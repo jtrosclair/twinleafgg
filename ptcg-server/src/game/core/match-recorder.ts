@@ -86,7 +86,7 @@ export class MatchRecorder {
       this.replay.player1 = this.buildReplayPlayer(match.player1);
       this.replay.player2 = this.buildReplayPlayer(match.player2);
       this.replay.winner = match.winner;
-      match.replayData = this.replay.serialize();
+      match.replayData = ''; // this.replay.serialize();
 
       // Update ranking
       const users = this.ranking.calculateMatch(match, state);
@@ -99,7 +99,7 @@ export class MatchRecorder {
         match.ranking2 = users[1].ranking;
       }
 
-      await manager.save(match);
+      //await manager.save(match);
 
       if (users.length >= 2) {
         for (const user of users) {

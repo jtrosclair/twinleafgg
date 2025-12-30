@@ -627,5 +627,22 @@
   "SOCKET_RECONNECTED": "Reconnected successfully",
   "SOCKET_RECONNECT_FAILED": "Failed to reconnect to server",
   "MAIN_BATTLE_PASS": "Battle Pass",
-  "MAIN_BUY_CARDS": "Buy Cards"
+  "MAIN_BUY_CARDS": "Buy Cards",
+  "SANDBOX_VIEWER_TITLE": "Game State Viewer",
+  "SANDBOX_VIEWER_DESCRIPTION": "Paste a base64-encoded game state to view the game board. This is a single-player viewing experience.",
+  "SANDBOX_VIEWER_INPUT_LABEL": "Game State Data",
+  "SANDBOX_VIEWER_INPUT_PLACEHOLDER": "Paste your base64 game state data here...",
+  "SANDBOX_VIEWER_LOAD_BUTTON": "Load Game",
+  "SANDBOX_VIEWER_CLEAR_BUTTON": "Clear",
+  "SANDBOX_VIEWER_EMPTY_INPUT": "Please enter a game state.",
+  "SANDBOX_VIEWER_INVALID_DATA": "Invalid game state data. Please check your input.",
+  "SANDBOX_VIEWER_LOADING_CARDS": "Loading card data...",
+  "SANDBOX_VIEWER_CARDS_READY": "Card data loaded. Ready to load game state.",
+  "SANDBOX_VIEWER_CARDS_LOAD_ERROR": "Failed to load card data. Please refresh the page.",
+  "SANDBOX_VIEWER_CARDS_NOT_LOADED": "Card data is not loaded yet. Please wait.",
+  "SANDBOX_VIEWER_CONNECTING": "Connecting to server...",
+  "SANDBOX_VIEWER_READY": "Connected. Ready to load game state.",
+  "SANDBOX_VIEWER_CONNECTION_ERROR": "Failed to connect to server. Please try again.",
+  "SANDBOX_VIEWER_NOT_READY": "Not connected to server yet. Please wait.",
+  "SANDBOX_VIEWER_RETRY_BUTTON": "Retry"
 }

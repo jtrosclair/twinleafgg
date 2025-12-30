@@ -36,6 +36,64 @@ export class StateSerializer {
     ];
   }
 
+  public static normalizeCardName(name: string): string {
+    if (name == 'Zekrom ex BLK 34') {
+      name = 'Zekrom ex SV11B 169';
+    }
+
+    name = name.replace('Pok�', 'Poke');
+
+    // if last word in card name is a number, remove it and trim the resulting string
+    let cardWithoutSetId = name;
+    const lastWord = cardWithoutSetId.split(' ').pop() || '';
+    if (/^\d+$/.test(lastWord)) {
+      cardWithoutSetId = cardWithoutSetId.split(' ').slice(0, -1).join(' ').trim();
+    }
+    cardWithoutSetId = cardWithoutSetId.replace('SV6a', 'SFA');
+
+    if (cardWithoutSetId == 'Slakoth PAL') {
+      cardWithoutSetId = 'Slakoth SSP';
+    }
+
+    if (cardWithoutSetId == 'Vigoroth PAL') {
+      cardWithoutSetId = 'Vigoroth SSP';
+    }
+
+    if (cardWithoutSetId.endsWith(' SV6')) {
+      cardWithoutSetId = cardWithoutSetId.replace('SV6', 'TWM');
+    }
+
+    // card name is card without last word, trimmed
+    const cardName = cardWithoutSetId.split(' ').slice(0, -1).join(' ').trim();
+
+
+    let card: Card | undefined = StateSerializer.knownCards.find(c => {
+      if (cardWithoutSetId === c?.fullName) {
+        return true;
+      }
+
+      //try using alternate set abbreviations
+
+      if (cardWithoutSetId == c?.name + ' ' + c?.set) {
+        return true;
+      }
+
+      return false;
+    });
+
+    if (!card) {
+      card = StateSerializer.knownCards.find(c => {
+        if (cardName === c?.name) {
+          return true;
+        }
+        return false;
+      });
+
+    }
+
+    return card?.fullName || '';
+  }
+
   public serialize(state: State): SerializedState {
     const serializers = this.serializers;
     const refs: { node: Object, path: string }[] = [];
@@ -72,6 +130,8 @@ export class StateSerializer {
   public deserialize(serializedState: SerializedState): State {
     const serializers = this.serializers;
     const context = this.restoreContext(serializedState);
+
+    console.log({ context })
 
     const reviver: any = function (this: any, key: string, value: any) {
       if (value instanceof Array) {
@@ -163,14 +223,25 @@ export class StateSerializer {
     const names: string[] = parsed[1].cardNames;
     const cards: Card[] = [];
     names.forEach((name, index) => {
-      let card: Card | undefined = StateSerializer.knownCards.find(c => c.fullName === name);
+      // Normalize the card name using the static normalizer
+      const cardWithoutSetId = StateSerializer.normalizeCardName(name);
+
+      // card name is card without last word, trimmed
+      const cardName = cardWithoutSetId.split(' ').slice(0, -1).join(' ').trim();
+
+      const card: Card | undefined = StateSerializer.knownCards.find(c => c?.fullName == name);
+
       if (card === undefined) {
+        console.log({ name, cardName, cardWithoutSetId });
         throw new GameError(GameCoreError.ERROR_SERIALIZER, `Unknown card '${name}'.`);
       }
-      card = deepClone(card) as Card;
-      card.id = index;
-      cards.push(card);
+
+      const clonedCard = deepClone(card) as Card;
+      clonedCard.id = index;
+      cards.push(clonedCard);
     });
+
+    console.log({ names });
     return { cards };
   }
 

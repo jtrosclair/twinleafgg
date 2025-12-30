@@ -26,6 +26,7 @@ import { TableModule } from './table/table.module';
 import { TermsModule } from './terms/terms.module';
 import { UiShowcaseModule } from './ui-showcase/ui-showcase.module';
 import { MaintenanceModule } from './maintenance/maintenance.module';
+import { SandboxViewerModule } from './sandbox-viewer/sandbox-viewer.module';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { MaintenanceModule } from './maintenance/maintenance.module';
     TermsModule,
     UiShowcaseModule,
     MaintenanceModule,
+    SandboxViewerModule,
     DndMultiBackendModule,
     DndModule.forRoot({ backend: MultiBackend, options: HTML5ToTouch }),
     TableModule,

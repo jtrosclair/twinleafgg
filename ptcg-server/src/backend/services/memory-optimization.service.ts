@@ -270,7 +270,7 @@ export class MemoryOptimizationService {
     config: MemoryOptimizationConfig;
     memoryHealth: any;
     lastOptimization: number;
-  } {
+    } {
     return {
       isRunning: this.isRunning,
       config: this.config,

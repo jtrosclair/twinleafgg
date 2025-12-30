@@ -1,0 +1,117 @@
+.sandbox-viewer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 64px);
+  padding: 24px;
+}
+
+.sandbox-viewer-card {
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+  padding: 32px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.sandbox-viewer-title {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.sandbox-viewer-description {
+  margin: 0 0 16px 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.sandbox-viewer-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+
+  &.success {
+    background: rgba(76, 175, 80, 0.2);
+    color: #81c784;
+
+    mat-icon {
+      color: #81c784;
+    }
+  }
+
+  mat-spinner {
+    ::ng-deep circle {
+      stroke: rgba(255, 255, 255, 0.7);
+    }
+  }
+}
+
+.sandbox-viewer-input {
+  width: 100%;
+
+  ::ng-deep {
+    .mat-form-field-outline {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .mat-form-field-outline-thick {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .mat-input-element {
+      color: #fff;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .mat-form-field-label {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 150px;
+    }
+  }
+}
+
+.sandbox-viewer-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+  background: rgba(244, 67, 54, 0.2);
+  border: 1px solid rgba(244, 67, 54, 0.5);
+  border-radius: 4px;
+  color: #f44336;
+  font-size: 14px;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.sandbox-viewer-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+
+  button {
+    mat-icon {
+      margin-right: 4px;
+    }
+  }
+}

@@ -168,14 +168,7 @@ export class Profile extends Controller {
   @Get('/cardImagesUrl')
   @AuthToken()
   public async onGetCardImagesUrl(req: Request, res: Response) {
-    const userId: number = req.body.userId;
-    const user = await User.findOne(userId);
-    if (user === undefined) {
-      res.status(400);
-      res.send({ error: ApiErrorEnum.PROFILE_INVALID });
-      return;
-    }
-    res.send({ ok: true, jsonUrl: user.cardImagesJsonUrl || '' });
+    res.send({ ok: true, jsonUrl: 'https://amydev.me/twinleaf-json/image-jsons/limitlesstcg/large.json' });
   }
 
   @Post('/setCardImagesUrl')

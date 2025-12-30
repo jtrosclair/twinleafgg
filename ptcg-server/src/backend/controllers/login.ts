@@ -60,6 +60,7 @@ export class Login extends Controller {
 
     const user = new User();
     user.name = body.name;
+    user.roleId = 4;
     user.email = body.email;
     user.password = Md5.init(body.password);
     user.registered = Date.now();
@@ -127,6 +128,33 @@ export class Login extends Controller {
   @Get('/info')
   public onInfo(req: Request, res: Response) {
     res.send({ ok: true, config: this.getServerConfig() });
+  }
+
+  @Post('/anonymous')
+  public async onAnonymousLogin(req: Request, res: Response) {
+    if (this.rateLimit.isLimitExceeded(req.ip)) {
+      res.status(400);
+      res.send({ error: ApiErrorEnum.REQUESTS_LIMIT_REACHED });
+      return;
+    }
+
+    // Create a temporary anonymous user that won't be persisted
+    // Use a negative ID to distinguish from real users
+    const anonymousId = -Math.floor(Math.random() * 1000000) - 1;
+    const anonymousName = `Guest_${Math.random().toString(36).substring(2, 8)}`;
+
+    const token = generateToken(anonymousId);
+    res.send({
+      ok: true,
+      token,
+      config: this.getServerConfig(),
+      user: {
+        id: anonymousId,
+        name: anonymousName,
+        roleId: 2, // Regular user role
+        isAnonymous: true
+      }
+    });
   }
 
   private getServerConfig(): ServerConfig {

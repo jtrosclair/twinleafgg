@@ -226,6 +226,7 @@ $board-min-height: calc(6 * var(--card-size) * #{$card-aspect-ratio} + 2 * #{map
   flex-direction: row;
   height: 100%;
   justify-content: space-evenly;
+  max-width: 100%;
   // margin-bottom: 20px;
 
   >ptcg-board-card,
@@ -233,6 +234,7 @@ $board-min-height: calc(6 * var(--card-size) * #{$card-aspect-ratio} + 2 * #{map
     width: calc(var(--card-size) * var(--card-scale));
     height: calc(var(--card-size) * #{$card-aspect-ratio} * var(--card-scale));
     max-width: 100%;
+    flex-shrink: 1;
   }
 }
 
@@ -253,6 +255,8 @@ $board-min-height: calc(6 * var(--card-size) * #{$card-aspect-ratio} + 2 * #{map
     width: calc(var(--card-size) * 1.15 * var(--card-scale));
     height: calc(var(--card-size) * 1.15 * #{$card-aspect-ratio} * var(--card-scale));
     max-width: 100%;
+    flex-shrink: 1;
+    min-width: 0;
   }
 }
 
@@ -364,6 +368,8 @@ ptcg-board-prizes {
 
 .ptcg-board-bench {
   grid-area: bench;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .ptcg-board-discard {
@@ -517,4 +523,109 @@ ptcg-board-card.highlighted-pokemon {
   transition: all 0.3s ease;
   transform: scale(1.05);
   z-index: 5;
+}
+
+// Mobile Zone Grid - 2x2 compact display
+.mobile-zone-grid {
+  display: none; // Hidden by default (desktop)
+}
+
+// Desktop zones container
+.desktop-zones {
+  display: contents; // Show by default (desktop)
+}
+
+// Mobile breakpoint - show compact grid, hide desktop zones
+@media (max-width: 990px) {
+  .ptcg-board-player {
+    position: relative; // Ensure positioning context
+  }
+
+  // Stadium always visible - mobile positioning
+  .stadium-always-visible {
+    grid-area: stadium;
+    justify-self: center;
+    align-self: center;
+
+    .stadium-card {
+      margin-top: 0;
+      width: calc(var(--card-size) * 1.0 * var(--card-scale));
+      height: calc(var(--card-size) * 1.0 * #{$card-aspect-ratio} * var(--card-scale));
+    }
+  }
+
+  .mobile-zone-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 8px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    position: absolute;
+    z-index: 100;
+    width: 110px;
+    height: 110px;
+
+    // Position bottom player's zone grid (in the stadium area)
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: start;
+    align-self: center;
+    margin-left: 60px;
+    margin-bottom: 50px;
+
+    &.mobile-zone-grid-top {
+      // Position top player's zone grid
+      grid-column: 2;
+      grid-row: 2;
+      justify-self: start;
+      align-self: center;
+      margin-bottom: 0px;
+      transform: translate(0px, -120px);
+    }
+
+    .zone-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(26, 32, 44, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      padding: 3px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: rgba(26, 32, 44, 1);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: scale(1.05);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+
+      .zone-label {
+        font-size: 7px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.7);
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        margin-bottom: 2px;
+        white-space: nowrap;
+      }
+
+      .zone-count {
+        font-size: 12px;
+        font-weight: 700;
+        color: #ffffff;
+      }
+    }
+  }
+
+  .desktop-zones {
+    display: none !important;
+  }
 }

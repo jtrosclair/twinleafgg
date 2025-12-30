@@ -632,4 +632,28 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
       });
 
   }
+
+  /**
+   * Get the count of remaining prizes for a player
+   */
+  public getPrizeCount(player: Player): number {
+    if (!player || !player.prizes) {
+      return 0;
+    }
+    return player.prizes.filter(prize => prize.cards.length > 0).length;
+  }
+
+  /**
+   * Handle clicking on prizes zone in mobile compact view
+   */
+  public onPrizesModalClick(player: Player) {
+    if (!player || !player.prizes || player.prizes.length === 0) {
+      return;
+    }
+    // Find the first non-empty prize to show
+    const firstPrize = player.prizes.find(prize => prize.cards.length > 0);
+    if (firstPrize) {
+      this.onPrizeClick(player, firstPrize);
+    }
+  }
 }

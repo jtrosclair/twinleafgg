@@ -38,6 +38,23 @@ export class GameService {
     return this.api.get<PlayerStatsResponse>('/v1/game/' + gameId + '/playerStats');
   }
 
+  public createGameFromState(stateData: string, opponentUsername?: string): Observable<GameState> {
+    this.boardInteractionService.endBoardSelection();
+
+    return new Observable<GameState>(observer => {
+      this.socketService.emit('core:createGameFromState', { stateData, opponentUsername })
+        .pipe(finalize(() => observer.complete()))
+        .subscribe((gameState: GameState) => {
+          this.appendGameState(gameState);
+          // Set the game ID for reconnection tracking
+          this.socketService.setGameId(gameState.gameId);
+          observer.next(gameState);
+        }, (error: any) => {
+          observer.error(error);
+        });
+    });
+  }
+
   public join(gameId: number): Observable<GameState> {
     this.boardInteractionService.endBoardSelection();
 
@@ -290,6 +307,7 @@ export class GameService {
     const index = games.findIndex(g => g.gameId === gameId && g.deleted === false);
     if (index !== -1) {
       const gameStates = this.sessionService.session.gameStates.slice();
+      const previousState = gameStates[index].state;
       const logs = [...gameStates[index].logs, ...state.logs];
 
       // Extract enhanced player statistics if available from the state
@@ -304,6 +322,17 @@ export class GameService {
       };
       this.sessionService.set({ gameStates });
       this.boardInteractionService.updateGameLogs(logs);
+
+      // Notify React Native WebView on turn change
+      if (previousState && state.turn !== previousState.turn) {
+        this.postMessageToWebView({
+          type: 'TurnChange',
+          data: {
+            turn: state.turn,
+            activePlayer: state.activePlayer === 0 ? 'player1' : 'player2'
+          }
+        });
+      }
 
       // Clear game ID for reconnection tracking if game has finished
       if (state.phase === GamePhase.FINISHED) {
@@ -411,6 +440,12 @@ export class GameService {
       : 'ERROR_UNKNOWN';
 
     this.alertService.toast(this.translate.instant(key));
+  }
+
+  private postMessageToWebView(message: { type: string; data: any }): void {
+    if ((window as any).ReactNativeWebView) {
+      (window as any).ReactNativeWebView.postMessage(JSON.stringify({ type: "GameOver", data: { winner: "player2" } }));
+    }
   }
 
 }

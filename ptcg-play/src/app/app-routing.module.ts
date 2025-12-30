@@ -25,6 +25,7 @@ import { TermsComponent } from './terms/terms.component';
 import { MaintenanceMessageComponent } from './maintenance/maintenance-message.component';
 import { SpectateComponent } from './spectate/spectate.component';
 import { UiShowcaseComponent } from './ui-showcase/ui-showcase.component';
+import { SandboxViewerComponent } from './sandbox-viewer/sandbox-viewer.component';
 
 const routes: Routes = [
   { path: 'deck', component: DeckComponent, canActivate: [CanActivateService] },
@@ -50,6 +51,7 @@ const routes: Routes = [
   { path: 'table/:gameId', component: TableComponent, canActivate: [CanActivateService] },
   { path: 'terms', component: TermsComponent },
   { path: 'ui-showcase', component: UiShowcaseComponent },
+  { path: 'sandbox-viewer', component: SandboxViewerComponent },
   { path: '', redirectTo: '/games', pathMatch: 'full' },
   { path: 'maintenance', component: MaintenanceMessageComponent },
   { path: 'battle-pass', loadChildren: () => import('./battle-pass/battle-pass.module').then(m => m.BattlePassModule) },

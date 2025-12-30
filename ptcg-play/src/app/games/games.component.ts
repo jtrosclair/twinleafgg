@@ -118,7 +118,9 @@ export class GamesComponent implements OnInit, OnDestroy {
             : EMPTY;
         }),
         switchMap(data => {
-          return this.mainSevice.createGame(data.deck, data.gameSettings, invitedId, data.deckId);
+          // If creating a game without invitedId, use "Standard" as opponent username (bot)
+          const opponentUsername = invitedId === undefined ? "Standard" : undefined;
+          return this.mainSevice.createGame(data.deck, data.gameSettings, invitedId, data.deckId, opponentUsername);
         }),
         finalize(() => { this.loading = false; })
       )

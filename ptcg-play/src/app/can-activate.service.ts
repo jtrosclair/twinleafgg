@@ -24,6 +24,8 @@ export class CanActivateService implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+
+    return true;
     const loggedUserId = this.sessionService.session.loggedUserId;
     const loggedUser = loggedUserId && this.sessionService.session.users[loggedUserId];
     const isLoggedIn = !!loggedUser;

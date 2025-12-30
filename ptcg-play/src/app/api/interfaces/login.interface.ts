@@ -8,6 +8,7 @@ export interface LoginResponse extends Response {
     id: number;
     name: string;
     roleId: number;
+    isAnonymous?: boolean;
   };
 }
 

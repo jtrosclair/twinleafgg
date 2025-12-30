@@ -2,8 +2,7 @@
   <source src="assets/star-bg.mp4" type="video/mp4">
 </video> -->
 
-<ptcg-sidebar-container 
-  [class.has-sandbox]="showSandboxPanel && gameState && gameState.state && gameState.gameId"
+<ptcg-sidebar-container [class.has-sandbox]="showSandboxPanel && gameState && gameState.state && gameState.gameId"
   [class.sandbox-collapsed]="sandboxSidebarCollapsed">
 
   <!-- Sandbox Control Panel (Admin only, Sandbox mode only) - Beside sidebar -->
@@ -12,11 +11,8 @@
       <div class="sandbox-toggle" (click)="toggleSandboxSidebar()">
         <mat-icon>{{ sandboxSidebarCollapsed ? 'chevron_left' : 'chevron_right' }}</mat-icon>
       </div>
-      <ptcg-sandbox-control
-        [gameId]="gameState.gameId"
-        [gameState]="gameState.state"
-        [players]="gameState.state.players"
-        [clientId]="clientId">
+      <ptcg-sandbox-control [gameId]="gameState.gameId" [gameState]="gameState.state"
+        [players]="gameState.state.players" [clientId]="clientId">
       </ptcg-sandbox-control>
     </div>
   </div>
@@ -39,10 +35,6 @@
       <!-- Table board -->
 
       <!-- Player's hand -->
-      <div class="opp-hand">
-        <ptcg-hand [player]="topPlayer" [gameState]="gameState" [clientId]="clientId" [isOpponent]="true"
-          [isAdmin]="isAdmin" [isTO]="isTO"></ptcg-hand>
-      </div>
       <ptcg-board [clientId]="clientId" [gameState]="gameState" [topPlayer]="topPlayer" [bottomPlayer]="bottomPlayer">
       </ptcg-board>
 

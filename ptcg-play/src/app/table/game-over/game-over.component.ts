@@ -78,7 +78,7 @@ export class GameOverComponent implements OnInit {
 
     const state = this.gameState.state;
     const currentPlayerId = this.sessionService.session.clientId;
-    
+
     // Determine max prizes from game state (6 for all formats)
     if (state.players && state.players.length > 0 && state.players[0].prizes) {
       this.maxPrizes = state.players[0].prizes.length;
@@ -96,6 +96,10 @@ export class GameOverComponent implements OnInit {
       const winningPlayerId = isPlayerA ? state.players[0].id : state.players[1].id;
       this.isWinner = String(currentPlayerId) === String(winningPlayerId);
     }
+
+    (window as any).ReactNativeWebView.postMessage(JSON.stringify({ type: "GameOver", data: { winner: GameWinner.PLAYER_1 ? 'player2' : 'player1' } }));
+
+    return
 
     // Set player usernames (use ID as fallback if username not available)
     const playerIndex = state.players.findIndex(p => String(p.id) === String(currentPlayerId));

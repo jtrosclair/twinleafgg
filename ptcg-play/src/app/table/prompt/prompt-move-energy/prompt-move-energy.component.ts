@@ -103,7 +103,7 @@ export class PromptMoveEnergyComponent implements OnChanges {
     }
     // PokemonItem.cardList is always PokemonCardList
     const cardList = this.selectedItem.cardList as PokemonCardList;
-    return cardList.energies.cards;
+    return cardList.energyCards;
   }
 
   public onCardClick(item: PokemonItem) {
@@ -123,11 +123,11 @@ export class PromptMoveEnergyComponent implements OnChanges {
     if (this.pokemonData.matchesTarget(item, this.blockedTo)) {
       return;
     }
-    // Check energies.cards first, then fall back to cards for backwards compatibility
-    const pokemonCardList = this.selectedItem.cardList instanceof PokemonCardList 
-      ? this.selectedItem.cardList 
+    // Check energyCards first, then fall back to cards for backwards compatibility
+    const pokemonCardList = this.selectedItem.cardList instanceof PokemonCardList
+      ? this.selectedItem.cardList
       : null;
-    const energyIndex = pokemonCardList ? pokemonCardList.energies.cards.indexOf(card) : -1;
+    const energyIndex = pokemonCardList ? pokemonCardList.energyCards.indexOf(card) : -1;
     const index = energyIndex !== -1 ? energyIndex : this.selectedItem.cardList.cards.indexOf(card);
     if (index === -1) {
       return;
@@ -158,24 +158,24 @@ export class PromptMoveEnergyComponent implements OnChanges {
     from.cardList.cards = [...from.cardList.cards];
     if (fromIsPokemon) {
       const fromPkm = from.cardList as PokemonCardList;
-      fromPkm.energies = Object.assign(new (fromPkm.energies.constructor as any)(), fromPkm.energies);
-      fromPkm.energies.cards = [...fromPkm.energies.cards];
+      fromPkm.energyCards = Object.assign(new (fromPkm.energyCards.constructor as any)(), fromPkm.energyCards);
+      fromPkm.energyCards = [...fromPkm.energyCards];
     }
 
     to.cardList = Object.assign(new PokemonCardList(), to.cardList) as PokemonCardList;
     to.cardList.cards = [...to.cardList.cards];
     if (toIsPokemon) {
       const toPkm = to.cardList as PokemonCardList;
-      toPkm.energies = Object.assign(new (toPkm.energies.constructor as any)(), toPkm.energies);
-      toPkm.energies.cards = [...toPkm.energies.cards];
+      toPkm.energyCards = Object.assign(new (toPkm.energyCards.constructor as any)(), toPkm.energyCards);
+      toPkm.energyCards = [...toPkm.energyCards];
     }
 
-    // Move from energies.cards if it's a PokemonCardList, otherwise use cards
+    // Move from energyCards if it's a PokemonCardList, otherwise use cards
     if (fromIsPokemon) {
       const fromPkm = from.cardList as PokemonCardList;
-      const energyIndex = fromPkm.energies.cards.indexOf(card);
+      const energyIndex = fromPkm.energyCards.indexOf(card);
       if (energyIndex !== -1) {
-        fromPkm.energies.cards.splice(energyIndex, 1);
+        fromPkm.energyCards.splice(energyIndex, 1);
         // Also remove from main cards array
         const cardIndex = fromPkm.cards.indexOf(card);
         if (cardIndex !== -1) {
@@ -189,10 +189,10 @@ export class PromptMoveEnergyComponent implements OnChanges {
       }
     }
 
-    // Add to energies.cards if it's a PokemonCardList, otherwise use cards
+    // Add to energyCards if it's a PokemonCardList, otherwise use cards
     if (toIsPokemon) {
       const toPkm = to.cardList as PokemonCardList;
-      toPkm.energies.cards.push(card);
+      toPkm.energyCards.push(card);
       // Also ensure it's in the main cards array for serialization
       if (!toPkm.cards.includes(card)) {
         toPkm.cards.push(card);
@@ -231,7 +231,7 @@ export class PromptMoveEnergyComponent implements OnChanges {
     const blocked: number[] = [];
     // PokemonItem.cardList is always PokemonCardList
     const cardList = item.cardList as PokemonCardList;
-    cardList.energies.cards.forEach((c, index) => {
+    cardList.energyCards.forEach((c, index) => {
       if (this.blockedCardList.includes(c)) {
         blocked.push(index);
       }
@@ -255,9 +255,9 @@ export class PromptMoveEnergyComponent implements OnChanges {
 
         if (blockedItem !== undefined) {
           blockedItem.blocked.forEach(b => {
-            // Check energies.cards first for PokemonCardList
-            if (item.cardList instanceof PokemonCardList && b < item.cardList.energies.cards.length) {
-              cards.push(item.cardList.energies.cards[b]);
+            // Check energyCards first for PokemonCardList
+            if (item.cardList instanceof PokemonCardList && b < item.cardList.energyCards.length) {
+              cards.push(item.cardList.energyCards[b]);
             } else if (b < item.cardList.cards.length) {
               cards.push(item.cardList.cards[b]);
             }

@@ -5,9 +5,9 @@ $ptcg-hand-height: calc(var(--card-size) * #{$card-aspect-ratio} + #{4 * $ptcg-h
 $ptcg-hand-max-margin: map-get($padding, normal);
 
 .ptcg-hand {
-  margin-bottom: -80px;
+  margin-bottom: -60px;
   display: flex;
-  height: 100px;
+  height: 90px;
   justify-content: center;
 }
 
@@ -22,16 +22,16 @@ $ptcg-hand-max-margin: map-get($padding, normal);
 
   ptcg-card {
     flex: 0 0 auto;
-    width: 88px;
+    width: 65px;
     transition: transform .2s;
-    transform: translateY(-45px);
+    transform: translateY(-35px);
 
     &.dragging {
       opacity: 0;
       position: absolute;
       pointer-events: none;
       z-index: 1000;
-      transform: rotate(5deg) scale(1.15) translateY(-40px);
+      transform: rotate(5deg) scale(1.15) translateY(-30px);
     }
 
     &:not(.dragging) {
@@ -39,7 +39,7 @@ $ptcg-hand-max-margin: map-get($padding, normal);
     }
 
     &:hover {
-      transform: scale(1.15) translateY(-40px);
+      transform: scale(1.15) translateY(-30px);
       z-index: 10;
     }
   }
@@ -59,12 +59,12 @@ ptcg-badge {
 
 ptcg-card {
   flex: 0 0 auto;
-  width: 88px;
+  width: 65px;
   transition: transform .2s;
-  transform: translateY(-45px); // This will move the cards up
+  transform: translateY(-35px); // This will move the cards up
 
   &:hover {
-    transform: scale(1.15) translateY(-40px); // Adjust this value as needed
+    transform: scale(1.15) translateY(-30px); // Adjust this value as needed
     z-index: 10;
   }
 }
@@ -89,12 +89,12 @@ ptcg-card {
 .ptcg-hand.opponent {
   position: static;
   z-index: 1;
-  margin-top: -100px;
+  margin-top: -75px;
   transform: rotate(180deg);
   // margin: 0 auto;
   // display: flex;
   justify-content: center;
-  height: 170px; // Add this line to set a fixed height
+  height: 130px; // Add this line to set a fixed height
   // overflow: hidden; // Add this to prevent overflow
   // align-items: flex-end; // Add this to align cards to the bottom of the container
 
@@ -103,11 +103,11 @@ ptcg-card {
   // }
 
   ptcg-card {
-    width: 88px;
-    transform: translateY(15px); // This will move the cards up
+    width: 65px;
+    transform: translateY(10px); // This will move the cards up
 
     &:hover {
-      transform: scale(1.025) translateY(7.5px); // Change to positive value
+      transform: scale(1.025) translateY(5px); // Change to positive value
     }
   }
 }
@@ -117,3 +117,40 @@ ptcg-card {
 //   position: absolute;
 //   width: 98px;
 // }
+
+// Mobile horizontal scrolling for hand
+@media (max-width: 768px) {
+  :host {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    position: absolute;
+    bottom: 0;
+    height: 130px;
+    z-index: 1000 !important;
+
+
+  }
+
+  .ptcg-hand {
+    justify-content: flex-start;
+    width: max-content;
+    min-width: 100%;
+    position: absolute;
+    z-index: 1000;
+    align-self: flex-end;
+  }
+
+  .ptcg-hand-container {
+    padding: 0 10px;
+    position: absolute;
+    z-index: 1000;
+  }
+
+  ptcg-card {
+    position: relative;
+    z-index: 1000;
+  }
+}

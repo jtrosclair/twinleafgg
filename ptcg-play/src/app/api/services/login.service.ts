@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiErrorEnum } from 'ptcg-server';
+import { ApiErrorEnum, Rank } from 'ptcg-server';
 import { map, switchMap, catchError, timeout, filter, takeUntil } from 'rxjs/operators';
 import { combineLatest, Observable } from 'rxjs';
 
@@ -25,7 +25,7 @@ export class LoginService {
     private profileService: ProfileService,
     private sessionService: SessionService,
     private socketService: SocketService
-  ) {}
+  ) { }
 
   public login(name: string, password: string, loginAborted$: Observable<void>): Observable<LoginResponse> {
     return this.api.post<LoginResponse>('/v1/login', { name, password }).pipe(
@@ -87,7 +87,7 @@ export class LoginService {
         });
 
         return response;
-    }));
+      }));
   }
 
   private waitForSocketConnection(token: string): Observable<boolean> {
@@ -116,6 +116,67 @@ export class LoginService {
 
   public logout(): void {
     this.sessionService.clear();
+  }
+
+  public anonymousLogin(loginAborted$: Observable<void>): Observable<LoginResponse> {
+    return this.api.post<LoginResponse>('/v1/login/anonymous', {}).pipe(
+      takeUntil(loginAborted$),
+      switchMap(response => this.processAnonymousLoginResponse(response, loginAborted$))
+    );
+  }
+
+  private processAnonymousLoginResponse(response: LoginResponse, loginAborted$: Observable<void>): Observable<LoginResponse> {
+    this.sessionService.session.authToken = response.token;
+
+    const apiVersion = response.config.apiVersion;
+    if (environment.apiVersion !== apiVersion) {
+      throw new ApiError(ApiErrorEnum.UNSUPPORTED_VERSION);
+    }
+
+    return combineLatest([
+      this.cardsService.getCardsInfo(),
+      this.waitForSocketConnection(response.token)
+    ]).pipe(
+      takeUntil(loginAborted$),
+      catchError(error => {
+        this.sessionService.session.authToken = '';
+        throw error;
+      }),
+      map(([cardsInfo]) => {
+        // Set up anonymous user in session
+        if (response.user) {
+          const users = { ...this.sessionService.session.users };
+          users[response.user.id] = {
+            connected: true,
+            userId: response.user.id,
+            name: response.user.name,
+            email: '',
+            registered: Date.now(),
+            lastSeen: Date.now(),
+            ranking: 1000,
+            rank: Rank.POKE,
+            lastRankingChange: 0,
+            avatarFile: '',
+            roleId: response.user.roleId
+          };
+          this.sessionService.set({
+            users,
+            loggedUserId: response.user.id,
+          });
+        }
+
+        // Load cards data
+        this.cardsBaseService.loadCardsInfo(cardsInfo);
+
+        // Store data in the session
+        this.sessionService.set({
+          authToken: response.token,
+          config: response.config,
+        });
+
+        return response;
+      })
+    );
   }
 
 }

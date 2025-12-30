@@ -25,10 +25,27 @@ export async function authMiddleware(socket: Socket, next: (err?: any) => void):
     return next(new Error(ApiErrorEnum.AUTH_TOKEN_INVALID));
   }
 
-  const user = await User.findOne(userId);
-  if (user === undefined) {
-    rateLimit.increment(ipAddress);
-    return next(new Error(ApiErrorEnum.AUTH_TOKEN_INVALID));
+  let user: User | undefined;
+
+  // Handle anonymous users (negative IDs)
+  if (userId < 0) {
+    // Create an in-memory User object for anonymous sessions
+    user = new User();
+    user.id = userId;
+    user.name = `Guest_${Math.abs(userId).toString(36).substring(0, 6)}`;
+    user.email = '';
+    user.ranking = 1000;
+    user.roleId = 2; // Regular user role
+    user.registered = Date.now();
+    user.lastSeen = Date.now();
+    user.lastRankingChange = 0;
+    user.avatarFile = '';
+  } else {
+    user = await User.findOne(userId);
+    if (user === undefined) {
+      rateLimit.increment(ipAddress);
+      return next(new Error(ApiErrorEnum.AUTH_TOKEN_INVALID));
+    }
   }
 
   // Log reconnection attempts for monitoring
@@ -39,6 +56,8 @@ export async function authMiddleware(socket: Socket, next: (err?: any) => void):
   }
 
   // --- Start Deck Migration Logic ---
+  // Skip deck migration for anonymous users (negative IDs)
+  if (userId > 0) {
   try {
     const userDecks = await Deck.find({ where: { user: { id: userId } } });
     const cardManager = CardManager.getInstance();
@@ -90,6 +109,7 @@ export async function authMiddleware(socket: Socket, next: (err?: any) => void):
     }
   } catch (error) {
     console.error(`Error during deck migration for user ${userId}:`, error);
+  }
   }
   // --- End Deck Migration Logic ---
 

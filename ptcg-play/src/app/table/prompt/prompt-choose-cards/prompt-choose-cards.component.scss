@@ -275,11 +275,11 @@
   }
 
   &.prev-button {
-    left: calc(50% - clamp(230px, 23vw, 345px));
+    left: calc(65% - clamp(230px, 23vw, 345px));
   }
 
   &.next-button {
-    right: calc(50% - clamp(230px, 23vw, 345px));
+    right: calc(65% - clamp(230px, 23vw, 345px));
   }
 }
 

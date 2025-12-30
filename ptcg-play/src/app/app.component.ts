@@ -29,6 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public loggedUser: UserInfo | undefined;
   private authToken$: Observable<string>;
   public showToolbar = true;
+  public isTableRoute = false;
   private reconnectTimer: any;
   private reconnectSnackRef: any;
 
@@ -49,7 +50,9 @@ export class AppComponent implements OnInit, OnDestroy {
     setTimeout(() => this.onResize());
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.showToolbar = !event.urlAfterRedirects.startsWith('/maintenance');
+        const url = event.urlAfterRedirects;
+        this.showToolbar = !url.startsWith('/maintenance') && !url.startsWith('/sandbox-viewer');
+        this.isTableRoute = url.startsWith('/table/');
       }
     });
   }

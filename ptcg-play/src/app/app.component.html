@@ -1,7 +1,7 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<ptcg-toolbar *ngIf="showToolbar"></ptcg-toolbar>
+<ptcg-toolbar *ngIf="showToolbar" [class.hide-on-mobile-table]="isTableRoute"></ptcg-toolbar>
 
-<mat-sidenav-container hasBackdrop="false">
+<mat-sidenav-container hasBackdrop="false" [class.hide-sidenav-on-mobile-table]="isTableRoute">
 
   <ptcg-sidenav></ptcg-sidenav>
 

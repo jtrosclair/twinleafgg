@@ -10,6 +10,7 @@ import { SocketWrapper, Response } from './socket-wrapper';
 import { deepCompare } from '../../utils/utils';
 import { Base64 } from '../../utils';
 import { ApiErrorEnum } from '../common/errors';
+import { BotClient } from '../../game/bots/bot-client';
 
 export class CoreSocket {
 
@@ -27,6 +28,7 @@ export class CoreSocket {
     // core listeners
     this.socket.addListener('core:getInfo', this.getCoreInfo.bind(this));
     this.socket.addListener('core:createGame', this.createGame.bind(this));
+    this.socket.addListener('core:createGameFromState', this.createGameFromState.bind(this));
   }
 
   public onConnect(client: Client): void {
@@ -94,7 +96,7 @@ export class CoreSocket {
     response('ok', this.buildCoreInfo());
   }
 
-  private createGame(params: { deck: string[], gameSettings: GameSettings, clientId?: number, artworks?: { code: string; artworkId?: number }[], deckId?: number },
+  private createGame(params: { deck: string[], gameSettings: GameSettings, clientId?: number, artworks?: { code: string; artworkId?: number }[], deckId?: number, opponentUsername?: string },
     response: Response<GameState>): void {
     // Validate that only admins can enable sandbox mode
     if (params.gameSettings.sandboxMode && this.client.user.roleId !== 4) {
@@ -102,19 +104,90 @@ export class CoreSocket {
       return;
     }
 
-    const invited = this.core.clients.find(c => c.id === params.clientId);
+    let invited = this.core.clients.find(c => c.id === params.clientId);
 
-    // Check if the invited client is a bot with format restrictions
-    if (invited && this.isBotClient(invited)) {
-      const botClient = invited as any; // Cast to access bot-specific methods
-      if (!botClient.isFormatAllowed(params.gameSettings.format)) {
-        response('error', ApiErrorEnum.INVALID_FORMAT);
+    // If opponentUsername is provided and no clientId, look up the bot by username
+    if (!invited && params.opponentUsername) {
+      const botManager = this.core.getBotManager();
+      try {
+        invited = botManager.getBot(params.opponentUsername);
+      } catch (error) {
+        response('error', ApiErrorEnum.ACTION_INVALID);
         return;
       }
     }
 
+    // Check if the invited client is a bot with format restrictions
+    if (invited && this.isBotClient(invited)) {
+      const botClient = invited as BotClient;
+      if (!botClient.isFormatAllowed(params.gameSettings.format)) {
+        response('error', ApiErrorEnum.INVALID_FORMAT);
+        return;
+      }
+      // Set the player's deck as the bot's pending deck so it can respond to the invite
+      botClient.setPendingDeck(params.deck);
+    }
+
     const game = this.core.createGame(this.client, params.deck, params.gameSettings, invited, params.deckId);
     response('ok', CoreSocket.buildGameState(game));
+  }
+
+  private createGameFromState(
+    params: { stateData: string, gameSettings?: GameSettings, opponentUsername?: string },
+    response: Response<GameState>
+  ): void {
+    try {
+      // Decode the base64 state data
+      const base64 = new Base64();
+      const serializedState = base64.decode(params.stateData);
+
+      // Normalize card names in the serialized state before deserialization
+      const normalizedState = this.normalizeCardNamesInSerializedState(serializedState);
+
+      console.log({ normalizedState })
+
+      const serializer = new StateSerializer();
+      const state = serializer.deserialize(normalizedState);
+
+      if (!state || !state.players || state.players.length === 0) {
+        response('error', ApiErrorEnum.ACTION_INVALID);
+        return;
+      }
+
+      // Look up the opponent bot if username is provided
+      let opponentClient: Client | undefined;
+      if (params.opponentUsername) {
+        const botManager = this.core.getBotManager();
+        try {
+          opponentClient = botManager.getBot(params.opponentUsername);
+        } catch (error) {
+          console.error('Bot not found:', params.opponentUsername);
+          // Continue without opponent - game will work but opponent won't respond
+        }
+      }
+
+      // Create game settings with sandbox mode enabled
+      const gameSettings = params.gameSettings || new GameSettings();
+      gameSettings.sandboxMode = true;
+
+      // Create the game from the state with the opponent client
+      const game = this.core.createGameFromState(this.client, state, gameSettings, opponentClient);
+      response('ok', CoreSocket.buildGameState(game));
+    } catch (error) {
+      console.error('Error creating game from state:', error);
+      response('error', ApiErrorEnum.ACTION_INVALID);
+    }
+  }
+
+  private normalizeCardNamesInSerializedState(serializedState: string): string {
+    const parsed = JSON.parse(serializedState);
+    const cardNames: string[] = parsed[1]?.cardNames;
+
+    if (Array.isArray(cardNames)) {
+      parsed[1].cardNames = cardNames.map(name => StateSerializer.normalizeCardName(name));
+    }
+
+    return JSON.stringify(parsed);
   }
 
   public static buildUserInfo(user: User, connected: boolean = true): UserInfo {
@@ -171,6 +244,7 @@ export class CoreSocket {
   public dispose(): void {
     this.socket.removeListener('core:getInfo');
     this.socket.removeListener('core:createGame');
+    this.socket.removeListener('core:createGameFromState');
   }
 
   private isBotClient(client: Client): boolean {

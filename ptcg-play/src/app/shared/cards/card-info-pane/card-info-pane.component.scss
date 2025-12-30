@@ -6,11 +6,14 @@
   background-image: map-get($ptcg-size, card);
 }
 
+
+
 .ptcg-card-info-image {
   cursor: pointer;
-  flex: 1 1 33%;
-  min-width: map-get($ptcg-size, card);
+  max-width: 0;
+  // min-width: map-get($ptcg-size, card);
   padding-right: map-get($padding, normal);
+  visibility: hidden;
 
   >ptcg-card:first-child {
     width: 100%;

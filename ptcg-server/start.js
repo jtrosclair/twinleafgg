@@ -218,7 +218,7 @@ const app = new App();
 app.connectToDatabase()
   .catch(error => {
     console.log('Unable to connect to database.');
-    console.error(error.message);
+    console.error(error);
     process.exit(1);
   })
   .then(() => app.configureBotManager(botManager))

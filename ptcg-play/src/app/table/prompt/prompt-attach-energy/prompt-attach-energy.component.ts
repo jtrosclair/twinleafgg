@@ -146,8 +146,8 @@ export class PromptAttachEnergyComponent implements OnChanges {
       item.cardList.cards = [...item.cardList.cards];
       if (isPokemon) {
         const pkm = item.cardList as PokemonCardList;
-        pkm.energies = Object.assign(new (pkm.energies.constructor as any)(), pkm.energies);
-        pkm.energies.cards = pkm.energies.cards.filter(c => c !== r.card);
+        pkm.energyCards = Object.assign(new (pkm.energyCards.constructor as any)(), pkm.energyCards);
+        pkm.energyCards = pkm.energyCards.filter(c => c !== r.card);
         // Also remove from main cards array
         pkm.cards = pkm.cards.filter(c => c !== r.card);
       } else {
@@ -167,17 +167,17 @@ export class PromptAttachEnergyComponent implements OnChanges {
     to.cardList.cards = [...to.cardList.cards];
     if (isPokemon) {
       const toPkm = to.cardList as PokemonCardList;
-      toPkm.energies = Object.assign(new (toPkm.energies.constructor as any)(), toPkm.energies);
-      toPkm.energies.cards = [...toPkm.energies.cards];
+      toPkm.energyCards = Object.assign(new (toPkm.energyCards.constructor as any)(), toPkm.energyCards);
+      toPkm.energyCards = [...toPkm.energyCards];
     }
 
     const index = this.cardListCards.indexOf(card);
     this.cardListCards.splice(index, 1);
-    
+
     // Add to energies.cards if it's a PokemonCardList, otherwise use cards
     if (isPokemon) {
       const toPkm = to.cardList as PokemonCardList;
-      toPkm.energies.cards.push(card);
+      toPkm.energyCards.push(card);
       // Also ensure it's in the main cards array for serialization
       if (!toPkm.cards.includes(card)) {
         toPkm.cards.push(card);

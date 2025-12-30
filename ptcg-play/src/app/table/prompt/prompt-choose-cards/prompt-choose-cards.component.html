@@ -23,7 +23,8 @@
     <!-- Top Pane - Carousel -->
     <div class="ptcg-prompt-content">
       <div class="carousel-container" (wheel)="onWheel($event)">
-        <button mat-icon-button class="nav-button prev-button" (click)="previousCards()" [disabled]="currentIndex === 0">
+        <button mat-icon-button class="nav-button prev-button" (click)="previousCards()"
+          [disabled]="currentIndex === 0">
           <mat-icon>chevron_left</mat-icon>
         </button>
 

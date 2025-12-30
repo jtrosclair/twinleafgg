@@ -42,9 +42,16 @@ export class Storage {
         CardArtwork,
         UserFavoriteCard
       ],
-      synchronize: true,
+      synchronize: false,
       logging: false
     });
+
+    // For SQLite, manually handle synchronization with foreign keys disabled
+    if (storageConfig.type === 'sqlite') {
+      await this.connection.query('PRAGMA foreign_keys = OFF');
+      await this.connection.synchronize();
+      await this.connection.query('PRAGMA foreign_keys = ON');
+    }
   }
 
   public async disconnect(): Promise<void> {

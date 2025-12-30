@@ -1,0 +1,77 @@
+<ptcg-sidebar-container>
+  <ptcg-content [loading]="loading || initializingSession">
+    <!-- Auto-start loading screen when hash is provided -->
+    <div class="sandbox-viewer-container" *ngIf="autoStartState">
+      <div class="sandbox-viewer-card">
+        <div class="sandbox-viewer-status">
+          <mat-spinner diameter="40"></mat-spinner>
+          <span>{{ 'SANDBOX_VIEWER_LOADING_GAME' | translate }}</span>
+        </div>
+        <div class="sandbox-viewer-error" *ngIf="error">
+          <mat-icon>error</mat-icon>
+          <span>{{ error }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Regular entry form when no hash -->
+    <div class="sandbox-viewer-container" *ngIf="!autoStartState">
+      <div class="sandbox-viewer-card">
+        <h2 class="sandbox-viewer-title">{{ 'SANDBOX_VIEWER_TITLE' | translate }}</h2>
+        <p class="sandbox-viewer-description">{{ 'SANDBOX_VIEWER_DESCRIPTION' | translate }}</p>
+
+        <div class="sandbox-viewer-status" *ngIf="initializingSession">
+          <mat-spinner diameter="20"></mat-spinner>
+          <span>{{ 'SANDBOX_VIEWER_CONNECTING' | translate }}</span>
+        </div>
+
+        <div class="sandbox-viewer-status success" *ngIf="isReady && !initializingSession">
+          <mat-icon>check_circle</mat-icon>
+          <span>{{ 'SANDBOX_VIEWER_READY' | translate }}</span>
+        </div>
+
+        <mat-form-field appearance="outline" class="sandbox-viewer-input">
+          <mat-label>{{ 'SANDBOX_VIEWER_INPUT_LABEL' | translate }}</mat-label>
+          <textarea
+            matInput
+            [(ngModel)]="stateDataInput"
+            rows="8"
+            placeholder="{{ 'SANDBOX_VIEWER_INPUT_PLACEHOLDER' | translate }}"
+            [disabled]="loading || initializingSession || !isReady">
+          </textarea>
+        </mat-form-field>
+
+        <div class="sandbox-viewer-error" *ngIf="error">
+          <mat-icon>error</mat-icon>
+          <span>{{ error }}</span>
+        </div>
+
+        <div class="sandbox-viewer-actions">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="loadGameState()"
+            [disabled]="loading || initializingSession || !isReady || !stateDataInput.trim()">
+            <mat-icon>play_arrow</mat-icon>
+            {{ 'SANDBOX_VIEWER_LOAD_BUTTON' | translate }}
+          </button>
+          <button
+            mat-button
+            (click)="clearInput()"
+            [disabled]="loading || initializingSession">
+            <mat-icon>clear</mat-icon>
+            {{ 'SANDBOX_VIEWER_CLEAR_BUTTON' | translate }}
+          </button>
+          <button
+            mat-button
+            color="warn"
+            (click)="retryConnection()"
+            *ngIf="error && !initializingSession">
+            <mat-icon>refresh</mat-icon>
+            {{ 'SANDBOX_VIEWER_RETRY_BUTTON' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ptcg-content>
+</ptcg-sidebar-container>

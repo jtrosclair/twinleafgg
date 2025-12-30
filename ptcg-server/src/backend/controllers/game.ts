@@ -12,11 +12,11 @@ export class Game extends Controller {
     const gameId: number = parseInt(req.params.id, 10);
     const game = this.core.games.find(g => g.id === gameId);
     if (game === undefined) {
-      res.send({error: ApiErrorEnum.GAME_INVALID_ID});
+      res.send({ error: ApiErrorEnum.GAME_INVALID_ID });
       return;
     }
     const logs = game.state.logs;
-    res.send({ok: true, logs });
+    res.send({ ok: true, logs });
   }
 
   @Get('/:id/playerStats')
@@ -25,11 +25,11 @@ export class Game extends Controller {
     const gameId: number = parseInt(req.params.id, 10);
     const game = this.core.games.find(g => g.id === gameId);
     if (game === undefined) {
-      res.send({error: ApiErrorEnum.GAME_INVALID_ID});
+      res.send({ error: ApiErrorEnum.GAME_INVALID_ID });
       return;
     }
     const playerStats = game.playerStats;
-    res.send({ok: true, playerStats });
+    res.send({ ok: true, playerStats });
   }
 
 }

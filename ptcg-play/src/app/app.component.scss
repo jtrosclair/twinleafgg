@@ -130,3 +130,20 @@
     line-height: 36px;
   }
 }
+
+// Hide header and sidenav on mobile when on table page
+@media (max-width: 768px) {
+  .hide-on-mobile-table {
+    display: none !important;
+  }
+
+  .hide-sidenav-on-mobile-table {
+    ptcg-sidenav {
+      display: none !important;
+    }
+
+    mat-sidenav-content {
+      margin-left: 0 !important;
+    }
+  }
+}

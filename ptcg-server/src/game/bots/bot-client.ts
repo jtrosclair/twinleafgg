@@ -19,6 +19,7 @@ export abstract class BotClient implements Client {
   public games: Game[] = [];
   protected decks: Map<Format, string[]> = new Map();
   protected allowedFormats: Format[] = [];
+  protected pendingDeck: string[] | null = null;
 
   constructor(name: string, allowedFormats?: Format[]) {
     this.user = new User();
@@ -45,6 +46,10 @@ export abstract class BotClient implements Client {
 
   public getAllowedFormats(): Format[] {
     return [...this.allowedFormats];
+  }
+
+  public setPendingDeck(deck: string[]): void {
+    this.pendingDeck = deck;
   }
 
   public abstract onConnect(client: Client): void;
@@ -76,6 +81,13 @@ export abstract class BotClient implements Client {
   }
 
   public async loadDeck(): Promise<string[]> {
+    // If a pending deck was set (passed during game creation), use it
+    if (this.pendingDeck) {
+      const deck = this.pendingDeck;
+      this.pendingDeck = null;
+      return deck;
+    }
+
     const deckRows = await Deck.find({
       user: { id: this.user.id },
       isValid: true

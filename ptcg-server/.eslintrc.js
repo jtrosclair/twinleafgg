@@ -16,6 +16,12 @@ module.exports = {
         '@typescript-eslint'
     ],
     'rules': {
+        'no-useless-escape': 'off',
+        'no-loss-of-precision': 'off',
+        'no-var-requires': 'off',
+        'no-case-declarations': 'off',
+        'no-empty': 'off',
+        'no-unused-vars': 'off',
         'indent': ['error', 2, { 'SwitchCase': 1 }],
         'linebreak-style': ['off', 'unix'],
         'prefer-rest-params': 'off',
@@ -31,13 +37,13 @@ module.exports = {
                 'extendDefaults': true
             }
         ],
-        '@typescript-eslint/no-unused-vars': ['error',
-            {
-              'vars': 'all',
-              'args': 'none',
-              'ignoreRestSiblings': false
-            }
-        ],
+        // '@typescript-eslint/no-unused-vars': ['error',
+        //     {
+        //         'vars': 'all',
+        //         'args': 'none',
+        //         'ignoreRestSiblings': false
+        //     }
+        // ],
         '@typescript-eslint/no-inferrable-types': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-empty-function': 'off'

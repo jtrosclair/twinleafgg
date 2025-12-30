@@ -13,12 +13,13 @@ import { config } from '../../config';
 import { Format } from '../store/card/card-types';
 import { AbortGameAction } from '../store/actions/abort-game-action';
 import { AbortGameReason } from '../store/actions/abort-game-action';
-import { GamePhase } from '../store/state/state';
+import { GamePhase, State } from '../store/state/state';
 import { BotManager } from '../bots/bot-manager';
 import { ReconnectionManager } from '../../backend/services/reconnection-manager';
 import { ReconnectionConfig } from '../../backend/interfaces/reconnection.interface';
 import { logger } from '../../utils/logger';
 import { User } from '../../storage';
+import { deepClone } from '../../utils/utils';
 
 export class Core {
   public clients: Client[] = [];
@@ -330,6 +331,81 @@ export class Core {
   private isBotClient(client: Client): boolean {
     // Check if the client has bot-specific methods
     return 'isFormatAllowed' in client && 'getAllowedFormats' in client;
+  }
+
+  /**
+   * Creates a game initialized with a specific state.
+   * Used for sandbox/viewer mode where a game state is loaded from base64.
+   * The client will be assigned as the active player.
+   */
+  public createGameFromState(
+    client: Client,
+    state: State,
+    gameSettings: GameSettings = new GameSettings(),
+    opponentClient?: Client
+  ): Game {
+    if (this.clients.indexOf(client) === -1) {
+      throw new GameError(GameMessage.ERROR_CLIENT_NOT_CONNECTED);
+    }
+    if (opponentClient && this.clients.indexOf(opponentClient) === -1) {
+      throw new GameError(GameMessage.ERROR_CLIENT_NOT_CONNECTED);
+    }
+
+    // Enable sandbox mode for state-loaded games
+    gameSettings.sandboxMode = true;
+
+    // Create a new game
+    const game = new Game(this, generateId(this.games), gameSettings);
+
+    // Clone and set the state directly
+    const clonedState = deepClone(state);
+
+    // Update player IDs to match the clients
+    // The active player will be controlled by the connecting client
+    const activePlayerIndex = clonedState.activePlayer || 0;
+    const opponentPlayerIndex = activePlayerIndex === 0 ? 1 : 0;
+
+    if (clonedState.players[activePlayerIndex]) {
+      clonedState.players[activePlayerIndex].id = client.id;
+      clonedState.players[activePlayerIndex].name = client.name;
+    }
+
+    // If opponent client provided, update the opponent player's ID
+    if (opponentClient && clonedState.players[opponentPlayerIndex]) {
+      clonedState.players[opponentPlayerIndex].id = opponentClient.id;
+      clonedState.players[opponentPlayerIndex].name = opponentClient.name;
+    }
+
+    // Set the state on the game's store
+    game.getStore().state = clonedState;
+
+    // Initialize player stats for timer
+    clonedState.players.forEach((player: any) => {
+      player.usedSquawkAndSeizeThisTurn = false;
+      game.playerStats.push({
+        clientId: player.id,
+        isTimeRunning: false,
+        invalidMoves: 0,
+        timeLeft: gameSettings.timeLimit
+      });
+    });
+
+    // Add game to core
+    this.games.push(game);
+    this.emit(c => c.onGameAdd(game));
+
+    // Join the client to the game
+    this.joinGame(client, game);
+
+    // Join the opponent client to the game if provided
+    if (opponentClient) {
+      this.joinGame(opponentClient, game);
+    }
+
+    // Trigger state change to notify clients
+    game.onStateChange(clonedState);
+
+    return game;
   }
 
 }
