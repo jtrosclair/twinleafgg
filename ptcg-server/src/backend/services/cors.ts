@@ -8,7 +8,8 @@ export function cors(): RequestHandler {
       'http://localhost:4200',
       'https://6eca7fef82e8.ngrok-free.app/',
       'http://sim.prizemap.app',
-      'https://sim.prizemap.app'
+      'https://sim.prizemap.app',
+      'https://prod.d2b8enpmjk7lxy.amplifyapp.com'
     ];
     const origin = req.headers.origin;
     if (config.backend.allowCors && origin && allowedOrigins.includes(origin)) {
