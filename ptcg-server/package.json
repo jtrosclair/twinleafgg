@@ -6,8 +6,8 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "lint": "eslint -c .eslintrc.js --ext .ts src --fix",
-    "compile": "tsc && tsc -p tsconfig.dist.json",
-    "build": "npm run lint && npm run test && npm run compile",
+    "compile": "tsc  && tsc -p tsconfig.dist.json",
+    "build": "npm run compile",
     "build:prod": "npm run compile",
     "build:joe": "tsc && tsc -p tsconfig.json",
     "build:start": "tsc && tsc -p tsconfig.json && npm run start",

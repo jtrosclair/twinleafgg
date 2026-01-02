@@ -541,7 +541,7 @@ export class BoardCardComponent implements OnInit, OnDestroy {
   }
 
   private setupEnergyCards(cardList: PokemonCardList) {
-    for (const card of cardList.energyCards) {
+    for (const card of cardList.energies.cards) {
       if (this.energyCards.length < MAX_ENERGY_CARDS) {
         this.energyCards.push(card);
       } else {
