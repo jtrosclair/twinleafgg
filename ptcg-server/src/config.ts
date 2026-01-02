@@ -1,6 +1,6 @@
 export const config = {
   backend: {
-    address: 'https://play-server.twinleaf.gg',
+    address: 'https://sim-server.prizemap.app',
     port: 8080,
     registrationEnabled: true,  // Completly disables/enables registration
     allowCors: true,
@@ -15,7 +15,7 @@ export const config = {
     rateLimitCount: 10000,     // Increased from 100 to 1000 HTTP requests
     wsRateLimitCount: 10000,   // Increased from 200 to 2000 WebSocket messages
     rateLimitTime: 60000,     // Keeping this at 1 minute
-    apiUrl: 'https://play-server.twinleaf.gg',
+    apiUrl: 'https://sim-server.prizemap.app',
     timeout: 60 * 60 * 1000,
     production: true,
     apiVersion: 2,

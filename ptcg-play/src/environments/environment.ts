@@ -1,5 +1,5 @@
 export const environment = {
-  apiUrl: 'https://play-server.twinleaf.gg',
+  apiUrl: 'https://sim-server.prizemap.app',
   // Increase API/socket observable timeouts to be more tolerant
   timeout: 60 * 1000,
   production: true,

@@ -5,7 +5,10 @@ export function cors(): RequestHandler {
   return function (req: Request, res: Response, next: NextFunction): any {
     const allowedOrigins = [
       'https://play.twinleaf.gg',
-      'http://localhost:4200'
+      'http://localhost:4200',
+      'https://6eca7fef82e8.ngrok-free.app/',
+      'http://sim.prizemap.app',
+      'https://sim.prizemap.app'
     ];
     const origin = req.headers.origin;
     if (config.backend.allowCors && origin && allowedOrigins.includes(origin)) {
