@@ -1,0 +1,30 @@
+import { Stage, CardType, PokemonType, TrainerType } from '../../game/store/card/card-types';
+import { Power, State, StoreLike, TrainerCard } from '../../game';
+export declare class AntiquePlumeFossil extends TrainerCard {
+    trainerType: TrainerType;
+    stage: Stage;
+    cardType: CardType;
+    cardTypez: CardType;
+    movedToActiveThisTurn: boolean;
+    pokemonType: PokemonType;
+    evolvesFrom: string;
+    cardTag: never[];
+    tools: never[];
+    archetype: never[];
+    hp: number;
+    weakness: never[];
+    retreat: never[];
+    resistance: never[];
+    attacks: never[];
+    maxTools: number;
+    evolvesTo: never[];
+    evolvesToStage: never[];
+    powers: Power[];
+    regulationMark: string;
+    set: string;
+    cardImage: string;
+    setNumber: string;
+    name: string;
+    fullName: string;
+    reduceEffect(store: StoreLike, state: State, effect: any): State;
+}

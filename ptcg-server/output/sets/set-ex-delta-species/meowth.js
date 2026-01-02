@@ -1,0 +1,40 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Meowth = void 0;
+const game_1 = require("../../game");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
+class Meowth extends game_1.PokemonCard {
+    constructor() {
+        super(...arguments);
+        this.cardType = C;
+        this.hp = 50;
+        this.weakness = [{ type: F }];
+        this.retreat = [C];
+        this.attacks = [
+            {
+                name: 'Pickup Power',
+                cost: [C],
+                damage: 0,
+                text: 'Put an Energy card from your discard pile into your hand.'
+            },
+            {
+                name: 'Bite',
+                cost: [C],
+                damage: 10,
+                text: ''
+            }
+        ];
+        this.set = 'DS';
+        this.setNumber = '77';
+        this.cardImage = 'assets/cardback.png';
+        this.name = 'Meowth';
+        this.fullName = 'Meowth DS';
+    }
+    reduceEffect(store, state, effect) {
+        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+            prefabs_1.SEARCH_DISCARD_PILE_FOR_CARDS_TO_HAND(store, state, effect.player, this, { superType: game_1.SuperType.ENERGY }, { min: 0, max: 1, allowCancel: false }, this.attacks[0]);
+        }
+        return state;
+    }
+}
+exports.Meowth = Meowth;

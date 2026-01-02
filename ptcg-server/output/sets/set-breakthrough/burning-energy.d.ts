@@ -1,0 +1,17 @@
+import { State, StoreLike } from '../../game';
+import { CardType, EnergyType } from '../../game/store/card/card-types';
+import { EnergyCard } from '../../game/store/card/energy-card';
+import { Effect } from '../../game/store/effects/effect';
+export declare class BurningEnergy extends EnergyCard {
+    provides: CardType[];
+    energyType: EnergyType;
+    set: string;
+    cardImage: string;
+    setNumber: string;
+    name: string;
+    fullName: string;
+    text: string;
+    readonly BURNING_EXISTANCE_MARKER = "BURNING_EXISTANCE_MARKER";
+    readonly BURNING_DISCARDED_MARKER = "BURNING_DISCARDED_MARKER";
+    reduceEffect(store: StoreLike, state: State, effect: Effect): State;
+}

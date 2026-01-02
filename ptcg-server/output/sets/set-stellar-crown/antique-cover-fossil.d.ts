@@ -1,0 +1,32 @@
+import { Stage, CardType, SuperType, PokemonType } from '../../game/store/card/card-types';
+import { Power, State, StoreLike, TrainerCard } from '../../game';
+export declare class AntiqueCoverFossil extends TrainerCard {
+    superType: SuperType;
+    regulationMark: string;
+    stage: Stage;
+    cardType: CardType;
+    hp: number;
+    movedToActiveThisTurn: boolean;
+    pokemonType: PokemonType;
+    evolvesFrom: string;
+    cardTag: never[];
+    tools: never[];
+    archetype: never[];
+    weakness: never[];
+    retreat: never[];
+    resistance: never[];
+    attacks: never[];
+    attacksThisTurn: number;
+    maxAttacksThisTurn: number;
+    allowSubsequentAttackChoice: boolean;
+    maxTools: number;
+    evolvesTo: never[];
+    evolvesToStage: never[];
+    powers: Power[];
+    set: string;
+    cardImage: string;
+    setNumber: string;
+    name: string;
+    fullName: string;
+    reduceEffect(store: StoreLike, state: State, effect: any): State;
+}

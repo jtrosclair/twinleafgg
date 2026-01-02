@@ -1,0 +1,32 @@
+import { Power, State, StoreLike } from '../../game';
+import { CardType, Stage } from '../../game/store/card/card-types';
+import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { Effect } from '../../game/store/effects/effect';
+export declare class Ribombee extends PokemonCard {
+    stage: Stage;
+    evolvesFrom: string;
+    cardType: CardType;
+    hp: number;
+    weakness: {
+        type: CardType.METAL;
+    }[];
+    resistance: {
+        type: CardType.DARK;
+        value: number;
+    }[];
+    retreat: CardType.COLORLESS[];
+    powers: Power[];
+    attacks: {
+        name: string;
+        cost: CardType.COLORLESS[];
+        damage: number;
+        text: string;
+    }[];
+    set: string;
+    cardImage: string;
+    setNumber: string;
+    name: string;
+    fullName: string;
+    readonly HONEY_GATHER_MARKER = "HONEY_GATHER_MARKER";
+    reduceEffect(store: StoreLike, state: State, effect: Effect): State;
+}

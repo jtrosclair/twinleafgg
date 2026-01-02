@@ -1,0 +1,85 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.setHiddenFates = void 0;
+const other_prints_1 = require("./other-prints");
+const alolan_vulpix_1 = require("./alolan-vulpix");
+const charmander_1 = require("./charmander");
+const erikas_hospitality_1 = require("./erikas-hospitality");
+const moltres_zapdos_articuno_gx_1 = require("./moltres-zapdos-articuno-gx");
+const psyduck_1 = require("./psyduck");
+const shiny_vault_1 = require("./shiny-vault");
+// Other prints
+const other_prints_2 = require("./other-prints");
+exports.setHiddenFates = [
+    new charmander_1.Charmander(),
+    new erikas_hospitality_1.ErikasHospitality(),
+    new moltres_zapdos_articuno_gx_1.MoltresZapdosArticunoGX(),
+    new psyduck_1.Psyduck(),
+    // FA/Shiny Vault
+    new alolan_vulpix_1.AlolanVulpix(),
+    new shiny_vault_1.WooperSV(),
+    new shiny_vault_1.QuagsireSV(),
+    // Other prints
+    new other_prints_2.BrocksGritHIF(),
+    new other_prints_2.GuzmaHIF(),
+    new other_prints_1.SlowpokeHIF(),
+    new other_prints_1.BillsAnalysisHIF(),
+    new other_prints_1.LtSurgesStrategyHIF(),
+    new other_prints_1.MoltresZapdosArticunoGX2HIF(),
+    new other_prints_1.MoltresZapdosArticunoGX3HIF(),
+    new other_prints_1.RowletHIF(),
+    new other_prints_1.DartrixHIF(),
+    new other_prints_1.FroakieFrubblesHIF(),
+    new other_prints_1.FrogadierHIF(),
+    new other_prints_1.ShuppetHIF(),
+    new other_prints_1.InkayHIF(),
+    new other_prints_1.MalamarHIF(),
+    new other_prints_1.PoipoleHIF(),
+    new other_prints_1.SudowoodoHIF(),
+    new other_prints_1.RioluHIF(),
+    new other_prints_1.LucarioHIF(),
+    new other_prints_1.RockruffHIF(),
+    new other_prints_1.BuzzwoleHIF(),
+    new other_prints_1.ZoruaHIF(),
+    new other_prints_1.MagnezoneHIF(),
+    new other_prints_1.RaltsHIF(),
+    new other_prints_1.DiancieHIF(),
+    new other_prints_1.GibleHIF(),
+    new other_prints_1.GabiteHIF(),
+    new other_prints_1.GarchompHIF(),
+    new other_prints_1.Eevee3HIF(),
+    new other_prints_1.NoibatHIF(),
+    new other_prints_1.OranguruHIF(),
+    new other_prints_1.DecidueyeGXHIF(),
+    new other_prints_1.AlolanNinetalesGXHIF(),
+    new other_prints_1.ArticunoGXHIF(),
+    new other_prints_1.GlaceonGXHIF(),
+    new other_prints_1.GreninjaGXHIF(),
+    new other_prints_1.ElectrodeGXHIF(),
+    new other_prints_1.MewtwoGX2HIF(),
+    new other_prints_1.EspeonGXHIF(),
+    new other_prints_1.BanetteGXHIF(),
+    new other_prints_1.NaganadelGXHIF(),
+    new other_prints_1.LucarioGXHIF(),
+    new other_prints_1.LycanrocGXHIF(),
+    new other_prints_1.BuzzwoleGXHIF(),
+    new other_prints_1.DarkraiGXHIF(),
+    new other_prints_1.GuzzlordGXHIF(),
+    new other_prints_1.KartanaGXHIF(),
+    new other_prints_1.GardevoirGXHIF(),
+    new other_prints_1.SylveonGXHIF(),
+    new other_prints_1.NoivernGXHIF(),
+    new other_prints_1.SilvallyGXHIF(),
+    new other_prints_1.DrampaGXHIF(),
+    new other_prints_1.CynthiaHIF(),
+    new other_prints_1.FishermanHSHIF(),
+    new other_prints_1.LadyFLIHIF(),
+    new other_prints_1.AetherParadiseConvserationAreaHIF(),
+    new other_prints_1.BrookletHillHIF(),
+    new other_prints_1.MtCoronetHIF(),
+    new other_prints_1.ShrineOfPunishmentHIF(),
+    new other_prints_1.TapuBuluGXHIF(),
+    new other_prints_1.TapuFiniGXHIF(),
+    new other_prints_1.TapuKokoGXHIF(),
+    new other_prints_1.TapuLeleGXHIF(),
+];

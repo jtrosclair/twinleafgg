@@ -1,0 +1,60 @@
+import { Client } from '../../game/client/client.interface';
+import { Game } from '../../game/core/game';
+import { State } from '../../game/store/state/state';
+import { Core } from '../../game/core/core';
+import { SocketCache } from './socket-cache';
+import { SocketWrapper, Response } from './socket-wrapper';
+export declare class GameSocket {
+    private cache;
+    private client;
+    private socket;
+    private core;
+    private stateSanitizer;
+    private lastActivePlayerId;
+    constructor(client: Client, socket: SocketWrapper, core: Core, cache: SocketCache);
+    onGameJoin(game: Game, client: Client): void;
+    onGameLeave(game: Game, client: Client): void;
+    onStateChange(game: Game, state: State): void;
+    private joinGame;
+    private leaveGame;
+    private rejoinGame;
+    private concedeGame;
+    private getGameStatus;
+    private dispatch;
+    private ability;
+    private trainerAbility;
+    private energyAbility;
+    private attack;
+    private stadium;
+    private playGame;
+    private playCard;
+    private resolvePrompt;
+    private reorderBench;
+    private reorderHand;
+    private retreat;
+    private passTurn;
+    private appendLog;
+    private changeAvatar;
+    private sandboxModifyPlayer;
+    private sandboxModifyGameState;
+    private sandboxModifyCard;
+    private sandboxModifyPokemon;
+    onTimerUpdate(game: Game, playerStats: any[]): void;
+    onPlayerDisconnected(game: Game, disconnectedClient: Client): void;
+    onPlayerReconnected(game: Game, reconnectedClient: Client): void;
+    onConnectionStatusUpdate(game: Game, connectionStatuses: Array<{
+        playerId: number;
+        playerName: string;
+        isConnected: boolean;
+        disconnectedAt?: number;
+    }>): void;
+    onReconnectionTimeout(game: Game, playerId: number, playerName: string): void;
+    onTimeoutWarning(game: Game, timeRemaining: number): void;
+    dispose(): void;
+    onUndoing(game: Game, playerName: string): void;
+    canUndo(params: {
+        gameId: number;
+    }, response: Response<{
+        canUndo: boolean;
+    }>): void;
+}

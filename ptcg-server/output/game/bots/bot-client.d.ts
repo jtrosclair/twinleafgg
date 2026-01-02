@@ -1,0 +1,37 @@
+import { Client } from '../client/client.interface';
+import { Game } from '../core/game';
+import { User, Message } from '../../storage';
+import { Core } from '../core/core';
+import { State } from '../store/state/state';
+import { GameSettings } from '../core/game-settings';
+import { Format } from '../store/card/card-types';
+export declare abstract class BotClient implements Client {
+    id: number;
+    name: string;
+    user: User;
+    core: Core | undefined;
+    games: Game[];
+    protected decks: Map<Format, string[]>;
+    protected allowedFormats: Format[];
+    protected pendingDeck: string[] | null;
+    constructor(name: string, allowedFormats?: Format[]);
+    getDeck(format: Format): Promise<string[] | null>;
+    hasDeckForFormat(format: Format): boolean;
+    setDeck(format: Format, deck: string[]): void;
+    isFormatAllowed(format: Format): boolean;
+    getAllowedFormats(): Format[];
+    setPendingDeck(deck: string[]): void;
+    abstract onConnect(client: Client): void;
+    abstract onDisconnect(client: Client): void;
+    abstract onUsersUpdate(users: User[]): void;
+    abstract onGameAdd(game: Game): void;
+    abstract onGameDelete(game: Game): void;
+    abstract onGameJoin(game: Game, client: Client): void;
+    abstract onGameLeave(game: Game, client: Client): void;
+    abstract onStateChange(game: Game, state: State): void;
+    abstract onMessage(from: Client, message: Message): void;
+    abstract onMessageRead(user: User): void;
+    createGame(deck: string[], gameSettings?: GameSettings, invited?: Client): Game;
+    loadDeck(): Promise<string[]>;
+    private validateDeck;
+}

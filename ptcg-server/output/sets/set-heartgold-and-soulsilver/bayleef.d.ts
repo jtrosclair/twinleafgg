@@ -1,0 +1,27 @@
+import { CardType, Stage } from '../../game/store/card/card-types';
+import { PokemonCard } from '../../game/store/card/pokemon-card';
+export declare class Bayleef extends PokemonCard {
+    stage: Stage;
+    evolvesFrom: string;
+    cardType: CardType;
+    hp: number;
+    weakness: {
+        type: CardType.FIRE;
+    }[];
+    resistance: {
+        type: CardType.WATER;
+        value: number;
+    }[];
+    retreat: CardType.COLORLESS[];
+    attacks: {
+        name: string;
+        cost: (CardType.GRASS | CardType.COLORLESS)[];
+        damage: number;
+        text: string;
+    }[];
+    set: string;
+    cardImage: string;
+    setNumber: string;
+    name: string;
+    fullName: string;
+}

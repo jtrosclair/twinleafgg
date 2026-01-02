@@ -1,0 +1,46 @@
+import { Server, Socket } from 'socket.io';
+import { Client } from '../../game/client/client.interface';
+import { Core } from '../../game/core/core';
+import { Game } from '../../game/core/game';
+import { State } from '../../game/store/state/state';
+import { Message, User } from '../../storage';
+import { SocketWrapper } from './socket-wrapper';
+export declare class SocketClient implements Client {
+    id: number;
+    name: string;
+    user: User;
+    games: Game[];
+    core: Core;
+    socket: SocketWrapper;
+    private cache;
+    private coreSocket;
+    private gameSocket;
+    private messageSocket;
+    private matchmakingSocket;
+    constructor(user: User, core: Core, io: Server, socket: Socket);
+    onConnect(client: Client): void;
+    onDisconnect(client: Client): void;
+    onGameAdd(game: Game): void;
+    onGameDelete(game: Game): void;
+    onUsersUpdate(users: User[]): void;
+    onStateChange(game: Game, state: State): void;
+    onGameJoin(game: Game, client: Client): void;
+    onGameLeave(game: Game, client: Client): void;
+    onJoinQueue(from: Client, message: Message): void;
+    onLeaveQueue(): void;
+    onMessage(from: Client, message: Message): void;
+    onMessageRead(user: User): void;
+    onTimerUpdate(game: Game, playerStats: any[]): void;
+    onPlayerDisconnected(game: Game, disconnectedClient: Client): void;
+    onPlayerReconnected(game: Game, reconnectedClient: Client): void;
+    onConnectionStatusUpdate(game: Game, connectionStatuses: Array<{
+        playerId: number;
+        playerName: string;
+        isConnected: boolean;
+        disconnectedAt?: number;
+    }>): void;
+    onReconnectionTimeout(game: Game, playerId: number, playerName: string): void;
+    onTimeoutWarning(game: Game, timeRemaining: number): void;
+    attachListeners(): void;
+    dispose(): void;
+}
