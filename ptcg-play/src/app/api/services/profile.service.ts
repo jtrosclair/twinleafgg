@@ -35,7 +35,10 @@ export class ProfileService {
   }
 
   public getCardImagesUrl() {
-    return this.api.get<{ ok: boolean; jsonUrl: string }>('/v1/profile/cardImagesUrl');
+    return {
+      ok: true,
+      jsonUrl: "https://amydev.me/twinleaf-json/image-jsons/limitlesstcg/small.json"
+    }
   }
 
   public setCardImagesUrl(jsonUrl: string) {

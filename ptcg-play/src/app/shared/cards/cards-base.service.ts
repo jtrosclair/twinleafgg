@@ -204,18 +204,7 @@ export class CardsBaseService implements OnDestroy {
   }
 
   private loadFavoritesFromAPI(): void {
-    this.favoritesService.getFavorites().pipe(
-      catchError(() => {
-        // If API fails, fall back to localStorage
-        const storedFavorites = localStorage.getItem('favoriteCards');
-        if (storedFavorites) {
-          this.favoriteCards = JSON.parse(storedFavorites);
-        }
-        return of({});
-      })
-    ).subscribe(favorites => {
-      this.favoriteCards = favorites;
-    });
+    this.favoriteCards = {};
   }
 
   public setCustomImageForCard(card: Card, imageUrl: string): void {
