@@ -412,7 +412,7 @@ export class GameSocket {
   }
 
   public onTimerUpdate(game: Game, playerStats: any[]): void {
-    this.socket.emit(`game[${game.id}]:timerUpdate`, { playerStats });
+    //this.socket.emit(`game[${game.id}]:timerUpdate`, { playerStats });
   }
 
   public onPlayerDisconnected(game: Game, disconnectedClient: Client): void {

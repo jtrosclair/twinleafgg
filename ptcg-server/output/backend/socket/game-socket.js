@@ -306,7 +306,7 @@ class GameSocket {
         this.dispatch(params.gameId, action, response);
     }
     onTimerUpdate(game, playerStats) {
-        this.socket.emit(`game[${game.id}]:timerUpdate`, { playerStats });
+        //this.socket.emit(`game[${game.id}]:timerUpdate`, { playerStats });
     }
     onPlayerDisconnected(game, disconnectedClient) {
         // Notify this client about the disconnection
