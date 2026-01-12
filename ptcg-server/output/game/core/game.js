@@ -461,35 +461,12 @@ class Game {
                 });
             }
         });
-        const activePlayers = this.getTimeRunningPlayers(state);
         this.playerStats.forEach(p => {
-            p.isTimeRunning = activePlayers.includes(p.clientId);
+            p.isTimeRunning = false;
         });
-    }
-    /**
-     * Returns playerIds that needs to make a move.
-     * Used to calculate their time left.
-     */
-    getTimeRunningPlayers(state) {
-        if (state.phase === state_1.GamePhase.WAITING_FOR_PLAYERS) {
-            return [];
-        }
-        const result = [];
-        state.prompts.filter(p => p.result === undefined).forEach(p => {
-            if (!result.includes(p.playerId)) {
-                result.push(p.playerId);
-            }
-        });
-        if (result.length > 0) {
-            return result;
-        }
-        const player = state.players[state.activePlayer];
-        if (player !== undefined) {
-            result.push(player.id);
-        }
-        return result;
     }
     startTimer() {
+        return;
         const intervalDelay = 1000; // 1 second
         // Game time is set to unlimited
         if (this.gameSettings.timeLimit === 0) {

@@ -121,11 +121,6 @@ export declare class Game implements StoreHandler {
     sendTimeoutWarning(clientId: number, timeRemaining: number): void;
     private updateInvalidMoves;
     private updateIsTimeRunning;
-    /**
-     * Returns playerIds that needs to make a move.
-     * Used to calculate their time left.
-     */
-    private getTimeRunningPlayers;
     private startTimer;
     private stopTimer;
     private startPeriodicSync;

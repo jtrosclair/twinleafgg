@@ -1,3 +1,4 @@
+//@ts-ignore
 import { Action } from '../store/actions/action';
 import { Arbiter } from './arbiter';
 import { Client } from '../client/client.interface';
@@ -568,41 +569,14 @@ export class Game implements StoreHandler {
       }
     });
 
-    const activePlayers = this.getTimeRunningPlayers(state);
     this.playerStats.forEach(p => {
-      p.isTimeRunning = activePlayers.includes(p.clientId);
+      p.isTimeRunning = false
     });
   }
 
-  /**
-   * Returns playerIds that needs to make a move.
-   * Used to calculate their time left.
-   */
-  private getTimeRunningPlayers(state: State): number[] {
-    if (state.phase === GamePhase.WAITING_FOR_PLAYERS) {
-      return [];
-    }
-
-    const result: number[] = [];
-    state.prompts.filter(p => p.result === undefined).forEach(p => {
-      if (!result.includes(p.playerId)) {
-        result.push(p.playerId);
-      }
-    });
-
-    if (result.length > 0) {
-      return result;
-    }
-
-    const player = state.players[state.activePlayer];
-    if (player !== undefined) {
-      result.push(player.id);
-    }
-
-    return result;
-  }
 
   private startTimer() {
+    return;
     const intervalDelay = 1000; // 1 second
 
     // Game time is set to unlimited
