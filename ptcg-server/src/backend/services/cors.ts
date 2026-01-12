@@ -9,6 +9,8 @@ export function cors(): RequestHandler {
       'https://6eca7fef82e8.ngrok-free.app/',
       'http://sim.prizemap.app',
       'https://sim.prizemap.app',
+      'http://sim-mobile.prizemap.app',
+      'https://sim-mobile.prizemap.app',
       'https://prod.d2b8enpmjk7lxy.amplifyapp.com'
     ];
     const origin = req.headers.origin;
