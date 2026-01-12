@@ -61,22 +61,22 @@ class Profile extends controller_1.Controller {
         });
         const matches = matchRows
             .map(match => ({
-                matchId: match.id,
-                player1Id: match.player1.id,
-                player2Id: match.player2.id,
-                ranking1: match.ranking1,
-                rankingStake1: match.rankingStake1,
-                ranking2: match.ranking2,
-                rankingStake2: match.rankingStake2,
-                winner: match.winner,
-                created: match.created,
-                player1Archetype: match.player1Archetype,
-                player2Archetype: match.player2Archetype,
-                player1DeckName: match.player1DeckName,
-                player2DeckName: match.player2DeckName,
-                player1DeckId: match.player1DeckId || undefined,
-                player2DeckId: match.player2DeckId || undefined
-            }));
+            matchId: match.id,
+            player1Id: match.player1.id,
+            player2Id: match.player2.id,
+            ranking1: match.ranking1,
+            rankingStake1: match.rankingStake1,
+            ranking2: match.ranking2,
+            rankingStake2: match.rankingStake2,
+            winner: match.winner,
+            created: match.created,
+            player1Archetype: match.player1Archetype,
+            player2Archetype: match.player2Archetype,
+            player1DeckName: match.player1DeckName,
+            player2DeckName: match.player2DeckName,
+            player1DeckId: match.player1DeckId || undefined,
+            player2DeckId: match.player2DeckId || undefined
+        }));
         res.send({ ok: true, matches, users, total });
     }
     async onChangePassword(req, res) {

@@ -10,7 +10,6 @@ const check_effects_1 = require("../effects/check-effects");
 const game_effects_1 = require("../effects/game-effects");
 const prefabs_1 = require("../prefabs/prefabs");
 const choose_pokemon_prompt_1 = require("../prompts/choose-pokemon-prompt");
-const choose_prize_prompt_1 = require("../prompts/choose-prize-prompt");
 const coin_flip_prompt_1 = require("../prompts/coin-flip-prompt");
 const shuffle_prompt_1 = require("../prompts/shuffle-prompt");
 const setup_reducer_1 = require("../reducers/setup-reducer");
@@ -132,51 +131,6 @@ function chooseActivePokemons(state) {
         if (!hasActive && hasBenched) {
             const choose = new choose_pokemon_prompt_1.ChoosePokemonPrompt(player.id, game_message_1.GameMessage.CHOOSE_NEW_ACTIVE_POKEMON, play_card_action_1.PlayerType.BOTTOM_PLAYER, [play_card_action_1.SlotType.BENCH], { min: 1, allowCancel: false });
             prompts.push(choose);
-        }
-    }
-    return prompts;
-}
-function choosePrizeCards(store, state, prizeGroups) {
-    const prompts = [];
-    for (let i = 0; i < state.players.length; i++) {
-        const player = state.players[i];
-        for (const group of prizeGroups[i]) {
-            const prizeLeft = player.getPrizeLeft();
-            // In sudden death, taking any prize card means winning
-            if (group.count > 0 && state.isSuddenDeath) {
-                endGame(store, state, i === 0 ? state_1.GameWinner.PLAYER_1 : state_1.GameWinner.PLAYER_2);
-                return [];
-            }
-            // If prizes to take >= remaining prizes, automatically take all prizes and end game
-            if (group.count >= prizeLeft && prizeLeft > 0) {
-                // Use TAKE_SPECIFIC_PRIZES to properly track the prizes taken
-                const remainingPrizes = player.prizes.filter(p => p.cards.length > 0);
-                prefabs_1.TAKE_SPECIFIC_PRIZES(store, state, player, remainingPrizes, {
-                    destination: group.destination || player.hand,
-                    skipReduce: false
-                });
-                // Track the accurate number of prizes taken using GameStatsTracker
-                game_stats_tracker_1.GameStatsTracker.trackPrizeTaken(player, remainingPrizes.length);
-                // End game with this player as winner
-                endGame(store, state, i === 0 ? state_1.GameWinner.PLAYER_1 : state_1.GameWinner.PLAYER_2);
-                return [];
-            }
-            if (group.count > prizeLeft) {
-                group.count = prizeLeft;
-            }
-            if (group.count > 0) {
-                let message = game_message_1.GameMessage.CHOOSE_PRIZE_CARD;
-                // Choose a custom message based on the destination.
-                if (group.destination === player.discard) {
-                    message = game_message_1.GameMessage.CHOOSE_PRIZE_CARD_TO_DISCARD;
-                }
-                const prompt = new choose_prize_prompt_1.ChoosePrizePrompt(player.id, message, {
-                    isSecret: player.prizes[0].isSecret,
-                    count: group.count,
-                    destination: group.destination
-                });
-                prompts.push(prompt);
-            }
         }
     }
     return prompts;
@@ -342,19 +296,37 @@ function* executeCheckState(next, store, state, onComplete) {
     if (state.phase === state_1.GamePhase.FINISHED) {
         return state;
     }
-    // Handle prize selection first - opponent then player
-    const prizePrompts = choosePrizeCards(store, state, prizeGroups);
-    for (const prompt of prizePrompts) {
-        const player = state.players.find(p => p.id === prompt.playerId);
-        if (!player) {
-            throw new game_error_1.GameError(game_message_1.GameMessage.ILLEGAL_ACTION);
-        }
-        state = store.prompt(state, prompt, (result) => {
-            const destination = prompt.options.destination || player.hand;
-            prefabs_1.TAKE_SPECIFIC_PRIZES(store, state, player, result, { destination });
-        });
-        if (store.hasPrompts()) {
-            yield store.waitPrompt(state, () => next());
+    // Handle prize selection first - opponent then player (auto-select first X)
+    for (let i = 0; i < state.players.length; i++) {
+        const player = state.players[i];
+        for (const group of prizeGroups[i]) {
+            const prizeLeft = player.getPrizeLeft();
+            // In sudden death, taking any prize card means winning
+            if (group.count > 0 && state.isSuddenDeath) {
+                endGame(store, state, i === 0 ? state_1.GameWinner.PLAYER_1 : state_1.GameWinner.PLAYER_2);
+                return state;
+            }
+            // If prizes to take >= remaining prizes, automatically take all prizes and end game
+            if (group.count >= prizeLeft && prizeLeft > 0) {
+                const remainingPrizes = player.prizes.filter(p => p.cards.length > 0);
+                prefabs_1.TAKE_SPECIFIC_PRIZES(store, state, player, remainingPrizes, {
+                    destination: group.destination || player.hand,
+                    skipReduce: false
+                });
+                game_stats_tracker_1.GameStatsTracker.trackPrizeTaken(player, remainingPrizes.length);
+                endGame(store, state, i === 0 ? state_1.GameWinner.PLAYER_1 : state_1.GameWinner.PLAYER_2);
+                return state;
+            }
+            if (group.count > prizeLeft) {
+                group.count = prizeLeft;
+            }
+            // Auto-select the first X prizes
+            if (group.count > 0) {
+                const allPrizes = player.prizes.filter(p => p.cards.length > 0);
+                const selectedPrizes = allPrizes.slice(0, group.count);
+                const destination = group.destination || player.hand;
+                prefabs_1.TAKE_SPECIFIC_PRIZES(store, state, player, selectedPrizes, { destination });
+            }
         }
     }
     // Then handle new active Pokemon selection - opponent then player
