@@ -131,7 +131,7 @@ export class StateSerializer {
     const serializers = this.serializers;
     const context = this.restoreContext(serializedState);
 
-    console.log({ context })
+    // console.log({ context })
 
     const reviver: any = function (this: any, key: string, value: any) {
       if (value instanceof Array) {
@@ -241,7 +241,7 @@ export class StateSerializer {
       cards.push(clonedCard);
     });
 
-    console.log({ names });
+    // console.log({ names });
     return { cards };
   }
 

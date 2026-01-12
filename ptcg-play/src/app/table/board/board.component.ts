@@ -147,6 +147,19 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
       this.deckSize = 0;
       this.discardSize = 0;
     }
+
+    // Update bench gap based on bench capacity
+    this.updateBenchGap();
+  }
+
+  private updateBenchGap(): void {
+    const topBenchSize = this.topPlayer?.bench?.length || 0;
+    const bottomBenchSize = this.bottomPlayer?.bench?.length || 0;
+    const maxBenchSize = Math.max(topBenchSize, bottomBenchSize);
+
+    // If bench size is 5 or less, use larger gap; otherwise use standard gap
+    const benchGap = maxBenchSize <= 5 ? 'clamp(8px, 15vw, 50px)' : 'clamp(2px, 10vw, 30px)';
+    document.documentElement.style.setProperty('--bench-gap', benchGap);
   }
 
   // private lastCoinFlipPrompt: CoinFlipPrompt | null = null;
@@ -292,6 +305,13 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
     }
   }
 
+  public hasActivePrompt(): boolean {
+    if (!this.gameState || !this.gameState.state) {
+      return false;
+    }
+    return this.gameState.state.prompts.some(p => p.result === undefined);
+  }
+
   private getScanUrl(item: BoardCardItem): string {
     const player = item.player === PlayerType.TOP_PLAYER
       ? this.topPlayer
@@ -426,12 +446,18 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
   }
 
   public onDeckClick(card: Card, cardList: CardList) {
-    const facedown = true;
-    const allowReveal = !!this.gameState.replay;
-    this.cardsBaseService.showCardInfoList({ card, cardList, allowReveal, facedown });
+    if (this.isZoneEmpty(cardList)) {
+      return;
+    }
+    const facedown = false;
+    this.cardsBaseService.showCardInfoList({ card, cardList, facedown });
   }
 
   public onDiscardClick(card: Card, cardList: CardList) {
+    if (this.isZoneEmpty(cardList)) {
+      return;
+    }
+
     const isBottomOwner = this.bottomPlayer && this.bottomPlayer.id === this.clientId;
     const isDeleted = this.gameState.deleted;
 
@@ -609,6 +635,10 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
   }
 
   public onLostZoneClick(card: Card, cardList: CardList) {
+    if (this.isZoneEmpty(cardList)) {
+      return;
+    }
+
     const isBottomOwner = this.bottomPlayer && this.bottomPlayer.id === this.clientId;
     const isDeleted = this.gameState.deleted;
 
@@ -644,16 +674,77 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
   }
 
   /**
+   * Check if a zone is empty
+   */
+  public isZoneEmpty(cardList: CardList | undefined): boolean {
+    return !cardList || !cardList.cards || cardList.cards.length === 0;
+  }
+
+  /**
+   * Check if deck is empty
+   */
+  public isDeckEmpty(player: Player | undefined): boolean {
+    return this.isZoneEmpty(player?.deck);
+  }
+
+  /**
+   * Check if discard is empty
+   */
+  public isDiscardEmpty(player: Player | undefined): boolean {
+    return this.isZoneEmpty(player?.discard);
+  }
+
+  /**
+   * Check if lost zone is empty
+   */
+  public isLostZoneEmpty(player: Player | undefined): boolean {
+    return this.isZoneEmpty(player?.lostzone);
+  }
+
+  /**
+   * Check if prizes are empty
+   */
+  public isPrizesEmpty(player: Player | undefined): boolean {
+    return this.getPrizeCount(player) === 0;
+  }
+
+  /**
    * Handle clicking on prizes zone in mobile compact view
    */
   public onPrizesModalClick(player: Player) {
-    if (!player || !player.prizes || player.prizes.length === 0) {
+    if (!player || !player.prizes || player.prizes.length === 0 || this.isPrizesEmpty(player)) {
       return;
     }
-    // Find the first non-empty prize to show
-    const firstPrize = player.prizes.find(prize => prize.cards.length > 0);
-    if (firstPrize) {
-      this.onPrizeClick(player, firstPrize);
+
+    const isBottomOwner = player.id === this.clientId;
+    const isDeleted = this.gameState.deleted;
+
+    if (!isBottomOwner || isDeleted) {
+      // For opponent's prizes, show the first card
+      const firstPrize = player.prizes.find(prize => prize.cards.length > 0);
+      if (firstPrize) {
+        this.onPrizeClick(player, firstPrize);
+      }
+      return;
     }
+
+    // For your own prizes, create a combined card list and show menu
+    const allPrizeCards: Card[] = [];
+    player.prizes.forEach(prize => {
+      allPrizeCards.push(...prize.cards);
+    });
+
+    if (allPrizeCards.length === 0) {
+      return;
+    }
+
+    const card = allPrizeCards[0];
+    const prizeCardList: CardList = {
+      cards: allPrizeCards,
+      isPublic: false,
+      isSecret: false
+    } as CardList;
+
+    this.cardsBaseService.showCardInfoList({ card, cardList: prizeCardList });
   }
 }

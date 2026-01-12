@@ -292,4 +292,11 @@ export class TableComponent implements OnInit, OnDestroy {
   toggleSandboxSidebar() {
     this.sandboxSidebarCollapsed = !this.sandboxSidebarCollapsed;
   }
+
+  public hasActivePrompt(): boolean {
+    if (!this.gameState || !this.gameState.state) {
+      return false;
+    }
+    return this.gameState.state.prompts.some(p => p.result === undefined);
+  }
 }

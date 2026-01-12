@@ -40,7 +40,7 @@
 
       <!-- Player's hand -->
 
-      <ptcg-hand [clientId]="clientId" [gameState]="gameState" [player]="bottomPlayer" [isAdmin]="isAdmin"
+      <ptcg-hand *ngIf="!hasActivePrompt()" [clientId]="clientId" [gameState]="gameState" [player]="bottomPlayer" [isAdmin]="isAdmin"
         [isTO]="isTO"></ptcg-hand>
 
       <!-- <button mat-raised-button color="primary" (click)="undo()" [disabled]="!canUndoBackend"

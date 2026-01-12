@@ -192,7 +192,7 @@ export class StateSerializer {
             clonedCard.id = index;
             cards.push(clonedCard);
         });
-        console.log({ names });
+        //console.log({ names });
         return { cards };
     }
 }

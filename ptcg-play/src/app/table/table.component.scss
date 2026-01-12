@@ -115,8 +115,8 @@ ptcg-hand {
     overflow: visible;
     position: absolute;
     z-index: 1000 !important;
-    background-color: purple;
-
+    // background-color: purple;
+    background-color: rgb(28, 0, 51);
     // Create a dedicated scrollable container for the hand
     display: block;
     width: 100%;

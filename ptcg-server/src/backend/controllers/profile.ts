@@ -168,7 +168,8 @@ export class Profile extends Controller {
   @Get('/cardImagesUrl')
   @AuthToken()
   public async onGetCardImagesUrl(req: Request, res: Response) {
-    res.send({ ok: true, jsonUrl: 'https://amydev.me/twinleaf-json/image-jsons/limitlesstcg/large.json' });
+    //res.send({ ok: true, jsonUrl: 'https://amydev.me/twinleaf-json/image-jsons/limitlesstcg/large.json' });
+    res.send({ ok: true, jsonUrl: 'https://amydev.me/twinleaf-json/image-jsons/limitlesstcg/small.json' });
   }
 
   @Post('/setCardImagesUrl')

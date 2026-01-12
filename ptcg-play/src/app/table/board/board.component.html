@@ -21,7 +21,7 @@
 <div id="top_div" [class.active]="isTopPlayerActive"></div>
 <div id="bottom_div" [class.active]="isBottomPlayerActive"></div>
 
-<div class="ptcg-board-outer-container responsive-board">
+<div class="ptcg-board-outer-container responsive-board" [class.prompt-active]="hasActivePrompt()">
   <div class="ptcg-board-container" [class.upside-down]="isUpsideDown" [dropTarget]="boardTarget">
     <div class="ptcg-board-player upside-down">
       <!-- Top Active -->
@@ -43,19 +43,19 @@
 
       <!-- Mobile Compact Zone Grid (for mobile only) -->
       <div class="mobile-zone-grid mobile-zone-grid-top">
-        <div class="zone-item" (click)="onDeckClick($event, topPlayer?.deck)">
+        <div class="zone-item" [class.zone-disabled]="isDeckEmpty(topPlayer)" (click)="onDeckClick($event, topPlayer?.deck)">
           <div class="zone-label">Deck</div>
           <div class="zone-count">{{topPlayer?.deck?.cards?.length || 0}}</div>
         </div>
-        <div class="zone-item" (click)="onLostZoneClick($event, topPlayer?.lostzone)">
+        <div class="zone-item" [class.zone-disabled]="isLostZoneEmpty(topPlayer)" (click)="onLostZoneClick($event, topPlayer?.lostzone)">
           <div class="zone-label">Lost</div>
           <div class="zone-count">{{topPlayer?.lostzone?.cards?.length || 0}}</div>
         </div>
-        <div class="zone-item" (click)="onDiscardClick($event, topPlayer?.discard)">
+        <div class="zone-item" [class.zone-disabled]="isDiscardEmpty(topPlayer)" (click)="onDiscardClick($event, topPlayer?.discard)">
           <div class="zone-label">Discard</div>
           <div class="zone-count">{{topPlayer?.discard?.cards?.length || 0}}</div>
         </div>
-        <div class="zone-item" (click)="onPrizesModalClick(topPlayer)">
+        <div class="zone-item" [class.zone-disabled]="isPrizesEmpty(topPlayer)" (click)="onPrizesModalClick(topPlayer)">
           <div class="zone-label">Prizes</div>
           <div class="zone-count">{{getPrizeCount(topPlayer)}}</div>
         </div>
@@ -64,7 +64,7 @@
       <!-- Desktop zones (hidden on mobile) -->
       <div class="desktop-zones">
         <!-- Top Lost Zone -->
-        <div class="ptcg-board-row ptcg-board-supporter">
+        <div class="ptcg-board-row ptcg-board-supporter" [class.zone-disabled]="isLostZoneEmpty(topPlayer)">
           <ptcg-board-card class="lost-zone" [cardList]="topPlayer?.lostzone" [owner]="topPlayer?.id === clientId"
             (cardClick)="onLostZoneClick($event, topPlayer?.lostzone)" showCardCount="true"
             [style.transform]="'rotate(90deg)'">
@@ -79,7 +79,7 @@
         </div>
 
         <!-- Top Deck -->
-        <div class="ptcg-board-row ptcg-board-deck">
+        <div class="ptcg-board-row ptcg-board-deck" [class.zone-disabled]="isDeckEmpty(topPlayer)">
           <div class="deck-container" style="position: relative;">
             <ng-container *ngFor="let card of topPlayer?.deck?.cards; let idx = index">
               <ptcg-board-card [cardList]="{ cards: [card] }" [owner]="topPlayer" class="deck-card"
@@ -94,7 +94,7 @@
         </div>
 
         <!-- Top Discard -->
-        <div class="ptcg-board-row ptcg-board-discard">
+        <div class="ptcg-board-row ptcg-board-discard" [class.zone-disabled]="isDiscardEmpty(topPlayer)">
           <div class="discard-container">
             <ng-container *ngFor="let i of createRange(topPlayer?.discard?.cards?.length || 0); let idx = index">
               <ptcg-board-card (click)="onDiscardClick($event, topPlayer?.discard)" [cardList]="topPlayer?.discard"
@@ -161,19 +161,19 @@
 
       <!-- Mobile Compact Zone Grid (for mobile only) -->
       <div class="mobile-zone-grid">
-        <div class="zone-item" (click)="onDeckClick($event, bottomPlayer?.deck)">
+        <div class="zone-item" [class.zone-disabled]="isDeckEmpty(bottomPlayer)" (click)="onDeckClick($event, bottomPlayer?.deck)">
           <div class="zone-label">Deck</div>
           <div class="zone-count">{{bottomPlayer?.deck?.cards?.length || 0}}</div>
         </div>
-        <div class="zone-item" (click)="onLostZoneClick($event, bottomPlayer?.lostzone)">
+        <div class="zone-item" [class.zone-disabled]="isLostZoneEmpty(bottomPlayer)" (click)="onLostZoneClick($event, bottomPlayer?.lostzone)">
           <div class="zone-label">Lost</div>
           <div class="zone-count">{{bottomPlayer?.lostzone?.cards?.length || 0}}</div>
         </div>
-        <div class="zone-item" (click)="onDiscardClick($event, bottomPlayer?.discard)">
+        <div class="zone-item" [class.zone-disabled]="isDiscardEmpty(bottomPlayer)" (click)="onDiscardClick($event, bottomPlayer?.discard)">
           <div class="zone-label">Discard</div>
           <div class="zone-count">{{bottomPlayer?.discard?.cards?.length || 0}}</div>
         </div>
-        <div class="zone-item" (click)="onPrizesModalClick(bottomPlayer)">
+        <div class="zone-item" [class.zone-disabled]="isPrizesEmpty(bottomPlayer)" (click)="onPrizesModalClick(bottomPlayer)">
           <div class="zone-label">Prizes</div>
           <div class="zone-count">{{getPrizeCount(bottomPlayer)}}</div>
         </div>
@@ -189,7 +189,7 @@
       <!-- Desktop zones (hidden on mobile) -->
       <div class="desktop-zones">
         <!-- Bottom Lost Zone -->
-        <div class="ptcg-board-row ptcg-board-stadium">
+        <div class="ptcg-board-row ptcg-board-stadium" [class.zone-disabled]="isLostZoneEmpty(bottomPlayer)">
           <ptcg-board-card class="lost-zone" [cardList]="bottomPlayer?.lostzone" [owner]="bottomPlayer?.id === clientId"
             (cardClick)="onLostZoneClick($event, bottomPlayer?.lostzone)" showCardCount="true">
           </ptcg-board-card>
@@ -203,7 +203,7 @@
         </div>
 
         <!-- Bottom Deck -->
-        <div class="ptcg-board-row ptcg-board-deck">
+        <div class="ptcg-board-row ptcg-board-deck" [class.zone-disabled]="isDeckEmpty(bottomPlayer)">
           <div class="deck-container" style="position: relative;">
             <ng-container *ngFor="let card of bottomPlayer?.deck?.cards; let idx = index">
               <ptcg-board-card [cardList]="{ cards: [card] }" [owner]="bottomPlayer" class="deck-card"
@@ -218,7 +218,7 @@
         </div>
 
         <!-- Bottom Discard -->
-        <div class="ptcg-board-row ptcg-board-discard">
+        <div class="ptcg-board-row ptcg-board-discard" [class.zone-disabled]="isDiscardEmpty(bottomPlayer)">
           <div class="discard-container">
             <ng-container *ngFor="let i of createRange(bottomPlayer?.discard?.cards?.length || 0); let idx = index">
               <ptcg-board-card (click)="onDiscardClick($event, bottomPlayer?.discard)"

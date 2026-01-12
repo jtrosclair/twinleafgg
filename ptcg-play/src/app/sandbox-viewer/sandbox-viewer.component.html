@@ -5,7 +5,6 @@
       <div class="sandbox-viewer-card">
         <div class="sandbox-viewer-status">
           <mat-spinner diameter="40"></mat-spinner>
-          <span>{{ 'SANDBOX_VIEWER_LOADING_GAME' | translate }}</span>
         </div>
         <div class="sandbox-viewer-error" *ngIf="error">
           <mat-icon>error</mat-icon>
@@ -32,10 +31,7 @@
 
         <mat-form-field appearance="outline" class="sandbox-viewer-input">
           <mat-label>{{ 'SANDBOX_VIEWER_INPUT_LABEL' | translate }}</mat-label>
-          <textarea
-            matInput
-            [(ngModel)]="stateDataInput"
-            rows="8"
+          <textarea matInput [(ngModel)]="stateDataInput" rows="8"
             placeholder="{{ 'SANDBOX_VIEWER_INPUT_PLACEHOLDER' | translate }}"
             [disabled]="loading || initializingSession || !isReady">
           </textarea>
@@ -47,26 +43,16 @@
         </div>
 
         <div class="sandbox-viewer-actions">
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="loadGameState()"
+          <button mat-raised-button color="primary" (click)="loadGameState()"
             [disabled]="loading || initializingSession || !isReady || !stateDataInput.trim()">
             <mat-icon>play_arrow</mat-icon>
             {{ 'SANDBOX_VIEWER_LOAD_BUTTON' | translate }}
           </button>
-          <button
-            mat-button
-            (click)="clearInput()"
-            [disabled]="loading || initializingSession">
+          <button mat-button (click)="clearInput()" [disabled]="loading || initializingSession">
             <mat-icon>clear</mat-icon>
             {{ 'SANDBOX_VIEWER_CLEAR_BUTTON' | translate }}
           </button>
-          <button
-            mat-button
-            color="warn"
-            (click)="retryConnection()"
-            *ngIf="error && !initializingSession">
+          <button mat-button color="warn" (click)="retryConnection()" *ngIf="error && !initializingSession">
             <mat-icon>refresh</mat-icon>
             {{ 'SANDBOX_VIEWER_RETRY_BUTTON' | translate }}
           </button>
