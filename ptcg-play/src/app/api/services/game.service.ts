@@ -274,8 +274,6 @@ export class GameService {
     this.socketService.on(`game[${id}]:leave`, (clientId: number) => this.onLeave(id, clientId));
     this.socketService.on(`game[${id}]:stateChange`, (data: { stateData: string, playerStats: PlayerStats[] }) =>
       this.onStateChange(id, data.stateData, data.playerStats));
-    this.socketService.on(`game[${id}]:timerUpdate`, (data: { playerStats: PlayerStats[] }) =>
-      this.onTimerUpdate(id, data.playerStats));
 
     // Animation event handlers
     this.socketService.on(`game[${id}]:playBasicAnimation`, (data: { playerId: number, cardId: number | string, slot: string, index?: number }) => {
@@ -293,7 +291,6 @@ export class GameService {
     this.socketService.off(`game[${id}]:join`);
     this.socketService.off(`game[${id}]:leave`);
     this.socketService.off(`game[${id}]:stateChange`);
-    this.socketService.off(`game[${id}]:timerUpdate`);
 
     // Clean up animation event handlers
     this.socketService.off(`game[${id}]:playBasicAnimation`);
