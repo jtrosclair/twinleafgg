@@ -407,6 +407,16 @@ ptcg-board-prizes {
   padding: 0 8px;
   justify-self: center;
   width: 100%;
+
+  // Shift bottom player's bench 25px to the left
+  .ptcg-board-player:not(.upside-down) & {
+    transform: translateX(-25px);
+  }
+
+  // Shift top player's bench 25px to the right
+  .ptcg-board-player.upside-down & {
+    transform: translateX(25px);
+  }
 }
 
 .ptcg-board-discard {

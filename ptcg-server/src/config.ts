@@ -55,7 +55,7 @@ export const config = {
     defaultPassword: 'bot',
 
     // Delay between every action that bot is making
-    actionDelay: 1500, // Reduced from 2500ms
+    actionDelay: 1, // Reduced from 2500ms
 
     // Simulate matches every X ticks of the scheduler
     // If set to 0, the bot matches are disabled

@@ -102,6 +102,10 @@ export class ChoosePokemonsPaneComponent implements OnDestroy {
     this.cardsBaseService.showCardInfo({ card, cardList });
   }
 
+  public hasMultipleCards(row: PokemonRow): boolean {
+    return row.items.filter(item => item.cardList.cards.length > 0).length > 1;
+  }
+
   ngOnDestroy() {
     this.unsubscribeDropTargets();
   }

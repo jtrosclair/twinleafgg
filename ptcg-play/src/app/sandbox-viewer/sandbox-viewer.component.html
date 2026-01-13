@@ -2,9 +2,17 @@
   <ptcg-content [loading]="loading || initializingSession">
     <!-- Auto-start loading screen when hash is provided -->
     <div class="sandbox-viewer-container" *ngIf="autoStartState">
-      <div class="sandbox-viewer-card">
-        <div class="sandbox-viewer-status">
-          <mat-spinner diameter="40"></mat-spinner>
+      <div class="sandbox-viewer-card loading-card">
+        <div class="loading-content">
+          <img src="https://www.prizemap.app/logo.png" alt="PrizeMap Logo" class="loading-logo">
+          <h1 class="loading-title">PrizeMap</h1>
+          <div class="loading-subtitle">
+            <span>powered by</span>
+            <img src="https://play.twinleaf.gg/assets/tl-open-beta-sm.webp" alt="Twinleaf" class="twinleaf-logo">
+          </div>
+          <div class="loading-spinner">
+            <mat-spinner diameter="40"></mat-spinner>
+          </div>
         </div>
         <div class="sandbox-viewer-error" *ngIf="error">
           <mat-icon>error</mat-icon>

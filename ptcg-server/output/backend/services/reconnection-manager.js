@@ -28,7 +28,7 @@ class ReconnectionManager {
             cleanupIntervalMs: config.cleanupIntervalMs,
             databaseOptimizationIntervalMs: 30 * 60 * 1000,
             memoryCleanupThresholdMb: 500,
-            maxSessionAge: 6 * 60 * 60 * 1000,
+            maxSessionAge: 1 * 60 * 60 * 1000,
             enableScheduledCleanup: true,
             enableDatabaseOptimization: true,
             enableMemoryManagement: true

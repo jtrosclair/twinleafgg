@@ -154,7 +154,7 @@ export class MatchmakingLobbyComponent implements OnInit, OnDestroy {
     if (this.inQueue) {
       this.leaveQueueSilently();
     }
-    this.socketService.off('matchmaking:queueUpdate');
+    //this.socketService.off('matchmaking:queueUpdate');
 
     // Remove resize event listener
     window.removeEventListener('resize', this.resizeHandler);
@@ -189,21 +189,6 @@ export class MatchmakingLobbyComponent implements OnInit, OnDestroy {
 
   private setupSocketListeners(): void {
     // Setup queue update listener
-    this.socketService.on('matchmaking:queueUpdate', (data: { players: string[], formatCounts?: { [format: number]: number } }) => {
-      this.queuedPlayers = data.players;
-      // Update format counts with real server data
-      if (data.formatCounts) {
-        this.formatQueueCounts = data.formatCounts;
-      }
-    });
-
-    // Listen for game creation
-    this.socketService.on('matchmaking:gameCreated', (data: { gameId: number }) => {
-      if (this.inQueue) {
-        this.resetQueueState();
-        this.router.navigate(['/table', data.gameId]);
-      }
-    });
   }
 
   // Get the preferred deck for the current format

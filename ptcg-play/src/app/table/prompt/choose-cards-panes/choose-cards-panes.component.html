@@ -50,8 +50,7 @@
 
 <div class="cards-viewport">
   <ptcg-cards-container [keepInitialSize]="false">
-    <dnd-sortable-list [spec]="topSortable.spec" [children]="topSortable.tempList" [listId]="topListId"
-      style="display: flex; flex-wrap: wrap; justify-content: center;">
+    <dnd-sortable-list [spec]="topSortable.spec" [children]="topSortable.tempList" [listId]="topListId">
       <ng-template dndSortableTemplate let-context>
         <ptcg-card [ngClass]="{
     'unavailable': !filterMap[context.data.card.fullName],

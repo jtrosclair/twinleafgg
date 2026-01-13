@@ -23,7 +23,7 @@ $ptcg-cards-container-min-width: 3 * map-get($ptcg-size, card) + 4 * map-get($pa
   max-height: $ptcg-cards-container-max-height;
   max-width: 100%;
   min-height: $ptcg-cards-container-min-height;
-  min-width: $ptcg-cards-container-min-width;
+  //min-width: $ptcg-cards-container-min-width;
   overflow: auto;
   padding: $ptcg-cards-container-padding-v $ptcg-cards-container-padding-h;
 }

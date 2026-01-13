@@ -205,11 +205,11 @@ export class PromptAttachEnergyComponent implements OnChanges {
 
       this.pokemonData = new PokemonData(state, playerId, playerType, slots);
       this.allowedCancel = prompt.options.allowCancel;
-      this.cardListCards = prompt.cardList.cards;
       this.initialCards = prompt.cardList.cards;
+      this.blocked = prompt.options.blocked;
+      this.cardListCards = this.initialCards.filter((card, index) => !this.blocked.includes(index));
       this.filter = prompt.filter;
       this.message = prompt.message;
-      this.blocked = prompt.options.blocked;
       this.promptId = prompt.id;
       this.results = [];
       this.options = prompt.options;

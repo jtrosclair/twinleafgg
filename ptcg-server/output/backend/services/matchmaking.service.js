@@ -62,19 +62,6 @@ class MatchmakingService {
         return this.queue.some(p => p.client === client);
     }
     broadcastQueueUpdate() {
-        const players = this.getQueuedPlayers();
-        const formatCounts = this.getQueueCountsByFormat();
-        // Broadcast to all connected clients, not just those in queue
-        this.core.clients.forEach(client => {
-            // Cast to SocketClient to access socket property
-            const socketClient = client;
-            if (socketClient.socket) {
-                socketClient.socket.emit('matchmaking:queueUpdate', {
-                    players,
-                    formatCounts
-                });
-            }
-        });
     }
     validateQueue() {
         const now = Date.now();

@@ -7,23 +7,43 @@
   width: 100%;
 }
 
+.cards-viewport {
+  width: 100%;
+  max-height: 60vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+dnd-sortable-list {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 10px;
+  width: 100%;
+  justify-items: center;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    padding: 4px;
+  }
+}
+
 ptcg-card {
-  margin: map-get($padding, small);
-  width: map-get($ptcg-size, card);
+  width: 100%;
+  max-width: 120px;
+  margin: 0;
+  touch-action: manipulation;
 
   &.unavailable {
     opacity: $ptcg-disabled-opacity;
   }
 
-  &:not(.unavailable) {
-    touch-action: none;
+  @media (max-width: 768px) {
+    max-width: 60px;
   }
-}
-
-dnd-sortable-list {
-  display: flex;
-  flex: 1 1 auto;
-  flex-wrap: wrap;
 }
 
 .selected-card {
@@ -31,21 +51,42 @@ dnd-sortable-list {
   transform: scale(1.05);
   transition: all 0.2s ease;
   border-radius: 5px;
-  width: map-get($ptcg-size, card);
+}
+
+.selected {
+  box-shadow: 0 0 15px #449058, 0 0 0 1px #44905800;
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+  border-radius: 5px;
 }
 
 .selected-cards {
-  display: grid;
-  grid-template-rows: auto auto;
-  gap: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 12px;
   padding: 20px;
+  margin-top: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    gap: 8px;
+    padding: 10px;
+    margin-top: 10px;
+  }
 }
 
 .selected-cards.compact {
   padding: 10px;
   margin-top: 10px;
-  min-height: auto;
   gap: 10px;
+
+  @media (max-width: 768px) {
+    padding: 8px;
+    gap: 6px;
+  }
 }
 
 .card-slot {
@@ -56,44 +97,36 @@ dnd-sortable-list {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto;
+  flex-shrink: 1;
   background: rgb(22, 26, 36);
 
-  .card-slot:first-child {
-    grid-row: 1;
-    grid-column: 1 / -1;
-    justify-self: center;
-  }
-
-  .card-slot:not(:first-child) {
-    grid-row: 2;
+  @media (max-width: 768px) {
+    width: 70px;
+    height: 96px;
   }
 }
 
 .selected-cards.setup-game {
   display: grid;
   grid-template-rows: auto auto;
-  grid-template-columns: repeat(5, 251px); // Explicitly set 5 columns
+  grid-template-columns: repeat(5, 1fr);
   gap: 5px;
   padding: 5px;
-  justify-content: center; // Center the entire grid
+  justify-content: center;
 
   .card-slot:first-child {
     grid-row: 1;
-    grid-column: 3; // Place in middle column
+    grid-column: 3;
     justify-self: center;
   }
 
   .card-slot:not(:first-child) {
     grid-row: 2;
   }
-}
 
-.selected-cards {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 20px;
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
 }
 
 .carousel-container {
@@ -102,6 +135,10 @@ dnd-sortable-list {
   justify-content: center;
   width: 100%;
   padding: 0 20px;
+
+  @media (max-width: 768px) {
+    padding: 0 10px;
+  }
 }
 
 .nav-button {
@@ -109,38 +146,15 @@ dnd-sortable-list {
   width: 48px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
+
+  @media (max-width: 768px) {
+    height: 36px;
+    width: 36px;
+  }
 }
 
 .nav-button:hover {
   background: rgba(255, 255, 255, 0.2);
-}
-
-.selected {
-  box-shadow: 0 0 15px #449058, 0 0 0 1px #44905800;
-  transform: scale(1.05);
-  transition: all 0.2s ease;
-  border-radius: 5px;
-}
-
-.cards-viewport {
-  width: 1000px;
-  // height: 500px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  // border: 2px solid rgba(255, 255, 255, 0.2);
-  // border-radius: 8px;
-}
-
-dnd-sortable-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  // padding: 20px;
-  // justify-content: center;
-}
-
-ptcg-card {
-  flex: 0 0 auto;
 }
 
 .cards-carousel {
@@ -154,7 +168,13 @@ ptcg-card {
   display: flex;
   gap: 20px;
   padding: 20px;
-  width: 1200px
+  width: 100%;
+  max-width: 1200px;
+
+  @media (max-width: 768px) {
+    gap: 10px;
+    padding: 10px;
+  }
 }
 
 .card-main {
@@ -173,4 +193,8 @@ ptcg-card {
   right: 0;
   z-index: 10;
   margin-right: -15px;
+
+  @media (max-width: 768px) {
+    margin-right: -10px;
+  }
 }

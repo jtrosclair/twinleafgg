@@ -251,10 +251,6 @@ $ptcg-energy-card-offset: 13%;
     line-height: 1;
     font-family: 'Arial Black',
       sans-serif;
-
-    :host-context(.upside-down) & {
-      transform: rotate(180deg);
-    }
   }
 
   // ==================== ABILITY USED INDICATOR ====================

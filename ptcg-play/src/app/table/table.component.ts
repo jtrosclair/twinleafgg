@@ -257,13 +257,13 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   private updateCanUndo() {
-    if (this.gameId) {
-      this.gameService.canUndo(this.gameId).subscribe(canUndo => {
-        this.canUndoBackend = canUndo;
-      });
-    } else {
-      this.canUndoBackend = false;
-    }
+    // if (this.gameId) {
+    //   this.gameService.canUndo(this.gameId).subscribe(canUndo => {
+    //     this.canUndoBackend = canUndo;
+    //   });
+    // } else {
+    //   this.canUndoBackend = false;
+    // }
   }
 
   private updateGameState(state: LocalGameState) {
