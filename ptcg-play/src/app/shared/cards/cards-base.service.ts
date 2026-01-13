@@ -114,45 +114,34 @@ export class CardsBaseService implements OnDestroy {
   }
 
   private loadCustomImagesFromAPI(): void {
-    this.profileService.getCardImagesUrl().pipe(
-      catchError(() => {
-        // If API fails, fall back to localStorage
-        const storedImages = localStorage.getItem('customCardImages');
-        if (storedImages) {
-          this.customImages = JSON.parse(storedImages);
-        }
-        return of({ ok: false, jsonUrl: '' });
-      }),
-      switchMap(response => {
-        const jsonUrl = response.jsonUrl;
-        if (jsonUrl && jsonUrl.trim()) {
-          // Fetch and parse the JSON from the URL
-          return this.http.get(jsonUrl).pipe(
-            map((json: any) => {
-              this.customImages = json;
-              // Also save to localStorage as backup
-              localStorage.setItem('customCardImages', JSON.stringify(this.customImages));
-              return json;
-            }),
-            catchError(() => {
-              // If fetching JSON fails, try localStorage
-              const storedImages = localStorage.getItem('customCardImages');
-              if (storedImages) {
-                this.customImages = JSON.parse(storedImages);
-              }
-              return of({});
-            })
-          );
-        } else {
-          // No URL saved, try localStorage
+    const response = this.profileService.getCardImagesUrl();
+    const jsonUrl = response.jsonUrl;
+
+    if (jsonUrl && jsonUrl.trim()) {
+      // Fetch and parse the JSON from the URL
+      this.http.get(jsonUrl).pipe(
+        map((json: any) => {
+          this.customImages = json;
+          // Also save to localStorage as backup
+          localStorage.setItem('customCardImages', JSON.stringify(this.customImages));
+          return json;
+        }),
+        catchError(() => {
+          // If fetching JSON fails, try localStorage
           const storedImages = localStorage.getItem('customCardImages');
           if (storedImages) {
             this.customImages = JSON.parse(storedImages);
           }
           return of({});
-        }
-      })
-    ).subscribe();
+        })
+      ).subscribe();
+    } else {
+      // No URL saved, try localStorage
+      const storedImages = localStorage.getItem('customCardImages');
+      if (storedImages) {
+        this.customImages = JSON.parse(storedImages);
+      }
+    }
   }
 
   private loadFavoriteCards(): void {

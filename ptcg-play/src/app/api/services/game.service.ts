@@ -318,22 +318,22 @@ export class GameService {
         playerStats
       };
       this.sessionService.set({ gameStates });
-      this.boardInteractionService.updateGameLogs(logs);
-
-      // Notify React Native WebView on turn change
-      if (previousState && state.turn !== previousState.turn) {
-        this.postMessageToWebView({
-          type: 'TurnChange',
-          data: {
-            turn: state.turn,
-            activePlayer: state.activePlayer === 0 ? 'player1' : 'player2'
-          }
-        });
-      }
+      this.boardInteractionService.updateGameLogs(logs)
 
       // Clear game ID for reconnection tracking if game has finished
       if (state.phase === GamePhase.FINISHED) {
         this.socketService.clearGameId();
+      } else {
+        // Notify React Native WebView on turn change
+        if (previousState && state.turn !== previousState.turn) {
+          this.postMessageToWebView({
+            type: 'TurnChange',
+            data: {
+              turn: state.turn,
+              activePlayer: state.activePlayer === 0 ? 'player1' : 'player2'
+            }
+          });
+        }
       }
     }
   }

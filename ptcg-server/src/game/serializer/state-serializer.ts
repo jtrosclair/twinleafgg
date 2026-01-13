@@ -43,6 +43,10 @@ export class StateSerializer {
 
     name = name.replace('Pok�', 'Poke');
 
+    if (name.includes("Energy XXX")) { //prevent vintage energy misnaming
+      name = name.replace("Energy XXX", "Energy SVE");
+    }
+
     // if last word in card name is a number, remove it and trim the resulting string
     let cardWithoutSetId = name;
     const lastWord = cardWithoutSetId.split(' ').pop() || '';
