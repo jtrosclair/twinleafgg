@@ -138,20 +138,24 @@ export class Login extends Controller {
       return;
     }
 
-    // Create a temporary anonymous user that won't be persisted
-    // Use a negative ID to distinguish from real users
-    const anonymousId = -Math.floor(Math.random() * 10000000) - 1;
+    // Create and persist an anonymous user to the database
     const anonymousName = `Guest_${Math.random().toString(36).substring(2, 15)}`;
 
-    const token = generateToken(anonymousId);
+    const user = new User();
+    user.name = anonymousName;
+    user.roleId = 2; // Regular user role
+    user.registered = Date.now();
+    const updatedUser = await user.save();
+
+    const token = generateToken(user.id);
     res.send({
       ok: true,
       token,
       config: this.getServerConfig(),
       user: {
-        id: anonymousId,
-        name: anonymousName,
-        roleId: 2, // Regular user role
+        id: updatedUser.id,
+        name: updatedUser.name,
+        roleId: updatedUser.roleId,
         isAnonymous: true
       }
     });
