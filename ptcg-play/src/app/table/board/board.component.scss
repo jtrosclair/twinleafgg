@@ -19,6 +19,7 @@ $board-min-height: calc(6 * var(--card-size) * #{$card-aspect-ratio} + 2 * #{map
   overflow: auto;
   z-index: 0;
   justify-content: center;
+  align-items: flex-start;
   width: calc(100vw - var(--sidebar-width));
   height: 100%;
   background-color: #091624;
@@ -34,14 +35,12 @@ $board-min-height: calc(6 * var(--card-size) * #{$card-aspect-ratio} + 2 * #{map
 
 .ptcg-board-outer-container {
   width: 100%;
-  height: 85%;
+  height: auto;
   perspective: 55em;
   -webkit-perspective: 55em;
   -moz-perspective: 55em;
   min-width: 990px;
-  // display: flex;
-  // align-items: center;
-  // justify-content: center;
+  padding-top: 1vh;
 
   &.prompt-active {
     pointer-events: none;
@@ -67,18 +66,16 @@ $board-min-height: calc(6 * var(--card-size) * #{$card-aspect-ratio} + 2 * #{map
 
 .ptcg-board-container {
   display: grid;
-  grid-template-rows: 1fr 1fr;
-  // grid-gap: 40px;
+  grid-template-rows: auto auto;
+  gap: 4vh;
   margin: 0 auto;
   width: 75%;
-  height: 100%;
-  transform-origin: center center;
+  height: auto;
+  transform-origin: center top;
   transform-style: preserve-3d;
   will-change: transform;
   backface-visibility: hidden;
-  // transform: translate3d(0, 0, 0);
   transition: transform 0.5s ease;
-  // position: relative;
 
   @media (min-aspect-ratio: 4/3) {
     transform: rotateX(15deg) translate3d(0, 0, 0);
@@ -99,10 +96,10 @@ $board-min-height: calc(6 * var(--card-size) * #{$card-aspect-ratio} + 2 * #{map
   display: grid;
   grid-template-columns: 2fr repeat(3, #{math.div($ptcg-bench-slots, 3)}fr) 2fr;
   grid-template-rows: auto auto;
+  row-gap: 2vh;
   grid-template-areas:
     "prizes stadium active supporter deck"
     "prizes bench bench bench discard";
-  // padding: 20px 0;
 
   &.upside-down {
     transform: scale3d(-1, -1, 1);
@@ -238,10 +235,8 @@ $board-min-height: calc(6 * var(--card-size) * #{$card-aspect-ratio} + 2 * #{map
   align-items: center;
   display: flex;
   flex-direction: row;
-  height: 100%;
   justify-content: space-evenly;
   max-width: 100%;
-  // margin-bottom: 20px;
 
   >ptcg-board-card,
   >.ptcg-board-drop-target {
@@ -399,12 +394,12 @@ ptcg-board-prizes {
 .ptcg-board-bench {
   grid-area: bench;
   max-width: 100%;
-  overflow: hidden;
+  overflow: visible;
   display: flex;
   gap: var(--bench-gap);
   justify-content: center;
   align-items: center;
-  padding: 0 8px;
+  padding: 20px 8px;
   justify-self: center;
   width: 100%;
 
@@ -450,7 +445,7 @@ ptcg-board-prizes {
 
 .stadium-card {
   align-self: flex-start;
-  margin-top: -48px;
+  margin-top: -80px;
   width: calc(var(--card-size) * 1.15 * var(--card-scale));
   height: calc(var(--card-size) * 1.15 * #{$card-aspect-ratio} * var(--card-scale));
 
@@ -592,11 +587,11 @@ ptcg-board-card.highlighted-pokemon {
   .stadium-always-visible {
     grid-area: stadium;
     justify-self: center;
-    align-self: center;
+    align-self: flex-start;
 
     .stadium-card {
-      //margin-top: 0;
-      margin-left: 50px;
+      margin-top: -140px;
+      margin-left: 70px;
       width: calc(var(--card-size) * 1.2 * var(--card-scale));
       height: calc(var(--card-size) * 1.2 * #{$card-aspect-ratio} * var(--card-scale));
     }
@@ -619,9 +614,9 @@ ptcg-board-card.highlighted-pokemon {
     grid-column: 2;
     grid-row: 1;
     justify-self: start;
-    align-self: center;
-    margin-left: 60px;
-    margin-bottom: 50px;
+    align-self: flex-start;
+    margin-left: 70px;
+    margin-top: 0px;
 
     &.mobile-zone-grid-top {
       // Position top player's zone grid
@@ -630,7 +625,7 @@ ptcg-board-card.highlighted-pokemon {
       justify-self: start;
       align-self: center;
       margin-bottom: 0px;
-      transform: translate(0px, -120px);
+      transform: translate(0px, -130px);
     }
 
     .zone-item {

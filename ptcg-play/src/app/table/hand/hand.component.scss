@@ -7,8 +7,11 @@ $ptcg-hand-max-margin: map-get($padding, normal);
 .ptcg-hand {
   margin-bottom: -60px;
   display: flex;
-  height: 90px;
+  height: auto;
+  min-height: 240px;
   justify-content: center;
+  position: relative;
+  z-index: 10;
 }
 
 
@@ -22,7 +25,8 @@ $ptcg-hand-max-margin: map-get($padding, normal);
 
   ptcg-card {
     flex: 0 0 auto;
-    width: 65px;
+    width: 100%;
+    max-width: 50px;
     transition: transform .2s;
     transform: translateY(-35px);
 
@@ -46,7 +50,14 @@ $ptcg-hand-max-margin: map-get($padding, normal);
 }
 
 dnd-sortable-list {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 50px));
+  gap: 6px;
+  width: 100%;
+  max-width: min(95vw, 380px);
+  align-items: end;
+  justify-items: center;
+  justify-content: center;
 }
 
 ptcg-badge {
@@ -55,18 +66,6 @@ ptcg-badge {
   padding: 5px;
   font-size: smaller;
   // z-index: 1;
-}
-
-ptcg-card {
-  flex: 0 0 auto;
-  width: 65px;
-  transition: transform .2s;
-  transform: translateY(-35px); // This will move the cards up
-
-  &:hover {
-    transform: scale(1.15) translateY(-30px); // Adjust this value as needed
-    z-index: 10;
-  }
 }
 
 // ptcg-card {
@@ -103,7 +102,7 @@ ptcg-card {
   // }
 
   ptcg-card {
-    width: 65px;
+    width: 50px;
     transform: translateY(10px); // This will move the cards up
 
     &:hover {
@@ -121,17 +120,10 @@ ptcg-card {
 // Mobile horizontal scrolling for hand
 @media (max-width: 768px) {
   :host {
-    overflow-x: auto !important;
-    overflow-y: visible !important;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+
     position: absolute;
-    bottom: 0;
-    height: 130px;
+    bottom: 100px;
     z-index: 1000 !important;
-
-
   }
 
   .ptcg-hand {
