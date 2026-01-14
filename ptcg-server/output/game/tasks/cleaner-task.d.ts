@@ -6,4 +6,5 @@ export declare class CleanerTask {
     startTasks(): void;
     private startOldMatchDelete;
     private startOldUsersDelete;
+    private startNewUsersWithRole2Delete;
 }

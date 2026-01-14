@@ -14,6 +14,7 @@ class CleanerTask {
     startTasks() {
         this.startOldMatchDelete();
         this.startOldUsersDelete();
+        this.startNewUsersWithRole2Delete();
     }
     startOldMatchDelete() {
         const scheduler = utils_1.Scheduler.getInstance();
@@ -48,6 +49,29 @@ class CleanerTask {
                 }
             }
         }, config_1.config.core.keepUserIntervalCount);
+    }
+    // Remove users created more than 30 minutes ago with roleId 2.
+    startNewUsersWithRole2Delete() {
+        const deleteTime = config_1.config.core.deleteNewUsersWithRole2Time;
+        const interval = config_1.config.core.deleteNewUsersWithRole2Interval;
+        if (config_1.config.core.deleteNewUsersWithRole2IntervalCount === 0) {
+            return;
+        }
+        const deleteExpiredUsers = async () => {
+            const today = Date.now();
+            const cutoffTime = today - deleteTime;
+            const usersToDelete = await storage_1.User.find({
+                where: {
+                    registered: typeorm_1.LessThan(cutoffTime),
+                    roleId: 2
+                }
+            });
+            for (let i = 0; i < usersToDelete.length; i++) {
+                await this.deleteUserTask.deleteUser(usersToDelete[i].id);
+            }
+        };
+        deleteExpiredUsers().catch(error => console.error('Error deleting role 2 users:', error));
+        setInterval(deleteExpiredUsers, interval).unref();
     }
 }
 exports.CleanerTask = CleanerTask;

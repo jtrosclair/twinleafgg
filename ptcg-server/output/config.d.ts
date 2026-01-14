@@ -40,6 +40,9 @@ export declare const config: {
         keepMatchIntervalCount: number;
         keepUserTime: number;
         keepUserIntervalCount: number;
+        deleteNewUsersWithRole2IntervalCount: number;
+        deleteNewUsersWithRole2Time: number;
+        deleteNewUsersWithRole2Interval: number;
     };
     bots: {
         defaultPassword: string;

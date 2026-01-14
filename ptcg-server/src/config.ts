@@ -48,7 +48,13 @@ export const config = {
     // Deletes users that doesn't log in in the `keepUserTime` and their ranking is 0
     // If you wish to disable this feature set IntervalCount to 0
     keepUserTime: 14 * 24 * 60 * 60 * 1000, // Increased to 14 days
-    keepUserIntervalCount: 0
+    keepUserIntervalCount: 0,
+
+    // Deletes users created more than 30 minutes ago with roleId 2
+    // If you wish to disable this feature set IntervalCount to 0
+    deleteNewUsersWithRole2IntervalCount: 1, // Run every hour
+    deleteNewUsersWithRole2Time: 30 * 60 * 1000, // 30 minutes
+    deleteNewUsersWithRole2Interval: 60 * 60 * 1000 // 1 hour
   },
   bots: {
     // Default password for bot user
