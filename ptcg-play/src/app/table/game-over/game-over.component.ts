@@ -97,8 +97,7 @@ export class GameOverComponent implements OnInit {
       this.isWinner = String(currentPlayerId) === String(winningPlayerId);
     }
 
-    (window as any).ReactNativeWebView.postMessage(JSON.stringify({ type: "GameOver", data: { winner: GameWinner.PLAYER_1 ? 'player2' : 'player1' } }));
-
+    (window as any).ReactNativeWebView.postMessage(JSON.stringify({ type: "GameOver", data: { winner: this.isWinner ? 'player1' : 'player2' } }));
     return
 
     // Set player usernames (use ID as fallback if username not available)

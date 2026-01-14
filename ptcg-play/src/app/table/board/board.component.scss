@@ -22,7 +22,7 @@ $board-min-height: calc(6 * var(--card-size) * #{$card-aspect-ratio} + 2 * #{map
   align-items: flex-start;
   width: calc(100vw - var(--sidebar-width));
   height: 100%;
-  background-color: #091624;
+  background-color: rgba(9, 22, 36, 0.7); // Translucent purple/dark blue (70% opacity)
 }
 
 .perspective-wrapper {
@@ -96,7 +96,7 @@ $board-min-height: calc(6 * var(--card-size) * #{$card-aspect-ratio} + 2 * #{map
   display: grid;
   grid-template-columns: 2fr repeat(3, #{math.div($ptcg-bench-slots, 3)}fr) 2fr;
   grid-template-rows: auto auto;
-  row-gap: 2vh;
+  row-gap: 0.5vh;
   grid-template-areas:
     "prizes stadium active supporter deck"
     "prizes bench bench bench discard";

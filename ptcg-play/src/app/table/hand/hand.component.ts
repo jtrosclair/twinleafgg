@@ -102,6 +102,11 @@ export class HandComponent implements OnChanges {
     return this.calculateContainerMargin();
   }
 
+  @HostBinding('class.small-hand')
+  get isSmallHand(): boolean {
+    return this.cards.length <= 7;
+  }
+
   ngOnChanges() {
     if (this.gameState) {
       this.isDeleted = this.gameState.deleted;

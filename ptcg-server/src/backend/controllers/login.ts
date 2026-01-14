@@ -140,8 +140,8 @@ export class Login extends Controller {
 
     // Create a temporary anonymous user that won't be persisted
     // Use a negative ID to distinguish from real users
-    const anonymousId = -Math.floor(Math.random() * 1000000) - 1;
-    const anonymousName = `Guest_${Math.random().toString(36).substring(2, 8)}`;
+    const anonymousId = -Math.floor(Math.random() * 10000000) - 1;
+    const anonymousName = `Guest_${Math.random().toString(36).substring(2, 15)}`;
 
     const token = generateToken(anonymousId);
     res.send({

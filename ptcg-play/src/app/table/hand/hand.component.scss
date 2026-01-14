@@ -1,148 +1,142 @@
 @import '../../../theme/variables.scss';
 
-$ptcg-hand-padding: map-get($padding, normal);
-$ptcg-hand-height: calc(var(--card-size) * #{$card-aspect-ratio} + #{4 * $ptcg-hand-padding});
-$ptcg-hand-max-margin: map-get($padding, normal);
-
-.ptcg-hand {
-  margin-bottom: -60px;
+// Host container - fixed positioning
+:host {
+  position: fixed;
+  bottom: 30px; // Default for more than 7 cards
+  left: 0;
+  right: 0;
+  z-index: 1000; // Always in front
+  pointer-events: none; // Allow clicks through to board
   display: flex;
-  height: auto;
-  min-height: 240px;
   justify-content: center;
-  position: relative;
-  z-index: 10;
-}
 
+  &.small-hand {
+    bottom: 60px; // 60px from bottom when 7 or fewer cards
+  }
 
-.ptcg-hand-container {
-  align-items: center;
-  display: flex;
-  flex: 0 0 auto;
-  background: transparent;
-  gap: 10px;
-  transition: all 200ms ease;
+  &.opponent {
+    top: 30px;
+    bottom: auto;
+    z-index: 999; // Slightly lower than player hand
 
-  ptcg-card {
-    flex: 0 0 auto;
-    width: 100%;
-    max-width: 50px;
-    transition: transform .2s;
-    transform: translateY(-35px);
-
-    &.dragging {
-      opacity: 0;
-      position: absolute;
-      pointer-events: none;
-      z-index: 1000;
-      transform: rotate(5deg) scale(1.15) translateY(-30px);
-    }
-
-    &:not(.dragging) {
-      transition: transform 200ms ease;
-    }
-
-    &:hover {
-      transform: scale(1.15) translateY(-30px);
-      z-index: 10;
+    &.small-hand {
+      top: 60px; // 60px from top for opponent with 7 or fewer cards
     }
   }
 }
 
-dnd-sortable-list {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 50px));
-  gap: 6px;
+// Main hand container
+.ptcg-hand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto; // Re-enable clicks on the hand itself
   width: 100%;
-  max-width: min(95vw, 380px);
-  align-items: end;
-  justify-items: center;
-  justify-content: center;
+  max-width: 100vw;
+
+  &.opponent {
+    transform: rotate(180deg);
+  }
 }
 
+// Card container - grid layout with 7 columns
+.ptcg-hand-container {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  width: 100%;
+  padding: 12px 8px;
+  background: transparent;
+  align-items: end;
+  justify-items: center;
+}
+
+// Sortable list styling
+dnd-sortable-list {
+  display: contents; // Makes grid work with the sortable list
+}
+
+// Individual card styling
+ptcg-card {
+  width: 100%;
+  height: auto;
+  max-width: 100%; // Fill grid cell
+  min-width: 40px;
+  transition: transform 0.2s ease, z-index 0s;
+  position: relative;
+  z-index: 1;
+
+  &:hover {
+    transform: translateY(-20px) scale(1.15);
+    z-index: 100;
+  }
+
+  &.dragging {
+    opacity: 0.5;
+    transform: rotate(5deg) scale(1.1);
+    z-index: 1000;
+  }
+
+  &:not(.dragging) {
+    transition: transform 200ms ease;
+  }
+}
+
+// Badge positioning
 ptcg-badge {
   position: absolute;
   width: 80%;
   padding: 5px;
   font-size: smaller;
-  // z-index: 1;
+  z-index: 2;
 }
 
-// ptcg-card {
-//   flex: 0 0 auto;
-//   width: 98px;
-//   margin: 3px;
-
-//   &.draggable {
-//     touch-action: none;
-//   }
-
-//   transition: transform .2s;
-
-//   &:hover {
-//     transform: scale(1.15) translateY(-12.5px); // Add translateY(-10px) to slide up 10px
-//     z-index: 10;
-//   }
-// }
-
+// Opponent hand adjustments
 .ptcg-hand.opponent {
-  position: static;
-  z-index: 1;
-  margin-top: -75px;
-  transform: rotate(180deg);
-  // margin: 0 auto;
-  // display: flex;
-  justify-content: center;
-  height: 130px; // Add this line to set a fixed height
-  // overflow: hidden; // Add this to prevent overflow
-  // align-items: flex-end; // Add this to align cards to the bottom of the container
-
-  // ptcg-hand.opponent ptcg-card {
-  //   width: 80px;
-  // }
-
   ptcg-card {
-    width: 50px;
-    transform: translateY(10px); // This will move the cards up
+    max-width: 80%; // Slightly smaller for opponent
 
     &:hover {
-      transform: scale(1.025) translateY(5px); // Change to positive value
+      transform: translateY(-10px) scale(1.05);
     }
   }
 }
 
-// .ptcg-card-preview {
-//   border-radius: $card-border-radius;
-//   position: absolute;
-//   width: 98px;
-// }
-
-// Mobile horizontal scrolling for hand
+// Mobile responsive adjustments
 @media (max-width: 768px) {
   :host {
+    bottom: 20px;
 
-    position: absolute;
-    bottom: 100px;
-    z-index: 1000 !important;
-  }
-
-  .ptcg-hand {
-    justify-content: flex-start;
-    width: max-content;
-    min-width: 100%;
-    position: absolute;
-    z-index: 1000;
-    align-self: flex-end;
+    &.opponent {
+      top: 20px;
+    }
   }
 
   .ptcg-hand-container {
-    padding: 0 10px;
-    position: absolute;
-    z-index: 1000;
+    gap: 4px;
+    padding: 8px 4px;
   }
 
   ptcg-card {
-    position: relative;
-    z-index: 1000;
+    max-width: 100%; // Fill grid cell
+    min-width: 35px;
+
+    &:hover {
+      transform: translateY(-15px) scale(1.1);
+    }
+  }
+}
+
+// Extra small screens - tighter spacing
+@media (max-width: 480px) {
+  .ptcg-hand-container {
+    gap: 2px;
+    padding: 4px 2px;
+  }
+
+  ptcg-card {
+    max-width: 100%; // Fill grid cell
+    min-width: 30px;
   }
 }
