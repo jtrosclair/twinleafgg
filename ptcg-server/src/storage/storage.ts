@@ -46,6 +46,11 @@ export class Storage {
       logging: false
     });
 
+    console.log({
+      type: process.env.STORAGE_TYPE,
+      host: process.env.STORAGE_HOST,
+    });
+
     // For SQLite, manually handle synchronization with foreign keys disabled
     if (storageConfig.type === 'sqlite') {
       await this.connection.query('PRAGMA foreign_keys = OFF');
