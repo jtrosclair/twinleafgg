@@ -116,6 +116,7 @@ export class MatchTableComponent implements OnInit {
   }
 
   public async saveReplay(matchId: number) {
+    return;
     const name = await this.getReplayName();
     if (name === undefined) {
       return;

@@ -5,7 +5,6 @@ export declare class MatchRecorder {
     private finished;
     private client1;
     private client2;
-    private ranking;
     private replay;
     private transactionTimeout;
     private readonly TRANSACTION_TIMEOUT_MS;

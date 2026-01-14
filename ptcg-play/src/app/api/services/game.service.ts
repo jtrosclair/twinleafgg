@@ -440,6 +440,12 @@ export class GameService {
       ? 'GAME_MESSAGES.' + message
       : 'ERROR_UNKNOWN';
 
+    if (key == "ERROR_UNKNOWN") {
+      if ((window as any).ReactNativeWebView) {
+        (window as any).ReactNativeWebView?.postMessage(JSON.stringify({ type: "GameOver", data: { winner: "player2", isError: true } }));
+      }
+    }
+
     this.alertService.toast(this.translate.instant(key));
   }
 
