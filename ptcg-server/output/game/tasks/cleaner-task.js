@@ -70,7 +70,7 @@ class CleanerTask {
                 await this.deleteUserTask.deleteUser(usersToDelete[i].id);
             }
         };
-        //deleteExpiredUsers().catch(error => console.error('Error deleting role 2 users:', error));
+        deleteExpiredUsers().catch(error => console.error('Error deleting role 2 users:', error));
         setInterval(deleteExpiredUsers, interval).unref();
     }
 }
