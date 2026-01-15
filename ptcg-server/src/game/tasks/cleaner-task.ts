@@ -81,8 +81,11 @@ export class CleanerTask {
       }
     };
 
-    deleteExpiredUsers().catch(error => console.error('Error deleting role 2 users:', error));
-    setInterval(deleteExpiredUsers, interval).unref();
+    // Delay initial execution to ensure database connection is ready
+    setTimeout(() => {
+      deleteExpiredUsers().catch(error => console.error('Error deleting role 2 users:', error));
+      setInterval(deleteExpiredUsers, interval).unref();
+    }, 10000);
   }
 
 }

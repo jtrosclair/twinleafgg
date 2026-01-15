@@ -70,8 +70,11 @@ class CleanerTask {
                 await this.deleteUserTask.deleteUser(usersToDelete[i].id);
             }
         };
-        deleteExpiredUsers().catch(error => console.error('Error deleting role 2 users:', error));
-        setInterval(deleteExpiredUsers, interval).unref();
+        // Delay initial execution to ensure database connection is ready
+        setTimeout(() => {
+            deleteExpiredUsers().catch(error => console.error('Error deleting role 2 users:', error));
+            setInterval(deleteExpiredUsers, interval).unref();
+        }, 10000);
     }
 }
 exports.CleanerTask = CleanerTask;
