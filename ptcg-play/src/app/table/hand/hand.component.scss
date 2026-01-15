@@ -3,7 +3,7 @@
 // Host container - fixed positioning
 :host {
   position: fixed;
-  bottom: 30px; // Default for more than 7 cards
+  bottom: 10px; // Default for more than 7 cards
   left: 0;
   right: 0;
   z-index: 1000; // Always in front
@@ -12,16 +12,16 @@
   justify-content: center;
 
   &.small-hand {
-    bottom: 60px; // 60px from bottom when 7 or fewer cards
+    bottom: 50px; // 60px from bottom when 7 or fewer cards
   }
 
   &.opponent {
-    top: 30px;
+    top: 10px;
     bottom: auto;
     z-index: 999; // Slightly lower than player hand
 
     &.small-hand {
-      top: 60px; // 60px from top for opponent with 7 or fewer cards
+      top: 50px; // 60px from top for opponent with 7 or fewer cards
     }
   }
 }

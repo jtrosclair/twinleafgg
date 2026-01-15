@@ -13,6 +13,7 @@ import { LocalGameState } from 'src/app/shared/session/session.interface';
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
 import { SettingsService } from '../table-sidebar/settings-dialog/settings.service';
 import { BoardInteractionService } from '../../shared/services/board-interaction.service';
+import { GameWinner } from 'ptcg-server';
 
 const MAX_BENCH_SIZE = 8;
 const DEFAULT_BENCH_SIZE = 5;
@@ -131,6 +132,7 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
   // Add property to track deck size
   public deckSize: number = 0;
   public discardSize: number = 0;
+  private previousOpponentDeckSize: number = 0;
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.player) {
@@ -148,8 +150,39 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
       this.discardSize = 0;
     }
 
+    // Watch opponent's deck for empty state (puzzle completion condition)
+    this.checkOpponentDeckEmpty();
+
     // Update bench gap based on bench capacity
     this.updateBenchGap();
+  }
+
+  private checkOpponentDeckEmpty(): void {
+    // Determine opponent based on whether this is top or bottom player
+    const opponent = this.topPlayer?.id === this.clientId ? this.bottomPlayer : this.topPlayer;
+    if (!opponent) {
+      return;
+    }
+
+    const currentDeckSize = opponent?.deck?.cards?.length || 0;
+
+    // Detect when opponent deck becomes empty
+    if (this.previousOpponentDeckSize > 0 && currentDeckSize === 0) {
+      // Opponent ran out of cards - they lose, current player wins
+      this.postGameOverMessage(GameWinner.PLAYER_1);
+    }
+
+    this.previousOpponentDeckSize = currentDeckSize;
+  }
+
+  private postGameOverMessage(winner: GameWinner): void {
+    if ((window as any).ReactNativeWebView) {
+      const winnerValue = winner === 0 ? 'player1' : 'player2';
+      (window as any).ReactNativeWebView.postMessage(JSON.stringify({
+        type: "GameOver",
+        data: { winner: winnerValue }
+      }));
+    }
   }
 
   private updateBenchGap(): void {
