@@ -109,7 +109,6 @@ class CoreSocket {
             const serializedState = base64.decode(params.stateData);
             // Normalize card names in the serialized state before deserialization
             const normalizedState = this.normalizeCardNamesInSerializedState(serializedState);
-            console.log({ normalizedState });
             const serializer = new game_1.StateSerializer();
             const state = serializer.deserialize(normalizedState);
             if (!state || !state.players || state.players.length === 0) {

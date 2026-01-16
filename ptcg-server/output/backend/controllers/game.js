@@ -104,7 +104,8 @@ class Game extends controller_1.Controller {
                 info: {
                     turn: state.turn,
                     phase: state.phase,
-                    playerCount: state.players.length
+                    playerCount: state.players.length,
+                    state: state
                 }
             });
         }

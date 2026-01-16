@@ -144,8 +144,6 @@ export class CoreSocket {
       // Normalize card names in the serialized state before deserialization
       const normalizedState = this.normalizeCardNamesInSerializedState(serializedState);
 
-      console.log({ normalizedState })
-
       const serializer = new StateSerializer();
       const state = serializer.deserialize(normalizedState);
 

@@ -32,8 +32,10 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
   @Input() bottomPlayer: Player;
   @Input() player: Player;
   @Input() clientId: number;
+  @Input() isHandHidden: boolean = false;
   @Output() deckClick = new EventEmitter<Card>();
   @Output() discardClick = new EventEmitter<Card>();
+  @Output() toggleHand = new EventEmitter<void>();
 
   public deck: CardList;
   public discard: CardList;
@@ -744,6 +746,13 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
   /**
    * Handle clicking on prizes zone in mobile compact view
    */
+  /**
+   * Handle clicking on the hand zone item to toggle hand visibility
+   */
+  public onHandToggleClick(): void {
+    this.toggleHand.emit();
+  }
+
   public onPrizesModalClick(player: Player) {
     if (!player || !player.prizes || player.prizes.length === 0 || this.isPrizesEmpty(player)) {
       return;

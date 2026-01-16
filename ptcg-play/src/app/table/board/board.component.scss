@@ -600,7 +600,7 @@ ptcg-board-card.highlighted-pokemon {
   .mobile-zone-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: auto 1fr 1fr;
     gap: 8px;
     padding: 8px;
     background: rgba(0, 0, 0, 0.4);
@@ -608,7 +608,7 @@ ptcg-board-card.highlighted-pokemon {
     position: absolute;
     z-index: 100;
     width: 110px;
-    height: 110px;
+    height: auto;
 
     // Position bottom player's zone grid (in the stadium area)
     grid-column: 2;
@@ -617,6 +617,8 @@ ptcg-board-card.highlighted-pokemon {
     align-self: flex-start;
     margin-left: 70px;
     margin-top: 0px;
+    transform: translate(0px, -15px);
+
 
     &.mobile-zone-grid-top {
       // Position top player's zone grid
@@ -625,7 +627,7 @@ ptcg-board-card.highlighted-pokemon {
       justify-self: start;
       align-self: center;
       margin-bottom: 0px;
-      transform: translate(0px, -130px);
+      transform: translate(0px, -145px);
     }
 
     .zone-item {
@@ -679,6 +681,59 @@ ptcg-board-card.highlighted-pokemon {
 
         &:active {
           transform: none;
+        }
+      }
+
+      &.zone-info {
+        grid-column: 1 / -1;
+        cursor: default;
+        flex-direction: row;
+        gap: 6px;
+        padding: 4px 8px;
+
+        &:hover {
+          transform: none;
+          background: rgba(26, 32, 44, 0.9);
+          border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        &:active {
+          transform: none;
+        }
+
+        .zone-label {
+          margin-bottom: 0;
+        }
+
+        &.zone-clickable {
+          cursor: pointer;
+
+          &:hover {
+            background: rgba(26, 32, 44, 1);
+            border-color: rgba(255, 255, 255, 0.4);
+          }
+
+          &:active {
+            transform: scale(0.98);
+          }
+        }
+
+        &.zone-active {
+          background: rgba(59, 130, 246, 0.3);
+          border-color: rgba(59, 130, 246, 0.6);
+
+          &:hover {
+            background: rgba(59, 130, 246, 0.4);
+            border-color: rgba(59, 130, 246, 0.8);
+          }
+        }
+
+        &.zone-no-interact {
+          pointer-events: none;
+          cursor: default;
+          user-select: none;
+          -webkit-user-select: none;
+          -webkit-tap-highlight-color: transparent;
         }
       }
     }

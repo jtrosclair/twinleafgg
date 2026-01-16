@@ -40,6 +40,7 @@ export class TableComponent implements OnInit, OnDestroy {
   public canUndoBackend = false;
   public showSandboxPanel = false;
   public sandboxSidebarCollapsed: boolean = false;
+  public isHandHidden: boolean = false;
 
   public formats = {
     [Format.STANDARD]: 'LABEL_STANDARD',
@@ -291,6 +292,10 @@ export class TableComponent implements OnInit, OnDestroy {
 
   toggleSandboxSidebar() {
     this.sandboxSidebarCollapsed = !this.sandboxSidebarCollapsed;
+  }
+
+  toggleHandVisibility() {
+    this.isHandHidden = !this.isHandHidden;
   }
 
   public hasActivePrompt(): boolean {

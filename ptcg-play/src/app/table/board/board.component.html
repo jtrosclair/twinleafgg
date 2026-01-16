@@ -43,22 +43,26 @@
 
       <!-- Mobile Compact Zone Grid (for mobile only) -->
       <div class="mobile-zone-grid mobile-zone-grid-top">
+        <div class="zone-item zone-info zone-no-interact">
+          <div class="zone-label">Hand</div>
+          <div class="zone-count">{{topPlayer?.hand?.cards?.length || 0}}</div>
+        </div>
         <div class="zone-item" [class.zone-disabled]="isDeckEmpty(topPlayer)"
-          (click)="onDeckClick($event, topPlayer?.deck)">
+          (click)="$event.stopPropagation(); onDeckClick($event, topPlayer?.deck)">
           <div class="zone-label">Deck</div>
           <div class="zone-count">{{topPlayer?.deck?.cards?.length || 0}}</div>
         </div>
         <div class="zone-item" [class.zone-disabled]="isLostZoneEmpty(topPlayer)"
-          (click)="onLostZoneClick($event, topPlayer?.lostzone)">
+          (click)="$event.stopPropagation(); onLostZoneClick($event, topPlayer?.lostzone)">
           <div class="zone-label">Lost</div>
           <div class="zone-count">{{topPlayer?.lostzone?.cards?.length || 0}}</div>
         </div>
         <div class="zone-item" [class.zone-disabled]="isDiscardEmpty(topPlayer)"
-          (click)="onDiscardClick($event, topPlayer?.discard)">
+          (click)="$event.stopPropagation(); onDiscardClick($event, topPlayer?.discard)">
           <div class="zone-label">Discard</div>
           <div class="zone-count">{{topPlayer?.discard?.cards?.length || 0}}</div>
         </div>
-        <div class="zone-item" [class.zone-disabled]="isPrizesEmpty(topPlayer)" (click)="onPrizesModalClick(topPlayer)">
+        <div class="zone-item zone-no-interact" [class.zone-disabled]="isPrizesEmpty(topPlayer)">
           <div class="zone-label">Prizes</div>
           <div class="zone-count">{{getPrizeCount(topPlayer)}}</div>
         </div>
@@ -164,23 +168,27 @@
 
       <!-- Mobile Compact Zone Grid (for mobile only) -->
       <div class="mobile-zone-grid">
+        <div class="zone-item zone-info zone-clickable" [class.zone-active]="!isHandHidden" (click)="$event.stopPropagation(); onHandToggleClick()">
+          <div class="zone-label">Hand</div>
+          <div class="zone-count">{{bottomPlayer?.hand?.cards?.length || 0}}</div>
+        </div>
         <div class="zone-item" [class.zone-disabled]="isDeckEmpty(bottomPlayer)"
-          (click)="onDeckClick($event, bottomPlayer?.deck)">
+          (click)="$event.stopPropagation(); onDeckClick($event, bottomPlayer?.deck)">
           <div class="zone-label">Deck</div>
           <div class="zone-count">{{bottomPlayer?.deck?.cards?.length || 0}}</div>
         </div>
         <div class="zone-item" [class.zone-disabled]="isLostZoneEmpty(bottomPlayer)"
-          (click)="onLostZoneClick($event, bottomPlayer?.lostzone)">
+          (click)="$event.stopPropagation(); onLostZoneClick($event, bottomPlayer?.lostzone)">
           <div class="zone-label">Lost</div>
           <div class="zone-count">{{bottomPlayer?.lostzone?.cards?.length || 0}}</div>
         </div>
         <div class="zone-item" [class.zone-disabled]="isDiscardEmpty(bottomPlayer)"
-          (click)="onDiscardClick($event, bottomPlayer?.discard)">
+          (click)="$event.stopPropagation(); onDiscardClick($event, bottomPlayer?.discard)">
           <div class="zone-label">Discard</div>
           <div class="zone-count">{{bottomPlayer?.discard?.cards?.length || 0}}</div>
         </div>
         <div class="zone-item" [class.zone-disabled]="isPrizesEmpty(bottomPlayer)"
-          (click)="onPrizesModalClick(bottomPlayer)">
+          (click)="$event.stopPropagation(); onPrizesModalClick(bottomPlayer)">
           <div class="zone-label">Prizes</div>
           <div class="zone-count">{{getPrizeCount(bottomPlayer)}}</div>
         </div>

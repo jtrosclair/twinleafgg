@@ -66,7 +66,9 @@ class CornerstoneMaskOgerponex extends pokemon_card_1.PokemonCard {
             if (state.phase !== game_1.GamePhase.ATTACK) {
                 return state;
             }
-            if (sourceCard.powers.length > 0) {
+            // Check if the attacking Pokémon has any abilities
+            const sourceAbilities = sourceCard.powers.filter(p => p.powerType === game_1.PowerType.ABILITY);
+            if (sourceAbilities.length > 0) {
                 // Try to reduce PowerEffect, to check if something is blocking our ability
                 try {
                     const stub = new game_effects_1.PowerEffect(player, {
@@ -79,7 +81,27 @@ class CornerstoneMaskOgerponex extends pokemon_card_1.PokemonCard {
                 catch (_a) {
                     return state;
                 }
-                effect.preventDefault = true;
+                // Check if the attacker's abilities are blocked by external effects (like Team Rocket's Watchtower)
+                // We use a stub ability to test if external effects would block the Pokémon's abilities,
+                // rather than testing the actual ability (which might fail due to its own usage restrictions)
+                const sourcePlayer = game_1.StateUtils.findOwner(state, effect.source);
+                let abilitiesBlockedExternally = false;
+                try {
+                    const attackerStub = new game_effects_1.PowerEffect(sourcePlayer, {
+                        name: 'test',
+                        powerType: game_1.PowerType.ABILITY,
+                        text: ''
+                    }, sourceCard);
+                    store.reduceEffect(state, attackerStub);
+                }
+                catch (_b) {
+                    // External effect is blocking the attacker's abilities
+                    abilitiesBlockedExternally = true;
+                }
+                // Only prevent damage if the attacker's abilities are not blocked by external effects
+                if (!abilitiesBlockedExternally) {
+                    effect.preventDefault = true;
+                }
             }
         }
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {

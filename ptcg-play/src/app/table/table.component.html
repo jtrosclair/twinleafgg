@@ -35,12 +35,13 @@
       <!-- Table board -->
 
       <!-- Player's hand -->
-      <ptcg-board [clientId]="clientId" [gameState]="gameState" [topPlayer]="topPlayer" [bottomPlayer]="bottomPlayer">
+      <ptcg-board [clientId]="clientId" [gameState]="gameState" [topPlayer]="topPlayer" [bottomPlayer]="bottomPlayer"
+        [isHandHidden]="isHandHidden" (toggleHand)="toggleHandVisibility()">
       </ptcg-board>
 
       <!-- Player's hand -->
 
-      <ptcg-hand *ngIf="!hasActivePrompt()" [clientId]="clientId" [gameState]="gameState" [player]="bottomPlayer" [isAdmin]="isAdmin"
+      <ptcg-hand *ngIf="!hasActivePrompt() && !isHandHidden" [clientId]="clientId" [gameState]="gameState" [player]="bottomPlayer" [isAdmin]="isAdmin"
         [isTO]="isTO"></ptcg-hand>
 
       <!-- <button mat-raised-button color="primary" (click)="undo()" [disabled]="!canUndoBackend"
