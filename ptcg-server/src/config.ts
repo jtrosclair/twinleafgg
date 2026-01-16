@@ -68,14 +68,14 @@ export const config = {
     botGamesIntervalCount: 0,
   },
   reconnection: {
-    // How long to preserve game state (5 minutes)
-    preservationTimeoutMs: 5 * 60 * 1000,
+    // How long to preserve game state (2 minutes)
+    preservationTimeoutMs: 2 * 60 * 1000,
 
     // Automatic reconnection attempts
-    maxAutoReconnectAttempts: 3,
+    maxAutoReconnectAttempts: 5,
 
-    // Intervals between reconnection attempts (5s, 10s, 15s)
-    reconnectIntervals: [5000, 10000, 15000],
+    // Intervals between reconnection attempts (every 10s for up to 2 minutes)
+    reconnectIntervals: [10000, 20000, 30000, 60000, 120000],
 
     // Connection health check interval (30 seconds)
     healthCheckIntervalMs: 30 * 1000,

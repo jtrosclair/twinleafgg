@@ -185,17 +185,6 @@ class Game {
         if (wasActivePlayer && !this.isPaused) {
             this.pauseGame();
         }
-        // Schedule auto-forfeit timer (15 seconds)
-        // Note: We already checked that state.phase !== FINISHED at the start of this method
-        const timeout = setTimeout(() => {
-            // Check if player is still disconnected and game is still active
-            if (this.disconnectedPlayers.has(client.id) && this.state.phase !== state_1.GamePhase.FINISHED) {
-                this.handleReconnectionTimeout(client.id);
-            }
-            // Remove timeout reference
-            this.disconnectionTimeouts.delete(client.id);
-        }, 15000); // 15 seconds
-        this.disconnectionTimeouts.set(client.id, timeout);
         // Notify other players of disconnection
         this.notifyPlayersOfDisconnection(client);
         logger_1.logger.log(`Player disconnected from game: gameId=${this.id}, playerId=${client.id}, playerName=${client.name}, wasActivePlayer=${wasActivePlayer}, gamePhase=${state.phase}`);

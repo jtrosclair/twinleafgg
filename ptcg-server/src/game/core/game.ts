@@ -237,19 +237,6 @@ export class Game implements StoreHandler {
       this.pauseGame();
     }
 
-    // Schedule auto-forfeit timer (15 seconds)
-    // Note: We already checked that state.phase !== FINISHED at the start of this method
-    const timeout = setTimeout(() => {
-      // Check if player is still disconnected and game is still active
-      if (this.disconnectedPlayers.has(client.id) && this.state.phase !== GamePhase.FINISHED) {
-        this.handleReconnectionTimeout(client.id);
-      }
-      // Remove timeout reference
-      this.disconnectionTimeouts.delete(client.id);
-    }, 15000); // 15 seconds
-
-    this.disconnectionTimeouts.set(client.id, timeout);
-
     // Notify other players of disconnection
     this.notifyPlayersOfDisconnection(client);
 
