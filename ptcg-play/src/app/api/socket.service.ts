@@ -418,34 +418,21 @@ export class SocketService {
       return;
     }
 
-    // Verify the user is actually a player in this game before attempting rejoin
+    // Check if we have a cached game state for this game
     const session = this.sessionService.session;
     const gameState = session.gameStates.find(
       g => g.gameId === this.lastKnownGameId && g.deleted === false
     );
 
-    if (!gameState) {
-      // No game state found, clear game ID and don't attempt rejoin
-      this.clearGameId();
-      return;
-    }
-
-    // Check if the user is a player (not just a spectator)
-    const clientId = session.clientId;
-    const isPlayer = gameState.state.players.some(p => p.id === clientId);
-
-    if (!isPlayer) {
-      // User is not a player, clear game ID and don't attempt rejoin
-      this.clearGameId();
-      return;
-    }
-
     // Check if game is finished - don't attempt rejoin for finished games
-    if (gameState.state.phase === GamePhase.FINISHED) {
+    if (gameState && gameState.state.phase === GamePhase.FINISHED) {
       this.clearGameId();
       return;
     }
 
+    // Attempt rejoin - the server will validate if we're a valid player
+    // Note: We don't check clientId here because after reconnection our
+    // session clientId is new, but the server tracks us by userId
     this.emit('game:rejoin', { gameId: this.lastKnownGameId }).pipe(
       timeout(15000), // 15 second timeout for rejoin operations
       catchError((error) => {
