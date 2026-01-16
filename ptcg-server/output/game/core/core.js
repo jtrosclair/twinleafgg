@@ -295,17 +295,16 @@ class Core {
         // Clone and set the state directly
         const clonedState = utils_2.deepClone(state);
         // Update player IDs to match the clients
-        // The active player will be controlled by the connecting client
-        const activePlayerIndex = clonedState.activePlayer || 0;
-        const opponentPlayerIndex = activePlayerIndex === 0 ? 1 : 0;
-        if (clonedState.players[activePlayerIndex]) {
-            clonedState.players[activePlayerIndex].id = client.id;
-            clonedState.players[activePlayerIndex].name = client.name;
+        // The human player is always players[0] (bottom of screen on client)
+        // The opponent (bot) is always players[1] (top of screen on client)
+        if (clonedState.players[0]) {
+            clonedState.players[0].id = client.id;
+            clonedState.players[0].name = client.name;
         }
         // If opponent client provided, update the opponent player's ID
-        if (opponentClient && clonedState.players[opponentPlayerIndex]) {
-            clonedState.players[opponentPlayerIndex].id = opponentClient.id;
-            clonedState.players[opponentPlayerIndex].name = opponentClient.name;
+        if (opponentClient && clonedState.players[1]) {
+            clonedState.players[1].id = opponentClient.id;
+            clonedState.players[1].name = opponentClient.name;
         }
         // Set the state on the game's store
         game.getStore().state = clonedState;
