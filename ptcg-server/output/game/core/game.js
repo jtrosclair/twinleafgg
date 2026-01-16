@@ -170,9 +170,10 @@ class Game {
         }
         const playerStats = this.playerStats.find(p => p.clientId === client.id);
         const wasActivePlayer = state.activePlayer !== undefined && ((_a = state.players[state.activePlayer]) === null || _a === void 0 ? void 0 : _a.id) === client.id;
-        // Store disconnection info
+        // Store disconnection info (including userId for reconnection lookup)
         const disconnectedPlayer = {
             clientId: client.id,
+            userId: client.user.id,
             disconnectedAt: Date.now(),
             wasActivePlayer,
             timeLeftWhenDisconnected: (playerStats === null || playerStats === void 0 ? void 0 : playerStats.timeLeft) || 0
@@ -326,10 +327,21 @@ class Game {
         return this.disconnectedPlayers.has(clientId);
     }
     /**
-     * Get disconnected player info
+     * Get disconnected player info by clientId
      */
     getDisconnectedPlayerInfo(clientId) {
         return this.disconnectedPlayers.get(clientId);
+    }
+    /**
+     * Get disconnected player info by userId (for reconnection)
+     */
+    getDisconnectedPlayerByUserId(userId) {
+        for (const disconnectedPlayer of this.disconnectedPlayers.values()) {
+            if (disconnectedPlayer.userId === userId) {
+                return disconnectedPlayer;
+            }
+        }
+        return undefined;
     }
     /**
      * Get all disconnected players

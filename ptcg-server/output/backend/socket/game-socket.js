@@ -110,26 +110,24 @@ class GameSocket {
                 response('ok', core_socket_1.CoreSocket.buildGameState(game));
                 return;
             }
-            // Check if this user is a player in the game
-            const userPlayer = game.state.players.find(p => p.id === this.client.user.id);
-            if (!userPlayer) {
-                // User is not a player in the game - they might be a spectator
-                // Don't allow rejoin for non-players
+            // Find disconnected player by user ID (not by player.id which is the old session ID)
+            const disconnectedPlayer = game.getDisconnectedPlayerByUserId(this.client.user.id);
+            if (!disconnectedPlayer) {
+                // User is not a disconnected player in this game
                 response('error', errors_1.ApiErrorEnum.GAME_INVALID_ID);
                 return;
             }
-            // User is a player, check if they're disconnected
-            const disconnectedPlayer = game.getDisconnectedPlayerInfo(userPlayer.id);
-            if (!disconnectedPlayer) {
-                // User is a player but not disconnected - they're already connected or never disconnected
-                // Don't allow rejoin if they're not actually disconnected
+            // Find the player in game state using the original clientId from disconnection
+            const userPlayer = game.state.players.find(p => p.id === disconnectedPlayer.clientId);
+            if (!userPlayer) {
+                // Player state not found (shouldn't happen if disconnectedPlayer exists)
                 response('error', errors_1.ApiErrorEnum.GAME_INVALID_ID);
                 return;
             }
             // User is disconnected, attempt reconnection
-            // Temporarily set client.id to match the player.id for reconnection
+            // Set client.id to match the original player.id for reconnection
             const originalClientId = this.client.id;
-            this.client.id = userPlayer.id;
+            this.client.id = disconnectedPlayer.clientId;
             const reconnected = game.handlePlayerReconnection(this.client);
             if (reconnected) {
                 // Successfully reconnected to the game

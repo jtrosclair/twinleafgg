@@ -9,6 +9,7 @@ import { StoreHandler } from '../store/store-handler';
 import { Format } from '../store/card/card-types';
 export interface DisconnectedPlayer {
     clientId: number;
+    userId: number;
     disconnectedAt: number;
     wasActivePlayer: boolean;
     timeLeftWhenDisconnected: number;
@@ -79,9 +80,13 @@ export declare class Game implements StoreHandler {
      */
     isPlayerDisconnected(clientId: number): boolean;
     /**
-     * Get disconnected player info
+     * Get disconnected player info by clientId
      */
     getDisconnectedPlayerInfo(clientId: number): DisconnectedPlayer | undefined;
+    /**
+     * Get disconnected player info by userId (for reconnection)
+     */
+    getDisconnectedPlayerByUserId(userId: number): DisconnectedPlayer | undefined;
     /**
      * Get all disconnected players
      */

@@ -18,6 +18,7 @@ import { logger } from '../../utils/logger';
 
 export interface DisconnectedPlayer {
   clientId: number;
+  userId: number;
   disconnectedAt: number;
   wasActivePlayer: boolean;
   timeLeftWhenDisconnected: number;
@@ -217,9 +218,10 @@ export class Game implements StoreHandler {
     const playerStats = this.playerStats.find(p => p.clientId === client.id);
     const wasActivePlayer = state.activePlayer !== undefined && state.players[state.activePlayer]?.id === client.id;
 
-    // Store disconnection info
+    // Store disconnection info (including userId for reconnection lookup)
     const disconnectedPlayer: DisconnectedPlayer = {
       clientId: client.id,
+      userId: client.user.id,
       disconnectedAt: Date.now(),
       wasActivePlayer,
       timeLeftWhenDisconnected: playerStats?.timeLeft || 0
@@ -408,10 +410,22 @@ export class Game implements StoreHandler {
   }
 
   /**
-   * Get disconnected player info
+   * Get disconnected player info by clientId
    */
   public getDisconnectedPlayerInfo(clientId: number): DisconnectedPlayer | undefined {
     return this.disconnectedPlayers.get(clientId);
+  }
+
+  /**
+   * Get disconnected player info by userId (for reconnection)
+   */
+  public getDisconnectedPlayerByUserId(userId: number): DisconnectedPlayer | undefined {
+    for (const disconnectedPlayer of this.disconnectedPlayers.values()) {
+      if (disconnectedPlayer.userId === userId) {
+        return disconnectedPlayer;
+      }
+    }
+    return undefined;
   }
 
   /**
