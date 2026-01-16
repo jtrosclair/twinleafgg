@@ -32,6 +32,7 @@ export interface GameState {
     recordingEnabled: boolean;
     playerStats: PlayerStats[];
     format?: Format;
+    reconnectedClientId?: number;
 }
 export interface UserInfo {
     userId: number;

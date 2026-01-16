@@ -38,6 +38,7 @@ export interface GameState {
   recordingEnabled: boolean;
   playerStats: PlayerStats[];
   format?: Format;
+  reconnectedClientId?: number; // Set when rejoining a game to indicate the client's player ID
 }
 
 export interface UserInfo {

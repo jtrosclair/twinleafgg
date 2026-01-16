@@ -132,7 +132,10 @@ class GameSocket {
             if (reconnected) {
                 // Successfully reconnected to the game
                 this.cache.lastLogIdCache[game.id] = 0;
-                response('ok', core_socket_1.CoreSocket.buildGameState(game));
+                const gameState = core_socket_1.CoreSocket.buildGameState(game);
+                // Include the reconnected client ID so the client knows which player they are
+                gameState.reconnectedClientId = disconnectedPlayer.clientId;
+                response('ok', gameState);
                 return;
             }
             else {

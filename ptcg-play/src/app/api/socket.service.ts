@@ -452,7 +452,12 @@ export class SocketService {
         return throwError(error);
       })
     ).subscribe(
-      (response) => {
+      (response: any) => {
+        // Update the client ID if the server provided the reconnected client ID
+        // This ensures we're identified as the correct player after reconnection
+        if (response && response.reconnectedClientId !== undefined) {
+          this.sessionService.set({ clientId: response.reconnectedClientId });
+        }
       },
       (error) => {
 
