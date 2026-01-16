@@ -84,8 +84,10 @@ export class CornerstoneMaskOgerponex extends PokemonCard {
         return state;
       }
 
-      if (sourceCard.powers.length > 0) {
+      // Check if the attacking Pokémon has any abilities
+      const sourceAbilities = sourceCard.powers.filter(p => p.powerType === PowerType.ABILITY);
 
+      if (sourceAbilities.length > 0) {
         // Try to reduce PowerEffect, to check if something is blocking our ability
         try {
           const stub = new PowerEffect(player, {
@@ -98,7 +100,27 @@ export class CornerstoneMaskOgerponex extends PokemonCard {
           return state;
         }
 
-        effect.preventDefault = true;
+        // Check if the attacker's abilities are blocked by external effects (like Team Rocket's Watchtower)
+        // We use a stub ability to test if external effects would block the Pokémon's abilities,
+        // rather than testing the actual ability (which might fail due to its own usage restrictions)
+        const sourcePlayer = StateUtils.findOwner(state, effect.source);
+        let abilitiesBlockedExternally = false;
+        try {
+          const attackerStub = new PowerEffect(sourcePlayer, {
+            name: 'test',
+            powerType: PowerType.ABILITY,
+            text: ''
+          }, sourceCard);
+          store.reduceEffect(state, attackerStub);
+        } catch {
+          // External effect is blocking the attacker's abilities
+          abilitiesBlockedExternally = true;
+        }
+
+        // Only prevent damage if the attacker's abilities are not blocked by external effects
+        if (!abilitiesBlockedExternally) {
+          effect.preventDefault = true;
+        }
       }
     }
 
