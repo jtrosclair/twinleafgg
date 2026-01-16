@@ -141,11 +141,8 @@ export class CoreSocket {
       const base64 = new Base64();
       const serializedState = base64.decode(params.stateData);
 
-      // Normalize card names in the serialized state before deserialization
-      const normalizedState = this.normalizeCardNamesInSerializedState(serializedState);
-
       const serializer = new StateSerializer();
-      const state = serializer.deserialize(normalizedState);
+      const state = serializer.deserialize(serializedState);
 
       if (!state || !state.players || state.players.length === 0) {
         response('error', ApiErrorEnum.ACTION_INVALID);
@@ -177,16 +174,16 @@ export class CoreSocket {
     }
   }
 
-  private normalizeCardNamesInSerializedState(serializedState: string): string {
-    const parsed = JSON.parse(serializedState);
-    const cardNames: string[] = parsed[1]?.cardNames;
+  // private normalizeCardNamesInSerializedState(serializedState: string): string {
+  //   const parsed = JSON.parse(serializedState);
+  //   const cardNames: string[] = parsed[1]?.cardNames;
 
-    if (Array.isArray(cardNames)) {
-      parsed[1].cardNames = cardNames.map(name => StateSerializer.normalizeCardName(name));
-    }
+  //   if (Array.isArray(cardNames)) {
+  //     parsed[1].cardNames = cardNames.map(name => StateSerializer.normalizeCardName(name));
+  //   }
 
-    return JSON.stringify(parsed);
-  }
+  //   return JSON.stringify(parsed);
+  // }
 
   public static buildUserInfo(user: User, connected: boolean = true): UserInfo {
     return {

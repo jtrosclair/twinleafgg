@@ -22,7 +22,6 @@ export declare class CoreSocket {
     private getCoreInfo;
     private createGame;
     private createGameFromState;
-    private normalizeCardNamesInSerializedState;
     static buildUserInfo(user: User, connected?: boolean): UserInfo;
     private static buildGameInfo;
     static buildGameState(game: Game): GameState;

@@ -107,10 +107,8 @@ class CoreSocket {
             // Decode the base64 state data
             const base64 = new utils_2.Base64();
             const serializedState = base64.decode(params.stateData);
-            // Normalize card names in the serialized state before deserialization
-            const normalizedState = this.normalizeCardNamesInSerializedState(serializedState);
             const serializer = new game_1.StateSerializer();
-            const state = serializer.deserialize(normalizedState);
+            const state = serializer.deserialize(serializedState);
             if (!state || !state.players || state.players.length === 0) {
                 response('error', errors_1.ApiErrorEnum.ACTION_INVALID);
                 return;
@@ -139,15 +137,14 @@ class CoreSocket {
             response('error', errors_1.ApiErrorEnum.ACTION_INVALID);
         }
     }
-    normalizeCardNamesInSerializedState(serializedState) {
-        var _a;
-        const parsed = JSON.parse(serializedState);
-        const cardNames = (_a = parsed[1]) === null || _a === void 0 ? void 0 : _a.cardNames;
-        if (Array.isArray(cardNames)) {
-            parsed[1].cardNames = cardNames.map(name => game_1.StateSerializer.normalizeCardName(name));
-        }
-        return JSON.stringify(parsed);
-    }
+    // private normalizeCardNamesInSerializedState(serializedState: string): string {
+    //   const parsed = JSON.parse(serializedState);
+    //   const cardNames: string[] = parsed[1]?.cardNames;
+    //   if (Array.isArray(cardNames)) {
+    //     parsed[1].cardNames = cardNames.map(name => StateSerializer.normalizeCardName(name));
+    //   }
+    //   return JSON.stringify(parsed);
+    // }
     static buildUserInfo(user, connected = true) {
         return {
             connected,
