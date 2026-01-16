@@ -227,26 +227,16 @@ export class StateSerializer {
     const names: string[] = parsed[1].cardNames;
     const cards: Card[] = [];
     names.forEach((name, index) => {
-      // Normalize the card name using the static normalizer
-      const cardWithoutSetId = StateSerializer.normalizeCardName(name);
-
-      // card name is card without last word, trimmed
-      const cardName = cardWithoutSetId.split(' ').slice(0, -1).join(' ').trim();
-
-      const card: Card | undefined = StateSerializer.knownCards.find(c => c?.fullName == name);
-
+      let card: Card | undefined = StateSerializer.knownCards.find(c => c.fullName === name);
       if (card === undefined) {
-        console.log({ name, cardName, cardWithoutSetId });
         throw new GameError(GameCoreError.ERROR_SERIALIZER, `Unknown card '${name}'.`);
       }
-
-      const clonedCard = deepClone(card) as Card;
-      clonedCard.id = index;
-      cards.push(clonedCard);
+      card = deepClone(card) as Card;
+      card.id = index;
+      cards.push(card);
     });
-
-    // console.log({ names });
     return { cards };
   }
+
 
 }
