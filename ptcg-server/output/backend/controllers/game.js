@@ -101,6 +101,7 @@ class Game extends controller_1.Controller {
             res.send({
                 ok: true,
                 valid: true,
+                serializedState: serializedState,
                 info: {
                     turn: state.turn,
                     phase: state.phase,
