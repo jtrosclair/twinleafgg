@@ -41,6 +41,10 @@ export class StateSerializer {
       name = 'Zekrom ex SV11B 169';
     }
 
+    if (name.includes('Vital A')) {
+      name = 'PokéVital A SFA';
+    }
+
     name = name.replace('Pok�', 'Poke');
 
     if (name.includes("Energy XXX")) { //prevent vintage energy misnaming

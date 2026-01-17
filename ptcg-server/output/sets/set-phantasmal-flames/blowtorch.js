@@ -17,7 +17,7 @@ class Blowtorch extends trainer_card_1.TrainerCard {
         this.fullName = 'Blowtorch M2';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '86';
-        this.text = `You can use this card only if you discard a Basic {R} Energy card from your hand. Discard a Pokémon Tool or Special Energy card from 1 of your opponent's Pokémon, or discard a Stadium in play.`;
+        this.text = `You can use this card only if you discard a Basic [R] Energy card from your hand. Discard a Pokémon Tool or Special Energy card from 1 of your opponent's Pokémon, or discard a Stadium in play.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
