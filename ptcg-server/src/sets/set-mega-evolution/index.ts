@@ -11,6 +11,7 @@ import { Corphish } from './corphish';
 import { Crawdaunt } from './crawdaunt';
 import { DangerousRuins } from './risky-ruins';
 import { Drizzile } from './drizzile';
+import { Delibird } from './delibird';
 import { Electrike } from './electrike';
 import { FightingGong } from './fighting-gong';
 import { Garganacl } from './garganacl';
@@ -73,6 +74,7 @@ export const setMegaEvolution: Card[] = [
   new Corphish(),
   new Crawdaunt(),
   new DangerousRuins(),
+  new Delibird(),
   new Drizzile(),
   new Electrike(),
   new FightingGong(),
