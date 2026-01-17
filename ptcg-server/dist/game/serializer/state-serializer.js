@@ -28,6 +28,7 @@ export class StateSerializer {
         ];
     }
     static normalizeCardName(name) {
+        name = name.replace("é", 'e');
         if (name == 'Zekrom ex BLK 34') {
             name = 'Zekrom ex SV11B 169';
         }
@@ -57,18 +58,19 @@ export class StateSerializer {
         // card name is card without last word, trimmed
         const cardName = cardWithoutSetId.split(' ').slice(0, -1).join(' ').trim();
         let card = StateSerializer.knownCards.find(c => {
-            if (cardWithoutSetId === (c === null || c === void 0 ? void 0 : c.fullName)) {
+            if (cardWithoutSetId === (c === null || c === void 0 ? void 0 : c.fullName) || cardWithoutSetId === (c === null || c === void 0 ? void 0 : c.fullName.replace('é', 'e'))) {
                 return true;
             }
             //try using alternate set abbreviations
-            if (cardWithoutSetId == (c === null || c === void 0 ? void 0 : c.name) + ' ' + (c === null || c === void 0 ? void 0 : c.set)) {
+            if (cardWithoutSetId == (c === null || c === void 0 ? void 0 : c.name.replace('é', 'e')) + ' ' + (c === null || c === void 0 ? void 0 : c.set)) {
                 return true;
             }
             return false;
         });
         if (!card) {
             card = StateSerializer.knownCards.find(c => {
-                if (cardName === (c === null || c === void 0 ? void 0 : c.name)) {
+                var _a;
+                if (cardName === ((_a = c === null || c === void 0 ? void 0 : c.name) === null || _a === void 0 ? void 0 : _a.replace('é', 'e'))) {
                     return true;
                 }
                 return false;

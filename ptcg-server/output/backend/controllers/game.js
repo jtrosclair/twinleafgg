@@ -78,6 +78,7 @@ class Game extends controller_1.Controller {
                 const parsed = JSON.parse(serializedState);
                 if (parsed[1] && Array.isArray(parsed[1].cardNames)) {
                     parsed[1].cardNames = parsed[1].cardNames.map((name) => {
+                        name = name.replace("é", 'e');
                         console.log({ name });
                         const normalizedName = state_serializer_1.StateSerializer.normalizeCardName(name);
                         // If normalization returns empty string, keep the original name

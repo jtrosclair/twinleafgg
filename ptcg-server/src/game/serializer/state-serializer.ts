@@ -37,6 +37,7 @@ export class StateSerializer {
   }
 
   public static normalizeCardName(name: string): string {
+    name = name.replace("é", 'e')
     if (name == 'Zekrom ex BLK 34') {
       name = 'Zekrom ex SV11B 169';
     }
@@ -76,13 +77,13 @@ export class StateSerializer {
 
 
     let card: Card | undefined = StateSerializer.knownCards.find(c => {
-      if (cardWithoutSetId === c?.fullName) {
+      if (cardWithoutSetId === c?.fullName || cardWithoutSetId === c?.fullName.replace('é', 'e')) {
         return true;
       }
 
       //try using alternate set abbreviations
 
-      if (cardWithoutSetId == c?.name + ' ' + c?.set) {
+      if (cardWithoutSetId == c?.name.replace('é', 'e') + ' ' + c?.set) {
         return true;
       }
 
@@ -91,7 +92,7 @@ export class StateSerializer {
 
     if (!card) {
       card = StateSerializer.knownCards.find(c => {
-        if (cardName === c?.name) {
+        if (cardName === c?.name?.replace('é', 'e')) {
           return true;
         }
         return false;
