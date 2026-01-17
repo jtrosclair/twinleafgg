@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.setPhantasmalFlames = void 0;
 const other_prints_1 = require("./other-prints");
 const battle_colosseum_1 = require("./battle-colosseum");
+const blowtorch_1 = require("./blowtorch");
 const bronzong_1 = require("./bronzong");
 const bronzor_1 = require("./bronzor");
 const buneary_1 = require("./buneary");
@@ -44,6 +45,7 @@ const wonder_patch_1 = require("./wonder-patch");
 const zacian_1 = require("./zacian");
 exports.setPhantasmalFlames = [
     new battle_colosseum_1.BattleColosseum(),
+    new blowtorch_1.Blowtorch(),
     new bronzong_1.Bronzong(),
     new bronzor_1.Bronzor(),
     new buneary_1.Buneary(),
