@@ -190,9 +190,11 @@ class StateSerializer {
         const names = parsed[1].cardNames;
         const cards = [];
         names.forEach((name, index) => {
-            let card = StateSerializer.knownCards.find(c => c.fullName === name);
+            const fixedName = name === null || name === void 0 ? void 0 : name.replace("�", "é");
+            let card = StateSerializer.knownCards.find(c => c.fullName === fixedName);
             if (card === undefined) {
-                throw new game_error_1.GameError(game_message_1.GameCoreError.ERROR_SERIALIZER, `Unknown card '${name}'.`);
+                console.log({ card, fixedName });
+                throw new game_error_1.GameError(game_message_1.GameCoreError.ERROR_SERIALIZER, `Unknown cards '${fixedName}'.`);
             }
             card = utils_1.deepClone(card);
             card.id = index;
