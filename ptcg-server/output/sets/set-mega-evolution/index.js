@@ -13,6 +13,7 @@ const corphish_1 = require("./corphish");
 const crawdaunt_1 = require("./crawdaunt");
 const risky_ruins_1 = require("./risky-ruins");
 const drizzile_1 = require("./drizzile");
+const delibird_1 = require("./delibird");
 const electrike_1 = require("./electrike");
 const fighting_gong_1 = require("./fighting-gong");
 const garganacl_1 = require("./garganacl");
@@ -74,6 +75,7 @@ exports.setMegaEvolution = [
     new corphish_1.Corphish(),
     new crawdaunt_1.Crawdaunt(),
     new risky_ruins_1.DangerousRuins(),
+    new delibird_1.Delibird(),
     new drizzile_1.Drizzile(),
     new electrike_1.Electrike(),
     new fighting_gong_1.FightingGong(),
