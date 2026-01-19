@@ -29,8 +29,8 @@ class ReconnectionManager {
             databaseOptimizationIntervalMs: 300 * 60 * 1000,
             memoryCleanupThresholdMb: 1000,
             maxSessionAge: 1 * 60 * 60 * 1000,
-            enableScheduledCleanup: true,
-            enableDatabaseOptimization: true,
+            enableScheduledCleanup: false,
+            enableDatabaseOptimization: false,
             enableMemoryManagement: true
         });
         // Initialize maintenance scheduler

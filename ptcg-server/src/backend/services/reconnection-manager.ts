@@ -46,8 +46,8 @@ export class ReconnectionManager {
         databaseOptimizationIntervalMs: 300 * 60 * 1000, // 30 minutes - more frequent
         memoryCleanupThresholdMb: 1000, // 500MB - more realistic threshold
         maxSessionAge: 1 * 60 * 60 * 1000, // 1 hour - shorter retention
-        enableScheduledCleanup: true,
-        enableDatabaseOptimization: true,
+        enableScheduledCleanup: false,
+        enableDatabaseOptimization: false,
         enableMemoryManagement: true
       }
     );

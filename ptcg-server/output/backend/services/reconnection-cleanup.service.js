@@ -72,8 +72,13 @@ class ReconnectionCleanupService {
             clearInterval(this.cleanupInterval);
         }
         this.cleanupInterval = setInterval(async () => {
-            if (!this.isShuttingDown) {
-                await this.performScheduledCleanup();
+            try {
+                if (!this.isShuttingDown) {
+                    await this.performScheduledCleanup();
+                }
+            }
+            catch (ex) {
+                console.log("CLEANUP FAILED", ex);
             }
         }, this.config.cleanupIntervalMs);
         logger_1.logger.logStructured({
@@ -91,8 +96,13 @@ class ReconnectionCleanupService {
             clearInterval(this.maintenanceInterval);
         }
         this.maintenanceInterval = setInterval(async () => {
-            if (!this.isShuttingDown) {
-                await this.performDatabaseMaintenance();
+            try {
+                if (!this.isShuttingDown) {
+                    await this.performDatabaseMaintenance();
+                }
+            }
+            catch (ex) {
+                console.log("DB MAIN FAILED", ex);
             }
         }, this.config.databaseOptimizationIntervalMs);
         logger_1.logger.logStructured({
