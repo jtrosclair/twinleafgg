@@ -180,7 +180,7 @@ export class SandboxViewerComponent implements OnInit, OnDestroy {
           }
         },
         error: (err) => {
-          console.error('Error creating game from state:', err, this.stateDataInput.trim().slice(0, 100));
+          console.error('Error creating game from state:', err, 'params:', this.stateDataInput.trim().slice(0, 100));
           this.error = this.translate.instant('SANDBOX_VIEWER_INVALID_DATA');
           this.loading = false;
         }

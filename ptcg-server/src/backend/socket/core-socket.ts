@@ -174,7 +174,7 @@ export class CoreSocket {
       const game = this.core.createGameFromState(this.client, state, gameSettings, opponentClient);
       response('ok', CoreSocket.buildGameState(game));
     } catch (error) {
-      console.error('Error creating game from state:', error);
+      console.error('Error creating game from state:', error, 'Params:', params.stateData?.slice(0, 100));
       response('error', ApiErrorEnum.ACTION_INVALID);
     }
   }

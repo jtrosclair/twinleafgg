@@ -108,6 +108,7 @@ class CoreSocket {
         response('ok', CoreSocket.buildGameState(game));
     }
     createGameFromState(params, response) {
+        var _a;
         try {
             // Decode the base64 state data
             const base64 = new utils_2.Base64();
@@ -138,7 +139,7 @@ class CoreSocket {
             response('ok', CoreSocket.buildGameState(game));
         }
         catch (error) {
-            console.error('Error creating game from state:', error);
+            console.error('Error creating game from state:', error, 'Params:', (_a = params.stateData) === null || _a === void 0 ? void 0 : _a.slice(0, 100));
             response('error', errors_1.ApiErrorEnum.ACTION_INVALID);
         }
     }
