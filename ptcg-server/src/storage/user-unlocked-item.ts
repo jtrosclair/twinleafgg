@@ -23,4 +23,4 @@ export class UserUnlockedItem extends BaseEntity {
   @CreateDateColumn()
     created!: Date;
 
-} 
+}

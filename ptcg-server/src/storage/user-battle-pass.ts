@@ -56,4 +56,4 @@ export class UserBattlePass extends BaseEntity {
       this.level = newLevel;
     }
   }
-} 
+}

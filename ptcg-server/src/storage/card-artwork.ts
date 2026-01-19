@@ -24,4 +24,4 @@ export class CardArtwork extends BaseEntity {
   @Column({ default: 'default' })
     holoType!: string;
 
-} 
+}
