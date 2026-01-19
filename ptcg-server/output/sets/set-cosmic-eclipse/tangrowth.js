@@ -36,7 +36,7 @@ class Tangrowth extends pokemon_card_1.PokemonCard {
         this.fullName = 'Tangrowth CEC';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const opponentActive = opponent.active.getPokemonCard();
@@ -47,9 +47,9 @@ class Tangrowth extends pokemon_card_1.PokemonCard {
                 effect.damage += retreatCost * 30;
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            return prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 2, results => {
+            return (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 2, results => {
                 let heads = 0;
                 results.forEach(r => {
                     if (r)

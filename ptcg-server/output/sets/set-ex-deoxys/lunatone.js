@@ -58,12 +58,12 @@ class Lunatone extends pokemon_card_1.PokemonCard {
             if (!isLunatoneInPlay) {
                 return state;
             }
-            if (!prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this) && active.name === 'Solrock') {
+            if (!(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this) && active.name === 'Solrock') {
                 effect.cost = [];
             }
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const options = [
@@ -107,7 +107,7 @@ class Lunatone extends pokemon_card_1.PokemonCard {
                 option.action();
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             let solrockCount = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (list, card) => {

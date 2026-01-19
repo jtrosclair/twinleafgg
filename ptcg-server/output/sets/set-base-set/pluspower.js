@@ -23,7 +23,7 @@ class PlusPower extends trainer_card_1.TrainerCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;
-            prefabs_1.MOVE_CARD_TO(state, this, player.active);
+            (0, prefabs_1.MOVE_CARD_TO)(state, this, player.active);
         }
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.source.cards.includes(this)) {
             // must deal > 0 damage to active Pokémon

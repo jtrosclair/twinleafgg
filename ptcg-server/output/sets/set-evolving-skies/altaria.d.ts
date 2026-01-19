@@ -9,7 +9,7 @@ export declare class Altaria extends PokemonCard {
     evolvesFrom: string;
     cardType: CardType;
     hp: number;
-    retreat: never[];
+    retreat: any[];
     powers: {
         name: string;
         useWhenInPlay: boolean;

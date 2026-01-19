@@ -70,10 +70,10 @@ class Frosmoth extends pokemon_card_1.PokemonCard {
             }
             // Draw cards for both players
             if (player.deck.cards.length > 0) {
-                prefabs_1.DRAW_CARDS(player, 1);
+                (0, prefabs_1.DRAW_CARDS)(player, 1);
             }
             if (opponent.deck.cards.length > 0) {
-                prefabs_1.DRAW_CARDS(opponent, 1);
+                (0, prefabs_1.DRAW_CARDS)(opponent, 1);
             }
             // Mark ability as used
             player.marker.addMarker(this.INVITING_WINGS_MARKER, this);
@@ -85,10 +85,10 @@ class Frosmoth extends pokemon_card_1.PokemonCard {
             });
         }
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            prefabs_1.ADD_MARKER(this.COLD_CYCLONE_MARKER, effect.player, this);
+            (0, prefabs_1.ADD_MARKER)(this.COLD_CYCLONE_MARKER, effect.player, this);
             return state;
         }
-        if (effect instanceof game_phase_effects_1.AfterAttackEffect && prefabs_1.HAS_MARKER(this.COLD_CYCLONE_MARKER, effect.player, this)) {
+        if (effect instanceof game_phase_effects_1.AfterAttackEffect && (0, prefabs_1.HAS_MARKER)(this.COLD_CYCLONE_MARKER, effect.player, this)) {
             const player = effect.player;
             const hasBench = player.bench.some(b => b.cards.length > 0);
             if (hasBench === false) {
@@ -105,7 +105,7 @@ class Frosmoth extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.COLD_CYCLONE_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.COLD_CYCLONE_MARKER, this);
         return state;
     }
 }

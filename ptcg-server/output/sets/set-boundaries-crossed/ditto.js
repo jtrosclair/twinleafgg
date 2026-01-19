@@ -28,7 +28,7 @@ class Ditto extends game_1.PokemonCard {
         this.fullName = 'Ditto BCR';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const targetCardList = game_1.StateUtils.findCardList(state, this);
             if (!(targetCardList instanceof game_1.PokemonCardList)) {

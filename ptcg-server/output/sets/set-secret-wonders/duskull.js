@@ -43,17 +43,17 @@ class Duskull extends pokemon_card_1.PokemonCard {
                 cardList.pokemonPlayedTurn = state.turn - 1;
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (result) {
                     if (opponent.hand.cards.length > 0) {
                         const randomIndex = Math.floor(Math.random() * opponent.hand.cards.length);
                         const randomCard = opponent.hand.cards[randomIndex];
-                        prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, player, [randomCard]);
-                        prefabs_1.MOVE_CARD_TO(state, randomCard, opponent.deck);
-                        prefabs_1.SHUFFLE_DECK(store, state, opponent);
+                        (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, player, [randomCard]);
+                        (0, prefabs_1.MOVE_CARD_TO)(state, randomCard, opponent.deck);
+                        (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
                     }
                 }
             });

@@ -64,7 +64,7 @@ class Hydreigonex extends pokemon_card_1.PokemonCard {
             if (state.phase !== game_1.GamePhase.ATTACK || opponent.active.getPokemonCard() !== this) {
                 return state;
             }
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             if (effect.prizeCount > 0) {

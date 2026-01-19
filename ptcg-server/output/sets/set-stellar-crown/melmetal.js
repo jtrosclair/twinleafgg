@@ -35,14 +35,14 @@ class Melmetal extends pokemon_card_1.PokemonCard {
         this.fullName = 'Melmetal SCR';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             effect.damage = 0; // Reset damage to 0 if no tools are discarded
             // Discard active Pokemon's tool first
             const activePokemon = opponent.active;
             if (activePokemon.tools.length > 0) {
-                prefabs_1.MOVE_CARD_TO(state, activePokemon.tools[0], opponent.discard);
+                (0, prefabs_1.MOVE_CARD_TO)(state, activePokemon.tools[0], opponent.discard);
                 if (activePokemon.tools.length > 1) {
                     activePokemon.moveCardsTo(activePokemon.tools.slice(1), opponent.discard);
                 }

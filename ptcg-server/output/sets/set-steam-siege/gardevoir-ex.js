@@ -38,7 +38,7 @@ class GardevoirEx extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Link Blast
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             const playerActiveEnergy = player.active.cards.filter(card => card instanceof game_1.EnergyCard);
@@ -48,8 +48,8 @@ class GardevoirEx extends pokemon_card_1.PokemonCard {
             }
         }
         // Shining Wind
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1);
         }
         return state;
     }

@@ -33,9 +33,9 @@ class Vibrava extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         var _a;
-        if (prefabs_1.AFTER_ATTACK(effect, 1, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
             if ((_a = effect.opponent.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.tags.includes(card_types_1.CardTag.POKEMON_ex)) {
-                prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+                (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
             }
         }
         return state;

@@ -19,10 +19,10 @@ class Repel extends trainer_card_1.TrainerCard {
         this.text = 'Your opponent switches their Active Pokémon with 1 of their Benched Pokémon.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, opponent);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, opponent);
         }
         return state;
     }

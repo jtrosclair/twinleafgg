@@ -28,7 +28,7 @@ class AZ extends trainer_card_1.TrainerCard {
                 throw new game_1.GameError(game_message_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
             }
             // Move to supporter pile
-            state = prefabs_1.MOVE_CARDS(store, state, player.hand, player.supporter, {
+            state = (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.supporter, {
                 cards: [effect.trainerCard]
             });
             effect.preventDefault = true;
@@ -48,13 +48,13 @@ class AZ extends trainer_card_1.TrainerCard {
                     }
                     // Move other cards to discard
                     if (otherCards.length > 0) {
-                        prefabs_1.MOVE_CARDS(store, state, cardList, player.discard, { cards: otherCards });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.discard, { cards: otherCards });
                     }
                     // Move Pokémon to hand
                     if (pokemons.length > 0) {
-                        prefabs_1.MOVE_CARDS(store, state, cardList, player.hand, { cards: pokemons });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.hand, { cards: pokemons });
                     }
-                    prefabs_1.MOVE_CARD_TO(state, effect.trainerCard, player.discard);
+                    (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
                 }
             });
         }

@@ -41,7 +41,7 @@ class Vileplume extends game_1.PokemonCard {
             // Return if attacker is not a basic, this Pokemon is not in the opponent's active, or Ability is blocked
             if (!effect.source.isStage(game_1.Stage.BASIC)
                 || opponent.active.getPokemonCard() !== this
-                || prefabs_1.IS_ABILITY_BLOCKED(store, state, opponent, this)) {
+                || (0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
             // Check if Ability can target the attacker
@@ -52,14 +52,14 @@ class Vileplume extends game_1.PokemonCard {
             }
         }
         // Downer Shock
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 const opponent = game_1.StateUtils.getOpponent(state, effect.player);
                 if (result) {
-                    prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, this);
+                    (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, opponent, this);
                 }
                 else {
-                    prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, opponent, this);
+                    (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, opponent, this);
                 }
             });
         }

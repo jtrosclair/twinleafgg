@@ -25,7 +25,7 @@ function* playCard(next, store, state, effect) {
         return state;
     }
     // Discard trainer only when user selected a Pokemon
-    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     player.active.clearEffects();
     player.switchPokemon(targets[0]);
     return state;

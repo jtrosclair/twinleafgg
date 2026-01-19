@@ -55,7 +55,7 @@ class Blastoise extends pokemon_card_1.PokemonCard {
             if (!hasBlastoiseInPlay) {
                 return state;
             }
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             if (game_1.StateUtils.findOwner(state, effect.target) === player && effect.target === player.active) {
@@ -63,8 +63,8 @@ class Blastoise extends pokemon_card_1.PokemonCard {
             }
         }
         // Enraged Linear Attack
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(effect.player.active.damage, effect, store, state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(effect.player.active.damage, effect, store, state);
         }
         return state;
     }

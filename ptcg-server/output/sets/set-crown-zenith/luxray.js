@@ -34,8 +34,8 @@ class Luxray extends pokemon_card_1.PokemonCard {
         this.fullName = 'Luxray CRZ';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, effect.player, this, { superType: card_types_1.SuperType.TRAINER }, { min: 0, max: 2 }, this.attacks[0]);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND)(store, state, effect.player, this, { superType: card_types_1.SuperType.TRAINER }, { min: 0, max: 2 }, this.attacks[0]);
         }
         return state;
     }

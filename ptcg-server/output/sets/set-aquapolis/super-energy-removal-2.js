@@ -18,23 +18,23 @@ class SuperEnergyRemoval2 extends trainer_card_1.TrainerCard {
         this.text = 'Flip 2 coins. If both are heads, discard all Energy cards attached to the Defending Pokémon. If both are tails, discard all Energy cards attached to your Active Pokémon. If 1 is heads and 1 is tails, this card does nothing.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             effect.preventDefault = true;
-            prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 2, result => {
+            (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 2, result => {
                 if (result[0] && result[1]) {
                     // Both heads: Discard all Energy from Defending Pokémon
                     const cards = opponent.active.cards.filter(c => c instanceof game_1.EnergyCard);
-                    prefabs_1.MOVE_CARDS(store, state, opponent.active, opponent.discard, { cards, sourceCard: this });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, opponent.active, opponent.discard, { cards, sourceCard: this });
                 }
                 else if (!result[0] && !result[1]) {
                     // Both tails: Discard all Energy from Active Pokémon
                     const cards = player.active.cards.filter(c => c instanceof game_1.EnergyCard);
-                    prefabs_1.MOVE_CARDS(store, state, player.active, player.discard, { cards, sourceCard: this });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.active, player.discard, { cards, sourceCard: this });
                 }
             });
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         }
         return state;
     }

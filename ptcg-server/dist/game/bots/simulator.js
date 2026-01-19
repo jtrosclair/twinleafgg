@@ -1,17 +1,20 @@
-import { Store } from '../store/store';
-import { BotArbiter } from './bot-arbiter';
-import { GameError } from '../game-error';
-import { GameCoreError } from '../game-message';
-import { deepClone } from '../../utils';
-import { Card } from '../store/card/card';
-export class Simulator {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Simulator = void 0;
+const store_1 = require("../store/store");
+const bot_arbiter_1 = require("./bot-arbiter");
+const game_error_1 = require("../game-error");
+const game_message_1 = require("../game-message");
+const utils_1 = require("../../utils");
+const card_1 = require("../store/card/card");
+class Simulator {
     constructor(state, botArbiterOptions = {}) {
         if (state.prompts.some(p => p.result === undefined)) {
-            throw new GameError(GameCoreError.ERROR_SIMULATOR_NOT_STABLE);
+            throw new game_error_1.GameError(game_message_1.GameCoreError.ERROR_SIMULATOR_NOT_STABLE);
         }
-        this.botArbiter = new BotArbiter(botArbiterOptions);
-        this.store = new Store(this);
-        this.store.state = deepClone(state, [Card]);
+        this.botArbiter = new bot_arbiter_1.BotArbiter(botArbiterOptions);
+        this.store = new store_1.Store(this);
+        this.store.state = (0, utils_1.deepClone)(state, [card_1.Card]);
     }
     clone() {
         return new Simulator(this.store.state);
@@ -39,3 +42,4 @@ export class Simulator {
         return state;
     }
 }
+exports.Simulator = Simulator;

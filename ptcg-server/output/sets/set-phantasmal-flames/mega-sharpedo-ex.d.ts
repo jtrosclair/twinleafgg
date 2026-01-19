@@ -9,7 +9,7 @@ export declare class MegaSharpedoex extends PokemonCard {
     weakness: {
         type: CardType.GRASS;
     }[];
-    retreat: never[];
+    retreat: any[];
     attacks: ({
         name: string;
         cost: CardType.DARK[];

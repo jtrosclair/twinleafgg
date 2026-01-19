@@ -36,7 +36,7 @@ class Jumpluff extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof game_effects_1.AttackEffect && effect.source.cards.includes(this)) {
-            if (!prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+            if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this)) {
                 this.powers[0].barrage = true;
             }
             else {

@@ -19,7 +19,7 @@ class ComputerError extends trainer_card_1.TrainerCard {
         this.text = 'You may draw up to 5 cards, then your opponent may draw up to 5 cards. Your turn is over now (you don\'t get to attack).';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             player.hand.moveCardTo(effect.trainerCard, player.supporter);

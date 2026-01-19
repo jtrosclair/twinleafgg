@@ -29,7 +29,7 @@ class Slowpoke extends game_1.PokemonCard {
         this.fullName = 'Slowpoke SVI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const cardList = game_1.StateUtils.findCardList(state, this);
             if (cardList !== effect.source) {
                 return state;

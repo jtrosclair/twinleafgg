@@ -9,12 +9,12 @@ export declare class Haunter extends PokemonCard {
     evolvesFrom: string;
     cardType: CardType;
     hp: number;
-    weakness: never[];
+    weakness: any[];
     resistance: {
         type: CardType.FIGHTING;
         value: number;
     }[];
-    retreat: never[];
+    retreat: any[];
     powers: {
         name: string;
         powerType: PowerType;

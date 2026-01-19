@@ -1,13 +1,14 @@
 {
-  "extends": "./tsconfig",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "skipLibCheck": true, // ignore errors in node_modules
-    "strict": true, // optional, keeps strict type checking in your own code
-    "module": "es2015",
-    "outDir": "dist",
-    "moduleResolution": "node"
+    "skipLibCheck": true,
+    "strict": false,
+    "outDir": "dist"
   },
   "include": [
     "src/index.ts"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

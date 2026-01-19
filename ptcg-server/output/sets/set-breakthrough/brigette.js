@@ -53,10 +53,10 @@ class Brigette extends trainer_card_1.TrainerCard {
                 return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH, player.deck, { superType: card_types_1.SuperType.POKEMON, stage: card_types_1.Stage.BASIC }, { min: 0, max: maxCards, allowCancel: false }), selectedCards => {
                     cards = selectedCards || [];
                     cards.forEach((card, index) => {
-                        prefabs_1.MOVE_CARDS(store, state, player.deck, slots[index], { sourceCard: this });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, slots[index], { sourceCard: this });
                         slots[index].pokemonPlayedTurn = state.turn;
                     });
-                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                         player.deck.applyOrder(order);
                     });

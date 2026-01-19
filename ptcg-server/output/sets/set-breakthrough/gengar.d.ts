@@ -15,7 +15,7 @@ export declare class Gengar extends PokemonCard {
         type: CardType.FIGHTING;
         value: number;
     }[];
-    retreat: never[];
+    retreat: any[];
     attacks: {
         name: string;
         cost: (CardType.PSYCHIC | CardType.COLORLESS)[];

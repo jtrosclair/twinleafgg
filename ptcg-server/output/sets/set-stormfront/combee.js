@@ -58,12 +58,12 @@ class Combee extends pokemon_card_1.PokemonCard {
             });
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.DRAW_CARDS(player, 1);
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.DRAW_CARDS)(player, 1);
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
-                    prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+                    (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
                 }
             });
         }

@@ -35,19 +35,19 @@ class Vespiquen extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Intelligence Gathering
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.hand.cards.length >= 6 || player.deck.cards.length === 0) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, effect.player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 6);
+                    (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, 6);
                 }
             });
         }
         // Bee Revenge
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             let pokemonInDiscard = 0;
             player.discard.cards.forEach(card => {

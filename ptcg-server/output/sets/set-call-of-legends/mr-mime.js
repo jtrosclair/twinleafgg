@@ -33,22 +33,22 @@ class MrMime extends game_1.PokemonCard {
         this.TRICK_REVEAL_MARKER = 'TRICK_REVEAL_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.HAS_MARKER(this.TRICK_REVEAL_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.TRICK_REVEAL_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
-            prefabs_1.ADD_MARKER(this.TRICK_REVEAL_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
-            prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, player, opponent.hand.cards);
-            prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, player.hand.cards);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.TRICK_REVEAL_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
+            (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, player, opponent.hand.cards);
+            (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, player.hand.cards);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.TRICK_REVEAL_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.TRICK_REVEAL_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 4, results => {
+            (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 4, results => {
                 let heads = 0;
                 results.forEach(r => {
                     if (r)

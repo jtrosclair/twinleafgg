@@ -39,14 +39,14 @@ class RocketsSneaselex extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Drag Off
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const bench = opponent.bench.filter(bench => bench.cards.length > 0);
             if (bench.length === 0) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
                     store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_SWITCH, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.BENCH], { allowCancel: false }), result => {
                         const cardList = result[0];
@@ -56,7 +56,7 @@ class RocketsSneaselex extends pokemon_card_1.PokemonCard {
             }, game_1.GameMessage.WANT_TO_SWITCH_POKEMON);
         }
         // Rock Smash
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             let darksInPlay = 0;
             const activeType = new check_effects_1.CheckPokemonTypeEffect(player.active);

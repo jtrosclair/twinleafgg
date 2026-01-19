@@ -22,7 +22,7 @@ class LuxuriousCape extends trainer_card_1.TrainerCard {
     // public damageDealt = false;
     reduceEffect(store, state, effect) {
         if (effect instanceof check_effects_1.CheckHpEffect && effect.target.tools.includes(this)) {
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             if (!effect.target.hasRuleBox()) {
@@ -30,7 +30,7 @@ class LuxuriousCape extends trainer_card_1.TrainerCard {
             }
         }
         if (effect instanceof game_effects_1.KnockOutEffect && effect.target.tools.includes(this) && effect.player.marker.hasMarker(effect.player.DAMAGE_DEALT_MARKER)) {
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             if (state.phase !== game_1.GamePhase.ATTACK) {

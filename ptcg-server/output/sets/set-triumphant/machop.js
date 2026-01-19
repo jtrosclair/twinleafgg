@@ -33,8 +33,8 @@ class Machop extends pokemon_card_1.PokemonCard {
         this.fullName = 'Machop TM';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            attack_effects_1.FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE(store, state, effect, 10);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, attack_effects_1.FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE)(store, state, effect, 10);
         }
         return state;
     }

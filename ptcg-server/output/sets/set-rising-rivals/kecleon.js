@@ -35,13 +35,13 @@ class Kecleon extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof check_effects_1.CheckPokemonTypeEffect
             && effect.target.getPokemonCard() === this
-            && !prefabs_1.IS_POKEBODY_BLOCKED(store, state, game_1.StateUtils.findOwner(state, effect.target), this)) {
+            && !(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, game_1.StateUtils.findOwner(state, effect.target), this)) {
             effect.cardTypes = [G, R, W, L, P, F, D, M, C];
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            return prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 3, results => {
+            return (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 3, results => {
                 let heads = 0;
                 results.forEach(r => {
                     if (r)

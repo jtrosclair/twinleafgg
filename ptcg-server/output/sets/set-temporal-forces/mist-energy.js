@@ -25,7 +25,7 @@ class MistEnergy extends energy_card_1.EnergyCard {
         // Prevent effects of attacks
         if (effect instanceof attack_effects_1.AbstractAttackEffect && effect.target.cards.includes(this)) {
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, opponent, this, effect.target)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, opponent, this, effect.target)) {
                 return state;
             }
             const sourceCard = effect.source.getPokemonCard();

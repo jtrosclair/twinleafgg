@@ -37,31 +37,31 @@ class StaraptorFBLVX extends game_1.PokemonCard {
         this.FAST_CALL_MARKER = 'FAST_CALL_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.BLOCK_EFFECT_IF_MARKER(this.FAST_CALL_MARKER, player, this);
-            prefabs_1.BLOCK_IF_DECK_EMPTY(player);
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_EFFECT_IF_MARKER)(this.FAST_CALL_MARKER, player, this);
+            (0, prefabs_1.BLOCK_IF_DECK_EMPTY)(player);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, { superType: game_1.SuperType.TRAINER, trainerType: game_1.TrainerType.SUPPORTER }, { min: 0, max: 1 }), cards => {
                 if (!cards || cards.length === 0) {
                     return state;
                 }
-                prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-                cards.forEach(card => prefabs_1.MOVE_CARD_TO(state, card, player.hand));
-                prefabs_1.ADD_MARKER(this.FAST_CALL_MARKER, player, this);
-                prefabs_1.ABILITY_USED(player, this);
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
+                cards.forEach(card => (0, prefabs_1.MOVE_CARD_TO)(state, card, player.hand));
+                (0, prefabs_1.ADD_MARKER)(this.FAST_CALL_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.FAST_CALL_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.FAST_CALL_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (game_1.StateUtils.getStadiumCard(state) === undefined) {
                 return state;
             }
             return store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
                 if (wantToUse) {
-                    attack_effects_1.DISCARD_A_STADIUM_CARD_IN_PLAY(state);
+                    (0, attack_effects_1.DISCARD_A_STADIUM_CARD_IN_PLAY)(state);
                     effect.damage = 70;
                 }
             });

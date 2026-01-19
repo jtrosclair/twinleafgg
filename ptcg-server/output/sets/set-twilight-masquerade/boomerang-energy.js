@@ -27,14 +27,14 @@ class BoomerangEnergy extends energy_card_1.EnergyCard {
     reduceEffect(store, state, effect) {
         // checking if this is on the player's active when attacking
         if (effect instanceof game_effects_1.AttackEffect && effect.source.cards.includes(this) && effect.player.active === effect.source) {
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.source)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.player, this, effect.source)) {
                 return state;
             }
             effect.player.marker.addMarker(this.BOOMERANG_EXISTANCE_MARKER, this);
         }
         // checking if this card is discarded while attacking
         if (effect instanceof attack_effects_1.DiscardCardsEffect && effect.player.marker.hasMarker(this.BOOMERANG_EXISTANCE_MARKER, this)) {
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.source)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.player, this, effect.source)) {
                 return state;
             }
             effect.player.marker.addMarker(this.BOOMERANG_DISCARDED_MARKER, this);

@@ -23,7 +23,7 @@ class BurningScarf extends trainer_card_1.TrainerCard {
         if (effect instanceof attack_effects_1.AfterDamageEffect && effect.target.tools.includes(this)) {
             const player = effect.player;
             const targetPlayer = game_1.StateUtils.findOwner(state, effect.target);
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, targetPlayer, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, targetPlayer, this)) {
                 return state;
             }
             if (effect.damage <= 0 || player === targetPlayer || targetPlayer.active !== effect.target) {

@@ -38,7 +38,7 @@ class ArceusMetal extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Metal Barrier
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             effect.opponent.marker.addMarker(this.METAL_BARRIER_MARKER, this);
         }
         if ((effect instanceof attack_effects_1.PutDamageEffect

@@ -43,13 +43,13 @@ class DeleteUserTask {
         return avatars;
     }
     async deleteUser(userId) {
-        const unlinkAsync = util_1.promisify(fs_1.unlink);
+        const unlinkAsync = (0, util_1.promisify)(fs_1.unlink);
         try {
             // delete user with all dependencies
             const avatars = await this.deleteUserFromDb(userId);
             // remove avatar files from disk
             for (let i = 0; i < avatars.length; i++) {
-                const path = path_1.join(config_1.config.backend.avatarsDir, avatars[i].fileName);
+                const path = (0, path_1.join)(config_1.config.backend.avatarsDir, avatars[i].fileName);
                 await unlinkAsync(path);
             }
         }
@@ -59,8 +59,8 @@ class DeleteUserTask {
     }
 }
 __decorate([
-    typeorm_1.Transaction(),
-    __param(1, typeorm_1.TransactionManager()),
+    (0, typeorm_1.Transaction)(),
+    __param(1, (0, typeorm_1.TransactionManager)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, typeorm_1.EntityManager]),
     __metadata("design:returntype", Promise)

@@ -1,18 +1,21 @@
-import { StateUtils, GameWinner } from '../../game';
-import { SimpleScore } from './score';
-export class PlayerScore extends SimpleScore {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PlayerScore = void 0;
+const game_1 = require("../../game");
+const score_1 = require("./score");
+class PlayerScore extends score_1.SimpleScore {
     getScore(state, playerId) {
         const player = this.getPlayer(state, playerId);
-        const opponent = StateUtils.getOpponent(state, player);
+        const opponent = game_1.StateUtils.getOpponent(state, player);
         const scores = this.options.scores.player;
         let score = 0;
         // 10000 points if we have won the game
         const isPlayer1 = state.players[0] === player;
-        if (state.winner === GameWinner.PLAYER_1) {
+        if (state.winner === game_1.GameWinner.PLAYER_1) {
             score += isPlayer1 ? scores.winner : -scores.winner;
         }
         const isPlayer2 = state.players[1] === player;
-        if (state.winner === GameWinner.PLAYER_2) {
+        if (state.winner === game_1.GameWinner.PLAYER_2) {
             score += isPlayer2 ? scores.winner : -scores.winner;
         }
         // 1000 points for each prize card less than opponent
@@ -28,3 +31,4 @@ export class PlayerScore extends SimpleScore {
         return score;
     }
 }
+exports.PlayerScore = PlayerScore;

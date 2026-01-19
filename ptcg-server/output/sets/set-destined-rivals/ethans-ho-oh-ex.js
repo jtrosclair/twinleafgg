@@ -45,7 +45,7 @@ class EthansHoOhex extends pokemon_card_1.PokemonCard {
         }
         if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
             const player = effect.player;
-            prefabs_1.BLOCK_EFFECT_IF_MARKER(this.SHINING_FEATHER_MARKER, player, this);
+            (0, prefabs_1.BLOCK_EFFECT_IF_MARKER)(this.SHINING_FEATHER_MARKER, player, this);
             const hasEnergyInHand = player.hand.cards.some(c => {
                 return c instanceof game_1.EnergyCard
                     && c.energyType === card_types_1.EnergyType.BASIC
@@ -66,8 +66,8 @@ class EthansHoOhex extends pokemon_card_1.PokemonCard {
             });
             state = store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_TO_ACTIVE, player.hand, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Fire Energy' }, { allowCancel: false, sameTarget: true, min: 0, max: 2, blockedTo: blocked2 }), transfers => {
                 transfers = transfers || [];
-                prefabs_1.ADD_MARKER(this.SHINING_FEATHER_MARKER, player, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ADD_MARKER)(this.SHINING_FEATHER_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 if (transfers.length === 0) {
                     return;
                 }
@@ -78,8 +78,8 @@ class EthansHoOhex extends pokemon_card_1.PokemonCard {
                 return state;
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.SHINING_FEATHER_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.SHINING_FEATHER_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
                 const healEffect = new game_effects_1.HealEffect(player, cardList, 50);

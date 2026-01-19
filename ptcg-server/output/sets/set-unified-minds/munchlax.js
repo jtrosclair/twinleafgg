@@ -31,7 +31,7 @@ class Munchlax extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             let cards = [];
-            prefabs_1.BLOCK_IF_DISCARD_EMPTY(player);
+            (0, prefabs_1.BLOCK_IF_DISCARD_EMPTY)(player);
             // Checking to see if ability is being blocked
             try {
                 const stub = new game_effects_1.PowerEffect(player, {

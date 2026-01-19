@@ -40,7 +40,7 @@ class Oranguru extends pokemon_card_1.PokemonCard {
         // Resource Management
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_DISCARD_EMPTY(player);
+            (0, prefabs_1.BLOCK_IF_DISCARD_EMPTY)(player);
             let cards = [];
             store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, {}, { min: 0, max: 3, allowCancel: false }), selected => {
                 cards = selected || [];

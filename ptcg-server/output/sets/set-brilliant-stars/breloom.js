@@ -38,8 +38,8 @@ class Breloom extends pokemon_card_1.PokemonCard {
         this.sporeBallTurn = -10;
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
         }
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1] && state.turn !== this.sporeBallTurn + 2) {
             throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_ATTACK);

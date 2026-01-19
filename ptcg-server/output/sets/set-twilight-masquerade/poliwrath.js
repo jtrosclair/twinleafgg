@@ -38,11 +38,11 @@ class Poliwrath extends game_1.PokemonCard {
         this.shuffleIntoDeck = false;
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP(store, state, effect);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP)(store, state, effect);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            return prefabs_1.CONFIRMATION_PROMPT(store, state, effect.player, (result) => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            return (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, (result) => {
                 if (!result) {
                     return state;
                 }
@@ -55,7 +55,7 @@ class Poliwrath extends game_1.PokemonCard {
             player.active.clearEffects();
             this.shuffleIntoDeck = false;
             player.active.moveTo(player.deck);
-            prefabs_1.SHUFFLE_DECK(store, state, player);
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         }
         return state;
     }

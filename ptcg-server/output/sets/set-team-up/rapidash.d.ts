@@ -10,7 +10,7 @@ export declare class Rapidash extends PokemonCard {
     weakness: {
         type: import("../../game").CardType.WATER;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: import("../../game").CardType.COLORLESS[];
     attacks: {
         name: string;

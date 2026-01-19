@@ -37,7 +37,7 @@ class ChienPao extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             const stadiumCard = game_1.StateUtils.getStadiumCard(state);
@@ -54,7 +54,7 @@ class ChienPao extends pokemon_card_1.PokemonCard {
                 });
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (!player.active.energies.cards.some(c => c instanceof game_1.EnergyCard)) {
                 return state;

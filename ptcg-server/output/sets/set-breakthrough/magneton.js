@@ -35,15 +35,15 @@ class Magneton extends pokemon_card_1.PokemonCard {
         this.fullName = 'Magneton BKT';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
+                    (0, prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE)(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
                 }
             });
         }
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1);
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1);
         }
         return state;
     }

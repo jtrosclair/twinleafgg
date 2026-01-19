@@ -30,7 +30,7 @@ class CursedShovel extends trainer_card_1.TrainerCard {
             catch (_a) {
                 return state;
             }
-            prefabs_1.MOVE_CARDS(store, state, opponent.deck, opponent.discard, { count: 2, sourceCard: this, sourceEffect: this.attacks[0] });
+            (0, prefabs_1.MOVE_CARDS)(store, state, opponent.deck, opponent.discard, { count: 2, sourceCard: this, sourceEffect: this.attacks[0] });
         }
         return state;
     }

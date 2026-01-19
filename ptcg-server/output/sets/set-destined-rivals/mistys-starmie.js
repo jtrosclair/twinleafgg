@@ -30,7 +30,7 @@ class MistysStarmie extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Sudden Flash
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (effect.player.active.pokemonPlayedTurn === state.turn) {
                 effect.damage += 80;
             }

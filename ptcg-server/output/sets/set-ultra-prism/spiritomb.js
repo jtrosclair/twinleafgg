@@ -38,7 +38,7 @@ class Spiritomb extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         var _a;
         // Lightless World
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             let supporterAmount = 0;
@@ -57,7 +57,7 @@ class Spiritomb extends pokemon_card_1.PokemonCard {
                     store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                 });
                 if (cards.length > 0) {
-                    prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
+                    (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
                 }
                 if (cards.length > 0) {
                     player.discard.moveCardsTo(cards, player.hand);
@@ -65,7 +65,7 @@ class Spiritomb extends pokemon_card_1.PokemonCard {
             });
         }
         // Terrify
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = effect.opponent;
             if (((_a = opponent.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.stage) === card_types_1.Stage.BASIC) {
                 opponent.active.marker.addMarker(this.TERRIFY_MARKER, this);

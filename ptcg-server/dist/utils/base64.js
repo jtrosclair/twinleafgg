@@ -1,4 +1,7 @@
-export class Base64 {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Base64 = void 0;
+class Base64 {
     encode(s) {
         // Encode string as UTF-8 bytes, then base64 encode
         const utf8Bytes = new TextEncoder().encode(s);
@@ -12,3 +15,4 @@ export class Base64 {
         return new TextDecoder().decode(bytes);
     }
 }
+exports.Base64 = Base64;

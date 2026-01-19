@@ -39,7 +39,7 @@ class Veluza extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_effects_1.KnockOutEffect && effect.target.cards.includes(this) &&
             effect.player.marker.hasMarker(effect.player.DAMAGE_DEALT_MARKER)) {
             const player = effect.player;
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             // Make a copy of the active's cards before they are discarded (like Exp. Share)
@@ -50,7 +50,7 @@ class Veluza extends pokemon_card_1.PokemonCard {
                 for (const transfer of transfers) {
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
                     // Move the card from the discard pile to the target (to avoid duplication)
-                    state = prefabs_1.MOVE_CARDS(store, state, player.discard, target, { cards: [transfer.card] });
+                    state = (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, target, { cards: [transfer.card] });
                 }
             });
         }

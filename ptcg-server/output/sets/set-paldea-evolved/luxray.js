@@ -34,15 +34,15 @@ class Luxray extends pokemon_card_1.PokemonCard {
         this.fullName = 'Luxray PAL';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.GET_PLAYER_PRIZES(player).length <= prefabs_1.GET_PLAYER_PRIZES(opponent).length)
+            if ((0, prefabs_1.GET_PLAYER_PRIZES)(player).length <= (0, prefabs_1.GET_PLAYER_PRIZES)(opponent).length)
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
-            prefabs_1.PLAY_POKEMON_FROM_HAND_TO_BENCH(state, player, this);
+            (0, prefabs_1.PLAY_POKEMON_FROM_HAND_TO_BENCH)(state, player, this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this))
-            prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 20);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this))
+            (0, prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF)(store, state, effect, 20);
         return state;
     }
 }

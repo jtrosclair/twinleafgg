@@ -37,7 +37,7 @@ class VictiniV extends pokemon_card_1.PokemonCard {
         this.fullName = 'Victini V BST';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const defending = opponent.active.getPokemonCard();
@@ -47,8 +47,8 @@ class VictiniV extends pokemon_card_1.PokemonCard {
                 effect.damage += 50;
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this))
-            prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON(store, state, effect, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this))
+            (0, prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON)(store, state, effect, this);
         return state;
     }
 }

@@ -46,7 +46,7 @@ class Durant extends pokemon_card_1.PokemonCard {
                     durantsInPlay++;
                 }
             });
-            prefabs_1.MOVE_CARDS(store, state, opponent.deck, opponent.discard, { count: durantsInPlay, sourceCard: this, sourceEffect: this.attacks[0] });
+            (0, prefabs_1.MOVE_CARDS)(store, state, opponent.deck, opponent.discard, { count: durantsInPlay, sourceCard: this, sourceEffect: this.attacks[0] });
         }
         return state;
     }

@@ -73,59 +73,59 @@ let BattlePassSeason = class BattlePassSeason extends typeorm_1.BaseEntity {
     }
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], BattlePassSeason.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column({ unique: true }),
+    (0, typeorm_1.Column)({ unique: true }),
     __metadata("design:type", String)
 ], BattlePassSeason.prototype, "seasonId", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], BattlePassSeason.prototype, "name", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'date', default: () => '(CURRENT_DATE)' }),
+    (0, typeorm_1.Column)({ type: 'date', default: () => '(CURRENT_DATE)' }),
     __metadata("design:type", Date)
 ], BattlePassSeason.prototype, "startDate", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'date', default: () => '(CURRENT_DATE)' }),
+    (0, typeorm_1.Column)({ type: 'date', default: () => '(CURRENT_DATE)' }),
     __metadata("design:type", Date)
 ], BattlePassSeason.prototype, "endDate", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], BattlePassSeason.prototype, "rewardsFile", void 0);
 __decorate([
-    typeorm_1.Column({ default: 1000 }) // Base XP needed per level
+    (0, typeorm_1.Column)({ default: 1000 }) // Base XP needed per level
     ,
     __metadata("design:type", Number)
 ], BattlePassSeason.prototype, "baseXpPerLevel", void 0);
 __decorate([
-    typeorm_1.Column({ default: 0 }) // XP increase per level
+    (0, typeorm_1.Column)({ default: 0 }) // XP increase per level
     ,
     __metadata("design:type", Number)
 ], BattlePassSeason.prototype, "xpIncreasePerLevel", void 0);
 __decorate([
-    typeorm_1.Column({ default: 100 }) // Max level for the season
+    (0, typeorm_1.Column)({ default: 100 }) // Max level for the season
     ,
     __metadata("design:type", Number)
 ], BattlePassSeason.prototype, "maxLevel", void 0);
 __decorate([
-    typeorm_1.CreateDateColumn(),
+    (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], BattlePassSeason.prototype, "created", void 0);
 __decorate([
-    typeorm_1.UpdateDateColumn(),
+    (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
 ], BattlePassSeason.prototype, "updated", void 0);
 __decorate([
-    typeorm_1.AfterLoad(),
+    (0, typeorm_1.AfterLoad)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], BattlePassSeason.prototype, "loadRewards", null);
 BattlePassSeason = __decorate([
-    typeorm_1.Entity()
+    (0, typeorm_1.Entity)()
 ], BattlePassSeason);
 exports.BattlePassSeason = BattlePassSeason;

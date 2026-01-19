@@ -9,7 +9,7 @@ export declare class NidoranFemale extends PokemonCard {
     weakness: {
         type: import("../../game").CardType.PSYCHIC;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: import("../../game").CardType.COLORLESS[];
     attacks: {
         name: string;

@@ -1,17 +1,20 @@
-import { GameError } from '../../game-error';
-import { GameMessage } from '../../game-message';
-import { Prompt } from './prompt';
-import { PlayerType } from '../actions/play-card-action';
-import { StateUtils } from '../state-utils';
-export const MoveDamagePromptType = 'Move damage';
-export class MoveDamagePrompt extends Prompt {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MoveDamagePrompt = exports.MoveDamagePromptType = void 0;
+const game_error_1 = require("../../game-error");
+const game_message_1 = require("../../game-message");
+const prompt_1 = require("./prompt");
+const play_card_action_1 = require("../actions/play-card-action");
+const state_utils_1 = require("../state-utils");
+exports.MoveDamagePromptType = 'Move damage';
+class MoveDamagePrompt extends prompt_1.Prompt {
     constructor(playerId, message, playerType, slots, maxAllowedDamage, options) {
         super(playerId);
         this.message = message;
         this.playerType = playerType;
         this.slots = slots;
         this.maxAllowedDamage = maxAllowedDamage;
-        this.type = MoveDamagePromptType;
+        this.type = exports.MoveDamagePromptType;
         // Default options
         this.options = Object.assign({}, {
             allowCancel: true,
@@ -30,7 +33,7 @@ export class MoveDamagePrompt extends Prompt {
         }
         const player = state.players.find(p => p.id === this.playerId);
         if (player === undefined) {
-            throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+            throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_PROMPT_RESULT);
         }
         return result;
     }
@@ -60,19 +63,19 @@ export class MoveDamagePrompt extends Prompt {
         if (player === undefined) {
             return false;
         }
-        const blockedFrom = this.options.blockedFrom.map(b => StateUtils.getTarget(state, player, b));
-        const blockedTo = this.options.blockedTo.map(b => StateUtils.getTarget(state, player, b));
+        const blockedFrom = this.options.blockedFrom.map(b => state_utils_1.StateUtils.getTarget(state, player, b));
+        const blockedTo = this.options.blockedTo.map(b => state_utils_1.StateUtils.getTarget(state, player, b));
         for (const r of result) {
-            const from = StateUtils.getTarget(state, player, r.from);
+            const from = state_utils_1.StateUtils.getTarget(state, player, r.from);
             if (from === undefined || blockedFrom.includes(from)) {
                 return false;
             }
-            const to = StateUtils.getTarget(state, player, r.to);
+            const to = state_utils_1.StateUtils.getTarget(state, player, r.to);
             if (to === undefined || blockedTo.includes(to)) {
                 return false;
             }
         }
-        if (this.playerType !== PlayerType.ANY) {
+        if (this.playerType !== play_card_action_1.PlayerType.ANY) {
             if (result.some(r => r.from.player !== this.playerType)
                 || result.some(r => r.to.player !== this.playerType)) {
                 return false;
@@ -85,3 +88,4 @@ export class MoveDamagePrompt extends Prompt {
         return true;
     }
 }
+exports.MoveDamagePrompt = MoveDamagePrompt;

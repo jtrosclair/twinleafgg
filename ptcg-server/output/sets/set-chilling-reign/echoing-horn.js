@@ -34,9 +34,9 @@ function* playCard(next, store, state, effect, self) {
         return state;
     }
     cards.forEach((card, index) => {
-        prefabs_1.MOVE_CARDS(store, state, opponent.discard, slots[index], { cards: [card], sourceCard: self, sourceEffect: effect });
+        (0, prefabs_1.MOVE_CARDS)(store, state, opponent.discard, slots[index], { cards: [card], sourceCard: self, sourceEffect: effect });
         slots[index].pokemonPlayedTurn = state.turn;
-        prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     });
 }
 class EchoingHorn extends trainer_card_1.TrainerCard {

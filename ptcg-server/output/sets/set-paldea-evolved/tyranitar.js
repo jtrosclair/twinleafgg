@@ -37,13 +37,13 @@ class Tyranitar extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Rout
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             const opponentBenched = opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
             effect.damage += opponentBenched * 30;
         }
         // Dread Mountain
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             effect.player.deck.moveTo(effect.player.discard, 4);
         }
         return state;

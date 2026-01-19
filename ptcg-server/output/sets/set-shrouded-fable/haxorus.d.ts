@@ -8,8 +8,8 @@ export declare class Haxorus extends PokemonCard {
     evolvesFrom: string;
     cardType: CardType;
     hp: number;
-    weakness: never[];
-    resistance: never[];
+    weakness: any[];
+    resistance: any[];
     retreat: CardType[];
     attacks: {
         name: string;

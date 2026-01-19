@@ -38,7 +38,7 @@ class Gengar extends pokemon_card_1.PokemonCard {
         this.hidInShadows = false;
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (player.marker.hasMarker(this.SHADY_MARKER, this)) {
@@ -47,7 +47,7 @@ class Gengar extends pokemon_card_1.PokemonCard {
             if (opponent.getPrizeLeft() > 3) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             // damage map gaming
             const maxAllowedDamage = [];
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card, target) => {
@@ -66,7 +66,7 @@ class Gengar extends pokemon_card_1.PokemonCard {
                     return;
                 }
                 player.marker.addMarker(this.SHADY_MARKER, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 for (const transfer of transfers) {
                     const source = game_1.StateUtils.getTarget(state, player, transfer.from);
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
@@ -77,11 +77,11 @@ class Gengar extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             this.hidInShadows = true;
         }
         if (effect instanceof game_phase_effects_1.AfterAttackEffect && this.hidInShadows === true) {
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, effect.player);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, effect.player);
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && this.hidInShadows) {
             this.hidInShadows = false;

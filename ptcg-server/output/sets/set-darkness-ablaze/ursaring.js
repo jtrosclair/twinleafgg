@@ -44,7 +44,7 @@ class Ursaring extends pokemon_card_1.PokemonCard {
             if (opponent.deck.cards.length === 0) {
                 return state;
             }
-            prefabs_1.MOVE_CARDS(store, state, opponent.deck, opponent.discard, { count: 1, sourceCard: this, sourceEffect: this.attacks[0] });
+            (0, prefabs_1.MOVE_CARDS)(store, state, opponent.deck, opponent.discard, { count: 1, sourceCard: this, sourceEffect: this.attacks[0] });
         }
         return state;
     }

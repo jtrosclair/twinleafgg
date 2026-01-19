@@ -41,7 +41,7 @@ class Leafeon extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Energy Crush
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             let energies = 0;
@@ -55,8 +55,8 @@ class Leafeon extends pokemon_card_1.PokemonCard {
             effect.damage = energies * 20;
         }
         // Leaf Blade
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            attack_effects_1.FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE(store, state, effect, 20);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, attack_effects_1.FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE)(store, state, effect, 20);
         }
         return state;
     }

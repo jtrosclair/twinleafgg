@@ -40,7 +40,7 @@ class Armaldoex extends pokemon_card_1.PokemonCard {
         this.cardImage = 'assets/cardback.png';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof check_effects_1.CheckPokemonTypeEffect && effect.target.getPokemonCard() === this && !prefabs_1.IS_POKEBODY_BLOCKED(store, state, game_1.StateUtils.findOwner(state, effect.target), this)) {
+        if (effect instanceof check_effects_1.CheckPokemonTypeEffect && effect.target.getPokemonCard() === this && !(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, game_1.StateUtils.findOwner(state, effect.target), this)) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
                 if (card === this) {
@@ -53,10 +53,10 @@ class Armaldoex extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.HEAL_X_DAMAGE_FROM_THIS_POKEMON(effect, store, state, 20);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.HEAL_X_DAMAGE_FROM_THIS_POKEMON)(effect, store, state, 20);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const target = effect.opponent.active.getPokemonCard();
             if ((target === null || target === void 0 ? void 0 : target.resistance) !== undefined && target.resistance.length > 0) {
                 effect.damage = 100;

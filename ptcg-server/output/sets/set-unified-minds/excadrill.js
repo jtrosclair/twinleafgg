@@ -35,7 +35,7 @@ class Excadrill extends pokemon_card_1.PokemonCard {
         this.fullName = 'Excadrill UNM';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (player.discard.cards.length > 0) {

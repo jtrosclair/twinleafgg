@@ -26,7 +26,7 @@ function* playCard(next, store, state, effect, self) {
                 return;
             }
             const target = targets[0];
-            prefabs_1.MOVE_CARDS(store, state, player.deck, target, { cards, sourceCard: self });
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, target, { cards, sourceCard: self });
             next();
         });
     }

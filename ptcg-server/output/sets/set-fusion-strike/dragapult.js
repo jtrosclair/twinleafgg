@@ -37,7 +37,7 @@ class Dragapult extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         var _a, _b;
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const playerBench = player.bench;
             let fusionStrikeCount = 0;

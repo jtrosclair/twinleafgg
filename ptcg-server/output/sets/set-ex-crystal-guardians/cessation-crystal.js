@@ -26,7 +26,7 @@ class CessationCrystal extends trainer_card_1.TrainerCard {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             let isActive = false;
-            if (player.active.tools.includes(this) && !prefabs_1.IS_TOOL_BLOCKED(store, state, player, this)) {
+            if (player.active.tools.includes(this) && !(0, prefabs_1.IS_TOOL_BLOCKED)(store, state, player, this)) {
                 if ((_a = player.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.tags.includes(card_types_1.CardTag.POKEMON_ex)) {
                     player.active.moveCardTo(this, player.discard);
                 }
@@ -34,7 +34,7 @@ class CessationCrystal extends trainer_card_1.TrainerCard {
                     isActive = true;
                 }
             }
-            if (opponent.active.tools.includes(this) && !prefabs_1.IS_TOOL_BLOCKED(store, state, opponent, this)) {
+            if (opponent.active.tools.includes(this) && !(0, prefabs_1.IS_TOOL_BLOCKED)(store, state, opponent, this)) {
                 if ((_b = opponent.active.getPokemonCard()) === null || _b === void 0 ? void 0 : _b.tags.includes(card_types_1.CardTag.POKEMON_ex)) {
                     opponent.active.moveCardTo(this, opponent.discard);
                 }

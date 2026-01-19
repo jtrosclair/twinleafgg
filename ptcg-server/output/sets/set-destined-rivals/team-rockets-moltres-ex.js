@@ -41,7 +41,7 @@ class TeamRocketsMoltresex extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Flame Screen
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             player.active.marker.addMarker(this.FLAME_SCREEN_MARKER, this);
@@ -58,7 +58,7 @@ class TeamRocketsMoltresex extends pokemon_card_1.PokemonCard {
             });
         }
         // Evil Burn
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             if (!player.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY && c.name === 'Team Rocket Energy')) {
@@ -68,7 +68,7 @@ class TeamRocketsMoltresex extends pokemon_card_1.PokemonCard {
                 const cards = selected || [];
                 player.active.moveCardsTo(cards, player.discard);
                 opponent.active.clearEffects();
-                prefabs_1.MOVE_CARDS(store, state, opponent.active, opponent.discard);
+                (0, prefabs_1.MOVE_CARDS)(store, state, opponent.active, opponent.discard);
             });
         }
         return state;

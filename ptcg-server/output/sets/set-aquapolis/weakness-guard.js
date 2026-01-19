@@ -19,7 +19,7 @@ class WeaknessGuard extends trainer_card_1.TrainerCard {
         this.text = 'Attach this card to 1 of your Pokémon. Discard it at the end of your opponent\'s next turn.\n\nAs long as this card is attached, this Pokémon has no Weakness.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             state = store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_ATTACH_CARDS, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH, game_1.SlotType.ACTIVE], { min: 1, max: 1, allowCancel: false }), transfers => {
                 player.supporter.moveCardTo(effect.trainerCard, transfers[0]);

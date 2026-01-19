@@ -40,10 +40,10 @@ class Ariados extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         //Ability
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.HAS_MARKER(this.POISONOUS_NEST_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.POISONOUS_NEST_MARKER, player, this)) {
                 throw new game_1.GameError(game_message_1.GameMessage.POWER_ALREADY_USED);
             }
             // Check if the Pokémon is Grass
@@ -54,27 +54,27 @@ class Ariados extends pokemon_card_1.PokemonCard {
             store.reduceEffect(state, checkPokemonTypeEffectOpponent);
             const isGrassPokemonOpponent = checkPokemonTypeEffectOpponent.cardTypes.includes(card_types_1.CardType.GRASS);
             if (!isGrassPokemonPlayer) {
-                prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, player, this);
+                (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, player, this);
             }
             if (!isGrassPokemonOpponent) {
-                prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
+                (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, opponent, this);
             }
-            prefabs_1.ADD_MARKER(this.POISONOUS_NEST_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.POISONOUS_NEST_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
         }
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            prefabs_1.REMOVE_MARKER(this.POISONOUS_NEST_MARKER, player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.POISONOUS_NEST_MARKER, player, this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            return prefabs_1.BLOCK_RETREAT(store, state, effect, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            return (0, prefabs_1.BLOCK_RETREAT)(store, state, effect, this);
         }
-        prefabs_1.BLOCK_RETREAT_IF_MARKER(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
-        prefabs_1.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
+        (0, prefabs_1.BLOCK_RETREAT_IF_MARKER)(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN)(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
         //Marker remover
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
-            if (prefabs_1.HAS_MARKER(this.POISONOUS_NEST_MARKER, effect.player, this)) {
-                prefabs_1.REMOVE_MARKER(this.POISONOUS_NEST_MARKER, effect.player, this);
+            if ((0, prefabs_1.HAS_MARKER)(this.POISONOUS_NEST_MARKER, effect.player, this)) {
+                (0, prefabs_1.REMOVE_MARKER)(this.POISONOUS_NEST_MARKER, effect.player, this);
             }
         }
         return state;

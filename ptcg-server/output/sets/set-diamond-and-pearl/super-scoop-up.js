@@ -16,7 +16,7 @@ function* playCard(next, store, state, effect) {
         next();
     });
     if (coinResult === false) {
-        prefabs_1.MOVE_CARDS(store, state, player.supporter, player.discard, { cards: [effect.trainerCard] });
+        (0, prefabs_1.MOVE_CARDS)(store, state, player.supporter, player.discard, { cards: [effect.trainerCard] });
         return state;
     }
     return store.prompt(state, new choose_pokemon_prompt_1.ChoosePokemonPrompt(player.id, game_message_1.GameMessage.CHOOSE_POKEMON_TO_PICK_UP, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { allowCancel: false }), result => {
@@ -29,7 +29,7 @@ function* playCard(next, store, state, effect) {
             const tools = [...cardList.tools];
             // Move other cards to hand
             if (otherCards.length > 0) {
-                prefabs_1.MOVE_CARDS(store, state, cardList, player.hand, { cards: otherCards });
+                (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.hand, { cards: otherCards });
             }
             // Move tools to hand explicitly
             for (const tool of tools) {
@@ -37,8 +37,8 @@ function* playCard(next, store, state, effect) {
             }
             // Move Pokémon to hand
             if (pokemons.length > 0) {
-                prefabs_1.MOVE_CARDS(store, state, cardList, player.hand, { cards: pokemons });
-                prefabs_1.MOVE_CARDS(store, state, player.supporter, player.discard, { cards: [effect.trainerCard] });
+                (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.hand, { cards: pokemons });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.supporter, player.discard, { cards: [effect.trainerCard] });
             }
         }
     });

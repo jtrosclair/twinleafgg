@@ -32,16 +32,16 @@ class Peony extends trainer_card_1.TrainerCard {
                 throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
             const cards = player.hand.cards.filter(c => c !== this);
-            prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: this });
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: this });
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_ATTACH, player.deck, { superType: card_types_1.SuperType.TRAINER }, { min: 0, max: 2, allowCancel: false }), cards => {
                 cards = cards || [];
                 if (cards.length > 0) {
-                    prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: this });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: this });
                     cards.forEach((card, index) => {
                         store.log(state, game_message_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                     });
                 }
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                     player.deck.applyOrder(order);
                 });

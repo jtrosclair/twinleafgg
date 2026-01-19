@@ -37,19 +37,19 @@ class Flygon extends game_1.PokemonCard {
         this.DELTA_SUPPLY_MARKER = 'DELTA_SUPPLY_MARKER';
     }
     reduceEffect(store, state, effect) {
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.DELTA_SUPPLY_MARKER, this);
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.DELTA_SUPPLY_MARKER, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInHand = player.hand.cards.some(c => {
                 return c instanceof game_1.EnergyCard && (c.energyType === game_1.EnergyType.BASIC || c.name === 'Delta Rainbow Energy');
             });
-            if (prefabs_1.HAS_MARKER(this.DELTA_SUPPLY_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.DELTA_SUPPLY_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             if (!hasEnergyInHand) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             const blocked = [];
             player.hand.cards.forEach((card, index) => {
                 if (card instanceof game_1.EnergyCard && (card.energyType === game_1.EnergyType.BASIC || card.name === 'Delta Rainbow Energy')) {
@@ -75,11 +75,11 @@ class Flygon extends game_1.PokemonCard {
                     player.hand.moveCardTo(transfer.card, target);
                 }
             });
-            prefabs_1.ADD_MARKER(this.DELTA_SUPPLY_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.DELTA_SUPPLY_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS(store, state, effect, 60);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS)(store, state, effect, 60);
         }
         return state;
     }

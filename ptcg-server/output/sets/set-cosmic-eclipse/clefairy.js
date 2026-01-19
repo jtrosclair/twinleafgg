@@ -28,23 +28,23 @@ class Clefairy extends pokemon_card_1.PokemonCard {
         this.fullName = 'Clefairy CEC';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             player.active.clearEffects();
             const pokemons = player.active.getPokemons();
             const otherCards = player.active.cards.filter(card => !(card instanceof pokemon_card_1.PokemonCard));
             // Move other cards to hand
             if (otherCards.length > 0) {
-                prefabs_1.MOVE_CARDS(store, state, player.active, player.hand, { cards: otherCards });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.active, player.hand, { cards: otherCards });
             }
             // Move Pokémon to hand
             if (pokemons.length > 0) {
-                prefabs_1.MOVE_CARDS(store, state, player.active, player.hand, { cards: pokemons });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.active, player.hand, { cards: pokemons });
             }
             const lilliesPokeDoll = player.hand.cards.find(card => card instanceof game_1.TrainerCard && card.name === 'Lillie\'s Poké Doll');
             // Check if Lillie's Poké Doll is in the player's hand
             if (lilliesPokeDoll && !player.active.getPokemonCard()) {
-                prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+                (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                     if (result) {
                         const playPokemonEffect = new play_card_effects_1.PlayPokemonEffect(player, lilliesPokeDoll, player.active);
                         store.reduceEffect(state, playPokemonEffect);

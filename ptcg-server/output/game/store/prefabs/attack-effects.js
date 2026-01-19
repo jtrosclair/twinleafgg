@@ -107,7 +107,7 @@ function SHUFFLE_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_DECK(store, state
 }
 exports.SHUFFLE_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_DECK = SHUFFLE_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_DECK;
 function FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE(store, state, effect, amount) {
-    prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, (result => {
+    (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, (result => {
         if (result) {
             effect.damage += amount;
         }

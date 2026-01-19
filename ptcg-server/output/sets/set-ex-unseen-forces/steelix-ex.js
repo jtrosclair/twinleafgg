@@ -46,12 +46,12 @@ class Steelixex extends pokemon_card_1.PokemonCard {
         if (effect instanceof attack_effects_1.AddSpecialConditionsEffect && effect.specialConditions.includes(card_types_1.SpecialCondition.POISONED) && effect.target.getPokemonCard() === this) {
             effect.preventDefault = true;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             effect.player.active.damage += 10;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 2, card_types_1.CardType.FIGHTING);
-            attack_effects_2.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(100, effect, store, state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 2, card_types_1.CardType.FIGHTING);
+            (0, attack_effects_2.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(100, effect, store, state);
         }
         return state;
     }

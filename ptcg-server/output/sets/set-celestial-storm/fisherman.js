@@ -45,8 +45,8 @@ function* playCard(next, store, state, self, effect) {
     if (recovered.length === 0) {
         return state;
     }
-    prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: recovered, sourceCard: self, sourceEffect: self.attacks[0] });
-    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: recovered, sourceCard: self, sourceEffect: self.attacks[0] });
+    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return state;
 }
 class Fisherman extends trainer_card_1.TrainerCard {

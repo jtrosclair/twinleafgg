@@ -30,8 +30,8 @@ class Fearow extends pokemon_card_1.PokemonCard {
         this.setNumber = '22';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, effect.player, this, {}, { min: 0, max: 3 }, this.attacks[0]);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND)(store, state, effect.player, this, {}, { min: 0, max: 3 }, this.attacks[0]);
         }
         return state;
     }

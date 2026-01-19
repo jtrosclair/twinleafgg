@@ -46,9 +46,9 @@ class CynthiasGarchompex extends pokemon_card_1.PokemonCard {
             if (player.hand.cards.length >= 6 || player.deck.cards.length === 0) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, (result) => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, (result) => {
                 if (result) {
-                    attack_effects_2.DRAW_CARDS_UNTIL_YOU_HAVE_X_CARDS_IN_HAND(6, effect, state);
+                    (0, attack_effects_2.DRAW_CARDS_UNTIL_YOU_HAVE_X_CARDS_IN_HAND)(6, effect, state);
                 }
             }, game_1.GameMessage.WANT_TO_DRAW_UNTIL_6);
         }

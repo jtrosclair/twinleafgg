@@ -17,7 +17,7 @@ class Storage {
             password: process.env.STORAGE_DATABASE_PASSWORD,
             database: process.env.STORAGE_DATABASE
         };
-        this.connection = await typeorm_1.createConnection(Object.assign(Object.assign({}, storageConfig), { timezone: 'Z', entities: [
+        this.connection = await (0, typeorm_1.createConnection)(Object.assign(Object.assign({}, storageConfig), { timezone: 'Z', entities: [
                 _1.Avatar,
                 _1.Conversation,
                 _1.Deck,

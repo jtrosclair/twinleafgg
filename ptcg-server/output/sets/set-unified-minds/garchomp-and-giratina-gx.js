@@ -46,7 +46,7 @@ class GarchompGiratinaGX extends game_1.PokemonCard {
             const player = effect.player;
             return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.BENCH, game_1.SlotType.ACTIVE], { allowCancel: false }), selected => {
                 const targets = selected || [];
-                prefabs_1.DAMAGE_OPPONENT_POKEMON(store, state, effect, 40, targets);
+                (0, prefabs_1.DAMAGE_OPPONENT_POKEMON)(store, state, effect, 40, targets);
             });
         }
         // Calamitous Slash
@@ -61,7 +61,7 @@ class GarchompGiratinaGX extends game_1.PokemonCard {
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
             const player = effect.player;
             const opponent = effect.opponent;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             let amountToDiscard = 1;
             const extraEffectCost = [game_1.CardType.PSYCHIC, game_1.CardType.PSYCHIC, game_1.CardType.FIGHTING, game_1.CardType.FIGHTING, game_1.CardType.FIGHTING, game_1.CardType.FIGHTING];

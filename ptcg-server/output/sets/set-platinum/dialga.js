@@ -43,10 +43,10 @@ class Dialga extends pokemon_card_1.PokemonCard {
                 && !player.discard.cards.some(c => c instanceof pokemon_card_1.PokemonCard && c.stage !== card_types_1.Stage.LV_X)) {
                 return state;
             }
-            if (prefabs_1.IS_POKEPOWER_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this)) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, wantToUse => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, wantToUse => {
                 if (wantToUse) {
                     const blocked = [];
                     player.discard.cards.forEach((c, index) => {
@@ -62,7 +62,7 @@ class Dialga extends pokemon_card_1.PokemonCard {
                             return;
                         selected.forEach(card => {
                             store.log(state, game_1.GameLog.LOG_PLAYER_RETURNS_TO_DECK_FROM_DISCARD, { name: player.name, card: card.name });
-                            prefabs_1.MOVE_CARD_TO(state, card, deckTop);
+                            (0, prefabs_1.MOVE_CARD_TO)(state, card, deckTop);
                         });
                         store.prompt(state, new game_1.OrderCardsPrompt(player.id, game_1.GameMessage.CHOOSE_CARDS_ORDER, deckTop, { allowCancel: false }), order => {
                             if (order === null)
@@ -71,13 +71,13 @@ class Dialga extends pokemon_card_1.PokemonCard {
                             deckTop.moveToTopOfDestination(player.deck);
                             store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, selected), () => { });
                         });
-                        prefabs_1.ABILITY_USED(player, this);
+                        (0, prefabs_1.ABILITY_USED)(player, this);
                     });
                 }
             }, game_1.GameMessage.WANT_TO_USE_ABILITY);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND(effect.player, 7);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(effect.player, 7);
         }
         return state;
     }

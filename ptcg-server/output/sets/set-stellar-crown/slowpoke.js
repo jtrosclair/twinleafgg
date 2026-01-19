@@ -34,7 +34,7 @@ class Slowpoke extends game_1.PokemonCard {
         this.fullName = 'Slowpoke SCR';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasCardInDiscard = player.discard.cards.some(c => {
                 return c instanceof game_1.Card;
@@ -52,7 +52,7 @@ class Slowpoke extends game_1.PokemonCard {
                 selected.forEach(card => {
                     store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                 });
-                prefabs_1.MOVE_CARDS(store, state, cards, player.hand);
+                (0, prefabs_1.MOVE_CARDS)(store, state, cards, player.hand);
             });
         }
         return state;

@@ -48,7 +48,7 @@ class Altaria extends pokemon_card_1.PokemonCard {
                 transfers = transfers || [];
                 // cancelled by user
                 if (transfers.length === 0) {
-                    prefabs_1.SHUFFLE_DECK(store, state, player);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                     return state;
                 }
                 for (const transfer of transfers) {

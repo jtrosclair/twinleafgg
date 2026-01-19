@@ -61,8 +61,8 @@ class FlutterMane extends pokemon_card_1.PokemonCard {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_ABILITY);
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE(2, store, state, effect, [game_1.SlotType.BENCH]);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE)(2, store, state, effect, [game_1.SlotType.BENCH]);
         }
         return state;
     }

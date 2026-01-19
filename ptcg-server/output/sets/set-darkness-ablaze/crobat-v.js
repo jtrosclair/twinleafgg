@@ -73,12 +73,12 @@ class CrobatV extends pokemon_card_1.PokemonCard {
                             cardList.addBoardEffect(card_types_1.BoardEffect.ABILITY_USED);
                         }
                     });
-                    prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 6);
+                    (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, 6);
                 }
             });
         }
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
         }
         return state;
     }

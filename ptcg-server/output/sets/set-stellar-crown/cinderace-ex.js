@@ -65,7 +65,7 @@ class Cinderaceex extends pokemon_card_1.PokemonCard {
             }
             return store.prompt(state, new game_1.ChoosePokemonPrompt(effect.player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH]), selected => {
                 const targets = selected || [];
-                prefabs_1.DAMAGE_OPPONENT_POKEMON(store, state, effect, 180, targets);
+                (0, prefabs_1.DAMAGE_OPPONENT_POKEMON)(store, state, effect, 180, targets);
             });
         }
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {

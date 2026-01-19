@@ -33,7 +33,7 @@ class Maractus extends pokemon_card_1.PokemonCard {
         this.regulationMark = 'E';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const blocked = player.hand.cards
                 .filter(c => c instanceof game_1.TrainerCard && c.trainerType !== card_types_1.TrainerType.TOOL)

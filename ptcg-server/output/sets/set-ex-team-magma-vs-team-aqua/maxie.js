@@ -20,15 +20,15 @@ class Maxie extends trainer_card_1.TrainerCard {
         this.text = 'Search your hand or discard pile for a Pokémon with Team Magma in its name and put it onto your Bench. Treat the new Benched Pokémon as a Basic Pokémon. If it is a Stage 2 Pokémon, put 2 damage counters on that Pokémon.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             effect.preventDefault = true;
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             if (player.supporterTurn > 0) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
             }
-            const slots = prefabs_1.GET_PLAYER_BENCH_SLOTS(player);
-            prefabs_1.BLOCK_IF_NO_SLOTS(slots);
+            const slots = (0, prefabs_1.GET_PLAYER_BENCH_SLOTS)(player);
+            (0, prefabs_1.BLOCK_IF_NO_SLOTS)(slots);
             const blockedHand = [];
             let hasTeamMagmaInHand = false;
             player.hand.cards.forEach((card, index) => {

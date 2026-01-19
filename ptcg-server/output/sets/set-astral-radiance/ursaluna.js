@@ -37,12 +37,12 @@ class Ursaluna extends pokemon_card_1.PokemonCard {
         this.fullName = 'Ursaluna ASR';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.SEARCH_DISCARD_PILE_FOR_CARDS_TO_HAND(store, state, player, this, {}, { min: 0, max: 2, allowCancel: false }, this.attacks[0]);
+            (0, prefabs_1.SEARCH_DISCARD_PILE_FOR_CARDS_TO_HAND)(store, state, player, this, {}, { min: 0, max: 2, allowCancel: false }, this.attacks[0]);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 2);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 2);
         }
         return state;
     }

@@ -81,7 +81,7 @@ class DialgaGX extends pokemon_card_1.PokemonCard {
         }
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             player.marker.addMarker(this.TIMELESS_GX_MARKER, this);
             effect.player.usedTurnSkip = true;

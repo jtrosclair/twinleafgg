@@ -38,7 +38,7 @@ class Forretress extends pokemon_card_1.PokemonCard {
         this.CLEAR_COUNTERS_MARKER = 'CLEAR_COUNTERS_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             // Apply Spiky Shell effect at the end of opponent's next turn
             effect.player.marker.addMarker(this.COUNTERS_MARKER, this);
@@ -52,8 +52,8 @@ class Forretress extends pokemon_card_1.PokemonCard {
             effect.player.active.marker.removeMarker(this.CLEAR_COUNTERS_MARKER, this);
             opponent.marker.removeMarker(this.COUNTERS_MARKER, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.COUNTERS_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.COUNTERS_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             // 7 damage counters on Forretress
             const putCounters = new attack_effects_1.PutCountersEffect(effect, 70);

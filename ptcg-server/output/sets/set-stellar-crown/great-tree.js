@@ -48,7 +48,7 @@ function* useStadium(next, store, state, effect) {
         next();
     });
     if (targets.length === 0) {
-        prefabs_1.SHUFFLE_DECK(store, state, player);
+        (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         return state; // canceled by user
     }
     const target = targets[0];
@@ -70,7 +70,7 @@ function* useStadium(next, store, state, effect) {
     });
     // Canceled by user, he didn't find the card in the deck
     if (cards.length === 0) {
-        prefabs_1.SHUFFLE_DECK(store, state, player);
+        (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         return state;
     }
     const evolution = cards[0];
@@ -100,7 +100,7 @@ function* useStadium(next, store, state, effect) {
             target.pokemonPlayedTurn = state.turn;
         }
     }
-    prefabs_1.SHUFFLE_DECK(store, state, player);
+    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
 }
 class GreatTree extends trainer_card_1.TrainerCard {
     constructor() {

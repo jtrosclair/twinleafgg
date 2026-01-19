@@ -32,7 +32,7 @@ function* playCard(next, store, state, effect) {
                     source.damage -= 20;
                     target.damage += 20;
                 }
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             }
         });
     });

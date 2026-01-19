@@ -64,7 +64,7 @@ class Gloria extends trainer_card_1.TrainerCard {
                         player.deck.moveCardTo(card, slots[index]);
                         slots[index].pokemonPlayedTurn = state.turn;
                     });
-                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                         player.deck.applyOrder(order);
                     });

@@ -52,7 +52,7 @@ class MachampLVX extends pokemon_card_1.PokemonCard {
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const oppActive = opponent.active.getPokemonCard();
             const damageSource = effect.source.getPokemonCard();
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, opponent, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
             // checking if it's your attack
@@ -69,7 +69,7 @@ class MachampLVX extends pokemon_card_1.PokemonCard {
         if ((effect instanceof attack_effects_1.DealDamageEffect || effect instanceof attack_effects_1.PutDamageEffect) && effect.target.getPokemonCard() === this) {
             const opponent = effect.player;
             const player = game_1.StateUtils.getOpponent(state, opponent);
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const activePokemonCard = player.active.getPokemonCard();
@@ -79,29 +79,29 @@ class MachampLVX extends pokemon_card_1.PokemonCard {
             effect.damage += 60;
         }
         // Strong-Willed
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (!result)
                     return;
-                prefabs_1.ADD_MARKER(this.PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, effect.player.active, this);
-                prefabs_1.ADD_MARKER(this.CLEAR_PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, opponent, this);
+                (0, prefabs_1.ADD_MARKER)(this.PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, effect.player.active, this);
+                (0, prefabs_1.ADD_MARKER)(this.CLEAR_PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, opponent, this);
             });
             return state;
         }
         //Strong-Willed in effect
         if (effect instanceof attack_effects_1.PutDamageEffect
             && effect.target.cards.includes(this)
-            && prefabs_1.HAS_MARKER(this.PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, effect.target, this)) {
+            && (0, prefabs_1.HAS_MARKER)(this.PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, effect.target, this)) {
             effect.surviveOnTenHPReason = this.attacks[0].name;
             return state;
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.CLEAR_PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.CLEAR_PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, this);
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
             //Remove the marker at the end of the opponent's turn.
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList) => {
-                prefabs_1.REMOVE_MARKER(this.PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, cardList, this);
+                (0, prefabs_1.REMOVE_MARKER)(this.PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, cardList, this);
             });
         }
         //Lv. X Stuff

@@ -18,7 +18,7 @@ class ProfessorOaksResearch extends trainer_card_1.TrainerCard {
         this.text = 'Shuffle your hand into your deck, then draw 5 cards.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             if (player.supporterTurn > 0) {
                 throw new game_1.GameError(game_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
@@ -27,10 +27,10 @@ class ProfessorOaksResearch extends trainer_card_1.TrainerCard {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
-            prefabs_1.MOVE_CARDS(store, state, player.hand, player.deck, { cards: player.hand.cards.filter(c => c !== this) });
-            prefabs_1.SHUFFLE_DECK(store, state, player);
-            prefabs_1.DRAW_CARDS(player, 5);
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck, { cards: player.hand.cards.filter(c => c !== this) });
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
+            (0, prefabs_1.DRAW_CARDS)(player, 5);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         }
         return state;
     }

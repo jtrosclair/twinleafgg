@@ -34,7 +34,7 @@ class Duskull extends pokemon_card_1.PokemonCard {
         this.fullName = 'Duskull FLF';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Check if opponent's bench is full
@@ -56,8 +56,8 @@ class Duskull extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            attack_effects_1.PUT_X_DAMAGE_COUNTERS_ON_YOUR_OPPONENTS_ACTIVE_POKEMON(1, store, state, effect);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, attack_effects_1.PUT_X_DAMAGE_COUNTERS_ON_YOUR_OPPONENTS_ACTIVE_POKEMON)(1, store, state, effect);
         }
         return state;
     }

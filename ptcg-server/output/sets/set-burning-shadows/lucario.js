@@ -42,10 +42,10 @@ class Lucario extends pokemon_card_1.PokemonCard {
         var _a;
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, wantToUse => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, wantToUse => {
                 if (wantToUse) {
                     const cardList = game_1.StateUtils.findCardList(state, this);
                     cardList.marker.addMarker(this.STANCE_MARKER, this);

@@ -54,7 +54,7 @@ class FieldBlower extends trainer_card_1.TrainerCard {
             if (pokemonsWithTool === 0 && stadiumCard !== undefined) {
                 const cardList = game_1.StateUtils.findCardList(state, stadiumCard);
                 const owner = game_1.StateUtils.findOwner(state, cardList);
-                prefabs_1.MOVE_CARDS(store, state, cardList, owner.discard, { sourceCard: this });
+                (0, prefabs_1.MOVE_CARDS)(store, state, cardList, owner.discard, { sourceCard: this });
                 store.log(state, game_1.GameLog.LOG_PLAYER_DISCARDS_WITH_FIELD_BLOWER, {
                     name: player.name,
                     card: stadiumCard.name,
@@ -76,7 +76,7 @@ class FieldBlower extends trainer_card_1.TrainerCard {
                     if (choice === 0) { // YES - discard stadium and up to 1 tool
                         const cardList = game_1.StateUtils.findCardList(state, stadiumCard);
                         const owner = game_1.StateUtils.findOwner(state, cardList);
-                        prefabs_1.MOVE_CARDS(store, state, cardList, owner.discard, { sourceCard: this });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, owner.discard, { sourceCard: this });
                         store.log(state, game_1.GameLog.LOG_PLAYER_DISCARDS_WITH_FIELD_BLOWER, {
                             name: player.name,
                             card: stadiumCard.name,

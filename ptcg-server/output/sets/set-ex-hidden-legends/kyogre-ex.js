@@ -47,15 +47,15 @@ class Kyogreex extends game_1.PokemonCard {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_ATTACK);
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(20, effect, store, state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(20, effect, store, state);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
-                    prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, player.hand.cards);
+                    (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, player.hand.cards);
                     const energyCards = player.hand.cards.filter(card => card.superType === game_1.SuperType.ENERGY);
                     effect.damage += 10 * energyCards.length;
                     this.usedSTW = true;
@@ -66,8 +66,8 @@ class Kyogreex extends game_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.AfterAttackEffect && this.usedSTW === true) {
             const player = effect.player;
             const energyCards = player.hand.cards.filter(card => card.superType === game_1.SuperType.ENERGY);
-            prefabs_1.MOVE_CARDS(store, state, player.hand, player.deck, { cards: energyCards, sourceCard: this, sourceEffect: this.attacks[1] });
-            prefabs_1.SHUFFLE_DECK(store, state, player);
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck, { cards: energyCards, sourceCard: this, sourceEffect: this.attacks[1] });
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             this.usedSTW = false;
         }
         return state;

@@ -111,11 +111,11 @@ class Replay {
         return diffs.map(diff => diff.replace(/["']/g, c => c === '"' ? '\'' : '"'));
     }
     compress(data) {
-        const compressed = pako_esm_1.gzip(data, { to: 'string' });
+        const compressed = (0, pako_esm_1.gzip)(data, { to: 'string' });
         return compressed;
     }
     decompress(data) {
-        const text = pako_esm_1.ungzip(data, { to: 'string' });
+        const text = (0, pako_esm_1.ungzip)(data, { to: 'string' });
         return text;
     }
     rebuildIndex(diffs) {

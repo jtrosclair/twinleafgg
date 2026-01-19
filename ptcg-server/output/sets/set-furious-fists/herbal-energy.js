@@ -42,7 +42,7 @@ class HerbalEnergy extends energy_card_1.EnergyCard {
             if (!checkPokemonType.cardTypes.includes(card_types_1.CardType.GRASS)) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.target)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.player, this, effect.target)) {
                 return state;
             }
             const healEffect = new game_effects_1.HealEffect(effect.player, effect.target, 30);
@@ -52,7 +52,7 @@ class HerbalEnergy extends energy_card_1.EnergyCard {
         if (effect instanceof check_effects_1.CheckTableStateEffect) {
             state.players.forEach(player => {
                 player.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, cardList => {
-                    if (!cardList.cards.includes(this) || prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, cardList)) {
+                    if (!cardList.cards.includes(this) || (0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, cardList)) {
                         return;
                     }
                     const checkPokemonType = new check_effects_1.CheckPokemonTypeEffect(cardList);

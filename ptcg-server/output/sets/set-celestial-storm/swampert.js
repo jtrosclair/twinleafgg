@@ -63,8 +63,8 @@ class Swampert extends pokemon_card_1.PokemonCard {
                         cardList.addBoardEffect(card_types_1.BoardEffect.ABILITY_USED);
                     }
                 });
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: this, sourceEffect: this.powers[0] });
-                prefabs_1.DRAW_CARDS(player, 3);
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: this, sourceEffect: this.powers[0] });
+                (0, prefabs_1.DRAW_CARDS)(player, 3);
             });
             return state;
         }

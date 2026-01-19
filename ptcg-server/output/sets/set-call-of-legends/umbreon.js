@@ -40,9 +40,9 @@ class Umbreon extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         var _a;
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             this.marker.addMarker(this.MOONLIGHT_FANG_MARKER, this);
-            prefabs_1.ADD_MARKER(this.MOONLIGHT_FANG_MARKER, effect.opponent, this);
+            (0, prefabs_1.ADD_MARKER)(this.MOONLIGHT_FANG_MARKER, effect.opponent, this);
         }
         if ((effect instanceof attack_effects_1.PutDamageEffect || effect instanceof attack_effects_1.PutCountersEffect || effect instanceof attack_effects_1.AddSpecialConditionsEffect)
             && effect.target.getPokemonCard() === this
@@ -52,12 +52,12 @@ class Umbreon extends pokemon_card_1.PokemonCard {
                 effect.preventDefault = true;
             }
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && prefabs_1.HAS_MARKER(this.MOONLIGHT_FANG_MARKER, effect.player, this)) {
-            prefabs_1.REMOVE_MARKER(this.MOONLIGHT_FANG_MARKER, effect.player, this);
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.MOONLIGHT_FANG_MARKER, effect.player, this)) {
+            (0, prefabs_1.REMOVE_MARKER)(this.MOONLIGHT_FANG_MARKER, effect.player, this);
             this.marker.removeMarker(this.MOONLIGHT_FANG_MARKER, this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            attack_effects_2.FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE(store, state, effect, 30);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, attack_effects_2.FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE)(store, state, effect, 30);
         }
         return state;
     }

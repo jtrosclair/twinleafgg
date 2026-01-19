@@ -40,10 +40,10 @@ class PremierBall extends trainer_card_1.TrainerCard {
                             cards.forEach(card => {
                                 store.log(state, game_message_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                             });
-                            prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, player, cards);
+                            (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, player, cards);
                             player.deck.moveCardsTo(cards, player.hand);
                             player.supporter.moveCardTo(effect.trainerCard, player.discard);
-                            prefabs_1.SHUFFLE_DECK(store, state, player);
+                            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                         });
                     }
                 });

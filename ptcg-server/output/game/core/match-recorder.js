@@ -123,8 +123,8 @@ class MatchRecorder {
     }
 }
 __decorate([
-    typeorm_1.Transaction(),
-    __param(1, typeorm_1.TransactionManager()),
+    (0, typeorm_1.Transaction)(),
+    __param(1, (0, typeorm_1.TransactionManager)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [state_1.State, typeorm_1.EntityManager]),
     __metadata("design:returntype", Promise)

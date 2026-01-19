@@ -40,11 +40,11 @@ class Electivireex extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Dual Bolt
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.THIS_ATTACK_DOES_X_DAMAGE_TO_X_OF_YOUR_OPPONENTS_POKEMON(50, effect, store, state, 2, 2);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.THIS_ATTACK_DOES_X_DAMAGE_TO_X_OF_YOUR_OPPONENTS_POKEMON)(50, effect, store, state, 2, 2);
         }
         // High Voltage Press
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const extraEffectCost = [L, L, C, C, C];
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);

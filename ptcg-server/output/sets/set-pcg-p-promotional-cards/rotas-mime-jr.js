@@ -26,14 +26,14 @@ class RotasMimeJr extends pokemon_card_1.PokemonCard {
         this.setNumber = '86';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, (result) => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, (result) => {
                 if (result) {
-                    attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED(store, state, effect);
+                    (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED)(store, state, effect);
                 }
                 else {
-                    attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED(store, state, effect);
-                    prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+                    (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED)(store, state, effect);
+                    (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, effect.player, this);
                 }
             });
         }

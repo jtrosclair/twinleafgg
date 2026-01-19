@@ -36,7 +36,7 @@ class Garchomp extends pokemon_card_1.PokemonCard {
         if (effect instanceof attack_effects_1.DealDamageEffect && effect.source.getPokemonCard() === this) {
             const player = effect.player;
             const opponent = effect.opponent;
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             if (effect.source.energies.cards.some(card => card.superType === card_types_1.SuperType.ENERGY && card.energyType === card_types_1.EnergyType.SPECIAL)) {

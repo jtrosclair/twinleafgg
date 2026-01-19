@@ -33,10 +33,10 @@ class Numel extends pokemon_card_1.PokemonCard {
         this.regulationMark = 'G';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.ADD_BURN_TO_PLAYER_ACTIVE(store, state, opponent, this);
+            (0, prefabs_1.ADD_BURN_TO_PLAYER_ACTIVE)(store, state, opponent, this);
         }
         return state;
     }

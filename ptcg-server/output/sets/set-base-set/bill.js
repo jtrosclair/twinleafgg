@@ -24,8 +24,8 @@ class Bill extends trainer_card_1.TrainerCard {
             if (player.deck.cards.length === 0) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            prefabs_1.DRAW_CARDS(player, 2);
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.DRAW_CARDS)(player, 2);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         }
         return state;
     }

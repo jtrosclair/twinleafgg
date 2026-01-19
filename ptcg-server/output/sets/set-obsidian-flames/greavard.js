@@ -30,9 +30,9 @@ class Greavard extends pokemon_card_1.PokemonCard {
         this.fullName = 'Greavard OBF';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (result) {
                     effect.damage += 30;
                 }

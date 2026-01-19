@@ -49,10 +49,10 @@ class MAudinoEx extends pokemon_card_1.PokemonCard {
             store.reduceEffect(state, endTurnEffect);
         }
         // Magical Symphony
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.supporterTurn >= 1) {
-                attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON(50, effect, store, state);
+                (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON)(50, effect, store, state);
             }
         }
         return state;

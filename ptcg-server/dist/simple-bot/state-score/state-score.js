@@ -1,26 +1,29 @@
-import { SimpleScore } from './score';
-import { HandScore } from './hand-score';
-import { OpponentScore } from './opponent-score';
-import { PlayerScore } from './player-score';
-import { SpecialConditionsScore } from './special-conditions-score';
-import { ActiveScore } from './active-score';
-import { BenchScore } from './bench-score';
-import { EnergyScore } from './energy-score';
-import { DamageScore } from './damage-score';
-import { ToolsScore } from './tools-score';
-export class StateScore extends SimpleScore {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StateScore = void 0;
+const score_1 = require("./score");
+const hand_score_1 = require("./hand-score");
+const opponent_score_1 = require("./opponent-score");
+const player_score_1 = require("./player-score");
+const special_conditions_score_1 = require("./special-conditions-score");
+const active_score_1 = require("./active-score");
+const bench_score_1 = require("./bench-score");
+const energy_score_1 = require("./energy-score");
+const damage_score_1 = require("./damage-score");
+const tools_score_1 = require("./tools-score");
+class StateScore extends score_1.SimpleScore {
     constructor(options) {
         super(options);
         this.options = options;
-        this.handScore = new HandScore(options);
-        this.opponentScore = new OpponentScore(options);
-        this.playerScore = new PlayerScore(options);
-        this.specialConditionsScore = new SpecialConditionsScore(options);
-        this.activeScore = new ActiveScore(options);
-        this.benchScore = new BenchScore(options);
-        this.energyScore = new EnergyScore(options);
-        this.damageScore = new DamageScore(options);
-        this.toolsScore = new ToolsScore(options);
+        this.handScore = new hand_score_1.HandScore(options);
+        this.opponentScore = new opponent_score_1.OpponentScore(options);
+        this.playerScore = new player_score_1.PlayerScore(options);
+        this.specialConditionsScore = new special_conditions_score_1.SpecialConditionsScore(options);
+        this.activeScore = new active_score_1.ActiveScore(options);
+        this.benchScore = new bench_score_1.BenchScore(options);
+        this.energyScore = new energy_score_1.EnergyScore(options);
+        this.damageScore = new damage_score_1.DamageScore(options);
+        this.toolsScore = new tools_score_1.ToolsScore(options);
     }
     getScore(state, playerId) {
         const handScore = this.handScore.getScore(state, playerId);
@@ -66,3 +69,4 @@ export class StateScore extends SimpleScore {
         return this.getPokemonScoreBy(this.options.scores.active, cardList);
     }
 }
+exports.StateScore = StateScore;

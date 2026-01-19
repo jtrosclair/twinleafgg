@@ -1,4 +1,7 @@
-export var CardZone;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SandboxModifyCardAction = exports.CardZone = void 0;
+var CardZone;
 (function (CardZone) {
     CardZone["HAND"] = "hand";
     CardZone["DECK"] = "deck";
@@ -7,8 +10,8 @@ export var CardZone;
     CardZone["PRIZES"] = "prizes";
     CardZone["STADIUM"] = "stadium";
     CardZone["SUPPORTER"] = "supporter";
-})(CardZone || (CardZone = {}));
-export class SandboxModifyCardAction {
+})(CardZone = exports.CardZone || (exports.CardZone = {}));
+class SandboxModifyCardAction {
     constructor(clientId, targetPlayerId, action, cardName, fromZone, toZone, fromIndex, toIndex, prizeIndex) {
         this.clientId = clientId;
         this.targetPlayerId = targetPlayerId;
@@ -22,3 +25,4 @@ export class SandboxModifyCardAction {
         this.type = 'SANDBOX_MODIFY_CARD';
     }
 }
+exports.SandboxModifyCardAction = SandboxModifyCardAction;

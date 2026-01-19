@@ -63,7 +63,7 @@ class PowerTree extends trainer_card_1.TrainerCard {
                 if (cards.length > 0) {
                     store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => {
                         cards.forEach((card, index) => {
-                            prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: [card], sourceCard: this });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: [card], sourceCard: this });
                         });
                         cards.forEach((card, index) => {
                             store.log(state, game_message_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });

@@ -67,8 +67,8 @@ class Cofagrigusex extends pokemon_card_1.PokemonCard {
             });
         }
         // Hollow Hands
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE(5, store, state, effect, [game_1.SlotType.BENCH]);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE)(5, store, state, effect, [game_1.SlotType.BENCH]);
         }
         return state;
     }

@@ -35,7 +35,7 @@ class MespritLVX extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Healing Look
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {
                 if (card !== player.active) {
@@ -45,7 +45,7 @@ class MespritLVX extends game_1.PokemonCard {
             });
         }
         // Supreme Blast
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             let isMespritInPlay = false;
             let isUxieInPlay = false;
@@ -66,7 +66,7 @@ class MespritLVX extends game_1.PokemonCard {
                 effect.damage = 0;
                 return state;
             }
-            prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON(store, state, effect, this);
+            (0, prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON)(store, state, effect, this);
         }
         //Lv. X Stuff
         // making sure it gets put on the active pokemon

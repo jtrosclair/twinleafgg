@@ -11,7 +11,7 @@ export declare class Kabutops extends PokemonCard {
     weakness: {
         type: CardType.GRASS;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: CardType[];
     attacks: {
         name: string;

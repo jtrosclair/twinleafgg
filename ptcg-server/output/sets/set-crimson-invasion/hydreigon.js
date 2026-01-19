@@ -35,8 +35,8 @@ class Hydreigon extends game_1.PokemonCard {
         this.WEED_OUT_MARKER = 'WEED_OUT_MARKER';
     }
     reduceEffect(store, state, effect) {
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.WEED_OUT_MARKER, this);
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.WEED_OUT_MARKER, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.WEED_OUT_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
@@ -46,7 +46,7 @@ class Hydreigon extends game_1.PokemonCard {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             player.marker.addMarker(this.WEED_OUT_MARKER, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             if (playerBench.length > 3) {
                 store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_CARDS, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH], { allowCancel: false, min: Math.min(playerBench.length, 3), max: 3 }), targets => {
                     if (!targets || targets.length === 0) {
@@ -55,20 +55,20 @@ class Hydreigon extends game_1.PokemonCard {
                     player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {
                         if (card !== player.active && !targets.includes(card)) {
                             card.clearEffects();
-                            prefabs_1.MOVE_CARDS(store, state, card, player.discard);
+                            (0, prefabs_1.MOVE_CARDS)(store, state, card, player.discard);
                         }
                     });
                 });
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const activeCardList = opponent.active;
             const activePokemonCard = activeCardList.getPokemonCard();
             state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_USE_EFFECT_OF_ATTACK), wantToUse => {
                 if (wantToUse) {
-                    costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1);
+                    (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1);
                     let hasPokemonWithEnergy = false;
                     if (activePokemonCard && activeCardList.cards.some(c => c.superType === game_1.SuperType.ENERGY)) {
                         hasPokemonWithEnergy = true;

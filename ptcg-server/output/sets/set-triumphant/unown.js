@@ -34,7 +34,7 @@ class Unown extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            if (prefabs_1.IS_POKEPOWER_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const conditions = player.active.specialConditions.slice();

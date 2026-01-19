@@ -23,7 +23,7 @@ class OranBerry extends trainer_card_1.TrainerCard {
         if (effect instanceof game_phase_effects_1.BetweenTurnsEffect || effect instanceof game_phase_effects_1.BeginTurnEffect) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, effect.player);
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             player.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {

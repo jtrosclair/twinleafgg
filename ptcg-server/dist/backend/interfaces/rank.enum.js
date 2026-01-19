@@ -1,4 +1,7 @@
-export var Rank;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.rankLevels = exports.Rank = void 0;
+var Rank;
 (function (Rank) {
     Rank["JUNIOR"] = "JUNIOR";
     Rank["SENIOR"] = "SENIOR";
@@ -8,8 +11,8 @@ export var Rank;
     Rank["BANNED"] = "BANNED";
     Rank["POKE"] = "POKE";
     Rank["GREAT"] = "GREAT";
-})(Rank || (Rank = {}));
-export const rankLevels = [
+})(Rank = exports.Rank || (exports.Rank = {}));
+exports.rankLevels = [
     { points: -1, rank: Rank.BANNED },
     { points: 0, rank: Rank.POKE },
     { points: 250, rank: Rank.GREAT },

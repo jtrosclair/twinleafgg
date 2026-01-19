@@ -36,7 +36,7 @@ class Suicuneex extends pokemon_card_1.PokemonCard {
         this.fullName = 'Suicune ex MA';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             const opponentBench = opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
@@ -119,9 +119,9 @@ class Suicuneex extends pokemon_card_1.PokemonCard {
                 return state;
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
                     // Damage for each basic energy card
                     player.active.cards.forEach(c => {
@@ -132,7 +132,7 @@ class Suicuneex extends pokemon_card_1.PokemonCard {
                     // Move all basic energy cards to hand
                     player.active.cards.forEach(c => {
                         if (c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC) {
-                            prefabs_1.MOVE_CARD_TO(state, c, player.hand);
+                            (0, prefabs_1.MOVE_CARD_TO)(state, c, player.hand);
                         }
                     });
                 }

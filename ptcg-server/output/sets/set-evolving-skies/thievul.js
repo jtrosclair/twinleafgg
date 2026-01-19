@@ -32,7 +32,7 @@ class Thievul extends pokemon_card_1.PokemonCard {
         this.fullName = 'Thievul EVS';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.JUST_EVOLVED(effect, this)) {
+        if ((0, prefabs_1.JUST_EVOLVED)(effect, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const deckBottom = new game_1.CardList();
@@ -40,16 +40,16 @@ class Thievul extends pokemon_card_1.PokemonCard {
             if (player.hand.cards.length === 0 && opponent.hand.cards.length === 0) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
                     this.shufflePlayerHand(player);
                     this.shufflePlayerHand(opponent);
-                    prefabs_1.MOVE_CARDS(store, state, player.hand, deckBottom, { sourceCard: this, sourceEffect: this.powers[0] });
-                    prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponentDeckBottom, { sourceCard: this, sourceEffect: this.powers[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, deckBottom, { sourceCard: this, sourceEffect: this.powers[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponentDeckBottom, { sourceCard: this, sourceEffect: this.powers[0] });
                     deckBottom.moveTo(player.deck);
                     opponentDeckBottom.moveTo(opponent.deck);
-                    prefabs_1.DRAW_CARDS(player, 4);
-                    prefabs_1.DRAW_CARDS(opponent, 4);
+                    (0, prefabs_1.DRAW_CARDS)(player, 4);
+                    (0, prefabs_1.DRAW_CARDS)(opponent, 4);
                 }
             }, game_1.GameMessage.WANT_TO_USE_ABILITY);
         }

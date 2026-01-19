@@ -38,7 +38,7 @@ class Buzzwole extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
             const prizesTaken = 6 - player.getPrizeLeft();
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             if (effect.target !== player.active && effect.target !== opponent.active) {

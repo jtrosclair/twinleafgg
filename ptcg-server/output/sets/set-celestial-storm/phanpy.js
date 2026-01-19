@@ -35,12 +35,12 @@ class Phanpy extends pokemon_card_1.PokemonCard {
         this.fullName = 'Phanpy CES';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
             const coinFlipEffect = new play_card_effects_1.CoinFlipEffect(effect.player, (result) => {
                 if (result) {
-                    prefabs_1.ADD_MARKER(marker_constants_1.MarkerConstants.PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, effect.player.active, this);
-                    prefabs_1.ADD_MARKER(marker_constants_1.MarkerConstants.CLEAR_PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, opponent, this);
+                    (0, prefabs_1.ADD_MARKER)(marker_constants_1.MarkerConstants.PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, effect.player.active, this);
+                    (0, prefabs_1.ADD_MARKER)(marker_constants_1.MarkerConstants.CLEAR_PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, opponent, this);
                 }
             });
             store.reduceEffect(state, coinFlipEffect);
@@ -49,11 +49,11 @@ class Phanpy extends pokemon_card_1.PokemonCard {
         //Endure UP
         if (effect instanceof attack_effects_1.PutDamageEffect
             && effect.target.cards.includes(this)
-            && prefabs_1.HAS_MARKER(marker_constants_1.MarkerConstants.PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, effect.target, this)) {
+            && (0, prefabs_1.HAS_MARKER)(marker_constants_1.MarkerConstants.PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, effect.target, this)) {
             effect.surviveOnTenHPReason = this.attacks[1].name;
             return state;
         }
-        prefabs_1.CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN(state, effect, marker_constants_1.MarkerConstants.CLEAR_PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, marker_constants_1.MarkerConstants.PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, this);
+        (0, prefabs_1.CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN)(state, effect, marker_constants_1.MarkerConstants.CLEAR_PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, marker_constants_1.MarkerConstants.PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, this);
         return state;
     }
 }

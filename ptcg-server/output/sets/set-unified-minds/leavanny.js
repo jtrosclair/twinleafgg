@@ -61,7 +61,7 @@ class Leavanny extends game_1.PokemonCard {
                 return state;
             }
             // Check if the ability is disabled by calling PowerEffect stub
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             effect.damage -= 40;

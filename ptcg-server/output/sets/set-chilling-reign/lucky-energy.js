@@ -29,7 +29,7 @@ class LuckyEnergy extends energy_card_1.EnergyCard {
                 return state;
             }
             const player = game_1.StateUtils.findOwner(state, effect.target);
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, effect.target)) {
                 return state;
             }
             // Check if damage target is owned by this card's owner 

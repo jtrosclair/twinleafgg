@@ -35,7 +35,7 @@ class GutsyPickaxe extends game_1.TrainerCard {
                         return store.prompt(state, new game_1.ShowCardsPrompt(player.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, temp.cards), () => {
                             temp.cards.slice(0, 1).forEach(card => {
                                 temp.moveCardTo(card, player.hand);
-                                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                             });
                         });
                     }
@@ -48,11 +48,11 @@ class GutsyPickaxe extends game_1.TrainerCard {
                                 for (const transfer of transfers) {
                                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
                                     temp.moveCardTo(transfer.card, target); // Move card to target
-                                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                                 }
                                 temp.cards.forEach(card => {
                                     temp.moveCardTo(card, player.hand); // Move card to hand
-                                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                                 });
                                 return state;
                             }

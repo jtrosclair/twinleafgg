@@ -53,43 +53,43 @@ let Friend = Friend_1 = class Friend extends typeorm_1.BaseEntity {
     }
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Friend.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Friend.prototype, "user_id", void 0);
 __decorate([
-    typeorm_1.ManyToOne(() => user_1.User),
-    typeorm_1.JoinColumn({ name: 'user_id' }),
+    (0, typeorm_1.ManyToOne)(() => user_1.User),
+    (0, typeorm_1.JoinColumn)({ name: 'user_id' }),
     __metadata("design:type", user_1.User)
 ], Friend.prototype, "user", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Friend.prototype, "friend_id", void 0);
 __decorate([
-    typeorm_1.ManyToOne(() => user_1.User),
-    typeorm_1.JoinColumn({ name: 'friend_id' }),
+    (0, typeorm_1.ManyToOne)(() => user_1.User),
+    (0, typeorm_1.JoinColumn)({ name: 'friend_id' }),
     __metadata("design:type", user_1.User)
 ], Friend.prototype, "friend", void 0);
 __decorate([
-    typeorm_1.Column({
+    (0, typeorm_1.Column)({
         type: 'varchar',
         default: FriendStatus.PENDING
     }),
     __metadata("design:type", String)
 ], Friend.prototype, "status", void 0);
 __decorate([
-    typeorm_1.CreateDateColumn(),
+    (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], Friend.prototype, "created_at", void 0);
 __decorate([
-    typeorm_1.UpdateDateColumn(),
+    (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
 ], Friend.prototype, "updated_at", void 0);
 Friend = Friend_1 = __decorate([
-    typeorm_1.Entity()
+    (0, typeorm_1.Entity)()
 ], Friend);
 exports.Friend = Friend;

@@ -22,7 +22,7 @@ class HealEnergy extends energy_card_1.EnergyCard {
         var _a;
         if (effect instanceof play_card_effects_1.AttachEnergyEffect && effect.energyCard === this) {
             const player = effect.player;
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.target)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.player, this, effect.target)) {
                 return state;
             }
             if ((_a = effect.target.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.tags.includes(card_types_1.CardTag.POKEMON_ex)) {

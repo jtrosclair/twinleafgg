@@ -13,7 +13,7 @@ export declare class Yveltal extends PokemonCard {
         type: CardType.FIGHTING;
         value: number;
     }[];
-    retreat: never[];
+    retreat: any[];
     attacks: {
         name: string;
         cost: (CardType.DARK | CardType.COLORLESS)[];

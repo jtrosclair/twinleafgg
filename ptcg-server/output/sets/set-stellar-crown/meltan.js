@@ -35,7 +35,7 @@ class Meltan extends pokemon_card_1.PokemonCard {
         this.fullName = 'Meltan SCR';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (player.deck.cards.length === 0) {
@@ -58,9 +58,9 @@ class Meltan extends pokemon_card_1.PokemonCard {
                         store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                     });
                     if (cards.length > 0) {
-                        prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
+                        (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
                     }
-                    prefabs_1.SHUFFLE_DECK(store, state, player);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                 });
             }
         }

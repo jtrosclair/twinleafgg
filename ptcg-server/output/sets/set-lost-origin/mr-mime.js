@@ -39,7 +39,7 @@ class MrMime extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Tricky Slap
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             // our options (idk why value is here because it definitely isn't used at all but eh)

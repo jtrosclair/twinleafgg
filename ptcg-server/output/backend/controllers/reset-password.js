@@ -109,19 +109,19 @@ class ResetPassword extends controller_1.Controller {
     }
 }
 __decorate([
-    controller_1.Post('/sendMail'),
-    services_1.Validate({
-        email: services_1.check().isEmail(),
+    (0, controller_1.Post)('/sendMail'),
+    (0, services_1.Validate)({
+        email: (0, services_1.check)().isEmail(),
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], ResetPassword.prototype, "onSendMail", null);
 __decorate([
-    controller_1.Post('/changePassword'),
-    services_1.Validate({
-        token: services_1.check().isString().required(),
-        newPassword: services_1.check().minLength(3).maxLength(32)
+    (0, controller_1.Post)('/changePassword'),
+    (0, services_1.Validate)({
+        token: (0, services_1.check)().isString().required(),
+        newPassword: (0, services_1.check)().minLength(3).maxLength(32)
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),

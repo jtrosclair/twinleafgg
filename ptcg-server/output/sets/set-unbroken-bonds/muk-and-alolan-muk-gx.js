@@ -43,11 +43,11 @@ class MukAlolanMukGX extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Severe Poison
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this, 80);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this, 80);
         }
         // Poison Absorption
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             if (opponent.active.specialConditions.length > 0 && opponent.active.specialConditions.includes(game_1.SpecialCondition.POISONED)) {
@@ -57,12 +57,12 @@ class MukAlolanMukGX extends game_1.PokemonCard {
             }
         }
         // Nasty Goo Mix-GX
-        if (prefabs_1.WAS_ATTACK_USED(effect, 2, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
-            prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, opponent, this);
+            (0, prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE)(store, state, opponent, this);
             let poisonDamage = 10;
             const extraEffectCost = [C, C, C, C];
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
@@ -71,7 +71,7 @@ class MukAlolanMukGX extends game_1.PokemonCard {
             if (meetsExtraEffectCost) {
                 poisonDamage = 150;
             }
-            prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this, poisonDamage);
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, opponent, this, poisonDamage);
         }
         return state;
     }

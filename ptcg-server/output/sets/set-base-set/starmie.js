@@ -38,16 +38,16 @@ class Starmie extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1, W);
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1, W);
             const player = effect.player;
             const heal = new game_effects_1.HealEffect(player, player.active, player.active.damage);
             heal.target = effect.player.active;
             store.reduceEffect(state, heal);
         }
-        if (prefabs_1.AFTER_ATTACK(effect, 1, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, (result) => {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, (result) => {
                 if (result) {
-                    prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
+                    (0, prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE)(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
                 }
             });
         }

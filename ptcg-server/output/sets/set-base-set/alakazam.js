@@ -63,8 +63,8 @@ class Alakazam extends pokemon_card_1.PokemonCard {
         this.fullName = 'Alakazam BS';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
-            prefabs_1.BLOCK_IF_ASLEEP_CONFUSED_PARALYZED(effect.player, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
+            (0, prefabs_1.BLOCK_IF_ASLEEP_CONFUSED_PARALYZED)(effect.player, this);
             const generator = useDamageSwap(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

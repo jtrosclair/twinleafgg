@@ -30,7 +30,7 @@ class Dipplin extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Energy Loop
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (!player.active.cards.some(c => c instanceof game_1.EnergyCard)) {
                 return state;
@@ -39,7 +39,7 @@ class Dipplin extends pokemon_card_1.PokemonCard {
             state = store.reduceEffect(state, checkProvidedEnergy);
             state = store.prompt(state, new game_1.ChooseEnergyPrompt(player.id, game_1.GameMessage.CHOOSE_ENERGIES_TO_DISCARD, checkProvidedEnergy.energyMap, [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS], { allowCancel: false }), energy => {
                 const cards = (energy || []).map(e => e.card);
-                prefabs_1.MOVE_CARDS(store, state, player.active, player.hand, { cards, sourceCard: this, sourceEffect: this.attacks[0] });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.active, player.hand, { cards, sourceCard: this, sourceEffect: this.attacks[0] });
             });
         }
         return state;

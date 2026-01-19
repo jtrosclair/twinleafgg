@@ -65,7 +65,7 @@ class MarshadowGX extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
             const player = effect.player;
             // gx thingies
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             const opponentProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
             store.reduceEffect(state, opponentProvidedEnergy);

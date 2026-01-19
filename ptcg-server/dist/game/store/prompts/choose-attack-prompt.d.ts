@@ -12,7 +12,7 @@ export interface ChooseAttackOptions {
         attack: string;
     }[];
 }
-export declare type ChooseAttackResultType = {
+export type ChooseAttackResultType = {
     index: number;
     attack: string;
 };

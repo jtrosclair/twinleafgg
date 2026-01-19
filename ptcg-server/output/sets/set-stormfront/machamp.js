@@ -45,7 +45,7 @@ class Machamp extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Take Out
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (opponent.active.getPokemons().length > 1) {
@@ -57,9 +57,9 @@ class Machamp extends pokemon_card_1.PokemonCard {
             store.reduceEffect(state, dealDamage);
         }
         // Hurricane Punch
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            return prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 4, results => {
+            return (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 4, results => {
                 let heads = 0;
                 results.forEach(r => {
                     if (r)
@@ -69,7 +69,7 @@ class Machamp extends pokemon_card_1.PokemonCard {
             });
         }
         // Rage
-        if (prefabs_1.WAS_ATTACK_USED(effect, 2, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             effect.damage += effect.player.active.damage;
         }
         return state;

@@ -22,7 +22,7 @@ class GravityGemstone extends trainer_card_1.TrainerCard {
         if (effect instanceof check_effects_1.CheckRetreatCostEffect) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             if (player.active.tools.includes(this) || opponent.active.tools.includes(this)) {

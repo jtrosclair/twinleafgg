@@ -34,9 +34,9 @@ class Totodile extends game_1.PokemonCard {
         this.SAND_PIT_MARKER = 'SAND_PIT_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            if (prefabs_1.THIS_POKEMON_HAS_ANY_DAMAGE_COUNTERS_ON_IT(effect, this)) {
-                prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE(effect, store, state, 10);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            if ((0, prefabs_1.THIS_POKEMON_HAS_ANY_DAMAGE_COUNTERS_ON_IT)(effect, this)) {
+                (0, prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE)(effect, store, state, 10);
             }
         }
         return state;

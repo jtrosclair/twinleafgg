@@ -39,9 +39,9 @@ class Pidgeotto extends pokemon_card_1.PokemonCard {
         ];
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const opponent = __1.StateUtils.getOpponent(state, effect.player);
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, opponent);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, opponent);
         }
         if (effect instanceof attack_effects_1.AbstractAttackEffect && effect.target.cards.includes(this)) {
             const pokemonCard = effect.target.getPokemonCard();

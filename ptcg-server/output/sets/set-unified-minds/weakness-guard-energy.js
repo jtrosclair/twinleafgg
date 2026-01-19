@@ -24,7 +24,7 @@ class WeaknessGuardEnergy extends energy_card_1.EnergyCard {
         if (effect instanceof check_effects_1.CheckPokemonStatsEffect && effect.target.cards.includes(this)) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (!prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, opponent, this, effect.target)) {
+            if (!(0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, opponent, this, effect.target)) {
                 const target = effect.target.getPokemonCard();
                 if (target) {
                     effect.weakness = [];

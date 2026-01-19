@@ -46,7 +46,7 @@ class TapuFiniGX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Aqua Ring
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
             const hasBench = player.bench.some(b => b.cards.length > 0);
             if (hasBench === false) {
@@ -73,7 +73,7 @@ class TapuFiniGX extends pokemon_card_1.PokemonCard {
                 store.reduceEffect(state, discardEnergy);
                 return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { allowCancel: false }), selected => {
                     const targets = selected || [];
-                    prefabs_1.DAMAGE_OPPONENT_POKEMON(store, state, effect, 120, targets);
+                    (0, prefabs_1.DAMAGE_OPPONENT_POKEMON)(store, state, effect, 120, targets);
                 });
             });
         }
@@ -82,7 +82,7 @@ class TapuFiniGX extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             // Check if player has used GX attack
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             // set GX attack as used for game
             player.usedGX = true;
             const hasBench = opponent.bench.some(b => b.cards.length > 0);
@@ -92,7 +92,7 @@ class TapuFiniGX extends pokemon_card_1.PokemonCard {
             opponent.active.clearEffects();
             opponent.active.damage = 0;
             opponent.active.moveTo(opponent.deck);
-            prefabs_1.SHUFFLE_DECK(store, state, opponent);
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
         }
         return state;
     }

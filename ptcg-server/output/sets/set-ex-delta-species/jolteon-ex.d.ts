@@ -13,7 +13,7 @@ export declare class Jolteonex extends PokemonCard {
         type: CardType.METAL;
         value: number;
     }[];
-    retreat: never[];
+    retreat: any[];
     powers: Power[];
     attacks: Attack[];
     set: string;

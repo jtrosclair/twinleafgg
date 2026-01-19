@@ -39,9 +39,9 @@ class MarniesPride extends trainer_card_1.TrainerCard {
                 transfers = transfers || [];
                 for (const transfer of transfers) {
                     const target = state_utils_1.StateUtils.getTarget(state, player, transfer.to);
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this });
                 }
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return state;
             });
             return state;

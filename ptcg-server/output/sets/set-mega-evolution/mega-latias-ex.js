@@ -47,7 +47,7 @@ class MegaLatiasex extends pokemon_card_1.PokemonCard {
             if (player.bench.length > 0) {
                 store.prompt(state, new game_1.ConfirmPrompt(player.id, game_1.GameMessage.WANT_TO_SWITCH_POKEMON), wantToSwitch => {
                     if (wantToSwitch) {
-                        prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+                        (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
                     }
                 });
             }

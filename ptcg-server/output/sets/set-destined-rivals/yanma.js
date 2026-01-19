@@ -37,7 +37,7 @@ class Yanma extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Whirlwind
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const opponent = effect.opponent;
             // Check if opponent has any benched Pokemon
             if (!opponent.bench.some(b => b.cards.length > 0)) {

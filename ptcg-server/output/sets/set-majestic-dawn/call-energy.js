@@ -41,7 +41,7 @@ class CallEnergy extends energy_card_1.EnergyCard {
                     }
                 }
             });
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player, { stage: card_types_1.Stage.BASIC }, { min: 0, max: 2 });
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, player, { stage: card_types_1.Stage.BASIC }, { min: 0, max: 2 });
             const endTurnEffect = new game_phase_effects_1.EndTurnEffect(player);
             return store.reduceEffect(state, endTurnEffect);
         }

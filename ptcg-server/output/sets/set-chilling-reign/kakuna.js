@@ -32,17 +32,17 @@ class Kakuna extends pokemon_card_1.PokemonCard {
         this.STIFFEN_MARKER = 'STIFFEN_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.ADD_MARKER(this.STIFFEN_MARKER, effect.player, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.ADD_MARKER)(this.STIFFEN_MARKER, effect.player, this);
         }
-        if (effect instanceof attack_effects_1.PutDamageEffect && prefabs_1.HAS_MARKER(this.STIFFEN_MARKER, game_1.StateUtils.getOpponent(state, effect.player), this) && effect.target.getPokemonCard() === this) {
+        if (effect instanceof attack_effects_1.PutDamageEffect && (0, prefabs_1.HAS_MARKER)(this.STIFFEN_MARKER, game_1.StateUtils.getOpponent(state, effect.player), this) && effect.target.getPokemonCard() === this) {
             if (state.phase !== game_1.GamePhase.ATTACK) {
                 return state;
             }
             effect.damage -= 40;
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player !== game_1.StateUtils.findOwner(state, game_1.StateUtils.findCardList(state, this))) {
-            prefabs_1.REMOVE_MARKER(this.STIFFEN_MARKER, game_1.StateUtils.getOpponent(state, effect.player), this);
+            (0, prefabs_1.REMOVE_MARKER)(this.STIFFEN_MARKER, game_1.StateUtils.getOpponent(state, effect.player), this);
         }
         return state;
     }

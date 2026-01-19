@@ -42,7 +42,7 @@ class Poltchageist extends pokemon_card_1.PokemonCard {
             }
             // Target is this
             if (effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
-                if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+                if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                     return state;
                 }
                 effect.preventDefault = true;

@@ -44,7 +44,7 @@ class Hitmonchan extends pokemon_card_1.PokemonCard {
             const opponent = effect.player;
             if (player === opponent || player.active !== effect.target)
                 return state;
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const damageEffect = new game_effects_1.EffectOfAbilityEffect(player, this.powers[0], this, effect.source);

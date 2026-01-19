@@ -1,4 +1,7 @@
-export var CardTag;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isCoreFormat = exports.Energy = exports.Format = exports.BoardEffect = exports.SpecialCondition = exports.CardType = exports.Archetype = exports.Stage = exports.PokemonType = exports.TrainerType = exports.EnergyType = exports.SuperType = exports.CardTag = void 0;
+var CardTag;
 (function (CardTag) {
     CardTag["POKEMON_SP"] = "SP";
     CardTag["POKEMON_EX"] = "EX";
@@ -58,34 +61,34 @@ export var CardTag;
     CardTag["PRIMAL"] = "Primal";
     CardTag["ARCEUS"] = "Arceus";
     CardTag["VS"] = "VS";
-})(CardTag || (CardTag = {}));
-export var SuperType;
+})(CardTag = exports.CardTag || (exports.CardTag = {}));
+var SuperType;
 (function (SuperType) {
     SuperType[SuperType["NONE"] = 0] = "NONE";
     SuperType[SuperType["POKEMON"] = 1] = "POKEMON";
     SuperType[SuperType["TRAINER"] = 2] = "TRAINER";
     SuperType[SuperType["ENERGY"] = 3] = "ENERGY";
     SuperType[SuperType["ANY"] = 4] = "ANY";
-})(SuperType || (SuperType = {}));
-export var EnergyType;
+})(SuperType = exports.SuperType || (exports.SuperType = {}));
+var EnergyType;
 (function (EnergyType) {
     EnergyType[EnergyType["BASIC"] = 0] = "BASIC";
     EnergyType[EnergyType["SPECIAL"] = 1] = "SPECIAL";
-})(EnergyType || (EnergyType = {}));
-export var TrainerType;
+})(EnergyType = exports.EnergyType || (exports.EnergyType = {}));
+var TrainerType;
 (function (TrainerType) {
     TrainerType[TrainerType["ITEM"] = 0] = "ITEM";
     TrainerType[TrainerType["SUPPORTER"] = 1] = "SUPPORTER";
     TrainerType[TrainerType["STADIUM"] = 2] = "STADIUM";
     TrainerType[TrainerType["TOOL"] = 3] = "TOOL";
-})(TrainerType || (TrainerType = {}));
-export var PokemonType;
+})(TrainerType = exports.TrainerType || (exports.TrainerType = {}));
+var PokemonType;
 (function (PokemonType) {
     PokemonType[PokemonType["NORMAL"] = 0] = "NORMAL";
     PokemonType[PokemonType["EX"] = 1] = "EX";
     PokemonType[PokemonType["LEGEND"] = 2] = "LEGEND";
-})(PokemonType || (PokemonType = {}));
-export var Stage;
+})(PokemonType = exports.PokemonType || (exports.PokemonType = {}));
+var Stage;
 (function (Stage) {
     Stage[Stage["NONE"] = 0] = "NONE";
     Stage[Stage["RESTORED"] = 1] = "RESTORED";
@@ -99,8 +102,8 @@ export var Stage;
     Stage[Stage["MEGA"] = 9] = "MEGA";
     Stage[Stage["BREAK"] = 10] = "BREAK";
     Stage[Stage["LV_X"] = 11] = "LV_X";
-})(Stage || (Stage = {}));
-export var Archetype;
+})(Stage = exports.Stage || (exports.Stage = {}));
+var Archetype;
 (function (Archetype) {
     Archetype["PALKIA_ORIGIN"] = "Palkia Origin";
     Archetype["COMFEY"] = "Comfey";
@@ -1216,8 +1219,8 @@ export var Archetype;
     Archetype["IRON_CROWN"] = "Iron Crown";
     Archetype["TERAPAGOS"] = "Terapagos";
     Archetype["PECHARUNT"] = "Pecharunt";
-})(Archetype || (Archetype = {}));
-export var CardType;
+})(Archetype = exports.Archetype || (exports.Archetype = {}));
+var CardType;
 (function (CardType) {
     CardType[CardType["ANY"] = 0] = "ANY";
     CardType[CardType["GRASS"] = 1] = "GRASS";
@@ -1277,8 +1280,8 @@ export var CardType;
     CardType[CardType["LPM"] = 55] = "LPM";
     CardType[CardType["FDY"] = 56] = "FDY";
     CardType[CardType["GRPD"] = 57] = "GRPD";
-})(CardType || (CardType = {}));
-export var SpecialCondition;
+})(CardType = exports.CardType || (exports.CardType = {}));
+var SpecialCondition;
 (function (SpecialCondition) {
     SpecialCondition[SpecialCondition["PARALYZED"] = 0] = "PARALYZED";
     SpecialCondition[SpecialCondition["CONFUSED"] = 1] = "CONFUSED";
@@ -1287,8 +1290,8 @@ export var SpecialCondition;
     SpecialCondition[SpecialCondition["BURNED"] = 4] = "BURNED";
     SpecialCondition[SpecialCondition["ABILITY_USED"] = 5] = "ABILITY_USED";
     SpecialCondition[SpecialCondition["POWER_GLOW"] = 6] = "POWER_GLOW";
-})(SpecialCondition || (SpecialCondition = {}));
-export var BoardEffect;
+})(SpecialCondition = exports.SpecialCondition || (exports.SpecialCondition = {}));
+var BoardEffect;
 (function (BoardEffect) {
     BoardEffect[BoardEffect["ABILITY_USED"] = 0] = "ABILITY_USED";
     BoardEffect[BoardEffect["POWER_GLOW"] = 1] = "POWER_GLOW";
@@ -1296,8 +1299,8 @@ export var BoardEffect;
     BoardEffect[BoardEffect["POWER_RETURN"] = 3] = "POWER_RETURN";
     BoardEffect[BoardEffect["EVOLVE"] = 4] = "EVOLVE";
     BoardEffect[BoardEffect["REVEAL_OPPONENT_HAND"] = 5] = "REVEAL_OPPONENT_HAND";
-})(BoardEffect || (BoardEffect = {}));
-export var Format;
+})(BoardEffect = exports.BoardEffect || (exports.BoardEffect = {}));
+var Format;
 (function (Format) {
     Format[Format["NONE"] = 0] = "NONE";
     Format[Format["STANDARD"] = 1] = "STANDARD";
@@ -1315,8 +1318,8 @@ export var Format;
     Format[Format["SV"] = 13] = "SV";
     Format[Format["THEME"] = 14] = "THEME";
     Format[Format["PRE_RELEASE"] = 15] = "PRE_RELEASE";
-})(Format || (Format = {}));
-export const Energy = {
+})(Format = exports.Format || (exports.Format = {}));
+exports.Energy = {
     D: CardType.DARK,
     C: CardType.COLORLESS,
     F: CardType.FIGHTING,
@@ -1329,9 +1332,10 @@ export const Energy = {
     Y: CardType.FAIRY,
     N: CardType.DRAGON
 };
-Object.entries(Energy).forEach(([key, value]) => {
+Object.entries(exports.Energy).forEach(([key, value]) => {
     global[key] = value;
 });
-export function isCoreFormat(format) {
+function isCoreFormat(format) {
     return format === Format.STANDARD || format === Format.EXPANDED || format === Format.UNLIMITED || format === Format.STANDARD_NIGHTLY || format === Format.GLC;
 }
+exports.isCoreFormat = isCoreFormat;

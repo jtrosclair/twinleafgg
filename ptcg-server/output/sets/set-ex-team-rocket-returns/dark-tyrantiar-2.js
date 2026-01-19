@@ -48,7 +48,7 @@ class DarkTyranitar2 extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         var _a;
         // Grind
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, player.active);
             store.reduceEffect(state, checkProvidedEnergy);
@@ -60,7 +60,7 @@ class DarkTyranitar2 extends pokemon_card_1.PokemonCard {
             effect.damage += energyCount * damagePerEnergy;
         }
         // Spinning Tail
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = effect.opponent;
             const benched = opponent.bench.filter(b => b.cards.length > 0);
             const activeDamageEffect = new attack_effects_1.DealDamageEffect(effect, 20);
@@ -72,7 +72,7 @@ class DarkTyranitar2 extends pokemon_card_1.PokemonCard {
             });
         }
         // Bite Off
-        if (prefabs_1.WAS_ATTACK_USED(effect, 2, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const defending = effect.opponent.active;
             if (defending && ((_a = defending.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.tags.includes(card_types_1.CardTag.POKEMON_ex))) {
                 effect.damage += 50;

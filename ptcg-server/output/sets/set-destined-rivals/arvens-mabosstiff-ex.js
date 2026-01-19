@@ -43,25 +43,25 @@ class ArvensMabosstiffex extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Hustle Tackle
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (effect.player.active.damage === 0) {
                 effect.damage += 120;
             }
         }
         // Boss's Headbutt
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            if (prefabs_1.HAS_MARKER(this.ATTACK_USED_MARKER, effect.player, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.ATTACK_USED_MARKER, effect.player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
             }
-            prefabs_1.ADD_MARKER(this.ATTACK_USED_MARKER, effect.player, this);
+            (0, prefabs_1.ADD_MARKER)(this.ATTACK_USED_MARKER, effect.player, this);
         }
         // removing the markers for preventing the pokemon from attacking
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && prefabs_1.HAS_MARKER(this.ATTACK_USED_2_MARKER, effect.player, this)) {
-            prefabs_1.REMOVE_MARKER(this.ATTACK_USED_MARKER, effect.player, this);
-            prefabs_1.REMOVE_MARKER(this.ATTACK_USED_2_MARKER, effect.player, this);
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.ATTACK_USED_2_MARKER, effect.player, this)) {
+            (0, prefabs_1.REMOVE_MARKER)(this.ATTACK_USED_MARKER, effect.player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.ATTACK_USED_2_MARKER, effect.player, this);
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && prefabs_1.HAS_MARKER(this.ATTACK_USED_MARKER, effect.player, this)) {
-            prefabs_1.ADD_MARKER(this.ATTACK_USED_2_MARKER, effect.player, this);
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.ATTACK_USED_MARKER, effect.player, this)) {
+            (0, prefabs_1.ADD_MARKER)(this.ATTACK_USED_2_MARKER, effect.player, this);
         }
         return state;
     }

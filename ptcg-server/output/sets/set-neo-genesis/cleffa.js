@@ -50,13 +50,13 @@ class Cleffa extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // avoids recursion
-            if (prefabs_1.HAS_MARKER(this.BABY_MARKER, effect.player)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.BABY_MARKER, effect.player)) {
                 return state;
             }
-            prefabs_1.ADD_MARKER(this.BABY_MARKER, effect.player, this);
+            (0, prefabs_1.ADD_MARKER)(this.BABY_MARKER, effect.player, this);
             if (opponent.active.getPokemonCard() === this) {
                 effect.preventDefault = true;
-                prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+                (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                     if (!result) {
                         const endTurnEffect = new game_phase_effects_1.EndTurnEffect(player);
                         store.reduceEffect(state, endTurnEffect);
@@ -68,13 +68,13 @@ class Cleffa extends pokemon_card_1.PokemonCard {
                 });
             }
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.BABY_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.BABY_MARKER, this);
         // Eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeek
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.MOVE_CARDS(store, state, player.hand, player.deck);
-            prefabs_1.SHUFFLE_DECK(store, state, player);
-            prefabs_1.DRAW_CARDS(player, 7);
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck);
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
+            (0, prefabs_1.DRAW_CARDS)(player, 7);
         }
         return state;
     }

@@ -1,9 +1,13 @@
+"use strict";
 /**
  * Centralized marker constants for the PTCG game
  * This file contains all marker names used throughout the game to avoid duplication
  */
-export class MarkerConstants {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MarkerConstants = void 0;
+class MarkerConstants {
 }
+exports.MarkerConstants = MarkerConstants;
 // ===== COMMON MARKERS (used across multiple cards) =====
 MarkerConstants.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
 MarkerConstants.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';

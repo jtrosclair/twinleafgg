@@ -34,12 +34,12 @@ class Zekrom extends pokemon_card_1.PokemonCard {
         this.setNumber = '47';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             effect.damage += effect.player.active.damage;
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            return prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 40);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            return (0, prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF)(store, state, effect, 40);
         }
         return state;
     }

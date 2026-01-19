@@ -37,7 +37,7 @@ class Galvantula extends game_1.PokemonCard {
         if (effect instanceof play_card_effects_1.TrainerTargetEffect && ((_a = effect.target) === null || _a === void 0 ? void 0 : _a.cards.includes(this))) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             // finding if the owner of the card is playing the trainer or if the opponent is
@@ -53,7 +53,7 @@ class Galvantula extends game_1.PokemonCard {
             effect.target = undefined;
         }
         // Spider Thread
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasCardInDiscard = player.discard.cards.some(c => {
                 return c instanceof game_1.Card;

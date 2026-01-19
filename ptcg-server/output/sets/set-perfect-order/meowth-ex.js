@@ -63,11 +63,11 @@ class Meowthex extends pokemon_card_1.PokemonCard {
                     blocked.push(index);
                 }
             });
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
-                    prefabs_1.ABILITY_USED(player, this);
+                    (0, prefabs_1.ABILITY_USED)(player, this);
                     player.marker.addMarkerToState(this.TRUMP_CARD_MARKER);
-                    prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, this, { superType: card_types_1.SuperType.TRAINER }, { min: 0, max: 1, allowCancel: false, blocked }, this.powers[0]);
+                    (0, prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND)(store, state, player, this, { superType: card_types_1.SuperType.TRAINER }, { min: 0, max: 1, allowCancel: false, blocked }, this.powers[0]);
                 }
             }, game_1.GameMessage.WANT_TO_USE_ABILITY);
         }
@@ -84,7 +84,7 @@ class Meowthex extends pokemon_card_1.PokemonCard {
             player.active.clearEffects();
             // Move other cards to hand
             if (otherCards.length > 0) {
-                prefabs_1.MOVE_CARDS(store, state, player.active, player.hand, { cards: otherCards });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.active, player.hand, { cards: otherCards });
             }
             // Move tools to hand explicitly
             for (const tool of tools) {
@@ -92,7 +92,7 @@ class Meowthex extends pokemon_card_1.PokemonCard {
             }
             // Move Pokémon to hand
             if (pokemons.length > 0) {
-                prefabs_1.MOVE_CARDS(store, state, player.active, player.hand, { cards: pokemons });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.active, player.hand, { cards: pokemons });
             }
             return state;
         }

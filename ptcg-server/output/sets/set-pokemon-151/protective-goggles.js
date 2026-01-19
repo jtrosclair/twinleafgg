@@ -20,7 +20,7 @@ class ProtectiveGoggles extends trainer_card_1.TrainerCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof check_effects_1.CheckPokemonStatsEffect && effect.target.tools.includes(this)) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
-            if (!prefabs_1.IS_TOOL_BLOCKED(store, state, player, this)) {
+            if (!(0, prefabs_1.IS_TOOL_BLOCKED)(store, state, player, this)) {
                 const target = effect.target.getPokemonCard();
                 if ((target === null || target === void 0 ? void 0 : target.stage) === card_types_1.Stage.BASIC) {
                     effect.weakness = [];

@@ -38,7 +38,7 @@ class Eevee extends game_1.PokemonCard {
         this.CLEAR_DURING_OPPONENTS_NEXT_TURN_DEFENDING_POKEMON_DEALS_LESS_DAMAGE_MARKER = 'CLEAR_DURING_OPPONENTS_NEXT_TURN_DEFENDING_POKEMON_DEALS_LESS_DAMAGE_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             opponent.active.marker.addMarker(this.DURING_OPPONENTS_NEXT_TURN_DEFENDING_POKEMON_DEALS_LESS_DAMAGE_MARKER, this);
@@ -58,8 +58,8 @@ class Eevee extends game_1.PokemonCard {
                 cardList.marker.removeMarker(this.DURING_OPPONENTS_NEXT_TURN_DEFENDING_POKEMON_DEALS_LESS_DAMAGE_MARKER, this);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            return prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, (result) => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            return (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, (result) => {
                 if (result) {
                     effect.damage += 10;
                 }

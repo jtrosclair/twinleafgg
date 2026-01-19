@@ -26,7 +26,7 @@ class RockChestplate extends game_1.TrainerCard {
                 return state;
             }
             // Try to reduce ToolEffect, to check if something is blocking the tool from working
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             const player = game_1.StateUtils.findOwner(state, effect.target);

@@ -26,10 +26,10 @@ class ImposterOaksRevenge extends trainer_card_1.TrainerCard {
             if (supporterTurn > 0) {
                 throw new game_1.GameError(game_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
             }
-            trainer_prefabs_1.DISCARD_X_CARDS_FROM_YOUR_HAND(effect, store, state, 1, 1);
-            prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.deck);
-            prefabs_1.SHUFFLE_DECK(store, state, opponent);
-            prefabs_1.DRAW_CARDS(opponent, 4);
+            (0, trainer_prefabs_1.DISCARD_X_CARDS_FROM_YOUR_HAND)(effect, store, state, 1, 1);
+            (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck);
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
+            (0, prefabs_1.DRAW_CARDS)(opponent, 4);
             player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
         }

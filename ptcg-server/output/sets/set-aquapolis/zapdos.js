@@ -40,31 +40,31 @@ class Zapdos extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.AttachEnergyEffect && effect.target.cards.includes(this)) {
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             if (effect.energyCard.provides.includes(card_types_1.CardType.LIGHTNING)) {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_ABILITY);
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.discard.cards.some(c => c instanceof game_1.EnergyCard && c.provides.includes(card_types_1.CardType.LIGHTNING))) {
-                prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+                (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                     if (result) {
                         store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_ATTACH, player.discard, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, provides: [card_types_1.CardType.LIGHTNING] }, { min: 1, max: 1, allowCancel: false }), cards => {
                             cards = cards || [];
                             if (cards.length > 0) {
-                                prefabs_1.MOVE_CARDS(store, state, player.discard, player.active, { cards, sourceCard: this, sourceEffect: this.attacks[0] });
+                                (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.active, { cards, sourceCard: this, sourceEffect: this.attacks[0] });
                             }
                         });
                     }
                 });
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (!result) {
                     player.active.damage += 20; // Apply 2 damage counters
                 }

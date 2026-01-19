@@ -13,11 +13,11 @@ export declare class SandboxModifyCardAction implements Action {
     targetPlayerId: number;
     action: 'add' | 'remove' | 'move';
     cardName: string;
-    fromZone?: CardZone | undefined;
-    toZone?: CardZone | undefined;
-    fromIndex?: number | undefined;
-    toIndex?: number | undefined;
-    prizeIndex?: number | undefined;
+    fromZone?: CardZone;
+    toZone?: CardZone;
+    fromIndex?: number;
+    toIndex?: number;
+    prizeIndex?: number;
     readonly type: string;
-    constructor(clientId: number, targetPlayerId: number, action: 'add' | 'remove' | 'move', cardName: string, fromZone?: CardZone | undefined, toZone?: CardZone | undefined, fromIndex?: number | undefined, toIndex?: number | undefined, prizeIndex?: number | undefined);
+    constructor(clientId: number, targetPlayerId: number, action: 'add' | 'remove' | 'move', cardName: string, fromZone?: CardZone, toZone?: CardZone, fromIndex?: number, toIndex?: number, prizeIndex?: number);
 }

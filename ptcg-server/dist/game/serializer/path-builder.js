@@ -1,4 +1,7 @@
-export class PathBuilder {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PathBuilder = void 0;
+class PathBuilder {
     constructor() {
         this.parents = [];
     }
@@ -29,3 +32,4 @@ export class PathBuilder {
         return value;
     }
 }
+exports.PathBuilder = PathBuilder;

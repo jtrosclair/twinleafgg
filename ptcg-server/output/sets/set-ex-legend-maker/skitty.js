@@ -33,19 +33,19 @@ class Skitty extends pokemon_card_1.PokemonCard {
         this.setNumber = '64';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, { name: 'React Energy' }, { min: 0, max: 1, allowCancel: false }), cards => {
                 if (cards.length > 0) {
-                    prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards: cards, sourceCard: this, sourceEffect: this.attacks[0] });
-                    prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: cards, sourceCard: this, sourceEffect: this.attacks[0] });
+                    (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
                 }
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            attack_effects_1.FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE(store, state, effect, 20);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, attack_effects_1.FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE)(store, state, effect, 20);
         }
         return state;
     }

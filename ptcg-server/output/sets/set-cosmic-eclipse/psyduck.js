@@ -32,9 +32,9 @@ class Psyduck extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Confusion Wave attack - confuse both active Pokemon
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, this);
-            prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, effect.player, this);
+            (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         return state;
     }

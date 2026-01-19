@@ -35,7 +35,7 @@ class Floatzel extends pokemon_card_1.PokemonCard {
         this.setNumber = '39';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
             const blocked = [];
             player.discard.cards.forEach((card, index) => {
@@ -43,7 +43,7 @@ class Floatzel extends pokemon_card_1.PokemonCard {
                     blocked.push(index);
                 }
             });
-            prefabs_1.SEARCH_DISCARD_PILE_FOR_CARDS_TO_HAND(store, state, player, this, { superType: card_types_1.SuperType.TRAINER }, { min: 0, max: 2, allowCancel: false, blocked }, this.attacks[0]);
+            (0, prefabs_1.SEARCH_DISCARD_PILE_FOR_CARDS_TO_HAND)(store, state, player, this, { superType: card_types_1.SuperType.TRAINER }, { min: 0, max: 2, allowCancel: false, blocked }, this.attacks[0]);
         }
         return state;
     }

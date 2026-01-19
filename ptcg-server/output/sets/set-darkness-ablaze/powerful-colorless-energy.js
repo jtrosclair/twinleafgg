@@ -23,7 +23,7 @@ The attacks of the [C] Pokémon this card is attached to do 20 more damage to yo
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.DealDamageEffect && effect.source.cards.includes(this)) {
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.source)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.player, this, effect.source)) {
                 return state;
             }
             const checkPokemonType = new check_effects_1.CheckPokemonTypeEffect(effect.source);

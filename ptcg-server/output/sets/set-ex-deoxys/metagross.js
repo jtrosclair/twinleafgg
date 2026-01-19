@@ -40,10 +40,10 @@ class Metagross extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            prefabs_1.REMOVE_MARKER(this.SUPER_CONNECTIVITY_MARKER, player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.SUPER_CONNECTIVITY_MARKER, player, this);
             return state;
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.SUPER_CONNECTIVITY_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.SUPER_CONNECTIVITY_MARKER, this);
         if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
             const player = effect.player;
             const hasEnergyInDiscard = player.discard.cards.some(c => {
@@ -63,19 +63,19 @@ class Metagross extends pokemon_card_1.PokemonCard {
                 validCardTypes: [card_types_1.CardType.PSYCHIC, card_types_1.CardType.METAL]
             }), transfers => {
                 transfers = transfers || [];
-                prefabs_1.ADD_MARKER(this.SUPER_CONNECTIVITY_MARKER, player, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ADD_MARKER)(this.SUPER_CONNECTIVITY_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 if (transfers.length === 0) {
                     return state;
                 }
                 for (const transfer of transfers) {
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.powers[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.powers[0] });
                     target.damage += 10;
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             const playerProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, player.active);

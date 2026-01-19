@@ -23,17 +23,17 @@ function* playCard(next, store, state, self, effect) {
     const cards = player.hand.cards.filter(c => c !== self);
     // We will discard this card after prompt confirmation
     effect.preventDefault = true;
-    prefabs_1.MOVE_CARDS(store, state, player.hand, player.deck, { cards, sourceCard: self });
-    prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.deck, { sourceCard: self });
+    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck, { cards, sourceCard: self });
+    (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck, { sourceCard: self });
     yield store.prompt(state, [
         new shuffle_prompt_1.ShuffleDeckPrompt(player.id),
         new shuffle_prompt_1.ShuffleDeckPrompt(opponent.id)
     ], deckOrder => {
         player.deck.applyOrder(deckOrder[0]);
         opponent.deck.applyOrder(deckOrder[1]);
-        prefabs_1.DRAW_CARDS(player, 6);
-        prefabs_1.DRAW_CARDS(opponent, 2);
-        prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+        (0, prefabs_1.DRAW_CARDS)(player, 6);
+        (0, prefabs_1.DRAW_CARDS)(opponent, 2);
+        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     });
 }
 class Roxanne extends trainer_card_1.TrainerCard {

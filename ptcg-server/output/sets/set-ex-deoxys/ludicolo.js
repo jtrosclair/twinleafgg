@@ -45,7 +45,7 @@ class Ludicolo extends game_1.PokemonCard {
         // Handle Swing Dance Poké-Power
         if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
             const player = effect.player;
-            if (prefabs_1.HAS_MARKER(this.SWING_DANCE_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.SWING_DANCE_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             if (!prefabs_1.IS_POKEPOWER_BLOCKED) {
@@ -57,13 +57,13 @@ class Ludicolo extends game_1.PokemonCard {
                         }
                     }
                 });
-                prefabs_1.ABILITY_USED(player, this);
-                prefabs_1.ADD_MARKER(this.SWING_DANCE_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
+                (0, prefabs_1.ADD_MARKER)(this.SWING_DANCE_MARKER, player, this);
                 // Draw a card
-                prefabs_1.DRAW_CARDS(player, 1);
+                (0, prefabs_1.DRAW_CARDS)(player, 1);
             }
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.SWING_DANCE_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.SWING_DANCE_MARKER, this);
         // Handle Water Healing Steps attack
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
             const player = effect.player;
@@ -78,7 +78,7 @@ class Ludicolo extends game_1.PokemonCard {
                 }
                 // Discard the cards
                 for (const transfer of transfers) {
-                    prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: [transfer] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: [transfer] });
                 }
                 // Remove damage counters equal to number of cards discarded
                 const damageToRemove = transfers.length * 10;

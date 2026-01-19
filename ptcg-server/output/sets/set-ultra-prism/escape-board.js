@@ -19,7 +19,7 @@ class EscapeBoard extends trainer_card_1.TrainerCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof check_effects_1.CheckRetreatCostEffect && effect.player.active.tools.includes(this)) {
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             if (effect.cost.length === 0) {
@@ -30,7 +30,7 @@ class EscapeBoard extends trainer_card_1.TrainerCard {
             }
         }
         if (effect instanceof game_effects_1.RetreatEffect && effect.player.active.tools.includes(this)) {
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             effect.ignoreStatusConditions = true;

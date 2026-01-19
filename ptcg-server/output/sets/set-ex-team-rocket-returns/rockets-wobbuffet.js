@@ -35,7 +35,7 @@ class RocketsWobbuffet extends pokemon_card_1.PokemonCard {
         this.setNumber = '47';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const blocked = [];
             player.discard.cards.forEach((c, index) => {
@@ -58,8 +58,8 @@ class RocketsWobbuffet extends pokemon_card_1.PokemonCard {
                             cards.forEach((card, index) => {
                                 store.log(state, game_1.GameLog.LOG_PLAYER_RETURNS_TO_DECK_FROM_DISCARD, { name: player.name, card: card.name });
                             });
-                            prefabs_1.MOVE_CARDS(store, state, player.discard, player.deck, { cards });
-                            prefabs_1.SHUFFLE_DECK(store, state, player);
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.deck, { cards });
+                            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                         });
                     }
                 },
@@ -72,7 +72,7 @@ class RocketsWobbuffet extends pokemon_card_1.PokemonCard {
                             cards.forEach((card, index) => {
                                 store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                             });
-                            prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards });
                         });
                     }
                 }
@@ -82,7 +82,7 @@ class RocketsWobbuffet extends pokemon_card_1.PokemonCard {
                 option.action();
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const pokemonCard = opponent.active.getPokemonCard();

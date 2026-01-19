@@ -36,7 +36,7 @@ class Exeggutor extends pokemon_card_1.PokemonCard {
         this.fullName = 'Exeggutor HP';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             // Count Delta Pokemon in play
             const player = effect.player;
             let deltaCount = 0;
@@ -48,7 +48,7 @@ class Exeggutor extends pokemon_card_1.PokemonCard {
             // Modify damage based on count
             effect.damage += 10 * deltaCount;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const max = Math.min(2);
             return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { min: 1, max: max, allowCancel: false }), selected => {

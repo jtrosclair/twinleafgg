@@ -71,7 +71,7 @@ class Zoroark extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Mind Jack
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             let benched = 0;
             opponent.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {
@@ -82,7 +82,7 @@ class Zoroark extends game_1.PokemonCard {
             effect.damage = benched * 30;
         }
         // Foul Play
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const generator = useFoulPlay(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

@@ -21,7 +21,7 @@ class Eviolite extends trainer_card_1.TrainerCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.tools.includes(this)) {
             // Try to reduce ToolEffect, to check if something is blocking the tool from working
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             if (effect.target.tools.includes(this) && effect.target.isStage(card_types_1.Stage.BASIC)) {

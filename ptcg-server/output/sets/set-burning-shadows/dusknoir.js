@@ -36,7 +36,7 @@ class Dusknoir extends game_1.PokemonCard {
         this.DARK_INVITATION_MARKER = 'DARK_INVITATION_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const slots = opponent.bench.filter(b => b.cards.length === 0);
@@ -47,11 +47,11 @@ class Dusknoir extends game_1.PokemonCard {
             if (opponent.hand.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            if (prefabs_1.HAS_MARKER(this.DARK_INVITATION_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.DARK_INVITATION_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.ADD_MARKER(this.DARK_INVITATION_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.DARK_INVITATION_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             const min = Math.min(opponent.hand.cards.filter(card => card instanceof game_1.PokemonCard && card.stage === game_1.Stage.BASIC).length, 1);
             // We will discard this card after prompt confirmation
             effect.preventDefault = true;
@@ -62,7 +62,7 @@ class Dusknoir extends game_1.PokemonCard {
                     return;
                 }
                 cards.forEach((card, index) => {
-                    prefabs_1.MOVE_CARDS(store, state, opponent.hand, slots[index], { cards: [card], sourceCard: this });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, slots[index], { cards: [card], sourceCard: this });
                     slots[index].pokemonPlayedTurn = state.turn;
                     const damageEffect = new game_effects_1.EffectOfAbilityEffect(player, this.powers[0], this, slots[index]);
                     store.reduceEffect(state, damageEffect);
@@ -72,8 +72,8 @@ class Dusknoir extends game_1.PokemonCard {
                 });
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.DARK_INVITATION_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.DARK_INVITATION_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             effect.damage += (opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0) * 30);

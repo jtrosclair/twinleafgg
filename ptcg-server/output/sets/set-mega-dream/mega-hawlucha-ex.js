@@ -39,7 +39,7 @@ class MegaHawluchaex extends game_1.PokemonCard {
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.cards.includes(this)) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
             // Check if ability is blocked
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             // Check if damage would cause knockout
@@ -57,7 +57,7 @@ class MegaHawluchaex extends game_1.PokemonCard {
             }
         }
         // Somersault Dive attack
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const stadiumCard = game_1.StateUtils.getStadiumCard(state);
             if (stadiumCard !== undefined) {
                 // Add 140 damage if Stadium is in play

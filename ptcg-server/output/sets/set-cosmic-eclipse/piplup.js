@@ -31,7 +31,7 @@ class Piplup extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         var _a;
         // Bubble Hold attack
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             if (((_a = opponent.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.stage) === card_types_1.Stage.BASIC) {
                 opponent.active.marker.addMarker(this.BUBBLE_HOLD_MARKER, this);

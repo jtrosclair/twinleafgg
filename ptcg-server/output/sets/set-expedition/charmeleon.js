@@ -34,9 +34,9 @@ class Charmeleon extends pokemon_card_1.PokemonCard {
         this.fullName = 'Charmeleon EX';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            return prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 2, results => {
+            return (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 2, results => {
                 let heads = 0;
                 results.forEach(r => {
                     if (r)
@@ -45,8 +45,8 @@ class Charmeleon extends pokemon_card_1.PokemonCard {
                 effect.damage = 20 * heads;
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1, card_types_1.CardType.FIRE);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1, card_types_1.CardType.FIRE);
         }
         return state;
     }

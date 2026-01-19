@@ -13,7 +13,7 @@ export declare class FlappleV extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: CardType[];
     attacks: {
         name: string;

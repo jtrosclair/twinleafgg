@@ -30,16 +30,16 @@ class Pawmot extends game_1.PokemonCard {
         this.fullName = 'Pawmot SVI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const blocked = [];
             effect.player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
                 if (card !== this)
                     blocked.push(target.index);
             });
-            return prefabs_1.ATTACH_ENERGY_PROMPT(store, state, effect.player, game_1.PlayerType.BOTTOM_PLAYER, game_1.SlotType.DECK, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { superType: game_1.SuperType.ENERGY, energyType: game_1.EnergyType.BASIC, name: 'Lightning Energy' }, { min: 0, max: 1, allowCancel: false, blocked });
+            return (0, prefabs_1.ATTACH_ENERGY_PROMPT)(store, state, effect.player, game_1.PlayerType.BOTTOM_PLAYER, game_1.SlotType.DECK, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { superType: game_1.SuperType.ENERGY, energyType: game_1.EnergyType.BASIC, name: 'Lightning Energy' }, { min: 0, max: 1, allowCancel: false, blocked });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this))
-            prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON(store, state, effect, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this))
+            (0, prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON)(store, state, effect, this);
         return state;
     }
 }

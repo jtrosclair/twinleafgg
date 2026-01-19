@@ -40,7 +40,7 @@ class FlyiniumZAirSlash extends trainer_card_1.TrainerCard {
             const player = effect.player;
             const cardList = game_1.StateUtils.findCardList(state, this);
             cardList.marker.addMarker(this.FLYINIUM_Z_MARKER, this);
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             return state;
         }

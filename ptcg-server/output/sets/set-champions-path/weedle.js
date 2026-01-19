@@ -29,8 +29,8 @@ class Weedle extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Call for Family
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, effect.player, { superType: game_1.SuperType.POKEMON, stage: game_1.Stage.BASIC }, { min: 0, max: 1, allowCancel: true });
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, effect.player, { superType: game_1.SuperType.POKEMON, stage: game_1.Stage.BASIC }, { min: 0, max: 1, allowCancel: true });
         }
         return state;
     }

@@ -43,7 +43,7 @@ class Bouffalant extends game_1.PokemonCard {
             if (bouffalantCount < 2) {
                 return state;
             }
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const targetPokemon = effect.target.getPokemonCard();

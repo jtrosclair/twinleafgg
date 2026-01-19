@@ -41,9 +41,9 @@ class Plusle extends pokemon_card_1.PokemonCard {
         this.fullName = 'Plusle SW';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (!prefabs_1.HAS_MARKER('OPPONENT_KNOCKOUT_MARKER', player, this)) {
+            if (!(0, prefabs_1.HAS_MARKER)('OPPONENT_KNOCKOUT_MARKER', player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             if (player.active.cards[0] === this && player.active.specialConditions.length > 0) {
@@ -63,7 +63,7 @@ class Plusle extends pokemon_card_1.PokemonCard {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
             player.usedPlusCharge = true;
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const min = Math.min(basicEnergyCards, 2);
             return store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { min: min, max: min, allowCancel: false }), cards => {
@@ -93,7 +93,7 @@ class Plusle extends pokemon_card_1.PokemonCard {
             const cardList = game_1.StateUtils.findCardList(state, this);
             const owner = game_1.StateUtils.findOwner(state, cardList);
             if (owner === player) {
-                prefabs_1.ADD_MARKER('OPPONENT_KNOCKOUT_MARKER', player, this);
+                (0, prefabs_1.ADD_MARKER)('OPPONENT_KNOCKOUT_MARKER', player, this);
             }
             return state;
         }
@@ -102,11 +102,11 @@ class Plusle extends pokemon_card_1.PokemonCard {
             const cardList = game_1.StateUtils.findCardList(state, this);
             const owner = game_1.StateUtils.findOwner(state, cardList);
             if (owner === player) {
-                prefabs_1.REMOVE_MARKER('OPPONENT_KNOCKOUT_MARKER', player, this);
+                (0, prefabs_1.REMOVE_MARKER)('OPPONENT_KNOCKOUT_MARKER', player, this);
             }
             player.usedPlusCharge = false;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let isMinunInPlay = false;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {

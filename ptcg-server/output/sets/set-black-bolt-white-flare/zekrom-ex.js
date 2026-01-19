@@ -34,7 +34,7 @@ class Zekromex extends game_1.PokemonCard {
         this.fullName = 'Zekrom ex SV11B';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             const prizesTaken = 6 - opponent.getPrizeLeft();

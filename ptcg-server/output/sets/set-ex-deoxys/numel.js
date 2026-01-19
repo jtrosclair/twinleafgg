@@ -34,7 +34,7 @@ class Numel extends pokemon_card_1.PokemonCard {
         this.fullName = 'Numel DX';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.getPokemonCard() === this && !prefabs_1.IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
+        if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.getPokemonCard() === this && !(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, effect.player, this)) {
             if (effect.source.getPokemons().length > 1) {
                 effect.damage -= 20;
             }

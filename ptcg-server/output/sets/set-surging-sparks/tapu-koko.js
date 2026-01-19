@@ -33,12 +33,12 @@ class TapuKoko extends game_1.PokemonCard {
         this.fullName = 'Tapu Koko SSP';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this))
-            return prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND(store, state, effect.player, { cardType: L }, { min: 0, max: 2 });
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this))
+            return (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND)(store, state, effect.player, { cardType: L }, { min: 0, max: 2 });
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.GET_PLAYER_PRIZES(player).length > prefabs_1.GET_PLAYER_PRIZES(opponent).length)
+            if ((0, prefabs_1.GET_PLAYER_PRIZES)(player).length > (0, prefabs_1.GET_PLAYER_PRIZES)(opponent).length)
                 effect.damage += 90;
         }
         return state;

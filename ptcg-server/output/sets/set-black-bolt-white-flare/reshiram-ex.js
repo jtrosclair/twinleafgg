@@ -34,13 +34,13 @@ class Reshiramex extends game_1.PokemonCard {
         this.fullName = 'Reshiram ex SV11W';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = effect.opponent;
             const prizesTaken = 6 - opponent.getPrizeLeft();
             const additionalDamage = 50 * prizesTaken;
             // Apply additional damage based on prizes taken
             effect.damage += additionalDamage;
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1);
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1);
         }
         return state;
     }

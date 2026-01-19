@@ -44,7 +44,7 @@ class RayquazaAndDeoxysLegendTop extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // assemblin the avengers
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const slots = player.bench.filter(b => b.cards.length === 0);
             if (slots.length === 0) {
@@ -88,7 +88,7 @@ class RayquazaAndDeoxysLegendTop extends pokemon_card_1.PokemonCard {
             if (pokemonCard !== this) {
                 return state;
             }
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             if (effect.prizeCount > 0) {
@@ -97,13 +97,13 @@ class RayquazaAndDeoxysLegendTop extends pokemon_card_1.PokemonCard {
             }
         }
         // Ozone Buster
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, player.active);
             store.reduceEffect(state, checkProvidedEnergy);
             checkProvidedEnergy.energyMap.forEach(em => {
                 if (em.provides.includes(card_types_1.CardType.FIRE) || em.provides.includes(card_types_1.CardType.ANY)) {
-                    prefabs_1.MOVE_CARDS(store, state, player.active, player.discard, { cards: [em.card] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.active, player.discard, { cards: [em.card] });
                 }
             });
         }

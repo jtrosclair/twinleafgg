@@ -50,13 +50,13 @@ class Forretressex extends pokemon_card_1.PokemonCard {
                 transfers = transfers || [];
                 // cancelled by user
                 if (transfers.length === 0) {
-                    prefabs_1.SHUFFLE_DECK(store, state, player);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                     return state;
                 }
                 for (const transfer of transfers) {
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
                     player.deck.moveCardTo(transfer.card, target);
-                    prefabs_1.SHUFFLE_DECK(store, state, player);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                 }
                 player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
                     if (cardList.getPokemonCard() === this) {

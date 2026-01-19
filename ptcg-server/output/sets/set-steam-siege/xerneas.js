@@ -35,7 +35,7 @@ class Xerneas extends pokemon_card_1.PokemonCard {
         this.fullName = 'Xerneas STS';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const cardList = state_utils_1.StateUtils.findCardList(state, this);
             const benchIndex = player.bench.indexOf(cardList);
@@ -48,20 +48,20 @@ class Xerneas extends pokemon_card_1.PokemonCard {
             state = store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_TO_BENCH, player.deck, play_card_action_1.PlayerType.BOTTOM_PLAYER, [play_card_action_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Fairy Energy' }, { allowCancel: false, min, max, differentTargets: true }), transfers => {
                 transfers = transfers || [];
                 if (transfers.length === 0) {
-                    prefabs_1.SHUFFLE_DECK(store, state, player);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                     return;
                 }
                 for (const transfer of transfers) {
                     const target = state_utils_1.StateUtils.getTarget(state, player, transfer.to);
                     player.deck.moveCardTo(transfer.card, target);
                 }
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                 return state;
             });
         }
         // Rainbow Spear
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1);
         }
         return state;
     }

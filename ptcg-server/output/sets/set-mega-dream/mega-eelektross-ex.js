@@ -35,12 +35,12 @@ class MegaEelektrossex extends game_1.PokemonCard {
         this.fullName = 'Mega Eelektross ex M2a';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             // Split Bomb: 60 damage to 2 opponent's Pokemon
             // Don't apply Weakness and Resistance for Benched Pokemon
-            prefabs_1.THIS_ATTACK_DOES_X_DAMAGE_TO_X_OF_YOUR_OPPONENTS_POKEMON(60, effect, store, state, 2, 2, false, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH]);
+            (0, prefabs_1.THIS_ATTACK_DOES_X_DAMAGE_TO_X_OF_YOUR_OPPONENTS_POKEMON)(60, effect, store, state, 2, 2, false, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH]);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             // Disaster Shock: 190 damage, optionally discard 2 [L] Energy to Paralyze
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);

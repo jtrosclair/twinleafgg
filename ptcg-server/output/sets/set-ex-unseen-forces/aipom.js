@@ -34,8 +34,8 @@ class Aipom extends pokemon_card_1.PokemonCard {
         this.SNAPPY_MOVE_MARKER = 'SNAPPY_MOVE_MARKER';
     }
     reduceEffect(store, state, effect) {
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.SNAPPY_MOVE_MARKER, this);
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.SNAPPY_MOVE_MARKER, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const cardList = game_1.StateUtils.findCardList(state, this);
             // check if on player's Bench
@@ -43,7 +43,7 @@ class Aipom extends pokemon_card_1.PokemonCard {
             if (benchIndex === -1) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            if (prefabs_1.HAS_MARKER(this.SNAPPY_MOVE_MARKER, player)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.SNAPPY_MOVE_MARKER, player)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             const aipomSlot = player.bench[benchIndex];
@@ -64,18 +64,18 @@ class Aipom extends pokemon_card_1.PokemonCard {
             }
             // Move other cards to discard
             if (otherCards.length > 0) {
-                prefabs_1.MOVE_CARDS(store, state, aipomSlot, player.discard, { cards: otherCards });
+                (0, prefabs_1.MOVE_CARDS)(store, state, aipomSlot, player.discard, { cards: otherCards });
             }
             // Move Pokémon to bottom of deck
             if (pokemons.length > 0) {
-                prefabs_1.MOVE_CARDS(store, state, aipomSlot, player.deck, { cards: pokemons, toBottom: true });
+                (0, prefabs_1.MOVE_CARDS)(store, state, aipomSlot, player.deck, { cards: pokemons, toBottom: true });
             }
             aipomSlot.clearEffects();
-            prefabs_1.DRAW_CARDS(player, 1);
-            prefabs_1.ADD_MARKER(this.SNAPPY_MOVE_MARKER, player, this);
+            (0, prefabs_1.DRAW_CARDS)(player, 1);
+            (0, prefabs_1.ADD_MARKER)(this.SNAPPY_MOVE_MARKER, player, this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(10, effect, store, state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(10, effect, store, state);
         }
         return state;
     }

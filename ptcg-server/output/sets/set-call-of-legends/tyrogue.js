@@ -37,11 +37,11 @@ class Tyrogue extends pokemon_card_1.PokemonCard {
                 && effect.target.getPokemonCard() === this
                 && player.active.cards[0] === this
                 && player.active.specialConditions.includes(card_types_1.SpecialCondition.ASLEEP)
-                && !prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+                && !(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 effect.damage = 0;
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             effect.ignoreResistance = true;
             effect.ignoreWeakness = true;

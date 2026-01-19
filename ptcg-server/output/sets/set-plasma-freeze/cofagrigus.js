@@ -37,7 +37,7 @@ class Cofagrigus extends pokemon_card_1.PokemonCard {
         this.fullName = 'Cofagrigus PLF';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const maxAllowedDamage = [];

@@ -39,7 +39,7 @@ class SamiyasBuizel extends pokemon_card_1.PokemonCard {
             if (pokemonCard !== this) {
                 return state;
             }
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
@@ -50,8 +50,8 @@ class SamiyasBuizel extends pokemon_card_1.PokemonCard {
                 effect.cost = [];
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, (result) => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, (result) => {
                 if (result) {
                     const player = effect.player;
                     const opponent = effect.opponent;

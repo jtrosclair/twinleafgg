@@ -26,7 +26,7 @@ class Bianca extends trainer_card_1.TrainerCard {
             if (cardsToDraw === 0 || player.deck.cards.length === 0) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 6);
+            (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, 6);
         }
         return state;
     }

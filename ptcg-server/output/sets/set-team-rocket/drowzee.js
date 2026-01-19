@@ -38,28 +38,28 @@ class Drowzee extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
-            prefabs_1.REMOVE_MARKER(this.HYPNOSIS_MARKER, effect.player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.HYPNOSIS_MARKER, effect.player, this);
         }
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.HAS_MARKER(this.HYPNOSIS_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.HYPNOSIS_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.BLOCK_IF_ASLEEP_CONFUSED_PARALYZED(player, this);
-            prefabs_1.ADD_MARKER(this.HYPNOSIS_MARKER, player, this);
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            (0, prefabs_1.BLOCK_IF_ASLEEP_CONFUSED_PARALYZED)(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.HYPNOSIS_MARKER, player, this);
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (result) {
-                    prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, this);
+                    (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, opponent, this);
                 }
                 else {
-                    prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, this);
+                    (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, player, this);
                 }
             });
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP(store, state, effect);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP)(store, state, effect);
         }
         return state;
     }

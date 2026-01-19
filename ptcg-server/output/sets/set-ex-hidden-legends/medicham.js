@@ -34,10 +34,10 @@ class Medicham extends pokemon_card_1.PokemonCard {
         this.fullName = 'Medicham HL';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             effect.damage += effect.target.damage;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             effect.damage += effect.opponent.hand.cards.length * 10;
         }
         return state;

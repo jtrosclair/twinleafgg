@@ -41,43 +41,43 @@ let FriendRequest = FriendRequest_1 = class FriendRequest extends typeorm_1.Base
     }
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], FriendRequest.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], FriendRequest.prototype, "sender_id", void 0);
 __decorate([
-    typeorm_1.ManyToOne(() => user_1.User),
-    typeorm_1.JoinColumn({ name: 'sender_id' }),
+    (0, typeorm_1.ManyToOne)(() => user_1.User),
+    (0, typeorm_1.JoinColumn)({ name: 'sender_id' }),
     __metadata("design:type", user_1.User)
 ], FriendRequest.prototype, "sender", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], FriendRequest.prototype, "receiver_id", void 0);
 __decorate([
-    typeorm_1.ManyToOne(() => user_1.User),
-    typeorm_1.JoinColumn({ name: 'receiver_id' }),
+    (0, typeorm_1.ManyToOne)(() => user_1.User),
+    (0, typeorm_1.JoinColumn)({ name: 'receiver_id' }),
     __metadata("design:type", user_1.User)
 ], FriendRequest.prototype, "receiver", void 0);
 __decorate([
-    typeorm_1.Column({
+    (0, typeorm_1.Column)({
         type: 'varchar',
         default: FriendRequestStatus.PENDING
     }),
     __metadata("design:type", String)
 ], FriendRequest.prototype, "status", void 0);
 __decorate([
-    typeorm_1.CreateDateColumn(),
+    (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], FriendRequest.prototype, "created_at", void 0);
 __decorate([
-    typeorm_1.UpdateDateColumn(),
+    (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
 ], FriendRequest.prototype, "updated_at", void 0);
 FriendRequest = FriendRequest_1 = __decorate([
-    typeorm_1.Entity()
+    (0, typeorm_1.Entity)()
 ], FriendRequest);
 exports.FriendRequest = FriendRequest;

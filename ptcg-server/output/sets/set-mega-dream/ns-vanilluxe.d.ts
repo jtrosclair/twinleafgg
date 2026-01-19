@@ -11,7 +11,7 @@ export declare class NsVanilluxe extends PokemonCard {
     weakness: {
         type: CardType.METAL;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;

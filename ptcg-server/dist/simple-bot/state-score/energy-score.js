@@ -1,11 +1,14 @@
-import { CardType, EnergyCard, PlayerType, Energy } from '../../game';
-import { SimpleScore } from './score';
-export class EnergyScore extends SimpleScore {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EnergyScore = void 0;
+const game_1 = require("../../game");
+const score_1 = require("./score");
+class EnergyScore extends score_1.SimpleScore {
     getScore(state, playerId) {
         const player = this.getPlayer(state, playerId);
         const scores = this.options.scores.energy;
         let score = 0;
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, pokemon, target) => {
+        player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, pokemon, target) => {
             let missing = this.getMissingEnergies(cardList, pokemon.retreat);
             pokemon.attacks.forEach(a => {
                 const missing2 = this.getMissingEnergies(cardList, a.cost);
@@ -15,7 +18,7 @@ export class EnergyScore extends SimpleScore {
                 ? scores.active
                 : scores.bench;
             missing.forEach(p => {
-                score += p === CardType.ANY
+                score += p === game_1.CardType.ANY
                     ? scores.missingColorless * multipier
                     : scores.missingMatch * multipier;
             });
@@ -24,11 +27,11 @@ export class EnergyScore extends SimpleScore {
     }
     mergeMissing(missing1, missing2) {
         let any1 = 0;
-        missing1.forEach(c => { any1 += c === CardType.ANY ? 1 : 0; });
-        missing1 = missing1.filter(c => c !== CardType.ANY);
+        missing1.forEach(c => { any1 += c === game_1.CardType.ANY ? 1 : 0; });
+        missing1 = missing1.filter(c => c !== game_1.CardType.ANY);
         let any2 = 0;
-        missing2.forEach(c => { any2 += c === CardType.ANY ? 1 : 0; });
-        missing2 = missing2.filter(c => c !== CardType.ANY);
+        missing2.forEach(c => { any2 += c === game_1.CardType.ANY ? 1 : 0; });
+        missing2 = missing2.filter(c => c !== game_1.CardType.ANY);
         missing1.forEach(c => {
             const index = missing2.indexOf(c);
             if (index !== -1) {
@@ -43,7 +46,7 @@ export class EnergyScore extends SimpleScore {
         });
         const max = Math.max(any1, any2);
         for (let i = 0; i < max; i++) {
-            missing1.push(CardType.ANY);
+            missing1.push(game_1.CardType.ANY);
         }
         return missing1;
     }
@@ -53,7 +56,7 @@ export class EnergyScore extends SimpleScore {
         }
         const provided = [];
         cardList.cards.forEach(card => {
-            if (card instanceof EnergyCard) {
+            if (card instanceof game_1.EnergyCard) {
                 card.provides.forEach(energy => provided.push(energy));
             }
         });
@@ -62,15 +65,15 @@ export class EnergyScore extends SimpleScore {
         // First remove from array cards with specific energy types
         cost.forEach(costType => {
             switch (costType) {
-                case CardType.ANY:
-                case CardType.NONE:
+                case game_1.CardType.ANY:
+                case game_1.CardType.NONE:
                     break;
-                case CardType.COLORLESS:
+                case game_1.CardType.COLORLESS:
                     colorless += 1;
                     break;
                 default: {
                     if (typeof costType === 'string') {
-                        const energyType = Energy[costType];
+                        const energyType = game_1.Energy[costType];
                         if (energyType !== undefined) {
                             const index = provided.findIndex(energy => energy === energyType);
                             if (index !== -1) {
@@ -95,8 +98,9 @@ export class EnergyScore extends SimpleScore {
         });
         colorless -= provided.length;
         for (let i = 0; i < colorless; i++) {
-            missing.push(CardType.ANY);
+            missing.push(game_1.CardType.ANY);
         }
         return missing;
     }
 }
+exports.EnergyScore = EnergyScore;

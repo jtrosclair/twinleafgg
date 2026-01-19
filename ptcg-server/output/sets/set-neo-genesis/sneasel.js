@@ -34,9 +34,9 @@ class Sneasel extends pokemon_card_1.PokemonCard {
         this.fullName = 'Sneasel N1';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 3, results => {
+            (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 3, results => {
                 let heads = 0;
                 results.forEach(r => {
                     if (r)
@@ -45,13 +45,13 @@ class Sneasel extends pokemon_card_1.PokemonCard {
                 effect.damage = 10 * heads;
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             let monCount = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, p => {
                 monCount++;
             });
-            prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, monCount, results => {
+            (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, monCount, results => {
                 let heads = 0;
                 results.forEach(r => {
                     if (r)

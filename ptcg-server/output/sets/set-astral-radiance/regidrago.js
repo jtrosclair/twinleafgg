@@ -64,7 +64,7 @@ class Regidrago extends pokemon_card_1.PokemonCard {
                     cardList.addBoardEffect(card_types_1.BoardEffect.ABILITY_USED);
                 }
             });
-            prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 4);
+            (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, 4);
         }
         return state;
     }

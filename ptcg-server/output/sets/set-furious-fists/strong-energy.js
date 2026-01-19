@@ -49,7 +49,7 @@ class StrongEnergy extends energy_card_1.EnergyCard {
         if (effect instanceof check_effects_1.CheckTableStateEffect) {
             state.players.forEach(player => {
                 player.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, cardList => {
-                    if (!cardList.cards.includes(this) || prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, cardList)) {
+                    if (!cardList.cards.includes(this) || (0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, cardList)) {
                         return;
                     }
                     const checkPokemonType = new check_effects_1.CheckPokemonTypeEffect(cardList);
@@ -64,7 +64,7 @@ class StrongEnergy extends energy_card_1.EnergyCard {
         if (effect instanceof attack_effects_1.DealDamageEffect && effect.source.cards.includes(this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
-            if (effect.target !== opponent.active || prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.source)) {
+            if (effect.target !== opponent.active || (0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, effect.source)) {
                 return state;
             }
             effect.damage += 20;

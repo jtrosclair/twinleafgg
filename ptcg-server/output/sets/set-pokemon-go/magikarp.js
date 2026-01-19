@@ -37,21 +37,21 @@ class Magikarp extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Lively Grouping
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, { superType: card_types_1.SuperType.POKEMON, name: 'Magikarp' }, { min: 0, allowCancel: false }), selected => {
                 if (selected && selected.length > 0) {
                     player.deck.moveCardsTo(selected, player.hand);
-                    prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, effect.opponent, selected);
-                    prefabs_1.SHUFFLE_DECK(store, state, player);
+                    (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, effect.opponent, selected);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                 }
                 else {
-                    prefabs_1.SHUFFLE_DECK(store, state, player);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                 }
             });
         }
         // Raging Fin
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             let karpsInDiscard = 0;
             player.discard.cards.forEach(card => {

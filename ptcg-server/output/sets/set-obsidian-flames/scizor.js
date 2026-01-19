@@ -70,7 +70,7 @@ class Scizor extends pokemon_card_1.PokemonCard {
     hasActuallyUsableAbility(store, state, player, pokemon) {
         for (const power of pokemon.powers) {
             if (power.powerType === pokemon_types_1.PowerType.ABILITY) {
-                if (!prefabs_1.IS_ABILITY_BLOCKED(store, state, player, pokemon) || power.exemptFromAbilityLock || power.exemptFromInitialize || power.abilityLock) {
+                if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, pokemon) || power.exemptFromAbilityLock || power.exemptFromInitialize || power.abilityLock) {
                     return true;
                 }
             }

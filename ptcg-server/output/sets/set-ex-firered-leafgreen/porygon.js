@@ -31,11 +31,11 @@ class Porygon extends pokemon_card_1.PokemonCard {
         this.fullName = 'Porygon RG';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND(effect.player, 4);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(effect.player, 4);
         }
-        if (prefabs_1.AFTER_ATTACK(effect, 1, this)) {
-            prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
+            (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         return state;
     }

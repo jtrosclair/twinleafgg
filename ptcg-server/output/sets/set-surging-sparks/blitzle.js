@@ -29,7 +29,7 @@ class Blitzle extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof game_effects_1.AttackEffect && effect.attack == this.attacks[0])
-            prefabs_1.DRAW_CARDS(effect.player, 1);
+            (0, prefabs_1.DRAW_CARDS)(effect.player, 1);
         return state;
     }
 }

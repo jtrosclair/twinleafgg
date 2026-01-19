@@ -40,7 +40,7 @@ class NsSigilyph extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
             const player = effect.player;
             if (player.prizes.length === 6) {
-                state = check_effect_1.endGame(store, state, player.id);
+                state = (0, check_effect_1.endGame)(store, state, player.id);
                 return state;
             }
         }

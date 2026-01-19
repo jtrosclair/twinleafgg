@@ -35,8 +35,8 @@ class HolonScientist extends trainer_card_1.TrainerCard {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
             if (cards.length === 1) {
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard);
-                prefabs_1.DRAW_CARDS(player, opponent.hand.cards.length);
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard);
+                (0, prefabs_1.DRAW_CARDS)(player, opponent.hand.cards.length);
             }
             if (cards.length > 1) {
                 state = store.prompt(state, new game_1.ChooseCardsPrompt(effect.player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {}, { allowCancel: false, min: 1, max: 1 }), cards => {
@@ -48,12 +48,12 @@ class HolonScientist extends trainer_card_1.TrainerCard {
                     cards.forEach((card, index) => {
                         store.log(state, game_1.GameLog.LOG_PLAYER_DISCARDS_CARD_FROM_HAND, { name: player.name, card: card.name });
                     });
-                    prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, opponent.hand.cards.length);
+                    (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, opponent.hand.cards.length);
                 });
             }
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             effect.preventDefault = true;
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         return state;

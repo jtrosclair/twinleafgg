@@ -10,7 +10,7 @@ export declare class LilliesCutiefly extends PokemonCard {
     weakness: {
         type: CardType.METAL;
     }[];
-    retreat: never[];
+    retreat: any[];
     attacks: {
         name: string;
         cost: CardType.PSYCHIC[];

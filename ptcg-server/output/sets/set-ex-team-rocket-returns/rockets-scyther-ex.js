@@ -43,7 +43,7 @@ class RocketsScytherex extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Dual Armor
-        if (effect instanceof check_effects_1.CheckPokemonTypeEffect && effect.target.getPokemonCard() === this && !prefabs_1.IS_POKEBODY_BLOCKED(store, state, game_1.StateUtils.findOwner(state, effect.target), this)) {
+        if (effect instanceof check_effects_1.CheckPokemonTypeEffect && effect.target.getPokemonCard() === this && !(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, game_1.StateUtils.findOwner(state, effect.target), this)) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
                 if (card === this) {
@@ -58,16 +58,16 @@ class RocketsScytherex extends pokemon_card_1.PokemonCard {
             });
         }
         // Slashing Strike
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.BLOCK_EFFECT_IF_MARKER(this.ATTACK_USED_2_MARKER, effect.player, this);
-            prefabs_1.ADD_MARKER(this.ATTACK_USED_MARKER, effect.player, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.BLOCK_EFFECT_IF_MARKER)(this.ATTACK_USED_2_MARKER, effect.player, this);
+            (0, prefabs_1.ADD_MARKER)(this.ATTACK_USED_MARKER, effect.player, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.ATTACK_USED_2_MARKER, this);
-        prefabs_1.REPLACE_MARKER_AT_END_OF_TURN(effect, this.ATTACK_USED_MARKER, this.ATTACK_USED_2_MARKER, this);
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.CONFIRMATION_PROMPT(store, state, effect.player, result => {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_2_MARKER, this);
+        (0, prefabs_1.REPLACE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_MARKER, this.ATTACK_USED_2_MARKER, this);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, effect.player);
+                    (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, effect.player);
                 }
             }, game_1.GameMessage.WANT_TO_SWITCH_POKEMON);
         }

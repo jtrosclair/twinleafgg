@@ -38,8 +38,8 @@ class Gengar extends pokemon_card_1.PokemonCard {
         this.fullName = 'Gengar BKT';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_2.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED(store, state, effect);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_2.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED)(store, state, effect);
             const player = effect.player;
             const opponent = __1.StateUtils.getOpponent(state, player);
             opponent.forEachPokemon(__1.PlayerType.TOP_PLAYER, (cardList) => {
@@ -50,7 +50,7 @@ class Gengar extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = __1.StateUtils.getOpponent(state, player);
             if (opponent.active.damage >= 30) {

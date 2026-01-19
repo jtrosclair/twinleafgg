@@ -5,8 +5,8 @@ export declare class RadiantEternatus extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    weakness: never[];
-    resistance: never[];
+    weakness: any[];
+    resistance: any[];
     retreat: CardType[];
     powers: {
         name: string;

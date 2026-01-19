@@ -50,7 +50,7 @@ As long as this card is attached to a Pokémon, it provides [F] and [D] Energy b
             state.players.forEach(player => {
                 player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
                     var _a;
-                    if (!cardList.cards.includes(this) || prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, cardList)) {
+                    if (!cardList.cards.includes(this) || (0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, cardList)) {
                         return;
                     }
                     if (!((_a = cardList.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.tags.includes(card_types_1.CardTag.SINGLE_STRIKE))) {
@@ -63,7 +63,7 @@ As long as this card is attached to a Pokémon, it provides [F] and [D] Energy b
         if (effect instanceof attack_effects_1.DealDamageEffect && effect.source.cards.includes(this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
-            if (effect.target !== opponent.active || prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.source)) {
+            if (effect.target !== opponent.active || (0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, effect.source)) {
                 return state;
             }
             effect.damage += 20;

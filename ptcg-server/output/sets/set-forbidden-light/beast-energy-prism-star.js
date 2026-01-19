@@ -40,7 +40,7 @@ class BeastEnergy extends energy_card_1.EnergyCard {
             if (!((_b = effect.source.getPokemonCard()) === null || _b === void 0 ? void 0 : _b.tags.includes(card_types_1.CardTag.ULTRA_BEAST))) {
                 return state;
             }
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.source)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, effect.source)) {
                 return state;
             }
             effect.damage += 30;

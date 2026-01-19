@@ -47,15 +47,15 @@ class GardevoirLVX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Teleportation
-        if (prefabs_1.WAS_POWER_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 1, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.TELEPORTATION_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             if (player.active.getPokemonCard() === this) {
                 player.marker.addMarker(this.TELEPORTATION_MARKER, this);
-                prefabs_1.ABILITY_USED(player, this);
-                prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+                (0, prefabs_1.ABILITY_USED)(player, this);
+                (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
             }
             else {
                 let bench = new game_1.PokemonCardList;
@@ -65,7 +65,7 @@ class GardevoirLVX extends pokemon_card_1.PokemonCard {
                     }
                 });
                 player.marker.addMarker(this.TELEPORTATION_MARKER, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 player.switchPokemon(bench);
             }
         }
@@ -73,7 +73,7 @@ class GardevoirLVX extends pokemon_card_1.PokemonCard {
             effect.player.marker.removeMarker(this.TELEPORTATION_MARKER, this);
         }
         // Bring Down
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             let leastHP = 9999999999999999;

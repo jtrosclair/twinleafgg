@@ -46,7 +46,7 @@ class Huntail extends pokemon_card_1.PokemonCard {
             if (state.phase !== game_1.GamePhase.ATTACK) {
                 return state;
             }
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             if (((_a = effect.target.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.cardType) !== card_types_1.CardType.WATER) {
@@ -72,12 +72,12 @@ class Huntail extends pokemon_card_1.PokemonCard {
                 if (!player.marker.hasMarker(this.DIVER_CATCH_MARKER)) {
                     return;
                 }
-                prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+                (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                     if (result) {
                         const rescued = player.marker.markers
                             .filter(m => m.name === this.DIVER_CATCH_MARKER && m.source !== undefined)
                             .map(m => m.source);
-                        prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: rescued });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: rescued });
                         player.marker.removeMarker(this.DIVER_CATCH_MARKER);
                     }
                 });

@@ -37,10 +37,10 @@ class Slugma extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
-            prefabs_1.REMOVE_MARKER(this.ACTIVE_VOLCANO_MARKER, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.ACTIVE_VOLCANO_MARKER, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.ACTIVE_VOLCANO_MARKER, this);
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.ACTIVE_VOLCANO_MARKER, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const temp = new game_1.CardList();
             if (player.deck.cards.length === 0) {
@@ -59,8 +59,8 @@ class Slugma extends pokemon_card_1.PokemonCard {
             });
             // If no energy cards were drawn, move all cards to discard
             if (energyCardsDrawn.length == 0) {
-                prefabs_1.ADD_MARKER(this.ACTIVE_VOLCANO_MARKER, player, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ADD_MARKER)(this.ACTIVE_VOLCANO_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 temp.cards.slice(0, 1).forEach(card => {
                     store.prompt(state, [new game_1.ShowCardsPrompt(player.id, game_1.GameMessage.CARDS_SHOWED_BY_EFFECT, temp.cards)], () => {
                         temp.moveTo(player.discard);
@@ -69,8 +69,8 @@ class Slugma extends pokemon_card_1.PokemonCard {
             }
             else {
                 // Automatically attach energy to this Pokemon (Slugma)
-                prefabs_1.ADD_MARKER(this.ACTIVE_VOLCANO_MARKER, player, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ADD_MARKER)(this.ACTIVE_VOLCANO_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 const cardList = game_1.StateUtils.findCardList(state, this);
                 store.prompt(state, [new game_1.ShowCardsPrompt(player.id, game_1.GameMessage.CARDS_SHOWED_BY_EFFECT, temp.cards)], () => {
                     energyCardsDrawn.forEach(card => {

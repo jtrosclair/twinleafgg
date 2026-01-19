@@ -36,7 +36,7 @@ class Vulpix extends pokemon_card_1.PokemonCard {
         this.setNumber = '102';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // Prompt player to choose cards to discard 
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, { superType: card_types_1.SuperType.ENERGY }, { allowCancel: false, min: 0, max: 2 }), cards => {
@@ -50,15 +50,15 @@ class Vulpix extends pokemon_card_1.PokemonCard {
                 player.hand.moveCardsTo(cards, player.discard);
                 // Perform an action for each energy card discarded
                 cards.forEach(() => {
-                    prefabs_1.DRAW_CARDS(player, 2);
+                    (0, prefabs_1.DRAW_CARDS)(player, 2);
                 });
                 return state;
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, (result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, (result => {
                 if (result) {
-                    attack_effects_2.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED(store, state, effect);
+                    (0, attack_effects_2.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED)(store, state, effect);
                 }
             }));
         }

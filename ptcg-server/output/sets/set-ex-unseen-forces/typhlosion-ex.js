@@ -35,11 +35,11 @@ class Typhlosionex extends pokemon_card_1.PokemonCard {
         this.fullName = 'Typhlosion ex UF';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.JUST_EVOLVED(effect, this) && !prefabs_1.IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+        if ((0, prefabs_1.JUST_EVOLVED)(effect, this) && !(0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, effect.player, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const opponentBenched = opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
                     const blockedTo = [];
                     player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (list, card, target) => {
@@ -52,17 +52,17 @@ class Typhlosionex extends pokemon_card_1.PokemonCard {
                     });
                     store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.CHOOSE_ENERGY_FROM_DECK, player.deck, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH, game_1.SlotType.ACTIVE], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Fire Energy' }, { allowCancel: true, min: 0, max: opponentBenched, sameTarget: true, blockedTo: blockedTo }), transfers => {
                         transfers = transfers || [];
-                        prefabs_1.ABILITY_USED(player, this);
+                        (0, prefabs_1.ABILITY_USED)(player, this);
                         for (const transfer of transfers) {
                             const target = game_1.StateUtils.getTarget(state, player, transfer.to);
                             player.deck.moveCardTo(transfer.card, target);
                         }
-                        prefabs_1.SHUFFLE_DECK(store, state, player);
+                        (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                     });
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Discard energy from Typhlosion ex

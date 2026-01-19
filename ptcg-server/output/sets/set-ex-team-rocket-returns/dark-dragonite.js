@@ -44,12 +44,12 @@ class DarkDragonite extends pokemon_card_1.PokemonCard {
         this.fullName = 'Dark Dragonite TRR';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (prefabs_1.IS_POKEPOWER_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             const blockedMap = [];
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
                 const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, cardList);
@@ -82,7 +82,7 @@ class DarkDragonite extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             effect.damage = 30;
         }
         return state;

@@ -37,7 +37,7 @@ class Primeape extends pokemon_card_1.PokemonCard {
         this.regulationMark = 'E';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const stadiumCard = game_1.StateUtils.getStadiumCard(state);
             if (!stadiumCard) {
                 return state;
@@ -46,12 +46,12 @@ class Primeape extends pokemon_card_1.PokemonCard {
             const stadiumCardList = game_1.StateUtils.findCardList(state, stadiumCard);
             const owner = game_1.StateUtils.findOwner(state, stadiumCardList);
             if (owner !== effect.player) {
-                prefabs_1.DISCARD_A_STADIUM_CARD_IN_PLAY(state);
+                (0, prefabs_1.DISCARD_A_STADIUM_CARD_IN_PLAY)(state);
                 return state;
             }
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             //I check how many Pokémon are on the bench to know how much damage the attack will cause.
             const player = effect.player;
             const hasBenched = player.bench.some(b => b.cards.length > 0);
@@ -69,7 +69,7 @@ class Primeape extends pokemon_card_1.PokemonCard {
             });
             //The attack needs to be reset; otherwise, it will always cause 50 damage, even without any Pokémon with damage on the bench.
             effect.damage = 0;
-            prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE(effect, store, state, 50 * benchPokemonWithDamage);
+            (0, prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE)(effect, store, state, 50 * benchPokemonWithDamage);
         }
         return state;
     }

@@ -39,7 +39,7 @@ class Pikachu extends pokemon_card_1.PokemonCard {
             if (pokemonCard !== this) {
                 return state;
             }
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
@@ -48,8 +48,8 @@ class Pikachu extends pokemon_card_1.PokemonCard {
                 effect.cost = [];
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (!result) {
                     effect.damage = 0;
                 }

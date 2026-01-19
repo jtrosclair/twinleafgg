@@ -30,9 +30,9 @@ class Pidgey extends pokemon_card_1.PokemonCard {
         ];
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, opponent);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, opponent);
         }
         return state;
     }

@@ -45,7 +45,7 @@ class NaganadelGX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Beast Raid
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             let ultraBeastsInPlay = 0;
             effect.player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
                 var _a;
@@ -56,19 +56,19 @@ class NaganadelGX extends pokemon_card_1.PokemonCard {
             effect.damage = 20 * ultraBeastsInPlay;
         }
         // Jet Needle
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             effect.ignoreWeakness = true;
             effect.ignoreResistance = true;
         }
         // Stinger-GX
-        if (prefabs_1.WAS_ATTACK_USED(effect, 2, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             [player, opponent].forEach(player => {
-                prefabs_1.SHUFFLE_PRIZES_INTO_DECK(store, state, player);
-                prefabs_1.DRAW_CARDS_AS_FACE_DOWN_PRIZES(player, 3);
+                (0, prefabs_1.SHUFFLE_PRIZES_INTO_DECK)(store, state, player);
+                (0, prefabs_1.DRAW_CARDS_AS_FACE_DOWN_PRIZES)(player, 3);
             });
         }
         return state;

@@ -32,16 +32,16 @@ class Porygon extends pokemon_card_1.PokemonCard {
         this.fullName = 'Porygon AQ';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, (result) => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, (result) => {
                 if (result) {
                     store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: card_types_1.SuperType.TRAINER }, { min: 0, max: 1, allowCancel: false }), selected => {
                         if (selected) {
-                            prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, selected);
-                            prefabs_1.MOVE_CARDS(store, state, player.discard, player.deck, { cards: selected, sourceCard: this, sourceEffect: this.attacks[0] });
-                            prefabs_1.SHUFFLE_DECK(store, state, player);
+                            (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, selected);
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.deck, { cards: selected, sourceCard: this, sourceEffect: this.attacks[0] });
+                            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                         }
                     });
                 }

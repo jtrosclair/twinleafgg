@@ -27,8 +27,8 @@ class Mankey extends game_1.PokemonCard {
         this.fullName = 'Mankey DRI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (!result) {
                     effect.damage = 0;
                 }

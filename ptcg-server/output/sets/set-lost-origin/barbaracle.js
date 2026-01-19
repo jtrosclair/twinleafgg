@@ -49,7 +49,7 @@ class Barbaracle extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // Check if ability is blocked
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             // If the DrawPrizesEffect is triggering on the opponent's prize draw, override the destination.

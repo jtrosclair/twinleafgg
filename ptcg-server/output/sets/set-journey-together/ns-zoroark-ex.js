@@ -95,7 +95,7 @@ class NsZoroarkex extends pokemon_card_1.PokemonCard {
             }
             state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {}, { allowCancel: false, min: 1, max: 1 }), cards => {
                 cards = cards || [];
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 player.marker.addMarker(this.TRADE_MARKER, this);
                 player.hand.moveCardsTo(cards, player.discard);
                 player.deck.moveTo(player.hand, 2);

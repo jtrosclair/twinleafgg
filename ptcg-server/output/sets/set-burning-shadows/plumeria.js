@@ -50,7 +50,7 @@ function* playCard(next, store, state, self, effect) {
         next();
     });
     if (targets.length === 0) {
-        prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         return state;
     }
     const cardList = targets[0];
@@ -60,7 +60,7 @@ function* playCard(next, store, state, self, effect) {
             store.reduceEffect(state, supporterEffect);
         }
         catch (_a) {
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
     }
@@ -70,8 +70,8 @@ function* playCard(next, store, state, self, effect) {
         cards = selected;
         next();
     });
-    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
-    prefabs_1.MOVE_CARDS(store, state, target, opponent.discard, { cards, sourceCard: self });
+    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
+    (0, prefabs_1.MOVE_CARDS)(store, state, target, opponent.discard, { cards, sourceCard: self });
     return state;
 }
 class Plumeria extends trainer_card_1.TrainerCard {

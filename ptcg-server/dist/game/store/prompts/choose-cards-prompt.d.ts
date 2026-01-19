@@ -30,7 +30,7 @@ export interface ChooseCardsOptions {
     maxStage1: number | undefined;
     maxStage2: number | undefined;
 }
-export declare type FilterType = Partial<PokemonCard | TrainerCard | EnergyCard>;
+export type FilterType = Partial<PokemonCard | TrainerCard | EnergyCard>;
 export declare class ChooseCardsPrompt extends Prompt<Card[]> {
     message: GameMessage;
     cards: CardList;

@@ -45,7 +45,7 @@ class WonderEnergy extends energy_card_1.EnergyCard {
         if (effect instanceof check_effects_1.CheckTableStateEffect) {
             state.players.forEach(player => {
                 player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
-                    if (!cardList.cards.includes(this) || prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, cardList)) {
+                    if (!cardList.cards.includes(this) || (0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, cardList)) {
                         return;
                     }
                     const checkPokemonType = new check_effects_1.CheckPokemonTypeEffect(cardList);
@@ -59,7 +59,7 @@ class WonderEnergy extends energy_card_1.EnergyCard {
         // Prevent effects of attacks
         if (effect instanceof attack_effects_1.AbstractAttackEffect && effect.target.cards.includes(this)) {
             const sourceCard = effect.source.getPokemonCard();
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.opponent, this, effect.target)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.opponent, this, effect.target)) {
                 return state;
             }
             if (sourceCard) {

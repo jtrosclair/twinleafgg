@@ -32,9 +32,9 @@ class Buneary extends pokemon_card_1.PokemonCard {
         this.fullName = 'Buneary M2';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
         }
         return state;
     }

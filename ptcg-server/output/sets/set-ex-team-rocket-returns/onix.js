@@ -33,15 +33,15 @@ class Onix extends game_1.PokemonCard {
         this.BARRIER_ATTACK_MARKER = 'BARRIER_ATTACK_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (!result) {
                     effect.damage = 0;
                 }
             });
         }
         // Granite Head
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const addMarkerEffect = new attack_effects_1.AddMarkerEffect(effect, this.BARRIER_ATTACK_MARKER, this);
             return store.reduceEffect(state, addMarkerEffect);
         }

@@ -39,7 +39,7 @@ function* playCard(next, store, state, self, effect) {
         cards = selected || [];
         next();
     });
-    prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
+    (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
     player.discard.moveCardsTo(cards, player.hand);
     player.supporter.moveCardTo(effect.trainerCard, player.discard);
 }

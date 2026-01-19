@@ -19,7 +19,7 @@ class FriendBall extends trainer_card_1.TrainerCard {
         this.text = 'Choose 1 of your opponent\'s Pokémon. Search your deck for a Baby Pokémon, Basic Pokémon, or Evolution card of the same type (color), show it to your opponent, and put it into your hand. Shuffle your deck afterward.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             effect.preventDefault = true;
             store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_CARD_TO_HAND, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { allowCancel: false }), targets => {
@@ -40,8 +40,8 @@ class FriendBall extends trainer_card_1.TrainerCard {
                         blocked.push(index);
                     }
                 });
-                prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND(store, state, player, {}, { blocked, min: 0, max: 1 });
-                prefabs_1.MOVE_CARD_TO(state, effect.trainerCard, player.discard);
+                (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND)(store, state, player, {}, { blocked, min: 0, max: 1 });
+                (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
             });
         }
         return state;

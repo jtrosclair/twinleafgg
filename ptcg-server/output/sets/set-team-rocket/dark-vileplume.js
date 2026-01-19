@@ -43,7 +43,7 @@ class DarkVileplume extends game_1.PokemonCard {
             const opponent = game_1.StateUtils.getOpponent(state, player);
             let vileplumeInPlay = false;
             // Checking to see if ability is being blocked
-            if (prefabs_1.IS_POKEMON_POWER_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEMON_POWER_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             // Checks for Vileplume in play on Player's Turn
@@ -71,9 +71,9 @@ class DarkVileplume extends game_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            return prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 3, results => {
+            return (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 3, results => {
                 let heads = 0;
                 results.forEach(r => {
                     if (r)
@@ -81,7 +81,7 @@ class DarkVileplume extends game_1.PokemonCard {
                 });
                 effect.damage = 30 * heads;
                 if (heads >= 2) {
-                    prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, this);
+                    (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, player, this);
                 }
             });
         }

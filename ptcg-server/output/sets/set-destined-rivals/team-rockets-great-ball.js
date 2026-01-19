@@ -50,7 +50,7 @@ class TeamRocketsGreatBall extends trainer_card_1.TrainerCard {
                         cards = selectedCards || [];
                         // Operation canceled by the user
                         if (cards.length === 0) {
-                            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                             return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                                 player.deck.applyOrder(order);
                             });
@@ -59,11 +59,11 @@ class TeamRocketsGreatBall extends trainer_card_1.TrainerCard {
                             store.log(state, game_message_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                         });
                         if (cards.length > 0) {
-                            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                             state = store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => state);
                         }
                         cards.forEach(card => {
-                            prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards: [card], sourceCard: this });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: [card], sourceCard: this });
                         });
                         return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                             player.deck.applyOrder(order);
@@ -76,7 +76,7 @@ class TeamRocketsGreatBall extends trainer_card_1.TrainerCard {
                         cards = selectedCards || [];
                         // Operation canceled by the user
                         if (cards.length === 0) {
-                            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                             return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                                 player.deck.applyOrder(order);
                             });
@@ -85,11 +85,11 @@ class TeamRocketsGreatBall extends trainer_card_1.TrainerCard {
                             store.log(state, game_message_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                         });
                         if (cards.length > 0) {
-                            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                             state = store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => state);
                         }
                         cards.forEach(card => {
-                            prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards: [card], sourceCard: this });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: [card], sourceCard: this });
                         });
                         return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                             player.deck.applyOrder(order);

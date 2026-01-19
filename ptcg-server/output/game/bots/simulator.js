@@ -14,7 +14,7 @@ class Simulator {
         }
         this.botArbiter = new bot_arbiter_1.BotArbiter(botArbiterOptions);
         this.store = new store_1.Store(this);
-        this.store.state = utils_1.deepClone(state, [card_1.Card]);
+        this.store.state = (0, utils_1.deepClone)(state, [card_1.Card]);
     }
     clone() {
         return new Simulator(this.store.state);

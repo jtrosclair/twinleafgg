@@ -41,14 +41,14 @@ class Machoke extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.DealDamageEffect && effect.player.active.getPokemonCard() === this) {
             const player = effect.player;
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             if (player.active.specialConditions.includes(card_types_1.SpecialCondition.CONFUSED)) {
                 effect.damage += 50;
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             effect.damage = 20;
         }
         return state;

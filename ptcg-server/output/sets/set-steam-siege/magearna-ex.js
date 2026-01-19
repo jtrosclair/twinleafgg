@@ -39,7 +39,7 @@ class MagearnaEX extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.AbstractAttackEffect) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             let hasMagearnaInPlay = false;
@@ -71,19 +71,19 @@ class MagearnaEX extends pokemon_card_1.PokemonCard {
                 effect.preventDefault = true;
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.ADD_MARKER(this.SOUL_BLASER_MARKER, this, this);
-            prefabs_1.ADD_MARKER(this.SOUL_BLASER_MARKER, effect.player, this);
-            if (prefabs_1.HAS_MARKER(this.SOUL_BLASER_MARKER, this, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.ADD_MARKER)(this.SOUL_BLASER_MARKER, this, this);
+            (0, prefabs_1.ADD_MARKER)(this.SOUL_BLASER_MARKER, effect.player, this);
+            if ((0, prefabs_1.HAS_MARKER)(this.SOUL_BLASER_MARKER, this, this)) {
                 effect.damage = 60;
             }
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && prefabs_1.HAS_MARKER(this.SOUL_BLASER_MARKER, effect.player, this)) {
-            prefabs_1.REMOVE_MARKER(this.SOUL_BLASER_MARKER, effect.player, this);
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.SOUL_BLASER_MARKER, effect.player, this)) {
+            (0, prefabs_1.REMOVE_MARKER)(this.SOUL_BLASER_MARKER, effect.player, this);
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && !prefabs_1.HAS_MARKER(this.SOUL_BLASER_MARKER, effect.player, this)) {
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && !(0, prefabs_1.HAS_MARKER)(this.SOUL_BLASER_MARKER, effect.player, this)) {
             effect.player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-                prefabs_1.REMOVE_MARKER(this.SOUL_BLASER_MARKER, effect.player, card);
+                (0, prefabs_1.REMOVE_MARKER)(this.SOUL_BLASER_MARKER, effect.player, card);
             });
         }
         return state;

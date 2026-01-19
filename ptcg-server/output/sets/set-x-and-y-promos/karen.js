@@ -21,7 +21,7 @@ class Karen extends trainer_card_1.TrainerCard {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             for (const p of [effect.player, state_utils_1.StateUtils.getOpponent(state, effect.player)]) {
                 const discardedPokemon = p.discard.cards.filter(c => c.superType === card_types_1.SuperType.POKEMON);
-                prefabs_1.SHUFFLE_CARDS_INTO_DECK(store, state, p, discardedPokemon);
+                (0, prefabs_1.SHUFFLE_CARDS_INTO_DECK)(store, state, p, discardedPokemon);
             }
         }
         return state;

@@ -37,13 +37,13 @@ class Charizard extends game_1.PokemonCard {
         this.ROARING_RESEOLVE_MARKER = 'ROARING_RESEOLVE_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             //Once per turn
-            if (prefabs_1.HAS_MARKER(this.ROARING_RESEOLVE_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.ROARING_RESEOLVE_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.ABILITY_BLOCKED);
             }
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
@@ -78,7 +78,7 @@ class Charizard extends game_1.PokemonCard {
             });
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
             state = store.reduceEffect(state, checkProvidedEnergy);

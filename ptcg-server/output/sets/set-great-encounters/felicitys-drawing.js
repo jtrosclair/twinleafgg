@@ -18,7 +18,7 @@ class FelicitysDrawing extends trainer_card_1.TrainerCard {
         this.text = 'Discard up to 2 cards from your hand. If you discard 1 card, draw 3 cards. If you discard 2 cards, draw 4 cards.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const supporterTurn = player.supporterTurn;
             if (supporterTurn > 0) {
@@ -36,7 +36,7 @@ class FelicitysDrawing extends trainer_card_1.TrainerCard {
                 }
                 const drawCount = cards.length === 1 ? 3 : cards.length === 2 ? 4 : 0;
                 player.hand.moveCardsTo(cards, player.discard);
-                prefabs_1.DRAW_CARDS(player, drawCount);
+                (0, prefabs_1.DRAW_CARDS)(player, drawCount);
             });
             player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;

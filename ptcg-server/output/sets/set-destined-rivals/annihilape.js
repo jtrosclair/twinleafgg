@@ -36,7 +36,7 @@ class Annihilape extends game_1.PokemonCard {
     reduceEffect(store, state, effect) {
         // Vessel of Rage
         if (effect instanceof game_effects_1.AttackEffect && effect.source.cards.includes(this)) {
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             if (effect.source.damage >= 20) {
@@ -44,12 +44,12 @@ class Annihilape extends game_1.PokemonCard {
             }
         }
         // Impact Blow
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.BLOCK_EFFECT_IF_MARKER(this.ATTACK_USED_2_MARKER, effect.player, this);
-            prefabs_1.ADD_MARKER(this.ATTACK_USED_MARKER, effect.player, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.BLOCK_EFFECT_IF_MARKER)(this.ATTACK_USED_2_MARKER, effect.player, this);
+            (0, prefabs_1.ADD_MARKER)(this.ATTACK_USED_MARKER, effect.player, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.ATTACK_USED_2_MARKER, this);
-        prefabs_1.REPLACE_MARKER_AT_END_OF_TURN(effect, this.ATTACK_USED_MARKER, this.ATTACK_USED_2_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_2_MARKER, this);
+        (0, prefabs_1.REPLACE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_MARKER, this.ATTACK_USED_2_MARKER, this);
         return state;
     }
 }

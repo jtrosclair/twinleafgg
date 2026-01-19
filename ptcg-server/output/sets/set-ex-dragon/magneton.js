@@ -41,7 +41,7 @@ class Magneton extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Magnetic Field
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const energyInDiscard = player.discard.cards.filter(c => c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC).length;
@@ -58,7 +58,7 @@ class Magneton extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // One per turn only
-            if (prefabs_1.HAS_MARKER(this.MAGNETIC_FIELD_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.MAGNETIC_FIELD_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             // Cannot use if affected by special conditions
@@ -75,21 +75,21 @@ class Magneton extends pokemon_card_1.PokemonCard {
                 state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { min: 0, max: max, allowCancel: false }), selected => {
                     const cards = selected || [];
                     store.prompt(state, [new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards)], () => {
-                        prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: cards, sourceCard: this, sourceEffect: this.powers[0] });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: cards, sourceCard: this, sourceEffect: this.powers[0] });
                     });
                     cards.forEach(card => {
                         store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                     });
                     // Move the discarded card to the discard pile after energy cards are added to the hand
-                    prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: [cardToDiscard], sourceCard: this, sourceEffect: this.powers[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: [cardToDiscard], sourceCard: this, sourceEffect: this.powers[0] });
                 });
-                prefabs_1.ADD_MARKER(this.MAGNETIC_FIELD_MARKER, player, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ADD_MARKER)(this.MAGNETIC_FIELD_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 return state;
             });
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let energyCount = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
@@ -102,10 +102,10 @@ class Magneton extends pokemon_card_1.PokemonCard {
             effect.damage = energyCount * 10;
             return state;
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.MAGNETIC_FIELD_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.MAGNETIC_FIELD_MARKER, this);
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            prefabs_1.REMOVE_MARKER(this.MAGNETIC_FIELD_MARKER, player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.MAGNETIC_FIELD_MARKER, player, this);
         }
         return state;
     }

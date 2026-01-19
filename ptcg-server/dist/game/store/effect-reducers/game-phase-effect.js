@@ -1,39 +1,43 @@
-import { EndTurnEffect, BetweenTurnsEffect, BeginTurnEffect, DrewTopdeckEffect } from '../effects/game-phase-effects';
-import { GameError } from '../../game-error';
-import { GameMessage, GameLog } from '../../game-message';
-import { BoardEffect, SpecialCondition } from '../card/card-types';
-import { GamePhase, GameWinner } from '../state/state';
-import { checkState, endGame } from './check-effect';
-import { CoinFlipPrompt } from '../prompts/coin-flip-prompt';
-import { PlayerType } from '../actions/play-card-action';
-import { MarkerConstants } from '../markers/marker-constants';
-import { StateUtils } from '../state-utils';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.gamePhaseReducer = exports.initNextTurn = exports.betweenTurns = void 0;
+const game_phase_effects_1 = require("../effects/game-phase-effects");
+const game_error_1 = require("../../game-error");
+const game_message_1 = require("../../game-message");
+const card_types_1 = require("../card/card-types");
+const state_1 = require("../state/state");
+const check_effect_1 = require("./check-effect");
+const coin_flip_prompt_1 = require("../prompts/coin-flip-prompt");
+const play_card_action_1 = require("../actions/play-card-action");
+const marker_constants_1 = require("../markers/marker-constants");
+const state_utils_1 = require("../state-utils");
 function getActivePlayer(state) {
     return state.players[state.activePlayer];
 }
-export function betweenTurns(store, state, onComplete) {
-    if (state.phase === GamePhase.PLAYER_TURN || state.phase === GamePhase.ATTACK) {
-        state.phase = GamePhase.BETWEEN_TURNS;
+function betweenTurns(store, state, onComplete) {
+    if (state.phase === state_1.GamePhase.PLAYER_TURN || state.phase === state_1.GamePhase.ATTACK) {
+        state.phase = state_1.GamePhase.BETWEEN_TURNS;
     }
     for (const player of state.players) {
-        store.reduceEffect(state, new BetweenTurnsEffect(player));
+        store.reduceEffect(state, new game_phase_effects_1.BetweenTurnsEffect(player));
     }
     if (store.hasPrompts()) {
         return store.waitPrompt(state, () => {
-            checkState(store, state, () => onComplete());
+            (0, check_effect_1.checkState)(store, state, () => onComplete());
         });
     }
-    return checkState(store, state, () => onComplete());
+    return (0, check_effect_1.checkState)(store, state, () => onComplete());
 }
-export function initNextTurn(store, state) {
-    if ([GamePhase.SETUP, GamePhase.BETWEEN_TURNS].indexOf(state.phase) === -1) {
+exports.betweenTurns = betweenTurns;
+function initNextTurn(store, state) {
+    if ([state_1.GamePhase.SETUP, state_1.GamePhase.BETWEEN_TURNS].indexOf(state.phase) === -1) {
         return state;
     }
     let player = getActivePlayer(state);
-    if (state.phase === GamePhase.SETUP) {
-        state.phase = GamePhase.PLAYER_TURN;
+    if (state.phase === state_1.GamePhase.SETUP) {
+        state.phase = state_1.GamePhase.PLAYER_TURN;
     }
-    if (state.phase === GamePhase.BETWEEN_TURNS) {
+    if (state.phase === state_1.GamePhase.BETWEEN_TURNS) {
         if (player.usedTurnSkip) {
             // eslint-disable-next-line no-self-assign
             state.activePlayer = state.activePlayer;
@@ -41,11 +45,11 @@ export function initNextTurn(store, state) {
         else {
             state.activePlayer = state.activePlayer ? 0 : 1;
         }
-        state.phase = GamePhase.PLAYER_TURN;
+        state.phase = state_1.GamePhase.PLAYER_TURN;
         player = getActivePlayer(state);
     }
     state.turn++;
-    store.log(state, GameLog.LOG_TURN, { turn: state.turn });
+    store.log(state, game_message_1.GameLog.LOG_TURN, { turn: state.turn });
     // Clear movement tracking for the new turn
     player.movedToActiveThisTurn = [];
     // Skip draw card on first turn
@@ -53,15 +57,15 @@ export function initNextTurn(store, state) {
         return state;
     }
     // Draw card at the beginning
-    store.log(state, GameLog.LOG_PLAYER_DRAWS_CARD, { name: player.name });
+    store.log(state, game_message_1.GameLog.LOG_PLAYER_DRAWS_CARD, { name: player.name });
     if (player.deck.cards.length === 0) {
-        store.log(state, GameLog.LOG_PLAYER_NO_CARDS_IN_DECK, { name: player.name });
-        const winner = state.activePlayer ? GameWinner.PLAYER_1 : GameWinner.PLAYER_2;
-        state = endGame(store, state, winner);
+        store.log(state, game_message_1.GameLog.LOG_PLAYER_NO_CARDS_IN_DECK, { name: player.name });
+        const winner = state.activePlayer ? state_1.GameWinner.PLAYER_1 : state_1.GameWinner.PLAYER_2;
+        state = (0, check_effect_1.endGame)(store, state, winner);
         return state;
     }
     try {
-        const beginTurn = new BeginTurnEffect(player);
+        const beginTurn = new game_phase_effects_1.BeginTurnEffect(player);
         store.reduceEffect(state, beginTurn);
     }
     catch (_a) {
@@ -71,7 +75,7 @@ export function initNextTurn(store, state) {
     // Check the drawn card
     const drawnCard = player.hand.cards[player.hand.cards.length - 1];
     try {
-        const drewTopdeck = new DrewTopdeckEffect(player, drawnCard);
+        const drewTopdeck = new game_phase_effects_1.DrewTopdeckEffect(player, drawnCard);
         store.reduceEffect(state, drewTopdeck);
     }
     catch (_b) {
@@ -79,15 +83,16 @@ export function initNextTurn(store, state) {
     }
     return state;
 }
+exports.initNextTurn = initNextTurn;
 function startNextTurn(store, state) {
     const player = state.players[state.activePlayer];
-    store.log(state, GameLog.LOG_PLAYER_ENDS_TURN, { name: player.name });
+    store.log(state, game_message_1.GameLog.LOG_PLAYER_ENDS_TURN, { name: player.name });
     // Remove Paralyzed at the end of the turn
-    player.active.removeSpecialCondition(SpecialCondition.PARALYZED);
+    player.active.removeSpecialCondition(card_types_1.SpecialCondition.PARALYZED);
     // Move supporter cards to discard
     player.supporter.moveTo(player.discard);
     return betweenTurns(store, state, () => {
-        if (state.phase !== GamePhase.FINISHED) {
+        if (state.phase !== state_1.GamePhase.FINISHED) {
             return initNextTurn(store, state);
         }
     });
@@ -97,10 +102,10 @@ function handleSpecialConditions(store, state, effect) {
     for (const sp of player.active.specialConditions) {
         const flipsForSleep = [];
         switch (sp) {
-            case SpecialCondition.POISONED:
+            case card_types_1.SpecialCondition.POISONED:
                 player.active.damage += effect.poisonDamage;
                 break;
-            case SpecialCondition.BURNED:
+            case card_types_1.SpecialCondition.BURNED:
                 player.active.damage += effect.burnDamage;
                 if (effect.burnFlipResult === true) {
                     break;
@@ -109,59 +114,59 @@ function handleSpecialConditions(store, state, effect) {
                     player.active.damage += effect.burnDamage;
                     break;
                 }
-                store.prompt(state, new CoinFlipPrompt(player.id, GameMessage.FLIP_BURNED), result => {
+                store.prompt(state, new coin_flip_prompt_1.CoinFlipPrompt(player.id, game_message_1.GameMessage.FLIP_BURNED), result => {
                     if (result === true) {
-                        player.active.removeSpecialCondition(SpecialCondition.BURNED);
+                        player.active.removeSpecialCondition(card_types_1.SpecialCondition.BURNED);
                     }
                 });
                 break;
-            case SpecialCondition.ASLEEP:
+            case card_types_1.SpecialCondition.ASLEEP:
                 if (effect.asleepFlipResult === true) {
-                    player.active.removeSpecialCondition(SpecialCondition.ASLEEP);
+                    player.active.removeSpecialCondition(card_types_1.SpecialCondition.ASLEEP);
                     break;
                 }
                 if (effect.asleepFlipResult === false) {
                     break;
                 }
                 for (let i = 0; i < effect.player.active.sleepFlips; i++) {
-                    store.log(state, GameLog.LOG_FLIP_ASLEEP, { name: player.name });
-                    flipsForSleep.push(new CoinFlipPrompt(player.id, GameMessage.FLIP_ASLEEP));
+                    store.log(state, game_message_1.GameLog.LOG_FLIP_ASLEEP, { name: player.name });
+                    flipsForSleep.push(new coin_flip_prompt_1.CoinFlipPrompt(player.id, game_message_1.GameMessage.FLIP_ASLEEP));
                 }
                 if (flipsForSleep.length > 0) {
                     store.prompt(state, flipsForSleep, results => {
                         const wakesUp = Array.isArray(results) ? results.every(r => r) : results;
                         if (wakesUp) {
-                            player.active.removeSpecialCondition(SpecialCondition.ASLEEP);
+                            player.active.removeSpecialCondition(card_types_1.SpecialCondition.ASLEEP);
                         }
                     });
                 }
                 else {
-                    player.active.removeSpecialCondition(SpecialCondition.ASLEEP);
+                    player.active.removeSpecialCondition(card_types_1.SpecialCondition.ASLEEP);
                 }
                 break;
         }
     }
 }
-export function gamePhaseReducer(store, state, effect) {
-    if (effect instanceof EndTurnEffect) {
+function gamePhaseReducer(store, state, effect) {
+    if (effect instanceof game_phase_effects_1.EndTurnEffect) {
         const player = state.players[state.activePlayer];
         player.canEvolve = false;
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-            cardList.removeSpecialCondition(SpecialCondition.ABILITY_USED);
-            cardList.removeBoardEffect(BoardEffect.ABILITY_USED);
+        player.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
+            cardList.removeSpecialCondition(card_types_1.SpecialCondition.ABILITY_USED);
+            cardList.removeBoardEffect(card_types_1.BoardEffect.ABILITY_USED);
             if (card.damageTakenLastTurn !== undefined) {
                 card.damageTakenLastTurn = 0;
             }
         });
         effect.player.marker.removeMarker(effect.player.DAMAGE_DEALT_MARKER);
-        effect.player.marker.removeMarker(MarkerConstants.REVENGE_MARKER);
+        effect.player.marker.removeMarker(marker_constants_1.MarkerConstants.REVENGE_MARKER);
         // Clear damage reduction effects on opponent's Pokémon when their turn ends
-        const opponent = StateUtils.getOpponent(state, player);
-        opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList) => {
+        const opponent = state_utils_1.StateUtils.getOpponent(state, player);
+        opponent.forEachPokemon(play_card_action_1.PlayerType.TOP_PLAYER, (cardList) => {
             cardList.damageReductionNextTurn = 0;
         });
         // Handle "cannot attack next turn" restrictions with two-stage cleanup
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
+        player.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
             // First, clear active restrictions (they blocked this turn, now clear them)
             if (cardList.cannotAttackNextTurn) {
                 cardList.cannotAttackNextTurn = false;
@@ -185,18 +190,19 @@ export function gamePhaseReducer(store, state, effect) {
         player.prizesTakenLastTurn = player.prizesTakenThisTurn;
         player.prizesTakenThisTurn = 0;
         if (player === undefined) {
-            throw new GameError(GameMessage.NOT_YOUR_TURN);
+            throw new game_error_1.GameError(game_message_1.GameMessage.NOT_YOUR_TURN);
         }
-        state = checkState(store, state, () => {
-            if (state.phase === GamePhase.FINISHED) {
+        state = (0, check_effect_1.checkState)(store, state, () => {
+            if (state.phase === state_1.GamePhase.FINISHED) {
                 return;
             }
             return startNextTurn(store, state);
         });
         return state;
     }
-    if (effect instanceof BetweenTurnsEffect) {
+    if (effect instanceof game_phase_effects_1.BetweenTurnsEffect) {
         handleSpecialConditions(store, state, effect);
     }
     return state;
 }
+exports.gamePhaseReducer = gamePhaseReducer;

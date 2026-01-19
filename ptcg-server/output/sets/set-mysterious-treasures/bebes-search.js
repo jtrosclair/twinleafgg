@@ -18,7 +18,7 @@ class BebesSearch extends trainer_card_1.TrainerCard {
         this.text = 'Choose a card from your hand and put it on top of your deck. Search your deck for a Pokémon, show it to your opponent, and put it into your hand. Shuffle your deck afterward. (If this is the only card in your hand, you can\'t play this card.)';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const supporterTurn = player.supporterTurn;
             if (supporterTurn > 0) {
@@ -35,7 +35,7 @@ class BebesSearch extends trainer_card_1.TrainerCard {
                     return;
                 }
                 player.hand.moveCardsTo(cards, player.deck);
-                prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND(store, state, player, {}, { min: 0, max: 1 });
+                (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND)(store, state, player, {}, { min: 0, max: 1 });
             });
             player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;

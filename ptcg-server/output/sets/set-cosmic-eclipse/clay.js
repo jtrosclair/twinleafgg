@@ -35,7 +35,7 @@ class Clay extends trainer_card_1.TrainerCard {
             store.reduceEffect(state, discardEffect);
             if (discardEffect.preventDefault) {
                 // If prevented, just discard the card and return
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return state;
             }
             // Move all cards to discard
@@ -44,8 +44,8 @@ class Clay extends trainer_card_1.TrainerCard {
                 store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
             });
             // Move item cards to hand
-            prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: itemCards, sourceCard: this });
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: itemCards, sourceCard: this });
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         return state;

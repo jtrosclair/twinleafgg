@@ -34,10 +34,10 @@ class Trapinch extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Smithereen Smash
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (result) {
                     store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, opponent.active, { superType: card_types_1.SuperType.ENERGY }, { min: 1, max: 1, allowCancel: false }), selected => {
                         const card = selected[0];

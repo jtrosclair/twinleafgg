@@ -37,17 +37,17 @@ class CynthiasFeelings extends trainer_card_1.TrainerCard {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;
             let cardsToDraw = 4;
-            if (prefabs_1.HAS_MARKER(this.FEELINGS_MARKER, player, this))
+            if ((0, prefabs_1.HAS_MARKER)(this.FEELINGS_MARKER, player, this))
                 cardsToDraw = 8;
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             // We will discard this card after prompt confirmation
             effect.preventDefault = true;
-            prefabs_1.MOVE_CARDS(store, state, player.hand, player.deck, { cards: player.hand.cards.filter(c => c !== this) });
-            prefabs_1.SHUFFLE_DECK(store, state, player);
-            prefabs_1.DRAW_CARDS(player, cardsToDraw);
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck, { cards: player.hand.cards.filter(c => c !== this) });
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
+            (0, prefabs_1.DRAW_CARDS)(player, cardsToDraw);
             player.supporter.moveCardTo(this, player.discard);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.FEELINGS_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.FEELINGS_MARKER, this);
         return state;
     }
 }

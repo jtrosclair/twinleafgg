@@ -34,19 +34,19 @@ class Magneton extends pokemon_card_1.PokemonCard {
         this.fullName = 'Magneton CEC';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             let cards = [];
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, { superType: card_types_1.SuperType.TRAINER, trainerType: card_types_1.TrainerType.SUPPORTER }, { min: 0, max: 3, allowCancel: true }), selectedCards => {
                 cards = selectedCards || [];
                 // Operation canceled by the user
                 if (cards.length === 0) {
-                    prefabs_1.SHUFFLE_DECK(store, state, player);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                     player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
                         if (cardList.getPokemonCard() === this) {
                             cardList.damage += 999;
@@ -55,13 +55,13 @@ class Magneton extends pokemon_card_1.PokemonCard {
                     return state;
                 }
                 cards.forEach((card, index) => {
-                    prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards: [card], sourceCard: this, sourceEffect: this.powers[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: [card], sourceCard: this, sourceEffect: this.powers[0] });
                 });
                 cards.forEach((card, index) => {
                     store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                 });
-                prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                 player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
                     if (cardList.getPokemonCard() === this) {
                         cardList.damage += 999;

@@ -5,7 +5,7 @@ export declare class Dreepy extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    weakness: never[];
+    weakness: any[];
     retreat: CardType[];
     attacks: {
         name: string;

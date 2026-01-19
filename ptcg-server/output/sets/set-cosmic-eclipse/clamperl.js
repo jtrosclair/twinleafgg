@@ -30,9 +30,9 @@ class Clamperl extends pokemon_card_1.PokemonCard {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
             const cardList = game_1.StateUtils.findCardList(state, this);
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this))
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this))
                 return state;
-            prefabs_1.CAN_EVOLVE_ON_FIRST_TURN_GOING_SECOND(state, player, cardList);
+            (0, prefabs_1.CAN_EVOLVE_ON_FIRST_TURN_GOING_SECOND)(state, player, cardList);
         }
         return state;
     }

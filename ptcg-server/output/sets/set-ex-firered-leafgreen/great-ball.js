@@ -18,7 +18,7 @@ class GreatBall extends trainer_card_1.TrainerCard {
         this.text = 'Search your deck for a Basic Pokémon (excluding Pokémon-ex) and put it onto your Bench. Shuffle your deck afterward.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             effect.preventDefault = true;
@@ -28,8 +28,8 @@ class GreatBall extends trainer_card_1.TrainerCard {
                     blocked.push(index);
                 }
             });
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player, { stage: card_types_1.Stage.BASIC }, { min: 0, max: 1, blocked });
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, player, { stage: card_types_1.Stage.BASIC }, { min: 0, max: 1, blocked });
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         return state;

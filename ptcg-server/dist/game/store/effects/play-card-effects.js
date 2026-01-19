@@ -1,5 +1,8 @@
-import { Stage } from '../card/card-types';
-export var PlayCardEffects;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PlayPokemonFromDeckEffect = exports.TrainerTargetEffect = exports.DiscardToHandEffect = exports.TrainerToDeckEffect = exports.CoinFlipEffect = exports.SupporterEffect = exports.ToolEffect = exports.EnergyEffect = exports.TrainerEffect = exports.PlayItemEffect = exports.AttachPokemonToolEffect = exports.PlayStadiumEffect = exports.PlaySupporterEffect = exports.PlayPokemonEffect = exports.AttachEnergyEffect = exports.PlayCardEffects = void 0;
+const card_types_1 = require("../card/card-types");
+var PlayCardEffects;
 (function (PlayCardEffects) {
     PlayCardEffects["ATTACH_ENERGY_EFFECT"] = "ATTACH_ENERGY_EFFECT";
     PlayCardEffects["PLAY_POKEMON_EFFECT"] = "PLAY_POKEMON_EFFECT";
@@ -16,8 +19,8 @@ export var PlayCardEffects;
     PlayCardEffects["TRAINER_CARD_TO_DECK_EFFECT"] = "TRAINER_CARD_TO_DECK_EFFECT";
     PlayCardEffects["DISCARD_TO_HAND_EFFECT"] = "DISCARD_TO_HAND_EFFECT";
     PlayCardEffects["TRAINER_TARGET_EFFECT"] = "TRAINER_TARGET_EFFECT";
-})(PlayCardEffects || (PlayCardEffects = {}));
-export class AttachEnergyEffect {
+})(PlayCardEffects = exports.PlayCardEffects || (exports.PlayCardEffects = {}));
+class AttachEnergyEffect {
     constructor(player, energyCard, target) {
         this.type = PlayCardEffects.ATTACH_ENERGY_EFFECT;
         this.preventDefault = false;
@@ -26,7 +29,8 @@ export class AttachEnergyEffect {
         this.target = target;
     }
 }
-export class PlayPokemonEffect {
+exports.AttachEnergyEffect = AttachEnergyEffect;
+class PlayPokemonEffect {
     constructor(player, pokemonCard, target, slot, index) {
         this.type = PlayCardEffects.PLAY_POKEMON_EFFECT;
         this.preventDefault = false;
@@ -35,12 +39,13 @@ export class PlayPokemonEffect {
         this.target = target;
         this.slot = slot;
         this.index = index;
-        if (pokemonCard.stage === Stage.BASIC) {
+        if (pokemonCard.stage === card_types_1.Stage.BASIC) {
             this.target.showBasicAnimation = true;
         }
     }
 }
-export class PlaySupporterEffect {
+exports.PlayPokemonEffect = PlayPokemonEffect;
+class PlaySupporterEffect {
     constructor(player, trainerCard, target) {
         this.type = PlayCardEffects.PLAY_SUPPORTER_EFFECT;
         this.preventDefault = false;
@@ -49,7 +54,8 @@ export class PlaySupporterEffect {
         this.target = target;
     }
 }
-export class PlayStadiumEffect {
+exports.PlaySupporterEffect = PlaySupporterEffect;
+class PlayStadiumEffect {
     constructor(player, trainerCard) {
         this.type = PlayCardEffects.PLAY_STADIUM_EFFECT;
         this.preventDefault = false;
@@ -57,7 +63,8 @@ export class PlayStadiumEffect {
         this.trainerCard = trainerCard;
     }
 }
-export class AttachPokemonToolEffect {
+exports.PlayStadiumEffect = PlayStadiumEffect;
+class AttachPokemonToolEffect {
     constructor(player, trainerCard, target) {
         this.type = PlayCardEffects.PLAY_POKEMON_TOOL_EFFECT;
         this.preventDefault = false;
@@ -66,7 +73,8 @@ export class AttachPokemonToolEffect {
         this.target = target;
     }
 }
-export class PlayItemEffect {
+exports.AttachPokemonToolEffect = AttachPokemonToolEffect;
+class PlayItemEffect {
     constructor(player, trainerCard, target) {
         this.type = PlayCardEffects.PLAY_ITEM_EFFECT;
         this.preventDefault = false;
@@ -75,7 +83,8 @@ export class PlayItemEffect {
         this.target = target;
     }
 }
-export class TrainerEffect {
+exports.PlayItemEffect = PlayItemEffect;
+class TrainerEffect {
     constructor(player, trainerCard, target) {
         this.type = PlayCardEffects.TRAINER_EFFECT;
         this.preventDefault = false;
@@ -84,7 +93,8 @@ export class TrainerEffect {
         this.target = target;
     }
 }
-export class EnergyEffect {
+exports.TrainerEffect = TrainerEffect;
+class EnergyEffect {
     constructor(player, card) {
         this.type = PlayCardEffects.ENERGY_EFFECT;
         this.preventDefault = false;
@@ -92,7 +102,8 @@ export class EnergyEffect {
         this.card = card;
     }
 }
-export class ToolEffect {
+exports.EnergyEffect = EnergyEffect;
+class ToolEffect {
     constructor(player, card) {
         this.type = PlayCardEffects.TOOL_EFFECT;
         this.preventDefault = false;
@@ -100,7 +111,8 @@ export class ToolEffect {
         this.card = card;
     }
 }
-export class SupporterEffect {
+exports.ToolEffect = ToolEffect;
+class SupporterEffect {
     constructor(player, card) {
         this.type = PlayCardEffects.SUPPORTER_EFFECT;
         this.preventDefault = false;
@@ -108,7 +120,8 @@ export class SupporterEffect {
         this.card = card;
     }
 }
-export class CoinFlipEffect {
+exports.SupporterEffect = SupporterEffect;
+class CoinFlipEffect {
     constructor(player, callback) {
         this.type = PlayCardEffects.COIN_FLIP_EFFECT;
         this.preventDefault = false;
@@ -116,7 +129,8 @@ export class CoinFlipEffect {
         this.callback = callback;
     }
 }
-export class TrainerToDeckEffect {
+exports.CoinFlipEffect = CoinFlipEffect;
+class TrainerToDeckEffect {
     constructor(player, card) {
         this.type = PlayCardEffects.TRAINER_CARD_TO_DECK_EFFECT;
         this.preventDefault = false;
@@ -124,7 +138,8 @@ export class TrainerToDeckEffect {
         this.card = card;
     }
 }
-export class DiscardToHandEffect {
+exports.TrainerToDeckEffect = TrainerToDeckEffect;
+class DiscardToHandEffect {
     constructor(player, card) {
         this.type = PlayCardEffects.DISCARD_TO_HAND_EFFECT;
         this.preventDefault = false;
@@ -132,7 +147,8 @@ export class DiscardToHandEffect {
         this.card = card;
     }
 }
-export class TrainerTargetEffect {
+exports.DiscardToHandEffect = DiscardToHandEffect;
+class TrainerTargetEffect {
     constructor(player, trainerCard, target) {
         this.type = PlayCardEffects.TRAINER_TARGET_EFFECT;
         this.preventDefault = false;
@@ -141,7 +157,8 @@ export class TrainerTargetEffect {
         this.target = target;
     }
 }
-export class PlayPokemonFromDeckEffect {
+exports.TrainerTargetEffect = TrainerTargetEffect;
+class PlayPokemonFromDeckEffect {
     constructor(player, pokemonCard, target, slot, index) {
         this.type = PlayCardEffects.PLAY_POKEMON_FROM_DECK_EFFECT;
         this.preventDefault = false;
@@ -150,8 +167,9 @@ export class PlayPokemonFromDeckEffect {
         this.target = target;
         this.slot = slot;
         this.index = index;
-        if (pokemonCard.stage === Stage.BASIC) {
+        if (pokemonCard.stage === card_types_1.Stage.BASIC) {
             this.target.showBasicAnimation = true;
         }
     }
 }
+exports.PlayPokemonFromDeckEffect = PlayPokemonFromDeckEffect;

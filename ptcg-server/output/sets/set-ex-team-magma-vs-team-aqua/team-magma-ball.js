@@ -20,7 +20,7 @@ class TeamMagmaBall extends trainer_card_1.TrainerCard {
         this.text = 'Flip a coin. If heads, search your deck for a Pokémon that has Team Magma in its name, show it to your opponent, and put it into your hand. If tails, search your deck for a Basic Pokémon that has Team Magma in its name, show it to your opponent and put it into your hand. Shuffle your deck afterward.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             effect.preventDefault = true;
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
@@ -29,7 +29,7 @@ class TeamMagmaBall extends trainer_card_1.TrainerCard {
             }
             // Not the most efficient way to handle this, but it was being weird when I tried another way
             const blocked = [];
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (result) {
                     player.deck.cards.forEach((card, index) => {
                         if (card instanceof game_1.PokemonCard && card.tags.includes(card_types_1.CardTag.TEAM_MAGMA)) {
@@ -51,7 +51,7 @@ class TeamMagmaBall extends trainer_card_1.TrainerCard {
                     });
                 }
             });
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND(store, state, player, {}, { min: 0, max: 1, allowCancel: false, blocked });
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND)(store, state, player, {}, { min: 0, max: 1, allowCancel: false, blocked });
             player.supporter.moveCardTo(this, player.discard);
         }
         return state;

@@ -1,4 +1,7 @@
-export class AddPlayerAction {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AddPlayerAction = void 0;
+class AddPlayerAction {
     constructor(clientId, name, deck, artworksMap, deckId) {
         this.clientId = clientId;
         this.name = name;
@@ -8,3 +11,4 @@ export class AddPlayerAction {
         this.type = 'ADD_PLAYER';
     }
 }
+exports.AddPlayerAction = AddPlayerAction;

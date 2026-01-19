@@ -31,8 +31,8 @@ class Larvitar extends pokemon_card_1.PokemonCard {
         this.fullName = 'Larvitar TRR';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.HEAL_X_DAMAGE_FROM_THIS_POKEMON(effect, store, state, 10);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.HEAL_X_DAMAGE_FROM_THIS_POKEMON)(effect, store, state, 10);
         }
         return state;
     }

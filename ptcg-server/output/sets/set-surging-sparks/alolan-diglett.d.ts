@@ -16,7 +16,7 @@ export declare class AlolanDiglett extends PokemonCard {
     retreat: CardType[];
     attacks: {
         name: string;
-        cost: never[];
+        cost: any[];
         damage: number;
         text: string;
     }[];

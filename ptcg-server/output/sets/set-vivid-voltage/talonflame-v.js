@@ -38,12 +38,12 @@ class TalonflameV extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         const player = state.players[state.activePlayer];
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             player.hand.moveTo(player.discard, player.hand.cards.length);
-            prefabs_1.DRAW_CARDS(player, 6);
+            (0, prefabs_1.DRAW_CARDS)(player, 6);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1);
         }
         return state;
     }

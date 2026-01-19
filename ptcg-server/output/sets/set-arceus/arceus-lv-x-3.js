@@ -50,7 +50,7 @@ class ArceusLvX3 extends pokemon_card_1.PokemonCard {
         // Multitype
         if (effect instanceof check_effects_1.CheckPokemonStatsEffect && effect.target.getPokemonCard() === this) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             effect.target.cards.forEach(card => {
@@ -62,13 +62,13 @@ class ArceusLvX3 extends pokemon_card_1.PokemonCard {
             });
         }
         // Omniscient
-        if (prefabs_1.WAS_POWER_USED(effect, 3, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 3, this)) {
             const player = effect.player;
             const pokemonCard = player.active.getPokemonCard();
             if (pokemonCard !== this) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.ABILITY_BLOCKED);
             }
             // Build cards and blocked for Choose Attack prompt

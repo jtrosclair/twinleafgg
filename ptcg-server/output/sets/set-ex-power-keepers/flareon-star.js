@@ -37,18 +37,18 @@ class FlareonStar extends pokemon_card_1.PokemonCard {
         this.setNumber = '100';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this && !prefabs_1.IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+        if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this && !(0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, effect.player, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (!result) {
                     return state;
                 }
-                prefabs_1.ADD_BURN_TO_PLAYER_ACTIVE(store, state, player, this);
-                prefabs_1.ADD_BURN_TO_PLAYER_ACTIVE(store, state, opponent, this);
+                (0, prefabs_1.ADD_BURN_TO_PLAYER_ACTIVE)(store, state, player, this);
+                (0, prefabs_1.ADD_BURN_TO_PLAYER_ACTIVE)(store, state, opponent, this);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
             state = store.reduceEffect(state, checkProvidedEnergy);

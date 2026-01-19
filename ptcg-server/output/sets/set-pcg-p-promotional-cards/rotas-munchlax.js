@@ -35,7 +35,7 @@ class RotasMunchlax extends pokemon_card_1.PokemonCard {
         this.fullName = 'Rota\'s Munchlax PCGP';
     }
     reduceEffect(store, state, effect) {
-        if ((effect instanceof attack_effects_1.DealDamageEffect || effect instanceof attack_effects_1.PutDamageEffect) && effect.target.getPokemonCard() === this && !prefabs_1.IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
+        if ((effect instanceof attack_effects_1.DealDamageEffect || effect instanceof attack_effects_1.PutDamageEffect) && effect.target.getPokemonCard() === this && !(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, effect.player, this)) {
             const checkPokemonTypeEffect = new check_effects_1.CheckPokemonTypeEffect(effect.source);
             store.reduceEffect(state, checkPokemonTypeEffect);
             if (checkPokemonTypeEffect.cardTypes.includes(card_types_1.CardType.WATER) || checkPokemonTypeEffect.cardTypes.includes(card_types_1.CardType.FIRE)) {

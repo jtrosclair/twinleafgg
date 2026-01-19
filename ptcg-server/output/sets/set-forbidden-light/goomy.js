@@ -36,7 +36,7 @@ class Goomy extends pokemon_card_1.PokemonCard {
         // Sticky Membrane
         if (effect instanceof check_effects_1.CheckAttackCostEffect) {
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
-            if (opponent.active.getPokemonCard() === this && !prefabs_1.IS_ABILITY_BLOCKED(store, state, opponent, this)) {
+            if (opponent.active.getPokemonCard() === this && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, opponent, this)) {
                 const canApplyAbility = new game_effects_1.EffectOfAbilityEffect(opponent, this.powers[0], this, effect.player.active);
                 store.reduceEffect(state, canApplyAbility);
                 if (!canApplyAbility.target) {

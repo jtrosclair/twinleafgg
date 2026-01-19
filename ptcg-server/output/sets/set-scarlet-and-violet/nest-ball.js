@@ -32,7 +32,7 @@ function* playCard(next, store, state, effect) {
     // Operation canceled by the user
     if (cards.length === 0) {
         player.supporter.moveCardTo(effect.trainerCard, player.discard);
-        prefabs_1.SHUFFLE_DECK(store, state, player);
+        (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         return state;
     }
     // Use the new PlayPokemonFromDeckEffect for each selected card
@@ -41,7 +41,7 @@ function* playCard(next, store, state, effect) {
         store.reduceEffect(state, playPokemonFromDeckEffect);
     });
     player.supporter.moveCardTo(effect.trainerCard, player.discard);
-    prefabs_1.SHUFFLE_DECK(store, state, player);
+    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
     return state;
 }
 class NestBall extends trainer_card_1.TrainerCard {

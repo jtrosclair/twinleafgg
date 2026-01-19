@@ -37,7 +37,7 @@ class RegisteelStar extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Flame Screen
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const addMarkerEffect = new attack_effects_1.AddMarkerEffect(effect, this.BARRIER_ATTACK_MARKER, this);
             return store.reduceEffect(state, addMarkerEffect);
         }
@@ -53,7 +53,7 @@ class RegisteelStar extends game_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
             effect.player.active.marker.removeMarker(this.BARRIER_ATTACK_MARKER, this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             let counters = 3;
@@ -61,7 +61,7 @@ class RegisteelStar extends game_1.PokemonCard {
             if (playerBench === 0 && opponent.getPrizeLeft() === 1) {
                 counters = 6;
             }
-            attack_effects_2.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE(counters, store, state, effect);
+            (0, attack_effects_2.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE)(counters, store, state, effect);
         }
         return state;
     }

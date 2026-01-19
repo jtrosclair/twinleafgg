@@ -8,8 +8,8 @@ export declare class GarchompV extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    weakness: never[];
-    retreat: never[];
+    weakness: any[];
+    retreat: any[];
     attacks: {
         name: string;
         cost: CardType[];

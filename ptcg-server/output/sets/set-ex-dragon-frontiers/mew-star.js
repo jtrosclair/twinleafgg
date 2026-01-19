@@ -39,7 +39,7 @@ class MewStar extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Mimicry
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             // Build cards and blocked for Choose Attack prompt
@@ -60,7 +60,7 @@ class MewStar extends pokemon_card_1.PokemonCard {
             });
         }
         //Rainbow Wave
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             if (!player.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC)) {

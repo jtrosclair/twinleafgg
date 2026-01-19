@@ -1,11 +1,14 @@
-import { CardManager } from './card-manager';
-import { EnergyCard } from '../store/card/energy-card';
-import { EnergyType, Stage, CardType, CardTag, Format } from '../store/card/card-types';
-import { PokemonCard } from '../store/card/pokemon-card';
-export class DeckAnalyser {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DeckAnalyser = void 0;
+const card_manager_1 = require("./card-manager");
+const energy_card_1 = require("../store/card/energy-card");
+const card_types_1 = require("../store/card/card-types");
+const pokemon_card_1 = require("../store/card/pokemon-card");
+class DeckAnalyser {
     constructor(cardNames = []) {
         this.cardNames = cardNames;
-        const cardManager = CardManager.getInstance();
+        const cardManager = card_manager_1.CardManager.getInstance();
         this.cards = [];
         cardNames.forEach(name => {
             const card = cardManager.getCardByName(name);
@@ -27,7 +30,7 @@ export class DeckAnalyser {
         let arceusRuleCount = 0;
         let arceusCount = 0;
         // Pre-Release format uses 40 cards, all other formats use 60
-        const requiredDeckSize = format === Format.PRE_RELEASE ? 40 : 60;
+        const requiredDeckSize = format === card_types_1.Format.PRE_RELEASE ? 40 : 60;
         if (this.cards.length !== requiredDeckSize) {
             return false;
         }
@@ -41,11 +44,11 @@ export class DeckAnalyser {
         }
         for (let i = 0; i < this.cards.length; i++) {
             const card = this.cards[i];
-            if (card instanceof PokemonCard && card.stage === Stage.BASIC) {
+            if (card instanceof pokemon_card_1.PokemonCard && card.stage === card_types_1.Stage.BASIC) {
                 hasBasicPokemon = true;
             }
             // Check for UNOWN tag
-            if (card.tags.includes(CardTag.UNOWN)) {
+            if (card.tags.includes(card_types_1.CardTag.UNOWN)) {
                 hasUnownTag = true;
             }
             // Count cards with 'Unown' in their name
@@ -53,41 +56,41 @@ export class DeckAnalyser {
                 unownCount++;
             }
             // CHeck for Arceus Rule
-            if (card.tags.includes(CardTag.ARCEUS)) {
+            if (card.tags.includes(card_types_1.CardTag.ARCEUS)) {
                 hasArceusRule = true;
             }
             // Count Cards with 'Arceus' in their name
             if (card.name === 'Arceus') {
                 arceusCount++;
-                if (card.tags.includes(CardTag.ARCEUS)) {
+                if (card.tags.includes(card_types_1.CardTag.ARCEUS)) {
                     arceusRuleCount++;
                 }
             }
-            if (!(card instanceof EnergyCard) || card.energyType !== EnergyType.BASIC) {
+            if (!(card instanceof energy_card_1.EnergyCard) || card.energyType !== card_types_1.EnergyType.BASIC) {
                 countMap[card.name] = (countMap[card.name] || 0) + 1;
                 if (countMap[card.name] > 4 && (!hasArceusRule || arceusCount !== arceusRuleCount)) {
                     return false;
                 }
             }
-            if (card.tags.includes(CardTag.ACE_SPEC)) {
+            if (card.tags.includes(card_types_1.CardTag.ACE_SPEC)) {
                 if (hasAceSpec) {
                     return false;
                 }
                 hasAceSpec = true;
             }
-            if (card.tags.includes(CardTag.RADIANT)) {
+            if (card.tags.includes(card_types_1.CardTag.RADIANT)) {
                 if (hasRadiant) {
                     return false;
                 }
                 hasRadiant = true;
             }
-            if (card.tags.includes(CardTag.STAR)) {
+            if (card.tags.includes(card_types_1.CardTag.STAR)) {
                 if (hasStar) {
                     return false;
                 }
                 hasStar = true;
             }
-            if (card.tags.includes(CardTag.PRISM_STAR)) {
+            if (card.tags.includes(card_types_1.CardTag.PRISM_STAR)) {
                 if (prismStarCards.has(card.name)) {
                     return false;
                 }
@@ -108,10 +111,10 @@ export class DeckAnalyser {
         const cardTypes = [];
         for (let i = 0; i < this.cards.length; i++) {
             const card = this.cards[i];
-            let cardType = CardType.NONE;
-            if (card instanceof PokemonCard) {
+            let cardType = card_types_1.CardType.NONE;
+            if (card instanceof pokemon_card_1.PokemonCard) {
                 cardType = card.cardType;
-                if (cardType !== CardType.NONE && cardTypes.indexOf(cardType) === -1) {
+                if (cardType !== card_types_1.CardType.NONE && cardTypes.indexOf(cardType) === -1) {
                     cardTypes.push(cardType);
                 }
             }
@@ -119,3 +122,4 @@ export class DeckAnalyser {
         return cardTypes;
     }
 }
+exports.DeckAnalyser = DeckAnalyser;

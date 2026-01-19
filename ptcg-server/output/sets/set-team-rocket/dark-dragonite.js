@@ -37,19 +37,19 @@ class DarkDragonite extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            prefabs_1.REMOVE_MARKER(this.EVOLUTIONARY_LIGHT_MARKER, player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.EVOLUTIONARY_LIGHT_MARKER, player, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.EVOLUTIONARY_LIGHT_MARKER, this);
-        if (prefabs_1.JUST_EVOLVED(effect, this) && !prefabs_1.IS_POKEMON_POWER_BLOCKED(store, state, effect.player, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.EVOLUTIONARY_LIGHT_MARKER, this);
+        if ((0, prefabs_1.JUST_EVOLVED)(effect, this) && !(0, prefabs_1.IS_POKEMON_POWER_BLOCKED)(store, state, effect.player, this)) {
             const player = effect.player;
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
-                    prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player, { stage: card_types_1.Stage.BASIC }, { min: 0, max: 2, allowCancel: false });
+                    (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, player, { stage: card_types_1.Stage.BASIC }, { min: 0, max: 2, allowCancel: false });
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (!result) {
                     effect.damage = 0;
                 }

@@ -50,7 +50,7 @@ class DarkFeraligatr extends pokemon_card_1.PokemonCard {
                     opponent.active.specialConditions.includes(card_types_1.SpecialCondition.PARALYZED))) {
                 return state;
             }
-            if (prefabs_1.IS_POKEMON_POWER_BLOCKED(store, state, opponent, this)) {
+            if ((0, prefabs_1.IS_POKEMON_POWER_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
             if (!effect.power.exemptFromAbilityLock) {
@@ -60,7 +60,7 @@ class DarkFeraligatr extends pokemon_card_1.PokemonCard {
         // Babies can not attack
         if (effect instanceof game_effects_1.AttackEffect && ((_a = effect.source.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.tags.includes(card_types_1.CardTag.BABY))) {
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
-            if (prefabs_1.IS_POKEMON_POWER_BLOCKED(store, state, opponent, this)) {
+            if ((0, prefabs_1.IS_POKEMON_POWER_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
             if (opponent.active.getPokemonCard() === this &&
@@ -73,13 +73,13 @@ class DarkFeraligatr extends pokemon_card_1.PokemonCard {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_ATTACK);
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (!opponent.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                 return state; // No energy to discard
             }
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (result) {
                     store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, opponent.active, { superType: card_types_1.SuperType.ENERGY }, { min: 0, max: 1, allowCancel: false }), selected => {
                         const card = selected[0];

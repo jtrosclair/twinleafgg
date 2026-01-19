@@ -39,14 +39,14 @@ class Reshiram extends pokemon_card_1.PokemonCard {
         this.TURBOBLAZE_MARKER = 'TURBOBLAZE_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInHand = player.hand.cards.some(c => {
                 return c instanceof game_1.EnergyCard
                     && c.energyType === card_types_1.EnergyType.BASIC
                     && c.provides.includes(R);
             });
-            if (prefabs_1.HAS_MARKER(this.TURBOBLAZE_MARKER, effect.player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.TURBOBLAZE_MARKER, effect.player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             if (player.active.cards[0] !== this) {
@@ -63,15 +63,15 @@ class Reshiram extends pokemon_card_1.PokemonCard {
                     const attachEnergyEffect = new play_card_effects_1.AttachEnergyEffect(player, energyCard, target);
                     store.reduceEffect(state, attachEnergyEffect);
                 }
-                prefabs_1.ABILITY_USED(effect.player, this);
-                prefabs_1.ADD_MARKER(this.TURBOBLAZE_MARKER, effect.player, this);
+                (0, prefabs_1.ABILITY_USED)(effect.player, this);
+                (0, prefabs_1.ADD_MARKER)(this.TURBOBLAZE_MARKER, effect.player, this);
                 return state;
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1, R);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1, R);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.TURBOBLAZE_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.TURBOBLAZE_MARKER, this);
         return state;
     }
 }

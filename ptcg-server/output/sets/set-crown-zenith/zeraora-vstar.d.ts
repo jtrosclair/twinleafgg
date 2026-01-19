@@ -9,7 +9,7 @@ export declare class ZeraoraVSTAR extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    retreat: never[];
+    retreat: any[];
     regulationMark: string;
     attacks: {
         name: string;

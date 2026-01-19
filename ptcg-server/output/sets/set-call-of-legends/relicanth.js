@@ -44,8 +44,8 @@ class Relicanth extends game_1.PokemonCard {
                 if (cards.length === 0) {
                     return;
                 }
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.lostzone, { cards, sourceCard: this, sourceEffect: this.attacks[0] });
-                prefabs_1.DRAW_CARDS(player, 3);
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.lostzone, { cards, sourceCard: this, sourceEffect: this.attacks[0] });
+                (0, prefabs_1.DRAW_CARDS)(player, 3);
             });
             return state;
         }

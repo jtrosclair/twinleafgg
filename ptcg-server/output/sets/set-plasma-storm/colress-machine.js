@@ -44,14 +44,14 @@ class ColressMachine extends trainer_card_1.TrainerCard {
             state = store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_message_1.GameMessage.ATTACH_ENERGY_TO_ACTIVE, player.deck, play_card_action_1.PlayerType.BOTTOM_PLAYER, [play_card_action_1.SlotType.BENCH, play_card_action_1.SlotType.ACTIVE], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.SPECIAL, name: 'Plasma Energy' }, { allowCancel: false, min: 0, max: 1, blockedTo: blocked2 }), transfers => {
                 transfers = transfers || [];
                 if (transfers.length === 0) {
-                    prefabs_1.SHUFFLE_DECK(store, state, player);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                     return;
                 }
                 for (const transfer of transfers) {
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
                     player.deck.moveCardTo(transfer.card, target);
                 }
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                 player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             });

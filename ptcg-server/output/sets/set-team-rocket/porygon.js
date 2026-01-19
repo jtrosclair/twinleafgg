@@ -37,7 +37,7 @@ class Porygon extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         var _a;
         // Conversion 1
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (((_a = opponent.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.weakness) === undefined) {
@@ -67,10 +67,10 @@ class Porygon extends pokemon_card_1.PokemonCard {
             });
         }
         // Psybeam
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+                    (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
                 }
             });
         }

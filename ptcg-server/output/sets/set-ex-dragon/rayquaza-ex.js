@@ -38,7 +38,7 @@ class Rayquazaex extends pokemon_card_1.PokemonCard {
         this.fullName = 'Rayquaza ex DR';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const flipCoin = (heads = 0) => {
                 return store.prompt(state, [
@@ -55,14 +55,14 @@ class Rayquazaex extends pokemon_card_1.PokemonCard {
                         }
                         for (const transfer of transfers) {
                             const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                            prefabs_1.MOVE_CARDS(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.attacks[0] });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.attacks[0] });
                         }
                     });
                 });
             };
             return flipCoin();
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const options = [
                 {

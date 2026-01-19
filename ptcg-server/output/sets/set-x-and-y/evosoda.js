@@ -69,7 +69,7 @@ function* playCard(next, store, state, effect) {
     });
     if (targets.length === 0) {
         player.supporter.moveCardTo(effect.trainerCard, player.discard);
-        prefabs_1.SHUFFLE_DECK(store, state, player);
+        (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         return state; // canceled by user
     }
     const pokemonCard = targets[0].getPokemonCard();
@@ -81,7 +81,7 @@ function* playCard(next, store, state, effect) {
     targets[0].clearEffects();
     targets[0].pokemonPlayedTurn = state.turn;
     player.supporter.moveCardTo(effect.trainerCard, player.discard);
-    prefabs_1.SHUFFLE_DECK(store, state, player);
+    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
 }
 class Evosoda extends trainer_card_1.TrainerCard {
     constructor() {

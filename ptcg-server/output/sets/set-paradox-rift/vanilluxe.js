@@ -50,7 +50,7 @@ class Vanilluxe extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // checking for ability lock (way cleaner than before :) )
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, opponent, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
             // checking for any hp boosters/removers

@@ -32,7 +32,7 @@ class Machop extends pokemon_card_1.PokemonCard {
         this.fullName = 'Machop HL';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const damage = Math.max(30 - player.active.damage, 0);
             effect.damage = damage;

@@ -38,7 +38,7 @@ class EspeonDeoxysGX extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Psychic Club
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let psychics = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {
@@ -50,9 +50,9 @@ class EspeonDeoxysGX extends game_1.PokemonCard {
             effect.damage += psychics * 30;
         }
         // Cross Division-GX
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             let counters = 10;
             const extraEffectCost = [P, C, C, C, C, C];
@@ -62,7 +62,7 @@ class EspeonDeoxysGX extends game_1.PokemonCard {
             if (meetsExtraEffectCost) {
                 counters = 20;
             }
-            attack_effects_1.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE(counters, store, state, effect);
+            (0, attack_effects_1.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE)(counters, store, state, effect);
         }
         return state;
     }

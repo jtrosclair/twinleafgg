@@ -61,7 +61,7 @@ class RaikouV extends pokemon_card_1.PokemonCard {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             // Draw a card
-            prefabs_1.DRAW_CARDS(player, 1);
+            (0, prefabs_1.DRAW_CARDS)(player, 1);
             player.marker.addMarker(this.FLEET_FOOTED_MARKER, this);
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
                 if (cardList.getPokemonCard() === this) {

@@ -19,15 +19,15 @@ class BillsTeleporter extends trainer_card_1.TrainerCard {
         this.text = 'Flip a coin. If heads, draw 4 cards.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             if (player.deck.cards.length === 0) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, (result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, (result => {
                 if (result) {
                     const player = effect.player;
-                    prefabs_1.DRAW_CARDS(player, 4);
+                    (0, prefabs_1.DRAW_CARDS)(player, 4);
                 }
             }));
             player.supporter.moveCardTo(effect.trainerCard, player.discard);

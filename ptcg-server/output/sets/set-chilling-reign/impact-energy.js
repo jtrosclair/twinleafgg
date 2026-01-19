@@ -44,7 +44,7 @@ class ImpactEnergy extends energy_card_1.EnergyCard {
             state.players.forEach(player => {
                 player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
                     var _a;
-                    if (!cardList.cards.includes(this) || prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, cardList)) {
+                    if (!cardList.cards.includes(this) || (0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, cardList)) {
                         return;
                     }
                     // Remove Poison before discarding as per ruling
@@ -58,7 +58,7 @@ class ImpactEnergy extends energy_card_1.EnergyCard {
         // Prevent Poison
         if (effect instanceof attack_effects_1.AddSpecialConditionsEffect || effect instanceof check_effects_1.AddSpecialConditionsPowerEffect) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
-            if (!effect.target.cards.includes(this) || prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {
+            if (!effect.target.cards.includes(this) || (0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, effect.target)) {
                 return state;
             }
             effect.specialConditions = effect.specialConditions.filter(condition => condition !== card_types_1.SpecialCondition.POISONED);

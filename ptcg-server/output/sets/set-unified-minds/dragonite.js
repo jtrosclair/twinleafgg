@@ -47,8 +47,8 @@ class Dragonite extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.HURRICANE_CHARGE_MARKER, this)) {
             effect.player.marker.removeMarker(this.HURRICANE_CHARGE_MARKER, this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 3);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 3);
         }
         if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
             const player = effect.player;

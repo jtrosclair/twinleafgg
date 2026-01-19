@@ -43,10 +43,10 @@ class Celebiex extends pokemon_card_1.PokemonCard {
             if (player.discard.cards.length === 0) {
                 return state;
             }
-            if (prefabs_1.IS_POKEPOWER_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this)) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, wantToUse => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, wantToUse => {
                 if (wantToUse) {
                     const deckTop = new game_1.CardList();
                     return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DECK, player.discard, {}, { min: 1, max: 1, allowCancel: false }), selected => {
@@ -54,26 +54,26 @@ class Celebiex extends pokemon_card_1.PokemonCard {
                             return;
                         selected.forEach(card => {
                             store.log(state, game_1.GameLog.LOG_PLAYER_RETURNS_TO_DECK_FROM_DISCARD, { name: player.name, card: card.name });
-                            prefabs_1.MOVE_CARD_TO(state, card, deckTop);
+                            (0, prefabs_1.MOVE_CARD_TO)(state, card, deckTop);
                         });
                         deckTop.moveToTopOfDestination(player.deck);
-                        prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, selected);
-                        prefabs_1.ABILITY_USED(player, this);
+                        (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, selected);
+                        (0, prefabs_1.ABILITY_USED)(player, this);
                     });
                 }
             }, game_1.GameMessage.WANT_TO_USE_ABILITY);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             this.marker.addMarker(this.PSYCHIC_SHIELD_MARKER, this);
-            prefabs_1.ADD_MARKER(this.PSYCHIC_SHIELD_MARKER, effect.opponent, this);
+            (0, prefabs_1.ADD_MARKER)(this.PSYCHIC_SHIELD_MARKER, effect.opponent, this);
         }
         if ((effect instanceof attack_effects_1.PutDamageEffect || effect instanceof attack_effects_1.AbstractAttackEffect) && effect.target.getPokemonCard() === this && ((_a = effect.source.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.tags.includes(card_types_1.CardTag.POKEMON_ex))) {
             if (this.marker.hasMarker(this.PSYCHIC_SHIELD_MARKER, this)) {
                 effect.preventDefault = true;
             }
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && prefabs_1.HAS_MARKER(this.PSYCHIC_SHIELD_MARKER, effect.player, this)) {
-            prefabs_1.REMOVE_MARKER(this.PSYCHIC_SHIELD_MARKER, effect.player, this);
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.PSYCHIC_SHIELD_MARKER, effect.player, this)) {
+            (0, prefabs_1.REMOVE_MARKER)(this.PSYCHIC_SHIELD_MARKER, effect.player, this);
             this.marker.removeMarker(this.PSYCHIC_SHIELD_MARKER, this);
         }
         return state;

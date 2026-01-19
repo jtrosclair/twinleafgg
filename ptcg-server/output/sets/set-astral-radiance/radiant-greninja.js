@@ -80,8 +80,8 @@ class RadiantGreninja extends pokemon_card_1.PokemonCard {
                         cardList.addBoardEffect(card_types_1.BoardEffect.ABILITY_USED);
                     }
                 });
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: this, sourceEffect: this.powers[0] });
-                prefabs_1.DRAW_CARDS(player, 2);
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: this, sourceEffect: this.powers[0] });
+                (0, prefabs_1.DRAW_CARDS)(player, 2);
             });
             return state;
         }
@@ -102,7 +102,7 @@ class RadiantGreninja extends pokemon_card_1.PokemonCard {
             });
             return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_message_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { min: minMax, max: minMax, allowCancel: false }), selected => {
                 const targets = selected || [];
-                prefabs_1.DAMAGE_OPPONENT_POKEMON(store, state, effect, 90, targets);
+                (0, prefabs_1.DAMAGE_OPPONENT_POKEMON)(store, state, effect, 90, targets);
             });
         }
         return state;

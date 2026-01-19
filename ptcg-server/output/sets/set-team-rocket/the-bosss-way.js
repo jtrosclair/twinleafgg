@@ -18,7 +18,7 @@ class TheBosssWay extends trainer_card_1.TrainerCard {
         this.text = 'Search your deck for an Evolution card with Dark in its name. Show it to your opponent and put it into your hand. Shuffle your deck afterward.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             effect.preventDefault = true;
             const blocked = [];
@@ -31,8 +31,8 @@ class TheBosssWay extends trainer_card_1.TrainerCard {
                     blocked.push(index);
                 }
             });
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND(store, state, player, {}, { blocked, min: 0, max: 1 });
-            prefabs_1.MOVE_CARD_TO(state, effect.trainerCard, player.discard);
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND)(store, state, player, {}, { blocked, min: 0, max: 1 });
+            (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
         }
         return state;
     }

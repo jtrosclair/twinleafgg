@@ -33,15 +33,15 @@ class Shelmet extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            return prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            return (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (!result)
                     return;
-                prefabs_1.ADD_MARKER(this.SHELL_HIT_MARKER, player.active, this);
-                prefabs_1.ADD_MARKER(this.CLEAR_SHELL_HIT_MARKER, opponent, this);
+                (0, prefabs_1.ADD_MARKER)(this.SHELL_HIT_MARKER, player.active, this);
+                (0, prefabs_1.ADD_MARKER)(this.CLEAR_SHELL_HIT_MARKER, opponent, this);
             });
         }
-        prefabs_1.PREVENT_DAMAGE_IF_TARGET_HAS_MARKER(effect, this.SHELL_HIT_MARKER, this);
-        prefabs_1.CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN(state, effect, this.CLEAR_SHELL_HIT_MARKER, this.SHELL_HIT_MARKER, this);
+        (0, prefabs_1.PREVENT_DAMAGE_IF_TARGET_HAS_MARKER)(effect, this.SHELL_HIT_MARKER, this);
+        (0, prefabs_1.CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN)(state, effect, this.CLEAR_SHELL_HIT_MARKER, this.SHELL_HIT_MARKER, this);
         return state;
     }
 }

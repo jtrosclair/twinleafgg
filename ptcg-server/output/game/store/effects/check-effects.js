@@ -45,15 +45,6 @@ class CheckPokemonAttacksEffect {
 }
 exports.CheckPokemonAttacksEffect = CheckPokemonAttacksEffect;
 class CheckHpEffect {
-    constructor(player, target) {
-        this.type = CheckEffects.CHECK_HP_EFFECT;
-        this.preventDefault = false;
-        this.nonstackingBoosts = [];
-        this.player = player;
-        this.target = target;
-        this.pokemonCard = target.getPokemonCard();
-        this.hp = this.pokemonCard ? this.pokemonCard.hp : 0;
-    }
     get hp() {
         if (this.pokemonCard === undefined) {
             return 0;
@@ -64,6 +55,15 @@ class CheckHpEffect {
         if (this.pokemonCard !== undefined) {
             this.target.hpBonus = value - this.pokemonCard.hp;
         }
+    }
+    constructor(player, target) {
+        this.type = CheckEffects.CHECK_HP_EFFECT;
+        this.preventDefault = false;
+        this.nonstackingBoosts = [];
+        this.player = player;
+        this.target = target;
+        this.pokemonCard = target.getPokemonCard();
+        this.hp = this.pokemonCard ? this.pokemonCard.hp : 0;
     }
 }
 exports.CheckHpEffect = CheckHpEffect;

@@ -17,7 +17,7 @@ export declare class MukAlolanMukGX extends PokemonCard {
         gxAttack?: undefined;
     } | {
         name: string;
-        cost: never[];
+        cost: any[];
         damage: number;
         gxAttack: boolean;
         text: string;

@@ -34,14 +34,14 @@ class Hariyama extends game_1.PokemonCard {
         this.regulationMark = 'I';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.JUST_EVOLVED(effect, this) && !prefabs_1.IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
+        if ((0, prefabs_1.JUST_EVOLVED)(effect, this) && !(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, effect.player, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const hasBench = opponent.bench.some(b => b.cards.length > 0);
             if (!hasBench) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, (result) => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, (result) => {
                 if (result) {
                     return store.prompt(state, new choose_pokemon_prompt_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_SWITCH, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.BENCH], { allowCancel: false }), result => {
                         const cardList = result[0];
@@ -54,8 +54,8 @@ class Hariyama extends game_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 70);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF)(store, state, effect, 70);
         }
         return state;
     }

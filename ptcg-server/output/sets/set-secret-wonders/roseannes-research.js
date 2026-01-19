@@ -24,7 +24,7 @@ class RoseannesResearch extends game_1.TrainerCard {
                 throw new game_1.GameError(game_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
             }
             player.hand.moveCardTo(this, player.supporter);
-            prefabs_1.BLOCK_IF_DECK_EMPTY(player);
+            (0, prefabs_1.BLOCK_IF_DECK_EMPTY)(player);
             const blocked = [];
             player.deck.cards.forEach((c, index) => {
                 const isBasicEnergy = c instanceof game_1.EnergyCard && (c.energyType === game_1.EnergyType.BASIC);
@@ -38,9 +38,9 @@ class RoseannesResearch extends game_1.TrainerCard {
                 if (!cards || cards.length === 0) {
                     return state;
                 }
-                prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-                cards.forEach(card => prefabs_1.MOVE_CARD_TO(state, card, player.hand));
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
+                cards.forEach(card => (0, prefabs_1.MOVE_CARD_TO)(state, card, player.hand));
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
             player.supporter.moveCardTo(this, player.discard);
         }

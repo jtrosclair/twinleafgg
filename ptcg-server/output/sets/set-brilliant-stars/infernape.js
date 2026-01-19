@@ -35,7 +35,7 @@ class Infernape extends pokemon_card_1.PokemonCard {
         this.fullName = 'Infernape BRS';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const deckTop = new game_1.CardList();
@@ -53,10 +53,10 @@ class Infernape extends pokemon_card_1.PokemonCard {
             // Move all cards to discard
             deckTop.moveTo(player.deck, deckTop.cards.length);
             effect.damage = 80 * energyCards.length;
-            prefabs_1.SHUFFLE_DECK(store, state, player);
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON(store, state, effect, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON)(store, state, effect, this);
         }
         return state;
     }

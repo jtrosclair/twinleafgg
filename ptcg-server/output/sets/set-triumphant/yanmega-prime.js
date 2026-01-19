@@ -45,7 +45,7 @@ class Yanmega extends pokemon_card_1.PokemonCard {
         if (effect instanceof check_effects_1.CheckAttackCostEffect && (effect.attack === this.attacks[0] || effect.attack === this.attacks[1])) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             if (player.hand.cards.length === opponent.hand.cards.length) {
@@ -53,10 +53,10 @@ class Yanmega extends pokemon_card_1.PokemonCard {
             }
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(40, effect, store, state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(40, effect, store, state);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             effect.ignoreResistance = true;
             effect.ignoreWeakness = true;
         }

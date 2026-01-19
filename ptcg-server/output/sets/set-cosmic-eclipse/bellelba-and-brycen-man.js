@@ -62,7 +62,7 @@ class BellelbaAndBrycenMan extends trainer_card_1.TrainerCard {
                 if (wantToUse) {
                     state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {}, { allowCancel: false, min: 3, max: 3 }), cards => {
                         cards = cards || [];
-                        prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: this });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: this });
                         cards.forEach((card, index) => {
                             store.log(state, game_message_1.GameLog.LOG_PLAYER_DISCARDS_CARD_FROM_HAND, { name: player.name, card: card.name, effectName: this.name });
                         });

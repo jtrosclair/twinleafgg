@@ -45,7 +45,7 @@ class Meganium extends pokemon_card_1.PokemonCard {
             if (!hasMeganiumInPlay) {
                 return state;
             }
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             effect.source.cards.forEach(c => {

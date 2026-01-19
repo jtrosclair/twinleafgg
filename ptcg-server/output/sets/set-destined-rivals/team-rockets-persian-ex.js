@@ -20,7 +20,7 @@ function* useHaughtyOrders(next, store, state, effect) {
         new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_EFFECT, opponentTop10.cards, { allowCancel: false }),
     ], results => {
         opponentTop10.moveTo(opponent.deck);
-        prefabs_1.SHUFFLE_DECK(store, state, opponent);
+        (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
     });
     // if there's no pokemon in the top ten cards, move on
     if (toppedPokemon.length === 0) {
@@ -95,13 +95,13 @@ class TeamRocketsPersianex extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Haughty Orders
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useHaughtyOrders(() => generator.next(), store, state, effect);
             return generator.next().value;
         }
         // Slash and Cash (thanks Pf987 for this name)
-        if (prefabs_1.AFTER_ATTACK(effect, 1, this)) {
-            prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
+            (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         return state;
     }

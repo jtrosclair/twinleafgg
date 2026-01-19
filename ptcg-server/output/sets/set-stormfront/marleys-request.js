@@ -44,8 +44,8 @@ class MarleysRequest extends game_1.TrainerCard {
             effect.preventDefault = true;
             if (notBlocked.cards.length === 1 || notBlocked.cards.every(card => card.name === notBlocked.cards[0].name)) {
                 state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, {}, { min: 1, max: 1, allowCancel: false, blocked }), cards => {
-                    prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-                    cards.forEach(card => prefabs_1.MOVE_CARD_TO(state, card, player.hand));
+                    (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
+                    cards.forEach(card => (0, prefabs_1.MOVE_CARD_TO)(state, card, player.hand));
                     player.supporter.moveCardTo(this, player.discard);
                 });
             }
@@ -57,7 +57,7 @@ class MarleysRequest extends game_1.TrainerCard {
                     const chosenCards = new game_1.CardList();
                     cards.forEach(card => chosenCards.cards.push(card));
                     state = store.prompt(state, new game_1.ChooseCardsPrompt(opponent, game_1.GameMessage.CHOOSE_CARD_TO_HAND, chosenCards, {}, { min: 1, max: 1, allowCancel: false }), card => {
-                        prefabs_1.MOVE_CARD_TO(state, card[0], player.hand);
+                        (0, prefabs_1.MOVE_CARD_TO)(state, card[0], player.hand);
                         player.supporter.moveCardTo(this, player.discard);
                     });
                 });

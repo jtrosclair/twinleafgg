@@ -1,7 +1,10 @@
-import { ChangeAvatarAction } from '../actions/change-avatar-action';
-import { ReorderBenchAction } from '../actions/reorder-actions';
-export function playerStateReducer(store, state, action) {
-    if (action instanceof ReorderBenchAction) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.playerStateReducer = void 0;
+const change_avatar_action_1 = require("../actions/change-avatar-action");
+const reorder_actions_1 = require("../actions/reorder-actions");
+function playerStateReducer(store, state, action) {
+    if (action instanceof reorder_actions_1.ReorderBenchAction) {
         const player = state.players.find(p => p.id === action.id);
         if (player === undefined || player.bench[action.from] === undefined) {
             return state;
@@ -19,7 +22,7 @@ export function playerStateReducer(store, state, action) {
     //   player.hand.applyOrder(action.order);
     //   return state;
     // }
-    if (action instanceof ChangeAvatarAction) {
+    if (action instanceof change_avatar_action_1.ChangeAvatarAction) {
         const player = state.players.find(p => p.id === action.id);
         if (player === undefined) {
             return state;
@@ -32,3 +35,4 @@ export function playerStateReducer(store, state, action) {
     }
     return state;
 }
+exports.playerStateReducer = playerStateReducer;

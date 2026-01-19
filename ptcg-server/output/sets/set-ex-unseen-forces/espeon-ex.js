@@ -40,10 +40,10 @@ class Espeonex extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Devo Flash
-        if (prefabs_1.JUST_EVOLVED(effect, this)) {
+        if ((0, prefabs_1.JUST_EVOLVED)(effect, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             const blocked = [];
@@ -63,7 +63,7 @@ class Espeonex extends game_1.PokemonCard {
             if (!hasAnyEvolved) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, effect.player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, result => {
                 if (result) {
                     const player = effect.player;
                     const opponent = game_1.StateUtils.getOpponent(state, player);
@@ -71,7 +71,7 @@ class Espeonex extends game_1.PokemonCard {
                         if (!targets || targets.length === 0) {
                             return state;
                         }
-                        prefabs_1.ABILITY_USED(player, this);
+                        (0, prefabs_1.ABILITY_USED)(player, this);
                         const target = targets[0];
                         const evolutions = target.cards.filter(c => c instanceof game_1.PokemonCard && c.stage !== game_1.Stage.BASIC);
                         if (evolutions.length > 0) {
@@ -84,10 +84,10 @@ class Espeonex extends game_1.PokemonCard {
             });
         }
         // Snap Tail
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(30, effect, store, state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(30, effect, store, state);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             let trainerCount = 0;
             const stadiumCard = game_1.StateUtils.getStadiumCard(state);
             if (stadiumCard && game_1.StateUtils.findOwner(state, game_1.StateUtils.findCardList(state, stadiumCard)) === effect.opponent) {

@@ -60,13 +60,13 @@ class SilvallyGX extends game_1.PokemonCard {
             if (!isSilvallyGXInPlay) {
                 return state;
             }
-            if (!prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this) && active.stage === game_1.Stage.BASIC) {
+            if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this) && active.stage === game_1.Stage.BASIC) {
                 effect.cost = [];
             }
             return state;
         }
         // Turbo Drive
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasBench = player.bench.some(b => b.cards.length > 0);
             if (!hasBench) {
@@ -94,7 +94,7 @@ class SilvallyGX extends game_1.PokemonCard {
             });
         }
         // Rebel-GX
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             if (player.usedGX) {

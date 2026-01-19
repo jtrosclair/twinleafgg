@@ -36,12 +36,12 @@ class Venusaur extends pokemon_card_1.PokemonCard {
         this.fullName = 'Venusaur BS';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (prefabs_1.IS_POKEPOWER_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this)) {
                 throw new __1.GameError(__1.GameMessage.BLOCKED_BY_EFFECT);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             const blockedMap = [];
             player.forEachPokemon(__1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
                 const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, cardList);

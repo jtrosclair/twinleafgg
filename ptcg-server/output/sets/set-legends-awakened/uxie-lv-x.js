@@ -37,28 +37,28 @@ class UxieLVX extends game_1.PokemonCard {
         this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.BLOCK_EFFECT_IF_MARKER(this.TRADE_OFF_MARKER, player, this);
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_EFFECT_IF_MARKER)(this.TRADE_OFF_MARKER, player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             const deckBottom = new game_1.CardList();
             const deckTop = new game_1.CardList();
             player.deck.moveTo(deckTop, 2);
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, deckTop, {}, { min: 1, max: 1, allowCancel: true }), selected => {
-                prefabs_1.ADD_MARKER(this.TRADE_OFF_MARKER, player, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ADD_MARKER)(this.TRADE_OFF_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 deckTop.moveCardsTo(selected, player.hand);
                 deckTop.moveTo(deckBottom);
                 deckBottom.moveTo(player.deck);
                 return state;
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.TRADE_OFF_MARKER, this);
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.ATTACK_USED_2_MARKER, this);
-        prefabs_1.REPLACE_MARKER_AT_END_OF_TURN(effect, this.ATTACK_USED_MARKER, this.ATTACK_USED_2_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.BLOCK_EFFECT_IF_MARKER(this.ATTACK_USED_2_MARKER, effect.player, this);
-            prefabs_1.ADD_MARKER(this.ATTACK_USED_MARKER, effect.player, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.TRADE_OFF_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_2_MARKER, this);
+        (0, prefabs_1.REPLACE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_MARKER, this.ATTACK_USED_2_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.BLOCK_EFFECT_IF_MARKER)(this.ATTACK_USED_2_MARKER, effect.player, this);
+            (0, prefabs_1.ADD_MARKER)(this.ATTACK_USED_MARKER, effect.player, this);
         }
         //Lv. X Stuff
         // making sure it gets put on the active pokemon

@@ -37,7 +37,7 @@ class Wailordex extends pokemon_card_1.PokemonCard {
         this.usedSuperDeepDive = false;
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const playerBench = player.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
             if (playerBench === 0) {
@@ -50,9 +50,9 @@ class Wailordex extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.AfterAttackEffect && this.usedSuperDeepDive) {
             this.usedSuperDeepDive = false;
             const player = effect.player;
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             effect.damage = Math.max(0, 100 - effect.player.active.damage);
         }
         return state;

@@ -7,8 +7,8 @@ export declare class NsZekrom extends PokemonCard {
     tags: CardTag[];
     cardType: CardType;
     hp: number;
-    weakness: never[];
-    resistance: never[];
+    weakness: any[];
+    resistance: any[];
     retreat: CardType.COLORLESS[];
     attacks: ({
         name: string;

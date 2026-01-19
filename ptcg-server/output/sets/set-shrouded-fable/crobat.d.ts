@@ -12,7 +12,7 @@ export declare class Crobat extends PokemonCard {
         type: CardType.FIGHTING;
         value: number;
     }[];
-    retreat: never[];
+    retreat: any[];
     powers: {
         name: string;
         powerType: PowerType;

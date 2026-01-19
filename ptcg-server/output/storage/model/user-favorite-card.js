@@ -20,28 +20,28 @@ let UserFavoriteCard = class UserFavoriteCard extends typeorm_1.BaseEntity {
     }
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], UserFavoriteCard.prototype, "id", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => user_1.User),
-    typeorm_1.JoinColumn({ name: 'userId' }),
+    (0, typeorm_1.ManyToOne)(type => user_1.User),
+    (0, typeorm_1.JoinColumn)({ name: 'userId' }),
     __metadata("design:type", user_1.User)
 ], UserFavoriteCard.prototype, "user", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], UserFavoriteCard.prototype, "userId", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], UserFavoriteCard.prototype, "cardName", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], UserFavoriteCard.prototype, "fullName", void 0);
 UserFavoriteCard = __decorate([
-    typeorm_1.Entity('user_favorite_card'),
-    typeorm_1.Unique(['user', 'cardName'])
+    (0, typeorm_1.Entity)('user_favorite_card'),
+    (0, typeorm_1.Unique)(['user', 'cardName'])
 ], UserFavoriteCard);
 exports.UserFavoriteCard = UserFavoriteCard;

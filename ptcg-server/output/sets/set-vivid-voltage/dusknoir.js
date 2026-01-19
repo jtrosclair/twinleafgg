@@ -49,7 +49,7 @@ class Dusknoir extends game_1.PokemonCard {
                     return state;
                 }
                 // Return if ability is blocked
-                if (prefabs_1.IS_ABILITY_BLOCKED(store, state, dusknoirOwner, this)) {
+                if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, dusknoirOwner, this)) {
                     return state;
                 }
                 // Check if effect of ability is prevented
@@ -68,7 +68,7 @@ class Dusknoir extends game_1.PokemonCard {
             const dusknoirOwner = game_1.StateUtils.findOwner(state, dusknoirCardList);
             if (game_1.StateUtils.isPokemonInPlay(dusknoirOwner, this)) {
                 // Return if ability is blocked
-                if (prefabs_1.IS_ABILITY_BLOCKED(store, state, dusknoirOwner, this)) {
+                if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, dusknoirOwner, this)) {
                     return state;
                 }
                 // Check if effect of ability is prevented

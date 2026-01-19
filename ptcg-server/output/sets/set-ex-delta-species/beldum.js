@@ -47,7 +47,7 @@ class Beldum extends pokemon_card_1.PokemonCard {
             if (!isBeldumInPlay) {
                 return state;
             }
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const pokemonCard = player.active.getPokemonCard();
@@ -68,8 +68,8 @@ class Beldum extends pokemon_card_1.PokemonCard {
                 }
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 10);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF)(store, state, effect, 10);
         }
         return state;
     }

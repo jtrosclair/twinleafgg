@@ -35,9 +35,9 @@ class Eiscueex extends pokemon_card_1.PokemonCard {
         this.SCALDING_BLOCK_MARKER = 'SCALDING_BLOCK_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1);
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1);
             opponent.marker.addMarker(this.SCALDING_BLOCK_MARKER, this);
             opponent.active.marker.addMarker(this.SCALDING_BLOCK_MARKER, this);
         }

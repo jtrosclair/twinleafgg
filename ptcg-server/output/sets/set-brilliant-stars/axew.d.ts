@@ -7,8 +7,8 @@ export declare class Axew extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    weakness: never[];
-    resistance: never[];
+    weakness: any[];
+    resistance: any[];
     retreat: CardType[];
     attacks: {
         name: string;

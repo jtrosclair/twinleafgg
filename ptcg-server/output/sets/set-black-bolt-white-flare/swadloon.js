@@ -37,7 +37,7 @@ class Swadloon extends pokemon_card_1.PokemonCard {
         this.HEALING_LEAVES_MARKER = 'HEALING_LEAVES_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.HEALING_LEAVES_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
@@ -47,7 +47,7 @@ class Swadloon extends pokemon_card_1.PokemonCard {
             state = store.reduceEffect(state, healEffect);
             return state;
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.HEALING_LEAVES_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.HEALING_LEAVES_MARKER, this);
         return state;
     }
 }

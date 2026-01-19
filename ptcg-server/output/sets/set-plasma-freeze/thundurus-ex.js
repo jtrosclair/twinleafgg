@@ -33,7 +33,7 @@ class ThundurusEX extends game_1.PokemonCard {
         this.fullName = 'Thundurus EX PLF';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInDiscard = player.discard.cards.some(c => c instanceof game_1.EnergyCard);
             let validTargets = false;
@@ -66,7 +66,7 @@ class ThundurusEX extends game_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const pokemon = player.active;

@@ -1,5 +1,8 @@
-import { Prompt } from './prompt';
-export class WaitPrompt extends Prompt {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.WaitPrompt = void 0;
+const prompt_1 = require("./prompt");
+class WaitPrompt extends prompt_1.Prompt {
     constructor(playerId, duration, message) {
         super(playerId);
         this.type = 'WaitPrompt';
@@ -7,3 +10,4 @@ export class WaitPrompt extends Prompt {
         this.message = message;
     }
 }
+exports.WaitPrompt = WaitPrompt;

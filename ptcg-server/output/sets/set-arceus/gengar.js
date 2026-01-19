@@ -44,18 +44,18 @@ class Gengar extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
-            prefabs_1.REMOVE_MARKER(this.CURSE_MARKER, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.CURSE_MARKER, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.CURSE_MARKER, this);
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.CURSE_MARKER, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             const damagedPokemon = [];
             let hasDamagedPokemon = false;
-            if (prefabs_1.HAS_MARKER(this.CURSE_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.CURSE_MARKER, player, this)) {
                 throw new game_1.GameError(game_message_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             opponent.forEachPokemon(play_card_action_1.PlayerType.TOP_PLAYER, (cardList, card, target) => {
                 if (cardList.damage > 0) {
                     hasDamagedPokemon = true;
@@ -72,8 +72,8 @@ class Gengar extends pokemon_card_1.PokemonCard {
                 maxAllowedDamage.push({ target, damage: checkHpEffect.hp });
             });
             return store.prompt(state, new move_damage_prompt_1.MoveDamagePrompt(effect.player.id, game_message_1.GameMessage.MOVE_DAMAGE, play_card_action_1.PlayerType.TOP_PLAYER, [play_card_action_1.SlotType.ACTIVE, play_card_action_1.SlotType.BENCH], maxAllowedDamage, { allowCancel: true, min: 1, max: 1 }), transfers => {
-                prefabs_1.ADD_MARKER(this.CURSE_MARKER, player, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ADD_MARKER)(this.CURSE_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 if (transfers === null) {
                     return;
                 }
@@ -87,13 +87,13 @@ class Gengar extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON(10, effect, store, state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON)(10, effect, store, state);
         }
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.CONFIRMATION_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, effect.player);
+                    (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, effect.player);
                 }
             }, game_message_1.GameMessage.WANT_TO_SWITCH_POKEMON);
         }

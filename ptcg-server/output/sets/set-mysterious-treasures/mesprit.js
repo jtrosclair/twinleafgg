@@ -59,18 +59,18 @@ class Mesprit extends pokemon_card_1.PokemonCard {
             if (!isTrioInPlay) {
                 return state;
             }
-            if (!prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this) && (active.name === 'Uxie' || active.name === 'Mesprit' || active.name === 'Azelf')) {
+            if (!(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this) && (active.name === 'Uxie' || active.name === 'Mesprit' || active.name === 'Azelf')) {
                 effect.cost = [];
             }
             return state;
         }
         // Teleportation Burst
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
             if (player.bench.length > 0) {
                 store.prompt(state, new game_1.ConfirmPrompt(player.id, game_1.GameMessage.WANT_TO_SWITCH_POKEMON), wantToSwitch => {
                     if (wantToSwitch) {
-                        prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+                        (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
                     }
                 });
             }

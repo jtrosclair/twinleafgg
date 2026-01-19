@@ -19,7 +19,7 @@ function* usePackCall(next, store, state, effect, self) {
         cards = selected || [];
         next();
     });
-    prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: self, sourceEffect: self.attacks[0] });
+    (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: self, sourceEffect: self.attacks[0] });
     if (cards.length > 0) {
         yield store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
@@ -56,7 +56,7 @@ class Zarude extends pokemon_card_1.PokemonCard {
         this.fullName = 'Zarude CRE';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = usePackCall(() => generator.next(), store, state, effect, this);
             return generator.next().value;
         }

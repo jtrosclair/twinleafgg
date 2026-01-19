@@ -1,11 +1,14 @@
-import { PlayerType } from '../../game';
-import { SimpleScore } from './score';
-export class ToolsScore extends SimpleScore {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ToolsScore = void 0;
+const game_1 = require("../../game");
+const score_1 = require("./score");
+class ToolsScore extends score_1.SimpleScore {
     getScore(state, playerId) {
         const player = this.getPlayer(state, playerId);
         const scores = this.options.scores.tools;
         let score = 0;
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
+        player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
             if (cardList.tools.length === 0) {
                 return;
             }
@@ -18,3 +21,4 @@ export class ToolsScore extends SimpleScore {
         return score;
     }
 }
+exports.ToolsScore = ToolsScore;

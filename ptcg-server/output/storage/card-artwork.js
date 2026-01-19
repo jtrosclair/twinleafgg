@@ -14,34 +14,34 @@ const typeorm_1 = require("typeorm");
 let CardArtwork = class CardArtwork extends typeorm_1.BaseEntity {
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], CardArtwork.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], CardArtwork.prototype, "name", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], CardArtwork.prototype, "cardName", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], CardArtwork.prototype, "setCode", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], CardArtwork.prototype, "code", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], CardArtwork.prototype, "imageUrl", void 0);
 __decorate([
-    typeorm_1.Column({ default: 'default' }),
+    (0, typeorm_1.Column)({ default: 'default' }),
     __metadata("design:type", String)
 ], CardArtwork.prototype, "holoType", void 0);
 CardArtwork = __decorate([
-    typeorm_1.Entity('card_artworks')
+    (0, typeorm_1.Entity)('card_artworks')
 ], CardArtwork);
 exports.CardArtwork = CardArtwork;

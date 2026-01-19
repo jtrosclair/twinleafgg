@@ -25,7 +25,7 @@ The [D] Pokémon this card is attached to has no Retreat Cost.`;
             return state;
         }
         if (effect instanceof check_effects_1.CheckRetreatCostEffect && effect.player.active.cards.includes(this)) {
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.player.active)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.player, this, effect.player.active)) {
                 return state;
             }
             const checkPokemonType = new check_effects_1.CheckPokemonTypeEffect(effect.player.active);

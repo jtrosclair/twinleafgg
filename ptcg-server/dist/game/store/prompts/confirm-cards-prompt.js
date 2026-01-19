@@ -1,5 +1,8 @@
-import { Prompt } from './prompt';
-export class ConfirmCardsPrompt extends Prompt {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ConfirmCardsPrompt = void 0;
+const prompt_1 = require("./prompt");
+class ConfirmCardsPrompt extends prompt_1.Prompt {
     constructor(playerId, message, cards, options) {
         super(playerId);
         this.message = message;
@@ -11,3 +14,4 @@ export class ConfirmCardsPrompt extends Prompt {
         }, options);
     }
 }
+exports.ConfirmCardsPrompt = ConfirmCardsPrompt;

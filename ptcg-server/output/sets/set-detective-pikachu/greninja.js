@@ -67,7 +67,7 @@ class Greninja extends pokemon_card_1.PokemonCard {
             catch (_b) {
                 return state;
             }
-            const coinFlipResult = prefabs_1.SIMULATE_COIN_FLIP(store, state, player);
+            const coinFlipResult = (0, prefabs_1.SIMULATE_COIN_FLIP)(store, state, player);
             if (coinFlipResult) {
                 effect.damage = 0;
                 store.log(state, game_message_1.GameLog.LOG_ABILITY_BLOCKS_DAMAGE, { name: opponent.name, pokemon: this.name });
@@ -83,7 +83,7 @@ class Greninja extends pokemon_card_1.PokemonCard {
             const max = Math.min(attackTargets, 2);
             state = store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_message_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.BENCH, game_1.SlotType.ACTIVE], { min, max, allowCancel: false }), selected => {
                 const targets = selected || [];
-                prefabs_1.DAMAGE_OPPONENT_POKEMON(store, state, effect, 50, targets);
+                (0, prefabs_1.DAMAGE_OPPONENT_POKEMON)(store, state, effect, 50, targets);
             });
             return state;
         }

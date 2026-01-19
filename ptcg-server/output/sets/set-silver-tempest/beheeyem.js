@@ -39,7 +39,7 @@ class Beheeyem extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
-            prefabs_1.THIS_ATTACK_DOES_X_DAMAGE_TO_X_OF_YOUR_OPPONENTS_POKEMON(60, effect, store, state, 1, 1, true, [game_1.SlotType.BENCH, game_1.SlotType.ACTIVE]);
+            (0, prefabs_1.THIS_ATTACK_DOES_X_DAMAGE_TO_X_OF_YOUR_OPPONENTS_POKEMON)(60, effect, store, state, 1, 1, true, [game_1.SlotType.BENCH, game_1.SlotType.ACTIVE]);
         }
         return state;
     }

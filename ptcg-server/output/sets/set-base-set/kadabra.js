@@ -36,7 +36,7 @@ class Kadabra extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1, P);
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1, P);
             const player = effect.player;
             const healEffect = new game_effects_1.HealEffect(player, player.active, player.active.damage);
             state = store.reduceEffect(state, healEffect);

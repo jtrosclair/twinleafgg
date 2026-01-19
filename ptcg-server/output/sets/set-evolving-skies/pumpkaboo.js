@@ -44,7 +44,7 @@ class Pumpkaboo extends pokemon_card_1.PokemonCard {
                         // Discard Stadium
                         const cardList = game_1.StateUtils.findCardList(state, stadiumCard);
                         const player = game_1.StateUtils.findOwner(state, cardList);
-                        prefabs_1.MOVE_CARDS(store, state, cardList, player.discard, { cards: [stadiumCard], sourceCard: this, sourceEffect: this.powers[0] });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.discard, { cards: [stadiumCard], sourceCard: this, sourceEffect: this.powers[0] });
                         return state;
                     }
                     return state;

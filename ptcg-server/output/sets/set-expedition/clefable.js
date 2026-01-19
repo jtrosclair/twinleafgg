@@ -35,37 +35,37 @@ class Clefable extends pokemon_card_1.PokemonCard {
         this.MOONLIGHT_MARKER = 'MOONLIGHT_MARKER';
     }
     reduceEffect(store, state, effect) {
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.MOONLIGHT_MARKER, this);
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.MOONLIGHT_MARKER, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.HAS_MARKER(this.MOONLIGHT_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.MOONLIGHT_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             if (player.hand.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.ADD_MARKER(this.MOONLIGHT_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.MOONLIGHT_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             state = store.prompt(state, new game_1.ChooseCardsPrompt(effect.player, game_1.GameMessage.CHOOSE_CARD_TO_DECK, player.hand, {}, { allowCancel: false, min: 1, max: 1 }), cards => {
                 cards = cards || [];
                 if (cards.length === 0) {
                     return;
                 }
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.deck, { cards });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck, { cards });
                 store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { min: 0, max: 1, allowCancel: false }), selected => {
                     if (selected) {
-                        prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, selected);
-                        prefabs_1.MOVE_CARDS_TO_HAND(store, state, player, selected);
+                        (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, selected);
+                        (0, prefabs_1.MOVE_CARDS_TO_HAND)(store, state, player, selected);
                     }
-                    prefabs_1.SHUFFLE_DECK(store, state, player);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                 });
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            return prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 2, results => {
+            return (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 2, results => {
                 let heads = 0;
                 results.forEach(r => {
                     if (r)

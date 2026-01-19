@@ -35,7 +35,7 @@ class Porygon extends pokemon_card_1.PokemonCard {
         this.STIFFEN_MARKER = 'STIFFEN_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             let pokemonInPlay = 0;
@@ -43,11 +43,11 @@ class Porygon extends pokemon_card_1.PokemonCard {
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, () => { pokemonInPlay += 1; });
             effect.damage = 10 * pokemonInPlay;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.ADD_MARKER(this.STIFFEN_MARKER, effect.player, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.ADD_MARKER)(this.STIFFEN_MARKER, effect.player, this);
         }
         if (effect instanceof attack_effects_1.PutDamageEffect
-            && prefabs_1.HAS_MARKER(this.STIFFEN_MARKER, game_1.StateUtils.getOpponent(state, effect.player), this)
+            && (0, prefabs_1.HAS_MARKER)(this.STIFFEN_MARKER, game_1.StateUtils.getOpponent(state, effect.player), this)
             && effect.target.getPokemonCard() === this) {
             if (state.phase !== game_1.GamePhase.ATTACK) {
                 return state;
@@ -55,10 +55,10 @@ class Porygon extends pokemon_card_1.PokemonCard {
             effect.damage -= 20;
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player !== game_1.StateUtils.findOwner(state, game_1.StateUtils.findCardList(state, this))) {
-            prefabs_1.REMOVE_MARKER(this.STIFFEN_MARKER, game_1.StateUtils.getOpponent(state, effect.player), this);
+            (0, prefabs_1.REMOVE_MARKER)(this.STIFFEN_MARKER, game_1.StateUtils.getOpponent(state, effect.player), this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND(store, state, effect.player, { name: 'Porygon2' });
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND)(store, state, effect.player, { name: 'Porygon2' });
         }
         return state;
     }

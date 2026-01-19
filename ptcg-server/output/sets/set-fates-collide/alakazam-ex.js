@@ -40,10 +40,10 @@ class AlakazamEx extends pokemon_card_1.PokemonCard {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.target.getPokemonCard() === this) {
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
             if (effect.pokemonCard.name === 'M Alakazam-EX') {
-                if (prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+                if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this)) {
                     return state;
                 }
-                prefabs_1.CONFIRMATION_PROMPT(store, state, effect.player, result => {
+                (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, result => {
                     if (result) {
                         opponent.active.damage += 20;
                         const hasBenched = opponent.bench.some(b => b.cards.length > 0);
@@ -61,7 +61,7 @@ class AlakazamEx extends pokemon_card_1.PokemonCard {
             }
         }
         // Suppression
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             opponent.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {
                 const goodEnergy = card.cards.filter(card => card instanceof game_1.EnergyCard);

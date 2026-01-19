@@ -36,14 +36,14 @@ class Gardevoir extends pokemon_card_1.PokemonCard {
         this.PSY_SHADOW_MARKER = 'PSY_SHADOW_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
-            if (prefabs_1.HAS_MARKER(this.PSY_SHADOW_MARKER, player, this)) {
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
+            if ((0, prefabs_1.HAS_MARKER)(this.PSY_SHADOW_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.ABILITY_USED(player, this);
-            prefabs_1.ADD_MARKER(this.PSY_SHADOW_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.PSY_SHADOW_MARKER, player, this);
             store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_TO_BENCH, player.deck, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY, name: 'Psychic Energy' }, { allowCancel: false, min: 0, max: 1 }), transfers => {
                 transfers = transfers || [];
                 for (const transfer of transfers) {
@@ -53,8 +53,8 @@ class Gardevoir extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.PSY_SHADOW_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.PSY_SHADOW_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             const player = effect.player;
             const checkProvidedEnergyOpponent = new check_effects_1.CheckProvidedEnergyEffect(opponent, opponent.active);

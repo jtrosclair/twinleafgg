@@ -14,7 +14,7 @@ export declare class Skiploom extends PokemonCard {
         type: CardType;
         value: number;
     }[];
-    retreat: never[];
+    retreat: any[];
     powers: {
         name: string;
         useWhenInPlay: boolean;

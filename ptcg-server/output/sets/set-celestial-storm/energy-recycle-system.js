@@ -42,7 +42,7 @@ class EnergyRecycleSystem extends trainer_card_1.TrainerCard {
                     state = store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { min: 1, max: 1, allowCancel: false }), selected => {
                         if (selected && selected.length > 0) {
                             store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: selected[0].name });
-                            prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: selected, sourceCard: this, sourceEffect: this.attacks[0] });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: selected, sourceCard: this, sourceEffect: this.attacks[0] });
                         }
                     });
                 }
@@ -55,8 +55,8 @@ class EnergyRecycleSystem extends trainer_card_1.TrainerCard {
                     state = store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DECK, player.discard, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { min: 1, max: 3, allowCancel: false }), selected => {
                         if (selected && selected.length === 3) {
                             store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_ON_BOTTOM_OF_DECK, { name: player.name, card: selected.map(c => c.name).join(', ') });
-                            prefabs_1.MOVE_CARDS(store, state, player.discard, player.deck, { cards: selected, sourceCard: this, sourceEffect: this.attacks[1] });
-                            prefabs_1.SHUFFLE_DECK(store, state, player);
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.deck, { cards: selected, sourceCard: this, sourceEffect: this.attacks[1] });
+                            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                         }
                     });
                 }

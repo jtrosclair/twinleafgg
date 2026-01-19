@@ -76,7 +76,7 @@ function* useDarkAwakening(next, store, state, effect) {
         target.clearEffects();
         target.pokemonPlayedTurn = state.turn;
     }
-    prefabs_1.SHUFFLE_DECK(store, state, player);
+    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
 }
 class TeamRocketsNidorina extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -110,7 +110,7 @@ class TeamRocketsNidorina extends pokemon_card_1.PokemonCard {
         this.fullName = 'Team Rocket\'s Nidorina DRI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useDarkAwakening(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

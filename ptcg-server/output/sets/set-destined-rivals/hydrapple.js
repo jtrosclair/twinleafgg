@@ -38,7 +38,7 @@ class Hydrapple extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Hydra Breath
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let grassEnergies = 0;
             player.hand.cards.forEach(card => {

@@ -30,7 +30,7 @@ class GiftEnergy extends energy_card_1.EnergyCard {
             if (state.phase !== state_1.GamePhase.ATTACK) {
                 return state;
             }
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, effect.target)) {
                 return state;
             }
             const target = effect.target;

@@ -19,7 +19,7 @@ class DangerousDrill extends trainer_card_1.TrainerCard {
         this.text = 'You can play this card only if you discard a [D] Pokémon from your hand.\n\nDiscard a Pokémon Tool or Special Energy card from 1 of your opponent\'s Pokémon, or discard any Stadium card in play.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (!player.hand.cards.some(c => c instanceof game_1.PokemonCard && c.cardType === card_types_1.CardType.DARK)) {
@@ -99,7 +99,7 @@ class DangerousDrill extends trainer_card_1.TrainerCard {
                     // Discard Stadium
                     const cardList = game_1.StateUtils.findCardList(state, stadiumCard);
                     const owner = game_1.StateUtils.findOwner(state, cardList);
-                    prefabs_1.MOVE_CARDS(store, state, cardList, owner.discard, { sourceCard: this });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, cardList, owner.discard, { sourceCard: this });
                     player.supporter.moveCardTo(this, player.discard);
                     return state;
                 }

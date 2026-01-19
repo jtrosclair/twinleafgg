@@ -38,7 +38,7 @@ class MegaLopunnyJigglypuffGX extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Jumping Balloon
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             let gxsAndExs = 0;
             opponent.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {
@@ -50,18 +50,18 @@ class MegaLopunnyJigglypuffGX extends game_1.PokemonCard {
             effect.damage += 60 * gxsAndExs;
         }
         // Puffy Smashers-GX
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
-            prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, this);
+            (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, opponent, this);
             const extraEffectCost = [C, C, C, C, C];
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
             store.reduceEffect(state, checkProvidedEnergy);
             const meetsExtraEffectCost = game_1.StateUtils.checkEnoughEnergy(checkProvidedEnergy.energyMap, extraEffectCost);
             if (meetsExtraEffectCost) {
-                attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON(200, effect, store, state);
+                (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON)(200, effect, store, state);
             }
         }
         return state;

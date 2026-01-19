@@ -25,7 +25,7 @@ class Mary extends trainer_card_1.TrainerCard {
             // We will discard this card after prompt confirmation
             effect.preventDefault = true;
             const cardsToDraw = Math.min(2, player.deck.cards.length);
-            prefabs_1.DRAW_CARDS(player, cardsToDraw);
+            (0, prefabs_1.DRAW_CARDS)(player, cardsToDraw);
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_SHUFFLE, player.hand, {}, { allowCancel: false, min: 2, max: 2 }), selected => {
                 selected.forEach(card => {
                     player.hand.moveCardTo(card, player.deck);

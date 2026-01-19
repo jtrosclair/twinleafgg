@@ -39,14 +39,14 @@ class MegaFroslassex extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Rebellion attack - 50x damage based on opponent's hand size
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
             const handCount = opponent.hand.cards.length;
             effect.damage = 50 * handCount;
         }
         // Absolute Snow attack - 150 damage and put opponent's Active Pokemon to sleep
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP(store, state, effect);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP)(store, state, effect);
         }
         return state;
     }

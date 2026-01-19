@@ -23,8 +23,8 @@ class Herdier extends game_1.PokemonCard {
         this.fullName = 'Herdier BLW';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.DRAW_CARDS(effect.player, 3);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.DRAW_CARDS)(effect.player, 3);
         }
         return state;
     }

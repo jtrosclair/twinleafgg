@@ -1,9 +1,12 @@
-import { GameError } from '../game-error';
-import { GameMessage } from '../game-message';
-import { PlayerType, SlotType } from './actions/play-card-action';
-import { CardType } from './card/card-types';
-import { EnergyCard } from './card/energy-card';
-export class StateUtils {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StateUtils = void 0;
+const game_error_1 = require("../game-error");
+const game_message_1 = require("../game-message");
+const play_card_action_1 = require("./actions/play-card-action");
+const card_types_1 = require("./card/card-types");
+const energy_card_1 = require("./card/energy-card");
+class StateUtils {
     static getStadium(state) {
         throw new Error('Method not implemented.');
     }
@@ -21,10 +24,10 @@ export class StateUtils {
         // First remove from array cards with specific energy types
         cost.forEach(costType => {
             switch (costType) {
-                case CardType.ANY:
-                case CardType.NONE:
+                case card_types_1.CardType.ANY:
+                case card_types_1.CardType.NONE:
                     break;
-                case CardType.COLORLESS:
+                case card_types_1.CardType.COLORLESS:
                     colorless += 1;
                     break;
                 default: {
@@ -45,26 +48,26 @@ export class StateUtils {
         // Collect blend/unit energies and their possible provides
         energy.forEach((energyMap, index) => {
             const card = energyMap.card;
-            if (card instanceof EnergyCard) {
+            if (card instanceof energy_card_1.EnergyCard) {
                 let blendTypes;
                 switch (card.name) {
                     case 'Blend Energy WLFM':
-                        blendTypes = [CardType.WATER, CardType.LIGHTNING, CardType.FIGHTING, CardType.METAL];
+                        blendTypes = [card_types_1.CardType.WATER, card_types_1.CardType.LIGHTNING, card_types_1.CardType.FIGHTING, card_types_1.CardType.METAL];
                         break;
                     case 'Blend Energy GRPD':
-                        blendTypes = [CardType.GRASS, CardType.FIRE, CardType.PSYCHIC, CardType.DARK];
+                        blendTypes = [card_types_1.CardType.GRASS, card_types_1.CardType.FIRE, card_types_1.CardType.PSYCHIC, card_types_1.CardType.DARK];
                         break;
                     case 'Unit Energy GRW':
-                        blendTypes = [CardType.GRASS, CardType.FIRE, CardType.WATER];
+                        blendTypes = [card_types_1.CardType.GRASS, card_types_1.CardType.FIRE, card_types_1.CardType.WATER];
                         break;
                     case 'Unit Energy LPM':
-                        blendTypes = [CardType.LIGHTNING, CardType.PSYCHIC, CardType.METAL];
+                        blendTypes = [card_types_1.CardType.LIGHTNING, card_types_1.CardType.PSYCHIC, card_types_1.CardType.METAL];
                         break;
                     case 'Unit Energy FDY':
-                        blendTypes = [CardType.FIGHTING, CardType.DARK, CardType.FAIRY];
+                        blendTypes = [card_types_1.CardType.FIGHTING, card_types_1.CardType.DARK, card_types_1.CardType.FAIRY];
                         break;
                     case 'Dark Metal Energy':
-                        blendTypes = [CardType.DARK, CardType.METAL];
+                        blendTypes = [card_types_1.CardType.DARK, card_types_1.CardType.METAL];
                         break;
                 }
                 if (blendTypes) {
@@ -95,7 +98,7 @@ export class StateUtils {
         // END HANDLING BLEND/UNIT ENERGIES
         // Check if we have enough rainbow energies for remaining needs
         for (let i = 0; i < rainbow; i++) {
-            const index = provides.findIndex(energy => energy === CardType.ANY);
+            const index = provides.findIndex(energy => energy === card_types_1.CardType.ANY);
             if (index !== -1) {
                 provides.splice(index, 1);
             }
@@ -150,29 +153,29 @@ export class StateUtils {
     static getPlayerById(state, playerId) {
         const player = state.players.find(p => p.id === playerId);
         if (player === undefined) {
-            throw new GameError(GameMessage.INVALID_GAME_STATE);
+            throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_GAME_STATE);
         }
         return player;
     }
     static getOpponent(state, player) {
         const opponent = state.players.find(p => p.id !== player.id);
         if (opponent === undefined) {
-            throw new GameError(GameMessage.INVALID_GAME_STATE);
+            throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_GAME_STATE);
         }
         return opponent;
     }
     static getTarget(state, player, target) {
-        if (target.player === PlayerType.TOP_PLAYER) {
+        if (target.player === play_card_action_1.PlayerType.TOP_PLAYER) {
             player = StateUtils.getOpponent(state, player);
         }
-        if (target.slot === SlotType.ACTIVE) {
+        if (target.slot === play_card_action_1.SlotType.ACTIVE) {
             return player.active;
         }
-        if (target.slot !== SlotType.BENCH) {
-            throw new GameError(GameMessage.INVALID_TARGET);
+        if (target.slot !== play_card_action_1.SlotType.BENCH) {
+            throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_TARGET);
         }
         if (player.bench[target.index] === undefined) {
-            throw new GameError(GameMessage.INVALID_TARGET);
+            throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_TARGET);
         }
         return player.bench[target.index];
     }
@@ -191,7 +194,7 @@ export class StateUtils {
         }
         const cardList = cardLists.find(c => c.cards.includes(card));
         if (cardList === undefined) {
-            throw new GameError(GameMessage.INVALID_GAME_STATE);
+            throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_GAME_STATE);
         }
         return cardList;
     }
@@ -222,14 +225,14 @@ export class StateUtils {
                 return player;
             }
         }
-        throw new GameError(GameMessage.INVALID_GAME_STATE);
+        throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_GAME_STATE);
     }
     static isPokemonInPlay(player, pokemon, location) {
         let inPlay = false;
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
+        player.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
             if (card === pokemon) {
-                if ((location === SlotType.BENCH && cardList === player.active) ||
-                    (location === SlotType.ACTIVE && cardList !== player.active)) {
+                if ((location === play_card_action_1.SlotType.BENCH && cardList === player.active) ||
+                    (location === play_card_action_1.SlotType.ACTIVE && cardList !== player.active)) {
                     inPlay = false;
                 }
                 else {
@@ -248,3 +251,4 @@ export class StateUtils {
         return undefined;
     }
 }
+exports.StateUtils = StateUtils;

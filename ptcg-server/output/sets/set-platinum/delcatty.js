@@ -46,11 +46,11 @@ class Delcatty extends pokemon_card_1.PokemonCard {
         this.POWER_CIRCULATION_MARKER = 'POWER_CIRCULATION_MARKER';
     }
     reduceEffect(store, state, effect) {
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.POWER_CIRCULATION_MARKER, this);
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.POWER_CIRCULATION_MARKER, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.HAS_MARKER(this.POWER_CIRCULATION_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.POWER_CIRCULATION_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             if (player.active.cards[0] === this && player.active.specialConditions.length > 0) {
@@ -91,7 +91,7 @@ class Delcatty extends pokemon_card_1.PokemonCard {
                                     cardList.damage += 20;
                                 }
                             });
-                            prefabs_1.ADD_MARKER(this.POWER_CIRCULATION_MARKER, player, this);
+                            (0, prefabs_1.ADD_MARKER)(this.POWER_CIRCULATION_MARKER, player, this);
                             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
                                 if (cardList.getPokemonCard() === this) {
                                     cardList.addBoardEffect(card_types_1.BoardEffect.ABILITY_USED);
@@ -103,10 +103,10 @@ class Delcatty extends pokemon_card_1.PokemonCard {
             });
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const delcattyDamage = effect.player.active.damage;
             effect.damage += (delcattyDamage * 10 / 10);
-            attack_effects_1.HEAL_X_DAMAGE_FROM_THIS_POKEMON(20, effect, store, state);
+            (0, attack_effects_1.HEAL_X_DAMAGE_FROM_THIS_POKEMON)(20, effect, store, state);
             return state;
         }
         return state;

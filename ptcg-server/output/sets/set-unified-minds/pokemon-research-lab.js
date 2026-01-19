@@ -21,8 +21,8 @@ class PokemonResearchLab extends trainer_card_1.TrainerCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof game_effects_1.UseStadiumEffect && state_utils_1.StateUtils.getStadiumCard(state) === this) {
             const player = effect.player;
-            const slots = prefabs_1.GET_PLAYER_BENCH_SLOTS(player);
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player, { evolvesFrom: 'Unidentified Fossil' }, { min: 0, max: Math.min(2, slots.length), allowCancel: true });
+            const slots = (0, prefabs_1.GET_PLAYER_BENCH_SLOTS)(player);
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, player, { evolvesFrom: 'Unidentified Fossil' }, { min: 0, max: Math.min(2, slots.length), allowCancel: true });
             return store.reduceEffect(state, new game_phase_effects_1.EndTurnEffect(player));
         }
         return state;

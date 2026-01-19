@@ -50,7 +50,7 @@ class MGardevoirEx extends pokemon_card_1.PokemonCard {
             store.reduceEffect(state, endTurnEffect);
         }
         // Brilliant Arrow
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let fairyEnergies = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {

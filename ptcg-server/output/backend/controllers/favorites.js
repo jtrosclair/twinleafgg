@@ -80,28 +80,28 @@ class Favorites extends controller_1.Controller {
     }
 }
 __decorate([
-    controller_1.Get('/list'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/list'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Favorites.prototype, "onList", null);
 __decorate([
-    controller_1.Post('/set'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        cardName: services_1.check().required(),
-        fullName: services_1.check().required()
+    (0, controller_1.Post)('/set'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        cardName: (0, services_1.check)().required(),
+        fullName: (0, services_1.check)().required()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Favorites.prototype, "onSet", null);
 __decorate([
-    controller_1.Post('/clear'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        cardName: services_1.check().required()
+    (0, controller_1.Post)('/clear'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        cardName: (0, services_1.check)().required()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),

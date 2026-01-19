@@ -29,16 +29,16 @@ class Magby extends game_1.PokemonCard {
         this.CLEAR_SCORCHING_HEATER_MARKER = 'CLEAR_SCORCHING_HEATER_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
             const cardList = game_1.StateUtils.findCardList(state, this);
-            prefabs_1.ADD_MARKER(this.SCORCHING_HEATER_MARKER, cardList, this);
-            prefabs_1.ADD_MARKER(this.CLEAR_SCORCHING_HEATER_MARKER, opponent, this);
+            (0, prefabs_1.ADD_MARKER)(this.SCORCHING_HEATER_MARKER, cardList, this);
+            (0, prefabs_1.ADD_MARKER)(this.CLEAR_SCORCHING_HEATER_MARKER, opponent, this);
         }
-        if ((effect instanceof attack_effects_1.PutDamageEffect) && prefabs_1.HAS_MARKER(this.SCORCHING_HEATER_MARKER, effect.target, this) && state.phase === game_1.GamePhase.ATTACK) {
+        if ((effect instanceof attack_effects_1.PutDamageEffect) && (0, prefabs_1.HAS_MARKER)(this.SCORCHING_HEATER_MARKER, effect.target, this) && state.phase === game_1.GamePhase.ATTACK) {
             effect.source.damage += 60;
         }
-        prefabs_1.CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN(state, effect, this.CLEAR_SCORCHING_HEATER_MARKER, this.SCORCHING_HEATER_MARKER, this);
+        (0, prefabs_1.CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN)(state, effect, this.CLEAR_SCORCHING_HEATER_MARKER, this.SCORCHING_HEATER_MARKER, this);
         return state;
     }
 }

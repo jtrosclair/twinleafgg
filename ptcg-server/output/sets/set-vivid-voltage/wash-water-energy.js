@@ -29,7 +29,7 @@ Prevent all effects of attacks from your opponent's Pokémon done to the [W] Pok
         }
         // Prevent effects of attacks
         if (effect instanceof attack_effects_1.AbstractAttackEffect && ((_b = (_a = effect.target) === null || _a === void 0 ? void 0 : _a.cards) === null || _b === void 0 ? void 0 : _b.includes(this))) {
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.opponent, this, effect.target)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.opponent, this, effect.target)) {
                 return state;
             }
             const checkPokemonType = new check_effects_1.CheckPokemonTypeEffect(effect.target);

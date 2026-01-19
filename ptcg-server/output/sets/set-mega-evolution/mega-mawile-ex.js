@@ -35,13 +35,13 @@ class MegaMawileEx extends game_1.PokemonCard {
         this.regulationMark = 'I';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const prizesTaken = 6 - player.getPrizeLeft();
             const damagePerPrize = 80;
             effect.damage = (prizesTaken * damagePerPrize);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             if (effect.opponent.active.damage > 0) {
                 effect.damage = 30;
             }

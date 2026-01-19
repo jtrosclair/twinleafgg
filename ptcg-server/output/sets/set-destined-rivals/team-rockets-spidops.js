@@ -43,7 +43,7 @@ class TeamRocketsSpidops extends game_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.CHARGE_UP_MARKER, this);
         }
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInDiscard = player.discard.cards.some(c => {
                 return c instanceof energy_card_1.EnergyCard
@@ -67,7 +67,7 @@ class TeamRocketsSpidops extends game_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             // Count Team Rocket's Pokemon in play
             const player = effect.player;
             let teamRocketCount = 0;

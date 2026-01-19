@@ -43,7 +43,7 @@ class Kingdraex extends pokemon_card_1.PokemonCard {
         this.PROTECTIVE_MARKER = 'PROTECTIVE_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof attack_effects_1.PutDamageEffect && !prefabs_1.IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
+        if (effect instanceof attack_effects_1.PutDamageEffect && !(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, effect.player, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             let isKingdraInPlay = false;
@@ -60,7 +60,7 @@ class Kingdraex extends pokemon_card_1.PokemonCard {
                 effect.damage -= 10;
             }
         }
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
             if (!player.discard.cards.some(card => card.superType === card_types_1.SuperType.ENERGY)) {
                 return state;
@@ -73,14 +73,14 @@ class Kingdraex extends pokemon_card_1.PokemonCard {
                 }
                 for (const transfer of transfers) {
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.attacks[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.attacks[0] });
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.ADD_MARKER(this.PROTECTIVE_MARKER, effect.player.active, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.ADD_MARKER)(this.PROTECTIVE_MARKER, effect.player.active, this);
         }
-        if (effect instanceof check_effects_1.CheckPokemonStatsEffect && prefabs_1.HAS_MARKER(this.PROTECTIVE_MARKER, effect.target, this)) {
+        if (effect instanceof check_effects_1.CheckPokemonStatsEffect && (0, prefabs_1.HAS_MARKER)(this.PROTECTIVE_MARKER, effect.target, this)) {
             if (effect.target.getPokemonCard() === this) {
                 effect.weakness = [];
             }
@@ -89,8 +89,8 @@ class Kingdraex extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, pokemon => {
-                if (prefabs_1.HAS_MARKER(this.PROTECTIVE_MARKER, pokemon, this)) {
-                    prefabs_1.REMOVE_MARKER(this.PROTECTIVE_MARKER, pokemon, this);
+                if ((0, prefabs_1.HAS_MARKER)(this.PROTECTIVE_MARKER, pokemon, this)) {
+                    (0, prefabs_1.REMOVE_MARKER)(this.PROTECTIVE_MARKER, pokemon, this);
                 }
             });
         }

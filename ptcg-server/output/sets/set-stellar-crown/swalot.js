@@ -36,7 +36,7 @@ class Swalot extends pokemon_card_1.PokemonCard {
         this.fullName = 'Swalot SCR';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             const playerProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, player.active);
@@ -51,8 +51,8 @@ class Swalot extends pokemon_card_1.PokemonCard {
                 effect.damage += 160;
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED(store, state, effect);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED)(store, state, effect);
         }
         return state;
     }

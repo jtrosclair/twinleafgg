@@ -1,4 +1,7 @@
-export var GameCoreError;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GameMessage = exports.GameLog = exports.GameCardMessage = exports.GameStoreMessage = exports.GameCoreError = void 0;
+var GameCoreError;
 (function (GameCoreError) {
     GameCoreError["ERROR_BOT_NOT_FOUND"] = "ERROR_BOT_NOT_FOUND";
     GameCoreError["ERROR_BOT_NOT_INITIALIZED"] = "ERROR_BOT_NOT_INITIALIZED";
@@ -10,8 +13,8 @@ export var GameCoreError;
     GameCoreError["ERROR_SERIALIZER"] = "ERROR_SERIALIZER";
     GameCoreError["ERROR_SIMULATOR_NOT_STABLE"] = "ERROR_SIMULATOR_NOT_STABLE";
     GameCoreError["MUST_BE_IN_ACTIVE_SPOT"] = "MUST_BE_IN_ACTIVE_SPOT";
-})(GameCoreError || (GameCoreError = {}));
-export var GameStoreMessage;
+})(GameCoreError = exports.GameCoreError || (exports.GameCoreError = {}));
+var GameStoreMessage;
 (function (GameStoreMessage) {
     GameStoreMessage["ACTION_IN_PROGRESS"] = "ACTION_IN_PROGRESS";
     GameStoreMessage["ALREADY_PLAYING"] = "ALREADY_PLAYING";
@@ -67,8 +70,8 @@ export var GameStoreMessage;
     GameStoreMessage["MULLIGAN"] = "MULLIGAN";
     GameStoreMessage["CHOOSE_PRIZES_SETUP"] = "CHOOSE_PRIZES_SETUP";
     GameStoreMessage["WANT_TO_DRAW_CARDS"] = "WANT_TO_DRAW_CARDS";
-})(GameStoreMessage || (GameStoreMessage = {}));
-export var GameCardMessage;
+})(GameStoreMessage = exports.GameStoreMessage || (exports.GameStoreMessage = {}));
+var GameCardMessage;
 (function (GameCardMessage) {
     GameCardMessage["HEADS"] = "HEADS";
     GameCardMessage["TAILS"] = "TAILS";
@@ -219,8 +222,8 @@ export var GameCardMessage;
     GameCardMessage["ROCK"] = "ROCK";
     GameCardMessage["PAPER"] = "PAPER";
     GameCardMessage["SCISSORS"] = "SCISSORS";
-})(GameCardMessage || (GameCardMessage = {}));
-export var GameLog;
+})(GameCardMessage = exports.GameCardMessage || (exports.GameCardMessage = {}));
+var GameLog;
 (function (GameLog) {
     GameLog["LOG_BANNED_BY_ARBITER"] = "LOG_BANNED_BY_ARBITER";
     GameLog["LOG_ABILITY_BLOCKS_DAMAGE"] = "LOG_ABILITY_BLOCKS_DAMAGE";
@@ -284,6 +287,6 @@ export var GameLog;
     GameLog["LOG_PLAYER_CHOOSES"] = "LOG_PLAYER_CHOOSES";
     GameLog["LOG_CARD_MOVED"] = "LOG_CARD_MOVED";
     GameLog["LOG_SHUFFLE_POKEMON_INTO_DECK"] = "SHUFFLE_POKEMON_INTO_DECK";
-})(GameLog || (GameLog = {}));
+})(GameLog = exports.GameLog || (exports.GameLog = {}));
 // tslint:disable-next-line
-export const GameMessage = Object.assign(Object.assign(Object.assign({}, GameCoreError), GameStoreMessage), GameCardMessage);
+exports.GameMessage = Object.assign(Object.assign(Object.assign({}, GameCoreError), GameStoreMessage), GameCardMessage);

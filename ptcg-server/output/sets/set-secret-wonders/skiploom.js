@@ -39,7 +39,7 @@ class Skiploom extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.getPokemonCard() === this) {
             const player = effect.player;
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
@@ -50,12 +50,12 @@ class Skiploom extends pokemon_card_1.PokemonCard {
                 effect.damage -= 20;
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             this.usedSmashTurn = true;
         }
         if (effect instanceof game_phase_effects_1.AfterAttackEffect && this.usedSmashTurn) {
             const player = effect.player;
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
             this.usedSmashTurn = false;
         }
         return state;

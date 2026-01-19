@@ -42,7 +42,7 @@ class Umbreonex extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Darker Ring
-        if (prefabs_1.JUST_EVOLVED(effect, this) && !prefabs_1.IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+        if ((0, prefabs_1.JUST_EVOLVED)(effect, this) && !(0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, effect.player, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const hasBench = opponent.bench.some(b => b.cards.length > 0);
@@ -57,16 +57,16 @@ class Umbreonex extends game_1.PokemonCard {
             });
         }
         // Black Cry
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
-            prefabs_1.ADD_MARKER(this.BLACK_CRY_MARKER, opponent.active, this);
-            return prefabs_1.BLOCK_RETREAT(store, state, effect, this);
+            (0, prefabs_1.ADD_MARKER)(this.BLACK_CRY_MARKER, opponent.active, this);
+            return (0, prefabs_1.BLOCK_RETREAT)(store, state, effect, this);
         }
-        prefabs_1.BLOCK_RETREAT_IF_MARKER(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
-        prefabs_1.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.BLACK_CRY_MARKER, this);
+        (0, prefabs_1.BLOCK_RETREAT_IF_MARKER)(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN)(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.BLACK_CRY_MARKER, this);
         // Black Cry Power
-        if (effect instanceof game_effects_1.PowerEffect && prefabs_1.HAS_MARKER(this.BLACK_CRY_MARKER, effect.player.active, this) && effect.power.powerType === game_1.PowerType.POKEPOWER) {
+        if (effect instanceof game_effects_1.PowerEffect && (0, prefabs_1.HAS_MARKER)(this.BLACK_CRY_MARKER, effect.player.active, this) && effect.power.powerType === game_1.PowerType.POKEPOWER) {
             throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
         }
         return state;

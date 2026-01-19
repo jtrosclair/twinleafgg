@@ -59,10 +59,10 @@ class Skeledirgeex extends pokemon_card_1.PokemonCard {
                 const card = selected[0];
                 player.hand.moveCardTo(card, player.discard);
                 player.marker.addMarker(this.INCENDIARY_SONG_MARKER, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && prefabs_1.HAS_MARKER(this.INCENDIARY_SONG_MARKER, effect.player, this)) {
+        if (effect instanceof game_effects_1.AttackEffect && (0, prefabs_1.HAS_MARKER)(this.INCENDIARY_SONG_MARKER, effect.player, this)) {
             if (effect.damage > 0) {
                 effect.damage += 60;
             }
@@ -89,7 +89,7 @@ class Skeledirgeex extends pokemon_card_1.PokemonCard {
             }
             effect.preventDefault = true;
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.INCENDIARY_SONG_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.INCENDIARY_SONG_MARKER, this);
         return state;
     }
 }

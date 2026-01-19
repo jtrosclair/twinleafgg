@@ -57,31 +57,31 @@ class VileplumeGX extends pokemon_card_1.PokemonCard {
             player.marker.removeMarker(this.FRAGRANT_FLOWER_GARDEN_MARKER, this);
         }
         // Fragrant Flower Garden
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.FRAGRANT_FLOWER_GARDEN_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             player.marker.addMarker(this.FRAGRANT_FLOWER_GARDEN_MARKER, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
                 const healEffect = new game_effects_1.HealEffect(player, cardList, 30);
                 state = store.reduceEffect(state, healEffect);
             });
         }
         // Massive Bloom
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             effect.damage -= effect.source.damage;
         }
         // Allergic Explosion-GX
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.ADD_BURN_TO_PLAYER_ACTIVE(store, state, opponent, this);
-            prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, opponent, this);
-            prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
+            (0, prefabs_1.ADD_BURN_TO_PLAYER_ACTIVE)(store, state, opponent, this);
+            (0, prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE)(store, state, opponent, this);
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, opponent, this);
         }
         return state;
     }

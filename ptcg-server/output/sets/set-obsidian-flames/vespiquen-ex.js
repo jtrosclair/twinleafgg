@@ -39,7 +39,7 @@ class Vespiquenex extends pokemon_card_1.PokemonCard {
         this.fullName = 'Vespiquen ex OBF';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { allowCancel: false }), targets => {
                 if (!targets || targets.length === 0) {
@@ -50,7 +50,7 @@ class Vespiquenex extends pokemon_card_1.PokemonCard {
                 store.reduceEffect(state, damageEffect);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = effect.opponent;
             if (opponent.active.damage > 0) {
                 const activeDamageEffect = new attack_effects_1.PutCountersEffect(effect, 20);

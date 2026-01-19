@@ -40,13 +40,13 @@ class MrMime extends pokemon_card_1.PokemonCard {
         // Pantomime
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.player, effect.pokemonCard)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, effect.pokemonCard)) {
                 return state;
             }
-            prefabs_1.BLOCK_IF_DECK_EMPTY(effect.player);
+            (0, prefabs_1.BLOCK_IF_DECK_EMPTY)(effect.player);
             return store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_message_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
                 if (wantToUse) {
-                    prefabs_1.ABILITY_USED(player, this);
+                    (0, prefabs_1.ABILITY_USED)(player, this);
                     // Select prize to swap
                     return store.prompt(state, new game_1.ChoosePrizePrompt(player.id, game_message_1.GameMessage.CHOOSE_PRIZE_CARD, { count: 1, allowCancel: false, isSecret: true }), selected => {
                         const selectedPrizes = selected || [];
@@ -69,7 +69,7 @@ class MrMime extends pokemon_card_1.PokemonCard {
         // Juggling
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
             const player = effect.player;
-            return prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 4, results => {
+            return (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 4, results => {
                 let heads = 0;
                 results.forEach(r => {
                     if (r)

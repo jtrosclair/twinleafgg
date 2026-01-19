@@ -32,9 +32,9 @@ class Rockruff extends pokemon_card_1.PokemonCard {
         this.fullName = 'Rockruff JTG';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_DECK_EMPTY(player);
+            (0, prefabs_1.BLOCK_IF_DECK_EMPTY)(player);
             const deckTop = new game_1.CardList();
             player.deck.moveTo(deckTop, 1);
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {

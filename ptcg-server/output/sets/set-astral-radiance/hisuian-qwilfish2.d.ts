@@ -12,7 +12,7 @@ export declare class HisuianQwilfish2 extends PokemonCard {
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;
-        cost: never[];
+        cost: any[];
         damage: number;
         text: string;
     }[];

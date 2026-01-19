@@ -49,7 +49,7 @@ class Ursaring extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_effects_1.AttackEffect && ((_a = effect.source.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.stage) === card_types_1.Stage.BASIC) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, opponent, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
             if (opponent.active.getPokemonCard() === this) {
@@ -60,7 +60,7 @@ class Ursaring extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_effects_1.PowerEffect && effect.power.powerType === pokemon_types_1.PowerType.POKEPOWER) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, opponent, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
             let effectCardList;
@@ -74,14 +74,14 @@ class Ursaring extends pokemon_card_1.PokemonCard {
             }
         }
         // Drag Off
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const bench = opponent.bench.filter(bench => bench.cards.length > 0);
             if (bench.length === 0) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
                     store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_SWITCH, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.BENCH], { allowCancel: false }), result => {
                         const cardList = result[0];
@@ -91,8 +91,8 @@ class Ursaring extends pokemon_card_1.PokemonCard {
             }, game_1.GameMessage.WANT_TO_SWITCH_POKEMON);
         }
         // Rock Smash
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            attack_effects_1.FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE(store, state, effect, 20);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, attack_effects_1.FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE)(store, state, effect, 20);
         }
         return state;
     }

@@ -22,7 +22,7 @@ function* playCard(next, store, state, self, effect) {
     player.hand.moveCardTo(effect.trainerCard, player.supporter);
     // We will discard this card after prompt confirmation
     effect.preventDefault = true;
-    prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { sourceCard: effect.trainerCard });
+    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { sourceCard: effect.trainerCard });
     // Count tools and items separately
     let pokemons = 0;
     let supporters = 0;

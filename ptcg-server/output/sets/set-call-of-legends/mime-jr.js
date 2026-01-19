@@ -37,14 +37,14 @@ class MimeJr extends pokemon_card_1.PokemonCard {
                 && effect.target.getPokemonCard() === this
                 && player.active.cards[0] === this
                 && player.active.specialConditions.includes(card_types_1.SpecialCondition.ASLEEP)
-                && !prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+                && !(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 effect.damage = 0;
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.MOVE_CARDS(store, state, opponent.deck, opponent.lostzone, { cards: [opponent.deck.cards[0]], sourceCard: this, sourceEffect: this.attacks[0] });
+            (0, prefabs_1.MOVE_CARDS)(store, state, opponent.deck, opponent.lostzone, { cards: [opponent.deck.cards[0]], sourceCard: this, sourceEffect: this.attacks[0] });
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
                 if (cardList.getPokemonCard() === this) {
                     cardList.addSpecialCondition(card_types_1.SpecialCondition.ASLEEP);

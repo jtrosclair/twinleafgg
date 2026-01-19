@@ -39,7 +39,7 @@ class Electrodeex extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         //Versatile pokebody
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
                 if (cardList.getPokemonCard() === this) {
@@ -59,12 +59,12 @@ class Electrodeex extends pokemon_card_1.PokemonCard {
                 // cancelled by user
                 for (const transfer of transfers) {
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                    prefabs_1.MOVE_CARD_TO(state, transfer.card, target);
+                    (0, prefabs_1.MOVE_CARD_TO)(state, transfer.card, target);
                 }
             });
         }
         //Power Move attack
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let totalEnergy = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {

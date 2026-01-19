@@ -35,7 +35,7 @@ class Illumise extends pokemon_card_1.PokemonCard {
         this.fullName = 'Illumise TWM';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (state.turn != 2) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_ATTACK);
             }

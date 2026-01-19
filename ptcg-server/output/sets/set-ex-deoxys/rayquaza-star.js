@@ -34,7 +34,7 @@ class RayquazaStar extends game_1.PokemonCard {
         this.fullName = 'Rayquaza Star DX';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const flipCoin = (heads = 0) => {
                 return store.prompt(state, [
@@ -49,8 +49,8 @@ class RayquazaStar extends game_1.PokemonCard {
             };
             return flipCoin();
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON(store, state, effect, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON)(store, state, effect, this);
             const opponent = effect.opponent;
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, target) => {
                 if (target.tags.includes(game_1.CardTag.POKEMON_ex)) {

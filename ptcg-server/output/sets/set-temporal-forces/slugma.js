@@ -29,7 +29,7 @@ class Slugma extends pokemon_card_1.PokemonCard {
         this.fullName = 'Slugma TEF';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (effect.opponent.active.specialConditions.includes(card_types_1.SpecialCondition.BURNED)) {
                 effect.damage += 40;
             }

@@ -23,19 +23,19 @@ class CrystalShard extends trainer_card_1.TrainerCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof check_effects_1.CheckPokemonTypeEffect && effect.target.tools.includes(this)) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
-            if (!prefabs_1.IS_TOOL_BLOCKED(store, state, player, this)) {
+            if (!(0, prefabs_1.IS_TOOL_BLOCKED)(store, state, player, this)) {
                 effect.cardTypes = [C];
             }
         }
         if (effect instanceof game_effects_1.AttackEffect && effect.source.tools.includes(this)) {
-            prefabs_1.ADD_MARKER(this.ATTACKED_MARKER, effect.player, this);
+            (0, prefabs_1.ADD_MARKER)(this.ATTACKED_MARKER, effect.player, this);
             console.log('Crystal Shard was used this turn, adding marker');
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && prefabs_1.HAS_MARKER(this.ATTACKED_MARKER, effect.player, this)) {
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.ATTACKED_MARKER, effect.player, this)) {
             const player = effect.player;
             console.log('Crystal Shard was used this turn, moving to discard');
-            prefabs_1.MOVE_CARDS(store, state, player.active, player.discard, { cards: [this] });
-            prefabs_1.REMOVE_MARKER(this.ATTACKED_MARKER, player, this);
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.active, player.discard, { cards: [this] });
+            (0, prefabs_1.REMOVE_MARKER)(this.ATTACKED_MARKER, player, this);
         }
         return state;
     }

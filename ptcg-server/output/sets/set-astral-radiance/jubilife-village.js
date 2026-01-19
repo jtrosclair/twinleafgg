@@ -29,11 +29,11 @@ class JubilifeVillage extends trainer_card_1.TrainerCard {
                 throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_USE_STADIUM);
             }
             const cards = player.hand.cards.filter(c => c !== this);
-            prefabs_1.MOVE_CARDS(store, state, player.hand, player.deck, { cards, sourceCard: this });
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck, { cards, sourceCard: this });
             state = store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                 player.deck.applyOrder(order);
             });
-            prefabs_1.DRAW_CARDS(player, 5);
+            (0, prefabs_1.DRAW_CARDS)(player, 5);
             effect.preventDefault = true;
             store.log(state, game_message_1.GameLog.LOG_PLAYER_USES_STADIUM, { name: player.name, stadium: effect.stadium.name });
             player.stadiumUsedTurn = state.turn;

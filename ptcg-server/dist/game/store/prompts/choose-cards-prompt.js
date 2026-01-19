@@ -1,13 +1,16 @@
-import { CardType, EnergyType, SuperType, TrainerType, Stage } from '../card/card-types';
-import { Prompt } from './prompt';
-export const ChooseCardsPromptType = 'Choose cards';
-export class ChooseCardsPrompt extends Prompt {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ChooseCardsPrompt = exports.ChooseCardsPromptType = void 0;
+const card_types_1 = require("../card/card-types");
+const prompt_1 = require("./prompt");
+exports.ChooseCardsPromptType = 'Choose cards';
+class ChooseCardsPrompt extends prompt_1.Prompt {
     constructor(player, message, cards, filter, options) {
         super(player.id);
         this.message = message;
         this.cards = cards;
         this.filter = filter;
-        this.type = ChooseCardsPromptType;
+        this.type = exports.ChooseCardsPromptType;
         this.blockedCardIds = [];
         this.player = player;
         // Default options
@@ -94,15 +97,15 @@ export class ChooseCardsPrompt extends Prompt {
         for (const card of result) {
             const count = countMap[card.superType.toString()] || 0;
             countMap[card.superType.toString()] = count + 1;
-            if (card.superType === SuperType.TRAINER) {
+            if (card.superType === card_types_1.SuperType.TRAINER) {
                 const trainerTypeCount = countMap[`${card.superType}-${card.trainerType}`] || 0;
                 countMap[`${card.superType}-${card.trainerType}`] = trainerTypeCount + 1;
             }
-            if (card.superType === SuperType.ENERGY) {
+            if (card.superType === card_types_1.SuperType.ENERGY) {
                 const energyTypeCount = countMap[`${card.superType}-${card.energyType}`] || 0;
                 countMap[`${card.superType}-${card.energyType}`] = energyTypeCount + 1;
             }
-            if (card.superType === SuperType.POKEMON) {
+            if (card.superType === card_types_1.SuperType.POKEMON) {
                 const pokemonCard = card;
                 const stageCount = countMap[`${card.superType}-${pokemonCard.stage}`] || 0;
                 countMap[`${card.superType}-${pokemonCard.stage}`] = stageCount + 1;
@@ -112,25 +115,25 @@ export class ChooseCardsPrompt extends Prompt {
         // Check if we have both basics and evolutions selected - only if maxBasics or maxEvolutions is defined
         // AND maxStage1/maxStage2 are NOT defined (old pattern where we select EITHER basics OR evolutions)
         if ((maxBasics !== undefined || maxEvolutions !== undefined) && maxStage1 === undefined && maxStage2 === undefined) {
-            const hasBasics = countMap[`${SuperType.POKEMON}-${Stage.BASIC}`] > 0;
-            const hasEvolutions = countMap[`${SuperType.POKEMON}`] - (countMap[`${SuperType.POKEMON}-${Stage.BASIC}`] || 0) > 0;
+            const hasBasics = countMap[`${card_types_1.SuperType.POKEMON}-${card_types_1.Stage.BASIC}`] > 0;
+            const hasEvolutions = countMap[`${card_types_1.SuperType.POKEMON}`] - (countMap[`${card_types_1.SuperType.POKEMON}-${card_types_1.Stage.BASIC}`] || 0) > 0;
             if (hasBasics && hasEvolutions) {
                 return false;
             }
         }
-        if ((maxPokemons !== undefined && maxPokemons < countMap[`${SuperType.POKEMON}`])
-            || (maxBasicEnergies !== undefined && maxBasicEnergies < countMap[`${SuperType.ENERGY}-${EnergyType.BASIC}`])
-            || (maxEnergies !== undefined && maxEnergies < countMap[`${SuperType.ENERGY}`])
-            || (maxTrainers !== undefined && maxTrainers < countMap[`${SuperType.TRAINER}`])
-            || (maxItems !== undefined && maxItems < countMap[`${SuperType.TRAINER}-${TrainerType.ITEM}`])
-            || (maxStadiums !== undefined && maxStadiums < countMap[`${SuperType.TRAINER}-${TrainerType.STADIUM}`])
-            || (maxSupporters !== undefined && maxSupporters < countMap[`${SuperType.TRAINER}-${TrainerType.SUPPORTER}`])
-            || (maxSpecialEnergies !== undefined && maxSpecialEnergies < countMap[`${SuperType.ENERGY}-${EnergyType.SPECIAL}`])
-            || (maxTools !== undefined && maxTools < countMap[`${SuperType.TRAINER}-${TrainerType.TOOL}`])
-            || (maxBasics !== undefined && maxBasics < countMap[`${SuperType.POKEMON}-${Stage.BASIC}`])
-            || (maxEvolutions !== undefined && maxEvolutions < (countMap[`${SuperType.POKEMON}`] - (countMap[`${SuperType.POKEMON}-${Stage.BASIC}`] || 0)))
-            || (maxStage1 !== undefined && maxStage1 < (countMap[`${SuperType.POKEMON}-${Stage.STAGE_1}`] || 0))
-            || (maxStage2 !== undefined && maxStage2 < (countMap[`${SuperType.POKEMON}-${Stage.STAGE_2}`] || 0))) {
+        if ((maxPokemons !== undefined && maxPokemons < countMap[`${card_types_1.SuperType.POKEMON}`])
+            || (maxBasicEnergies !== undefined && maxBasicEnergies < countMap[`${card_types_1.SuperType.ENERGY}-${card_types_1.EnergyType.BASIC}`])
+            || (maxEnergies !== undefined && maxEnergies < countMap[`${card_types_1.SuperType.ENERGY}`])
+            || (maxTrainers !== undefined && maxTrainers < countMap[`${card_types_1.SuperType.TRAINER}`])
+            || (maxItems !== undefined && maxItems < countMap[`${card_types_1.SuperType.TRAINER}-${card_types_1.TrainerType.ITEM}`])
+            || (maxStadiums !== undefined && maxStadiums < countMap[`${card_types_1.SuperType.TRAINER}-${card_types_1.TrainerType.STADIUM}`])
+            || (maxSupporters !== undefined && maxSupporters < countMap[`${card_types_1.SuperType.TRAINER}-${card_types_1.TrainerType.SUPPORTER}`])
+            || (maxSpecialEnergies !== undefined && maxSpecialEnergies < countMap[`${card_types_1.SuperType.ENERGY}-${card_types_1.EnergyType.SPECIAL}`])
+            || (maxTools !== undefined && maxTools < countMap[`${card_types_1.SuperType.TRAINER}-${card_types_1.TrainerType.TOOL}`])
+            || (maxBasics !== undefined && maxBasics < countMap[`${card_types_1.SuperType.POKEMON}-${card_types_1.Stage.BASIC}`])
+            || (maxEvolutions !== undefined && maxEvolutions < (countMap[`${card_types_1.SuperType.POKEMON}`] - (countMap[`${card_types_1.SuperType.POKEMON}-${card_types_1.Stage.BASIC}`] || 0)))
+            || (maxStage1 !== undefined && maxStage1 < (countMap[`${card_types_1.SuperType.POKEMON}-${card_types_1.Stage.STAGE_1}`] || 0))
+            || (maxStage2 !== undefined && maxStage2 < (countMap[`${card_types_1.SuperType.POKEMON}-${card_types_1.Stage.STAGE_2}`] || 0))) {
             return false;
         }
         const blocked = this.options.blocked;
@@ -140,15 +143,15 @@ export class ChooseCardsPrompt extends Prompt {
         });
     }
     static getCardType(card) {
-        if (card.superType === SuperType.ENERGY) {
+        if (card.superType === card_types_1.SuperType.ENERGY) {
             const energyCard = card;
-            return energyCard.provides.length > 0 ? energyCard.provides[0] : CardType.NONE;
+            return energyCard.provides.length > 0 ? energyCard.provides[0] : card_types_1.CardType.NONE;
         }
-        if (card.superType === SuperType.POKEMON) {
+        if (card.superType === card_types_1.SuperType.POKEMON) {
             const pokemonCard = card;
             return pokemonCard.cardType;
         }
-        return CardType.NONE;
+        return card_types_1.CardType.NONE;
     }
     matchesFilter(card) {
         for (const key in this.filter) {
@@ -161,3 +164,4 @@ export class ChooseCardsPrompt extends Prompt {
         return true;
     }
 }
+exports.ChooseCardsPrompt = ChooseCardsPrompt;

@@ -41,7 +41,7 @@ class Cobalion extends pokemon_card_1.PokemonCard {
         this.CLEAR_QUICK_GUARD_MARKER = 'CLEAR_QUICK_GUARD_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             player.active.marker.addMarker(this.QUICK_GUARD_MARKER, this);
@@ -65,8 +65,8 @@ class Cobalion extends pokemon_card_1.PokemonCard {
                 });
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.DEAL_MORE_DAMAGE_FOR_EACH_PRIZE_CARD_TAKEN(effect, state, 30);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.DEAL_MORE_DAMAGE_FOR_EACH_PRIZE_CARD_TAKEN)(effect, state, 30);
         }
         return state;
     }

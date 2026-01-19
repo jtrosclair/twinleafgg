@@ -23,7 +23,7 @@ class BrocksGrit extends trainer_card_1.TrainerCard {
         this.text = 'Shuffle 6 in any combination of Pokémon and basic Energy cards from your discard pile into your deck.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const supporterTurn = player.supporterTurn;
             if (supporterTurn > 0) {
@@ -51,8 +51,8 @@ class BrocksGrit extends trainer_card_1.TrainerCard {
                 cards.forEach((card) => {
                     store.log(state, game_message_1.GameLog.LOG_PLAYER_RETURNS_TO_DECK_FROM_DISCARD, { name: player.name, card: card.name });
                 });
-                prefabs_1.MOVE_CARDS(store, state, player.discard, player.deck, { cards: cards, sourceCard: this });
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.deck, { cards: cards, sourceCard: this });
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
                     player.deck.applyOrder(order);
                 });

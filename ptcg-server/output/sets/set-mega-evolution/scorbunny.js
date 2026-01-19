@@ -27,7 +27,7 @@ class Scorbunny extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Wild Kick
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             state = store.prompt(state, new game_1.CoinFlipPrompt(player.id, game_1.GameMessage.COIN_FLIP), result => {
                 if (result === false) { // tails

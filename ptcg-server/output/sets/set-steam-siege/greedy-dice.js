@@ -48,7 +48,7 @@ class GreedyDice extends trainer_card_1.TrainerCard {
         effect.preventDefault = true;
         // Ask player if they want to use the card
         let wantToUse = false;
-        yield prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+        yield (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
             wantToUse = result;
             next();
         }, game_message_1.GameMessage.WANT_TO_USE_ITEM_FROM_PRIZES);
@@ -56,7 +56,7 @@ class GreedyDice extends trainer_card_1.TrainerCard {
         const prizeIndex = player.prizes.findIndex(prize => prize.cards.includes(this));
         const fallback = (prizeIndex) => {
             if (prizeIndex !== -1) {
-                prefabs_1.TAKE_SPECIFIC_PRIZES(store, state, player, [player.prizes[prizeIndex]], { skipReduce: true });
+                (0, prefabs_1.TAKE_SPECIFIC_PRIZES)(store, state, player, [player.prizes[prizeIndex]], { skipReduce: true });
             }
             return;
         };
@@ -85,13 +85,13 @@ class GreedyDice extends trainer_card_1.TrainerCard {
         catch (_a) {
             return state;
         }
-        const coinResult = prefabs_1.SIMULATE_COIN_FLIP(store, state, player);
+        const coinResult = (0, prefabs_1.SIMULATE_COIN_FLIP)(store, state, player);
         if (!coinResult) {
             return state;
         }
         player.supporter.moveCardTo(this, player.discard);
         // Handle extra prize (excluding the group this card is in)
-        yield prefabs_1.TAKE_X_PRIZES(store, state, player, 1, {
+        yield (0, prefabs_1.TAKE_X_PRIZES)(store, state, player, 1, {
             promptOptions: {
                 blocked: effect.prizes.map(p => player.prizes.indexOf(p))
             }

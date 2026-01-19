@@ -36,7 +36,7 @@ class CancelingCologne extends trainer_card_1.TrainerCard {
             // We will discard this card after prompt confirmation
             effect.preventDefault = true;
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         }
         if (effect instanceof game_effects_1.PowerEffect && !effect.power.exemptFromAbilityLock) {
             const player = effect.player;

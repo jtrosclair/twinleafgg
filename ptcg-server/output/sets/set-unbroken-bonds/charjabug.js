@@ -44,7 +44,7 @@ class Charjabug extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         var _a, _b;
         // The Special Energy Stuff
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.energyPlayedTurn === state.turn) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);

@@ -82,7 +82,7 @@ class Slaking extends pokemon_card_1.PokemonCard {
             }
             effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
             console.log('marker added');
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1);
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1);
         }
         return state;
     }

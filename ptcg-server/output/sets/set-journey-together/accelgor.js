@@ -26,12 +26,12 @@ class Accelgor extends game_1.PokemonCard {
         this.fullName = 'Accelgor JTG';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
-            prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, opponent, this);
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, opponent, this);
+            (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, opponent, this);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
         }
         return state;
     }

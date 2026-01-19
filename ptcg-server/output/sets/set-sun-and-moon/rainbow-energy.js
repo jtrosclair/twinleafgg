@@ -26,7 +26,7 @@ class RainbowEnergy extends energy_card_1.EnergyCard {
             effect.energyMap.push({ card: this, provides: [card_types_1.CardType.ANY] });
         }
         if (effect instanceof play_card_effects_1.AttachEnergyEffect && effect.energyCard === this) {
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.target)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.player, this, effect.target)) {
                 return state;
             }
             effect.target.damage += 10;

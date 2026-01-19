@@ -30,8 +30,8 @@ function* playCard(next, store, state, effect, self) {
             next();
         });
         // Get selected cards
-        prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards: cards, sourceCard: self });
-        prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+        (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: cards, sourceCard: self });
+        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         // Shuffle the deck
         yield store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
             player.deck.applyOrder(order);
@@ -41,8 +41,8 @@ function* playCard(next, store, state, effect, self) {
     }
     if (coinResults.some(r => r === true)) {
         // Get selected cards
-        prefabs_1.DRAW_CARDS(player, 1);
-        prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+        (0, prefabs_1.DRAW_CARDS)(player, 1);
+        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         return state;
     }
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {

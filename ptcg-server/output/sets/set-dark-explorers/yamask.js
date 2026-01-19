@@ -20,7 +20,7 @@ function* useAstonish(next, store, state, effect, self) {
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(player.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
-    prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.deck, { cards, sourceCard: self, sourceEffect: self.attacks[0] });
+    (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck, { cards, sourceCard: self, sourceEffect: self.attacks[0] });
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(opponent.id), order => {
         opponent.deck.applyOrder(order);
     });
@@ -47,14 +47,14 @@ class Yamask extends pokemon_card_1.PokemonCard {
         this.setNumber = '51';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             // Opponent has no cards in the hand
             if (opponent.hand.cards.length === 0) {
                 return state;
             }
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, (result) => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, (result) => {
                 if (!result) {
                     return state;
                 }

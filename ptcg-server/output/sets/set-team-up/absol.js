@@ -37,7 +37,7 @@ class Absol extends pokemon_card_1.PokemonCard {
         if (effect instanceof check_effects_1.CheckRetreatCostEffect && game_1.StateUtils.isPokemonInPlay(effect.player, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this) || !opponent.active.isStage(card_types_1.Stage.BASIC)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this) || !opponent.active.isStage(card_types_1.Stage.BASIC)) {
                 return state;
             }
             effect.cost.push(card_types_1.CardType.COLORLESS);

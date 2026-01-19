@@ -79,7 +79,7 @@ class ReshiramCharizardGX extends game_1.PokemonCard {
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
             const player = effect.player;
             const opponent = effect.opponent;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             const extraEffectCost = [game_1.CardType.FIRE, game_1.CardType.FIRE, game_1.CardType.FIRE, game_1.CardType.FIRE, game_1.CardType.FIRE, game_1.CardType.FIRE];
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);

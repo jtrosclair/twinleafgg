@@ -40,7 +40,7 @@ class Donphan extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.cards.includes(this)) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
-            if (!prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this) && prefabs_1.DAMAGED_FROM_FULL_HP(store, state, effect, player, effect.target)) {
+            if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this) && (0, prefabs_1.DAMAGED_FROM_FULL_HP)(store, state, effect, player, effect.target)) {
                 effect.surviveOnTenHPReason = this.powers[0].name;
             }
         }
@@ -55,19 +55,19 @@ class Donphan extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
             if (!this.usedAttack) {
                 this.usedAttack = false;
-                prefabs_1.REMOVE_MARKER(this.NEXT_TURN_MORE_DAMAGE_MARKER, effect.player, this);
-                prefabs_1.REMOVE_MARKER(this.NEXT_TURN_MORE_DAMAGE_MARKER_2, effect.player, this);
+                (0, prefabs_1.REMOVE_MARKER)(this.NEXT_TURN_MORE_DAMAGE_MARKER, effect.player, this);
+                (0, prefabs_1.REMOVE_MARKER)(this.NEXT_TURN_MORE_DAMAGE_MARKER_2, effect.player, this);
             }
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && prefabs_1.HAS_MARKER(this.NEXT_TURN_MORE_DAMAGE_MARKER, effect.player, this)) {
-            prefabs_1.ADD_MARKER(this.NEXT_TURN_MORE_DAMAGE_MARKER_2, effect.player, this);
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.NEXT_TURN_MORE_DAMAGE_MARKER, effect.player, this)) {
+            (0, prefabs_1.ADD_MARKER)(this.NEXT_TURN_MORE_DAMAGE_MARKER_2, effect.player, this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             // Check marker
-            if (prefabs_1.HAS_MARKER(this.NEXT_TURN_MORE_DAMAGE_MARKER, effect.player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.NEXT_TURN_MORE_DAMAGE_MARKER, effect.player, this)) {
                 effect.damage += 70;
             }
-            prefabs_1.ADD_MARKER(this.NEXT_TURN_MORE_DAMAGE_MARKER, effect.player, this);
+            (0, prefabs_1.ADD_MARKER)(this.NEXT_TURN_MORE_DAMAGE_MARKER, effect.player, this);
         }
         return state;
     }

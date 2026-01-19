@@ -42,7 +42,7 @@ class Parasect extends pokemon_card_1.PokemonCard {
             state.players.forEach(player => {
                 player.forEachPokemon(game_1.PlayerType.ANY, (list, card) => {
                     if (card === this) {
-                        if (prefabs_1.IS_POKEMON_POWER_BLOCKED(store, state, player, this)) {
+                        if ((0, prefabs_1.IS_POKEMON_POWER_BLOCKED)(store, state, player, this)) {
                             return;
                         }
                         if (player.active.getPokemonCard() === this &&
@@ -69,10 +69,10 @@ class Parasect extends pokemon_card_1.PokemonCard {
                 }
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_2.StateUtils.getOpponent(state, player);
-            return prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            return (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (result) {
                     const addSpecialCondition = new attack_effects_1.AddSpecialConditionsEffect(effect, [card_types_1.SpecialCondition.ASLEEP]);
                     addSpecialCondition.target = opponent.active;

@@ -34,7 +34,7 @@ class Tyrogue extends pokemon_card_1.PokemonCard {
         this.fullName = 'Tyrogue UF';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEvo = player.hand.cards.some(card => card instanceof pokemon_card_1.PokemonCard && (card.name === 'Hitmonlee' || card.name === 'Hitmonchan' || card.name === 'Hitmontop'));
             // Check if Wobbuffet is in the player's hand
@@ -64,7 +64,7 @@ class Tyrogue extends pokemon_card_1.PokemonCard {
                 return state;
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const playerBench = player.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
             const opponent = effect.opponent;

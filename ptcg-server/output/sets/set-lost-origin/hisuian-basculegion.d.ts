@@ -13,7 +13,7 @@ export declare class HisuianBasculegion extends PokemonCard {
     evolvesFrom: string;
     attacks: ({
         name: string;
-        cost: never[];
+        cost: any[];
         damage: number;
         damageCalculation: string;
         text: string;

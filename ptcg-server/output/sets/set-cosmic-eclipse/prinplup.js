@@ -53,7 +53,7 @@ class Prinplup extends pokemon_card_1.PokemonCard {
             // Choose benched Pokémon to damage
             return store.prompt(state, new choose_pokemon_prompt_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.BENCH], { min: 1, max: 1, allowCancel: false }), selected => {
                 const targets = selected || [];
-                prefabs_1.DAMAGE_OPPONENT_POKEMON(store, state, effect, 100, targets);
+                (0, prefabs_1.DAMAGE_OPPONENT_POKEMON)(store, state, effect, 100, targets);
             });
         }
         return state;

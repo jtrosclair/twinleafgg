@@ -39,7 +39,7 @@ class Gardevoir extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         //Telepass
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const supportersInDiscard = opponent.discard.cards.filter(card => {
@@ -49,36 +49,36 @@ class Gardevoir extends pokemon_card_1.PokemonCard {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             //One per turn only
-            if (prefabs_1.HAS_MARKER(this.TELEPASS_MARKER, player)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.TELEPASS_MARKER, player)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             //Do not allow if affected by a Special Condition
             if (player.active.cards[0] === this && player.active.specialConditions.length > 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.ADD_MARKER(this.TELEPASS_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.TELEPASS_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_COPY_EFFECT, opponent.discard, { superType: card_types_1.SuperType.TRAINER, trainerType: card_types_1.TrainerType.SUPPORTER }, { allowCancel: false, min: 1, max: 1 }), cards => {
                 const trainerCard = cards[0];
                 // Validate that the copied supporter can be played
-                if (!prefabs_1.CAN_PLAY_SUPPORTER_CARD(store, state, player, trainerCard)) {
+                if (!(0, prefabs_1.CAN_PLAY_SUPPORTER_CARD)(store, state, player, trainerCard)) {
                     return state;
                 }
                 return state;
             });
         }
         //Attack
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.ADD_MARKER(this.PSCHIC_LOCK_MARKER, opponent, this);
+            (0, prefabs_1.ADD_MARKER)(this.PSCHIC_LOCK_MARKER, opponent, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power.powerType === game_1.PowerType.POKEPOWER && prefabs_1.HAS_MARKER(this.PSCHIC_LOCK_MARKER, effect.player)) {
+        if (effect instanceof game_effects_1.PowerEffect && effect.power.powerType === game_1.PowerType.POKEPOWER && (0, prefabs_1.HAS_MARKER)(this.PSCHIC_LOCK_MARKER, effect.player)) {
             throw new game_1.GameError(game_1.GameMessage.ABILITY_BLOCKED);
         }
         //Remove Markers
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.TELEPASS_MARKER, this);
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.PSCHIC_LOCK_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.TELEPASS_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.PSCHIC_LOCK_MARKER, this);
         return state;
     }
 }

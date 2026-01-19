@@ -34,7 +34,7 @@ class TeamMagmasZangoose extends pokemon_card_1.PokemonCard {
         this.fullName = 'Team Magma\'s Zangoose MA';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const blocked = [];
             effect.player.deck.cards.forEach((card, index) => {
                 if (card instanceof pokemon_card_1.PokemonCard && (card.cardType === card_types_1.CardType.COLORLESS || card.tags.includes(card_types_1.CardTag.TEAM_MAGMA))) {
@@ -44,9 +44,9 @@ class TeamMagmasZangoose extends pokemon_card_1.PokemonCard {
                     blocked.push(index);
                 }
             });
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, effect.player, { stage: card_types_1.Stage.BASIC }, { min: 0, max: 1, blocked });
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, effect.player, { stage: card_types_1.Stage.BASIC }, { min: 0, max: 1, blocked });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             let magmaCount = 0;
             effect.player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
                 if (card.tags.includes(card_types_1.CardTag.TEAM_MAGMA)) {

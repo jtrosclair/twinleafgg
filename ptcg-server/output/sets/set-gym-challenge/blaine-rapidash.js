@@ -35,11 +35,11 @@ class BlainesRapidash extends pokemon_card_1.PokemonCard {
         this.fullName = 'Blaine\'s Rapidash G2';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
                     // If heads, do 30 damage plus 10 more damage to the Defending Pokémon
-                    prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE(effect, store, state, 10);
+                    (0, prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE)(effect, store, state, 10);
                     // Deal 10 damage to each of the opponent's Benched Pokémon
                     const opponent = effect.opponent;
                     opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList) => {

@@ -50,7 +50,7 @@ class Umbreonex extends game_1.PokemonCard {
             const discardEnergy = new attack_effects_1.DiscardCardsEffect(effect, cards);
             discardEnergy.target = player.active;
             store.reduceEffect(state, discardEnergy);
-            return prefabs_1.TAKE_X_PRIZES(store, state, player, 1);
+            return (0, prefabs_1.TAKE_X_PRIZES)(store, state, player, 1);
         }
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
             const player = effect.player;

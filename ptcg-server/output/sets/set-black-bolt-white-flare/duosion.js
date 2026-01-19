@@ -55,7 +55,7 @@ function* useCellularEvolution(next, store, state, effect) {
         next();
     });
     if (targets.length === 0) {
-        prefabs_1.SHUFFLE_DECK(store, state, player);
+        (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         return state; // canceled by user
     }
     const pokemonCard = targets[0].getPokemonCard();
@@ -66,7 +66,7 @@ function* useCellularEvolution(next, store, state, effect) {
     player.deck.moveCardTo(evolution, targets[0]);
     targets[0].clearEffects();
     targets[0].pokemonPlayedTurn = state.turn;
-    prefabs_1.SHUFFLE_DECK(store, state, player);
+    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
 }
 class Duosion extends game_1.PokemonCard {
     constructor() {
@@ -101,7 +101,7 @@ class Duosion extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Cellular Evolution
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useCellularEvolution(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

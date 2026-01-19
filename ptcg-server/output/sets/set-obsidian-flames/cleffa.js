@@ -29,8 +29,8 @@ class Cleffa extends pokemon_card_1.PokemonCard {
         this.fullName = 'Cleffa OBF';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.DRAW_CARDS_UNTIL_YOU_HAVE_X_CARDS_IN_HAND(7, effect, state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.DRAW_CARDS_UNTIL_YOU_HAVE_X_CARDS_IN_HAND)(7, effect, state);
         }
         return state;
     }

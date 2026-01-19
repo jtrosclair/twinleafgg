@@ -48,7 +48,7 @@ class Lunatone extends pokemon_card_1.PokemonCard {
             const thisCardList = game_1.StateUtils.findCardList(state, this);
             const owner = game_1.StateUtils.findOwner(state, thisCardList);
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, opponent, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
             let isSolrockInPlay = false;
@@ -80,7 +80,7 @@ class Lunatone extends pokemon_card_1.PokemonCard {
             }
         }
         // Moon Guidance
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             // TODO: make this format dependent (only items in modern or unlimited fomrats)
             const player = effect.player;
             if (player.deck.cards.length === 0) {
@@ -98,15 +98,15 @@ class Lunatone extends pokemon_card_1.PokemonCard {
                 if (selected.length === 0) {
                     return state;
                 }
-                prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, effect.opponent, cards);
-                prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards: selected, sourceCard: this, sourceEffect: this.attacks[0] });
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, effect.opponent, cards);
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: selected, sourceCard: this, sourceEffect: this.attacks[0] });
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
         }
-        if (prefabs_1.AFTER_ATTACK(effect, 1, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+                    (0, prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
                 }
             });
         }

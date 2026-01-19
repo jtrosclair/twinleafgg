@@ -33,20 +33,20 @@ class RollerSkater extends trainer_card_1.TrainerCard {
             state = store.prompt(state, new game_1.ChooseCardsPrompt(effect.player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {}, { allowCancel: false, min: 1, max: 1 }), cards => {
                 cards = cards || [];
                 if (cards.length === 0) {
-                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     return;
                 }
                 let cardsToDraw = 2;
                 if (cards[0] instanceof energy_card_1.EnergyCard) {
                     cardsToDraw = 4;
                 }
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: cards, sourceCard: this });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: cards, sourceCard: this });
                 cards.forEach((card, index) => {
                     store.log(state, game_1.GameLog.LOG_PLAYER_DISCARDS_CARD_FROM_HAND, { name: player.name, card: card.name });
                 });
-                prefabs_1.DRAW_CARDS(player, cardsToDraw);
+                (0, prefabs_1.DRAW_CARDS)(player, cardsToDraw);
             });
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         return state;

@@ -33,7 +33,7 @@ class Dewgong extends pokemon_card_1.PokemonCard {
         this.fullName = 'Dewgong MEW';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Count all Pokémon in play (active + bench with cards)
@@ -42,7 +42,7 @@ class Dewgong extends pokemon_card_1.PokemonCard {
             const minMax = numTargets >= 2 ? 2 : 1;
             return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { min: minMax, max: minMax, allowCancel: false }), selected => {
                 const targets = selected || [];
-                prefabs_1.DAMAGE_OPPONENT_POKEMON(store, state, effect, 50, targets);
+                (0, prefabs_1.DAMAGE_OPPONENT_POKEMON)(store, state, effect, 50, targets);
             });
         }
         return state;

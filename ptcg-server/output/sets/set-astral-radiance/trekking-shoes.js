@@ -36,14 +36,14 @@ class TrekkingShoes extends trainer_card_1.TrainerCard {
                 if (selected !== null) {
                     // Add card to hand
                     deckTop.moveCardsTo(deckTop.cards, player.hand);
-                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 }
                 else {
                     // Discard card
                     deckTop.moveTo(player.discard);
                     // Draw a card
                     player.deck.moveTo(player.hand, 1);
-                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 }
             });
         }

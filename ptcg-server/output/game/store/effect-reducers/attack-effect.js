@@ -70,7 +70,7 @@ function attackReducer(store, state, effect) {
         // --- Track damaged targets for animation ---
         if (effect.attackEffect && effect.attackEffect.player && effect.attackEffect.player.active.pendingAttackTargets) {
             try {
-                const cardTarget = simple_tactics_1.getCardTarget(effect.attackEffect.player, state, target);
+                const cardTarget = (0, simple_tactics_1.getCardTarget)(effect.attackEffect.player, state, target);
                 const pending = effect.attackEffect.player.active.pendingAttackTargets;
                 if (Array.isArray(pending) && !pending.some(t => t.player === cardTarget.player && t.slot === cardTarget.slot && t.index === cardTarget.index)) {
                     pending.push(cardTarget);

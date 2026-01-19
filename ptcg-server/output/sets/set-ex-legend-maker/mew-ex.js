@@ -38,13 +38,13 @@ class Mewex extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         //Versatile pokebody
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const pokemonCard = player.active.getPokemonCard();
             if (pokemonCard !== this) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.ABILITY_BLOCKED);
             }
             // Build cards and blocked for Choose Attack prompt
@@ -61,23 +61,23 @@ class Mewex extends pokemon_card_1.PokemonCard {
             });
         }
         //Power Move attack
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             return store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_CARDS, player.deck, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE], { superType: card_types_1.SuperType.ENERGY }, { allowCancel: false, min: 0, max: 1 }), transfers => {
                 transfers = transfers || [];
                 // Attach energy if selected
                 for (const transfer of transfers) {
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                    prefabs_1.MOVE_CARDS(store, state, player.deck, target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.attacks[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.attacks[0] });
                 }
                 // Shuffle the deck after attaching energy
                 state = store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                     player.deck.applyOrder(order);
                 });
                 // Prompt to switch Mew ex with a Benched Pokémon
-                prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+                (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                     if (result) {
-                        prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+                        (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
                     }
                 });
             });

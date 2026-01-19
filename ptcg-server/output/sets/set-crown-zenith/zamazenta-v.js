@@ -43,14 +43,14 @@ class ZamazentaV extends pokemon_card_1.PokemonCard {
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { sourceCard: this, sourceEffect: this.powers[0] });
-            prefabs_1.DRAW_CARDS(player, 5);
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { sourceCard: this, sourceEffect: this.powers[0] });
+            (0, prefabs_1.DRAW_CARDS)(player, 5);
             const endTurnEffect = new game_phase_effects_1.EndTurnEffect(player);
             store.reduceEffect(state, endTurnEffect);
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.DEAL_MORE_DAMAGE_FOR_EACH_PRIZE_CARD_TAKEN(effect, state, 30);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.DEAL_MORE_DAMAGE_FOR_EACH_PRIZE_CARD_TAKEN)(effect, state, 30);
         }
         return state;
     }

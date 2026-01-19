@@ -82,13 +82,13 @@ class Yanmegaex extends pokemon_card_1.PokemonCard {
                             transfers = transfers || [];
                             // cancelled by user
                             if (transfers.length === 0) {
-                                prefabs_1.SHUFFLE_DECK(store, state, player);
+                                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                                 return state;
                             }
                             for (const transfer of transfers) {
                                 const target = game_1.StateUtils.getTarget(state, player, transfer.to);
                                 player.deck.moveCardTo(transfer.card, target);
-                                prefabs_1.SHUFFLE_DECK(store, state, player);
+                                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                             }
                         });
                     }
@@ -96,7 +96,7 @@ class Yanmegaex extends pokemon_card_1.PokemonCard {
             }
         }
         // Jet Cyclone
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             return store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_message_1.GameMessage.ATTACH_ENERGY_TO_BENCH, player.active, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY }, { allowCancel: false, min: 3, max: 3, sameTarget: true }), transfers => {
                 transfers = transfers || [];
                 for (const transfer of transfers) {

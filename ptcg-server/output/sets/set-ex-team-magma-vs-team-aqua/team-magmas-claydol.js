@@ -37,14 +37,14 @@ class TeamMagmasClaydol extends pokemon_card_1.PokemonCard {
         this.MAGMA_SWITCH_MARKER = 'MAGMA_SWITCH_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
-            if (prefabs_1.HAS_MARKER(this.MAGMA_SWITCH_MARKER, player, this)) {
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
+            if ((0, prefabs_1.HAS_MARKER)(this.MAGMA_SWITCH_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.ABILITY_USED(player, this);
-            prefabs_1.ADD_MARKER(this.MAGMA_SWITCH_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.MAGMA_SWITCH_MARKER, player, this);
             const blockedFrom = [];
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
                 var _a;
@@ -64,8 +64,8 @@ class TeamMagmasClaydol extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.MAGMA_SWITCH_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.MAGMA_SWITCH_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (effect.player.hand.cards.length > effect.opponent.hand.cards.length) {
                 effect.damage += 20;
             }

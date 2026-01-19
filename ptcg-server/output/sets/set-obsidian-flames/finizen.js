@@ -87,7 +87,7 @@ class Finizen extends pokemon_card_1.PokemonCard {
         this.usedSpinTurn = false;
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             this.usedSpinTurn = true;
         }
         if (effect instanceof game_phase_effects_1.AfterAttackEffect && this.usedSpinTurn === true) {
@@ -96,7 +96,7 @@ class Finizen extends pokemon_card_1.PokemonCard {
             if (!hasBenched) {
                 return state;
             }
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, effect.player);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, effect.player);
             // After switching, we need to evolve Finizen
             let cards = [];
             state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_EVOLVE, player.deck, { superType: card_types_1.SuperType.POKEMON, evolvesFrom: 'Finizen' }, { min: 0, max: 1, allowCancel: false }), selected => {

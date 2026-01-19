@@ -35,8 +35,8 @@ class MegaGalladeex extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Gale Cut
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            if (prefabs_1.THIS_POKEMON_HAS_ANY_DAMAGE_COUNTERS_ON_IT(effect, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            if ((0, prefabs_1.THIS_POKEMON_HAS_ANY_DAMAGE_COUNTERS_ON_IT)(effect, this)) {
                 effect.damage += 150;
             }
         }

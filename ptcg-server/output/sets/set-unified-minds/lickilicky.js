@@ -44,7 +44,7 @@ class Lickilicky extends pokemon_card_1.PokemonCard {
                 const randomCard = opponent.hand.cards[randomIndex];
                 opponent.hand.moveCardTo(randomCard, opponent.discard);
             }
-            prefabs_1.MOVE_CARDS(store, state, opponent.deck, opponent.discard, { count: 1, sourceCard: this, sourceEffect: this.attacks[1] });
+            (0, prefabs_1.MOVE_CARDS)(store, state, opponent.deck, opponent.discard, { count: 1, sourceCard: this, sourceEffect: this.attacks[1] });
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(opponent, opponent.active);
             state = store.reduceEffect(state, checkProvidedEnergy);
             if (checkProvidedEnergy.energyMap.length === 0) {

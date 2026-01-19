@@ -31,12 +31,12 @@ class Pidgeotto extends pokemon_card_1.PokemonCard {
         this.usedWhirlwind = false;
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             this.usedWhirlwind = true;
         }
         if (effect instanceof game_phase_effects_1.AfterAttackEffect && this.usedWhirlwind === true) {
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, opponent);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, opponent);
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && this.usedWhirlwind) {
             this.usedWhirlwind = false;

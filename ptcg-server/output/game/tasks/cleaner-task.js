@@ -22,7 +22,7 @@ class CleanerTask {
             const keepMatchTime = config_1.config.core.keepMatchTime;
             const today = Date.now();
             const yesterday = today - keepMatchTime;
-            await storage_1.Match.delete({ created: typeorm_1.LessThan(yesterday) });
+            await storage_1.Match.delete({ created: (0, typeorm_1.LessThan)(yesterday) });
         }, config_1.config.core.keepMatchIntervalCount);
     }
     // Remove inactive users with ranking equals 0.
@@ -35,8 +35,8 @@ class CleanerTask {
             const onlineUserIds = this.core.clients.map(c => c.user.id);
             const usersToDelete = await storage_1.User.find({
                 where: {
-                    lastSeen: typeorm_1.LessThan(yesterday),
-                    registered: typeorm_1.LessThan(yesterday),
+                    lastSeen: (0, typeorm_1.LessThan)(yesterday),
+                    registered: (0, typeorm_1.LessThan)(yesterday),
                     ranking: 0
                 },
                 relations: ['decks']
@@ -62,7 +62,7 @@ class CleanerTask {
             const cutoffTime = today - deleteTime;
             const usersToDelete = await storage_1.User.find({
                 where: {
-                    registered: typeorm_1.LessThan(cutoffTime),
+                    registered: (0, typeorm_1.LessThan)(cutoffTime),
                     roleId: 2
                 }
             });

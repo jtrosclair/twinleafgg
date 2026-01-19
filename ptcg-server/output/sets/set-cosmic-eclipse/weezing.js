@@ -34,7 +34,7 @@ class Weezing extends game_1.PokemonCard {
     reduceEffect(store, state, effect) {
         // Blow-Away Bomb is handled in Roxie. 
         // It shouldn't be, so if you can figure out how to get it to be contained in Koffing and Weezing themselves, please do so.
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             this.usedBalloonBurst = true;
         }
         if (effect instanceof game_phase_effects_1.AfterAttackEffect && this.usedBalloonBurst === true) {
@@ -45,11 +45,11 @@ class Weezing extends game_1.PokemonCard {
             const otherCards = target.cards.filter(card => !(card instanceof game_1.PokemonCard));
             // Move other cards to discard first
             if (otherCards.length > 0) {
-                prefabs_1.MOVE_CARDS(store, state, target, player.discard, { cards: otherCards });
+                (0, prefabs_1.MOVE_CARDS)(store, state, target, player.discard, { cards: otherCards });
             }
             // Move Pokemon to discard
             if (pokemons.length > 0) {
-                prefabs_1.MOVE_CARDS(store, state, target, player.discard, { cards: pokemons });
+                (0, prefabs_1.MOVE_CARDS)(store, state, target, player.discard, { cards: pokemons });
             }
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && this.usedBalloonBurst) {

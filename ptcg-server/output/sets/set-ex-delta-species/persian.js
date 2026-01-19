@@ -37,18 +37,18 @@ class Persian extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Prowl
-        if (prefabs_1.JUST_EVOLVED(effect, this) && !prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
-            if (prefabs_1.CONFIRMATION_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.JUST_EVOLVED)(effect, this) && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this)) {
+            if ((0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, result => {
                 if (result) {
                     const player = effect.player;
-                    prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, this, {}, { min: 1, max: 1 }, this.powers[0]);
+                    (0, prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND)(store, state, player, this, {}, { min: 1, max: 1 }, this.powers[0]);
                 }
             }))
                 return state;
         }
         // Snap Tail
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(30, effect, store, state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(30, effect, store, state);
         }
         return state;
     }

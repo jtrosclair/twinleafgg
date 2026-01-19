@@ -29,11 +29,11 @@ class Gorebyss extends pokemon_card_1.PokemonCard {
         this.fullName = 'Gorebyss DRI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const energiesInHand = player.hand.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC && c.name === 'Water Energy');
             if (energiesInHand.length > 0) {
-                prefabs_1.CONFIRMATION_PROMPT(store, state, effect.player, result => {
+                (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, result => {
                     if (result) {
                         state = store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_TO_ACTIVE, player.hand, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Water Energy' }, { allowCancel: false, min: 0 }), transfers => {
                             transfers = transfers || [];

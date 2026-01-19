@@ -44,12 +44,12 @@ class Zangoose extends pokemon_card_1.PokemonCard {
         if (effect instanceof attack_effects_1.AddSpecialConditionsEffect && effect.specialConditions.includes(card_types_1.SpecialCondition.POISONED) && effect.target.getPokemonCard() === this) {
             effect.preventDefault = true;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (((_a = effect.opponent.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.name) === 'Seviper') {
                 effect.damage += 30;
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             if (effect.opponent.active.getPokemons().length > 1) {
                 effect.damage += 30;
             }

@@ -12,7 +12,7 @@ export declare class Infernape extends PokemonCard {
         type: CardType.WATER;
         value: number;
     }[];
-    retreat: never[];
+    retreat: any[];
     attacks: ({
         name: string;
         cost: CardType.COLORLESS[];

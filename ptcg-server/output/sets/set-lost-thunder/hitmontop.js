@@ -33,7 +33,7 @@ class Hitmontop extends pokemon_card_1.PokemonCard {
         this.cardImage = 'assets/cardback.png';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const playerBench = player.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
@@ -45,12 +45,12 @@ class Hitmontop extends pokemon_card_1.PokemonCard {
                     return state;
                 const target = selected[0];
                 player.switchPokemon(target);
-                prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, opponent);
+                (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, opponent);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            return prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 3, results => {
+            return (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 3, results => {
                 let heads = 0;
                 results.forEach(r => {
                     if (r)

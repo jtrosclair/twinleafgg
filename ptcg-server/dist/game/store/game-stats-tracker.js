@@ -1,8 +1,11 @@
-import { PokemonCard } from './card/pokemon-card';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GameStatsTracker = void 0;
+const pokemon_card_1 = require("./card/pokemon-card");
 /**
  * Service for tracking game statistics including prize counts and damage dealt by Pokemon
  */
-export class GameStatsTracker {
+class GameStatsTracker {
     /**
      * Track when a player takes prize cards
      * @param player The player taking prizes
@@ -67,7 +70,7 @@ export class GameStatsTracker {
      * @param newCard The Pokemon after evolution
      */
     static handlePokemonEvolution(player, pokemonCardList, oldCard, newCard) {
-        if (!(oldCard instanceof PokemonCard) || !(newCard instanceof PokemonCard)) {
+        if (!(oldCard instanceof pokemon_card_1.PokemonCard) || !(newCard instanceof pokemon_card_1.PokemonCard)) {
             return;
         }
         // Generate the Pokemon ID for this card list
@@ -160,3 +163,4 @@ export class GameStatsTracker {
         }
     }
 }
+exports.GameStatsTracker = GameStatsTracker;

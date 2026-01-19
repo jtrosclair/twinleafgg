@@ -49,8 +49,8 @@ Each player shuffles their hand into their deck. Then, you draw 5 cards, and you
             effect.preventDefault = true;
             const cards = player.hand.cards.filter(c => c !== this);
             // Shuffle hands into decks
-            prefabs_1.MOVE_CARDS(store, state, player.hand, player.deck, { cards, sourceCard: this });
-            prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.deck, { sourceCard: this });
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck, { cards, sourceCard: this });
+            (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck, { sourceCard: this });
             return store.prompt(state, [
                 new shuffle_prompt_1.ShuffleDeckPrompt(player.id),
                 new shuffle_prompt_1.ShuffleDeckPrompt(opponent.id)
@@ -58,9 +58,9 @@ Each player shuffles their hand into their deck. Then, you draw 5 cards, and you
                 player.deck.applyOrder(deckOrder[0]);
                 opponent.deck.applyOrder(deckOrder[1]);
                 // Draw new hands
-                prefabs_1.DRAW_CARDS(player, 5);
-                prefabs_1.DRAW_CARDS(opponent, 3);
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                (0, prefabs_1.DRAW_CARDS)(player, 5);
+                (0, prefabs_1.DRAW_CARDS)(opponent, 3);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             });
         }
         // Track when a Team Rocket's Pokemon is knocked out

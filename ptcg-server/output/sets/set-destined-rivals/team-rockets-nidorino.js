@@ -38,7 +38,7 @@ class TeamRocketsNidorino extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Horned Gouge
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             if (effect.opponent.active.damage > 0) {
                 effect.damage += 60;
             }

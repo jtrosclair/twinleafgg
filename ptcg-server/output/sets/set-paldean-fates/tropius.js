@@ -33,10 +33,10 @@ class Tropius extends pokemon_card_1.PokemonCard {
         this.regulationMark = 'G';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.HEAL_X_DAMAGE_FROM_THIS_POKEMON(effect, store, state, 20);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.HEAL_X_DAMAGE_FROM_THIS_POKEMON)(effect, store, state, 20);
         }
-        if (prefabs_1.AFTER_ATTACK(effect, 1, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
             const player = effect.player;
             const hasBench = player.bench.some(b => b.cards.length > 0);
             if (hasBench === false) {

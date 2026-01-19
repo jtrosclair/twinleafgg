@@ -11,7 +11,7 @@ export declare class LilliesRibombee extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    retreat: never[];
+    retreat: any[];
     powers: {
         name: string;
         powerType: PowerType;

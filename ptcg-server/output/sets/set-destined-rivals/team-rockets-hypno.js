@@ -39,14 +39,14 @@ class TeamRocketsHypno extends pokemon_card_1.PokemonCard {
         this.fullName = 'Team Rocket\'s Hypno DRI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = effect.opponent;
             let tails = 0;
             opponent.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {
                 if (opponent.active === card) {
                     return;
                 }
-                prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+                (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                     if (!result) {
                         tails++;
                     }

@@ -30,7 +30,7 @@ class Drizzile extends game_1.PokemonCard {
         this.fullName = 'Drizzile CRE';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
             const hasBenched = player.bench.some(b => b.cards.length > 0);
             if (!hasBenched) {

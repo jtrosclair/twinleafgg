@@ -1,18 +1,21 @@
-import { AttachPokemonToolEffect, TrainerEffect, PlaySupporterEffect, PlayItemEffect, PlayStadiumEffect } from '../effects/play-card-effects';
-import { GameError } from '../../game-error';
-import { GameMessage, GameLog } from '../../game-message';
-import { StateUtils } from '../state-utils';
-import { CardTag, TrainerType } from '../card/card-types';
-export function playTrainerReducer(store, state, effect) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.playTrainerReducer = void 0;
+const play_card_effects_1 = require("../effects/play-card-effects");
+const game_error_1 = require("../../game-error");
+const game_message_1 = require("../../game-message");
+const state_utils_1 = require("../state-utils");
+const card_types_1 = require("../card/card-types");
+function playTrainerReducer(store, state, effect) {
     /* Play supporter card */
-    if (effect instanceof PlaySupporterEffect) {
+    if (effect instanceof play_card_effects_1.PlaySupporterEffect) {
         const player = effect.player;
         if (player.marker.hasMarker(player.ATTACK_EFFECT_SUPPORTER_LOCK)) {
-            throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+            throw new game_error_1.GameError(game_message_1.GameMessage.BLOCKED_BY_EFFECT);
         }
-        const playTrainer = new TrainerEffect(player, effect.trainerCard, effect.target);
+        const playTrainer = new play_card_effects_1.TrainerEffect(player, effect.trainerCard, effect.target);
         state = store.reduceEffect(state, playTrainer);
-        store.log(state, GameLog.LOG_PLAYER_PLAYS_SUPPORTER, {
+        store.log(state, game_message_1.GameLog.LOG_PLAYER_PLAYS_SUPPORTER, {
             name: player.name,
             card: effect.trainerCard.name
         });
@@ -20,16 +23,16 @@ export function playTrainerReducer(store, state, effect) {
         return state;
     }
     /* Play stadium card */
-    if (effect instanceof PlayStadiumEffect) {
+    if (effect instanceof play_card_effects_1.PlayStadiumEffect) {
         const player = effect.player;
-        const opponent = StateUtils.getOpponent(state, player);
-        const stadiumCard = StateUtils.getStadiumCard(state);
+        const opponent = state_utils_1.StateUtils.getOpponent(state, player);
+        const stadiumCard = state_utils_1.StateUtils.getStadiumCard(state);
         if (player.marker.hasMarker(player.ATTACK_EFFECT_STADIUM_LOCK)) {
-            throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+            throw new game_error_1.GameError(game_message_1.GameMessage.BLOCKED_BY_EFFECT);
         }
         // Handle player's existing stadium
         if (player.stadium.cards.length > 0) {
-            if (stadiumCard && stadiumCard.tags.includes(CardTag.PRISM_STAR)) {
+            if (stadiumCard && stadiumCard.tags.includes(card_types_1.CardTag.PRISM_STAR)) {
                 player.stadium.moveTo(player.lostzone);
             }
             else {
@@ -38,14 +41,14 @@ export function playTrainerReducer(store, state, effect) {
         }
         // Handle opponent's existing stadium
         if (opponent.stadium.cards.length > 0) {
-            if (stadiumCard && stadiumCard.tags.includes(CardTag.PRISM_STAR)) {
+            if (stadiumCard && stadiumCard.tags.includes(card_types_1.CardTag.PRISM_STAR)) {
                 opponent.stadium.moveTo(opponent.lostzone);
             }
             else {
                 opponent.stadium.moveTo(opponent.discard);
             }
         }
-        store.log(state, GameLog.LOG_PLAYER_PLAYS_STADIUM, {
+        store.log(state, game_message_1.GameLog.LOG_PLAYER_PLAYS_STADIUM, {
             name: effect.player.name,
             card: effect.trainerCard.name
         });
@@ -54,21 +57,21 @@ export function playTrainerReducer(store, state, effect) {
         return state;
     }
     // Play Pokemon Tool card
-    if (effect instanceof AttachPokemonToolEffect) {
+    if (effect instanceof play_card_effects_1.AttachPokemonToolEffect) {
         const player = effect.player;
         const target = effect.target;
         const trainerCard = effect.trainerCard;
         const pokemonCard = target.getPokemonCard();
         if (pokemonCard === undefined) {
-            throw new GameError(GameMessage.INVALID_TARGET);
+            throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_TARGET);
         }
         if (effect.target.tools.length >= pokemonCard.maxTools) {
-            throw new GameError(GameMessage.POKEMON_TOOL_ALREADY_ATTACHED);
+            throw new game_error_1.GameError(game_message_1.GameMessage.POKEMON_TOOL_ALREADY_ATTACHED);
         }
         if (player.marker.hasMarker(effect.player.ATTACK_EFFECT_TOOL_LOCK)) {
-            throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+            throw new game_error_1.GameError(game_message_1.GameMessage.BLOCKED_BY_EFFECT);
         }
-        store.log(state, GameLog.LOG_PLAYER_PLAYS_TOOL, {
+        store.log(state, game_message_1.GameLog.LOG_PLAYER_PLAYS_TOOL, {
             name: player.name,
             card: trainerCard.name,
             pokemon: pokemonCard.name
@@ -80,30 +83,30 @@ export function playTrainerReducer(store, state, effect) {
             target.cards.splice(idx, 1);
         }
         target.tools.push(effect.trainerCard);
-        const playTrainer = new TrainerEffect(player, trainerCard, target);
+        const playTrainer = new play_card_effects_1.TrainerEffect(player, trainerCard, target);
         state = store.reduceEffect(state, playTrainer);
         return state;
     }
     // Play item card
-    if (effect instanceof PlayItemEffect) {
+    if (effect instanceof play_card_effects_1.PlayItemEffect) {
         const player = effect.player;
         if (player.marker.hasMarker(player.ATTACK_EFFECT_ITEM_LOCK)) {
-            throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+            throw new game_error_1.GameError(game_message_1.GameMessage.BLOCKED_BY_EFFECT);
         }
-        const playTrainer = new TrainerEffect(effect.player, effect.trainerCard, effect.target);
+        const playTrainer = new play_card_effects_1.TrainerEffect(effect.player, effect.trainerCard, effect.target);
         effect.player.hand.moveCardTo(effect.trainerCard, effect.player.supporter);
         state = store.reduceEffect(state, playTrainer);
-        store.log(state, GameLog.LOG_PLAYER_PLAYS_ITEM, {
+        store.log(state, game_message_1.GameLog.LOG_PLAYER_PLAYS_ITEM, {
             name: effect.player.name,
             card: effect.trainerCard.name
         });
         return state;
     }
     // Process trainer effect
-    if (effect instanceof TrainerEffect) {
+    if (effect instanceof play_card_effects_1.TrainerEffect) {
         if (effect.player.hand.cards.includes(effect.trainerCard)) {
             // IF DIAMOND/PEARL FORMAT, SUPPORTER WILL STAY ON FIELD UNTIL THE END OF YOUR TURN
-            const isSupporter = effect.trainerCard.trainerType === TrainerType.SUPPORTER;
+            const isSupporter = effect.trainerCard.trainerType === card_types_1.TrainerType.SUPPORTER;
             const target = isSupporter ? effect.player.supporter : effect.player.discard;
             effect.player.hand.moveCardTo(effect.trainerCard, target);
         }
@@ -111,3 +114,4 @@ export function playTrainerReducer(store, state, effect) {
     }
     return state;
 }
+exports.playTrainerReducer = playTrainerReducer;

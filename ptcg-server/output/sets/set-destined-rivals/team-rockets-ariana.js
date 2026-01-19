@@ -64,7 +64,7 @@ class TeamRocketsAriana extends trainer_card_1.TrainerCard {
                 }
                 player.deck.moveTo(player.hand, 1);
             }
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.rocketSupporter) {

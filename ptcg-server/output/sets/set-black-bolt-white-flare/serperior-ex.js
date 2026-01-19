@@ -39,14 +39,14 @@ class Serperiorex extends game_1.PokemonCard {
             // Check if this card is in play
             const isInPlay = player.bench.some(b => b.cards.some(c => c === this)) ||
                 player.active.cards.some(c => c === this);
-            if (isInPlay && !prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if (isInPlay && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 effect.damage += 20;
             }
         }
         // Grass Order attack
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, this, {}, { min: 0, max: 3, allowCancel: false }, this.attacks[0]);
+            (0, prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND)(store, state, player, this, {}, { min: 0, max: 3, allowCancel: false }, this.attacks[0]);
         }
         return state;
     }

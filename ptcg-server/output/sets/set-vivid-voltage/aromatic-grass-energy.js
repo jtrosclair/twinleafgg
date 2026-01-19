@@ -30,7 +30,7 @@ The [G] Pokémon this card is attached to recovers from all Special Conditions a
         }
         if (effect instanceof play_card_effects_1.AttachEnergyEffect && effect.target.cards.includes(this)) {
             const pokemon = effect.target;
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, pokemon)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.player, this, pokemon)) {
                 return state;
             }
             const checkPokemonType = new check_effects_1.CheckPokemonTypeEffect(pokemon);
@@ -49,7 +49,7 @@ The [G] Pokémon this card is attached to recovers from all Special Conditions a
         if (effect instanceof check_effects_1.CheckTableStateEffect &&
             cardList instanceof game_1.PokemonCardList &&
             cardList.cards.includes(this)) {
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, cardList)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.player, this, cardList)) {
                 return state;
             }
             const checkPokemonType = new check_effects_1.CheckPokemonTypeEffect(cardList);

@@ -35,26 +35,26 @@ class EspeonEX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Miraculous Shine
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (opponent.active.getPokemonCard()) {
                 const activePokemon = opponent.active.getPokemons();
                 if (activePokemon.length > 0) {
-                    prefabs_1.DEVOLVE_POKEMON(store, state, opponent.active, opponent.hand);
+                    (0, prefabs_1.DEVOLVE_POKEMON)(store, state, opponent.active, opponent.hand);
                 }
             }
             opponent.bench.forEach(benchSpot => {
                 if (benchSpot.getPokemonCard()) {
                     const benchPokemon = benchSpot.getPokemons();
                     if (benchPokemon.length > 0) {
-                        prefabs_1.DEVOLVE_POKEMON(store, state, benchSpot, opponent.hand);
+                        (0, prefabs_1.DEVOLVE_POKEMON)(store, state, benchSpot, opponent.hand);
                     }
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            attack_effects_1.THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS(store, state, effect, 70);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, attack_effects_1.THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS)(store, state, effect, 70);
         }
         return state;
     }

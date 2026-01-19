@@ -1,5 +1,8 @@
-import { deepCompare } from '../../utils';
-export class JsonPatch {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.JsonPatch = void 0;
+const utils_1 = require("../../utils");
+class JsonPatch {
     diff(src, dest) {
         const deltas = this.delta(src, dest, [], []);
         return deltas.map(d => ({
@@ -118,7 +121,7 @@ export class JsonPatch {
         return results;
     }
     isEqual(src, dest) {
-        return deepCompare(src, dest);
+        return (0, utils_1.deepCompare)(src, dest);
     }
     applyToObject(root, delta) {
         switch (delta.op) {
@@ -174,3 +177,4 @@ export class JsonPatch {
         return result;
     }
 }
+exports.JsonPatch = JsonPatch;

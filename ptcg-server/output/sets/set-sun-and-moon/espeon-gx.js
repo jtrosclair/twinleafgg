@@ -64,13 +64,13 @@ class EspeonGX extends pokemon_card_1.PokemonCard {
             effect.damage += opponentEnergyCount * 30;
         }
         // Divide-GX
-        if (prefabs_1.WAS_ATTACK_USED(effect, 2, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
             // Check if player has used GX attack
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             // set GX attack as used for game
             player.usedGX = true;
-            attack_effects_2.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE(10, store, state, effect);
+            (0, attack_effects_2.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE)(10, store, state, effect);
         }
         return state;
     }

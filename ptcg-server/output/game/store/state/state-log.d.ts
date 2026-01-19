@@ -1,5 +1,5 @@
 import { GameLog } from '../../game-message';
-export declare type StateLogParam = {
+export type StateLogParam = {
     [key: string]: string | number;
 };
 export declare class StateLog {

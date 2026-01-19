@@ -33,7 +33,7 @@ class Scorbunny2 extends pokemon_card_1.PokemonCard {
         this.fullName = 'Scorbunny SWSH 244';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const flipCoin = (heads = 0) => {
                 return store.prompt(state, [
@@ -42,7 +42,7 @@ class Scorbunny2 extends pokemon_card_1.PokemonCard {
                     if (result === true) {
                         return flipCoin(heads + 1);
                     }
-                    prefabs_1.DRAW_CARDS(player, heads);
+                    (0, prefabs_1.DRAW_CARDS)(player, heads);
                     return state;
                 });
             };

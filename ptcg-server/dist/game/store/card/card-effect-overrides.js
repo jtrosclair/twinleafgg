@@ -1,49 +1,52 @@
-import { Format } from './card-types';
-import { GreatBall as GreatBallRG } from '../../../sets/set-ex-firered-leafgreen/great-ball';
-import { GreatBall as GreatBallPAL } from '../../../sets/set-paldea-evolved/great-ball';
-import { MasterBall as MasterBallDX } from '../../../sets/set-ex-deoxys/master-ball';
-import { MasterBall as MasterBallTEF } from '../../../sets/set-temporal-forces/master-ball';
-import { PokemonFanClub as PokemonFanClubP4 } from '../../../sets/set-pop-series-4/pokemon-fan-club';
-import { PokemonFanClub as PokemonFanClubUPR } from '../../../sets/set-ultra-prism/pokemon-fan-club';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getOverriddenReduceEffect = void 0;
+const card_types_1 = require("./card-types");
+const great_ball_1 = require("../../../sets/set-ex-firered-leafgreen/great-ball");
+const great_ball_2 = require("../../../sets/set-paldea-evolved/great-ball");
+const master_ball_1 = require("../../../sets/set-ex-deoxys/master-ball");
+const master_ball_2 = require("../../../sets/set-temporal-forces/master-ball");
+const pokemon_fan_club_1 = require("../../../sets/set-pop-series-4/pokemon-fan-club");
+const pokemon_fan_club_2 = require("../../../sets/set-ultra-prism/pokemon-fan-club");
 // import { QuickBall as QuickBallMD } from '../../../sets/set-majestic-dawn/quick-ball';
 // import { QuickBall as QuickBallSSH } from '../../../sets/set-sword-and-shield/quick-ball';
-import { RareCandy as RareCandyHP } from '../../../sets/set-ex-holon-phantoms/rare-candy';
-import { RareCandy as RareCandySVI } from '../../../sets/set-scarlet-and-violet/rare-candy';
+const rare_candy_1 = require("../../../sets/set-ex-holon-phantoms/rare-candy");
+const rare_candy_2 = require("../../../sets/set-scarlet-and-violet/rare-candy");
 // import { SuperRod as SuperRodNVI } from '../../../sets/set-noble-victories/super-rod';
 // import { SuperRod as SuperRodPAL } from '../../../sets/set-paldea-evolved/super-rod';
-import { PokemonCatcher as PokemonCatcherEPO } from '../../../sets/set-emerging-powers/pokemon-catcher';
-import { PokemonCatcher as PokemonCatcherSVI } from '../../../sets/set-scarlet-and-violet/pokemon-catcher';
+const pokemon_catcher_1 = require("../../../sets/set-emerging-powers/pokemon-catcher");
+const pokemon_catcher_2 = require("../../../sets/set-scarlet-and-violet/pokemon-catcher");
 const effectOverrides = {
     // 'Super Rod': {
     //   [Format.RETRO]: SuperRodNVI.prototype.reduceEffect,
     //   default: SuperRodPAL.prototype.reduceEffect
     // }
     'Great Ball': {
-        [Format.RSPK]: GreatBallRG.prototype.reduceEffect,
-        default: GreatBallPAL.prototype.reduceEffect
+        [card_types_1.Format.RSPK]: great_ball_1.GreatBall.prototype.reduceEffect,
+        default: great_ball_2.GreatBall.prototype.reduceEffect
     },
     'Master Ball': {
-        [Format.RSPK]: MasterBallDX.prototype.reduceEffect,
-        default: MasterBallTEF.prototype.reduceEffect
+        [card_types_1.Format.RSPK]: master_ball_1.MasterBall.prototype.reduceEffect,
+        default: master_ball_2.MasterBall.prototype.reduceEffect
     },
     'Pokémon Fan Club': {
-        [Format.RSPK]: PokemonFanClubP4.prototype.reduceEffect,
-        default: PokemonFanClubUPR.prototype.reduceEffect
+        [card_types_1.Format.RSPK]: pokemon_fan_club_1.PokemonFanClub.prototype.reduceEffect,
+        default: pokemon_fan_club_2.PokemonFanClub.prototype.reduceEffect
     },
     'Rare Candy': {
-        [Format.RSPK]: RareCandyHP.prototype.reduceEffect,
-        default: RareCandySVI.prototype.reduceEffect
+        [card_types_1.Format.RSPK]: rare_candy_1.RareCandy.prototype.reduceEffect,
+        default: rare_candy_2.RareCandy.prototype.reduceEffect
     },
     // 'Quick Ball': {
     //   [Format.DP]: QuickBallMD.prototype.reduceEffect,
     //   default: QuickBallSSH.prototype.reduceEffect
     // },
     'Pokemon Catcher': {
-        [Format.BW]: PokemonCatcherEPO.prototype.reduceEffect,
-        default: PokemonCatcherSVI.prototype.reduceEffect
+        [card_types_1.Format.BW]: pokemon_catcher_1.PokemonCatcher.prototype.reduceEffect,
+        default: pokemon_catcher_2.PokemonCatcher.prototype.reduceEffect
     },
 };
-export function getOverriddenReduceEffect(card, format) {
+function getOverriddenReduceEffect(card, format) {
     const key = `${card.name}`;
     const overrides = effectOverrides[key];
     if (overrides) {
@@ -56,3 +59,4 @@ export function getOverriddenReduceEffect(card, format) {
     }
     return undefined;
 }
+exports.getOverriddenReduceEffect = getOverriddenReduceEffect;

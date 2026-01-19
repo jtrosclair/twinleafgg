@@ -33,7 +33,7 @@ class UnwonE extends pokemon_card_1.PokemonCard {
         this.fullName = 'Unown [E] N2';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this && !prefabs_1.IS_POKEMON_POWER_BLOCKED(store, state, effect.player, this)) {
+        if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this && !(0, prefabs_1.IS_POKEMON_POWER_BLOCKED)(store, state, effect.player, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Opponent chooses first

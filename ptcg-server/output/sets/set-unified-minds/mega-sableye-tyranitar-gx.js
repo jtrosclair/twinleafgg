@@ -62,7 +62,7 @@ class MegaSableyeTyranitarGX extends pokemon_card_1.PokemonCard {
                 return state;
             } // If we don't have the extra energy, we just deal damage.
             // activate the millworks
-            prefabs_1.MOVE_CARDS(store, state, opponent.deck, opponent.discard, { count: 15, sourceCard: this, sourceEffect: this.attacks[1] });
+            (0, prefabs_1.MOVE_CARDS)(store, state, opponent.deck, opponent.discard, { count: 15, sourceCard: this, sourceEffect: this.attacks[1] });
         }
         // the prize taking effect
         if (effect instanceof game_effects_1.KnockOutEffect && effect.target === effect.player.active) {

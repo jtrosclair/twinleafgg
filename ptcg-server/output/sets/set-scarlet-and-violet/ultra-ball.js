@@ -23,7 +23,7 @@ function* playCard(next, store, state, self, effect) {
     handTemp.cards = player.hand.cards.filter(c => c !== self);
     yield store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_DISCARD, handTemp, {}, { min: 2, max: 2, allowCancel: false }), selected => {
         if (selected) {
-            prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: selected });
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: selected });
         }
         next();
     });

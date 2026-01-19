@@ -27,9 +27,9 @@ class TvReporter extends trainer_card_1.TrainerCard {
             }
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             effect.preventDefault = true;
-            prefabs_1.DRAW_CARDS(player, 3);
-            trainer_prefabs_1.DISCARD_X_CARDS_FROM_YOUR_HAND(effect, store, state, 1, 1);
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.DRAW_CARDS)(player, 3);
+            (0, trainer_prefabs_1.DISCARD_X_CARDS_FROM_YOUR_HAND)(effect, store, state, 1, 1);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         }
         return state;
     }

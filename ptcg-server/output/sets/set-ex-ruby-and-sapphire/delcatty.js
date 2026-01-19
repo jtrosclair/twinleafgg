@@ -43,13 +43,13 @@ class Delcatty extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Energy Draw
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInHand = player.hand.cards.some(c => {
                 return c instanceof energy_card_1.EnergyCard;
             });
             // One per turn only
-            if (prefabs_1.HAS_MARKER(this.ENERGY_DRAW_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.ENERGY_DRAW_MARKER, player, this)) {
                 throw new game_1.GameError(game_message_1.GameMessage.POWER_ALREADY_USED);
             }
             // Cannot use if affected by special conditions
@@ -68,15 +68,15 @@ class Delcatty extends pokemon_card_1.PokemonCard {
                 player.hand.moveCardsTo(cards, player.discard);
                 player.deck.moveTo(player.hand, 3);
             });
-            prefabs_1.ADD_MARKER(this.ENERGY_DRAW_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.ENERGY_DRAW_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             return state;
         }
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            prefabs_1.REMOVE_MARKER(this.ENERGY_DRAW_MARKER, player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.ENERGY_DRAW_MARKER, player, this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const cardList = player.active;
             const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(player, cardList);
@@ -87,8 +87,8 @@ class Delcatty extends pokemon_card_1.PokemonCard {
         }
         //Marker remover
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
-            if (prefabs_1.HAS_MARKER(this.ENERGY_DRAW_MARKER, effect.player, this)) {
-                prefabs_1.REMOVE_MARKER(this.ENERGY_DRAW_MARKER, effect.player, this);
+            if ((0, prefabs_1.HAS_MARKER)(this.ENERGY_DRAW_MARKER, effect.player, this)) {
+                (0, prefabs_1.REMOVE_MARKER)(this.ENERGY_DRAW_MARKER, effect.player, this);
             }
         }
         return state;

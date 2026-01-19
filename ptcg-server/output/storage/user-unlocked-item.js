@@ -15,31 +15,31 @@ const _1 = require("./");
 let UserUnlockedItem = class UserUnlockedItem extends typeorm_1.BaseEntity {
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], UserUnlockedItem.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], UserUnlockedItem.prototype, "userId", void 0);
 __decorate([
-    typeorm_1.ManyToOne(() => _1.User),
-    typeorm_1.JoinColumn({ name: 'userId' }),
+    (0, typeorm_1.ManyToOne)(() => _1.User),
+    (0, typeorm_1.JoinColumn)({ name: 'userId' }),
     __metadata("design:type", _1.User)
 ], UserUnlockedItem.prototype, "user", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], UserUnlockedItem.prototype, "itemId", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], UserUnlockedItem.prototype, "itemType", void 0);
 __decorate([
-    typeorm_1.CreateDateColumn(),
+    (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], UserUnlockedItem.prototype, "created", void 0);
 UserUnlockedItem = __decorate([
-    typeorm_1.Entity('user_unlocked_items')
+    (0, typeorm_1.Entity)('user_unlocked_items')
 ], UserUnlockedItem);
 exports.UserUnlockedItem = UserUnlockedItem;

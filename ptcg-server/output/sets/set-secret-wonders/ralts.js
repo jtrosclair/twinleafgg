@@ -35,14 +35,14 @@ class Ralts extends pokemon_card_1.PokemonCard {
         this.setNumber = '102';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             return store.prompt(state, [
                 new game_1.CoinFlipPrompt(player.id, game_message_1.GameMessage.COIN_FLIP)
             ], result => {
                 if (result === true) {
-                    prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, opponent, this);
+                    (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, opponent, this);
                 }
             });
         }

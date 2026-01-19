@@ -56,7 +56,7 @@ class Dragonite extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.DELTA_CHARGE_MARKER, this);
         }
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasBench = player.bench.some(b => b.cards.length > 0);
             if (!hasBench) {
@@ -79,8 +79,8 @@ class Dragonite extends pokemon_card_1.PokemonCard {
                 if (transfers.length === 0) {
                     return;
                 }
-                prefabs_1.ABILITY_USED(player, this);
-                prefabs_1.ADD_MARKER(this.DELTA_CHARGE_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
+                (0, prefabs_1.ADD_MARKER)(this.DELTA_CHARGE_MARKER, player, this);
                 for (const transfer of transfers) {
                     const target = state_utils_1.StateUtils.getTarget(state, player, transfer.to);
                     player.discard.moveCardTo(transfer.card, target);
@@ -88,11 +88,11 @@ class Dragonite extends pokemon_card_1.PokemonCard {
             });
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
                     this.marker.addMarker(this.AGILITY_MARKER, this);
-                    prefabs_1.ADD_MARKER(this.AGILITY_MARKER, effect.opponent, this);
+                    (0, prefabs_1.ADD_MARKER)(this.AGILITY_MARKER, effect.opponent, this);
                 }
             });
         }
@@ -101,11 +101,11 @@ class Dragonite extends pokemon_card_1.PokemonCard {
                 effect.preventDefault = true;
             }
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && prefabs_1.HAS_MARKER(this.AGILITY_MARKER, effect.player, this)) {
-            prefabs_1.REMOVE_MARKER(this.AGILITY_MARKER, effect.player, this);
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.AGILITY_MARKER, effect.player, this)) {
+            (0, prefabs_1.REMOVE_MARKER)(this.AGILITY_MARKER, effect.player, this);
             this.marker.removeMarker(this.AGILITY_MARKER, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.DELTA_CHARGE_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.DELTA_CHARGE_MARKER, this);
         return state;
     }
 }

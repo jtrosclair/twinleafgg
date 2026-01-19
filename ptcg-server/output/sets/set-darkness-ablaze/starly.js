@@ -70,8 +70,8 @@ class Starly extends pokemon_card_1.PokemonCard {
             effect.player.marker.removeMarker(this.STARLY_SKY_CIRCUS_MARKER);
         }
         // Keen Eye
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, effect.player, this, {}, { min: 0, max: 2, allowCancel: true }, this.attacks[0]);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND)(store, state, effect.player, this, {}, { min: 0, max: 2, allowCancel: true }, this.attacks[0]);
         }
         return state;
     }

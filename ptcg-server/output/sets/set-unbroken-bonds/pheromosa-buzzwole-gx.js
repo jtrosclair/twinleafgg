@@ -90,7 +90,7 @@ class PheromosaBuzzwoleGX extends game_1.PokemonCard {
         // Beast Game-GX
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             this.usedBaseBeastGame = true;
             const extraEffectCost = [G, C, C, C, C, C, C, C];

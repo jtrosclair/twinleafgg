@@ -14,7 +14,7 @@ export declare class Chatot extends PokemonCard {
         type: CardType.FIGHTING;
         value: number;
     }[];
-    retreat: never[];
+    retreat: any[];
     attacks: {
         name: string;
         cost: CardType.COLORLESS[];

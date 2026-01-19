@@ -38,7 +38,7 @@ class Suicune extends pokemon_card_1.PokemonCard {
             const player = game_3.StateUtils.findOwner(state, effect.target);
             if (state.phase !== game_2.GamePhase.ATTACK)
                 return state;
-            if (sourceCard.tags.includes(card_types_1.CardTag.POKEMON_EX) && !prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this))
+            if (sourceCard.tags.includes(card_types_1.CardTag.POKEMON_EX) && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this))
                 effect.preventDefault = true;
         }
         return state;

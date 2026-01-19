@@ -115,15 +115,15 @@ class BanetteGX extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
             const player = effect.player;
             // Check if player has used GX attack
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
-            prefabs_1.BLOCK_IF_DISCARD_EMPTY(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
+            (0, prefabs_1.BLOCK_IF_DISCARD_EMPTY)(player);
             // set GX attack as used for game
             player.usedGX = true;
             return store.prompt(state, [
                 new game_3.ChooseCardsPrompt(player, game_2.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, {}, { min: 1, max: 3, allowCancel: false })
             ], selected => {
                 const cards = selected || [];
-                prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards, sourceCard: this, sourceEffect: this.attacks[1] });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards, sourceCard: this, sourceEffect: this.attacks[1] });
             });
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {

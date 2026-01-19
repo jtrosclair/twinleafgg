@@ -54,7 +54,7 @@ class Houndoom extends pokemon_card_1.PokemonCard {
             if (effect.player !== opponent) {
                 return state;
             }
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const playerBench = player.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);

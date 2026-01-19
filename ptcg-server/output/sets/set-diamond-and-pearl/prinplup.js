@@ -35,7 +35,7 @@ class Prinplup extends pokemon_card_1.PokemonCard {
         this.fullName = 'Prinplup DP';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             const benched = opponent.bench.filter(b => b.cards.length > 0);
             effect.damage = 10;
@@ -45,7 +45,7 @@ class Prinplup extends pokemon_card_1.PokemonCard {
                 store.reduceEffect(state, damageEffect);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             // Gather all opponent's Pokemon (active + benched) that have any damage counters
@@ -75,7 +75,7 @@ class Prinplup extends pokemon_card_1.PokemonCard {
             });
             return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { min: 1, max: 1, allowCancel: false, blocked }), selected => {
                 const targets = selected || [];
-                prefabs_1.DAMAGE_OPPONENT_POKEMON(store, state, effect, 40, targets);
+                (0, prefabs_1.DAMAGE_OPPONENT_POKEMON)(store, state, effect, 40, targets);
             });
         }
         return state;

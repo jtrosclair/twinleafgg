@@ -37,7 +37,7 @@ class Latiasex extends pokemon_card_1.PokemonCard {
         this.POWER_CRUSH_MARKER = 'POWER_CRUSH_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (!player.hand.cards.some(card => card instanceof game_1.EnergyCard && card.energyType === card_types_1.EnergyType.BASIC)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -65,17 +65,17 @@ class Latiasex extends pokemon_card_1.PokemonCard {
                 store.reduceEffect(state, endTurnEffect);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.ADD_MARKER(this.POWER_CRUSH_MARKER, effect.opponent.active, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.ADD_MARKER)(this.POWER_CRUSH_MARKER, effect.opponent.active, this);
         }
-        if (effect instanceof game_effects_1.KnockOutEffect && prefabs_1.HAS_MARKER(this.POWER_CRUSH_MARKER, effect.target, this)) {
+        if (effect instanceof game_effects_1.KnockOutEffect && (0, prefabs_1.HAS_MARKER)(this.POWER_CRUSH_MARKER, effect.target, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const attackEffect = new game_effects_1.AttackEffect(opponent, player, this.attacks[0]);
             attackEffect.preventDefault = true;
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, attackEffect, 2, card_types_1.CardType.FIRE);
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, attackEffect, 2, card_types_1.CardType.FIRE);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.POWER_CRUSH_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.POWER_CRUSH_MARKER, this);
         return state;
     }
 }

@@ -34,8 +34,8 @@ class Audino extends pokemon_card_1.PokemonCard {
         this.HEARING_MARKER = 'HEARING_MARKER';
     }
     reduceEffect(store, state, effect) {
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.HEARING_MARKER, this);
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.HEARING_MARKER, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.HEARING_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
@@ -43,11 +43,11 @@ class Audino extends pokemon_card_1.PokemonCard {
             if (player.active.getPokemonCard() !== this) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.DRAW_CARDS(player, 1);
+            (0, prefabs_1.DRAW_CARDS)(player, 1);
             player.marker.addMarker(this.HEARING_MARKER, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
         }
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const healEffect = new game_effects_1.HealEffect(effect.player, effect.player.active, 30);
             state = store.reduceEffect(state, healEffect);
         }

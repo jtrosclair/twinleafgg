@@ -33,7 +33,7 @@ class Groudon extends pokemon_card_1.PokemonCard {
         this.fullName = 'Groudon CEL';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const deckTop = new game_1.CardList();
             // Move top 5 cards from deckTop

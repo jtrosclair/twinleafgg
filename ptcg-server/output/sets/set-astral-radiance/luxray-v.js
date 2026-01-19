@@ -38,7 +38,7 @@ class LuxrayV extends pokemon_card_1.PokemonCard {
         this.fullName = 'Luxray V ASR';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             let cards = [];
@@ -48,22 +48,22 @@ class LuxrayV extends pokemon_card_1.PokemonCard {
                 if (cards.length === 0) {
                     return state;
                 }
-                prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.discard, { cards, sourceCard: this, sourceEffect: this.attacks[0] });
+                (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.discard, { cards, sourceCard: this, sourceEffect: this.attacks[0] });
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(opponent);
             state = store.reduceEffect(state, checkProvidedEnergy);
             store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.active, { superType: card_types_1.SuperType.ENERGY }, { min: 2, max: 2, allowCancel: false }), selected => {
                 selected = selected || [];
-                prefabs_1.MOVE_CARDS(store, state, player.active, player.discard, { cards: selected, sourceCard: this, sourceEffect: this.attacks[1] });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.active, player.discard, { cards: selected, sourceCard: this, sourceEffect: this.attacks[1] });
             });
             return state;
         }
-        if (prefabs_1.AFTER_ATTACK(effect, 1, this)) {
-            prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
+            (0, prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE)(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
         }
         return state;
     }

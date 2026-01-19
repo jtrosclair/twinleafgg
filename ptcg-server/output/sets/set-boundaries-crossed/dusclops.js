@@ -25,7 +25,7 @@ function* useAstonish(next, store, state, effect, sourceCard) {
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(player.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
-    prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.deck, { cards, sourceCard, sourceEffect: sourceCard.attacks[0] });
+    (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck, { cards, sourceCard, sourceEffect: sourceCard.attacks[0] });
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(opponent.id), order => {
         opponent.deck.applyOrder(order);
     });

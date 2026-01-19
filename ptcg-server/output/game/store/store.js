@@ -52,31 +52,31 @@ class Store {
             if (clientRoleId === undefined) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.ILLEGAL_ACTION);
             }
-            state = sandbox_reducer_1.sandboxReducer(this, state, action, clientRoleId);
+            state = (0, sandbox_reducer_1.sandboxReducer)(this, state, action, clientRoleId);
             this.handler.onStateChange(state);
             return state;
         }
         if (action instanceof abort_game_action_1.AbortGameAction) {
-            state = abort_game_reducer_1.abortGameReducer(this, state, action);
+            state = (0, abort_game_reducer_1.abortGameReducer)(this, state, action);
             this.handler.onStateChange(state);
             return state;
         }
         if (action instanceof concede_action_1.ConcedeAction) {
-            state = concede_reducer_1.concedeReducer(this, state, action);
+            state = (0, concede_reducer_1.concedeReducer)(this, state, action);
             this.handler.onStateChange(state);
             return state;
         }
         if (action instanceof reorder_actions_1.ReorderHandAction
             || action instanceof reorder_actions_1.ReorderBenchAction
             || action instanceof change_avatar_action_1.ChangeAvatarAction) {
-            state = player_state_reducer_1.playerStateReducer(this, state, action);
+            state = (0, player_state_reducer_1.playerStateReducer)(this, state, action);
             this.handler.onStateChange(state);
             return state;
         }
         if (action instanceof resolve_prompt_action_1.ResolvePromptAction) {
             state = this.reducePrompt(state, action);
             if (this.promptItems.length === 0) {
-                state = check_effect_1.checkState(this, state);
+                state = (0, check_effect_1.checkState)(this, state);
             }
             this.handler.onStateChange(state);
             return state;
@@ -97,26 +97,26 @@ class Store {
         if (effect.preventDefault === true) {
             return state;
         }
-        state = game_phase_effect_1.gamePhaseReducer(this, state, effect);
-        state = play_energy_effect_1.playEnergyReducer(this, state, effect);
-        state = play_pokemon_effect_1.playPokemonReducer(this, state, effect);
-        state = play_pokemon_from_deck_effect_1.playPokemonFromDeckReducer(this, state, effect);
-        state = play_trainer_effect_1.playTrainerReducer(this, state, effect);
-        state = retreat_effect_1.retreatReducer(this, state, effect);
-        state = game_effect_1.gameReducer(this, state, effect);
-        state = attack_effect_1.attackReducer(this, state, effect);
-        state = check_effect_1.checkStateReducer(this, state, effect);
+        state = (0, game_phase_effect_1.gamePhaseReducer)(this, state, effect);
+        state = (0, play_energy_effect_1.playEnergyReducer)(this, state, effect);
+        state = (0, play_pokemon_effect_1.playPokemonReducer)(this, state, effect);
+        state = (0, play_pokemon_from_deck_effect_1.playPokemonFromDeckReducer)(this, state, effect);
+        state = (0, play_trainer_effect_1.playTrainerReducer)(this, state, effect);
+        state = (0, retreat_effect_1.retreatReducer)(this, state, effect);
+        state = (0, game_effect_1.gameReducer)(this, state, effect);
+        state = (0, attack_effect_1.attackReducer)(this, state, effect);
+        state = (0, check_effect_1.checkStateReducer)(this, state, effect);
         return state;
     }
     compareEffects(effect1, effect2) {
-        var _a, _b, _c, _d, _e, _f, _g, _h;
+        var _a, _b, _c, _d;
         if (effect1.type !== effect2.type) {
             return false;
         }
-        const effect1CardId = (_b = (_a = effect1) === null || _a === void 0 ? void 0 : _a.card) === null || _b === void 0 ? void 0 : _b.id;
-        const effect2CardId = (_d = (_c = effect2) === null || _c === void 0 ? void 0 : _c.card) === null || _d === void 0 ? void 0 : _d.id;
-        const effect1CardPlayerId = (_f = (_e = effect1) === null || _e === void 0 ? void 0 : _e.player) === null || _f === void 0 ? void 0 : _f.id;
-        const effect2CardPlayerId = (_h = (_g = effect2) === null || _g === void 0 ? void 0 : _g.player) === null || _h === void 0 ? void 0 : _h.id;
+        const effect1CardId = (_a = effect1 === null || effect1 === void 0 ? void 0 : effect1.card) === null || _a === void 0 ? void 0 : _a.id;
+        const effect2CardId = (_b = effect2 === null || effect2 === void 0 ? void 0 : effect2.card) === null || _b === void 0 ? void 0 : _b.id;
+        const effect1CardPlayerId = (_c = effect1 === null || effect1 === void 0 ? void 0 : effect1.player) === null || _c === void 0 ? void 0 : _c.id;
+        const effect2CardPlayerId = (_d = effect2 === null || effect2 === void 0 ? void 0 : effect2.player) === null || _d === void 0 ? void 0 : _d.id;
         return effect1CardId === effect2CardId &&
             effect1CardPlayerId === effect2CardPlayerId;
     }
@@ -125,7 +125,7 @@ class Store {
             prompts = [prompts];
         }
         for (let i = 0; i < prompts.length; i++) {
-            const id = utils_1.generateId(state.prompts);
+            const id = (0, utils_1.generateId)(state.prompts);
             prompts[i].id = id;
             state.prompts.push(prompts[i]);
         }
@@ -203,15 +203,15 @@ class Store {
         this.state = new state_1.State();
     }
     reduce(state, action) {
-        const stateBackup = utils_1.deepClone(state, [card_1.Card]);
+        const stateBackup = (0, utils_1.deepClone)(state, [card_1.Card]);
         this.promptItems.length = 0;
         try {
-            state = setup_reducer_1.setupPhaseReducer(this, state, action);
-            state = play_card_reducer_1.playCardReducer(this, state, action);
-            state = player_turn_reducer_1.playerTurnReducer(this, state, action);
+            state = (0, setup_reducer_1.setupPhaseReducer)(this, state, action);
+            state = (0, play_card_reducer_1.playCardReducer)(this, state, action);
+            state = (0, player_turn_reducer_1.playerTurnReducer)(this, state, action);
             this.resolveWaitItems();
             if (this.promptItems.length === 0) {
-                state = check_effect_1.checkState(this, state);
+                state = (0, check_effect_1.checkState)(this, state);
             }
         }
         catch (storeError) {
@@ -251,12 +251,12 @@ class Store {
     }
     // Utility function to call reduceEffect with override support
     callReduceEffect(card, store, state, effect) {
-        var _a, _b, _c, _d;
+        var _a, _b, _c;
         // Only try override for TrainerCard (for now)
         if (card.trainerType !== undefined) {
             // Import here to avoid circular dependency at module level
             const { getOverriddenReduceEffect } = require('./card/card-effect-overrides');
-            const format = (_d = (_c = (_b = (_a = store) === null || _a === void 0 ? void 0 : _a.handler) === null || _b === void 0 ? void 0 : _b.gameSettings) === null || _c === void 0 ? void 0 : _c.format) !== null && _d !== void 0 ? _d : 0;
+            const format = (_c = (_b = (_a = store === null || store === void 0 ? void 0 : store.handler) === null || _a === void 0 ? void 0 : _a.gameSettings) === null || _b === void 0 ? void 0 : _b.format) !== null && _c !== void 0 ? _c : 0;
             const override = getOverriddenReduceEffect(card, format);
             if (override) {
                 return override(store, state, effect);

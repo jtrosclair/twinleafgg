@@ -21,23 +21,23 @@ let Avatar = class Avatar extends typeorm_1.BaseEntity {
     }
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Avatar.prototype, "id", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => user_1.User, user => user.avatars),
+    (0, typeorm_1.ManyToOne)(type => user_1.User, user => user.avatars),
     __metadata("design:type", user_1.User)
 ], Avatar.prototype, "user", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Avatar.prototype, "name", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Avatar.prototype, "fileName", void 0);
 Avatar = __decorate([
-    typeorm_1.Entity(),
-    typeorm_1.Unique(['user', 'name'])
+    (0, typeorm_1.Entity)(),
+    (0, typeorm_1.Unique)(['user', 'name'])
 ], Avatar);
 exports.Avatar = Avatar;

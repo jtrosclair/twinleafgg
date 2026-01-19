@@ -48,11 +48,11 @@ class Feraligatr extends pokemon_card_1.PokemonCard {
                 if (cards.length === 0) {
                     return;
                 }
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: cards, sourceCard: this, sourceEffect: this.powers[0] });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: cards, sourceCard: this, sourceEffect: this.powers[0] });
             });
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let energyInDiscard = 0;
             const blocked = [];
@@ -70,7 +70,7 @@ class Feraligatr extends pokemon_card_1.PokemonCard {
             effect.damage += energyInDiscard * 20;
             player.discard.cards.forEach(cards => {
                 if (cards instanceof game_1.EnergyCard && cards.energyType === card_types_1.EnergyType.BASIC && cards.name === 'Water Energy') {
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, player.deck, { cards: basicEnergyCards, sourceCard: this, sourceEffect: this.attacks[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.deck, { cards: basicEnergyCards, sourceCard: this, sourceEffect: this.attacks[0] });
                 }
             });
             return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {

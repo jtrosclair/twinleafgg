@@ -62,7 +62,7 @@ class Bibarel extends pokemon_card_1.PokemonCard {
                 if (player.deck.cards.length === 0) {
                     break;
                 }
-                prefabs_1.DRAW_CARDS(player, 1);
+                (0, prefabs_1.DRAW_CARDS)(player, 1);
             }
             player.marker.addMarker(this.INDUSTRIOUS_INCISORS_MARKER, this);
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {

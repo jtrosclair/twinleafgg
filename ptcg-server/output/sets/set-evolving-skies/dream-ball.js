@@ -38,14 +38,14 @@ class DreamBall extends trainer_card_1.TrainerCard {
         const player = effect.player;
         const prizeCard = effect.prizes.find(cardList => cardList.cards.includes(this));
         // Check if play conditions are met
-        if (!prizeCard || prefabs_1.GET_PLAYER_BENCH_SLOTS(player).length === 0 || !prizeCard.isSecret || effect.destination !== player.hand) {
+        if (!prizeCard || (0, prefabs_1.GET_PLAYER_BENCH_SLOTS)(player).length === 0 || !prizeCard.isSecret || effect.destination !== player.hand) {
             return state;
         }
         // Prevent prize card from going to hand until we complete the card effect flow
         effect.preventDefault = true;
         // Ask player if they want to use the card
         let wantToUse = false;
-        yield prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+        yield (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
             wantToUse = result;
             next();
         }, game_message_1.GameMessage.WANT_TO_USE_ITEM_FROM_PRIZES);
@@ -54,7 +54,7 @@ class DreamBall extends trainer_card_1.TrainerCard {
             effect.preventDefault = false;
             const prizeIndex = player.prizes.findIndex(prize => prize.cards.includes(this));
             if (prizeIndex !== -1) {
-                prefabs_1.TAKE_SPECIFIC_PRIZES(store, state, player, [player.prizes[prizeIndex]], { skipReduce: true });
+                (0, prefabs_1.TAKE_SPECIFIC_PRIZES)(store, state, player, [player.prizes[prizeIndex]], { skipReduce: true });
             }
             return state;
         }
@@ -69,7 +69,7 @@ class DreamBall extends trainer_card_1.TrainerCard {
             }
         }
         // Search for a Pokémon and put it onto the bench
-        const emptyBenchSlots = prefabs_1.GET_PLAYER_BENCH_SLOTS(player);
+        const emptyBenchSlots = (0, prefabs_1.GET_PLAYER_BENCH_SLOTS)(player);
         if (emptyBenchSlots.length === 0) {
             return state;
         }
@@ -84,7 +84,7 @@ class DreamBall extends trainer_card_1.TrainerCard {
             }
         });
         player.supporter.moveCardTo(this, player.discard);
-        yield prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player, {}, { min: 1, max: 1, allowCancel: false, blocked: searchBlocked });
+        yield (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, player, {}, { min: 1, max: 1, allowCancel: false, blocked: searchBlocked });
         return state;
     }
 }

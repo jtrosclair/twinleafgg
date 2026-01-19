@@ -8,7 +8,7 @@ export declare class MegaHawluchaex extends PokemonCard {
     weakness: {
         type: CardType.PSYCHIC;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: CardType.COLORLESS[];
     powers: {
         name: string;

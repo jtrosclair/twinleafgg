@@ -54,7 +54,7 @@ class Dragonair extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
             const player = effect.player;
             // Check if ability is blocked
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             // Find this Pokémon in play
@@ -91,7 +91,7 @@ class Dragonair extends pokemon_card_1.PokemonCard {
                 }
             });
             // Search deck for Evolution Pokémon
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND(store, state, player, {}, { min: 0, max: 1, blocked });
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND)(store, state, player, {}, { min: 0, max: 1, blocked });
             // Mark ability as used
             player.marker.addMarker(this.EVOLUTION_GUIDANCE_MARKER, this);
             // Add visual effect

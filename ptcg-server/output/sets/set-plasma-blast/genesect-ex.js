@@ -45,9 +45,9 @@ class GenesectEX extends pokemon_card_1.PokemonCard {
                 return state;
             }
             if (effect.energyCard.name === 'Plasma Energy') {
-                const abilityLock = prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.player, this);
+                const abilityLock = (0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this);
                 if (!abilityLock) {
-                    prefabs_1.CONFIRMATION_PROMPT(store, state, effect.player, result => {
+                    (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, result => {
                         if (result) {
                             state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
                                 if (wantToUse) {
@@ -63,8 +63,8 @@ class GenesectEX extends pokemon_card_1.PokemonCard {
             }
         }
         // Megalo Cannon
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON(20, effect, store, state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON)(20, effect, store, state);
         }
         return state;
     }

@@ -42,15 +42,15 @@ class Jynx extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
-            prefabs_1.REMOVE_MARKER(this.OMINOUS_POSTURE_MARKER, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.OMINOUS_POSTURE_MARKER, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.OMINOUS_POSTURE_MARKER, this);
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.OMINOUS_POSTURE_MARKER, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             const damagedPokemon = [];
             let hasDamagedPokemon = false;
-            if (prefabs_1.HAS_MARKER(this.OMINOUS_POSTURE_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.OMINOUS_POSTURE_MARKER, player, this)) {
                 throw new game_1.GameError(game_message_1.GameMessage.CANNOT_USE_POWER);
             }
             player.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
@@ -69,8 +69,8 @@ class Jynx extends pokemon_card_1.PokemonCard {
                 maxAllowedDamage.push({ target, damage: checkHpEffect.hp });
             });
             return store.prompt(state, new move_damage_prompt_1.MoveDamagePrompt(effect.player.id, game_message_1.GameMessage.MOVE_DAMAGE, play_card_action_1.PlayerType.BOTTOM_PLAYER, [play_card_action_1.SlotType.ACTIVE, play_card_action_1.SlotType.BENCH], maxAllowedDamage, { allowCancel: true, min: 1, max: 1 }), transfers => {
-                prefabs_1.ADD_MARKER(this.OMINOUS_POSTURE_MARKER, player, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ADD_MARKER)(this.OMINOUS_POSTURE_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 if (transfers === null) {
                     return;
                 }
@@ -84,10 +84,10 @@ class Jynx extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, (result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, (result => {
                 if (result) {
-                    attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED(store, state, effect);
+                    (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED)(store, state, effect);
                 }
             }));
         }

@@ -39,10 +39,10 @@ class TeamRocketsGolbat extends game_1.PokemonCard {
         // Sneaky Bite
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (!result) {
                     return state;
                 }
@@ -55,8 +55,8 @@ class TeamRocketsGolbat extends game_1.PokemonCard {
             });
         }
         // Confuse Ray
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
         }
         return state;
     }

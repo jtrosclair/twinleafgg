@@ -34,7 +34,7 @@ class Nidorina extends pokemon_card_1.PokemonCard {
         this.fullName = 'Nidorina RG';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 1, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
             const blocked = [];
             effect.player.deck.cards.forEach((card, index) => {
                 if (card instanceof pokemon_card_1.PokemonCard && card.evolvesFrom !== '' && card.stage !== card_types_1.Stage.LV_X) {
@@ -44,7 +44,7 @@ class Nidorina extends pokemon_card_1.PokemonCard {
                     blocked.push(index);
                 }
             });
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND(store, state, effect.player, {}, { min: 0, max: 2, blocked });
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND)(store, state, effect.player, {}, { min: 0, max: 2, blocked });
         }
         return state;
     }

@@ -28,13 +28,13 @@ class IngoAndEmmet extends trainer_card_1.TrainerCard {
             if (supporterTurn > 0) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
             }
-            prefabs_1.MOVE_CARD_TO(state, effect.trainerCard, player.supporter);
+            (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.supporter);
             if (player.deck.cards.length === 0) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
             const deckTop = new game_1.CardList();
             player.deck.moveTo(deckTop, 1);
-            prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards);
+            (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, player, deckTop.cards);
             deckTop.moveTo(player.deck, 0);
             player.deck.cards = deckTop.cards.concat(player.deck.cards);
             state = store.prompt(state, new game_1.SelectOptionPrompt(player.id, game_message_1.GameMessage.CHOOSE_OPTION, [
@@ -46,17 +46,17 @@ class IngoAndEmmet extends trainer_card_1.TrainerCard {
             }), choice => {
                 if (choice === 0) {
                     // Option 1
-                    prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard);
-                    prefabs_1.DRAW_CARDS(player, 5);
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard);
+                    (0, prefabs_1.DRAW_CARDS)(player, 5);
                 }
                 else if (choice === 1) {
                     // Option 2
-                    prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard);
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard);
                     const bottomCards = player.deck.cards.slice(-5);
                     player.deck.moveCardsTo(bottomCards, player.hand);
                 }
             });
-            prefabs_1.MOVE_CARD_TO(state, effect.trainerCard, player.discard);
+            (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
         }
         return state;
     }

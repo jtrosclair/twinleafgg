@@ -32,9 +32,9 @@ function* playCard(next, store, state, effect) {
         new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards)
     ], () => next());
     if (supporter !== undefined) {
-        prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards: [supporter], sourceCard: effect.trainerCard, sourceEffect: effect.trainerCard });
+        (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: [supporter], sourceCard: effect.trainerCard, sourceEffect: effect.trainerCard });
     }
-    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });

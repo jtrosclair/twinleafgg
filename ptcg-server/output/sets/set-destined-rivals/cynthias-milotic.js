@@ -31,8 +31,8 @@ class CynthiasMilotic extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Aqua Split
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.THIS_ATTACK_DOES_X_DAMAGE_TO_X_OF_YOUR_OPPONENTS_POKEMON(30, effect, store, state, 1, 2);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.THIS_ATTACK_DOES_X_DAMAGE_TO_X_OF_YOUR_OPPONENTS_POKEMON)(30, effect, store, state, 1, 2);
         }
         return state;
     }

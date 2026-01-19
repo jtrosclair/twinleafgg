@@ -69,7 +69,7 @@ class GalarianMoltresV extends pokemon_card_1.PokemonCard {
                 cards = cards || [];
                 if (cards.length > 0) {
                     player.marker.addMarker(this.DIREFLAME_WINGS_MARKER, this);
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, cardList, { cards, sourceCard: this, sourceEffect: this.powers[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, cardList, { cards, sourceCard: this, sourceEffect: this.powers[0] });
                 }
             });
         }

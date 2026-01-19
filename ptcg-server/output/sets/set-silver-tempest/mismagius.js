@@ -46,7 +46,7 @@ class Mismagius extends pokemon_card_1.PokemonCard {
             const pokemonCard = effect.target.getPokemonCard();
             if (pokemonCard !== this ||
                 state.phase !== game_1.GamePhase.ATTACK ||
-                prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+                (0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const checkHpEffect = new check_effects_1.CheckHpEffect(player, effect.target);

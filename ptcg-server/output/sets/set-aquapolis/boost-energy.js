@@ -41,7 +41,7 @@ class BoostEnergy extends energy_card_1.EnergyCard {
             const player = effect.player;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
                 if (cardList.cards.includes(this)) {
-                    prefabs_1.MOVE_CARDS(store, state, game_1.StateUtils.findCardList(state, this), player.discard, { cards: [this], sourceCard: this });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, game_1.StateUtils.findCardList(state, this), player.discard, { cards: [this], sourceCard: this });
                     effect.player.marker.removeMarker(this.BOOST_MARKER, this);
                 }
             });
@@ -54,7 +54,7 @@ class BoostEnergy extends energy_card_1.EnergyCard {
                     }
                     const attachedTo = cardList.getPokemonCard();
                     if (!!attachedTo && cardList.getPokemons().length < 2) {
-                        prefabs_1.MOVE_CARDS(store, state, game_1.StateUtils.findCardList(state, this), player.discard, { cards: [this] });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, game_1.StateUtils.findCardList(state, this), player.discard, { cards: [this] });
                     }
                 });
             });

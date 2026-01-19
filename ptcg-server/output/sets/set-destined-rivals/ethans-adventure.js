@@ -25,7 +25,7 @@ class EthansAdventure extends game_1.TrainerCard {
                 throw new game_1.GameError(game_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
             }
             player.hand.moveCardTo(this, player.supporter);
-            prefabs_1.BLOCK_IF_DECK_EMPTY(player);
+            (0, prefabs_1.BLOCK_IF_DECK_EMPTY)(player);
             const blocked = [];
             player.deck.cards.forEach((c, index) => {
                 const isPokemon = c instanceof game_1.PokemonCard && c.tags.includes(game_1.CardTag.ETHANS);
@@ -39,9 +39,9 @@ class EthansAdventure extends game_1.TrainerCard {
                 if (!cards || cards.length === 0) {
                     return state;
                 }
-                prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-                prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: this });
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: this });
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
             player.supporter.moveCardTo(this, player.discard);
         }

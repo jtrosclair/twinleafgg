@@ -35,12 +35,12 @@ class Gabite extends pokemon_card_1.PokemonCard {
         this.fullName = 'Gabite MT';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.SEARCH_DISCARD_PILE_FOR_CARDS_TO_HAND(store, state, effect.player, this, { superType: card_types_1.SuperType.ENERGY }, { min: 0, max: 2 }, this.attacks[0]);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.SEARCH_DISCARD_PILE_FOR_CARDS_TO_HAND)(store, state, effect.player, this, { superType: card_types_1.SuperType.ENERGY }, { min: 0, max: 2 }, this.attacks[0]);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
                     return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { allowCancel: false }), targets => {
                         if (!targets || targets.length === 0) {

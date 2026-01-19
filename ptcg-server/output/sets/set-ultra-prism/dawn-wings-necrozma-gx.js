@@ -87,7 +87,7 @@ class DawnWingsNecrozmaGX extends pokemon_card_1.PokemonCard {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             // Check if player has used GX attack
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             // set GX attack as used for game
             player.usedGX = true;
             player.active.marker.addMarker(this.ECLIPSE_MARKER, this);

@@ -17,13 +17,13 @@ class TrashExchange extends trainer_card_1.TrainerCard {
         this.text = 'Count the number of cards in your discard pile and shuffle them into your deck. Then discard that many cards from the top of your deck.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             effect.preventDefault = true;
             const discardCount = player.discard.cards.length;
-            prefabs_1.MOVE_CARDS(store, state, player.discard, player.deck);
-            prefabs_1.SHUFFLE_DECK(store, state, player);
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.deck);
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             player.deck.moveTo(player.discard, discardCount);
             player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }

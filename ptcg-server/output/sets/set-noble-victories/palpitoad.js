@@ -29,7 +29,7 @@ class Palpitoad extends game_1.PokemonCard {
         this.fullName = 'Palpitoad NVI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             let roundPokemon = 0;
             effect.player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
                 if (card.attacks.some(attack => attack.name === 'Round')) {

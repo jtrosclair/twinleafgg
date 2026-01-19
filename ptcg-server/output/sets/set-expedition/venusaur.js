@@ -49,17 +49,17 @@ class Venusaur extends pokemon_card_1.PokemonCard {
             if (!isVenusaurInPlay) {
                 return state;
             }
-            if (prefabs_1.HAS_MARKER(this.HARVEST_BOUNTY_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.HARVEST_BOUNTY_MARKER, player, this)) {
                 return state;
             }
             const energyInHand = player.hand.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY && c !== effect.energyCard);
-            if (!prefabs_1.IS_POKEPOWER_BLOCKED(store, state, player, this) && energyInHand.length > 0) {
+            if (!(0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this) && energyInHand.length > 0) {
                 if (owner === player && effect.target === active) {
-                    prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+                    (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                         if (result) {
                             // Once per turn
-                            prefabs_1.ADD_MARKER(this.HARVEST_BOUNTY_MARKER, player, this);
-                            prefabs_1.ABILITY_USED(player, this);
+                            (0, prefabs_1.ADD_MARKER)(this.HARVEST_BOUNTY_MARKER, player, this);
+                            (0, prefabs_1.ABILITY_USED)(player, this);
                             store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_CARDS, player.hand, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE], { superType: card_types_1.SuperType.ENERGY }, { allowCancel: false, min: 1, max: 1 }), transfers => {
                                 transfers = transfers || [];
                                 if (transfers.length === 0) {
@@ -78,10 +78,10 @@ class Venusaur extends pokemon_card_1.PokemonCard {
                 }
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED(store, state, effect);
+                    (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED)(store, state, effect);
                 }
             });
         }

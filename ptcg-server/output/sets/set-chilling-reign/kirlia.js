@@ -29,8 +29,8 @@ class Kirlia extends pokemon_card_1.PokemonCard {
         this.fullName = 'Kirlia CRE';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, effect.player, { superType: card_types_1.SuperType.POKEMON, name: 'Kirlia' }, { min: 0, max: 3, allowCancel: false });
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, effect.player, { superType: card_types_1.SuperType.POKEMON, name: 'Kirlia' }, { min: 0, max: 3, allowCancel: false });
         }
         return state;
     }

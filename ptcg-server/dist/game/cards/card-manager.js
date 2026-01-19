@@ -1,5 +1,8 @@
-import { deepClone } from '../../utils/utils';
-export class CardManager {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CardManager = void 0;
+const utils_1 = require("../../utils/utils");
+class CardManager {
     constructor() {
         this.cards = [];
         this.cardIndex = {};
@@ -40,7 +43,7 @@ export class CardManager {
     getCardByName(name) {
         const index = this.cardIndex[name];
         if (index !== undefined) {
-            return deepClone(this.cards[index]);
+            return (0, utils_1.deepClone)(this.cards[index]);
         }
     }
     isCardDefined(name) {
@@ -50,3 +53,4 @@ export class CardManager {
         return this.cards;
     }
 }
+exports.CardManager = CardManager;

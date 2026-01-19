@@ -31,10 +31,10 @@ class Solrock extends game_1.PokemonCard {
         this.fullName = 'Solrock BUS';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.DRAW_CARDS(effect.player, 2);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.DRAW_CARDS)(effect.player, 2);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             if (game_1.StateUtils.getStadiumCard(state) !== undefined) {
                 effect.damage += 20;
             }

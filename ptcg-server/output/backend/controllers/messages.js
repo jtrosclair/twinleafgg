@@ -124,24 +124,24 @@ class Messages extends controller_1.Controller {
     }
 }
 __decorate([
-    controller_1.Get('/list'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/list'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Messages.prototype, "onList", null);
 __decorate([
-    controller_1.Get('/get/:id'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/get/:id'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Messages.prototype, "onGet", null);
 __decorate([
-    controller_1.Post('/deleteMessages'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        id: services_1.check().isNumber()
+    (0, controller_1.Post)('/deleteMessages'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        id: (0, services_1.check)().isNumber()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),

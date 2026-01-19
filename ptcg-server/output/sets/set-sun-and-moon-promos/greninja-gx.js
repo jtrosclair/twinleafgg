@@ -45,15 +45,15 @@ class GreninjaGX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Elusive Master
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.hand.cards.filter(c => c !== this).length !== 0)
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
-            prefabs_1.PLAY_POKEMON_FROM_HAND_TO_BENCH(state, player, this);
+            (0, prefabs_1.PLAY_POKEMON_FROM_HAND_TO_BENCH)(state, player, this);
             player.deck.moveTo(player.hand, 3);
         }
         // Mist Slash
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             if (effect.damage > 0) {
@@ -63,7 +63,7 @@ class GreninjaGX extends pokemon_card_1.PokemonCard {
             }
         }
         // Dark Mist-GX
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             const hasBenched = opponent.bench.some(b => b.cards.length > 0);
@@ -71,7 +71,7 @@ class GreninjaGX extends pokemon_card_1.PokemonCard {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             // Check if player has used GX attack
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             // set GX attack as used for game
             player.usedGX = true;
             return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_PICK_UP, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.BENCH], { min: 1, max: 1, allowCancel: false }), result => {
@@ -84,7 +84,7 @@ class GreninjaGX extends pokemon_card_1.PokemonCard {
                     const tools = [...cardList.tools];
                     // Move other cards to hand
                     if (otherCards.length > 0) {
-                        prefabs_1.MOVE_CARDS(store, state, cardList, opponent.hand, { cards: otherCards });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, opponent.hand, { cards: otherCards });
                     }
                     // Move tools to hand
                     if (tools.length > 0) {
@@ -94,7 +94,7 @@ class GreninjaGX extends pokemon_card_1.PokemonCard {
                     }
                     // Move Pokémon to hand
                     if (pokemons.length > 0) {
-                        prefabs_1.MOVE_CARDS(store, state, cardList, opponent.hand, { cards: pokemons });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, opponent.hand, { cards: pokemons });
                     }
                 }
             });

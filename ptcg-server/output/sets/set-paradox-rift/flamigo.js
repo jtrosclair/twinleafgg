@@ -34,10 +34,10 @@ class Flamigo extends pokemon_card_1.PokemonCard {
         this.regulationMark = 'G';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = effect.opponent;
             const opponentBench = opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
-            prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE(effect, store, state, 20 * opponentBench);
+            (0, prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE)(effect, store, state, 20 * opponentBench);
         }
         return state;
     }

@@ -28,13 +28,13 @@ function* playCard(next, store, state, self, effect) {
         state = store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {}, { min: 1, max: 1, allowCancel: false }), discarded => {
             if (discarded && discarded.length > 0) {
                 store.log(state, game_message_1.GameLog.LOG_PLAYER_DISCARDS_CARD_FROM_HAND, { name: player.name, card: discarded[0].name });
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: discarded, sourceCard: self });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: discarded, sourceCard: self });
                 // Draw 3 cards
-                prefabs_1.DRAW_CARDS(player, 3);
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                (0, prefabs_1.DRAW_CARDS)(player, 3);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             }
         });
-        prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         return state;
     }
     // Create blocked indices for Cynthia & Caitlin cards
@@ -60,8 +60,8 @@ function* playCard(next, store, state, self, effect) {
             state = store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: card_types_1.SuperType.TRAINER, trainerType: card_types_1.TrainerType.SUPPORTER }, { min: 1, max: 1, allowCancel: false, blocked }), selected => {
                 if (selected && selected.length > 0) {
                     store.log(state, game_message_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: selected[0].name });
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: selected, sourceCard: self });
-                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: selected, sourceCard: self });
+                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 }
             });
         }
@@ -92,7 +92,7 @@ function* playCard(next, store, state, self, effect) {
             });
         }
     });
-    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return state;
 }
 class CynthiaAndCaitlin extends trainer_card_1.TrainerCard {
@@ -117,7 +117,7 @@ class CynthiaAndCaitlin extends trainer_card_1.TrainerCard {
             store.reduceEffect(state, discardEffect);
             if (effect.preventDefault) {
                 // If prevented, just discard the card and return
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return state;
             }
             const generator = playCard(() => generator.next(), store, state, this, effect);

@@ -23,10 +23,10 @@ function betweenTurns(store, state, onComplete) {
     }
     if (store.hasPrompts()) {
         return store.waitPrompt(state, () => {
-            check_effect_1.checkState(store, state, () => onComplete());
+            (0, check_effect_1.checkState)(store, state, () => onComplete());
         });
     }
-    return check_effect_1.checkState(store, state, () => onComplete());
+    return (0, check_effect_1.checkState)(store, state, () => onComplete());
 }
 exports.betweenTurns = betweenTurns;
 function initNextTurn(store, state) {
@@ -61,7 +61,7 @@ function initNextTurn(store, state) {
     if (player.deck.cards.length === 0) {
         store.log(state, game_message_1.GameLog.LOG_PLAYER_NO_CARDS_IN_DECK, { name: player.name });
         const winner = state.activePlayer ? state_1.GameWinner.PLAYER_1 : state_1.GameWinner.PLAYER_2;
-        state = check_effect_1.endGame(store, state, winner);
+        state = (0, check_effect_1.endGame)(store, state, winner);
         return state;
     }
     try {
@@ -192,7 +192,7 @@ function gamePhaseReducer(store, state, effect) {
         if (player === undefined) {
             throw new game_error_1.GameError(game_message_1.GameMessage.NOT_YOUR_TURN);
         }
-        state = check_effect_1.checkState(store, state, () => {
+        state = (0, check_effect_1.checkState)(store, state, () => {
             if (state.phase === state_1.GamePhase.FINISHED) {
                 return;
             }

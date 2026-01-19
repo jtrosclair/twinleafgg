@@ -22,7 +22,7 @@ class LancePrismStar extends trainer_card_1.TrainerCard {
         this.LANCE_MARKER = 'LANCE_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const supporterTurn = player.supporterTurn;
             if (supporterTurn > 0) {
@@ -35,7 +35,7 @@ class LancePrismStar extends trainer_card_1.TrainerCard {
             // We will discard this card after prompt confirmation
             effect.preventDefault = true;
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player, { cardType: card_types_1.CardType.DRAGON }, { min: 0, max: 2, allowCancel: false });
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, player, { cardType: card_types_1.CardType.DRAGON }, { min: 0, max: 2, allowCancel: false });
             player.supporter.moveCardTo(this, player.lostzone);
         }
         if (effect instanceof game_effects_1.KnockOutEffect) {
@@ -49,11 +49,11 @@ class LancePrismStar extends trainer_card_1.TrainerCard {
             const cardList = game_1.StateUtils.findCardList(state, this);
             const owner = game_1.StateUtils.findOwner(state, cardList);
             if (owner === player) {
-                prefabs_1.ADD_MARKER(this.LANCE_MARKER, player, this);
+                (0, prefabs_1.ADD_MARKER)(this.LANCE_MARKER, player, this);
             }
             return state;
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.LANCE_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.LANCE_MARKER, this);
         return state;
     }
 }

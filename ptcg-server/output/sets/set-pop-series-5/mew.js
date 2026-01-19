@@ -39,7 +39,7 @@ class Mew extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Copy
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Build cards and blocked for Choose Attack prompt
@@ -59,7 +59,7 @@ class Mew extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             let hasexPokemon = false;
@@ -74,9 +74,9 @@ class Mew extends pokemon_card_1.PokemonCard {
                     transfers = transfers || [];
                     for (const transfer of transfers) {
                         const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                        prefabs_1.MOVE_CARD_TO(state, transfer.card, target);
+                        (0, prefabs_1.MOVE_CARD_TO)(state, transfer.card, target);
                     }
-                    prefabs_1.SHUFFLE_DECK(store, state, player);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                 });
             }
         }

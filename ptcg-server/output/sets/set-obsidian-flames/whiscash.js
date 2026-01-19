@@ -45,7 +45,7 @@ class Whiscash extends pokemon_card_1.PokemonCard {
             const totalFightingnergy = checkProvidedEnergy.energyMap.reduce((sum, energy) => {
                 return sum + energy.provides.filter(type => type === card_types_1.CardType.FIGHTING || type === card_types_1.CardType.ANY).length;
             }, 0);
-            prefabs_1.MOVE_CARDS(store, state, opponent.deck, opponent.discard, { count: totalFightingnergy, sourceCard: this, sourceEffect: this.attacks[0] });
+            (0, prefabs_1.MOVE_CARDS)(store, state, opponent.deck, opponent.discard, { count: totalFightingnergy, sourceCard: this, sourceEffect: this.attacks[0] });
         }
         return state;
     }

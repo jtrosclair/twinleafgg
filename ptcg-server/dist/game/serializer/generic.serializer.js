@@ -1,4 +1,7 @@
-export class GenericSerializer {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GenericSerializer = void 0;
+class GenericSerializer {
     constructor(creatorClass, constructorName) {
         this.creatorClass = creatorClass;
         this.constructorName = constructorName;
@@ -15,3 +18,4 @@ export class GenericSerializer {
         return Object.assign(instance, data);
     }
 }
+exports.GenericSerializer = GenericSerializer;

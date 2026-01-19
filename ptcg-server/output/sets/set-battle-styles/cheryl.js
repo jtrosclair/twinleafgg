@@ -39,9 +39,9 @@ class Cheryl extends trainer_card_1.TrainerCard {
                     const pokemon = cardList.getPokemonCard();
                     if (pokemon && pokemon.stage !== card_types_1.Stage.BASIC) {
                         const energyCards = cardList.cards.filter(c => c instanceof __1.EnergyCard);
-                        prefabs_1.MOVE_CARDS(store, state, cardList, player.discard, { cards: energyCards, sourceCard: this });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.discard, { cards: energyCards, sourceCard: this });
                     }
-                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 });
             }
             return state;

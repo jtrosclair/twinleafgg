@@ -15,7 +15,7 @@ export declare class LuxrayGLLVX extends PokemonCard {
         type: CardType.METAL;
         value: number;
     }[];
-    retreat: never[];
+    retreat: any[];
     powers: {
         name: string;
         powerType: PowerType;

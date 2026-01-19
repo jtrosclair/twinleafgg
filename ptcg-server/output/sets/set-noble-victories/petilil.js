@@ -34,7 +34,7 @@ class Petilil extends pokemon_card_1.PokemonCard {
         this.fullName = 'Petilil NVI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const healEffect = new attack_effects_1.HealTargetEffect(effect, 10);
             healEffect.target = player.active;

@@ -33,7 +33,7 @@ class TypeNull extends game_1.PokemonCard {
         this.fullName = 'Type: Null UPR';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (effect.opponent.active.damage > 0) {
                 effect.damage += 30;
             }

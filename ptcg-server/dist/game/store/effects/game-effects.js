@@ -1,4 +1,7 @@
-export var GameEffects;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PutDamageCountersEffect = exports.SpecialEnergyEffect = exports.EffectOfAbilityEffect = exports.MoveCardsEffect = exports.DrawPrizesEffect = exports.EvolveEffect = exports.HealEffect = exports.KnockOutAttackEffect = exports.KnockOutEffect = exports.AttackEffect = exports.UseStadiumEffect = exports.UseAttackEffect = exports.TrainerPowerEffect = exports.PowerEffect = exports.UseEnergyPowerEffect = exports.UseTrainerPowerEffect = exports.UsePowerEffect = exports.RetreatEffect = exports.GameEffects = void 0;
+var GameEffects;
 (function (GameEffects) {
     GameEffects["RETREAT_EFFECT"] = "RETREAT_EFFECT";
     GameEffects["USE_ATTACK_EFFECT"] = "USE_ATTACK_EFFECT";
@@ -14,8 +17,8 @@ export var GameEffects;
     GameEffects["EFFECT_OF_ABILITY_EFFECT"] = "EFFECT_OF_ABILITY_EFFECT";
     GameEffects["SPECIAL_ENERGY_EFFECT"] = "SPECIAL_ENERGY_EFFECT";
     GameEffects["PUT_COUNTERS_EFFECT"] = "PUT_COUNTERS_EFFECT";
-})(GameEffects || (GameEffects = {}));
-export class RetreatEffect {
+})(GameEffects = exports.GameEffects || (exports.GameEffects = {}));
+class RetreatEffect {
     constructor(player, benchIndex) {
         this.type = GameEffects.RETREAT_EFFECT;
         this.preventDefault = false;
@@ -25,7 +28,8 @@ export class RetreatEffect {
         this.moveRetreatCostTo = player.discard;
     }
 }
-export class UsePowerEffect {
+exports.RetreatEffect = RetreatEffect;
+class UsePowerEffect {
     constructor(player, power, card, target) {
         this.type = GameEffects.USE_POWER_EFFECT;
         this.preventDefault = false;
@@ -35,7 +39,8 @@ export class UsePowerEffect {
         this.target = target;
     }
 }
-export class UseTrainerPowerEffect {
+exports.UsePowerEffect = UsePowerEffect;
+class UseTrainerPowerEffect {
     constructor(player, power, card, target) {
         this.type = GameEffects.USE_POWER_EFFECT;
         this.preventDefault = false;
@@ -45,7 +50,8 @@ export class UseTrainerPowerEffect {
         this.target = target;
     }
 }
-export class UseEnergyPowerEffect {
+exports.UseTrainerPowerEffect = UseTrainerPowerEffect;
+class UseEnergyPowerEffect {
     constructor(player, power, card, target) {
         this.type = GameEffects.USE_POWER_EFFECT;
         this.preventDefault = false;
@@ -55,7 +61,8 @@ export class UseEnergyPowerEffect {
         this.target = target;
     }
 }
-export class PowerEffect {
+exports.UseEnergyPowerEffect = UseEnergyPowerEffect;
+class PowerEffect {
     constructor(player, power, card, target) {
         this.type = GameEffects.POWER_EFFECT;
         this.preventDefault = false;
@@ -65,7 +72,8 @@ export class PowerEffect {
         this.target = target;
     }
 }
-export class TrainerPowerEffect {
+exports.PowerEffect = PowerEffect;
+class TrainerPowerEffect {
     constructor(player, power, card) {
         this.type = GameEffects.POWER_EFFECT;
         this.preventDefault = false;
@@ -74,7 +82,8 @@ export class TrainerPowerEffect {
         this.card = card;
     }
 }
-export class UseAttackEffect {
+exports.TrainerPowerEffect = TrainerPowerEffect;
+class UseAttackEffect {
     constructor(player, attack) {
         this.type = GameEffects.USE_ATTACK_EFFECT;
         this.preventDefault = false;
@@ -83,7 +92,8 @@ export class UseAttackEffect {
         this.source = player.active;
     }
 }
-export class UseStadiumEffect {
+exports.UseAttackEffect = UseAttackEffect;
+class UseStadiumEffect {
     constructor(player, stadium) {
         this.type = GameEffects.USE_STADIUM_EFFECT;
         this.preventDefault = false;
@@ -91,7 +101,8 @@ export class UseStadiumEffect {
         this.stadium = stadium;
     }
 }
-export class AttackEffect {
+exports.UseStadiumEffect = UseStadiumEffect;
+class AttackEffect {
     constructor(player, opponent, attack) {
         this.type = GameEffects.ATTACK_EFFECT;
         this.preventDefault = false;
@@ -105,8 +116,9 @@ export class AttackEffect {
         this.source = player.active;
     }
 }
+exports.AttackEffect = AttackEffect;
 // how many prizes when target Pokemon is KO
-export class KnockOutEffect {
+class KnockOutEffect {
     constructor(player, target) {
         this.type = GameEffects.KNOCK_OUT_EFFECT;
         this.preventDefault = false;
@@ -116,8 +128,9 @@ export class KnockOutEffect {
         this.prizeCount = 1;
     }
 }
+exports.KnockOutEffect = KnockOutEffect;
 // how many prizes when target Pokemon is KO
-export class KnockOutAttackEffect {
+class KnockOutAttackEffect {
     constructor(player, target, attack) {
         this.type = GameEffects.KNOCK_OUT_EFFECT;
         this.preventDefault = false;
@@ -127,7 +140,8 @@ export class KnockOutAttackEffect {
         this.prizeCount = 1;
     }
 }
-export class HealEffect {
+exports.KnockOutAttackEffect = KnockOutAttackEffect;
+class HealEffect {
     constructor(player, target, damage) {
         this.type = GameEffects.HEAL_EFFECT;
         this.preventDefault = false;
@@ -136,7 +150,8 @@ export class HealEffect {
         this.damage = damage;
     }
 }
-export class EvolveEffect {
+exports.HealEffect = HealEffect;
+class EvolveEffect {
     constructor(player, target, pokemonCard) {
         this.type = GameEffects.EVOLVE_EFFECT;
         this.preventDefault = false;
@@ -146,7 +161,8 @@ export class EvolveEffect {
         this.target.triggerEvolutionAnimation = true;
     }
 }
-export class DrawPrizesEffect {
+exports.EvolveEffect = EvolveEffect;
+class DrawPrizesEffect {
     constructor(player, prizes, destination) {
         this.type = GameEffects.DRAW_PRIZES_EFFECT;
         this.preventDefault = false;
@@ -155,7 +171,8 @@ export class DrawPrizesEffect {
         this.destination = destination;
     }
 }
-export class MoveCardsEffect {
+exports.DrawPrizesEffect = DrawPrizesEffect;
+class MoveCardsEffect {
     constructor(source, destination, options = {}) {
         this.type = GameEffects.MOVE_CARDS_EFFECT;
         this.preventDefault = false;
@@ -170,7 +187,8 @@ export class MoveCardsEffect {
         this.sourceEffect = options.sourceEffect;
     }
 }
-export class EffectOfAbilityEffect {
+exports.MoveCardsEffect = MoveCardsEffect;
+class EffectOfAbilityEffect {
     constructor(player, power, card, target) {
         this.type = GameEffects.EFFECT_OF_ABILITY_EFFECT;
         this.preventDefault = false;
@@ -180,7 +198,8 @@ export class EffectOfAbilityEffect {
         this.target = target;
     }
 }
-export class SpecialEnergyEffect {
+exports.EffectOfAbilityEffect = EffectOfAbilityEffect;
+class SpecialEnergyEffect {
     constructor(player, card, attachedTo, exemptFromOpponentsSpecialEnergyBlockingAbility = false) {
         this.type = GameEffects.SPECIAL_ENERGY_EFFECT;
         this.preventDefault = false;
@@ -190,7 +209,8 @@ export class SpecialEnergyEffect {
         this.exemptFromOpponentsSpecialEnergyBlockingAbility = exemptFromOpponentsSpecialEnergyBlockingAbility;
     }
 }
-export class PutDamageCountersEffect extends PowerEffect {
+exports.SpecialEnergyEffect = SpecialEnergyEffect;
+class PutDamageCountersEffect extends PowerEffect {
     constructor(base, damage) {
         super(base.player, base.power, base.card, base.target);
         this.type = GameEffects.PUT_COUNTERS_EFFECT;
@@ -200,3 +220,4 @@ export class PutDamageCountersEffect extends PowerEffect {
         this.effectOfAbility = new EffectOfAbilityEffect(base.player, base.power, base.card, base.target);
     }
 }
+exports.PutDamageCountersEffect = PutDamageCountersEffect;

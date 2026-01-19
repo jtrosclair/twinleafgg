@@ -39,7 +39,7 @@ class Eelektross extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Electric Swamp
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             // Can't bench this Pokemon unless we have 4 Lightning Energy cards in play.
             const energyCards = [];
@@ -50,7 +50,7 @@ class Eelektross extends game_1.PokemonCard {
             if (energyCards.length < 4)
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             // Bench this Pokemon to the desired slot.
-            prefabs_1.PLAY_POKEMON_FROM_HAND_TO_BENCH(state, player, this);
+            (0, prefabs_1.PLAY_POKEMON_FROM_HAND_TO_BENCH)(state, player, this);
             // Then, prompt player to move Lightning energy from their other Pokemon to this one.
             const blockedFrom = [];
             const blockedTo = [];
@@ -89,11 +89,11 @@ class Eelektross extends game_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            return prefabs_1.BLOCK_RETREAT(store, state, effect, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            return (0, prefabs_1.BLOCK_RETREAT)(store, state, effect, this);
         }
-        prefabs_1.BLOCK_RETREAT_IF_MARKER(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
-        prefabs_1.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
+        (0, prefabs_1.BLOCK_RETREAT_IF_MARKER)(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN)(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
         return state;
     }
 }

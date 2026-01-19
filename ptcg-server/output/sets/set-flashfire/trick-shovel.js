@@ -21,13 +21,13 @@ class TrickShovel extends game_1.TrainerCard {
             const opponent = game_1.StateUtils.getOpponent(state, player);
             effect.preventDefault = true;
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
-            prefabs_1.SELECT_PROMPT_WITH_OPTIONS(store, state, player, game_1.GameMessage.CHOOSE_OPTION, [{
+            (0, prefabs_1.SELECT_PROMPT_WITH_OPTIONS)(store, state, player, game_1.GameMessage.CHOOSE_OPTION, [{
                     message: game_1.GameMessage.REVEAL_YOUR_TOP_DECK,
-                    action: () => prefabs_1.LOOK_AT_TOPDECK_AND_DISCARD_OR_RETURN(store, state, player, player),
+                    action: () => (0, prefabs_1.LOOK_AT_TOPDECK_AND_DISCARD_OR_RETURN)(store, state, player, player),
                 },
                 {
                     message: game_1.GameMessage.REVEAL_OPPONENT_TOP_DECK,
-                    action: () => prefabs_1.LOOK_AT_TOPDECK_AND_DISCARD_OR_RETURN(store, state, player, opponent),
+                    action: () => (0, prefabs_1.LOOK_AT_TOPDECK_AND_DISCARD_OR_RETURN)(store, state, player, opponent),
                 }]);
             player.supporter.moveCardTo(this, player.discard);
         }

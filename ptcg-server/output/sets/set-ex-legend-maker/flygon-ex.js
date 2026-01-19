@@ -43,9 +43,9 @@ class Flygonex extends pokemon_card_1.PokemonCard {
         this.fullName = 'Flygon ex LM';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.JUST_EVOLVED(effect, this)) {
+        if ((0, prefabs_1.JUST_EVOLVED)(effect, this)) {
             const player = effect.player;
-            if (prefabs_1.IS_POKEPOWER_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const blockedTo = [];
@@ -67,11 +67,11 @@ class Flygonex extends pokemon_card_1.PokemonCard {
                 transfers = transfers || [];
                 for (const transfer of transfers) {
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                    prefabs_1.MOVE_CARDS(store, state, player.deck, target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.powers[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.powers[0] });
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // See if there is holon energy attached
             const reactEnergy = player.active.cards.filter(card => card.name === 'React Energy');

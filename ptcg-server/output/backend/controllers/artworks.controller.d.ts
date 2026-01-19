@@ -5,7 +5,7 @@ import { Core } from '../../game/core/core';
 import { Storage } from '../../storage';
 export declare class Artworks extends Controller {
     constructor(path: string, app: Application, db: Storage, core: Core);
-    onUpsertArtwork(req: Request, res: Response): Promise<Response<any> | undefined>;
-    onGrantArtwork(req: Request, res: Response): Promise<Response<any> | undefined>;
-    onGetUnlockedArtworks(req: Request, res: Response): Promise<Response<any> | undefined>;
+    onUpsertArtwork(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
+    onGrantArtwork(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
+    onGetUnlockedArtworks(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
 }

@@ -37,9 +37,9 @@ class MoltresZapdosArticunoGX extends pokemon_card_1.PokemonCard {
         this.fullName = 'Moltres & Zapdos & Articuno-GX HIF';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             // Check for the extra energy cost.
             const extraEffectCost = [R, W, L, C];
@@ -49,13 +49,13 @@ class MoltresZapdosArticunoGX extends pokemon_card_1.PokemonCard {
             if (meetsExtraEffectCost) {
                 return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { min: 1, max: 3, allowCancel: false }), selected => {
                     const targets = selected || [];
-                    prefabs_1.DAMAGE_OPPONENT_POKEMON(store, state, effect, 110, targets);
-                    attack_effects_1.SHUFFLE_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_DECK(store, state, effect);
+                    (0, prefabs_1.DAMAGE_OPPONENT_POKEMON)(store, state, effect, 110, targets);
+                    (0, attack_effects_1.SHUFFLE_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_DECK)(store, state, effect);
                     return state;
                 });
             }
             else {
-                attack_effects_1.SHUFFLE_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_DECK(store, state, effect);
+                (0, attack_effects_1.SHUFFLE_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_DECK)(store, state, effect);
             }
         }
         return state;

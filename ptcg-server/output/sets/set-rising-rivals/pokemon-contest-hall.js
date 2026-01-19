@@ -30,35 +30,35 @@ class PokemonContestHall extends trainer_card_1.TrainerCard {
             if (slots.length == 0) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_USE_STADIUM);
             }
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, (result) => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, (result) => {
                 if (result) {
                     let cards = [];
                     return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH, player.deck, { superType: card_types_1.SuperType.POKEMON, stage: card_types_1.Stage.BASIC }, { min: 0, max: 1, allowCancel: false }), selectedCards => {
                         cards = selectedCards || [];
                         // Operation canceled by the user
                         if (cards.length === 0) {
-                            prefabs_1.SHUFFLE_DECK(store, state, player);
+                            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                         }
                         else {
                             cards.forEach((card, index) => {
-                                prefabs_1.MOVE_CARD_TO(state, card, slots[index]);
+                                (0, prefabs_1.MOVE_CARD_TO)(state, card, slots[index]);
                                 slots[index].pokemonPlayedTurn = state.turn;
-                                prefabs_1.CONFIRMATION_PROMPT(store, state, player, (result) => {
+                                (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, (result) => {
                                     if (result) {
                                         return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_ATTACH, player.deck, { superType: card_types_1.SuperType.TRAINER, trainerType: card_types_1.TrainerType.TOOL }, { min: 0, max: 1, allowCancel: false }), selectedCards => {
                                             if (selectedCards.length > 0) {
                                                 selectedCards.forEach(card => {
-                                                    prefabs_1.MOVE_CARD_TO(state, card, slots[index]);
+                                                    (0, prefabs_1.MOVE_CARD_TO)(state, card, slots[index]);
                                                     slots[index].tools.push(card);
                                                 });
                                             }
-                                            prefabs_1.SHUFFLE_DECK(store, state, player);
+                                            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                                         });
                                     }
                                 });
                             });
                         }
-                        prefabs_1.SHUFFLE_DECK(store, state, player);
+                        (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                     });
                 }
             });

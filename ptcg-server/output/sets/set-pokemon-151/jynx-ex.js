@@ -37,7 +37,7 @@ class Jynxex extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Heart-Stopping Kiss
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             if (opponent.active.specialConditions.includes(card_types_1.SpecialCondition.ASLEEP)) {
                 const dealDamage = new attack_effects_1.KnockOutOpponentEffect(effect, 999);
@@ -46,9 +46,9 @@ class Jynxex extends pokemon_card_1.PokemonCard {
             }
         }
         // Icy Wind
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = effect.opponent;
-            prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, this);
+            (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, opponent, this);
         }
         return state;
     }

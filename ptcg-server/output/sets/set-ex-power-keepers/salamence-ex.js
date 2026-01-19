@@ -37,17 +37,17 @@ class Salamenceex extends pokemon_card_1.PokemonCard {
         this.fullName = 'Salamence ex PK';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             player.deck.moveTo(player.discard, 5);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, player.active);
             store.reduceEffect(state, checkProvidedEnergy);
             checkProvidedEnergy.energyMap.forEach(em => {
                 if (em.provides.includes(card_types_1.CardType.WATER) || em.provides.includes(card_types_1.CardType.ANY)) {
-                    prefabs_1.MOVE_CARDS(store, state, player.active, player.discard, { cards: [em.card] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.active, player.discard, { cards: [em.card] });
                 }
             });
             const opponent = game_1.StateUtils.getOpponent(state, player);

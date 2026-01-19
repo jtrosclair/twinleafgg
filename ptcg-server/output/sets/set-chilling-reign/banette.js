@@ -40,8 +40,8 @@ class Banette extends game_1.PokemonCard {
             const generator = attack(() => generator.next(), store, state, effect);
             return generator.next().value;
         }
-        if (prefabs_1.AFTER_ATTACK(effect, 1, this)) {
-            prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
+            (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
         }
         return state;
     }

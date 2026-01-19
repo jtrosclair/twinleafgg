@@ -29,17 +29,17 @@ function* playCard(next, store, state, effect) {
         return;
     }
     // Put Pokemon from hand into the deck
-    prefabs_1.MOVE_CARDS(store, state, player.hand, player.deck, { cards, sourceCard: effect.trainerCard });
+    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck, { cards, sourceCard: effect.trainerCard });
     yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     yield store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, { superType: card_types_1.SuperType.POKEMON }, { min: 1, max: 1, allowCancel: true }), selected => {
         cards = selected || [];
         next();
     });
-    prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: effect.trainerCard });
+    (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: effect.trainerCard });
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
-    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });

@@ -29,8 +29,8 @@ function* playCard(next, store, state, effect) {
         return state;
     }
     player.switchPokemon(targets[0]);
-    prefabs_1.DRAW_CARDS(player, 3);
-    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+    (0, prefabs_1.DRAW_CARDS)(player, 3);
+    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return state;
 }
 class BirdKeeper extends trainer_card_1.TrainerCard {

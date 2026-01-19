@@ -35,11 +35,11 @@ class Koffing extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         // Blow-Away Bomb is handled in Roxie. 
         // It shouldn't be, so if you can figure out how to get it to be contained in Koffing and Weezing themselves, please do so.
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             this.usedPoisonGas = true;
         }
         if (effect instanceof game_phase_effects_1.AfterAttackEffect && this.usedPoisonGas === true) {
-            prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && this.usedPoisonGas) {
             this.usedPoisonGas = false;

@@ -49,7 +49,7 @@ class BuriedFossil extends pokemon_card_1.PokemonCard {
             return state;
         }
         // Evolution ruling power thing
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEvolution = player.hand.cards.some(card => card instanceof pokemon_card_1.PokemonCard && card.evolvesFrom === 'Mysterious Fossil');
             // Check if evo is in the player's hand
@@ -80,7 +80,7 @@ class BuriedFossil extends pokemon_card_1.PokemonCard {
             });
         }
         // Reconstruction
-        if (prefabs_1.WAS_POWER_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 1, this)) {
             const player = effect.player;
             store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_SHUFFLE, player.hand, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { allowCancel: false, min: 1, max: 1 }), selected => {
                 if (selected) {

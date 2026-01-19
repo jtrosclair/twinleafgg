@@ -14,7 +14,7 @@ export declare class Jumpluff extends PokemonCard {
         type: CardType;
         value: number;
     }[];
-    retreat: never[];
+    retreat: any[];
     attacks: {
         name: string;
         cost: CardType[];

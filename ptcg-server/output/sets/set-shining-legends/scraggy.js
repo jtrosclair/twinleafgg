@@ -32,7 +32,7 @@ class Scraggy extends pokemon_card_1.PokemonCard {
         this.fullName = 'Scraggy SLG';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useCallForFamily(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

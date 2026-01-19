@@ -46,17 +46,17 @@ class Roxie extends trainer_card_1.TrainerCard {
                     return;
                 }
                 const cardsToDraw = 3 * cards.length;
-                state = prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: this });
-                prefabs_1.DRAW_CARDS(player, cardsToDraw);
+                state = (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: this });
+                (0, prefabs_1.DRAW_CARDS)(player, cardsToDraw);
                 // Handling Blow-Away Bomb mons (Joe forgive me for this, I'm going rogue and putting the effect in here)
                 // I could not for the life of me figure out how to get the effect to be contained in Koffing and Weezing themselves itself
                 cards.forEach(card => {
                     if (card instanceof game_1.PokemonCard && (card.fullName === 'Koffing CEC' || card.fullName === 'Weezing CEC')) {
                         const pokemonCard = card;
-                        if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, pokemonCard)) {
+                        if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, pokemonCard)) {
                             return state;
                         }
-                        prefabs_1.CONFIRMATION_PROMPT(store, state, effect.player, result => {
+                        (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, result => {
                             if (result) {
                                 opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList) => {
                                     const effectOfAbility = new game_effects_1.EffectOfAbilityEffect(effect.player, pokemonCard.powers[0], pokemonCard, cardList);
@@ -71,7 +71,7 @@ class Roxie extends trainer_card_1.TrainerCard {
                     }
                 });
             });
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         return state;

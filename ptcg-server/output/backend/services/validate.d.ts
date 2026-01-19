@@ -1,4 +1,4 @@
-export declare type ValidationFn = (value: any) => boolean;
+export type ValidationFn = (value: any) => boolean;
 export interface ValidationMap {
     [key: string]: Validator;
 }

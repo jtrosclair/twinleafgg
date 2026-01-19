@@ -32,8 +32,8 @@ class Poochyena extends pokemon_card_1.PokemonCard {
         this.fullName = 'Poochyena TEU';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND(store, state, effect.player, { cardType: card_types_1.CardType.DARK }, { min: 0, max: 2 });
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND)(store, state, effect.player, { cardType: card_types_1.CardType.DARK }, { min: 0, max: 2 });
         }
         return state;
     }

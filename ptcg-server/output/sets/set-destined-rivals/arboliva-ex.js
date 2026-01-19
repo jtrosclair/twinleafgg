@@ -38,7 +38,7 @@ class Arbolivaex extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Oil Machine Gun
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             const maxAllowedDamage = [];
@@ -50,7 +50,7 @@ class Arbolivaex extends pokemon_card_1.PokemonCard {
                 const results = targets || [];
                 for (const result of results) {
                     const target = game_1.StateUtils.getTarget(state, player, result.target);
-                    prefabs_1.DAMAGE_OPPONENT_POKEMON(store, state, effect, result.damage, [target]);
+                    (0, prefabs_1.DAMAGE_OPPONENT_POKEMON)(store, state, effect, result.damage, [target]);
                 }
             });
         }

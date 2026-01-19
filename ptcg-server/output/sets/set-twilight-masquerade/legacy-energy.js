@@ -32,7 +32,7 @@ If the Pokémon this card is attached to is Knocked Out by damage from an attack
             if (state.phase !== state_1.GamePhase.ATTACK || state.players[state.activePlayer] != opponent) {
                 return state;
             }
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, effect.target)) {
                 return state;
             }
             if (player.legacyEnergyUsed == false) {

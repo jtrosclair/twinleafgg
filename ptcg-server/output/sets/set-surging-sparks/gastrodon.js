@@ -49,7 +49,7 @@ class Gastrodon extends pokemon_card_1.PokemonCard {
                 return state;
             }
             const gastrodonPlayer = isGastrodonOnPlayerBench ? player : opponent;
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, gastrodonPlayer, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, gastrodonPlayer, this)) {
                 return state;
             }
             if (!effect.power.exemptFromAbilityLock) {

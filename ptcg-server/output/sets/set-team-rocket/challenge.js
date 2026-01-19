@@ -31,7 +31,7 @@ class Challenge extends trainer_card_1.TrainerCard {
                     throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
                 }
                 else {
-                    prefabs_1.DRAW_CARDS(player, 2);
+                    (0, prefabs_1.DRAW_CARDS)(player, 2);
                     player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 }
                 return state;
@@ -59,13 +59,13 @@ class Challenge extends trainer_card_1.TrainerCard {
                             opponent.deck.moveCardTo(card, opponentOpenSlots[index]);
                             opponentOpenSlots[index].pokemonPlayedTurn = state.turn;
                         });
-                        prefabs_2.SHUFFLE_DECK(store, state, player);
-                        prefabs_2.SHUFFLE_DECK(store, state, opponent);
+                        (0, prefabs_2.SHUFFLE_DECK)(store, state, player);
+                        (0, prefabs_2.SHUFFLE_DECK)(store, state, opponent);
                     });
                 }
                 else {
                     // Challenge declined
-                    prefabs_1.DRAW_CARDS(player, 2);
+                    (0, prefabs_1.DRAW_CARDS)(player, 2);
                 }
                 player.supporter.moveCardTo(effect.trainerCard, player.discard);
             });

@@ -1,12 +1,15 @@
-import { config } from '../config';
-export var LogLevel;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.logger = exports.Logger = exports.LogLevel = void 0;
+const config_1 = require("../config");
+var LogLevel;
 (function (LogLevel) {
     LogLevel[LogLevel["DEBUG"] = 0] = "DEBUG";
     LogLevel[LogLevel["INFO"] = 1] = "INFO";
     LogLevel[LogLevel["WARN"] = 2] = "WARN";
     LogLevel[LogLevel["ERROR"] = 3] = "ERROR";
-})(LogLevel || (LogLevel = {}));
-export class Logger {
+})(LogLevel = exports.LogLevel || (exports.LogLevel = {}));
+class Logger {
     constructor() {
         this.metrics = {
             totalDisconnections: 0,
@@ -25,7 +28,7 @@ export class Logger {
         this.maxBufferSize = 1000;
     }
     log(message) {
-        if (!config.core.debug) {
+        if (!config_1.config.core.debug) {
             return;
         }
         console.log(message);
@@ -39,7 +42,7 @@ export class Logger {
             this.logBuffer.shift();
         }
         // Console output based on debug setting and log level
-        if (config.core.debug || logEntry.level >= LogLevel.WARN) {
+        if (config_1.config.core.debug || logEntry.level >= LogLevel.WARN) {
             const timestamp = new Date(logEntry.timestamp).toISOString();
             const levelStr = LogLevel[logEntry.level];
             const prefix = `[${timestamp}] [${levelStr}] [${logEntry.category}]`;
@@ -284,4 +287,5 @@ export class Logger {
         return filteredLogs.sort((a, b) => a.timestamp - b.timestamp);
     }
 }
-export const logger = new Logger();
+exports.Logger = Logger;
+exports.logger = new Logger();

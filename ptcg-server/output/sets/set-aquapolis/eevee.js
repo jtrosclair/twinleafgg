@@ -32,8 +32,8 @@ class Eevee extends pokemon_card_1.PokemonCard {
         this.setNumber = '75';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
                     const player = effect.player;
                     return store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_CARDS, player.deck, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE], { superType: card_types_1.SuperType.ENERGY }, { allowCancel: false, min: 0, max: 1 }), transfers => {
@@ -41,15 +41,15 @@ class Eevee extends pokemon_card_1.PokemonCard {
                         // Attach energy if selected
                         for (const transfer of transfers) {
                             const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                            prefabs_1.MOVE_CARDS(store, state, game_1.StateUtils.findCardList(state, transfer.card), target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.attacks[0] });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, game_1.StateUtils.findCardList(state, transfer.card), target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.attacks[0] });
                         }
-                        prefabs_1.SHUFFLE_DECK(store, state, player);
+                        (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                     });
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (!result) {
                     effect.damage = 0;
                 }

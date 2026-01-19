@@ -24,7 +24,7 @@ class Cheren extends trainer_card_1.TrainerCard {
             if (player.deck.cards.length === 0) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            prefabs_1.DRAW_CARDS(player, 3);
+            (0, prefabs_1.DRAW_CARDS)(player, 3);
         }
         return state;
     }

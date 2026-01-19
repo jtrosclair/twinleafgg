@@ -37,7 +37,7 @@ class Flapple extends pokemon_card_1.PokemonCard {
         this.fullName = 'Flapple RCL';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_message_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { min: 1, max: 1, allowCancel: false }), selected => {
                 const targets = selected || [];
@@ -53,18 +53,18 @@ class Flapple extends pokemon_card_1.PokemonCard {
                         const otherCards = thisCardList.cards.filter(card => !(card instanceof pokemon_card_1.PokemonCard));
                         // Move other cards to deck first
                         if (otherCards.length > 0) {
-                            prefabs_1.MOVE_CARDS(store, state, thisCardList, player.deck, { cards: otherCards });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, thisCardList, player.deck, { cards: otherCards });
                         }
                         // Move Pokemon to deck
                         if (pokemons.length > 0) {
-                            prefabs_1.MOVE_CARDS(store, state, thisCardList, player.deck, { cards: pokemons });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, thisCardList, player.deck, { cards: pokemons });
                         }
-                        prefabs_1.SHUFFLE_DECK(store, state, player);
+                        (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                     }
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             return store.prompt(state, new game_1.CoinFlipPrompt(player.id, game_message_1.GameMessage.COIN_FLIP), flipResult => {

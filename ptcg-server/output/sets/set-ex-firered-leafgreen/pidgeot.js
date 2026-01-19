@@ -41,9 +41,9 @@ class Pidgeot extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.QUICK_SEARCH_POWER_MARKER, this);
         }
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (prefabs_1.HAS_MARKER(this.QUICK_SEARCH_POWER_MARKER, player)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.QUICK_SEARCH_POWER_MARKER, player)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             if (player.active.cards[0] === this && player.active.specialConditions.length > 0) {
@@ -52,18 +52,18 @@ class Pidgeot extends pokemon_card_1.PokemonCard {
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.ADD_MARKER(this.QUICK_SEARCH_POWER_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.QUICK_SEARCH_POWER_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, {}, { min: 1, max: 1, allowCancel: false }), cards => {
-                prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards: cards, sourceCard: this, sourceEffect: this.powers[0] });
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: cards, sourceCard: this, sourceEffect: this.powers[0] });
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            return prefabs_1.BLOCK_RETREAT(store, state, effect, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            return (0, prefabs_1.BLOCK_RETREAT)(store, state, effect, this);
         }
-        prefabs_1.BLOCK_RETREAT_IF_MARKER(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
-        prefabs_1.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
+        (0, prefabs_1.BLOCK_RETREAT_IF_MARKER)(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN)(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
         return state;
     }
 }

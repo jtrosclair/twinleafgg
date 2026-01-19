@@ -28,7 +28,7 @@ class MysteryPlateGamma extends trainer_card_1.TrainerCard {
         this.text = 'Attach this card to 1 of your Pokémon in play. That Pokémon may use this card\'s attack instead of its own. At the end of your turn, discard Mystery Plate γ.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             state = store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_ATTACH_CARDS, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH, game_1.SlotType.ACTIVE], { min: 1, max: 1, allowCancel: false }), transfers => {
                 player.supporter.moveCardTo(effect.trainerCard, transfers[0]);
@@ -62,9 +62,9 @@ class MysteryPlateGamma extends trainer_card_1.TrainerCard {
             const player = effect.player;
             const opponent = effect.opponent;
             if (opponent.getPrizeLeft() >= 5) {
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.deck, { cards: player.hand.cards });
-                prefabs_1.SHUFFLE_DECK(store, state, player);
-                prefabs_1.DRAW_CARDS(player, 6);
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck, { cards: player.hand.cards });
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
+                (0, prefabs_1.DRAW_CARDS)(player, 6);
             }
             else if (opponent.getPrizeLeft() === 2) {
                 let canDevolve = false;
@@ -82,7 +82,7 @@ class MysteryPlateGamma extends trainer_card_1.TrainerCard {
                 }
                 return store.prompt(state, new game_1.ChoosePokemonPrompt(effect.player.id, game_1.GameMessage.CHOOSE_POKEMON, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { allowCancel: false, min: 1, max: 1, blocked }), (results) => {
                     if (results && results.length > 0) {
-                        prefabs_1.DEVOLVE_POKEMON(store, state, results[0], effect.opponent.deck);
+                        (0, prefabs_1.DEVOLVE_POKEMON)(store, state, results[0], effect.opponent.deck);
                     }
                     return state;
                 });

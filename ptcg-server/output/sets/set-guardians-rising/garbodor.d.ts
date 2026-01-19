@@ -3,7 +3,7 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 export declare class Garbodor extends PokemonCard {
-    tags: never[];
+    tags: any[];
     stage: Stage;
     evolvesFrom: string;
     cardType: CardType;

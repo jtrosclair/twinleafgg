@@ -39,14 +39,14 @@ class TeamAquasManectric extends pokemon_card_1.PokemonCard {
         this.POWER_SHIFT_MARKER = 'POWER_SHIFT_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
-            if (prefabs_1.HAS_MARKER(this.POWER_SHIFT_MARKER, player, this)) {
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
+            if ((0, prefabs_1.HAS_MARKER)(this.POWER_SHIFT_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.ABILITY_USED(player, this);
-            prefabs_1.ADD_MARKER(this.POWER_SHIFT_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.POWER_SHIFT_MARKER, player, this);
             const blockedFrom = [];
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
                 var _a;
@@ -86,8 +86,8 @@ class TeamAquasManectric extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.POWER_SHIFT_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.POWER_SHIFT_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             // Check both players' Pokémon for Poké-Powers/Bodies

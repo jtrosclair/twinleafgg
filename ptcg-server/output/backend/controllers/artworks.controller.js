@@ -81,7 +81,7 @@ class Artworks extends controller_1.Controller {
                 return res.send({ ok: true, artworks: [] });
             }
             const artworks = await storage_1.CardArtwork.find({
-                where: { id: typeorm_1.In(artworkIds) }
+                where: { id: (0, typeorm_1.In)(artworkIds) }
             });
             res.send({ ok: true, artworks });
         }
@@ -92,34 +92,34 @@ class Artworks extends controller_1.Controller {
     }
 }
 __decorate([
-    controller_1.Post('/admin/upsert'),
-    services_1.AuthToken(),
-    services_2.Validate({
-        id: services_2.check().isNumber().required(),
-        name: services_2.check().required(),
-        cardName: services_2.check().required(),
-        setCode: services_2.check().required(),
-        code: services_2.check().required(),
-        imageUrl: services_2.check().required(),
-        holoType: services_2.check()
+    (0, controller_1.Post)('/admin/upsert'),
+    (0, services_1.AuthToken)(),
+    (0, services_2.Validate)({
+        id: (0, services_2.check)().isNumber().required(),
+        name: (0, services_2.check)().required(),
+        cardName: (0, services_2.check)().required(),
+        setCode: (0, services_2.check)().required(),
+        code: (0, services_2.check)().required(),
+        imageUrl: (0, services_2.check)().required(),
+        holoType: (0, services_2.check)()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Artworks.prototype, "onUpsertArtwork", null);
 __decorate([
-    controller_1.Post('/admin/grant'),
-    services_1.AuthToken(),
-    services_2.Validate({
-        artworkId: services_2.check().isNumber().required()
+    (0, controller_1.Post)('/admin/grant'),
+    (0, services_1.AuthToken)(),
+    (0, services_2.Validate)({
+        artworkId: (0, services_2.check)().isNumber().required()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Artworks.prototype, "onGrantArtwork", null);
 __decorate([
-    controller_1.Get('/unlocked'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/unlocked'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)

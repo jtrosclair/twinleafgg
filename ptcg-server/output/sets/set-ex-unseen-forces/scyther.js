@@ -34,7 +34,7 @@ class Scyther extends pokemon_card_1.PokemonCard {
         this.AGILITY_MARKER = 'AGILITY_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const blocked = [];
             player.deck.cards.forEach((card, index) => {
@@ -46,13 +46,13 @@ class Scyther extends pokemon_card_1.PokemonCard {
                     blocked.push(index);
                 }
             });
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player, {}, { min: 0, max: 2, blocked });
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, player, {}, { min: 0, max: 2, blocked });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
                     this.marker.addMarker(this.AGILITY_MARKER, this);
-                    prefabs_1.ADD_MARKER(this.AGILITY_MARKER, effect.opponent, this);
+                    (0, prefabs_1.ADD_MARKER)(this.AGILITY_MARKER, effect.opponent, this);
                 }
             });
         }
@@ -61,8 +61,8 @@ class Scyther extends pokemon_card_1.PokemonCard {
                 effect.preventDefault = true;
             }
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && prefabs_1.HAS_MARKER(this.AGILITY_MARKER, effect.player, this)) {
-            prefabs_1.REMOVE_MARKER(this.AGILITY_MARKER, effect.player, this);
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.AGILITY_MARKER, effect.player, this)) {
+            (0, prefabs_1.REMOVE_MARKER)(this.AGILITY_MARKER, effect.player, this);
             this.marker.removeMarker(this.AGILITY_MARKER, this);
         }
         return state;

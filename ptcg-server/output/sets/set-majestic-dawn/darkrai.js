@@ -42,16 +42,16 @@ class Darkrai extends pokemon_card_1.PokemonCard {
         this.CLEAR_PUT_SLEEP_MARKER = 'CLEAR_PUT_SLEEP_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this && !prefabs_1.IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+        if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this && !(0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, effect.player, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
-                    prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, this);
+                    (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, opponent, this);
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             // Apply Spiky Shell effect at the end of opponent's next turn
             effect.player.marker.addMarker(this.PUT_SLEEP_MARKER, this);
@@ -61,14 +61,14 @@ class Darkrai extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.active.marker.hasMarker(this.CLEAR_PUT_SLEEP_MARKER, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, this);
+            (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, opponent, this);
             effect.player.active.marker.removeMarker(this.CLEAR_PUT_SLEEP_MARKER, this);
             opponent.marker.removeMarker(this.PUT_SLEEP_MARKER, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.PUT_SLEEP_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.PUT_SLEEP_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             if (effect.opponent.active.specialConditions.includes(card_types_1.SpecialCondition.ASLEEP)) {
-                prefabs_1.HEAL_X_DAMAGE_FROM_THIS_POKEMON(effect, store, state, 40);
+                (0, prefabs_1.HEAL_X_DAMAGE_FROM_THIS_POKEMON)(effect, store, state, 40);
             }
         }
         return state;

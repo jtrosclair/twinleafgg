@@ -42,10 +42,10 @@ class Gyarados extends pokemon_card_1.PokemonCard {
         this.fullName = 'Gyarados SF';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_FOR_EACH_POKEMON_IN_YOUR_DISCARD_PILE(30, c => c.name === 'Magikarp', effect);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_FOR_EACH_POKEMON_IN_YOUR_DISCARD_PILE)(30, c => c.name === 'Magikarp', effect);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             const flipCoin = (heads = 0) => {
@@ -55,16 +55,16 @@ class Gyarados extends pokemon_card_1.PokemonCard {
                     if (result === true) {
                         return flipCoin(heads + 1);
                     }
-                    prefabs_1.MOVE_CARDS(store, state, opponent.deck, opponent.discard, { count: heads, sourceCard: this, sourceEffect: this.attacks[1] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, opponent.deck, opponent.discard, { count: heads, sourceCard: this, sourceEffect: this.attacks[1] });
                     return state;
                 });
             };
             return flipCoin();
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 2, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (result) {
                     let oppSpecialPokemon = 0;
                     let hasPokemonWithEnergy = false;

@@ -19,7 +19,7 @@ function concedeReducer(store, state, action) {
     // The other player wins
     const winner = playerIndex === 0 ? state_1.GameWinner.PLAYER_2 : state_1.GameWinner.PLAYER_1;
     // End the game
-    state = check_effect_1.endGame(store, state, winner);
+    state = (0, check_effect_1.endGame)(store, state, winner);
     return state;
 }
 exports.concedeReducer = concedeReducer;

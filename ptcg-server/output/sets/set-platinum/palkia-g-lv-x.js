@@ -48,7 +48,7 @@ class PalkiaGLVX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Lost Cyclone
-        if (prefabs_1.WAS_POWER_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (player.marker.hasMarker(this.LOST_CYCLONE_MARKER, this)) {
@@ -68,7 +68,7 @@ class PalkiaGLVX extends pokemon_card_1.PokemonCard {
                     player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {
                         if (card !== player.active && !targets.includes(card)) {
                             card.clearEffects();
-                            prefabs_1.MOVE_CARDS(store, state, card, player.lostzone);
+                            (0, prefabs_1.MOVE_CARDS)(store, state, card, player.lostzone);
                         }
                     });
                 });
@@ -81,7 +81,7 @@ class PalkiaGLVX extends pokemon_card_1.PokemonCard {
                     opponent.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {
                         if (card !== opponent.active && !targets.includes(card)) {
                             card.clearEffects();
-                            prefabs_1.MOVE_CARDS(store, state, card, opponent.lostzone);
+                            (0, prefabs_1.MOVE_CARDS)(store, state, card, opponent.lostzone);
                         }
                     });
                 });
@@ -91,9 +91,9 @@ class PalkiaGLVX extends pokemon_card_1.PokemonCard {
             effect.player.marker.removeMarker(this.LOST_CYCLONE_MARKER, this);
         }
         // Hydro Shot
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 2);
-            attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON(80, effect, store, state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 2);
+            (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON)(80, effect, store, state);
         }
         // making sure it gets put on the active pokemon
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {

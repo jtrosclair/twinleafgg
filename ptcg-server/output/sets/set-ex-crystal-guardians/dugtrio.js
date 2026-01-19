@@ -46,12 +46,12 @@ class Dugtrio extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Dig Under
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_2.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(30, effect, store, state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_2.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(30, effect, store, state);
         }
         // Double-edge
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 10);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF)(store, state, effect, 10);
         }
         // Sand Veil
         if (effect instanceof attack_effects_1.PutDamageEffect) {

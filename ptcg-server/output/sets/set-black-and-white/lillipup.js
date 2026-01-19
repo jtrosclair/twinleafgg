@@ -35,8 +35,8 @@ class Lillipup extends pokemon_card_1.PokemonCard {
         this.setNumber = '80';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.PUT_X_CARDS_FROM_YOUR_DISCARD_PILE_INTO_YOUR_HAND(1, c => c instanceof game_1.TrainerCard && c.trainerType === card_types_1.TrainerType.ITEM, store, state, effect);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.PUT_X_CARDS_FROM_YOUR_DISCARD_PILE_INTO_YOUR_HAND)(1, c => c instanceof game_1.TrainerCard && c.trainerType === card_types_1.TrainerType.ITEM, store, state, effect);
         }
         return state;
     }

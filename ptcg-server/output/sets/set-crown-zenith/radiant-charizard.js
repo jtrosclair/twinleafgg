@@ -48,7 +48,7 @@ class RadiantCharizard extends pokemon_card_1.PokemonCard {
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const index = effect.cost.indexOf(card_types_1.CardType.COLORLESS);
             // No cost to reduce
-            if (index === -1 || prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if (index === -1 || (0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             for (let i = 0; i < opponent.prizesTaken; i++) {

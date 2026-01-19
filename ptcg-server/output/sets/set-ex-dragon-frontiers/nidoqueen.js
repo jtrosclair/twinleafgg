@@ -37,20 +37,20 @@ class Nidoqueen extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
-            prefabs_1.REMOVE_MARKER(this.INVITATION_MARKER, effect.player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.INVITATION_MARKER, effect.player, this);
         }
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (prefabs_1.HAS_MARKER(this.INVITATION_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.INVITATION_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND(store, state, player, {}, { min: 0, max: 1, allowCancel: false });
-            prefabs_1.ADD_MARKER(this.INVITATION_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND)(store, state, player, {}, { min: 0, max: 1, allowCancel: false });
+            (0, prefabs_1.ADD_MARKER)(this.INVITATION_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.INVITATION_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.INVITATION_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let pokemonCount = 0;
             player.discard.cards.forEach(c => {

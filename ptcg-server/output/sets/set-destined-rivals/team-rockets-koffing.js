@@ -38,7 +38,7 @@ class TeamRocketsKoffing extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.AfterDamageEffect && effect.target.getPokemonCard() === this) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const openSlots = player.bench.filter(b => b.cards.length === 0);
@@ -46,7 +46,7 @@ class TeamRocketsKoffing extends pokemon_card_1.PokemonCard {
                 return state;
             }
             store.log(state, game_1.GameLog.LOG_PLAYER_USES_ABILITY, { name: player.name, card: this.name });
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
                     const maxPokemons = Math.min(openSlots.length, 2);
                     const blocked = [];
@@ -61,7 +61,7 @@ class TeamRocketsKoffing extends pokemon_card_1.PokemonCard {
                             player.deck.moveCardTo(card, openSlots[index]);
                             openSlots[index].pokemonPlayedTurn = state.turn;
                         });
-                        prefabs_1.SHUFFLE_DECK(store, state, player);
+                        (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                     });
                 }
             });

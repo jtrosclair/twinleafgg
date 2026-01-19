@@ -42,7 +42,7 @@ class Charcadet extends pokemon_card_1.PokemonCard {
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { min: 0, max: 2, allowCancel: false }), cards => {
                 cards = cards || [];
                 if (cards.length > 0) {
-                    prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: this });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: this });
                 }
             });
         }

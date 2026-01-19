@@ -40,7 +40,7 @@ class Scizor extends pokemon_card_1.PokemonCard {
         this.fullName = 'Scizor UD';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(player);
             store.reduceEffect(state, checkProvidedEnergyEffect);
@@ -58,7 +58,7 @@ class Scizor extends pokemon_card_1.PokemonCard {
             const opponentPokemon = opponent.active;
             const checkEnergy = new check_effects_1.CheckProvidedEnergyEffect(opponent, opponentPokemon);
             store.reduceEffect(state, checkEnergy);
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             checkEnergy.energyMap.forEach(em => {

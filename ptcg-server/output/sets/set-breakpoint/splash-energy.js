@@ -48,13 +48,13 @@ class SplashEnergy extends energy_card_1.EnergyCard {
         if (effect instanceof check_effects_1.CheckTableStateEffect) {
             state.players.forEach(player => {
                 player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
-                    if (!cardList.cards.includes(this) || prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, cardList)) {
+                    if (!cardList.cards.includes(this) || (0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, cardList)) {
                         return;
                     }
                     const checkPokemonType = new check_effects_1.CheckPokemonTypeEffect(cardList);
                     store.reduceEffect(state, checkPokemonType);
                     if (!checkPokemonType.cardTypes.includes(card_types_1.CardType.WATER)) {
-                        prefabs_1.MOVE_CARDS(store, state, cardList, player.discard, { sourceCard: this, sourceEffect: this });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.discard, { sourceCard: this, sourceEffect: this });
                     }
                 });
             });
@@ -65,7 +65,7 @@ class SplashEnergy extends energy_card_1.EnergyCard {
             state.phase === state_1.GamePhase.ATTACK &&
             effect.player.marker.hasMarker(effect.player.DAMAGE_DEALT_MARKER)) {
             const knockedPokemonOwner = game_1.StateUtils.findOwner(state, effect.target);
-            if (!prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, knockedPokemonOwner, this, effect.target)) {
+            if (!(0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, knockedPokemonOwner, this, effect.target)) {
                 const cards = effect.target.getPokemons();
                 cards.forEach(card => {
                     knockedPokemonOwner.marker.addMarker(this.SPLASH_ENERGY_MARKER, card);
@@ -81,7 +81,7 @@ class SplashEnergy extends energy_card_1.EnergyCard {
                     .filter(m => m.name === this.SPLASH_ENERGY_MARKER)
                     .map(m => m.source)
                     .filter((card) => !!card);
-                prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: rescued, sourceCard: this, sourceEffect: this });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: rescued, sourceCard: this, sourceEffect: this });
                 player.marker.removeMarker(this.SPLASH_ENERGY_MARKER);
             });
         }

@@ -29,7 +29,7 @@ class MegatonBlower extends trainer_card_1.TrainerCard {
                 const cardList = game_1.StateUtils.findCardList(state, stadiumCard);
                 if (cardList) {
                     const stadiumOwner = game_1.StateUtils.findOwner(state, cardList);
-                    state = prefabs_1.MOVE_CARDS(store, state, cardList, stadiumOwner.discard, { cards: [stadiumCard], sourceCard: this });
+                    state = (0, prefabs_1.MOVE_CARDS)(store, state, cardList, stadiumOwner.discard, { cards: [stadiumCard], sourceCard: this });
                 }
             }
             const opponent = game_1.StateUtils.getOpponent(state, player);
@@ -38,7 +38,7 @@ class MegatonBlower extends trainer_card_1.TrainerCard {
                 const cardsToDiscard = pokemonCardList.cards.filter(card => (card instanceof game_1.EnergyCard && card.energyType === card_types_1.EnergyType.SPECIAL) ||
                     (card instanceof trainer_card_1.TrainerCard && card.trainerType === card_types_1.TrainerType.TOOL));
                 if (cardsToDiscard.length > 0) {
-                    state = prefabs_1.MOVE_CARDS(store, state, pokemonCardList, opponent.discard, { cards: cardsToDiscard });
+                    state = (0, prefabs_1.MOVE_CARDS)(store, state, pokemonCardList, opponent.discard, { cards: cardsToDiscard });
                 }
             };
             // Discard from active Pokémon
@@ -48,7 +48,7 @@ class MegatonBlower extends trainer_card_1.TrainerCard {
                 discardSpecialEnergyAndTools(benchPokemon);
             });
             // Move this card to discard pile
-            state = prefabs_1.MOVE_CARDS(store, state, player.supporter, player.discard, { cards: [this] });
+            state = (0, prefabs_1.MOVE_CARDS)(store, state, player.supporter, player.discard, { cards: [this] });
         }
         return state;
     }

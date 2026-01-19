@@ -44,7 +44,7 @@ class HolonsElectrode extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // The Special Energy Stuff
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.energyPlayedTurn === state.turn) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -113,8 +113,8 @@ class HolonsElectrode extends pokemon_card_1.PokemonCard {
             effect.energyMap.push({ card: this, provides: this.provides });
         }
         // Dazzle Blast
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         return state;
     }

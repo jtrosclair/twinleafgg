@@ -32,7 +32,7 @@ class Corsola extends pokemon_card_1.PokemonCard {
         this.fullName = 'Corsola HL';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             let cardsToDraw = 0;
@@ -43,7 +43,7 @@ class Corsola extends pokemon_card_1.PokemonCard {
                 }
             });
             cardsToDraw = Math.min(cardsToDraw, 10 - player.hand.cards.length);
-            prefabs_1.DRAW_UP_TO_X_CARDS(store, state, player, cardsToDraw);
+            (0, prefabs_1.DRAW_UP_TO_X_CARDS)(store, state, player, cardsToDraw);
         }
         return state;
     }

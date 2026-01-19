@@ -29,8 +29,8 @@ class Dragonair extends pokemon_card_1.PokemonCard {
         this.cardImage = 'assets/cardback.png';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, effect.player, 2, (results) => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, effect.player, 2, (results) => {
                 const player = effect.player;
                 const opponent = effect.opponent;
                 if (results.every(result => !result)) {

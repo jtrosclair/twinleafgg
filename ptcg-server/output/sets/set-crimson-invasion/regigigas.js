@@ -33,7 +33,7 @@ class Regigigas extends pokemon_card_1.PokemonCard {
             }];
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             try {
                 const stub = new game_effects_1.PowerEffect(player, {

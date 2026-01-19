@@ -34,7 +34,7 @@ class Seadra extends pokemon_card_1.PokemonCard {
         this.fullName = 'Seadra AQ';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(player, player.active);
             store.reduceEffect(state, checkProvidedEnergyEffect);
@@ -46,7 +46,7 @@ class Seadra extends pokemon_card_1.PokemonCard {
                 }
             });
             for (let i = 0; i < waterEnergyCount; i++) {
-                prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+                (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                     if (result) {
                         effect.damage += 10;
                     }

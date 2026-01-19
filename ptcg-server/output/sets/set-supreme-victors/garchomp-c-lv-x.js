@@ -62,7 +62,7 @@ class GarchompCLVX extends pokemon_card_1.PokemonCard {
             catch (_a) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
                     player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {
                         var _a;
@@ -75,12 +75,12 @@ class GarchompCLVX extends pokemon_card_1.PokemonCard {
             });
         }
         // Dragon Rush
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (effect.player.marker.hasMarker(this.DRAGON_RUSH_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
             }
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 2);
-            attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(80, effect, store, state);
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 2);
+            (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(80, effect, store, state);
             effect.player.marker.addMarker(this.DRAGON_RUSH_MARKER, this);
         }
         // removing the markers for preventing the pokemon from attacking

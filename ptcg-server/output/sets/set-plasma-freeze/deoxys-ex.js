@@ -34,7 +34,7 @@ class DeoxysEX extends game_1.PokemonCard {
         this.fullName = 'Deoxys EX PLF';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const pokemon = player.active;
@@ -60,7 +60,7 @@ class DeoxysEX extends game_1.PokemonCard {
             const source = effect.source.getPokemonCard();
             if (state.phase === game_1.GamePhase.ATTACK &&
                 source.tags.includes(game_1.CardTag.TEAM_PLASMA) && source.name !== 'Deoxys-EX' &&
-                effect.target === opponent.active && effect.damage > 0 && !prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+                effect.target === opponent.active && effect.damage > 0 && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 effect.damage += 10;
             }
         }

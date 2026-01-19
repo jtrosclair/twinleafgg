@@ -41,14 +41,14 @@ class GardevoirEx extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Life Leap
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const healTargetEffect = new attack_effects_1.HealTargetEffect(effect, effect.damage);
             healTargetEffect.target = player.active;
             state = store.reduceEffect(state, healTargetEffect);
         }
         // Shining Wind
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             player.active.marker.addMarker(this.SHINING_WIND_MARKER, this);

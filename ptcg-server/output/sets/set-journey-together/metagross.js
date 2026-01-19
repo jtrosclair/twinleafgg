@@ -31,7 +31,7 @@ class Metagross extends game_1.PokemonCard {
         this.fullName = 'Metagross JTG';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             let hasBeldum = false;
             let hasMetang = false;

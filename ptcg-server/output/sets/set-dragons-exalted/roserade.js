@@ -66,9 +66,9 @@ class Roserade extends pokemon_card_1.PokemonCard {
                             store.log(state, game_message_1.GameLog.LOG_PLAYER_USES_ABILITY, { name: player.name, ability: 'Le Parfum' });
                         }
                     });
-                    prefabs_1.ABILITY_USED(player, this);
-                    prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, this, {}, { min: 1, max: 1, allowCancel: false }, this.powers[0]);
-                    prefabs_1.SHUFFLE_DECK(store, state, player);
+                    (0, prefabs_1.ABILITY_USED)(player, this);
+                    (0, prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND)(store, state, player, this, {}, { min: 1, max: 1, allowCancel: false }, this.powers[0]);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                 }
             });
         }

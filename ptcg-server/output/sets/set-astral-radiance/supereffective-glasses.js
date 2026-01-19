@@ -18,7 +18,7 @@ class SupereffectiveGlasses extends game_1.TrainerCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.ApplyWeaknessEffect && effect.target.tools.includes(this)) {
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             effect.damage = effect.damage * 1.5;

@@ -24,12 +24,12 @@ class UTurnBoard extends trainer_card_1.TrainerCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.DiscardCardsEffect && effect.cards.includes(this)) {
             const player = effect.player;
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             const cardsToMove = effect.cards.filter(c => c === this);
             if (cardsToMove.length > 0) {
-                state = prefabs_1.MOVE_CARDS(store, state, effect.target, player.hand, { cards: cardsToMove });
+                state = (0, prefabs_1.MOVE_CARDS)(store, state, effect.target, player.hand, { cards: cardsToMove });
                 effect.cards = effect.cards.filter(c => c !== this);
             }
         }
@@ -39,7 +39,7 @@ class UTurnBoard extends trainer_card_1.TrainerCard {
         }
         if (effect instanceof check_effects_1.CheckRetreatCostEffect && effect.player.active.tools.includes(this)) {
             const index = effect.cost.indexOf(card_types_1.CardType.COLORLESS);
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             if (index !== -1) {
@@ -56,7 +56,7 @@ class UTurnBoard extends trainer_card_1.TrainerCard {
                     .map(m => m.source);
                 const cardsInDiscard = rescued.filter(c => player.discard.cards.includes(c));
                 if (cardsInDiscard.length > 0) {
-                    state = prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: cardsInDiscard });
+                    state = (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: cardsInDiscard });
                     player.marker.removeMarker(this.U_TURN_BOARD_MARKER, this);
                 }
             }

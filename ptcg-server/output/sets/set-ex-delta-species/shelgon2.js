@@ -38,7 +38,7 @@ class Shelgon2 extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.DealDamageEffect && effect.target.getPokemonCard() === this) {
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             effect.damage -= 10;

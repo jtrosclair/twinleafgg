@@ -21,7 +21,7 @@ class SilverMirror extends trainer_card_1.TrainerCard {
         if (effect instanceof attack_effects_1.AbstractAttackEffect && effect.target.tools.includes(this)) {
             const targetCard = effect.target.getPokemonCard();
             const sourceCard = effect.source.getPokemonCard();
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             if (targetCard && !targetCard.tags.includes(card_types_1.CardTag.POKEMON_EX) && sourceCard && sourceCard.tags.includes(card_types_1.CardTag.TEAM_PLASMA)) {

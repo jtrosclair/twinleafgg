@@ -23,13 +23,13 @@ When you attach this card from your hand to a Pokémon, search your deck for a B
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.AttachEnergyEffect && effect.energyCard === this) {
             const player = effect.player;
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, effect.target)) {
                 return state;
             }
-            if (prefabs_1.GET_PLAYER_BENCH_SLOTS(player).length === 0) {
+            if ((0, prefabs_1.GET_PLAYER_BENCH_SLOTS)(player).length === 0) {
                 return state;
             }
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player, { stage: card_types_1.Stage.BASIC }, { min: 0, max: 1 });
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, player, { stage: card_types_1.Stage.BASIC }, { min: 0, max: 1 });
         }
         return state;
     }

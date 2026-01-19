@@ -47,7 +47,7 @@ class EnergyStadium extends trainer_card_1.TrainerCard {
             if (basicEnergyInDiscard === 0) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (result) {
                     let cards = [];
                     store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { min: 0, max: 1, allowCancel: false, blocked }), selectedCards => {
@@ -57,7 +57,7 @@ class EnergyStadium extends trainer_card_1.TrainerCard {
                             return state;
                         }
                         if (cards.length > 0) {
-                            prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
+                            (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
                         }
                         cards.forEach((card, index) => {
                             player.discard.moveCardTo(card, player.hand);

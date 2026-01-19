@@ -44,11 +44,11 @@ class Lugiaex extends pokemon_card_1.PokemonCard {
             if (effect.damage <= 0 || player === targetPlayer || targetPlayer.active !== effect.target) {
                 return state;
             }
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             if (state.phase === state_1.GamePhase.ATTACK) {
-                prefabs_1.COIN_FLIP_PROMPT(store, state, targetPlayer, result => {
+                (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, targetPlayer, result => {
                     if (result) {
                         const opponentProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(opponent, opponent.active);
                         store.reduceEffect(state, opponentProvidedEnergy);
@@ -64,7 +64,7 @@ class Lugiaex extends pokemon_card_1.PokemonCard {
                 });
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
             state = store.reduceEffect(state, checkProvidedEnergy);

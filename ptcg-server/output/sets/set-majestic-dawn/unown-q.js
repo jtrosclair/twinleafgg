@@ -55,7 +55,7 @@ function* usePower(next, store, state, self, effect) {
             }
             // Move other cards to discard
             if (otherCards.length > 0) {
-                prefabs_1.MOVE_CARDS(store, state, unownQSlot, player.discard, { cards: otherCards });
+                (0, prefabs_1.MOVE_CARDS)(store, state, unownQSlot, player.discard, { cards: otherCards });
             }
             // Now attach Unown Q as a Pokemon Tool
             unownQSlot.moveCardTo(unownQCard, targets[0]);

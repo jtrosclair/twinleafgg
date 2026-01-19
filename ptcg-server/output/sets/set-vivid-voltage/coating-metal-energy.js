@@ -27,7 +27,7 @@ The [M] Pokémon this card is attached to has no Weakness.`;
         }
         // Prevent effects of attacks
         if (effect instanceof attack_effects_1.AbstractAttackEffect && effect.target && effect.target.cards.includes(this)) {
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.opponent, this, effect.target)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.opponent, this, effect.target)) {
                 return state;
             }
             const checkPokemonType = new check_effects_1.CheckPokemonTypeEffect(effect.target);

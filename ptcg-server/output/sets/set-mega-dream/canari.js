@@ -40,7 +40,7 @@ function* playCard(next, store, state, self, effect) {
     if (discardCards.length === 0) {
         return state;
     }
-    prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: discardCards, sourceCard: self });
+    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: discardCards, sourceCard: self });
     // Build blocked indices array for non-Lightning Pokemon
     let lightningPokemonCount = 0;
     const blocked = [];
@@ -63,7 +63,7 @@ function* playCard(next, store, state, self, effect) {
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
-    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });

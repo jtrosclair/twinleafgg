@@ -217,37 +217,37 @@ class MemoryHealthController extends controller_1.Controller {
     }
 }
 __decorate([
-    controller_1.Get('/health'),
+    (0, controller_1.Get)('/health'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], MemoryHealthController.prototype, "getMemoryHealth", null);
 __decorate([
-    controller_1.Get('/history'),
+    (0, controller_1.Get)('/history'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], MemoryHealthController.prototype, "getMemoryHistory", null);
 __decorate([
-    controller_1.Post('/optimize'),
+    (0, controller_1.Post)('/optimize'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], MemoryHealthController.prototype, "forceOptimization", null);
 __decorate([
-    controller_1.Post('/gc'),
+    (0, controller_1.Post)('/gc'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], MemoryHealthController.prototype, "forceGarbageCollection", null);
 __decorate([
-    controller_1.Post('/config'),
+    (0, controller_1.Post)('/config'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], MemoryHealthController.prototype, "updateConfig", null);
 __decorate([
-    controller_1.Get('/status'),
+    (0, controller_1.Get)('/status'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)

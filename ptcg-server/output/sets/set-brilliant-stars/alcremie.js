@@ -35,7 +35,7 @@ class Alcremie extends pokemon_card_1.PokemonCard {
         this.fullName = 'Alcremie BRS';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const uniqueTypes = new Set();
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, pokemon => {

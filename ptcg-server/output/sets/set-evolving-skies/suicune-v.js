@@ -60,7 +60,7 @@ class SuicuneV extends pokemon_card_1.PokemonCard {
                 return state; // Not active
             }
             // Draw a card
-            prefabs_1.DRAW_CARDS(player, 1);
+            (0, prefabs_1.DRAW_CARDS)(player, 1);
             player.marker.addMarker(this.FLEET_FOOTED_MARKER, this);
         }
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {

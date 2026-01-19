@@ -37,7 +37,7 @@ class TateAndLiza extends trainer_card_1.TrainerCard {
                         return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_message_1.GameMessage.CHOOSE_POKEMON_TO_SWITCH, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH], { allowCancel: false }), result => {
                             const cardList = result[0];
                             player.switchPokemon(cardList);
-                            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                         });
                     }
                 },
@@ -45,13 +45,13 @@ class TateAndLiza extends trainer_card_1.TrainerCard {
                     message: game_message_1.GameMessage.SHUFFLE_YOUR_HAND,
                     action: () => {
                         if (player.hand.cards.length > 0) {
-                            prefabs_1.MOVE_CARDS(store, state, player.hand, player.deck, { cards: player.hand.cards.filter(c => c !== this), sourceCard: this });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck, { cards: player.hand.cards.filter(c => c !== this), sourceCard: this });
                         }
                         store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                             player.deck.applyOrder(order);
                         });
-                        prefabs_1.DRAW_CARDS(player, 5);
-                        prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                        (0, prefabs_1.DRAW_CARDS)(player, 5);
+                        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     }
                 }
             ];

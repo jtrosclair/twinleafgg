@@ -37,10 +37,10 @@ class Haunter extends pokemon_card_1.PokemonCard {
         this.fullName = 'Haunter SF';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED(store, state, effect);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED)(store, state, effect);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const hasValidCard = opponent.discard.cards.some(c => {
@@ -71,7 +71,7 @@ class Haunter extends pokemon_card_1.PokemonCard {
                     cards.forEach((card, index) => {
                         store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: opponent.name, card: card.name });
                     });
-                    prefabs_1.MOVE_CARDS(store, state, opponent.discard, opponent.hand, { cards: cards });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, opponent.discard, opponent.hand, { cards: cards });
                 }
             });
         }

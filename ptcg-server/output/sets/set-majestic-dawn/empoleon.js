@@ -35,7 +35,7 @@ class Empoleon extends pokemon_card_1.PokemonCard {
         this.fullName = 'Empoleon MD';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const opponentTargets = [opponent.active, ...opponent.bench].filter(p => p.cards.length > 0);
@@ -51,11 +51,11 @@ class Empoleon extends pokemon_card_1.PokemonCard {
                 return state;
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const playerBench = player.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
             effect.damage += playerBench * 10;
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (!result) {
                     player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
                         if (cardList === player.active) {

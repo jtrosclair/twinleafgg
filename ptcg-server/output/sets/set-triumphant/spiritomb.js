@@ -53,13 +53,13 @@ class Spiritomb extends pokemon_card_1.PokemonCard {
             state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
                 if (wantToUse) {
                     opponent.hand.moveTo(opponent.deck);
-                    prefabs_1.SHUFFLE_DECK(store, state, opponent);
-                    prefabs_1.DRAW_CARDS(opponent, 6);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
+                    (0, prefabs_1.DRAW_CARDS)(opponent, 6);
                 }
                 return state;
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             const options = [

@@ -41,12 +41,12 @@ class BronzongG extends game_1.PokemonCard {
             player.marker.removeMarker(this.GALACTIC_SWITCH_MARKER, this);
             return state;
         }
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.GALACTIC_SWITCH_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             let hasEnergy = false;
             let pokemonCount = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
@@ -74,8 +74,8 @@ class BronzongG extends game_1.PokemonCard {
                     return;
                 }
                 for (const transfer of transfers) {
-                    prefabs_1.ADD_MARKER(this.GALACTIC_SWITCH_MARKER, player, this);
-                    prefabs_1.ABILITY_USED(player, this);
+                    (0, prefabs_1.ADD_MARKER)(this.GALACTIC_SWITCH_MARKER, player, this);
+                    (0, prefabs_1.ABILITY_USED)(player, this);
                     player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
                         if (cardList.getPokemonCard() === effect.card) {
                             cardList.damage += 20; // Add 2 damage counters
@@ -88,8 +88,8 @@ class BronzongG extends game_1.PokemonCard {
                 return state;
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.GALACTIC_SWITCH_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.GALACTIC_SWITCH_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             const benched = opponent.bench.filter(b => b.cards.length > 0);
             benched.forEach(target => {

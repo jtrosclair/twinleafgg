@@ -38,29 +38,29 @@ class Illumise extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
-            prefabs_1.REMOVE_MARKER(this.SCENT_CONDUCT_MARKER, effect.player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.SCENT_CONDUCT_MARKER, effect.player, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.SCENT_CONDUCT_MARKER, this);
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.SCENT_CONDUCT_MARKER, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (prefabs_1.HAS_MARKER(this.SCENT_CONDUCT_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.SCENT_CONDUCT_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             if (player.active.cards[0] === this && player.active.specialConditions.length > 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, (result) => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, (result) => {
                 if (result) {
-                    prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player, { cardType: card_types_1.CardType.GRASS, stage: card_types_1.Stage.BASIC }, { min: 0, max: 1 });
+                    (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, player, { cardType: card_types_1.CardType.GRASS, stage: card_types_1.Stage.BASIC }, { min: 0, max: 1 });
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const opponentActive = opponent.active.getPokemonCard();
             if (opponentActive && opponentActive.powers.some(power => power.powerType === game_1.PowerType.POKEBODY)) {
-                attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP(store, state, effect);
+                (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP)(store, state, effect);
             }
         }
         return state;

@@ -39,7 +39,7 @@ class AncientBoosterEnergyCapsule extends trainer_card_1.TrainerCard {
                 return state;
             }
             // Try to reduce ToolEffect, to check if something is blocking the tool from working
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             if (card.tags.includes(card_types_1.CardTag.ANCIENT)) {
@@ -52,7 +52,7 @@ class AncientBoosterEnergyCapsule extends trainer_card_1.TrainerCard {
                 const card = cardList.getPokemonCard();
                 if (card && card.tags.includes(card_types_1.CardTag.ANCIENT)) {
                     // Try to reduce ToolEffect, to check if something is blocking the tool from working
-                    if (!prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+                    if (!(0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                         // Prevent all special conditions
                         effect.specialConditions = [];
                     }
@@ -65,7 +65,7 @@ class AncientBoosterEnergyCapsule extends trainer_card_1.TrainerCard {
                 const card = cardList.getPokemonCard();
                 if (card && card.tags.includes(card_types_1.CardTag.ANCIENT)) {
                     // Try to reduce ToolEffect, to check if something is blocking the tool from working
-                    if (!prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+                    if (!(0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                         // Prevent all special conditions
                         effect.specialConditions = [];
                     }

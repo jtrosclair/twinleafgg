@@ -27,7 +27,7 @@ class HolonResearcher extends trainer_card_1.TrainerCard {
             if (supporterTurn > 0) {
                 throw new game_1.GameError(game_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
             }
-            trainer_prefabs_1.DISCARD_X_CARDS_FROM_YOUR_HAND(effect, store, state, 1, 1);
+            (0, trainer_prefabs_1.DISCARD_X_CARDS_FROM_YOUR_HAND)(effect, store, state, 1, 1);
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             effect.preventDefault = true;
             const blocked = [];
@@ -45,12 +45,12 @@ class HolonResearcher extends trainer_card_1.TrainerCard {
             let cards = [];
             store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, {}, { min: 0, max: 1, allowCancel: false, blocked }), selected => {
                 cards = selected || [];
-                prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-                prefabs_1.MOVE_CARDS_TO_HAND(store, state, player, cards);
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
+                (0, prefabs_1.MOVE_CARDS_TO_HAND)(store, state, player, cards);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         return state;

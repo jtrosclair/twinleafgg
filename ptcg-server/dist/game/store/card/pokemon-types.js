@@ -1,4 +1,7 @@
-export var PowerType;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PowerType = void 0;
+var PowerType;
 (function (PowerType) {
     PowerType[PowerType["POKEBODY"] = 0] = "POKEBODY";
     PowerType[PowerType["POKEPOWER"] = 1] = "POKEPOWER";
@@ -16,4 +19,4 @@ export var PowerType;
     PowerType[PowerType["BREAK_RULE"] = 13] = "BREAK_RULE";
     PowerType[PowerType["ARCEUS_RULE"] = 14] = "ARCEUS_RULE";
     PowerType[PowerType["ENERGY_ABILITY"] = 15] = "ENERGY_ABILITY";
-})(PowerType || (PowerType = {}));
+})(PowerType = exports.PowerType || (exports.PowerType = {}));

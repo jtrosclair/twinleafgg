@@ -72,7 +72,7 @@ class DarkraiVSTAR extends pokemon_card_1.PokemonCard {
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: card_types_1.SuperType.TRAINER, trainerType: card_types_1.TrainerType.ITEM }, { min: 1, max: 2, allowCancel: true }), selected => {
                 cards = selected || [];
                 if (cards.length > 0) {
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards, sourceCard: this, sourceEffect: this.powers[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards, sourceCard: this, sourceEffect: this.powers[0] });
                 }
                 player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
                     if (cardList.getPokemonCard() === this) {

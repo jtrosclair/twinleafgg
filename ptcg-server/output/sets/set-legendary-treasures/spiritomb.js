@@ -45,7 +45,7 @@ class Spiritomb extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
@@ -63,7 +63,7 @@ class Spiritomb extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
@@ -81,7 +81,7 @@ class Spiritomb extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
@@ -99,19 +99,19 @@ class Spiritomb extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.deck.cards.length === 0) {
                 return state;
             }
-            prefabs_1.MOVE_CARDS(store, state, player.hand, player.deck, { cards: player.hand.cards.filter(c => c !== this) });
-            prefabs_1.SHUFFLE_DECK(store, state, player);
-            prefabs_1.DRAW_CARDS(player, effect.opponent.hand.cards.length);
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck, { cards: player.hand.cards.filter(c => c !== this) });
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
+            (0, prefabs_1.DRAW_CARDS)(player, effect.opponent.hand.cards.length);
         }
         return state;
     }

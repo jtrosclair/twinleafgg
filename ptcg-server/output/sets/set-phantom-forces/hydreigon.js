@@ -35,7 +35,7 @@ class Hydreigon extends game_1.PokemonCard {
         this.usedCrazyHeadbutt = false;
     }
     reduceEffect(store, state, effect) {
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.DARK_IMPULSE_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.DARK_IMPULSE_MARKER, this);
         if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
             const player = effect.player;
             const hasEnergyInDiscard = player.discard.cards.some(c => {
@@ -51,7 +51,7 @@ class Hydreigon extends game_1.PokemonCard {
             state = store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_TO_ACTIVE, player.discard, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE], { superType: game_1.SuperType.ENERGY, name: 'Darkness Energy' }, { allowCancel: false, min: 1, max: 1 }), transfers => {
                 transfers = transfers || [];
                 player.marker.addMarker(this.DARK_IMPULSE_MARKER, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 if (transfers.length === 0) {
                     return;
                 }
@@ -62,8 +62,8 @@ class Hydreigon extends game_1.PokemonCard {
                 return state;
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1);
         }
         return state;
     }

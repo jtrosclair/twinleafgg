@@ -48,63 +48,63 @@ let User = User_1 = class User extends typeorm_1.BaseEntity {
     }
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], User.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "name", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], User.prototype, "ranking", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'int', default: 0 }),
+    (0, typeorm_1.Column)({ type: 'int', default: 0 }),
     __metadata("design:type", Number)
 ], User.prototype, "roleId", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'bigint', transformer: [bigint_1.bigint] }),
+    (0, typeorm_1.Column)({ type: 'bigint', transformer: [bigint_1.bigint] }),
     __metadata("design:type", Number)
 ], User.prototype, "registered", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'bigint', transformer: [bigint_1.bigint] }),
+    (0, typeorm_1.Column)({ type: 'bigint', transformer: [bigint_1.bigint] }),
     __metadata("design:type", Number)
 ], User.prototype, "lastSeen", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'bigint', transformer: [bigint_1.bigint] }),
+    (0, typeorm_1.Column)({ type: 'bigint', transformer: [bigint_1.bigint] }),
     __metadata("design:type", Number)
 ], User.prototype, "lastRankingChange", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "avatarFile", void 0);
 __decorate([
-    typeorm_1.Column({ nullable: true }),
+    (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], User.prototype, "cardImagesJsonUrl", void 0);
 __decorate([
-    typeorm_1.OneToMany(type => deck_1.Deck, deck => deck.user),
+    (0, typeorm_1.OneToMany)(type => deck_1.Deck, deck => deck.user),
     __metadata("design:type", Array)
 ], User.prototype, "decks", void 0);
 __decorate([
-    typeorm_1.OneToMany(type => avatar_1.Avatar, avatar => avatar.user),
+    (0, typeorm_1.OneToMany)(type => avatar_1.Avatar, avatar => avatar.user),
     __metadata("design:type", Array)
 ], User.prototype, "avatars", void 0);
 __decorate([
-    typeorm_1.OneToMany(type => replay_1.Replay, replay => replay.user),
+    (0, typeorm_1.OneToMany)(type => replay_1.Replay, replay => replay.user),
     __metadata("design:type", Array)
 ], User.prototype, "replays", void 0);
 User = User_1 = __decorate([
-    typeorm_1.Entity(),
-    typeorm_1.Unique(['name'])
+    (0, typeorm_1.Entity)(),
+    (0, typeorm_1.Unique)(['name'])
 ], User);
 exports.User = User;

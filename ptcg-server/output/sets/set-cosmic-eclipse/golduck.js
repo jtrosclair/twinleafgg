@@ -40,7 +40,7 @@ class Golduck extends pokemon_card_1.PokemonCard {
             let card;
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.active, { superType: card_types_1.SuperType.ENERGY }, { min: 1, max: 1, allowCancel: false }), selected => {
                 card = selected[0];
-                prefabs_1.MOVE_CARDS(store, state, player.active, player.hand, { cards: [card], sourceCard: this, sourceEffect: this.attacks[1] });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.active, player.hand, { cards: [card], sourceCard: this, sourceEffect: this.attacks[1] });
                 return state;
             });
         }

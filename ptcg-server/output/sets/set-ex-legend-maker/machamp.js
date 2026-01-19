@@ -35,7 +35,7 @@ class Machamp extends pokemon_card_1.PokemonCard {
         this.fullName = 'Machamp LM';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const oppActive = opponent.active;
@@ -48,11 +48,11 @@ class Machamp extends pokemon_card_1.PokemonCard {
                     store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, oppActive, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.SPECIAL }, { min: 1, max: 1, allowCancel: false }), selected => {
                         cards = selected;
                     });
-                    prefabs_1.MOVE_CARDS(store, state, oppActive, opponent.discard, { cards: cards, sourceCard: this, sourceEffect: this.attacks[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, oppActive, opponent.discard, { cards: cards, sourceCard: this, sourceEffect: this.attacks[0] });
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             let energyCount = 0;
             const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(player, player.active);

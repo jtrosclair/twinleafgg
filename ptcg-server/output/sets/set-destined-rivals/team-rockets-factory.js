@@ -27,7 +27,7 @@ class TeamRocketsFactory extends trainer_card_1.TrainerCard {
             if (!player.rocketSupporter) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_STADIUM);
             }
-            prefabs_1.DRAW_CARDS(player, 2);
+            (0, prefabs_1.DRAW_CARDS)(player, 2);
             player.marker.addMarker(this.FACTORY_USED_MARKER, this);
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.FACTORY_USED_MARKER, this)) {

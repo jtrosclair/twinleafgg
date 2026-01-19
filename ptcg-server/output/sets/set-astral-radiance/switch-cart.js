@@ -35,7 +35,7 @@ function* playCard(next, store, state, effect) {
         store.reduceEffect(state, healEffect);
         player.active.clearEffects();
         player.switchPokemon(targets[0]);
-        prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         return state;
     }
     return state;

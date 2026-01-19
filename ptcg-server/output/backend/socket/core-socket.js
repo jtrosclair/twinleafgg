@@ -41,7 +41,7 @@ class CoreSocket {
     onStateChange(game, state) {
         return;
         const gameInfo = CoreSocket.buildGameInfo(game);
-        if (!utils_1.deepCompare(gameInfo, this.cache.gameInfoCache[game.id])) {
+        if (!(0, utils_1.deepCompare)(gameInfo, this.cache.gameInfoCache[game.id])) {
             this.cache.gameInfoCache[game.id] = gameInfo;
             this.socket.emit('core:gameInfo', gameInfo);
         }

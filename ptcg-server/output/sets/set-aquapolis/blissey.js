@@ -36,15 +36,15 @@ class Blissey extends pokemon_card_1.PokemonCard {
         this.HAPPY_HEALING_MARKER = 'HAPPY_HEALING_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
-            if (prefabs_1.HAS_MARKER(this.HAPPY_HEALING_MARKER, player, this)) {
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
+            if ((0, prefabs_1.HAS_MARKER)(this.HAPPY_HEALING_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.ABILITY_USED(player, this);
-            prefabs_1.ADD_MARKER(this.HAPPY_HEALING_MARKER, player, this);
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, (result) => {
+            (0, prefabs_1.ABILITY_USED)(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.HAPPY_HEALING_MARKER, player, this);
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, (result) => {
                 if (result) {
                     const player = effect.player;
                     const cardList = game_1.StateUtils.findCardList(state, effect.card);
@@ -74,9 +74,9 @@ class Blissey extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.HAPPY_HEALING_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, (result) => {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.HAPPY_HEALING_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, (result) => {
                 if (!result) {
                     effect.damage = 0;
                 }

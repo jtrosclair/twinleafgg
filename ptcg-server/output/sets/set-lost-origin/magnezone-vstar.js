@@ -51,7 +51,7 @@ class MagnezoneVSTAR extends game_1.PokemonCard {
                 throw new game_1.GameError(game_1.GameMessage.LABEL_VSTAR_USED);
             }
             player.usedVSTAR = true;
-            prefabs_1.THIS_ATTACK_DOES_X_DAMAGE_TO_X_OF_YOUR_OPPONENTS_POKEMON(90, effect, store, state, 0, 2);
+            (0, prefabs_1.THIS_ATTACK_DOES_X_DAMAGE_TO_X_OF_YOUR_OPPONENTS_POKEMON)(90, effect, store, state, 0, 2);
         }
         return state;
     }

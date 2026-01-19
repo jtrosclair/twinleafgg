@@ -49,12 +49,12 @@ class Gengar extends pokemon_card_1.PokemonCard {
             // This Pokemon was knocked out
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_POKEPOWER_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this)) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, wantToUse => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, wantToUse => {
                 if (wantToUse) {
-                    prefabs_1.COIN_FLIP_PROMPT(store, state, player, flipResult => {
+                    (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, flipResult => {
                         if (flipResult) {
                             opponent.active.damage += 999;
                         }
@@ -62,7 +62,7 @@ class Gengar extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { allowCancel: false }), targets => {
                 if (!targets || targets.length === 0) {
@@ -81,7 +81,7 @@ class Gengar extends pokemon_card_1.PokemonCard {
                 store.reduceEffect(state, damageEffect);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             state = store.prompt(state, new game_1.ShowCardsPrompt(player.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, opponent.hand.cards), () => {

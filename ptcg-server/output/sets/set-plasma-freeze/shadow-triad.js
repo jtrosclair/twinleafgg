@@ -22,7 +22,7 @@ class ShadowTriad extends trainer_card_1.TrainerCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_DISCARD_EMPTY(player);
+            (0, prefabs_1.BLOCK_IF_DISCARD_EMPTY)(player);
             const blocked = [];
             player.discard.cards.forEach((card, index) => {
                 if (!(card.tags.includes(card_types_1.CardTag.TEAM_PLASMA))) {
@@ -36,7 +36,7 @@ class ShadowTriad extends trainer_card_1.TrainerCard {
                 if (cards.length === 0) {
                     return state;
                 }
-                state = prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards });
+                state = (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards });
                 player.supporter.moveCardTo(effect.trainerCard, player.discard);
             });
         }

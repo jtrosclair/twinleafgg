@@ -26,8 +26,8 @@ class Frogadier extends pokemon_card_1.PokemonCard {
         this.setNumber = '39';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, effect.player, { name: 'Frogadier' }, { min: 0, max: 3 });
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, effect.player, { name: 'Frogadier' }, { min: 0, max: 3 });
         }
         return state;
     }

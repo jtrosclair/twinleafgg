@@ -62,11 +62,11 @@ class NsPlan extends trainer_card_1.TrainerCard {
                         const source = game_1.StateUtils.getTarget(state, player, transfer.from);
                         if (source) {
                             const target = player.active;
-                            prefabs_1.MOVE_CARDS(store, state, source, target, { cards: [transfer.card], sourceCard: this });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, source, target, { cards: [transfer.card], sourceCard: this });
                         }
                     }
                 }
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             });
         }
         return state;

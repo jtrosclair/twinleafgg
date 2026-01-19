@@ -210,7 +210,7 @@ function* alternativeSetupGame(next, store, state) {
         p.active.isSecret = false;
         p.bench.forEach(list => { list.isSecret = false; });
     }
-    return game_phase_effect_1.initNextTurn(store, state);
+    return (0, game_phase_effect_1.initNextTurn)(store, state);
 }
 // Helper: Alternative setup for a single player (choose Active, Bench, choose Prizes from hand)
 function* alternativeSetupSinglePlayer(player, chooseCardsOptions, state, store, next) {
@@ -440,7 +440,7 @@ function* setupGame(next, store, state) {
         p.active.isSecret = false;
         p.bench.forEach(list => { list.isSecret = false; });
     }
-    return game_phase_effect_1.initNextTurn(store, state);
+    return (0, game_phase_effect_1.initNextTurn)(store, state);
 }
 exports.setupGame = setupGame;
 // Helper: Setup for a single player (choose Active, Bench, place Prizes)
@@ -570,7 +570,7 @@ function setupPhaseReducer(store, state, action) {
                 if (deck === null) {
                     store.log(state, game_message_1.GameLog.LOG_INVITATION_NOT_ACCEPTED, { name: player.name });
                     const winner = state_1.GameWinner.NONE;
-                    state = check_effect_1.endGame(store, state, winner);
+                    state = (0, check_effect_1.endGame)(store, state, winner);
                     return;
                 }
                 const deckAnalyser = new deck_analyser_1.DeckAnalyser(deck);
@@ -578,7 +578,7 @@ function setupPhaseReducer(store, state, action) {
                     // Safe exit for invalid deck (invited player): end game with no winner
                     store.log(state, game_message_1.GameLog.LOG_GAME_FINISHED_BEFORE_STARTED);
                     const winner = state_1.GameWinner.NONE;
-                    state = check_effect_1.endGame(store, state, winner);
+                    state = (0, check_effect_1.endGame)(store, state, winner);
                     return;
                 }
                 player.deck = card_list_1.CardList.fromList(deck);

@@ -46,15 +46,15 @@ class Salamence extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Magnetic Field
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const hasBench = opponent.bench.some(b => b.cards.length > 0);
             // One per turn only
-            if (prefabs_1.HAS_MARKER(this.DRAGON_WIND_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.DRAGON_WIND_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             if (player.active.getPokemonCard() !== this) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
@@ -67,15 +67,15 @@ class Salamence extends pokemon_card_1.PokemonCard {
                     opponent.switchPokemon(cardList);
                 }
             });
-            prefabs_1.ADD_MARKER(this.DRAGON_WIND_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.DRAGON_WIND_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
                     this.marker.addMarker(this.AGILITY_MARKER, this);
-                    prefabs_1.ADD_MARKER(this.AGILITY_MARKER, effect.opponent, this);
+                    (0, prefabs_1.ADD_MARKER)(this.AGILITY_MARKER, effect.opponent, this);
                 }
             });
         }
@@ -84,14 +84,14 @@ class Salamence extends pokemon_card_1.PokemonCard {
                 effect.preventDefault = true;
             }
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && prefabs_1.HAS_MARKER(this.AGILITY_MARKER, effect.player, this)) {
-            prefabs_1.REMOVE_MARKER(this.AGILITY_MARKER, effect.player, this);
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.AGILITY_MARKER, effect.player, this)) {
+            (0, prefabs_1.REMOVE_MARKER)(this.AGILITY_MARKER, effect.player, this);
             this.marker.removeMarker(this.AGILITY_MARKER, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.DRAGON_WIND_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.DRAGON_WIND_MARKER, this);
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            prefabs_1.REMOVE_MARKER(this.DRAGON_WIND_MARKER, player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.DRAGON_WIND_MARKER, player, this);
         }
         return state;
     }

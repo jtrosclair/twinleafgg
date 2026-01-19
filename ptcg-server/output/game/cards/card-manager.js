@@ -43,7 +43,7 @@ class CardManager {
     getCardByName(name) {
         const index = this.cardIndex[name];
         if (index !== undefined) {
-            return utils_1.deepClone(this.cards[index]);
+            return (0, utils_1.deepClone)(this.cards[index]);
         }
     }
     isCardDefined(name) {

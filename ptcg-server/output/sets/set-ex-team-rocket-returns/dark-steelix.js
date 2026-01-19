@@ -36,7 +36,7 @@ class DarkSteelix extends pokemon_card_1.PokemonCard {
         this.fullName = 'Dark Steelix TRR';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (!player.discard.cards.some(card => card.superType === card_types_1.SuperType.ENERGY)) {
                 return state;

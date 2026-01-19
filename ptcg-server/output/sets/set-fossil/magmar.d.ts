@@ -9,7 +9,7 @@ export declare class Magmar extends PokemonCard {
     weakness: {
         type: CardType.WATER;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;

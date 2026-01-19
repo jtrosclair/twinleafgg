@@ -26,8 +26,8 @@ class BattlePass extends controller_1.Controller {
             const today = new Date().toISOString().slice(0, 10);
             const currentSeason = await storage_1.BattlePassSeason.findOne({
                 where: {
-                    startDate: typeorm_1.LessThanOrEqual(today),
-                    endDate: typeorm_1.MoreThanOrEqual(today)
+                    startDate: (0, typeorm_1.LessThanOrEqual)(today),
+                    endDate: (0, typeorm_1.MoreThanOrEqual)(today)
                 }
             });
             if (!currentSeason) {
@@ -61,8 +61,8 @@ class BattlePass extends controller_1.Controller {
             // Get current season
             const currentSeason = await storage_1.BattlePassSeason.findOne({
                 where: {
-                    startDate: typeorm_1.LessThanOrEqual(now),
-                    endDate: typeorm_1.MoreThanOrEqual(now)
+                    startDate: (0, typeorm_1.LessThanOrEqual)(now),
+                    endDate: (0, typeorm_1.MoreThanOrEqual)(now)
                 }
             });
             if (!currentSeason) {
@@ -118,8 +118,8 @@ class BattlePass extends controller_1.Controller {
             // Get current season
             const currentSeason = await storage_1.BattlePassSeason.findOne({
                 where: {
-                    startDate: typeorm_1.LessThanOrEqual(now),
-                    endDate: typeorm_1.MoreThanOrEqual(now)
+                    startDate: (0, typeorm_1.LessThanOrEqual)(now),
+                    endDate: (0, typeorm_1.MoreThanOrEqual)(now)
                 }
             });
             if (!currentSeason) {
@@ -198,8 +198,8 @@ class BattlePass extends controller_1.Controller {
             // Get current season
             const currentSeason = await storage_1.BattlePassSeason.findOne({
                 where: {
-                    startDate: typeorm_1.LessThanOrEqual(now),
-                    endDate: typeorm_1.MoreThanOrEqual(now)
+                    startDate: (0, typeorm_1.LessThanOrEqual)(now),
+                    endDate: (0, typeorm_1.MoreThanOrEqual)(now)
                 }
             });
             if (!currentSeason) {
@@ -245,8 +245,8 @@ class BattlePass extends controller_1.Controller {
             // Get current season
             const currentSeason = await storage_1.BattlePassSeason.findOne({
                 where: {
-                    startDate: typeorm_1.LessThanOrEqual(now),
-                    endDate: typeorm_1.MoreThanOrEqual(now)
+                    startDate: (0, typeorm_1.LessThanOrEqual)(now),
+                    endDate: (0, typeorm_1.MoreThanOrEqual)(now)
                 }
             });
             if (!currentSeason) {
@@ -328,50 +328,50 @@ class BattlePass extends controller_1.Controller {
     }
 }
 __decorate([
-    controller_1.Get('/current'),
+    (0, controller_1.Get)('/current'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], BattlePass.prototype, "onGetCurrent", null);
 __decorate([
-    controller_1.Get('/progress'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/progress'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], BattlePass.prototype, "onGetProgress", null);
 __decorate([
-    controller_1.Post('/claim'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        level: services_1.check().isNumber().required()
+    (0, controller_1.Post)('/claim'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        level: (0, services_1.check)().isNumber().required()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], BattlePass.prototype, "onClaim", null);
 __decorate([
-    controller_1.Post('/debug/add-exp'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        exp: services_1.check().isNumber().required()
+    (0, controller_1.Post)('/debug/add-exp'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        exp: (0, services_1.check)().isNumber().required()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], BattlePass.prototype, "onAddDebugExp", null);
 __decorate([
-    controller_1.Post('/exp'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        exp: services_1.check().isNumber().required()
+    (0, controller_1.Post)('/exp'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        exp: (0, services_1.check)().isNumber().required()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], BattlePass.prototype, "onAddExp", null);
 __decorate([
-    controller_1.Get('/seasons'),
+    (0, controller_1.Get)('/seasons'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)

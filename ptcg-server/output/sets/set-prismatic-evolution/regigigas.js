@@ -32,7 +32,7 @@ class Regigigas extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            prefabs_1.DEAL_MORE_DAMAGE_IF_OPPONENT_ACTIVE_HAS_CARD_TAG(effect, state, 230, card_types_1.CardTag.POKEMON_TERA);
+            (0, prefabs_1.DEAL_MORE_DAMAGE_IF_OPPONENT_ACTIVE_HAS_CARD_TAG)(effect, state, 230, card_types_1.CardTag.POKEMON_TERA);
         }
         return state;
     }

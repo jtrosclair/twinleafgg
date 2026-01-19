@@ -32,13 +32,13 @@ class EnergyLoto extends trainer_card_1.TrainerCard {
                     temp.cards.forEach(card => {
                         temp.moveCardTo(card, player.deck);
                     });
-                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 }
                 if (chosenCards.length > 0) {
                     // Move chosen Energy to hand
                     const energyCard = chosenCards[0];
                     temp.moveCardTo(energyCard, player.hand);
-                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     temp.moveTo(player.deck);
                     chosenCards.forEach((card, index) => {
                         store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
@@ -47,7 +47,7 @@ class EnergyLoto extends trainer_card_1.TrainerCard {
                         state = store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, chosenCards), () => state);
                     }
                 }
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                     player.deck.applyOrder(order);
                 });

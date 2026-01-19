@@ -65,9 +65,9 @@ class IonosKilowattrel extends pokemon_card_1.PokemonCard {
             // If we have exactly 1 basic [L] energy attached, do it without a prompt
             if (lightningEnergy.length === 1) {
                 lightningEnergy.forEach(card => cardList.moveCardTo(card, player.discard));
-                prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 6);
-                prefabs_1.ADD_MARKER(this.RUMBLING_ENGINE_MARKER, player, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, 6);
+                (0, prefabs_1.ADD_MARKER)(this.RUMBLING_ENGINE_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 return state;
             }
             state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, cardList, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Lightning Energy' }, { allowCancel: true, min: 0, max: 1 }), energy => {
@@ -75,9 +75,9 @@ class IonosKilowattrel extends pokemon_card_1.PokemonCard {
                     return state;
                 }
                 energy.forEach(card => cardList.moveCardTo(card, player.discard));
-                prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 6);
-                prefabs_1.ADD_MARKER(this.RUMBLING_ENGINE_MARKER, player, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, 6);
+                (0, prefabs_1.ADD_MARKER)(this.RUMBLING_ENGINE_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
             });
         }
         return state;

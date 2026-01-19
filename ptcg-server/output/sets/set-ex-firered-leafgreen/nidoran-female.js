@@ -34,7 +34,7 @@ class NidoranFemale extends pokemon_card_1.PokemonCard {
         this.fullName = 'Nidoran F RG';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (player.deck.cards.length === 0) {
@@ -50,12 +50,12 @@ class NidoranFemale extends pokemon_card_1.PokemonCard {
                     break;
                 }
             }
-            prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, player, cards);
-            prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
+            (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, player, cards);
+            (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
             if (pokemon !== undefined) {
                 player.deck.moveCardTo(pokemon, player.hand);
             }
-            prefabs_1.SHUFFLE_DECK(store, state, player);
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         }
         return state;
     }

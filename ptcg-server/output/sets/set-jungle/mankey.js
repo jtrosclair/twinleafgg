@@ -45,7 +45,7 @@ class Mankey extends pokemon_card_1.PokemonCard {
             if (player.marker.hasMarker(this.PEEK_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             const options = [
                 {
                     message: game_1.GameMessage.REVEAL_YOUR_TOP_DECK,
@@ -54,7 +54,7 @@ class Mankey extends pokemon_card_1.PokemonCard {
                         player.deck.moveTo(deckTop, 1);
                         state = store.prompt(state, new game_1.ShowCardsPrompt(player.id, game_1.GameMessage.REVEAL_YOUR_TOP_DECK, deckTop.cards), () => state);
                         deckTop.moveToTopOfDestination(player.deck);
-                        prefabs_1.ADD_MARKER(this.PEEK_MARKER, player, this);
+                        (0, prefabs_1.ADD_MARKER)(this.PEEK_MARKER, player, this);
                         return state;
                     }
                 },
@@ -65,7 +65,7 @@ class Mankey extends pokemon_card_1.PokemonCard {
                         opponent.deck.moveTo(deckTop, 1);
                         state = store.prompt(state, new game_1.ShowCardsPrompt(player.id, game_1.GameMessage.REVEAL_OPPONENT_TOP_DECK, deckTop.cards), () => state);
                         deckTop.moveToTopOfDestination(opponent.deck);
-                        prefabs_1.ADD_MARKER(this.PEEK_MARKER, player, this);
+                        (0, prefabs_1.ADD_MARKER)(this.PEEK_MARKER, player, this);
                         return state;
                     }
                 },
@@ -78,9 +78,9 @@ class Mankey extends pokemon_card_1.PokemonCard {
                         if (opponent.hand.cards.length > 0) {
                             const randomIndex = Math.floor(Math.random() * opponent.hand.cards.length);
                             const randomCard = opponent.hand.cards[randomIndex];
-                            prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, player, [randomCard]);
+                            (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, player, [randomCard]);
                         }
-                        prefabs_1.ADD_MARKER(this.PEEK_MARKER, player, this);
+                        (0, prefabs_1.ADD_MARKER)(this.PEEK_MARKER, player, this);
                         return state;
                     }
                 },
@@ -104,7 +104,7 @@ class Mankey extends pokemon_card_1.PokemonCard {
                                 state = store.prompt(state, new game_1.ShowCardsPrompt(player.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, list), () => state);
                             }
                         });
-                        prefabs_1.ADD_MARKER(this.PEEK_MARKER, player, this);
+                        (0, prefabs_1.ADD_MARKER)(this.PEEK_MARKER, player, this);
                         return state;
                     }
                 },
@@ -128,7 +128,7 @@ class Mankey extends pokemon_card_1.PokemonCard {
                                 state = store.prompt(state, new game_1.ShowCardsPrompt(player.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, list), () => state);
                             }
                         });
-                        prefabs_1.ADD_MARKER(this.PEEK_MARKER, player, this);
+                        (0, prefabs_1.ADD_MARKER)(this.PEEK_MARKER, player, this);
                         return state;
                     }
                 }
@@ -138,7 +138,7 @@ class Mankey extends pokemon_card_1.PokemonCard {
                 option.action();
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.PEEK_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.PEEK_MARKER, this);
         return state;
     }
 }

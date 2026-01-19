@@ -10,7 +10,7 @@ export declare class Morpeko extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: CardType[];
     powers: {
         name: string;

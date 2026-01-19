@@ -10,7 +10,7 @@ export declare class TestPokemon extends PokemonCard {
     weakness: {
         type: CardType.DARK;
     }[];
-    retreat: never[];
+    retreat: any[];
     powers: {
         name: string;
         useWhenInPlay: boolean;
@@ -19,7 +19,7 @@ export declare class TestPokemon extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: never[];
+        cost: any[];
         damage: number;
         text: string;
     }[];

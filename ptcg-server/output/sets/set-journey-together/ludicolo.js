@@ -32,7 +32,7 @@ class Ludicolo extends game_1.PokemonCard {
         if (effect instanceof check_effects_1.CheckHpEffect) {
             const cardList = game_1.StateUtils.findCardList(state, this);
             const player = game_1.StateUtils.findOwner(state, cardList);
-            if (!game_1.StateUtils.isPokemonInPlay(player, this) || prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this) || effect.nonstackingBoosts.includes(this.powers[0].name)) {
+            if (!game_1.StateUtils.isPokemonInPlay(player, this) || (0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this) || effect.nonstackingBoosts.includes(this.powers[0].name)) {
                 return state;
             }
             effect.hp += 40;

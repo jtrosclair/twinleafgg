@@ -57,7 +57,7 @@ class Banetteex extends pokemon_card_1.PokemonCard {
             if (player.active.getPokemonCard() !== this) {
                 throw new game_1.GameError(game_2.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             if (player.marker.hasMarker(this.SHADY_MARKER, this)) {
                 throw new game_1.GameError(game_2.GameMessage.POWER_ALREADY_USED);
             }
@@ -82,7 +82,7 @@ class Banetteex extends pokemon_card_1.PokemonCard {
                     return;
                 }
                 player.marker.addMarker(this.SHADY_MARKER, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 for (const transfer of transfers) {
                     const source = game_3.StateUtils.getTarget(state, player, transfer.from);
                     const target = game_3.StateUtils.getTarget(state, player, transfer.to);
@@ -94,7 +94,7 @@ class Banetteex extends pokemon_card_1.PokemonCard {
             });
         }
         // Shadow Chant
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let supportersInDiscard = 0;
             player.discard.cards.forEach(c => {
@@ -108,7 +108,7 @@ class Banetteex extends pokemon_card_1.PokemonCard {
             }
             effect.damage += supportersInDiscard * 10;
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.SHADY_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.SHADY_MARKER, this);
         return state;
     }
 }

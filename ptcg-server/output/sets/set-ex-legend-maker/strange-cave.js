@@ -22,8 +22,8 @@ class StrangeCave extends trainer_card_1.TrainerCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof game_effects_1.UseStadiumEffect && state_utils_1.StateUtils.getStadiumCard(state) === this) {
             const player = effect.player;
-            const slots = prefabs_1.GET_PLAYER_BENCH_SLOTS(player);
-            prefabs_1.BLOCK_IF_NO_SLOTS(slots);
+            const slots = (0, prefabs_1.GET_PLAYER_BENCH_SLOTS)(player);
+            (0, prefabs_1.BLOCK_IF_NO_SLOTS)(slots);
             const blockedHand = [];
             player.hand.cards.forEach((card, index) => {
                 if (card instanceof game_1.PokemonCard && (card.name === 'Omanyte' || card.name === 'Kabuto' || card.name === 'Aerodactyl' || card.name === 'Aerodactyl ex' || card.name === 'Lileep' || card.name === 'Anorith')) {

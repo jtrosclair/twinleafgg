@@ -59,7 +59,7 @@ class Nidoqueen extends pokemon_card_1.PokemonCard {
             if (!isNidoqueenInPlay) {
                 return state;
             }
-            if (!prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)
+            if (!(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)
                 && (active.name === 'Nidoran F'
                     || active.name === 'Nidorina'
                     || active.name === 'Nidoran M'
@@ -69,10 +69,10 @@ class Nidoqueen extends pokemon_card_1.PokemonCard {
             }
             return state;
         }
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this, 20);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this, 20);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             let evolvedCount = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (list, card) => {

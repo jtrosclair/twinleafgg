@@ -34,12 +34,12 @@ class BrocksZubat2 extends pokemon_card_1.PokemonCard {
         this.fullName = 'Brock\'s Zubat G1 74';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 1, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
+                    (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, opponent, this);
                 }
             });
         }

@@ -28,7 +28,7 @@ class Raikou extends pokemon_card_1.PokemonCard {
         this.fullName = 'Raikou LOT';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (effect.player.lostzone.cards.some(c => c instanceof game_1.EnergyCard && c.provides.includes(card_types_1.CardType.LIGHTNING))) {
                 effect.damage += 90;
             }

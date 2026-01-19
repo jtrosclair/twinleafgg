@@ -35,9 +35,9 @@ class DevolutionSpray extends game_1.TrainerCard {
             }
             return store.prompt(state, new game_1.ChoosePokemonPrompt(effect.player.id, game_1.GameMessage.CHOOSE_POKEMON, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { allowCancel: false, min: 1, max: 1, blocked }), (results) => {
                 if (results && results.length > 0) {
-                    prefabs_1.DEVOLVE_POKEMON(store, state, results[0], effect.player.hand);
+                    (0, prefabs_1.DEVOLVE_POKEMON)(store, state, results[0], effect.player.hand);
                 }
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return state;
             });
         }

@@ -39,7 +39,7 @@ class FloatzelGL extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Incite
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const hasSupporter = player.discard.cards.some(c => {
@@ -55,13 +55,13 @@ class FloatzelGL extends pokemon_card_1.PokemonCard {
                     cards.forEach((card, index) => {
                         store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                     });
-                    prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: cards });
+                    (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: cards });
                 }
             });
         }
         // Giant Wave
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             if (effect.player.marker.hasMarker(this.GIANT_WAVE_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
             }

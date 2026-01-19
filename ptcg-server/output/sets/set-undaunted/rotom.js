@@ -78,7 +78,7 @@ class Rotom extends pokemon_card_1.PokemonCard {
                         damage += 20 * c.provides.length;
                     }
                 });
-                prefabs_1.DAMAGE_OPPONENT_POKEMON(store, state, effect, damage, targets);
+                (0, prefabs_1.DAMAGE_OPPONENT_POKEMON)(store, state, effect, damage, targets);
             });
             return state;
         }

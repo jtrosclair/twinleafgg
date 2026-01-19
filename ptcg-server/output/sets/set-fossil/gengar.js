@@ -85,7 +85,7 @@ class Gengar extends pokemon_card_1.PokemonCard {
                         source.damage -= 10;
                         target.damage += 10;
                     }
-                    prefabs_1.ABILITY_USED(player, this);
+                    (0, prefabs_1.ABILITY_USED)(player, this);
                     return state;
                 }
             });

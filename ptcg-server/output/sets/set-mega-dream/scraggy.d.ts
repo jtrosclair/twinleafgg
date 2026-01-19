@@ -9,7 +9,7 @@ export declare class Scraggy extends PokemonCard {
     weakness: {
         type: CardType.GRASS;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;

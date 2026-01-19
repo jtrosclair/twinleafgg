@@ -35,14 +35,14 @@ class Haunter extends pokemon_card_1.PokemonCard {
         this.fullName = 'Haunter SK';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED(store, state, effect);
+                    (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED)(store, state, effect);
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             if (player.hand.cards.length === 0) {
                 return state;
@@ -53,7 +53,7 @@ class Haunter extends pokemon_card_1.PokemonCard {
                     return;
                 }
                 player.hand.moveCardsTo(cards, player.discard);
-                prefabs_1.DRAW_CARDS(player, cards.length);
+                (0, prefabs_1.DRAW_CARDS)(player, cards.length);
             });
         }
         return state;

@@ -49,7 +49,7 @@ class KyogreAndGroudonLegendTop extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // assemblin the avengers
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const slots = player.bench.filter(b => b.cards.length === 0);
             if (slots.length === 0) {
@@ -81,7 +81,7 @@ class KyogreAndGroudonLegendTop extends pokemon_card_1.PokemonCard {
             }
         }
         // Mega Tidal Wave
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const deckTop = new game_1.CardList();
@@ -91,7 +91,7 @@ class KyogreAndGroudonLegendTop extends pokemon_card_1.PokemonCard {
             const energyCount = deckTop.cards.filter(c => c instanceof game_1.EnergyCard);
             const attackDamage = energyCount.length * 30;
             // Move all cards to discard
-            prefabs_1.MOVE_CARDS(store, state, deckTop, opponent.discard, { count: deckTop.cards.length, sourceCard: this, sourceEffect: this.attacks[0] });
+            (0, prefabs_1.MOVE_CARDS)(store, state, deckTop, opponent.discard, { count: deckTop.cards.length, sourceCard: this, sourceEffect: this.attacks[0] });
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList) => {
                 if (cardList !== opponent.active) {
                     const damageEffect = new attack_effects_1.PutDamageEffect(effect, attackDamage);
@@ -101,7 +101,7 @@ class KyogreAndGroudonLegendTop extends pokemon_card_1.PokemonCard {
             });
         }
         // Massive Eruption
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const deckTop = new game_1.CardList();
             // Move top 5 cards from deckTop

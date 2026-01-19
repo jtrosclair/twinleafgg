@@ -36,7 +36,7 @@ class Dunsparce extends pokemon_card_1.PokemonCard {
         this.wantsToSwitch = false;
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const openSlots = player.bench.filter(b => b.cards.length === 0);
             if (player.deck.cards.length === 0 || openSlots.length === 0) {
@@ -50,22 +50,22 @@ class Dunsparce extends pokemon_card_1.PokemonCard {
                     openSlots[index].pokemonPlayedTurn = state.turn;
                     store.log(state, game_1.GameLog.LOG_PLAYER_PLAYS_BASIC_POKEMON, { name: player.name, card: card.name });
                 });
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                 this.wantsToSwitch == true;
             });
         }
         if (effect instanceof game_phase_effects_1.AfterAttackEffect && this.wantsToSwitch) {
             const player = effect.player;
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
-                    prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+                    (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+                    (0, prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
                 }
             });
         }

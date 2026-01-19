@@ -58,17 +58,17 @@ class Rhydon extends pokemon_card_1.PokemonCard {
             if (!isRhydonActive) {
                 return state;
             }
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, targetPlayer, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, targetPlayer, this)) {
                 return state;
             }
             effect.preventDefault = true;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             const opponentActive = opponent.active.getPokemonCard();
             if (opponentActive && (opponentActive.powers.some(power => power.powerType === pokemon_types_1.PowerType.POKEBODY) || opponentActive.powers.some(power => power.powerType === pokemon_types_1.PowerType.POKEPOWER))) {
-                prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE(effect, store, state, 20);
+                (0, prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE)(effect, store, state, 20);
             }
         }
         return state;

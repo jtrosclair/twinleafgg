@@ -28,7 +28,7 @@ class MrStonesProject extends trainer_card_1.TrainerCard {
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            prefabs_1.BLOCK_IF_DISCARD_EMPTY(player);
+            (0, prefabs_1.BLOCK_IF_DISCARD_EMPTY)(player);
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             const options = [
                 {
@@ -40,8 +40,8 @@ class MrStonesProject extends trainer_card_1.TrainerCard {
                             if (cards.length > 0) {
                                 store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => { });
                             }
-                            prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards: cards, sourceCard: this });
-                            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: cards, sourceCard: this });
+                            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                             store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                                 player.deck.applyOrder(order);
                             });
@@ -58,8 +58,8 @@ class MrStonesProject extends trainer_card_1.TrainerCard {
                             if (cards.length > 0) {
                                 store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => { });
                             }
-                            prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: cards, sourceCard: this });
-                            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: cards, sourceCard: this });
+                            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                         });
                         return state;
                     }

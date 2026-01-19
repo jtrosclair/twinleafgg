@@ -46,7 +46,7 @@ class Metagross extends game_1.PokemonCard {
             player.marker.removeMarker(this.DELTA_CONTROL_MARKER, this);
             return state;
         }
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_message_1.GameMessage.CANNOT_USE_POWER);
@@ -54,21 +54,21 @@ class Metagross extends game_1.PokemonCard {
             if (player.marker.hasMarker(this.DELTA_CONTROL_MARKER, this)) {
                 throw new game_1.GameError(game_message_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             const deckBottom = new card_list_1.CardList();
             const deckTop = new card_list_1.CardList();
             player.deck.moveTo(deckTop, 4);
             return store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, deckTop, {}, { min: 1, max: 1, allowCancel: true }), selected => {
-                prefabs_1.ADD_MARKER(this.DELTA_CONTROL_MARKER, player, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ADD_MARKER)(this.DELTA_CONTROL_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 deckTop.moveCardsTo(selected, player.hand);
                 deckTop.moveTo(deckBottom);
                 deckBottom.moveTo(player.deck);
                 return state;
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.DELTA_CONTROL_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.DELTA_CONTROL_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let totalEnergy = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {

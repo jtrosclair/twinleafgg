@@ -55,7 +55,7 @@ class RegirockEx extends pokemon_card_1.PokemonCard {
             }
         }
         // Bedrock Press
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             this.marker.addMarker(this.BEDROCK_PRESS_MARKER, this);
             opponent.marker.addMarker(this.BEDROCK_PRESS_MARKER, this);

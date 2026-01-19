@@ -1,21 +1,24 @@
-import { GameError } from '../../game-error';
-import { GameMessage } from '../../game-message';
-import { PlayerType, SlotType } from '../actions/play-card-action';
-import { CardTag } from '../card/card-types';
-import { CardList } from './card-list';
-import { Marker } from './card-marker';
-import { PokemonCardList } from './pokemon-card-list';
-export class Player {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Player = void 0;
+const game_error_1 = require("../../game-error");
+const game_message_1 = require("../../game-message");
+const play_card_action_1 = require("../actions/play-card-action");
+const card_types_1 = require("../card/card-types");
+const card_list_1 = require("./card-list");
+const card_marker_1 = require("./card-marker");
+const pokemon_card_list_1 = require("./pokemon-card-list");
+class Player {
     constructor() {
         this.id = 0;
         this.name = '';
-        this.deck = new CardList();
-        this.hand = new CardList();
-        this.discard = new CardList();
-        this.lostzone = new CardList();
-        this.stadium = new CardList();
-        this.supporter = new CardList();
-        this.active = new PokemonCardList();
+        this.deck = new card_list_1.CardList();
+        this.hand = new card_list_1.CardList();
+        this.discard = new card_list_1.CardList();
+        this.lostzone = new card_list_1.CardList();
+        this.stadium = new card_list_1.CardList();
+        this.supporter = new card_list_1.CardList();
+        this.active = new pokemon_card_list_1.PokemonCardList();
         this.bench = [];
         this.prizes = [];
         this.supporterTurn = 0;
@@ -25,7 +28,7 @@ export class Player {
         this.energyPlayedTurn = 0;
         this.stadiumPlayedTurn = 0;
         this.stadiumUsedTurn = 0;
-        this.marker = new Marker();
+        this.marker = new card_marker_1.Marker();
         this.avatarName = '';
         this.usedVSTAR = false;
         this.usedGX = false;
@@ -65,7 +68,7 @@ export class Player {
         this.pecharuntexIsInPlay = false;
         this.usedFanCall = false;
         this.canEvolve = false;
-        this.supportersForDetour = new CardList();
+        this.supportersForDetour = new card_list_1.CardList();
         //GX-Attack Dedicated Section
         this.usedAlteredCreation = false;
         this.alteredCreationDamage = false;
@@ -89,13 +92,13 @@ export class Player {
         let pokemonCard = this.active.getPokemonCard();
         let target;
         if (pokemonCard !== undefined) {
-            target = { player, slot: SlotType.ACTIVE, index: 0 };
+            target = { player, slot: play_card_action_1.SlotType.ACTIVE, index: 0 };
             handler(this.active, pokemonCard, target);
         }
         for (let i = 0; i < this.bench.length; i++) {
             pokemonCard = this.bench[i].getPokemonCard();
             if (pokemonCard !== undefined) {
-                target = { player, slot: SlotType.BENCH, index: i };
+                target = { player, slot: play_card_action_1.SlotType.BENCH, index: i };
                 handler(this.bench[i], pokemonCard, target);
             }
         }
@@ -125,7 +128,7 @@ export class Player {
     }
     getPokemonInPlay() {
         const list = [];
-        this.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, pokemonCard, target) => {
+        this.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, (cardList, pokemonCard, target) => {
             if (cardList.cards.length !== 0)
                 list.push(cardList);
         });
@@ -133,7 +136,7 @@ export class Player {
     }
     vPokemon() {
         let result = false;
-        this.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, pokemonCard, target) => {
+        this.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, (cardList, pokemonCard, target) => {
             if (cardList.vPokemon()) {
                 result = true;
             }
@@ -142,8 +145,8 @@ export class Player {
     }
     singleStrike() {
         let result = false;
-        this.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, pokemonCard, target) => {
-            if (cardList.getPokemons().some(pokemon => pokemon.tags.includes(CardTag.SINGLE_STRIKE))) {
+        this.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, (cardList, pokemonCard, target) => {
+            if (cardList.getPokemons().some(pokemon => pokemon.tags.includes(card_types_1.CardTag.SINGLE_STRIKE))) {
                 result = true;
             }
         });
@@ -151,8 +154,8 @@ export class Player {
     }
     fusionStrike() {
         let result = false;
-        this.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, pokemonCard, target) => {
-            if (cardList.getPokemons().some(pokemon => pokemon.tags.includes(CardTag.FUSION_STRIKE))) {
+        this.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, (cardList, pokemonCard, target) => {
+            if (cardList.getPokemons().some(pokemon => pokemon.tags.includes(card_types_1.CardTag.FUSION_STRIKE))) {
                 result = true;
             }
         });
@@ -160,8 +163,8 @@ export class Player {
     }
     rapidStrike() {
         let result = false;
-        this.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, pokemonCard, target) => {
-            if (cardList.getPokemons().some(pokemon => pokemon.tags.includes(CardTag.RAPID_STRIKE))) {
+        this.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, (cardList, pokemonCard, target) => {
+            if (cardList.getPokemons().some(pokemon => pokemon.tags.includes(card_types_1.CardTag.RAPID_STRIKE))) {
                 result = true;
             }
         });
@@ -169,16 +172,16 @@ export class Player {
     }
     getSlot(slotType) {
         switch (slotType) {
-            case SlotType.DISCARD:
+            case play_card_action_1.SlotType.DISCARD:
                 return this.discard;
-            case SlotType.HAND:
+            case play_card_action_1.SlotType.HAND:
                 return this.hand;
-            case SlotType.LOSTZONE:
+            case play_card_action_1.SlotType.LOSTZONE:
                 return this.lostzone;
-            case SlotType.DECK:
+            case play_card_action_1.SlotType.DECK:
                 return this.deck;
             default:
-                throw new GameError(GameMessage.INVALID_TARGET);
+                throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_TARGET);
         }
     }
     switchPokemon(target, store, state) {
@@ -218,3 +221,4 @@ export class Player {
         }
     }
 }
+exports.Player = Player;

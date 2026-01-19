@@ -37,7 +37,7 @@ class DarkIvysaur extends game_1.PokemonCard {
         this.fullName = 'Dark Ivysaur BP';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.RetreatEffect && effect.player.active.cards.includes(this) && !prefabs_1.IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
+        if (effect instanceof game_effects_1.RetreatEffect && effect.player.active.cards.includes(this) && !(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, effect.player, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const hasBench = opponent.bench.some(b => b.cards.length > 0);
@@ -51,7 +51,7 @@ class DarkIvysaur extends game_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const maxAllowedDamage = [];

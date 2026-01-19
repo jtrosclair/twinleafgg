@@ -52,7 +52,7 @@ class ErikasDratini extends pokemon_card_1.PokemonCard {
                 }
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const damage = effect.damage;
             const coinFlipEffect = new play_card_effects_1.CoinFlipEffect(player, (result) => {

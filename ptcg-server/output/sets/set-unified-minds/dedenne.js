@@ -26,9 +26,9 @@ class Dedenne extends pokemon_card_1.PokemonCard {
         this.fullName = 'Dedenne UNM';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 6);
+            (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, 6);
         }
         return state;
     }

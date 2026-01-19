@@ -18,15 +18,15 @@ class RocketsSneakAttack extends trainer_card_1.TrainerCard {
         this.text = 'Look at your opponent\'s hand. If he or she has any Trainer cards, choose 1 of them. Your opponent shuffles that card into his or her deck.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             let cards = [];
             store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_SHUFFLE, opponent.hand, { superType: card_types_1.SuperType.TRAINER }, { min: 0, max: 1, allowCancel: false }), selected => {
                 cards = selected || [];
-                prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.deck, { cards });
-                prefabs_1.SHUFFLE_DECK(store, state, opponent);
-                prefabs_1.MOVE_CARD_TO(state, effect.trainerCard, player.discard);
+                (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck, { cards });
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
+                (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
             });
         }
         return state;

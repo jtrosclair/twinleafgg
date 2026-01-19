@@ -39,7 +39,7 @@ class Claydol extends pokemon_card_1.PokemonCard {
         this.CHARGE_MARKER = 'CHARGE_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             // Checking if there are supporters in the discard
             const hasSupporter = player.discard.cards.some(c => {
@@ -64,7 +64,7 @@ class Claydol extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // Putting the "Ability used" marker on 
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_ATTACH, player.discard, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Fighting Energy' }, { min: 1, max: 1, allowCancel: false }), cards => {
                 cards = cards || [];
                 if (cards.length > 0) {

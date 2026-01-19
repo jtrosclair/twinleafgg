@@ -16,47 +16,47 @@ const bigint_1 = require("../transformers/bigint");
 let DisconnectedSession = class DisconnectedSession extends typeorm_1.BaseEntity {
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], DisconnectedSession.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], DisconnectedSession.prototype, "userId", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], DisconnectedSession.prototype, "gameId", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'text' }),
+    (0, typeorm_1.Column)({ type: 'text' }),
     __metadata("design:type", String)
 ], DisconnectedSession.prototype, "gameState", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'bigint', transformer: [bigint_1.bigint] }),
+    (0, typeorm_1.Column)({ type: 'bigint', transformer: [bigint_1.bigint] }),
     __metadata("design:type", Number)
 ], DisconnectedSession.prototype, "disconnectedAt", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'bigint', transformer: [bigint_1.bigint] }),
+    (0, typeorm_1.Column)({ type: 'bigint', transformer: [bigint_1.bigint] }),
     __metadata("design:type", Number)
 ], DisconnectedSession.prototype, "expiresAt", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], DisconnectedSession.prototype, "gamePhase", void 0);
 __decorate([
-    typeorm_1.Column({ default: false }),
+    (0, typeorm_1.Column)({ default: false }),
     __metadata("design:type", Boolean)
 ], DisconnectedSession.prototype, "isPlayerTurn", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'text', nullable: true }),
+    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
     __metadata("design:type", String)
 ], DisconnectedSession.prototype, "disconnectionReason", void 0);
 __decorate([
-    typeorm_1.ManyToOne(() => user_1.User),
-    typeorm_1.JoinColumn({ name: 'userId' }),
+    (0, typeorm_1.ManyToOne)(() => user_1.User),
+    (0, typeorm_1.JoinColumn)({ name: 'userId' }),
     __metadata("design:type", user_1.User)
 ], DisconnectedSession.prototype, "user", void 0);
 DisconnectedSession = __decorate([
-    typeorm_1.Entity('disconnected_session')
+    (0, typeorm_1.Entity)('disconnected_session')
 ], DisconnectedSession);
 exports.DisconnectedSession = DisconnectedSession;

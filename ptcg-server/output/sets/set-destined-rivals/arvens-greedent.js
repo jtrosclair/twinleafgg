@@ -66,7 +66,7 @@ class ArvensGreedent extends pokemon_card_1.PokemonCard {
                         if (cards.length > 0) {
                             return state;
                         }
-                        prefabs_1.MOVE_CARDS_TO_HAND(store, state, player, cards);
+                        (0, prefabs_1.MOVE_CARDS_TO_HAND)(store, state, player, cards);
                     });
                 }
             });

@@ -28,7 +28,7 @@ class MysteryPlateBeta extends trainer_card_1.TrainerCard {
         this.text = 'Attach this card to 1 of your Pokémon in play. That Pokémon may use this card\'s attack instead of its own. At the end of your turn, discard Mystery Plate β.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             state = store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_ATTACH_CARDS, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH, game_1.SlotType.ACTIVE], { min: 1, max: 1, allowCancel: false }), transfers => {
                 player.supporter.moveCardTo(effect.trainerCard, transfers[0]);
@@ -62,7 +62,7 @@ class MysteryPlateBeta extends trainer_card_1.TrainerCard {
             const player = effect.player;
             const opponent = effect.opponent;
             if (opponent.getPrizeLeft() >= 5) {
-                prefabs_1.DRAW_CARDS(player, 3);
+                (0, prefabs_1.DRAW_CARDS)(player, 3);
             }
             else if (opponent.getPrizeLeft() === 1) {
                 store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, opponent.active, { superType: card_types_1.SuperType.ENERGY }, { min: 0, max: 2, allowCancel: false }), selected => {
@@ -71,7 +71,7 @@ class MysteryPlateBeta extends trainer_card_1.TrainerCard {
                         return;
                     }
                     opponent.active.moveCardTo(card, opponent.deck);
-                    prefabs_1.SHUFFLE_DECK(store, state, opponent);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
                 });
             }
         }

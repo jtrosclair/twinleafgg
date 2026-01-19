@@ -38,7 +38,7 @@ class Rotom extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Crushing Pulse
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             const escrow = new game_1.CardList;
@@ -52,7 +52,7 @@ class Rotom extends pokemon_card_1.PokemonCard {
             });
         }
         // Energy Short
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = effect.opponent;
             const opponentProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(opponent);
             store.reduceEffect(state, opponentProvidedEnergy);

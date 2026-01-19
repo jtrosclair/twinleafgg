@@ -67,15 +67,15 @@ class Dragapult extends pokemon_card_1.PokemonCard {
             catch (_b) {
                 return state;
             }
-            const coinFlipResult = prefabs_1.SIMULATE_COIN_FLIP(store, state, player);
+            const coinFlipResult = (0, prefabs_1.SIMULATE_COIN_FLIP)(store, state, player);
             if (coinFlipResult) {
                 effect.damage = 0;
                 store.log(state, game_1.GameLog.LOG_ABILITY_BLOCKS_DAMAGE, { name: opponent.name, pokemon: this.name });
             }
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_2.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE(3, store, state, effect, [game_1.SlotType.BENCH]);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_2.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE)(3, store, state, effect, [game_1.SlotType.BENCH]);
         }
         return state;
     }

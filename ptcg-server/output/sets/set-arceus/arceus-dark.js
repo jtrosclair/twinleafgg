@@ -37,7 +37,7 @@ class ArceusDark extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Prize Count
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (effect.player.getPrizeLeft() > effect.opponent.getPrizeLeft()) {
                 effect.damage += 60;
             }

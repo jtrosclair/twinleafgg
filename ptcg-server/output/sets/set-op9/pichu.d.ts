@@ -23,7 +23,7 @@ export declare class Pichu extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: never[];
+        cost: any[];
         damage: number;
         text: string;
     }[];

@@ -36,13 +36,13 @@ class Scizor extends pokemon_card_1.PokemonCard {
         this.fullName = 'Scizor MD';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (effect.opponent.active.energies.cards.some(c => c.energyType === card_types_1.EnergyType.SPECIAL)) {
-                prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE(effect, store, state, 50);
+                (0, prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE)(effect, store, state, 50);
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            attack_effects_1.FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE(store, state, effect, 40);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, attack_effects_1.FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE)(store, state, effect, 40);
         }
         return state;
     }

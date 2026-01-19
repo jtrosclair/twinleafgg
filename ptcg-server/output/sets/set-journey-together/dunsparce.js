@@ -34,8 +34,8 @@ class Dunsparce extends pokemon_card_1.PokemonCard {
         this.fullName = 'Dunsparce JTG';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this))
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, effect.player);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this))
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, effect.player);
         return state;
     }
 }

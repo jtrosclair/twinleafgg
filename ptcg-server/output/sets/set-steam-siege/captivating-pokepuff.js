@@ -20,7 +20,7 @@ class CaptivatingPokePuff extends trainer_card_1.TrainerCard {
         this.text = 'Your opponent reveals his or her hand. Put any number of Basic Pokémon you find there onto your opponent\'s Bench.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const slots = opponent.bench.filter(b => b.cards.length === 0);

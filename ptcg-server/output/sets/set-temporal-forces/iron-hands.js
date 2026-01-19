@@ -49,8 +49,8 @@ class IronHands extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.DEAL_MORE_DAMAGE_IF_OPPONENT_ACTIVE_HAS_CARD_TAG(effect, state, 80, card_types_1.CardTag.POKEMON_ex, card_types_1.CardTag.POKEMON_V);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.DEAL_MORE_DAMAGE_IF_OPPONENT_ACTIVE_HAS_CARD_TAG)(effect, state, 80, card_types_1.CardTag.POKEMON_ex, card_types_1.CardTag.POKEMON_V);
         }
         return state;
     }

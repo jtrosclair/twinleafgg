@@ -72,11 +72,11 @@ class Reuniclus extends pokemon_card_1.PokemonCard {
         this.fullName = 'Reuniclus BLW';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const generator = useDamageSwap(() => generator.next(), store, state, effect);
             return generator.next().value;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(opponent);

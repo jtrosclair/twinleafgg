@@ -1,4 +1,7 @@
-export var ApiErrorEnum;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ApiErrorEnum = void 0;
+var ApiErrorEnum;
 (function (ApiErrorEnum) {
     ApiErrorEnum["AVATAR_INVALID"] = "ERROR_AVATAR_INVALID";
     ApiErrorEnum["AUTH_TOKEN_INVALID"] = "ERROR_INVALID_TOKEN";
@@ -27,4 +30,4 @@ export var ApiErrorEnum;
     ApiErrorEnum["USER_BANNED"] = "USER_BANNED";
     ApiErrorEnum["SERVER_ERROR"] = "SERVER_ERROR";
     ApiErrorEnum["ACTION_INVALID"] = "ACTION_INVALID";
-})(ApiErrorEnum || (ApiErrorEnum = {}));
+})(ApiErrorEnum = exports.ApiErrorEnum || (exports.ApiErrorEnum = {}));

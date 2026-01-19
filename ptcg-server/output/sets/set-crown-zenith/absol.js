@@ -36,13 +36,13 @@ class Absol extends pokemon_card_1.PokemonCard {
         this.fullName = 'Absol CRZ';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 1, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             if (opponent.hand.cards.length > 0) {
                 const randomIndex = Math.floor(Math.random() * opponent.hand.cards.length);
                 const randomCard = opponent.hand.cards[randomIndex];
-                prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.lostzone, { cards: [randomCard], sourceCard: this, sourceEffect: this.attacks[1] });
+                (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.lostzone, { cards: [randomCard], sourceCard: this, sourceEffect: this.attacks[1] });
                 store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_LOST_ZONE, {
                     player: opponent.name,
                     card: randomCard.name

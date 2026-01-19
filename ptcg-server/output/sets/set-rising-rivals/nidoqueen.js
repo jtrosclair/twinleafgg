@@ -52,7 +52,7 @@ class Nidoqueen extends game_1.PokemonCard {
             if (!isNidoqueenInPlay) {
                 return state;
             }
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             effect.maternalComfortUsed = true;
@@ -61,7 +61,7 @@ class Nidoqueen extends game_1.PokemonCard {
                 state = store.reduceEffect(state, healEffect);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = effect.opponent;
             const opponentBench = opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
             effect.damage += 10 * opponentBench;

@@ -27,8 +27,8 @@ class Abra extends pokemon_card_1.PokemonCard {
         this.regulationMark = 'I';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, effect.player);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, effect.player);
         }
         return state;
     }

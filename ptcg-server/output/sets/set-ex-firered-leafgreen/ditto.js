@@ -32,7 +32,7 @@ class Ditto extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         //Power
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const targetCardList = game_1.StateUtils.findCardList(state, this);
             if (!(targetCardList instanceof game_1.PokemonCardList)) {
@@ -70,7 +70,7 @@ class Ditto extends game_1.PokemonCard {
             });
         }
         //Attack
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const checkCost = new check_effects_1.CheckAttackCostEffect(player, this.attacks[0]);
             state = store.reduceEffect(state, checkCost);

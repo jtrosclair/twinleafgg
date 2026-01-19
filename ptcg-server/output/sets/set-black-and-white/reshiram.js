@@ -35,11 +35,11 @@ class Reshiram extends pokemon_card_1.PokemonCard {
         this.setNumber = '26';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             effect.damage += effect.player.active.damage;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            return costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 2, card_types_1.CardType.FIRE);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            return (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 2, card_types_1.CardType.FIRE);
         }
         return state;
     }

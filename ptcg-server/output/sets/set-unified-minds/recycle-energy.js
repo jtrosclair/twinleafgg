@@ -31,7 +31,7 @@ If this card is discarded from play, put it into your hand instead of the discar
                 if (!player.marker.hasMarker(this.RECYCLE_ENERGY_MARKER, this)) {
                     return;
                 }
-                if (this.attachedTo && prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, this.attachedTo)) {
+                if (this.attachedTo && (0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, this.attachedTo)) {
                     player.marker.removeMarker(this.RECYCLE_ENERGY_MARKER, this);
                     return;
                 }

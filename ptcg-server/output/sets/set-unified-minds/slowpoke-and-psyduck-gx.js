@@ -39,7 +39,7 @@ class SlowpokePsyduckGX extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Ditch and Splash
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // Prompt player to choose cards to discard 
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, { superType: game_1.SuperType.TRAINER, trainerType: game_1.TrainerType.SUPPORTER }, { allowCancel: false, min: 0 }), cards => {
@@ -56,9 +56,9 @@ class SlowpokePsyduckGX extends game_1.PokemonCard {
             });
         }
         // Thrilling Times-GX
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             let coinFlips = 1;
             const extraEffectCost = [W, W, W, W, W, W, W, W];
@@ -70,7 +70,7 @@ class SlowpokePsyduckGX extends game_1.PokemonCard {
             }
             let heads = 0;
             for (let i = 0; i < coinFlips; i++) {
-                prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+                (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                     if (result) {
                         heads++;
                     }

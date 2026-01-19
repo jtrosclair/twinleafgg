@@ -37,7 +37,7 @@ class Ditto extends pokemon_card_1.PokemonCard {
         // Prismatic Body
         if (effect instanceof check_effects_1.CheckProvidedEnergyEffect) {
             const player = effect.player;
-            if (!prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if (!(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 effect.source.cards.forEach(c => {
                     if (c instanceof game_1.EnergyCard &&
                         c.energyType === card_types_1.EnergyType.BASIC &&
@@ -51,7 +51,7 @@ class Ditto extends pokemon_card_1.PokemonCard {
             return state;
         }
         // Copy
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Build cards and blocked for Choose Attack prompt

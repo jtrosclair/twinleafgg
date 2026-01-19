@@ -35,18 +35,18 @@ class Chatot extends pokemon_card_1.PokemonCard {
         this.CHATTER_MARKER = 'CHATTER_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.MOVE_CARDS(store, state, player.hand, player.deck);
-            prefabs_1.SHUFFLE_DECK(store, state, player);
-            prefabs_1.DRAW_CARDS(player, opponent.hand.cards.length);
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck);
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
+            (0, prefabs_1.DRAW_CARDS)(player, opponent.hand.cards.length);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            return prefabs_1.BLOCK_RETREAT(store, state, effect, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            return (0, prefabs_1.BLOCK_RETREAT)(store, state, effect, this);
         }
-        prefabs_1.BLOCK_RETREAT_IF_MARKER(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
-        prefabs_1.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
+        (0, prefabs_1.BLOCK_RETREAT_IF_MARKER)(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN)(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
         return state;
     }
 }

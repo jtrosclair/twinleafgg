@@ -110,12 +110,12 @@ class Spiritomb extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // block items when active 
-            if ((player.active.getPokemonCard() === this && !prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this))
-                || (opponent.active.getPokemonCard() === this && !prefabs_1.IS_POKEBODY_BLOCKED(store, state, opponent, this))) {
+            if ((player.active.getPokemonCard() === this && !(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this))
+                || (opponent.active.getPokemonCard() === this && !(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, opponent, this))) {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_ABILITY);
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = playCard(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

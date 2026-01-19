@@ -43,10 +43,10 @@ class Magnezone extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
-            prefabs_1.REMOVE_MARKER(this.MAGNETIC_DRAW_MARKER, effect.player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.MAGNETIC_DRAW_MARKER, effect.player, this);
         }
         // Magnetic Draw
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.hand.cards.length >= 6) {
                 throw new game_1.GameError(game_message_1.GameMessage.CANNOT_USE_POWER);
@@ -57,13 +57,13 @@ class Magnezone extends pokemon_card_1.PokemonCard {
             if (player.marker.hasMarker(this.MAGNETIC_DRAW_MARKER, this)) {
                 throw new game_1.GameError(game_message_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 6);
-            prefabs_1.ADD_MARKER(this.MAGNETIC_DRAW_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, 6);
+            (0, prefabs_1.ADD_MARKER)(this.MAGNETIC_DRAW_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             return state;
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.MAGNETIC_DRAW_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.MAGNETIC_DRAW_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let totalEnergy = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {

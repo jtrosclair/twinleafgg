@@ -34,7 +34,7 @@ class Magmar extends pokemon_card_1.PokemonCard {
         this.fullName = 'Magmar TRR';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInHand = player.hand.cards.some(c => {
                 return c instanceof energy_card_1.EnergyCard;
@@ -51,7 +51,7 @@ class Magmar extends pokemon_card_1.PokemonCard {
                     return;
                 }
                 player.hand.moveCardsTo(cards, player.discard);
-                prefabs_1.DRAW_CARDS(player, cards.length * 2);
+                (0, prefabs_1.DRAW_CARDS)(player, cards.length * 2);
             });
         }
         return state;

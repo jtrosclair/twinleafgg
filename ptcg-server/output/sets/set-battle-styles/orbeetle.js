@@ -36,7 +36,7 @@ class Orbeetle extends pokemon_card_1.PokemonCard {
         this.fullName = 'Orbeetle BST';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // Check attached energy
             const checkEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
@@ -50,7 +50,7 @@ class Orbeetle extends pokemon_card_1.PokemonCard {
                     blocked.push(index);
                 }
             });
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, effect.player, { stage: card_types_1.Stage.STAGE_2 }, { min: 0, max: totalEnergy, blocked });
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, effect.player, { stage: card_types_1.Stage.STAGE_2 }, { min: 0, max: totalEnergy, blocked });
         }
         return state;
     }

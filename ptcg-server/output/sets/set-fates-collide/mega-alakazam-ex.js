@@ -49,7 +49,7 @@ class MAlakazamEx extends pokemon_card_1.PokemonCard {
             store.reduceEffect(state, endTurnEffect);
         }
         // Zen Force
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             effect.damage += effect.opponent.active.damage * 3;
         }
         return state;

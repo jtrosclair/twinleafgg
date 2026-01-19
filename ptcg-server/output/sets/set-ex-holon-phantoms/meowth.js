@@ -31,8 +31,8 @@ class Meowth extends game_1.PokemonCard {
         this.fullName = 'Meowth HP';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 1, this)) {
-            prefabs_1.DRAW_CARDS(effect.player, 1);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
+            (0, prefabs_1.DRAW_CARDS)(effect.player, 1);
         }
         return state;
     }

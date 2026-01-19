@@ -1,16 +1,19 @@
-import { CardList } from '../store/state/card-list';
-import { GameError } from '../game-error';
-import { GameCoreError } from '../game-message';
-import { PokemonCardList } from '../store/state/pokemon-card-list';
-export class CardListSerializer {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CardListSerializer = void 0;
+const card_list_1 = require("../store/state/card-list");
+const game_error_1 = require("../game-error");
+const game_message_1 = require("../game-message");
+const pokemon_card_list_1 = require("../store/state/pokemon-card-list");
+class CardListSerializer {
     constructor() {
         this.types = ['CardList', 'PokemonCardList'];
-        this.classes = [CardList, PokemonCardList];
+        this.classes = [card_list_1.CardList, pokemon_card_list_1.PokemonCardList];
     }
     serialize(cardList) {
         const data = Object.assign({}, cardList);
         let constructorName = 'CardList';
-        if (cardList instanceof PokemonCardList) {
+        if (cardList instanceof pokemon_card_list_1.PokemonCardList) {
             constructorName = 'PokemonCardList';
             if (cardList.tools.length > 0) {
                 data.tool = cardList.tools[0].id;
@@ -27,13 +30,13 @@ export class CardListSerializer {
     }
     deserialize(data, context) {
         const instance = data._type === 'PokemonCardList'
-            ? new PokemonCardList()
-            : new CardList();
+            ? new pokemon_card_list_1.PokemonCardList()
+            : new card_list_1.CardList();
         delete data._type;
         const indexes = data.cards;
         data.cards = indexes.map(index => this.fromIndex(index, context));
         // Explicitly handle PokemonCardList properties
-        if (instance instanceof PokemonCardList) {
+        if (instance instanceof pokemon_card_list_1.PokemonCardList) {
             // If a tool is present, add it only to tools, not to cards
             if (data.tool !== undefined) {
                 const toolCard = this.fromIndex(data.tool, context);
@@ -48,8 +51,9 @@ export class CardListSerializer {
     fromIndex(index, context) {
         const card = context.cards[index];
         if (card === undefined) {
-            throw new GameError(GameCoreError.ERROR_SERIALIZER, `Card not found on index '${index}'.`);
+            throw new game_error_1.GameError(game_message_1.GameCoreError.ERROR_SERIALIZER, `Card not found on index '${index}'.`);
         }
         return card;
     }
 }
+exports.CardListSerializer = CardListSerializer;

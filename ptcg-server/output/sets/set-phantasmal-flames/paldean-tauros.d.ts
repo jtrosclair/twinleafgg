@@ -10,7 +10,7 @@ export declare class PaldeanTauros extends PokemonCard {
     weakness: {
         type: CardType.PSYCHIC;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;

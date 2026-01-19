@@ -41,7 +41,7 @@ class WhimsicottVSTAR extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Trick Wind
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             opponent.marker.addMarker(this.DOMINATING_ECHO_MARKER, this);
@@ -68,7 +68,7 @@ class WhimsicottVSTAR extends pokemon_card_1.PokemonCard {
             }
         }
         // Fluffball Star
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const cardList = game_1.StateUtils.findCardList(state, this);
             if (player.usedVSTAR) {
@@ -79,7 +79,7 @@ class WhimsicottVSTAR extends pokemon_card_1.PokemonCard {
             store.reduceEffect(state, checkProvidedEnergyEffect);
             let energies = 0;
             checkProvidedEnergyEffect.energyMap.forEach(energy => { energy.provides.forEach(e => { energies++; }); });
-            attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(60 * energies, effect, store, state);
+            (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(60 * energies, effect, store, state);
         }
         return state;
     }

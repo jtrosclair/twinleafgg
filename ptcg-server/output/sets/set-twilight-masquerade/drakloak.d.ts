@@ -9,7 +9,7 @@ export declare class Drakloak extends PokemonCard {
     regulationMark: string;
     cardType: CardType;
     hp: number;
-    weakness: never[];
+    weakness: any[];
     retreat: CardType[];
     powers: {
         name: string;

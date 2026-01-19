@@ -68,7 +68,7 @@ class GiratinaLVX extends pokemon_card_1.PokemonCard {
             if (effect.invisibleTentacles) {
                 return state;
             }
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, opponent, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
             if (player.hand.cards.length === 0) {
@@ -77,12 +77,12 @@ class GiratinaLVX extends pokemon_card_1.PokemonCard {
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {}, { min: 1, max: 1, allowCancel: false }), selected => {
                 if (selected) {
                     effect.invisibleTentacles = true;
-                    prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: selected });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: selected });
                 }
             });
         }
         // Darkness Lost
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             opponent.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {
                 if (card !== opponent.active) {

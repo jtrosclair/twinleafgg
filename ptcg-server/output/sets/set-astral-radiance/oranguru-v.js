@@ -48,7 +48,7 @@ class OranguruV extends pokemon_card_1.PokemonCard {
             player.marker.removeMarker(this.BACK_ORDER_MARKER, this);
         }
         // Back Order
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.BACK_ORDER_MARKER)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
@@ -65,7 +65,7 @@ class OranguruV extends pokemon_card_1.PokemonCard {
                     blocked.push(index);
                 }
             });
-            prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, this, { superType: card_types_1.SuperType.TRAINER }, { min: 0, max: 2, allowCancel: false, blocked }, this.powers[0]);
+            (0, prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND)(store, state, player, this, { superType: card_types_1.SuperType.TRAINER }, { min: 0, max: 2, allowCancel: false, blocked }, this.powers[0]);
         }
         // Psychic
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {

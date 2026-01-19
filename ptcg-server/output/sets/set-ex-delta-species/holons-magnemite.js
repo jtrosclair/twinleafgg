@@ -44,7 +44,7 @@ class HolonsMagnemite extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // The Special Energy Stuff
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.energyPlayedTurn === state.turn) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -67,8 +67,8 @@ class HolonsMagnemite extends pokemon_card_1.PokemonCard {
             effect.energyMap.push({ card: this, provides: this.provides });
         }
         // Linear Attack
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(10, effect, store, state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(10, effect, store, state);
         }
         return state;
     }

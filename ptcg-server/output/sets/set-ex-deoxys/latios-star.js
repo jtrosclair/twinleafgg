@@ -38,19 +38,19 @@ class LatiosStar extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         var _a;
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.HEAL_X_DAMAGE_FROM_THIS_POKEMON(effect, store, state, 10);
+            (0, prefabs_1.HEAL_X_DAMAGE_FROM_THIS_POKEMON)(effect, store, state, 10);
             const removeSpecialCondition = new attack_effects_1.RemoveSpecialConditionsEffect(effect, undefined);
             removeSpecialCondition.target = player.active;
             state = store.reduceEffect(state, removeSpecialCondition);
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = effect.opponent;
             const defending = opponent.active;
             if (((_a = defending.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.stage) === card_types_1.Stage.STAGE_2 && defending.getPokemons().length > 1) {
-                prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON(store, state, effect, this);
+                (0, prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON)(store, state, effect, this);
                 effect.damage += 100;
             }
         }

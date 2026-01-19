@@ -37,7 +37,7 @@ class ArceusWater extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Fastwave
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             effect.ignoreResistance = true;
             const applyWeakness = new attack_effects_1.ApplyWeaknessEffect(effect, 50);

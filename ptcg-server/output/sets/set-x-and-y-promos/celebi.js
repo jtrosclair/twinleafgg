@@ -60,7 +60,7 @@ class Celebi extends pokemon_card_1.PokemonCard {
             catch (_b) {
                 return state;
             }
-            const coinFlipResult = prefabs_1.SIMULATE_COIN_FLIP(store, state, player);
+            const coinFlipResult = (0, prefabs_1.SIMULATE_COIN_FLIP)(store, state, player);
             if (coinFlipResult) {
                 effect.prizeCount = 0;
                 const cardList = effect.target;
@@ -70,7 +70,7 @@ class Celebi extends pokemon_card_1.PokemonCard {
                 const tools = [...cardList.tools];
                 // Move other cards (tools, energy, etc.) to deck
                 if (otherCards.length > 0) {
-                    prefabs_1.MOVE_CARDS(store, state, cardList, player.deck, { cards: otherCards });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.deck, { cards: otherCards });
                 }
                 // Move tools to deck
                 if (tools.length > 0) {
@@ -82,7 +82,7 @@ class Celebi extends pokemon_card_1.PokemonCard {
                 if (pokemon.length > 0) {
                     cardList.damage = 0;
                     cardList.clearEffects();
-                    prefabs_1.MOVE_CARDS(store, state, cardList, player.deck, { cards: pokemon });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.deck, { cards: pokemon });
                 }
                 store.log(state, game_1.GameLog.LOG_SHUFFLE_POKEMON_INTO_DECK, { name: player.name, card: this.name, effect: this.powers[0].name });
                 return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
@@ -90,8 +90,8 @@ class Celebi extends pokemon_card_1.PokemonCard {
                 });
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.PUT_X_DAMAGE_COUNTERS_ON_ALL_YOUR_OPPONENTS_POKEMON(1, store, state, effect);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.PUT_X_DAMAGE_COUNTERS_ON_ALL_YOUR_OPPONENTS_POKEMON)(1, store, state, effect);
         }
         return state;
     }

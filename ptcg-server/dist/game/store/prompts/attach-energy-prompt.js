@@ -1,10 +1,13 @@
-import { Card } from '../card/card';
-import { GameError } from '../../game-error';
-import { GameMessage } from '../../game-message';
-import { Prompt } from './prompt';
-import { SuperType, CardType } from '../card/card-types';
-export const AttachEnergyPromptType = 'Attach energy';
-export class AttachEnergyPrompt extends Prompt {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AttachEnergyPrompt = exports.AttachEnergyPromptType = void 0;
+const card_1 = require("../card/card");
+const game_error_1 = require("../../game-error");
+const game_message_1 = require("../../game-message");
+const prompt_1 = require("./prompt");
+const card_types_1 = require("../card/card-types");
+exports.AttachEnergyPromptType = 'Attach energy';
+class AttachEnergyPrompt extends prompt_1.Prompt {
     constructor(playerId, message, cardList, playerType, slots, filter, options) {
         super(playerId);
         this.message = message;
@@ -12,7 +15,7 @@ export class AttachEnergyPrompt extends Prompt {
         this.playerType = playerType;
         this.slots = slots;
         this.filter = filter;
-        this.type = AttachEnergyPromptType;
+        this.type = exports.AttachEnergyPromptType;
         // Default options
         this.options = Object.assign({}, {
             allowCancel: true,
@@ -27,27 +30,27 @@ export class AttachEnergyPrompt extends Prompt {
     }
     decode(result, state) {
         if (result === null) {
-            return result;
+            return null;
         }
         const player = state.players.find(p => p.id === this.playerId);
         if (player === undefined) {
-            throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+            throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_PROMPT_RESULT);
         }
         const transfers = [];
         result.forEach(t => {
             const cardList = this.cardList;
             const card = cardList.cards[t.index];
             // Verify this is a card.
-            if (!(card instanceof Card)) {
-                throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+            if (!(card instanceof card_1.Card)) {
+                throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_PROMPT_RESULT);
             }
             // Verify card is an energy card
-            if (card.superType !== SuperType.ENERGY) {
-                throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+            if (card.superType !== card_types_1.SuperType.ENERGY) {
+                throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_PROMPT_RESULT);
             }
             // Verify card is not blocked
             if (this.options.blocked.includes(t.index)) {
-                throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+                throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_PROMPT_RESULT);
             }
             transfers.push({ to: t.to, card });
         });
@@ -126,14 +129,15 @@ export class AttachEnergyPrompt extends Prompt {
         return result.every(r => r.card !== undefined);
     }
     getCardType(card) {
-        if (card.superType === SuperType.ENERGY) {
+        if (card.superType === card_types_1.SuperType.ENERGY) {
             const energyCard = card;
-            return energyCard.provides.length > 0 ? energyCard.provides[0] : CardType.NONE;
+            return energyCard.provides.length > 0 ? energyCard.provides[0] : card_types_1.CardType.NONE;
         }
-        if (card.superType === SuperType.POKEMON) {
+        if (card.superType === card_types_1.SuperType.POKEMON) {
             const pokemonCard = card;
             return pokemonCard.cardType;
         }
-        return CardType.NONE;
+        return card_types_1.CardType.NONE;
     }
 }
+exports.AttachEnergyPrompt = AttachEnergyPrompt;

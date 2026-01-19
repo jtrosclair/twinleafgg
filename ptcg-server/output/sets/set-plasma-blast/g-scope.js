@@ -13,7 +13,7 @@ function* playCard(next, store, state, effect) {
     if (((_a = player.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.name) !== 'Genesect-EX') {
         throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_ATTACK);
     }
-    attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(100, effect, store, state);
+    (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(100, effect, store, state);
     return state;
 }
 class GScope extends trainer_card_1.TrainerCard {

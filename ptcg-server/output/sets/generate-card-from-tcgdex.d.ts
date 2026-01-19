@@ -36,6 +36,6 @@ declare function formatResistancesRaw(resArr: any): string;
 declare function formatPowers(powers: any): string;
 declare function escapeSingleQuotes(str: any): any;
 declare function formatAttacksRaw(attacks: any): any;
-declare function getTags(card: any): string[];
+declare function getTags(card: any): any[];
 declare function getCardFromArg(arg: any): Promise<any>;
 declare function main(): Promise<void>;

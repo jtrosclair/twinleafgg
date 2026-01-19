@@ -54,7 +54,7 @@ class FloatzelGLLVX extends pokemon_card_1.PokemonCard {
             if (state.phase !== game_1.GamePhase.ATTACK) {
                 return state;
             }
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             if (((_a = effect.target.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.cardType) !== card_types_1.CardType.WATER) {
@@ -86,12 +86,12 @@ class FloatzelGLLVX extends pokemon_card_1.PokemonCard {
                 const rescued = player.marker.markers
                     .filter(m => m.name === this.WATER_RESCUE_MARKER && m.source !== undefined)
                     .map(m => m.source);
-                prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: rescued });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: rescued });
                 player.marker.removeMarker(this.WATER_RESCUE_MARKER);
             });
         }
         // Energy Cyclone
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const energiesInHand = player.hand.cards.filter(card => card instanceof game_1.EnergyCard && card.superType === card_types_1.SuperType.ENERGY);
             // Prompt player to choose cards to discard 
@@ -100,9 +100,9 @@ class FloatzelGLLVX extends pokemon_card_1.PokemonCard {
                 if (cards.length === 0) {
                     return;
                 }
-                prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, effect.opponent, cards);
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.deck, { cards: cards });
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, effect.opponent, cards);
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck, { cards: cards });
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                 effect.damage = (cards.length * 20);
                 return state;
             });

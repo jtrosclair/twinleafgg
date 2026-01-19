@@ -24,8 +24,8 @@ The [F] Pokémon this card is attached to takes 20 less damage from attacks from
         if (effect instanceof check_effects_1.CheckProvidedEnergyEffect && effect.source.cards.includes(this)) {
             effect.energyMap.push({ card: this, provides: [card_types_1.CardType.FIGHTING] });
         }
-        if (prefabs_1.DEAL_DAMAGE(effect) && effect.target.cards.includes(this)) {
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.opponent, this, effect.target)) {
+        if ((0, prefabs_1.DEAL_DAMAGE)(effect) && effect.target.cards.includes(this)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.opponent, this, effect.target)) {
                 return state;
             }
             const checkPokemonType = new check_effects_1.CheckPokemonTypeEffect(effect.target);

@@ -34,17 +34,17 @@ class MegaSharpedoex extends game_1.PokemonCard {
         this.fullName = 'Mega Sharpedo ex M2';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.deck.cards.length === 0) {
                 return state;
             }
-            prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { count: 1 });
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { count: 1 });
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            if (prefabs_1.THIS_POKEMON_HAS_ANY_DAMAGE_COUNTERS_ON_IT(effect, this)) {
-                prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE(effect, store, state, 150);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            if ((0, prefabs_1.THIS_POKEMON_HAS_ANY_DAMAGE_COUNTERS_ON_IT)(effect, this)) {
+                (0, prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE)(effect, store, state, 150);
             }
         }
         return state;

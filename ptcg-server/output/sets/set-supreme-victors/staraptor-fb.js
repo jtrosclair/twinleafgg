@@ -40,15 +40,15 @@ class StaraptorFB extends pokemon_card_1.PokemonCard {
         this.usedWhirlwind = false;
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE(store, state, effect, 10);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE)(store, state, effect, 10);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             this.usedWhirlwind = true;
         }
         if (effect instanceof game_phase_effects_1.AfterAttackEffect && this.usedWhirlwind === true) {
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, opponent);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, opponent);
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && this.usedWhirlwind) {
             this.usedWhirlwind = false;

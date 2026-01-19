@@ -77,11 +77,11 @@ class Lanturn extends pokemon_card_1.PokemonCard {
             return state;
         }
         // Lightning Strike attack
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
-                    prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON(store, state, effect, this);
+                    (0, prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON)(store, state, effect, this);
                     effect.damage = 90;
                 }
             }, game_1.GameMessage.WANT_TO_USE_EFFECT_OF_ATTACK);

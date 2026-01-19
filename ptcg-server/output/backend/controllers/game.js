@@ -127,21 +127,21 @@ class Game extends controller_1.Controller {
     }
 }
 __decorate([
-    controller_1.Get('/:id/logs'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/:id/logs'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Game.prototype, "onLogs", null);
 __decorate([
-    controller_1.Get('/:id/playerStats'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/:id/playerStats'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Game.prototype, "onPlayerStats", null);
 __decorate([
-    controller_1.Post('/validate-state'),
+    (0, controller_1.Post)('/validate-state'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)

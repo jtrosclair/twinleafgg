@@ -28,7 +28,7 @@ class Gumshoos extends pokemon_card_1.PokemonCard {
         this.fullName = 'Gumshoos UNM';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
             const opponentActive = opponent.active.getPokemonCard();
             if (opponentActive &&

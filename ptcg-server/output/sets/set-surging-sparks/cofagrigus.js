@@ -45,7 +45,7 @@ class Cofagrigus extends pokemon_card_1.PokemonCard {
             const opponent = game_1.StateUtils.getOpponent(state, player);
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
                 if (card.powers.length > 0 && card.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
-                    if (!prefabs_1.IS_ABILITY_BLOCKED(store, state, player, card)) {
+                    if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, card)) {
                         const damageEffect = new attack_effects_1.PutCountersEffect(effect, 60);
                         damageEffect.target = cardList;
                         store.reduceEffect(state, damageEffect);
@@ -54,7 +54,7 @@ class Cofagrigus extends pokemon_card_1.PokemonCard {
             });
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card) => {
                 if (card.powers.length > 0 && card.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
-                    if (!prefabs_1.IS_ABILITY_BLOCKED(store, state, opponent, card)) {
+                    if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, opponent, card)) {
                         const damageEffect = new attack_effects_1.PutCountersEffect(effect, 60);
                         damageEffect.target = cardList;
                         store.reduceEffect(state, damageEffect);

@@ -36,12 +36,12 @@ class Zubat extends pokemon_card_1.PokemonCard {
         this.usedHideInShadows = false;
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             this.usedHideInShadows = true;
         }
         if (effect instanceof game_phase_effects_1.AfterAttackEffect && this.usedHideInShadows == true) {
             const player = effect.player;
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
             this.usedHideInShadows = false;
         }
         return state;

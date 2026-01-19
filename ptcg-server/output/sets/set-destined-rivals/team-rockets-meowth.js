@@ -36,7 +36,7 @@ class TeamRocketsMeowth extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Cat Nab
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (opponent.hand.cards.length === 0) {
@@ -45,12 +45,12 @@ class TeamRocketsMeowth extends game_1.PokemonCard {
             if (opponent.hand.cards.length > 0) {
                 const randomIndex = Math.floor(Math.random() * opponent.hand.cards.length);
                 const randomCard = opponent.hand.cards[randomIndex];
-                prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.deck, { cards: [randomCard], sourceCard: this, sourceEffect: this.attacks[0] });
-                prefabs_1.SHUFFLE_DECK(store, state, opponent);
+                (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck, { cards: [randomCard], sourceCard: this, sourceEffect: this.attacks[0] });
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
             }
         }
         // Wild Scratch
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             return store.prompt(state, [
                 new game_1.CoinFlipPrompt(player.id, game_1.GameMessage.COIN_FLIP),

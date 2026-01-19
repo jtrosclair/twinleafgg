@@ -46,12 +46,12 @@ class Delcatty extends game_1.PokemonCard {
             player.marker.removeMarker(this.REACTIVE_SHIFT_MARKER, this);
             return state;
         }
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.REACTIVE_SHIFT_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             let hasReactEnergy = false;
             let pokemonCount = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
@@ -85,7 +85,7 @@ class Delcatty extends game_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.REACTIVE_SHIFT_MARKER, this)) {
             effect.player.marker.removeMarker(this.REACTIVE_SHIFT_MARKER, this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (!player.discard.cards.some(card => card.superType === card_types_1.SuperType.ENERGY)) {
                 return state;
@@ -98,7 +98,7 @@ class Delcatty extends game_1.PokemonCard {
                 }
                 for (const transfer of transfers) {
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.attacks[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.attacks[0] });
                 }
             });
         }

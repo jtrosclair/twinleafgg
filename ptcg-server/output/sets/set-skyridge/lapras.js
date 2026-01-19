@@ -33,7 +33,7 @@ class Lapras extends pokemon_card_1.PokemonCard {
         this.fullName = 'Lapras SK';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (player.deck.cards.length === 0) {
@@ -43,15 +43,15 @@ class Lapras extends pokemon_card_1.PokemonCard {
                 if (!cards || cards.length === 0) {
                     return state;
                 }
-                prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-                cards.forEach(card => prefabs_1.MOVE_CARD_TO(state, card, player.hand));
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
+                cards.forEach(card => (0, prefabs_1.MOVE_CARD_TO)(state, card, player.hand));
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP(store, state, effect);
+                    (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP)(store, state, effect);
                 }
             });
         }

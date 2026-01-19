@@ -36,7 +36,7 @@ class Regirockex extends game_1.PokemonCard {
         // Handle Healing Stone Poké-Body
         if (effect instanceof game_phase_effects_1.BetweenTurnsEffect) {
             const player = effect.player;
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             player.forEachPokemon(game_1.PlayerType.ANY, cardList => {
@@ -47,12 +47,12 @@ class Regirockex extends game_1.PokemonCard {
             });
         }
         // Handle Tonnage attack
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
                     effect.damage += 20;
-                    prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 30);
+                    (0, prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF)(store, state, effect, 30);
                 }
             });
         }

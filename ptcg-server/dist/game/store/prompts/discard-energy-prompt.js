@@ -1,18 +1,21 @@
-import { Card } from '../card/card';
-import { GameError } from '../../game-error';
-import { GameMessage } from '../../game-message';
-import { Prompt } from './prompt';
-import { StateUtils } from '../state-utils';
-import { SuperType } from '../card/card-types';
-export const DiscardEnergyPromptType = 'Discard energy';
-export class DiscardEnergyPrompt extends Prompt {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DiscardEnergyPrompt = exports.DiscardEnergyPromptType = void 0;
+const card_1 = require("../card/card");
+const game_error_1 = require("../../game-error");
+const game_message_1 = require("../../game-message");
+const prompt_1 = require("./prompt");
+const state_utils_1 = require("../state-utils");
+const card_types_1 = require("../card/card-types");
+exports.DiscardEnergyPromptType = 'Discard energy';
+class DiscardEnergyPrompt extends prompt_1.Prompt {
     constructor(playerId, message, playerType, slots, filter, options) {
         super(playerId);
         this.message = message;
         this.playerType = playerType;
         this.slots = slots;
         this.filter = filter;
-        this.type = DiscardEnergyPromptType;
+        this.type = exports.DiscardEnergyPromptType;
         // Default options
         this.options = Object.assign({}, {
             allowCancel: true,
@@ -24,31 +27,31 @@ export class DiscardEnergyPrompt extends Prompt {
     }
     decode(result, state) {
         if (result === null) {
-            return result; // operation cancelled
+            return null; // operation cancelled
         }
         const player = state.players.find(p => p.id === this.playerId);
         if (player === undefined) {
-            throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+            throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_PROMPT_RESULT);
         }
         const transfers = [];
         const processedCards = new Set();
         result.forEach(t => {
-            const cardList = StateUtils.getTarget(state, player, t.from);
+            const cardList = state_utils_1.StateUtils.getTarget(state, player, t.from);
             // Check if we've already processed this card from this source
             // Create a unique key using the card target components and index
             const key = `${t.from.player}-${t.from.slot}-${t.from.index}-${t.index}`;
             if (processedCards.has(key)) {
-                throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+                throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_PROMPT_RESULT);
             }
             processedCards.add(key);
             const card = cardList.cards[t.index];
             // Verify this is a card.
-            if (!(card instanceof Card)) {
-                throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+            if (!(card instanceof card_1.Card)) {
+                throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_PROMPT_RESULT);
             }
             // Verify card is an energy card
-            if (card.superType !== SuperType.ENERGY) {
-                throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+            if (card.superType !== card_types_1.SuperType.ENERGY) {
+                throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_PROMPT_RESULT);
             }
             transfers.push({ from: t.from, card });
         });
@@ -64,3 +67,4 @@ export class DiscardEnergyPrompt extends Prompt {
         return result.every(r => r.card !== undefined);
     }
 }
+exports.DiscardEnergyPrompt = DiscardEnergyPrompt;

@@ -41,13 +41,13 @@ class TeamRocketsPorygon extends pokemon_card_1.PokemonCard {
                 return store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {}, { allowCancel: false, min: 1, max: 1 }), cards => {
                     cards = cards || [];
                     // Discard the selected card
-                    prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: cards, sourceCard: this, sourceEffect: this.attacks[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: cards, sourceCard: this, sourceEffect: this.attacks[0] });
                     // Then opponent chooses 1 card to discard
                     if (opponent.hand.cards.length > 0) {
                         return store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(opponent, game_message_1.GameMessage.CHOOSE_CARD_TO_DISCARD, opponent.hand, {}, { allowCancel: false, min: 1, max: 1 }), oppCards => {
                             oppCards = oppCards || [];
                             // Discard the opponent's selected card
-                            prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.discard, { cards: oppCards, sourceCard: this, sourceEffect: this.attacks[0] });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.discard, { cards: oppCards, sourceCard: this, sourceEffect: this.attacks[0] });
                             return state;
                         });
                     }

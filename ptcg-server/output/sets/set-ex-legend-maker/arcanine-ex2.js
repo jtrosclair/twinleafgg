@@ -47,7 +47,7 @@ class Arcanineex extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.AttachEnergyEffect && effect.target.getPokemonCard() === this) {
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             if (effect.energyCard.energyType === card_types_1.EnergyType.BASIC && effect.energyCard.provides.includes(card_types_1.CardType.FIRE)) {
@@ -82,10 +82,10 @@ class Arcanineex extends pokemon_card_1.PokemonCard {
                 }
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON(20, effect, store, state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON)(20, effect, store, state);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             // See if there is holon energy attached
             const hasReactEnergy = player.active.energies.cards.some(card => card.name === 'React Energy');
@@ -111,7 +111,7 @@ class Arcanineex extends pokemon_card_1.PokemonCard {
             options.push({
                 message: game_2.GameMessage.CHOOSE_ENERGIES_TO_DISCARD,
                 action: () => {
-                    costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 2, card_types_1.CardType.FIRE);
+                    (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 2, card_types_1.CardType.FIRE);
                 }
             });
             if (options.length === 1) {

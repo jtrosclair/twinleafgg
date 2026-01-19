@@ -1,24 +1,27 @@
-import { GameError } from '../../game-error';
-import { GameMessage } from '../../game-message';
-import { SandboxModifyPlayerAction } from '../actions/sandbox-modify-player-action';
-import { SandboxModifyGameStateAction } from '../actions/sandbox-modify-game-state-action';
-import { SandboxModifyCardAction, CardZone } from '../actions/sandbox-modify-card-action';
-import { SandboxModifyPokemonAction } from '../actions/sandbox-modify-pokemon-action';
-import { CardManager } from '../../cards/card-manager';
-import { SpecialCondition } from '../card/card-types';
-export function sandboxReducer(store, state, action, clientRoleId) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.sandboxReducer = void 0;
+const game_error_1 = require("../../game-error");
+const game_message_1 = require("../../game-message");
+const sandbox_modify_player_action_1 = require("../actions/sandbox-modify-player-action");
+const sandbox_modify_game_state_action_1 = require("../actions/sandbox-modify-game-state-action");
+const sandbox_modify_card_action_1 = require("../actions/sandbox-modify-card-action");
+const sandbox_modify_pokemon_action_1 = require("../actions/sandbox-modify-pokemon-action");
+const card_manager_1 = require("../../cards/card-manager");
+const card_types_1 = require("../card/card-types");
+function sandboxReducer(store, state, action, clientRoleId) {
     // Validate sandbox mode is enabled
     if (!state.gameSettings.sandboxMode) {
-        throw new GameError(GameMessage.ILLEGAL_ACTION);
+        throw new game_error_1.GameError(game_message_1.GameMessage.ILLEGAL_ACTION);
     }
     // Validate user is admin (roleId === 4)
     if (clientRoleId !== 4) {
-        throw new GameError(GameMessage.ILLEGAL_ACTION);
+        throw new game_error_1.GameError(game_message_1.GameMessage.ILLEGAL_ACTION);
     }
-    if (action instanceof SandboxModifyPlayerAction) {
+    if (action instanceof sandbox_modify_player_action_1.SandboxModifyPlayerAction) {
         const player = state.players.find(p => p.id === action.targetPlayerId);
         if (!player) {
-            throw new GameError(GameMessage.ILLEGAL_ACTION);
+            throw new game_error_1.GameError(game_message_1.GameMessage.ILLEGAL_ACTION);
         }
         const mods = action.modifications;
         // Modify prizes
@@ -54,7 +57,7 @@ export function sandboxReducer(store, state, action, clientRoleId) {
             const diff = mods.handSize - player.hand.cards.length;
             if (diff > 0) {
                 // Add cards to hand
-                const cardManager = CardManager.getInstance();
+                const cardManager = card_manager_1.CardManager.getInstance();
                 const placeholder = cardManager.getCardByName('Pikachu');
                 if (placeholder) {
                     for (let i = 0; i < diff; i++) {
@@ -76,7 +79,7 @@ export function sandboxReducer(store, state, action, clientRoleId) {
         if (mods.deckSize !== undefined) {
             const diff = mods.deckSize - player.deck.cards.length;
             if (diff > 0) {
-                const cardManager = CardManager.getInstance();
+                const cardManager = card_manager_1.CardManager.getInstance();
                 const placeholder = cardManager.getCardByName('Pikachu');
                 if (placeholder) {
                     for (let i = 0; i < diff; i++) {
@@ -97,7 +100,7 @@ export function sandboxReducer(store, state, action, clientRoleId) {
         if (mods.discardSize !== undefined) {
             const diff = mods.discardSize - player.discard.cards.length;
             if (diff > 0) {
-                const cardManager = CardManager.getInstance();
+                const cardManager = card_manager_1.CardManager.getInstance();
                 const placeholder = cardManager.getCardByName('Pikachu');
                 if (placeholder) {
                     for (let i = 0; i < diff; i++) {
@@ -118,7 +121,7 @@ export function sandboxReducer(store, state, action, clientRoleId) {
         if (mods.lostzoneSize !== undefined) {
             const diff = mods.lostzoneSize - player.lostzone.cards.length;
             if (diff > 0) {
-                const cardManager = CardManager.getInstance();
+                const cardManager = card_manager_1.CardManager.getInstance();
                 const placeholder = cardManager.getCardByName('Pikachu');
                 if (placeholder) {
                     for (let i = 0; i < diff; i++) {
@@ -156,7 +159,7 @@ export function sandboxReducer(store, state, action, clientRoleId) {
             player.rocketSupporter = mods.rocketSupporter;
         return state;
     }
-    if (action instanceof SandboxModifyGameStateAction) {
+    if (action instanceof sandbox_modify_game_state_action_1.SandboxModifyGameStateAction) {
         const mods = action.modifications;
         if (mods.turn !== undefined)
             state.turn = mods.turn;
@@ -174,23 +177,23 @@ export function sandboxReducer(store, state, action, clientRoleId) {
         }
         return state;
     }
-    if (action instanceof SandboxModifyCardAction) {
+    if (action instanceof sandbox_modify_card_action_1.SandboxModifyCardAction) {
         const player = state.players.find(p => p.id === action.targetPlayerId);
         if (!player) {
-            throw new GameError(GameMessage.ILLEGAL_ACTION);
+            throw new game_error_1.GameError(game_message_1.GameMessage.ILLEGAL_ACTION);
         }
-        const cardManager = CardManager.getInstance();
+        const cardManager = card_manager_1.CardManager.getInstance();
         let card = cardManager.getCardByName(action.cardName);
         if (!card) {
-            throw new GameError(GameMessage.UNKNOWN_CARD, action.cardName);
+            throw new game_error_1.GameError(game_message_1.GameMessage.UNKNOWN_CARD, action.cardName);
         }
         if (action.action === 'add') {
-            const targetZone = getZone(player, action.toZone || CardZone.HAND);
+            const targetZone = getZone(player, action.toZone || sandbox_modify_card_action_1.CardZone.HAND);
             if (targetZone) {
                 // Clone the card
                 card = cardManager.getCardByName(action.cardName);
                 if (card) {
-                    if (action.toZone === CardZone.PRIZES && action.prizeIndex !== undefined) {
+                    if (action.toZone === sandbox_modify_card_action_1.CardZone.PRIZES && action.prizeIndex !== undefined) {
                         if (player.prizes[action.prizeIndex]) {
                             player.prizes[action.prizeIndex].cards.push(card);
                         }
@@ -202,9 +205,9 @@ export function sandboxReducer(store, state, action, clientRoleId) {
             }
         }
         else if (action.action === 'remove') {
-            const sourceZone = getZone(player, action.fromZone || CardZone.HAND);
+            const sourceZone = getZone(player, action.fromZone || sandbox_modify_card_action_1.CardZone.HAND);
             if (sourceZone) {
-                if (action.fromZone === CardZone.PRIZES && action.fromIndex !== undefined) {
+                if (action.fromZone === sandbox_modify_card_action_1.CardZone.PRIZES && action.fromIndex !== undefined) {
                     if (player.prizes[action.fromIndex] && player.prizes[action.fromIndex].cards.length > 0) {
                         player.prizes[action.fromIndex].cards.pop();
                     }
@@ -218,14 +221,14 @@ export function sandboxReducer(store, state, action, clientRoleId) {
             }
         }
         else if (action.action === 'move') {
-            const sourceZone = getZone(player, action.fromZone || CardZone.HAND);
-            const targetZone = getZone(player, action.toZone || CardZone.HAND);
+            const sourceZone = getZone(player, action.fromZone || sandbox_modify_card_action_1.CardZone.HAND);
+            const targetZone = getZone(player, action.toZone || sandbox_modify_card_action_1.CardZone.HAND);
             if (sourceZone && targetZone) {
                 const index = action.fromIndex !== undefined ? action.fromIndex :
                     sourceZone.cards.findIndex(c => c.fullName === action.cardName);
                 if (index !== -1 && index < sourceZone.cards.length) {
                     const cardToMove = sourceZone.cards.splice(index, 1)[0];
-                    if (action.toZone === CardZone.PRIZES && action.prizeIndex !== undefined) {
+                    if (action.toZone === sandbox_modify_card_action_1.CardZone.PRIZES && action.prizeIndex !== undefined) {
                         if (player.prizes[action.prizeIndex]) {
                             player.prizes[action.prizeIndex].cards.push(cardToMove);
                         }
@@ -238,10 +241,10 @@ export function sandboxReducer(store, state, action, clientRoleId) {
         }
         return state;
     }
-    if (action instanceof SandboxModifyPokemonAction) {
+    if (action instanceof sandbox_modify_pokemon_action_1.SandboxModifyPokemonAction) {
         const player = state.players.find(p => p.id === action.targetPlayerId);
         if (!player) {
-            throw new GameError(GameMessage.ILLEGAL_ACTION);
+            throw new game_error_1.GameError(game_message_1.GameMessage.ILLEGAL_ACTION);
         }
         let pokemon;
         if (action.location === 'active') {
@@ -251,7 +254,7 @@ export function sandboxReducer(store, state, action, clientRoleId) {
             pokemon = player.bench[action.benchIndex];
         }
         if (!pokemon) {
-            throw new GameError(GameMessage.ILLEGAL_ACTION);
+            throw new game_error_1.GameError(game_message_1.GameMessage.ILLEGAL_ACTION);
         }
         const mods = action.modifications;
         // Modify damage (on PokemonCardList, not PokemonCard)
@@ -268,7 +271,7 @@ export function sandboxReducer(store, state, action, clientRoleId) {
             const diff = mods.energyCount - currentEnergy;
             if (diff > 0) {
                 // Add energy
-                const cardManager = CardManager.getInstance();
+                const cardManager = card_manager_1.CardManager.getInstance();
                 // Use specified energy type if provided, otherwise default to Fire Energy
                 const energyName = mods.energyTypes && mods.energyTypes.length > 0
                     ? mods.energyTypes[0]
@@ -298,42 +301,42 @@ export function sandboxReducer(store, state, action, clientRoleId) {
         if (mods.conditions) {
             if (mods.conditions.burned !== undefined) {
                 if (mods.conditions.burned) {
-                    pokemon.addSpecialCondition(SpecialCondition.BURNED);
+                    pokemon.addSpecialCondition(card_types_1.SpecialCondition.BURNED);
                 }
                 else {
-                    pokemon.removeSpecialCondition(SpecialCondition.BURNED);
+                    pokemon.removeSpecialCondition(card_types_1.SpecialCondition.BURNED);
                 }
             }
             if (mods.conditions.poisoned !== undefined) {
                 if (mods.conditions.poisoned) {
-                    pokemon.addSpecialCondition(SpecialCondition.POISONED);
+                    pokemon.addSpecialCondition(card_types_1.SpecialCondition.POISONED);
                 }
                 else {
-                    pokemon.removeSpecialCondition(SpecialCondition.POISONED);
+                    pokemon.removeSpecialCondition(card_types_1.SpecialCondition.POISONED);
                 }
             }
             if (mods.conditions.asleep !== undefined) {
                 if (mods.conditions.asleep) {
-                    pokemon.addSpecialCondition(SpecialCondition.ASLEEP);
+                    pokemon.addSpecialCondition(card_types_1.SpecialCondition.ASLEEP);
                 }
                 else {
-                    pokemon.removeSpecialCondition(SpecialCondition.ASLEEP);
+                    pokemon.removeSpecialCondition(card_types_1.SpecialCondition.ASLEEP);
                 }
             }
             if (mods.conditions.paralyzed !== undefined) {
                 if (mods.conditions.paralyzed) {
-                    pokemon.addSpecialCondition(SpecialCondition.PARALYZED);
+                    pokemon.addSpecialCondition(card_types_1.SpecialCondition.PARALYZED);
                 }
                 else {
-                    pokemon.removeSpecialCondition(SpecialCondition.PARALYZED);
+                    pokemon.removeSpecialCondition(card_types_1.SpecialCondition.PARALYZED);
                 }
             }
             if (mods.conditions.confused !== undefined) {
                 if (mods.conditions.confused) {
-                    pokemon.addSpecialCondition(SpecialCondition.CONFUSED);
+                    pokemon.addSpecialCondition(card_types_1.SpecialCondition.CONFUSED);
                 }
                 else {
-                    pokemon.removeSpecialCondition(SpecialCondition.CONFUSED);
+                    pokemon.removeSpecialCondition(card_types_1.SpecialCondition.CONFUSED);
                 }
             }
         }
@@ -352,19 +355,20 @@ export function sandboxReducer(store, state, action, clientRoleId) {
     }
     return state;
 }
+exports.sandboxReducer = sandboxReducer;
 function getZone(player, zone) {
     switch (zone) {
-        case CardZone.HAND:
+        case sandbox_modify_card_action_1.CardZone.HAND:
             return player.hand;
-        case CardZone.DECK:
+        case sandbox_modify_card_action_1.CardZone.DECK:
             return player.deck;
-        case CardZone.DISCARD:
+        case sandbox_modify_card_action_1.CardZone.DISCARD:
             return player.discard;
-        case CardZone.LOSTZONE:
+        case sandbox_modify_card_action_1.CardZone.LOSTZONE:
             return player.lostzone;
-        case CardZone.STADIUM:
+        case sandbox_modify_card_action_1.CardZone.STADIUM:
             return player.stadium;
-        case CardZone.SUPPORTER:
+        case sandbox_modify_card_action_1.CardZone.SUPPORTER:
             return player.supporter;
         default:
             return undefined;

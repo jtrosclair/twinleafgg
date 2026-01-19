@@ -26,7 +26,7 @@ class HolonMentor extends trainer_card_1.TrainerCard {
             if (supporterTurn > 0) {
                 throw new game_1.GameError(game_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
             }
-            trainer_prefabs_1.DISCARD_X_CARDS_FROM_YOUR_HAND(effect, store, state, 1, 1);
+            (0, trainer_prefabs_1.DISCARD_X_CARDS_FROM_YOUR_HAND)(effect, store, state, 1, 1);
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             effect.preventDefault = true;
             const blocked = player.deck.cards.reduce((acc, c, index) => {
@@ -35,7 +35,7 @@ class HolonMentor extends trainer_card_1.TrainerCard {
                 }
                 return acc;
             }, []);
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND(store, state, player, {}, { min: 0, max: 3, allowCancel: false, blocked });
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND)(store, state, player, {}, { min: 0, max: 3, allowCancel: false, blocked });
             player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
         }

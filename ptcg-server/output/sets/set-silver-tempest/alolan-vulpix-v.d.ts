@@ -13,7 +13,7 @@ export declare class AlolanVulpixV extends PokemonCard {
     retreat: CardType[];
     attacks: ({
         name: string;
-        cost: never[];
+        cost: any[];
         damage: number;
         damageCalculation: string;
         text: string;

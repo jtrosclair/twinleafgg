@@ -43,7 +43,7 @@ class SolgaleoLunalaGX extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Cosmic Burn
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (effect.player.active.marker.hasMarker(this.COSMIC_BURN_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
             }
@@ -56,10 +56,10 @@ class SolgaleoLunalaGX extends game_1.PokemonCard {
                 player.marker.addMarker(this.PLAYED_LILLIES_FULL_FORCE_MARKER, this);
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             if (player.marker.hasMarker(this.PLAYED_LILLIES_FULL_FORCE_MARKER, this)) {
                 player.marker.addMarker(this.LIGHT_OF_THE_PROTECTOR_MARKER, this);

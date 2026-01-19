@@ -41,7 +41,7 @@ class DialgaG extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Deafen
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             effect.opponent.marker.addMarker(this.DEAFEN_MARKER, this);
         }
         if ((effect instanceof play_card_effects_1.PlayItemEffect
@@ -52,7 +52,7 @@ class DialgaG extends pokemon_card_1.PokemonCard {
             effect.player.marker.removeMarker(this.DEAFEN_MARKER, this);
         }
         // Second Strike
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             if (effect.opponent.active.damage >= 20) {
                 effect.damage += 20;
             }

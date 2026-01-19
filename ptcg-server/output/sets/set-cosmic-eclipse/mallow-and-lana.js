@@ -42,14 +42,14 @@ class MallowAndLana extends trainer_card_1.TrainerCard {
                 const previousActiveCardList = player.active;
                 player.switchPokemon(cardList);
                 if (player.hand.cards.length < 2 || !activeHasDamage) {
-                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     return state;
                 }
                 state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_message_1.GameMessage.WANT_TO_HEAL_POKEMON), wantToUse => {
                     if (wantToUse) {
                         state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {}, { allowCancel: false, min: 2, max: 2 }), cards => {
                             cards = cards || [];
-                            prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: this });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: this });
                             cards.forEach((card, index) => {
                                 store.log(state, game_message_1.GameLog.LOG_PLAYER_DISCARDS_CARD_FROM_HAND, { name: player.name, card: card.name });
                             });
@@ -58,7 +58,7 @@ class MallowAndLana extends trainer_card_1.TrainerCard {
                             store.log(state, game_message_1.GameLog.LOG_PLAYER_HEALS_POKEMON, { name: player.name, pokemon: previousActiveCardList.getPokemonCard().name, healingAmount: 120 });
                         });
                     }
-                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 });
             });
         }

@@ -36,7 +36,7 @@ class Swoobat extends pokemon_card_1.PokemonCard {
         this.fullName = 'Swoobat BCR';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
@@ -44,9 +44,9 @@ class Swoobat extends pokemon_card_1.PokemonCard {
             const totalPsychicEnergy = checkProvidedEnergy.energyMap.reduce((sum, energy) => {
                 return sum + energy.provides.filter(type => type === card_types_1.CardType.PSYCHIC || type === card_types_1.CardType.ANY).length;
             }, 0);
-            prefabs_1.MOVE_CARDS(store, state, opponent.deck, opponent.discard, { count: totalPsychicEnergy, sourceCard: this, sourceEffect: this.attacks[0] });
+            (0, prefabs_1.MOVE_CARDS)(store, state, opponent.deck, opponent.discard, { count: totalPsychicEnergy, sourceCard: this, sourceEffect: this.attacks[0] });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             return store.prompt(state, [
                 new game_1.CoinFlipPrompt(player.id, game_1.GameMessage.COIN_FLIP),

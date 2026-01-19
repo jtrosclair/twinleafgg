@@ -63,11 +63,11 @@ class Archeops extends game_1.PokemonCard {
             }
             return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_EVOLVE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { allowCancel: false, blocked }), targets => {
                 player.marker.addMarker(this.PRIMAL_WINGS_MARKER, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 if (!targets || targets.length === 0) {
                     return state;
                 }
-                prefabs_1.DEVOLVE_POKEMON(store, state, targets[0], opponent.hand);
+                (0, prefabs_1.DEVOLVE_POKEMON)(store, state, targets[0], opponent.hand);
                 return state;
             });
         }

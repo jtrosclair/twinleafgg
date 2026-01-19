@@ -42,9 +42,9 @@ class UnownVSTAR extends pokemon_card_1.PokemonCard {
         this.STAR_CIPHER_MARKER = 'STAR_CIPHER_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            return prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 3, results => {
+            return (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 3, results => {
                 let heads = 0;
                 results.forEach(r => {
                     if (r)
@@ -54,12 +54,12 @@ class UnownVSTAR extends pokemon_card_1.PokemonCard {
             });
         }
         // Star Cipher
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             if (player.usedVSTAR === true) {
                 throw new game_1.GameError(game_1.GameMessage.LABEL_VSTAR_USED);
             }
-            prefabs_1.ADD_MARKER(this.STAR_CIPHER_MARKER, player, this);
+            (0, prefabs_1.ADD_MARKER)(this.STAR_CIPHER_MARKER, player, this);
             player.usedVSTAR = true;
         }
         if (effect instanceof check_effects_1.CheckPokemonPowersEffect && effect.target.cards.includes(this)) {
@@ -78,7 +78,7 @@ class UnownVSTAR extends pokemon_card_1.PokemonCard {
             if (!isThisInPlay) {
                 return state;
             }
-            if (!prefabs_1.HAS_MARKER(this.STAR_CIPHER_MARKER, player, this)) {
+            if (!(0, prefabs_1.HAS_MARKER)(this.STAR_CIPHER_MARKER, player, this)) {
                 return state;
             }
             // Add the power
@@ -103,10 +103,10 @@ class UnownVSTAR extends pokemon_card_1.PokemonCard {
             if (!isUnownInPlay) {
                 return state;
             }
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, opponent, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
-            if (!prefabs_1.HAS_MARKER(this.STAR_CIPHER_MARKER, opponent, this)) {
+            if (!(0, prefabs_1.HAS_MARKER)(this.STAR_CIPHER_MARKER, opponent, this)) {
                 return state;
             }
             // Check if weakness can be changed

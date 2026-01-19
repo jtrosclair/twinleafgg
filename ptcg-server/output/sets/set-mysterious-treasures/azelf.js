@@ -39,7 +39,7 @@ class Azelf extends pokemon_card_1.PokemonCard {
         // Sticky Membrane
         if (effect instanceof check_effects_1.CheckAttackCostEffect) {
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
-            if (!prefabs_1.IS_POKEBODY_BLOCKED(store, state, opponent, this) && ((_a = opponent.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.stage) === card_types_1.Stage.BASIC) {
+            if (!(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, opponent, this) && ((_a = opponent.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.stage) === card_types_1.Stage.BASIC) {
                 let isAzelfInPlay = false;
                 let isMespritInPlay = false;
                 let isUxieInPlay = false;
@@ -67,7 +67,7 @@ class Azelf extends pokemon_card_1.PokemonCard {
                 effect.cost.push(card_types_1.CardType.COLORLESS);
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             opponent.marker.addMarker(this.BIND_PULSE_MARKER, this);

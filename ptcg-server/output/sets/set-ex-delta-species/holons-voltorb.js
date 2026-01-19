@@ -42,7 +42,7 @@ class HolonsVoltorb extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // The Special Energy Stuff
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.energyPlayedTurn === state.turn) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -65,10 +65,10 @@ class HolonsVoltorb extends pokemon_card_1.PokemonCard {
             effect.energyMap.push({ card: this, provides: this.provides });
         }
         // Thundershock
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, (result => {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, (result => {
                 if (result) {
-                    prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+                    (0, prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
                 }
             }));
         }

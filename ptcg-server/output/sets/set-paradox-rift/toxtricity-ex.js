@@ -40,12 +40,12 @@ class Toxtricityex extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Knocking Hammer
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.MOVE_CARDS(store, state, effect.opponent.deck, effect.opponent.discard, { count: 1, sourceCard: this, sourceEffect: this.attacks[0] });
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.MOVE_CARDS)(store, state, effect.opponent.deck, effect.opponent.discard, { count: 1, sourceCard: this, sourceEffect: this.attacks[0] });
         }
         // Gaia Punk
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 3, L);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 3, L);
         }
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
             const player = effect.player;

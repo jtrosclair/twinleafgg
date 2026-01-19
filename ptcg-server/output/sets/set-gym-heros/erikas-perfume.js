@@ -20,7 +20,7 @@ class ErikasPerfume extends trainer_card_1.TrainerCard {
         this.text = 'Look at your opponent\'s hand. If he or she has any Basic Pokémon cards there, you may put any number of them onto your opponent\'s Bench (as long as there\'s room).';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const slots = opponent.bench.filter(b => b.cards.length === 0);

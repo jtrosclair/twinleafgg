@@ -63,7 +63,7 @@ class Empoleon extends pokemon_card_1.PokemonCard {
             const cards = player.discard.cards.filter(c => c === this);
             cards.forEach(card => {
                 player.discard.moveCardTo(card, slots[0]); // Move to Bench
-                prefabs_1.DRAW_CARDS(player, 3);
+                (0, prefabs_1.DRAW_CARDS)(player, 3);
             });
             if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.EMERGENCY_SURFACING_MARKER, this)) {
                 effect.player.marker.removeMarker(this.EMERGENCY_SURFACING_MARKER, this);
@@ -74,7 +74,7 @@ class Empoleon extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             return store.prompt(state, new __1.ChoosePokemonPrompt(player.id, game_message_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, __1.PlayerType.TOP_PLAYER, [__1.SlotType.ACTIVE, __1.SlotType.BENCH], { min: 1, max: 1, allowCancel: false }), selected => {
                 const targets = selected || [];
-                prefabs_1.DAMAGE_OPPONENT_POKEMON(store, state, effect, 30, targets);
+                (0, prefabs_1.DAMAGE_OPPONENT_POKEMON)(store, state, effect, 30, targets);
             });
         }
         return state;

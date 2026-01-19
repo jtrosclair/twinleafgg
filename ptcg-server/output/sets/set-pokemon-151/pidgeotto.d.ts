@@ -9,7 +9,7 @@ export declare class Pidgeotto extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    retreat: never[];
+    retreat: any[];
     resistance: {
         type: CardType;
         value: number;

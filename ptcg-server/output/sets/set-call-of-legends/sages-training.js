@@ -41,7 +41,7 @@ class SagesTraining extends trainer_card_1.TrainerCard {
                 player.ancientSupporter = true;
                 deckTop.moveCardsTo(selected, player.hand);
                 deckTop.moveTo(player.discard);
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             });
         }
         return state;

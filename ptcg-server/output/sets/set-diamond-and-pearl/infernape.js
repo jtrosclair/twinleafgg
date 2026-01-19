@@ -35,7 +35,7 @@ class Infernape extends pokemon_card_1.PokemonCard {
         this.fullName = 'Infernape DP';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const flipCoin = (heads = 0) => {
                 return store.prompt(state, [
@@ -50,13 +50,13 @@ class Infernape extends pokemon_card_1.PokemonCard {
             };
             return flipCoin();
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, player.active);
             store.reduceEffect(state, checkProvidedEnergy);
             checkProvidedEnergy.energyMap.forEach(em => {
                 if (em.provides.includes(card_types_1.CardType.FIRE) || em.provides.includes(card_types_1.CardType.ANY)) {
-                    prefabs_1.MOVE_CARDS(store, state, player.active, player.discard, { cards: [em.card] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.active, player.discard, { cards: [em.card] });
                 }
             });
         }

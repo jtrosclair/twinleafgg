@@ -34,7 +34,7 @@ class Weavile extends pokemon_card_1.PokemonCard {
         this.fullName = 'Weavile M2';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.active.hp <= 50) {
                 effect.damage += 170;

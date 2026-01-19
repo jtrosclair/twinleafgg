@@ -47,7 +47,7 @@ class Snorlax extends pokemon_card_1.PokemonCard {
             });
             if (isSnorlaxInPlay) {
                 // Try to reduce PowerEffect, to check if something is blocking our ability
-                if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this))
+                if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this))
                     return state;
                 // Check if Block can target the retreating Pokemon
                 const canApplyAbility = new game_effects_1.EffectOfAbilityEffect(opponent, this.powers[0], this, player.active);

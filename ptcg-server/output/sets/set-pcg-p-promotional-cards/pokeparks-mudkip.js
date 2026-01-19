@@ -33,8 +33,8 @@ class PokeParksMudkip extends pokemon_card_1.PokemonCard {
         this.setNumber = '48';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, (result) => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, (result) => {
                 if (result) {
                     const player = effect.player;
                     const opponent = effect.opponent;

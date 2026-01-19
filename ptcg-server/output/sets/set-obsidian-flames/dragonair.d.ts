@@ -9,7 +9,7 @@ export declare class Dragonair extends PokemonCard {
     evolvesFrom: string;
     cardType: CardType;
     hp: number;
-    weakness: never[];
+    weakness: any[];
     retreat: CardType[];
     attacks: ({
         name: string;

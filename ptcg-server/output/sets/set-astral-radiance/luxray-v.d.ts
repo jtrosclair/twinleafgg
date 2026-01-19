@@ -10,7 +10,7 @@ export declare class LuxrayV extends PokemonCard {
     weakness: {
         type: import("../../game").CardType.FIGHTING;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: import("../../game").CardType.COLORLESS[];
     attacks: {
         name: string;

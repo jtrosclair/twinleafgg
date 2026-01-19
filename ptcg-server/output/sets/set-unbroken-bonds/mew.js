@@ -36,8 +36,8 @@ class Mew extends pokemon_card_1.PokemonCard {
         this.fullName = 'Mew UNB';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_2.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE(3, store, state, effect);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_2.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE)(3, store, state, effect);
         }
         if (effect instanceof attack_effects_1.PutDamageEffect) {
             // Find the owner of the target (the defending player)

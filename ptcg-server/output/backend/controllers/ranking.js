@@ -46,7 +46,7 @@ class Ranking extends controller_1.Controller {
         }
         const escapedQuery = this.escapeLikeString(query);
         const [users, total] = await storage_1.User.findAndCount({
-            where: { name: typeorm_1.Like(`%${escapedQuery}%`) },
+            where: { name: (0, typeorm_1.Like)(`%${escapedQuery}%`) },
             order: { ranking: 'DESC', lastRankingChange: 'DESC', registered: 'ASC' },
             skip: page * pageSize,
             take: pageSize
@@ -71,17 +71,17 @@ class Ranking extends controller_1.Controller {
     }
 }
 __decorate([
-    controller_1.Get('/list/:page?/:pageSize?'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/list/:page?/:pageSize?'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Ranking.prototype, "onList", null);
 __decorate([
-    controller_1.Post('/list/:page?/:pageSize?'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        query: services_1.check().isString().required()
+    (0, controller_1.Post)('/list/:page?/:pageSize?'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        query: (0, services_1.check)().isString().required()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),

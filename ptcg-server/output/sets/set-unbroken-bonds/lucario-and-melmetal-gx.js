@@ -45,7 +45,7 @@ class LucarioMelmetalGX extends game_1.PokemonCard {
     reduceEffect(store, state, effect) {
         var _a;
         // Steel Fist
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.deck.cards.length === 0) {
                 return state;
@@ -60,14 +60,14 @@ class LucarioMelmetalGX extends game_1.PokemonCard {
                 if (cards.length > 0) {
                     player.deck.moveCardsTo(cards, player.active);
                 }
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
         }
         // Full Metal Wall-GX
-        if (prefabs_1.WAS_ATTACK_USED(effect, 2, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             player.usedFullMetalWall = true;
             const extraEffectCost = [C, C];

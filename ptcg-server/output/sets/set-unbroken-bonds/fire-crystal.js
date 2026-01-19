@@ -47,7 +47,7 @@ class FireCrystal extends trainer_card_1.TrainerCard {
         this.text = 'Put 3 [R] Energy cards from your discard pile into your hand.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             // Check if DiscardToHandEffect is prevented
             const discardEffect = new play_card_effects_1.DiscardToHandEffect(player, this);

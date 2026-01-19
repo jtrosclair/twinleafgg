@@ -34,7 +34,7 @@ class Zubat extends game_1.PokemonCard {
         this.REVEALING_ECHO_MARKER = 'REVEALING_ECHO_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (effect.player.active.getPokemonCard() !== this) {
@@ -43,14 +43,14 @@ class Zubat extends game_1.PokemonCard {
             if (opponent.hand.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            if (prefabs_1.HAS_MARKER(this.REVEALING_ECHO_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.REVEALING_ECHO_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, player, opponent.hand.cards);
-            prefabs_1.ADD_MARKER(this.REVEALING_ECHO_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, player, opponent.hand.cards);
+            (0, prefabs_1.ADD_MARKER)(this.REVEALING_ECHO_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.REVEALING_ECHO_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.REVEALING_ECHO_MARKER, this);
         return state;
     }
 }

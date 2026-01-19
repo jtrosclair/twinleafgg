@@ -20,7 +20,7 @@ function* playCard(next, store, state, effect) {
         const afterDamage = new attack_effects_1.AfterDamageEffect(effect, effect.damage);
         state = store.reduceEffect(state, afterDamage);
     }
-    costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 2);
+    (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 2);
     return state;
 }
 class GBooster extends trainer_card_1.TrainerCard {

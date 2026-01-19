@@ -32,7 +32,7 @@ class Clamperl extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Shell Press
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             opponent.marker.addMarker(this.SHELL_PRESS_MARKER, this);
         }

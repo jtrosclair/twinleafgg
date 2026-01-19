@@ -36,7 +36,7 @@ class LuxrayGL extends pokemon_card_1.PokemonCard {
         this.fullName = 'Luxray GL RR';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             // Prompt player to choose cards to discard 
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, { superType: card_types_1.SuperType.ENERGY }, { allowCancel: false, min: 0, max: 1 }), cards => {
@@ -45,7 +45,7 @@ class LuxrayGL extends pokemon_card_1.PokemonCard {
                     effect.damage = 0;
                     return state;
                 }
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: cards });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: cards });
                 return state;
             });
         }

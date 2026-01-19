@@ -36,7 +36,7 @@ class Amoongus extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Dangerous Reaction
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (effect.opponent.active.specialConditions.length > 0) {
                 effect.damage += 120;
             }

@@ -35,11 +35,11 @@ class Kyurem extends pokemon_card_1.PokemonCard {
         this.fullName = 'Kyurem BWP';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const damageCounters = effect.player.active.damage;
             effect.damage += damageCounters * 10;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = effect.opponent;
             const benched = opponent.bench.filter(b => b.cards.length > 0);
             const activeDamageEffect = new attack_effects_1.DealDamageEffect(effect, 80);

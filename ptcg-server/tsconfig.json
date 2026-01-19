@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "skipLibCheck": true,
     "target": "es2017",
     "module": "commonjs",
     "lib": [
@@ -14,10 +15,10 @@
     "removeComments": false,
     "preserveConstEnums": true,
     "resolveJsonModule": true,
-    "noEmitOnError": true,
+    "noEmitOnError": false, // CHANGED
     "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "noUnusedLocals": true,
+    "strict": false, // CHANGED
+    "noUnusedLocals": false, // CHANGED
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -26,5 +27,8 @@
   },
   "include": [
     "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

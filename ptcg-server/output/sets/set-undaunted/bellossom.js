@@ -39,22 +39,22 @@ class Bellossom extends pokemon_card_1.PokemonCard {
         this.HUSTLE_STEP_MARKER = 'HUSTLE_STEP_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.HUSTLE_STEP_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             player.marker.addMarker(this.HUSTLE_STEP_MARKER, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             player.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
                 const healEffect = new game_effects_1.HealEffect(player, cardList, 10);
                 state = store.reduceEffect(state, healEffect);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 3, results => {
+            (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 3, results => {
                 let heads = 0;
                 results.forEach(r => {
                     if (r)
@@ -62,7 +62,7 @@ class Bellossom extends pokemon_card_1.PokemonCard {
                 });
                 effect.damage = 30 * heads;
             });
-            prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, this);
+            (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, player, this);
         }
         return state;
     }

@@ -1,5 +1,5 @@
 import { Card } from '../store/card/card';
-export declare type SerializedState = string;
+export type SerializedState = string;
 export interface SerializerContext {
     cards: Card[];
 }

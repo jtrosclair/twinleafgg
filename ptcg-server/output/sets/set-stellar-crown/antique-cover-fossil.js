@@ -62,12 +62,12 @@ At any time during your turn, you may discard this card from play.`,
             }
             store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_ON_BOTTOM_OF_DECK, { name: player.name, card: this.name });
             // Move Lillie's Poke Doll to bottom of deck
-            state = prefabs_1.MOVE_CARDS(store, state, pokeDollCardList, player.deck, {
+            state = (0, prefabs_1.MOVE_CARDS)(store, state, pokeDollCardList, player.deck, {
                 cards: [this],
                 toBottom: true
             });
             // Move any attached cards to discard
-            state = prefabs_1.MOVE_CARDS(store, state, pokeDollCardList, player.discard, {
+            state = (0, prefabs_1.MOVE_CARDS)(store, state, pokeDollCardList, player.discard, {
                 cards: pokeDollCardList.cards.filter(c => c !== this)
             });
         }

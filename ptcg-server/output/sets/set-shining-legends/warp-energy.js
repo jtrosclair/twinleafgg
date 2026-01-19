@@ -24,10 +24,10 @@ class WarpEnergy extends energy_card_1.EnergyCard {
             const player = effect.player;
             if (effect.player.active !== effect.target
                 || player.bench.length <= 0
-                || prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {
+                || (0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, effect.target)) {
                 return state;
             }
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
         }
         return state;
     }

@@ -38,80 +38,80 @@ let Match = class Match extends typeorm_1.BaseEntity {
     }
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Match.prototype, "id", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => user_1.User),
+    (0, typeorm_1.ManyToOne)(type => user_1.User),
     __metadata("design:type", user_1.User)
 ], Match.prototype, "player1", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => user_1.User),
+    (0, typeorm_1.ManyToOne)(type => user_1.User),
     __metadata("design:type", user_1.User)
 ], Match.prototype, "player2", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Match.prototype, "ranking1", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Match.prototype, "rankingStake1", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Match.prototype, "ranking2", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Match.prototype, "rankingStake2", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Match.prototype, "winner", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'bigint', transformer: [bigint_1.bigint] }),
+    (0, typeorm_1.Column)({ type: 'bigint', transformer: [bigint_1.bigint] }),
     __metadata("design:type", Number)
 ], Match.prototype, "created", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'blob', transformer: [blob_1.blob] }),
+    (0, typeorm_1.Column)({ type: 'blob', transformer: [blob_1.blob] }),
     __metadata("design:type", String)
 ], Match.prototype, "replayData", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'varchar', length: 50, nullable: true }),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 50, nullable: true }),
     __metadata("design:type", String)
 ], Match.prototype, "player1Archetype", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'varchar', length: 50, nullable: true }),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 50, nullable: true }),
     __metadata("design:type", String)
 ], Match.prototype, "player1Archetype2", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'varchar', length: 50, nullable: true }),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 50, nullable: true }),
     __metadata("design:type", String)
 ], Match.prototype, "player2Archetype", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'varchar', length: 50, nullable: true }),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 50, nullable: true }),
     __metadata("design:type", String)
 ], Match.prototype, "player2Archetype2", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'varchar', length: 100, nullable: true }),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 100, nullable: true }),
     __metadata("design:type", String)
 ], Match.prototype, "player1DeckName", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'varchar', length: 100, nullable: true }),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 100, nullable: true }),
     __metadata("design:type", String)
 ], Match.prototype, "player2DeckName", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'int', nullable: true }),
-    typeorm_1.Index(),
-    __metadata("design:type", Object)
+    (0, typeorm_1.Column)({ type: 'int', nullable: true }),
+    (0, typeorm_1.Index)(),
+    __metadata("design:type", Number)
 ], Match.prototype, "player1DeckId", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'int', nullable: true }),
-    typeorm_1.Index(),
-    __metadata("design:type", Object)
+    (0, typeorm_1.Column)({ type: 'int', nullable: true }),
+    (0, typeorm_1.Index)(),
+    __metadata("design:type", Number)
 ], Match.prototype, "player2DeckId", void 0);
 Match = __decorate([
-    typeorm_1.Entity()
+    (0, typeorm_1.Entity)()
 ], Match);
 exports.Match = Match;

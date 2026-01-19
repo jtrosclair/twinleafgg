@@ -27,7 +27,7 @@ class LostWorld extends trainer_card_1.TrainerCard {
             if (opponent.lostzone.cards.filter(c => c instanceof game_1.PokemonCard).length < 6) {
                 throw new game_1.GameError(game_message_1.GameMessage.CANNOT_USE_STADIUM);
             }
-            state = check_effect_1.endGame(store, state, winner);
+            state = (0, check_effect_1.endGame)(store, state, winner);
         }
         return state;
     }

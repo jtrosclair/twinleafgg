@@ -28,15 +28,15 @@ class MistysPsyduck extends game_1.PokemonCard {
         this.fullName = 'Misty\'s Psyduck DRI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.BLOCK_IF_DECK_EMPTY(player);
+            (0, prefabs_1.BLOCK_IF_DECK_EMPTY)(player);
             const cardList = game_1.StateUtils.findCardList(state, this);
             if (player.active.cards.includes(this) || opponent.active.cards.includes(this)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            player.deck.moveCardsTo(prefabs_1.GET_CARDS_ON_BOTTOM_OF_DECK(player, 1), player.discard);
+            player.deck.moveCardsTo((0, prefabs_1.GET_CARDS_ON_BOTTOM_OF_DECK)(player, 1), player.discard);
             const psyduckCard = cardList.getPokemonCard();
             if (!psyduckCard) {
                 return state;
@@ -54,12 +54,12 @@ class MistysPsyduck extends game_1.PokemonCard {
             }
             // Move other cards to discard first
             if (otherCards.length > 0) {
-                prefabs_1.MOVE_CARDS(store, state, cardList, player.discard, { cards: otherCards });
+                (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.discard, { cards: otherCards });
             }
             // Create temporary card list and move Psyduck to top of deck
             const deckTop = new game_1.CardList();
-            prefabs_1.MOVE_CARDS(store, state, cardList, deckTop, { cards: [psyduckCard] });
-            prefabs_1.MOVE_CARDS(store, state, deckTop, player.deck, { toTop: true });
+            (0, prefabs_1.MOVE_CARDS)(store, state, cardList, deckTop, { cards: [psyduckCard] });
+            (0, prefabs_1.MOVE_CARDS)(store, state, deckTop, player.deck, { toTop: true });
             cardList.clearEffects();
         }
         return state;

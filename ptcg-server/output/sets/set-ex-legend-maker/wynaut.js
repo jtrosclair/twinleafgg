@@ -33,7 +33,7 @@ class Wynaut extends pokemon_card_1.PokemonCard {
         this.fullName = 'Wynaut LM';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasWobbuffet = player.hand.cards.some(card => card instanceof pokemon_card_1.PokemonCard && card.name === 'Wobbuffet');
             // Check if Wobbuffet is in the player's hand
@@ -63,9 +63,9 @@ class Wynaut extends pokemon_card_1.PokemonCard {
                 return state;
             });
         }
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-            prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
+            (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, effect.player, this);
         }
         return state;
     }

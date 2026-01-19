@@ -28,38 +28,38 @@ let Replay = class Replay extends typeorm_1.BaseEntity {
     }
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Replay.prototype, "id", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => user_1.User),
+    (0, typeorm_1.ManyToOne)(type => user_1.User),
     __metadata("design:type", user_1.User)
 ], Replay.prototype, "user", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Replay.prototype, "name", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'simple-json' }),
+    (0, typeorm_1.Column)({ type: 'simple-json' }),
     __metadata("design:type", Object)
 ], Replay.prototype, "player1", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'simple-json' }),
+    (0, typeorm_1.Column)({ type: 'simple-json' }),
     __metadata("design:type", Object)
 ], Replay.prototype, "player2", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Replay.prototype, "winner", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'bigint', transformer: [bigint_1.bigint] }),
+    (0, typeorm_1.Column)({ type: 'bigint', transformer: [bigint_1.bigint] }),
     __metadata("design:type", Number)
 ], Replay.prototype, "created", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'blob', transformer: [blob_1.blob] }),
+    (0, typeorm_1.Column)({ type: 'blob', transformer: [blob_1.blob] }),
     __metadata("design:type", String)
 ], Replay.prototype, "replayData", void 0);
 Replay = __decorate([
-    typeorm_1.Entity()
+    (0, typeorm_1.Entity)()
 ], Replay);
 exports.Replay = Replay;

@@ -30,7 +30,7 @@ class Flareon extends game_1.PokemonCard {
         this.fullName = 'Flareon PLF';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let pokemonCount = 0;
             player.discard.cards.forEach(c => {
@@ -39,8 +39,8 @@ class Flareon extends game_1.PokemonCard {
             });
             effect.damage += pokemonCount * 10;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 10);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF)(store, state, effect, 10);
         }
         return state;
     }

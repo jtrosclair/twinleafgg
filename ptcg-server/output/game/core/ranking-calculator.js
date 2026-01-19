@@ -85,8 +85,8 @@ class RankingCalculator {
         const yesterday = today - oneDay;
         const users = await storage_1.User.find({
             where: {
-                lastRankingChange: typeorm_1.LessThan(yesterday),
-                ranking: typeorm_1.MoreThan(0)
+                lastRankingChange: (0, typeorm_1.LessThan)(yesterday),
+                ranking: (0, typeorm_1.MoreThan)(0)
             }
         });
         users.forEach(user => {
@@ -94,8 +94,8 @@ class RankingCalculator {
             user.ranking = Math.floor(user.ranking * rankingDecreaseRate);
         });
         await storage_1.User.update({
-            lastRankingChange: typeorm_1.LessThan(yesterday),
-            ranking: typeorm_1.MoreThan(0)
+            lastRankingChange: (0, typeorm_1.LessThan)(yesterday),
+            ranking: (0, typeorm_1.MoreThan)(0)
         }, {
             lastRankingChange: today,
             ranking: () => `ROUND(${rankingDecreaseRate} * ranking - 0.5)`

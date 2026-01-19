@@ -55,7 +55,7 @@ class OriginFormeDialgaV extends pokemon_card_1.PokemonCard {
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_ATTACH, player.discard, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Metal Energy' }, { min: 0, max: 2, allowCancel: true }), cards => {
                 cards = cards || [];
                 if (cards.length > 0) {
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, cardList, { cards, sourceCard: this, sourceEffect: this.attacks[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, cardList, { cards, sourceCard: this, sourceEffect: this.attacks[0] });
                 }
             });
         }

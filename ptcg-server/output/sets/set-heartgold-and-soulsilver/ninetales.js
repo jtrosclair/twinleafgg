@@ -40,13 +40,13 @@ class Ninetales extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Energy Draw
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInHand = player.hand.cards.some(c => {
                 return c instanceof energy_card_1.EnergyCard && c.name === 'Fire Energy';
             });
             // One per turn only
-            if (prefabs_1.HAS_MARKER(this.ROAST_REVEAL_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.ROAST_REVEAL_MARKER, player, this)) {
                 throw new game_1.GameError(game_message_1.GameMessage.POWER_ALREADY_USED);
             }
             // Cannot use if affected by special conditions
@@ -63,17 +63,17 @@ class Ninetales extends pokemon_card_1.PokemonCard {
                     return;
                 }
                 player.hand.moveCardsTo(cards, player.discard);
-                prefabs_1.DRAW_CARDS(player, 3);
+                (0, prefabs_1.DRAW_CARDS)(player, 3);
             });
-            prefabs_1.ADD_MARKER(this.ROAST_REVEAL_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.ROAST_REVEAL_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             return state;
         }
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            prefabs_1.REMOVE_MARKER(this.ROAST_REVEAL_MARKER, player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.ROAST_REVEAL_MARKER, player, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.ROAST_REVEAL_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.ROAST_REVEAL_MARKER, this);
         return state;
     }
 }

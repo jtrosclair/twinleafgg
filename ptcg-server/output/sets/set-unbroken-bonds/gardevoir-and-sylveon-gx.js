@@ -55,14 +55,14 @@ class GardevoirSylveonGX extends game_1.PokemonCard {
                 transfers = transfers || [];
                 // cancelled by user
                 if (transfers.length === 0) {
-                    prefabs_1.SHUFFLE_DECK(store, state, player);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                     return;
                 }
                 for (const transfer of transfers) {
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
                     player.deck.moveCardTo(transfer.card, target);
                 }
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
         }
         // Kaleidostorm
@@ -83,7 +83,7 @@ class GardevoirSylveonGX extends game_1.PokemonCard {
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
             const player = effect.player;
             const opponent = effect.opponent;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             const extraEffectCost = [game_1.CardType.FAIRY, game_1.CardType.FAIRY, game_1.CardType.FAIRY, game_1.CardType.FAIRY, game_1.CardType.FAIRY, game_1.CardType.FAIRY];
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);

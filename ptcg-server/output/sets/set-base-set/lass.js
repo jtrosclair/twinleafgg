@@ -33,7 +33,7 @@ class Lass extends trainer_card_1.TrainerCard {
             const moveTrainersToDeck = (store, state, hand, deck) => {
                 const trainers = hand.cards.filter((c) => c.superType === card_types_1.SuperType.TRAINER);
                 if (trainers.length > 0) {
-                    state = prefabs_1.MOVE_CARDS(store, state, hand, deck, { cards: trainers, sourceCard: this });
+                    state = (0, prefabs_1.MOVE_CARDS)(store, state, hand, deck, { cards: trainers, sourceCard: this });
                 }
                 return state;
             };
@@ -45,14 +45,14 @@ class Lass extends trainer_card_1.TrainerCard {
                     state = moveTrainersToDeck(store, state, opponent.hand, opponent.deck);
                     // Discard Lass (if needed)
                     if (player.hand.cards.includes(effect.trainerCard)) {
-                        state = prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: [effect.trainerCard], sourceCard: this });
+                        state = (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: [effect.trainerCard], sourceCard: this });
                     }
                     // Shuffle both decks
                     return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), playerOrder => {
                         player.deck.applyOrder(playerOrder);
                         return store.prompt(state, new game_1.ShuffleDeckPrompt(opponent.id), opponentOrder => {
                             opponent.deck.applyOrder(opponentOrder);
-                            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                             return state;
                         });
                     });

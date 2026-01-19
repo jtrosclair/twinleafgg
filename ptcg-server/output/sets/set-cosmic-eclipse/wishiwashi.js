@@ -72,10 +72,10 @@ class Wishiwashi extends pokemon_card_1.PokemonCard {
                                     }
                                 }
                                 if (otherCards.length > 0) {
-                                    prefabs_1.MOVE_CARDS(store, state, cardList, opponent.deck, { cards: otherCards });
+                                    (0, prefabs_1.MOVE_CARDS)(store, state, cardList, opponent.deck, { cards: otherCards });
                                 }
                                 if (pokemons.length > 0) {
-                                    prefabs_1.MOVE_CARDS(store, state, cardList, opponent.deck, { cards: pokemons });
+                                    (0, prefabs_1.MOVE_CARDS)(store, state, cardList, opponent.deck, { cards: pokemons });
                                 }
                                 return store.prompt(state, new game_1.ShuffleDeckPrompt(opponent.id), order => {
                                     opponent.deck.applyOrder(order);

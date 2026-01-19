@@ -50,7 +50,7 @@ class MegaGengarex extends game_1.PokemonCard {
                     hasThisInPlay = true;
                 }
             });
-            if (!hasThisInPlay || prefabs_1.IS_ABILITY_BLOCKED(store, state, opponent, this)) {
+            if (!hasThisInPlay || (0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
             // Target must be a Darkness Pokémon
@@ -76,11 +76,11 @@ class MegaGengarex extends game_1.PokemonCard {
                 effect.prizeCount -= 1;
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.ADD_MARKER(this.VOID_GALE_MARKER, effect.player, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.ADD_MARKER)(this.VOID_GALE_MARKER, effect.player, this);
             return state;
         }
-        if (effect instanceof game_phase_effects_1.AfterAttackEffect && prefabs_1.HAS_MARKER(this.VOID_GALE_MARKER, effect.player, this)) {
+        if (effect instanceof game_phase_effects_1.AfterAttackEffect && (0, prefabs_1.HAS_MARKER)(this.VOID_GALE_MARKER, effect.player, this)) {
             const player = effect.player;
             const hasBench = player.bench.some(b => b.cards.length > 0);
             if (hasBench === false) {
@@ -95,7 +95,7 @@ class MegaGengarex extends game_1.PokemonCard {
                 }
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.VOID_GALE_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.VOID_GALE_MARKER, this);
         return state;
     }
 }

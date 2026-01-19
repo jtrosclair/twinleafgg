@@ -27,7 +27,7 @@ class HolonEnergyFF extends energy_card_1.EnergyCard {
             && effect.target
             && effect.target.cards.includes(this)
             && !effect.target.tags.includes(card_types_1.CardTag.POKEMON_ex)
-            && !prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.opponent, this, effect.target)) {
+            && !(0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.opponent, this, effect.target)) {
             console.log('Holon Energy FF effect');
             if (effect.target.energies.cards.some((card) => card.energyType === card_types_1.EnergyType.BASIC && card.name === 'Fire Energy')) {
                 console.log('Holon Energy FF effect & fire energy detected');
@@ -38,7 +38,7 @@ class HolonEnergyFF extends energy_card_1.EnergyCard {
             && effect.source
             && effect.source.cards.includes(this)
             && !((_a = effect.source.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.tags.includes(card_types_1.CardTag.POKEMON_ex))
-            && !prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.source)) {
+            && !(0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.player, this, effect.source)) {
             if (effect.source.energies.cards.some((card) => card.energyType === card_types_1.EnergyType.BASIC && card.name === 'Fighting Energy')) {
                 effect.ignoreResistance = true;
             }
@@ -48,7 +48,7 @@ class HolonEnergyFF extends energy_card_1.EnergyCard {
             && effect.target.energies.cards.some((card) => card.energyType === card_types_1.EnergyType.BASIC && card.name === 'Fire Energy')) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (!prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, opponent, this, effect.target)) {
+            if (!(0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, opponent, this, effect.target)) {
                 const target = effect.target.getPokemonCard();
                 if (target) {
                     effect.weakness = [];

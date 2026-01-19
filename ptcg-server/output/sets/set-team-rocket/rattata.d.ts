@@ -13,7 +13,7 @@ export declare class Rattata extends PokemonCard {
         type: CardType.PSYCHIC;
         value: number;
     }[];
-    retreat: never[];
+    retreat: any[];
     powers: {
         name: string;
         useWhenInPlay: boolean;

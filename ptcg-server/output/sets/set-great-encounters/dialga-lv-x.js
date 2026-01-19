@@ -49,37 +49,37 @@ class DialgaLVX extends pokemon_card_1.PokemonCard {
         this.METAL_FLASH_USED_2_MARKER = 'METAL_FLASH_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.TIME_SKIP_USED_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.TIME_SKIP_USED_MARKER, this);
         // Time Skip
-        if (effect instanceof game_phase_effects_1.BeginTurnEffect && prefabs_1.HAS_MARKER(this.TIME_SKIP_EFFECT_MARKER, effect.player, this)) {
-            prefabs_1.REMOVE_MARKER(this.TIME_SKIP_EFFECT_MARKER, effect.player, this);
+        if (effect instanceof game_phase_effects_1.BeginTurnEffect && (0, prefabs_1.HAS_MARKER)(this.TIME_SKIP_EFFECT_MARKER, effect.player, this)) {
+            (0, prefabs_1.REMOVE_MARKER)(this.TIME_SKIP_EFFECT_MARKER, effect.player, this);
             const endTurnEffect = new game_phase_effects_1.EndTurnEffect(effect.player);
             return store.reduceEffect(state, endTurnEffect);
         }
-        if (prefabs_1.WAS_POWER_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
-            if (prefabs_1.HAS_MARKER(this.TIME_SKIP_USED_MARKER, player, this)) {
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
+            if ((0, prefabs_1.HAS_MARKER)(this.TIME_SKIP_USED_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, opponent, 2, results => {
+            (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, opponent, 2, results => {
                 if (results.every(result => result === true)) {
                     const endTurnEffect = new game_phase_effects_1.EndTurnEffect(player);
                     return store.reduceEffect(state, endTurnEffect);
                 }
                 if (results.every(result => result === false)) {
-                    prefabs_1.ADD_MARKER(this.TIME_SKIP_EFFECT_MARKER, opponent, this);
+                    (0, prefabs_1.ADD_MARKER)(this.TIME_SKIP_EFFECT_MARKER, opponent, this);
                 }
             });
-            prefabs_1.ADD_MARKER(this.TIME_SKIP_USED_MARKER, player, this);
+            (0, prefabs_1.ADD_MARKER)(this.TIME_SKIP_USED_MARKER, player, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.METAL_FLASH_USED_2_MARKER, this);
-        prefabs_1.REPLACE_MARKER_AT_END_OF_TURN(effect, this.METAL_FLASH_USED_MARKER, this.METAL_FLASH_USED_2_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.METAL_FLASH_USED_2_MARKER, this);
+        (0, prefabs_1.REPLACE_MARKER_AT_END_OF_TURN)(effect, this.METAL_FLASH_USED_MARKER, this.METAL_FLASH_USED_2_MARKER, this);
         // Metal Flash
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.BLOCK_EFFECT_IF_MARKER(this.METAL_FLASH_USED_2_MARKER, effect.player, this);
-            prefabs_1.ADD_MARKER(this.METAL_FLASH_USED_MARKER, effect.player, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.BLOCK_EFFECT_IF_MARKER)(this.METAL_FLASH_USED_2_MARKER, effect.player, this);
+            (0, prefabs_1.ADD_MARKER)(this.METAL_FLASH_USED_MARKER, effect.player, this);
         }
         // making sure it gets put on the active pokemon
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {

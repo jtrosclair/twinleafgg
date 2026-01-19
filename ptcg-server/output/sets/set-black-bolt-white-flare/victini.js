@@ -25,7 +25,7 @@ class Victini extends game_1.PokemonCard {
         this.fullName = 'Victini SV11B';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // Count number of benched Pokémon
             const benchedCount = player.bench.reduce((count, b) => count + (b.cards.length ? 1 : 0), 0);

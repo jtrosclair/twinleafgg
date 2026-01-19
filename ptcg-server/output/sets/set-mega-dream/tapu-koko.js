@@ -36,7 +36,7 @@ class TapuKoko extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Fast Flight
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // Discard all cards from hand
             const cards = player.hand.cards;
@@ -47,7 +47,7 @@ class TapuKoko extends pokemon_card_1.PokemonCard {
             }
         }
         // Thunder Blast
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             // Check if this Pokémon has at least 2 energy attached
             const energyCount = player.active.cards.filter(card => card.superType === card_types_1.SuperType.ENERGY).length;

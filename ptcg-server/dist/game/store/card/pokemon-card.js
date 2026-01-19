@@ -1,25 +1,28 @@
-import { Marker } from '../state/card-marker';
-import { Card } from './card';
-import { SuperType, Stage, PokemonType, CardType, Format } from './card-types';
-export class PokemonCard extends Card {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PokemonCard = void 0;
+const card_marker_1 = require("../state/card-marker");
+const card_1 = require("./card");
+const card_types_1 = require("./card-types");
+class PokemonCard extends card_1.Card {
     constructor() {
         super(...arguments);
-        this.superType = SuperType.POKEMON;
-        this.cardType = CardType.COLORLESS;
+        this.superType = card_types_1.SuperType.POKEMON;
+        this.cardType = card_types_1.CardType.COLORLESS;
         this.cardTag = [];
-        this.pokemonType = PokemonType.NORMAL;
+        this.pokemonType = card_types_1.PokemonType.NORMAL;
         this.evolvesFrom = '';
         this.evolvesTo = [];
         this.evolvesToStage = [];
-        this.stage = Stage.BASIC;
+        this.stage = card_types_1.Stage.BASIC;
         this.retreat = [];
         this.hp = 0;
         this.weakness = [];
         this.resistance = [];
         this.powers = [];
         this.attacks = [];
-        this.format = Format.NONE;
-        this.marker = new Marker();
+        this.format = card_types_1.Format.NONE;
+        this.marker = new card_marker_1.Marker();
         this.movedToActiveThisTurn = false;
         this.tools = [];
         this.maxTools = 1;
@@ -30,3 +33,4 @@ export class PokemonCard extends Card {
         return player.movedToActiveThisTurn.includes(this.id);
     }
 }
+exports.PokemonCard = PokemonCard;

@@ -19,7 +19,7 @@ export declare class UnownR extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: never[];
+        cost: any[];
         damage: number;
         text: string;
     }[];

@@ -49,17 +49,17 @@ class MrBrineysCompassion extends trainer_card_1.TrainerCard {
                     const tools = [...cardList.tools];
                     // Move other cards to hand
                     if (otherCards.length > 0) {
-                        prefabs_1.MOVE_CARDS(store, state, cardList, player.hand, { cards: otherCards, sourceCard: this });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.hand, { cards: otherCards, sourceCard: this });
                     }
                     // Move tools to hand explicitly
                     for (const tool of tools) {
-                        prefabs_1.MOVE_CARDS(store, state, cardList, player.hand, { cards: [tool], sourceCard: this });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.hand, { cards: [tool], sourceCard: this });
                     }
                     // Move Pokémon to hand
                     if (pokemons.length > 0) {
-                        prefabs_1.MOVE_CARDS(store, state, cardList, player.hand, { cards: pokemons, sourceCard: this });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.hand, { cards: pokemons, sourceCard: this });
                     }
-                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 }
             });
         }

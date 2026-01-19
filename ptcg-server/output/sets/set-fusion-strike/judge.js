@@ -24,7 +24,7 @@ class Judge extends trainer_card_1.TrainerCard {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             const cards = player.hand.cards.filter(c => c !== this);
-            prefabs_1.MOVE_CARDS(store, state, player.hand, player.deck, { sourceCard: this });
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck, { sourceCard: this });
             player.hand.moveCardsTo(cards, player.deck);
             opponent.hand.moveTo(opponent.deck);
             store.prompt(state, [

@@ -45,46 +45,46 @@ class Lugia extends pokemon_card_1.PokemonCard {
         this.P_CRYSTAL_MARKER = 'P_CRYSTAL_MARKER';
     }
     reduceEffect(store, state, effect) {
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.R_CRYSTAL_MARKER, this);
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.W_CRYSTAL_MARKER, this);
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.P_CRYSTAL_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.R_CRYSTAL_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.W_CRYSTAL_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.P_CRYSTAL_MARKER, this);
         if (effect instanceof play_card_effects_1.AttachEnergyEffect && effect.target.getPokemonCard() === this) {
             const player = effect.player;
             const energyCard = effect.energyCard;
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             if (effect.energyCard.energyType === card_types_1.EnergyType.BASIC) {
                 if (energyCard.provides.includes(card_types_1.CardType.FIRE)) {
-                    prefabs_1.REMOVE_MARKER(this.W_CRYSTAL_MARKER, player, this);
-                    prefabs_1.REMOVE_MARKER(this.P_CRYSTAL_MARKER, player, this);
-                    prefabs_1.ADD_MARKER(this.R_CRYSTAL_MARKER, player, this);
+                    (0, prefabs_1.REMOVE_MARKER)(this.W_CRYSTAL_MARKER, player, this);
+                    (0, prefabs_1.REMOVE_MARKER)(this.P_CRYSTAL_MARKER, player, this);
+                    (0, prefabs_1.ADD_MARKER)(this.R_CRYSTAL_MARKER, player, this);
                 }
                 else if (energyCard.provides.includes(card_types_1.CardType.WATER)) {
-                    prefabs_1.REMOVE_MARKER(this.R_CRYSTAL_MARKER, player, this);
-                    prefabs_1.REMOVE_MARKER(this.P_CRYSTAL_MARKER, player, this);
-                    prefabs_1.ADD_MARKER(this.W_CRYSTAL_MARKER, player, this);
+                    (0, prefabs_1.REMOVE_MARKER)(this.R_CRYSTAL_MARKER, player, this);
+                    (0, prefabs_1.REMOVE_MARKER)(this.P_CRYSTAL_MARKER, player, this);
+                    (0, prefabs_1.ADD_MARKER)(this.W_CRYSTAL_MARKER, player, this);
                 }
                 else if (energyCard.provides.includes(card_types_1.CardType.PSYCHIC)) {
-                    prefabs_1.REMOVE_MARKER(this.R_CRYSTAL_MARKER, player, this);
-                    prefabs_1.REMOVE_MARKER(this.W_CRYSTAL_MARKER, player, this);
-                    prefabs_1.ADD_MARKER(this.P_CRYSTAL_MARKER, player, this);
+                    (0, prefabs_1.REMOVE_MARKER)(this.R_CRYSTAL_MARKER, player, this);
+                    (0, prefabs_1.REMOVE_MARKER)(this.W_CRYSTAL_MARKER, player, this);
+                    (0, prefabs_1.ADD_MARKER)(this.P_CRYSTAL_MARKER, player, this);
                 }
             }
         }
         if (effect instanceof check_effects_1.CheckPokemonTypeEffect && effect.target.getPokemonCard() === this) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
-            if (prefabs_1.HAS_MARKER(this.R_CRYSTAL_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.R_CRYSTAL_MARKER, player, this)) {
                 effect.cardTypes = [R];
             }
-            else if (prefabs_1.HAS_MARKER(this.W_CRYSTAL_MARKER, player, this)) {
+            else if ((0, prefabs_1.HAS_MARKER)(this.W_CRYSTAL_MARKER, player, this)) {
                 effect.cardTypes = [W];
             }
-            else if (prefabs_1.HAS_MARKER(this.P_CRYSTAL_MARKER, player, this)) {
+            else if ((0, prefabs_1.HAS_MARKER)(this.P_CRYSTAL_MARKER, player, this)) {
                 effect.cardTypes = [P];
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             const oppActive = opponent.active;
             oppActive.cards.forEach(card => {
@@ -94,8 +94,8 @@ class Lugia extends pokemon_card_1.PokemonCard {
             });
             effect.damage -= 10; // Subtract the base damage
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1);
         }
         return state;
     }

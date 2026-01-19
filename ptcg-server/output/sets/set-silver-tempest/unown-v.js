@@ -39,19 +39,19 @@ class UnownV extends pokemon_card_1.PokemonCard {
         this.fullName = 'Unown V SIT';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED(store, state, effect);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED)(store, state, effect);
         }
         // Star Cipher
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const owner = state.activePlayer;
             if (player.getPrizeLeft() === 1) {
                 if (owner === 0) {
-                    state = check_effect_1.endGame(store, state, game_1.GameWinner.PLAYER_1);
+                    state = (0, check_effect_1.endGame)(store, state, game_1.GameWinner.PLAYER_1);
                 }
                 if (owner === 1) {
-                    state = check_effect_1.endGame(store, state, game_1.GameWinner.PLAYER_2);
+                    state = (0, check_effect_1.endGame)(store, state, game_1.GameWinner.PLAYER_2);
                 }
             }
         }

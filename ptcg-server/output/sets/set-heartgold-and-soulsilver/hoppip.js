@@ -29,8 +29,8 @@ class Hoppip extends pokemon_card_1.PokemonCard {
         this.usedSmashTurn = false;
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.CONFIRMATION_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, result => {
                 if (result) {
                     this.usedSmashTurn = true;
                 }
@@ -38,7 +38,7 @@ class Hoppip extends pokemon_card_1.PokemonCard {
         }
         if (effect instanceof game_phase_effects_1.AfterAttackEffect && this.usedSmashTurn) {
             const player = effect.player;
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
             this.usedSmashTurn = false;
         }
         return state;

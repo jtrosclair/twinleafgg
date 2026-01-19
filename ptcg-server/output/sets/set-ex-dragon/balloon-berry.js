@@ -22,7 +22,7 @@ class BalloonBerry extends trainer_card_1.TrainerCard {
         if (effect instanceof check_effects_1.CheckRetreatCostEffect && effect.player.active.tools.includes(this) && state.phase !== state_1.GamePhase.ATTACK) {
             const player = effect.player;
             const index = effect.cost.indexOf(card_types_1.CardType.COLORLESS);
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             if (index !== -1) {

@@ -11,8 +11,8 @@ export declare class CastformSnowyForm extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    resistance: never[];
-    retreat: never[];
+    resistance: any[];
+    retreat: any[];
     powers: {
         name: string;
         text: string;

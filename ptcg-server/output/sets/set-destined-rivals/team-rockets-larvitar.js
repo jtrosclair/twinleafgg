@@ -30,8 +30,8 @@ class TeamRocketsLarvitar extends pokemon_card_1.PokemonCard {
         this.fullName = 'Team Rocket\'s Larvitar DRI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.MOVE_CARDS(store, state, game_1.StateUtils.getOpponent(state, effect.player).deck, game_1.StateUtils.getOpponent(state, effect.player).discard, { count: 1, sourceCard: this, sourceEffect: this.attacks[0] });
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.MOVE_CARDS)(store, state, game_1.StateUtils.getOpponent(state, effect.player).deck, game_1.StateUtils.getOpponent(state, effect.player).discard, { count: 1, sourceCard: this, sourceEffect: this.attacks[0] });
         }
         return state;
     }

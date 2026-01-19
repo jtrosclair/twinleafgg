@@ -38,15 +38,15 @@ class AurasLucario extends pokemon_card_1.PokemonCard {
         this.IRON_DEFENSE_MARKER = 'IRON_DEFENSE_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
                     this.marker.addMarker(this.IRON_DEFENSE_MARKER, this);
-                    prefabs_1.ADD_MARKER(this.IRON_DEFENSE_MARKER, effect.opponent, this);
+                    (0, prefabs_1.ADD_MARKER)(this.IRON_DEFENSE_MARKER, effect.opponent, this);
                 }
             });
         }
-        if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.cards.includes(this) && prefabs_1.HAS_MARKER(this.IRON_DEFENSE_MARKER, effect.target, this)) {
+        if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.cards.includes(this) && (0, prefabs_1.HAS_MARKER)(this.IRON_DEFENSE_MARKER, effect.target, this)) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
             const opponent = game_1.StateUtils.findOwner(state, effect.source);
             if (player === opponent) {
@@ -58,8 +58,8 @@ class AurasLucario extends pokemon_card_1.PokemonCard {
             }
             effect.preventDefault = true;
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && prefabs_1.HAS_MARKER(this.IRON_DEFENSE_MARKER, effect.player, this)) {
-            prefabs_1.REMOVE_MARKER(this.IRON_DEFENSE_MARKER, effect.player, this);
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.IRON_DEFENSE_MARKER, effect.player, this)) {
+            (0, prefabs_1.REMOVE_MARKER)(this.IRON_DEFENSE_MARKER, effect.player, this);
             this.marker.removeMarker(this.IRON_DEFENSE_MARKER, this);
         }
         return state;

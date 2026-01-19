@@ -9,7 +9,7 @@ export declare class Tentacool extends PokemonCard {
     weakness: {
         type: CardType.LIGHTNING;
     }[];
-    retreat: never[];
+    retreat: any[];
     powers: {
         name: string;
         useWhenInPlay: boolean;

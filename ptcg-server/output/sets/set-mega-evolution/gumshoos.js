@@ -60,7 +60,7 @@ class Gumshoos extends pokemon_card_1.PokemonCard {
                         player.deck.cards.unshift(cards[0]);
                     }
                     player.marker.addMarker(this.GATHER_EVIDENCE_MARKER, this);
-                    prefabs_1.ABILITY_USED(player, this);
+                    (0, prefabs_1.ABILITY_USED)(player, this);
                 }
             });
         }

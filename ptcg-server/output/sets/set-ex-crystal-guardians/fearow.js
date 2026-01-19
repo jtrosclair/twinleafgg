@@ -37,18 +37,18 @@ class Fearow extends pokemon_card_1.PokemonCard {
         this.DELTA_SIGN_MARKER = 'DELTA_SIGN_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.HAS_MARKER(this.DELTA_SIGN_MARKER, player)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.DELTA_SIGN_MARKER, player)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.ADD_MARKER(this.DELTA_SIGN_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.DELTA_SIGN_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             const blocked = [];
             player.deck.cards.forEach((c, index) => {
                 if (c instanceof pokemon_card_1.PokemonCard && c.tags.includes(card_types_1.CardTag.DELTA_SPECIES)) {
@@ -61,12 +61,12 @@ class Fearow extends pokemon_card_1.PokemonCard {
             let cards = [];
             store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, {}, { min: 0, max: 1, allowCancel: false, blocked }), selected => {
                 cards = selected || [];
-                prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-                prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards: cards, sourceCard: this, sourceEffect: this.powers[0] });
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: cards, sourceCard: this, sourceEffect: this.powers[0] });
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.DELTA_SIGN_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.DELTA_SIGN_MARKER, this);
         return state;
     }
 }

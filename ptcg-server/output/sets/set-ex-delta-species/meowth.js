@@ -31,8 +31,8 @@ class Meowth extends game_1.PokemonCard {
         this.fullName = 'Meowth DS';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.SEARCH_DISCARD_PILE_FOR_CARDS_TO_HAND(store, state, effect.player, this, { superType: game_1.SuperType.ENERGY }, { min: 0, max: 1, allowCancel: false }, this.attacks[0]);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.SEARCH_DISCARD_PILE_FOR_CARDS_TO_HAND)(store, state, effect.player, this, { superType: game_1.SuperType.ENERGY }, { min: 0, max: 1, allowCancel: false }, this.attacks[0]);
         }
         return state;
     }

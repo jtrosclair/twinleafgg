@@ -3,7 +3,7 @@ import { Prompt } from './prompt';
 import { PlayerType, SlotType, CardTarget } from '../actions/play-card-action';
 import { State } from '../state/state';
 export declare const MoveDamagePromptType = "Move damage";
-export declare type MoveDamageResultType = DamageTransfer[];
+export type MoveDamageResultType = DamageTransfer[];
 export interface DamageTransfer {
     from: CardTarget;
     to: CardTarget;

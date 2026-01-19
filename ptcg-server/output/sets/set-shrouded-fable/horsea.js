@@ -35,8 +35,8 @@ class Horsea extends pokemon_card_1.PokemonCard {
         this.fullName = 'Horsea SFA';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.HEAL_X_DAMAGE_FROM_THIS_POKEMON(30, effect, store, state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.HEAL_X_DAMAGE_FROM_THIS_POKEMON)(30, effect, store, state);
         }
         return state;
     }

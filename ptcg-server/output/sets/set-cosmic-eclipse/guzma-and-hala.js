@@ -28,14 +28,14 @@ function* playCard(next, store, state, self, effect) {
         });
         state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, {}, { allowCancel: false, min: 0, max: 1, maxStadiums: 1, blocked }), cards => {
             cards = cards || [];
-            prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: self });
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: self });
             if (cards.length > 0) {
                 state = store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                     player.deck.applyOrder(order);
                     return state;
                 });
             }
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => state);
         });
         return state;
@@ -58,14 +58,14 @@ function* playCard(next, store, state, self, effect) {
             });
             state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, {}, { allowCancel: false, min: 0, max: 1, maxStadiums: 1, blocked }), cards => {
                 cards = cards || [];
-                prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: self });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: self });
                 if (cards.length > 0) {
                     state = store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                         player.deck.applyOrder(order);
                         return state;
                     });
                 }
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => state);
             });
         }
@@ -73,7 +73,7 @@ function* playCard(next, store, state, self, effect) {
             // Option 2: Discard 2 cards and search for multiple card types
             state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {}, { allowCancel: false, min: 2, max: 2 }), cards => {
                 cards = cards || [];
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: self });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: self });
                 cards.forEach(card => {
                     store.log(state, game_message_1.GameLog.LOG_PLAYER_DISCARDS_CARD_FROM_HAND, { name: player.name, card: card.name });
                 });
@@ -88,14 +88,14 @@ function* playCard(next, store, state, self, effect) {
                 });
                 return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, {}, { allowCancel: false, min: 0, max: 3, maxSpecialEnergies: 1, maxTools: 1, maxStadiums: 1, blocked }), cards => {
                     cards = cards || [];
-                    prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: self });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: self });
                     if (cards.length > 0) {
                         state = store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                             player.deck.applyOrder(order);
                             return state;
                         });
                     }
-                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     return store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => state);
                 });
             });

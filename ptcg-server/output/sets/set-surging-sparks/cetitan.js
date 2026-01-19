@@ -36,7 +36,7 @@ class Cetitan extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         // Solid Body
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.getPokemonCard() === this) {
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.opponent, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.opponent, this)) {
                 return state;
             }
             effect.damage -= 30;

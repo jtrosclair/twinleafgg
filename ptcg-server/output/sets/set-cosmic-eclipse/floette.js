@@ -33,16 +33,16 @@ class Floette extends pokemon_card_1.PokemonCard {
         this.setNumber = '151';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.JUST_EVOLVED(effect, this) && !prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
-            prefabs_1.CONFIRMATION_PROMPT(store, state, effect.player, wantToUse => {
+        if ((0, prefabs_1.JUST_EVOLVED)(effect, this) && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this)) {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, wantToUse => {
                 if (wantToUse) {
                     const player = effect.player;
                     const opponent = game_1.StateUtils.getOpponent(state, player);
                     if (opponent.hand.cards.length > 0) {
                         const randomIndex = Math.floor(Math.random() * opponent.hand.cards.length);
                         const randomCard = opponent.hand.cards[randomIndex];
-                        prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.deck, { cards: [randomCard], sourceCard: this, sourceEffect: this.powers[0] });
-                        prefabs_1.SHUFFLE_DECK(store, state, opponent);
+                        (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck, { cards: [randomCard], sourceCard: this, sourceEffect: this.powers[0] });
+                        (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
                     }
                 }
             }, game_1.GameMessage.WANT_TO_USE_ABILITY);

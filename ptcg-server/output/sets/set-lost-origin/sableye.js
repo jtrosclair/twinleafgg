@@ -35,12 +35,12 @@ class Sableye extends pokemon_card_1.PokemonCard {
         this.fullName = 'Sableye LOR';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             if (player.lostzone.cards.length <= 9) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_USE_ATTACK);
             }
-            attack_effects_1.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE(12, store, state, effect);
+            (0, attack_effects_1.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE)(12, store, state, effect);
         }
         return state;
     }

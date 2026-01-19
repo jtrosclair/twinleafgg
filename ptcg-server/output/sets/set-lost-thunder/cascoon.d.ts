@@ -11,7 +11,7 @@ export declare class Cascoon extends PokemonCard {
     weakness: {
         type: CardType.FIRE;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;

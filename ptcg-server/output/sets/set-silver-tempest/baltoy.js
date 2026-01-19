@@ -34,8 +34,8 @@ class Baltoy extends pokemon_card_1.PokemonCard {
         this.fullName = 'Baltoy SIT';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this))
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND(store, state, effect.player, {}, { min: 0, max: 1 });
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this))
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND)(store, state, effect.player, {}, { min: 0, max: 1 });
         return state;
     }
 }

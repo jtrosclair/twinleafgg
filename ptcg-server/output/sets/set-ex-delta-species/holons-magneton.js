@@ -46,7 +46,7 @@ class HolonsMagneton extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // The Special Energy Stuff
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.energyPlayedTurn === state.turn) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -115,8 +115,8 @@ class HolonsMagneton extends pokemon_card_1.PokemonCard {
             effect.energyMap.push({ card: this, provides: this.provides });
         }
         // Extra Ball
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.DEAL_MORE_DAMAGE_IF_OPPONENT_ACTIVE_HAS_CARD_TAG(effect, state, 20, card_types_1.CardTag.POKEMON_ex);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.DEAL_MORE_DAMAGE_IF_OPPONENT_ACTIVE_HAS_CARD_TAG)(effect, state, 20, card_types_1.CardTag.POKEMON_ex);
         }
         return state;
     }

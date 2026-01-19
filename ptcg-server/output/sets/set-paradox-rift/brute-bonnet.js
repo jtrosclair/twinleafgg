@@ -79,8 +79,8 @@ class BruteBonnet extends pokemon_card_1.PokemonCard {
             if (player.marker.hasMarker(this.TOXIC_POWDER_MARKER, this)) {
                 throw new game_1.GameError(game_message_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, player, this);
-            prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, player, this);
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, opponent, this);
             player.marker.addMarker(this.TOXIC_POWDER_MARKER, this);
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
                 if (cardList.getPokemonCard() === this) {

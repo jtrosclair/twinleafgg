@@ -39,20 +39,20 @@ class JolteonEX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         var _a;
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_2.THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS(store, state, effect, 30);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_2.THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS)(store, state, effect, 30);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             this.marker.addMarker(this.FLASH_RAY_MARKER, this);
-            prefabs_1.ADD_MARKER(this.FLASH_RAY_MARKER, effect.opponent, this);
+            (0, prefabs_1.ADD_MARKER)(this.FLASH_RAY_MARKER, effect.opponent, this);
         }
         if ((effect instanceof attack_effects_1.PutDamageEffect) && effect.target.getPokemonCard() === this && ((_a = effect.source.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.stage) === card_types_1.Stage.BASIC) {
             if (this.marker.hasMarker(this.FLASH_RAY_MARKER, this)) {
                 effect.preventDefault = true;
             }
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && prefabs_1.HAS_MARKER(this.FLASH_RAY_MARKER, effect.player, this)) {
-            prefabs_1.REMOVE_MARKER(this.FLASH_RAY_MARKER, effect.player, this);
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.FLASH_RAY_MARKER, effect.player, this)) {
+            (0, prefabs_1.REMOVE_MARKER)(this.FLASH_RAY_MARKER, effect.player, this);
             this.marker.removeMarker(this.FLASH_RAY_MARKER, this);
         }
         return state;

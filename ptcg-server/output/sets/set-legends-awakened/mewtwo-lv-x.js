@@ -43,14 +43,14 @@ class MewtwoLVX extends game_1.PokemonCard {
             }
             if (!(effect.source.getPokemons().length > 1 && !(sourceCard === null || sourceCard === void 0 ? void 0 : sourceCard.tags.includes(game_1.CardTag.LEGEND)) && !(sourceCard === null || sourceCard === void 0 ? void 0 : sourceCard.tags.includes(game_1.CardTag.POKEMON_VUNION)))) {
                 const player = game_1.StateUtils.findOwner(state, effect.target);
-                if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+                if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                     return state;
                 }
                 effect.preventDefault = true;
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON(store, state, effect, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON)(store, state, effect, this);
         }
         //Lv. X Stuff
         // making sure it gets put on the active pokemon

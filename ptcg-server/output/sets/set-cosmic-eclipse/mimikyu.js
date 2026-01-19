@@ -36,7 +36,7 @@ class Mimikyu extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Impersonation
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const supportersInHand = player.hand.cards.filter(card => {
                 card instanceof game_1.TrainerCard && card.trainerType === card_types_1.TrainerType.SUPPORTER;
@@ -56,7 +56,7 @@ class Mimikyu extends pokemon_card_1.PokemonCard {
             });
         }
         // Mischevous Hands
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const hasBenched = opponent.bench.some(b => b.cards.length > 0);

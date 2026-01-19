@@ -59,11 +59,11 @@ class Dudunsparce extends pokemon_card_1.PokemonCard {
                     }
                     // Move other cards (energies, etc.) to the deck second
                     if (otherCards.length > 0) {
-                        prefabs_1.MOVE_CARDS(store, state, cardList, player.deck, { cards: otherCards });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.deck, { cards: otherCards });
                     }
                     // Move Pokémon cards to the deck last
                     if (pokemons.length > 0) {
-                        prefabs_1.MOVE_CARDS(store, state, cardList, player.deck, { cards: pokemons });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.deck, { cards: pokemons });
                     }
                     cardList.clearEffects();
                     return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {

@@ -34,7 +34,7 @@ class Onix extends pokemon_card_1.PokemonCard {
         this.fullName = 'Onix UF';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const hasSupporter = player.discard.cards.some(c => {
@@ -50,8 +50,8 @@ class Onix extends pokemon_card_1.PokemonCard {
                     cards.forEach((card, index) => {
                         store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                     });
-                    prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: cards });
+                    (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: cards });
                 }
             });
         }

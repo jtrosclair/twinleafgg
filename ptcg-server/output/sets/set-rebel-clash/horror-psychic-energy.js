@@ -32,7 +32,7 @@ If the [P] Pokémon this card is attached to is in the Active Spot and is damage
         if (effect instanceof attack_effects_1.AfterDamageEffect && ((_a = effect.target.cards) === null || _a === void 0 ? void 0 : _a.includes(this))) {
             const player = effect.player;
             const targetPlayer = game_1.StateUtils.findOwner(state, effect.target);
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, effect.target)) {
                 return state;
             }
             const checkPokemonType = new check_effects_1.CheckPokemonTypeEffect(targetPlayer.active);

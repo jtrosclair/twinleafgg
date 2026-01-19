@@ -12,7 +12,7 @@ export declare class HisuianGrowlithe extends PokemonCard {
     retreat: CardType[];
     attacks: {
         name: string;
-        cost: never[];
+        cost: any[];
         damage: number;
         text: string;
     }[];

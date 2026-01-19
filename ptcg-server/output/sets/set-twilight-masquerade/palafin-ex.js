@@ -43,7 +43,7 @@ class Palafinex extends game_1.PokemonCard {
             player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
         }
         if (effect instanceof game_effects_1.EvolveEffect && effect.pokemonCard === this) {
-            if (!prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+            if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_EVOLVE);
             }
         }

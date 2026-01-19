@@ -33,14 +33,14 @@ class UnownE extends pokemon_card_1.PokemonCard {
         this.SHUFFLE_MARKER = 'SHUFFLE_MARKER';
     }
     reduceEffect(store, state, effect) {
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.SHUFFLE_MARKER, this);
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.SHUFFLE_MARKER, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const targetCardList = game_1.StateUtils.findCardList(state, this);
             if (!(targetCardList instanceof game_1.PokemonCardList)) {
                 throw new game_1.GameError(game_1.GameMessage.INVALID_TARGET);
             }
-            if (prefabs_1.HAS_MARKER(this.SHUFFLE_MARKER, player)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.SHUFFLE_MARKER, player)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             const blocked = [];
@@ -65,12 +65,12 @@ class UnownE extends pokemon_card_1.PokemonCard {
                 });
                 player.deck.moveCardTo(pokemonCard, targetCardList);
                 targetCardList.moveCardTo(this, player.deck);
-                prefabs_1.SHUFFLE_DECK(store, state, player);
-                prefabs_1.ADD_MARKER(this.SHUFFLE_MARKER, player, this);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
+                (0, prefabs_1.ADD_MARKER)(this.SHUFFLE_MARKER, player, this);
             });
         }
         // Hidden Power
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const slots = opponent.bench.filter(b => b.cards.length === 0);

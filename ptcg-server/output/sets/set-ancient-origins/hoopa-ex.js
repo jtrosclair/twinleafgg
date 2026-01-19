@@ -37,7 +37,7 @@ class HoopaEX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Scoundrel Ring
-        if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this && !prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+        if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this)) {
             state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
                 if (wantToUse) {
                     const player = effect.player;
@@ -47,15 +47,15 @@ class HoopaEX extends pokemon_card_1.PokemonCard {
                             blocked.push(index);
                         }
                     });
-                    prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND(store, state, effect.player, { superType: card_types_1.SuperType.POKEMON }, { min: 0, max: 3, blocked });
+                    (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND)(store, state, effect.player, { superType: card_types_1.SuperType.POKEMON }, { min: 0, max: 3, blocked });
                 }
             });
             return state;
         }
         // Hyperspace Fury
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 2);
-            attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(100, effect, store, state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 2);
+            (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(100, effect, store, state);
         }
         return state;
     }

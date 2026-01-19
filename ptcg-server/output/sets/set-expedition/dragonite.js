@@ -36,27 +36,27 @@ class Dragonite extends pokemon_card_1.PokemonCard {
         this.TAILWIND_USED_MARKER = 'TAILWIND_USED_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (prefabs_1.HAS_MARKER(this.TAILWIND_USED_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.TAILWIND_USED_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             if (effect.card === player.active.getPokemonCard()) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.ADD_MARKER(this.TAILWIND_MARKER, player.active, this);
-            prefabs_1.ADD_MARKER(this.TAILWIND_USED_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.TAILWIND_MARKER, player.active, this);
+            (0, prefabs_1.ADD_MARKER)(this.TAILWIND_USED_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.TAILWIND_MARKER, this);
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.TAILWIND_USED_MARKER, this);
-        if (effect instanceof check_effects_1.CheckRetreatCostEffect && prefabs_1.HAS_MARKER(this.TAILWIND_MARKER, effect.player.active, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.TAILWIND_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.TAILWIND_USED_MARKER, this);
+        if (effect instanceof check_effects_1.CheckRetreatCostEffect && (0, prefabs_1.HAS_MARKER)(this.TAILWIND_MARKER, effect.player.active, this)) {
             effect.cost = [];
         }
         // Dragon Tail
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            return prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 2, results => {
+            return (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 2, results => {
                 let heads = 0;
                 results.forEach(r => {
                     if (r)

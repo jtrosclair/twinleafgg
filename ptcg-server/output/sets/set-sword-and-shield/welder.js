@@ -23,7 +23,7 @@ class Welder extends trainer_card_1.TrainerCard {
         this.text = 'Attach up to 2 [R] Energy cards from your hand to 1 of your Pokémon. If you do, draw 3 cards.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const hasEnergyInHand = player.hand.cards.some(c => {
                 return c instanceof energy_card_1.EnergyCard

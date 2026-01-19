@@ -43,7 +43,7 @@ class Dipplin extends game_1.PokemonCard {
                 const playerBenched = player.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
                 effect.damage = playerBenched * 20;
             }
-            if (!prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+            if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this)) {
                 // Dynamically set barrage if Festival Grounds is in play
                 const stadiumCard = game_1.StateUtils.getStadiumCard(state);
                 if (stadiumCard && stadiumCard.name === 'Festival Grounds') {

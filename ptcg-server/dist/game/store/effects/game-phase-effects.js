@@ -1,4 +1,7 @@
-export var GamePhaseEffects;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BetweenTurnsEffect = exports.WhoBeginsEffect = exports.EndTurnEffect = exports.ChoosePrizeEffect = exports.AfterAttackEffect = exports.ChooseStartingPokemonEffect = exports.DrewTopdeckEffect = exports.BeginTurnEffect = exports.GamePhaseEffects = void 0;
+var GamePhaseEffects;
 (function (GamePhaseEffects) {
     GamePhaseEffects["BEGIN_TURN_EFFECT"] = "BEGIN_TURN_EFFECT";
     GamePhaseEffects["END_TURN_EFFECT"] = "END_TURN_EFFECT";
@@ -8,15 +11,16 @@ export var GamePhaseEffects;
     GamePhaseEffects["DREW_TOPDECK_EFFECT"] = "DREW_TOPDECK_EFFECT";
     GamePhaseEffects["CHOOSE_PRIZE_EFFECT"] = "CHOOSE_PRIZE_EFFECT";
     GamePhaseEffects["AFTER_ATTACK_EFFECT"] = "AFTER_ATTACK_EFFECT";
-})(GamePhaseEffects || (GamePhaseEffects = {}));
-export class BeginTurnEffect {
+})(GamePhaseEffects = exports.GamePhaseEffects || (exports.GamePhaseEffects = {}));
+class BeginTurnEffect {
     constructor(player) {
         this.type = GamePhaseEffects.BEGIN_TURN_EFFECT;
         this.preventDefault = false;
         this.player = player;
     }
 }
-export class DrewTopdeckEffect {
+exports.BeginTurnEffect = BeginTurnEffect;
+class DrewTopdeckEffect {
     constructor(player, handCard) {
         this.type = GamePhaseEffects.DREW_TOPDECK_EFFECT;
         this.preventDefault = false;
@@ -24,14 +28,16 @@ export class DrewTopdeckEffect {
         this.handCard = handCard;
     }
 }
-export class ChooseStartingPokemonEffect {
+exports.DrewTopdeckEffect = DrewTopdeckEffect;
+class ChooseStartingPokemonEffect {
     constructor(player) {
         this.type = GamePhaseEffects.CHOOSE_STARTING_POKEMON_EFFECT;
         this.preventDefault = false;
         this.player = player;
     }
 }
-export class AfterAttackEffect {
+exports.ChooseStartingPokemonEffect = ChooseStartingPokemonEffect;
+class AfterAttackEffect {
     constructor(player, opponent, attack) {
         this.type = GamePhaseEffects.AFTER_ATTACK_EFFECT;
         this.preventDefault = false;
@@ -40,27 +46,31 @@ export class AfterAttackEffect {
         this.attack = attack;
     }
 }
-export class ChoosePrizeEffect {
+exports.AfterAttackEffect = AfterAttackEffect;
+class ChoosePrizeEffect {
     constructor(player) {
         this.type = GamePhaseEffects.CHOOSE_PRIZE_EFFECT;
         this.preventDefault = false;
         this.player = player;
     }
 }
-export class EndTurnEffect {
+exports.ChoosePrizeEffect = ChoosePrizeEffect;
+class EndTurnEffect {
     constructor(player) {
         this.type = GamePhaseEffects.END_TURN_EFFECT;
         this.preventDefault = false;
         this.player = player;
     }
 }
-export class WhoBeginsEffect {
+exports.EndTurnEffect = EndTurnEffect;
+class WhoBeginsEffect {
     constructor() {
         this.type = GamePhaseEffects.END_TURN_EFFECT;
         this.preventDefault = false;
     }
 }
-export class BetweenTurnsEffect {
+exports.WhoBeginsEffect = WhoBeginsEffect;
+class BetweenTurnsEffect {
     constructor(player) {
         this.type = GamePhaseEffects.BETWEEN_TURNS_EFFECT;
         this.preventDefault = false;
@@ -72,3 +82,4 @@ export class BetweenTurnsEffect {
         this.asleepFlipResult = undefined;
     }
 }
+exports.BetweenTurnsEffect = BetweenTurnsEffect;

@@ -69,7 +69,7 @@ class Eelektrik extends pokemon_card_1.PokemonCard {
                 player.marker.addMarker(this.DYNAMOTOR_MAREKER, this);
                 for (const transfer of transfers) {
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.powers[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.powers[0] });
                 }
             });
             return state;

@@ -47,7 +47,7 @@ function* playCard(next, store, state, effect, trainerCard) {
             store.reduceEffect(state, supporterEffect);
         }
         catch (_a) {
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
     }
@@ -59,15 +59,15 @@ function* playCard(next, store, state, effect, trainerCard) {
     });
     if (cards.length > 0) {
         // Discard trainer only when user selected a Pokemon
-        prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         // Discard selected special energy card
-        prefabs_1.MOVE_CARDS(store, state, target, opponent.discard, { cards, sourceCard: trainerCard });
+        (0, prefabs_1.MOVE_CARDS)(store, state, target, opponent.discard, { cards, sourceCard: trainerCard });
     }
     if (stadiumCard !== undefined) {
         // Discard Stadium
         const cardList = game_1.StateUtils.findCardList(state, stadiumCard);
         const playerStadium = game_1.StateUtils.findOwner(state, cardList);
-        prefabs_1.MOVE_CARDS(store, state, cardList, playerStadium.discard, { sourceCard: trainerCard });
+        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, playerStadium.discard, { sourceCard: trainerCard });
         return state;
     }
 }

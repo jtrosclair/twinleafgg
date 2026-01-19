@@ -30,14 +30,14 @@ class Ghetsis extends trainer_card_1.TrainerCard {
             effect.preventDefault = true;
             // Create a temporary copy of the opponent's hand to show
             const opponentHandSnapshot = [...opponent.hand.cards];
-            prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, player, opponentHandSnapshot);
+            (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, player, opponentHandSnapshot);
             // Find Item cards in the opponent's hand
             const itemsShown = opponent.hand.cards.filter(card => card instanceof trainer_card_1.TrainerCard && card.trainerType === card_types_1.TrainerType.ITEM);
             // Move Item cards to deck and shuffle
-            prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.deck, { cards: itemsShown });
-            prefabs_1.SHUFFLE_DECK(store, state, opponent);
+            (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck, { cards: itemsShown });
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
             // Draw cards equal to the number of Item cards shuffled
-            prefabs_1.DRAW_CARDS(player, itemsShown.length);
+            (0, prefabs_1.DRAW_CARDS)(player, itemsShown.length);
             player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
         }

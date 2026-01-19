@@ -37,24 +37,24 @@ class Mesprit extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            if (prefabs_1.IS_POKEPOWER_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this)) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
                     const opponent = game_1.StateUtils.getOpponent(state, player);
-                    prefabs_1.ADD_MARKER(this.PSYCHIC_BIND_MARKER, opponent, this);
+                    (0, prefabs_1.ADD_MARKER)(this.PSYCHIC_BIND_MARKER, opponent, this);
                     // Log the ability usage
                     store.log(state, game_1.GameLog.LOG_PLAYER_USES_ABILITY, { name: this.name, ability: this.powers[0].name });
                 }
             });
         }
-        if (effect instanceof game_effects_1.PowerEffect && prefabs_1.HAS_MARKER(this.PSYCHIC_BIND_MARKER, effect.player, this)
+        if (effect instanceof game_effects_1.PowerEffect && (0, prefabs_1.HAS_MARKER)(this.PSYCHIC_BIND_MARKER, effect.player, this)
             && (effect.power.powerType === game_1.PowerType.POKEPOWER)) {
             throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.PSYCHIC_BIND_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.PSYCHIC_BIND_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (effect.player.hand.cards.length === effect.opponent.hand.cards.length) {
                 effect.damage += 50;
             }

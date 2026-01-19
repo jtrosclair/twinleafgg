@@ -34,18 +34,18 @@ class Registeel extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.DealDamageEffect && effect.target.getPokemonCard() === this) {
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             effect.damage -= 20;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const opponentActive = opponent.active.getPokemonCard();
             if (opponentActive && opponentActive.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
-                if (!prefabs_1.IS_ABILITY_BLOCKED(store, state, opponent, opponentActive)) {
-                    prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE(effect, store, state, 60);
+                if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, opponent, opponentActive)) {
+                    (0, prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE)(effect, store, state, 60);
                 }
             }
         }

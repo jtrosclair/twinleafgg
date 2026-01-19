@@ -39,7 +39,7 @@ class Mewtwo extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            if (prefabs_1.IS_POKEPOWER_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const blockedTo = [];
@@ -104,7 +104,7 @@ class Mewtwo extends pokemon_card_1.PokemonCard {
                 return state;
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const playerCardList = player.active;
             const playerCheckProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(player, playerCardList);

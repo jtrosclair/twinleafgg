@@ -121,7 +121,7 @@ class JsonPatch {
         return results;
     }
     isEqual(src, dest) {
-        return utils_1.deepCompare(src, dest);
+        return (0, utils_1.deepCompare)(src, dest);
     }
     applyToObject(root, delta) {
         switch (delta.op) {

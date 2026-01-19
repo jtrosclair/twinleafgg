@@ -39,7 +39,7 @@ class Regirock extends pokemon_card_1.PokemonCard {
             const pokemonCard = effect.target.getPokemonCard();
             const player = game_1.StateUtils.findOwner(state, effect.target);
             // It's not this pokemon card
-            if (pokemonCard !== this || state.phase !== game_1.GamePhase.ATTACK || prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this))
+            if (pokemonCard !== this || state.phase !== game_1.GamePhase.ATTACK || (0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this))
                 return state;
             // Check attached energy 
             // Check attached energy 
@@ -50,7 +50,7 @@ class Regirock extends pokemon_card_1.PokemonCard {
                 effect.damage = Math.max(0, effect.damage - 30);
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this))
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this))
             effect.ignoreResistance = true;
         return state;
     }

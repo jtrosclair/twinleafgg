@@ -30,7 +30,7 @@ class TapuKokoex extends pokemon_card_1.PokemonCard {
         this.fullName = 'Tapu Koko ex JTG';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this))
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this))
             effect.damage += (effect.player.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0) * 20);
         return state;
     }

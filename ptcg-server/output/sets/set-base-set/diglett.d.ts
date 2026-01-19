@@ -17,6 +17,6 @@ export declare class Diglett extends PokemonCard {
         type: CardType;
         value: number;
     }[];
-    retreat: never[];
+    retreat: any[];
     attacks: Attack[];
 }

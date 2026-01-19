@@ -36,13 +36,13 @@ class Pignite extends pokemon_card_1.PokemonCard {
         this.setNumber = '17';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const cardList = game_1.StateUtils.findCardList(state, this);
             if (!cardList)
                 return state;
-            state = prefabs_1.ATTACH_ENERGY_PROMPT(store, state, player, game_2.PlayerType.BOTTOM_PLAYER, game_2.SlotType.DECK, [game_2.SlotType.ACTIVE], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Fire Energy' }, { min: 1, max: 1, allowCancel: true });
-            return prefabs_1.SHUFFLE_DECK(store, state, player);
+            state = (0, prefabs_1.ATTACH_ENERGY_PROMPT)(store, state, player, game_2.PlayerType.BOTTOM_PLAYER, game_2.SlotType.DECK, [game_2.SlotType.ACTIVE], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Fire Energy' }, { min: 1, max: 1, allowCancel: true });
+            return (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         }
         return state;
     }

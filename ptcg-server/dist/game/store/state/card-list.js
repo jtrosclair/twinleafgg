@@ -1,13 +1,16 @@
-import { CardManager } from '../../cards/card-manager';
-import { GameError } from '../../game-error';
-import { GameMessage } from '../../game-message';
-import { EnergyType, SuperType, TrainerType } from '../card/card-types';
-export var StadiumDirection;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CardList = exports.StadiumDirection = void 0;
+const card_manager_1 = require("../../cards/card-manager");
+const game_error_1 = require("../../game-error");
+const game_message_1 = require("../../game-message");
+const card_types_1 = require("../card/card-types");
+var StadiumDirection;
 (function (StadiumDirection) {
     StadiumDirection["UP"] = "up";
     StadiumDirection["DOWN"] = "down";
-})(StadiumDirection || (StadiumDirection = {}));
-export class CardList {
+})(StadiumDirection = exports.StadiumDirection || (exports.StadiumDirection = {}));
+class CardList {
     constructor() {
         this.cards = [];
         this.isPublic = false;
@@ -18,11 +21,11 @@ export class CardList {
     }
     static fromList(names) {
         const cardList = new CardList();
-        const cardManager = CardManager.getInstance();
+        const cardManager = card_manager_1.CardManager.getInstance();
         cardList.cards = names.map(cardName => {
             const card = cardManager.getCardByName(cardName);
             if (card === undefined) {
-                throw new GameError(GameMessage.UNKNOWN_CARD, cardName);
+                throw new game_error_1.GameError(game_message_1.GameMessage.UNKNOWN_CARD, cardName);
             }
             return card;
         });
@@ -76,7 +79,7 @@ export class CardList {
                     const destPkm = destination;
                     if (destPkm.energies && destPkm.energies.cards) {
                         // Only add actual energy cards (superType === ENERGY), not Pokemon cards that can act as energy
-                        const isEnergyCard = card[0].superType === SuperType.ENERGY;
+                        const isEnergyCard = card[0].superType === card_types_1.SuperType.ENERGY;
                         if (isEnergyCard && !destPkm.energies.cards.includes(card[0])) {
                             destPkm.energies.cards.push(card[0]);
                         }
@@ -94,7 +97,7 @@ export class CardList {
                         const destPkm = destination;
                         if (destPkm.energies && destPkm.energies.cards) {
                             // Only add actual energy cards (superType === ENERGY), not Pokemon cards that can act as energy
-                            const isEnergyCard = card[0].superType === SuperType.ENERGY;
+                            const isEnergyCard = card[0].superType === card_types_1.SuperType.ENERGY;
                             if (isEnergyCard && !destPkm.energies.cards.includes(card[0])) {
                                 destPkm.energies.cards.push(card[0]);
                             }
@@ -127,7 +130,7 @@ export class CardList {
     count(query) {
         return this.filter(query).length;
     }
-    sort(superType = SuperType.POKEMON) {
+    sort(superType = card_types_1.SuperType.POKEMON) {
         this.cards.sort((a, b) => {
             const result = this.compareSupertype(a.superType) - this.compareSupertype(b.superType);
             // not of the same supertype
@@ -165,30 +168,31 @@ export class CardList {
         });
     }
     compareSupertype(input) {
-        if (input === SuperType.POKEMON)
+        if (input === card_types_1.SuperType.POKEMON)
             return 1;
-        if (input === SuperType.TRAINER)
+        if (input === card_types_1.SuperType.TRAINER)
             return 2;
-        if (input === SuperType.ENERGY)
+        if (input === card_types_1.SuperType.ENERGY)
             return 3;
         return Infinity;
     }
     compareTrainerType(input) {
-        if (input === TrainerType.SUPPORTER)
+        if (input === card_types_1.TrainerType.SUPPORTER)
             return 1;
-        if (input === TrainerType.ITEM)
+        if (input === card_types_1.TrainerType.ITEM)
             return 2;
-        if (input === TrainerType.TOOL)
+        if (input === card_types_1.TrainerType.TOOL)
             return 3;
-        if (input === TrainerType.STADIUM)
+        if (input === card_types_1.TrainerType.STADIUM)
             return 4;
         return Infinity;
     }
     compareEnergyType(input) {
-        if (input === EnergyType.BASIC)
+        if (input === card_types_1.EnergyType.BASIC)
             return 1;
-        if (input === EnergyType.SPECIAL)
+        if (input === card_types_1.EnergyType.SPECIAL)
             return 2;
         return Infinity;
     }
 }
+exports.CardList = CardList;

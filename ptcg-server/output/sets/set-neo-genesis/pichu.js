@@ -51,13 +51,13 @@ class Pichu extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // avoids recursion
-            if (prefabs_1.HAS_MARKER(this.BABY_MARKER, effect.player)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.BABY_MARKER, effect.player)) {
                 return state;
             }
-            prefabs_1.ADD_MARKER(this.BABY_MARKER, effect.player, this);
+            (0, prefabs_1.ADD_MARKER)(this.BABY_MARKER, effect.player, this);
             if (opponent.active.getPokemonCard() === this) {
                 effect.preventDefault = true;
-                prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+                (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                     if (!result) {
                         const endTurnEffect = new game_phase_effects_1.EndTurnEffect(player);
                         store.reduceEffect(state, endTurnEffect);
@@ -69,9 +69,9 @@ class Pichu extends pokemon_card_1.PokemonCard {
                 });
             }
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.BABY_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.BABY_MARKER, this);
         // Zzzap attack
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Check both players' Pokémon for Poké-Powers/Bodies

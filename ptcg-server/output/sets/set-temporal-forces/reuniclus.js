@@ -58,17 +58,17 @@ class Reuniclus extends pokemon_card_1.PokemonCard {
             });
             const maxPokemons = Math.min(pokemonCount, openSlots.length);
             const deckTop = new game_1.CardList();
-            prefabs_1.MOVE_CARDS(store, state, player.deck, deckTop, { count: 8 });
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, deckTop, { count: 8 });
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH, deckTop, { superType: card_types_1.SuperType.POKEMON }, { min: 0, max: openSlots.length, allowCancel: false, blocked, maxPokemons }), selectedCards => {
                 const cards = selectedCards || [];
                 // Move selected cards to open bench slots
                 cards.forEach((card, index) => {
                     const targetSlot = openSlots[index];
-                    prefabs_1.MOVE_CARDS(store, state, deckTop, targetSlot, { cards: [card] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, deckTop, targetSlot, { cards: [card] });
                     targetSlot.pokemonPlayedTurn = state.turn;
                 });
                 // Move remaining cards back to deck
-                prefabs_1.MOVE_CARDS(store, state, deckTop, player.deck);
+                (0, prefabs_1.MOVE_CARDS)(store, state, deckTop, player.deck);
                 return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                     player.deck.applyOrder(order);
                     return state;

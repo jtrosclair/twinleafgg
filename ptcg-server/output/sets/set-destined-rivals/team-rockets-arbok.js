@@ -45,7 +45,7 @@ class TeamRocketsArbok extends pokemon_card_1.PokemonCard {
             if (opponent.active.getPokemonCard() !== this) {
                 return state;
             }
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, opponent, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
             if (pokemonCard.powers.length > 0 && pokemonCard.powers[0].powerType === game_1.PowerType.ABILITY && !pokemonCard.tags.includes(card_types_1.CardTag.TEAM_ROCKET)) {
@@ -53,11 +53,11 @@ class TeamRocketsArbok extends pokemon_card_1.PokemonCard {
             }
         }
         // Spinning Tail
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList) => {
-                prefabs_1.DAMAGE_OPPONENT_POKEMON(store, state, effect, 30, [cardList]);
+                (0, prefabs_1.DAMAGE_OPPONENT_POKEMON)(store, state, effect, 30, [cardList]);
             });
         }
         return state;

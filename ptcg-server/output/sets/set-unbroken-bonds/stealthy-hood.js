@@ -21,7 +21,7 @@ class StealthyHood extends trainer_card_1.TrainerCard {
         // Prevent effects of abilities from opponent's Pokemon
         if (effect instanceof game_effects_1.EffectOfAbilityEffect && effect.target) {
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, opponent, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
             // Check for Stealthy Hood on the opposing side from the player using the ability

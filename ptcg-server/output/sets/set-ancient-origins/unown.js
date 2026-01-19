@@ -56,11 +56,11 @@ class Unown extends pokemon_card_1.PokemonCard {
             const tools = [...monCardList.tools];
             // Move Pokémon cards to the discard
             if (pokemons.length > 0) {
-                prefabs_1.MOVE_CARDS(store, state, cardList, player.discard, { cards: pokemons });
+                (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.discard, { cards: pokemons });
             }
             // Move other cards (tools, energies, etc.) to the discard
             if (otherCards.length > 0) {
-                prefabs_1.MOVE_CARDS(store, state, cardList, player.discard, { cards: otherCards });
+                (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.discard, { cards: otherCards });
             }
             // Move tools to the discard
             if (tools.length > 0) {
@@ -68,7 +68,7 @@ class Unown extends pokemon_card_1.PokemonCard {
                     cardList.moveCardTo(tool, player.discard);
                 }
             }
-            prefabs_1.DRAW_CARDS(player, 1);
+            (0, prefabs_1.DRAW_CARDS)(player, 1);
             return state;
         }
         return state;

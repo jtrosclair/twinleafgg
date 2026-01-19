@@ -27,13 +27,13 @@ class Blacephalon extends pokemon_card_1.PokemonCard {
         this.cardImage = 'assets/cardback.png';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             let counters = 4;
-            const prizes = prefabs_1.GET_PLAYER_PRIZES(effect.opponent).length;
+            const prizes = (0, prefabs_1.GET_PLAYER_PRIZES)(effect.opponent).length;
             if (prizes === 3) {
                 counters = 12;
             }
-            attack_effects_1.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE(counters, store, state, effect);
+            (0, attack_effects_1.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE)(counters, store, state, effect);
         }
         return state;
     }

@@ -35,7 +35,7 @@ class MeowsticEX extends pokemon_card_1.PokemonCard {
         this.SHADOW_EAR_MARKER = 'SHADOW_EAR_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (player.marker.hasMarker(this.SHADOW_EAR_MARKER, this)) {
@@ -70,7 +70,7 @@ class MeowsticEX extends pokemon_card_1.PokemonCard {
                     return;
                 }
                 player.marker.addMarker(this.SHADOW_EAR_MARKER, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 for (const transfer of transfers) {
                     const source = game_1.StateUtils.getTarget(state, player, transfer.from);
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
@@ -81,7 +81,7 @@ class MeowsticEX extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             effect.ignoreWeakness = true;
             effect.ignoreResistance = true;
         }

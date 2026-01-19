@@ -48,7 +48,7 @@ class Snorlax extends pokemon_card_1.PokemonCard {
             });
             if (isSnorlaxInPlay) {
                 // Try to reduce PowerEffect, to check if something is blocking our ability
-                if (prefabs_1.IS_POKEMON_POWER_BLOCKED(store, state, opponent, this))
+                if ((0, prefabs_1.IS_POKEMON_POWER_BLOCKED)(store, state, opponent, this))
                     return state;
                 if (opponent.active.cards[0] === this && opponent.active.specialConditions.length > 0) {
                     return state;
@@ -58,11 +58,11 @@ class Snorlax extends pokemon_card_1.PokemonCard {
             }
         }
         // Roll Over
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, this);
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, (result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, effect.player, this);
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, (result => {
                 if (result) {
-                    attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP(store, state, effect);
+                    (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP)(store, state, effect);
                 }
             }));
         }

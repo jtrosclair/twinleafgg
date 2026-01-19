@@ -1,4 +1,7 @@
-export class Prompt {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Prompt = void 0;
+class Prompt {
     constructor(playerId) {
         this.playerId = playerId;
         this.id = 0;
@@ -10,3 +13,4 @@ export class Prompt {
         return true;
     }
 }
+exports.Prompt = Prompt;

@@ -31,8 +31,8 @@ class SeasManaphy3 extends pokemon_card_1.PokemonCard {
         this.fullName = 'Sea\'s Manaphy PCGP 147';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, effect.player, { cardType: card_types_1.CardType.WATER, stage: card_types_1.Stage.BASIC }, { min: 0, max: 2 });
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, effect.player, { cardType: card_types_1.CardType.WATER, stage: card_types_1.Stage.BASIC }, { min: 0, max: 2 });
         }
         return state;
     }

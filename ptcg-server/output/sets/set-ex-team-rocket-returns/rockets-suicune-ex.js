@@ -42,7 +42,7 @@ class RocketsSuicuneex extends game_1.PokemonCard {
     reduceEffect(store, state, effect) {
         // Dark and Clear
         if (effect instanceof attack_effects_2.AddSpecialConditionsEffect && effect.target.getPokemonCard() === this) {
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(effect.player, effect.target);
@@ -54,11 +54,11 @@ class RocketsSuicuneex extends game_1.PokemonCard {
             }
         }
         // Icy Wind
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP(store, state, effect);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP)(store, state, effect);
         }
         // Hyper Splash
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             if (effect.opponent.active.isStage(game_1.Stage.STAGE_2) && effect.opponent.active.getPokemons.length > 1) {
                 effect.damage += 40;
             }

@@ -21,8 +21,8 @@ class FocusSash extends trainer_card_1.TrainerCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.tools.includes(this)) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, player, this) ||
-                !prefabs_1.DAMAGED_FROM_FULL_HP(store, state, effect, player, effect.target)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, player, this) ||
+                !(0, prefabs_1.DAMAGED_FROM_FULL_HP)(store, state, effect, player, effect.target)) {
                 return state;
             }
             const checkPokemonTypeEffect = new check_effects_1.CheckPokemonTypeEffect(effect.target);

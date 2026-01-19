@@ -54,7 +54,7 @@ class Slowbro extends game_1.PokemonCard {
                         const currentPlayer = state.players[i];
                         if (currentPlayer.id === player.id) {
                             state.winner = currentPlayer.id === game_1.GameWinner.PLAYER_1 ? game_1.GameWinner.PLAYER_2 : game_1.GameWinner.PLAYER_1;
-                            state = check_effect_1.endGame(store, state, state.winner);
+                            state = (0, check_effect_1.endGame)(store, state, state.winner);
                             return;
                         }
                     }

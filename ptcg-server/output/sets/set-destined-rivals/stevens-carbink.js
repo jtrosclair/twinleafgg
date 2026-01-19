@@ -42,7 +42,7 @@ class StevensCarbink extends game_1.PokemonCard {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, opponent, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
             if ((_a = effect.target.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.tags.includes(card_types_1.CardTag.STEVENS)) {

@@ -34,14 +34,14 @@ class Kadabra extends pokemon_card_1.PokemonCard {
         this.regulationMark = 'I';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.JUST_EVOLVED(effect, this)) {
+        if ((0, prefabs_1.JUST_EVOLVED)(effect, this)) {
             const player = effect.player;
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
-                    prefabs_1.DRAW_CARDS(player, 2);
+                    (0, prefabs_1.DRAW_CARDS)(player, 2);
                 }
             }, game_1.GameMessage.WANT_TO_USE_ABILITY);
         }

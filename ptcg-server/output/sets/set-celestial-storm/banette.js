@@ -34,7 +34,7 @@ class Banette extends pokemon_card_1.PokemonCard {
         this.fullName = 'Banette CES';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.JUST_EVOLVED(effect, this)) {
+        if ((0, prefabs_1.JUST_EVOLVED)(effect, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Check if opponent's bench is full
@@ -51,15 +51,15 @@ class Banette extends pokemon_card_1.PokemonCard {
                 if (cards.length > 0) {
                     const card = cards[0];
                     const slot = openSlots[0];
-                    prefabs_1.MOVE_CARDS(store, state, opponent.discard, slot, { cards: [card], sourceCard: this, sourceEffect: this.powers[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, opponent.discard, slot, { cards: [card], sourceCard: this, sourceEffect: this.powers[0] });
                     slot.pokemonPlayedTurn = state.turn;
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             const opponentBench = opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
-            attack_effects_1.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE(opponentBench + 1, store, state, effect);
+            (0, attack_effects_1.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE)(opponentBench + 1, store, state, effect);
         }
         return state;
     }

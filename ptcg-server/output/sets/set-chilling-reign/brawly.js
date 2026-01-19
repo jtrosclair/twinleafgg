@@ -28,7 +28,7 @@ function* useKeepCalling(next, store, state, self, effect) {
         cards.length = slots.length;
     }
     cards.forEach((card, index) => {
-        prefabs_1.MOVE_CARDS(store, state, player.deck, slots[index], { cards: [card], sourceCard: self, sourceEffect: effect });
+        (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, slots[index], { cards: [card], sourceCard: self, sourceEffect: effect });
         slots[index].pokemonPlayedTurn = state.turn;
     });
     player.supporter.moveCardTo(self, player.discard);
@@ -50,7 +50,7 @@ class Brawly extends trainer_card_1.TrainerCard {
         this.text = 'Search your deck for up to 3 Basic Rapid Strike Pokémon and put them onto your Bench. Then, shuffle your deck.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const generator = useKeepCalling(() => generator.next(), store, state, this, effect);
             return generator.next().value;
         }

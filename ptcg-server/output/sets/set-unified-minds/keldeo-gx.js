@@ -83,7 +83,7 @@ class KeldeoGX extends game_1.PokemonCard {
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
             const player = effect.player;
             const opponent = effect.opponent;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             let benchCount = 0;
             opponent.bench.forEach(b => benchCount += b.cards.length > 0 ? 1 : 0);

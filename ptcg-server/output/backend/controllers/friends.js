@@ -252,91 +252,91 @@ class Friends extends controller_1.Controller {
     }
 }
 __decorate([
-    controller_1.Get('/list'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/list'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Friends.prototype, "onGetFriendsList", null);
 __decorate([
-    controller_1.Get('/requests/pending'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/requests/pending'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Friends.prototype, "onGetPendingRequests", null);
 __decorate([
-    controller_1.Get('/requests/sent'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/requests/sent'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Friends.prototype, "onGetSentRequests", null);
 __decorate([
-    controller_1.Post('/request/send'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        receiverId: services_1.check().isNumber()
+    (0, controller_1.Post)('/request/send'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        receiverId: (0, services_1.check)().isNumber()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Friends.prototype, "onSendFriendRequest", null);
 __decorate([
-    controller_1.Post('/request/accept'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        requestId: services_1.check().isNumber()
+    (0, controller_1.Post)('/request/accept'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        requestId: (0, services_1.check)().isNumber()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Friends.prototype, "onAcceptFriendRequest", null);
 __decorate([
-    controller_1.Post('/request/reject'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        requestId: services_1.check().isNumber()
+    (0, controller_1.Post)('/request/reject'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        requestId: (0, services_1.check)().isNumber()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Friends.prototype, "onRejectFriendRequest", null);
 __decorate([
-    controller_1.Post('/request/cancel'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        requestId: services_1.check().isNumber()
+    (0, controller_1.Post)('/request/cancel'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        requestId: (0, services_1.check)().isNumber()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Friends.prototype, "onCancelFriendRequest", null);
 __decorate([
-    controller_1.Post('/remove'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        friendId: services_1.check().isNumber()
+    (0, controller_1.Post)('/remove'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        friendId: (0, services_1.check)().isNumber()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Friends.prototype, "onRemoveFriend", null);
 __decorate([
-    controller_1.Post('/block'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        userId: services_1.check().isNumber()
+    (0, controller_1.Post)('/block'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        userId: (0, services_1.check)().isNumber()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Friends.prototype, "onBlockUser", null);
 __decorate([
-    controller_1.Post('/unblock'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        userId: services_1.check().isNumber()
+    (0, controller_1.Post)('/unblock'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        userId: (0, services_1.check)().isNumber()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),

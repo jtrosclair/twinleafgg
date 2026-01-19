@@ -38,28 +38,28 @@ let Conversation = Conversation_1 = class Conversation extends typeorm_1.BaseEnt
     }
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Conversation.prototype, "id", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => user_1.User),
+    (0, typeorm_1.ManyToOne)(type => user_1.User),
     __metadata("design:type", user_1.User)
 ], Conversation.prototype, "user1", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => user_1.User),
+    (0, typeorm_1.ManyToOne)(type => user_1.User),
     __metadata("design:type", user_1.User)
 ], Conversation.prototype, "user2", void 0);
 __decorate([
-    typeorm_1.OneToMany(type => message_1.Message, message => message.conversation),
+    (0, typeorm_1.OneToMany)(type => message_1.Message, message => message.conversation),
     __metadata("design:type", Array)
 ], Conversation.prototype, "messages", void 0);
 __decorate([
-    typeorm_1.OneToOne(type => message_1.Message, { onDelete: 'CASCADE' }),
-    typeorm_1.JoinColumn(),
+    (0, typeorm_1.OneToOne)(type => message_1.Message, { onDelete: 'CASCADE' }),
+    (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", message_1.Message)
 ], Conversation.prototype, "lastMessage", void 0);
 Conversation = Conversation_1 = __decorate([
-    typeorm_1.Entity(),
-    typeorm_1.Unique(['user1', 'user2'])
+    (0, typeorm_1.Entity)(),
+    (0, typeorm_1.Unique)(['user1', 'user2'])
 ], Conversation);
 exports.Conversation = Conversation;

@@ -51,7 +51,7 @@ class Crobat extends pokemon_card_1.PokemonCard {
             }
             state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
                 if (wantToUse) {
-                    prefabs_1.DRAW_CARDS(player, 3);
+                    (0, prefabs_1.DRAW_CARDS)(player, 3);
                 }
             });
             return state;

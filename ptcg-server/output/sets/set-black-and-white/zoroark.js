@@ -21,7 +21,7 @@ function* useNastyPlot(next, store, state, effect, self) {
         cards = selected || [];
         next();
     });
-    state = prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: self, sourceEffect: self.attacks[0] });
+    state = (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: self, sourceEffect: self.attacks[0] });
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });
@@ -92,11 +92,11 @@ class Zoroark extends pokemon_card_1.PokemonCard {
         this.fullName = 'Zoroark BLW';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useNastyPlot(() => generator.next(), store, state, effect, this);
             return generator.next().value;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const generator = useFoulPlay(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

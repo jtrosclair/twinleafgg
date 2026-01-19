@@ -18,14 +18,14 @@ class PokeDexHANDY909 extends trainer_card_1.TrainerCard {
         this.text = 'Shuffle your deck. Look at 6 cards from the top of your deck, then put them back on top of your deck in any order.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
             // We will discard this card after prompt confirmation
             effect.preventDefault = true;
-            prefabs_1.SHUFFLE_DECK(store, state, player);
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             const deckTop = new game_1.CardList();
             player.deck.moveTo(deckTop, 6);
             store.prompt(state, new game_1.OrderCardsPrompt(player.id, game_1.GameMessage.CHOOSE_CARDS_ORDER, deckTop, { allowCancel: false }), order => {

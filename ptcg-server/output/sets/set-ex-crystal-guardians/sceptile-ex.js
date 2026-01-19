@@ -63,7 +63,7 @@ class Sceptileex extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // Try reducing ability for each player  
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             if (effect.card.tags.includes(card_types_1.CardTag.POKEMON_ex)) {
@@ -74,7 +74,7 @@ class Sceptileex extends pokemon_card_1.PokemonCard {
         if (effect instanceof check_effects_1.CheckAttackCostEffect) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             let playerHasExtraLiquid = false;
@@ -105,7 +105,7 @@ class Sceptileex extends pokemon_card_1.PokemonCard {
             }
         }
         // Offensive Bomb
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             const prizesTaken = 6 - opponent.getPrizeLeft();

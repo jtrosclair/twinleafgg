@@ -47,7 +47,7 @@ class Gengar extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_effects_1.KnockOutEffect) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (opponent.active.getPokemonCard() === this && !prefabs_1.IS_POKEBODY_BLOCKED(store, state, opponent, this)) {
+            if (opponent.active.getPokemonCard() === this && !(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, opponent, this)) {
                 const card = effect.target.getPokemonCard();
                 if (card !== undefined && !card.tags.includes(card_types_1.CardTag.PRISM_STAR)) {
                     // Don't prevent default behavior yet - let other cards handle the knockout first
@@ -56,7 +56,7 @@ class Gengar extends pokemon_card_1.PokemonCard {
                 }
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // get the Energy attached to Gengar
@@ -75,8 +75,8 @@ class Gengar extends pokemon_card_1.PokemonCard {
                 opponent.hand.moveCardsTo(cards, opponent.lostzone);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            attack_effects_1.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE(4, store, state, effect);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, attack_effects_1.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE)(4, store, state, effect);
         }
         return state;
     }

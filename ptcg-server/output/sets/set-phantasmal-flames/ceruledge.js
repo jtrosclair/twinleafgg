@@ -49,7 +49,7 @@ class Ceruledge extends pokemon_card_1.PokemonCard {
                     card.energyType === card_types_1.EnergyType.BASIC &&
                     card.name === 'Fire Energy');
                 if (fireEnergyCards.length === 4) {
-                    prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: fireEnergyCards, sourceCard: this });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: fireEnergyCards, sourceCard: this });
                 }
                 else {
                     // If not exactly 4 Fire Energy cards selected, attack does nothing

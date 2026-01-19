@@ -55,8 +55,8 @@ class RayquazaVMAX extends pokemon_card_1.PokemonCard {
                 throw new game_1.GameError(game_message_1.GameMessage.CANNOT_USE_POWER);
             }
             const cards = player.hand.cards.filter(c => c !== this);
-            prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: cards, sourceCard: this });
-            prefabs_1.DRAW_CARDS(player, 3);
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: cards, sourceCard: this });
+            (0, prefabs_1.DRAW_CARDS)(player, 3);
             player.marker.addMarker(this.AZURE_PULSE_MARKER, this);
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.AZURE_PULSE_MARKER, this)) {

@@ -36,12 +36,12 @@ class Mew extends pokemon_card_1.PokemonCard {
         this.fullName = 'Mew SW';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, opponent.hand.cards.length);
+            (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, opponent.hand.cards.length);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const pokemonCard = player.active.getPokemonCard();

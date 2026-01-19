@@ -39,7 +39,7 @@ class LatiasStar extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         var _a;
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
                 const healTargetEffect = new attack_effects_1.HealTargetEffect(effect, 10);
@@ -47,11 +47,11 @@ class LatiasStar extends pokemon_card_1.PokemonCard {
                 state = store.reduceEffect(state, healTargetEffect);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = effect.opponent;
             const defending = opponent.active;
             if ((_a = defending.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.tags.includes(card_types_1.CardTag.POKEMON_ex)) {
-                prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON(store, state, effect, this);
+                (0, prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON)(store, state, effect, this);
                 effect.damage += 100;
             }
         }

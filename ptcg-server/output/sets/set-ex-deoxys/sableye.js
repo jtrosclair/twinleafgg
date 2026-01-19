@@ -42,37 +42,37 @@ class Sableye extends game_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            prefabs_1.REMOVE_MARKER(this.NIGHT_VISION_MARKER, player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.NIGHT_VISION_MARKER, player, this);
             return state;
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.NIGHT_VISION_MARKER, this);
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.NIGHT_VISION_MARKER, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.HAS_MARKER(this.NIGHT_VISION_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.NIGHT_VISION_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             if (player.active.cards[0] !== this) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
-            prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, player, opponent.hand.cards);
-            prefabs_1.ADD_MARKER(this.NIGHT_VISION_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
+            (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, player, opponent.hand.cards);
+            (0, prefabs_1.ADD_MARKER)(this.NIGHT_VISION_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.ADD_MARKER(this.OPPONENT_CANNOT_PLAY_SUPPORTER_CARDS_MARKER, opponent, this);
+            (0, prefabs_1.ADD_MARKER)(this.OPPONENT_CANNOT_PLAY_SUPPORTER_CARDS_MARKER, opponent, this);
         }
         if (effect instanceof play_card_effects_1.PlaySupporterEffect) {
             const player = effect.player;
-            if (prefabs_1.HAS_MARKER(this.OPPONENT_CANNOT_PLAY_SUPPORTER_CARDS_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.OPPONENT_CANNOT_PLAY_SUPPORTER_CARDS_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
             }
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
-            prefabs_1.REMOVE_MARKER(this.OPPONENT_CANNOT_PLAY_SUPPORTER_CARDS_MARKER, effect.player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.OPPONENT_CANNOT_PLAY_SUPPORTER_CARDS_MARKER, effect.player, this);
         }
         return state;
     }

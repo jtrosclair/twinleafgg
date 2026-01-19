@@ -72,14 +72,14 @@ class Phione extends pokemon_card_1.PokemonCard {
                     }
                     // Move other attached cards to discard
                     if (otherCards.length > 0) {
-                        prefabs_1.MOVE_CARDS(store, state, phioneList, player.discard, { cards: otherCards });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, phioneList, player.discard, { cards: otherCards });
                     }
                     // Move Phione to bottom of deck
-                    prefabs_1.MOVE_CARDS(store, state, phioneList, deckBottom, {
+                    (0, prefabs_1.MOVE_CARDS)(store, state, phioneList, deckBottom, {
                         cards: [phioneCard],
                         skipCleanup: false
                     });
-                    prefabs_1.MOVE_CARDS(store, state, deckBottom, player.deck, {
+                    (0, prefabs_1.MOVE_CARDS)(store, state, deckBottom, player.deck, {
                         toBottom: true
                     });
                     phioneList.clearEffects();

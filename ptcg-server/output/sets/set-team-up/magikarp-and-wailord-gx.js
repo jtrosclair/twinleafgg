@@ -37,10 +37,10 @@ class MagikarpWailordGX extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Towering Splash-GX
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             const extraEffectCost = [W, W, W, W, W, W, W, W];
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);

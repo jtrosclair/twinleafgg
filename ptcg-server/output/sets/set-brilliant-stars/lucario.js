@@ -63,7 +63,7 @@ class Lucario extends pokemon_card_1.PokemonCard {
                     let cards = [];
                     store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Fighting Energy' }, { min: 0, max: 1, allowCancel: false, differentTypes: true }), selected => {
                         cards = selected || [];
-                        prefabs_1.MOVE_CARDS(store, state, player.deck, cardList, { cards, sourceCard: this, sourceEffect: this.powers[0] });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, cardList, { cards, sourceCard: this, sourceEffect: this.powers[0] });
                     });
                 }
             });

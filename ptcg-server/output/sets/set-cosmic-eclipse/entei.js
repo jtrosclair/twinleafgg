@@ -33,7 +33,7 @@ class Entei extends pokemon_card_1.PokemonCard {
         this.fullName = 'Entei CEC';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(marker_constants_1.MarkerConstants.REVENGE_MARKER)) {
                 effect.damage += 90;

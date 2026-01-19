@@ -1,5 +1,8 @@
-import { Prompt } from './prompt';
-export class ShuffleDeckPrompt extends Prompt {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ShuffleDeckPrompt = void 0;
+const prompt_1 = require("./prompt");
+class ShuffleDeckPrompt extends prompt_1.Prompt {
     constructor(playerId) {
         super(playerId);
         this.type = 'Shuffle deck';
@@ -25,3 +28,4 @@ export class ShuffleDeckPrompt extends Prompt {
         return true;
     }
 }
+exports.ShuffleDeckPrompt = ShuffleDeckPrompt;

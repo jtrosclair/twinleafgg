@@ -31,7 +31,7 @@ class Butterfree extends pokemon_card_1.PokemonCard {
         this.setNumber = '3';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             state = store.prompt(state, [
                 new game_1.CoinFlipPrompt(player.id, game_1.GameMessage.COIN_FLIP),
@@ -43,7 +43,7 @@ class Butterfree extends pokemon_card_1.PokemonCard {
                 results.forEach(r => { heads += r ? 1 : 0; });
                 effect.damage = 60 * heads;
                 if (heads >= 2) {
-                    prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+                    (0, prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
                 }
             });
             return state;

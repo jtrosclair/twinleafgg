@@ -80,7 +80,7 @@ class Empoleon extends pokemon_card_1.PokemonCard {
         }
         // Aquafall attack - discard all energy after damage is dealt
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
-            prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON(store, state, effect, this);
+            (0, prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON)(store, state, effect, this);
         }
         return state;
     }

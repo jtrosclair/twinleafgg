@@ -29,11 +29,11 @@ function* usePsychicRestore(next, store, state, effect) {
         const otherCards = target.cards.filter(card => !(card instanceof pokemon_card_1.PokemonCard));
         // Move other cards to deck first
         if (otherCards.length > 0) {
-            prefabs_1.MOVE_CARDS(store, state, target, player.deck, { cards: otherCards });
+            (0, prefabs_1.MOVE_CARDS)(store, state, target, player.deck, { cards: otherCards });
         }
         // Move Pokemon to deck
         if (pokemons.length > 0) {
-            prefabs_1.MOVE_CARDS(store, state, target, player.deck, { cards: pokemons });
+            (0, prefabs_1.MOVE_CARDS)(store, state, target, player.deck, { cards: pokemons });
         }
     });
 }

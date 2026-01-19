@@ -43,10 +43,10 @@ class Bellossom extends pokemon_card_1.PokemonCard {
         this.HEAL_DANCE_MARKER = 'HEAL_DANCE_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
-            if (prefabs_1.HAS_MARKER(this.HEAL_DANCE_MARKER, player)) {
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
+            if ((0, prefabs_1.HAS_MARKER)(this.HEAL_DANCE_MARKER, player)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             const blocked = [];
@@ -74,13 +74,13 @@ class Bellossom extends pokemon_card_1.PokemonCard {
                     store.reduceEffect(state, healEffect);
                 });
             });
-            prefabs_1.ADD_MARKER(this.HEAL_DANCE_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.HEAL_DANCE_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.HEAL_DANCE_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.HEAL_DANCE_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (result) {
                     const options = [
                         { message: game_1.GameMessage.SPECIAL_CONDITION_PARALYZED, value: card_types_1.SpecialCondition.PARALYZED },

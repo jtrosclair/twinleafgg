@@ -31,7 +31,7 @@ class Avery extends trainer_card_1.TrainerCard {
             // We will discard this card after prompt confirmation
             effect.preventDefault = true;
             // Draw 3 cards
-            prefabs_1.DRAW_CARDS(player, 3);
+            (0, prefabs_1.DRAW_CARDS)(player, 3);
             // Get opponent
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const opponentBenched = opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
@@ -52,22 +52,22 @@ class Avery extends trainer_card_1.TrainerCard {
                         const tools = [...cardList.tools];
                         // Move other cards to discard using MOVE_CARDS
                         if (otherCards.length > 0) {
-                            prefabs_1.MOVE_CARDS(store, state, cardList, opponent.discard, { cards: otherCards });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, cardList, opponent.discard, { cards: otherCards });
                         }
                         // Move tools to discard using MOVE_CARDS
                         if (tools.length > 0) {
-                            prefabs_1.MOVE_CARDS(store, state, cardList, opponent.discard, { cards: tools });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, cardList, opponent.discard, { cards: tools });
                         }
                         // Move Pokémon to discard using MOVE_CARDS
                         if (pokemons.length > 0) {
-                            prefabs_1.MOVE_CARDS(store, state, cardList, opponent.discard, { cards: pokemons });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, cardList, opponent.discard, { cards: pokemons });
                         }
                     });
-                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     return state;
                 });
             }
-            prefabs_1.MOVE_CARDS(store, state, player.supporter, player.discard, { cards: [effect.trainerCard] });
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.supporter, player.discard, { cards: [effect.trainerCard] });
             return state;
         }
         return state;

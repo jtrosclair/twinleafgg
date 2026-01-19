@@ -36,7 +36,7 @@ class ArceusGrass extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Leaf Refresh
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {
                 if (card !== player.active) {

@@ -34,7 +34,7 @@ class Ariados extends game_1.PokemonCard {
         this.usedSpiderTrap = false;
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const oppActive = opponent.active;
@@ -42,7 +42,7 @@ class Ariados extends game_1.PokemonCard {
                 effect.damage += 30;
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             this.usedSpiderTrap = true;
         }
         if (effect instanceof game_phase_effects_1.AfterAttackEffect && this.usedSpiderTrap) {
@@ -50,15 +50,15 @@ class Ariados extends game_1.PokemonCard {
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const bench = opponent.bench.filter(bench => bench.cards.length > 0);
             if (bench.length === 0) {
-                prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
-                prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, this);
+                (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, opponent, this);
+                (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, opponent, this);
                 this.usedSpiderTrap = false;
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (!result) {
-                    prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
-                    prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, this);
+                    (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, opponent, this);
+                    (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, opponent, this);
                     this.usedSpiderTrap = false;
                     return state;
                 }
@@ -66,8 +66,8 @@ class Ariados extends game_1.PokemonCard {
                     store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_SWITCH, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.BENCH], { allowCancel: false }), result => {
                         const cardList = result[0];
                         opponent.switchPokemon(cardList);
-                        prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
-                        prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, this);
+                        (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, opponent, this);
+                        (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, opponent, this);
                         this.usedSpiderTrap = false;
                     });
                 }

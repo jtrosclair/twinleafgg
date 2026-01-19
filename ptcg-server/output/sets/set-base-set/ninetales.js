@@ -35,7 +35,7 @@ class Ninetales extends pokemon_card_1.PokemonCard {
             }];
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const opponent = __1.StateUtils.getOpponent(state, effect.player);
             if (opponent.bench.some(b => b.cards.length > 0)) {
                 return store.prompt(state, new choose_pokemon_prompt_1.ChoosePokemonPrompt(effect.player.id, __1.GameMessage.CHOOSE_POKEMON_TO_SWITCH, __1.PlayerType.TOP_PLAYER, [__1.SlotType.BENCH]), ([bench]) => {
@@ -43,8 +43,8 @@ class Ninetales extends pokemon_card_1.PokemonCard {
                 });
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1, R);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1, R);
         }
         return state;
     }

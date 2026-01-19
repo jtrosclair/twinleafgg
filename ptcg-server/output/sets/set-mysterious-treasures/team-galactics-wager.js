@@ -18,7 +18,7 @@ class TeamGalacticsWager extends trainer_card_1.TrainerCard {
         this.text = 'Each player shuffles his or her hand into his or her deck, and you and your opponent play "Rock-Paper-Scissors." The player who wins draws up to 6 cards. The player who loses draws up to 3 cards. (You draw your cards first.)';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const supporterTurn = player.supporterTurn;
@@ -34,8 +34,8 @@ class TeamGalacticsWager extends trainer_card_1.TrainerCard {
             }
             player.hand.moveCardsTo(cards, player.deck);
             opponent.hand.moveCardsTo(opponentCards, opponent.deck);
-            prefabs_1.SHUFFLE_DECK(store, state, player);
-            prefabs_1.SHUFFLE_DECK(store, state, opponent);
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
             const options = [
                 { value: 'Rock', message: 'Rock' },
                 { value: 'Paper', message: 'Paper' },
@@ -65,8 +65,8 @@ class TeamGalacticsWager extends trainer_card_1.TrainerCard {
                     || (playerChosenValue === 0 && opponentChosenValue === 2)) {
                     maxPlayerDraw = 6;
                     maxOpponentDraw = 3;
-                    prefabs_1.DRAW_UP_TO_X_CARDS(store, state, player, maxPlayerDraw);
-                    prefabs_1.DRAW_UP_TO_X_CARDS(store, state, opponent, maxOpponentDraw);
+                    (0, prefabs_1.DRAW_UP_TO_X_CARDS)(store, state, player, maxPlayerDraw);
+                    (0, prefabs_1.DRAW_UP_TO_X_CARDS)(store, state, opponent, maxOpponentDraw);
                 }
             });
             player.supporter.moveCardTo(effect.trainerCard, player.discard);

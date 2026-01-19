@@ -46,7 +46,7 @@ function abortGameReducer(store, state, action) {
         const winner = culprit === state.players[0]
             ? state_1.GameWinner.PLAYER_2
             : state_1.GameWinner.PLAYER_1;
-        state = check_effect_1.endGame(store, state, winner);
+        state = (0, check_effect_1.endGame)(store, state, winner);
         return state;
     }
     return state;

@@ -31,7 +31,7 @@ class Onix extends game_1.PokemonCard {
         this.fullName = 'Onix CEC';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             //I couldn't find a prefab that moves energies from the discard to the hand.
             const player = effect.player;
             const hasEnergyInDiscard = player.discard.cards.some(c => {
@@ -42,12 +42,12 @@ class Onix extends game_1.PokemonCard {
             }
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: game_1.SuperType.ENERGY }, { min: 1, max: 1, allowCancel: false }), cards => {
                 cards = cards || [];
-                prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards, sourceCard: this, sourceEffect: this.attacks[0] });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards, sourceCard: this, sourceEffect: this.attacks[0] });
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             //Flip a coin. If tails, this attack does nothing.
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result)
                     return;
                 effect.damage = 0;

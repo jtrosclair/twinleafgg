@@ -33,7 +33,7 @@ class Servine extends game_1.PokemonCard {
         this.fullName = 'Servine SV11B';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_2.StateUtils.getOpponent(state, player);
             return store.prompt(state, new game_2.CoinFlipPrompt(player.id, game_2.GameMessage.COIN_FLIP), flipResult => {

@@ -34,13 +34,13 @@ class Magneton extends pokemon_card_1.PokemonCard {
         this.fullName = 'Magneton MEW';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: card_types_1.SuperType.TRAINER, trainerType: card_types_1.TrainerType.ITEM }, { min: 0, max: 2, allowCancel: false }), selected => {
                 if (selected) {
-                    prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, selected);
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: selected });
+                    (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, selected);
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: selected });
                 }
             });
         }

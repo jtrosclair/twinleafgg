@@ -1,5 +1,8 @@
-import { SimpleScore } from './score';
-export class BenchScore extends SimpleScore {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BenchScore = void 0;
+const score_1 = require("./score");
+class BenchScore extends score_1.SimpleScore {
     getScore(state, playerId) {
         const player = this.getPlayer(state, playerId);
         const scores = this.options.scores.bench;
@@ -8,3 +11,4 @@ export class BenchScore extends SimpleScore {
         return score;
     }
 }
+exports.BenchScore = BenchScore;

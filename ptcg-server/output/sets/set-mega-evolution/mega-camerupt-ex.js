@@ -36,7 +36,7 @@ class MegaCameruptEx extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Roasting Heat
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
             const activePokemon = opponent.active;
             // Check if opponent's active Pokémon is burned
@@ -45,7 +45,7 @@ class MegaCameruptEx extends game_1.PokemonCard {
             }
         }
         // Volcano Meteor
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             // Check if this Pokémon has at least 2 energy attached
             const energyCount = player.active.cards.filter(card => card.superType === game_1.SuperType.ENERGY).length;

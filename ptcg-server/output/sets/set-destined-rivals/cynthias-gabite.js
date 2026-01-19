@@ -44,18 +44,18 @@ class CynthiasGabite extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
-            prefabs_1.REMOVE_MARKER(this.CHAMPIONS_CALL_MARKER, effect.player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.CHAMPIONS_CALL_MARKER, effect.player, this);
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && prefabs_1.HAS_MARKER(this.CHAMPIONS_CALL_MARKER, effect.player, this)) {
-            prefabs_1.REMOVE_MARKER(this.CHAMPIONS_CALL_MARKER, effect.player, this);
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.CHAMPIONS_CALL_MARKER, effect.player, this)) {
+            (0, prefabs_1.REMOVE_MARKER)(this.CHAMPIONS_CALL_MARKER, effect.player, this);
         }
         if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.HAS_MARKER(this.CHAMPIONS_CALL_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.CHAMPIONS_CALL_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             const blocked = [];
             player.deck.cards.forEach((card, index) => {
                 if (card instanceof pokemon_card_1.PokemonCard && !card.tags.includes(card_types_1.CardTag.CYNTHIAS)) {
@@ -64,12 +64,12 @@ class CynthiasGabite extends pokemon_card_1.PokemonCard {
             });
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, { superType: card_types_1.SuperType.POKEMON }, { min: 0, max: 1, allowCancel: false, blocked }), cards => {
                 if (cards.length > 0) {
-                    prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: this, sourceEffect: this.powers[0] });
-                    prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: this, sourceEffect: this.powers[0] });
+                    (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
                 }
                 return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                     player.deck.applyOrder(order);
-                    prefabs_1.ADD_MARKER(this.CHAMPIONS_CALL_MARKER, player, this);
+                    (0, prefabs_1.ADD_MARKER)(this.CHAMPIONS_CALL_MARKER, player, this);
                 });
             });
         }

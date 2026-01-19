@@ -1,5 +1,8 @@
-import { Prompt } from './prompt';
-export class SelectPrompt extends Prompt {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SelectPrompt = void 0;
+const prompt_1 = require("./prompt");
+class SelectPrompt extends prompt_1.Prompt {
     constructor(playerId, message, values, options) {
         super(playerId);
         this.message = message;
@@ -12,3 +15,4 @@ export class SelectPrompt extends Prompt {
         }, options);
     }
 }
+exports.SelectPrompt = SelectPrompt;

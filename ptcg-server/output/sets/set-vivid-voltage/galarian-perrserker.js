@@ -35,11 +35,11 @@ class GalarianPerrserker extends pokemon_card_1.PokemonCard {
         this.fullName = 'Galarian Perserker VIV';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             let headsCount = 0;
-            prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 3, (results) => {
+            (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 3, (results) => {
                 results.forEach(result => {
                     if (result) {
                         headsCount++;

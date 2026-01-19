@@ -1,19 +1,22 @@
-import { AttachEnergyEffect } from '../effects/play-card-effects';
-import { GameError } from '../../game-error';
-import { GameMessage, GameLog } from '../../game-message';
-import { EnergyType } from '../card/card-types';
-export function playEnergyReducer(store, state, effect) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.playEnergyReducer = void 0;
+const play_card_effects_1 = require("../effects/play-card-effects");
+const game_error_1 = require("../../game-error");
+const game_message_1 = require("../../game-message");
+const card_types_1 = require("../card/card-types");
+function playEnergyReducer(store, state, effect) {
     /* Play energy card */
-    if (effect instanceof AttachEnergyEffect) {
+    if (effect instanceof play_card_effects_1.AttachEnergyEffect) {
         const pokemonCard = effect.target.getPokemonCard();
         if (pokemonCard === undefined) {
-            throw new GameError(GameMessage.INVALID_TARGET);
+            throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_TARGET);
         }
-        if (effect.energyCard.energyType === EnergyType.SPECIAL
+        if (effect.energyCard.energyType === card_types_1.EnergyType.SPECIAL
             && effect.player.marker.hasMarker(effect.player.ATTACK_EFFECT_SPECIAL_ENERGY_LOCK)) {
-            throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+            throw new game_error_1.GameError(game_message_1.GameMessage.BLOCKED_BY_EFFECT);
         }
-        store.log(state, GameLog.LOG_PLAYER_ATTACHES_CARD, {
+        store.log(state, game_message_1.GameLog.LOG_PLAYER_ATTACHES_CARD, {
             name: effect.player.name,
             card: effect.energyCard.name,
             pokemon: pokemonCard.name
@@ -28,3 +31,4 @@ export function playEnergyReducer(store, state, effect) {
     }
     return state;
 }
+exports.playEnergyReducer = playEnergyReducer;

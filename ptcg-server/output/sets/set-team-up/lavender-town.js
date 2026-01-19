@@ -21,7 +21,7 @@ class LavenderTown extends trainer_card_1.TrainerCard {
         if (effect instanceof game_effects_1.UseStadiumEffect && state_utils_1.StateUtils.getStadiumCard(state) === this) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
-            prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, player, opponent.hand.cards);
+            (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, player, opponent.hand.cards);
         }
         return state;
     }

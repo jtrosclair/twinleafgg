@@ -1,7 +1,7 @@
 import { Player, State, Action, Prompt } from '../../game';
 import { SimpleBotOptions } from '../simple-bot-options';
 import { StateScore } from '../state-score/state-score';
-export declare type PromptResolverList = (new (options: SimpleBotOptions) => PromptResolver)[];
+export type PromptResolverList = (new (options: SimpleBotOptions) => PromptResolver)[];
 export declare abstract class PromptResolver {
     protected options: SimpleBotOptions;
     protected stateScore: StateScore;

@@ -60,7 +60,7 @@ class MRayquazaEx extends pokemon_card_1.PokemonCard {
             store.reduceEffect(state, endTurnEffect);
         }
         // Emerald Break
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const playerBench = player.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
             effect.damage = playerBench * 30;

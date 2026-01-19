@@ -41,22 +41,22 @@ class Crobat extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard.name == 'Janine\'s Secret Art') {
-            prefabs_1.ADD_MARKER(this.PLAY_JANINES_SECRET_ART_MARKER, effect.player, this);
+            (0, prefabs_1.ADD_MARKER)(this.PLAY_JANINES_SECRET_ART_MARKER, effect.player, this);
         }
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
-            prefabs_1.REMOVE_MARKER(this.SHADOWY_ENVOY_MARKER, effect.player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.SHADOWY_ENVOY_MARKER, effect.player, this);
         }
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             //Check if the player's hand has fewer than 8 cards, and if they have not already used the ability.
             if (player.hand.cards.length >= 8) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            if (prefabs_1.HAS_MARKER(this.SHADOWY_ENVOY_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.SHADOWY_ENVOY_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             //If Janine's card was played, draw cards until you have 8 in hand.
-            if (prefabs_1.HAS_MARKER(this.PLAY_JANINES_SECRET_ART_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.PLAY_JANINES_SECRET_ART_MARKER, player, this)) {
                 /*When I tried to use the prefab to draw cards, I received this error:
                 Argument of type 'PowerEffect' is not assignable to parameter of type 'AttackEffect'.
                   Type 'PowerEffect' is missing the following properties from type 'AttackEffect': opponent, attack, damage, ignoreWeakness, and 3 more.ts(2345)*/
@@ -68,7 +68,7 @@ class Crobat extends game_1.PokemonCard {
                     player.deck.moveTo(player.hand, 1);
                 }
                 //Mark the Pokémon to indicate that the ability has already been used.
-                prefabs_1.ADD_MARKER(this.SHADOWY_ENVOY_MARKER, player, this);
+                (0, prefabs_1.ADD_MARKER)(this.SHADOWY_ENVOY_MARKER, player, this);
                 player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
                     if (cardList.getPokemonCard() === this) {
                         cardList.addBoardEffect(game_1.BoardEffect.ABILITY_USED);
@@ -80,12 +80,12 @@ class Crobat extends game_1.PokemonCard {
             }
             return state;
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.PLAY_JANINES_SECRET_ART_MARKER, this);
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.PLAY_JANINES_SECRET_ART_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.PLAY_JANINES_SECRET_ART_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.PLAY_JANINES_SECRET_ART_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this, 20);
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, opponent, this, 20);
         }
         return state;
     }

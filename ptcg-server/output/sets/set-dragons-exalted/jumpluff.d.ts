@@ -14,7 +14,7 @@ export declare class Jumpluff extends PokemonCard {
         type: CardType.WATER;
         value: number;
     }[];
-    retreat: never[];
+    retreat: any[];
     powers: {
         name: string;
         useWhenInPlay: boolean;

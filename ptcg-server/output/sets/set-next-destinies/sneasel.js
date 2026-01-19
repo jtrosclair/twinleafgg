@@ -33,13 +33,13 @@ class Sneasel extends game_1.PokemonCard {
         this.CORNER_MARKER = 'CORNER_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_2.ADD_MARKER(this.CORNER_MARKER, opponent.active, this);
+            (0, prefabs_2.ADD_MARKER)(this.CORNER_MARKER, opponent.active, this);
         }
-        prefabs_2.BLOCK_RETREAT_IF_MARKER(effect, this.CORNER_MARKER, this);
-        prefabs_1.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN(effect, this.CORNER_MARKER, this);
+        (0, prefabs_2.BLOCK_RETREAT_IF_MARKER)(effect, this.CORNER_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN)(effect, this.CORNER_MARKER, this);
         return state;
     }
 }

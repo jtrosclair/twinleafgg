@@ -47,10 +47,10 @@ Search your deck for up to 3 Basic Team Rocket's Pokémon, reveal them, and put 
             let cards = [];
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH, player.deck, { superType: card_types_1.SuperType.POKEMON, stage: card_types_1.Stage.BASIC }, { min: 0, max: 3, allowCancel: false, blocked: blocked }), selectedCards => {
                 cards = selectedCards || [];
-                prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards: cards, sourceCard: this });
-                prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: cards, sourceCard: this });
+                (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.rocketSupporter) {

@@ -90,7 +90,7 @@ class AlolanVulpixVSTAR extends pokemon_card_1.PokemonCard {
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.cards.includes(this)) {
             if (effect.target.marker.hasMarker(this.PREVENT_ALL_DAMAGE_BY_POKEMON_WITH_ABILITIES_MARKER, this)) {
                 const source = effect.source.getPokemonCard();
-                if (!prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.player, source)) {
+                if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, source)) {
                     effect.preventDefault = true;
                     return state;
                 }

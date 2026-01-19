@@ -47,7 +47,7 @@ class Wugtrio extends pokemon_card_1.PokemonCard {
             ], results => {
                 let heads = 0;
                 results.forEach(r => { heads += r ? 1 : 0; });
-                prefabs_1.MOVE_CARDS(store, state, opponent.deck, opponent.discard, { count: 3 * heads, sourceCard: this, sourceEffect: this.attacks[1] });
+                (0, prefabs_1.MOVE_CARDS)(store, state, opponent.deck, opponent.discard, { count: 3 * heads, sourceCard: this, sourceEffect: this.attacks[1] });
             });
         }
         return state;

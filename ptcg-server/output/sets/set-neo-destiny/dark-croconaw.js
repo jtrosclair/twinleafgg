@@ -34,22 +34,22 @@ class DarkCroconaw extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Clamping Jaw
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            return prefabs_1.BLOCK_RETREAT(store, state, effect, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            return (0, prefabs_1.BLOCK_RETREAT)(store, state, effect, this);
         }
-        prefabs_1.BLOCK_RETREAT_IF_MARKER(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
-        prefabs_1.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.SMOKESCREEN_MARKER, this);
+        (0, prefabs_1.BLOCK_RETREAT_IF_MARKER)(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN)(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.SMOKESCREEN_MARKER, this);
         // Smokescreen
-        if (effect instanceof game_effects_1.UseAttackEffect && prefabs_1.HAS_MARKER(marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this)) {
+        if (effect instanceof game_effects_1.UseAttackEffect && (0, prefabs_1.HAS_MARKER)(marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.HAS_MARKER(this.SMOKESCREEN_MARKER, opponent, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.SMOKESCREEN_MARKER, opponent, this)) {
                 return state; // Avoids recursion
             }
             effect.preventDefault = true;
-            prefabs_1.ADD_MARKER(this.SMOKESCREEN_MARKER, opponent, this); // Avoids recursion
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            (0, prefabs_1.ADD_MARKER)(this.SMOKESCREEN_MARKER, opponent, this); // Avoids recursion
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (result) {
                     const useAttackEffect = new game_effects_1.UseAttackEffect(player, effect.attack);
                     store.reduceEffect(state, useAttackEffect);

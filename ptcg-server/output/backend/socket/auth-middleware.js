@@ -12,7 +12,7 @@ async function authMiddleware(socket, next) {
     const rateLimit = rate_limit_1.RateLimit.getInstance();
     const token = socket.handshake.query && socket.handshake.query.token;
     const reconnectionAttempt = socket.handshake.query && socket.handshake.query.reconnection;
-    const userId = auth_token_1.validateToken(token);
+    const userId = (0, auth_token_1.validateToken)(token);
     const ipAddress = ((_b = (_a = socket.handshake.headers['x-forwarded-for']) === null || _a === void 0 ? void 0 : _a.split(',')[0]) === null || _b === void 0 ? void 0 : _b.trim())
         || (socket.request.socket.remoteAddress || ((_c = socket.request.connection) === null || _c === void 0 ? void 0 : _c.remoteAddress))
         || '0.0.0.0';

@@ -7,7 +7,7 @@ export declare class Diancie extends PokemonCard {
     weakness: {
         type: CardType.GRASS;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: CardType.COLORLESS[];
     attacks: ({
         name: string;

@@ -34,14 +34,14 @@ class Shaymin extends pokemon_card_1.PokemonCard {
         this.fullName = 'Shaymin SLG';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             //MOVE_CARDS(store, state, player.hand, player.deck, { cards: player.hand.cards });
             player.hand.moveTo(player.deck);
-            prefabs_1.SHUFFLE_DECK(store, state, player);
-            prefabs_1.DRAW_CARDS(player, 6);
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
+            (0, prefabs_1.DRAW_CARDS)(player, 6);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(marker_constants_1.MarkerConstants.REVENGE_MARKER)) {
                 effect.damage += 90;

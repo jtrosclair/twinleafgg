@@ -33,7 +33,7 @@ class SeasManaphy2 extends pokemon_card_1.PokemonCard {
         this.fullName = 'Sea\'s Manaphy PCGP 146';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const hasEnergy = player.discard.cards.some(c => {
@@ -49,13 +49,13 @@ class SeasManaphy2 extends pokemon_card_1.PokemonCard {
                     cards.forEach((card, index) => {
                         store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                     });
-                    prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: cards });
+                    (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: cards });
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1, card_types_1.CardType.WATER);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1, card_types_1.CardType.WATER);
         }
         return state;
     }

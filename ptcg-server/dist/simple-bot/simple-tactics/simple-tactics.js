@@ -1,38 +1,41 @@
-import { PlayerType, SlotType, GameError, GameMessage, ResolvePromptAction } from '../../game';
-import { Simulator } from '../../game/bots/simulator';
-import { StateScore } from '../state-score/state-score';
-export class SimpleTactic {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getCardTarget = exports.SimpleTactic = void 0;
+const game_1 = require("../../game");
+const simulator_1 = require("../../game/bots/simulator");
+const state_score_1 = require("../state-score/state-score");
+class SimpleTactic {
     constructor(options) {
         this.options = options;
-        this.stateScore = new StateScore(this.options);
+        this.stateScore = new state_score_1.StateScore(this.options);
     }
     getCardTarget(player, state, target) {
         if (target === player.active) {
-            return { player: PlayerType.BOTTOM_PLAYER, slot: SlotType.ACTIVE, index: 0 };
+            return { player: game_1.PlayerType.BOTTOM_PLAYER, slot: game_1.SlotType.ACTIVE, index: 0 };
         }
         for (let index = 0; index < player.bench.length; index++) {
             if (target === player.bench[index]) {
-                return { player: PlayerType.BOTTOM_PLAYER, slot: SlotType.BENCH, index };
+                return { player: game_1.PlayerType.BOTTOM_PLAYER, slot: game_1.SlotType.BENCH, index };
             }
         }
         const opponent = state.players.find(p => p !== player);
         if (opponent === undefined) {
-            throw new GameError(GameMessage.INVALID_GAME_STATE);
+            throw new game_1.GameError(game_1.GameMessage.INVALID_GAME_STATE);
         }
         if (target === opponent.active) {
-            return { player: PlayerType.TOP_PLAYER, slot: SlotType.ACTIVE, index: 0 };
+            return { player: game_1.PlayerType.TOP_PLAYER, slot: game_1.SlotType.ACTIVE, index: 0 };
         }
         for (let index = 0; index < opponent.bench.length; index++) {
             if (target === opponent.bench[index]) {
-                return { player: PlayerType.TOP_PLAYER, slot: SlotType.BENCH, index };
+                return { player: game_1.PlayerType.TOP_PLAYER, slot: game_1.SlotType.BENCH, index };
             }
         }
-        throw new GameError(GameMessage.INVALID_TARGET);
+        throw new game_1.GameError(game_1.GameMessage.INVALID_TARGET);
     }
     simulateAction(state, action) {
         let newState = state;
         try {
-            const simulator = new Simulator(state, this.options.arbiter);
+            const simulator = new simulator_1.Simulator(state, this.options.arbiter);
             newState = simulator.dispatch(action);
             while (simulator.store.state.prompts.some(p => p.result === undefined)) {
                 newState = simulator.store.state;
@@ -62,7 +65,7 @@ export class SimpleTactic {
             }
         }
         // Unknown prompt. Try to cancel it.
-        return new ResolvePromptAction(prompt.id, null);
+        return new game_1.ResolvePromptAction(prompt.id, null);
     }
     getStateScore(state, playerId) {
         return this.stateScore.getScore(state, playerId);
@@ -76,26 +79,28 @@ export class SimpleTactic {
         }
     }
 }
-export function getCardTarget(player, state, target) {
+exports.SimpleTactic = SimpleTactic;
+function getCardTarget(player, state, target) {
     if (target === player.active) {
-        return { player: PlayerType.BOTTOM_PLAYER, slot: SlotType.ACTIVE, index: 0 };
+        return { player: game_1.PlayerType.BOTTOM_PLAYER, slot: game_1.SlotType.ACTIVE, index: 0 };
     }
     for (let index = 0; index < player.bench.length; index++) {
         if (target === player.bench[index]) {
-            return { player: PlayerType.BOTTOM_PLAYER, slot: SlotType.BENCH, index };
+            return { player: game_1.PlayerType.BOTTOM_PLAYER, slot: game_1.SlotType.BENCH, index };
         }
     }
     const opponent = state.players.find(p => p !== player);
     if (opponent === undefined) {
-        throw new GameError(GameMessage.INVALID_GAME_STATE);
+        throw new game_1.GameError(game_1.GameMessage.INVALID_GAME_STATE);
     }
     if (target === opponent.active) {
-        return { player: PlayerType.TOP_PLAYER, slot: SlotType.ACTIVE, index: 0 };
+        return { player: game_1.PlayerType.TOP_PLAYER, slot: game_1.SlotType.ACTIVE, index: 0 };
     }
     for (let index = 0; index < opponent.bench.length; index++) {
         if (target === opponent.bench[index]) {
-            return { player: PlayerType.TOP_PLAYER, slot: SlotType.BENCH, index };
+            return { player: game_1.PlayerType.TOP_PLAYER, slot: game_1.SlotType.BENCH, index };
         }
     }
-    throw new GameError(GameMessage.INVALID_TARGET);
+    throw new game_1.GameError(game_1.GameMessage.INVALID_TARGET);
 }
+exports.getCardTarget = getCardTarget;

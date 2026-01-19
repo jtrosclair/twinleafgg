@@ -1049,7 +1049,7 @@ exports.CAN_PLAY_SUPPORTER_CARD = CAN_PLAY_SUPPORTER_CARD;
  * @returns The updated game state
  */
 function BLOCK_RETREAT(store, state, effect, source) {
-    const retreatEffect = effect_of_attack_effects_1.preventRetreatEffect(effect, source);
+    const retreatEffect = (0, effect_of_attack_effects_1.preventRetreatEffect)(effect, source);
     return store.reduceEffect(state, retreatEffect);
 }
 exports.BLOCK_RETREAT = BLOCK_RETREAT;
@@ -1063,7 +1063,7 @@ exports.BLOCK_RETREAT = BLOCK_RETREAT;
  * @returns The updated game state
  */
 function PREVENT_DAMAGE(store, state, effect, source) {
-    const damageEffect = effect_of_attack_effects_1.preventDamageEffect(effect, source);
+    const damageEffect = (0, effect_of_attack_effects_1.preventDamageEffect)(effect, source);
     return store.reduceEffect(state, damageEffect);
 }
 exports.PREVENT_DAMAGE = PREVENT_DAMAGE;

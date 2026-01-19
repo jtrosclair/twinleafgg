@@ -38,7 +38,7 @@ class Kingambit extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Strike Down
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             if (opponent.active.damage >= 40) {
                 const knockout = new attack_effects_1.KnockOutOpponentEffect(effect, 999);

@@ -37,7 +37,7 @@ class Kyogre extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // High Water ability
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // Count Water Energy cards in discard
             const waterEnergyCards = player.discard.cards.filter(c => {
@@ -71,12 +71,12 @@ class Kyogre extends pokemon_card_1.PokemonCard {
                 // Attach energy cards to target Pokemon
                 for (const transfer of validTransfers) {
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this });
                 }
             });
         }
         // Swirling Waves attack
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             // Prompt to discard 1 energy from this Pokemon
             state = store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.active, { superType: card_types_1.SuperType.ENERGY }, { min: 1, max: 1, allowCancel: false }), selected => {

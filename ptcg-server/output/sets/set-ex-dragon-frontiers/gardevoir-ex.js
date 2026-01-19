@@ -38,23 +38,23 @@ class Gardevoirex extends pokemon_card_1.PokemonCard {
         this.IMPRISON_USED_MARKER = 'IMPRISON_USED_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.active.getPokemonCard() !== this) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            if (prefabs_1.HAS_MARKER(this.IMPRISON_USED_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.IMPRISON_USED_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { min: 1, max: 1, allowCancel: false }), selected => {
                 const targets = selected || [];
                 const pokemonList = targets[0];
                 if (pokemonList !== undefined) {
-                    prefabs_1.ADD_MARKER(this.IMPRISON_MARKER, pokemonList, this);
+                    (0, prefabs_1.ADD_MARKER)(this.IMPRISON_MARKER, pokemonList, this);
                 }
-                prefabs_1.ADD_MARKER(this.IMPRISON_USED_MARKER, player, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ADD_MARKER)(this.IMPRISON_USED_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 return state;
             });
         }
@@ -65,11 +65,11 @@ class Gardevoirex extends pokemon_card_1.PokemonCard {
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const allLists = [player.active, ...player.bench, ...opponent.active ? [opponent.active] : [], ...opponent.bench];
             const pokemonCardList = allLists.find(list => list.cards.includes(effect.card));
-            if (pokemonCardList && prefabs_1.HAS_MARKER(this.IMPRISON_MARKER, pokemonCardList, this)) {
+            if (pokemonCardList && (0, prefabs_1.HAS_MARKER)(this.IMPRISON_MARKER, pokemonCardList, this)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasBench = player.bench.some(b => b.cards.length > 0);
             if (hasBench === false) {
@@ -136,7 +136,7 @@ class Gardevoirex extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.IMPRISON_USED_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.IMPRISON_USED_MARKER, this);
         return state;
     }
 }

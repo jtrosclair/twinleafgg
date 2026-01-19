@@ -36,18 +36,18 @@ class Galvantula extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Stun Needle
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+                    (0, prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
                 }
             });
         }
         {
             // Shocking Pursuit
-            if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+            if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
                 const opponent = game_1.StateUtils.getOpponent(state, effect.player);
-                prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE(effect, store, state, 2 * opponent.active.damage);
+                (0, prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE)(effect, store, state, 2 * opponent.active.damage);
             }
             return state;
         }

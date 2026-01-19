@@ -20,7 +20,7 @@ function* useRegiGate(next, store, state, effect, self) {
         cards.length = slots.length;
     }
     cards.forEach((card, index) => {
-        prefabs_1.MOVE_CARDS(store, state, player.deck, slots[index], { cards: [card], sourceCard: self, sourceEffect: self.attacks[0] });
+        (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, slots[index], { cards: [card], sourceCard: self, sourceEffect: self.attacks[0] });
         slots[index].pokemonPlayedTurn = state.turn;
     });
     return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
@@ -59,7 +59,7 @@ class Regice extends pokemon_card_1.PokemonCard {
         this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER = 'DEFENDING_POKEMON_CANNOT_ATTACK_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useRegiGate(() => generator.next(), store, state, effect, this);
             return generator.next().value;
         }

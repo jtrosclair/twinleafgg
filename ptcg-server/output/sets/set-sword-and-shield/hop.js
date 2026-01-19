@@ -19,7 +19,7 @@ class Hop extends trainer_card_1.TrainerCard {
         this.text = 'Draw 3 cards.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             if (player.supporterTurn > 0) {
                 throw new game_1.GameError(game_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
@@ -28,7 +28,7 @@ class Hop extends trainer_card_1.TrainerCard {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
-            prefabs_1.DRAW_CARDS(player, 3);
+            (0, prefabs_1.DRAW_CARDS)(player, 3);
             player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;

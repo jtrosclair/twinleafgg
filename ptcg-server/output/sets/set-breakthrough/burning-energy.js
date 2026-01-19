@@ -49,7 +49,7 @@ If this card is discarded by an attack of the [R] Pokémon this card is attached
         if (effect instanceof check_effects_1.CheckTableStateEffect) {
             state.players.forEach(player => {
                 player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
-                    if (!cardList.cards.includes(this) || prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, cardList)) {
+                    if (!cardList.cards.includes(this) || (0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, cardList)) {
                         return;
                     }
                     const checkPokemonType = new check_effects_1.CheckPokemonTypeEffect(cardList);
@@ -61,14 +61,14 @@ If this card is discarded by an attack of the [R] Pokémon this card is attached
             });
         }
         if (effect instanceof game_effects_1.AttackEffect && effect.source.cards.includes(this) && effect.player.active === effect.source) {
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.source)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.player, this, effect.source)) {
                 return state;
             }
             effect.player.marker.addMarker(this.BURNING_EXISTANCE_MARKER, this);
         }
         // checking if this card is discarded while attacking
         if (effect instanceof attack_effects_1.DiscardCardsEffect && effect.player.marker.hasMarker(this.BURNING_EXISTANCE_MARKER, this)) {
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.source)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.player, this, effect.source)) {
                 return state;
             }
             effect.player.marker.addMarker(this.BURNING_DISCARDED_MARKER, this);

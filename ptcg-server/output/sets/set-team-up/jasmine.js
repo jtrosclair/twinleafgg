@@ -36,10 +36,10 @@ class Jasmine extends trainer_card_1.TrainerCard {
                 if (cards.length === 0) {
                     return state;
                 }
-                prefabs_1.MOVE_CARDS_TO_HAND(store, state, player, cards);
-                prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
+                (0, prefabs_1.MOVE_CARDS_TO_HAND)(store, state, player, cards);
+                (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
                 player.supporter.moveCardTo(effect.trainerCard, player.discard);
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
             return state;
         }

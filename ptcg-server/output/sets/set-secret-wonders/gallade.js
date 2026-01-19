@@ -36,7 +36,7 @@ class Gallade extends pokemon_card_1.PokemonCard {
         this.fullName = 'Gallade SW';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             const selectedTarget = opponent.active;
             const checkHpEffect = new check_effects_1.CheckHpEffect(effect.player, selectedTarget);
@@ -52,13 +52,13 @@ class Gallade extends pokemon_card_1.PokemonCard {
                 const damageEffect = new attack_effects_1.PutCountersEffect(effect, damageAmount);
                 damageEffect.target = selectedTarget;
                 store.reduceEffect(state, damageEffect);
-                prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, opponent);
+                (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, opponent);
             }
             else if (damageAmount <= 0) {
                 return state;
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const prizes = player.prizes.filter(p => p.isSecret);
             const cards = [];

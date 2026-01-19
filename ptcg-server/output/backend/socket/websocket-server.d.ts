@@ -3,7 +3,7 @@ import * as http from 'http';
 import { Server, Socket } from 'socket.io';
 import { Core } from '../../game/core/core';
 import { ReconnectionManager } from '../services/reconnection-manager';
-export declare type Middleware = (socket: Socket, next: (err?: any) => void) => void;
+export type Middleware = (socket: Socket, next: (err?: any) => void) => void;
 export declare class WebSocketServer {
     private core;
     server: Server | undefined;

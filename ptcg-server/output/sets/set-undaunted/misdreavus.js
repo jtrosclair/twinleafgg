@@ -32,9 +32,9 @@ class Misdreavus extends pokemon_card_1.PokemonCard {
         this.setNumber = '57';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.DRAW_CARDS(effect.player, 3);
-            prefabs_1.DRAW_CARDS(effect.opponent, 3);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.DRAW_CARDS)(effect.player, 3);
+            (0, prefabs_1.DRAW_CARDS)(effect.opponent, 3);
         }
         return state;
     }

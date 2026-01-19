@@ -68,13 +68,13 @@ class Giratina extends pokemon_card_1.PokemonCard {
                 return state;
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             let heads = 0;
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => { if (result)
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => { if (result)
                 heads++; });
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => { if (result)
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => { if (result)
                 heads++; });
             if (heads > 0) {
                 opponent.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {

@@ -44,7 +44,7 @@ class Nuzleaf extends pokemon_card_1.PokemonCard {
             if (opponent.hand.cards.length > 0) {
                 store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_SHUFFLE, opponent.hand, { trainerType: card_types_1.TrainerType.SUPPORTER }, { min: 1, max: 1, allowCancel: false }), selected => {
                     cards = selected || [];
-                    prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.deck, { cards, sourceCard: this, sourceEffect: this.attacks[1] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck, { cards, sourceCard: this, sourceEffect: this.attacks[1] });
                     //Shuffle deck afterward.
                     return store.prompt(state, new game_1.ShuffleDeckPrompt(opponent.id), order => {
                         opponent.deck.applyOrder(order);

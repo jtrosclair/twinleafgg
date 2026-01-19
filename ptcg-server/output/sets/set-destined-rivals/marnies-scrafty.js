@@ -34,7 +34,7 @@ class MarniesScrafty extends pokemon_card_1.PokemonCard {
         this.fullName = 'Marnie\'s Scrafty DRI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const dealDamage = new attack_effects_1.DealDamageEffect(effect, 30);
             dealDamage.target = player.active;

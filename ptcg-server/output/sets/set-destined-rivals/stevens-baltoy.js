@@ -34,9 +34,9 @@ class StevensBaltoy extends pokemon_card_1.PokemonCard {
         this.fullName = 'Steven\'s Baltoy DRI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            const slots = prefabs_1.GET_PLAYER_BENCH_SLOTS(player);
+            const slots = (0, prefabs_1.GET_PLAYER_BENCH_SLOTS)(player);
             if (slots.length === 0) {
                 return state;
             }
@@ -51,7 +51,7 @@ class StevensBaltoy extends pokemon_card_1.PokemonCard {
                     player.deck.moveCardTo(card, slots[index]);
                     slots[index].pokemonPlayedTurn = state.turn;
                 });
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                 return state;
             });
         }

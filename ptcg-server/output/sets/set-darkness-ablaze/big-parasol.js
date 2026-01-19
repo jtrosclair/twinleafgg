@@ -20,7 +20,7 @@ class BigParasol extends trainer_card_1.TrainerCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.AbstractAttackEffect) {
             const player = state_utils_1.StateUtils.findOwner(state, effect.target);
-            if (player.active.tools.includes(this) && !prefabs_1.IS_TOOL_BLOCKED(store, state, player, this)) {
+            if (player.active.tools.includes(this) && !(0, prefabs_1.IS_TOOL_BLOCKED)(store, state, player, this)) {
                 const sourceCard = effect.source.getPokemonCard();
                 if (sourceCard) {
                     // Check if the effect targets the player's active or benched Pokémon

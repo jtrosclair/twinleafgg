@@ -39,7 +39,7 @@ class Farigiraf extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // One-derful Rumble
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let stage1s = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
@@ -51,8 +51,8 @@ class Farigiraf extends pokemon_card_1.PokemonCard {
             effect.damage = 40 * stage1s;
         }
         // Eerie Wave
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         return state;
     }

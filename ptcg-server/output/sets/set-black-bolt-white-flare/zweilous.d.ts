@@ -10,7 +10,7 @@ export declare class Zweilous extends PokemonCard {
     weakness: {
         type: import("../../game").CardType.GRASS;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: import("../../game").CardType.COLORLESS[];
     attacks: ({
         name: string;

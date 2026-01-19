@@ -24,7 +24,7 @@ class TeamPlasmaBall extends trainer_card_1.TrainerCard {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.BLOCK_IF_DECK_EMPTY(player);
+            (0, prefabs_1.BLOCK_IF_DECK_EMPTY)(player);
             const blocked = [];
             player.deck.cards.forEach((card, index) => {
                 if (!(card instanceof game_1.PokemonCard && card.tags.includes(card_types_1.CardTag.TEAM_PLASMA))) {
@@ -38,10 +38,10 @@ class TeamPlasmaBall extends trainer_card_1.TrainerCard {
                 if (cards.length === 0) {
                     return state;
                 }
-                prefabs_1.MOVE_CARDS_TO_HAND(store, state, player, cards);
-                prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
+                (0, prefabs_1.MOVE_CARDS_TO_HAND)(store, state, player, cards);
+                (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
                 player.supporter.moveCardTo(effect.trainerCard, player.discard);
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
         }
         return state;

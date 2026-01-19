@@ -10,7 +10,7 @@ export declare class Sneasel extends PokemonCard {
         type: CardType.PSYCHIC;
         value: number;
     }[];
-    retreat: never[];
+    retreat: any[];
     attacks: ({
         name: string;
         cost: CardType.COLORLESS[];

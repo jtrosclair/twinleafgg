@@ -39,9 +39,9 @@ class Dragoniteex extends pokemon_card_1.PokemonCard {
         this.OPPONENT_CANNOT_PLAY_TRAINER_CARDS_MARKER = 'OPPONENT_CANNOT_PLAY_TRAINER_CARDS_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
-            prefabs_1.ADD_MARKER(this.OPPONENT_CANNOT_PLAY_TRAINER_CARDS_MARKER, opponent, this);
+            (0, prefabs_1.ADD_MARKER)(this.OPPONENT_CANNOT_PLAY_TRAINER_CARDS_MARKER, opponent, this);
         }
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard.trainerType !== card_types_1.TrainerType.SUPPORTER) {
             const player = effect.player;
@@ -52,7 +52,7 @@ class Dragoniteex extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
             effect.player.marker.removeMarker(this.OPPONENT_CANNOT_PLAY_TRAINER_CARDS_MARKER, this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = effect.opponent;
             const defending = opponent.active;
             // Check current HP and current damage on the defending Pokémon
@@ -65,7 +65,7 @@ class Dragoniteex extends pokemon_card_1.PokemonCard {
             const damageToPlace = Math.min(80, damageToKO);
             // Place damage counters on the Defending Pokémon
             if (damageToPlace > 0) {
-                attack_effects_2.PUT_X_DAMAGE_COUNTERS_ON_YOUR_OPPONENTS_ACTIVE_POKEMON(damageToPlace / 10, store, state, effect);
+                (0, attack_effects_2.PUT_X_DAMAGE_COUNTERS_ON_YOUR_OPPONENTS_ACTIVE_POKEMON)(damageToPlace / 10, store, state, effect);
             }
             // Put the rest wherever you want
             const remainingDamage = 80 - damageToPlace;

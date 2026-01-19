@@ -30,11 +30,11 @@ class Beedrill extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Elusive Master
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.hand.cards.filter(c => c !== this).length !== 0)
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
-            prefabs_1.PLAY_POKEMON_FROM_HAND_TO_BENCH(state, player, this);
+            (0, prefabs_1.PLAY_POKEMON_FROM_HAND_TO_BENCH)(state, player, this);
             player.deck.moveTo(player.hand, 3);
         }
         return state;

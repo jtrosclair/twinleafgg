@@ -68,7 +68,7 @@ class Jirachi extends pokemon_card_1.PokemonCard {
                         if (cards.length > 0) {
                             player.deck.moveCardsTo(cards, player.hand);
                         }
-                        prefabs_1.SHUFFLE_DECK(store, state, player);
+                        (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                     });
                 }
             });
@@ -79,7 +79,7 @@ class Jirachi extends pokemon_card_1.PokemonCard {
                 player.supportersForDetour.cards.push(effect.trainerCard);
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.supportersForDetour.cards.length == 0) {
                 return state;
@@ -91,7 +91,7 @@ class Jirachi extends pokemon_card_1.PokemonCard {
                 store.reduceEffect(state, playTrainerEffect);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const damage = 20; // Direct damage without weakness

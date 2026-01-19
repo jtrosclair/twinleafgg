@@ -41,21 +41,21 @@ class Flareonex extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Devo Flash
-        if (prefabs_1.JUST_EVOLVED(effect, this)) {
+        if ((0, prefabs_1.JUST_EVOLVED)(effect, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, effect.player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    prefabs_1.ADD_BURN_TO_PLAYER_ACTIVE(store, state, opponent, this);
-                    prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, opponent, this);
+                    (0, prefabs_1.ADD_BURN_TO_PLAYER_ACTIVE)(store, state, opponent, this);
+                    (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, opponent, this);
                 }
             });
         }
         // Flame Screen
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const addMarkerEffect = new attack_effects_1.AddMarkerEffect(effect, this.FLAME_SCREEN_MARKER, this);
             return store.reduceEffect(state, addMarkerEffect);
         }
@@ -71,8 +71,8 @@ class Flareonex extends game_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
             effect.player.active.marker.removeMarker(this.FLAME_SCREEN_MARKER, this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 10);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF)(store, state, effect, 10);
         }
         return state;
     }

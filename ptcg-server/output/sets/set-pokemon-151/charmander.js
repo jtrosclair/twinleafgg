@@ -34,8 +34,8 @@ class Charmander extends pokemon_card_1.PokemonCard {
         this.fullName = 'Charmander MEW';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.DISCARD_A_STADIUM_CARD_IN_PLAY(state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.DISCARD_A_STADIUM_CARD_IN_PLAY)(state);
         }
         return state;
     }

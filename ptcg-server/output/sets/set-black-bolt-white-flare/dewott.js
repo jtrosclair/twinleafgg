@@ -28,7 +28,7 @@ class Dewott extends game_1.PokemonCard {
         this.fullName = 'Dewott SV11W';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const cardList = player.active;
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, cardList);

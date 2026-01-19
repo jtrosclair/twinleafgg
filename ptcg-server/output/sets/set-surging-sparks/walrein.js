@@ -40,13 +40,13 @@ class Walrein extends pokemon_card_1.PokemonCard {
         this.FRIGID_FANGS_MARKER = 'FRIGID_FANGS_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = __1.StateUtils.getOpponent(state, player);
-            prefabs_1.ADD_MARKER(this.FRIGID_FANGS_MARKER, opponent, this);
+            (0, prefabs_1.ADD_MARKER)(this.FRIGID_FANGS_MARKER, opponent, this);
         }
         if (effect instanceof game_effects_1.AttackEffect) {
-            if (prefabs_1.HAS_MARKER(this.FRIGID_FANGS_MARKER, effect.player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.FRIGID_FANGS_MARKER, effect.player, this)) {
                 const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(effect.player);
                 store.reduceEffect(state, checkProvidedEnergyEffect);
                 const energyCount = checkProvidedEnergyEffect.energyMap
@@ -57,12 +57,12 @@ class Walrein extends pokemon_card_1.PokemonCard {
             }
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
-            if (prefabs_1.HAS_MARKER(this.FRIGID_FANGS_MARKER, effect.player, this)) {
-                prefabs_1.REMOVE_MARKER(this.FRIGID_FANGS_MARKER, effect.player, this);
+            if ((0, prefabs_1.HAS_MARKER)(this.FRIGID_FANGS_MARKER, effect.player, this)) {
+                (0, prefabs_1.REMOVE_MARKER)(this.FRIGID_FANGS_MARKER, effect.player, this);
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 50);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF)(store, state, effect, 50);
         }
         return state;
     }

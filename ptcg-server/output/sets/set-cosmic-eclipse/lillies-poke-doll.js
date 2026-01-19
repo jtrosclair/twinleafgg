@@ -61,12 +61,12 @@ This card can't retreat. If this card is Knocked Out, your opponent can't take a
             }
             store.log(state, __1.GameLog.LOG_PLAYER_PUTS_CARD_ON_BOTTOM_OF_DECK, { name: player.name, card: this.name });
             // Move Lillie's Poke Doll to bottom of deck
-            state = prefabs_1.MOVE_CARDS(store, state, pokeDollCardList, player.deck, {
+            state = (0, prefabs_1.MOVE_CARDS)(store, state, pokeDollCardList, player.deck, {
                 cards: [this],
                 toBottom: true
             });
             // Move any attached cards to discard
-            state = prefabs_1.MOVE_CARDS(store, state, pokeDollCardList, player.discard, {
+            state = (0, prefabs_1.MOVE_CARDS)(store, state, pokeDollCardList, player.discard, {
                 cards: pokeDollCardList.cards.filter(c => c !== this)
             });
         }

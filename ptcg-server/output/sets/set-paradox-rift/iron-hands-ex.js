@@ -38,10 +38,10 @@ class IronHandsex extends pokemon_card_1.PokemonCard {
         this.usedAmpYouVeryMuch = false;
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             this.usedAmpYouVeryMuch = false;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             this.usedAmpYouVeryMuch = true;
         }
         if (effect instanceof game_effects_1.KnockOutEffect && effect.target === effect.player.active) {

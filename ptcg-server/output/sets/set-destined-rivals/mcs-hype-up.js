@@ -35,9 +35,9 @@ class EmceesHype extends trainer_card_1.TrainerCard {
             // Move to supporter pile
             state = store.reduceEffect(state, new game_effects_1.MoveCardsEffect(player.hand, player.supporter, { cards: [effect.trainerCard] }));
             effect.preventDefault = true;
-            prefabs_1.DRAW_CARDS(player, 2);
+            (0, prefabs_1.DRAW_CARDS)(player, 2);
             if (opponent.getPrizeLeft() <= 3) {
-                prefabs_1.DRAW_CARDS(player, 2);
+                (0, prefabs_1.DRAW_CARDS)(player, 2);
             }
             player.supporter.moveTo(player.discard);
         }

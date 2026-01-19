@@ -59,13 +59,13 @@ class Vikavolt extends game_1.PokemonCard {
         this.fullName = 'Vikavolt SUM';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const generator = useStrongCharge(() => generator.next(), store, state, effect);
-            prefabs_1.ABILITY_USED(effect.player, this);
+            (0, prefabs_1.ABILITY_USED)(effect.player, this);
             return generator.next().value;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 3);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 3);
         }
         return state;
     }

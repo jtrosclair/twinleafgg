@@ -19,7 +19,7 @@ class Dan extends trainer_card_1.TrainerCard {
         this.text = 'Draw 2 cards. You and your opponent play Rock-Paper-Scissors until someone wins. If you win, draw 2 more cards.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (player.supporterTurn > 0) {
@@ -29,7 +29,7 @@ class Dan extends trainer_card_1.TrainerCard {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
-            prefabs_1.DRAW_CARDS(player, 2);
+            (0, prefabs_1.DRAW_CARDS)(player, 2);
             const options = [
                 { value: 'Rock', message: 'Rock' },
                 { value: 'Paper', message: 'Paper' },
@@ -54,7 +54,7 @@ class Dan extends trainer_card_1.TrainerCard {
                 if ((playerChosenValue === 1 && opponentChosenValue === 0)
                     || (playerChosenValue === 2 && opponentChosenValue === 1)
                     || (playerChosenValue === 0 && opponentChosenValue === 2)) {
-                    prefabs_1.DRAW_CARDS(player, 2);
+                    (0, prefabs_1.DRAW_CARDS)(player, 2);
                 }
             });
             player.supporter.moveCardTo(effect.trainerCard, player.discard);

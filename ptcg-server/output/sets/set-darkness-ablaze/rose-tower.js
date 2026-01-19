@@ -30,7 +30,7 @@ class RoseTower extends trainer_card_1.TrainerCard {
     }
     useStadium(store, state, effect) {
         const player = effect.player;
-        prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 3);
+        (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, 3);
         return state;
     }
 }

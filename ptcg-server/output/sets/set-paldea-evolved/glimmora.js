@@ -41,7 +41,7 @@ class Glimmora extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_effects_1.KnockOutEffect) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             // checking if this is the target for the damage
@@ -56,16 +56,16 @@ class Glimmora extends pokemon_card_1.PokemonCard {
             catch (_a) {
                 return state;
             }
-            const coinFlipResult = prefabs_1.SIMULATE_COIN_FLIP(store, state, player);
+            const coinFlipResult = (0, prefabs_1.SIMULATE_COIN_FLIP)(store, state, player);
             if (coinFlipResult) {
                 effect.prizeCount = 0;
                 store.log(state, game_1.GameLog.LOG_ABILITY_BLOCKS_DAMAGE, { name: opponent.name, pokemon: this.name });
             }
         }
         // Energy Feather
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
-            prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this, 60);
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, opponent, this, 60);
         }
         return state;
     }

@@ -127,7 +127,7 @@ class Game {
         var _a;
         let state = this.store.state;
         try {
-            this.stateHistory.push(utils_1.deepClone(state));
+            this.stateHistory.push((0, utils_1.deepClone)(state));
             if (this.isStartOfTurnAction(action, state)) {
                 this.turnStartHistoryIndex = this.stateHistory.length - 1;
             }
@@ -543,7 +543,7 @@ class Game {
         const prevState = this.stateHistory.pop();
         if (!prevState)
             return false;
-        this.store.state = utils_1.deepClone(prevState);
+        this.store.state = (0, utils_1.deepClone)(prevState);
         this.onStateChange(this.store.state);
         return true;
     }

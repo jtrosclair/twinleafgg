@@ -45,11 +45,11 @@ class Jolteonex extends game_1.PokemonCard {
         this.fullName = 'Jolteon ex DS';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.JUST_EVOLVED(effect, this)) {
-            if (prefabs_1.IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+        if ((0, prefabs_1.JUST_EVOLVED)(effect, this)) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, effect.player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, result => {
                 if (result) {
                     const opponent = game_1.StateUtils.getOpponent(state, effect.player);
                     opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList) => {
@@ -63,11 +63,11 @@ class Jolteonex extends game_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             effect.damage += effect.opponent.active.damage;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1, L);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1, L);
         }
         return state;
     }

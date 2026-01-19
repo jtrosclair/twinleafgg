@@ -61,7 +61,7 @@ class Jellicentex extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             if (opponent.active.getPokemonCard() === this) {
-                if (!prefabs_1.IS_ABILITY_BLOCKED(store, state, opponent, this)) {
+                if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, opponent, this)) {
                     throw new game_error_1.GameError(game_message_1.GameMessage.BLOCKED_BY_ABILITY);
                 }
             }

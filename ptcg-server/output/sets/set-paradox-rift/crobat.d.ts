@@ -14,7 +14,7 @@ export declare class Crobat extends PokemonCard {
         type: CardType;
         value: number;
     }[];
-    retreat: never[];
+    retreat: any[];
     evolvesFrom: string;
     attacks: {
         name: string;

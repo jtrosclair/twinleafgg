@@ -66,10 +66,10 @@ class Melony extends trainer_card_1.TrainerCard {
                     // Attach the energy
                     const transfer = transfers[0];
                     const targetList = game_1.StateUtils.getTarget(state, player, transfer.to);
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, targetList, { cards: [transfer.card], sourceCard: this, sourceEffect: effect });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, targetList, { cards: [transfer.card], sourceCard: this, sourceEffect: effect });
                     // Draw 3 cards
-                    prefabs_1.DRAW_CARDS(player, 3);
-                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                    (0, prefabs_1.DRAW_CARDS)(player, 3);
+                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 });
             });
         }

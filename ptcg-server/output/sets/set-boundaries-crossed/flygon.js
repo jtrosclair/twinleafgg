@@ -41,7 +41,7 @@ class Flygon extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.BetweenTurnsEffect && effect.player.active.getPokemonCard() === this) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card, target) => {
@@ -53,9 +53,9 @@ class Flygon extends pokemon_card_1.PokemonCard {
             });
         }
         // Flying Beatdown
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
                     const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
                     state = store.reduceEffect(state, checkProvidedEnergy);
@@ -65,7 +65,7 @@ class Flygon extends pokemon_card_1.PokemonCard {
                         discardEnergy.target = player.active;
                         store.reduceEffect(state, discardEnergy);
                     });
-                    attack_effects_2.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED(store, state, effect);
+                    (0, attack_effects_2.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED)(store, state, effect);
                 }
             }, game_1.GameMessage.WANT_TO_USE_EFFECT_OF_ATTACK);
         }

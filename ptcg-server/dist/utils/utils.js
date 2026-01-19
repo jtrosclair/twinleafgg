@@ -1,4 +1,7 @@
-export function deepCompare(x, y) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.generateId = exports.deepClone = exports.deepIterate = exports.deepCompare = void 0;
+function deepCompare(x, y) {
     if (x === y) {
         return true;
     }
@@ -42,7 +45,8 @@ export function deepCompare(x, y) {
     }
     return true;
 }
-export function deepIterate(source, callback) {
+exports.deepCompare = deepCompare;
+function deepIterate(source, callback) {
     if (source === null) {
         return;
     }
@@ -58,7 +62,8 @@ export function deepIterate(source, callback) {
         }
     }
 }
-export function deepClone(source, ignores = [], refMap = []) {
+exports.deepIterate = deepIterate;
+function deepClone(source, ignores = [], refMap = []) {
     if (source === null) {
         return null;
     }
@@ -84,7 +89,8 @@ export function deepClone(source, ignores = [], refMap = []) {
     }
     return source;
 }
-export function generateId(array) {
+exports.deepClone = deepClone;
+function generateId(array) {
     if (array.length === 0) {
         return 1;
     }
@@ -98,3 +104,4 @@ export function generateId(array) {
     }
     return id;
 }
+exports.generateId = generateId;

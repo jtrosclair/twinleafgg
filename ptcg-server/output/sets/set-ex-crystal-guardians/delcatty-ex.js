@@ -42,14 +42,14 @@ class Delcattyex extends pokemon_card_1.PokemonCard {
         this.NIGHT_VISION_MARKER = 'NIGHT_VISION_MARKER';
     }
     reduceEffect(store, state, effect) {
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.NIGHT_VISION_MARKER, this);
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.NIGHT_VISION_MARKER, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.HAS_MARKER(this.NIGHT_VISION_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.NIGHT_VISION_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             // Get player's hand length
             const playerHandLength = player.hand.cards.length;
             // Set discard amount to reach hand size of 6
@@ -58,7 +58,7 @@ class Delcattyex extends pokemon_card_1.PokemonCard {
             if (player.hand.cards.length > 6) {
                 store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {}, { min: playerDiscardAmount, max: playerDiscardAmount, allowCancel: false }), selected => {
                     const cards = selected || [];
-                    prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: cards, sourceCard: this, sourceEffect: this.powers[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: cards, sourceCard: this, sourceEffect: this.powers[0] });
                 });
             }
             // Get opponent's hand length
@@ -69,18 +69,18 @@ class Delcattyex extends pokemon_card_1.PokemonCard {
             if (opponent.hand.cards.length > 6) {
                 store.prompt(state, new game_1.ChooseCardsPrompt(opponent, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, opponent.hand, {}, { min: discardAmount, max: discardAmount, allowCancel: false }), selected => {
                     const cards = selected || [];
-                    prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.discard, { cards: cards, sourceCard: this, sourceEffect: this.powers[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.discard, { cards: cards, sourceCard: this, sourceEffect: this.powers[0] });
                 });
             }
-            prefabs_1.ADD_MARKER(this.NIGHT_VISION_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.NIGHT_VISION_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const energyInDiscard = player.discard.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY);
             effect.damage = energyInDiscard.length * 10;
-            prefabs_1.MOVE_CARDS(store, state, player.discard, player.deck, { cards: energyInDiscard, sourceCard: this, sourceEffect: this.attacks[0] });
-            prefabs_1.SHUFFLE_DECK(store, state, player);
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.deck, { cards: energyInDiscard, sourceCard: this, sourceEffect: this.attacks[0] });
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         }
         return state;
     }

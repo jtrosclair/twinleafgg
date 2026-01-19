@@ -6,7 +6,7 @@ export declare const ChooseEnergyPromptType = "Choose energy";
 export interface ChooseEnergyOptions {
     allowCancel: boolean;
 }
-export declare type EnergyMap = {
+export type EnergyMap = {
     card: Card;
     provides: CardType[];
 };

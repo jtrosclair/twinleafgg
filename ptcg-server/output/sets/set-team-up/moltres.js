@@ -62,8 +62,8 @@ class Moltres extends pokemon_card_1.PokemonCard {
             store.reduceEffect(state, discardEnergy);
             opponent.deck.moveTo(opponent.discard, totalDiscarded);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 3);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 3);
         }
         return state;
     }

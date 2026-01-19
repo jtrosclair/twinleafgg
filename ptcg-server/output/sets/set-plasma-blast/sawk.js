@@ -28,8 +28,8 @@ class Sawk extends game_1.PokemonCard {
         this.fullName = 'Sawk PLB';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.DEAL_MORE_DAMAGE_IF_OPPONENT_ACTIVE_HAS_CARD_TAG(effect, state, 40, game_1.CardTag.TEAM_PLASMA);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.DEAL_MORE_DAMAGE_IF_OPPONENT_ACTIVE_HAS_CARD_TAG)(effect, state, 40, game_1.CardTag.TEAM_PLASMA);
         }
         return state;
     }

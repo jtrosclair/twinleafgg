@@ -41,7 +41,7 @@ class Armaldo extends pokemon_card_1.PokemonCard {
                 return state;
             }
             const armaldoOwner = player.active.getPokemonCard() === this ? player : opponent;
-            if (!prefabs_1.IS_POKEBODY_BLOCKED(store, state, armaldoOwner, this)) {
+            if (!(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, armaldoOwner, this)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
         }

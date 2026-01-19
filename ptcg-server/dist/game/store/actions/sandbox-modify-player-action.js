@@ -1,4 +1,7 @@
-export class SandboxModifyPlayerAction {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SandboxModifyPlayerAction = void 0;
+class SandboxModifyPlayerAction {
     constructor(clientId, targetPlayerId, modifications) {
         this.clientId = clientId;
         this.targetPlayerId = targetPlayerId;
@@ -6,3 +9,4 @@ export class SandboxModifyPlayerAction {
         this.type = 'SANDBOX_MODIFY_PLAYER';
     }
 }
+exports.SandboxModifyPlayerAction = SandboxModifyPlayerAction;

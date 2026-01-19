@@ -36,7 +36,7 @@ class Dondozo extends pokemon_card_1.PokemonCard {
         this.fullName = 'Dondozo SVI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const cards = effect.player.discard.cards.filter(c => c.name === 'Tatsugiri');
             effect.damage = cards.length * 50;
             return state;

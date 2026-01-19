@@ -19,7 +19,7 @@ class PokemonFanClub extends trainer_card_1.TrainerCard {
         this.text = 'Search your deck for up to 2 Basic Pokémon and put them onto your Bench. Shuffle your deck afterward.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             effect.preventDefault = true;
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
@@ -29,7 +29,7 @@ class PokemonFanClub extends trainer_card_1.TrainerCard {
             if (player.supporterTurn > 0) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
             }
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player, { superType: card_types_1.SuperType.POKEMON, stage: card_types_1.Stage.BASIC }, { min: 0, max: 2 });
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, player, { superType: card_types_1.SuperType.POKEMON, stage: card_types_1.Stage.BASIC }, { min: 0, max: 2 });
             player.supporter.moveCardTo(this, player.discard);
         }
         return state;

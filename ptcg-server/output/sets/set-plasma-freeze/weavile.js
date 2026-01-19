@@ -38,7 +38,7 @@ class Weavile extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Hail
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             const benched = opponent.bench.filter(b => b.cards.length > 0);
             const activeDamageEffect = new attack_effects_1.DealDamageEffect(effect, 20);
@@ -50,7 +50,7 @@ class Weavile extends pokemon_card_1.PokemonCard {
             });
         }
         // Bite Off
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const pokemonInHand = player.hand.cards.filter(c => c.superType === card_types_1.SuperType.POKEMON).length;
             // Allow player to discard any number of pokemon
@@ -62,7 +62,7 @@ class Weavile extends pokemon_card_1.PokemonCard {
                 effect.damage = transfers.length * 30;
                 // Discard the cards
                 for (const transfer of transfers) {
-                    prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: [transfer] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: [transfer] });
                 }
                 return state;
             });

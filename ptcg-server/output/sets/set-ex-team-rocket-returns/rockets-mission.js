@@ -51,7 +51,7 @@ class RocketsMission extends trainer_card_1.TrainerCard {
                     cards.forEach((card, index) => {
                         store.log(state, game_1.GameLog.LOG_PLAYER_DISCARDS_CARD_FROM_HAND, { name: player.name, card: card.name });
                     });
-                    prefabs_1.DRAW_CARDS(player, cardsToDraw);
+                    (0, prefabs_1.DRAW_CARDS)(player, cardsToDraw);
                 });
             }
             player.supporter.moveCardTo(effect.trainerCard, player.discard);

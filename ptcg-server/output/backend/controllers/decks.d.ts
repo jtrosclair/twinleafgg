@@ -9,6 +9,6 @@ export declare class Decks extends Controller {
     onDuplicate(req: Request, res: Response): Promise<void>;
     onStats(req: Request, res: Response): Promise<void>;
     onBackfillSecondaryArchetypes(req: Request, res: Response): Promise<void>;
-    onValidateFormats(req: Request, res: Response): Promise<Response<any>>;
+    onValidateFormats(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
     private validateCards;
 }

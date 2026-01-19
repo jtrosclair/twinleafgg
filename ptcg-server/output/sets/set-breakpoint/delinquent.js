@@ -38,21 +38,21 @@ class Delinquent extends trainer_card_1.TrainerCard {
                 // Discard Stadium
                 const cardList = state_utils_1.StateUtils.findCardList(state, stadiumCard);
                 const player = state_utils_1.StateUtils.findOwner(state, cardList);
-                prefabs_1.MOVE_CARDS(store, state, cardList, player.discard, { sourceCard: this });
+                (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.discard, { sourceCard: this });
             }
             // Discard 3 cards from opponent's hand
             const opponentCards = opponent.hand.cards.filter(c => c !== this);
             if (opponentCards.length <= 3) {
-                prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.discard, { sourceCard: this });
+                (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.discard, { sourceCard: this });
             }
             if (opponentCards.length > 3) {
                 let cards = [];
                 state = store.prompt(state, new game_1.ChooseCardsPrompt(opponent, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, opponent.hand, {}, { min: 3, max: 3, allowCancel: false }), selected => {
                     cards = selected || [];
-                    prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.discard, { cards, sourceCard: this });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.discard, { cards, sourceCard: this });
                 });
             }
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         }
         return state;
     }

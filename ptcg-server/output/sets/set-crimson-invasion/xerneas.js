@@ -50,7 +50,7 @@ class Xerneas extends pokemon_card_1.PokemonCard {
                         cards.forEach((card, index) => {
                             store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                         });
-                        prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: this, sourceEffect: this.attacks[0] });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: this, sourceEffect: this.attacks[0] });
                     });
                 }
                 return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {

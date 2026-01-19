@@ -46,7 +46,7 @@ function* useSuperGrowth(next, store, state, effect) {
         next();
     });
     if (targets.length === 0) {
-        prefabs_1.SHUFFLE_DECK(store, state, player);
+        (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         return state; // canceled by user
     }
     const target = targets[0];
@@ -68,7 +68,7 @@ function* useSuperGrowth(next, store, state, effect) {
     });
     // Canceled by user, he didn't find the card in the deck
     if (cards.length === 0) {
-        prefabs_1.SHUFFLE_DECK(store, state, player);
+        (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         return state;
     }
     const evolution = cards[0];
@@ -98,7 +98,7 @@ function* useSuperGrowth(next, store, state, effect) {
             target.pokemonPlayedTurn = state.turn;
         }
     }
-    prefabs_1.SHUFFLE_DECK(store, state, player);
+    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
 }
 class RowletAlolanExeggutorGX extends game_1.PokemonCard {
     constructor() {
@@ -138,20 +138,20 @@ class RowletAlolanExeggutorGX extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Super Growth
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useSuperGrowth(() => generator.next(), store, state, effect);
             return generator.next().value;
         }
         // Calming Hurricane
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const healing = new game_effects_1.HealEffect(effect.player, effect.player.active, 30);
             store.reduceEffect(state, healing);
         }
         // Tropical Hour-GX
-        if (prefabs_1.WAS_ATTACK_USED(effect, 2, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             const extraEffectCost = [G, G, G, G, G, G];
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
@@ -165,7 +165,7 @@ class RowletAlolanExeggutorGX extends game_1.PokemonCard {
                         em.card.cards.moveTo(opponent.deck);
                     });
                 });
-                prefabs_1.SHUFFLE_DECK(store, state, opponent);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
             }
         }
         return state;

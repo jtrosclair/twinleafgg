@@ -36,15 +36,15 @@ function* playCard(next, store, state, effect) {
     if (cards.length === 0) {
         return state;
     }
-    prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: effect.trainerCard });
+    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: effect.trainerCard });
     const max = Math.min(basicEnergyCards, 2);
     return store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { min: 1, max: max, allowCancel: false }), cards => {
         cards = cards || [];
         if (cards.length > 0) {
             // Recover discarded Pokemon
-            prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards, sourceCard: effect.trainerCard });
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards, sourceCard: effect.trainerCard });
             // Discard item card
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         }
     });
 }

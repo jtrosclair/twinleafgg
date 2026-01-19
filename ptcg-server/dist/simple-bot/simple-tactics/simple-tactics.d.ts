@@ -1,6 +1,6 @@
 import { Action, Player, State, PokemonCardList, CardTarget } from '../../game';
 import { SimpleBotOptions } from '../simple-bot-options';
-export declare type SimpleTacticList = (new (options: SimpleBotOptions) => SimpleTactic)[];
+export type SimpleTacticList = (new (options: SimpleBotOptions) => SimpleTactic)[];
 export declare abstract class SimpleTactic {
     protected options: SimpleBotOptions;
     private stateScore;

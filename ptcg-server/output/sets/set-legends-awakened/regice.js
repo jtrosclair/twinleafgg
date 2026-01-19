@@ -40,11 +40,11 @@ class Regice extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
-            prefabs_1.REMOVE_MARKER(this.REGI_MOVE_MARKER, effect.player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.REGI_MOVE_MARKER, effect.player, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.REGI_MOVE_MARKER, this);
-        prefabs_1.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN(effect, this.ICE_REFLECT_MARKER, this);
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.REGI_MOVE_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN)(effect, this.ICE_REFLECT_MARKER, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.REGI_MOVE_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
@@ -62,10 +62,10 @@ class Regice extends pokemon_card_1.PokemonCard {
                 }
                 const opponent = game_1.StateUtils.getOpponent(state, player);
                 player.hand.moveCardsTo(cards, player.discard);
-                prefabs_1.ADD_MARKER(this.REGI_MOVE_MARKER, player, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ADD_MARKER)(this.REGI_MOVE_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 if (opponent.active.getPokemons().length < 2) {
-                    prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, opponent);
+                    (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, opponent);
                 }
                 else {
                     // Rulings state that you can discard cards even if the opponent's active is evolved
@@ -74,10 +74,10 @@ class Regice extends pokemon_card_1.PokemonCard {
             });
         }
         // Not sure how to manage the markers on this
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (prefabs_1.HAS_MARKER(this.ICE_REFLECT_MARKER, player, this)) {
-                attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED(store, state, effect);
+            if ((0, prefabs_1.HAS_MARKER)(this.ICE_REFLECT_MARKER, player, this)) {
+                (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED)(store, state, effect);
             }
         }
         if (effect instanceof attack_effects_2.AfterDamageEffect && effect.target.cards.includes(this)) {
@@ -86,7 +86,7 @@ class Regice extends pokemon_card_1.PokemonCard {
             if (effect.damage <= 0 || player === targetPlayer || targetPlayer.active !== effect.target) {
                 return state;
             }
-            prefabs_1.ADD_MARKER(this.ICE_REFLECT_MARKER, targetPlayer, this);
+            (0, prefabs_1.ADD_MARKER)(this.ICE_REFLECT_MARKER, targetPlayer, this);
             console.log('added ice marker');
         }
         return state;

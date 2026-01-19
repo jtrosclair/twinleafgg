@@ -56,8 +56,8 @@ class JirachiPrismStar extends pokemon_card_1.PokemonCard {
             opponent.active.marker.addMarker(this.CLEAR_KNOCKOUT_MARKER, this);
             console.log('first marker added');
         }
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, effect.player, this);
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.active.marker.hasMarker(this.CLEAR_KNOCKOUT_MARKER, this)) {
             const player = effect.player;
@@ -73,7 +73,7 @@ class JirachiPrismStar extends pokemon_card_1.PokemonCard {
         const player = effect.player;
         const prizeCard = effect.prizes.find(cardList => cardList.cards.includes(this));
         // Check if ability conditions are met
-        if (!prizeCard || prefabs_1.GET_PLAYER_BENCH_SLOTS(player).length === 0 || !prizeCard.isSecret || effect.destination !== player.hand) {
+        if (!prizeCard || (0, prefabs_1.GET_PLAYER_BENCH_SLOTS)(player).length === 0 || !prizeCard.isSecret || effect.destination !== player.hand) {
             return state;
         }
         // Prevent unintended multiple uses
@@ -82,14 +82,14 @@ class JirachiPrismStar extends pokemon_card_1.PokemonCard {
         }
         this.abilityUsed = true;
         // Check if ability is blocked
-        if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+        if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
             return state;
         }
         // Prevent prize card from going to hand until we complete the ability flow
         effect.preventDefault = true;
         // Ask player if they want to use the ability
         let wantToUse = false;
-        yield prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+        yield (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
             wantToUse = result;
             next();
         }, game_1.GameMessage.WANT_TO_USE_ABILITY_FROM_PRIZES);
@@ -97,7 +97,7 @@ class JirachiPrismStar extends pokemon_card_1.PokemonCard {
         const prizeIndex = player.prizes.findIndex(prize => prize.cards.includes(this));
         const fallback = (prizeIndex) => {
             if (prizeIndex !== -1) {
-                prefabs_1.TAKE_SPECIFIC_PRIZES(store, state, player, [player.prizes[prizeIndex]], { skipReduce: true });
+                (0, prefabs_1.TAKE_SPECIFIC_PRIZES)(store, state, player, [player.prizes[prizeIndex]], { skipReduce: true });
             }
             return;
         };
@@ -110,7 +110,7 @@ class JirachiPrismStar extends pokemon_card_1.PokemonCard {
         // (Unfortunately, we have to check this again closer to the end of the flow
         // because due to how the generator pattern works, the player could have
         // played another card to the bench)
-        const emptyBenchSlots = prefabs_1.GET_PLAYER_BENCH_SLOTS(player);
+        const emptyBenchSlots = (0, prefabs_1.GET_PLAYER_BENCH_SLOTS)(player);
         if (emptyBenchSlots.length === 0) {
             effect.preventDefault = false;
             fallback(prizeIndex);
@@ -130,7 +130,7 @@ class JirachiPrismStar extends pokemon_card_1.PokemonCard {
             }
         }
         // Handle extra prize (excluding the group this card is in)
-        yield prefabs_1.TAKE_X_PRIZES(store, state, player, 1, {
+        yield (0, prefabs_1.TAKE_X_PRIZES)(store, state, player, 1, {
             promptOptions: {
                 blocked: effect.prizes.map(p => player.prizes.indexOf(p))
             }

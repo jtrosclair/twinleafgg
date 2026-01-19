@@ -59,10 +59,10 @@ class NaganadelGuzzlordGX extends pokemon_card_1.PokemonCard {
                         throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
                     }
                     return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARDS, player.hand, { superType: card_types_1.SuperType.POKEMON }, { allowCancel: false, min: 1, max: 1 }), cards => {
-                        prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: this, sourceEffect: this.powers[0] });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: this, sourceEffect: this.powers[0] });
                         card.marker.addMarker(this.VIOLENT_APPETITE_MARKER, this);
                         player.marker.addMarker(this.VIOLENT_APPETITE_MARKER, this);
-                        prefabs_1.ABILITY_USED(player, card);
+                        (0, prefabs_1.ABILITY_USED)(player, card);
                         const healing = new game_effects_1.HealEffect(player, player.active, 60);
                         store.reduceEffect(state, healing);
                     });
@@ -72,7 +72,7 @@ class NaganadelGuzzlordGX extends pokemon_card_1.PokemonCard {
         // Chaotic Order-GX
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             player.prizes.forEach(p => {
                 p.isPublic = true;
@@ -87,7 +87,7 @@ class NaganadelGuzzlordGX extends pokemon_card_1.PokemonCard {
             if (!meetsExtraEffectCost) {
                 return state;
             } // If we don't have the extra energy, we just deal damage.
-            return prefabs_1.TAKE_X_PRIZES(store, state, player, 2);
+            return (0, prefabs_1.TAKE_X_PRIZES)(store, state, player, 2);
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.VIOLENT_APPETITE_MARKER, this)) {
             effect.player.marker.removeMarker(this.VIOLENT_APPETITE_MARKER, this);

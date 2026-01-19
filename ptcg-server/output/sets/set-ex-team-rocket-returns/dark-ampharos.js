@@ -45,7 +45,7 @@ class DarkAmpharos extends game_1.PokemonCard {
         if (effect instanceof game_effects_1.EvolveEffect) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, opponent, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
             if (effect.darkestImpulseSV) {

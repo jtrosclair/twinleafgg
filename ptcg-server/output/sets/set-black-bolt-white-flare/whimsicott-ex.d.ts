@@ -11,8 +11,8 @@ export declare class Whimsicottex extends PokemonCard {
     weakness: {
         type: CardType.FIRE;
     }[];
-    resistance: never[];
-    retreat: never[];
+    resistance: any[];
+    retreat: any[];
     attacks: {
         name: string;
         cost: CardType.GRASS[];

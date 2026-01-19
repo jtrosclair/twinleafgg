@@ -37,9 +37,9 @@ class Naveen extends trainer_card_1.TrainerCard {
             handTemp.cards = player.hand.cards.filter(c => c !== this);
             state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_DISCARD, handTemp, {}, { min: 0, max: player.hand.cards.length, allowCancel: false }), selected => {
                 selected = selected || [];
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: selected });
-                prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 5);
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: selected });
+                (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, 5);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             });
             return state;
         }

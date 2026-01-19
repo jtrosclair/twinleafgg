@@ -52,7 +52,7 @@ class Feebas extends pokemon_card_1.PokemonCard {
         this.fullName = 'Feebas HL';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const generator = useAscension(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

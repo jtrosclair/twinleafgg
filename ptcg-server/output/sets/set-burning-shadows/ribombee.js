@@ -37,21 +37,21 @@ class Ribombee extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Honey Gather
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (prefabs_1.HAS_MARKER(this.HONEY_GATHER_MARKER, effect.player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.HONEY_GATHER_MARKER, effect.player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, this, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { min: 0, max: 2 }, this.powers[0]);
-            prefabs_1.ADD_MARKER(this.HONEY_GATHER_MARKER, effect.player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND)(store, state, player, this, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { min: 0, max: 2 }, this.powers[0]);
+            (0, prefabs_1.ADD_MARKER)(this.HONEY_GATHER_MARKER, effect.player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.HONEY_GATHER_MARKER, this);
-        if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this && prefabs_1.HAS_MARKER(this.HONEY_GATHER_MARKER, effect.player, this)) {
-            prefabs_1.REMOVE_MARKER(this.HONEY_GATHER_MARKER, effect.player, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.HONEY_GATHER_MARKER, this);
+        if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this && (0, prefabs_1.HAS_MARKER)(this.HONEY_GATHER_MARKER, effect.player, this)) {
+            (0, prefabs_1.REMOVE_MARKER)(this.HONEY_GATHER_MARKER, effect.player, this);
         }
         return state;
     }

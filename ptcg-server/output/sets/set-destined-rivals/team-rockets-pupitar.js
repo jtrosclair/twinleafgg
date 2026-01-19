@@ -21,7 +21,7 @@ function* useExplosiveAwakening(next, store, state, effect) {
         player.active.clearEffects();
         player.active.pokemonPlayedTurn = state.turn;
     }
-    prefabs_1.SHUFFLE_DECK(store, state, player);
+    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
 }
 class TeamRocketsPupitar extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -49,7 +49,7 @@ class TeamRocketsPupitar extends pokemon_card_1.PokemonCard {
         this.fullName = 'Team Rocket\'s Pupitar DRI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useExplosiveAwakening(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

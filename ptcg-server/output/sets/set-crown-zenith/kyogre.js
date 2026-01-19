@@ -48,13 +48,13 @@ class Kyogre extends pokemon_card_1.PokemonCard {
                     return;
                 }
                 for (const transfer of transfers) {
-                    prefabs_1.MOVE_CARDS(store, state, player.active, player.hand, { cards: [transfer.card], sourceCard: this, sourceEffect: this.attacks[1] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.active, player.hand, { cards: [transfer.card], sourceCard: this, sourceEffect: this.attacks[1] });
                 }
                 const min = Math.min(1);
                 const max = Math.min(1);
                 return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_message_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { min, max, allowCancel: false }), selected => {
                     const targets = selected || [];
-                    prefabs_1.DAMAGE_OPPONENT_POKEMON(store, state, effect, 180, targets);
+                    (0, prefabs_1.DAMAGE_OPPONENT_POKEMON)(store, state, effect, 180, targets);
                 });
             });
         }
@@ -64,13 +64,13 @@ class Kyogre extends pokemon_card_1.PokemonCard {
                 transfers = transfers || [];
                 // cancelled by user
                 if (transfers.length === 0) {
-                    prefabs_1.SHUFFLE_DECK(store, state, player);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                     return;
                 }
                 for (const transfer of transfers) {
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                    prefabs_1.MOVE_CARDS(store, state, player.deck, target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.attacks[0] });
-                    prefabs_1.SHUFFLE_DECK(store, state, player);
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.attacks[0] });
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                     return state;
                 }
             });

@@ -24,7 +24,7 @@ class TherapeuticEnergy extends energy_card_1.EnergyCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.AttachEnergyEffect && effect.target.cards.includes(this)) {
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.target)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.player, this, effect.target)) {
                 return state;
             }
             const pokemon = effect.target;
@@ -35,7 +35,7 @@ class TherapeuticEnergy extends energy_card_1.EnergyCard {
         if (effect instanceof check_effects_1.CheckTableStateEffect) {
             const cardList = game_1.StateUtils.findCardList(state, this);
             if (cardList instanceof game_1.PokemonCardList && cardList.cards.includes(this)) {
-                if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, cardList)) {
+                if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.player, this, cardList)) {
                     return state;
                 }
                 const conditionsToKeep = [card_types_1.SpecialCondition.ABILITY_USED, card_types_1.SpecialCondition.POISONED, card_types_1.SpecialCondition.BURNED];

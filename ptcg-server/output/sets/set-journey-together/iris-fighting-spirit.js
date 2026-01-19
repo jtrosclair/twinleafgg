@@ -32,7 +32,7 @@ class IrisFightingSpirit extends trainer_card_1.TrainerCard {
                 if (player.hand.cards.length >= 6) {
                     return;
                 }
-                prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 6);
+                (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, 6);
             });
             return state;
         }

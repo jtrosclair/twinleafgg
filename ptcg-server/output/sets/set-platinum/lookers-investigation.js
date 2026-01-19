@@ -18,7 +18,7 @@ class LookersInvestigation extends trainer_card_1.TrainerCard {
         this.text = 'Look at your opponent\'s hand, then choose you or your opponent. That player shuffles his or her hand into his or her deck and draws up to 5 cards.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (player.supporterTurn > 0) {
@@ -26,7 +26,7 @@ class LookersInvestigation extends trainer_card_1.TrainerCard {
             }
             effect.preventDefault = true;
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
-            prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, player, opponent.hand.cards);
+            (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, player, opponent.hand.cards);
             state = store.prompt(state, new game_1.SelectOptionPrompt(player.id, game_1.GameMessage.CHOOSE_OPTION, [
                 'You shuffle your hand into your deck and draw 5 cards.',
                 'Your opponent shuffles his or her hand into his or her deck and draws 5 cards.'
@@ -36,16 +36,16 @@ class LookersInvestigation extends trainer_card_1.TrainerCard {
             }), choice => {
                 if (choice === 0) {
                     // Option 1
-                    prefabs_1.MOVE_CARDS(store, state, player.hand, player.deck);
-                    prefabs_1.SHUFFLE_DECK(store, state, player);
-                    prefabs_1.DRAW_CARDS(player, 5);
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
+                    (0, prefabs_1.DRAW_CARDS)(player, 5);
                     player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 }
                 else if (choice === 1) {
                     // Option 2
-                    prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.deck);
-                    prefabs_1.SHUFFLE_DECK(store, state, opponent);
-                    prefabs_1.DRAW_CARDS(opponent, 5);
+                    (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
+                    (0, prefabs_1.DRAW_CARDS)(opponent, 5);
                     player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 }
             });

@@ -21,15 +21,15 @@ class TransparentWalls extends trainer_card_1.TrainerCard {
         this.TRANSPARENT_WALLS_MARKER = 'TRANSPARENT_WALLS_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
-            prefabs_1.ADD_MARKER(this.TRANSPARENT_WALLS_MARKER, player, this);
-            prefabs_1.MOVE_CARD_TO(state, effect.trainerCard, player.discard);
+            (0, prefabs_1.ADD_MARKER)(this.TRANSPARENT_WALLS_MARKER, player, this);
+            (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
         }
         if (effect instanceof attack_effects_1.PutDamageEffect) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (!prefabs_1.HAS_MARKER(this.TRANSPARENT_WALLS_MARKER, opponent, this)) {
+            if (!(0, prefabs_1.HAS_MARKER)(this.TRANSPARENT_WALLS_MARKER, opponent, this)) {
                 return state;
             }
             if (effect.target === player.active || effect.target === opponent.active) {
@@ -43,8 +43,8 @@ class TransparentWalls extends trainer_card_1.TrainerCard {
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.HAS_MARKER(this.TRANSPARENT_WALLS_MARKER, opponent, this)) {
-                prefabs_1.REMOVE_MARKER(this.TRANSPARENT_WALLS_MARKER, opponent, this);
+            if ((0, prefabs_1.HAS_MARKER)(this.TRANSPARENT_WALLS_MARKER, opponent, this)) {
+                (0, prefabs_1.REMOVE_MARKER)(this.TRANSPARENT_WALLS_MARKER, opponent, this);
             }
         }
         return state;

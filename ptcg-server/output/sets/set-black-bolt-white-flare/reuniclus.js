@@ -104,12 +104,12 @@ class Reuniclus extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Cellular Awakening
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useCellularAwakening(() => generator.next(), store, state, effect);
             return generator.next().value;
         }
         // Evo Lariat
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             let evolutions = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {

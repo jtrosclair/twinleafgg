@@ -1,15 +1,18 @@
-import { PlayerType, SlotType } from '../../game/store/actions/play-card-action';
-import { GameError } from '../../game/game-error';
-import { GameMessage } from '../../game/game-message';
-import { TrainerCard } from '../../game/store/card/trainer-card';
-import { TrainerType, Stage, SuperType } from '../../game/store/card/card-types';
-import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
-import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { CardManager } from '../../game/cards/card-manager';
-import { CheckPokemonPlayedTurnEffect } from '../../game/store/effects/check-effects';
-import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RareCandy = void 0;
+const play_card_action_1 = require("../../game/store/actions/play-card-action");
+const game_error_1 = require("../../game/game-error");
+const game_message_1 = require("../../game/game-message");
+const trainer_card_1 = require("../../game/store/card/trainer-card");
+const card_types_1 = require("../../game/store/card/card-types");
+const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const choose_pokemon_prompt_1 = require("../../game/store/prompts/choose-pokemon-prompt");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
+const card_manager_1 = require("../../game/cards/card-manager");
+const check_effects_1 = require("../../game/store/effects/check-effects");
+const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
+const game_effects_1 = require("../../game/store/effects/game-effects");
 function isMatchingStage2(stage1, basic, stage2) {
     for (const card of stage1) {
         if (card.name === stage2.evolvesFrom && basic.name === card.evolvesFrom) {
@@ -26,19 +29,19 @@ function* playCard(next, store, state, effect) {
     // We will discard this card after prompt confirmation
     effect.preventDefault = true;
     const stage2 = player.hand.cards.filter(c => {
-        return c instanceof PokemonCard && c.stage === Stage.STAGE_2;
+        return c instanceof pokemon_card_1.PokemonCard && c.stage === card_types_1.Stage.STAGE_2;
     });
     if (stage2.length === 0) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
+        throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
     }
     // Look through all known cards to find out if it's a valid Stage 2
-    const cm = CardManager.getInstance();
+    const cm = card_manager_1.CardManager.getInstance();
     const stage1 = cm.getAllCards().filter(c => {
-        return c instanceof PokemonCard && c.stage === Stage.STAGE_1;
+        return c instanceof pokemon_card_1.PokemonCard && c.stage === card_types_1.Stage.STAGE_1;
     });
-    player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (list, card, target) => {
-        if (card.stage === Stage.BASIC && stage2.some(s => isMatchingStage2(stage1, card, s))) {
-            const playedTurnEffect = new CheckPokemonPlayedTurnEffect(player, list);
+    player.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, (list, card, target) => {
+        if (card.stage === card_types_1.Stage.BASIC && stage2.some(s => isMatchingStage2(stage1, card, s))) {
+            const playedTurnEffect = new check_effects_1.CheckPokemonPlayedTurnEffect(player, list);
             store.reduceEffect(state, playedTurnEffect);
             if (playedTurnEffect.pokemonPlayedTurn < state.turn) {
                 hasBasicPokemon = true;
@@ -48,13 +51,13 @@ function* playCard(next, store, state, effect) {
         blocked.push(target);
     });
     if (!hasBasicPokemon) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
+        throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
     }
     // We will discard this card after prompt confirmation
     effect.preventDefault = true;
     player.hand.moveCardTo(effect.trainerCard, player.supporter);
     let targets = [];
-    yield store.prompt(state, new ChoosePokemonPrompt(player.id, GameMessage.CHOOSE_POKEMON_TO_EVOLVE, PlayerType.BOTTOM_PLAYER, [SlotType.ACTIVE, SlotType.BENCH], { allowCancel: false, blocked }), selection => {
+    yield store.prompt(state, new choose_pokemon_prompt_1.ChoosePokemonPrompt(player.id, game_message_1.GameMessage.CHOOSE_POKEMON_TO_EVOLVE, play_card_action_1.PlayerType.BOTTOM_PLAYER, [play_card_action_1.SlotType.ACTIVE, play_card_action_1.SlotType.BENCH], { allowCancel: false, blocked }), selection => {
         targets = selection || [];
         next();
     });
@@ -67,29 +70,29 @@ function* playCard(next, store, state, effect) {
     }
     const blocked2 = [];
     player.hand.cards.forEach((c, index) => {
-        if (c instanceof PokemonCard && c.stage === Stage.STAGE_2) {
+        if (c instanceof pokemon_card_1.PokemonCard && c.stage === card_types_1.Stage.STAGE_2) {
             if (!isMatchingStage2(stage1, pokemonCard, c)) {
                 blocked2.push(index);
             }
         }
     });
     let cards = [];
-    return store.prompt(state, new ChooseCardsPrompt(player, GameMessage.CHOOSE_CARD_TO_EVOLVE, player.hand, { superType: SuperType.POKEMON, stage: Stage.STAGE_2 }, { min: 1, max: 1, allowCancel: false, blocked: blocked2 }), selected => {
+    return store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_EVOLVE, player.hand, { superType: card_types_1.SuperType.POKEMON, stage: card_types_1.Stage.STAGE_2 }, { min: 1, max: 1, allowCancel: false, blocked: blocked2 }), selected => {
         cards = selected || [];
         if (cards.length > 0) {
             const pokemonCard = cards[0];
-            const evolveEffect = new EvolveEffect(player, targets[0], pokemonCard);
+            const evolveEffect = new game_effects_1.EvolveEffect(player, targets[0], pokemonCard);
             store.reduceEffect(state, evolveEffect);
             // Discard trainer only when user selected a Pokemon
             player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
     });
 }
-export class RareCandy extends TrainerCard {
+class RareCandy extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
         this.regulationMark = 'G';
-        this.trainerType = TrainerType.ITEM;
+        this.trainerType = card_types_1.TrainerType.ITEM;
         this.set = 'SVI';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '191';
@@ -101,10 +104,11 @@ export class RareCandy extends TrainerCard {
             'or on a Basic Pokemon that was put into play this turn.';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof TrainerEffect && effect.trainerCard === this) {
+        if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const generator = playCard(() => generator.next(), store, state, effect);
             return generator.next().value;
         }
         return state;
     }
 }
+exports.RareCandy = RareCandy;

@@ -37,15 +37,15 @@ class PalkiaG extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Splashing Turn
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.CONFIRMATION_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, effect.player);
+                    (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, effect.player);
                 }
             });
         }
         // Pearl Breath
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = effect.opponent;
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList) => {
                 if (cardList !== opponent.active) {

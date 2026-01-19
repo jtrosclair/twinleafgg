@@ -54,12 +54,12 @@ class Porygon2 extends pokemon_card_1.PokemonCard {
             if (player.hand.cards.length >= 3) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             while (player.hand.cards.length < 3) {
                 if (player.deck.cards.length === 0) {
                     break;
                 }
-                prefabs_1.DRAW_CARDS(player, 1);
+                (0, prefabs_1.DRAW_CARDS)(player, 1);
             }
             player.marker.addMarker(this.BACKUP_MARKER, this);
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
@@ -68,8 +68,8 @@ class Porygon2 extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
         }
         return state;
     }

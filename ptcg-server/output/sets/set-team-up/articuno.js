@@ -65,7 +65,7 @@ class Articuno extends pokemon_card_1.PokemonCard {
         if (effect instanceof play_card_effects_1.TrainerTargetEffect) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (!opponent.active.cards.includes(this) || prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if (!opponent.active.cards.includes(this) || (0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             if (effect.target) {

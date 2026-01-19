@@ -11,7 +11,7 @@ export declare class TapuKokoex extends PokemonCard {
     weakness: {
         type: CardType.FIGHTING;
     }[];
-    retreat: never[];
+    retreat: any[];
     attacks: {
         name: string;
         cost: (CardType.LIGHTNING | CardType.COLORLESS)[];

@@ -18,7 +18,7 @@ class BillsMaintenance extends trainer_card_1.TrainerCard {
         this.text = 'If you have any cards in your hand, shuffle 1 of them into your deck, then draw 3 cards.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const supporterTurn = player.supporterTurn;
             if (supporterTurn > 0) {
@@ -34,11 +34,11 @@ class BillsMaintenance extends trainer_card_1.TrainerCard {
                 if (cards.length === 0) {
                     return;
                 }
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.deck, { cards: cards, sourceCard: this });
-                prefabs_1.SHUFFLE_DECK(store, state, player);
-                prefabs_1.DRAW_CARDS(player, 3);
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck, { cards: cards, sourceCard: this });
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
+                (0, prefabs_1.DRAW_CARDS)(player, 3);
             });
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         return state;

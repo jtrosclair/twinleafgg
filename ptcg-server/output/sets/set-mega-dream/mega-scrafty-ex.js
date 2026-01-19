@@ -43,7 +43,7 @@ class MegaScraftyex extends game_1.PokemonCard {
             if (player === opponent || player.active !== effect.target) {
                 return state;
             }
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const damageEffect = new game_effects_1.EffectOfAbilityEffect(player, this.powers[0], this, effect.source);
@@ -63,7 +63,7 @@ class MegaScraftyex extends game_1.PokemonCard {
                 opponent.hand.moveCardTo(randomCard, opponent.discard);
             }
             // Discard the top card of opponent's deck
-            prefabs_1.MOVE_CARDS(store, state, opponent.deck, opponent.discard, { count: 1, sourceCard: this, sourceEffect: this.attacks[0] });
+            (0, prefabs_1.MOVE_CARDS)(store, state, opponent.deck, opponent.discard, { count: 1, sourceCard: this, sourceEffect: this.attacks[0] });
         }
         return state;
     }

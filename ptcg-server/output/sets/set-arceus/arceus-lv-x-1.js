@@ -50,7 +50,7 @@ class ArceusLvX1 extends pokemon_card_1.PokemonCard {
         // Multitype
         if (effect instanceof check_effects_1.CheckPokemonStatsEffect && effect.target.getPokemonCard() === this) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             effect.target.cards.forEach(card => {
@@ -61,7 +61,7 @@ class ArceusLvX1 extends pokemon_card_1.PokemonCard {
             });
         }
         // Psychic Bolt
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
             state = store.reduceEffect(state, checkProvidedEnergy);

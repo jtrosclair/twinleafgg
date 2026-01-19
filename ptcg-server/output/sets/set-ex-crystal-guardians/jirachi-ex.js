@@ -43,7 +43,7 @@ class Jirachiex extends pokemon_card_1.PokemonCard {
         if (effect instanceof check_effects_1.CheckAttackCostEffect && effect.attack === (this.attacks[0] || this.attacks[1])) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             let isThingInPlay = false;
@@ -63,16 +63,16 @@ class Jirachiex extends pokemon_card_1.PokemonCard {
                 }
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.ADD_MARKER(this.SHIELD_BEAM_MARKER, opponent, this);
+            (0, prefabs_1.ADD_MARKER)(this.SHIELD_BEAM_MARKER, opponent, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && prefabs_1.HAS_MARKER(this.SHIELD_BEAM_MARKER, effect.player, this)
+        if (effect instanceof game_effects_1.PowerEffect && (0, prefabs_1.HAS_MARKER)(this.SHIELD_BEAM_MARKER, effect.player, this)
             && (effect.power.powerType === game_1.PowerType.POKEPOWER)) {
             throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.SHIELD_BEAM_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.SHIELD_BEAM_MARKER, this);
         return state;
     }
 }

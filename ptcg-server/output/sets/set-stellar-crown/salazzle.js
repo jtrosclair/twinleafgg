@@ -36,15 +36,15 @@ class Salazzle extends pokemon_card_1.PokemonCard {
         this.SUDDEN_SCORCHING_MARKER = 'SUDDEN_SCORCHING_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.JUST_EVOLVED(effect, this) && !prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+        if ((0, prefabs_1.JUST_EVOLVED)(effect, this) && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this)) {
             const player = effect.player;
-            prefabs_1.ADD_MARKER(this.SUDDEN_SCORCHING_MARKER, player, this);
+            (0, prefabs_1.ADD_MARKER)(this.SUDDEN_SCORCHING_MARKER, player, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.SUDDEN_SCORCHING_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.SUDDEN_SCORCHING_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            const markerCount = prefabs_1.HAS_MARKER(this.SUDDEN_SCORCHING_MARKER, player, this) ? 3 : 1;
+            const markerCount = (0, prefabs_1.HAS_MARKER)(this.SUDDEN_SCORCHING_MARKER, player, this) ? 3 : 1;
             if (opponent.hand.cards.length < markerCount) {
                 const cards = opponent.hand.cards;
                 opponent.hand.moveCardsTo(cards, player.discard);
@@ -56,8 +56,8 @@ class Salazzle extends pokemon_card_1.PokemonCard {
             });
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1);
         }
         return state;
     }

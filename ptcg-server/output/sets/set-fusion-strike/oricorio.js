@@ -37,15 +37,15 @@ class Oricorio extends pokemon_card_1.PokemonCard {
         this.fullName = 'Oricorio FST';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_2.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE(5, store, state, effect);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_2.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE)(5, store, state, effect);
         }
         if (effect instanceof attack_effects_1.PutDamageEffect && state_utils_1.StateUtils.isPokemonInPlay(effect.player, this)) {
             const player = effect.player;
             const target = effect.target.getPokemonCard();
             const isTargetFusionStrike = target && target.tags.includes(card_types_1.CardTag.FUSION_STRIKE);
             if (isTargetFusionStrike) {
-                if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+                if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                     return state;
                 }
                 effect.reduceDamage(20, this.powers[0].name);

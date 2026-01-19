@@ -48,7 +48,7 @@ class GalarianWeezing extends pokemon_card_1.PokemonCard {
                 return state;
             }
             if (hasThisInPlay) {
-                if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+                if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                     return state;
                 }
                 if (!((_a = effect.source.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.name.includes('Weezing'))) {

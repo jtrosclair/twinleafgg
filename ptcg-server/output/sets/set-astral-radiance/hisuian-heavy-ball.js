@@ -52,7 +52,7 @@ class HisuianHeavyBall extends game_1.TrainerCard {
                             p.isSecret = true;
                         }
                     });
-                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     this.shuffleFaceDownPrizeCards(player.prizes.filter((p, index) => originallyFaceDown[index]));
                     return state;
                 }

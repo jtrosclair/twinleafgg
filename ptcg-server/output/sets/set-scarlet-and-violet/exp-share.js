@@ -31,7 +31,7 @@ class ExpShare extends trainer_card_1.TrainerCard {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             const active = effect.target;
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             // Do not activate between turns, or when it's not opponents turn.

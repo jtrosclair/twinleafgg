@@ -54,7 +54,7 @@ class VenusaurSnivyGX extends game_1.PokemonCard {
             if (player.active.getPokemonCard() !== this) {
                 return state;
             }
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             if (!effect.energyCard.provides.includes(game_1.CardType.GRASS)) {
@@ -73,7 +73,7 @@ class VenusaurSnivyGX extends game_1.PokemonCard {
             if (player.active.marker.hasMarker(this.SHINING_VINE_MARKER, this)) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
                     return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_SWITCH, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.BENCH], { allowCancel: false }), result => {
                         const cardList = result[0];
@@ -93,10 +93,10 @@ class VenusaurSnivyGX extends game_1.PokemonCard {
             });
         }
         // Solar Plant-GX
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             opponent.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {
                 const damage = new attack_effects_1.DealDamageEffect(effect, 50);

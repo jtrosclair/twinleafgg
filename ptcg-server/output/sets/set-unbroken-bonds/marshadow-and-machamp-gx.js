@@ -46,15 +46,15 @@ class MarshadowMachampGX extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Revenge
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (effect.player.marker.hasMarker(marker_constants_1.MarkerConstants.REVENGE_MARKER)) {
                 effect.damage += 90;
             }
         }
         // Acme of Heroism-GX
-        if (prefabs_1.WAS_ATTACK_USED(effect, 2, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             const extraEffectCost = [F, F, C, C];
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);

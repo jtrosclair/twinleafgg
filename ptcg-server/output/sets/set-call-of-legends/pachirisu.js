@@ -68,13 +68,13 @@ class Pachirisu extends pokemon_card_1.PokemonCard {
                     return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_ATTACH, player.hand, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Lightning Energy' }, { min: 0, max: 2, allowCancel: false }), cards => {
                         cards = cards || [];
                         if (cards.length > 0) {
-                            prefabs_1.MOVE_CARDS(store, state, player.hand, cardList, { cards, sourceCard: this, sourceEffect: this.powers[0] });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, cardList, { cards, sourceCard: this, sourceEffect: this.powers[0] });
                         }
                     });
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const cardList = game_1.StateUtils.findCardList(state, this);
             if (!(cardList instanceof game_1.PokemonCardList))
@@ -83,7 +83,7 @@ class Pachirisu extends pokemon_card_1.PokemonCard {
             state = store.reduceEffect(state, checkProvidedEnergy);
             const cards = checkProvidedEnergy.energyMap.map(e => e.card);
             cards.forEach(card => {
-                prefabs_1.MOVE_CARDS(store, state, cardList, player.lostzone, { cards: [card], sourceCard: this, sourceEffect: this.attacks[0] });
+                (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.lostzone, { cards: [card], sourceCard: this, sourceEffect: this.attacks[0] });
             });
         }
         return state;

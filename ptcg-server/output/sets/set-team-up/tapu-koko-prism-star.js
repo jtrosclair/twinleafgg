@@ -86,11 +86,11 @@ class TapuKokoPrismStar extends pokemon_card_1.PokemonCard {
                         cardList.clearEffects();
                         // Move Pokémon cards to the Lost Zone
                         if (pokemons.length > 0) {
-                            prefabs_1.MOVE_CARDS(store, state, cardList, player.lostzone, { cards: pokemons });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.lostzone, { cards: pokemons });
                         }
                         // Move other cards (tools, energies, etc.) to the discard
                         if (otherCards.length > 0) {
-                            prefabs_1.MOVE_CARDS(store, state, cardList, player.discard, { cards: otherCards });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.discard, { cards: otherCards });
                         }
                         // Move tools to the discard
                         if (tools.length > 0) {

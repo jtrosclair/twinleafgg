@@ -29,11 +29,11 @@ function* playCard(next, store, state, self, effect) {
         cards = selected || [];
         next();
     });
-    prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: cards, sourceCard: self });
+    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: cards, sourceCard: self });
     const opponent = state_utils_1.StateUtils.getOpponent(state, player);
     const cardsToDraw = opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
-    prefabs_1.DRAW_CARDS(player, cardsToDraw);
-    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+    (0, prefabs_1.DRAW_CARDS)(player, cardsToDraw);
+    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return state;
 }
 class ZinniasResolve extends trainer_card_1.TrainerCard {

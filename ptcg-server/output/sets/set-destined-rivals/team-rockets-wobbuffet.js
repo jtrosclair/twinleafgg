@@ -36,7 +36,7 @@ class TeamRocketsWobbuffet extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Rocket Mirror
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // checking for a damaged rockets pokemon on the bench
             const blockedTo = [];

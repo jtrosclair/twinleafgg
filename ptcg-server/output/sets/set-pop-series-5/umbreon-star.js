@@ -39,20 +39,20 @@ class UmbreonStar extends pokemon_card_1.PokemonCard {
         this.fullName = 'Umbreon Star P5';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this && !prefabs_1.IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
-            prefabs_1.CONFIRMATION_PROMPT(store, state, effect.player, wantToUse => {
+        if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this && !(0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, effect.player, this)) {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, wantToUse => {
                 if (wantToUse) {
                     const player = effect.player;
                     const opponent = game_1.StateUtils.getOpponent(state, player);
                     if (opponent.hand.cards.length > 0) {
                         const randomIndex = Math.floor(Math.random() * opponent.hand.cards.length);
                         const randomCard = opponent.hand.cards[randomIndex];
-                        prefabs_1.MOVE_CARD_TO(state, randomCard, opponent.discard);
+                        (0, prefabs_1.MOVE_CARD_TO)(state, randomCard, opponent.discard);
                     }
                 }
             }, game_1.GameMessage.WANT_TO_USE_ABILITY);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const targets = opponent.getPokemonInPlay();

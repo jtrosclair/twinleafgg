@@ -24,10 +24,10 @@ class RichEnergy extends energy_card_1.EnergyCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.AttachEnergyEffect && effect.energyCard === this) {
             const player = effect.player;
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, effect.target)) {
                 return state;
             }
-            prefabs_1.DRAW_CARDS(player, 4);
+            (0, prefabs_1.DRAW_CARDS)(player, 4);
         }
         return state;
     }

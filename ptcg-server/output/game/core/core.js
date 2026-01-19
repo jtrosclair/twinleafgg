@@ -48,7 +48,7 @@ class Core {
         return this.reconnectionManager;
     }
     async connect(client) {
-        client.id = utils_1.generateId(this.clients);
+        client.id = (0, utils_1.generateId)(this.clients);
         client.core = this;
         client.games = [];
         // Add client to the core
@@ -107,7 +107,7 @@ class Core {
             gameSettings.rules.firstTurnDrawCard = true;
             gameSettings.rules.firstTurnUseSupporter = true;
         }
-        const game = new game_1.Game(this, utils_1.generateId(this.games), gameSettings);
+        const game = new game_1.Game(this, (0, utils_1.generateId)(this.games), gameSettings);
         game.dispatch(client, new add_player_action_1.AddPlayerAction(client.id, client.name, deck, undefined, deckId1));
         if (invited) {
             game.dispatch(client, new invite_player_action_1.InvitePlayerAction(invited.id, invited.name));
@@ -141,7 +141,7 @@ class Core {
             gameSettings.rules.firstTurnDrawCard = true;
             gameSettings.rules.firstTurnUseSupporter = true;
         }
-        const game = new game_1.Game(this, utils_1.generateId(this.games), gameSettings);
+        const game = new game_1.Game(this, (0, utils_1.generateId)(this.games), gameSettings);
         game.dispatch(client, new add_player_action_1.AddPlayerAction(client.id, client.name, deck, artworksMap1, deckId1));
         game.dispatch(client, new add_player_action_1.AddPlayerAction(client2.id, client2.name, deck2, artworksMap2, deckId2));
         this.games.push(game);
@@ -320,9 +320,9 @@ class Core {
         // Enable sandbox mode for state-loaded games
         gameSettings.sandboxMode = true;
         // Create a new game
-        const game = new game_1.Game(this, utils_1.generateId(this.games), gameSettings);
+        const game = new game_1.Game(this, (0, utils_1.generateId)(this.games), gameSettings);
         // Clone and set the state directly
-        const clonedState = utils_2.deepClone(state);
+        const clonedState = (0, utils_2.deepClone)(state);
         // Update player IDs to match the clients
         // The human player is always players[0] (bottom of screen on client)
         // The opponent (bot) is always players[1] (top of screen on client)

@@ -43,16 +43,16 @@ class DarkElectrode extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            prefabs_1.REMOVE_MARKER(this.DARKNESS_NAVIGATION_MARKER, player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.DARKNESS_NAVIGATION_MARKER, player, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.DARKNESS_NAVIGATION_MARKER, this);
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.DARKNESS_NAVIGATION_MARKER, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const thisElectrode = game_1.StateUtils.findCardList(state, effect.card);
-            if (prefabs_1.IS_POKEPOWER_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             if (player.marker.hasMarker(this.DARKNESS_NAVIGATION_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
@@ -81,12 +81,12 @@ class DarkElectrode extends pokemon_card_1.PokemonCard {
                 if (cards.length > 0) {
                     player.deck.moveCardsTo(cards, thisElectrode);
                 }
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
-            prefabs_1.ADD_MARKER(this.DARKNESS_NAVIGATION_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.DARKNESS_NAVIGATION_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             this.usedEnergyBomb = true;
         }
         if (effect instanceof game_phase_effects_2.AfterAttackEffect && this.usedEnergyBomb === true) {
@@ -95,7 +95,7 @@ class DarkElectrode extends pokemon_card_1.PokemonCard {
             if (hasBench === false) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
                     const blockedCards = [];
                     const blockedMap = [];

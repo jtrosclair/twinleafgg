@@ -48,7 +48,7 @@ class SeasManaphy4 extends pokemon_card_1.PokemonCard {
             if (pokemonCard !== this) {
                 return state;
             }
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const healEffect = new game_effects_1.HealEffect(player, effect.target, 10);
@@ -58,7 +58,7 @@ class SeasManaphy4 extends pokemon_card_1.PokemonCard {
                 effect.target.removeSpecialCondition(condition);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(player, player.active);
             store.reduceEffect(state, checkProvidedEnergyEffect);

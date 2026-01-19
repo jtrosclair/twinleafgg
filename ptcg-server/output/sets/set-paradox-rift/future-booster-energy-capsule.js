@@ -25,7 +25,7 @@ class FutureBoosterEnergyCapsule extends trainer_card_1.TrainerCard {
         if (effect instanceof attack_effects_1.DealDamageEffect && effect.player.active.tools.includes(this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             if (effect.target !== player.active && effect.target !== opponent.active) {

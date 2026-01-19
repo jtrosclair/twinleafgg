@@ -37,9 +37,9 @@ class Minun extends pokemon_card_1.PokemonCard {
         this.fullName = 'Minun SW';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (!prefabs_1.HAS_MARKER('OPPONENT_KNOCKOUT_MARKER', player, this)) {
+            if (!(0, prefabs_1.HAS_MARKER)('OPPONENT_KNOCKOUT_MARKER', player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             if (player.active.cards[0] === this && player.active.specialConditions.length > 0) {
@@ -53,7 +53,7 @@ class Minun extends pokemon_card_1.PokemonCard {
             }
             player.deck.moveTo(player.hand, 2);
             player.usedMinusCharge = true;
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
         }
         if (effect instanceof game_effects_1.KnockOutEffect) {
             const player = effect.player;
@@ -65,7 +65,7 @@ class Minun extends pokemon_card_1.PokemonCard {
             const cardList = game_1.StateUtils.findCardList(state, this);
             const owner = game_1.StateUtils.findOwner(state, cardList);
             if (owner === player) {
-                prefabs_1.ADD_MARKER('OPPONENT_KNOCKOUT_MARKER', player, this);
+                (0, prefabs_1.ADD_MARKER)('OPPONENT_KNOCKOUT_MARKER', player, this);
             }
             return state;
         }
@@ -74,11 +74,11 @@ class Minun extends pokemon_card_1.PokemonCard {
             const cardList = game_1.StateUtils.findCardList(state, this);
             const owner = game_1.StateUtils.findOwner(state, cardList);
             if (owner === player) {
-                prefabs_1.REMOVE_MARKER('OPPONENT_KNOCKOUT_MARKER', player, this);
+                (0, prefabs_1.REMOVE_MARKER)('OPPONENT_KNOCKOUT_MARKER', player, this);
             }
             player.usedMinusCharge = false;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let isPlusleInPlay = false;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {

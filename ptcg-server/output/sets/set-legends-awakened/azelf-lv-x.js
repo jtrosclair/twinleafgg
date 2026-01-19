@@ -42,7 +42,7 @@ class AzelfLVX extends game_1.PokemonCard {
                     isAzelfInPlay = true;
                 }
             });
-            if (isAzelfInPlay && !prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if (isAzelfInPlay && !(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 const checkPokemonTypeEffect = new check_effects_1.CheckPokemonTypeEffect(effect.target);
                 store.reduceEffect(state, checkPokemonTypeEffect);
                 if (checkPokemonTypeEffect.cardTypes.includes(game_1.CardType.PSYCHIC)) {
@@ -50,7 +50,7 @@ class AzelfLVX extends game_1.PokemonCard {
                 }
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // get the energies from the opponent's pokemon

@@ -35,7 +35,7 @@ class RockFightingEnergy extends energy_card_1.EnergyCard {
         // Prevent effects of attacks
         if (effect instanceof attack_effects_1.AbstractAttackEffect && effect.target.cards.includes(this) && ((_a = effect.target.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.cardType) === card_types_1.CardType.FIGHTING) {
             const opponent = state_utils_1.StateUtils.getOpponent(state, effect.player);
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, opponent, this, effect.target)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, opponent, this, effect.target)) {
                 return state;
             }
             const sourceCard = effect.source.getPokemonCard();

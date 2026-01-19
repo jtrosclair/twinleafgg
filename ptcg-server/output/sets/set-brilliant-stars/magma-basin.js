@@ -51,7 +51,7 @@ class MagmaBasin extends trainer_card_1.TrainerCard {
                     // if (pokemonCard.cardType !== CardType.FIRE) {
                     //   throw new GameError(GameMessage.INVALID_TARGET);
                     // }
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this });
                     target.damage += 20;
                 }
                 return state;

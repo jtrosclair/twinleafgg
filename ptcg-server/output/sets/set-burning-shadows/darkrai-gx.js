@@ -65,7 +65,7 @@ class DarkraiGX extends game_1.PokemonCard {
             //player.marker.addMarker(this.NETHERWORLD_GATE_MARKER, this);
             const cards = player.discard.cards.filter(c => c === this);
             cards.forEach((card, index) => {
-                prefabs_1.MOVE_CARDS(store, state, player.discard, slots[index], { cards: [card], sourceCard: this });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, slots[index], { cards: [card], sourceCard: this });
             });
             const hasEnergyInDiscard = player.discard.cards.some(c => {
                 return c instanceof game_1.EnergyCard
@@ -102,7 +102,7 @@ class DarkraiGX extends game_1.PokemonCard {
                     }
                     for (const transfer of transfers) {
                         const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                        prefabs_1.MOVE_CARDS(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this });
                     }
                 });
             }
@@ -113,7 +113,7 @@ class DarkraiGX extends game_1.PokemonCard {
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             const opponentActive = opponent.active;
             if (opponentActive instanceof game_1.PokemonCardList) {

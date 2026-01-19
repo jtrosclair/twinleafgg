@@ -48,7 +48,7 @@ class Solrock extends pokemon_card_1.PokemonCard {
             const thisCardList = game_1.StateUtils.findCardList(state, this);
             const owner = game_1.StateUtils.findOwner(state, thisCardList);
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, opponent, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
             let isLunatoneInPlay = false;
@@ -80,7 +80,7 @@ class Solrock extends pokemon_card_1.PokemonCard {
             }
         }
         // Call for Family
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const blocked = [];
             effect.player.deck.cards.forEach((card, index) => {
                 if (card instanceof pokemon_card_1.PokemonCard && card.name === 'Lunatone') {
@@ -90,16 +90,16 @@ class Solrock extends pokemon_card_1.PokemonCard {
                     blocked.push(index);
                 }
             });
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, effect.player, {}, { min: 0, max: 1, blocked });
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, effect.player, {}, { min: 0, max: 1, blocked });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (result) {
                     store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, opponent.active, { superType: card_types_1.SuperType.ENERGY }, { min: 1, max: 1, allowCancel: false }), selected => {
                         const card = selected[0];
-                        prefabs_1.MOVE_CARDS(store, state, opponent.active, opponent.discard, { cards: [card], sourceCard: this, sourceEffect: this.attacks[1] });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, opponent.active, opponent.discard, { cards: [card], sourceCard: this, sourceEffect: this.attacks[1] });
                         return state;
                     });
                 }

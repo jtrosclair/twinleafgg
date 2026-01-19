@@ -52,7 +52,7 @@ class MegaDragoniteex extends game_1.PokemonCard {
         if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
             const player = effect.player;
             // Check if ability is blocked
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             // Check if ability was already used this turn
@@ -65,7 +65,7 @@ class MegaDragoniteex extends game_1.PokemonCard {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             // Switch Active with Benched Pokémon
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
             // Mark ability as used
             player.marker.addMarker(this.SKY_CARRY_MARKER, this);
             // Add visual effect
@@ -76,7 +76,7 @@ class MegaDragoniteex extends game_1.PokemonCard {
             });
         }
         // Ryuno Glide attack
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // Check if this Pokémon has at least 2 energy attached
             const energyCount = player.active.cards.filter(card => card.superType === game_1.SuperType.ENERGY).length;

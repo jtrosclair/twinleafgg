@@ -7,7 +7,7 @@ export declare class Cleffa extends PokemonCard {
     tags: CardTag[];
     cardType: CardType;
     hp: number;
-    retreat: never[];
+    retreat: any[];
     evolvesTo: string[];
     powers: {
         name: string;

@@ -19,12 +19,12 @@ class BlainesLastResort extends trainer_card_1.TrainerCard {
         this.text = 'You can\'t play this card if you have any cards in your hand other than Blaine\'s Last Resort. Show your hand to your opponent, then draw 5 cards.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             if (player.hand.cards.some(card => card.name !== 'Blaine\'s Last Resort')) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            prefabs_1.DRAW_CARDS(player, 5);
+            (0, prefabs_1.DRAW_CARDS)(player, 5);
             player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;

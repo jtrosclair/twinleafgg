@@ -37,7 +37,7 @@ class DragapultV extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         var _a;
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = state.players.find(p => p.active.getPokemonCard() === this);
             if ((_a = this.wasMovedToActiveThisTurn) === null || _a === void 0 ? void 0 : _a.call(this, player)) {
                 effect.damage += 80;

@@ -44,7 +44,7 @@ class Frogadier extends pokemon_card_1.PokemonCard {
             }
             state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
                 if (wantToUse) {
-                    if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this))
+                    if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this))
                         return state;
                     return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { min: 1, max: 1, allowCancel: false }), selected => {
                         const targets = selected || [];

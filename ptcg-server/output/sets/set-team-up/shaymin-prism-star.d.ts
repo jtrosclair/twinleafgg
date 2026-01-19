@@ -10,7 +10,7 @@ export declare class ShayminPrismStar extends PokemonCard {
     weakness: {
         type: CardType.FIRE;
     }[];
-    retreat: never[];
+    retreat: any[];
     attacks: {
         name: string;
         cost: CardType.GRASS[];

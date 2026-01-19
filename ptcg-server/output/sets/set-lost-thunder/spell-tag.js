@@ -37,7 +37,7 @@ class SpellTag extends trainer_card_1.TrainerCard {
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player === state_utils_1.StateUtils.getOpponent(state, effect.player)) {
             const cardList = state_utils_1.StateUtils.findCardList(state, this);
             const owner = state_utils_1.StateUtils.findOwner(state, cardList);
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             if (owner === effect.player) {
@@ -47,7 +47,7 @@ class SpellTag extends trainer_card_1.TrainerCard {
         if (effect instanceof game_effects_1.KnockOutEffect && effect.target.tools.includes(this)) {
             const player = effect.player;
             // const target = effect.target;
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             if (this.damageDealt) {

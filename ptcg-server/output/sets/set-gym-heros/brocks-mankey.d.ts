@@ -10,7 +10,7 @@ export declare class BrocksMankey extends PokemonCard {
     weakness: {
         type: CardType.PSYCHIC;
     }[];
-    retreat: never[];
+    retreat: any[];
     attacks: ({
         name: string;
         cost: CardType.COLORLESS[];

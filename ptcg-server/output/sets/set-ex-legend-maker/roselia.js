@@ -34,7 +34,7 @@ class Roselia extends game_1.PokemonCard {
         // Handle Healing Stone Poké-Body
         if (effect instanceof game_phase_effects_1.BetweenTurnsEffect) {
             const player = effect.player;
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             let hasReactRose = false;
@@ -52,7 +52,7 @@ class Roselia extends game_1.PokemonCard {
                 });
             }
         }
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             const hasBench = opponent.bench.some(b => b.cards.length > 0);
@@ -62,7 +62,7 @@ class Roselia extends game_1.PokemonCard {
             store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_SWITCH, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.BENCH], { allowCancel: false }), result => {
                 const cardList = result[0];
                 opponent.switchPokemon(cardList);
-                prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+                (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
             });
         }
         return state;

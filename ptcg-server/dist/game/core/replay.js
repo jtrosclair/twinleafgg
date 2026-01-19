@@ -1,18 +1,21 @@
-import { gzip, ungzip } from '@progress/pako-esm';
-import { GameWinner } from '../store/state/state';
-import { GameError } from '../game-error';
-import { GameCoreError } from '../game-message';
-import { StateSerializer } from '../serializer/state-serializer';
-export class Replay {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Replay = void 0;
+const pako_esm_1 = require("@progress/pako-esm");
+const state_1 = require("../store/state/state");
+const game_error_1 = require("../game-error");
+const game_message_1 = require("../game-message");
+const state_serializer_1 = require("../serializer/state-serializer");
+class Replay {
     constructor(options = {}) {
         this.indexJumpSize = 16;
         this.turnMap = [];
         this.diffs = [];
         this.indexes = [];
-        this.serializer = new StateSerializer();
+        this.serializer = new state_serializer_1.StateSerializer();
         this.player1 = { name: '', userId: 0, ranking: 0 };
         this.player2 = { name: '', userId: 0, ranking: 0 };
-        this.winner = GameWinner.NONE;
+        this.winner = state_1.GameWinner.NONE;
         this.created = 0;
         this.options = Object.assign({
             indexEnabled: true,
@@ -24,7 +27,7 @@ export class Replay {
     }
     getState(position) {
         if (position < 0 || position >= this.diffs.length) {
-            throw new GameError(GameCoreError.ERROR_INVALID_STATE);
+            throw new game_error_1.GameError(game_message_1.GameCoreError.ERROR_INVALID_STATE);
         }
         let stateData = this.diffs[0];
         const jumps = this.indexJumps(position);
@@ -48,7 +51,7 @@ export class Replay {
     }
     getTurnPosition(turn) {
         if (turn < 0 || turn >= this.turnMap.length) {
-            throw new GameError(GameCoreError.ERROR_INVALID_STATE);
+            throw new game_error_1.GameError(game_message_1.GameCoreError.ERROR_INVALID_STATE);
         }
         return this.turnMap[turn];
     }
@@ -101,18 +104,18 @@ export class Replay {
             }
         }
         catch (error) {
-            throw new GameError(GameCoreError.ERROR_INVALID_STATE);
+            throw new game_error_1.GameError(game_message_1.GameCoreError.ERROR_INVALID_STATE);
         }
     }
     swapQuotes(diffs) {
         return diffs.map(diff => diff.replace(/["']/g, c => c === '"' ? '\'' : '"'));
     }
     compress(data) {
-        const compressed = gzip(data, { to: 'string' });
+        const compressed = (0, pako_esm_1.gzip)(data, { to: 'string' });
         return compressed;
     }
     decompress(data) {
-        const text = ungzip(data, { to: 'string' });
+        const text = (0, pako_esm_1.ungzip)(data, { to: 'string' });
         return text;
     }
     rebuildIndex(diffs) {
@@ -163,3 +166,4 @@ export class Replay {
         return jumps;
     }
 }
+exports.Replay = Replay;

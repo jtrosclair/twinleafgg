@@ -10,7 +10,7 @@ export declare class Raticate extends PokemonCard {
     weakness: {
         type: CardType.FIGHTING;
     }[];
-    retreat: never[];
+    retreat: any[];
     powers: {
         name: string;
         powerType: PowerType;

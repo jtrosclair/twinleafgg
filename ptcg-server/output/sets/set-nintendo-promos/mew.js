@@ -34,15 +34,15 @@ class Mew extends pokemon_card_1.PokemonCard {
         this.fullName = 'Mew NP';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(opponent, opponent.active);
             store.reduceEffect(state, checkProvidedEnergy);
             const damagePerEnergy = 10;
             effect.damage = checkProvidedEnergy.energyMap.length * damagePerEnergy;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
                     let canDevolve = false;
                     const blocked = [];
@@ -67,7 +67,7 @@ class Mew extends pokemon_card_1.PokemonCard {
                     }
                     return store.prompt(state, new game_1.ChoosePokemonPrompt(effect.player.id, game_1.GameMessage.CHOOSE_POKEMON, game_1.PlayerType.ANY, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { allowCancel: false, min: 1, max: 1, blocked }), (results) => {
                         if (results && results.length > 0) {
-                            prefabs_1.DEVOLVE_POKEMON(store, state, results[0], effect.opponent.hand);
+                            (0, prefabs_1.DEVOLVE_POKEMON)(store, state, results[0], effect.opponent.hand);
                         }
                         return state;
                     });

@@ -60,21 +60,21 @@ class Latiosex extends pokemon_card_1.PokemonCard {
             if (!isLatiosexInPlay) {
                 return state;
             }
-            if (!prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this) && (active.name === 'Latios' || active.name === 'Latios ex' || active.name === 'Latias' || active.name === 'Latias ex')) {
+            if (!(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this) && (active.name === 'Latios' || active.name === 'Latios ex' || active.name === 'Latias' || active.name === 'Latias ex')) {
                 effect.cost = [];
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             this.marker.addMarker(this.ICE_BARRIER_MARKER, this);
-            prefabs_1.ADD_MARKER(this.ICE_BARRIER_MARKER, effect.opponent, this);
+            (0, prefabs_1.ADD_MARKER)(this.ICE_BARRIER_MARKER, effect.opponent, this);
         }
         if ((effect instanceof attack_effects_1.PutDamageEffect || effect instanceof attack_effects_1.PutCountersEffect) && effect.target.getPokemonCard() === this && ((_a = effect.source.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.tags.includes(card_types_1.CardTag.POKEMON_ex))) {
             if (this.marker.hasMarker(this.ICE_BARRIER_MARKER, this)) {
                 effect.preventDefault = true;
             }
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && prefabs_1.HAS_MARKER(this.ICE_BARRIER_MARKER, effect.player, this)) {
-            prefabs_1.REMOVE_MARKER(this.ICE_BARRIER_MARKER, effect.player, this);
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.ICE_BARRIER_MARKER, effect.player, this)) {
+            (0, prefabs_1.REMOVE_MARKER)(this.ICE_BARRIER_MARKER, effect.player, this);
             this.marker.removeMarker(this.ICE_BARRIER_MARKER, this);
         }
         return state;

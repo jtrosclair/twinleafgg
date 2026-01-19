@@ -39,21 +39,21 @@ class Garchomp extends pokemon_card_1.PokemonCard {
         this.CYNTHIA_MARKER = 'CYNTHIA_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(50, effect, store, state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(50, effect, store, state);
         }
         // Track if we played Cynthia this turn
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard.name == 'Cynthia') {
             // Put a "played Cynthia this turn" marker on ourselves.
             const player = effect.player;
-            prefabs_1.ADD_MARKER(this.CYNTHIA_MARKER, player, this);
+            (0, prefabs_1.ADD_MARKER)(this.CYNTHIA_MARKER, player, this);
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.CYNTHIA_MARKER, this)) {
             // Remove marker at the end of turn.
             effect.player.marker.removeMarker(this.CYNTHIA_MARKER);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            if (prefabs_1.HAS_MARKER(this.CYNTHIA_MARKER, effect.player, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.CYNTHIA_MARKER, effect.player, this)) {
                 effect.damage += 100;
             }
         }

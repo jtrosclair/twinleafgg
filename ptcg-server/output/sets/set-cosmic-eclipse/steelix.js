@@ -34,7 +34,7 @@ class Steelix extends game_1.PokemonCard {
         this.fullName = 'Steelix CEC';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const bigBoys = player.hand.cards.filter(c => c instanceof game_1.PokemonCard && c.retreat.length === 4);
             const blocked = [];
@@ -51,12 +51,12 @@ class Steelix extends game_1.PokemonCard {
                 if (cards.length === 0) {
                     return;
                 }
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: this });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: this });
                 const monsDiscarded = cards.length;
                 effect.damage = monsDiscarded * 50;
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const flipCoin = (heads = 0) => {
                 return store.prompt(state, [

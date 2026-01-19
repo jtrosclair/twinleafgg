@@ -45,14 +45,14 @@ class Hitmontop extends pokemon_card_1.PokemonCard {
             const opponent = effect.player;
             if (player === opponent || player.active !== effect.target)
                 return state;
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             if (effect.target.getPokemons().length > 1) {
                 effect.source.damage += 20;
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (effect.opponent.active.damage >= 20) {
                 effect.damage += 30;
             }

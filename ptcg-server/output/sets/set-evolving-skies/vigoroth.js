@@ -34,13 +34,13 @@ class Vigoroth extends pokemon_card_1.PokemonCard {
         this.fullName = 'Vigoroth EVS';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const stadiumCard = game_1.StateUtils.getStadiumCard(state);
             if (stadiumCard !== undefined) {
                 // Discard Stadium
                 const cardList = game_1.StateUtils.findCardList(state, stadiumCard);
                 const player = game_1.StateUtils.findOwner(state, cardList);
-                prefabs_1.MOVE_CARDS(store, state, cardList, player.discard, { cards: [stadiumCard], sourceCard: this, sourceEffect: this.attacks[0] });
+                (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.discard, { cards: [stadiumCard], sourceCard: this, sourceEffect: this.attacks[0] });
                 return state;
             }
         }

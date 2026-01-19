@@ -33,7 +33,7 @@ class Kabuto extends pokemon_card_1.PokemonCard {
         this.fullName = 'Kabuto SK';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof attack_effects_1.DealDamageEffect && effect.target.getPokemonCard() === this && !prefabs_1.IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
+        if (effect instanceof attack_effects_1.DealDamageEffect && effect.target.getPokemonCard() === this && !(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, effect.player, this)) {
             const opponent = effect.player;
             if (opponent.active.getPokemons().length > 1) {
                 effect.damage -= 10;

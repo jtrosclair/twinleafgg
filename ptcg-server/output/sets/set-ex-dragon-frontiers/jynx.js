@@ -54,7 +54,7 @@ class Jynx extends pokemon_card_1.PokemonCard {
             const checkPokemonType = new check_effects_1.CheckPokemonTypeEffect(player.active);
             store.reduceEffect(state, checkPokemonType);
             cardTypes = checkPokemonType.cardTypes;
-            if (!prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this) && (cardTypes.includes(card_types_1.CardType.PSYCHIC) || cardTypes.includes(card_types_1.CardType.FIRE))) {
+            if (!(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this) && (cardTypes.includes(card_types_1.CardType.PSYCHIC) || cardTypes.includes(card_types_1.CardType.FIRE))) {
                 const colorlessIndex = effect.cost.lastIndexOf(card_types_1.CardType.COLORLESS);
                 if (colorlessIndex !== -1) {
                     effect.cost.splice(colorlessIndex, 1);

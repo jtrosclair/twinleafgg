@@ -41,10 +41,10 @@ class TeamRocketsCrobatex extends game_1.PokemonCard {
         // Bite About
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (!result) {
                     return state;
                 }
@@ -57,23 +57,23 @@ class TeamRocketsCrobatex extends game_1.PokemonCard {
             });
         }
         // Assassin's Return
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             this.usedAssassinsReturn = true;
         }
         if (effect instanceof game_phase_effects_1.AfterAttackEffect && this.usedAssassinsReturn) {
             const player = effect.player;
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
                     const pokemons = player.active.getPokemons();
                     const otherCards = player.active.cards.filter(card => !(card instanceof game_1.PokemonCard));
                     player.active.clearEffects();
                     // Move other cards to discard
                     if (otherCards.length > 0) {
-                        prefabs_1.MOVE_CARDS(store, state, player.active, player.discard, { cards: otherCards });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, player.active, player.discard, { cards: otherCards });
                     }
                     // Move Pokémon to hand
                     if (pokemons.length > 0) {
-                        prefabs_1.MOVE_CARDS(store, state, player.active, player.hand, { cards: pokemons });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, player.active, player.hand, { cards: pokemons });
                     }
                     this.usedAssassinsReturn = false;
                 }

@@ -37,7 +37,7 @@ class Ninetales extends game_1.PokemonCard {
         this.NINE_TEMPTATIONS_MARKER = 'NINE_TEMPTATIONS_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const fireEnergyCount = player.hand.cards.filter(c => {
@@ -46,7 +46,7 @@ class Ninetales extends game_1.PokemonCard {
             if (fireEnergyCount < 2) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            if (prefabs_1.HAS_MARKER(this.NINE_TEMPTATIONS_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.NINE_TEMPTATIONS_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, { superType: game_1.SuperType.ENERGY, name: 'Fire Energy' }, { allowCancel: true, min: 2, max: 2 }), cards => {
@@ -66,8 +66,8 @@ class Ninetales extends game_1.PokemonCard {
                         opponent.switchPokemon(gustEffect.target);
                     }
                 });
-                prefabs_1.ADD_MARKER(this.NINE_TEMPTATIONS_MARKER, player, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ADD_MARKER)(this.NINE_TEMPTATIONS_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 player.hand.moveCardsTo(cards, player.discard);
             });
         }

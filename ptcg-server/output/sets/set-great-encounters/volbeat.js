@@ -37,12 +37,12 @@ class Volbeat extends pokemon_card_1.PokemonCard {
         this.LIGHT_CONDUCT_MARKER = 'LIGHT_CONDUCT_MARKER';
     }
     reduceEffect(store, state, effect) {
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.LIGHT_CONDUCT_MARKER, this);
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.LIGHT_CONDUCT_MARKER, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             //Once per turn
-            if (prefabs_1.HAS_MARKER(this.LIGHT_CONDUCT_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.LIGHT_CONDUCT_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             // Cannot use if affected by special condition
@@ -73,17 +73,17 @@ class Volbeat extends pokemon_card_1.PokemonCard {
                         player.discard.moveCardTo(selected[0], deckTop);
                         deckTop.moveToTopOfDestination(player.deck);
                         store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, selected), () => { });
-                        prefabs_1.ADD_MARKER(this.LIGHT_CONDUCT_MARKER, player, this);
-                        prefabs_1.ABILITY_USED(player, this);
+                        (0, prefabs_1.ADD_MARKER)(this.LIGHT_CONDUCT_MARKER, player, this);
+                        (0, prefabs_1.ABILITY_USED)(player, this);
                     });
                 }
             });
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, (result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, (result => {
                 if (result) {
-                    attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED(store, state, effect);
+                    (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED)(store, state, effect);
                 }
             }));
         }

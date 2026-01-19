@@ -32,7 +32,7 @@ class TeamRocketsWeezing extends pokemon_card_1.PokemonCard {
         this.fullName = 'Team Rocket\'s Weezing DRI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             let koffingsAndWeezings = 0;

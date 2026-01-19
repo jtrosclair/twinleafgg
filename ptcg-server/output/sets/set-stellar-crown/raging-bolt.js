@@ -45,7 +45,7 @@ class RagingBolt extends pokemon_card_1.PokemonCard {
                 store.reduceEffect(state, checkProvidedEnergyEffect);
                 const providedEnergy = checkProvidedEnergyEffect.energyMap.reduce((acc, curr) => acc + curr.provides.length, 0);
                 const damage = providedEnergy * 30;
-                prefabs_1.DAMAGE_OPPONENT_POKEMON(store, state, effect, damage, targets);
+                (0, prefabs_1.DAMAGE_OPPONENT_POKEMON)(store, state, effect, damage, targets);
             });
         }
         return state;

@@ -1,5 +1,8 @@
-import { SpecialCondition } from '../card/card-types';
-export var AttackEffects;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HealTargetEffect = exports.RemoveSpecialConditionsEffect = exports.AddSpecialConditionsEffect = exports.AddMarkerEffect = exports.CardsToHandEffect = exports.LostZoneCardsEffect = exports.DiscardCardsEffect = exports.KnockOutOpponentEffect = exports.GustOpponentBenchEffect = exports.KOEffect = exports.PutCountersEffect = exports.AfterDamageEffect = exports.AfterWeaknessAndResistanceEffect = exports.PutDamageEffect = exports.DealDamageEffect = exports.ApplyWeaknessEffect = exports.AbstractAttackEffect = exports.AttackEffects = void 0;
+const card_types_1 = require("../card/card-types");
+var AttackEffects;
 (function (AttackEffects) {
     AttackEffects["APPLY_WEAKNESS_EFFECT"] = "APPLY_WEAKNESS_EFFECT";
     AttackEffects["DEAL_DAMAGE_EFFECT"] = "DEAL_DAMAGE_EFFECT";
@@ -15,8 +18,8 @@ export var AttackEffects;
     AttackEffects["MOVED_TO_ACTIVE_BONUS_EFFECT"] = "MOVED_TO_ACTIVE_BONUS_EFFECT";
     AttackEffects["LOST_ZONED_CARDS_EFFECT"] = "LOST_ZONED_CARDS_EFFECT";
     AttackEffects["AFTER_WEAKNESS_AND_RESISTANCE_EFFECT"] = "AFTER_WEAKNESS_AND_RESISTANCE_EFFECT";
-})(AttackEffects || (AttackEffects = {}));
-export class AbstractAttackEffect {
+})(AttackEffects = exports.AttackEffects || (exports.AttackEffects = {}));
+class AbstractAttackEffect {
     constructor(base) {
         this.preventDefault = false;
         this.attackEffect = base;
@@ -27,7 +30,8 @@ export class AbstractAttackEffect {
         this.target = base.opponent.active;
     }
 }
-export class ApplyWeaknessEffect extends AbstractAttackEffect {
+exports.AbstractAttackEffect = AbstractAttackEffect;
+class ApplyWeaknessEffect extends AbstractAttackEffect {
     constructor(base, damage) {
         super(base);
         this.type = AttackEffects.APPLY_WEAKNESS_EFFECT;
@@ -37,7 +41,8 @@ export class ApplyWeaknessEffect extends AbstractAttackEffect {
         this.damage = damage;
     }
 }
-export class DealDamageEffect extends AbstractAttackEffect {
+exports.ApplyWeaknessEffect = ApplyWeaknessEffect;
+class DealDamageEffect extends AbstractAttackEffect {
     constructor(base, damage) {
         super(base);
         this.type = AttackEffects.DEAL_DAMAGE_EFFECT;
@@ -46,7 +51,8 @@ export class DealDamageEffect extends AbstractAttackEffect {
         this.damage = damage;
     }
 }
-export class PutDamageEffect extends AbstractAttackEffect {
+exports.DealDamageEffect = DealDamageEffect;
+class PutDamageEffect extends AbstractAttackEffect {
     constructor(base, damage) {
         super(base);
         this.type = AttackEffects.PUT_DAMAGE_EFFECT;
@@ -68,7 +74,8 @@ export class PutDamageEffect extends AbstractAttackEffect {
         }
     }
 }
-export class AfterWeaknessAndResistanceEffect extends AbstractAttackEffect {
+exports.PutDamageEffect = PutDamageEffect;
+class AfterWeaknessAndResistanceEffect extends AbstractAttackEffect {
     constructor(base, damage) {
         super(base);
         this.type = AttackEffects.AFTER_WEAKNESS_AND_RESISTANCE_EFFECT;
@@ -76,7 +83,8 @@ export class AfterWeaknessAndResistanceEffect extends AbstractAttackEffect {
         this.damage = damage;
     }
 }
-export class AfterDamageEffect extends AbstractAttackEffect {
+exports.AfterWeaknessAndResistanceEffect = AfterWeaknessAndResistanceEffect;
+class AfterDamageEffect extends AbstractAttackEffect {
     constructor(base, damage) {
         super(base);
         this.type = AttackEffects.AFTER_DAMAGE_EFFECT;
@@ -84,7 +92,8 @@ export class AfterDamageEffect extends AbstractAttackEffect {
         this.damage = damage;
     }
 }
-export class PutCountersEffect extends AbstractAttackEffect {
+exports.AfterDamageEffect = AfterDamageEffect;
+class PutCountersEffect extends AbstractAttackEffect {
     constructor(base, damage) {
         super(base);
         this.type = AttackEffects.PUT_COUNTERS_EFFECT;
@@ -92,7 +101,8 @@ export class PutCountersEffect extends AbstractAttackEffect {
         this.damage = damage;
     }
 }
-export class KOEffect extends AbstractAttackEffect {
+exports.PutCountersEffect = PutCountersEffect;
+class KOEffect extends AbstractAttackEffect {
     constructor(base, damage) {
         super(base);
         this.type = AttackEffects.PUT_DAMAGE_EFFECT;
@@ -102,7 +112,8 @@ export class KOEffect extends AbstractAttackEffect {
         this.damage = damage;
     }
 }
-export class GustOpponentBenchEffect extends AbstractAttackEffect {
+exports.KOEffect = KOEffect;
+class GustOpponentBenchEffect extends AbstractAttackEffect {
     constructor(base, target) {
         super(base);
         this.type = AttackEffects.GUST_OPPONENT_BENCH_EFFECT;
@@ -110,7 +121,8 @@ export class GustOpponentBenchEffect extends AbstractAttackEffect {
         this.target = target;
     }
 }
-export class KnockOutOpponentEffect extends AbstractAttackEffect {
+exports.GustOpponentBenchEffect = GustOpponentBenchEffect;
+class KnockOutOpponentEffect extends AbstractAttackEffect {
     constructor(base, damage) {
         super(base);
         this.type = AttackEffects.DEAL_DAMAGE_EFFECT;
@@ -118,7 +130,8 @@ export class KnockOutOpponentEffect extends AbstractAttackEffect {
         this.damage = damage;
     }
 }
-export class DiscardCardsEffect extends AbstractAttackEffect {
+exports.KnockOutOpponentEffect = KnockOutOpponentEffect;
+class DiscardCardsEffect extends AbstractAttackEffect {
     constructor(base, energyCards) {
         super(base);
         this.type = AttackEffects.DISCARD_CARD_EFFECT;
@@ -126,7 +139,8 @@ export class DiscardCardsEffect extends AbstractAttackEffect {
         this.cards = energyCards;
     }
 }
-export class LostZoneCardsEffect extends AbstractAttackEffect {
+exports.DiscardCardsEffect = DiscardCardsEffect;
+class LostZoneCardsEffect extends AbstractAttackEffect {
     constructor(base, energyCards) {
         super(base);
         this.type = AttackEffects.LOST_ZONED_CARDS_EFFECT;
@@ -134,7 +148,8 @@ export class LostZoneCardsEffect extends AbstractAttackEffect {
         this.cards = energyCards;
     }
 }
-export class CardsToHandEffect extends AbstractAttackEffect {
+exports.LostZoneCardsEffect = LostZoneCardsEffect;
+class CardsToHandEffect extends AbstractAttackEffect {
     constructor(base, energyCards) {
         super(base);
         this.type = AttackEffects.DISCARD_CARD_EFFECT;
@@ -142,7 +157,8 @@ export class CardsToHandEffect extends AbstractAttackEffect {
         this.cards = energyCards;
     }
 }
-export class AddMarkerEffect extends AbstractAttackEffect {
+exports.CardsToHandEffect = CardsToHandEffect;
+class AddMarkerEffect extends AbstractAttackEffect {
     constructor(base, markerName, markerSource) {
         super(base);
         this.type = AttackEffects.ADD_MARKER_EFFECT;
@@ -151,7 +167,8 @@ export class AddMarkerEffect extends AbstractAttackEffect {
         this.markerSource = markerSource;
     }
 }
-export class AddSpecialConditionsEffect extends AbstractAttackEffect {
+exports.AddMarkerEffect = AddMarkerEffect;
+class AddSpecialConditionsEffect extends AbstractAttackEffect {
     constructor(base, specialConditions) {
         super(base);
         this.type = AttackEffects.ADD_SPECIAL_CONDITIONS_EFFECT;
@@ -159,24 +176,26 @@ export class AddSpecialConditionsEffect extends AbstractAttackEffect {
         this.specialConditions = specialConditions;
     }
 }
-export class RemoveSpecialConditionsEffect extends AbstractAttackEffect {
+exports.AddSpecialConditionsEffect = AddSpecialConditionsEffect;
+class RemoveSpecialConditionsEffect extends AbstractAttackEffect {
     constructor(base, specialConditions) {
         super(base);
         this.type = AttackEffects.ADD_SPECIAL_CONDITIONS_EFFECT;
         this.preventDefault = false;
         if (specialConditions === undefined) {
             specialConditions = [
-                SpecialCondition.PARALYZED,
-                SpecialCondition.CONFUSED,
-                SpecialCondition.ASLEEP,
-                SpecialCondition.POISONED,
-                SpecialCondition.BURNED
+                card_types_1.SpecialCondition.PARALYZED,
+                card_types_1.SpecialCondition.CONFUSED,
+                card_types_1.SpecialCondition.ASLEEP,
+                card_types_1.SpecialCondition.POISONED,
+                card_types_1.SpecialCondition.BURNED
             ];
         }
         this.specialConditions = specialConditions;
     }
 }
-export class HealTargetEffect extends AbstractAttackEffect {
+exports.RemoveSpecialConditionsEffect = RemoveSpecialConditionsEffect;
+class HealTargetEffect extends AbstractAttackEffect {
     constructor(base, damage) {
         super(base);
         this.type = AttackEffects.ADD_MARKER_EFFECT;
@@ -184,3 +203,4 @@ export class HealTargetEffect extends AbstractAttackEffect {
         this.damage = damage;
     }
 }
+exports.HealTargetEffect = HealTargetEffect;

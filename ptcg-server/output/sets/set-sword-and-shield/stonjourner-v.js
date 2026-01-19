@@ -40,18 +40,18 @@ class StonjournerV extends pokemon_card_1.PokemonCard {
         this.CLEAR_GUARD_PRESS_MARKER = 'CLEAR_GUARD_PRESS_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_2.ADD_MARKER(this.GUARD_PRESS_MARKER, player.active, this);
-            prefabs_2.ADD_MARKER(this.CLEAR_GUARD_PRESS_MARKER, opponent, this);
+            (0, prefabs_2.ADD_MARKER)(this.GUARD_PRESS_MARKER, player.active, this);
+            (0, prefabs_2.ADD_MARKER)(this.CLEAR_GUARD_PRESS_MARKER, opponent, this);
         }
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.cards.includes(this)) {
-            if (prefabs_2.HAS_MARKER(this.GUARD_PRESS_MARKER, effect.target, this)) {
+            if ((0, prefabs_2.HAS_MARKER)(this.GUARD_PRESS_MARKER, effect.target, this)) {
                 effect.damage -= 20;
             }
         }
-        prefabs_2.CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN(state, effect, this.CLEAR_GUARD_PRESS_MARKER, this.GUARD_PRESS_MARKER, this);
+        (0, prefabs_2.CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN)(state, effect, this.CLEAR_GUARD_PRESS_MARKER, this.GUARD_PRESS_MARKER, this);
         return state;
     }
 }

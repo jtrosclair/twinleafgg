@@ -1,12 +1,15 @@
-import { Prompt } from './prompt';
-import { GameError } from '../../game-error';
-import { GameMessage } from '../../game-message';
-export const ChoosePrizePromptType = 'Choose prize';
-export class ChoosePrizePrompt extends Prompt {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ChoosePrizePrompt = exports.ChoosePrizePromptType = void 0;
+const prompt_1 = require("./prompt");
+const game_error_1 = require("../../game-error");
+const game_message_1 = require("../../game-message");
+exports.ChoosePrizePromptType = 'Choose prize';
+class ChoosePrizePrompt extends prompt_1.Prompt {
     constructor(playerId, message, options) {
         super(playerId);
         this.message = message;
-        this.type = ChoosePrizePromptType;
+        this.type = exports.ChoosePrizePromptType;
         // Default options
         this.options = Object.assign({}, {
             count: 1,
@@ -20,17 +23,17 @@ export class ChoosePrizePrompt extends Prompt {
     }
     decode(result, state) {
         if (result === null) {
-            return result;
+            return null;
         }
         const player = state.players.find(p => p.id === this.playerId);
         if (player === undefined) {
-            throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+            throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_PROMPT_RESULT);
         }
         const targetPlayer = this.options.useOpponentPrizes
             ? state.players.find(p => p.id !== this.playerId)
             : player;
         if (targetPlayer === undefined) {
-            throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+            throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_PROMPT_RESULT);
         }
         const prizes = targetPlayer.prizes.filter(p => p.cards.length > 0);
         return result.map(index => prizes[index]);
@@ -55,3 +58,4 @@ export class ChoosePrizePrompt extends Prompt {
         return true;
     }
 }
+exports.ChoosePrizePrompt = ChoosePrizePrompt;

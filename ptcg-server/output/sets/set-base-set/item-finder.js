@@ -42,7 +42,7 @@ function* playCard(next, store, state, self, effect) {
     if (cards.length === 0) {
         return state;
     }
-    prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: self });
+    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: self });
     yield store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: card_types_1.SuperType.TRAINER }, { min: 0, max: 1, allowCancel: false }), selected => {
         cards = selected || [];
         next();
@@ -50,8 +50,8 @@ function* playCard(next, store, state, self, effect) {
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
-    prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards, sourceCard: self });
-    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards, sourceCard: self });
+    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
 }
 class ItemFinder extends trainer_card_1.TrainerCard {
     constructor() {

@@ -33,7 +33,7 @@ class Wishiwashi extends pokemon_card_1.PokemonCard {
         this.fullName = 'Wishiwashi SUM';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const cardList = game_1.StateUtils.findCardList(state, this);
             const playedTurnEffect = new check_effects_1.CheckPokemonPlayedTurnEffect(player, cardList);
@@ -59,11 +59,11 @@ class Wishiwashi extends pokemon_card_1.PokemonCard {
             }
             // Move other cards to discard
             if (otherCards.length > 0) {
-                prefabs_1.MOVE_CARDS(store, state, cardList, player.discard, { cards: otherCards });
+                (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.discard, { cards: otherCards });
             }
             // Move Pokémon to hand
             if (pokemons.length > 0) {
-                prefabs_1.MOVE_CARDS(store, state, cardList, player.hand, { cards: pokemons });
+                (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.hand, { cards: pokemons });
             }
         }
         return state;

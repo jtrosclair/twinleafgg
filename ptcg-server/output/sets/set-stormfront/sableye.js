@@ -49,7 +49,7 @@ class Sableye extends pokemon_card_1.PokemonCard {
         this.setNumber = '48';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const itemCount = player.discard.cards.filter(c => {
                 return c instanceof game_1.TrainerCard && c.trainerType === card_types_1.TrainerType.ITEM;
@@ -70,7 +70,7 @@ class Sableye extends pokemon_card_1.PokemonCard {
                 });
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             if (player.hand.cards.length === 0) {
                 effect.damage += 90;

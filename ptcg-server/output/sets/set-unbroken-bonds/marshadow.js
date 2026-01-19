@@ -59,12 +59,12 @@ class Marshadow extends pokemon_card_1.PokemonCard {
                 throw new game_1.GameError(game_message_1.GameMessage.CANNOT_USE_POWER);
             }
             // Discard Stadium
-            prefabs_1.MOVE_CARDS(store, state, cardList, owner.discard);
+            (0, prefabs_1.MOVE_CARDS)(store, state, cardList, owner.discard);
             player.bench[benchIndex].moveTo(player.discard);
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.DEAL_MORE_DAMAGE_IF_OPPONENT_ACTIVE_HAS_CARD_TAG(effect, state, 60, card_types_1.CardTag.ULTRA_BEAST);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.DEAL_MORE_DAMAGE_IF_OPPONENT_ACTIVE_HAS_CARD_TAG)(effect, state, 60, card_types_1.CardTag.ULTRA_BEAST);
         }
         return state;
     }

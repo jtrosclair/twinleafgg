@@ -28,7 +28,7 @@ class MetalCoreBarrier extends trainer_card_1.TrainerCard {
                 player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
                     if (cardList.tools.includes(this) && state_utils_1.StateUtils.findOwner(state, cardList) !== effect.player) {
                         // Check if tool is blocked before discarding
-                        if (!prefabs_1.IS_TOOL_BLOCKED(store, state, state_utils_1.StateUtils.findOwner(state, cardList), this)) {
+                        if (!(0, prefabs_1.IS_TOOL_BLOCKED)(store, state, state_utils_1.StateUtils.findOwner(state, cardList), this)) {
                             cardList.moveCardTo(this, player.discard);
                         }
                     }
@@ -36,7 +36,7 @@ class MetalCoreBarrier extends trainer_card_1.TrainerCard {
             });
         }
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.tools.includes(this)) {
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             const checkPokemonType = new check_effects_1.CheckPokemonTypeEffect(effect.target);

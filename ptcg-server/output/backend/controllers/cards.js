@@ -41,13 +41,13 @@ class Cards extends controller_1.Controller {
     }
 }
 __decorate([
-    controller_1.Get('/all'),
+    (0, controller_1.Get)('/all'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Cards.prototype, "onAll", null);
 __decorate([
-    controller_1.Get('/hash'),
+    (0, controller_1.Get)('/hash'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)

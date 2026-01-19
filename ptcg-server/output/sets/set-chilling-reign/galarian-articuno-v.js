@@ -73,8 +73,8 @@ class GalarianArticunoV extends pokemon_card_1.PokemonCard {
                     return;
                 }
                 player.marker.addMarker(this.RECONSTITUTE_MARKER, this);
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: this, sourceEffect: this.powers[0] });
-                prefabs_1.DRAW_CARDS(player, 1);
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: this, sourceEffect: this.powers[0] });
+                (0, prefabs_1.DRAW_CARDS)(player, 1);
             });
             return state;
         }

@@ -6,7 +6,7 @@ export declare class MimeJr extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    retreat: never[];
+    retreat: any[];
     powers: {
         name: string;
         powerType: PowerType;
@@ -14,7 +14,7 @@ export declare class MimeJr extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: never[];
+        cost: any[];
         damage: number;
         text: string;
     }[];

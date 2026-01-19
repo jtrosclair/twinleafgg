@@ -43,45 +43,45 @@ let Message = class Message extends typeorm_1.BaseEntity {
     }
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Message.prototype, "id", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => conversation_1.Conversation, conversation => conversation.messages, { onDelete: 'CASCADE' }),
+    (0, typeorm_1.ManyToOne)(type => conversation_1.Conversation, conversation => conversation.messages, { onDelete: 'CASCADE' }),
     __metadata("design:type", conversation_1.Conversation)
 ], Message.prototype, "conversation", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => user_1.User),
+    (0, typeorm_1.ManyToOne)(type => user_1.User),
     __metadata("design:type", user_1.User)
 ], Message.prototype, "sender", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'bigint', transformer: [bigint_1.bigint] }),
+    (0, typeorm_1.Column)({ type: 'bigint', transformer: [bigint_1.bigint] }),
     __metadata("design:type", Number)
 ], Message.prototype, "created", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Boolean)
 ], Message.prototype, "isRead", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Boolean)
 ], Message.prototype, "isDeletedByUser1", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Boolean)
 ], Message.prototype, "isDeletedByUser2", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Message.prototype, "text", void 0);
 __decorate([
-    typeorm_1.Transaction(),
-    __param(1, typeorm_1.TransactionManager()),
+    (0, typeorm_1.Transaction)(),
+    __param(1, (0, typeorm_1.TransactionManager)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [user_1.User, typeorm_1.EntityManager]),
     __metadata("design:returntype", Promise)
 ], Message.prototype, "send", null);
 Message = __decorate([
-    typeorm_1.Entity()
+    (0, typeorm_1.Entity)()
 ], Message);
 exports.Message = Message;

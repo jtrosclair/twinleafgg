@@ -23,11 +23,11 @@ class DynaTreeHill extends trainer_card_1.TrainerCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof game_effects_1.HealEffect || attack_effects_1.HealTargetEffect && state_utils_1.StateUtils.getStadiumCard(state) === this) {
             effect.preventDefault = true;
-            check_effect_1.checkState(store, state);
+            (0, check_effect_1.checkState)(store, state);
             if (effect instanceof game_effects_1.UseStadiumEffect && state_utils_1.StateUtils.getStadiumCard(state) === this) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_STADIUM);
             }
-            check_effect_1.checkState(store, state);
+            (0, check_effect_1.checkState)(store, state);
             return state;
         }
         return state;

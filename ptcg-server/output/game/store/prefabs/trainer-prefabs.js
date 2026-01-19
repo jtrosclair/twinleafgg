@@ -25,7 +25,7 @@ function DISCARD_X_CARDS_FROM_YOUR_HAND(effect, store, state, minAmount, maxAmou
         throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
     }
     if (cards.length == maxAmount) {
-        prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: effect.trainerCard });
+        (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: effect.trainerCard });
     }
     if (cards.length > maxAmount) {
         state = store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(effect.player, game_message_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {}, { allowCancel: false, min: minAmount, max: maxAmount }), cards => {
@@ -33,7 +33,7 @@ function DISCARD_X_CARDS_FROM_YOUR_HAND(effect, store, state, minAmount, maxAmou
             if (cards.length === 0) {
                 return;
             }
-            prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: cards, sourceCard: effect.trainerCard });
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: cards, sourceCard: effect.trainerCard });
             cards.forEach((card, index) => {
                 store.log(state, game_message_1.GameLog.LOG_PLAYER_DISCARDS_CARD_FROM_HAND, { name: player.name, card: card.name });
             });

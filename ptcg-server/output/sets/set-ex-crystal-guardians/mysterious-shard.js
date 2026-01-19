@@ -42,7 +42,7 @@ class MysteriousShard extends trainer_card_1.TrainerCard {
             }
             if (sourceCard.tags.includes(card_types_1.CardTag.POKEMON_ex)) {
                 // Try to reduce PowerEffect, to check if something is blocking our ability
-                if (prefabs_1.IS_TOOL_BLOCKED(store, state, player, this)) {
+                if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, player, this)) {
                     return state;
                 }
                 effect.preventDefault = true;
@@ -55,11 +55,11 @@ class MysteriousShard extends trainer_card_1.TrainerCard {
                         return state;
                     }
                     const attachedTo = cardList.getPokemonCard();
-                    if (prefabs_1.IS_TOOL_BLOCKED(store, state, player, this)) {
+                    if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, player, this)) {
                         return state;
                     }
                     if (!!attachedTo && (attachedTo.tags.includes(card_types_1.CardTag.POKEMON_ex))) {
-                        prefabs_1.MOVE_CARD_TO(state, this, player.discard);
+                        (0, prefabs_1.MOVE_CARD_TO)(state, this, player.discard);
                     }
                 });
             });

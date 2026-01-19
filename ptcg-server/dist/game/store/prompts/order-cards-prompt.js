@@ -1,11 +1,14 @@
-import { Prompt } from './prompt';
-export const OrderCardsPromptType = 'Order cards';
-export class OrderCardsPrompt extends Prompt {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.OrderCardsPrompt = exports.OrderCardsPromptType = void 0;
+const prompt_1 = require("./prompt");
+exports.OrderCardsPromptType = 'Order cards';
+class OrderCardsPrompt extends prompt_1.Prompt {
     constructor(playerId, message, cards, options) {
         super(playerId);
         this.message = message;
         this.cards = cards;
-        this.type = OrderCardsPromptType;
+        this.type = exports.OrderCardsPromptType;
         // Default options
         this.options = Object.assign({}, {
             allowCancel: true
@@ -28,3 +31,4 @@ export class OrderCardsPrompt extends Prompt {
         return true;
     }
 }
+exports.OrderCardsPrompt = OrderCardsPrompt;

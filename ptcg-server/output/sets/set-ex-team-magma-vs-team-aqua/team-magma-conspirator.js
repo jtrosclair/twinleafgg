@@ -41,10 +41,10 @@ class TeamMagmaConspirator extends trainer_card_1.TrainerCard {
             });
             store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, {}, { min: 0, max: 2, allowCancel: false, blocked }), selected => {
                 if (selected) {
-                    prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, selected);
-                    prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards: selected });
+                    (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, selected);
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: selected });
                 }
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
             player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;

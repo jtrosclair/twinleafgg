@@ -38,16 +38,16 @@ class Klinklang extends pokemon_card_1.PokemonCard {
         this.fullName = 'Klinklang SCR';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponentStage2InPlay = game_1.StateUtils.getOpponent(state, player)
                 .getPokemonInPlay().filter(c => { var _a; return ((_a = c.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.stage) === card_types_1.Stage.STAGE_2; });
             if (opponentStage2InPlay.length === 0)
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
-            prefabs_1.PLAY_POKEMON_FROM_HAND_TO_BENCH(state, player, this);
+            (0, prefabs_1.PLAY_POKEMON_FROM_HAND_TO_BENCH)(state, player, this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this))
-            prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON(store, state, effect, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this))
+            (0, prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON)(store, state, effect, this);
         return state;
     }
 }

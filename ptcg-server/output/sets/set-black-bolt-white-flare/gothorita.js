@@ -35,7 +35,7 @@ class Gothorita extends pokemon_card_1.PokemonCard {
         this.regulationMark = 'I';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             if (opponent.deck.cards.length === 0) {

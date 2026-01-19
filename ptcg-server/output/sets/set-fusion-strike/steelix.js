@@ -36,12 +36,12 @@ class Steelix extends game_1.PokemonCard {
         this.fullName = 'Steelix FST';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             //The attack needs to be reset; otherwise, it will always cause 20 damage.
             effect.damage = 0;
-            prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE(effect, store, state, 2 * effect.player.active.damage);
+            (0, prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE)(effect, store, state, 2 * effect.player.active.damage);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             //I couldn't find a prefab to add damage to my Pokémon on the bench.
             const player = effect.player;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {

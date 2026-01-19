@@ -45,7 +45,7 @@ class Bronzong extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.BetweenTurnsEffect && effect.player.active.getPokemonCard() === this) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList) => {
@@ -55,7 +55,7 @@ class Bronzong extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList) => {
@@ -67,11 +67,11 @@ class Bronzong extends pokemon_card_1.PokemonCard {
                 store.reduceEffect(state, damageEffect);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.ADD_MARKER(this.COATING_MARKER, effect.player, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.ADD_MARKER)(this.COATING_MARKER, effect.player, this);
         }
         if (effect instanceof attack_effects_1.PutDamageEffect
-            && prefabs_1.HAS_MARKER(this.COATING_MARKER, game_1.StateUtils.getOpponent(state, effect.player), this)
+            && (0, prefabs_1.HAS_MARKER)(this.COATING_MARKER, game_1.StateUtils.getOpponent(state, effect.player), this)
             && effect.target.getPokemonCard() === this) {
             if (state.phase !== game_1.GamePhase.ATTACK) {
                 return state;
@@ -79,7 +79,7 @@ class Bronzong extends pokemon_card_1.PokemonCard {
             effect.damage -= 20;
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player !== game_1.StateUtils.findOwner(state, game_1.StateUtils.findCardList(state, this))) {
-            prefabs_1.REMOVE_MARKER(this.COATING_MARKER, game_1.StateUtils.getOpponent(state, effect.player), this);
+            (0, prefabs_1.REMOVE_MARKER)(this.COATING_MARKER, game_1.StateUtils.getOpponent(state, effect.player), this);
         }
         return state;
     }

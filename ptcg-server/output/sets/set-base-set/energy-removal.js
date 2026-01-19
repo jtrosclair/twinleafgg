@@ -39,8 +39,8 @@ function* playCard(next, store, state, effect) {
         cards = selected;
         next();
     });
-    prefabs_1.MOVE_CARDS(store, state, target, opponent.discard, { cards, sourceCard: effect.trainerCard });
-    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+    (0, prefabs_1.MOVE_CARDS)(store, state, target, opponent.discard, { cards, sourceCard: effect.trainerCard });
+    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return state;
 }
 class EnergyRemoval extends trainer_card_1.TrainerCard {

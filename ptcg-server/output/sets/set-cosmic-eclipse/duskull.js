@@ -41,7 +41,7 @@ class Duskull extends game_1.PokemonCard {
             }
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {}, { allowCancel: false, min: 3, max: 3 }), cards => {
                 cards = cards || [];
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: this, sourceEffect: this.powers[0] });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: this, sourceEffect: this.powers[0] });
                 cards.forEach((card, index) => {
                     store.log(state, game_1.GameLog.LOG_PLAYER_DISCARDS_CARD_FROM_HAND, { name: player.name, card: card.name });
                 });
@@ -69,7 +69,7 @@ class Duskull extends game_1.PokemonCard {
                     store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_EVOLVE, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { allowCancel: false, blocked: blocked2 }), selection => {
                         targets = selection || [];
                         // Evolve Pokemon
-                        prefabs_1.MOVE_CARDS(store, state, player.deck, targets[0], { cards: [evolution], sourceCard: this, sourceEffect: this.powers[0] });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, targets[0], { cards: [evolution], sourceCard: this, sourceEffect: this.powers[0] });
                         targets[0].clearEffects();
                         targets[0].pokemonPlayedTurn = state.turn;
                         return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {

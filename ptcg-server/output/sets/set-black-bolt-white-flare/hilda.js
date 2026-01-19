@@ -47,8 +47,8 @@ function* playCard(next, store, state, self, effect) {
         cards = selected || [];
         next();
     });
-    prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: self });
-    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+    (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: self });
+    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }

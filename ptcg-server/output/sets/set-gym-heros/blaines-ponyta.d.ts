@@ -10,7 +10,7 @@ export declare class BlainesPonyta extends PokemonCard {
     weakness: {
         type: CardType.WATER;
     }[];
-    retreat: never[];
+    retreat: any[];
     attacks: {
         name: string;
         cost: (CardType.FIRE | CardType.COLORLESS)[];

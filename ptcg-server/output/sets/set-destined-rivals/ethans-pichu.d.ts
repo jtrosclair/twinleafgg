@@ -8,10 +8,10 @@ export declare class EthansPichu extends PokemonCard {
     weakness: {
         type: import("../../game").CardType.FIGHTING;
     }[];
-    retreat: never[];
+    retreat: any[];
     attacks: {
         name: string;
-        cost: never[];
+        cost: any[];
         damage: number;
         text: string;
     }[];

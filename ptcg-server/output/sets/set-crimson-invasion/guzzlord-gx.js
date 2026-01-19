@@ -42,7 +42,7 @@ class GuzzlordGX extends pokemon_card_1.PokemonCard {
         this.usedGluttonGX = false;
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const temp = new game_1.CardList();
             player.deck.moveTo(temp, 5);
@@ -51,9 +51,9 @@ class GuzzlordGX extends pokemon_card_1.PokemonCard {
             temp.moveTo(player.discard);
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 2, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             this.usedGluttonGX = true;
         }

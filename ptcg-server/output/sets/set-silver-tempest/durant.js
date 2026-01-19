@@ -47,7 +47,7 @@ class Durant extends pokemon_card_1.PokemonCard {
             let cards = [];
             store.prompt(state, new game_1.ChooseCardsPrompt(player, game_2.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { min: 0, max: 2, allowCancel: false }), selected => {
                 cards = selected || [];
-                prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
+                (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
                 player.deck.moveCardsTo(cards, player.hand);
             });
             return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {

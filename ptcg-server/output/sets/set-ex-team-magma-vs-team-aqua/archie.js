@@ -20,7 +20,7 @@ class Archie extends trainer_card_1.TrainerCard {
         this.text = 'Search your deck for a Pokémon with Team Aqua in its name and put it onto your Bench. Shuffle your deck afterward. Treat the new Benched Pokémon as a Basic Pokémon. If it is a Stage 2 Pokémon, put 2 damage counters on that Pokémon.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             effect.preventDefault = true;
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
@@ -30,9 +30,9 @@ class Archie extends trainer_card_1.TrainerCard {
             if (player.supporterTurn > 0) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
             }
-            prefabs_1.BLOCK_IF_DECK_EMPTY(player);
-            const slots = prefabs_1.GET_PLAYER_BENCH_SLOTS(player);
-            prefabs_1.BLOCK_IF_NO_SLOTS(slots);
+            (0, prefabs_1.BLOCK_IF_DECK_EMPTY)(player);
+            const slots = (0, prefabs_1.GET_PLAYER_BENCH_SLOTS)(player);
+            (0, prefabs_1.BLOCK_IF_NO_SLOTS)(slots);
             const blocked = [];
             player.deck.cards.forEach((card, index) => {
                 if (card instanceof game_1.PokemonCard && card.tags.includes(card_types_1.CardTag.TEAM_AQUA)) {
@@ -52,7 +52,7 @@ class Archie extends trainer_card_1.TrainerCard {
                         slots[index].damage += 20; // Add 2 damage counters
                     }
                 });
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
             player.supporter.moveCardTo(this, player.discard);
         }

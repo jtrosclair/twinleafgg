@@ -38,7 +38,7 @@ class TeamRocketsAmpharos extends game_1.PokemonCard {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             //const sourcePlayer = StateUtils.findOwner(state, effect.target);
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, opponent, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
             if (effect.darkestImpulseSV) {

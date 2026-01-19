@@ -34,7 +34,7 @@ class Lotad extends game_1.PokemonCard {
         // Handle Healing Stone Poké-Body
         if (effect instanceof game_phase_effects_1.BetweenTurnsEffect) {
             const player = effect.player;
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             player.forEachPokemon(game_1.PlayerType.ANY, cardList => {

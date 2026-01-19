@@ -1,4 +1,7 @@
-export class SandboxModifyPokemonAction {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SandboxModifyPokemonAction = void 0;
+class SandboxModifyPokemonAction {
     constructor(clientId, targetPlayerId, location, modifications, benchIndex) {
         this.clientId = clientId;
         this.targetPlayerId = targetPlayerId;
@@ -8,3 +11,4 @@ export class SandboxModifyPokemonAction {
         this.type = 'SANDBOX_MODIFY_POKEMON';
     }
 }
+exports.SandboxModifyPokemonAction = SandboxModifyPokemonAction;

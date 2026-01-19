@@ -37,14 +37,14 @@ class RayquazaEx extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         var _a;
         // Intensifying Burn
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if ((_a = effect.opponent.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.tags.includes(card_types_1.CardTag.POKEMON_EX)) {
                 effect.damage += 50;
             }
         }
         // Dragon Pulse
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.MOVE_CARDS(store, state, effect.player.deck, effect.player.discard, { count: 3 });
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.MOVE_CARDS)(store, state, effect.player.deck, effect.player.discard, { count: 3 });
         }
         return state;
     }

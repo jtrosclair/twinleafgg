@@ -10,7 +10,7 @@ export declare class Yanmega extends PokemonCard {
     weakness: {
         type: import("../../game").CardType.FIRE;
     }[];
-    retreat: never[];
+    retreat: any[];
     attacks: {
         name: string;
         cost: import("../../game").CardType.COLORLESS[];

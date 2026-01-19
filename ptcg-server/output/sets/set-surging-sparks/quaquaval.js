@@ -50,7 +50,7 @@ class Quaquaval extends game_1.PokemonCard {
                 if (cards.length === 0) {
                     return;
                 }
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 this.marker.addMarker(this.UP_TEMPO_MARKER, this);
                 player.marker.addMarker(this.UP_TEMPO_MARKER, this);
                 player.hand.moveCardsTo(cards, player.deck);

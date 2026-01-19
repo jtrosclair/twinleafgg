@@ -35,11 +35,11 @@ class Hugh extends trainer_card_1.TrainerCard {
             if (opponent.hand.cards.length > 5) {
                 store.prompt(state, new __1.ChooseCardsPrompt(opponent, __1.GameMessage.CHOOSE_CARD_TO_DISCARD, opponent.hand, {}, { min: discardAmount, max: discardAmount, allowCancel: false }), selected => {
                     const cards = selected || [];
-                    prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.discard, { cards, sourceCard: this });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.discard, { cards, sourceCard: this });
                 });
             }
             else {
-                prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND(opponent, 5);
+                (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(opponent, 5);
             }
             const playerCards = player.hand.cards.filter(c => c !== this);
             // Get player's hand length
@@ -50,14 +50,14 @@ class Hugh extends trainer_card_1.TrainerCard {
             if (player.hand.cards.length > 5) {
                 store.prompt(state, new __1.ChooseCardsPrompt(player, __1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {}, { min: playerDiscardAmount, max: playerDiscardAmount, allowCancel: false }), selected => {
                     const cards = selected || [];
-                    prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: this });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: this });
                 });
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             }
             else {
-                prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 5);
+                (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, 5);
             }
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         return state;

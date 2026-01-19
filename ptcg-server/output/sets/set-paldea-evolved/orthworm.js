@@ -59,7 +59,7 @@ class Orthworm extends pokemon_card_1.PokemonCard {
         }
         if (effect instanceof check_effects_1.CheckHpEffect && effect.target.cards.includes(this)) {
             const player = effect.player;
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const thisCardList = [];

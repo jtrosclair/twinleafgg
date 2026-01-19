@@ -33,7 +33,7 @@ class Kingdra extends pokemon_card_1.PokemonCard {
         this.fullName = 'Kingdra AQ';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             // Block all energy on bench (can't move from bench)
             const blockedMap = [];
@@ -62,15 +62,15 @@ class Kingdra extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (opponent.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
-                prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+                (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                     if (result) {
                         store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, opponent.active, { superType: card_types_1.SuperType.ENERGY }, { min: 1, max: 1, allowCancel: false }), selected => {
                             const card = selected[0];
-                            prefabs_1.MOVE_CARDS(store, state, game_1.StateUtils.findCardList(state, card), opponent.discard, { cards: [card], sourceCard: this, sourceEffect: this.attacks[0] });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, game_1.StateUtils.findCardList(state, card), opponent.discard, { cards: [card], sourceCard: this, sourceEffect: this.attacks[0] });
                             return state;
                         });
                     }

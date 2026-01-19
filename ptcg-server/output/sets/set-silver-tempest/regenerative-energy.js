@@ -25,7 +25,7 @@ class RegenerativeEnergy extends energy_card_1.EnergyCard {
         // Provide energy when attached to Single Strike Pokemon
         if (effect instanceof game_effects_1.EvolveEffect && effect.target.cards.includes(this)) {
             const player = effect.player;
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, effect.target)) {
                 return state;
             }
             if ((_a = effect.target.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.tags.includes(card_types_1.CardTag.POKEMON_V)) {

@@ -49,7 +49,7 @@ class Scizorex extends pokemon_card_1.PokemonCard {
         if (effect instanceof attack_effects_1.DealDamageEffect && effect.source.getPokemonCard() === this) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const checkHpEffect = new check_effects_1.CheckHpEffect(player, effect.source);
@@ -60,7 +60,7 @@ class Scizorex extends pokemon_card_1.PokemonCard {
                 effect.damage += 40;
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const addMarkerEffect = new attack_effects_1.AddMarkerEffect(effect, this.STEEL_WING_MARKER, this);
             return store.reduceEffect(state, addMarkerEffect);
         }
@@ -77,7 +77,7 @@ class Scizorex extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
             effect.player.active.marker.removeMarker(this.STEEL_WING_MARKER, this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             if (effect.opponent.active.getPokemons().length > 1) {
                 effect.damage += 30;
             }

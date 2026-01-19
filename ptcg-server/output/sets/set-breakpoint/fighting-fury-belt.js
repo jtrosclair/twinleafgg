@@ -21,7 +21,7 @@ class FightingFuryBelt extends trainer_card_1.TrainerCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.DealDamageEffect && effect.source.tools.includes(this)) {
             const opponent = state_utils_1.StateUtils.getOpponent(state, effect.player);
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             const attack = effect.attack;
@@ -31,7 +31,7 @@ class FightingFuryBelt extends trainer_card_1.TrainerCard {
         }
         if (effect instanceof check_effects_1.CheckHpEffect && effect.target.tools.includes(this)) {
             const card = effect.target.getPokemonCard();
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             if (card === undefined) {

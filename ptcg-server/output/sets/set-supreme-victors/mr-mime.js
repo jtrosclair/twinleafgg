@@ -38,13 +38,13 @@ class MrMime extends pokemon_card_1.PokemonCard {
             const checkHpEffect = new check_effects_1.CheckHpEffect(player, effect.target);
             store.reduceEffect(state, checkHpEffect);
             if (effect.damage >= checkHpEffect.hp) {
-                if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+                if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                     return state;
                 }
                 effect.surviveOnTenHPReason = this.powers[0].name;
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (effect.player.active.damage >= 50) {
                 effect.damage += 40;
             }

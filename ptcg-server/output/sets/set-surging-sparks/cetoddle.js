@@ -27,8 +27,8 @@ class Cetoddle extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Draining Fin
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            prefabs_1.HEAL_X_DAMAGE_FROM_THIS_POKEMON(effect, store, state, 20);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.HEAL_X_DAMAGE_FROM_THIS_POKEMON)(effect, store, state, 20);
         }
         return state;
     }

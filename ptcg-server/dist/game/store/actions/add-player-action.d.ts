@@ -6,15 +6,15 @@ export declare class AddPlayerAction implements Action {
     artworksMap?: {
         [code: string]: {
             imageUrl: string;
-            holoType?: string | undefined;
+            holoType?: string;
         };
-    } | undefined;
-    deckId?: number | undefined;
+    };
+    deckId?: number;
     readonly type: string;
     constructor(clientId: number, name: string, deck: string[], artworksMap?: {
         [code: string]: {
             imageUrl: string;
-            holoType?: string | undefined;
+            holoType?: string;
         };
-    } | undefined, deckId?: number | undefined);
+    }, deckId?: number);
 }

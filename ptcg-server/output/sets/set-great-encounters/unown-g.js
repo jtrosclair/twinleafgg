@@ -57,7 +57,7 @@ function* usePower(next, store, state, self, effect) {
             }
             // Move other cards to discard
             if (otherCards.length > 0) {
-                prefabs_1.MOVE_CARDS(store, state, unownGSlot, player.discard, { cards: otherCards });
+                (0, prefabs_1.MOVE_CARDS)(store, state, unownGSlot, player.discard, { cards: otherCards });
             }
             unownGSlot.clearEffects();
         }
@@ -130,7 +130,7 @@ class UnownG extends pokemon_card_1.PokemonCard {
                 effect.preventDefault = true;
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (effect.player.active.damage > 0) {
                 effect.damage = 10;
             }

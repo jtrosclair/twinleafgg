@@ -12,7 +12,7 @@ class MoveEnergyPromptResolver extends prompt_resolver_1.PromptResolver {
         }
     }
     getPromptResult(state, prompt) {
-        const copy = utils_1.deepClone(state, [game_1.Card]);
+        const copy = (0, utils_1.deepClone)(state, [game_1.Card]);
         const fromItems = this.buildFromCardItems(copy, prompt);
         const max = prompt.options.max;
         const min = prompt.options.min;

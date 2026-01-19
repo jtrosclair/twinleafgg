@@ -104,7 +104,7 @@ function handleBenchSizeChange(store, state, benchSizes) {
                     const tools = [...cardList.tools];
                     // Move other cards to discard
                     if (otherCards.length > 0) {
-                        prefabs_1.MOVE_CARDS(store, state, cardList, player.discard, { cards: otherCards });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.discard, { cards: otherCards });
                     }
                     // Move tools to discard
                     for (const tool of tools) {
@@ -112,7 +112,7 @@ function handleBenchSizeChange(store, state, benchSizes) {
                     }
                     // Move Pokémon to discard
                     if (pokemons.length > 0) {
-                        prefabs_1.MOVE_CARDS(store, state, cardList, player.discard, { cards: pokemons });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.discard, { cards: pokemons });
                     }
                     player.bench.splice(i, 1);
                 }
@@ -259,7 +259,7 @@ function setupSuddenDeathGame(store, state, firstPlayer) {
     state.turn = 0;
     state.phase = state_1.GamePhase.SETUP;
     state.isSuddenDeath = true;
-    const generator = setup_reducer_1.setupGame(() => generator.next(), store, state);
+    const generator = (0, setup_reducer_1.setupGame)(() => generator.next(), store, state);
     return generator.next().value;
 }
 function* executeCheckState(next, store, state, onComplete) {
@@ -309,7 +309,7 @@ function* executeCheckState(next, store, state, onComplete) {
             // If prizes to take >= remaining prizes, automatically take all prizes and end game
             if (group.count >= prizeLeft && prizeLeft > 0) {
                 const remainingPrizes = player.prizes.filter(p => p.cards.length > 0);
-                prefabs_1.TAKE_SPECIFIC_PRIZES(store, state, player, remainingPrizes, {
+                (0, prefabs_1.TAKE_SPECIFIC_PRIZES)(store, state, player, remainingPrizes, {
                     destination: group.destination || player.hand,
                     skipReduce: false
                 });
@@ -325,7 +325,7 @@ function* executeCheckState(next, store, state, onComplete) {
                 const allPrizes = player.prizes.filter(p => p.cards.length > 0);
                 const selectedPrizes = allPrizes.slice(0, group.count);
                 const destination = group.destination || player.hand;
-                prefabs_1.TAKE_SPECIFIC_PRIZES(store, state, player, selectedPrizes, { destination });
+                (0, prefabs_1.TAKE_SPECIFIC_PRIZES)(store, state, player, selectedPrizes, { destination });
             }
         }
     }

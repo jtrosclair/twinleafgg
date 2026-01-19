@@ -26,9 +26,9 @@ class Glimmet extends pokemon_card_1.PokemonCard {
         this.fullName = 'Glimmet OBF';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
-            prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, opponent, this);
         }
         return state;
     }

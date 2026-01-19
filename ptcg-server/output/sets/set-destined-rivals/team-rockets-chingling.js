@@ -31,7 +31,7 @@ class TeamRocketsChingling extends pokemon_card_1.PokemonCard {
         this.fullName = 'Team Rocket\'s Chingling DRI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (opponent.hand.cards.length === 0) {
@@ -40,7 +40,7 @@ class TeamRocketsChingling extends pokemon_card_1.PokemonCard {
             if (opponent.hand.cards.length > 0) {
                 const randomIndex = Math.floor(Math.random() * opponent.hand.cards.length);
                 const randomCard = opponent.hand.cards[randomIndex];
-                prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.discard, { cards: [randomCard], sourceCard: this, sourceEffect: this.attacks[0] });
+                (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.discard, { cards: [randomCard], sourceCard: this, sourceEffect: this.attacks[0] });
             }
         }
         return state;

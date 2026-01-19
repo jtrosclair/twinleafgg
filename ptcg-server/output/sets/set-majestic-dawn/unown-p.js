@@ -40,9 +40,9 @@ class UnownP extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
-            prefabs_2.REMOVE_MARKER(this.PUT_MARKER, effect.player, this);
+            (0, prefabs_2.REMOVE_MARKER)(this.PUT_MARKER, effect.player, this);
         }
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             // Ensure the Pokémon is on the bench
             const isOnBench = player.bench.some(cardList => cardList.getPokemonCard() === this);
@@ -50,7 +50,7 @@ class UnownP extends pokemon_card_1.PokemonCard {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             // Once per turn
-            if (prefabs_2.HAS_MARKER(this.PUT_MARKER, player, this)) {
+            if ((0, prefabs_2.HAS_MARKER)(this.PUT_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             const blocked = [];
@@ -63,7 +63,7 @@ class UnownP extends pokemon_card_1.PokemonCard {
                 if (!targets || targets.length === 0) {
                     return;
                 }
-                prefabs_2.ADD_MARKER(this.PUT_MARKER, player, this);
+                (0, prefabs_2.ADD_MARKER)(this.PUT_MARKER, player, this);
                 player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
                     if (cardList.getPokemonCard() === this) {
                         cardList.addBoardEffect(card_types_1.BoardEffect.ABILITY_USED);
@@ -74,7 +74,7 @@ class UnownP extends pokemon_card_1.PokemonCard {
                 });
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const playerTopDeck = new game_1.CardList();
@@ -92,7 +92,7 @@ class UnownP extends pokemon_card_1.PokemonCard {
             playerTopDeck.moveTo(player.discard);
             opponentTopDeck.moveTo(opponent.discard);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.PUT_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.PUT_MARKER, this);
         return state;
     }
 }

@@ -78,9 +78,9 @@ class TeamRocketsPorygonZ extends pokemon_card_1.PokemonCard {
                     }
                 });
                 // Discard the selected cards
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: cards, sourceCard: this });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: cards, sourceCard: this });
                 // Draw a card
-                prefabs_1.DRAW_CARDS(player, 1);
+                (0, prefabs_1.DRAW_CARDS)(player, 1);
             });
             return state;
         }

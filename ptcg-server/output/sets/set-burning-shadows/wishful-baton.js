@@ -29,7 +29,7 @@ class WishfulBaton extends trainer_card_1.TrainerCard {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             const active = effect.target;
-            if (prefabs_1.IS_TOOL_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             // Do not activate between turns, or when it's not opponents turn.
@@ -58,7 +58,7 @@ class WishfulBaton extends trainer_card_1.TrainerCard {
                 active.marker.removeMarker(this.WISHFUL_BATON_MARKER);
                 for (const transfer of transfers) {
                     const target = state_utils_1.StateUtils.getTarget(state, player, transfer.to);
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, target, { cards: [transfer.card] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, target, { cards: [transfer.card] });
                 }
             });
         }

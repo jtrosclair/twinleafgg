@@ -37,10 +37,10 @@ class Ninetales extends game_1.PokemonCard {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const hasBench = opponent.bench.some(b => b.cards.length > 0);
-            if (!hasBench || prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if (!hasBench || (0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
-            state = prefabs_1.CONFIRMATION_PROMPT(store, state, player, (wantToUse) => {
+            state = (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, (wantToUse) => {
                 if (!wantToUse) {
                     return;
                 }
@@ -50,7 +50,7 @@ class Ninetales extends game_1.PokemonCard {
                 });
             }, game_1.GameMessage.WANT_TO_USE_ABILITY);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const oppActive = opponent.active;

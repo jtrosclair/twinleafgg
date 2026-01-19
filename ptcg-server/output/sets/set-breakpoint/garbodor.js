@@ -81,9 +81,9 @@ class Garbodor extends pokemon_card_1.PokemonCard {
             }
         }
         // Offensive Bomb
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, state_utils_1.StateUtils.getOpponent(state, effect.player), this);
-            prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, state_utils_1.StateUtils.getOpponent(state, effect.player), this);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, state_utils_1.StateUtils.getOpponent(state, effect.player), this);
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, state_utils_1.StateUtils.getOpponent(state, effect.player), this);
         }
         return state;
     }

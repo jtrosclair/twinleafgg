@@ -38,7 +38,7 @@ class TeamRocketsMewtwoex extends game_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof game_effects_1.UseAttackEffect && effect.source.cards.includes(this)) {
             const player = effect.player;
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             // Count Team Rocket's Pokémon in play

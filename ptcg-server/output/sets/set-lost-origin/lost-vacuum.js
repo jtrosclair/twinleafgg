@@ -113,7 +113,7 @@ Choose a Pokémon Tool attached to any Pokémon, or any Stadium in play, and put
                             // Discard Stadium
                             const cardList = game_1.StateUtils.findCardList(state, stadiumCard);
                             const owner = game_1.StateUtils.findOwner(state, cardList);
-                            prefabs_1.MOVE_CARDS(store, state, cardList, owner.lostzone, { sourceCard: this });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, cardList, owner.lostzone, { sourceCard: this });
                             player.supporter.moveCardTo(this, player.discard);
                             return state;
                         }
@@ -136,7 +136,7 @@ Choose a Pokémon Tool attached to any Pokémon, or any Stadium in play, and put
                 // Discard Stadium
                 const cardList = game_1.StateUtils.findCardList(state, stadiumCard);
                 const owner = game_1.StateUtils.findOwner(state, cardList);
-                prefabs_1.MOVE_CARDS(store, state, cardList, owner.discard, { sourceCard: this });
+                (0, prefabs_1.MOVE_CARDS)(store, state, cardList, owner.discard, { sourceCard: this });
                 player.supporter.moveCardTo(this, player.discard);
                 return state;
             }

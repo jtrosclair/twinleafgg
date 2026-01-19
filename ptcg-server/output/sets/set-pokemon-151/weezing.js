@@ -46,17 +46,17 @@ class Weezing extends game_1.PokemonCard {
             if (state.phase !== game_1.GamePhase.ATTACK ||
                 player.active.getPokemonCard() !== this ||
                 state.players[state.activePlayer] !== opponent ||
-                prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this))
+                (0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this))
                 return state;
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, (result) => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, (result) => {
                 if (!result)
                     return;
                 const dealDamage = new game_effects_1.KnockOutEffect(opponent, opponent.active);
                 store.reduceEffect(state, dealDamage);
-                return prefabs_1.TAKE_X_PRIZES(store, state, player, dealDamage.prizeCount);
+                return (0, prefabs_1.TAKE_X_PRIZES)(store, state, player, dealDamage.prizeCount);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             const benched = opponent.bench.filter(b => b.cards.length > 0);
             benched.forEach(target => {

@@ -39,22 +39,22 @@ class Victiniex extends pokemon_card_1.PokemonCard {
         this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (prefabs_1.HAS_MARKER(this.ATTACK_USED_MARKER, this, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.ATTACK_USED_MARKER, this, this)) {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
-                    prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+                    (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            if (prefabs_1.HAS_MARKER(this.ATTACK_USED_MARKER, this, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.ATTACK_USED_MARKER, this, this)) {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
             }
-            prefabs_1.ADD_MARKER(this.ATTACK_USED_MARKER, this, this);
+            (0, prefabs_1.ADD_MARKER)(this.ATTACK_USED_MARKER, this, this);
             effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {

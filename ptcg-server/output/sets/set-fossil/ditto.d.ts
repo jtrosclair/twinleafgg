@@ -14,7 +14,7 @@ export declare class Ditto extends PokemonCard {
         type: CardType.FIGHTING;
     }[];
     retreat: CardType.COLORLESS[];
-    attacks: never[];
+    attacks: any[];
     powers: {
         name: string;
         powerType: PowerType;

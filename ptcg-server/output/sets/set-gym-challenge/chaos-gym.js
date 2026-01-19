@@ -24,15 +24,15 @@ class ChaosGym extends trainer_card_1.TrainerCard {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             // avoid recursion if Chaos Gym is already in effect
-            if (prefabs_1.HAS_MARKER(this.CHAOS_GYM_MARKER, effect.trainerCard)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.CHAOS_GYM_MARKER, effect.trainerCard)) {
                 return state;
             }
             effect.preventDefault = true;
-            prefabs_1.MOVE_CARD_TO(state, effect.trainerCard, player.supporter);
+            (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.supporter);
             // Add a marker to the player to indicate that Chaos Gym is in effect
-            prefabs_1.ADD_MARKER(this.CHAOS_GYM_MARKER, effect.trainerCard, this);
+            (0, prefabs_1.ADD_MARKER)(this.CHAOS_GYM_MARKER, effect.trainerCard, this);
             // Flip a coin to see if the player can play the Trainer card
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (result) {
                     const playTrainerEffect = new play_card_effects_1.TrainerEffect(player, effect.trainerCard);
                     store.reduceEffect(state, playTrainerEffect);
@@ -40,11 +40,11 @@ class ChaosGym extends trainer_card_1.TrainerCard {
                 else {
                     // Just can't use if put into play
                     if (effect.trainerCard.putIntoPlay || effect.trainerCard.trainerType === card_types_1.TrainerType.TOOL) {
-                        prefabs_1.MOVE_CARD_TO(state, effect.trainerCard, player.discard);
+                        (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
                         return state;
                     }
                     // If tails, opponent can use the Trainer card if they want
-                    prefabs_1.CONFIRMATION_PROMPT(store, state, opponent, result => {
+                    (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, opponent, result => {
                         if (result) {
                             const playTrainerEffect = new play_card_effects_1.TrainerEffect(opponent, effect.trainerCard);
                             store.reduceEffect(state, playTrainerEffect);
@@ -53,7 +53,7 @@ class ChaosGym extends trainer_card_1.TrainerCard {
                 }
             });
             // Regardless of the outcome, the Trainer card goes to the discard pile
-            prefabs_1.MOVE_CARD_TO(state, effect.trainerCard, player.discard);
+            (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
             // Remove the Chaos Gym marker after resolving (idk how to do this)
         }
         return state;

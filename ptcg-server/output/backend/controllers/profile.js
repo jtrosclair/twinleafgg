@@ -186,70 +186,70 @@ class Profile extends controller_1.Controller {
     }
 }
 __decorate([
-    controller_1.Get('/me'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/me'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Profile.prototype, "onMe", null);
 __decorate([
-    controller_1.Get('/get/:id'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/get/:id'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Profile.prototype, "onGet", null);
 __decorate([
-    controller_1.Get('/matchHistory/:userId/:page?/:pageSize?'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/matchHistory/:userId/:page?/:pageSize?'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Profile.prototype, "onMatchHistory", null);
 __decorate([
-    controller_1.Post('/changePassword'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        currentPassword: services_1.check().isPassword(),
-        newPassword: services_1.check().isPassword()
+    (0, controller_1.Post)('/changePassword'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        currentPassword: (0, services_1.check)().isPassword(),
+        newPassword: (0, services_1.check)().isPassword()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Profile.prototype, "onChangePassword", null);
 __decorate([
-    controller_1.Post('/changeEmail'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        email: services_1.check().isEmail(),
+    (0, controller_1.Post)('/changeEmail'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        email: (0, services_1.check)().isEmail(),
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Profile.prototype, "onChangeEmail", null);
 __decorate([
-    controller_1.Get('/cardImagesUrl'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/cardImagesUrl'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Profile.prototype, "onGetCardImagesUrl", null);
 __decorate([
-    controller_1.Post('/setCardImagesUrl'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        jsonUrl: services_1.check().isString()
+    (0, controller_1.Post)('/setCardImagesUrl'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        jsonUrl: (0, services_1.check)().isString()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Profile.prototype, "onSetCardImagesUrl", null);
 __decorate([
-    controller_1.Post('/updateRole'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        targetUserId: services_1.check().isNumber(),
-        roleId: services_1.check().isNumber()
+    (0, controller_1.Post)('/updateRole'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        targetUserId: (0, services_1.check)().isNumber(),
+        roleId: (0, services_1.check)().isNumber()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),

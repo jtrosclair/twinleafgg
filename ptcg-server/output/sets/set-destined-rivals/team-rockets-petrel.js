@@ -26,10 +26,10 @@ function* playCard(next, store, state, effect, self) {
         cards = selected || [];
         next();
     });
-    prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards: cards, sourceCard: self });
-    prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
-    prefabs_1.SHUFFLE_DECK(store, state, player);
+    (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: cards, sourceCard: self });
+    (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
+    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
+    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
 }
 class TeamRocketsPetrel extends trainer_card_1.TrainerCard {
     constructor() {

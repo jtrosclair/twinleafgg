@@ -38,7 +38,7 @@ class Garganacl extends pokemon_card_1.PokemonCard {
         if (effect instanceof attack_effects_1.DealDamageEffect) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const hasGarganaclInPlay = player.bench.some(b => b.cards.includes(this)) || player.active.cards.includes(this);

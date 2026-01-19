@@ -37,7 +37,7 @@ class MegaLucarioex extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Aura Jab
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             state = store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_TO_BENCH, player.discard, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH], { superType: game_1.SuperType.ENERGY, energyType: game_1.EnergyType.BASIC, name: 'Fighting Energy' }, { allowCancel: false, min: 0, max: 3 }), transfers => {
                 transfers = transfers || [];
@@ -52,11 +52,11 @@ class MegaLucarioex extends game_1.PokemonCard {
             });
         }
         // Mega Brave
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            if (prefabs_1.HAS_MARKER(this.MEGA_BRAVE_MARKER, effect.player, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.MEGA_BRAVE_MARKER, effect.player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
             }
-            prefabs_1.ADD_MARKER(this.MEGA_BRAVE_MARKER, effect.player, this);
+            (0, prefabs_1.ADD_MARKER)(this.MEGA_BRAVE_MARKER, effect.player, this);
             effect.player.marker.addMarker(this.MEGA_BRAVE_MARKER, this);
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.MEGA_BRAVE_MARKER, this)) {

@@ -37,7 +37,7 @@ class ZeraoraVMAX extends game_1.PokemonCard {
         this.setNumber = '54';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             let numOpPokemonWithAbilities = 0;
@@ -49,8 +49,8 @@ class ZeraoraVMAX extends game_1.PokemonCard {
             const damagePerOpponent = 60;
             effect.damage = numOpPokemonWithAbilities * damagePerOpponent;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 2);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 2);
         }
         return state;
     }

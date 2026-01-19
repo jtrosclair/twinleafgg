@@ -36,7 +36,7 @@ class Kyogre extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Surging Flames
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // counting the energies
             const energiesInDiscard = player.discard.cards.filter(c => c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC && c.name === 'Water Energy');
@@ -45,11 +45,11 @@ class Kyogre extends pokemon_card_1.PokemonCard {
             }
             effect.damage = 20 * energiesInDiscard.length;
             // slapping those energies back into the deck
-            prefabs_1.MOVE_CARDS(store, state, player.discard, player.deck, { cards: energiesInDiscard, sourceCard: this, sourceEffect: this.attacks[0] });
-            prefabs_1.SHUFFLE_DECK(store, state, player);
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.deck, { cards: energiesInDiscard, sourceCard: this, sourceEffect: this.attacks[0] });
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 2);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 2);
         }
         return state;
     }

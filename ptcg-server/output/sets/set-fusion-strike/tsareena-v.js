@@ -51,7 +51,7 @@ class TsareenaV extends pokemon_card_1.PokemonCard {
                         const tools = [...cardList.tools];
                         // Move other cards (tools, energy, etc.) to discard
                         if (otherCards.length > 0) {
-                            prefabs_1.MOVE_CARDS(store, state, cardList, player.discard, { cards: otherCards });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.discard, { cards: otherCards });
                         }
                         // Move tools to discard
                         if (tools.length > 0) {
@@ -63,7 +63,7 @@ class TsareenaV extends pokemon_card_1.PokemonCard {
                         if (pokemons.length > 0) {
                             cardList.damage = 0;
                             cardList.clearEffects();
-                            prefabs_1.MOVE_CARDS(store, state, cardList, player.discard, { cards: pokemons });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.discard, { cards: pokemons });
                         }
                         discardCount++;
                     }

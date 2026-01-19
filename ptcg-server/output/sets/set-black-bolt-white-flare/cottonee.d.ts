@@ -9,7 +9,7 @@ export declare class Cottonee extends PokemonCard {
     weakness: {
         type: CardType.FIRE;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;

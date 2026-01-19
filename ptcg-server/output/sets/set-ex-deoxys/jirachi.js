@@ -36,7 +36,7 @@ class Jirachi extends pokemon_card_1.PokemonCard {
         this.WISHING_STAR_MARKER = 'WISHING_STAR_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const target = opponent.active.getPokemonCard();
@@ -46,16 +46,16 @@ class Jirachi extends pokemon_card_1.PokemonCard {
         }
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            prefabs_1.REMOVE_MARKER(this.WISHING_STAR_MARKER, player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.WISHING_STAR_MARKER, player, this);
             return state;
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.WISHING_STAR_MARKER, this);
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.WISHING_STAR_MARKER, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            if (prefabs_1.HAS_MARKER(this.WISHING_STAR_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.WISHING_STAR_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             if (player.active.getPokemonCard() !== this) {
@@ -67,11 +67,11 @@ class Jirachi extends pokemon_card_1.PokemonCard {
             const deckTop = new game_1.CardList();
             player.deck.moveTo(deckTop, 5);
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, deckTop, {}, { min: 1, max: 1, allowCancel: false }), selected => {
-                prefabs_1.ADD_MARKER(this.WISHING_STAR_MARKER, player, this);
+                (0, prefabs_1.ADD_MARKER)(this.WISHING_STAR_MARKER, player, this);
                 deckTop.moveCardsTo(selected, player.hand);
                 deckTop.moveTo(player.deck);
-                prefabs_1.ABILITY_USED(player, this);
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.ABILITY_USED)(player, this);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                 player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
                     if (cardList.getPokemonCard() === this) {
                         cardList.addSpecialCondition(card_types_1.SpecialCondition.ASLEEP);

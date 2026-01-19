@@ -24,7 +24,7 @@ class DoubleTurboEnergy extends energy_card_1.EnergyCard {
     }
     reduceEffect(store, state, effect) {
         if ((effect instanceof attack_effects_1.DealDamageEffect) && effect.source.cards.includes(this)) {
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.source)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.player, this, effect.source)) {
                 return state;
             }
             effect.damage -= 20;

@@ -70,9 +70,9 @@ class ArceusVSTAR extends pokemon_card_1.PokemonCard {
             if (player.usedVSTAR) {
                 throw new game_1.GameError(game_1.GameMessage.LABEL_VSTAR_USED);
             }
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             player.usedVSTAR = true;
-            prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, this, {}, { min: 0, max: 2, allowCancel: false }, this.powers[0]);
+            (0, prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND)(store, state, player, this, {}, { min: 0, max: 2, allowCancel: false }, this.powers[0]);
         }
         //     if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
         //       const player = effect.player;

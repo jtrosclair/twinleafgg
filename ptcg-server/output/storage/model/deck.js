@@ -25,43 +25,43 @@ let Deck = class Deck extends typeorm_1.BaseEntity {
     }
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Deck.prototype, "id", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => user_1.User, user => user.decks),
+    (0, typeorm_1.ManyToOne)(type => user_1.User, user => user.decks),
     __metadata("design:type", user_1.User)
 ], Deck.prototype, "user", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Deck.prototype, "name", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'text' }),
+    (0, typeorm_1.Column)({ type: 'text' }),
     __metadata("design:type", String)
 ], Deck.prototype, "cards", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Boolean)
 ], Deck.prototype, "isValid", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Deck.prototype, "cardTypes", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Deck.prototype, "manualArchetype1", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Deck.prototype, "manualArchetype2", void 0);
 __decorate([
-    typeorm_1.Column({ type: 'text', nullable: true }),
+    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
     __metadata("design:type", String)
 ], Deck.prototype, "artworks", void 0);
 Deck = __decorate([
-    typeorm_1.Entity(),
-    typeorm_1.Unique(['user', 'name'])
+    (0, typeorm_1.Entity)(),
+    (0, typeorm_1.Unique)(['user', 'name'])
 ], Deck);
 exports.Deck = Deck;

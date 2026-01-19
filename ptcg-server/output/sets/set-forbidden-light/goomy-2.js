@@ -35,7 +35,7 @@ class Goomy2 extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Flail
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             effect.damage = effect.source.damage;
         }
         return state;

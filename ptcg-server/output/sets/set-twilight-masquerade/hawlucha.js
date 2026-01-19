@@ -28,8 +28,8 @@ class Hawlucha extends pokemon_card_1.PokemonCard {
         this.regulationMark = 'H';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            if (prefabs_1.GET_PLAYER_PRIZES(effect.player) > prefabs_1.GET_PLAYER_PRIZES(game_1.StateUtils.getOpponent(state, effect.player))) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            if ((0, prefabs_1.GET_PLAYER_PRIZES)(effect.player) > (0, prefabs_1.GET_PLAYER_PRIZES)(game_1.StateUtils.getOpponent(state, effect.player))) {
                 effect.damage += 90;
             }
         }

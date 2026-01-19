@@ -40,7 +40,7 @@ class Jolteon extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         var _a;
-        if (effect instanceof check_effects_1.CheckPokemonTypeEffect && ((_a = effect.target.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.stage) === card_types_1.Stage.STAGE_1 && !prefabs_1.IS_ABILITY_BLOCKED(store, state, game_1.StateUtils.findOwner(state, effect.target), this)) {
+        if (effect instanceof check_effects_1.CheckPokemonTypeEffect && ((_a = effect.target.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.stage) === card_types_1.Stage.STAGE_1 && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, game_1.StateUtils.findOwner(state, effect.target), this)) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
             let isJolteonInPlay = false;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
@@ -60,8 +60,8 @@ class Jolteon extends pokemon_card_1.PokemonCard {
             });
         }
         // Thunder Blast
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1);
         }
         return state;
     }

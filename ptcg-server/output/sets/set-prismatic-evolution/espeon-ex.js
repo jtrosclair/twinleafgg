@@ -56,7 +56,7 @@ class Espeonex extends pokemon_card_1.PokemonCard {
             const opponent = game_1.StateUtils.getOpponent(state, player);
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card) => {
                 if (cardList.getPokemons().length > 1) {
-                    prefabs_1.DEVOLVE_POKEMON(store, state, cardList, opponent.deck);
+                    (0, prefabs_1.DEVOLVE_POKEMON)(store, state, cardList, opponent.deck);
                 }
             });
             return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {

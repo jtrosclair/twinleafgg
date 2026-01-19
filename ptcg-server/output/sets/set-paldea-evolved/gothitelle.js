@@ -39,13 +39,13 @@ class Gothitelle extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Read the Stars
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (opponent.deck.cards.length < 2) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            if (prefabs_1.HAS_MARKER(this.READ_THE_STARS_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.READ_THE_STARS_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             let cards = [];
@@ -53,14 +53,14 @@ class Gothitelle extends pokemon_card_1.PokemonCard {
             opponent.deck.moveTo(deckTop, 2);
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_PUT_ON_BOTTOM, deckTop, {}, { min: 1, max: 1, allowCancel: false }), selected => {
                 cards = selected || [];
-                prefabs_1.ABILITY_USED(player, this);
-                prefabs_1.ADD_MARKER(this.READ_THE_STARS_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
+                (0, prefabs_1.ADD_MARKER)(this.READ_THE_STARS_MARKER, player, this);
                 deckTop.moveCardsTo(cards, opponent.deck);
                 deckTop.moveToTopOfDestination(opponent.deck);
             });
         }
         // Psych Out
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             if (opponent.hand.cards.length === 0) {
@@ -72,7 +72,7 @@ class Gothitelle extends pokemon_card_1.PokemonCard {
                 opponent.hand.moveCardsTo(cards, opponent.discard);
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.READ_THE_STARS_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.READ_THE_STARS_MARKER, this);
         return state;
     }
 }

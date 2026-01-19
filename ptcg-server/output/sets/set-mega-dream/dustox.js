@@ -68,7 +68,7 @@ class Dustox extends pokemon_card_1.PokemonCard {
             // Mark ability as used
             player.marker.addMarker(this.RUSTLING_WIND_MARKER, this);
             // Flip coin
-            return prefabs_1.COIN_FLIP_PROMPT(store, state, player, (result) => {
+            return (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, (result) => {
                 if (result) {
                     // If heads, select and move energy to opponent's hand
                     store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, opponent.active, { superType: card_types_1.SuperType.ENERGY }, { min: 1, max: 1, allowCancel: false }), selected => {

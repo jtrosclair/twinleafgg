@@ -1,11 +1,15 @@
-export class AttackAction {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PassTurnAction = exports.RetreatAction = exports.UseStadiumAction = exports.UseEnergyAbilityAction = exports.UseTrainerAbilityAction = exports.UseAbilityAction = exports.AttackAction = void 0;
+class AttackAction {
     constructor(clientId, name) {
         this.clientId = clientId;
         this.name = name;
         this.type = 'ATTACK_ACTION';
     }
 }
-export class UseAbilityAction {
+exports.AttackAction = AttackAction;
+class UseAbilityAction {
     constructor(clientId, name, target) {
         this.clientId = clientId;
         this.name = name;
@@ -13,7 +17,8 @@ export class UseAbilityAction {
         this.type = 'USE_ABILITY_ACTION';
     }
 }
-export class UseTrainerAbilityAction {
+exports.UseAbilityAction = UseAbilityAction;
+class UseTrainerAbilityAction {
     constructor(clientId, name, target) {
         this.clientId = clientId;
         this.name = name;
@@ -21,7 +26,8 @@ export class UseTrainerAbilityAction {
         this.type = 'USE_TRAINER_ABILITY_ACTION';
     }
 }
-export class UseEnergyAbilityAction {
+exports.UseTrainerAbilityAction = UseTrainerAbilityAction;
+class UseEnergyAbilityAction {
     constructor(clientId, name, target) {
         this.clientId = clientId;
         this.name = name;
@@ -29,22 +35,26 @@ export class UseEnergyAbilityAction {
         this.type = 'USE_ENERGY_ABILITY_ACTION';
     }
 }
-export class UseStadiumAction {
+exports.UseEnergyAbilityAction = UseEnergyAbilityAction;
+class UseStadiumAction {
     constructor(clientId) {
         this.clientId = clientId;
         this.type = 'USE_STADIUM_ACTION';
     }
 }
-export class RetreatAction {
+exports.UseStadiumAction = UseStadiumAction;
+class RetreatAction {
     constructor(clientId, benchIndex) {
         this.clientId = clientId;
         this.benchIndex = benchIndex;
         this.type = 'RETREAT_ACTION';
     }
 }
-export class PassTurnAction {
+exports.RetreatAction = RetreatAction;
+class PassTurnAction {
     constructor(clientId) {
         this.clientId = clientId;
         this.type = 'PASS_TURN';
     }
 }
+exports.PassTurnAction = PassTurnAction;

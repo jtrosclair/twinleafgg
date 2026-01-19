@@ -20,7 +20,7 @@ class TimeSpaceDistortion extends trainer_card_1.TrainerCard {
         this.text = 'Flip 3 coins. For each heads, search your discard pile for a Pokémon, show it to your opponent, and put it into your hand.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             // Player has no Pokemons in the discard pile
             if (!player.discard.cards.some(c => c.superType === card_types_1.SuperType.POKEMON)) {
@@ -29,7 +29,7 @@ class TimeSpaceDistortion extends trainer_card_1.TrainerCard {
             // We will discard this card after prompt confirmation
             effect.preventDefault = true;
             let headsCount = 0;
-            prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 3, (results) => {
+            (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 3, (results) => {
                 results.forEach(result => {
                     if (result) {
                         headsCount++;

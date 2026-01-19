@@ -29,18 +29,18 @@ class Cryogonal extends game_1.PokemonCard {
         this.fullName = 'Cryogonal EVS';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const temp = new game_1.CardList();
             player.deck.moveTo(temp, 6);
-            prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, player, temp.cards);
+            (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, player, temp.cards);
             // Check if any cards drawn are basic energy
             const energyCardsDrawn = temp.cards.filter(card => {
                 return card instanceof game_1.EnergyCard && card.energyType === game_1.EnergyType.BASIC;
             });
             // If no energy cards were drawn, move all cards to deck
             if (energyCardsDrawn.length == 0) {
-                prefabs_1.SHUFFLE_CARDS_INTO_DECK(store, state, player, temp.cards);
+                (0, prefabs_1.SHUFFLE_CARDS_INTO_DECK)(store, state, player, temp.cards);
             }
             else {
                 // Prompt to attach energy if any were drawn
@@ -52,7 +52,7 @@ class Cryogonal extends game_1.PokemonCard {
                             const target = game_1.StateUtils.getTarget(state, player, transfer.to);
                             temp.moveCardTo(transfer.card, target); // Move card to target
                         }
-                        prefabs_1.SHUFFLE_CARDS_INTO_DECK(store, state, player, temp.cards);
+                        (0, prefabs_1.SHUFFLE_CARDS_INTO_DECK)(store, state, player, temp.cards);
                     }
                     return state;
                 });

@@ -1,4 +1,7 @@
-export const config = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.config = void 0;
+exports.config = {
     backend: {
         address: 'https://sim-server.prizemap.app',
         port: 8080,

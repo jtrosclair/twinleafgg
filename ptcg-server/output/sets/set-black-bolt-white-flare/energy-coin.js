@@ -27,12 +27,12 @@ function* playCard(next, store, state, effect, sourceCard) {
         state = store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_message_1.GameMessage.ATTACH_ENERGY_TO_ACTIVE, player.deck, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH, game_1.SlotType.ACTIVE], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { allowCancel: false, min: 0, max: 1 }), transfers => {
             transfers = transfers || [];
             if (transfers.length === 0) {
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                 return;
             }
             for (const transfer of transfers) {
                 const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                prefabs_1.MOVE_CARDS(store, state, player.deck, target, { cards: [transfer.card], sourceCard: effect.trainerCard });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, target, { cards: [transfer.card], sourceCard: effect.trainerCard });
             }
             return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), (order) => {
                 player.deck.applyOrder(order);

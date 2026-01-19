@@ -60,7 +60,7 @@ class Electrode extends pokemon_card_1.PokemonCard {
                 return state;
             }
             cardList.damage = 999;
-            state = check_effect_1.checkState(store, state);
+            state = (0, check_effect_1.checkState)(store, state);
             if (store.hasPrompts()) {
                 state = store.waitPrompt(state, () => { });
             }

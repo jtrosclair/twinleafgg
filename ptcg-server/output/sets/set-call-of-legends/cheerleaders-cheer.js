@@ -18,7 +18,7 @@ class CheerleadersCheer extends trainer_card_1.TrainerCard {
         this.text = 'Draw 3 cards. Your opponent may draw a card.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (player.supporterTurn > 0) {
@@ -28,11 +28,11 @@ class CheerleadersCheer extends trainer_card_1.TrainerCard {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
-            prefabs_1.DRAW_CARDS(player, 3);
+            (0, prefabs_1.DRAW_CARDS)(player, 3);
             if (opponent.deck.cards.length > 0) {
-                prefabs_1.CONFIRMATION_PROMPT(store, state, opponent, result => {
+                (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, opponent, result => {
                     if (result) {
-                        prefabs_1.DRAW_CARDS(opponent, 1);
+                        (0, prefabs_1.DRAW_CARDS)(opponent, 1);
                     }
                 }, game_1.GameMessage.WANT_TO_DRAW_CARDS);
             }

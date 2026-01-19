@@ -495,4 +495,4 @@ export declare const GameMessage: {
     ERROR_SIMULATOR_NOT_STABLE: GameCoreError.ERROR_SIMULATOR_NOT_STABLE;
     MUST_BE_IN_ACTIVE_SPOT: GameCoreError.MUST_BE_IN_ACTIVE_SPOT;
 };
-export declare type GameMessage = GameCoreError | GameStoreMessage | GameCardMessage;
+export type GameMessage = GameCoreError | GameStoreMessage | GameCardMessage;

@@ -74,7 +74,7 @@ class Pidgeotex extends pokemon_card_1.PokemonCard {
             if (stadiumCard !== undefined) {
                 state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_message_1.GameMessage.WANT_TO_USE_ABILITY), (wantToUse) => {
                     if (wantToUse) {
-                        prefabs_1.DISCARD_A_STADIUM_CARD_IN_PLAY(state);
+                        (0, prefabs_1.DISCARD_A_STADIUM_CARD_IN_PLAY)(state);
                     }
                     return state;
                 });

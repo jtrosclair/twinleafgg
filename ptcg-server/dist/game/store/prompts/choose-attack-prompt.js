@@ -1,32 +1,35 @@
-import { GameError } from '../../game-error';
-import { GameMessage } from '../../game-message';
-import { Prompt } from './prompt';
-export const ChooseAttackPromptType = 'Choose attack';
-export class ChooseAttackPrompt extends Prompt {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ChooseAttackPrompt = exports.ChooseAttackPromptType = void 0;
+const game_error_1 = require("../../game-error");
+const game_message_1 = require("../../game-message");
+const prompt_1 = require("./prompt");
+exports.ChooseAttackPromptType = 'Choose attack';
+class ChooseAttackPrompt extends prompt_1.Prompt {
     constructor(playerId, message, cards, options) {
         super(playerId);
         this.message = message;
         this.cards = cards;
-        this.type = ChooseAttackPromptType;
+        this.type = exports.ChooseAttackPromptType;
         // Default options
         this.options = Object.assign({}, {
             allowCancel: false,
-            blockedMessage: GameMessage.NOT_ENOUGH_ENERGY,
+            blockedMessage: game_message_1.GameMessage.NOT_ENOUGH_ENERGY,
             blocked: []
         }, options);
     }
     decode(result, state) {
         if (result === null) {
-            return result; // operation cancelled
+            return null; // operation cancelled
         }
         const index = result.index;
         if (index < 0 || index >= this.cards.length) {
-            throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+            throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_PROMPT_RESULT);
         }
         const card = this.cards[index];
         const attack = card.attacks.find(a => a.name === result.attack);
         if (attack === undefined) {
-            throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+            throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_PROMPT_RESULT);
         }
         return attack;
     }
@@ -46,3 +49,4 @@ export class ChooseAttackPrompt extends Prompt {
         return this.cards.some(c => c.attacks.includes(result));
     }
 }
+exports.ChooseAttackPrompt = ChooseAttackPrompt;

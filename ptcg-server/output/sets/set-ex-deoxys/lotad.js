@@ -26,7 +26,7 @@ class Lotad extends pokemon_card_1.PokemonCard {
         this.fullName = 'Lotad DX';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (opponent.hand.cards.length === 0) {
@@ -36,7 +36,7 @@ class Lotad extends pokemon_card_1.PokemonCard {
                 const randomIndex = Math.floor(Math.random() * opponent.hand.cards.length);
                 const randomCard = opponent.hand.cards[randomIndex];
                 store.prompt(state, new game_1.ShowCardsPrompt(player.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, [randomCard]), () => []);
-                prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.deck, { cards: [randomCard], sourceCard: this, sourceEffect: this.attacks[0] });
+                (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck, { cards: [randomCard], sourceCard: this, sourceEffect: this.attacks[0] });
                 return store.prompt(state, new game_1.ShuffleDeckPrompt(opponent.id), order => {
                     opponent.deck.applyOrder(order);
                 });

@@ -44,7 +44,7 @@ class Yveltal extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
             effect.player.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInDiscard = player.discard.cards.some(c => {
                 return c instanceof game_1.EnergyCard
@@ -69,7 +69,7 @@ class Yveltal extends pokemon_card_1.PokemonCard {
                     throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
                 }
             }
-            if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+            if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
                 effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
             }
             return state;

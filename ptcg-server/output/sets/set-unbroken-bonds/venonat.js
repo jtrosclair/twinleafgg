@@ -30,7 +30,7 @@ class Venonat extends game_1.PokemonCard {
         this.fullName = 'Venonat UNB';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.deck.cards.length === 0) {
                 return state;
@@ -38,9 +38,9 @@ class Venonat extends game_1.PokemonCard {
             const deckTop = new game_1.CardList();
             player.deck.moveTo(deckTop, 7);
             store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, deckTop, {}, { min: 1, max: 1, allowCancel: false }), selected => {
-                prefabs_1.MOVE_CARDS(store, state, deckTop, player.hand, { cards: selected });
+                (0, prefabs_1.MOVE_CARDS)(store, state, deckTop, player.hand, { cards: selected });
                 deckTop.moveTo(player.deck);
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
         }
         return state;

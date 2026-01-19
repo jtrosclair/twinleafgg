@@ -40,25 +40,25 @@ class Vaporeonex extends game_1.PokemonCard {
         this.FLAME_SCREEN_MARKER = 'FLAME_SCREEN_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.JUST_EVOLVED(effect, this)) {
+        if ((0, prefabs_1.JUST_EVOLVED)(effect, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, effect.player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, result => {
                 if (result) {
                     // Shuffle hand into deck
-                    prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.deck, { sourceCard: this, sourceEffect: this.powers[0] });
-                    prefabs_1.SHUFFLE_DECK(store, state, opponent);
+                    (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck, { sourceCard: this, sourceEffect: this.powers[0] });
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
                     // Draw up to 4 cards
-                    prefabs_1.DRAW_UP_TO_X_CARDS(store, state, opponent, 4);
+                    (0, prefabs_1.DRAW_UP_TO_X_CARDS)(store, state, opponent, 4);
                 }
             });
         }
         // Fastwave
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS(store, state, effect, 40);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS)(store, state, effect, 40);
         }
         return state;
     }

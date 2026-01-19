@@ -10,7 +10,7 @@ export declare class Drifblim extends PokemonCard {
     weakness: {
         type: CardType.DARK;
     }[];
-    retreat: never[];
+    retreat: any[];
     powers: {
         name: string;
         powerType: PowerType;

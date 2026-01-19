@@ -68,10 +68,10 @@ class AlolanPersianGX extends pokemon_card_1.PokemonCard {
                 effect.preventDefault = true;
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             const targets = opponent.getPokemonInPlay();
             if (targets.length === 0)

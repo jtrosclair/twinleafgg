@@ -39,7 +39,7 @@ class RadiantTsareena extends pokemon_card_1.PokemonCard {
         this.ELEGANT_HEAL_MARKER = 'ELEGANT_HEAL_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.ELEGANT_HEAL_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
@@ -51,8 +51,8 @@ class RadiantTsareena extends pokemon_card_1.PokemonCard {
                 return state;
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.ELEGANT_HEAL_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.ELEGANT_HEAL_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const removeSpecialCondition = new attack_effects_1.RemoveSpecialConditionsEffect(effect, undefined);
             removeSpecialCondition.target = player.active;

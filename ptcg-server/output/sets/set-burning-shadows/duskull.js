@@ -24,7 +24,7 @@ function* useKingsOrder(next, store, state, effect, self) {
         cards.length = slots.length;
     }
     cards.forEach((card, index) => {
-        prefabs_1.MOVE_CARDS(store, state, player.discard, slots[index], { cards: [card], sourceCard: self });
+        (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, slots[index], { cards: [card], sourceCard: self });
         slots[index].pokemonPlayedTurn = state.turn;
     });
 }

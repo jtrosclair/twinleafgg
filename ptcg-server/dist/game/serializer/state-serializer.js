@@ -1,30 +1,33 @@
-import { GameError } from '../game-error';
-import { GameCoreError } from '../game-message';
-import { State } from '../store/state/state';
-import { GenericSerializer } from './generic.serializer';
-import { Rules } from '../store/state/rules';
-import { Player } from '../store/state/player';
-import { CardSerializer } from './card.serializer';
-import { CardListSerializer } from './card-list.serializer';
-import { Marker } from '../store/state/card-marker';
-import { StateLogSerializer } from './state-log.serializer';
-import { PromptSerializer } from './prompt.serializer';
-import { PathBuilder } from './path-builder';
-import { deepIterate, deepClone } from '../../utils';
-import { JsonPatch } from './json-patch';
-import { GameSettings } from '../core/game-settings';
-export class StateSerializer {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StateSerializer = void 0;
+const game_error_1 = require("../game-error");
+const game_message_1 = require("../game-message");
+const state_1 = require("../store/state/state");
+const generic_serializer_1 = require("./generic.serializer");
+const rules_1 = require("../store/state/rules");
+const player_1 = require("../store/state/player");
+const card_serializer_1 = require("./card.serializer");
+const card_list_serializer_1 = require("./card-list.serializer");
+const card_marker_1 = require("../store/state/card-marker");
+const state_log_serializer_1 = require("./state-log.serializer");
+const prompt_serializer_1 = require("./prompt.serializer");
+const path_builder_1 = require("./path-builder");
+const utils_1 = require("../../utils");
+const json_patch_1 = require("./json-patch");
+const game_settings_1 = require("../core/game-settings");
+class StateSerializer {
     constructor() {
         this.serializers = [
-            new GenericSerializer(State, 'State'),
-            new GenericSerializer(Rules, 'Rules'),
-            new GenericSerializer(Player, 'Player'),
-            new GenericSerializer(Marker, 'Marker'),
-            new GenericSerializer(GameSettings, 'GameSettings'),
-            new CardSerializer(),
-            new CardListSerializer(),
-            new StateLogSerializer(),
-            new PromptSerializer()
+            new generic_serializer_1.GenericSerializer(state_1.State, 'State'),
+            new generic_serializer_1.GenericSerializer(rules_1.Rules, 'Rules'),
+            new generic_serializer_1.GenericSerializer(player_1.Player, 'Player'),
+            new generic_serializer_1.GenericSerializer(card_marker_1.Marker, 'Marker'),
+            new generic_serializer_1.GenericSerializer(game_settings_1.GameSettings, 'GameSettings'),
+            new card_serializer_1.CardSerializer(),
+            new card_list_serializer_1.CardListSerializer(),
+            new state_log_serializer_1.StateLogSerializer(),
+            new prompt_serializer_1.PromptSerializer()
         ];
     }
     static normalizeCardName(name) {
@@ -81,7 +84,7 @@ export class StateSerializer {
     serialize(state) {
         const serializers = this.serializers;
         const refs = [];
-        const pathBuilder = new PathBuilder();
+        const pathBuilder = new path_builder_1.PathBuilder();
         const replacer = function (key, value) {
             pathBuilder.goTo(this, key);
             const path = pathBuilder.getPath();
@@ -102,7 +105,7 @@ export class StateSerializer {
                 if (serializer !== undefined) {
                     return serializer.serialize(value);
                 }
-                throw new GameError(GameCoreError.ERROR_SERIALIZER, `Unknown serializer for '${name}'.`);
+                throw new game_error_1.GameError(game_message_1.GameCoreError.ERROR_SERIALIZER, `Unknown serializer for '${name}'.`);
             }
             return value;
         };
@@ -126,19 +129,19 @@ export class StateSerializer {
                     if (serializer !== undefined) {
                         return serializer.deserialize(value, context);
                     }
-                    throw new GameError(GameCoreError.ERROR_SERIALIZER, `Unknown deserializer for '${name}'.`);
+                    throw new game_error_1.GameError(game_message_1.GameCoreError.ERROR_SERIALIZER, `Unknown deserializer for '${name}'.`);
                 }
             }
             return value;
         };
         const parsed = JSON.parse(serializedState, reviver);
         // Restore Refs
-        const pathBuilder = new PathBuilder();
-        deepIterate(parsed, (holder, key, value) => {
+        const pathBuilder = new path_builder_1.PathBuilder();
+        (0, utils_1.deepIterate)(parsed, (holder, key, value) => {
             if (value instanceof Object && value._type === 'Ref') {
                 const reference = pathBuilder.getValue(parsed, value.path);
                 if (reference === undefined) {
-                    throw new GameError(GameCoreError.ERROR_SERIALIZER, `Unknown reference '${value.path}'.`);
+                    throw new game_error_1.GameError(game_message_1.GameCoreError.ERROR_SERIALIZER, `Unknown reference '${value.path}'.`);
                 }
                 holder[key] = reference;
             }
@@ -157,7 +160,7 @@ export class StateSerializer {
         const parsed2 = JSON.parse(serialized2);
         const players2 = parsed2[0];
         const state2 = parsed2[1];
-        const jsonPatch = new JsonPatch();
+        const jsonPatch = new json_patch_1.JsonPatch();
         const diff = jsonPatch.diff([players1, state1], [players2, state2]);
         return JSON.stringify([diff]);
     }
@@ -175,7 +178,7 @@ export class StateSerializer {
         }
         let [players, state] = JSON.parse(base);
         const diff = parsed[0];
-        const jsonPatch = new JsonPatch();
+        const jsonPatch = new json_patch_1.JsonPatch();
         [players, state] = jsonPatch.apply([players, state], diff);
         return JSON.stringify([players, state]);
     }
@@ -191,13 +194,14 @@ export class StateSerializer {
             let card = StateSerializer.knownCards.find(c => c.fullName === fixedName);
             if (card === undefined) {
                 console.log({ card, fixedName });
-                throw new GameError(GameCoreError.ERROR_SERIALIZER, `Unknown cards '${fixedName}'.`);
+                throw new game_error_1.GameError(game_message_1.GameCoreError.ERROR_SERIALIZER, `Unknown cards '${fixedName}'.`);
             }
-            card = deepClone(card);
+            card = (0, utils_1.deepClone)(card);
             card.id = index;
             cards.push(card);
         });
         return { cards };
     }
 }
+exports.StateSerializer = StateSerializer;
 StateSerializer.knownCards = [];

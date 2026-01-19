@@ -29,7 +29,7 @@ class ScoopUpNet extends game_1.TrainerCard {
                     blocked.push(target);
                 }
             });
-            prefabs_1.MOVE_CARD_TO(state, effect.trainerCard, player.supporter);
+            (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.supporter);
             effect.preventDefault = true;
             return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_PICK_UP, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { allowCancel: false, blocked }), result => {
                 const cardList = result.length > 0 ? result[0] : null;
@@ -41,7 +41,7 @@ class ScoopUpNet extends game_1.TrainerCard {
                     const tools = [...cardList.tools];
                     // Move other cards to hand
                     if (otherCards.length > 0) {
-                        prefabs_1.MOVE_CARDS(store, state, cardList, player.discard, { cards: otherCards });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.discard, { cards: otherCards });
                     }
                     // Move tools to discard
                     if (tools.length > 0) {
@@ -51,9 +51,9 @@ class ScoopUpNet extends game_1.TrainerCard {
                     }
                     // Move Pokémon to hand
                     if (pokemons.length > 0) {
-                        prefabs_1.MOVE_CARDS(store, state, cardList, player.hand, { cards: pokemons });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.hand, { cards: pokemons });
                     }
-                    prefabs_1.MOVE_CARD_TO(state, effect.trainerCard, player.discard);
+                    (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
                 }
             });
         }

@@ -17,7 +17,7 @@ class HereComesTeamRocket extends trainer_card_1.TrainerCard {
         this.text = 'Each player turns all of his or her Prize cards face up. (Those Prize cards remain face up for the rest of the game.)';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             player.hand.moveCardTo(effect.trainerCard, player.supporter);

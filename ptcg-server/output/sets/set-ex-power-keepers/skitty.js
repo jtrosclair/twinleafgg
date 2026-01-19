@@ -38,20 +38,20 @@ class Skitty extends pokemon_card_1.PokemonCard {
         this.TAIL_WHIP_MARKER = 'TAIL_WHIP_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (result) {
-                    prefabs_1.ADD_MARKER(this.TAIL_WHIP_MARKER, opponent.active, this);
+                    (0, prefabs_1.ADD_MARKER)(this.TAIL_WHIP_MARKER, opponent.active, this);
                 }
             });
         }
-        if (effect instanceof game_effects_1.UseAttackEffect && prefabs_1.HAS_MARKER(this.TAIL_WHIP_MARKER, effect.player.active, this)) {
+        if (effect instanceof game_effects_1.UseAttackEffect && (0, prefabs_1.HAS_MARKER)(this.TAIL_WHIP_MARKER, effect.player.active, this)) {
             throw new game_1.GameError(game_message_1.GameMessage.BLOCKED_BY_EFFECT);
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
-            prefabs_1.REMOVE_MARKER(this.TAIL_WHIP_MARKER, effect.player.active, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.TAIL_WHIP_MARKER, effect.player.active, this);
         }
         return state;
     }

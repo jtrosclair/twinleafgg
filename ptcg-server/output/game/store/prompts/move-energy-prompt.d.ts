@@ -5,7 +5,7 @@ import { PlayerType, SlotType, CardTarget } from '../actions/play-card-action';
 import { State } from '../state/state';
 import { FilterType } from './choose-cards-prompt';
 export declare const MoveEnergyPromptType = "Move energy";
-export declare type MoveEnergyResultType = {
+export type MoveEnergyResultType = {
     from: CardTarget;
     to: CardTarget;
     index: number;

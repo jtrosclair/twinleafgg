@@ -19,7 +19,7 @@ class LostRemover extends trainer_card_1.TrainerCard {
         this.text = 'Put 1 Special Energy card attached to 1 of your opponent\'s Pokémon in the Lost Zone.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             let hasPokemonWithEnergy = false;
@@ -46,9 +46,9 @@ class LostRemover extends trainer_card_1.TrainerCard {
                 }
                 const target = targets[0];
                 store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, target.energies, { energyType: card_types_1.EnergyType.SPECIAL }, { min: 1, max: 1, allowCancel: false }), selected => {
-                    prefabs_1.MOVE_CARDS(store, state, target, opponent.lostzone, { cards: selected, sourceCard: this });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, target, opponent.lostzone, { cards: selected, sourceCard: this });
                 });
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             });
         }
         return state;

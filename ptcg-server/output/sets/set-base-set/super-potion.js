@@ -43,7 +43,7 @@ function* playCard(next, store, state, effect) {
         return state;
     }
     // Discard trainer only when user selected a Pokemon
-    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     target.moveCardsTo(cards, player.discard);
     // Heal Pokemon
     const healEffect = new game_effects_1.HealEffect(player, target, 40);

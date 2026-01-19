@@ -29,12 +29,12 @@ class MarniesLiepard extends pokemon_card_1.PokemonCard {
         this.fullName = 'Marnie\'s Liepard DRI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const defending = opponent.active.getPokemonCard();
             if (defending && defending.tags.includes(card_types_1.CardTag.POKEMON_ex)) {
-                prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE(effect, store, state, 70);
+                (0, prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE)(effect, store, state, 70);
             }
         }
         return state;

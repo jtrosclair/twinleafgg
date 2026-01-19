@@ -6,7 +6,7 @@ import { State } from '../state/state';
 import { FilterType } from './choose-cards-prompt';
 import { CardList } from '../state/card-list';
 export declare const DiscardEnergyPromptType = "Discard energy";
-export declare type DiscardEnergyResultType = {
+export type DiscardEnergyResultType = {
     from: CardTarget;
     index: number;
 }[];

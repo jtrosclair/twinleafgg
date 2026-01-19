@@ -39,12 +39,12 @@ class Seadra extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         //Attack
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.ADD_MARKER(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, opponent.active, this);
+            (0, prefabs_1.ADD_MARKER)(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, opponent.active, this);
         }
-        if (effect instanceof game_effects_1.AttackEffect && prefabs_1.HAS_MARKER(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this)) {
+        if (effect instanceof game_effects_1.AttackEffect && (0, prefabs_1.HAS_MARKER)(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this)) {
             const player = effect.player;
             try {
                 const coinFlip = new play_card_effects_1.CoinFlipEffect(player);
@@ -53,15 +53,15 @@ class Seadra extends pokemon_card_1.PokemonCard {
             catch (_a) {
                 return state;
             }
-            const coinFlipResult = prefabs_1.SIMULATE_COIN_FLIP(store, state, player);
+            const coinFlipResult = (0, prefabs_1.SIMULATE_COIN_FLIP)(store, state, player);
             if (!coinFlipResult) {
                 effect.preventDefault = true;
             }
         }
         //Marker remover
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
-            if (prefabs_1.HAS_MARKER(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this)) {
-                prefabs_1.REMOVE_MARKER(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this);
+            if ((0, prefabs_1.HAS_MARKER)(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this)) {
+                (0, prefabs_1.REMOVE_MARKER)(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this);
             }
         }
         return state;

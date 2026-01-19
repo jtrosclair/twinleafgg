@@ -30,7 +30,7 @@ class REnergy extends energy_card_1.EnergyCard {
                 !((_b = effect.target.getPokemonCard()) === null || _b === void 0 ? void 0 : _b.tags.includes(card_types_1.CardTag.ROCKETS))) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            prefabs_1.ADD_MARKER(this.R_MARKER, effect.player, this);
+            (0, prefabs_1.ADD_MARKER)(this.R_MARKER, effect.player, this);
         }
         if (effect instanceof check_effects_1.CheckProvidedEnergyEffect && effect.source.cards.includes(this)) {
             const attachedTo = effect.source.getPokemonCard();
@@ -44,7 +44,7 @@ class REnergy extends energy_card_1.EnergyCard {
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
                 if (cardList.cards.includes(this)) {
                     cardList.moveCardTo(this, player.discard);
-                    prefabs_1.REMOVE_MARKER(this.R_MARKER, effect.player, this);
+                    (0, prefabs_1.REMOVE_MARKER)(this.R_MARKER, effect.player, this);
                 }
             });
         }

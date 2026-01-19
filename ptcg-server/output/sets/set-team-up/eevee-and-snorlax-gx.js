@@ -44,7 +44,7 @@ class EeveeSnorlaxGX extends game_1.PokemonCard {
     reduceEffect(store, state, effect) {
         var _a, _b, _c;
         // Cheer Up
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             return store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_CARDS, player.hand, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH, game_1.SlotType.ACTIVE], { superType: game_1.SuperType.ENERGY }, { allowCancel: false, min: 0, max: 1 }), transfers => {
                 transfers = transfers || [];
@@ -59,7 +59,7 @@ class EeveeSnorlaxGX extends game_1.PokemonCard {
             });
         }
         // Dump Truck Press
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = effect.opponent;
             if (((_a = opponent.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.stage) !== game_1.Stage.BASIC
                 || ((_b = opponent.active.getPokemonCard()) === null || _b === void 0 ? void 0 : _b.stage) !== game_1.Stage.LEGEND
@@ -68,9 +68,9 @@ class EeveeSnorlaxGX extends game_1.PokemonCard {
             }
         }
         // Megaton Friends-GX
-        if (prefabs_1.WAS_ATTACK_USED(effect, 2, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             const extraEffectCost = [C, C, C, C, C];
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
@@ -82,7 +82,7 @@ class EeveeSnorlaxGX extends game_1.PokemonCard {
                 }
                 const cardsToDraw = 10 - player.hand.cards.length;
                 for (let i = 0; i < cardsToDraw; i++) {
-                    prefabs_1.DRAW_CARDS(player, 1);
+                    (0, prefabs_1.DRAW_CARDS)(player, 1);
                 }
             }
         }

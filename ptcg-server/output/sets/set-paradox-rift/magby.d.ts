@@ -7,7 +7,7 @@ export declare class Magby extends PokemonCard {
     weakness: {
         type: CardType.WATER;
     }[];
-    retreat: never[];
+    retreat: any[];
     attacks: Attack[];
     set: string;
     regulationMark: string;

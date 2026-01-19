@@ -1,12 +1,15 @@
-import { GameError, GameMessage } from '../../game';
-export class SimpleScore {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SimpleScore = void 0;
+const game_1 = require("../../game");
+class SimpleScore {
     constructor(options) {
         this.options = options;
     }
     getPlayer(state, playerId) {
         const player = state.players.find(p => p.id === playerId);
         if (player === undefined) {
-            throw new GameError(GameMessage.INVALID_GAME_STATE);
+            throw new game_1.GameError(game_1.GameMessage.INVALID_GAME_STATE);
         }
         return player;
     }
@@ -25,3 +28,4 @@ export class SimpleScore {
         return score;
     }
 }
+exports.SimpleScore = SimpleScore;

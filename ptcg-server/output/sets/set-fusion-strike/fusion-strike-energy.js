@@ -39,7 +39,7 @@ class FusionStrikeEnergy extends energy_card_1.EnergyCard {
             // Check for Fusion Strike Energy on the opposing side from the player using the ability
             if (opponent.getPokemonInPlay().includes(effect.target) && effect.target.cards.includes(this)) {
                 // Check if Fusion Strike Energy has any effects
-                if (!prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, opponent, this, effect.target, true)) {
+                if (!(0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, opponent, this, effect.target, true)) {
                     effect.target = undefined;
                 }
             }
@@ -55,7 +55,7 @@ class FusionStrikeEnergy extends energy_card_1.EnergyCard {
             state.players.forEach(player => {
                 player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
                     var _a;
-                    if (!cardList.cards.includes(this) || prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, cardList)) {
+                    if (!cardList.cards.includes(this) || (0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, player, this, cardList)) {
                         return;
                     }
                     if (!((_a = cardList.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.tags.includes(card_types_1.CardTag.FUSION_STRIKE))) {

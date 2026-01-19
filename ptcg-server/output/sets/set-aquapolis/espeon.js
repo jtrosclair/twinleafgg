@@ -35,7 +35,7 @@ class Espeon extends pokemon_card_1.PokemonCard {
         this.setNumber = '11';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             let isEnergyOnBench = false;
             let isEnergyOnActive = false;
@@ -86,16 +86,16 @@ class Espeon extends pokemon_card_1.PokemonCard {
                     const cards = (energy || []).map(e => e.card);
                     store.log(state, game_1.GameLog.LOG_PLAYER_CHOOSES, { name: player.name, string: '' + cards[0].name });
                     targets[0].moveCardsTo(cards, player.hand);
-                    prefabs_1.MOVE_CARDS(store, state, targets[0], player.hand, { cards, sourceCard: this, sourceEffect: this.powers[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, targets[0], player.hand, { cards, sourceCard: this, sourceEffect: this.powers[0] });
                 });
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // Count only energies that provide [W]
             const counterCount = effect.opponent.active.damage / 10;
             for (let i = 0; i < counterCount; i++) {
-                prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+                (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                     if (result) {
                         effect.damage += 10;
                     }

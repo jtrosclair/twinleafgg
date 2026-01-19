@@ -24,9 +24,9 @@ class MarniesImpidimp extends game_1.PokemonCard {
         this.fullName = 'Marnie\'s Impidimp DRI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.DRAW_CARDS(player, 1);
+            (0, prefabs_1.DRAW_CARDS)(player, 1);
             return state;
         }
         return state;

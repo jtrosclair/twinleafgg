@@ -35,16 +35,16 @@ class Gallade extends pokemon_card_1.PokemonCard {
         this.PREMONITION_MARKER = 'PREMONITION_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (prefabs_1.HAS_MARKER(this.PREMONITION_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.PREMONITION_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.ADD_MARKER(this.PREMONITION_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.PREMONITION_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             const deckTop = new game_1.CardList();
             player.deck.moveTo(deckTop, 5);
             return store.prompt(state, new game_1.OrderCardsPrompt(player.id, game_1.GameMessage.CHOOSE_CARDS_ORDER, deckTop, { allowCancel: false }), order => {
@@ -55,8 +55,8 @@ class Gallade extends pokemon_card_1.PokemonCard {
                 deckTop.moveToTopOfDestination(player.deck);
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.PREMONITION_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.PREMONITION_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const supporterTurn = player.supporterTurn;
             if (supporterTurn) {

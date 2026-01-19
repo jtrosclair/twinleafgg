@@ -43,10 +43,10 @@ class HolonTransceiver extends trainer_card_1.TrainerCard {
                             .map(c => player.deck.cards.indexOf(c));
                         store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, { superType: card_types_1.SuperType.TRAINER, trainerType: card_types_1.TrainerType.SUPPORTER }, { min: 0, max: 1, allowCancel: false, blocked }), selected => {
                             cards = selected || [];
-                            prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-                            prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards: cards, sourceCard: this });
-                            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
-                            prefabs_1.SHUFFLE_DECK(store, state, player);
+                            (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: cards, sourceCard: this });
+                            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
+                            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                         });
                     }
                 });
@@ -61,9 +61,9 @@ class HolonTransceiver extends trainer_card_1.TrainerCard {
                             .map(c => player.discard.cards.indexOf(c));
                         store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: card_types_1.SuperType.TRAINER, trainerType: card_types_1.TrainerType.SUPPORTER }, { min: 1, max: 1, allowCancel: false, blocked }), selected => {
                             cards = selected || [];
-                            prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-                            prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: cards, sourceCard: this });
-                            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                            (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: cards, sourceCard: this });
+                            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                             return state;
                         });
                     }

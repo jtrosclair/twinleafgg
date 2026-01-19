@@ -58,7 +58,7 @@ class Blowtorch extends trainer_card_1.TrainerCard {
                     player.supporter.moveCardTo(this, player.hand);
                     return state;
                 }
-                prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: this });
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: this });
             });
             // If both Pokemon targets and Stadium exist, give choice
             if (opponentPokemonsWithTargets >= 1 && stadiumCard !== undefined) {
@@ -78,7 +78,7 @@ class Blowtorch extends trainer_card_1.TrainerCard {
                             }
                             const cardList = game_1.StateUtils.findCardList(state, stadiumCard);
                             const owner = game_1.StateUtils.findOwner(state, cardList);
-                            prefabs_1.MOVE_CARDS(store, state, cardList, owner.discard, { sourceCard: this });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, cardList, owner.discard, { sourceCard: this });
                             player.supporter.moveCardTo(this, player.discard);
                             return state;
                         }
@@ -93,7 +93,7 @@ class Blowtorch extends trainer_card_1.TrainerCard {
             if (opponentPokemonsWithTargets === 0 && stadiumCard !== undefined) {
                 const cardList = game_1.StateUtils.findCardList(state, stadiumCard);
                 const owner = game_1.StateUtils.findOwner(state, cardList);
-                prefabs_1.MOVE_CARDS(store, state, cardList, owner.discard, { sourceCard: this });
+                (0, prefabs_1.MOVE_CARDS)(store, state, cardList, owner.discard, { sourceCard: this });
                 player.supporter.moveCardTo(this, player.discard);
                 return state;
             }

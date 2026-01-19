@@ -26,7 +26,7 @@ class SpeedStadium extends trainer_card_1.TrainerCard {
                 new game_1.CoinFlipPrompt(player.id, game_message_1.GameMessage.COIN_FLIP)
             ], result => {
                 if (result === true) {
-                    prefabs_1.DRAW_CARDS(player, 1);
+                    (0, prefabs_1.DRAW_CARDS)(player, 1);
                     return this.reduceEffect(store, state, effect);
                 }
             });

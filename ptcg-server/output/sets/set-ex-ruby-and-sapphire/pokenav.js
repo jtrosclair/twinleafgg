@@ -18,7 +18,7 @@ class PokeNav extends trainer_card_1.TrainerCard {
         this.text = 'Look at the top 3 cards of your deck. You may reveal a Pokémon or Energy card you find there and put it into your hand. Put the other cards back in any order.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const temp = new game_1.CardList();
@@ -41,7 +41,7 @@ class PokeNav extends trainer_card_1.TrainerCard {
                     // Move chosen card to hand
                     const chosen = chosenCards[0];
                     temp.moveCardTo(chosen, player.hand);
-                    prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, chosenCards);
+                    (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, chosenCards);
                     chosenCards.forEach((card, index) => {
                         store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                     });

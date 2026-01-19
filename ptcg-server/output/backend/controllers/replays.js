@@ -49,7 +49,7 @@ class Replays extends controller_1.Controller {
         }
         const escapedQuery = this.escapeLikeString(query);
         const [replayRows, total] = await storage_1.Replay.findAndCount({
-            where: { name: typeorm_1.Like(`%${escapedQuery}%`), user: { id: userId } },
+            where: { name: (0, typeorm_1.Like)(`%${escapedQuery}%`), user: { id: userId } },
             order: { created: 'DESC', name: 'ASC' },
             skip: page * pageSize,
             take: pageSize
@@ -243,7 +243,7 @@ class Replays extends controller_1.Controller {
         const userMap = {};
         if (userIds.length > 0) {
             const userRows = await storage_1.User.find({
-                where: { id: typeorm_1.In(userIds) }
+                where: { id: (0, typeorm_1.In)(userIds) }
             });
             userRows.forEach(user => {
                 userMap[user.id] = user;
@@ -275,74 +275,74 @@ class Replays extends controller_1.Controller {
     }
 }
 __decorate([
-    controller_1.Get('/list/:page?/:pageSize?'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/list/:page?/:pageSize?'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Replays.prototype, "onList", null);
 __decorate([
-    controller_1.Post('/list/:page?/:pageSize?'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        query: services_1.check().isString().required()
+    (0, controller_1.Post)('/list/:page?/:pageSize?'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        query: (0, services_1.check)().isString().required()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Replays.prototype, "onFind", null);
 __decorate([
-    controller_1.Get('/match/:id'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/match/:id'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Replays.prototype, "onMatchGet", null);
 __decorate([
-    controller_1.Get('/get/:id'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/get/:id'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Replays.prototype, "onGet", null);
 __decorate([
-    controller_1.Post('/save'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        name: services_1.check().minLength(3).maxLength(32),
-        id: services_1.check().isNumber()
+    (0, controller_1.Post)('/save'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        name: (0, services_1.check)().minLength(3).maxLength(32),
+        id: (0, services_1.check)().isNumber()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Replays.prototype, "onSave", null);
 __decorate([
-    controller_1.Post('/delete'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        id: services_1.check().isNumber()
+    (0, controller_1.Post)('/delete'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        id: (0, services_1.check)().isNumber()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Replays.prototype, "onDelete", null);
 __decorate([
-    controller_1.Post('/rename'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        id: services_1.check().isNumber(),
-        name: services_1.check().minLength(3).maxLength(32),
+    (0, controller_1.Post)('/rename'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        id: (0, services_1.check)().isNumber(),
+        name: (0, services_1.check)().minLength(3).maxLength(32),
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Replays.prototype, "onRename", null);
 __decorate([
-    controller_1.Post('/import'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        name: services_1.check().minLength(3).maxLength(32),
-        replayData: services_1.check().isString().required(),
+    (0, controller_1.Post)('/import'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        name: (0, services_1.check)().minLength(3).maxLength(32),
+        replayData: (0, services_1.check)().isString().required(),
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),

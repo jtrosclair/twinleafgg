@@ -38,7 +38,7 @@ class Kirlia extends pokemon_card_1.PokemonCard {
         this.setNumber = '53';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const supportersInDiscard = player.discard.cards.filter(card => {
                 card instanceof game_1.TrainerCard && card.trainerType === card_types_1.TrainerType.SUPPORTER;
@@ -52,7 +52,7 @@ class Kirlia extends pokemon_card_1.PokemonCard {
                 store.reduceEffect(state, playTrainerEffect);
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             state = store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_message_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { allowCancel: false }), targets => {
                 if (!targets || targets.length === 0) {

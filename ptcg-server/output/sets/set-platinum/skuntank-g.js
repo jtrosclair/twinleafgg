@@ -41,7 +41,7 @@ class SkuntankG extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         var _a, _b, _c, _d;
         //Poke-Power
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const stadiumCard = game_1.StateUtils.getStadiumCard(state);
@@ -53,32 +53,32 @@ class SkuntankG extends pokemon_card_1.PokemonCard {
             if (stadiumOwner !== player) {
                 throw new game_1.GameError(game_message_1.GameMessage.CANNOT_USE_POWER);
             }
-            if (prefabs_1.HAS_MARKER(this.POISON_STRUCTURE_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.POISON_STRUCTURE_MARKER, player, this)) {
                 throw new game_1.GameError(game_message_1.GameMessage.POWER_ALREADY_USED);
             }
             if (player.active.cards[0] === this && player.active.specialConditions.length > 0) {
                 throw new game_1.GameError(game_message_1.GameMessage.CANNOT_USE_POWER);
             }
             if (!((_b = (_a = player.active) === null || _a === void 0 ? void 0 : _a.getPokemonCard()) === null || _b === void 0 ? void 0 : _b.tags.includes(card_types_1.CardTag.POKEMON_SP))) {
-                prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, player, this);
+                (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, player, this);
             }
             if (!((_d = (_c = opponent.active) === null || _c === void 0 ? void 0 : _c.getPokemonCard()) === null || _d === void 0 ? void 0 : _d.tags.includes(card_types_1.CardTag.POKEMON_SP))) {
-                prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
+                (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, opponent, this);
             }
-            prefabs_1.ADD_MARKER(this.POISON_STRUCTURE_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.POISON_STRUCTURE_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
         }
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            prefabs_1.REMOVE_MARKER(this.POISON_STRUCTURE_MARKER, player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.POISON_STRUCTURE_MARKER, player, this);
         }
         //Attack
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.ADD_MARKER(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, opponent.active, this);
+            (0, prefabs_1.ADD_MARKER)(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, opponent.active, this);
         }
-        if (effect instanceof game_effects_1.AttackEffect && prefabs_1.HAS_MARKER(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this)) {
+        if (effect instanceof game_effects_1.AttackEffect && (0, prefabs_1.HAS_MARKER)(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             try {
@@ -88,7 +88,7 @@ class SkuntankG extends pokemon_card_1.PokemonCard {
             catch (_e) {
                 return state;
             }
-            const coinFlipResult = prefabs_1.SIMULATE_COIN_FLIP(store, state, player);
+            const coinFlipResult = (0, prefabs_1.SIMULATE_COIN_FLIP)(store, state, player);
             if (!coinFlipResult) {
                 effect.damage = 0;
                 store.log(state, game_message_1.GameLog.LOG_ABILITY_BLOCKS_DAMAGE, { name: opponent.name, pokemon: this.name });
@@ -96,11 +96,11 @@ class SkuntankG extends pokemon_card_1.PokemonCard {
         }
         //Marker remover
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
-            if (prefabs_1.HAS_MARKER(this.POISON_STRUCTURE_MARKER, effect.player, this)) {
-                prefabs_1.REMOVE_MARKER(this.POISON_STRUCTURE_MARKER, effect.player, this);
+            if ((0, prefabs_1.HAS_MARKER)(this.POISON_STRUCTURE_MARKER, effect.player, this)) {
+                (0, prefabs_1.REMOVE_MARKER)(this.POISON_STRUCTURE_MARKER, effect.player, this);
             }
-            if (prefabs_1.HAS_MARKER(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this)) {
-                prefabs_1.REMOVE_MARKER(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this);
+            if ((0, prefabs_1.HAS_MARKER)(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this)) {
+                (0, prefabs_1.REMOVE_MARKER)(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this);
             }
         }
         return state;

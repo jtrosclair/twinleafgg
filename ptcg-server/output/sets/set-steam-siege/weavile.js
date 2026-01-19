@@ -37,7 +37,7 @@ function* useTearAway(next, store, state, effect) {
             if (target.tools.length > 1) {
                 store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_TOOL, target, { superType: card_types_1.SuperType.TRAINER, trainerType: card_types_2.TrainerType.TOOL }, { min: 1, max: 1, allowCancel: false }), selected => {
                     if (selected && selected.length > 0) {
-                        prefabs_1.MOVE_CARD_TO(state, selected[0], owner.hand);
+                        (0, prefabs_1.MOVE_CARD_TO)(state, selected[0], owner.hand);
                     }
                 });
             }
@@ -77,7 +77,7 @@ class Weavile extends pokemon_card_1.PokemonCard {
         this.fullName = 'Weavile STS';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const generator = useTearAway(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

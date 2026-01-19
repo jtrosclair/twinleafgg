@@ -1,9 +1,12 @@
-import { BoardEffect, CardTag, SpecialCondition, Stage, SuperType } from '../card/card-types';
-import { PokemonCard } from '../card/pokemon-card';
-import { CardList } from './card-list';
-import { Marker } from './card-marker';
-import { StateUtils } from '../state-utils';
-export class PokemonCardList extends CardList {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PokemonCardList = void 0;
+const card_types_1 = require("../card/card-types");
+const pokemon_card_1 = require("../card/pokemon-card");
+const card_list_1 = require("./card-list");
+const card_marker_1 = require("./card-marker");
+const state_utils_1 = require("../state-utils");
+class PokemonCardList extends card_list_1.CardList {
     constructor() {
         super(...arguments);
         this.damage = 0;
@@ -11,13 +14,13 @@ export class PokemonCardList extends CardList {
         this.specialConditions = [];
         this.poisonDamage = 10;
         this.burnDamage = 20;
-        this.marker = new Marker();
+        this.marker = new card_marker_1.Marker();
         this.pokemonPlayedTurn = 0;
         this.sleepFlips = 1;
         this.boardEffect = [];
         this.hpBonus = 0;
         this.tools = [];
-        this.energies = new CardList();
+        this.energies = new card_list_1.CardList();
         this.isActivatingCard = false;
         this.showAllStageAbilities = false;
         this.triggerEvolutionAnimation = false;
@@ -32,7 +35,7 @@ export class PokemonCardList extends CardList {
     getPokemons() {
         const result = [];
         for (const card of this.cards) {
-            if (card.superType === SuperType.POKEMON && !this.tools.includes(card) && !this.energies.cards.includes(card)) {
+            if (card.superType === card_types_1.SuperType.POKEMON && !this.tools.includes(card) && !this.energies.cards.includes(card)) {
                 result.push(card);
             }
             else if (card.name === 'Lillie\'s Poké Doll') {
@@ -86,15 +89,15 @@ export class PokemonCardList extends CardList {
             return false;
         }
         // LEGEND cards are not considered evolved
-        if ((pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.stage) === Stage.LEGEND) {
+        if ((pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.stage) === card_types_1.Stage.LEGEND) {
             return false;
         }
         // VUNION cards are not considered evolved
-        if ((pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.stage) === Stage.VUNION) {
+        if ((pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.stage) === card_types_1.Stage.VUNION) {
             return false;
         }
         // LV_X placed on a Basic Pokémon is not considered evolved
-        if ((pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.stage) === Stage.LV_X && pokemons.length === 2 && pokemons.some(p => p.stage === Stage.BASIC)) {
+        if ((pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.stage) === card_types_1.Stage.LV_X && pokemons.length === 2 && pokemons.some(p => p.stage === card_types_1.Stage.BASIC)) {
             return false;
         }
         // Otherwise, it's evolved
@@ -130,11 +133,11 @@ export class PokemonCardList extends CardList {
         this.triggerEvolutionAnimation = false;
         this.showBasicAnimation = false;
         this.triggerAttackAnimation = false;
-        this.removeSpecialCondition(SpecialCondition.POISONED);
-        this.removeSpecialCondition(SpecialCondition.ASLEEP);
-        this.removeSpecialCondition(SpecialCondition.BURNED);
-        this.removeSpecialCondition(SpecialCondition.CONFUSED);
-        this.removeSpecialCondition(SpecialCondition.PARALYZED);
+        this.removeSpecialCondition(card_types_1.SpecialCondition.POISONED);
+        this.removeSpecialCondition(card_types_1.SpecialCondition.ASLEEP);
+        this.removeSpecialCondition(card_types_1.SpecialCondition.BURNED);
+        this.removeSpecialCondition(card_types_1.SpecialCondition.CONFUSED);
+        this.removeSpecialCondition(card_types_1.SpecialCondition.PARALYZED);
         this.poisonDamage = 10;
         this.burnDamage = 20;
         this.damageReductionNextTurn = 0;
@@ -150,11 +153,11 @@ export class PokemonCardList extends CardList {
         // }
     }
     clearAllSpecialConditions() {
-        this.removeSpecialCondition(SpecialCondition.POISONED);
-        this.removeSpecialCondition(SpecialCondition.ASLEEP);
-        this.removeSpecialCondition(SpecialCondition.BURNED);
-        this.removeSpecialCondition(SpecialCondition.CONFUSED);
-        this.removeSpecialCondition(SpecialCondition.PARALYZED);
+        this.removeSpecialCondition(card_types_1.SpecialCondition.POISONED);
+        this.removeSpecialCondition(card_types_1.SpecialCondition.ASLEEP);
+        this.removeSpecialCondition(card_types_1.SpecialCondition.BURNED);
+        this.removeSpecialCondition(card_types_1.SpecialCondition.CONFUSED);
+        this.removeSpecialCondition(card_types_1.SpecialCondition.PARALYZED);
     }
     removeSpecialCondition(sp) {
         if (!this.specialConditions.includes(sp)) {
@@ -164,24 +167,24 @@ export class PokemonCardList extends CardList {
             .filter(s => s !== sp);
     }
     addSpecialCondition(sp) {
-        if (sp === SpecialCondition.POISONED) {
+        if (sp === card_types_1.SpecialCondition.POISONED) {
             this.poisonDamage = 10;
         }
-        if (sp === SpecialCondition.BURNED) {
+        if (sp === card_types_1.SpecialCondition.BURNED) {
             this.burnDamage = 20;
         }
         if (this.specialConditions.includes(sp)) {
             return;
         }
-        if (sp === SpecialCondition.POISONED || sp === SpecialCondition.BURNED) {
+        if (sp === card_types_1.SpecialCondition.POISONED || sp === card_types_1.SpecialCondition.BURNED) {
             this.specialConditions.push(sp);
             return;
         }
         this.specialConditions = this.specialConditions.filter(s => [
-            SpecialCondition.PARALYZED,
-            SpecialCondition.CONFUSED,
-            SpecialCondition.ASLEEP,
-            SpecialCondition.ABILITY_USED,
+            card_types_1.SpecialCondition.PARALYZED,
+            card_types_1.SpecialCondition.CONFUSED,
+            card_types_1.SpecialCondition.ASLEEP,
+            card_types_1.SpecialCondition.ABILITY_USED,
         ].includes(s) === false);
         this.specialConditions.push(sp);
     }
@@ -197,65 +200,65 @@ export class PokemonCardList extends CardList {
             return;
         }
         this.boardEffect = this.boardEffect.filter(s => [
-            BoardEffect.ABILITY_USED,
-            BoardEffect.POWER_GLOW,
-            BoardEffect.POWER_NEGATED_GLOW,
-            BoardEffect.POWER_RETURN,
+            card_types_1.BoardEffect.ABILITY_USED,
+            card_types_1.BoardEffect.POWER_GLOW,
+            card_types_1.BoardEffect.POWER_NEGATED_GLOW,
+            card_types_1.BoardEffect.POWER_RETURN,
         ].includes(s) === false);
         this.boardEffect.push(sp);
     }
     //Rule-Box Pokemon
     hasRuleBox() {
-        return this.cards.some(c => c.tags.includes(CardTag.POKEMON_ex) || c.tags.includes(CardTag.RADIANT) || c.tags.includes(CardTag.POKEMON_V) || c.tags.includes(CardTag.POKEMON_VMAX) || c.tags.includes(CardTag.POKEMON_VSTAR) || c.tags.includes(CardTag.POKEMON_GX) || c.tags.includes(CardTag.PRISM_STAR) || c.tags.includes(CardTag.BREAK) || c.tags.includes(CardTag.POKEMON_SV_MEGA));
+        return this.cards.some(c => c.tags.includes(card_types_1.CardTag.POKEMON_ex) || c.tags.includes(card_types_1.CardTag.RADIANT) || c.tags.includes(card_types_1.CardTag.POKEMON_V) || c.tags.includes(card_types_1.CardTag.POKEMON_VMAX) || c.tags.includes(card_types_1.CardTag.POKEMON_VSTAR) || c.tags.includes(card_types_1.CardTag.POKEMON_GX) || c.tags.includes(card_types_1.CardTag.PRISM_STAR) || c.tags.includes(card_types_1.CardTag.BREAK) || c.tags.includes(card_types_1.CardTag.POKEMON_SV_MEGA));
     }
     vPokemon() {
-        return this.cards.some(c => c.tags.includes(CardTag.POKEMON_V) || c.tags.includes(CardTag.POKEMON_VMAX) || c.tags.includes(CardTag.POKEMON_VSTAR) || c.tags.includes(CardTag.POKEMON_VUNION));
+        return this.cards.some(c => c.tags.includes(card_types_1.CardTag.POKEMON_V) || c.tags.includes(card_types_1.CardTag.POKEMON_VMAX) || c.tags.includes(card_types_1.CardTag.POKEMON_VSTAR) || c.tags.includes(card_types_1.CardTag.POKEMON_VUNION));
     }
     exPokemon() {
-        return this.cards.some(c => c.tags.includes(CardTag.POKEMON_ex));
+        return this.cards.some(c => c.tags.includes(card_types_1.CardTag.POKEMON_ex));
     }
     isTera() {
-        return this.cards.some(c => c.tags.includes(CardTag.POKEMON_TERA));
+        return this.cards.some(c => c.tags.includes(card_types_1.CardTag.POKEMON_TERA));
     }
     //Single/Rapid/Fusion Strike
     singleStrikePokemon() {
-        return this.cards.some(c => c.tags.includes(CardTag.SINGLE_STRIKE));
+        return this.cards.some(c => c.tags.includes(card_types_1.CardTag.SINGLE_STRIKE));
     }
     rapidStrikePokemon() {
-        return this.cards.some(c => c.tags.includes(CardTag.RAPID_STRIKE));
+        return this.cards.some(c => c.tags.includes(card_types_1.CardTag.RAPID_STRIKE));
     }
     fusionStrikePokemon() {
-        return this.cards.some(c => c.tags.includes(CardTag.FUSION_STRIKE));
+        return this.cards.some(c => c.tags.includes(card_types_1.CardTag.FUSION_STRIKE));
     }
     //Future/Ancient
     futurePokemon() {
-        return this.cards.some(c => c.tags.includes(CardTag.FUTURE));
+        return this.cards.some(c => c.tags.includes(card_types_1.CardTag.FUTURE));
     }
     ancientPokemon() {
-        return this.cards.some(c => c.tags.includes(CardTag.ANCIENT));
+        return this.cards.some(c => c.tags.includes(card_types_1.CardTag.ANCIENT));
     }
     //Trainer Pokemon
     isLillies() {
-        return this.cards.some(c => c.tags.includes(CardTag.LILLIES));
+        return this.cards.some(c => c.tags.includes(card_types_1.CardTag.LILLIES));
     }
     isNs() {
-        return this.cards.some(c => c.tags.includes(CardTag.NS));
+        return this.cards.some(c => c.tags.includes(card_types_1.CardTag.NS));
     }
     isIonos() {
-        return this.cards.some(c => c.tags.includes(CardTag.IONOS));
+        return this.cards.some(c => c.tags.includes(card_types_1.CardTag.IONOS));
     }
     isHops() {
-        return this.cards.some(c => c.tags.includes(CardTag.HOPS));
+        return this.cards.some(c => c.tags.includes(card_types_1.CardTag.HOPS));
     }
     isEthans() {
-        return this.cards.some(c => c.tags.includes(CardTag.ETHANS));
+        return this.cards.some(c => c.tags.includes(card_types_1.CardTag.ETHANS));
     }
     getToolEffect() {
         if (this.tools.length === 0) {
             return;
         }
         const toolCard = this.tools[0];
-        if (toolCard instanceof PokemonCard) {
+        if (toolCard instanceof pokemon_card_1.PokemonCard) {
             return toolCard.powers[0] || toolCard.attacks[0];
         }
         // removeTool(tool: Card): void {
@@ -271,7 +274,7 @@ export class PokemonCardList extends CardList {
         return player.active === this;
     }
     isOpponentActive(state) {
-        const opponent = StateUtils.getOpponent(state, state.players[state.activePlayer]);
+        const opponent = state_utils_1.StateUtils.getOpponent(state, state.players[state.activePlayer]);
         return opponent.active === this;
     }
     isPlayerBench(state) {
@@ -279,7 +282,7 @@ export class PokemonCardList extends CardList {
         return player.bench.includes(this);
     }
     isOpponentBench(state) {
-        const opponent = StateUtils.getOpponent(state, state.players[state.activePlayer]);
+        const opponent = state_utils_1.StateUtils.getOpponent(state, state.players[state.activePlayer]);
         return opponent.bench.includes(this);
     }
     // Override the parent CardList's moveTo method to properly handle Pokemon acting as energy
@@ -304,7 +307,7 @@ export class PokemonCardList extends CardList {
                 // If destination is a PokemonCardList and card is an energy card (not a Pokemon), add to energies.cards
                 if (destination instanceof PokemonCardList) {
                     // Only add actual energy cards (superType === ENERGY), not Pokemon cards that can act as energy
-                    const isEnergyCard = card[0].superType === SuperType.ENERGY;
+                    const isEnergyCard = card[0].superType === card_types_1.SuperType.ENERGY;
                     if (isEnergyCard && !destination.energies.cards.includes(card[0])) {
                         destination.energies.cards.push(card[0]);
                     }
@@ -332,7 +335,7 @@ export class PokemonCardList extends CardList {
                         destination.cards.push(card[0]);
                         // If destination is a PokemonCardList and card is an energy card, add to energies.cards
                         if (destination instanceof PokemonCardList) {
-                            const isEnergyCard = card[0].superType === SuperType.ENERGY || card[0].energyType !== undefined;
+                            const isEnergyCard = card[0].superType === card_types_1.SuperType.ENERGY || card[0].energyType !== undefined;
                             if (isEnergyCard && !destination.energies.cards.includes(card[0])) {
                                 destination.energies.cards.push(card[0]);
                             }
@@ -343,6 +346,7 @@ export class PokemonCardList extends CardList {
         }
     }
 }
+exports.PokemonCardList = PokemonCardList;
 PokemonCardList.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
 PokemonCardList.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
 PokemonCardList.CLEAR_KNOCKOUT_MARKER = 'CLEAR_KNOCKOUT_MARKER';

@@ -32,14 +32,14 @@ function* playCard(next, store, state, self, effect) {
         if (cards.length === 0) {
             return;
         }
-        prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: self });
+        (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: self });
     });
     const deckTop = new game_1.CardList();
     player.deck.moveTo(deckTop, 7);
     return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, deckTop, {}, { min: 0, max: 2, allowCancel: false }), selected => {
         deckTop.moveCardsTo(selected, player.hand);
         deckTop.moveTo(player.deck);
-        prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
             player.deck.applyOrder(order);
             return state;

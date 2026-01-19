@@ -36,7 +36,7 @@ class Wartortle extends pokemon_card_1.PokemonCard {
         this.setNumber = '50';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // Check attack cost
             const checkCost = new check_effects_1.CheckAttackCostEffect(player, this.attacks[0]);
@@ -54,9 +54,9 @@ class Wartortle extends pokemon_card_1.PokemonCard {
             if (extraWaterEnergy == 2)
                 effect.damage += 20;
         }
-        if (prefabs_1.AFTER_ATTACK(effect, 1, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
             const player = effect.player;
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
         }
         return state;
     }

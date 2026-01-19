@@ -38,10 +38,10 @@ class Jirachi extends pokemon_card_1.PokemonCard {
             if (!player.discard.cards.some(c => c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC && c.provides.includes(card_types_1.CardType.PSYCHIC))) {
                 return state;
             }
-            if (prefabs_1.IS_POKEPOWER_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this)) {
                 return state;
             }
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, wantToUse => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, wantToUse => {
                 if (wantToUse) {
                     const blocked = [];
                     player.discard.cards.forEach((c, index) => {
@@ -49,9 +49,9 @@ class Jirachi extends pokemon_card_1.PokemonCard {
                             blocked.push(index);
                         }
                     });
-                    prefabs_1.ABILITY_USED(player, this);
+                    (0, prefabs_1.ABILITY_USED)(player, this);
                     let heads = 0;
-                    prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 3, results => {
+                    (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 3, results => {
                         results.forEach(r => {
                             if (r)
                                 heads++;
@@ -84,7 +84,7 @@ class Jirachi extends pokemon_card_1.PokemonCard {
                 }
             }, game_1.GameMessage.WANT_TO_USE_ABILITY);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let canDevolve = false;
             const blocked = [];

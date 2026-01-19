@@ -54,8 +54,8 @@ class EnergyRecycleSystem extends trainer_card_1.TrainerCard {
                             cards.forEach((card, index) => {
                                 store.log(state, game_message_1.GameLog.LOG_PLAYER_RETURNS_TO_DECK_FROM_DISCARD, { name: player.name, card: card.name });
                             });
-                            prefabs_1.MOVE_CARDS(store, state, player.discard, player.deck, { cards: cards, sourceCard: this });
-                            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.deck, { cards: cards, sourceCard: this });
+                            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                             return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
                                 player.deck.applyOrder(order);
                             });
@@ -71,8 +71,8 @@ class EnergyRecycleSystem extends trainer_card_1.TrainerCard {
                             cards.forEach((card, index) => {
                                 store.log(state, game_message_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                             });
-                            prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: cards, sourceCard: this });
-                            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: cards, sourceCard: this });
+                            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                             return state;
                         });
                     }

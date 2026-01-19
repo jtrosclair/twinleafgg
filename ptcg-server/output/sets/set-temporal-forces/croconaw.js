@@ -30,7 +30,7 @@ class Croconaw extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.AfterDamageEffect && effect.attack === this.attacks[0]) {
             const player = effect.player;
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
             /*const hasBenched = player.bench.some(b => b.cards.length > 0);
             if (!hasBenched) {
               return state;

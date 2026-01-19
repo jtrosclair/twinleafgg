@@ -46,7 +46,7 @@ class Sawsbuck extends pokemon_card_1.PokemonCard {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             player.deck.moveTo(player.hand, 1);
-            prefabs_1.ADD_MARKER(this.SEASONAL_BLESSINGS_MARKER, player, this);
+            (0, prefabs_1.ADD_MARKER)(this.SEASONAL_BLESSINGS_MARKER, player, this);
         }
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
             this.bounceMarker = true;

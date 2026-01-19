@@ -28,7 +28,7 @@ class Toxel extends pokemon_card_1.PokemonCard {
         this.fullName = 'Toxel OBF';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const dealDamage = new attack_effects_1.DealDamageEffect(effect, 10);
             dealDamage.target = player.active;

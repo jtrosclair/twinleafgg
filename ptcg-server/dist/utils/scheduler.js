@@ -1,5 +1,8 @@
-import { config } from '../config';
-export class Scheduler {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Scheduler = void 0;
+const config_1 = require("../config");
+class Scheduler {
     constructor() {
         this.jobs = [];
     }
@@ -15,7 +18,7 @@ export class Scheduler {
         if (this.intervalRef !== undefined || this.timeoutRef !== undefined) {
             return;
         }
-        if (!config.core.schedulerStartNextHour) {
+        if (!config_1.config.core.schedulerStartNextHour) {
             this.startInterval();
             return;
         }
@@ -39,7 +42,7 @@ export class Scheduler {
                     job.callback();
                 }
             });
-        }, config.core.schedulerInterval);
+        }, config_1.config.core.schedulerInterval);
     }
     stop(callback) {
         const index = this.jobs.findIndex(job => job.callback === callback);
@@ -58,4 +61,5 @@ export class Scheduler {
         }
     }
 }
+exports.Scheduler = Scheduler;
 Scheduler.instance = new Scheduler();

@@ -137,7 +137,7 @@ class StateSerializer {
         const parsed = JSON.parse(serializedState, reviver);
         // Restore Refs
         const pathBuilder = new path_builder_1.PathBuilder();
-        utils_1.deepIterate(parsed, (holder, key, value) => {
+        (0, utils_1.deepIterate)(parsed, (holder, key, value) => {
             if (value instanceof Object && value._type === 'Ref') {
                 const reference = pathBuilder.getValue(parsed, value.path);
                 if (reference === undefined) {
@@ -196,7 +196,7 @@ class StateSerializer {
                 console.log({ card, fixedName });
                 throw new game_error_1.GameError(game_message_1.GameCoreError.ERROR_SERIALIZER, `Unknown cards '${fixedName}'.`);
             }
-            card = utils_1.deepClone(card);
+            card = (0, utils_1.deepClone)(card);
             card.id = index;
             cards.push(card);
         });

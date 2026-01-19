@@ -41,7 +41,7 @@ class UmbreonDarkraiGX extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Black Lance
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             const hasBenched = opponent.bench.some(b => b.cards.length > 0);
@@ -82,10 +82,10 @@ class UmbreonDarkraiGX extends game_1.PokemonCard {
             });
         }
         // Dark Moon-GX
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             opponent.marker.addMarker(this.DARK_MOON_MARKER, this);
             const extraEffectCost = [D, D, D, D, D, C];

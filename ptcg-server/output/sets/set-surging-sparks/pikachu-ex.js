@@ -39,7 +39,7 @@ class Pikachuex extends game_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.cards.includes(this)) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
-            if (!prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this) && prefabs_1.DAMAGED_FROM_FULL_HP(store, state, effect, player, effect.target)) {
+            if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this) && (0, prefabs_1.DAMAGED_FROM_FULL_HP)(store, state, effect, player, effect.target)) {
                 effect.surviveOnTenHPReason = this.powers[0].name;
             }
         }

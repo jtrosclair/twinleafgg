@@ -78,7 +78,7 @@ class EldegossV extends pokemon_card_1.PokemonCard {
                                 cards.forEach((card, index) => {
                                     store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                                 });
-                                prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards, sourceCard: this, sourceEffect: this.powers[0] });
+                                (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards, sourceCard: this, sourceEffect: this.powers[0] });
                             });
                         }
                     });

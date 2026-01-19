@@ -47,7 +47,7 @@ This card can't be affected by any Special Conditions and can't retreat. If this
         ];
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             store.log(state, game_1.GameLog.LOG_PLAYER_DISCARDS_CARD, { name: player.name, card: this.name, effect: 'Snorlax Doll' });
             const cardList = game_1.StateUtils.findCardList(state, this);

@@ -26,7 +26,7 @@ function* useFeatherSlice(next, store, state, effect, self) {
         return state;
     }
     // Else, discard the card and do 140 damage.
-    prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: self, sourceEffect: self.attacks[0] });
+    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: self, sourceEffect: self.attacks[0] });
     effect.damage += 70;
     return state;
 }

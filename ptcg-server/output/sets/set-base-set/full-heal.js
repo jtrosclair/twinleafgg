@@ -24,7 +24,7 @@ class FullHeal extends trainer_card_1.TrainerCard {
                 throw new game_1.GameError(game_1.GameStoreMessage.CANNOT_PLAY_THIS_CARD);
             }
             player.active.specialConditions = [];
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         }
         return state;
     }

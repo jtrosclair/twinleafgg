@@ -70,7 +70,7 @@ class DragoniteEX extends game_1.PokemonCard {
                     return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: game_1.SuperType.POKEMON, stage: game_1.Stage.BASIC }, { min: 0, max: 2, allowCancel: false, blocked: blocked }), selected => {
                         if (selected && selected.length > 0) {
                             selected.forEach(card => {
-                                prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: [card], sourceCard: this, sourceEffect: this.powers[0] });
+                                (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: [card], sourceCard: this, sourceEffect: this.powers[0] });
                             });
                         }
                         return state;

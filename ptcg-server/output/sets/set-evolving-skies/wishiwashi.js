@@ -39,7 +39,7 @@ class Wishiwashi extends game_1.PokemonCard {
         if (effect instanceof check_effects_1.CheckHpEffect) {
             const player = effect.player;
             const targetPokemonCard = effect.target.getPokemonCard();
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this) || targetPokemonCard !== this) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this) || targetPokemonCard !== this) {
                 return state;
             }
             const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(player);

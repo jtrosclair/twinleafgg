@@ -27,7 +27,7 @@ class HolonLass extends trainer_card_1.TrainerCard {
             if (supporterTurn > 0) {
                 throw new game_1.GameError(game_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
             }
-            trainer_prefabs_1.DISCARD_X_CARDS_FROM_YOUR_HAND(effect, store, state, 1, 1);
+            (0, trainer_prefabs_1.DISCARD_X_CARDS_FROM_YOUR_HAND)(effect, store, state, 1, 1);
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             effect.preventDefault = true;
             const temp = new game_1.CardList();
@@ -51,12 +51,12 @@ class HolonLass extends trainer_card_1.TrainerCard {
                         store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                     });
                     if (chosenCards.length > 0) {
-                        prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, chosenCards);
+                        (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, chosenCards);
                     }
                     player.supporter.moveCardTo(this, player.discard);
                     temp.moveTo(player.deck);
                 }
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
         }
         return state;

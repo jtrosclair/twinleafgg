@@ -4,7 +4,7 @@ import { PlayerType, SlotType, CardTarget } from '../actions/play-card-action';
 import { State } from '../state/state';
 import { DamageMap, DamageTransfer } from './move-damage-prompt';
 export declare const RemoveDamagePromptType = "Remove damage";
-export declare type RemoveDamageResultType = DamageTransfer[];
+export type RemoveDamageResultType = DamageTransfer[];
 export interface RemoveDamageOptions {
     allowCancel: boolean;
     min: number;

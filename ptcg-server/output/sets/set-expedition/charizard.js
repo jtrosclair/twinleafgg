@@ -38,19 +38,19 @@ class Charizard extends pokemon_card_1.PokemonCard {
         this.BURNING_ENERGY_USED_MARKER = 'BURNING_ENERGY_USED_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (prefabs_1.HAS_MARKER(this.BURNING_ENERGY_USED_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.BURNING_ENERGY_USED_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
-            prefabs_1.ADD_MARKER(this.BURNING_ENERGY_USED_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.BURNING_ENERGY_USED_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             // Add the marker to all basic Energy cards attached to Pokémon
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
                 cardList.cards.forEach(c => {
                     if (c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC) {
-                        prefabs_1.ADD_MARKER(this.BURNING_ENERGY_MARKER, c, this);
+                        (0, prefabs_1.ADD_MARKER)(this.BURNING_ENERGY_MARKER, c, this);
                     }
                 });
             });
@@ -59,7 +59,7 @@ class Charizard extends pokemon_card_1.PokemonCard {
         if (effect instanceof check_effects_1.CheckProvidedEnergyEffect) {
             effect.source.cards.forEach(c => {
                 if (c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC && !effect.energyMap.some(e => e.card === c)) {
-                    if (prefabs_1.HAS_MARKER(this.BURNING_ENERGY_MARKER, c, this)) {
+                    if ((0, prefabs_1.HAS_MARKER)(this.BURNING_ENERGY_MARKER, c, this)) {
                         effect.energyMap.push({ card: c, provides: [card_types_1.CardType.FIRE] });
                     }
                 }
@@ -70,26 +70,26 @@ class Charizard extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
             effect.player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
                 cardList.cards.forEach(c => {
-                    if (prefabs_1.HAS_MARKER(this.BURNING_ENERGY_MARKER, c, this)) {
-                        prefabs_1.REMOVE_MARKER(this.BURNING_ENERGY_MARKER, c, this);
+                    if ((0, prefabs_1.HAS_MARKER)(this.BURNING_ENERGY_MARKER, c, this)) {
+                        (0, prefabs_1.REMOVE_MARKER)(this.BURNING_ENERGY_MARKER, c, this);
                     }
                 });
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.BURNING_ENERGY_USED_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.BURNING_ENERGY_USED_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            return prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 2, results => {
+            return (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 2, results => {
                 let heads = 0;
                 results.forEach(r => {
                     if (r)
                         heads++;
                 });
                 if (!heads) {
-                    prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON(store, state, effect, this);
+                    (0, prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON)(store, state, effect, this);
                 }
                 if (heads === 1) {
-                    costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 2);
+                    (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 2);
                 }
             });
         }

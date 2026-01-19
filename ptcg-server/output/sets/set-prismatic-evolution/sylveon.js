@@ -43,7 +43,7 @@ class Sylveon extends pokemon_card_1.PokemonCard {
             const opponent = game_3.StateUtils.findOwner(state, effect.source);
             if (player === opponent || pokemonCard !== this || sourceCard === undefined || state.phase !== game_2.GamePhase.ATTACK)
                 return state;
-            if (sourceCard.tags.includes(card_types_1.CardTag.POKEMON_ex) && !prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this))
+            if (sourceCard.tags.includes(card_types_1.CardTag.POKEMON_ex) && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this))
                 effect.preventDefault = true;
         }
         return state;

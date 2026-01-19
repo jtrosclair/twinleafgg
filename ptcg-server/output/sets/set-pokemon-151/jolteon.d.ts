@@ -10,8 +10,8 @@ export declare class Jolteon extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    resistance: never[];
-    retreat: never[];
+    resistance: any[];
+    retreat: any[];
     attacks: ({
         name: string;
         cost: CardType[];

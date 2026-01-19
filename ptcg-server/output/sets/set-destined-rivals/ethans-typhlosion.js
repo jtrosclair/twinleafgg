@@ -33,7 +33,7 @@ class EthansTyphlosion extends game_1.PokemonCard {
         this.fullName = 'Ethan\'s Typhlosion DRI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const adventureCount = player.discard.cards.filter(c => c.name === 'Ethan\'s Adventure').length;
             effect.damage += 60 * adventureCount;

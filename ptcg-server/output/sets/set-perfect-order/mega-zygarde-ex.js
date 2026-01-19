@@ -35,12 +35,12 @@ class MegaZygardeex extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Gaia Wave
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             player.active.damageReductionNextTurn = 30;
         }
         // Munikis Zero
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Collect all opponent Pokemon (active + bench)

@@ -55,7 +55,7 @@ class Ceruledge extends pokemon_card_1.PokemonCard {
             const discardSpecialEnergy = (pokemonCardList) => {
                 const cardsToDiscard = pokemonCardList.cards.filter(card => (card instanceof game_1.EnergyCard && card.energyType === card_types_1.EnergyType.SPECIAL));
                 if (cardsToDiscard.length > 0) {
-                    state = prefabs_1.MOVE_CARDS(store, state, pokemonCardList, opponent.discard, { cards: cardsToDiscard });
+                    state = (0, prefabs_1.MOVE_CARDS)(store, state, pokemonCardList, opponent.discard, { cards: cardsToDiscard });
                 }
             };
             // Discard from active Pokémon

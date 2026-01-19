@@ -42,7 +42,7 @@ class GardeniasVigor extends trainer_card_1.TrainerCard {
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             // We will discard this card after prompt confirmation
             effect.preventDefault = true;
-            prefabs_1.DRAW_CARDS(player, 2);
+            (0, prefabs_1.DRAW_CARDS)(player, 2);
             // const hasEnergyInHand = player.hand.cards.some(c => {
             //   return c instanceof EnergyCard
             //     && c.energyType === EnergyType.BASIC
@@ -58,7 +58,7 @@ class GardeniasVigor extends trainer_card_1.TrainerCard {
                     const energyCard = transfer.card;
                     const attachEnergyEffect = new play_card_effects_1.AttachEnergyEffect(player, energyCard, target);
                     store.reduceEffect(state, attachEnergyEffect);
-                    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 }
             });
         }

@@ -17,7 +17,7 @@ function* useTricksterGX(next, store, state, effect) {
     const oppBenched = opponent.bench.filter(b => b.cards.length > 0);
     const allOpponentPokemon = oppActive ? [oppActive, ...oppBenched.map(b => b.getPokemonCard())].filter((pokemon) => pokemon !== undefined) : [];
     // Check if player has used GX attack
-    prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+    (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
     let selected;
     yield store.prompt(state, new game_1.ChooseAttackPrompt(player.id, game_1.GameMessage.CHOOSE_ATTACK_TO_COPY, allOpponentPokemon, { allowCancel: false }), result => {
         selected = result;

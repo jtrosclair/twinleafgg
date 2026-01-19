@@ -28,7 +28,7 @@ class SpikyEnergy extends energy_card_1.EnergyCard {
             const opponent = effect.player;
             if (player === opponent || player.active !== effect.target)
                 return state;
-            if (prefabs_1.IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.target)) {
+            if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.player, this, effect.target)) {
                 return state;
             }
             effect.source.damage += 20;

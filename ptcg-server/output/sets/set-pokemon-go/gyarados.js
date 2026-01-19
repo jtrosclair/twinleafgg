@@ -37,7 +37,7 @@ class Gyarados extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Wreak Havoc
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             const flipCoin = (heads = 0) => {
@@ -47,16 +47,16 @@ class Gyarados extends pokemon_card_1.PokemonCard {
                     if (result === true) {
                         return flipCoin(heads + 1);
                     }
-                    prefabs_1.MOVE_CARDS(store, state, opponent.deck, opponent.discard, { count: (heads * 2), sourceCard: this, sourceEffect: this.attacks[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, opponent.deck, opponent.discard, { count: (heads * 2), sourceCard: this, sourceEffect: this.attacks[0] });
                     return state;
                 });
             };
             return flipCoin();
         }
         // Raging Fin
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            prefabs_1.MOVE_CARDS(store, state, player.deck, player.discard, { count: 5 });
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.discard, { count: 5 });
         }
         return state;
     }

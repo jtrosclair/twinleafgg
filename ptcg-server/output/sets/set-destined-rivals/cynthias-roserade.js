@@ -40,7 +40,7 @@ class CynthiasRoserade extends pokemon_card_1.PokemonCard {
         if (effect instanceof attack_effects_1.DealDamageEffect && game_1.StateUtils.isPokemonInPlay(effect.player, this)) {
             const player = effect.player;
             const attackingCard = effect.source.getPokemonCard();
-            prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this);
+            (0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this);
             if (attackingCard !== undefined && attackingCard.tags.includes(card_types_1.CardTag.CYNTHIAS)) {
                 effect.damage += 30;
             }

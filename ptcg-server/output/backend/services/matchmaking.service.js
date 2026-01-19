@@ -175,7 +175,7 @@ class MatchmakingService {
         const ids = artworks.map(a => a.artworkId).filter((v) => typeof v === 'number');
         if (ids.length === 0)
             return map;
-        const rows = await storage_1.CardArtwork.find({ where: { id: typeorm_1.In(ids) } });
+        const rows = await storage_1.CardArtwork.find({ where: { id: (0, typeorm_1.In)(ids) } });
         const byId = new Map(rows.map(r => [r.id, r]));
         for (const a of artworks) {
             if (!a.artworkId)

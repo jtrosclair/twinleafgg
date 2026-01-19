@@ -18,7 +18,7 @@ class LanettesNetSearch extends trainer_card_1.TrainerCard {
         this.text = 'Search your deck for up to 3 different types of Basic Pokémon cards (excluding Baby Pokémon), show them to your opponent, and put them into your hand. Shuffle your deck afterward.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const supporterTurn = player.supporterTurn;
             if (supporterTurn > 0) {
@@ -26,7 +26,7 @@ class LanettesNetSearch extends trainer_card_1.TrainerCard {
             }
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             effect.preventDefault = true;
-            prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND(store, state, player, { stage: card_types_1.Stage.BASIC }, { min: 0, max: 3, differentTypes: true });
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND)(store, state, player, { stage: card_types_1.Stage.BASIC }, { min: 0, max: 3, differentTypes: true });
             player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
         }

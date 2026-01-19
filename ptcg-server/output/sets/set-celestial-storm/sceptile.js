@@ -39,14 +39,14 @@ class Sceptile extends pokemon_card_1.PokemonCard {
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.source.getPokemonCard() != null) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, opponent, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
-            prefabs_1.PREVENT_DAMAGE_IF_SOURCE_HAS_TAG(effect, card_types_1.CardTag.ULTRA_BEAST, effect.source.getPokemonCard());
+            (0, prefabs_1.PREVENT_DAMAGE_IF_SOURCE_HAS_TAG)(effect, card_types_1.CardTag.ULTRA_BEAST, effect.source.getPokemonCard());
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            const attachedEnergy = prefabs_1.GET_TOTAL_ENERGY_ATTACHED_TO_PLAYERS_POKEMON(effect.player, store, state);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            const attachedEnergy = (0, prefabs_1.GET_TOTAL_ENERGY_ATTACHED_TO_PLAYERS_POKEMON)(effect.player, store, state);
             effect.damage = 20 * attachedEnergy;
         }
         return state;

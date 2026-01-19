@@ -43,7 +43,7 @@ class Rayquaza extends pokemon_card_1.PokemonCard {
         this.fullName = 'Rayquaza DS';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
                 if (cardList.getPokemonCard() === this) {
@@ -60,7 +60,7 @@ class Rayquaza extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const energies = player.active.cards.filter(card => card instanceof energy_card_1.EnergyCard && card.name.includes('Holon Energy'));
             if (energies.length === 0) {

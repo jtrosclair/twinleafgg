@@ -43,7 +43,7 @@ class HolonsCastform extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // The Special Energy Stuff
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.energyPlayedTurn === state.turn) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -112,7 +112,7 @@ class HolonsCastform extends pokemon_card_1.PokemonCard {
             effect.energyMap.push({ card: this, provides: [card_types_1.CardType.ANY, card_types_1.CardType.ANY] });
         }
         // Delta Draw
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let deltasInPlay = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {
@@ -121,7 +121,7 @@ class HolonsCastform extends pokemon_card_1.PokemonCard {
                     deltasInPlay++;
                 }
             });
-            prefabs_1.DRAW_UP_TO_X_CARDS(store, state, player, deltasInPlay);
+            (0, prefabs_1.DRAW_UP_TO_X_CARDS)(store, state, player, deltasInPlay);
         }
         return state;
     }

@@ -56,7 +56,7 @@ class Girafarig extends pokemon_card_1.PokemonCard {
             if (!isGirafarigInPlay) {
                 return state;
             }
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, opponent, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
             // Only check opponent's Active Pokemon
@@ -74,7 +74,7 @@ class Girafarig extends pokemon_card_1.PokemonCard {
             }
         }
         // Drag Off
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const options = [
@@ -118,7 +118,7 @@ class Girafarig extends pokemon_card_1.PokemonCard {
                 option.action();
             });
         }
-        if (prefabs_1.AFTER_ATTACK(effect, 1, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
             const opponent = effect.opponent;
             const pokemon = opponent.active;
             let specialEnergyCount = 0;
@@ -130,7 +130,7 @@ class Girafarig extends pokemon_card_1.PokemonCard {
                 }
             });
             if (specialEnergyCount > 0) {
-                prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+                (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
             }
         }
         return state;

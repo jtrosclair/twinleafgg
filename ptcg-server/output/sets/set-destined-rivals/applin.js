@@ -28,7 +28,7 @@ class Applin extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Mini Drain
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const healing = new attack_effects_1.HealTargetEffect(effect, 10);
             healing.target = effect.player.active;
             store.reduceEffect(state, healing);

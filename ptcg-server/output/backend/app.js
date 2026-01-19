@@ -26,8 +26,8 @@ class App {
             const instance = new controller(path, app, storage, core);
             instance.init();
         };
-        app.use(body_parser_1.json({ limit: 512 + config_1.config.backend.avatarFileSize * 4 }));
-        app.use(cors_1.cors());
+        app.use((0, body_parser_1.json)({ limit: 512 + config_1.config.backend.avatarFileSize * 4 }));
+        app.use((0, cors_1.cors)());
         // Health check endpoint - must be first route
         app.get('/health', async (req, res) => {
             try {

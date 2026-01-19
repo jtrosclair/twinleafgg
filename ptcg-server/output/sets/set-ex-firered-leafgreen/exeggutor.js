@@ -34,13 +34,13 @@ class Exeggutor extends pokemon_card_1.PokemonCard {
         this.fullName = 'Exeggutor RG';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
-            prefabs_1.MOVE_CARDS(store, state, player.hand, player.deck, { cards: player.hand.cards.filter(c => c !== this), sourceCard: this, sourceEffect: this.attacks[0] });
-            prefabs_1.SHUFFLE_DECK(store, state, player);
-            prefabs_1.DRAW_UP_TO_X_CARDS(store, state, player, 8);
+            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck, { cards: player.hand.cards.filter(c => c !== this), sourceCard: this, sourceEffect: this.attacks[0] });
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
+            (0, prefabs_1.DRAW_UP_TO_X_CARDS)(store, state, player, 8);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(player, player.active);
             store.reduceEffect(state, checkProvidedEnergyEffect);
@@ -51,7 +51,7 @@ class Exeggutor extends pokemon_card_1.PokemonCard {
             });
             effect.damage = 0;
             for (let i = 0; i < energyCount; i++) {
-                prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+                (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                     if (result) {
                         effect.damage += 40;
                     }

@@ -32,7 +32,7 @@ class Onix extends game_1.PokemonCard {
         this.fullName = 'Onix MEW';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const deckTop = new game_1.CardList();
             player.deck.moveTo(deckTop, 5);

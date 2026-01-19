@@ -43,7 +43,7 @@ class Machamp extends pokemon_card_1.PokemonCard {
         this.fullName = 'Machamp TM';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const source = player.active;
             if (player.active.getPokemonCard() === this) {
@@ -71,7 +71,7 @@ class Machamp extends pokemon_card_1.PokemonCard {
             });
             player.switchPokemon(player.bench[machampBenchIndex]);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const activeCardList = opponent.active;
@@ -90,7 +90,7 @@ class Machamp extends pokemon_card_1.PokemonCard {
             const discardEnergy = new attack_effects_1.DiscardCardsEffect(effect, cards);
             return store.reduceEffect(state, discardEnergy);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             //I check how many Pokémon are on the bench to know how much damage the attack will cause.
             const player = effect.player;
             const hasBenched = player.bench.some(b => b.cards.length > 0);
@@ -106,7 +106,7 @@ class Machamp extends pokemon_card_1.PokemonCard {
                     benchPokemonWithDamage++;
                 }
             });
-            prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE(effect, store, state, 10 * benchPokemonWithDamage);
+            (0, prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE)(effect, store, state, 10 * benchPokemonWithDamage);
         }
         return state;
     }

@@ -28,7 +28,7 @@ class TeamAquaTechnicalMachine01 extends trainer_card_1.TrainerCard {
         this.text = 'Attach this card to 1 of your Pokémon that has Team Aqua in its name. That Pokémon may use this card\'s attack instead of its own. At the end of your turn, discard Team Aqua Technical Machine 01.';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             // Find slots to attach TM
             const blocked = [];

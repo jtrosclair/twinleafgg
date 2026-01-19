@@ -50,7 +50,7 @@ class VolcaronaV extends pokemon_card_1.PokemonCard {
             // slapping those energies back into the deck
             player.discard.cards.forEach(c => {
                 if (c instanceof game_1.EnergyCard && c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC) {
-                    prefabs_1.MOVE_CARDS(store, state, player.discard, player.deck, { cards: [c], sourceCard: this, sourceEffect: this.attacks[0] });
+                    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.deck, { cards: [c], sourceCard: this, sourceEffect: this.attacks[0] });
                 }
             });
             return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {

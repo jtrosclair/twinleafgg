@@ -38,48 +38,48 @@ let UserBattlePass = class UserBattlePass extends typeorm_1.BaseEntity {
     }
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], UserBattlePass.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], UserBattlePass.prototype, "userId", void 0);
 __decorate([
-    typeorm_1.ManyToOne(() => _1.User),
-    typeorm_1.JoinColumn({ name: 'userId' }),
+    (0, typeorm_1.ManyToOne)(() => _1.User),
+    (0, typeorm_1.JoinColumn)({ name: 'userId' }),
     __metadata("design:type", _1.User)
 ], UserBattlePass.prototype, "user", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], UserBattlePass.prototype, "seasonId", void 0);
 __decorate([
-    typeorm_1.ManyToOne(() => _1.BattlePassSeason),
-    typeorm_1.JoinColumn({ name: 'seasonId', referencedColumnName: 'seasonId' }),
+    (0, typeorm_1.ManyToOne)(() => _1.BattlePassSeason),
+    (0, typeorm_1.JoinColumn)({ name: 'seasonId', referencedColumnName: 'seasonId' }),
     __metadata("design:type", _1.BattlePassSeason)
 ], UserBattlePass.prototype, "season", void 0);
 __decorate([
-    typeorm_1.Column({ default: 0 }),
+    (0, typeorm_1.Column)({ default: 0 }),
     __metadata("design:type", Number)
 ], UserBattlePass.prototype, "exp", void 0);
 __decorate([
-    typeorm_1.Column({ default: 1 }),
+    (0, typeorm_1.Column)({ default: 1 }),
     __metadata("design:type", Number)
 ], UserBattlePass.prototype, "level", void 0);
 __decorate([
-    typeorm_1.Column('simple-json'),
+    (0, typeorm_1.Column)('simple-json'),
     __metadata("design:type", Array)
 ], UserBattlePass.prototype, "claimedRewards", void 0);
 __decorate([
-    typeorm_1.CreateDateColumn(),
+    (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], UserBattlePass.prototype, "created", void 0);
 __decorate([
-    typeorm_1.UpdateDateColumn(),
+    (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
 ], UserBattlePass.prototype, "updated", void 0);
 UserBattlePass = __decorate([
-    typeorm_1.Entity()
+    (0, typeorm_1.Entity)()
 ], UserBattlePass);
 exports.UserBattlePass = UserBattlePass;

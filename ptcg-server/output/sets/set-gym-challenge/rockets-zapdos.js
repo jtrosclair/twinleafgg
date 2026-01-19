@@ -34,7 +34,7 @@ class RocketsZapdos extends pokemon_card_1.PokemonCard {
         this.fullName = 'Rocket\'s Zapdos G2';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.discard.cards.some(card => card instanceof game_1.EnergyCard && card.name === 'Lightning Energy')) {
                 state = store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_TO_ACTIVE, player.discard, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE], { superType: card_types_1.SuperType.ENERGY, name: 'Lightning Energy' }, { allowCancel: false, min: 1, max: 1 }), transfers => {
@@ -50,11 +50,11 @@ class RocketsZapdos extends pokemon_card_1.PokemonCard {
                 });
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const checkProvided = new check_effects_1.CheckProvidedEnergyEffect(effect.player, effect.player.active);
             store.reduceEffect(state, checkProvided);
             const lightningCount = checkProvided.energyMap.filter(e => e.provides.includes(card_types_1.CardType.LIGHTNING)).length;
-            prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 10 * lightningCount);
+            (0, prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF)(store, state, effect, 10 * lightningCount);
         }
         return state;
     }

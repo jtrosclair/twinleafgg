@@ -31,7 +31,7 @@ class Rotom extends game_1.PokemonCard {
         this.fullName = 'Rotom DRI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (opponent.hand.cards.length === 0) {
@@ -40,8 +40,8 @@ class Rotom extends game_1.PokemonCard {
             if (opponent.hand.cards.length > 0) {
                 const randomIndex = Math.floor(Math.random() * opponent.hand.cards.length);
                 const randomCard = opponent.hand.cards[randomIndex];
-                prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.deck, { cards: [randomCard], sourceCard: this, sourceEffect: this.attacks[0] });
-                prefabs_1.SHUFFLE_DECK(store, state, opponent);
+                (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck, { cards: [randomCard], sourceCard: this, sourceEffect: this.attacks[0] });
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
             }
         }
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {

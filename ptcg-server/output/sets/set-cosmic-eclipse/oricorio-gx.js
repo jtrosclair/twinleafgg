@@ -45,9 +45,9 @@ class OricorioGX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         //Dance of Tribute
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (!prefabs_1.HAS_MARKER('OPPONENT_KNOCKOUT_MARKER', player, this)) {
+            if (!(0, prefabs_1.HAS_MARKER)('OPPONENT_KNOCKOUT_MARKER', player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             //Once per turn only
@@ -59,7 +59,7 @@ class OricorioGX extends pokemon_card_1.PokemonCard {
             }
             player.deck.moveTo(player.hand, 3);
             player.usedTributeDance = true;
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
         }
         if (effect instanceof game_effects_1.KnockOutEffect) {
             const player = effect.player;
@@ -71,7 +71,7 @@ class OricorioGX extends pokemon_card_1.PokemonCard {
             const cardList = game_1.StateUtils.findCardList(state, this);
             const owner = game_1.StateUtils.findOwner(state, cardList);
             if (owner === player) {
-                prefabs_1.ADD_MARKER('OPPONENT_KNOCKOUT_MARKER', player, this);
+                (0, prefabs_1.ADD_MARKER)('OPPONENT_KNOCKOUT_MARKER', player, this);
             }
             return state;
         }
@@ -80,16 +80,16 @@ class OricorioGX extends pokemon_card_1.PokemonCard {
             const cardList = game_1.StateUtils.findCardList(state, this);
             const owner = game_1.StateUtils.findOwner(state, cardList);
             if (owner === player) {
-                prefabs_1.REMOVE_MARKER('OPPONENT_KNOCKOUT_MARKER', player, this);
+                (0, prefabs_1.REMOVE_MARKER)('OPPONENT_KNOCKOUT_MARKER', player, this);
             }
             player.usedTributeDance = false;
         }
         //Strafe GX
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
         }
         return state;
     }

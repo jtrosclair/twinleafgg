@@ -6,7 +6,7 @@ export declare class Cleffa extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    retreat: never[];
+    retreat: any[];
     powers: {
         name: string;
         useWhenInPlay: boolean;

@@ -42,7 +42,7 @@ class TeamRocketsTyranitar extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.BetweenTurnsEffect) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             if (player.active.getPokemonCard() !== this) {
@@ -56,7 +56,7 @@ class TeamRocketsTyranitar extends pokemon_card_1.PokemonCard {
             return state;
         }
         // Breakthrough Tackle
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             if (!opponent.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                 return state;

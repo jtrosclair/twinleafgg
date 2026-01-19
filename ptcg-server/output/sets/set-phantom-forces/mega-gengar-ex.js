@@ -85,7 +85,7 @@ class MGengarEx extends pokemon_card_1.PokemonCard {
             store.reduceEffect(state, endTurnEffect);
         }
         // Phantom Gate
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = usePhantomGate(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

@@ -45,7 +45,7 @@ class Ditto extends pokemon_card_1.PokemonCard {
             if (!isOpponentDittoInPlay) {
                 return state;
             }
-            if (!prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if (!(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 effect.benchSizes = state.players.map((player, index) => {
                     if (player === owner) {
                         return effect.benchSizes[index];

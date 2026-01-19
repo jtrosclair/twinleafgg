@@ -28,7 +28,7 @@ function* playCard(next, store, state, effect) {
             store.reduceEffect(state, supporterEffect);
         }
         catch (_a) {
-            prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         // playTwoCards = true;
@@ -44,7 +44,7 @@ function* playCard(next, store, state, effect) {
             }
             else {
                 // If no target, effect ends
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return state;
             }
             store.log(state, game_message_1.GameLog.LOG_PLAYER_SWITCHES_POKEMON_TO_ACTIVE, { name: player.name, card: targets[0].getPokemonCard().name });
@@ -70,14 +70,14 @@ function* playCard(next, store, state, effect) {
                         store.reduceEffect(state, supporterEffect);
                     }
                     catch (_a) {
-                        prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                         return state;
                     }
                 }
                 player.active.clearEffects();
                 player.switchPokemon(target[0]);
                 store.log(state, game_message_1.GameLog.LOG_PLAYER_SWITCHES_POKEMON_TO_ACTIVE, { name: player.name, card: target[0].getPokemonCard().name });
-                prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return state;
             });
         });

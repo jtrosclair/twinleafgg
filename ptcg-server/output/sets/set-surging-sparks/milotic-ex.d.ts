@@ -8,7 +8,7 @@ export declare class Miloticex extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: CardType[];
     tags: CardTag[];
     powers: {

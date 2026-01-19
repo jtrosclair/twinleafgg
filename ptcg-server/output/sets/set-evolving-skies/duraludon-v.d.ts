@@ -9,7 +9,7 @@ export declare class DuraludonV extends PokemonCard {
     tags: CardTag[];
     cardType: CardType;
     hp: number;
-    weakness: never[];
+    weakness: any[];
     retreat: CardType[];
     attacks: {
         name: string;

@@ -1,9 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ANY_PRINTING_ALLOWED = void 0;
 /**
  * List of cards where any printing is legal in any format where the card is legal.
  * These cards are considered functionally identical across all printings and can be
  * used regardless of their specific set/printing as long as the card name matches.
  */
-export const ANY_PRINTING_ALLOWED = [
+exports.ANY_PRINTING_ALLOWED = [
     'Pokémon Fan Club',
     'Master Ball',
     'Quick Ball',

@@ -39,7 +39,7 @@ class MegaKangaskhanex extends game_1.PokemonCard {
             const player = effect.player;
             player.usedRunErrand = false;
         }
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.active.getPokemonCard() !== this) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -47,10 +47,10 @@ class MegaKangaskhanex extends game_1.PokemonCard {
             if (player.usedRunErrand === true) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.DRAW_CARDS(player, 2);
+            (0, prefabs_1.DRAW_CARDS)(player, 2);
             player.usedRunErrand = true;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const flipCoin = (heads = 0) => {
                 return store.prompt(state, [

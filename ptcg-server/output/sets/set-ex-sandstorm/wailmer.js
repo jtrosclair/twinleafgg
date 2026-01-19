@@ -34,12 +34,12 @@ class Wailmer extends pokemon_card_1.PokemonCard {
         this.usedSuperHypnoWave = false;
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             this.usedSuperHypnoWave = true;
         }
         if (effect instanceof game_phase_effects_1.AfterAttackEffect && this.usedSuperHypnoWave === true) {
             this.usedSuperHypnoWave = false;
-            prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
+            (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
         }
         return state;
     }

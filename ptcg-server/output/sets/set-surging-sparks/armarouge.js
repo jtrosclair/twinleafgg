@@ -38,13 +38,13 @@ class Armarouge extends pokemon_card_1.PokemonCard {
         this.fullName = 'Armarouge SSP';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const fireEnergy = player.active.cards.filter(card => card instanceof game_1.EnergyCard && card.name === 'Fire Energy');
             const discardEnergy = new attack_effects_1.DiscardCardsEffect(effect, fireEnergy);
             discardEnergy.target = player.active;
             store.reduceEffect(state, discardEnergy);
-            attack_effects_2.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(180, effect, store, state);
+            (0, attack_effects_2.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(180, effect, store, state);
         }
         return state;
     }

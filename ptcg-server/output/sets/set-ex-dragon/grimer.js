@@ -35,12 +35,12 @@ class Grimer extends pokemon_card_1.PokemonCard {
         this.usedPoisonSpurt = false;
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1, card_types_1.CardType.GRASS);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1, card_types_1.CardType.GRASS);
             this.usedPoisonSpurt = true;
         }
         if (effect instanceof game_phase_effects_1.AfterAttackEffect && this.usedPoisonSpurt === true) {
-            prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && this.usedPoisonSpurt) {
             this.usedPoisonSpurt = false;

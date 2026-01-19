@@ -148,42 +148,42 @@ class Avatars extends controller_1.Controller {
     }
 }
 __decorate([
-    controller_1.Get('/available'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/available'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Avatars.prototype, "onGetAvailable", null);
 __decorate([
-    controller_1.Get('/list/:id?'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/list/:id?'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Avatars.prototype, "onList", null);
 __decorate([
-    controller_1.Get('/get/:id'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/get/:id'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Avatars.prototype, "onGet", null);
 __decorate([
-    controller_1.Post('/find'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        id: services_1.check().isNumber(),
-        name: services_1.check().minLength(3).maxLength(32)
+    (0, controller_1.Post)('/find'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        id: (0, services_1.check)().isNumber(),
+        name: (0, services_1.check)().minLength(3).maxLength(32)
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Avatars.prototype, "onFind", null);
 __decorate([
-    controller_1.Post('/markAsDefault'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        id: services_1.check().isNumber()
+    (0, controller_1.Post)('/markAsDefault'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        id: (0, services_1.check)().isNumber()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),

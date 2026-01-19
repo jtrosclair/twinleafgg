@@ -33,7 +33,7 @@ class Greedent extends pokemon_card_1.PokemonCard {
         this.setNumber = '152';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             if (effect.source.tools.length > 0) {
                 effect.damage += 80;
             }

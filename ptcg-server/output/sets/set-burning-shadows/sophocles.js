@@ -20,8 +20,8 @@ function* playCard(next, store, state, effect, self) {
         cards = selected || [];
         next();
     });
-    prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: self });
-    prefabs_1.DRAW_CARDS(player, 4);
+    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: self });
+    (0, prefabs_1.DRAW_CARDS)(player, 4);
 }
 class Sophocles extends trainer_card_1.TrainerCard {
     constructor() {

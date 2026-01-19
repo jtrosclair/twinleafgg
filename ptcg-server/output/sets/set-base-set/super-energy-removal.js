@@ -68,7 +68,7 @@ function* playCard(next, store, state, effect) {
         next();
     });
     target2.moveCardsTo(cards2, opponent.discard);
-    prefabs_1.CLEAN_UP_SUPPORTER(effect, player);
+    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return state;
 }
 class SuperEnergyRemoval extends trainer_card_1.TrainerCard {

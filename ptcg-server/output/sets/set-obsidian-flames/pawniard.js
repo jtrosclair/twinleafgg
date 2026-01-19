@@ -30,15 +30,15 @@ class Pawniard extends pokemon_card_1.PokemonCard {
         this.fullName = 'Pawniard OBF';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             let heads = 0;
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => { if (result) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => { if (result) {
                 heads++;
             } });
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => { if (result) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => { if (result) {
                 heads++;
             } });
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => { if (result) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => { if (result) {
                 heads++;
             } });
             effect.damage = heads * 10;

@@ -46,7 +46,7 @@ class Slowbro extends game_1.PokemonCard {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (opponent.getPrizeLeft() === 1) {
-                return prefabs_1.TAKE_X_PRIZES(store, state, player, 2);
+                return (0, prefabs_1.TAKE_X_PRIZES)(store, state, player, 2);
             }
         }
         return state;

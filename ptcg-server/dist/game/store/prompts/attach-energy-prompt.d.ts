@@ -19,7 +19,7 @@ export interface AttachEnergyOptions {
     validCardTypes?: CardType[];
     maxPerType?: number;
 }
-export declare type AttachEnergyResultType = {
+export type AttachEnergyResultType = {
     to: CardTarget;
     index: number;
 }[];

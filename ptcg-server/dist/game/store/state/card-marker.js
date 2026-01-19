@@ -1,4 +1,7 @@
-export class Marker {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Marker = void 0;
+class Marker {
     constructor() {
         this.markers = [];
     }
@@ -31,3 +34,4 @@ export class Marker {
         this.markers.push({ name });
     }
 }
+exports.Marker = Marker;

@@ -38,12 +38,12 @@ class HisuianZoroarkV extends game_1.PokemonCard {
         this.usedVoidReturn = false;
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             this.usedVoidReturn = true;
         }
         if (effect instanceof game_phase_effects_1.AfterAttackEffect && this.usedVoidReturn) {
             const player = effect.player;
-            prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
             this.usedVoidReturn = false;
         }
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {

@@ -32,8 +32,8 @@ class ProfessorElm extends trainer_card_1.TrainerCard {
                     player.deck.applyOrder(order);
                 });
             }
-            prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 7);
-            prefabs_1.ADD_MARKER(this.PROFESSOR_ELM_MARKER, player, this);
+            (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, 7);
+            (0, prefabs_1.ADD_MARKER)(this.PROFESSOR_ELM_MARKER, player, this);
             player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
         }
@@ -46,7 +46,7 @@ class ProfessorElm extends trainer_card_1.TrainerCard {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
             }
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.PROFESSOR_ELM_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.PROFESSOR_ELM_MARKER, this);
         return state;
     }
 }

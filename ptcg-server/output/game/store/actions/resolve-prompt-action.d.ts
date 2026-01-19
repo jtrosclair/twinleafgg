@@ -3,7 +3,7 @@ import { StateLog } from '../state/state-log';
 export declare class ResolvePromptAction implements Action {
     id: number;
     result: any;
-    log?: StateLog | undefined;
+    log?: StateLog;
     readonly type: string;
-    constructor(id: number, result: any, log?: StateLog | undefined);
+    constructor(id: number, result: any, log?: StateLog);
 }

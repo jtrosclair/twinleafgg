@@ -10,7 +10,7 @@ export declare class Ninjask extends PokemonCard {
     weakness: {
         type: CardType.FIRE;
     }[];
-    retreat: never[];
+    retreat: any[];
     powers: {
         name: string;
         powerType: PowerType;

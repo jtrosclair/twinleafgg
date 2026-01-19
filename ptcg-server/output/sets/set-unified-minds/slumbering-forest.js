@@ -24,24 +24,24 @@ class SlumberingForest extends trainer_card_1.TrainerCard {
             players.forEach(player => {
                 if (player.active.specialConditions.includes(card_types_1.SpecialCondition.ASLEEP)) {
                     // observed as asleep end turn
-                    prefabs_1.ADD_MARKER(this.SLUMBERING_MARKER, player, this);
+                    (0, prefabs_1.ADD_MARKER)(this.SLUMBERING_MARKER, player, this);
                 }
             });
         }
         if (effect instanceof game_phase_effects_1.BeginTurnEffect && game_1.StateUtils.getStadiumCard(state) === this) {
             const players = [effect.player, game_1.StateUtils.getOpponent(state, effect.player)];
             players.forEach(player => {
-                if (!player.active.specialConditions.includes(card_types_1.SpecialCondition.ASLEEP) && prefabs_1.HAS_MARKER(this.SLUMBERING_MARKER, player, this)) {
+                if (!player.active.specialConditions.includes(card_types_1.SpecialCondition.ASLEEP) && (0, prefabs_1.HAS_MARKER)(this.SLUMBERING_MARKER, player, this)) {
                     // heads on first coin flip, now flip again
-                    prefabs_1.COIN_FLIP_PROMPT(store, state, player, (result) => {
+                    (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, (result) => {
                         if (!result) {
                             player.active.addSpecialCondition(card_types_1.SpecialCondition.ASLEEP);
                         }
                     });
-                    prefabs_1.REMOVE_MARKER(this.SLUMBERING_MARKER, player, this);
+                    (0, prefabs_1.REMOVE_MARKER)(this.SLUMBERING_MARKER, player, this);
                 }
                 else {
-                    prefabs_1.REMOVE_MARKER(this.SLUMBERING_MARKER, player, this);
+                    (0, prefabs_1.REMOVE_MARKER)(this.SLUMBERING_MARKER, player, this);
                 }
             });
         }

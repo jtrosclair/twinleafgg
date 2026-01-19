@@ -90,7 +90,7 @@ class NoivernGX extends pokemon_card_1.PokemonCard {
             opponent.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
                 targets.push(cardList);
             });
-            prefabs_1.DAMAGE_OPPONENT_POKEMON(store, state, effect, 50, targets);
+            (0, prefabs_1.DAMAGE_OPPONENT_POKEMON)(store, state, effect, 50, targets);
         }
         return state;
     }

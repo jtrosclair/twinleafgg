@@ -36,22 +36,22 @@ class Aipom extends pokemon_card_1.PokemonCard {
         this.SCAMPERING_TAIL_MARKER = 'SCAMPERING_TAIL_MARKER';
     }
     reduceEffect(store, state, effect) {
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.SCAMPERING_TAIL_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.SCAMPERING_TAIL_MARKER, this);
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            prefabs_1.REMOVE_MARKER(this.SCAMPERING_TAIL_MARKER, player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.SCAMPERING_TAIL_MARKER, player, this);
         }
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (prefabs_1.HAS_MARKER(this.SCAMPERING_TAIL_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.SCAMPERING_TAIL_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             if (opponent.deck.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.ADD_MARKER(this.SCAMPERING_TAIL_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.SCAMPERING_TAIL_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             // Move the top card of the opponent's deck to the bottom of their deck
             const topCard = opponent.deck.cards.shift();
             if (topCard) {

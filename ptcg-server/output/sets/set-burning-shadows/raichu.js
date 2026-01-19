@@ -37,19 +37,19 @@ class Raichu extends game_1.PokemonCard {
         this.fullName = 'Raichu BUS';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.JUST_EVOLVED(effect, this) && !prefabs_1.IS_ABILITY_BLOCKED(store, state, effect.player, this))
-            if (prefabs_1.CONFIRMATION_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.JUST_EVOLVED)(effect, this) && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this))
+            if ((0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, result => {
                 if (result) {
                     const opponent = game_1.StateUtils.getOpponent(state, effect.player);
                     const canApplyAbility = new game_effects_1.EffectOfAbilityEffect(effect.player, this.powers[0], this, opponent.active);
                     store.reduceEffect(state, canApplyAbility);
                     if (canApplyAbility.target) {
-                        prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, opponent, this);
+                        (0, prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE)(store, state, opponent, this);
                     }
                 }
             }))
-                if (prefabs_1.WAS_ATTACK_USED(effect, 0, this))
-                    prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 30);
+                if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this))
+                    (0, prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF)(store, state, effect, 30);
         return state;
     }
 }

@@ -11,7 +11,7 @@ export declare class Frosmoth extends PokemonCard {
     weakness: {
         type: CardType.METAL;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: CardType.COLORLESS[];
     powers: {
         name: string;

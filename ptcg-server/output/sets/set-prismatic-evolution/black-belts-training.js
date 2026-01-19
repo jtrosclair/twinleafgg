@@ -21,7 +21,7 @@ class BlackBeltsTraining extends trainer_card_1.TrainerCard {
         this.BLACK_BELTS_TRAINING_MARKER = 'BLACK_BELTS_TRAINING_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             const supporterTurn = player.supporterTurn;
             if (supporterTurn > 0) {
@@ -29,10 +29,10 @@ class BlackBeltsTraining extends trainer_card_1.TrainerCard {
             }
             supporterTurn == 1;
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
-            prefabs_1.ADD_MARKER(this.BLACK_BELTS_TRAINING_MARKER, player, this);
+            (0, prefabs_1.ADD_MARKER)(this.BLACK_BELTS_TRAINING_MARKER, player, this);
             player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
-        if (prefabs_1.PUT_DAMAGE(effect) && prefabs_1.HAS_MARKER(this.BLACK_BELTS_TRAINING_MARKER, effect.player, this) && effect.damage > 0) {
+        if ((0, prefabs_1.PUT_DAMAGE)(effect) && (0, prefabs_1.HAS_MARKER)(this.BLACK_BELTS_TRAINING_MARKER, effect.player, this) && effect.damage > 0) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const oppActiveCard = effect.target.getPokemonCard();
@@ -43,8 +43,8 @@ class BlackBeltsTraining extends trainer_card_1.TrainerCard {
                 effect.damage += 40;
             }
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && prefabs_1.HAS_MARKER(this.BLACK_BELTS_TRAINING_MARKER, effect.player, this)) {
-            prefabs_1.REMOVE_MARKER(this.BLACK_BELTS_TRAINING_MARKER, effect.player, this);
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.BLACK_BELTS_TRAINING_MARKER, effect.player, this)) {
+            (0, prefabs_1.REMOVE_MARKER)(this.BLACK_BELTS_TRAINING_MARKER, effect.player, this);
         }
         return state;
     }

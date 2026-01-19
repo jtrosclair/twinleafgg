@@ -9,7 +9,7 @@ export declare class Joltik extends PokemonCard {
     weakness: {
         type: CardType.FIGHTING;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;

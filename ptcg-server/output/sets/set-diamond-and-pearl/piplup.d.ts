@@ -13,7 +13,7 @@ export declare class Piplup extends PokemonCard {
     retreat: CardType.COLORLESS[];
     attacks: ({
         name: string;
-        cost: never[];
+        cost: any[];
         damage: number;
         text: string;
         damageCalculation?: undefined;

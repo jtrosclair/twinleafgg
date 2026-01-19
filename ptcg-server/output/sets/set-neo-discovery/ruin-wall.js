@@ -18,7 +18,7 @@ class RuinWall extends trainer_card_1.TrainerCard {
         this.text = 'Search your deck for a card with Unown in its name and put it onto your Bench. Shuffle your deck afterward. (You can\'t play this card if your Bench is full.)';
     }
     reduceEffect(store, state, effect) {
-        if (trainer_prefabs_1.WAS_TRAINER_USED(effect, this)) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             effect.preventDefault = true;
@@ -32,7 +32,7 @@ class RuinWall extends trainer_card_1.TrainerCard {
                 }
             });
             player.supporter.moveCardTo(effect.trainerCard, player.discard);
-            return prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, effect.player, {}, { min: 0, max: 1, blocked });
+            return (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, effect.player, {}, { min: 0, max: 1, blocked });
         }
         return state;
     }

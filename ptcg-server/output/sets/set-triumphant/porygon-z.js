@@ -34,18 +34,18 @@ class PorygonZ extends pokemon_card_1.PokemonCard {
         this.DIMENASIONAL_TRANSFER_MARKER = 'DIMENASIONAL_TRANSFER_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             if (!(player.discard.cards.some(card => card instanceof game_1.TrainerCard
                 && card.trainerType === card_types_1.TrainerType.ITEM))) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            if (prefabs_1.HAS_MARKER(this.DIMENASIONAL_TRANSFER_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.DIMENASIONAL_TRANSFER_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (result) {
                     const deckTop = new game_1.CardList();
                     let cards = [];
@@ -53,7 +53,7 @@ class PorygonZ extends pokemon_card_1.PokemonCard {
                         cards = selected || [];
                         if (cards.length > 0) {
                             cards.forEach(card => {
-                                prefabs_1.MOVE_CARD_TO(state, card, deckTop);
+                                (0, prefabs_1.MOVE_CARD_TO)(state, card, deckTop);
                             });
                             return store.prompt(state, new game_1.OrderCardsPrompt(player.id, game_1.GameMessage.CHOOSE_CARDS_ORDER, deckTop, { allowCancel: false }), order => {
                                 if (order === null) {
@@ -61,26 +61,26 @@ class PorygonZ extends pokemon_card_1.PokemonCard {
                                 }
                                 deckTop.applyOrder(order);
                                 deckTop.moveToTopOfDestination(player.deck);
-                                prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
+                                (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
                             });
                         }
                         return state;
                     });
                 }
             });
-            prefabs_1.ABILITY_USED(player, this);
-            prefabs_1.ADD_MARKER(this.DIMENASIONAL_TRANSFER_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.DIMENASIONAL_TRANSFER_MARKER, player, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.DIMENASIONAL_TRANSFER_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.DIMENASIONAL_TRANSFER_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasRainbowEnergy = player.active.cards.some(card => card.name === 'Rainbow Energy');
             if (hasRainbowEnergy) {
                 return state;
             }
             else {
-                prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 20);
-                prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, this);
+                (0, prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF)(store, state, effect, 20);
+                (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, player, this);
             }
         }
         return state;

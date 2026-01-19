@@ -40,10 +40,10 @@ class Yanma extends pokemon_card_1.PokemonCard {
         this.usedShockwave = false;
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.COIN_FLIP_PROMPT(store, state, player, result => {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                 if (result) {
                     opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card) => {
                         const damageEffect = new attack_effects_1.PutDamageEffect(effect, 10);
@@ -70,8 +70,8 @@ class Yanma extends pokemon_card_1.PokemonCard {
                 this.usedShockwave = false;
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            attack_effects_2.THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS(store, state, effect, 30);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, attack_effects_2.THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS)(store, state, effect, 30);
         }
         return state;
     }

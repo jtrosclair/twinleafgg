@@ -71,12 +71,12 @@ class PrimalGroudonEx extends pokemon_card_1.PokemonCard {
             effect.preventDefault = true;
         }
         // Gaia Volcano
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (game_1.StateUtils.getStadiumCard(state) === undefined) {
                 return state;
             }
             effect.damage += 100;
-            prefabs_1.DISCARD_A_STADIUM_CARD_IN_PLAY(state);
+            (0, prefabs_1.DISCARD_A_STADIUM_CARD_IN_PLAY)(state);
         }
         return state;
     }

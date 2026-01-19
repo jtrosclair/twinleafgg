@@ -40,7 +40,7 @@ class Gothitelle extends pokemon_card_1.PokemonCard {
         this.DISTORTED_FUTURE_MARKER = 'DISTORTED_FUTURE_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Can't use ability if already used
@@ -48,12 +48,12 @@ class Gothitelle extends pokemon_card_1.PokemonCard {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             player.marker.addMarker(this.DISTORTED_FUTURE_MARKER, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             if (player.active.getPokemonCard() !== this) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            prefabs_1.MOVE_CARDS(store, state, opponent.hand, opponent.deck, { sourceCard: this });
-            prefabs_1.DRAW_CARDS(opponent, 3);
+            (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck, { sourceCard: this });
+            (0, prefabs_1.DRAW_CARDS)(opponent, 3);
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
             const player = effect.player;
@@ -64,7 +64,7 @@ class Gothitelle extends pokemon_card_1.PokemonCard {
             player.marker.removeMarker(this.DISTORTED_FUTURE_MARKER, this);
             return state;
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (player.hand.cards.length === opponent.hand.cards.length) {

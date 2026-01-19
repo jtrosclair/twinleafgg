@@ -27,7 +27,7 @@ class Phanpy extends pokemon_card_1.PokemonCard {
         this.setNumber = '77';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             effect.damage = effect.player.active.damage;
         }
         return state;

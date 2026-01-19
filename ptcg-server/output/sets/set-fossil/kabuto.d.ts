@@ -8,7 +8,7 @@ export declare class Kabuto extends PokemonCard {
     weakness: {
         type: CardType.GRASS;
     }[];
-    resistance: never[];
+    resistance: any[];
     retreat: CardType.COLORLESS[];
     powers: {
         name: string;

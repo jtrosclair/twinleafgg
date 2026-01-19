@@ -50,7 +50,7 @@ class CafeMaster extends trainer_card_1.TrainerCard {
                     player.deck.moveCardTo(transfer.card, target);
                 }
                 // Always shuffle deck after energy attachment (or no attachment)
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
             // Move supporter card to discard pile
             player.supporter.moveCardTo(effect.trainerCard, player.discard);
@@ -58,7 +58,7 @@ class CafeMaster extends trainer_card_1.TrainerCard {
             const playerActive = player.active.getPokemonCard();
             if (playerActive &&
                 playerActive.fullName !== 'Alcremie BRS' &&
-                !prefabs_1.IS_ABILITY_BLOCKED(store, state, player, playerActive)) {
+                !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, playerActive)) {
                 const endTurnEffect = new game_phase_effects_1.EndTurnEffect(player);
                 return store.reduceEffect(state, endTurnEffect);
             }

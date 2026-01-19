@@ -36,14 +36,14 @@ class Deoxysex extends pokemon_card_1.PokemonCard {
         this.FORME_CHANGE_MARKER = 'FORME_CHANGE_MARKER';
     }
     reduceEffect(store, state, effect) {
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.FORME_CHANGE_MARKER, this);
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.FORME_CHANGE_MARKER, this);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const targetCardList = game_1.StateUtils.findCardList(state, this);
             if (!(targetCardList instanceof game_1.PokemonCardList)) {
                 throw new game_1.GameError(game_1.GameMessage.INVALID_TARGET);
             }
-            if (prefabs_1.HAS_MARKER(this.FORME_CHANGE_MARKER, player)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.FORME_CHANGE_MARKER, player)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             const blocked = [];
@@ -68,13 +68,13 @@ class Deoxysex extends pokemon_card_1.PokemonCard {
                 });
                 player.deck.moveCardTo(pokemonCard, targetCardList);
                 targetCardList.moveCardTo(this, player.deck);
-                prefabs_1.SHUFFLE_DECK(store, state, player);
-                prefabs_1.ADD_MARKER(this.FORME_CHANGE_MARKER, player, this);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
+                (0, prefabs_1.ADD_MARKER)(this.FORME_CHANGE_MARKER, player, this);
             });
         }
         // Fastwave
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS(store, state, effect, 50);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS)(store, state, effect, 50);
         }
         return state;
     }

@@ -53,15 +53,15 @@ class Gengar extends pokemon_card_1.PokemonCard {
                 return state;
             }
             store.log(state, game_1.GameLog.LOG_PLAYER_USES_ABILITY, { name: player.name, card: this.name });
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (!result) {
                     return state;
                 }
-                prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, this, {}, { min: 0, max: 2, allowCancel: false }, this.powers[0]);
+                (0, prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND)(store, state, player, this, {}, { min: 0, max: 2, allowCancel: false }, this.powers[0]);
             });
         }
         // Pain Burst
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             effect.damage += 4 * opponent.active.damage;
         }

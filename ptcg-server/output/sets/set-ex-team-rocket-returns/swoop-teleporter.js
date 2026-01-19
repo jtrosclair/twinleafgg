@@ -51,16 +51,16 @@ class SwoopTeleporter extends trainer_card_1.TrainerCard {
                     // Discard the pokemon
                     target[0].cards.forEach(c => {
                         if (c instanceof game_1.PokemonCard && !target[0].energies.cards.includes(c)) {
-                            prefabs_1.MOVE_CARD_TO(state, c, player.discard);
+                            (0, prefabs_1.MOVE_CARD_TO)(state, c, player.discard);
                         }
                     });
                     // Move the selected card to the bench slot
                     cards.forEach((card, index) => {
-                        prefabs_1.MOVE_CARD_TO(state, card, target[0]);
+                        (0, prefabs_1.MOVE_CARD_TO)(state, card, target[0]);
                     });
                     store.log(state, game_message_1.GameLog.LOG_PLAYER_SWITCHES_POKEMON_WITH_POKEMON_FROM_DECK, { name: player.name, card: target[0].getPokemonCard().name, secondCard: cards[0].name });
                     player.supporter.moveCardTo(effect.trainerCard, player.discard);
-                    prefabs_1.SHUFFLE_DECK(store, state, player);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                 });
             });
         }

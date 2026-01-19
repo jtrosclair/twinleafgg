@@ -151,11 +151,11 @@ function* useAttack(next, store, state, effect) {
         yield store.waitPrompt(state, () => next());
     }
     if ((attack.barrage || hasBarragePower) && !effect._barrageUsed) {
-        state = check_effect_1.checkState(store, state);
+        state = (0, check_effect_1.checkState)(store, state);
         if (store.hasPrompts()) {
             yield store.waitPrompt(state, () => next());
         }
-        state = check_effect_1.checkState(store, state);
+        state = (0, check_effect_1.checkState)(store, state);
         if (store.hasPrompts()) {
             yield store.waitPrompt(state, () => next());
         }
@@ -262,11 +262,11 @@ function gameReducer(store, state, effect) {
                 }
                 // Move attached cards to discard
                 if (attachedCards.cards.length > 0) {
-                    state = prefabs_1.MOVE_CARDS(store, state, attachedCards, effect.player.discard);
+                    state = (0, prefabs_1.MOVE_CARDS)(store, state, attachedCards, effect.player.discard);
                 }
                 // Move Pokémon to lost zone
                 if (lostZoned.cards.length > 0) {
-                    state = prefabs_1.MOVE_CARDS(store, state, lostZoned, effect.player.lostzone);
+                    state = (0, prefabs_1.MOVE_CARDS)(store, state, lostZoned, effect.player.lostzone);
                 }
             }
             else {
@@ -277,7 +277,7 @@ function gameReducer(store, state, effect) {
                     effect.target.moveCardTo(tool, effect.player.discard);
                 }
                 effect.target.clearEffects();
-                state = prefabs_1.MOVE_CARDS(store, state, effect.target, effect.player.discard);
+                state = (0, prefabs_1.MOVE_CARDS)(store, state, effect.target, effect.player.discard);
             }
         }
     }

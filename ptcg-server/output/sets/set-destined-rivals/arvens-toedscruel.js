@@ -38,7 +38,7 @@ class ArvensToedscruel extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Pull
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             const hasBench = opponent.bench.some(b => b.cards.length > 0);
@@ -50,8 +50,8 @@ class ArvensToedscruel extends pokemon_card_1.PokemonCard {
             });
         }
         // Reckless Charge
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 30);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF)(store, state, effect, 30);
         }
         return state;
     }

@@ -86,7 +86,7 @@ class KartanaGX extends pokemon_card_1.PokemonCard {
                         let cards = [];
                         return store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, target, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.SPECIAL }, { min: 1, max: 1, allowCancel: false }), selected => {
                             cards = selected;
-                            prefabs_1.MOVE_CARDS(store, state, target, opponent.discard, { cards, sourceCard: this, sourceEffect: this.powers[0] });
+                            (0, prefabs_1.MOVE_CARDS)(store, state, target, opponent.discard, { cards, sourceCard: this, sourceEffect: this.powers[0] });
                         });
                     });
                 }
@@ -108,10 +108,10 @@ class KartanaGX extends pokemon_card_1.PokemonCard {
         // Blade-GX
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
             const player = effect.player;
-            prefabs_1.BLOCK_IF_GX_ATTACK_USED(player);
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             // set GX attack as used for game
             player.usedGX = true;
-            return prefabs_1.TAKE_X_PRIZES(store, state, player, 1);
+            return (0, prefabs_1.TAKE_X_PRIZES)(store, state, player, 1);
         }
         return state;
     }

@@ -31,11 +31,11 @@ class Cascoon extends pokemon_card_1.PokemonCard {
         this.fullName = 'Cascoon M2a';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
             state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_SWITCH_POKEMON), wantToUse => {
                 if (wantToUse) {
-                    prefabs_1.SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
+                    (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
                 }
             });
         }

@@ -52,7 +52,7 @@ class DialgaGLVX extends pokemon_card_1.PokemonCard {
             if (effect.card.tags.includes(card_types_1.CardTag.POKEMON_SP)) {
                 return state;
             }
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, owner, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, owner, this)) {
                 return state;
             }
             let isThisInPlay = false;
@@ -67,7 +67,7 @@ class DialgaGLVX extends pokemon_card_1.PokemonCard {
             throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_ABILITY);
         }
         // Remove Lost
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             let numFlips = 0;
@@ -84,7 +84,7 @@ class DialgaGLVX extends pokemon_card_1.PokemonCard {
                 return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_ENERGIES_TO_DISCARD, opponent.active, { superType: card_types_1.SuperType.ENERGY }, { min: 0, max: numFlips, allowCancel: false }), selected => {
                     const cards = selected || [];
                     if (cards.length > 0) {
-                        prefabs_1.MOVE_CARDS(store, state, opponent.active, opponent.lostzone, { cards: cards });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, opponent.active, opponent.lostzone, { cards: cards });
                     }
                     return state;
                 });

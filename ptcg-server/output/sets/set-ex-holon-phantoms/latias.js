@@ -80,8 +80,8 @@ class Latias extends pokemon_card_1.PokemonCard {
             }
         }
         // Spearhead
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.DRAW_CARDS(effect.player, 1);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.DRAW_CARDS)(effect.player, 1);
         }
         return state;
     }

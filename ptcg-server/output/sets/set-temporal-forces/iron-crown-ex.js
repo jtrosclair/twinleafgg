@@ -68,7 +68,7 @@ class IronCrownex extends pokemon_card_1.PokemonCard {
             const source = effect.source.getPokemonCard();
             if (state.phase === game_1.GamePhase.ATTACK &&
                 source.tags.includes(card_types_1.CardTag.FUTURE) && source.name !== 'Iron Crown ex' &&
-                effect.target === opponent.active && effect.damage > 0 && !prefabs_1.IS_ABILITY_BLOCKED(store, state, player, this)) {
+                effect.target === opponent.active && effect.damage > 0 && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 effect.damage += 20;
             }
         }

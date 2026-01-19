@@ -46,14 +46,14 @@ class Gardevoir extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
-            prefabs_1.REMOVE_MARKER(this.ENERGY_JUMP_MARKER, effect.player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.ENERGY_JUMP_MARKER, effect.player, this);
         }
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (prefabs_1.HAS_MARKER(this.ENERGY_JUMP_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.ENERGY_JUMP_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             const blockedMap = [];
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
                 const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, cardList);
@@ -85,8 +85,8 @@ class Gardevoir extends game_1.PokemonCard {
                     return;
                 }
                 for (const transfer of transfers) {
-                    prefabs_1.ADD_MARKER(this.ENERGY_JUMP_MARKER, player, this);
-                    prefabs_1.ABILITY_USED(player, this);
+                    (0, prefabs_1.ADD_MARKER)(this.ENERGY_JUMP_MARKER, player, this);
+                    (0, prefabs_1.ABILITY_USED)(player, this);
                     const source = game_1.StateUtils.getTarget(state, player, transfer.from);
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
                     if (transfer.card instanceof game_1.PokemonCard) {
@@ -112,11 +112,11 @@ class Gardevoir extends game_1.PokemonCard {
                 return state;
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.ENERGY_JUMP_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
-            attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(effect.player.active.damage, effect, store, state);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.ENERGY_JUMP_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(effect.player.active.damage, effect, store, state);
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             //Get number of benched pokemon

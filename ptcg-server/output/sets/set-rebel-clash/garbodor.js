@@ -37,27 +37,27 @@ class Garbodor extends pokemon_card_1.PokemonCard {
         this.POISON_STRUCTURE_MARKER = 'POISON_STRUCTURE_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const stadiumCard = game_1.StateUtils.getStadiumCard(state);
             if (stadiumCard === undefined) {
                 throw new game_1.GameError(game_message_1.GameMessage.CANNOT_USE_POWER);
             }
-            if (prefabs_1.HAS_MARKER(this.POISON_STRUCTURE_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.POISON_STRUCTURE_MARKER, player, this)) {
                 throw new game_1.GameError(game_message_1.GameMessage.POWER_ALREADY_USED);
             }
             if (opponent.active) {
-                prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
+                (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, opponent, this);
             }
-            prefabs_1.ADD_MARKER(this.POISON_STRUCTURE_MARKER, player, this);
-            prefabs_1.ABILITY_USED(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.POISON_STRUCTURE_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
         }
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            prefabs_1.REMOVE_MARKER(this.POISON_STRUCTURE_MARKER, player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.POISON_STRUCTURE_MARKER, player, this);
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.POISON_STRUCTURE_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.POISON_STRUCTURE_MARKER, this);
         return state;
     }
 }

@@ -40,10 +40,10 @@ class UnownHAND extends pokemon_card_1.PokemonCard {
             }
             if (player.hand.cards.length >= 35) {
                 if (owner === 0) {
-                    state = check_effect_1.endGame(store, state, game_2.GameWinner.PLAYER_1);
+                    state = (0, check_effect_1.endGame)(store, state, game_2.GameWinner.PLAYER_1);
                 }
                 if (owner === 1) {
-                    state = check_effect_1.endGame(store, state, game_2.GameWinner.PLAYER_2);
+                    state = (0, check_effect_1.endGame)(store, state, game_2.GameWinner.PLAYER_2);
                 }
             }
             return state;

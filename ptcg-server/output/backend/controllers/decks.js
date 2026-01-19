@@ -306,8 +306,8 @@ class Decks extends controller_1.Controller {
         // Get all matches that have deck IDs but may be missing secondary archetypes
         const matches = await storage_1.Match.find({
             where: [
-                { player1DeckId: typeorm_1.Not(typeorm_1.IsNull()) },
-                { player2DeckId: typeorm_1.Not(typeorm_1.IsNull()) }
+                { player1DeckId: (0, typeorm_1.Not)((0, typeorm_1.IsNull)()) },
+                { player2DeckId: (0, typeorm_1.Not)((0, typeorm_1.IsNull)()) }
             ],
             relations: ['player1', 'player2']
         });
@@ -379,78 +379,78 @@ class Decks extends controller_1.Controller {
     }
 }
 __decorate([
-    controller_1.Get('/list'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/list'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Decks.prototype, "onList", null);
 __decorate([
-    controller_1.Get('/get/:id'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/get/:id'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Decks.prototype, "onGet", null);
 __decorate([
-    controller_1.Post('/save'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        name: services_1.check().minLength(3).maxLength(32),
-        cards: services_1.check().required()
+    (0, controller_1.Post)('/save'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        name: (0, services_1.check)().minLength(3).maxLength(32),
+        cards: (0, services_1.check)().required()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Decks.prototype, "onSave", null);
 __decorate([
-    controller_1.Post('/delete'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        id: services_1.check().isNumber()
+    (0, controller_1.Post)('/delete'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        id: (0, services_1.check)().isNumber()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Decks.prototype, "onDelete", null);
 __decorate([
-    controller_1.Post('/rename'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        id: services_1.check().isNumber(),
-        name: services_1.check().minLength(3).maxLength(32),
+    (0, controller_1.Post)('/rename'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        id: (0, services_1.check)().isNumber(),
+        name: (0, services_1.check)().minLength(3).maxLength(32),
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Decks.prototype, "onRename", null);
 __decorate([
-    controller_1.Post('/duplicate'),
-    services_1.AuthToken(),
-    services_1.Validate({
-        id: services_1.check().isNumber(),
-        name: services_1.check().minLength(3).maxLength(32),
+    (0, controller_1.Post)('/duplicate'),
+    (0, services_1.AuthToken)(),
+    (0, services_1.Validate)({
+        id: (0, services_1.check)().isNumber(),
+        name: (0, services_1.check)().minLength(3).maxLength(32),
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Decks.prototype, "onDuplicate", null);
 __decorate([
-    controller_1.Get('/stats/:deckId'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/stats/:deckId'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Decks.prototype, "onStats", null);
 __decorate([
-    controller_1.Post('/backfill-secondary-archetypes'),
-    services_1.AuthToken(),
+    (0, controller_1.Post)('/backfill-secondary-archetypes'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Decks.prototype, "onBackfillSecondaryArchetypes", null);
 __decorate([
-    controller_1.Post('/validate-formats'),
+    (0, controller_1.Post)('/validate-formats'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)

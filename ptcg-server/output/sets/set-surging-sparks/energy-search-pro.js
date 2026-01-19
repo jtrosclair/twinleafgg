@@ -29,7 +29,7 @@ function* playCard(next, store, state, effect) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.CAN_ONLY_SELECT_TWO_DIFFERENT_ENERGY_TYPES);
             }
         }
-        prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
+        (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
         player.deck.moveCardsTo(cards, player.hand);
         player.supporter.moveCardTo(effect.trainerCard, player.discard);
     });

@@ -52,7 +52,7 @@ class Wobbuffet extends game_1.PokemonCard {
             if (!isWobbuffetInPlay) {
                 return state;
             }
-            if (prefabs_1.IS_POKEBODY_BLOCKED(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const pokemonCard = opponent.active.getPokemonCard();
@@ -60,7 +60,7 @@ class Wobbuffet extends game_1.PokemonCard {
                 effect.cost.push(game_1.CardType.COLORLESS);
             }
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
                 if (cardList.getPokemonCard() === this) {
@@ -77,7 +77,7 @@ class Wobbuffet extends game_1.PokemonCard {
                 }
             });
         }
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             effect.player.marker.addMarker(this.KNOCKOUT_MARKER, this);

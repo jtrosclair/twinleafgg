@@ -53,7 +53,7 @@ class Acerola extends trainer_card_1.TrainerCard {
                     const tools = [...cardList.tools];
                     // Move other cards to hand
                     if (otherCards.length > 0) {
-                        prefabs_1.MOVE_CARDS(store, state, cardList, player.hand, { cards: otherCards });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.hand, { cards: otherCards });
                     }
                     // Move tools to hand explicitly
                     for (const tool of tools) {
@@ -61,9 +61,9 @@ class Acerola extends trainer_card_1.TrainerCard {
                     }
                     // Move Pokémon to hand
                     if (pokemons.length > 0) {
-                        prefabs_1.MOVE_CARDS(store, state, cardList, player.hand, { cards: pokemons });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.hand, { cards: pokemons });
                     }
-                    prefabs_1.MOVE_CARD_TO(state, effect.trainerCard, player.discard);
+                    (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
                 }
             });
         }

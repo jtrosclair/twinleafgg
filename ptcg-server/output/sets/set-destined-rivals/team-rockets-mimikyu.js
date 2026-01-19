@@ -74,7 +74,7 @@ class TeamRocketsMimikyu extends pokemon_card_1.PokemonCard {
         this.fullName = 'Team Rocket\'s Mimikyu DRI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useGemstoneHunt(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

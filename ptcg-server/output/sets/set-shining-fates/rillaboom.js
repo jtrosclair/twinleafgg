@@ -55,16 +55,16 @@ class Rillaboom extends pokemon_card_1.PokemonCard {
             return store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_TO_BENCH, player.deck, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH, game_1.SlotType.ACTIVE], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Grass Energy' }, { allowCancel: true, min: 0, max: 2, sameTarget: true }), transfers => {
                 transfers = transfers || [];
                 player.marker.addMarker(this.VOLTAGE_BEAT_MARKER, this);
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 for (const transfer of transfers) {
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
                     player.deck.moveCardTo(transfer.card, target);
                 }
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && prefabs_1.HAS_MARKER(this.VOLTAGE_BEAT_MARKER, effect.player, this)) {
-            prefabs_1.REMOVE_MARKER(this.VOLTAGE_BEAT_MARKER, effect.player, this);
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.VOLTAGE_BEAT_MARKER, effect.player, this)) {
+            (0, prefabs_1.REMOVE_MARKER)(this.VOLTAGE_BEAT_MARKER, effect.player, this);
         }
         return state;
     }

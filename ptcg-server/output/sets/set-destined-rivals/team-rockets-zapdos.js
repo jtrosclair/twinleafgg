@@ -39,10 +39,10 @@ class TeamRocketsZapdos extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Jamming Wave
-        if (prefabs_1.WAS_ATTACK_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
-            prefabs_1.CONFIRMATION_PROMPT(store, state, player, result => {
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
                     if (!opponent.bench.some(b => b.cards.length > 0)) {
                         return state;
@@ -61,7 +61,7 @@ class TeamRocketsZapdos extends pokemon_card_1.PokemonCard {
             });
         }
         // Bad Thunder
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             if (effect.player.active.cards.some(c => c instanceof game_1.EnergyCard && c.name === 'Team Rocket Energy')) {
                 effect.damage += 60;
             }

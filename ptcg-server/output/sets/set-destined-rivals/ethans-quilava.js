@@ -34,24 +34,24 @@ class EthansQuilava extends game_1.PokemonCard {
         this.ADVENTURE_BOUND_MARKER = 'ADVENTURE_BOUND';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            prefabs_1.BLOCK_EFFECT_IF_MARKER(this.ADVENTURE_BOUND_MARKER, player, this);
-            prefabs_1.BLOCK_IF_DECK_EMPTY(player);
+            (0, prefabs_1.BLOCK_EFFECT_IF_MARKER)(this.ADVENTURE_BOUND_MARKER, player, this);
+            (0, prefabs_1.BLOCK_IF_DECK_EMPTY)(player);
             state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, { name: 'Ethan\'s Adventure' }, { min: 0, max: 1 }), cards => {
                 if (!cards || cards.length === 0) {
-                    prefabs_1.SHUFFLE_DECK(store, state, player);
+                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                     return state;
                 }
-                prefabs_1.SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-                prefabs_1.MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: this, sourceEffect: this.powers[0] });
-                prefabs_1.ADD_MARKER(this.ADVENTURE_BOUND_MARKER, player, this);
-                prefabs_1.ABILITY_USED(player, this);
-                prefabs_1.SHUFFLE_DECK(store, state, player);
+                (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
+                (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: this, sourceEffect: this.powers[0] });
+                (0, prefabs_1.ADD_MARKER)(this.ADVENTURE_BOUND_MARKER, player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.ADVENTURE_BOUND_MARKER, this);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.ADVENTURE_BOUND_MARKER, this);
         return state;
     }
 }

@@ -49,14 +49,14 @@ class Meganiumex extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            prefabs_1.REMOVE_MARKER(this.NURTURE_AND_HEAL_MARKER, player, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.NURTURE_AND_HEAL_MARKER, player, this);
         }
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (prefabs_1.HAS_MARKER(this.NURTURE_AND_HEAL_MARKER, player, this)) {
+            if ((0, prefabs_1.HAS_MARKER)(this.NURTURE_AND_HEAL_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+            (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             if (!player.hand.cards.some(card => card.superType === card_types_1.SuperType.ENERGY && card.name === 'Grass Energy')) {
                 return state;
             }
@@ -67,21 +67,21 @@ class Meganiumex extends pokemon_card_1.PokemonCard {
                     return state;
                 }
                 for (const transfer of transfers) {
-                    prefabs_1.ADD_MARKER(this.NURTURE_AND_HEAL_MARKER, player, this);
-                    prefabs_1.ABILITY_USED(player, this);
+                    (0, prefabs_1.ADD_MARKER)(this.NURTURE_AND_HEAL_MARKER, player, this);
+                    (0, prefabs_1.ABILITY_USED)(player, this);
                     //Attaching energy
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                    prefabs_1.MOVE_CARD_TO(state, transfer.card, target);
+                    (0, prefabs_1.MOVE_CARD_TO)(state, transfer.card, target);
                     //Heal 30 from target
                     const healEffect = new game_effects_1.HealEffect(player, target, 10);
                     state = store.reduceEffect(state, healEffect);
                 }
             });
         }
-        prefabs_1.REMOVE_MARKER_AT_END_OF_TURN(effect, this.NURTURE_AND_HEAL_MARKER, this);
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1);
-            attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED(store, state, effect);
+        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.NURTURE_AND_HEAL_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1);
+            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED)(store, state, effect);
         }
         return state;
     }

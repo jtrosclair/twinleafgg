@@ -1,16 +1,19 @@
-import { Prompt } from './prompt';
-import { PlayerType, SlotType } from '../actions/play-card-action';
-import { GameError } from '../../game-error';
-import { GameMessage } from '../../game-message';
-import { StateUtils } from '../state-utils';
-export const ChoosePokemonPromptType = 'Choose pokemon';
-export class ChoosePokemonPrompt extends Prompt {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ChoosePokemonPrompt = exports.ChoosePokemonPromptType = void 0;
+const prompt_1 = require("./prompt");
+const play_card_action_1 = require("../actions/play-card-action");
+const game_error_1 = require("../../game-error");
+const game_message_1 = require("../../game-message");
+const state_utils_1 = require("../state-utils");
+exports.ChoosePokemonPromptType = 'Choose pokemon';
+class ChoosePokemonPrompt extends prompt_1.Prompt {
     constructor(playerId, message, playerType, slots, options) {
         super(playerId);
         this.message = message;
         this.playerType = playerType;
         this.slots = slots;
-        this.type = ChoosePokemonPromptType;
+        this.type = exports.ChoosePokemonPromptType;
         // Default options
         this.options = Object.assign({}, {
             min: 1,
@@ -21,16 +24,16 @@ export class ChoosePokemonPrompt extends Prompt {
     }
     decode(result, state) {
         if (result === null) {
-            return result; // operation cancelled
+            return null; // operation cancelled
         }
         const player = state.players.find(p => p.id === this.playerId);
         const opponent = state.players.find(p => p.id !== this.playerId);
         if (player === undefined || opponent === undefined) {
-            throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+            throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_PROMPT_RESULT);
         }
         return result.map(target => {
-            const p = target.player === PlayerType.BOTTOM_PLAYER ? player : opponent;
-            return target.slot === SlotType.ACTIVE ? p.active : p.bench[target.index];
+            const p = target.player === play_card_action_1.PlayerType.BOTTOM_PLAYER ? player : opponent;
+            return target.slot === play_card_action_1.SlotType.ACTIVE ? p.active : p.bench[target.index];
         });
     }
     validate(result, state) {
@@ -47,10 +50,11 @@ export class ChoosePokemonPrompt extends Prompt {
         if (player === undefined) {
             return false;
         }
-        const blocked = this.options.blocked.map(b => StateUtils.getTarget(state, player, b));
+        const blocked = this.options.blocked.map(b => state_utils_1.StateUtils.getTarget(state, player, b));
         if (result.some(r => blocked.includes(r))) {
             return false;
         }
         return true;
     }
 }
+exports.ChoosePokemonPrompt = ChoosePokemonPrompt;

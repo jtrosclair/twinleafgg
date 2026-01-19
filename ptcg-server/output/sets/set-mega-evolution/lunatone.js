@@ -34,7 +34,7 @@ class Lunatone extends pokemon_card_1.PokemonCard {
         this.fullName = 'Lunatone M1L';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_POWER_USED(effect, 0, this)) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.usedLunarCycle == true) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -63,9 +63,9 @@ class Lunatone extends pokemon_card_1.PokemonCard {
                     return;
                 }
                 player.hand.moveCardsTo(cards, player.discard);
-                prefabs_1.DRAW_CARDS(player, 3);
+                (0, prefabs_1.DRAW_CARDS)(player, 3);
                 player.usedLunarCycle = true;
-                prefabs_1.ABILITY_USED(player, this);
+                (0, prefabs_1.ABILITY_USED)(player, this);
             });
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {

@@ -35,7 +35,7 @@ class TeamRocketsSneasel extends game_1.PokemonCard {
         this.fullName = 'Team Rocket\'s Sneasel DRI';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             const targets = opponent.bench.filter(b => b.cards.length > 0);

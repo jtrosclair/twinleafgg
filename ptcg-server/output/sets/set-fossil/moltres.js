@@ -49,7 +49,7 @@ class Moltres extends pokemon_card_1.PokemonCard {
                 const discardEnergy = new attack_effects_1.DiscardCardsEffect(effect, energy);
                 discardEnergy.target = player.active;
                 store.reduceEffect(state, discardEnergy);
-                state = prefabs_1.MOVE_CARDS(store, state, opponent.deck, opponent.discard, { count: energy.length });
+                state = (0, prefabs_1.MOVE_CARDS)(store, state, opponent.deck, opponent.discard, { count: energy.length });
                 // opponent.deck.moveTo(opponent.discard, energy.length);
             });
         }

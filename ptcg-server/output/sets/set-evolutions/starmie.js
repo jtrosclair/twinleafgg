@@ -46,8 +46,8 @@ function* useSpaceBeacon(next, store, state, effect, self) {
             cardList.addBoardEffect(card_types_1.BoardEffect.ABILITY_USED);
         }
     });
-    prefabs_1.MOVE_CARDS(store, state, player.hand, player.discard, { cards: cards, sourceCard: self, sourceEffect: self.powers[0] });
-    prefabs_1.MOVE_CARDS(store, state, player.discard, player.hand, { cards: recovered, sourceCard: self, sourceEffect: self.powers[0] });
+    (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: cards, sourceCard: self, sourceEffect: self.powers[0] });
+    (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: recovered, sourceCard: self, sourceEffect: self.powers[0] });
     return state;
 }
 class Starmie extends pokemon_card_1.PokemonCard {
@@ -100,10 +100,10 @@ class Starmie extends pokemon_card_1.PokemonCard {
             player.marker.addMarker(this.SPACE_BEACON_MARKER, this);
             return generator.next().value;
         }
-        if (prefabs_1.AFTER_ATTACK(effect, 0, this)) {
-            prefabs_1.COIN_FLIP_PROMPT(store, state, effect.player, result => {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result === true) {
-                    prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+                    (0, prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
                 }
             });
         }

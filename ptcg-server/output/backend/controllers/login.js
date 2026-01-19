@@ -82,7 +82,7 @@ class Login extends controller_1.Controller {
             res.send({ error: errors_1.ApiErrorEnum.USER_BANNED });
             return;
         }
-        const token = services_1.generateToken(user.id);
+        const token = (0, services_1.generateToken)(user.id);
         res.send({
             ok: true,
             token,
@@ -96,7 +96,7 @@ class Login extends controller_1.Controller {
     }
     async onRefreshToken(req, res) {
         const userId = req.body.userId;
-        const token = services_1.generateToken(userId);
+        const token = (0, services_1.generateToken)(userId);
         res.send({ ok: true, token, config: this.getServerConfig() });
     }
     onLogout(req, res) {
@@ -118,7 +118,7 @@ class Login extends controller_1.Controller {
         user.roleId = 2; // Regular user role
         user.registered = Date.now();
         const updatedUser = await user.save();
-        const token = services_1.generateToken(user.id);
+        const token = (0, services_1.generateToken)(user.id);
         res.send({
             ok: true,
             token,
@@ -146,48 +146,48 @@ class Login extends controller_1.Controller {
     }
 }
 __decorate([
-    controller_1.Post('/register'),
-    services_1.Validate({
-        name: services_1.check().isName(),
-        email: services_1.check().isEmail(),
-        password: services_1.check().isPassword()
+    (0, controller_1.Post)('/register'),
+    (0, services_1.Validate)({
+        name: (0, services_1.check)().isName(),
+        email: (0, services_1.check)().isEmail(),
+        password: (0, services_1.check)().isPassword()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)
 ], Login.prototype, "onRegister", null);
 __decorate([
-    controller_1.Post(''),
-    services_1.Validate({
-        name: services_1.check().isName(),
-        password: services_1.check().isString()
+    (0, controller_1.Post)(''),
+    (0, services_1.Validate)({
+        name: (0, services_1.check)().isName(),
+        password: (0, services_1.check)().isString()
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Login.prototype, "onLogin", null);
 __decorate([
-    controller_1.Get('/refreshToken'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/refreshToken'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Login.prototype, "onRefreshToken", null);
 __decorate([
-    controller_1.Get('/logout'),
-    services_1.AuthToken(),
+    (0, controller_1.Get)('/logout'),
+    (0, services_1.AuthToken)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], Login.prototype, "onLogout", null);
 __decorate([
-    controller_1.Get('/info'),
+    (0, controller_1.Get)('/info'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], Login.prototype, "onInfo", null);
 __decorate([
-    controller_1.Post('/anonymous'),
+    (0, controller_1.Post)('/anonymous'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)

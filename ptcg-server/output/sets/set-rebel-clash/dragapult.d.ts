@@ -14,7 +14,7 @@ export declare class Dragapult extends PokemonCard {
         type: CardType;
         value: number;
     }[];
-    retreat: never[];
+    retreat: any[];
     powers: Power[];
     attacks: {
         name: string;

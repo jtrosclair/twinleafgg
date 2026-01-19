@@ -33,8 +33,8 @@ class Scyther extends pokemon_card_1.PokemonCard {
         this.fullName = 'Scyther MD';
     }
     reduceEffect(store, state, effect) {
-        if (prefabs_1.WAS_ATTACK_USED(effect, 1, this)) {
-            prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT(store, state, effect.player, 3, result => {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, effect.player, 3, result => {
                 const results = result.filter(r => r === true);
                 let damageBonus = 0;
                 if (results.length === 1) {
@@ -46,7 +46,7 @@ class Scyther extends pokemon_card_1.PokemonCard {
                 else if (results.length === 3) {
                     damageBonus = 40;
                 }
-                prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE(effect, store, state, damageBonus);
+                (0, prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE)(effect, store, state, damageBonus);
             });
         }
         return state;

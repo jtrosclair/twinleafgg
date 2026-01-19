@@ -62,7 +62,7 @@ class Mew extends pokemon_card_1.PokemonCard {
                         return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_PICK_UP, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { blocked: blocked, allowCancel: false }), result => {
                             const cardList = result.length > 0 ? result[0] : null;
                             if (cardList !== null) {
-                                prefabs_1.DEVOLVE_POKEMON(store, state, cardList, opponent.hand);
+                                (0, prefabs_1.DEVOLVE_POKEMON)(store, state, cardList, opponent.hand);
                             }
                         });
                     }
@@ -80,7 +80,7 @@ class Mew extends pokemon_card_1.PokemonCard {
                         return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_PICK_UP, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { blocked: blocked2, allowCancel: false }), result => {
                             const cardList = result.length > 0 ? result[0] : null;
                             if (cardList !== null) {
-                                prefabs_1.DEVOLVE_POKEMON(store, state, cardList, player.hand);
+                                (0, prefabs_1.DEVOLVE_POKEMON)(store, state, cardList, player.hand);
                             }
                         });
                     }
