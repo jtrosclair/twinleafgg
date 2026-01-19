@@ -221,7 +221,7 @@ export class ReconnectionConfigValidator {
       maxAutoReconnectAttempts: 3,
       reconnectIntervals: [5000, 10000, 15000], // 5s, 10s, 15s
       healthCheckIntervalMs: 30 * 1000, // 30 seconds
-      cleanupIntervalMs: 60 * 1000, // 1 minute
+      cleanupIntervalMs: 600 * 1000, // 1 minute
       maxPreservedSessionsPerUser: 1
     };
   }

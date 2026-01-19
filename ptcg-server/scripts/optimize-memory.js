@@ -33,7 +33,7 @@ const memoryOptimizations = {
   // Memory monitoring configuration
   memoryConfig: {
     cleanupIntervalMs: 60000, // 1 minute
-    memoryCleanupThresholdMb: 500,
+    memoryCleanupThresholdMb: 1000,
     maxSessionAge: 6 * 60 * 60 * 1000, // 6 hours
     enableStateCompression: true,
     maxStateSize: 1024 * 1024 // 1MB

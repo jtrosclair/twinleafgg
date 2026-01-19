@@ -19,9 +19,9 @@ class ReconnectionCleanupService {
             totalCleanupOperations: 0
         };
         this.config = {
-            cleanupIntervalMs: 2 * 60 * 1000,
-            databaseOptimizationIntervalMs: 30 * 60 * 1000,
-            memoryCleanupThresholdMb: 500,
+            cleanupIntervalMs: 10 * 60 * 1000,
+            databaseOptimizationIntervalMs: 300 * 60 * 1000,
+            memoryCleanupThresholdMb: 1000,
             maxSessionAge: 6 * 60 * 60 * 1000,
             enableScheduledCleanup: true,
             enableDatabaseOptimization: true,
@@ -429,7 +429,7 @@ class ReconnectionCleanupService {
                 try {
                     // For MySQL, use OPTIMIZE TABLE to optimize the database
                     // For SQLite, this would be VACUUM
-                    await disconnected_session_1.DisconnectedSession.query(`OPTIMIZE TABLE ${tableName}`);
+                    //await DisconnectedSession.query(`OPTIMIZE TABLE ${tableName}`);
                     const tableDuration = Date.now() - tableStartTime;
                     logger_1.logger.logStructured({
                         level: logger_1.LogLevel.INFO,

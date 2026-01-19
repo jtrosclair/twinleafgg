@@ -200,7 +200,7 @@ class ReconnectionConfigValidator {
             maxAutoReconnectAttempts: 3,
             reconnectIntervals: [5000, 10000, 15000],
             healthCheckIntervalMs: 30 * 1000,
-            cleanupIntervalMs: 60 * 1000,
+            cleanupIntervalMs: 600 * 1000,
             maxPreservedSessionsPerUser: 1
         };
     }
