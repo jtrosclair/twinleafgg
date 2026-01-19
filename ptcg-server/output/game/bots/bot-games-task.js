@@ -29,9 +29,9 @@ class BotGamesTask {
             const bot = allBots[botIndex];
             allBots.splice(botIndex, 1);
             try {
-                const deck = await bot.loadDeck();
+                //const deck = await bot.loadDeck();
                 bots.push(bot);
-                decks.push(deck);
+                //decks.push(deck);
             }
             catch (_a) {
                 // continue regardless of error

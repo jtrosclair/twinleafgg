@@ -44,6 +44,7 @@ class BotClient {
         return game;
     }
     async loadDeck() {
+        return [];
         // If a pending deck was set (passed during game creation), use it
         if (this.pendingDeck) {
             const deck = this.pendingDeck;

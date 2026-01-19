@@ -81,6 +81,7 @@ export abstract class BotClient implements Client {
   }
 
   public async loadDeck(): Promise<string[]> {
+    return []
     // If a pending deck was set (passed during game creation), use it
     if (this.pendingDeck) {
       const deck = this.pendingDeck;
