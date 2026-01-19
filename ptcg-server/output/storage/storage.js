@@ -33,7 +33,7 @@ class Storage {
                 _1.UserUnlockedItem,
                 _1.CardArtwork,
                 _1.UserFavoriteCard
-            ], synchronize: false, logging: true }));
+            ], synchronize: false, logging: false }));
         console.log({
             type: process.env.STORAGE_TYPE,
             host: process.env.STORAGE_HOST,
