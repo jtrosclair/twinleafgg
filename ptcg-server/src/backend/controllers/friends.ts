@@ -182,7 +182,7 @@ export class Friends extends Controller {
     request.sender_id = userId;
     request.receiver_id = body.receiverId;
     request.status = FriendRequestStatus.PENDING;
-    await request.save();
+    //await request.save();
 
     res.send({ ok: true });
   }
@@ -209,14 +209,14 @@ export class Friends extends Controller {
 
     // Update request status
     request.status = FriendRequestStatus.ACCEPTED;
-    await request.save();
+    //await request.save();
 
     // Create friendship
     const friendship = new Friend();
     friendship.user_id = request.sender_id;
     friendship.friend_id = request.receiver_id;
     friendship.status = FriendStatus.ACCEPTED;
-    await friendship.save();
+    // await friendship.save();
 
     res.send({ ok: true });
   }
@@ -241,7 +241,7 @@ export class Friends extends Controller {
     }
 
     request.status = FriendRequestStatus.REJECTED;
-    await request.save();
+    // await request.save();
 
     res.send({ ok: true });
   }
@@ -317,14 +317,14 @@ export class Friends extends Controller {
     let friendship = await Friend.findFriendship(currentUserId, body.userId);
     if (friendship) {
       friendship.status = FriendStatus.BLOCKED;
-      await friendship.save();
+      //await friendship.save();
     } else {
       // Create new blocked friendship
       friendship = new Friend();
       friendship.user_id = currentUserId;
       friendship.friend_id = body.userId;
       friendship.status = FriendStatus.BLOCKED;
-      await friendship.save();
+      //await friendship.save();
     }
 
     res.send({ ok: true });

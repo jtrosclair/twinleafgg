@@ -5,7 +5,6 @@ const errors_1 = require("../common/errors");
 const storage_1 = require("../../storage");
 const rate_limit_1 = require("../common/rate-limit");
 const auth_token_1 = require("../services/auth-token");
-const game_1 = require("../../game");
 const logger_1 = require("../../utils/logger");
 async function authMiddleware(socket, next) {
     var _a, _b, _c;
@@ -51,58 +50,6 @@ async function authMiddleware(socket, next) {
         // Mark this socket as a reconnection attempt
         socket.isReconnectionAttempt = true;
     }
-    // --- Start Deck Migration Logic ---
-    // Skip deck migration for anonymous users (negative IDs)
-    if (userId > 0) {
-        try {
-            const userDecks = await storage_1.Deck.find({ where: { user: { id: userId } } });
-            const cardManager = game_1.CardManager.getInstance();
-            let hasChanges = false;
-            for (const deck of userDecks) {
-                const cardNames = JSON.parse(deck.cards);
-                let needsNameUpdate = false;
-                const changedCards = [];
-                const resolvedCards = cardNames.map(name => {
-                    const card = cardManager.getCardByName(name);
-                    if (card && card.fullName !== name) {
-                        needsNameUpdate = true;
-                        changedCards.push(`${name} → ${card.fullName}`);
-                        return card.fullName;
-                    }
-                    return name;
-                });
-                const deckAnalyser = new game_1.DeckAnalyser(needsNameUpdate ? resolvedCards : cardNames);
-                const newIsValid = deckAnalyser.isValid();
-                const needsValidationUpdate = deck.isValid !== newIsValid;
-                if (needsNameUpdate || needsValidationUpdate) {
-                    hasChanges = true;
-                    if (needsNameUpdate) {
-                        deck.cards = JSON.stringify(resolvedCards);
-                    }
-                    if (needsValidationUpdate) {
-                        deck.isValid = newIsValid;
-                    }
-                    await deck.save();
-                    // Log specific changes for this deck
-                    const changes = [];
-                    if (needsNameUpdate && changedCards.length > 0) {
-                        changes.push(`Card names: ${changedCards.join(', ')}`);
-                    }
-                    if (needsValidationUpdate) {
-                        changes.push(`Validation: ${deck.isValid ? 'valid' : 'invalid'}`);
-                    }
-                    console.log(`Deck ${deck.id} updated for user ${userId}: ${changes.join(', ')}`);
-                }
-            }
-            if (hasChanges) {
-                console.log(`Deck migration completed for user ${userId}: Updated card names and validation status`);
-            }
-        }
-        catch (error) {
-            console.error(`Error during deck migration for user ${userId}:`, error);
-        }
-    }
-    // --- End Deck Migration Logic ---
     socket.user = user;
     next();
 }

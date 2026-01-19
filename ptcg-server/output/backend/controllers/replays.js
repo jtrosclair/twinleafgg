@@ -60,6 +60,8 @@ class Replays extends controller_1.Controller {
         res.send({ ok: true, replays, total });
     }
     async onMatchGet(req, res) {
+        res.send({ error: errors_1.ApiErrorEnum.PROFILE_INVALID });
+        return;
         const matchId = parseInt(req.params.id, 10);
         const entity = await storage_1.Match.findOne(matchId);
         if (entity === undefined) {
@@ -106,7 +108,7 @@ class Replays extends controller_1.Controller {
             res.send({ error: errors_1.ApiErrorEnum.REPLAY_INVALID });
             return;
         }
-        let replay = new storage_1.Replay();
+        const replay = new storage_1.Replay();
         replay.user = user;
         replay.name = body.name.trim();
         replay.player1 = gameReplay.player1;
@@ -115,7 +117,7 @@ class Replays extends controller_1.Controller {
         replay.created = gameReplay.created;
         replay.replayData = match.replayData;
         try {
-            replay = await replay.save();
+            //  replay = await replay.save();
         }
         catch (error) {
             res.status(400);
@@ -153,7 +155,7 @@ class Replays extends controller_1.Controller {
             res.send({ error: errors_1.ApiErrorEnum.PROFILE_INVALID });
             return;
         }
-        let replay = await storage_1.Replay.findOne(body.id, { relations: ['user'] });
+        const replay = await storage_1.Replay.findOne(body.id, { relations: ['user'] });
         if (replay === undefined || replay.user.id !== user.id) {
             res.status(400);
             res.send({ error: errors_1.ApiErrorEnum.REPLAY_INVALID });
@@ -161,17 +163,19 @@ class Replays extends controller_1.Controller {
         }
         try {
             replay.name = body.name.trim();
-            replay = await replay.save();
+            //replay = await replay.save();
         }
         catch (error) {
             res.status(400);
             res.send({ error: errors_1.ApiErrorEnum.REPLAY_INVALID });
             return;
         }
-        res.send({ ok: true, replay: {
+        res.send({
+            ok: true, replay: {
                 id: replay.id,
                 name: replay.name
-            } });
+            }
+        });
     }
     async onImport(req, res) {
         const body = req.body;
@@ -196,7 +200,7 @@ class Replays extends controller_1.Controller {
             res.send({ error: errors_1.ApiErrorEnum.REPLAY_INVALID });
             return;
         }
-        let replay = new storage_1.Replay();
+        const replay = new storage_1.Replay();
         replay.user = user;
         replay.name = body.name.trim();
         replay.player1 = gameReplay.player1;
@@ -205,7 +209,7 @@ class Replays extends controller_1.Controller {
         replay.created = gameReplay.created;
         try {
             replay.replayData = gameReplay.serialize();
-            replay = await replay.save();
+            //replay = await replay.save();
         }
         catch (error) {
             res.status(400);

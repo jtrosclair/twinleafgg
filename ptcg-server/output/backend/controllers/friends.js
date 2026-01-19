@@ -141,7 +141,7 @@ class Friends extends controller_1.Controller {
         request.sender_id = userId;
         request.receiver_id = body.receiverId;
         request.status = storage_1.FriendRequestStatus.PENDING;
-        await request.save();
+        //await request.save();
         res.send({ ok: true });
     }
     async onAcceptFriendRequest(req, res) {
@@ -158,13 +158,13 @@ class Friends extends controller_1.Controller {
         }
         // Update request status
         request.status = storage_1.FriendRequestStatus.ACCEPTED;
-        await request.save();
+        //await request.save();
         // Create friendship
         const friendship = new storage_1.Friend();
         friendship.user_id = request.sender_id;
         friendship.friend_id = request.receiver_id;
         friendship.status = storage_1.FriendStatus.ACCEPTED;
-        await friendship.save();
+        // await friendship.save();
         res.send({ ok: true });
     }
     async onRejectFriendRequest(req, res) {
@@ -179,7 +179,7 @@ class Friends extends controller_1.Controller {
             return;
         }
         request.status = storage_1.FriendRequestStatus.REJECTED;
-        await request.save();
+        // await request.save();
         res.send({ ok: true });
     }
     async onCancelFriendRequest(req, res) {
@@ -226,7 +226,7 @@ class Friends extends controller_1.Controller {
         let friendship = await storage_1.Friend.findFriendship(currentUserId, body.userId);
         if (friendship) {
             friendship.status = storage_1.FriendStatus.BLOCKED;
-            await friendship.save();
+            //await friendship.save();
         }
         else {
             // Create new blocked friendship
@@ -234,7 +234,7 @@ class Friends extends controller_1.Controller {
             friendship.user_id = currentUserId;
             friendship.friend_id = body.userId;
             friendship.status = storage_1.FriendStatus.BLOCKED;
-            await friendship.save();
+            //await friendship.save();
         }
         res.send({ ok: true });
     }

@@ -134,10 +134,6 @@ export class Avatars extends Controller {
     if (body.id <= 10) { // Predefined avatars have IDs 1-10
       try {
         user.avatarFile = `predefined_${body.id}.png`;
-        const savedUser = await user.save();
-        if (savedUser) {
-          this.core.emit(c => c.onUsersUpdate([savedUser]));
-        }
         res.send({ ok: true });
         return;
       } catch (error) {

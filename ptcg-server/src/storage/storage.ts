@@ -43,7 +43,7 @@ export class Storage {
         UserFavoriteCard
       ],
       synchronize: false,
-      logging: false
+      logging: true
     });
 
     console.log({

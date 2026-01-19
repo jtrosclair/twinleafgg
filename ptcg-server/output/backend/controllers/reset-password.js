@@ -26,6 +26,9 @@ class ResetPassword extends controller_1.Controller {
         this.tokens = [];
     }
     async onSendMail(req, res) {
+        res.status(400);
+        res.send({ error: errors_1.ApiErrorEnum.REQUESTS_LIMIT_REACHED });
+        return;
         const body = req.body;
         if (this.rateLimit.isLimitExceeded(req.ip)) {
             res.status(400);
@@ -75,7 +78,7 @@ class ResetPassword extends controller_1.Controller {
         }
         user.password = md5_1.Md5.init(body.newPassword);
         try {
-            await user.save();
+            //await user.save();
         }
         catch (error) {
             res.status(400);

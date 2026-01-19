@@ -59,6 +59,9 @@ export class BattlePass extends Controller {
   @Get('/progress')
   @AuthToken()
   public async onGetProgress(req: Request, res: Response) {
+    res.status(404).send({ error: 'No active battle pass season' });
+    return;
+
     try {
       const userId: number = req.body.userId;
       const now = new Date();
@@ -98,7 +101,7 @@ export class BattlePass extends Controller {
         progress.seasonId = currentSeason.seasonId;
         progress.season = currentSeason;
         progress.user = user;
-        await progress.save();
+        // await progress.save();
       }
 
       // Get available rewards for current level (premium track removed globally)
@@ -127,6 +130,8 @@ export class BattlePass extends Controller {
     level: check().isNumber().required()
   })
   public async onClaim(req: Request, res: Response) {
+    res.status(404).send({ error: 'No active battle pass season' });
+    return;
     try {
       const userId: number = req.body.userId;
       const level: number = req.body.level;
@@ -194,13 +199,13 @@ export class BattlePass extends Controller {
             unlockedItem.userId = userId;
             unlockedItem.itemId = reward.item;
             unlockedItem.itemType = reward.type;
-            await unlockedItem.save();
+            // await unlockedItem.save();
             break;
           }
         }
       }
 
-      await progress.save();
+      //  await progress.save();
 
       res.send({
         ok: true,
@@ -268,7 +273,7 @@ export class BattlePass extends Controller {
 
       // Add experience and save
       await progress.addExp(exp);
-      await progress.save();
+      //    await progress.save();
 
       res.send({ ok: true });
 
@@ -328,7 +333,7 @@ export class BattlePass extends Controller {
 
       const oldLevel = progress.level;
       await progress.addExp(exp);
-      await progress.save();
+      //    await progress.save();
 
       // Check for level up
       const leveledUp = progress.level > oldLevel;

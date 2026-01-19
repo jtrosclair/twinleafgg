@@ -40,7 +40,7 @@ export class Artworks extends Controller {
       row.code = code;
       row.imageUrl = imageUrl;
       row.holoType = holoType || 'default';
-      await row.save();
+      // await row.save();
       res.send({ ok: true, artwork: row });
     } catch (err) {
       console.error('Upsert artwork failed', err);
@@ -68,7 +68,7 @@ export class Artworks extends Controller {
         unlockedItem.userId = userId;
         unlockedItem.itemId = String(artworkId);
         unlockedItem.itemType = 'card_artwork';
-        await unlockedItem.save();
+        // await unlockedItem.save();
       }
       res.send({ ok: true });
     } catch (err) {

@@ -33,7 +33,7 @@ export class Replays extends Controller {
     const replays: ReplayInfo[] = replayRows
       .map(replay => this.buildReplayInfo(replay, userMap));
 
-    res.send({ok: true, replays, total});
+    res.send({ ok: true, replays, total });
   }
 
   @Post('/list/:page?/:pageSize?')
@@ -67,23 +67,25 @@ export class Replays extends Controller {
     const replays: ReplayInfo[] = replayRows
       .map(replay => this.buildReplayInfo(replay, userMap));
 
-    res.send({ok: true, replays, total});
+    res.send({ ok: true, replays, total });
   }
 
   @Get('/match/:id')
   @AuthToken()
   public async onMatchGet(req: Request, res: Response) {
+    res.send({ error: ApiErrorEnum.PROFILE_INVALID });
+    return;
     const matchId: number = parseInt(req.params.id, 10);
     const entity = await Match.findOne(matchId);
 
     if (entity === undefined) {
-      res.send({error: ApiErrorEnum.GAME_INVALID_ID});
+      res.send({ error: ApiErrorEnum.GAME_INVALID_ID });
       return;
     }
 
     const base64 = new Base64();
     const replayData = base64.encode(entity.replayData);
-    res.send({ok: true, replayData});
+    res.send({ ok: true, replayData });
   }
 
   @Get('/get/:id')
@@ -94,13 +96,13 @@ export class Replays extends Controller {
     const entity = await Replay.findOne(replayId, { relations: ['user'] });
 
     if (entity === undefined || entity.user.id !== userId) {
-      res.send({error: ApiErrorEnum.REPLAY_INVALID});
+      res.send({ error: ApiErrorEnum.REPLAY_INVALID });
       return;
     }
 
     const base64 = new Base64();
     const replayData = base64.encode(entity.replayData);
-    res.send({ok: true, replayData});
+    res.send({ ok: true, replayData });
   }
 
   @Post('/save')
@@ -117,14 +119,14 @@ export class Replays extends Controller {
 
     if (user === undefined) {
       res.status(400);
-      res.send({error: ApiErrorEnum.PROFILE_INVALID});
+      res.send({ error: ApiErrorEnum.PROFILE_INVALID });
       return;
     }
 
     const match = await Match.findOne(body.id);
     if (match === undefined) {
       res.status(400);
-      res.send({error: ApiErrorEnum.GAME_INVALID_ID});
+      res.send({ error: ApiErrorEnum.GAME_INVALID_ID });
       return;
     }
 
@@ -133,11 +135,11 @@ export class Replays extends Controller {
       gameReplay.deserialize(match.replayData);
     } catch (error) {
       res.status(400);
-      res.send({error: ApiErrorEnum.REPLAY_INVALID});
+      res.send({ error: ApiErrorEnum.REPLAY_INVALID });
       return;
     }
 
-    let replay = new Replay();
+    const replay = new Replay();
     replay.user = user;
     replay.name = body.name.trim();
     replay.player1 = gameReplay.player1;
@@ -147,17 +149,17 @@ export class Replays extends Controller {
     replay.replayData = match.replayData;
 
     try {
-      replay = await replay.save();
+      //  replay = await replay.save();
     } catch (error) {
       res.status(400);
-      res.send({error: ApiErrorEnum.REPLAY_INVALID});
+      res.send({ error: ApiErrorEnum.REPLAY_INVALID });
       return;
     }
 
     const userMap = await this.buildUserMap([replay]);
     const replayInfo = this.buildReplayInfo(replay, userMap);
 
-    res.send({ok: true, replay: replayInfo});
+    res.send({ ok: true, replay: replayInfo });
   }
 
   @Post('/delete')
@@ -173,7 +175,7 @@ export class Replays extends Controller {
 
     if (user === undefined) {
       res.status(400);
-      res.send({error: ApiErrorEnum.PROFILE_INVALID});
+      res.send({ error: ApiErrorEnum.PROFILE_INVALID });
       return;
     }
 
@@ -181,13 +183,13 @@ export class Replays extends Controller {
 
     if (replay === undefined || replay.user.id !== user.id) {
       res.status(400);
-      res.send({error: ApiErrorEnum.REPLAY_INVALID});
+      res.send({ error: ApiErrorEnum.REPLAY_INVALID });
       return;
     }
 
     await replay.remove();
 
-    res.send({ok: true});
+    res.send({ ok: true });
   }
 
   @Post('/rename')
@@ -204,31 +206,33 @@ export class Replays extends Controller {
 
     if (user === undefined) {
       res.status(400);
-      res.send({error: ApiErrorEnum.PROFILE_INVALID});
+      res.send({ error: ApiErrorEnum.PROFILE_INVALID });
       return;
     }
 
-    let replay = await Replay.findOne(body.id, { relations: ['user'] });
+    const replay = await Replay.findOne(body.id, { relations: ['user'] });
 
     if (replay === undefined || replay.user.id !== user.id) {
       res.status(400);
-      res.send({error: ApiErrorEnum.REPLAY_INVALID});
+      res.send({ error: ApiErrorEnum.REPLAY_INVALID });
       return;
     }
 
     try {
       replay.name = body.name.trim();
-      replay = await replay.save();
+      //replay = await replay.save();
     } catch (error) {
       res.status(400);
-      res.send({error: ApiErrorEnum.REPLAY_INVALID});
+      res.send({ error: ApiErrorEnum.REPLAY_INVALID });
       return;
     }
 
-    res.send({ok: true, replay: {
-      id: replay.id,
-      name: replay.name
-    }});
+    res.send({
+      ok: true, replay: {
+        id: replay.id,
+        name: replay.name
+      }
+    });
   }
 
   @Post('/import')
@@ -245,7 +249,7 @@ export class Replays extends Controller {
 
     if (user === undefined) {
       res.status(400);
-      res.send({error: ApiErrorEnum.PROFILE_INVALID});
+      res.send({ error: ApiErrorEnum.PROFILE_INVALID });
       return;
     }
 
@@ -261,11 +265,11 @@ export class Replays extends Controller {
       gameReplay.created = Date.now();
     } catch (error) {
       res.status(400);
-      res.send({error: ApiErrorEnum.REPLAY_INVALID});
+      res.send({ error: ApiErrorEnum.REPLAY_INVALID });
       return;
     }
 
-    let replay = new Replay();
+    const replay = new Replay();
     replay.user = user;
     replay.name = body.name.trim();
     replay.player1 = gameReplay.player1;
@@ -275,17 +279,17 @@ export class Replays extends Controller {
 
     try {
       replay.replayData = gameReplay.serialize();
-      replay = await replay.save();
+      //replay = await replay.save();
     } catch (error) {
       res.status(400);
-      res.send({error: ApiErrorEnum.REPLAY_INVALID});
+      res.send({ error: ApiErrorEnum.REPLAY_INVALID });
       return;
     }
 
     const userMap = await this.buildUserMap([replay]);
     const replayInfo = this.buildReplayInfo(replay, userMap);
 
-    res.send({ok: true, replay: replayInfo});
+    res.send({ ok: true, replay: replayInfo });
   }
 
   private async syncReplayPlayer(player: ReplayPlayer): Promise<ReplayPlayer> {
@@ -306,7 +310,7 @@ export class Replays extends Controller {
     return { userId, name, ranking };
   }
 
-  private async buildUserMap(replays: Replay[]): Promise<{[id: number]: User}> {
+  private async buildUserMap(replays: Replay[]): Promise<{ [id: number]: User }> {
     const userIds: number[] = [];
     replays.forEach(replay => {
       for (const id of [replay.player1.userId, replay.player2.userId]) {
@@ -316,7 +320,7 @@ export class Replays extends Controller {
       }
     });
 
-    const userMap: {[id: number]: User} = {};
+    const userMap: { [id: number]: User } = {};
     if (userIds.length > 0) {
       const userRows = await User.find({
         where: { id: In(userIds) }
@@ -328,7 +332,7 @@ export class Replays extends Controller {
     return userMap;
   }
 
-  private buildReplayInfo(replay: Replay, userMap: {[id: number]: User}): ReplayInfo {
+  private buildReplayInfo(replay: Replay, userMap: { [id: number]: User }): ReplayInfo {
     let user1 = userMap[replay.player1.userId];
     let user2 = userMap[replay.player2.userId];
 

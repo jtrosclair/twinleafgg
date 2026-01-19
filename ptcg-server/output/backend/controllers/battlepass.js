@@ -55,6 +55,8 @@ class BattlePass extends controller_1.Controller {
     }
     // GET /v1/battlepass/progress
     async onGetProgress(req, res) {
+        res.status(404).send({ error: 'No active battle pass season' });
+        return;
         try {
             const userId = req.body.userId;
             const now = new Date();
@@ -89,7 +91,7 @@ class BattlePass extends controller_1.Controller {
                 progress.seasonId = currentSeason.seasonId;
                 progress.season = currentSeason;
                 progress.user = user;
-                await progress.save();
+                // await progress.save();
             }
             // Get available rewards for current level (premium track removed globally)
             const availableRewards = currentSeason.getRewardsForLevel(progress.level, false);
@@ -111,6 +113,8 @@ class BattlePass extends controller_1.Controller {
         }
     }
     async onClaim(req, res) {
+        res.status(404).send({ error: 'No active battle pass season' });
+        return;
         try {
             const userId = req.body.userId;
             const level = req.body.level;
@@ -169,12 +173,12 @@ class BattlePass extends controller_1.Controller {
                         unlockedItem.userId = userId;
                         unlockedItem.itemId = reward.item;
                         unlockedItem.itemType = reward.type;
-                        await unlockedItem.save();
+                        // await unlockedItem.save();
                         break;
                     }
                 }
             }
-            await progress.save();
+            //  await progress.save();
             res.send({
                 ok: true,
                 rewards,
@@ -229,7 +233,7 @@ class BattlePass extends controller_1.Controller {
             }
             // Add experience and save
             await progress.addExp(exp);
-            await progress.save();
+            //    await progress.save();
             res.send({ ok: true });
         }
         catch (error) {
@@ -276,7 +280,7 @@ class BattlePass extends controller_1.Controller {
             }
             const oldLevel = progress.level;
             await progress.addExp(exp);
-            await progress.save();
+            //    await progress.save();
             // Check for level up
             const leveledUp = progress.level > oldLevel;
             // Get available rewards if leveled up (premium removed)

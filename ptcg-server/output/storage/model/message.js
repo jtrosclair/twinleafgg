@@ -29,17 +29,7 @@ let Message = class Message extends typeorm_1.BaseEntity {
         this.text = '';
     }
     async send(receiver, manager) {
-        if (manager === undefined) {
-            return;
-        }
-        const conversation = await conversation_1.Conversation.findByUsers(this.sender, receiver);
-        if (conversation.id === undefined) {
-            await manager.save(conversation);
-        }
-        this.conversation = conversation;
-        await manager.save(this);
-        conversation.lastMessage = this;
-        await manager.save(conversation);
+        return;
     }
 };
 __decorate([

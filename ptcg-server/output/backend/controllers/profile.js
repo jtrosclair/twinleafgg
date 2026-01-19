@@ -38,6 +38,8 @@ class Profile extends controller_1.Controller {
         res.send({ ok: true, user: userInfo });
     }
     async onMatchHistory(req, res) {
+        res.send({ error: errors_1.ApiErrorEnum.PROFILE_INVALID });
+        return;
         const defaultPageSize = config_1.config.backend.defaultPageSize;
         const userId = parseInt(req.params.userId, 10) || 0;
         const page = parseInt(req.params.page, 10) || 0;
@@ -90,7 +92,7 @@ class Profile extends controller_1.Controller {
         }
         user.password = md5_1.Md5.init(body.newPassword);
         try {
-            await user.save();
+            // await user.save();
         }
         catch (error) {
             res.status(400);
@@ -119,7 +121,7 @@ class Profile extends controller_1.Controller {
         }
         try {
             user.email = body.email;
-            await user.save();
+            // await user.save();
         }
         catch (error) {
             res.status(400);
@@ -143,7 +145,7 @@ class Profile extends controller_1.Controller {
         }
         try {
             user.cardImagesJsonUrl = body.jsonUrl || '';
-            await user.save();
+            //await user.save();
             res.send({ ok: true });
         }
         catch (error) {
@@ -174,7 +176,7 @@ class Profile extends controller_1.Controller {
         }
         try {
             targetUser.roleId = body.roleId;
-            await targetUser.save();
+            //await targetUser.save();
             this.core.emit(c => c.onUsersUpdate([targetUser]));
             res.send({ ok: true });
         }

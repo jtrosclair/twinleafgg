@@ -50,6 +50,8 @@ export class Profile extends Controller {
   @Get('/matchHistory/:userId/:page?/:pageSize?')
   @AuthToken()
   public async onMatchHistory(req: Request, res: Response) {
+    res.send({ error: ApiErrorEnum.PROFILE_INVALID });
+    return;
     const defaultPageSize = config.backend.defaultPageSize;
     const userId: number = parseInt(req.params.userId, 10) || 0;
     const page: number = parseInt(req.params.page, 10) || 0;
@@ -116,7 +118,7 @@ export class Profile extends Controller {
 
     user.password = Md5.init(body.newPassword);
     try {
-      await user.save();
+      // await user.save();
     } catch (error) {
       res.status(400);
       res.send({ error: ApiErrorEnum.LOGIN_INVALID });
@@ -155,7 +157,7 @@ export class Profile extends Controller {
 
     try {
       user.email = body.email;
-      await user.save();
+      // await user.save();
     } catch (error) {
       res.status(400);
       res.send({ error: ApiErrorEnum.LOGIN_INVALID });
@@ -190,7 +192,7 @@ export class Profile extends Controller {
 
     try {
       user.cardImagesJsonUrl = body.jsonUrl || '';
-      await user.save();
+      //await user.save();
       res.send({ ok: true });
     } catch (error) {
       res.status(400);
@@ -232,7 +234,7 @@ export class Profile extends Controller {
 
     try {
       targetUser.roleId = body.roleId;
-      await targetUser.save();
+      //await targetUser.save();
 
       this.core.emit(c => c.onUsersUpdate([targetUser]));
 

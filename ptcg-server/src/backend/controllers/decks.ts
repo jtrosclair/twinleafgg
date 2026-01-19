@@ -16,6 +16,8 @@ export class Decks extends Controller {
   @Get('/list')
   @AuthToken()
   public async onList(req: Request, res: Response) {
+    res.send({ error: ApiErrorEnum.PROFILE_INVALID });
+    return;
     const userId: number = req.body.userId;
     const user = await User.findOne(userId, { relations: ['decks'] });
 
@@ -53,6 +55,9 @@ export class Decks extends Controller {
   @Get('/get/:id')
   @AuthToken()
   public async onGet(req: Request, res: Response) {
+    res.send({ error: ApiErrorEnum.DECK_INVALID });
+    return;
+
     const userId: number = req.body.userId;
     const deckId: number = parseInt(req.params.id, 10);
     // Check if this is a theme deck
@@ -455,7 +460,7 @@ export class Decks extends Controller {
       }
 
       if (needsUpdate) {
-        await match.save();
+        //await match.save();
         updatedCount++;
       }
     }

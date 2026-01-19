@@ -21,6 +21,8 @@ const card_types_1 = require("../../game/store/card/card-types");
 const any_printing_allowed_1 = require("../../game/store/card/any-printing-allowed");
 class Decks extends controller_1.Controller {
     async onList(req, res) {
+        res.send({ error: errors_1.ApiErrorEnum.PROFILE_INVALID });
+        return;
         const userId = req.body.userId;
         const user = await storage_1.User.findOne(userId, { relations: ['decks'] });
         if (user === undefined) {
@@ -38,6 +40,8 @@ class Decks extends controller_1.Controller {
         res.send({ ok: true, decks: [...decks, ...themeDecks] });
     }
     async onGet(req, res) {
+        res.send({ error: errors_1.ApiErrorEnum.DECK_INVALID });
+        return;
         const userId = req.body.userId;
         const deckId = parseInt(req.params.id, 10);
         // Check if this is a theme deck
@@ -341,7 +345,7 @@ class Decks extends controller_1.Controller {
                 }
             }
             if (needsUpdate) {
-                await match.save();
+                //await match.save();
                 updatedCount++;
             }
         }

@@ -38,7 +38,7 @@ class Artworks extends controller_1.Controller {
             row.code = code;
             row.imageUrl = imageUrl;
             row.holoType = holoType || 'default';
-            await row.save();
+            // await row.save();
             res.send({ ok: true, artwork: row });
         }
         catch (err) {
@@ -61,7 +61,7 @@ class Artworks extends controller_1.Controller {
                 unlockedItem.userId = userId;
                 unlockedItem.itemId = String(artworkId);
                 unlockedItem.itemType = 'card_artwork';
-                await unlockedItem.save();
+                // await unlockedItem.save();
             }
             res.send({ ok: true });
         }
