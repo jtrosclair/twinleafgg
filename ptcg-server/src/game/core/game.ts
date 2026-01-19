@@ -119,7 +119,8 @@ export class Game implements StoreHandler {
 
     this.updateIsTimeRunning(state);
 
-    this.core.emit(c => {
+    // Notify only clients in this game of state changes
+    this.clients.forEach(c => {
       if (typeof c.onStateChange === 'function') {
         c.onStateChange(this, state);
       }
@@ -628,7 +629,8 @@ export class Game implements StoreHandler {
 
   private startPeriodicSync() {
     this.periodicSyncRef = setInterval(() => {
-      this.core.emit(c => {
+      // Notify only clients in this game of state changes
+      this.clients.forEach(c => {
         if (typeof c.onStateChange === 'function') {
           c.onStateChange(this, this.state);
         }

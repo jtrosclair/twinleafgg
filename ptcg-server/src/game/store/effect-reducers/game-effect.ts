@@ -181,16 +181,12 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
 
   // Emit attack animation event
   const game = (store as any).handler;
-  if (game && game.core && typeof game.core.emit === 'function') {
-    game.core.emit((c: any) => {
-      if (typeof c.socket !== 'undefined') {
-        c.socket.emit(`game[${game.id}]:attack`, {
-          playerId: player.id,
-          cardId,
-          slot,
-          index
-        });
-      }
+  if (game && game.core && typeof game.core.emitToGame === 'function') {
+    game.core.emitToGame(game.id, `game[${game.id}]:attack`, {
+      playerId: player.id,
+      cardId,
+      slot,
+      index
     });
   }
 

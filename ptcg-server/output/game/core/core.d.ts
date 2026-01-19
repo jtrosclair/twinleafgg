@@ -34,6 +34,10 @@ export declare class Core {
     leaveGame(client: Client, game: Game): void;
     emit(fn: (client: Client) => void): void;
     /**
+     * Emit an event to all clients in a specific game using Socket.IO rooms
+     */
+    emitToGame(gameId: number, event: string, data: any): void;
+    /**
      * Broadcast user updates to all connected clients
      */
     private broadcastUserUpdates;

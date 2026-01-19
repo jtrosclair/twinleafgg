@@ -47,7 +47,7 @@ class GameSocket {
         this.socket.addListener('game:sandbox:modifyPokemon', this.sandboxModifyPokemon.bind(this));
     }
     onGameJoin(game, client) {
-        this.socket.emit(`game[${game.id}]:join`, { clientId: client.id });
+        //this.socket.emit(`game[${game.id}]:join`, { clientId: client.id });
     }
     onGameLeave(game, client) {
         this.socket.emit(`game[${game.id}]:leave`, { clientId: client.id });

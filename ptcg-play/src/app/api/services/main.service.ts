@@ -29,12 +29,12 @@ export class MainService {
       games: coreInfo.games,
       clientId: coreInfo.clientId
     });
-    this.socketService.on('core:join', (data: ClientUserData) => this.onJoin(data));
-    this.socketService.on('core:leave', (clientId: number) => this.onLeave(clientId));
-    this.socketService.on('core:gameInfo', (game: GameInfo) => this.onGameInfo(game));
-    this.socketService.on('core:usersInfo', (infos: UserInfo[]) => this.onUsersInfo(infos));
-    this.socketService.on('core:createGame', (game: GameInfo) => this.onCreateGame(game));
-    this.socketService.on('core:deleteGame', (gameId: number) => this.onDeleteGame(gameId));
+    //this.socketService.on('core:join', (data: ClientUserData) => this.onJoin(data));
+    //this.socketService.on('core:leave', (clientId: number) => this.onLeave(clientId));
+    //this.socketService.on('core:gameInfo', (game: GameInfo) => this.onGameInfo(game));
+    //this.socketService.on('core:usersInfo', (infos: UserInfo[]) => this.onUsersInfo(infos));
+    //this.socketService.on('core:createGame', (game: GameInfo) => this.onCreateGame(game));
+    //this.socketService.on('core:deleteGame', (gameId: number) => this.onDeleteGame(gameId));
   }
 
   private autoJoinGame(game: GameInfo) {

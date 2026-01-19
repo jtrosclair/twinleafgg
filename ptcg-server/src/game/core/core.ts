@@ -203,6 +203,14 @@ export class Core {
       this.emit(c => c.onGameJoin(game, client));
       client.games.push(game);
       game.clients.push(client);
+
+      // Join Socket.IO room for game-specific messages
+      const socketClient = client as any;
+      if (socketClient && socketClient.socket && socketClient.socket.socket) {
+        const socket = socketClient.socket.socket;
+        const roomName = `game[${game.id}]`;
+        socket.join(roomName);
+      }
     }
   }
 
@@ -235,6 +243,14 @@ export class Core {
       game.clients.splice(clientIndex, 1);
       this.emit(c => c.onGameLeave(game, client));
       game.handleClientLeave(client);
+
+      // Leave Socket.IO room for game-specific messages
+      const socketClient = client as any;
+      if (socketClient && socketClient.socket && socketClient.socket.socket) {
+        const socket = socketClient.socket.socket;
+        const roomName = `game[${game.id}]`;
+        socket.leave(roomName);
+      }
     }
     if (game.clients.length === 0) {
       this.deleteGame(game);
@@ -243,6 +259,22 @@ export class Core {
 
   public emit(fn: (client: Client) => void): void {
     this.clients.forEach(fn);
+  }
+
+  /**
+   * Emit an event to all clients in a specific game using Socket.IO rooms
+   */
+  public emitToGame(gameId: number, event: string, data: any): void {
+    const game = this.games.find(g => g.id === gameId);
+    if (game && game.clients.length > 0) {
+      // Get the socket.io server from the first client
+      const firstClient = game.clients[0] as any;
+      if (firstClient && firstClient.socket && firstClient.socket.io) {
+        const io = firstClient.socket.io;
+        const roomName = `game[${gameId}]`;
+        io.to(roomName).emit(event, data);
+      }
+    }
   }
 
   /**

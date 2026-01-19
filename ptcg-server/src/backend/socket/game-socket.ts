@@ -70,7 +70,7 @@ export class GameSocket {
   }
 
   public onGameJoin(game: Game, client: Client): void {
-    this.socket.emit(`game[${game.id}]:join`, { clientId: client.id });
+    //this.socket.emit(`game[${game.id}]:join`, { clientId: client.id });
   }
 
   public onGameLeave(game: Game, client: Client): void {

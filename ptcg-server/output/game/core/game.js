@@ -85,7 +85,8 @@ class Game {
             this.matchRecorder.onStateChange(state);
         }
         this.updateIsTimeRunning(state);
-        this.core.emit(c => {
+        // Notify only clients in this game of state changes
+        this.clients.forEach(c => {
             if (typeof c.onStateChange === 'function') {
                 c.onStateChange(this, state);
             }
@@ -510,7 +511,8 @@ class Game {
     }
     startPeriodicSync() {
         this.periodicSyncRef = setInterval(() => {
-            this.core.emit(c => {
+            // Notify only clients in this game of state changes
+            this.clients.forEach(c => {
                 if (typeof c.onStateChange === 'function') {
                     c.onStateChange(this, this.state);
                 }

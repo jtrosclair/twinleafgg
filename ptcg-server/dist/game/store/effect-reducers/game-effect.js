@@ -123,16 +123,12 @@ function* useAttack(next, store, state, effect) {
     const cardId = card ? card.id : undefined;
     // Emit attack animation event
     const game = store.handler;
-    if (game && game.core && typeof game.core.emit === 'function') {
-        game.core.emit((c) => {
-            if (typeof c.socket !== 'undefined') {
-                c.socket.emit(`game[${game.id}]:attack`, {
-                    playerId: player.id,
-                    cardId,
-                    slot,
-                    index
-                });
-            }
+    if (game && game.core && typeof game.core.emitToGame === 'function') {
+        game.core.emitToGame(game.id, `game[${game.id}]:attack`, {
+            playerId: player.id,
+            cardId,
+            slot,
+            index
         });
     }
     // Yield a wait prompt for the animation (1 second)

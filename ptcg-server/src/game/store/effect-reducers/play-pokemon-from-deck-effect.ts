@@ -11,12 +11,8 @@ import { StoreLike } from '../store-like';
  */
 function emitAnimationEvent(store: StoreLike, eventName: string, data: any): void {
   const game = (store as any).handler;
-  if (game && game.core && typeof game.core.emit === 'function') {
-    game.core.emit((c: any) => {
-      if (typeof c.socket !== 'undefined') {
-        c.socket.emit(`game[${game.id}]:${eventName}`, data);
-      }
-    });
+  if (game && game.core && typeof game.core.emitToGame === 'function') {
+    game.core.emitToGame(game.id, `game[${game.id}]:${eventName}`, data);
   }
 }
 

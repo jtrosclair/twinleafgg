@@ -12,12 +12,8 @@ import { EvolveEffect } from '../effects/game-effects';
  */
 function emitAnimationEvent(store, eventName, data) {
     const game = store.handler;
-    if (game && game.core && typeof game.core.emit === 'function') {
-        game.core.emit((c) => {
-            if (typeof c.socket !== 'undefined') {
-                c.socket.emit(`game[${game.id}]:${eventName}`, data);
-            }
-        });
+    if (game && game.core && typeof game.core.emitToGame === 'function') {
+        game.core.emitToGame(game.id, `game[${game.id}]:${eventName}`, data);
     }
 }
 export function playPokemonReducer(store, state, effect) {

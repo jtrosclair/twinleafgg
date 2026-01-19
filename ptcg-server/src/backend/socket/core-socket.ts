@@ -32,6 +32,7 @@ export class CoreSocket {
   }
 
   public onConnect(client: Client): void {
+    return
     this.socket.emit('core:join', {
       clientId: client.id,
       user: CoreSocket.buildUserInfo(client.user)
@@ -39,10 +40,12 @@ export class CoreSocket {
   }
 
   public onDisconnect(client: Client): void {
+    return
     this.socket.emit('core:leave', client.id);
   }
 
   public onGameAdd(game: Game): void {
+    return;
     this.cache.lastLogIdCache[game.id] = 0;
     this.cache.gameInfoCache[game.id] = CoreSocket.buildGameInfo(game);
     this.socket.emit('core:createGame', this.cache.gameInfoCache[game.id]);
@@ -55,6 +58,7 @@ export class CoreSocket {
   }
 
   public onStateChange(game: Game, state: State): void {
+    return;
     const gameInfo = CoreSocket.buildGameInfo(game);
     if (!deepCompare(gameInfo, this.cache.gameInfoCache[game.id])) {
       this.cache.gameInfoCache[game.id] = gameInfo;
@@ -63,21 +67,22 @@ export class CoreSocket {
   }
 
   public onUsersUpdate(users: User[]): void {
-    const core = this.client.core;
-    if (core === undefined) {
-      return;
-    }
+    return;
+    // const core = this.client.core;
+    // if (core === undefined) {
+    //   return;
+    // }
 
-    const me = users.find(u => u.id === this.client.user.id);
-    if (me !== undefined) {
-      this.client.user = me;
-    }
+    // const me = users.find(u => u.id === this.client.user.id);
+    // if (me !== undefined) {
+    //   this.client.user = me;
+    // }
 
-    const userInfos = users.map(u => {
-      const connected = core.clients.some(c => c.user.id === u.id);
-      return CoreSocket.buildUserInfo(u, connected);
-    });
-    this.socket.emit('core:usersInfo', userInfos);
+    // const userInfos = users.map(u => {
+    //   const connected = core.clients.some(c => c.user.id === u.id);
+    //   return CoreSocket.buildUserInfo(u, connected);
+    // });
+    // this.socket.emit('core:usersInfo', userInfos);
   }
 
   private buildCoreInfo(): CoreInfo {

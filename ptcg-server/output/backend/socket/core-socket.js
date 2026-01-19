@@ -17,15 +17,18 @@ class CoreSocket {
         this.socket.addListener('core:createGameFromState', this.createGameFromState.bind(this));
     }
     onConnect(client) {
+        return;
         this.socket.emit('core:join', {
             clientId: client.id,
             user: CoreSocket.buildUserInfo(client.user)
         });
     }
     onDisconnect(client) {
+        return;
         this.socket.emit('core:leave', client.id);
     }
     onGameAdd(game) {
+        return;
         this.cache.lastLogIdCache[game.id] = 0;
         this.cache.gameInfoCache[game.id] = CoreSocket.buildGameInfo(game);
         this.socket.emit('core:createGame', this.cache.gameInfoCache[game.id]);
@@ -36,6 +39,7 @@ class CoreSocket {
         this.socket.emit('core:deleteGame', game.id);
     }
     onStateChange(game, state) {
+        return;
         const gameInfo = CoreSocket.buildGameInfo(game);
         if (!utils_1.deepCompare(gameInfo, this.cache.gameInfoCache[game.id])) {
             this.cache.gameInfoCache[game.id] = gameInfo;
@@ -43,19 +47,20 @@ class CoreSocket {
         }
     }
     onUsersUpdate(users) {
-        const core = this.client.core;
-        if (core === undefined) {
-            return;
-        }
-        const me = users.find(u => u.id === this.client.user.id);
-        if (me !== undefined) {
-            this.client.user = me;
-        }
-        const userInfos = users.map(u => {
-            const connected = core.clients.some(c => c.user.id === u.id);
-            return CoreSocket.buildUserInfo(u, connected);
-        });
-        this.socket.emit('core:usersInfo', userInfos);
+        return;
+        // const core = this.client.core;
+        // if (core === undefined) {
+        //   return;
+        // }
+        // const me = users.find(u => u.id === this.client.user.id);
+        // if (me !== undefined) {
+        //   this.client.user = me;
+        // }
+        // const userInfos = users.map(u => {
+        //   const connected = core.clients.some(c => c.user.id === u.id);
+        //   return CoreSocket.buildUserInfo(u, connected);
+        // });
+        // this.socket.emit('core:usersInfo', userInfos);
     }
     buildCoreInfo() {
         return {
