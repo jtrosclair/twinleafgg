@@ -73,7 +73,7 @@ export class Logger {
     }
 
     // Console output based on debug setting and log level
-    if (config.core.debug || logEntry.level >= LogLevel.WARN) {
+    if (logEntry.level >= LogLevel.WARN) {
       const timestamp = new Date(logEntry.timestamp).toISOString();
       const levelStr = LogLevel[logEntry.level];
       const prefix = `[${timestamp}] [${levelStr}] [${logEntry.category}]`;
