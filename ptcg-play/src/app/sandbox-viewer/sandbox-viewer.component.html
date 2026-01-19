@@ -13,6 +13,7 @@
           <div class="loading-spinner">
             <mat-spinner diameter="40"></mat-spinner>
           </div>
+          <p class="delayed-message" *ngIf="delayedMessage">{{ delayedMessage }}</p>
         </div>
         <div class="sandbox-viewer-error" *ngIf="error">
           <mat-icon>error</mat-icon>

@@ -29,6 +29,8 @@ export class SandboxViewerComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
   public autoStartState: string | null = null;
+  public delayedMessage: string | null = null;
+  private delayedMessageTimeouts: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -49,6 +51,25 @@ export class SandboxViewerComponent implements OnInit, OnDestroy {
     if (hash) {
       this.autoStartState = hash;
       this.stateDataInput = hash;
+      // Show delayed messages at different intervals if still loading
+      this.delayedMessageTimeouts.push(setTimeout(() => {
+        if (this.autoStartState && (this.loading || this.initializingSession)) {
+          this.delayedMessage = 'It looks like a lot of people are puzzling now, please hang tight while we prep the simulator. This may take up to 30 seconds...';
+        }
+      }, 4001));
+
+      this.delayedMessageTimeouts.push(setTimeout(() => {
+        if (this.autoStartState && (this.loading || this.initializingSession)) {
+          this.delayedMessage = "We're still here, and working as hard as our servers allow, thanks for being patient.";
+        }
+      }, 15000));
+
+      this.delayedMessageTimeouts.push(setTimeout(() => {
+        if (this.autoStartState && (this.loading || this.initializingSession)) {
+          this.delayedMessage = "Okay, Jerry's daily rations has been reduced and he is being further disciplined. If you want to retry, you can now.";
+        }
+      }, 30000));
+
     }
     this.initializeSession();
   }
@@ -56,6 +77,7 @@ export class SandboxViewerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.delayedMessageTimeouts.forEach(timeout => clearTimeout(timeout));
   }
 
   private initializeSession(): void {
