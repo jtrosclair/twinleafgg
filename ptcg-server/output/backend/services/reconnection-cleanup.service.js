@@ -68,6 +68,8 @@ class ReconnectionCleanupService {
      * Start cleanup interval for expired sessions
      */
     startCleanupInterval() {
+        console.log("SKIP CLEANUP");
+        return;
         if (this.cleanupInterval) {
             clearInterval(this.cleanupInterval);
         }
@@ -263,7 +265,7 @@ class ReconnectionCleanupService {
                     }
                 });
                 // Perform aggressive cleanup before GC
-                await this.performAggressiveCleanup();
+                //await this.performAggressiveCleanup();
                 // Force garbage collection if available
                 if (global.gc) {
                     const beforeGc = process.memoryUsage().heapUsed;

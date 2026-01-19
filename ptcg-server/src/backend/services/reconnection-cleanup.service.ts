@@ -104,6 +104,8 @@ export class ReconnectionCleanupService {
    * Start cleanup interval for expired sessions
    */
   private startCleanupInterval(): void {
+    console.log("SKIP CLEANUP");
+    return;
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
     }
@@ -328,7 +330,7 @@ export class ReconnectionCleanupService {
         });
 
         // Perform aggressive cleanup before GC
-        await this.performAggressiveCleanup();
+        //await this.performAggressiveCleanup();
 
         // Force garbage collection if available
         if (global.gc) {
