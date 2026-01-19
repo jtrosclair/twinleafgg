@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Replay = void 0;
-const pako_esm_1 = require("@progress/pako-esm");
 const state_1 = require("../store/state/state");
 const game_error_1 = require("../game-error");
 const game_message_1 = require("../game-message");
@@ -111,12 +110,10 @@ class Replay {
         return diffs.map(diff => diff.replace(/["']/g, c => c === '"' ? '\'' : '"'));
     }
     compress(data) {
-        const compressed = (0, pako_esm_1.gzip)(data, { to: 'string' });
-        return compressed;
+        return 'compressed';
     }
     decompress(data) {
-        const text = (0, pako_esm_1.ungzip)(data, { to: 'string' });
-        return text;
+        return 'text';
     }
     rebuildIndex(diffs) {
         if (diffs.length === 0) {

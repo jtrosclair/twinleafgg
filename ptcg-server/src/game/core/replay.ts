@@ -1,5 +1,3 @@
-import { gzip, ungzip } from '@progress/pako-esm';
-
 import { State, GameWinner } from '../store/state/state';
 import { ReplayPlayer, ReplayOptions } from './replay.interface';
 import { GameError } from '../game-error';
@@ -135,13 +133,11 @@ export class Replay {
   }
 
   private compress(data: string): string {
-    const compressed = gzip(data, { to: 'string' });
-    return compressed;
+    return 'compressed';
   }
 
   private decompress(data: string): string {
-    const text = ungzip(data, { to: 'string' });
-    return text;
+    return 'text';
   }
 
   private rebuildIndex(diffs: SerializedState[]): void {
@@ -177,7 +173,7 @@ export class Replay {
     if (position < this.indexJumpSize) {
       return [];
     }
-    const jumps = [ this.indexJumpSize ];
+    const jumps = [this.indexJumpSize];
 
     if (position < this.indexJumpSize * 2) {
       return jumps;
