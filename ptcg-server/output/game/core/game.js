@@ -6,6 +6,7 @@ const match_recorder_1 = require("./match-recorder");
 const state_1 = require("../store/state/state");
 const store_1 = require("../store/store");
 const abort_game_action_1 = require("../store/actions/abort-game-action");
+const add_player_action_1 = require("../store/actions/add-player-action");
 const card_types_1 = require("../store/card/card-types");
 const check_effects_1 = require("../store/effects/check-effects");
 const utils_1 = require("../../utils/utils");
@@ -27,6 +28,7 @@ class Game {
         this.disconnectionTimeouts = new Map();
         this.isPaused = false;
         this.pausedAt = 0;
+        this.userIdToPlayerId = new Map();
         this.id = id;
         this.store = new store_1.Store(this);
         this.store.state.rules = gameSettings.rules;
@@ -61,6 +63,7 @@ class Game {
         // Clear disconnected players tracking
         this.disconnectedPlayers.clear();
         this.isPaused = false;
+        this.userIdToPlayerId.clear();
     }
     setBonusHps(state) {
         for (const player of state.players) {
@@ -135,6 +138,9 @@ class Game {
             const clientRoleId = (_a = client.user) === null || _a === void 0 ? void 0 : _a.roleId;
             state = this.store.dispatch(action, clientRoleId);
             state = this.updateInvalidMoves(state, client.id, false);
+            if (action instanceof add_player_action_1.AddPlayerAction) {
+                this.registerPlayer(client);
+            }
         }
         catch (error) {
             state = this.updateInvalidMoves(state, client.id, true);
@@ -155,6 +161,19 @@ class Game {
             // Instead of immediately aborting, handle as disconnection for reconnection system
             this.handlePlayerDisconnection(client);
         }
+    }
+    registerPlayer(client) {
+        if (!client.user) {
+            return;
+        }
+        const player = this.state.players.find(p => p.id === client.id);
+        if (!player) {
+            return;
+        }
+        this.userIdToPlayerId.set(client.user.id, player.id);
+    }
+    getPlayerIdForUser(userId) {
+        return this.userIdToPlayerId.get(userId);
     }
     /**
      * Handle player disconnection - preserve state and notify other players

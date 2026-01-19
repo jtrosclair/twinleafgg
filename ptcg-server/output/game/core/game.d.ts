@@ -34,6 +34,7 @@ export declare class Game implements StoreHandler {
     private disconnectionTimeouts;
     private isPaused;
     private pausedAt;
+    private userIdToPlayerId;
     constructor(core: Core, id: number, gameSettings: GameSettings);
     get state(): State;
     getStore(): Store;
@@ -47,6 +48,8 @@ export declare class Game implements StoreHandler {
     dispatch(client: Client, action: Action): State;
     private isStartOfTurnAction;
     handleClientLeave(client: Client): void;
+    registerPlayer(client: Client): void;
+    getPlayerIdForUser(userId: number): number | undefined;
     /**
      * Handle player disconnection - preserve state and notify other players
      */

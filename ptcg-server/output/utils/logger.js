@@ -42,7 +42,7 @@ class Logger {
             this.logBuffer.shift();
         }
         // Console output based on debug setting and log level
-        if (true || logEntry.level >= LogLevel.WARN) {
+        if (logEntry.level >= LogLevel.WARN) {
             const timestamp = new Date(logEntry.timestamp).toISOString();
             const levelStr = LogLevel[logEntry.level];
             const prefix = `[${timestamp}] [${levelStr}] [${logEntry.category}]`;

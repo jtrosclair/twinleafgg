@@ -30,11 +30,21 @@ class WebSocketServer {
             const user = socket.user;
             try {
                 const socketClient = new socket_client_1.SocketClient(user, this.core, server, socket);
+                const reconnectionTarget = this.findReconnectionTarget(user.id);
+                if (socket.isReconnectionAttempt && reconnectionTarget) {
+                    socketClient.id = reconnectionTarget.playerId;
+                }
                 // Simple connection - just connect to core
                 await this.core.connect(socketClient);
                 socketClient.attachListeners();
                 socket.on('disconnect', async (reason) => {
                     try {
+                        try {
+                            await this.core.getReconnectionManager().handleDisconnection(socketClient, String(reason));
+                        }
+                        catch (error) {
+                            logger_1.logger.log(`[Socket] Error preserving disconnection state: ${error}`);
+                        }
                         // Simple disconnection - just disconnect from core
                         await this.core.disconnect(socketClient, String(reason));
                         socketClient.dispose();
@@ -56,6 +66,15 @@ class WebSocketServer {
      */
     getReconnectionManager() {
         return this.reconnectionManager;
+    }
+    findReconnectionTarget(userId) {
+        for (const game of this.core.games) {
+            const playerId = game.getPlayerIdForUser(userId);
+            if (playerId && game.isPlayerDisconnected(playerId)) {
+                return { gameId: game.id, playerId };
+            }
+        }
+        return undefined;
     }
     /**
      * Dispose of the WebSocketServer and cleanup resources

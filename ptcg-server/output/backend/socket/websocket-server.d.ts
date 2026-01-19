@@ -14,6 +14,7 @@ export declare class WebSocketServer {
      * Get the reconnection manager instance
      */
     getReconnectionManager(): ReconnectionManager;
+    private findReconnectionTarget;
     /**
      * Dispose of the WebSocketServer and cleanup resources
      */

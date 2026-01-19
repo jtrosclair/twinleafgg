@@ -48,7 +48,9 @@ class Core {
         return this.reconnectionManager;
     }
     async connect(client) {
-        client.id = (0, utils_1.generateId)(this.clients);
+        if (client.id === 0 || this.clients.some(c => c.id === client.id)) {
+            client.id = (0, utils_1.generateId)(this.clients);
+        }
         client.core = this;
         client.games = [];
         // Add client to the core
@@ -64,8 +66,20 @@ class Core {
         if (index === -1) {
             throw new game_error_1.GameError(game_message_1.GameMessage.ERROR_CLIENT_NOT_CONNECTED);
         }
-        // Leave all games
-        client.games.forEach(game => this.leaveGame(client, game));
+        // Handle disconnection for all games without removing them
+        client.games.forEach(game => {
+            const isPlayer = game.state.players.some(player => player.id === client.id);
+            if (isPlayer) {
+                game.handlePlayerDisconnection(client);
+                return;
+            }
+            const gameClientIndex = game.clients.indexOf(client);
+            if (gameClientIndex !== -1) {
+                game.clients.splice(gameClientIndex, 1);
+                this.emit(c => c.onGameLeave(game, client));
+            }
+        });
+        client.games = [];
         // Remove client from core
         this.clients.splice(index, 1);
         client.core = undefined;
@@ -161,6 +175,7 @@ class Core {
             this.emit(c => c.onGameJoin(game, client));
             client.games.push(game);
             game.clients.push(client);
+            game.registerPlayer(client);
             // Join Socket.IO room for game-specific messages
             const socketClient = client;
             if (socketClient && socketClient.socket && socketClient.socket.socket) {

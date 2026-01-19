@@ -143,42 +143,37 @@ export class GameSocket {
         return;
       }
 
-      // Find disconnected player by user ID (not by player.id which is the old session ID)
-      const disconnectedPlayer = game.getDisconnectedPlayerByUserId(this.client.user.id);
-
-      if (!disconnectedPlayer) {
-        // User is not a disconnected player in this game
+      const playerId = game.getPlayerIdForUser(this.client.user.id);
+      if (!playerId) {
         response('error', ApiErrorEnum.GAME_INVALID_ID);
         return;
       }
 
-      // Find the player in game state using the original clientId from disconnection
-      const userPlayer = game.state.players.find(p => p.id === disconnectedPlayer.clientId);
+      // User is a player, check if they're disconnected
+      const disconnectedPlayer = game.getDisconnectedPlayerInfo(playerId);
 
-      if (!userPlayer) {
-        // Player state not found (shouldn't happen if disconnectedPlayer exists)
+      if (!disconnectedPlayer) {
+        // User is a player but not disconnected - they're already connected or never disconnected
         response('error', ApiErrorEnum.GAME_INVALID_ID);
         return;
       }
 
       // User is disconnected, attempt reconnection
-      // Set client.id to match the original player.id for reconnection
-      const originalClientId = this.client.id;
-      this.client.id = disconnectedPlayer.clientId;
+      if (this.client.id !== playerId) {
+        this.client.id = playerId;
+      }
 
       const reconnected = game.handlePlayerReconnection(this.client);
 
       if (reconnected) {
         // Successfully reconnected to the game
         this.cache.lastLogIdCache[game.id] = 0;
-        const gameState = CoreSocket.buildGameState(game);
-        // Include the reconnected client ID so the client knows which player they are
-        gameState.reconnectedClientId = disconnectedPlayer.clientId;
-        response('ok', gameState);
+        if (!this.client.games.includes(game)) {
+          this.client.games.push(game);
+        }
+        response('ok', CoreSocket.buildGameState(game));
         return;
       } else {
-        // Restore original client ID if reconnection failed
-        this.client.id = originalClientId;
         response('error', ApiErrorEnum.GAME_INVALID_ID);
         return;
       }
