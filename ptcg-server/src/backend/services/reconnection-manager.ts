@@ -619,8 +619,14 @@ export class ReconnectionManager {
   private startCleanupInterval(): void {
     this.cleanupInterval = setInterval(
       async () => {
-        await this.cleanupExpiredSessions();
-        await this.checkTimeoutWarnings();
+        try {
+          logger.log('STARTING CLEANUP');
+          await this.cleanupExpiredSessions();
+          await this.checkTimeoutWarnings();
+        }
+        catch (ex) {
+          logger.log('[ReconnectionManager] OOPS WE COULDN"T DO THE THING');
+        }
       },
       this.getCurrentConfig().cleanupIntervalMs
     );
@@ -660,7 +666,14 @@ export class ReconnectionManager {
   private startResourceMetricsCollection(): void {
     this.resourceMetricsInterval = setInterval(
       async () => {
-        await this.collectAndUpdateResourceMetrics();
+        try {
+          logger.log('STARTING METRICS');
+
+          await this.collectAndUpdateResourceMetrics();
+        }
+        catch (ex) {
+          logger.log('COULDNT DO THE RECONNECTION THING');
+        }
       },
       30 * 1000 // Collect metrics every 30 seconds
     );
