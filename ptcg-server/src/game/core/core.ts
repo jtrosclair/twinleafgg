@@ -327,6 +327,7 @@ export class Core {
   private startInactiveGameCleanup(): void {
     const cleanupIntervalMs = 10 * 60 * 1000; // 10 minutes
     this.inactiveGameCleanupInterval = setInterval(async () => {
+      console.log("startInactiveCleanup")
       const inactiveTimeout = 10 * 60 * 1000; // 10 minutes
 
       // Collect games to clean up first to avoid modifying array during iteration

@@ -25,6 +25,7 @@ const jumbo_ice_1 = require("./jumbo-ice");
 const lombre_1 = require("./lombre");
 const lotad_1 = require("./lotad");
 const ludicolo_1 = require("./ludicolo");
+const mamoswine_1 = require("./mamoswine");
 const mega_charizard_x_ex_1 = require("./mega-charizard-x-ex");
 const mega_diancie_ex_1 = require("./mega-diancie-ex");
 const mega_gengar_ex_1 = require("./mega-gengar-ex");
@@ -67,6 +68,7 @@ exports.setPhantasmalFlames = [
     new lombre_1.Lombre(),
     new lotad_1.Lotad(),
     new ludicolo_1.Ludicolo(),
+    new mamoswine_1.Mamoswine(),
     new mega_charizard_x_ex_1.MegaCharizardXex(),
     new mega_diancie_ex_1.MegaDiancieex(),
     new mega_gengar_ex_1.MegaGengarex(),

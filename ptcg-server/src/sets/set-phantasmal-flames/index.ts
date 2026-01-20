@@ -23,6 +23,7 @@ import { JumboIce } from './jumbo-ice';
 import { Lombre } from './lombre';
 import { Lotad } from './lotad';
 import { Ludicolo } from './ludicolo';
+import { Mamoswine } from './mamoswine';
 import { MegaCharizardXex } from './mega-charizard-x-ex';
 import { MegaDiancieex } from './mega-diancie-ex';
 import { MegaGengarex } from './mega-gengar-ex';
@@ -66,6 +67,7 @@ export const setPhantasmalFlames: Card[] = [
   new Lombre(),
   new Lotad(),
   new Ludicolo(),
+  new Mamoswine(),
   new MegaCharizardXex(),
   new MegaDiancieex(),
   new MegaGengarex(),
