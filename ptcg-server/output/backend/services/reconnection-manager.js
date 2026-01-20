@@ -27,9 +27,9 @@ class ReconnectionManager {
         this.cleanupService = new reconnection_cleanup_service_1.ReconnectionCleanupService(this.gameStatePreserver, this.configManager, {
             cleanupIntervalMs: config.cleanupIntervalMs,
             databaseOptimizationIntervalMs: 300 * 60 * 1000,
-            memoryCleanupThresholdMb: 1000,
+            memoryCleanupThresholdMb: 500,
             maxSessionAge: 1 * 60 * 60 * 1000,
-            enableScheduledCleanup: false,
+            enableScheduledCleanup: true,
             enableDatabaseOptimization: false,
             enableMemoryManagement: true
         });

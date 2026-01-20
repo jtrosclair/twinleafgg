@@ -43,10 +43,10 @@ export class ReconnectionCleanupService {
   private config: MaintenanceConfig = {
     cleanupIntervalMs: 10 * 60 * 1000, // 2 minutes - more frequent cleanup
     databaseOptimizationIntervalMs: 300 * 60 * 1000, // 30 minutes - more frequent DB optimization
-    memoryCleanupThresholdMb: 1000, // 500MB - more realistic threshold
+    memoryCleanupThresholdMb: 500, // 500MB - more realistic threshold
     maxSessionAge: 6 * 60 * 60 * 1000, // 6 hours - shorter session retention
     enableScheduledCleanup: true,
-    enableDatabaseOptimization: true,
+    enableDatabaseOptimization: false,
     enableMemoryManagement: true
   };
 
@@ -104,8 +104,6 @@ export class ReconnectionCleanupService {
    * Start cleanup interval for expired sessions
    */
   private startCleanupInterval(): void {
-    console.log("SKIP CLEANUP");
-    return;
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
     }
@@ -117,7 +115,7 @@ export class ReconnectionCleanupService {
         }
       }
       catch (ex) {
-        console.log("CLEANUP FAILED", ex)
+        console.log("CLEANUP FAILED", ex);
       }
     }, this.config.cleanupIntervalMs);
 
@@ -330,7 +328,7 @@ export class ReconnectionCleanupService {
         });
 
         // Perform aggressive cleanup before GC
-        //await this.performAggressiveCleanup();
+        await this.performAggressiveCleanup();
 
         // Force garbage collection if available
         if (global.gc) {

@@ -21,10 +21,10 @@ class ReconnectionCleanupService {
         this.config = {
             cleanupIntervalMs: 10 * 60 * 1000,
             databaseOptimizationIntervalMs: 300 * 60 * 1000,
-            memoryCleanupThresholdMb: 1000,
+            memoryCleanupThresholdMb: 500,
             maxSessionAge: 6 * 60 * 60 * 1000,
             enableScheduledCleanup: true,
-            enableDatabaseOptimization: true,
+            enableDatabaseOptimization: false,
             enableMemoryManagement: true
         };
         this.gameStatePreserver = gameStatePreserver;
@@ -68,8 +68,6 @@ class ReconnectionCleanupService {
      * Start cleanup interval for expired sessions
      */
     startCleanupInterval() {
-        console.log("SKIP CLEANUP");
-        return;
         if (this.cleanupInterval) {
             clearInterval(this.cleanupInterval);
         }
@@ -265,7 +263,7 @@ class ReconnectionCleanupService {
                     }
                 });
                 // Perform aggressive cleanup before GC
-                //await this.performAggressiveCleanup();
+                await this.performAggressiveCleanup();
                 // Force garbage collection if available
                 if (global.gc) {
                     const beforeGc = process.memoryUsage().heapUsed;
