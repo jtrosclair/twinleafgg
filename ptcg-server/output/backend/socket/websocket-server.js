@@ -33,6 +33,14 @@ class WebSocketServer {
                 const reconnectionTarget = this.findReconnectionTarget(user.id);
                 if (socket.isReconnectionAttempt && reconnectionTarget) {
                     socketClient.id = reconnectionTarget.playerId;
+                    // Restore the player's name from the game state
+                    const game = this.core.games.find(g => g.id === reconnectionTarget.gameId);
+                    if (game) {
+                        const player = game.state.players.find(p => p.id === reconnectionTarget.playerId);
+                        if (player) {
+                            socketClient.name = player.name;
+                        }
+                    }
                 }
                 // Simple connection - just connect to core
                 await this.core.connect(socketClient);

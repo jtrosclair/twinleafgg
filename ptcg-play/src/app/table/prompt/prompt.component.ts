@@ -1,5 +1,5 @@
 import { AnimationEvent } from '@angular/animations';
-import { Component, Input, OnChanges, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
 import { Prompt, GamePhase } from 'ptcg-server';
 
 import { GameService } from '../../api/services/game.service';
@@ -24,7 +24,10 @@ export class PromptComponent implements OnChanges {
   public prompt: Prompt<any>;
   public minimized = false;
 
-  constructor(private gameService: GameService) { }
+  constructor(
+    private gameService: GameService,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.gameState || !this.clientId) {
@@ -64,6 +67,7 @@ export class PromptComponent implements OnChanges {
         this.minimized = false;
         this.maximize();
         this.toggle(prompt !== undefined);
+        this.cdr.detectChanges();
       });
     } else if (this.minimized !== this.gameState.promptMinimized) {
       this.minimized = this.gameState.promptMinimized;

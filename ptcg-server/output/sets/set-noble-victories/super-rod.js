@@ -40,7 +40,7 @@ function* playCard(next, store, state, self, effect) {
         max = eligibleIndices.length;
     }
     else {
-        min = 3;
+        min = 1;
         max = 3;
     }
     yield store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_DECK, player.discard, {}, { min, max, allowCancel: false, blocked }), selected => {

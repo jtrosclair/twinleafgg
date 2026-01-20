@@ -46,7 +46,7 @@ function* playCard(next: Function, store: StoreLike, state: State,
     min = eligibleIndices.length;
     max = eligibleIndices.length;
   } else {
-    min = 3;
+    min = 1;
     max = 3;
   }
 

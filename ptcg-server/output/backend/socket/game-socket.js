@@ -55,7 +55,7 @@ class GameSocket {
     onStateChange(game, state) {
         if (this.core.games.indexOf(game) !== -1) {
             game.setBonusHps(state);
-            state = this.stateSanitizer.sanitize(game.state, game.id);
+            state = this.stateSanitizer.sanitize(state, game.id);
             // Emit turn start if active player changed
             const activePlayer = state.players[state.activePlayer];
             if (activePlayer && this.lastActivePlayerId !== activePlayer.id) {

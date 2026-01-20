@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import {
   ClientInfo, GameState, State, CardTarget, StateLog, Replay,
   Base64, StateSerializer, PlayerStats, GamePhase
@@ -31,7 +31,8 @@ export class GameService {
     private sessionService: SessionService,
     public socketService: SocketService,
     private translate: TranslateService,
-    private boardInteractionService: BoardInteractionService
+    private boardInteractionService: BoardInteractionService,
+    private ngZone: NgZone
   ) { }
 
   public getPlayerStats(gameId: number) {
@@ -274,20 +275,25 @@ export class GameService {
   }
 
   private startListening(id: number) {
-    this.socketService.on(`game[${id}]:join`, (clientId: number) => this.onJoin(id, clientId));
-    this.socketService.on(`game[${id}]:leave`, (clientId: number) => this.onLeave(id, clientId));
-    this.socketService.on(`game[${id}]:stateChange`, (data: { stateData: string, playerStats: PlayerStats[] }) =>
-      this.onStateChange(id, data.stateData, data.playerStats));
+    this.socketService.on(`game[${id}]:join`, (clientId: number) => {
+      this.ngZone.run(() => this.onJoin(id, clientId));
+    });
+    this.socketService.on(`game[${id}]:leave`, (clientId: number) => {
+      this.ngZone.run(() => this.onLeave(id, clientId));
+    });
+    this.socketService.on(`game[${id}]:stateChange`, (data: { stateData: string, playerStats: PlayerStats[] }) => {
+      this.ngZone.run(() => this.onStateChange(id, data.stateData, data.playerStats));
+    });
 
     // Animation event handlers
     this.socketService.on(`game[${id}]:playBasicAnimation`, (data: { playerId: number, cardId: number | string, slot: string, index?: number }) => {
-      this.boardInteractionService.triggerBasicAnimation(data);
+      this.ngZone.run(() => this.boardInteractionService.triggerBasicAnimation(data));
     });
     this.socketService.on(`game[${id}]:evolution`, (data: { playerId: number, cardId: number | string, slot: string, index?: number }) => {
-      this.boardInteractionService.triggerEvolutionAnimation(data);
+      this.ngZone.run(() => this.boardInteractionService.triggerEvolutionAnimation(data));
     });
     this.socketService.on(`game[${id}]:attack`, (data: { playerId: number, cardId: number | string, slot: string, index?: number }) => {
-      this.boardInteractionService.triggerAttackAnimation(data);
+      this.ngZone.run(() => this.boardInteractionService.triggerAttackAnimation(data));
     });
   }
 

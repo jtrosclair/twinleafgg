@@ -432,17 +432,19 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
         throw new GameError(GameMessage.ILLEGAL_ACTION);
       }
       const temp = player.active;
-      const playerActive = player.active.getPokemonCard();
       player.active = player.bench[benchIndex];
-      if (playerActive) {
+      player.bench[benchIndex] = temp;
+
+      // Track the newly promoted Pokemon (the one that moved FROM bench TO active)
+      const newActivePokemon = player.active.getPokemonCard();
+      if (newActivePokemon) {
         // Add to new tracking system
-        if (!player.movedToActiveThisTurn.includes(playerActive.id)) {
-          player.movedToActiveThisTurn.push(playerActive.id);
+        if (!player.movedToActiveThisTurn.includes(newActivePokemon.id)) {
+          player.movedToActiveThisTurn.push(newActivePokemon.id);
         }
         // Keep existing boolean for backwards compatibility
-        playerActive.movedToActiveThisTurn = true;
+        newActivePokemon.movedToActiveThisTurn = true;
       }
-      player.bench[benchIndex] = temp;
     });
 
     if (store.hasPrompts()) {
