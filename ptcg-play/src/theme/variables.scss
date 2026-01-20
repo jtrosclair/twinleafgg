@@ -29,7 +29,7 @@ $ptcg-disabled-opacity: .5;
 $ptcg-sidebar-tiny-padding: math.div(map-get($padding, small), 2);
 $ptcg-board-tiny-padding: math.div(map-get($padding, small), 4);
 
-$ptcg-prompt-padding: 24px !default;
+$ptcg-prompt-padding: 12px !default;
 $ptcg-prompt-border-radius: 4px !default;
-$ptcg-prompt-max-height: 65vh !default;
+$ptcg-prompt-max-height: 80vh !default;
 $ptcg-prompt-button-margin: 8px !default;

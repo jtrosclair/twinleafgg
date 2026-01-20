@@ -10,6 +10,7 @@ class Scheduler {
         return Scheduler.instance;
     }
     run(callback, counter = 1) {
+        console.log({ config: config_1.config.core });
         // Job disabled in the config file, do not add it to scheduler
         if (counter === 0) {
             return;

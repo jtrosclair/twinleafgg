@@ -38,7 +38,7 @@ class Core {
         this.reconnectionManager = new reconnection_manager_1.ReconnectionManager(reconnectionConfig || defaultConfig);
         const cleanerTask = new cleaner_task_1.CleanerTask(this);
         cleanerTask.startTasks();
-        this.startRankingDecrease();
+        //this.startRankingDecrease();
         this.startInactiveGameCleanup();
     }
     getBotManager() {
@@ -268,9 +268,8 @@ class Core {
         }, config_1.config.core.rankingDecreaseIntervalCount);
     }
     startInactiveGameCleanup() {
-        const scheduler = utils_1.Scheduler.getInstance();
-        // Check for inactive games every 2 minutes
-        scheduler.run(async () => {
+        const cleanupIntervalMs = 10 * 60 * 1000; // 10 minutes
+        this.inactiveGameCleanupInterval = setInterval(async () => {
             const inactiveTimeout = 10 * 60 * 1000; // 10 minutes
             // Collect games to clean up first to avoid modifying array during iteration
             const gamesToCleanup = [];
@@ -314,12 +313,16 @@ class Core {
             if (gamesToCleanup.length > 0) {
                 console.log(`[Game Cleanup] Cleaned up ${gamesToCleanup.length} inactive games. Active games: ${this.games.length}`);
             }
-        }, 5 * 60); // Run every 5 minutes
+        }, cleanupIntervalMs);
     }
     /**
      * Dispose of the Core and cleanup resources
      */
     dispose() {
+        if (this.inactiveGameCleanupInterval) {
+            clearInterval(this.inactiveGameCleanupInterval);
+            this.inactiveGameCleanupInterval = undefined;
+        }
         if (this.reconnectionManager) {
             this.reconnectionManager.dispose();
         }

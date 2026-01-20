@@ -42,6 +42,7 @@ export declare class Core {
      */
     private broadcastUserUpdates;
     private startRankingDecrease;
+    private inactiveGameCleanupInterval;
     private startInactiveGameCleanup;
     /**
      * Dispose of the Core and cleanup resources
