@@ -21,6 +21,7 @@ export class StateSerializer {
 
   public serializers: Serializer<any>[];
   public static knownCards: Card[] = [];
+  private static knownCardsByFullName: Map<string, Card> = new Map();
 
   constructor() {
     this.serializers = [
@@ -225,22 +226,23 @@ export class StateSerializer {
 
   public static setKnownCards(cards: Card[]) {
     StateSerializer.knownCards = cards;
+    StateSerializer.knownCardsByFullName = new Map(cards.map(card => [card.fullName, card]));
+    console.log("cards set")
   }
 
   private restoreContext(serializedState: SerializedState): SerializerContext {
     const parsed = JSON.parse(serializedState);
     const names: string[] = parsed[1].cardNames;
-    const cards: Card[] = [];
-    names.forEach((name, index) => {
+    const cards: Card[] = names.map((name, index) => {
       const fixedName = name?.replace("�", "é")
-      let card: Card | undefined = StateSerializer.knownCards.find(c => c.fullName === fixedName);
+      const card = StateSerializer.knownCardsByFullName.get(fixedName);
       if (card === undefined) {
         console.log({ card, fixedName })
         throw new GameError(GameCoreError.ERROR_SERIALIZER, `Unknown cards '${fixedName}'.`);
       }
-      card = deepClone(card) as Card;
-      card.id = index;
-      cards.push(card);
+      const clonedCard = deepClone(card) as Card;
+      clonedCard.id = index;
+      return clonedCard;
     });
     return { cards };
   }

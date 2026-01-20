@@ -184,24 +184,26 @@ class StateSerializer {
     }
     static setKnownCards(cards) {
         StateSerializer.knownCards = cards;
+        StateSerializer.knownCardsByFullName = new Map(cards.map(card => [card.fullName, card]));
+        console.log("cards set");
     }
     restoreContext(serializedState) {
         const parsed = JSON.parse(serializedState);
         const names = parsed[1].cardNames;
-        const cards = [];
-        names.forEach((name, index) => {
+        const cards = names.map((name, index) => {
             const fixedName = name === null || name === void 0 ? void 0 : name.replace("�", "é");
-            let card = StateSerializer.knownCards.find(c => c.fullName === fixedName);
+            const card = StateSerializer.knownCardsByFullName.get(fixedName);
             if (card === undefined) {
                 console.log({ card, fixedName });
                 throw new game_error_1.GameError(game_message_1.GameCoreError.ERROR_SERIALIZER, `Unknown cards '${fixedName}'.`);
             }
-            card = (0, utils_1.deepClone)(card);
-            card.id = index;
-            cards.push(card);
+            const clonedCard = (0, utils_1.deepClone)(card);
+            clonedCard.id = index;
+            return clonedCard;
         });
         return { cards };
     }
 }
 exports.StateSerializer = StateSerializer;
 StateSerializer.knownCards = [];
+StateSerializer.knownCardsByFullName = new Map();

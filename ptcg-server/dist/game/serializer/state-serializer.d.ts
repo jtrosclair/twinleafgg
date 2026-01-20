@@ -4,6 +4,7 @@ import { Card } from '../store/card/card';
 export declare class StateSerializer {
     serializers: Serializer<any>[];
     static knownCards: Card[];
+    private static knownCardsByFullName;
     constructor();
     static normalizeCardName(name: string): string;
     serialize(state: State): SerializedState;

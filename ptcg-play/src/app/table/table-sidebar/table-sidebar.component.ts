@@ -144,15 +144,15 @@ export class TableSidebarComponent implements OnDestroy, OnChanges {
       || (this.bottomPlayerStats && this.bottomPlayerStats.clientId !== bottomPlayerId);
 
     if (!this.gameState.deleted && gameOrPlayerHasChanged) {
-      this.refreshPlayerStats(this.gameState);
+      //this.refreshPlayerStats(this.gameState);
     }
 
     this.gameId = this.gameState.localId;
     this.turn = state.turn;
     this.isTopPlayerActive = this.isPlayerActive(state, this.topPlayer);
     this.isBottomPlayerActive = this.isPlayerActive(state, this.bottomPlayer);
-    this.topPlayerStats = this.getPlayerStats(this.gameState, this.topPlayer);
-    this.bottomPlayerStats = this.getPlayerStats(this.gameState, this.bottomPlayer);
+    //this.topPlayerStats = this.getPlayerStats(this.gameState, this.topPlayer);
+    //this.bottomPlayerStats = this.getPlayerStats(this.gameState, this.bottomPlayer);
     this.bottomReplayPlayer = undefined;
     this.topReplayPlayer = undefined;
 

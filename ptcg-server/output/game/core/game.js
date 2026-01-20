@@ -102,11 +102,11 @@ class Game {
             this.startTimer();
         }
         if (state.phase !== state_1.GamePhase.FINISHED && this.periodicSyncRef === undefined) {
-            this.startPeriodicSync();
+            //this.startPeriodicSync();
         }
         if (state.phase === state_1.GamePhase.FINISHED) {
             this.stopTimer();
-            this.stopPeriodicSync();
+            //this.stopPeriodicSync();
             this.core.deleteGame(this);
         }
     }
