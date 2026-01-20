@@ -204,36 +204,20 @@ export class MemoryOptimizationService {
 
   /**
    * Clear various caches and temporary data
+   *
+   * NOTE: Clearing require.cache has been disabled because it causes module
+   * reinitialization failures. When modules like js-yaml are cleared and later
+   * re-required, their schema initialization can fail due to inconsistent state.
+   * The memory savings are minimal compared to the instability it causes.
    */
   private async clearCaches(): Promise<void> {
-    try {
-      // Clear require cache for non-essential modules
-      const cacheKeys = Object.keys(require.cache);
-      const nonEssentialModules = cacheKeys.filter(key =>
-        key.includes('node_modules') &&
-        !key.includes('core') &&
-        !key.includes('essential')
-      );
-
-      nonEssentialModules.forEach(key => {
-        delete require.cache[key];
-      });
-
-      logger.logStructured({
-        level: LogLevel.DEBUG,
-        category: 'memory-optimization',
-        message: 'Cleared require cache',
-        data: { clearedModules: nonEssentialModules.length }
-      });
-
-    } catch (error) {
-      logger.logStructured({
-        level: LogLevel.WARN,
-        category: 'memory-optimization',
-        message: 'Error clearing caches',
-        error: error as Error
-      });
-    }
+    // Intentionally disabled - clearing require.cache causes module initialization
+    // failures (e.g., YAMLException when js-yaml is re-required after being cleared)
+    logger.logStructured({
+      level: LogLevel.DEBUG,
+      category: 'memory-optimization',
+      message: 'Cache clearing skipped (disabled for stability)'
+    });
   }
 
   /**

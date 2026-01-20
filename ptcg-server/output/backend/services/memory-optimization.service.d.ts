@@ -40,6 +40,11 @@ export declare class MemoryOptimizationService {
     private performPreventiveOptimization;
     /**
      * Clear various caches and temporary data
+     *
+     * NOTE: Clearing require.cache has been disabled because it causes module
+     * reinitialization failures. When modules like js-yaml are cleared and later
+     * re-required, their schema initialization can fail due to inconsistent state.
+     * The memory savings are minimal compared to the instability it causes.
      */
     private clearCaches;
     /**
