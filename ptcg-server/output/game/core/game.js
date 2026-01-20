@@ -130,7 +130,7 @@ class Game {
         var _a;
         let state = this.store.state;
         try {
-            this.stateHistory.push((0, utils_1.deepClone)(state));
+            //this.stateHistory.push(deepClone(state));
             if (this.isStartOfTurnAction(action, state)) {
                 this.turnStartHistoryIndex = this.stateHistory.length - 1;
             }
@@ -545,6 +545,7 @@ class Game {
         }
     }
     canUndo(clientId) {
+        return false;
         if (clientId !== undefined) {
             const state = this.store.state;
             const activePlayer = state.players[state.activePlayer];
@@ -555,6 +556,7 @@ class Game {
         return this.stateHistory.length - 1 >= this.turnStartHistoryIndex - 1;
     }
     undo(clientId) {
+        return true;
         if (!this.canUndo(clientId))
             return false;
         if (this.stateHistory.length - 1 < this.turnStartHistoryIndex - 1)

@@ -38,7 +38,7 @@ export class Core {
       maxAutoReconnectAttempts: 3,
       reconnectIntervals: [5000, 10000, 15000],
       healthCheckIntervalMs: 30 * 1000,
-      cleanupIntervalMs: 60 * 1000,
+      cleanupIntervalMs: 5 * 60 * 1000,
       maxPreservedSessionsPerUser: 1
     };
     this.reconnectionManager = new ReconnectionManager(reconnectionConfig || defaultConfig);
@@ -324,13 +324,16 @@ export class Core {
 
   private startInactiveGameCleanup(): void {
     const scheduler = Scheduler.getInstance();
-    // Check for inactive games every 5 minutes
+    // Check for inactive games every 2 minutes
     scheduler.run(async () => {
-      const inactiveTimeout = 5 * 60 * 1000; // 5 minutes
+      const inactiveTimeout = 10 * 60 * 1000; // 10 minutes
+
+      // Collect games to clean up first to avoid modifying array during iteration
+      const gamesToCleanup: Game[] = [];
 
       for (const game of this.games) {
         if (game.isInactive(inactiveTimeout)) {
-          console.log(`[Game Cleanup] Checking inactive game ${game.id}`);
+          console.log(`[Game Cleanup] Checking inactive game ${game.id} (last activity: ${Math.round((Date.now() - game.getLastActivity()) / 1000)}s ago)`);
 
           // Check if this game has preserved sessions before cleaning up
           try {
@@ -347,21 +350,30 @@ export class Core {
             continue;
           }
 
-          console.log(`[Game Cleanup] Cleaning up inactive game ${game.id}`);
-          // Force end the game
-          const state = game.state;
-          if (state.phase !== GamePhase.FINISHED) {
-            state.players.forEach(player => {
-              const action = new AbortGameAction(player.id, AbortGameReason.DISCONNECTED);
-              // Use the first client as the source for the abort action
-              if (game.clients.length > 0) {
-                game.dispatch(game.clients[0], action);
-              }
-            });
-          }
-          game.cleanup();
-          this.deleteGame(game);
+          gamesToCleanup.push(game);
         }
+      }
+
+      // Now clean up the collected games
+      for (const game of gamesToCleanup) {
+        console.log(`[Game Cleanup] Cleaning up inactive game ${game.id}`);
+        // Force end the game
+        const state = game.state;
+        if (state.phase !== GamePhase.FINISHED) {
+          state.players.forEach(player => {
+            const action = new AbortGameAction(player.id, AbortGameReason.DISCONNECTED);
+            // Use the first client as the source for the abort action
+            if (game.clients.length > 0) {
+              game.dispatch(game.clients[0], action);
+            }
+          });
+        }
+        game.cleanup();
+        this.deleteGame(game);
+      }
+
+      if (gamesToCleanup.length > 0) {
+        console.log(`[Game Cleanup] Cleaned up ${gamesToCleanup.length} inactive games. Active games: ${this.games.length}`);
       }
     }, 5 * 60); // Run every 5 minutes
   }

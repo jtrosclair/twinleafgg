@@ -106,6 +106,10 @@ export class ChoosePokemonsPaneComponent implements OnDestroy {
     return row.items.filter(item => item.cardList.cards.length > 0).length > 1;
   }
 
+  public hasMoreThanFiveItems(row: PokemonRow): boolean {
+    return row.items.filter(item => item.cardList.cards.length > 0).length > 5;
+  }
+
   ngOnDestroy() {
     this.unsubscribeDropTargets();
   }

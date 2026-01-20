@@ -172,7 +172,7 @@ export class Game implements StoreHandler {
   public dispatch(client: Client, action: Action): State {
     let state = this.store.state;
     try {
-      this.stateHistory.push(deepClone(state));
+      //this.stateHistory.push(deepClone(state));
       if (this.isStartOfTurnAction(action, state)) {
         this.turnStartHistoryIndex = this.stateHistory.length - 1;
       }
@@ -670,6 +670,7 @@ export class Game implements StoreHandler {
   }
 
   public canUndo(clientId?: number): boolean {
+    return false;
     if (clientId !== undefined) {
       const state = this.store.state;
       const activePlayer = state.players[state.activePlayer];
@@ -681,6 +682,7 @@ export class Game implements StoreHandler {
   }
 
   public undo(clientId?: number): boolean {
+    return true;
     if (!this.canUndo(clientId)) return false;
     if (this.stateHistory.length - 1 < this.turnStartHistoryIndex - 1) return false;
     const prevState = this.stateHistory.pop();

@@ -2,6 +2,7 @@
 
 $ptcg-selection-container-padding: map-get($padding, small);
 $ptcg-selection-container-border-radius: map-get($padding, small);
+$ptcg-wrap-gap: map-get($padding, small);
 
 :host {
   display: block;
@@ -33,6 +34,21 @@ ptcg-board-card {
   display: flex;
   justify-content: center;
   margin: map-get($padding, normal) 0;
+
+  &.wrap-items {
+    flex-wrap: wrap;
+    gap: $ptcg-wrap-gap;
+
+    ptcg-board-card {
+      // Calculate width for exactly 5 items per row: (100% - 4 gaps) / 5
+      width: calc((100% - 4 * #{$ptcg-wrap-gap}) / 5);
+      margin: 0;
+
+      &.small-card {
+        width: calc((100% - 4 * #{$ptcg-wrap-gap}) / 5) !important;
+      }
+    }
+  }
 
   &.upside-down {
     transform: rotate(180deg);

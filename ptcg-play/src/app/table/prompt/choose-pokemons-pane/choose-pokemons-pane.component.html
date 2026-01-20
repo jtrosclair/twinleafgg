@@ -1,6 +1,6 @@
 <div class="ptcg-choose-pokemons-pane">
   <div class="ptcg-pokemon-row" *ngFor="let row of rows"
-    [ngClass]="{'upside-down': row.pokemonRow.playerType === PlayerType.TOP_PLAYER}">
+    [ngClass]="{'upside-down': row.pokemonRow.playerType === PlayerType.TOP_PLAYER, 'wrap-items': hasMoreThanFiveItems(row.pokemonRow)}">
     <ng-container *ngFor="let item of row.items">
       <ptcg-board-card *ngIf="item.pokemonItem.cardList.cards.length > 0" [inPrompt]="true" [dropTarget]="item.target"
         [class.small-card]="hasMultipleCards(row.pokemonRow)" ptcgDropHighlight="outside"
