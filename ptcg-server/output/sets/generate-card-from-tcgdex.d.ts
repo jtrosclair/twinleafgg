@@ -20,22 +20,14 @@ declare const setCodeToTcgDexId: {
     OBF: string;
 };
 declare function parseInputToTcgDexId(input: any): any;
-declare function toPascalCase(str: any): any;
-declare function toKebabCase(str: any): any;
-declare function getSetFolder(setId: any): string;
 declare function getBaseClassAndImport(category: any): {
     baseClass: string;
     importPath: string;
 };
-declare function mapStage(stage: any): string;
 declare function mapCardType(type: any): string;
-declare function mapCardTypeSymbol(type: any): string;
-declare function formatCost(costArr: any): string;
 declare function formatWeaknessesRaw(weakArr: any): string;
 declare function formatResistancesRaw(resArr: any): string;
 declare function formatPowers(powers: any): string;
-declare function escapeSingleQuotes(str: any): any;
 declare function formatAttacksRaw(attacks: any): any;
 declare function getTags(card: any): any[];
 declare function getCardFromArg(arg: any): Promise<any>;
-declare function main(): Promise<void>;

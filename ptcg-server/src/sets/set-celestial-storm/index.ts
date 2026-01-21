@@ -34,10 +34,12 @@ import { Slaking } from './slaking';
 import { Slakoth } from './slakoth';
 import { Slugma } from './slugma';
 import { Spinarak } from './spinarak';
+import { Steelix } from './steelix';
 import { StevensResolve } from './stevens-resolve';
 import { Swampert } from './swampert';
 import { TateAndLiza } from './tate-and-liza';
 import { Whismur } from './whismur';
+import { Wailmer } from './wailmer';
 
 // Other Prints
 import {
@@ -83,10 +85,12 @@ export const setCelestialStorm: Card[] = [
   new Slakoth(),
   new Slugma(),
   new Spinarak(),
+  new Steelix(),
   new StevensResolve(),
   new Swampert(),
   new TateAndLiza(),
   new Whismur(),
+  new Wailmer(),
   new ArticunoGX(),
   new Dunsparce(),
 

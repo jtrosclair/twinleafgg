@@ -1,0 +1,154 @@
+{
+  "lastUpdated": "2026-01-21T19:26:50.963Z",
+  "cards": [
+    {
+      "name": "Looker",
+      "setCode": "UPR",
+      "setNumber": "126",
+      "fullName": "Looker UPR",
+      "importLine": "1 Looker UPR 126",
+      "addedAt": "2026-01-21T19:18:15.695Z",
+      "tcgdexData": {
+        "category": "Trainer",
+        "id": "sm5-126",
+        "illustrator": "Ken Sugimori",
+        "image": "https://assets.tcgdex.net/en/sm/sm5/126",
+        "localId": "126",
+        "name": "Looker",
+        "rarity": "Uncommon",
+        "set": {
+          "cardCount": {
+            "official": 156,
+            "total": 173
+          },
+          "id": "sm5",
+          "logo": "https://assets.tcgdex.net/en/sm/sm5/logo",
+          "name": "Ultra Prism",
+          "symbol": "https://assets.tcgdex.net/univ/sm/sm5/symbol"
+        },
+        "variants": {
+          "firstEdition": false,
+          "holo": true,
+          "normal": true,
+          "reverse": true,
+          "wPromo": false
+        },
+        "variants_detailed": [
+          {
+            "type": "normal",
+            "size": "standard"
+          },
+          {
+            "type": "reverse",
+            "size": "standard"
+          },
+          {
+            "type": "holo",
+            "size": "standard"
+          }
+        ],
+        "effect": "Draw 3 cards from the bottom of your deck.",
+        "trainerType": "Supporter",
+        "legal": {
+          "standard": false,
+          "expanded": true
+        },
+        "updated": "2025-08-16T20:39:55Z",
+        "pricing": {
+          "cardmarket": {
+            "updated": "2026-01-21T01:41:52.000Z",
+            "unit": "EUR",
+            "idProduct": 316051,
+            "avg": 0.09,
+            "low": 0.02,
+            "trend": 0.1,
+            "avg1": 0.05,
+            "avg7": 0.12,
+            "avg30": 0.08,
+            "avg-holo": 0.25,
+            "low-holo": 0.04,
+            "trend-holo": 0.36,
+            "avg1-holo": 0.45,
+            "avg7-holo": 0.25,
+            "avg30-holo": 0.34
+          },
+          "tcgplayer": {
+            "updated": "2026-01-20T20:10:19.000Z",
+            "unit": "USD",
+            "reverse-holofoil": {
+              "productId": 157743,
+              "lowPrice": 0.1,
+              "midPrice": 0.33,
+              "highPrice": 1.49,
+              "marketPrice": 0.32,
+              "directLowPrice": 0.32
+            },
+            "normal": {
+              "productId": 157743,
+              "lowPrice": 0.01,
+              "midPrice": 0.2,
+              "highPrice": 2,
+              "marketPrice": 0.12,
+              "directLowPrice": 0.12
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Damage Mover",
+      "setCode": "SLG",
+      "setNumber": "58",
+      "fullName": "Damage Mover SLG",
+      "importLine": "1 Damage Mover SLG 58",
+      "addedAt": "2026-01-21T19:18:15.695Z",
+      "tcgdexData": {
+        "category": "Trainer",
+        "id": "sm35-58",
+        "illustrator": "Naoki Saito",
+        "image": "https://assets.tcgdex.net/en/sm/sm35/58",
+        "localId": "58",
+        "name": "Damage Mover",
+        "rarity": "Uncommon",
+        "set": {
+          "cardCount": {
+            "official": 73,
+            "total": 102
+          },
+          "id": "sm35",
+          "logo": "https://assets.tcgdex.net/en/sm/sm35/logo",
+          "name": "Shining Legends",
+          "symbol": "https://assets.tcgdex.net/univ/sm/sm35/symbol"
+        },
+        "variants": {
+          "firstEdition": false,
+          "holo": true,
+          "normal": true,
+          "reverse": true,
+          "wPromo": false
+        },
+        "variants_detailed": [
+          {
+            "type": "normal",
+            "size": "standard"
+          },
+          {
+            "type": "reverse",
+            "size": "standard"
+          },
+          {
+            "type": "holo",
+            "size": "standard"
+          }
+        ],
+        "effect": "Move 3 damage counters from 1 of your Pokémon to another of your Pokémon.",
+        "trainerType": "Item",
+        "legal": {
+          "standard": false,
+          "expanded": true
+        },
+        "updated": "2025-08-16T20:39:55Z"
+      }
+    }
+  ]
+}

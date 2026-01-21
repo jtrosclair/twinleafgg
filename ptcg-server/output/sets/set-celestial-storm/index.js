@@ -36,10 +36,12 @@ const slaking_1 = require("./slaking");
 const slakoth_1 = require("./slakoth");
 const slugma_1 = require("./slugma");
 const spinarak_1 = require("./spinarak");
+const steelix_1 = require("./steelix");
 const stevens_resolve_1 = require("./stevens-resolve");
 const swampert_1 = require("./swampert");
 const tate_and_liza_1 = require("./tate-and-liza");
 const whismur_1 = require("./whismur");
+const wailmer_1 = require("./wailmer");
 // Other Prints
 const other_prints_2 = require("./other-prints");
 const regice_1 = require("./regice");
@@ -77,10 +79,12 @@ exports.setCelestialStorm = [
     new slakoth_1.Slakoth(),
     new slugma_1.Slugma(),
     new spinarak_1.Spinarak(),
+    new steelix_1.Steelix(),
     new stevens_resolve_1.StevensResolve(),
     new swampert_1.Swampert(),
     new tate_and_liza_1.TateAndLiza(),
     new whismur_1.Whismur(),
+    new wailmer_1.Wailmer(),
     new articuno_gx_1.ArticunoGX(),
     new dunsparce_1.Dunsparce(),
     // Other Prints

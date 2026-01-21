@@ -14,3 +14,4 @@ export * from './reset-password';
 export * from './battlepass';
 export * from './artworks.controller';
 export * from './memory-health.controller';
+export * from './deck-import';

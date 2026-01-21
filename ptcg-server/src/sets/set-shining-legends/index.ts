@@ -1,6 +1,7 @@
 import { EnergyRetrievalSLG, GreatBallSLG, HauSLG, LillieSLG, PokemonBreederSLG, PokemonCatcherSLG, SophoclesSLG, SuperScoopUpSLG, SwitchSLG, UltraBallSLG, DoubleColorlessEnergySLG, MewtwoGX2SLG, PokemonBreeder2SLG, MewtwoGX3SLG, ZoroarkGX2SLG, MewtwoGX4SLG, UltraBall2SLG, ZoroarkGX3SLG } from './other-prints';
 import { Card } from '../../game/store/card/card';
 import { Croconaw } from './croconaw';
+import { DamageMover } from './damage-mover';
 import { Hoopa } from './hoopa';
 import { Latios } from './latios';
 import { Marshadow } from './marshadow';
@@ -18,6 +19,7 @@ import { Zorua } from './zorua';
 
 export const setShiningLegends: Card[] = [
   new Croconaw(),
+  new DamageMover(),
   new Hoopa(),
   new Latios(),
   new Marshadow(),

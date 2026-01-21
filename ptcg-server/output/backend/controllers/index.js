@@ -30,3 +30,4 @@ __exportStar(require("./reset-password"), exports);
 __exportStar(require("./battlepass"), exports);
 __exportStar(require("./artworks.controller"), exports);
 __exportStar(require("./memory-health.controller"), exports);
+__exportStar(require("./deck-import"), exports);

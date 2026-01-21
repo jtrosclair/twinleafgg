@@ -69,6 +69,7 @@ class App {
         define('/v1/battlepass', controllers_1.BattlePass);
         define('/v1/artworks', controllers_1.Artworks);
         define('/v1/memory', controllers_1.MemoryHealthController);
+        define('/v1/deck-import', controllers_1.DeckImport);
         app.use((err, req, res, next) => {
             // Handle request aborted errors
             if (err && ((err.type === 'request.aborted') ||

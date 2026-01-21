@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.setShiningLegends = void 0;
 const other_prints_1 = require("./other-prints");
 const croconaw_1 = require("./croconaw");
+const damage_mover_1 = require("./damage-mover");
 const hoopa_1 = require("./hoopa");
 const latios_1 = require("./latios");
 const marshadow_1 = require("./marshadow");
@@ -19,6 +20,7 @@ const zoroark_gx_1 = require("./zoroark-gx");
 const zorua_1 = require("./zorua");
 exports.setShiningLegends = [
     new croconaw_1.Croconaw(),
+    new damage_mover_1.DamageMover(),
     new hoopa_1.Hoopa(),
     new latios_1.Latios(),
     new marshadow_1.Marshadow(),

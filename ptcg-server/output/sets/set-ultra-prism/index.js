@@ -15,6 +15,7 @@ const gible_1 = require("./gible");
 const glaceon_gx_1 = require("./glaceon-gx");
 const honchkrow_1 = require("./honchkrow");
 const lillie_1 = require("./lillie");
+const looker_1 = require("./looker");
 const lucario_1 = require("./lucario");
 const lunala_prism_star_1 = require("./lunala-prism-star");
 const magnemite_1 = require("./magnemite");
@@ -56,6 +57,7 @@ exports.setUltraPrism = [
     new glaceon_gx_1.GlaceonGX(),
     new honchkrow_1.Honchkrow(),
     new lillie_1.Lillie(),
+    new looker_1.Looker(),
     new lucario_1.Lucario(),
     new lunala_prism_star_1.LunalaPrismStar(),
     new magnemite_1.Magnemite(),

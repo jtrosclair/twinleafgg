@@ -14,6 +14,7 @@ import {
   Cards,
   ControllerClass,
   Decks,
+  DeckImport,
   Favorites,
   Friends,
   Game,
@@ -98,6 +99,7 @@ export class App {
     define('/v1/battlepass', BattlePass);
     define('/v1/artworks', Artworks);
     define('/v1/memory', MemoryHealthController);
+    define('/v1/deck-import', DeckImport);
 
     app.use((err: any, req: any, res: any, next: any) => {
       // Handle request aborted errors

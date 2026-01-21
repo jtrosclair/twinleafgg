@@ -24,6 +24,7 @@ const sylveon_gx_1 = require("./sylveon-gx");
 const tapu_koko_gx_1 = require("./tapu-koko-gx");
 const tapu_lele_gx_1 = require("./tapu-lele-gx");
 const trubbish_1 = require("./trubbish");
+const wailord_1 = require("./wailord");
 // Other prints
 const other_prints_2 = require("./other-prints");
 exports.setGuardiansRising = [
@@ -49,6 +50,7 @@ exports.setGuardiansRising = [
     new tapu_lele_gx_1.TapuLeleGX(),
     new tapu_koko_gx_1.TapuKokoGX(),
     new trubbish_1.Trubbish(),
+    new wailord_1.Wailord(),
     // Other prints
     new other_prints_2.AlolanVulpixGRI(),
     new other_prints_2.DoubleColorlessEnergyGRISR(),

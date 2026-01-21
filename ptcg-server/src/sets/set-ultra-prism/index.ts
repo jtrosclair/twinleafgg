@@ -13,6 +13,7 @@ import { Gible } from './gible';
 import { GlaceonGX } from './glaceon-gx';
 import { Honchkrow } from './honchkrow';
 import { Lillie } from './lillie';
+import { Looker } from './looker';
 import { Lucario } from './lucario';
 import { LunalaPrismStar } from './lunala-prism-star';
 import { Magnemite } from './magnemite';
@@ -55,6 +56,7 @@ export const setUltraPrism: Card[] = [
   new GlaceonGX(),
   new Honchkrow(),
   new Lillie(),
+  new Looker(),
   new Lucario(),
   new LunalaPrismStar(),
   new Magnemite(),
