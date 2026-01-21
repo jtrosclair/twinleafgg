@@ -48,8 +48,8 @@ class DamageMover extends trainer_card_1.TrainerCard {
                     const source = game_1.StateUtils.getTarget(state, player, transfer.from);
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
                     if (source && target && source !== target && source.damage > 0) {
-                        // Move exactly 3 damage counters (or less if source has less than 3)
-                        const damageToMove = Math.min(3, source.damage);
+                        // Move exactly 3 damage counters (30 damage, or less if source has less than 30)
+                        const damageToMove = Math.min(30, source.damage);
                         source.damage -= damageToMove;
                         target.damage += damageToMove;
                     }
