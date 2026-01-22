@@ -4,8 +4,8 @@ import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { DamageMap, GameError, GameMessage, MoveDamagePrompt, PlayerType, SlotType, StateUtils } from '../../game';
-import { CheckHpEffect } from '../../game/store/effects/check-effects';
+import { GameError, GameMessage, PlayerType, SlotType } from '../../game';
+import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
 
 export class DamageMover extends TrainerCard {
 
@@ -28,56 +28,84 @@ export class DamageMover extends TrainerCard {
     if (effect instanceof TrainerEffect && effect.trainerCard === this) {
       const player = effect.player;
 
-      // Check if any Pokémon have damage
-      let hasDamagedPokemon = false;
-      const damagedPokemon: DamageMap[] = [];
+      // Count total Pokémon and those with at least 30 damage
+      let totalPokemon = 0;
+      let pokemonWithDamage = 0;
+      const sourceOptions: { min: number; max: number; allowCancel: boolean; blocked: any[] } = {
+        min: 1,
+        max: 1,
+        allowCancel: false,
+        blocked: []
+      };
+
+      // Block Pokémon with less than 30 damage
       player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        if (cardList.damage > 0) {
-          hasDamagedPokemon = true;
-          damagedPokemon.push({ target, damage: cardList.damage });
+        totalPokemon++;
+        if (cardList.damage >= 30) {
+          pokemonWithDamage++;
+        } else {
+          sourceOptions.blocked.push(target);
         }
       });
 
-      if (!hasDamagedPokemon) {
+      // Need at least 2 Pokémon and at least one with 30+ damage
+      if (totalPokemon < 2 || pokemonWithDamage === 0) {
         throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }
 
-      const maxAllowedDamage: DamageMap[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        const checkHpEffect = new CheckHpEffect(player, cardList);
-        store.reduceEffect(state, checkHpEffect);
-        maxAllowedDamage.push({ target, damage: checkHpEffect.hp });
-      });
-
       effect.preventDefault = true;
 
-      return store.prompt(state, new MoveDamagePrompt(
-        effect.player.id,
-        GameMessage.MOVE_DAMAGE,
+      return store.prompt(state, new ChoosePokemonPrompt(
+        player.id,
+        GameMessage.CHOOSE_POKEMON_WITH_DAMAGE,
         PlayerType.BOTTOM_PLAYER,
         [SlotType.ACTIVE, SlotType.BENCH],
-        maxAllowedDamage,
-        { min: 1, max: 1, allowCancel: false, blockedFrom: [], blockedTo: [], singleSourceTarget: true, singleDestinationTarget: true }
-      ), transfers => {
-        if (transfers === null) {
+        sourceOptions
+      ), sourceResult => {
+        if (sourceResult === null || sourceResult.length === 0) {
           player.hand.moveCardTo(effect.trainerCard, player.discard);
           return state;
         }
 
-        for (const transfer of transfers) {
-          const source = StateUtils.getTarget(state, player, transfer.from);
-          const target = StateUtils.getTarget(state, player, transfer.to);
+        const source = sourceResult[0];
 
-          if (source && target && source !== target && source.damage > 0) {
-            // Move exactly 3 damage counters (30 damage, or less if source has less than 30)
-            const damageToMove = Math.min(30, source.damage);
-            source.damage -= damageToMove;
-            target.damage += damageToMove;
+        // Build the blocked list - need to block the source from being a target
+        const blockedTargets: any[] = [];
+        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, _card, target) => {
+          if (cardList === source) {
+            blockedTargets.push(target);
           }
-        }
+        });
 
-        player.hand.moveCardTo(effect.trainerCard, player.discard);
-        return state;
+        // Prompt to choose target (any other Pokémon)
+        const targetOptions: { min: number; max: number; allowCancel: boolean; blocked: any[] } = {
+          min: 1,
+          max: 1,
+          allowCancel: false,
+          blocked: blockedTargets
+        };
+
+        return store.prompt(state, new ChoosePokemonPrompt(
+          player.id,
+          GameMessage.CHOOSE_POKEMON_TO_MOVE_DAMAGE_TO,
+          PlayerType.BOTTOM_PLAYER,
+          [SlotType.ACTIVE, SlotType.BENCH],
+          targetOptions
+        ), targetResult => {
+          if (targetResult === null || targetResult.length === 0) {
+            player.hand.moveCardTo(effect.trainerCard, player.discard);
+            return state;
+          }
+
+          const target = targetResult[0];
+
+          // Move 30 damage from source to target
+          source.damage -= 30;
+          target.damage += 30;
+
+          player.hand.moveCardTo(effect.trainerCard, player.discard);
+          return state;
+        });
       });
     }
     return state;

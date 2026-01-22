@@ -422,6 +422,8 @@
     "CHOOSE_BASIC_POKEMON": "Select a Basic Pokémon.",
     "CHOOSE_POKEMON_TO_ATTACH_CARDS": "Choose Pokémon to attach cards.",
     "CHOOSE_POKEMON_TO_DAMAGE": "Choose Pokémon to deal damage to.",
+    "CHOOSE_POKEMON_WITH_DAMAGE": "Choose Pokémon with damage.",
+    "CHOOSE_POKEMON_TO_MOVE_DAMAGE_TO": "Choose Pokémon to move damage to.",
     "CHOOSE_POKEMON_TO_DISCARD": "Choose Pokémon that will be discarded.",
     "CHOOSE_POKEMON_TO_DISCARD_CARDS": "Choose Pokémon to discard cards.",
     "CHOOSE_POKEMON_TO_EVOLVE": "Choose Pokémon to evolve.",
@@ -548,7 +550,9 @@
     "CHOOSE_CARDS": "Choose cards",
     "CHOOSE_ENERGY_FROM_DECK": "Choose energies from deck",
     "CHOOSE_ENERGY_FROM_DISCARD": "Choose energies from discard",
-    "CHOOSE_CARD_TO_PUT_ON_BOTTOM": "Choose the card to put on the bottom of the deck."
+    "CHOOSE_CARD_TO_PUT_ON_BOTTOM": "Choose the card to put on the bottom of the deck.",
+    "CHOOSE_POKEMON_WITH_DAMAGE": "Choose Pokémon with damage.",
+    "CHOOSE_POKEMON_TO_MOVE_DAMAGE_TO": "Choose Pokémon to move damage to."
   },
   "GAME_LOGS": {
     "LOG_BANNED_BY_ARBITER": "{{name}} made an invalid move multiple times and was banned by the arbiter.",
