@@ -66,14 +66,14 @@ class DamageMover extends trainer_card_1.TrainerCard {
                 };
                 return store.prompt(state, new choose_pokemon_prompt_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_MOVE_DAMAGE_TO, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], targetOptions), targetResult => {
                     if (targetResult === null || targetResult.length === 0) {
-                        player.hand.moveCardTo(effect.trainerCard, player.discard);
+                        player.supporter.moveCardTo(effect.trainerCard, player.discard);
                         return state;
                     }
                     const target = targetResult[0];
                     // Move 30 damage from source to target
                     source.damage -= 30;
                     target.damage += 30;
-                    player.hand.moveCardTo(effect.trainerCard, player.discard);
+                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                     return state;
                 });
             });

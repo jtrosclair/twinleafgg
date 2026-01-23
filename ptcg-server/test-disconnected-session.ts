@@ -38,6 +38,7 @@ async function testDisconnectedSession() {
       UserFavoriteCard
     ],
     synchronize: false,
+    socketPath: process.env.STORAGE_TYPE === 'mysql' ? '/var/run/mysqld/mysqld.sock' : undefined,
     logging: true
   });
 

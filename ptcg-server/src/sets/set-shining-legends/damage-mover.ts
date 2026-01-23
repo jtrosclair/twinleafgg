@@ -93,7 +93,7 @@ export class DamageMover extends TrainerCard {
           targetOptions
         ), targetResult => {
           if (targetResult === null || targetResult.length === 0) {
-            player.hand.moveCardTo(effect.trainerCard, player.discard);
+            player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
           }
 
@@ -103,7 +103,7 @@ export class DamageMover extends TrainerCard {
           source.damage -= 30;
           target.damage += 30;
 
-          player.hand.moveCardTo(effect.trainerCard, player.discard);
+          player.supporter.moveCardTo(effect.trainerCard, player.discard);
           return state;
         });
       });

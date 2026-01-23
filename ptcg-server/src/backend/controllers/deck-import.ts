@@ -253,7 +253,11 @@ export class DeckImport extends Controller {
       totalCards += parsed.quantity;
 
       // Try to find the card
-      const setCode = IMPORT_SET_CODE_MAP[parsed.setCode.toUpperCase()] || parsed.setCode.toUpperCase();
+      let setCode = IMPORT_SET_CODE_MAP[parsed.setCode.toUpperCase()] || parsed.setCode.toUpperCase();
+
+      if (setCode == 'MEE') {
+        setCode = 'GEN';
+      }
 
       // First try: exact fullName match (Name SET)
       const fullName = `${parsed.name} ${setCode}`;
