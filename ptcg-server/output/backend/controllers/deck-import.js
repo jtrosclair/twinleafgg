@@ -158,6 +158,49 @@ class DeckImport extends controller_1.Controller {
         }
         return res.json(Object.assign(Object.assign({}, result), { unknownCardsSaved: result.unknownCards.length > 0 }));
     }
+    async onGetCards(req, res) {
+        const { cards } = req.body;
+        if (!Array.isArray(cards)) {
+            return res.status(400).json({
+                ok: false,
+                error: 'cards is required and must be an array'
+            });
+        }
+        // Load image cache
+        await this.loadImageCache();
+        const cardManager = game_1.CardManager.getInstance();
+        const allCards = cardManager.getAllCards();
+        // Build lookup maps
+        const cardsByFullName = new Map();
+        const cardsByNameSetNumber = new Map();
+        for (const card of allCards) {
+            cardsByFullName.set(card.fullName.toLowerCase(), card);
+            const key = `${card.name.toLowerCase()}|${card.set.toLowerCase()}|${card.setNumber}`;
+            cardsByNameSetNumber.set(key, card);
+        }
+        const results = [];
+        for (const cardIdentifier of cards) {
+            // Try to find the card
+            const card = cardsByFullName.get(cardIdentifier.toLowerCase());
+            if (card) {
+                results.push({
+                    name: card.name,
+                    setCode: card.set,
+                    setNumber: card.setNumber,
+                    fullName: card.fullName,
+                    cardData: card,
+                    cardImage: this.getCardImage(card.set, card.setNumber),
+                    superType: this.getSuperTypeString(card.superType),
+                    subType: this.getSubTypeString(card)
+                });
+            }
+        }
+        return res.json({
+            ok: true,
+            cards: results,
+            count: results.length
+        });
+    }
     parseDeckList(deckList) {
         const cardManager = game_1.CardManager.getInstance();
         const allCards = cardManager.getAllCards();
@@ -214,7 +257,7 @@ class DeckImport extends controller_1.Controller {
                 name: parsed.name,
                 setCode: setCode,
                 setNumber: parsed.setNumber,
-                fullName: fullName,
+                fullName: card ? card.fullName : fullName,
                 known: !!card,
                 cardData: card || undefined,
                 cardImage: this.getCardImage(setCode, parsed.setNumber),
@@ -420,4 +463,10 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], DeckImport.prototype, "onParseAndSaveUnknown", null);
+__decorate([
+    (0, controller_1.Post)('/get-cards'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], DeckImport.prototype, "onGetCards", null);
 exports.DeckImport = DeckImport;

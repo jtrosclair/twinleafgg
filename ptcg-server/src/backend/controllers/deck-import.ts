@@ -204,6 +204,71 @@ export class DeckImport extends Controller {
     });
   }
 
+  @Post('/get-cards')
+  public async onGetCards(req: Request, res: Response) {
+    const { cards } = req.body;
+
+    if (!Array.isArray(cards)) {
+      return res.status(400).json({
+        ok: false,
+        error: 'cards is required and must be an array'
+      });
+    }
+
+    // Load image cache
+    await this.loadImageCache();
+
+    const cardManager = CardManager.getInstance();
+    const allCards = cardManager.getAllCards();
+
+    // Build lookup maps
+    const cardsByFullName = new Map<string, Card>();
+    const cardsByNameSetNumber = new Map<string, Card>();
+
+    for (const card of allCards) {
+      cardsByFullName.set(card.fullName.toLowerCase(), card);
+      const key = `${card.name.toLowerCase()}|${card.set.toLowerCase()}|${card.setNumber}`;
+      cardsByNameSetNumber.set(key, card);
+    }
+
+    interface CardMetadata {
+      name: string;
+      setCode: string;
+      setNumber: string;
+      fullName: string;
+      cardData?: Card;
+      cardImage?: string;
+      superType?: string;
+      subType?: string;
+    }
+
+    const results: CardMetadata[] = [];
+
+    for (const cardIdentifier of cards) {
+      // Try to find the card
+      const card = cardsByFullName.get(cardIdentifier.toLowerCase());
+
+      if (card) {
+        results.push({
+          name: card.name,
+          setCode: card.set,
+          setNumber: card.setNumber,
+          fullName: card.fullName,
+          cardData: card,
+          cardImage: this.getCardImage(card.set, card.setNumber),
+          superType: this.getSuperTypeString(card.superType),
+          subType: this.getSubTypeString(card)
+        });
+      }
+    }
+
+    return res.json({
+      ok: true,
+      cards: results,
+      count: results.length
+    });
+  }
+
   private parseDeckList(deckList: string): {
     ok: boolean;
     knownCards: CardResult[];
@@ -279,7 +344,7 @@ export class DeckImport extends Controller {
         name: parsed.name,
         setCode: setCode,
         setNumber: parsed.setNumber,
-        fullName: fullName,
+        fullName: card ? card.fullName : fullName,
         known: !!card,
         cardData: card || undefined,
         cardImage: this.getCardImage(setCode, parsed.setNumber),

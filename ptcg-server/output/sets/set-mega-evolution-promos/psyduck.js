@@ -30,7 +30,7 @@ class Psyduck extends pokemon_card_1.PokemonCard {
         this.setNumber = '7';
         this.cardImage = 'assets/cardback.png';
         this.name = 'Psyduck';
-        this.fullName = 'Psyduck SVP';
+        this.fullName = 'Psyduck MEP';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof game_effects_1.PowerEffect && effect.power.powerType === game_1.PowerType.ABILITY && effect.power.name !== 'Damp') {
