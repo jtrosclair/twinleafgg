@@ -1,0 +1,88 @@
+import { Injectable, NgZone } from '@angular/core';
+import { GameService } from '../../api/services/game.service';
+import { SessionService } from '../session/session.service';
+
+export interface WebViewMessage {
+  type: string;
+  data: any;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class WebViewBridgeService {
+
+  constructor(
+    private gameService: GameService,
+    private sessionService: SessionService,
+    private ngZone: NgZone
+  ) {
+    this.setupMessageListener();
+  }
+
+  private setupMessageListener(): void {
+    // Listen for messages from React Native
+    window.addEventListener('message', (event) => {
+      this.handleMessage(event.data);
+    });
+
+    // Also listen for messages sent via document (alternative approach for some WebView implementations)
+    document.addEventListener('message', (event: any) => {
+      this.handleMessage(event.data);
+    });
+  }
+
+  private handleMessage(messageData: string | WebViewMessage): void {
+    try {
+      let message: WebViewMessage;
+
+      // Parse message if it's a string
+      if (typeof messageData === 'string') {
+        message = JSON.parse(messageData);
+      } else {
+        message = messageData;
+      }
+
+      // Run inside Angular zone to ensure change detection works
+      this.ngZone.run(() => {
+        this.processMessage(message);
+      });
+    } catch (error) {
+      console.error('Error handling WebView message:', error);
+    }
+  }
+
+  private processMessage(message: WebViewMessage): void {
+    switch (message.type) {
+      case 'PushStateChange':
+        this.handlePushStateChange(message.data);
+        break;
+      // Add other message types here as needed
+      default:
+        console.warn('Unknown message type from WebView:', message.type);
+    }
+  }
+
+  private handlePushStateChange(data: { stateData: string }): void {
+    // Find the current active game
+    const gameStates = this.sessionService.session.gameStates;
+    const activeGame = gameStates.find(g => g.deleted === false);
+
+    if (!activeGame) {
+      console.error('No active game found to push state change');
+      return;
+    }
+
+    // Call the game service to push the state change
+    this.gameService.pushStateChange(activeGame.gameId, data.stateData);
+  }
+
+  /**
+   * Send a message to React Native WebView
+   */
+  public postMessage(message: WebViewMessage): void {
+    if ((window as any).ReactNativeWebView) {
+      (window as any).ReactNativeWebView.postMessage(JSON.stringify(message));
+    }
+  }
+}

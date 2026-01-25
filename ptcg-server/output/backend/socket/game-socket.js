@@ -40,6 +40,7 @@ class GameSocket {
         this.socket.addListener('game:action:passTurn', this.passTurn.bind(this));
         this.socket.addListener('game:action:appendLog', this.appendLog.bind(this));
         this.socket.addListener('game:action:changeAvatar', this.changeAvatar.bind(this));
+        this.socket.addListener('game:action:pushStateChange', this.pushStateChange.bind(this));
         // Sandbox actions
         this.socket.addListener('game:sandbox:modifyPlayer', this.sandboxModifyPlayer.bind(this));
         this.socket.addListener('game:sandbox:modifyGameState', this.sandboxModifyGameState.bind(this));
@@ -266,6 +267,30 @@ class GameSocket {
         const action = new change_avatar_action_1.ChangeAvatarAction(this.client.id, params.avatarName);
         this.dispatch(params.gameId, action, response);
     }
+    pushStateChange(params, response) {
+        const game = this.core.games.find(g => g.id === params.gameId);
+        if (game === undefined) {
+            response('error', errors_1.ApiErrorEnum.GAME_INVALID_ID);
+            return;
+        }
+        try {
+            // Decode the stateData
+            const base64 = new utils_1.Base64();
+            const serializedState = base64.decode(params.stateData);
+            const serializer = new game_1.StateSerializer();
+            const newState = serializer.deserialize(serializedState);
+            // Update the game state directly via the store
+            const store = game.getStore();
+            store.state = newState;
+            // Notify all clients about the state change
+            this.onStateChange(game, newState);
+            response('ok');
+        }
+        catch (error) {
+            console.error('Error in pushStateChange:', error);
+            response('error', errors_1.ApiErrorEnum.SERVER_ERROR);
+        }
+    }
     sandboxModifyPlayer(params, response) {
         // Validate admin role
         if (this.client.user.roleId !== 4) {
@@ -368,6 +393,7 @@ class GameSocket {
         this.socket.removeListener('game:action:passTurn');
         this.socket.removeListener('game:action:appendLog');
         this.socket.removeListener('game:action:changeAvatar');
+        this.socket.removeListener('game:action:pushStateChange');
         this.socket.removeListener('game:sandbox:modifyPlayer');
         this.socket.removeListener('game:sandbox:modifyGameState');
         this.socket.removeListener('game:sandbox:modifyCard');

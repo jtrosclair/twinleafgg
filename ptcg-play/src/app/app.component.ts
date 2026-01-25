@@ -16,6 +16,7 @@ import { environment } from '../environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ReconnectionDialogService } from './shared/services/reconnection-dialog.service';
+import { WebViewBridgeService } from './shared/services/webview-bridge.service';
 
 @UntilDestroy()
 @Component({
@@ -44,7 +45,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private socketService: SocketService,
     private translate: TranslateService,
     private snackBar: MatSnackBar,
-    private reconnectionDialogService: ReconnectionDialogService
+    private reconnectionDialogService: ReconnectionDialogService,
+    private webViewBridgeService: WebViewBridgeService
   ) {
     this.authToken$ = this.sessionService.get(session => session.authToken);
     setTimeout(() => this.onResize());

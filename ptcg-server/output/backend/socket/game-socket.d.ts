@@ -35,6 +35,7 @@ export declare class GameSocket {
     private passTurn;
     private appendLog;
     private changeAvatar;
+    private pushStateChange;
     private sandboxModifyPlayer;
     private sandboxModifyGameState;
     private sandboxModifyCard;

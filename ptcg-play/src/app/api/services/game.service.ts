@@ -266,6 +266,11 @@ export class GameService {
     });
   }
 
+  public pushStateChange(gameId: number, stateData: string) {
+    this.socketService.emit('game:action:pushStateChange', { gameId, stateData })
+      .subscribe(() => { }, (error: ApiError) => this.handleError(error));
+  }
+
   public forceDisconnect() {
     // Force disconnect from the socket to simulate network issues
     this.socketService.forceDisconnect();
@@ -309,6 +314,12 @@ export class GameService {
   }
 
   private onStateChange(gameId: number, stateData: string, playerStats: PlayerStats[]) {
+    try {
+      (window as any).ReactNativeWebView.postMessage(JSON.stringify({ type: "StateUpdate", data: { stateData } }));
+    }
+    catch (ex) {
+      console.log("Webview error")
+    }
     const state = this.decodeStateData(stateData);
     const games = this.sessionService.session.gameStates;
     const index = games.findIndex(g => g.gameId === gameId && g.deleted === false);

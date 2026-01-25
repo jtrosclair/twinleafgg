@@ -35,6 +35,12 @@ export class ReconnectionDialogService {
               // Show dialog on first reconnection attempt
               this.showReconnectionDialog();
             }
+            try {
+              (window as any).ReactNativeWebView.postMessage(JSON.stringify({ type: "Reconnecting", data: { attempt: 1 } }));
+            }
+            catch (ex) {
+              console.log("Webview error")
+            }
             break;
           case 'success':
             this.closeReconnectionDialog();
