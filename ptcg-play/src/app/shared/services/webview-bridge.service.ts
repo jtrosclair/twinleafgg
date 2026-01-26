@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone, Injector } from '@angular/core';
 import { GameService } from '../../api/services/game.service';
 import { SessionService } from '../session/session.service';
 
@@ -11,13 +11,21 @@ export interface WebViewMessage {
   providedIn: 'root'
 })
 export class WebViewBridgeService {
+  private _gameService: GameService | undefined;
 
   constructor(
-    private gameService: GameService,
+    private injector: Injector,
     private sessionService: SessionService,
     private ngZone: NgZone
   ) {
     this.setupMessageListener();
+  }
+
+  private get gameService(): GameService {
+    if (!this._gameService) {
+      this._gameService = this.injector.get(GameService);
+    }
+    return this._gameService;
   }
 
   private setupMessageListener(): void {
@@ -29,6 +37,7 @@ export class WebViewBridgeService {
     // Also listen for messages sent via document (alternative approach for some WebView implementations)
     document.addEventListener('message', (event: any) => {
       this.handleMessage(event.data);
+
     });
   }
 
@@ -48,7 +57,7 @@ export class WebViewBridgeService {
         this.processMessage(message);
       });
     } catch (error) {
-      console.error('Error handling WebView message:', error);
+      console.error('Error handling WebView message:', error.message);
     }
   }
 
@@ -65,6 +74,7 @@ export class WebViewBridgeService {
 
   private handlePushStateChange(data: { stateData: string }): void {
     // Find the current active game
+    console.log({ stateData: data.stateData })
     const gameStates = this.sessionService.session.gameStates;
     const activeGame = gameStates.find(g => g.deleted === false);
 

@@ -6,7 +6,7 @@ import { AttackEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 
 export class Rillaboom extends PokemonCard {
-  public stage: Stage = Stage.BASIC;
+  public stage: Stage = Stage.STAGE_2;
   public evolvesFrom = 'Thwackey';
   public cardType: CardType = CardType.GRASS;
   public hp: number = 180;
