@@ -6,6 +6,7 @@ import { takeUntil, filter } from 'rxjs/operators';
 
 import { SocketService } from '../../api/socket.service';
 import { ReconnectionDialogComponent } from '../components/reconnection-dialog/reconnection-dialog.component';
+import { WebViewBridgeService } from './webview-bridge.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,8 @@ export class ReconnectionDialogService {
   constructor(
     private dialog: MatDialog,
     private socketService: SocketService,
-    private router: Router
+    private router: Router,
+    private webViewBridgeService: WebViewBridgeService
   ) {
     this.initializeReconnectionHandling();
   }
@@ -35,12 +37,7 @@ export class ReconnectionDialogService {
               // Show dialog on first reconnection attempt
               this.showReconnectionDialog();
             }
-            try {
-              (window as any).ReactNativeWebView.postMessage(JSON.stringify({ type: "Reconnecting", data: { attempt: 1 } }));
-            }
-            catch (ex) {
-              console.log("Webview error")
-            }
+            this.webViewBridgeService.postMessage({ type: "Reconnecting", data: { attempt: 1 } });
             break;
           case 'success':
             this.closeReconnectionDialog();

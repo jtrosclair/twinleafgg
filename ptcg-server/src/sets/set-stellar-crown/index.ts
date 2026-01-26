@@ -1,6 +1,7 @@
 import { VenusaurexSCR, BlastoiseexSCR, YamaskSCR, Raboot2SCR, Crabominable2SCR, Joltik2SCR, Zeraora2SCR, Milcery2SCR, Gulpin2SCR, Archaludon2SCR, Hydrappleex2SCR, Cinderaceex2SCR, Laprasex2SCR, Galvantulaex2SCR, Medichamex2SCR, Orthwormex2SCR, Briar2SCR, Crispin2SCR, Kofu2SCR, Lacey2SCR, Hydrappleex3SCR, Galvantulaex3SCR, Terapagosex2SCR, Briar3SCR, Lacey3SCR, Terapagosex3SCR, AreaZeroUnderdepths2SCR } from './other-prints';
 import { Card } from '../../game/store/card/card';
 import { Archaludon } from './archaludon';
+import { Applin } from './applin';
 import { AreaZeroUnderdepths } from './area-zero-underdepths';
 import { Bouffalant } from './bouffalant';
 import { Briar } from './briar';
@@ -56,6 +57,7 @@ import { AntiqueCoverFossil } from './antique-cover-fossil';
 import { Toedscool } from './toedscool';
 
 export const setStellarCrown: Card[] = [
+  new Applin(),
   new Archaludon(),
   new AreaZeroUnderdepths(),
   new Bouffalant(),

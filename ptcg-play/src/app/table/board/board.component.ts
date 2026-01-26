@@ -14,6 +14,7 @@ import { trigger, transition, style, animate, query, stagger } from '@angular/an
 import { SettingsService } from '../table-sidebar/settings-dialog/settings.service';
 import { BoardInteractionService } from '../../shared/services/board-interaction.service';
 import { GameWinner } from 'ptcg-server';
+import { WebViewBridgeService } from '../../shared/services/webview-bridge.service';
 
 const MAX_BENCH_SIZE = 8;
 const DEFAULT_BENCH_SIZE = 5;
@@ -103,7 +104,8 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
     private dnd: DndService,
     private gameService: GameService,
     private settingsService: SettingsService,
-    private boardInteractionService: BoardInteractionService
+    private boardInteractionService: BoardInteractionService,
+    private webViewBridgeService: WebViewBridgeService
   ) {
 
     this.settingsService.cardSize$.subscribe(size => {
@@ -178,13 +180,11 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
   }
 
   private postGameOverMessage(winner: GameWinner): void {
-    if ((window as any).ReactNativeWebView) {
-      const winnerValue = winner === 0 ? 'player1' : 'player2';
-      (window as any).ReactNativeWebView.postMessage(JSON.stringify({
-        type: "GameOver",
-        data: { winner: winnerValue }
-      }));
-    }
+    const winnerValue = winner === 0 ? 'player1' : 'player2';
+    this.webViewBridgeService.postMessage({
+      type: "GameOver",
+      data: { winner: winnerValue }
+    });
   }
 
   private updateBenchGap(): void {

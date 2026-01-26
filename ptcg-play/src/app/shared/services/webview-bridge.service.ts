@@ -78,11 +78,22 @@ export class WebViewBridgeService {
   }
 
   /**
-   * Send a message to React Native WebView
+   * Send a message to React Native WebView with iframe fallback
+   * If ReactNativeWebView is not available (e.g., running in iframe),
+   * it will post a window message with type "iframeEvent" instead
    */
   public postMessage(message: WebViewMessage): void {
-    if ((window as any).ReactNativeWebView) {
-      (window as any).ReactNativeWebView.postMessage(JSON.stringify(message));
+    try {
+      if ((window as any).ReactNativeWebView) {
+        (window as any).ReactNativeWebView.postMessage(JSON.stringify(message));
+      } else {
+        // Fallback to window.postMessage for iframe environments
+        window.parent.postMessage({ type: 'iframeEvent', data: message }, '*');
+      }
+    } catch (error) {
+      // If ReactNativeWebView.postMessage fails, use iframe fallback
+      console.warn('Failed to post to ReactNativeWebView, using iframe fallback:', error);
+      window.parent.postMessage({ type: 'iframeEvent', data: message }, '*');
     }
   }
 }

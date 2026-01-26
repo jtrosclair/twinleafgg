@@ -16,6 +16,7 @@ import { PlayerStatsResponse } from '../interfaces/game.interface';
 import { SocketService } from '../socket.service';
 import { SessionService } from '../../shared/session/session.service';
 import { BoardInteractionService } from '../../shared/services/board-interaction.service';
+import { WebViewBridgeService } from '../../shared/services/webview-bridge.service';
 
 export interface GameUserInfo {
   gameId: number;
@@ -32,7 +33,8 @@ export class GameService {
     public socketService: SocketService,
     private translate: TranslateService,
     private boardInteractionService: BoardInteractionService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private webViewBridgeService: WebViewBridgeService
   ) { }
 
   public getPlayerStats(gameId: number) {
@@ -314,12 +316,7 @@ export class GameService {
   }
 
   private onStateChange(gameId: number, stateData: string, playerStats: PlayerStats[]) {
-    try {
-      (window as any).ReactNativeWebView.postMessage(JSON.stringify({ type: "StateUpdate", data: { stateData } }));
-    }
-    catch (ex) {
-      console.log("Webview error")
-    }
+    this.webViewBridgeService.postMessage({ type: "StateUpdate", data: { stateData } });
     const state = this.decodeStateData(stateData);
     const games = this.sessionService.session.gameStates;
     const index = games.findIndex(g => g.gameId === gameId && g.deleted === false);
@@ -459,7 +456,7 @@ export class GameService {
 
     if (key == "ERROR_UNKNOWN" || key == "NOT_YOUR_TURN") {
       if ((window as any).ReactNativeWebView) {
-        (window as any).ReactNativeWebView?.postMessage(JSON.stringify({ type: "GameOver", data: { winner: "player2", isError: true } }));
+        //(window as any).ReactNativeWebView?.postMessage(JSON.stringify({ type: "GameOver", data: { winner: "player2", isError: true } }));
       }
     }
 
@@ -467,9 +464,7 @@ export class GameService {
   }
 
   private postMessageToWebView(message: { type: string; data: any }): void {
-    if ((window as any).ReactNativeWebView) {
-      (window as any).ReactNativeWebView.postMessage(JSON.stringify({ type: "GameOver", data: { winner: "player2" } }));
-    }
+    this.webViewBridgeService.postMessage(message);
   }
 
 }

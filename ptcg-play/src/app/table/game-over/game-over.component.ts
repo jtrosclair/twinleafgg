@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { GameService } from 'src/app/api/services/game.service';
 import { AlertService } from '../../shared/alert/alert.service';
 import { TranslateService } from '@ngx-translate/core';
+import { WebViewBridgeService } from '../../shared/services/webview-bridge.service';
 
 
 interface PokemonDamageStats {
@@ -51,7 +52,8 @@ export class GameOverComponent implements OnInit {
     private router: Router,
     private gameService: GameService,
     private alertService: AlertService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private webViewBridgeService: WebViewBridgeService
   ) { }
 
   ngOnInit(): void {
@@ -97,7 +99,7 @@ export class GameOverComponent implements OnInit {
       this.isWinner = String(currentPlayerId) === String(winningPlayerId);
     }
 
-    (window as any).ReactNativeWebView.postMessage(JSON.stringify({ type: "GameOver", data: { winner: this.isWinner ? 'player1' : 'player2' } }));
+    this.webViewBridgeService.postMessage({ type: "GameOver", data: { winner: this.isWinner ? 'player1' : 'player2' } });
     return
 
     // Set player usernames (use ID as fallback if username not available)

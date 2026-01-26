@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.setStellarCrown = void 0;
 const other_prints_1 = require("./other-prints");
 const archaludon_1 = require("./archaludon");
+const applin_1 = require("./applin");
 const area_zero_underdepths_1 = require("./area-zero-underdepths");
 const bouffalant_1 = require("./bouffalant");
 const briar_1 = require("./briar");
@@ -57,6 +58,7 @@ const marill_1 = require("./marill");
 const antique_cover_fossil_1 = require("./antique-cover-fossil");
 const toedscool_1 = require("./toedscool");
 exports.setStellarCrown = [
+    new applin_1.Applin(),
     new archaludon_1.Archaludon(),
     new area_zero_underdepths_1.AreaZeroUnderdepths(),
     new bouffalant_1.Bouffalant(),

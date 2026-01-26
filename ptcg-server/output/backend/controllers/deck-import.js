@@ -253,11 +253,11 @@ class DeckImport extends controller_1.Controller {
                 quantity: parsed.quantity,
                 name: parsed.name,
                 setCode: setCode,
-                setNumber: card.setNumber,
+                setNumber: card ? card.setNumber : parsed.setNumber,
                 fullName: card ? card.fullName : fullName,
                 known: !!card,
                 cardData: card || undefined,
-                cardImage: this.getCardImage(setCode, card.setNumber),
+                cardImage: this.getCardImage(setCode, card ? card.setNumber : parsed.setNumber),
                 superType: card ? this.getSuperTypeString(card.superType) : undefined,
                 subType: card ? this.getSubTypeString(card) : undefined
             };
