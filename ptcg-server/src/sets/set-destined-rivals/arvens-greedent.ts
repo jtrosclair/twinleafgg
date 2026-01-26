@@ -79,7 +79,7 @@ export class ArvensGreedent extends PokemonCard {
               return state;
             }
 
-            MOVE_CARDS_TO_HAND(store, state, player, cards);
+            player.discard.moveCardsTo(cards, player.hand);
           });
 
         }
