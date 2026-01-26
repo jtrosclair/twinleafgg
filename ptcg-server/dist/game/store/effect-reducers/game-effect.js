@@ -4,6 +4,7 @@ exports.gameReducer = void 0;
 const game_error_1 = require("../../game-error");
 const game_message_1 = require("../../game-message");
 const card_types_1 = require("../card/card-types");
+const trainer_card_1 = require("../card/trainer-card");
 const attack_effects_1 = require("../effects/attack-effects");
 const check_effects_1 = require("../effects/check-effects");
 const game_effects_1 = require("../effects/game-effects");
@@ -18,7 +19,6 @@ const prefabs_1 = require("../prefabs/prefabs");
 const card_list_1 = require("../state/card-list");
 const marker_constants_1 = require("../markers/marker-constants");
 const confirm_prompt_1 = require("../prompts/confirm-prompt");
-const check_effect_1 = require("./check-effect");
 const choose_attack_prompt_1 = require("../prompts/choose-attack-prompt");
 const wait_prompt_1 = require("../prompts/wait-prompt");
 const play_card_effects_1 = require("../effects/play-card-effects");
@@ -44,6 +44,7 @@ function applyWeaknessAndResistance(damage, cardTypes, additionalCardTypes, weak
     return (damage * multiply) + modifier;
 }
 function* useAttack(next, store, state, effect) {
+    let _a;
     const player = effect.player;
     const opponent = state_utils_1.StateUtils.getOpponent(state, player);
     //Skip attack on first turn
@@ -150,57 +151,51 @@ function* useAttack(next, store, state, effect) {
     if (store.hasPrompts()) {
         yield store.waitPrompt(state, () => next());
     }
-    if ((attack.barrage || hasBarragePower) && !effect._barrageUsed) {
-        state = (0, check_effect_1.checkState)(store, state);
-        if (store.hasPrompts()) {
-            yield store.waitPrompt(state, () => next());
-        }
-        state = (0, check_effect_1.checkState)(store, state);
-        if (store.hasPrompts()) {
-            yield store.waitPrompt(state, () => next());
-        }
-        let wantToUse = undefined;
-        yield store.prompt(state, new confirm_prompt_1.ConfirmPrompt(player.id, game_message_1.GameMessage.WANT_TO_USE_ABILITY), result => {
-            wantToUse = result;
-            next();
-        });
-        if (wantToUse) {
-            // If barrage is from a power, prompt for attack choice
-            if (!attack.barrage && hasBarragePower) {
-                // Gather all attackable cards: the actual Pokemon and any attached tool with attacks
-                const attackableCards = [];
-                const mainPokemon = attackingPokemon.getPokemonCard();
-                if (mainPokemon) {
-                    attackableCards.push(mainPokemon);
+    const attackThisTurn = player.active.attacksThisTurn;
+    const playerActive = player.active.getPokemonCard();
+    // Now, we can check if the Pokémon can attack again
+    const canAttackAgain = playerActive && playerActive.canAttackTwice && attackThisTurn && attackThisTurn < 2;
+    const hasBarrageAbility = (_a = player.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.powers.some(power => power.barrage === true);
+    if (canAttackAgain || hasBarrageAbility) {
+        // Prompt the player if they want to attack again
+        yield store.prompt(state, new confirm_prompt_1.ConfirmPrompt(player.id, game_message_1.GameMessage.WANT_TO_ATTACK_AGAIN), wantToAttackAgain => {
+            if (wantToAttackAgain) {
+                if (hasBarrageAbility) {
+                    const attackableCards = player.active.cards.filter(card => card.superType === card_types_1.SuperType.POKEMON ||
+                        (card.superType === card_types_1.SuperType.TRAINER && card instanceof trainer_card_1.TrainerCard && card.trainerType === card_types_1.TrainerType.TOOL && card.attacks.length > 0));
+                    // Use ChooseAttackPrompt for Barrage ability
+                    store.prompt(state, new choose_attack_prompt_1.ChooseAttackPrompt(player.id, game_message_1.GameMessage.CHOOSE_ATTACK_TO_COPY, attackableCards, { allowCancel: false }), selectedAttack => {
+                        if (selectedAttack) {
+                            const secondAttackEffect = new game_effects_1.AttackEffect(player, opponent, selectedAttack);
+                            state = useAttack(() => next(), store, state, secondAttackEffect).next().value;
+                            if (store.hasPrompts()) {
+                                state = store.waitPrompt(state, () => next());
+                            }
+                            if (secondAttackEffect.damage > 0) {
+                                const dealDamage = new attack_effects_1.DealDamageEffect(secondAttackEffect, secondAttackEffect.damage);
+                                state = store.reduceEffect(state, dealDamage);
+                            }
+                            state = store.reduceEffect(state, new game_phase_effects_1.EndTurnEffect(player));
+                            return state;
+                        }
+                        next();
+                    });
                 }
-                if (attackingPokemon.tools.length > 0) {
-                    attackableCards.push(attackingPokemon.tools[0]);
+                else {
+                    const dealDamage = new attack_effects_1.DealDamageEffect(attackEffect, attackEffect.damage);
+                    state = store.reduceEffect(state, dealDamage);
+                    state = store.reduceEffect(state, new game_phase_effects_1.EndTurnEffect(player));
                 }
-                yield store.prompt(state, new choose_attack_prompt_1.ChooseAttackPrompt(player.id, game_message_1.GameMessage.CHOOSE_ATTACK_TO_COPY, attackableCards, { allowCancel: false }), (selectedAttack) => {
-                    if (selectedAttack) {
-                        const newEffect = new game_effects_1.AttackEffect(player, opponent, selectedAttack);
-                        newEffect._barrageUsed = true;
-                        const generator = useAttack(() => generator.next(), store, state, newEffect);
-                        state = generator.next().value;
-                    }
-                    else {
-                        state = store.reduceEffect(state, new game_phase_effects_1.EndTurnEffect(player));
-                    }
-                    next();
-                });
-                return state;
             }
             else {
-                // Default: use the same attack again
-                const newEffect = new game_effects_1.UseAttackEffect(player, attack);
-                newEffect._barrageUsed = true;
-                const generator = useAttack(() => generator.next(), store, state, newEffect);
-                return generator.next().value;
+                state = store.reduceEffect(state, new game_phase_effects_1.EndTurnEffect(player));
             }
-        }
+            next();
+        });
+    }
+    if (!canAttackAgain && !hasBarrageAbility) {
         return store.reduceEffect(state, new game_phase_effects_1.EndTurnEffect(player));
     }
-    return store.reduceEffect(state, new game_phase_effects_1.EndTurnEffect(player));
 }
 function gameReducer(store, state, effect) {
     if (effect instanceof game_effects_1.KnockOutEffect) {
@@ -400,7 +395,7 @@ function gameReducer(store, state, effect) {
             try {
                 return state_utils_1.StateUtils.findOwner(state, cardList);
             }
-            catch (_a) {
+            catch (_b) {
                 return undefined;
             }
         };
