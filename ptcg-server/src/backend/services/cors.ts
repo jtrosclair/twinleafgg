@@ -11,11 +11,15 @@ export function cors(): RequestHandler {
       'https://sim.prizemap.app',
       'http://sim-mobile.prizemap.app',
       'https://sim-mobile.prizemap.app',
+      'http://localhost:3000',
+      'https://prizemap.app',
+      'https://www.prizemap.app',
       'https://prod.d2b8enpmjk7lxy.amplifyapp.com'
     ];
     const origin = req.headers.origin;
     if (config.backend.allowCors && origin && allowedOrigins.includes(origin)) {
       res.header('Access-Control-Allow-Origin', origin);
+      res.header('Access-Control-Allow-Credentials', 'true');
     }
 
     res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST');
@@ -26,6 +30,10 @@ export function cors(): RequestHandler {
       'Accept',
       'Auth-Token'
     ].join(','));
+
+    // Allow embedding in iframes from allowed origins
+    const frameAncestors = allowedOrigins.join(' ');
+    res.header('Content-Security-Policy', `frame-ancestors 'self' ${frameAncestors}`);
 
     next();
   };
