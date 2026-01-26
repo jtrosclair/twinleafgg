@@ -4,7 +4,6 @@ exports.ArvensGreedent = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 class ArvensGreedent extends pokemon_card_1.PokemonCard {
@@ -66,7 +65,7 @@ class ArvensGreedent extends pokemon_card_1.PokemonCard {
                         if (cards.length > 0) {
                             return state;
                         }
-                        (0, prefabs_1.MOVE_CARDS_TO_HAND)(store, state, player, cards);
+                        player.discard.moveCardsTo(cards, player.hand);
                     });
                 }
             });
