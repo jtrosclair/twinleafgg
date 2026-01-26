@@ -63,9 +63,9 @@ class ArvensGreedent extends pokemon_card_1.PokemonCard {
                 if (wantToUse) {
                     return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: card_types_1.SuperType.TRAINER, name: 'Arven\'s Sandwich' }, { min: 0, max: 2, allowCancel: false }), cards => {
                         if (cards.length > 0) {
-                            return state;
+                            player.discard.moveCardsTo(cards, player.hand);
                         }
-                        player.discard.moveCardsTo(cards, player.hand);
+                        return state;
                     });
                 }
             });
