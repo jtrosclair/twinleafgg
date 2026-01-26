@@ -76,10 +76,9 @@ export class ArvensGreedent extends PokemonCard {
             { min: 0, max: 2, allowCancel: false }
           ), cards => {
             if (cards.length > 0) {
-              return state;
+              player.discard.moveCardsTo(cards, player.hand);
             }
-
-            player.discard.moveCardsTo(cards, player.hand);
+            return state;
           });
 
         }
