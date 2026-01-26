@@ -318,11 +318,7 @@ export class DeckImport extends Controller {
       totalCards += parsed.quantity;
 
       // Try to find the card
-      let setCode = IMPORT_SET_CODE_MAP[parsed.setCode.toUpperCase()] || parsed.setCode.toUpperCase();
-
-      if (setCode == 'MEE') {
-        setCode = 'GEN';
-      }
+      const setCode = IMPORT_SET_CODE_MAP[parsed.setCode.toUpperCase()] || parsed.setCode.toUpperCase();
 
       // First try: exact fullName match (Name SET)
       const fullName = `${parsed.name} ${setCode}`;
@@ -343,11 +339,11 @@ export class DeckImport extends Controller {
         quantity: parsed.quantity,
         name: parsed.name,
         setCode: setCode,
-        setNumber: parsed.setNumber,
+        setNumber: card.setNumber,
         fullName: card ? card.fullName : fullName,
         known: !!card,
         cardData: card || undefined,
-        cardImage: this.getCardImage(setCode, parsed.setNumber),
+        cardImage: this.getCardImage(setCode, card.setNumber),
         superType: card ? this.getSuperTypeString(card.superType) : undefined,
         subType: card ? this.getSubTypeString(card) : undefined
       };
@@ -474,14 +470,15 @@ export class DeckImport extends Controller {
     //   "4 Double Colorless Energy SUM 136"
     //   "1 Articuno-GX CES 31"
 
-    // Handle basic energy without set/number
-    const basicEnergyMatch = line.match(/^(\d+)\s+(Fire|Water|Grass|Lightning|Psychic|Fighting|Darkness|Metal|Fairy)\s+Energy$/i);
+    // Handle basic energy with optional set/number
+    const basicEnergyMatch = line.match(/^(\d+)\s+(Fire|Water|Grass|Lightning|Psychic|Fighting|Darkness|Metal|Fairy)\s+Energy(?:\s+([A-Z]{2,4})\s+(\d+[a-z]?))?$/i);
+
     if (basicEnergyMatch) {
       return {
         quantity: parseInt(basicEnergyMatch[1], 10),
         name: `${basicEnergyMatch[2]} Energy`,
-        setCode: 'BS', // Basic energy is from Base Set
-        setNumber: '0',
+        setCode: 'SUM', // Use provided set code or default to SUM
+        setNumber: basicEnergyMatch[4] || '0',
         originalLine: line
       };
     }
