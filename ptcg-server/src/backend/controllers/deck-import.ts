@@ -469,6 +469,37 @@ export class DeckImport extends Controller {
     //   "1 Tapu Lele-GX GRI 60"
     //   "4 Double Colorless Energy SUM 136"
     //   "1 Articuno-GX CES 31"
+    //   "5 Basic {G} Energy SVE 1"
+
+    // Mapping of energy type abbreviations to full names
+    const energyTypeMap: { [key: string]: string } = {
+      'G': 'Grass',
+      'R': 'Fire',
+      'W': 'Water',
+      'L': 'Lightning',
+      'P': 'Psychic',
+      'F': 'Fighting',
+      'D': 'Darkness',
+      'M': 'Metal',
+      'Y': 'Fairy',
+      'N': 'Dragon',
+      'C': 'Colorless'
+    };
+
+    // Handle basic energy with type abbreviation format: "5 Basic {G} Energy SVE 1"
+    const basicEnergyAbbrevMatch = line.match(/^(\d+)\s+Basic\s+\{([GRWLPFDMYNC])\}\s+Energy(?:\s+([A-Z]{2,4})\s+(\d+[a-z]?))?$/i);
+
+    if (basicEnergyAbbrevMatch) {
+      const typeAbbrev = basicEnergyAbbrevMatch[2].toUpperCase();
+      const energyType = energyTypeMap[typeAbbrev] || 'Colorless';
+      return {
+        quantity: parseInt(basicEnergyAbbrevMatch[1], 10),
+        name: `${energyType} Energy`,
+        setCode: 'SUM', // Default to SUM for basic energy
+        setNumber: basicEnergyAbbrevMatch[4] || '0',
+        originalLine: line
+      };
+    }
 
     // Handle basic energy with optional set/number
     const basicEnergyMatch = line.match(/^(\d+)\s+(Fire|Water|Grass|Lightning|Psychic|Fighting|Darkness|Metal|Fairy)\s+Energy(?:\s+([A-Z]{2,4})\s+(\d+[a-z]?))?$/i);
