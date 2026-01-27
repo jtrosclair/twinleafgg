@@ -45,6 +45,7 @@ import { Scizor } from './scizor';
 import { Seismitoad } from './seismitoad';
 import { Tadbulb } from './tadbulb';
 import { Thundurus } from './thundurus';
+import { Toedscool } from './toedscool';
 import { Toedscruelex } from './toedscruel-ex';
 import { Togekiss } from './togekiss';
 import { Togepi } from './togepi';
@@ -98,6 +99,7 @@ export const setObsidianFlames: Card[] = [
   new Seismitoad(),
   new Tadbulb(),
   new Thundurus(),
+  new Toedscool(),
   new Toedscruelex(),
   new TownStore(),
   new Tympole(),
