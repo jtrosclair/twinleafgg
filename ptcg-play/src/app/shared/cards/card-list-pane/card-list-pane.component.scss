@@ -17,6 +17,13 @@ $ptcg-card-list-pane-max-height: 3 * map-get($ptcg-size, card) * $card-aspect-ra
   padding: $ptcg-card-list-pane-padding;
 }
 
+// Wider screens - 8 columns
+@media (min-width: 501px) {
+  .ptcg-hand-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
 ptcg-card {
   cursor: pointer;
   width: 100%;

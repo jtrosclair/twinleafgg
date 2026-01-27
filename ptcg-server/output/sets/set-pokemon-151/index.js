@@ -12,6 +12,7 @@ const chansey_1 = require("./chansey");
 const charizard_ex_1 = require("./charizard-ex");
 const charmander_1 = require("./charmander");
 const charmeleon_1 = require("./charmeleon");
+const clefable_1 = require("./clefable");
 const cloytser_1 = require("./cloytser");
 const cycling_road_1 = require("./cycling-road");
 const dewgong_1 = require("./dewgong");
@@ -85,6 +86,7 @@ exports.setPokemon151 = [
     new charizard_ex_1.Charizardex(),
     new charmeleon_1.Charmeleon(),
     new charmander_1.Charmander(),
+    new clefable_1.Clefable(),
     new cloytser_1.Cloyster(),
     new cycling_road_1.CyclingRoad(),
     new dewgong_1.Dewgong(),

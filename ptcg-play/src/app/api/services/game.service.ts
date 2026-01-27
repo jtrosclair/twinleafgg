@@ -344,13 +344,12 @@ export class GameService {
       } else {
         // Notify React Native WebView on turn change
         if (previousState && state.turn !== previousState.turn) {
-          this.postMessageToWebView({
-            type: 'TurnChange',
-            data: {
-              turn: state.turn,
-              activePlayer: state.activePlayer === 0 ? 'player1' : 'player2'
-            }
-          });
+          if (state.activePlayer === 1) {
+            this.webViewBridgeService.postMessage({
+              type: "GameOver",
+              data: { winner: "player2" }
+            });
+          }
         }
       }
     }
