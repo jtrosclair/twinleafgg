@@ -7,6 +7,7 @@ import { AttackEffect, KnockOutEffect } from '../../game/store/effects/game-effe
 import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
 import { GameMessage, PlayerType, SlotType, GamePhase } from '../../game';
 import { StateUtils } from '../../game/store/state-utils';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Clefable extends PokemonCard {
 
@@ -46,7 +47,19 @@ export class Clefable extends PokemonCard {
 
   public fullName: string = 'Clefable MEW';
 
+  private usedMoreMoon = false;
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+
+    // Track when Follow Me attack is used (reset More Moon flag)
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      this.usedMoreMoon = false;
+    }
+
+    // Track when More Moon attack is used
+    if (WAS_ATTACK_USED(effect, 1, this)) {
+      this.usedMoreMoon = true;
+    }
 
     // Follow Me - Switch opponent's benched Pokémon to active
     if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
@@ -87,10 +100,14 @@ export class Clefable extends PokemonCard {
         return state;
       }
 
-      // Take 1 more prize card
-      if (effect.prizeCount > 0) {
-        effect.prizeCount += 1;
+      // Check if More Moon attack was used
+      if (this.usedMoreMoon === true) {
+        if (effect.prizeCount > 0) {
+          effect.prizeCount += 1;
+          this.usedMoreMoon = false;
+        }
       }
+
       return state;
     }
 

@@ -7,6 +7,7 @@ const game_effects_1 = require("../../game/store/effects/game-effects");
 const choose_pokemon_prompt_1 = require("../../game/store/prompts/choose-pokemon-prompt");
 const game_1 = require("../../game");
 const state_utils_1 = require("../../game/store/state-utils");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Clefable extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -33,8 +34,17 @@ class Clefable extends pokemon_card_1.PokemonCard {
         this.setNumber = '36';
         this.name = 'Clefable';
         this.fullName = 'Clefable MEW';
+        this.usedMoreMoon = false;
     }
     reduceEffect(store, state, effect) {
+        // Track when Follow Me attack is used (reset More Moon flag)
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            this.usedMoreMoon = false;
+        }
+        // Track when More Moon attack is used
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            this.usedMoreMoon = true;
+        }
         // Follow Me - Switch opponent's benched Pokémon to active
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
             const player = effect.player;
@@ -62,9 +72,12 @@ class Clefable extends pokemon_card_1.PokemonCard {
             if (pokemonCard !== this) {
                 return state;
             }
-            // Take 1 more prize card
-            if (effect.prizeCount > 0) {
-                effect.prizeCount += 1;
+            // Check if More Moon attack was used
+            if (this.usedMoreMoon === true) {
+                if (effect.prizeCount > 0) {
+                    effect.prizeCount += 1;
+                    this.usedMoreMoon = false;
+                }
             }
             return state;
         }

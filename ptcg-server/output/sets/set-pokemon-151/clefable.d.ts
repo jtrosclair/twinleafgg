@@ -24,5 +24,6 @@ export declare class Clefable extends PokemonCard {
     setNumber: string;
     name: string;
     fullName: string;
+    private usedMoreMoon;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }
