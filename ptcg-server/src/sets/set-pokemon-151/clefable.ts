@@ -40,7 +40,7 @@ export class Clefable extends PokemonCard {
 
   public cardImage: string = 'assets/cardback.png';
 
-  public setNumber: string = '036';
+  public setNumber: string = '36';
 
   public name: string = 'Clefable';
 

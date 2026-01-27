@@ -30,7 +30,7 @@ class Clefable extends pokemon_card_1.PokemonCard {
         this.set = 'MEW';
         this.regulationMark = 'G';
         this.cardImage = 'assets/cardback.png';
-        this.setNumber = '036';
+        this.setNumber = '36';
         this.name = 'Clefable';
         this.fullName = 'Clefable MEW';
     }
