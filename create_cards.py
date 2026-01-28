@@ -144,7 +144,7 @@ def implement_card_with_agent(card_data):
         # WARNING: Only use in trusted directories for automated card implementation
         process = subprocess.Popen(
             [
-                "~/.local/bin/claude",
+                "claude",
                 "--model", "sonnet",
                 "--allow-dangerously-skip-permissions",
                 "--dangerously-skip-permissions"
