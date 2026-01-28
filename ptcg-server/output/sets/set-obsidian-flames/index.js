@@ -47,6 +47,7 @@ const scizor_1 = require("./scizor");
 const seismitoad_1 = require("./seismitoad");
 const tadbulb_1 = require("./tadbulb");
 const thundurus_1 = require("./thundurus");
+const toedscool_1 = require("./toedscool");
 const toedscruel_ex_1 = require("./toedscruel-ex");
 const togekiss_1 = require("./togekiss");
 const togepi_1 = require("./togepi");
@@ -97,6 +98,7 @@ exports.setObsidianFlames = [
     new seismitoad_1.Seismitoad(),
     new tadbulb_1.Tadbulb(),
     new thundurus_1.Thundurus(),
+    new toedscool_1.Toedscool(),
     new toedscruel_ex_1.Toedscruelex(),
     new town_store_1.TownStore(),
     new tympole_1.Tympole(),

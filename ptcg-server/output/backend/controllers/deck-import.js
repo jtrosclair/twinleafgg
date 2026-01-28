@@ -240,6 +240,9 @@ class DeckImport extends controller_1.Controller {
             // First try: exact fullName match (Name SET)
             const fullName = `${parsed.name} ${setCode}`;
             let card = cardsByFullName.get(fullName.toLowerCase());
+            if (!card) {
+                card = cardsByFullName.get(fullName.toLowerCase().replace(/-/g, ' '));
+            }
             // Second try: name + set + number match
             if (!card) {
                 const key = `${parsed.name.toLowerCase()}|${setCode.toLowerCase()}|${parsed.setNumber}`;
