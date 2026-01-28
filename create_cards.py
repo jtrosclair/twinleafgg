@@ -107,6 +107,7 @@ Please follow the instructions in ptcg-server/CREATE_CARD.txt exactly:
 
 Important notes:
 - Use the set code from ptcg-server/output/sets/index.d.ts
+- Reference other cards in the same set for mechanics (uppercase "EX" and "ex" are not the same)
 - Remove leading zeros from set numbers (001 → 1)
 - Reference the effect type table in CREATE_CARD.txt for similar implementations
 - Ensure all properties are implemented correctly (HP, types, stage, attacks, effects, etc.)
