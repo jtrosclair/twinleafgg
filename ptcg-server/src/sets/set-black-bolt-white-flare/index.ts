@@ -51,6 +51,7 @@ import { Solosis } from './solosis';
 import { Swadloon } from './swadloon';
 import { Tepig } from './tepig';
 import { Terrakion } from './terrakion';
+import { Timburr } from './timburr';
 import { Tirtouga } from './tirtouga';
 import { Tympole } from './tympole';
 import { Tynamo } from './tynamo';
@@ -100,6 +101,7 @@ export const setSV11: Card[] = [
   new Gurdurr(),
   new Keldeoex(),
   new Terrakion(),
+  new Timburr(),
   new Tirtouga(),
   new Virizion(),
   new Alomomola(),
