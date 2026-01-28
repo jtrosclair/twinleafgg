@@ -26,6 +26,7 @@ import { Genesectex } from './genesect-ex';
 import { Gothita } from './gothita';
 import { Gothorita } from './gothorita';
 import { Gothitelle } from './gothitelle';
+import { Gurdurr } from './gurdurr';
 import { Haxorus } from './haxorus';
 import { Hilda } from './hilda';
 import { IgnitionEnergy } from './ignition-energy';
@@ -96,6 +97,7 @@ export const setSV11: Card[] = [
   new Carracosta(),
   new Cobalion(),
   new Genesectex(),
+  new Gurdurr(),
   new Keldeoex(),
   new Terrakion(),
   new Tirtouga(),
