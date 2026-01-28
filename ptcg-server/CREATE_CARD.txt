@@ -1,0 +1,141 @@
+# Pokemon TCG Card Implementation Guide
+
+## Overview
+
+This guide explains how to implement cards for a Pokemon Trading Card Game simulator. Card data is sourced from [TCGDex.dev](https://tcgdex.dev).
+
+## Data Source Format
+
+### Pokemon Card JSON Structure
+
+```json
+{
+  "category": "Pokemon",
+  "id": "me02-025",
+  "localId": "025",
+  "name": "Mamoswine",
+  "rarity": "Uncommon",
+  "set": {
+    "id": "me02",
+    "name": "Phantasmal Flames"
+  },
+  "hp": 180,
+  "types": ["Water"],
+  "stage": "Stage2",
+  "attacks": [
+    {
+      "cost": ["Colorless", "Colorless", "Colorless"],
+      "name": "Wreck",
+      "effect": "If a Stadium is in play, this attack does 120 more damage. Then, discard that Stadium.",
+      "damage": "120+"
+    }
+  ],
+  "retreat": 4,
+  "regulationMark": "I"
+}
+```
+
+### Trainer Card JSON Structure
+
+```json
+{
+  "category": "Trainer",
+  "id": "me02-085",
+  "localId": "085",
+  "name": "Battle Cage",
+  "rarity": "Uncommon",
+  "set": {
+    "id": "me02",
+    "name": "Phantasmal Flames"
+  },
+  "effect": "Prevent all damage counters from being placed on Benched Pokémon...",
+  "trainerType": "Stadium",
+  "regulationMark": "I"
+}
+```
+
+## Implementation Steps
+
+### Step 1: Locate Set Directory
+
+Find the appropriate set directory in `ptcg-server/src/sets/`. Sets are named `set-{set-name}.ts` or organized in folders like `set-{set-name}/`.
+
+### Step 2: Create Card File
+
+Create a new TypeScript file with the card name:
+- Use kebab-case: `charizard.ts`, `charizard-ex.ts`, `battle-cage.ts`
+- Place in the appropriate set folder
+
+### Step 3: Implement Card Functionality
+
+Implement all card properties:
+- Name
+- Set Code (use the common set code, reference english name from ptcg-server/output/sets/index.d.ts), you shouldn't have to create a new folder.
+- Set number (remove leading zeros: `001` → `1`)
+- HP, types, stage (for Pokemon)
+- Attacks with costs, damage, and effects
+- Trainer effects (for Trainer cards)
+
+**Important**: Reference existing cards for similar effects (see Reference Cards section below).
+
+### Step 4: Register in Index
+
+In the set's `index.ts`:
+1. Import the new card
+2. Add to the card list in **alphabetical order**
+
+### Step 5: Commit Changes
+
+Use this commit message format:
+```
+Implement [CARDNAME SETCODE SETNUMBER]
+```
+
+Example: `Implement Mamoswine PFL 25`
+
+---
+
+## Reference Cards by Effect Type
+
+Use these existing implementations as templates:
+
+| Effect Type | Reference File |
+|-------------|----------------|
+| EX/GX mechanic | `set-pokemon-151/charizard-ex.ts`, `set-breakpoint/greninja-break.ts` |
+| Take X more prize cards | `set-paradox-rift/iron-hands-ex.ts` |
+| Take X fewer prize cards | `set-shrouded-fable/munkidori-ex.ts` |
+| Deal X damage | `set-surging-sparks/gholdengo.ts` |
+| Place damage counters | `set-mega-evolution/alakazam.ts` |
+| Auto knockout | `set-mega-evolution/mega-absol-ex.ts` |
+| Draw cards | `set-stellar-crown/crispin.ts` |
+| Search deck | `set-destined-rivals/team-rockets-petrel.ts`, `set-obsidian-flames/pidgeot-ex.ts` |
+| Attach energy | `set-stellar-crown/crispin.ts` |
+| Shuffle deck | `set-mega-evolution/lillies-determination.ts` |
+| Switch Pokemon | `set-temporal-forces/prime-catcher.ts` |
+| Check prize cards taken | `set-paldea-evolved/iono.ts` |
+| Stadium cards | `set-paldea-evolved/artazon.ts` |
+| ACE SPEC cards | `set-temporal-forces/prime-catcher.ts` |
+| Special Energy | `set-paldea-evolved/jet-energy.ts` |
+
+**Base path**: `ptcg-server/src/sets/`
+
+---
+
+## Finding Other Effects
+
+If the effect you need isn't listed above, search the codebase:
+
+```bash
+# Search by keyword in the sets folder
+grep -r "keyword" ptcg-server/src/sets/
+```
+
+Common search terms:
+- `discard` - discard effects
+- `heal` - healing effects
+- `damage` - damage calculation
+- `bench` - bench-related effects
+- `stadium` - stadium interactions
+- `energy` - energy manipulation
+- `evolve` - evolution effects
+- `coin` - coin flip mechanics
