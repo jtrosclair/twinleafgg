@@ -153,7 +153,7 @@ def implement_card_with_agent(card_data):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
-            cwd="/home/ec2-user/twinleaf/twinleafgg"
+            cwd="/srv/twinleafgg"
         )
 
         # Send the prompt via stdin and get the response
