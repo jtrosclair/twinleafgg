@@ -4,6 +4,7 @@ import { ApricornMaker } from './apricorn-maker';
 import { ArticunoGX } from './articuno-gx';
 import { Banette } from './banette';
 import { BanetteGX } from './banette-gx';
+import { BeastBall } from './beast-ball';
 import { Chinchou } from './chinchou';
 import { Copycat } from './copycat';
 import { Delcatty } from './delcatty';
@@ -55,6 +56,7 @@ export const setCelestialStorm: Card[] = [
   new ApricornMaker(),
   new Banette(),
   new BanetteGX(),
+  new BeastBall(),
   new Chinchou(),
   new Copycat(),
   new Delcatty(),
