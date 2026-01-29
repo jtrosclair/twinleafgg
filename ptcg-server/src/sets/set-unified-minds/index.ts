@@ -46,6 +46,7 @@ import { WeaknessGuardEnergy } from './weakness-guard-energy';
 import { Whimsicott } from './whimsicott';
 import { Wimpod } from './wimpod';
 import { Sneasel } from './sneasel';
+import { Snorunt } from './snorunt';
 import { WeavileGX } from './weavile-gx';
 import { MegaSableyeTyranitarGX } from './mega-sableye-tyranitar-gx';
 import { PokemonResearchLab } from './pokemon-research-lab';
@@ -115,6 +116,7 @@ export const setUnifiedMinds: Card[] = [
   new SlowpokePsyduckGX(),
   new SlumberingForest(),
   new Sneasel(),
+  new Snorunt(),
   new StadiumNav(),
   new TagSwitch(),
   new Thundurus(),
