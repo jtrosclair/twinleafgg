@@ -30,6 +30,7 @@ import { Malamar } from './malamar';
 import { MetalFryingPan } from './metal-frying-pan';
 import { MysteriousTreasure } from './mysterious-treasure';
 import { NaganadelGX } from './naganadel-gx';
+import { Pheromosa } from './pheromosa';
 import { Poipole } from './poipole';
 import { Rockruff } from './rockruff';
 import { Sliggoo } from './sliggoo';
@@ -75,6 +76,7 @@ export const setForbiddenLight: Card[] = [
   new MetalFryingPan(),
   new MysteriousTreasure(),
   new NaganadelGX(),
+  new Pheromosa(),
   new Poipole(),
   new Rockruff(),
   new Sliggoo(),
