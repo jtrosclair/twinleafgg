@@ -4,7 +4,7 @@ import { StoreLike, State, AttachEnergyPrompt, GameMessage, PlayerType, SlotType
 import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect } from '../../game/store/effects/game-effects';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
+import { CheckProvidedEnergyEffect, CheckAttackCostEffect } from '../../game/store/effects/check-effects';
 import { BLOCK_IF_GX_ATTACK_USED, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
 
 export class PikachuZekromGX extends PokemonCard {
@@ -94,7 +94,14 @@ export class PikachuZekromGX extends PokemonCard {
         ).length;
       });
 
-      const extraLightningEnergy = energyCount - effect.attack.cost.length;
+      const checkAttackCost = new CheckAttackCostEffect(player, effect.attack);
+      store.reduceEffect(state, checkAttackCost);
+
+      const lightningCostCount = checkAttackCost.cost.filter(cardType =>
+        cardType === CardType.LIGHTNING
+      ).length;
+
+      const extraLightningEnergy = energyCount - lightningCostCount;
 
       if (extraLightningEnergy < 3) {
         return state;
