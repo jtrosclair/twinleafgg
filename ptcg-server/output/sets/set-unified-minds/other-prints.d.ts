@@ -5,6 +5,7 @@ import { RowletAlolanExeggutorGX as RowletAlolanExeggutorGXUNM1 } from "../set-u
 import { SlowpokePsyduckGX as SlowpokePsyduckGXUNM35 } from "../set-unified-minds/slowpoke-and-psyduck-gx";
 import { KeldeoGX as KeldeoGXUNM47 } from "../set-unified-minds/keldeo-gx";
 import { RaichuAlolanRaichuGX as RaichuAlolanRaichuGXUNM54 } from "../set-unified-minds/raichu-and-alolan-raichu-gx";
+import { LatiosGX as LatiosGXUNM78 } from "../set-unified-minds/latios-gx";
 import { MewtwoMewGX as MewtwoMewGXUNM71 } from "../set-unified-minds/mewtwo-and-mew-gx";
 import { MegaSableyeTyranitarGX as MegaSableyeTyranitarGXUNM126 } from "../set-unified-minds/mega-sableye-tyranitar-gx";
 import { GarchompGiratinaGX as GarchompGiratinaGXUNM146 } from "../set-unified-minds/garchomp-and-giratina-gx";
@@ -69,6 +70,11 @@ export declare class RaichuAlolanRaichuGX3UNM extends RaichuAlolanRaichuGXUNM54 
     set: string;
 }
 export declare class MewtwoMewGX2UNM extends MewtwoMewGXUNM71 {
+    setNumber: string;
+    fullName: string;
+    set: string;
+}
+export declare class LatiosGX2UNM extends LatiosGXUNM78 {
     setNumber: string;
     fullName: string;
     set: string;

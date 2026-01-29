@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ResetStamp2UNM = exports.CherishBall2UNM = exports.WeaknessGuardEnergy2UNM = exports.RecycleEnergyN12UNM = exports.ViridianForestUNM = exports.UTurnBoard2UNM = exports.TagSwitch2UNM = exports.ResetStamp3UNM = exports.KarateBelt2UNM = exports.CherishBall3UNM = exports.GarchompGiratinaGX3UNM = exports.MegaSableyeTyranitarGX4UNM = exports.MewtwoMewGX3UNM = exports.RaichuAlolanRaichuGX4UNM = exports.KeldeoGX3UNM = exports.SlowpokePsyduckGX4UNM = exports.RowletAlolanExeggutorGX4UNM = exports.MistysFavor2UNM = exports.Grimsley2UNM = exports.GarchompGiratinaGX2UNM = exports.MegaSableyeTyranitarGX3UNM = exports.MegaSableyeTyranitarGX2UNM = exports.MewtwoMewGX2UNM = exports.RaichuAlolanRaichuGX3UNM = exports.RaichuAlolanRaichuGX2UNM = exports.KeldeoGX2UNM = exports.SlowpokePsyduckGX3UNM = exports.SlowpokePsyduckGX2UNM = exports.RowletAlolanExeggutorGX3UNM = exports.RowletAlolanExeggutorGX2UNM = exports.UnidentifiedFossilUNM = exports.MurkrowUNM = exports.Riolu2UNM = void 0;
+exports.ResetStamp2UNM = exports.CherishBall2UNM = exports.WeaknessGuardEnergy2UNM = exports.RecycleEnergyN12UNM = exports.ViridianForestUNM = exports.UTurnBoard2UNM = exports.TagSwitch2UNM = exports.ResetStamp3UNM = exports.KarateBelt2UNM = exports.CherishBall3UNM = exports.GarchompGiratinaGX3UNM = exports.MegaSableyeTyranitarGX4UNM = exports.MewtwoMewGX3UNM = exports.RaichuAlolanRaichuGX4UNM = exports.KeldeoGX3UNM = exports.SlowpokePsyduckGX4UNM = exports.RowletAlolanExeggutorGX4UNM = exports.MistysFavor2UNM = exports.Grimsley2UNM = exports.GarchompGiratinaGX2UNM = exports.MegaSableyeTyranitarGX3UNM = exports.MegaSableyeTyranitarGX2UNM = exports.LatiosGX2UNM = exports.MewtwoMewGX2UNM = exports.RaichuAlolanRaichuGX3UNM = exports.RaichuAlolanRaichuGX2UNM = exports.KeldeoGX2UNM = exports.SlowpokePsyduckGX3UNM = exports.SlowpokePsyduckGX2UNM = exports.RowletAlolanExeggutorGX3UNM = exports.RowletAlolanExeggutorGX2UNM = exports.UnidentifiedFossilUNM = exports.MurkrowUNM = exports.Riolu2UNM = void 0;
 const riolu_1 = require("../set-unified-minds/riolu");
 const murkrow_1 = require("../set-unbroken-bonds/murkrow");
 const unidentified_fossil_1 = require("../set-silver-tempest/unidentified-fossil");
@@ -8,6 +8,7 @@ const rowlet_and_alolan_exeggutor_gx_1 = require("../set-unified-minds/rowlet-an
 const slowpoke_and_psyduck_gx_1 = require("../set-unified-minds/slowpoke-and-psyduck-gx");
 const keldeo_gx_1 = require("../set-unified-minds/keldeo-gx");
 const raichu_and_alolan_raichu_gx_1 = require("../set-unified-minds/raichu-and-alolan-raichu-gx");
+const latios_gx_1 = require("../set-unified-minds/latios-gx");
 const mewtwo_and_mew_gx_1 = require("../set-unified-minds/mewtwo-and-mew-gx");
 const mega_sableye_tyranitar_gx_1 = require("../set-unified-minds/mega-sableye-tyranitar-gx");
 const garchomp_and_giratina_gx_1 = require("../set-unified-minds/garchomp-and-giratina-gx");
@@ -120,6 +121,15 @@ class MewtwoMewGX2UNM extends mewtwo_and_mew_gx_1.MewtwoMewGX {
     }
 }
 exports.MewtwoMewGX2UNM = MewtwoMewGX2UNM;
+class LatiosGX2UNM extends latios_gx_1.LatiosGX {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '223';
+        this.fullName = 'Latios-GX2 UNM';
+        this.set = 'UNM';
+    }
+}
+exports.LatiosGX2UNM = LatiosGX2UNM;
 class MegaSableyeTyranitarGX2UNM extends mega_sableye_tyranitar_gx_1.MegaSableyeTyranitarGX {
     constructor() {
         super(...arguments);

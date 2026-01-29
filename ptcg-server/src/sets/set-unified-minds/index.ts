@@ -1,4 +1,4 @@
-import { Riolu2UNM, MurkrowUNM, UnidentifiedFossilUNM, RowletAlolanExeggutorGX2UNM, RowletAlolanExeggutorGX3UNM, SlowpokePsyduckGX2UNM, SlowpokePsyduckGX3UNM, KeldeoGX2UNM, RaichuAlolanRaichuGX2UNM, RaichuAlolanRaichuGX3UNM, MewtwoMewGX2UNM, MegaSableyeTyranitarGX2UNM, MegaSableyeTyranitarGX3UNM, GarchompGiratinaGX2UNM, Grimsley2UNM, MistysFavor2UNM, RowletAlolanExeggutorGX4UNM, SlowpokePsyduckGX4UNM, KeldeoGX3UNM, RaichuAlolanRaichuGX4UNM, MewtwoMewGX3UNM, MegaSableyeTyranitarGX4UNM, GarchompGiratinaGX3UNM, CherishBall3UNM, KarateBelt2UNM, ResetStamp3UNM, TagSwitch2UNM, UTurnBoard2UNM, ViridianForestUNM, RecycleEnergyN12UNM, WeaknessGuardEnergy2UNM, CherishBall2UNM, ResetStamp2UNM } from './other-prints';
+import { Riolu2UNM, MurkrowUNM, UnidentifiedFossilUNM, RowletAlolanExeggutorGX2UNM, RowletAlolanExeggutorGX3UNM, SlowpokePsyduckGX2UNM, SlowpokePsyduckGX3UNM, KeldeoGX2UNM, RaichuAlolanRaichuGX2UNM, RaichuAlolanRaichuGX3UNM, LatiosGX2UNM, MewtwoMewGX2UNM, MegaSableyeTyranitarGX2UNM, MegaSableyeTyranitarGX3UNM, GarchompGiratinaGX2UNM, Grimsley2UNM, MistysFavor2UNM, RowletAlolanExeggutorGX4UNM, SlowpokePsyduckGX4UNM, KeldeoGX3UNM, RaichuAlolanRaichuGX4UNM, MewtwoMewGX3UNM, MegaSableyeTyranitarGX4UNM, GarchompGiratinaGX3UNM, CherishBall3UNM, KarateBelt2UNM, ResetStamp3UNM, TagSwitch2UNM, UTurnBoard2UNM, ViridianForestUNM, RecycleEnergyN12UNM, WeaknessGuardEnergy2UNM, CherishBall2UNM, ResetStamp2UNM } from './other-prints';
 import { Card } from '../../game/store/card/card';
 import { AlolanGrimer } from './alolan-grimer';
 import { AlolanRaichu } from './alolan-raichu';
@@ -135,6 +135,7 @@ export const setUnifiedMinds: Card[] = [
   new KeldeoGX2UNM(),
   new RaichuAlolanRaichuGX2UNM(),
   new RaichuAlolanRaichuGX3UNM(),
+  new LatiosGX2UNM(),
   new MewtwoMewGX2UNM(),
   new MegaSableyeTyranitarGX2UNM(),
   new MegaSableyeTyranitarGX3UNM(),

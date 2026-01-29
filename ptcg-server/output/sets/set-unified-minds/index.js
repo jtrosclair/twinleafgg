@@ -26,6 +26,7 @@ const hoopa_1 = require("./hoopa");
 const jynx_1 = require("./jynx");
 const karate_belt_1 = require("./karate-belt");
 const keldeo_gx_1 = require("./keldeo-gx");
+const latios_gx_1 = require("./latios-gx");
 const leavanny_1 = require("./leavanny");
 const lickilicky_1 = require("./lickilicky");
 const meditite_1 = require("./meditite");
@@ -92,6 +93,7 @@ exports.setUnifiedMinds = [
     new jynx_1.Jynx(),
     new karate_belt_1.KarateBelt(),
     new keldeo_gx_1.KeldeoGX(),
+    new latios_gx_1.LatiosGX(),
     new magnemite_1.Magnemite(),
     new leavanny_1.Leavanny(),
     new lickilicky_1.Lickilicky(),
@@ -133,6 +135,7 @@ exports.setUnifiedMinds = [
     new other_prints_1.KeldeoGX2UNM(),
     new other_prints_1.RaichuAlolanRaichuGX2UNM(),
     new other_prints_1.RaichuAlolanRaichuGX3UNM(),
+    new other_prints_1.LatiosGX2UNM(),
     new other_prints_1.MewtwoMewGX2UNM(),
     new other_prints_1.MegaSableyeTyranitarGX2UNM(),
     new other_prints_1.MegaSableyeTyranitarGX3UNM(),

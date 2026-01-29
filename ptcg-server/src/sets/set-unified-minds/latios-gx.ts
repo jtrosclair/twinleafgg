@@ -1,10 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils, GameError, GameMessage, PlayerType } from '../../game';
+import { StoreLike, State, StateUtils, GameError, GameMessage, PlayerType, PowerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect } from '../../game/store/effects/game-effects';
-import { AbstractAttackEffect, EndTurnEffect } from '../../game/store/effects/attack-effects';
-import { CheckAttackEffect } from '../../game/store/effects/check-effects';
+import { AbstractAttackEffect } from '../../game/store/effects/attack-effects';
+import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { CheckAttackCostEffect } from '../../game/store/effects/check-effects';
 import { BLOCK_IF_GX_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class LatiosGX extends PokemonCard {
@@ -14,6 +15,12 @@ export class LatiosGX extends PokemonCard {
   public hp: number = 170;
   public weakness = [{ type: P }];
   public retreat = [];
+
+  public powers = [{
+    name: 'Power Bind',
+    powerType: PowerType.ABILITY,
+    text: 'If you have 4 or fewer Pokémon in play, this Pokémon can\'t attack.'
+  }];
 
   public attacks = [
     {
@@ -32,7 +39,7 @@ export class LatiosGX extends PokemonCard {
 
   public set: string = 'UNM';
   public cardImage: string = 'assets/cardback.png';
-  public setNumber: string = '223';
+  public setNumber: string = '78';
   public name: string = 'Latios-GX';
   public fullName: string = 'Latios-GX UNM';
 
@@ -42,7 +49,7 @@ export class LatiosGX extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Power Bind: If you have 4 or fewer Pokémon in play, this Pokémon can't attack.
-    if (effect instanceof CheckAttackEffect && effect.player.active.getPokemonCard() === this) {
+    if (effect instanceof CheckAttackCostEffect && effect.player.active.getPokemonCard() === this) {
       const player = effect.player;
       let pokemonInPlay = 0;
 
@@ -59,7 +66,7 @@ export class LatiosGX extends PokemonCard {
       });
 
       if (pokemonInPlay <= 4) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
+        throw new GameError(GameMessage.CANNOT_USE_ATTACK);
       }
     }
 
