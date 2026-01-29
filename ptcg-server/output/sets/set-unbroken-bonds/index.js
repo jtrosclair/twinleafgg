@@ -35,6 +35,7 @@ const mismagius_1 = require("./mismagius");
 const murkrow_1 = require("./murkrow");
 const oddish_1 = require("./oddish");
 const persian_1 = require("./persian");
+const persian_gx_1 = require("./persian-gx");
 const pheromosa_buzzwole_gx_1 = require("./pheromosa-buzzwole-gx");
 const pokegear_30_1 = require("./pokegear-30");
 const poliwag_1 = require("./poliwag");
@@ -90,6 +91,7 @@ exports.setUnbrokenBonds = [
     new mismagius_1.Mismagius(),
     new oddish_1.Oddish(),
     new persian_1.Persian(),
+    new persian_gx_1.PersianGX(),
     new pokegear_30_1.Pokegear30(),
     new poliwag_1.Poliwag(),
     new porygon_1.Porygon(),

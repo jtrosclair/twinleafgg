@@ -32,6 +32,7 @@ const lickilicky_1 = require("./lickilicky");
 const meditite_1 = require("./meditite");
 const mewtwo_and_mew_gx_1 = require("./mewtwo-and-mew-gx");
 const munchlax_1 = require("./munchlax");
+const naganadel_gx_1 = require("./naganadel-gx");
 const necrozma_1 = require("./necrozma");
 const numel_1 = require("./numel");
 const purrloin_1 = require("./purrloin");
@@ -48,6 +49,7 @@ const weakness_guard_energy_1 = require("./weakness-guard-energy");
 const whimsicott_1 = require("./whimsicott");
 const wimpod_1 = require("./wimpod");
 const sneasel_1 = require("./sneasel");
+const snorunt_1 = require("./snorunt");
 const weavile_gx_1 = require("./weavile-gx");
 const mega_sableye_tyranitar_gx_1 = require("./mega-sableye-tyranitar-gx");
 const pokemon_research_lab_1 = require("./pokemon-research-lab");
@@ -102,6 +104,7 @@ exports.setUnifiedMinds = [
     new mewtwo_and_mew_gx_1.MewtwoMewGX(),
     new mistys_favor_1.MistysFavor(),
     new munchlax_1.Munchlax(),
+    new naganadel_gx_1.NaganadelGX(),
     new necrozma_1.Necrozma(),
     new numel_1.Numel(),
     new pokemon_research_lab_1.PokemonResearchLab(),
@@ -115,6 +118,7 @@ exports.setUnifiedMinds = [
     new slowpoke_and_psyduck_gx_1.SlowpokePsyduckGX(),
     new slumbering_forest_1.SlumberingForest(),
     new sneasel_1.Sneasel(),
+    new snorunt_1.Snorunt(),
     new stadium_nav_1.StadiumNav(),
     new tag_switch_1.TagSwitch(),
     new thundurus_1.Thundurus(),

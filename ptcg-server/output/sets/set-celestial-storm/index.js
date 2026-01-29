@@ -6,6 +6,7 @@ const apricorn_maker_1 = require("./apricorn-maker");
 const articuno_gx_1 = require("./articuno-gx");
 const banette_1 = require("./banette");
 const banette_gx_1 = require("./banette-gx");
+const beast_ball_1 = require("./beast-ball");
 const chinchou_1 = require("./chinchou");
 const copycat_1 = require("./copycat");
 const delcatty_1 = require("./delcatty");
@@ -49,6 +50,7 @@ exports.setCelestialStorm = [
     new apricorn_maker_1.ApricornMaker(),
     new banette_1.Banette(),
     new banette_gx_1.BanetteGX(),
+    new beast_ball_1.BeastBall(),
     new chinchou_1.Chinchou(),
     new copycat_1.Copycat(),
     new delcatty_1.Delcatty(),

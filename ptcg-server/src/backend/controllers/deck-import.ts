@@ -527,7 +527,7 @@ export class DeckImport extends Controller {
       return {
         quantity: parseInt(basicEnergyMatch[1], 10),
         name: `${basicEnergyMatch[2]} Energy`,
-        setCode: basicEnergyMatch[3] || 'SUM',
+        setCode: 'SUM',
         setNumber: basicEnergyMatch[4] || '0',
         originalLine: line
       };

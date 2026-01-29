@@ -32,6 +32,7 @@ const malamar_1 = require("./malamar");
 const metal_frying_pan_1 = require("./metal-frying-pan");
 const mysterious_treasure_1 = require("./mysterious-treasure");
 const naganadel_gx_1 = require("./naganadel-gx");
+const pheromosa_1 = require("./pheromosa");
 const poipole_1 = require("./poipole");
 const rockruff_1 = require("./rockruff");
 const sliggoo_1 = require("./sliggoo");
@@ -72,6 +73,7 @@ exports.setForbiddenLight = [
     new metal_frying_pan_1.MetalFryingPan(),
     new mysterious_treasure_1.MysteriousTreasure(),
     new naganadel_gx_1.NaganadelGX(),
+    new pheromosa_1.Pheromosa(),
     new poipole_1.Poipole(),
     new rockruff_1.Rockruff(),
     new sliggoo_1.Sliggoo(),

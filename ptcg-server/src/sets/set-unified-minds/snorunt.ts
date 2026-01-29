@@ -5,7 +5,7 @@ export class Snorunt extends PokemonCard {
   public stage: Stage = Stage.BASIC;
   public cardType: CardType = W;
   public hp: number = 50;
-  public weakness = [{ type: M, value: '×2' }];
+  public weakness = [{ type: CardType.METAL }];
   public retreat = [C];
 
   public attacks = [{

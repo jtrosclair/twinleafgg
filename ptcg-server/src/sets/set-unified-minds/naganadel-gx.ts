@@ -1,10 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, CardTag, PowerType } from '../../game/store/card/card-types';
-import { ChooseCardsPrompt, GameError, GameMessage, PlayerType, SlotType, State, StateUtils, StoreLike } from '../../game';
+import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
+import { PowerType } from '../../game/store/card/pokemon-types';
+import { ChooseCardsPrompt, GameError, GameMessage, PlayerType, PokemonCardList, SlotType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect, PowerEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { ChoosePokemonPrompt } from '../../game/prompts/choose-pokemon-prompt';
+import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
 import { BLOCK_IF_GX_ATTACK_USED, DAMAGE_OPPONENT_POKEMON } from '../../game/store/prefabs/prefabs';
 import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
 import { CardList } from '../../game/store/state/card-list';
@@ -119,7 +120,7 @@ export class NaganadelGX extends PokemonCard {
         PlayerType.TOP_PLAYER,
         [SlotType.BENCH, SlotType.ACTIVE],
         { allowCancel: false }
-      ), selected => {
+      ), (selected: PokemonCardList[]) => {
         const targets = selected || [];
         DAMAGE_OPPONENT_POKEMON(store, state, effect, 170, targets);
       });
