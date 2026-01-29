@@ -30,6 +30,7 @@ import { Lickilicky } from './lickilicky';
 import { Meditite } from './meditite';
 import { MewtwoMewGX } from './mewtwo-and-mew-gx';
 import { Munchlax } from './munchlax';
+import { NaganadelGX } from './naganadel-gx';
 import { Necrozma } from './necrozma';
 import { Numel } from './numel';
 import { Purrloin } from './purrloin';
@@ -103,6 +104,7 @@ export const setUnifiedMinds: Card[] = [
   new MewtwoMewGX(),
   new MistysFavor(),
   new Munchlax(),
+  new NaganadelGX(),
   new Necrozma(),
   new Numel(),
   new PokemonResearchLab(),
