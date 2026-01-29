@@ -24,6 +24,7 @@ import { Hoopa } from './hoopa';
 import { Jynx } from './jynx';
 import { KarateBelt } from './karate-belt';
 import { KeldeoGX } from './keldeo-gx';
+import { LatiosGX } from './latios-gx';
 import { Leavanny } from './leavanny';
 import { Lickilicky } from './lickilicky';
 import { Meditite } from './meditite';
@@ -92,6 +93,7 @@ export const setUnifiedMinds: Card[] = [
   new Jynx(),
   new KarateBelt(),
   new KeldeoGX(),
+  new LatiosGX(),
   new Magnemite(),
   new Leavanny(),
   new Lickilicky(),
