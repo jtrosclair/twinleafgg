@@ -21,7 +21,7 @@ class Trevenant extends pokemon_card_1.PokemonCard {
         this.powers = [{
                 name: 'Forest\'s Curse',
                 powerType: pokemon_types_1.PowerType.ABILITY,
-                text: 'As long as this Pokémon is your Active Pokémon, your opponent can\t play any Item cards from his or her hand.'
+                text: 'As long as this Pokémon is your Active Pokémon, your opponent can\'t play any Item cards from his or her hand.'
             }];
         this.attacks = [{
                 name: 'Tree Slam',
@@ -39,7 +39,10 @@ class Trevenant extends pokemon_card_1.PokemonCard {
         if (effect instanceof play_card_effects_1.PlayItemEffect) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            if (player.active.getPokemonCard() !== this && opponent.active.getPokemonCard() !== this) {
+            // Check if this card is in the opponent's active slot (either as the top card or in the evolution chain)
+            const isInOpponentActive = opponent.active.cards.includes(this);
+            const isInPlayerActive = player.active.cards.includes(this);
+            if (!isInPlayerActive && !isInOpponentActive) {
                 return state;
             }
             // Checking to see if ability is being blocked
@@ -54,7 +57,7 @@ class Trevenant extends pokemon_card_1.PokemonCard {
             catch (_a) {
                 return state;
             }
-            if (opponent.active.getPokemonCard() === this) {
+            if (isInOpponentActive) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
         }
