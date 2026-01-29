@@ -11,6 +11,7 @@ export const cardReplacements = [
   { from: '♢', to: 'Prism Star' },
 
   //Energy
+  { from: 'Beast Energy FLI', to: 'Beast Energy ♢ FLI' },
   { from: 'Grass Energy 1', to: 'Grass Energy SVE 1' },
   { from: 'Basic Grass Energy 1', to: 'Grass Energy SVE 1' },
   { from: 'Basic Grass Energy SVE 1', to: 'Grass Energy SVE 1' },
