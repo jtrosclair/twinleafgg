@@ -1181,15 +1181,24 @@ export function PREVENT_DAMAGE(store: StoreLike, state: State, effect: AttackEff
 
 /**
  * Checks if the a Pokemon is at full HP and that the damage dealt is enough to knock it out.
- * TODO: This doesn't work if the an attack changes the result of a CheckHpEffect (e.g. discards an hp-modifying stadium)
+ * Uses cached max HP from before the attack started to properly handle attacks that modify
+ * max HP during their execution (e.g., discarding HP-modifying stadiums like Exciting Stadium).
  */
 export function DAMAGED_FROM_FULL_HP(store: StoreLike, state: State, effect: PutDamageEffect, player: Player, target: PokemonCardList): boolean {
   if (effect.target.damage != 0) {
     return false;
   }
-  const checkHpEffect = new CheckHpEffect(player, target);
-  store.reduceEffect(state, checkHpEffect);
-  return effect.damage >= checkHpEffect.hp;
+
+  // Use the max HP cached before the attack started, if available
+  // This handles cases where the attack modifies max HP (e.g., discarding stadiums)
+  // before damage is dealt
+  const maxHp = target.maxHpBeforeAttack > 0 ? target.maxHpBeforeAttack : (() => {
+    const checkHpEffect = new CheckHpEffect(player, target);
+    store.reduceEffect(state, checkHpEffect);
+    return checkHpEffect.hp;
+  })();
+
+  return effect.damage >= maxHp;
 }
 
 /**

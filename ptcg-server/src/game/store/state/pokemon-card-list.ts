@@ -33,6 +33,7 @@ export class PokemonCardList extends CardList {
   public cannotAttackNextTurnPending: boolean = false;
   public cannotUseAttacksNextTurn: string[] = [];
   public cannotUseAttacksNextTurnPending: string[] = [];
+  public maxHpBeforeAttack: number = 0;
 
 
   public static readonly ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';

@@ -104,6 +104,26 @@ function* useAttack(next, store, state, effect) {
     state.phase = state_1.GamePhase.ATTACK;
     // At the start of the attack, initialize pendingAttackTargets
     //  (attackingPokemon as any).pendingAttackTargets = [];
+    // Cache max HP for all Pokemon before attack effect is processed
+    // This is needed for effects like Tenacious Heart that check "full HP"
+    // when attacks modify max HP during their execution (e.g., discarding stadiums)
+    const cacheMaxHpForPlayer = (p) => {
+        const { CheckHpEffect } = require('../effects/check-effects');
+        if (p.active && p.active.cards.length > 0) {
+            const checkHp = new CheckHpEffect(p, p.active);
+            store.reduceEffect(state, checkHp);
+            p.active.maxHpBeforeAttack = checkHp.hp;
+        }
+        p.bench.forEach((benchSlot) => {
+            if (benchSlot.cards.length > 0) {
+                const checkHp = new CheckHpEffect(p, benchSlot);
+                store.reduceEffect(state, checkHp);
+                benchSlot.maxHpBeforeAttack = checkHp.hp;
+            }
+        });
+    };
+    cacheMaxHpForPlayer(player);
+    cacheMaxHpForPlayer(opponent);
     const attackEffect = (effect instanceof game_effects_1.AttackEffect) ? effect : new game_effects_1.AttackEffect(player, opponent, attack);
     state = store.reduceEffect(state, attackEffect);
     if (store.hasPrompts()) {

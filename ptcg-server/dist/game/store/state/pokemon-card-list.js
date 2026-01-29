@@ -31,6 +31,7 @@ class PokemonCardList extends card_list_1.CardList {
         this.cannotAttackNextTurnPending = false;
         this.cannotUseAttacksNextTurn = [];
         this.cannotUseAttacksNextTurnPending = [];
+        this.maxHpBeforeAttack = 0;
     }
     getPokemons() {
         const result = [];

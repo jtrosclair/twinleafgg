@@ -248,7 +248,8 @@ export declare function BLOCK_RETREAT(store: StoreLike, state: State, effect: At
 export declare function PREVENT_DAMAGE(store: StoreLike, state: State, effect: AttackEffect, source: Card): State;
 /**
  * Checks if the a Pokemon is at full HP and that the damage dealt is enough to knock it out.
- * TODO: This doesn't work if the an attack changes the result of a CheckHpEffect (e.g. discards an hp-modifying stadium)
+ * Uses cached max HP from before the attack started to properly handle attacks that modify
+ * max HP during their execution (e.g., discarding HP-modifying stadiums like Exciting Stadium).
  */
 export declare function DAMAGED_FROM_FULL_HP(store: StoreLike, state: State, effect: PutDamageEffect, player: Player, target: PokemonCardList): boolean;
 /**

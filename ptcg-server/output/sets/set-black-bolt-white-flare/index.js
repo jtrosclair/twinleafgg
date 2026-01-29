@@ -28,6 +28,7 @@ const genesect_ex_1 = require("./genesect-ex");
 const gothita_1 = require("./gothita");
 const gothorita_1 = require("./gothorita");
 const gothitelle_1 = require("./gothitelle");
+const gurdurr_1 = require("./gurdurr");
 const haxorus_1 = require("./haxorus");
 const hilda_1 = require("./hilda");
 const ignition_energy_1 = require("./ignition-energy");
@@ -52,6 +53,7 @@ const solosis_1 = require("./solosis");
 const swadloon_1 = require("./swadloon");
 const tepig_1 = require("./tepig");
 const terrakion_1 = require("./terrakion");
+const timburr_1 = require("./timburr");
 const tirtouga_1 = require("./tirtouga");
 const tympole_1 = require("./tympole");
 const tynamo_1 = require("./tynamo");
@@ -96,8 +98,10 @@ exports.setSV11 = [
     new carracosta_1.Carracosta(),
     new cobalion_1.Cobalion(),
     new genesect_ex_1.Genesectex(),
+    new gurdurr_1.Gurdurr(),
     new keldeo_ex_1.Keldeoex(),
     new terrakion_1.Terrakion(),
+    new timburr_1.Timburr(),
     new tirtouga_1.Tirtouga(),
     new virizion_1.Virizion(),
     new alomomola_1.Alomomola(),
