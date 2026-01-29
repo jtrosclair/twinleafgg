@@ -33,6 +33,7 @@ import { Mismagius } from './mismagius';
 import { Murkrow } from './murkrow';
 import { Oddish } from './oddish';
 import { Persian } from './persian';
+import { PersianGX } from './persian-gx';
 import { PheromosaBuzzwoleGX } from './pheromosa-buzzwole-gx';
 import { Pokegear30 } from './pokegear-30';
 import { Poliwag } from './poliwag';
@@ -90,6 +91,7 @@ export const setUnbrokenBonds: Card[] = [
   new Mismagius(),
   new Oddish(),
   new Persian(),
+  new PersianGX(),
   new Pokegear30(),
   new Poliwag(),
   new Porygon(),
