@@ -13,24 +13,53 @@ exports.Cards = void 0;
 const controller_1 = require("./controller");
 const game_1 = require("../../game");
 const md5_1 = require("../../utils/md5");
+const IMAGE_JSON_URL = 'https://amydev.me/twinleaf-json/image-jsons/limitlesstcg/small.json';
 class Cards extends controller_1.Controller {
+    constructor() {
+        super(...arguments);
+        this.imageMap = {};
+    }
     async onAll(req, res) {
         if (!this.cardsInfo) {
+            await this.fetchImageMap();
             this.cardsInfo = this.buildCardsInfo();
         }
         res.send({ ok: true, cardsInfo: this.cardsInfo });
     }
     async onHash(req, res) {
         if (!this.cardsInfo) {
+            await this.fetchImageMap();
             this.cardsInfo = this.buildCardsInfo();
         }
         const cardsTotal = this.cardsInfo.cards.length;
         const hash = this.cardsInfo.hash;
         res.send({ ok: true, cardsTotal, hash });
     }
+    async fetchImageMap() {
+        if (Object.keys(this.imageMap).length > 0) {
+            return;
+        }
+        try {
+            const response = await fetch(IMAGE_JSON_URL);
+            if (response.ok) {
+                this.imageMap = await response.json();
+                console.log(`Loaded ${Object.keys(this.imageMap).length} card images from remote`);
+            }
+        }
+        catch (error) {
+            console.error('Failed to fetch card images:', error);
+        }
+    }
     buildCardsInfo() {
         const cardManager = game_1.CardManager.getInstance();
         const cards = cardManager.getAllCards();
+        // Update card images from the image map
+        for (const card of cards) {
+            const key = `${card.set} ${card.setNumber}`;
+            if (this.imageMap[key]) {
+                card.cardImage = this.imageMap[key];
+            }
+        }
         const cardsInfo = {
             cards,
             hash: ''
