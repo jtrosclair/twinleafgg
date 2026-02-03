@@ -721,6 +721,7 @@ const cardReplacements = [
   { from: 'Reshiram ex SV11W 174', to: 'Reshiram exWR SV11W 174' },
 
   //Mega Evolution (me01 -> MEG)
+  { from: 'Energy Switch me01 115', to: 'Energy Switch MEG 115' },
   { from: 'Mystery Garden me01 122', to: 'Mystery Garden MEG 122' },
 ];
 
