@@ -9,10 +9,10 @@ export class LilliesClefairyex extends PokemonCard {
 
   public stage: Stage = Stage.BASIC;
   public tags = [CardTag.POKEMON_ex, CardTag.LILLIES];
-  public cardType: CardType = P;
+  public cardType: CardType = CardType.PSYCHIC;
   public hp: number = 190;
-  public weakness = [{ type: M }];
-  public retreat = [C];
+  public weakness = [{ type: CardType.METAL }];
+  public retreat = [CardType.COLORLESS];
 
   public powers = [{
     name: 'Fairy Zone',
@@ -23,7 +23,7 @@ export class LilliesClefairyex extends PokemonCard {
   public attacks = [
     {
       name: 'Full Moon Rondo',
-      cost: [P, C],
+      cost: [CardType.PSYCHIC, CardType.COLORLESS],
       damage: 20,
       damageCalculation: '+',
       text: 'This attack does 20 more damage for each Benched Pokémon (both yours and your opponent\'s).'
