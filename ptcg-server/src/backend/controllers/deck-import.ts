@@ -531,6 +531,7 @@ const cardReplacements = [
 
   //SSP
   { from: 'Charcadet SSP 33', to: 'Charcadet 2 SSP 33' },
+  { from: 'Lively Stadium SSP 180', to: 'Exciting Stadium SSP 180' },
   //SSP FA
   { from: 'Larvesta SSP 196', to: 'LarvestaIR SSP 196' },
   { from: 'Feebas SSP 198', to: 'FeebasIR SSP 198' },
