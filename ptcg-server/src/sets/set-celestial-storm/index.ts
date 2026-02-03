@@ -13,6 +13,7 @@ import { Dunsparce } from './dunsparce';
 import { ElectrodeGX } from './electrode-gx';
 import { EnergyRecycleSystem } from './energy-recycle-system';
 import { Fisherman } from './fisherman';
+import { FriendBall } from './friend-ball';
 import { Hau } from './hau';
 import { HustleBelt } from './hustle-belt';
 import { JirachiPrismStar } from './jirachi-prism-star';
@@ -64,6 +65,7 @@ export const setCelestialStorm: Card[] = [
   new ElectrodeGX(),
   new EnergyRecycleSystem(),
   new Fisherman(),
+  new FriendBall(),
   new Hau(),
   new HustleBelt(),
   new JirachiPrismStar(),
