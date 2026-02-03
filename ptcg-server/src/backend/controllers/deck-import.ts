@@ -718,6 +718,9 @@ const cardReplacements = [
 
   //SV11W White Rare
   { from: 'Reshiram ex SV11W 174', to: 'Reshiram exWR SV11W 174' },
+
+  //Mega Evolution (me01 -> MEG)
+  { from: 'Mystery Garden me01 122', to: 'Mystery Garden MEG 122' },
 ];
 
 // Mapping of common import format set codes to internal set codes
