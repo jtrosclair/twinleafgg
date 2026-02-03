@@ -40,6 +40,7 @@ import { Oshawott } from './oshawott';
 import { AirBalloonSV11, CarracostaAR, AlomomolaAR, CherenSV11, EnergyRetrievalSV11, LarvestaAR, PrismEnergySV11, ProfessorsResearchSV11, SeismitoadAR, TirtougaAR, ServineAR, SnivyAR, TympoleAR, VictiniAR, VolcaronaAR, HaxorusAR, FraxureAR, AxewAR, CobalionAR, DrillburAR, EelektrikAR, CottoneeAR, EmolgaAR, PalpitoadAR, TynamoAR, ExcadrillexFA, FennelFA, GenesectexFA, KyuremexFA, MeloettaexFA, SerperiorexFA, ZekromexFA, ExcadrillexSIR, GenesectexSIR, KyuremexSIR, MeloettaexSIR, SerperiorexSIR, ZekromexSIR, ZekromexBR, JoltikAR, GalvantulaAR, DewottAR, EmboarAR, FrillishAR, OshawottAR, PigniteAR, SamurottAR, TepigAR, VirizionAR, ArchenAR, ArcheopsAR, DeinoAR, TerrakionAR, ZoroarkAR, ZoruaAR, ZweilousAR, ReshiramexFA, KeldeoexFA, WhimsicottexFA, HydreigonexFA, JellicentexFA, BouffalantexFA, HildaFA, HildaSIR, BouffalantexSIR, HydreigonexSIR, JellicentexSIR, KeldeoexSIR, ReshiramexSIR, WhimsicottexSIR, ReshiramexWR, ToolScrapperSV11, NsPlanFA, NsPlanSIR, VictiniRRB, VictiniRRW } from './other-prints';
 import { Palpitoad } from './palpitoad';
 import { Pignite } from './pignite';
+import { Purrloin } from './purrloin';
 import { Reshiramex } from './reshiram-ex';
 import { Reuniclus } from './reuniclus';
 import { Samurott } from './samurott';
@@ -85,6 +86,7 @@ export const setSV11: Card[] = [
   new Hilda(),
   new Foongus(),
   new Amoongus(),
+  new Purrloin(),
   new Zorua(),
   new Zoroark(),
   new Solosis(),
