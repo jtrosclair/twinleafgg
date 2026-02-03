@@ -10,6 +10,7 @@ import { Flareonex } from './flareon-ex';
 import { AmarysFA, AmarysSAR, AtticusFA, AtticusFA2, BloodmoonUrsalunaexSAR, CeruledgeexSAR, CornerstoneMaskOgerponexSAR, CrispinSAR, DragapultexSAR, DraytonSAR, EeveeexSAR, EriFA, EspeonexSAR, FlareonexSAR, GholdengoexSAR, GiacomoFA, GlaceonexSAR, HearthflameMaskOgerponexSAR, IronCrownexSAR, IronHandsexSAR, IronLeavesexUR, IronValiantexSAR, JaninesSecretArtSAR, JolteonexSAR, KieranSAR, LaceySAR, LeafeonexSAR, LarrysSkillSAR, MelaFA, PalafinexSAR, PecharuntexSAR, PikachuexUR, RagingBoltexSAR, RoaringMoonexSAR, SandyShocksexSAR, SylveonexSAR, TealMaskOgerponexSAR, TealMaskOgerponexUR, TerapagosexSAR, TerapagosexUR, UmbreonexSAR, VaporeonexSAR, WalkingWakeexUR, WellspringMaskOgerponexSAR } from './full-art';
 import { Glaceonex } from './glaceon-ex';
 import { Hoothoot } from './hoothoot';
+import { JaninesSecretArt } from './janines-secret-art';
 import { Jolteonex } from './jolteon-ex';
 import { Larvitar } from './larvitar';
 import { LarrysSkill } from './larrys-skill';
@@ -45,6 +46,7 @@ export const setPrismaticEvolution: Card[] = [
   new Seaking(),
   new Regigigas(),
   new Riolu(),
+  new JaninesSecretArt(),
   new MaxRod(),
   new RotoStick(),
   new TreasureTracker(),
