@@ -11,7 +11,7 @@ function* useInviteEvil(next: Function, store: StoreLike, state: State, effect: 
     player,
     GameMessage.CHOOSE_CARD_TO_HAND,
     player.deck,
-    { cardType: CardType.DARKNESS },
+    { cardType: CardType.DARK },
     { min: 0, max: 3, allowCancel: true }
   ), selected => {
     cards = selected || [];

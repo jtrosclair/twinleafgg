@@ -362,10 +362,16 @@ export class FestivalGroundsPRE extends FestivalGrounds {
 export class GlassTrumpetPRE extends GlassTrumpet {
   public set = 'PRE';
   public setNumber = '110';
-  public fullName = 'Glass Trumpet PRE';
+  public fullName = 'Glass Trumpewt PRE';
 }
 
 export class JaninesSecretArt extends JaninesSecretTechnique {
+  public set = 'PRE';
+  public setNumber: string = '112';
+  public fullName: string = 'Janine\'s Secret Art PRE';
+}
+
+export class JaninesSecretArt2 extends JaninesSecretTechnique {
   public set = 'PRE';
   public setNumber = '112';
   public fullName = 'Janine\'s Secret Art PRE';

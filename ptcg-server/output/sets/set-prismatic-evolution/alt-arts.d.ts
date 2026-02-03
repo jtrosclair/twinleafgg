@@ -318,6 +318,11 @@ export declare class JaninesSecretArt extends JaninesSecretTechnique {
     setNumber: string;
     fullName: string;
 }
+export declare class JaninesSecretArt2 extends JaninesSecretTechnique {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
 export declare class KieranPRE extends Kieran {
     set: string;
     setNumber: string;

@@ -42,6 +42,7 @@ const oshawott_1 = require("./oshawott");
 const other_prints_1 = require("./other-prints");
 const palpitoad_1 = require("./palpitoad");
 const pignite_1 = require("./pignite");
+const purrloin_1 = require("./purrloin");
 const reshiram_ex_1 = require("./reshiram-ex");
 const reuniclus_1 = require("./reuniclus");
 const samurott_1 = require("./samurott");
@@ -86,6 +87,7 @@ exports.setSV11 = [
     new hilda_1.Hilda(),
     new foongus_1.Foongus(),
     new amoongus_1.Amoongus(),
+    new purrloin_1.Purrloin(),
     new zorua_1.Zorua(),
     new zoroark_1.Zoroark(),
     new solosis_1.Solosis(),

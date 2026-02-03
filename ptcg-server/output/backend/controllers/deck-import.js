@@ -446,6 +446,7 @@ const cardReplacements = [
     { from: 'Rescue Board TWM 225', to: 'Rescue BoardHR TWM 225' },
     //SFA
     { from: 'Janine\'s Secret Art SFA 59', to: 'Janine\'s Secret Technique SFA 59' },
+    { from: 'Night Stretcher SFA 61', to: 'Nightly Stretcher SFA 61' },
     { from: 'Poké Vital A SFA 62', to: 'PokéVital A SFA 62' },
     { from: 'Tapu Bulu SFA 65', to: 'Tapu BuluIR SFA 65' },
     { from: 'Houndoom SFA 66', to: 'HoundoomIR SFA 66' },
@@ -502,6 +503,7 @@ const cardReplacements = [
     { from: 'Area Zero Underdepths SCR 174', to: 'Area Zero UnderdepthsHR SCR 174' },
     //SSP
     { from: 'Charcadet SSP 33', to: 'Charcadet 2 SSP 33' },
+    { from: 'Lively Stadium SSP 180', to: 'Exciting Stadium SSP 180' },
     //SSP FA
     { from: 'Larvesta SSP 196', to: 'LarvestaIR SSP 196' },
     { from: 'Feebas SSP 198', to: 'FeebasIR SSP 198' },
@@ -681,6 +683,9 @@ const cardReplacements = [
     { from: 'Hilda SV11W 173', to: 'HildaSIR SV11W 173' },
     //SV11W White Rare
     { from: 'Reshiram ex SV11W 174', to: 'Reshiram exWR SV11W 174' },
+    //Mega Evolution (me01 -> MEG)
+    { from: 'Energy Switch me01 115', to: 'Energy Switch MEG 115' },
+    { from: 'Mystery Garden me01 122', to: 'Mystery Garden MEG 122' },
 ];
 // Mapping of common import format set codes to internal set codes
 // The import format uses codes like "CES" for Celestial Storm

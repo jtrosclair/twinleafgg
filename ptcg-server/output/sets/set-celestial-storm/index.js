@@ -15,6 +15,7 @@ const dunsparce_1 = require("./dunsparce");
 const electrode_gx_1 = require("./electrode-gx");
 const energy_recycle_system_1 = require("./energy-recycle-system");
 const fisherman_1 = require("./fisherman");
+const friend_ball_1 = require("./friend-ball");
 const hau_1 = require("./hau");
 const hustle_belt_1 = require("./hustle-belt");
 const jirachi_prism_star_1 = require("./jirachi-prism-star");
@@ -58,6 +59,7 @@ exports.setCelestialStorm = [
     new electrode_gx_1.ElectrodeGX(),
     new energy_recycle_system_1.EnergyRecycleSystem(),
     new fisherman_1.Fisherman(),
+    new friend_ball_1.FriendBall(),
     new hau_1.Hau(),
     new hustle_belt_1.HustleBelt(),
     new jirachi_prism_star_1.JirachiPrismStar(),

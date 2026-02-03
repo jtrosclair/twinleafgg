@@ -46,6 +46,7 @@ exports.setPrismaticEvolution = [
     new seaking_1.Seaking(),
     new regigigas_1.Regigigas(),
     new riolu_1.Riolu(),
+    new alt_arts_1.JaninesSecretArt(),
     new max_rod_1.MaxRod(),
     new roto_stick_1.RotoStick(),
     new treasure_tracker_1.TreasureTracker(),

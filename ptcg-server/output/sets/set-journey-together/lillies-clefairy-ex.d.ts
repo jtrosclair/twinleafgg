@@ -8,9 +8,9 @@ export declare class LilliesClefairyex extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType.METAL;
+        type: CardType;
     }[];
-    retreat: CardType.COLORLESS[];
+    retreat: CardType[];
     powers: {
         name: string;
         powerType: PowerType;
@@ -18,7 +18,7 @@ export declare class LilliesClefairyex extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: (CardType.PSYCHIC | CardType.COLORLESS)[];
+        cost: CardType[];
         damage: number;
         damageCalculation: string;
         text: string;

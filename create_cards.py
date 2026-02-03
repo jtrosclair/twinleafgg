@@ -107,6 +107,8 @@ Please follow the instructions in ptcg-server/CREATE_CARD.txt exactly:
 
 Important notes:
 - Use the set code from ptcg-server/output/sets/index.d.ts
+- Ensure file edits link properly.
+- DO NOT MODIFY EXISTING FILES, if the item already exists, add a replacement value in ptcg-server/src/backend/controllers/deck-import.ts to reference
 - Reference other cards in the same set for mechanics (uppercase "EX" and "ex" are not the same)
 - Remove leading zeros from set numbers (001 → 1)
 - Reference the effect type table in CREATE_CARD.txt for similar implementations

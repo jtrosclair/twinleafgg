@@ -1,5 +1,5 @@
 import { TrainerCard } from '../../game/store/card/trainer-card';
-import { SuperType, TrainerType } from '../../game/store/card/card-types';
+import { CardType, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
@@ -18,19 +18,25 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
   }
 
   // Get all types of opponent's Pokemon in play
-  const opponentTypes = new Set<string>();
+  const opponentTypes = new Set<CardType>();
 
   // Check active Pokemon
   if (opponent.active.cards.length > 0 && opponent.active.cards[0] instanceof PokemonCard) {
     const activePokemon = opponent.active.cards[0] as PokemonCard;
-    activePokemon.types.forEach(type => opponentTypes.add(type));
+    opponentTypes.add(activePokemon.cardType);
+    if (activePokemon.additionalCardTypes) {
+      activePokemon.additionalCardTypes.forEach(type => opponentTypes.add(type));
+    }
   }
 
   // Check bench Pokemon
   opponent.bench.forEach(benchSlot => {
     if (benchSlot.cards.length > 0 && benchSlot.cards[0] instanceof PokemonCard) {
       const benchPokemon = benchSlot.cards[0] as PokemonCard;
-      benchPokemon.types.forEach(type => opponentTypes.add(type));
+      opponentTypes.add(benchPokemon.cardType);
+      if (benchPokemon.additionalCardTypes) {
+        benchPokemon.additionalCardTypes.forEach(type => opponentTypes.add(type));
+      }
     }
   });
 
@@ -38,7 +44,11 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
   const blocked: number[] = [];
   player.deck.cards.forEach((card, index) => {
     if (card instanceof PokemonCard) {
-      const hasMatchingType = card.types.some(type => opponentTypes.has(type));
+      const cardTypes = [card.cardType];
+      if (card.additionalCardTypes) {
+        cardTypes.push(...card.additionalCardTypes);
+      }
+      const hasMatchingType = cardTypes.some(type => opponentTypes.has(type));
       if (!hasMatchingType) {
         blocked.push(index);
       }
