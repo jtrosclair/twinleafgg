@@ -473,6 +473,7 @@ const cardReplacements = [
 
   //SFA
   { from: 'Janine\'s Secret Art SFA 59', to: 'Janine\'s Secret Technique SFA 59' },
+  { from: 'Night Stretcher SFA 61', to: 'Nightly Stretcher SFA 61' },
   { from: 'Poké Vital A SFA 62', to: 'PokéVital A SFA 62' },
   { from: 'Tapu Bulu SFA 65', to: 'Tapu BuluIR SFA 65' },
   { from: 'Houndoom SFA 66', to: 'HoundoomIR SFA 66' },
