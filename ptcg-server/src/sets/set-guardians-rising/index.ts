@@ -18,6 +18,7 @@ import { Oricorio } from './oricorio';
 import { Oricorio2 } from './oricorio-2';
 import { RescueStretcher } from './rescue-stretcher';
 import { Salandit } from './salandit';
+import { Salazzle } from './salazzle';
 import { Sudowoodo } from './sudowoodo';
 import { SylveonGX } from './sylveon-gx';
 import { TapuKokoGX } from './tapu-koko-gx';
@@ -58,6 +59,7 @@ export const setGuardiansRising: Card[] = [
   new Oricorio2(),
   new RescueStretcher(),
   new Salandit(),
+  new Salazzle(),
   new Sudowoodo(),
   new SylveonGX(),
   new TapuLeleGX(),
