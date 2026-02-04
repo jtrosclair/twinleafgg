@@ -51,14 +51,14 @@ export class Clefable extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    // Track when any attack named "More Moon" is used (including when copied by other Pokemon)
+    if (effect instanceof AttackEffect && effect.attack.name === 'More Moon') {
+      this.usedMoreMoon = true;
+    }
+
     // Track when Follow Me attack is used (reset More Moon flag)
     if (WAS_ATTACK_USED(effect, 0, this)) {
       this.usedMoreMoon = false;
-    }
-
-    // Track when More Moon attack is used
-    if (WAS_ATTACK_USED(effect, 1, this)) {
-      this.usedMoreMoon = true;
     }
 
     // Follow Me - Switch opponent's benched Pokémon to active
@@ -94,11 +94,6 @@ export class Clefable extends PokemonCard {
         return state;
       }
 
-      // Check if Clefable was the attacking Pokémon
-      const pokemonCard = opponent.active.getPokemonCard();
-      if (pokemonCard !== this) {
-        return state;
-      }
 
       // Check if More Moon attack was used
       if (this.usedMoreMoon === true) {
