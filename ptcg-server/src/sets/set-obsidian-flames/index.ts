@@ -10,6 +10,7 @@ import { Charmeleon } from './charmeleon';
 import { Cleffa } from './cleffa';
 import { Combee } from './combee';
 import { Dartrix } from './dartrix';
+import { Darumaka } from './darumaka';
 import { Decidueyeex } from './decidueye-ex';
 import { Dragonair } from './dragonair';
 import { Dragoniteex } from './dragonite-ex';
@@ -75,6 +76,7 @@ export const setObsidianFlames: Card[] = [
   new Cleffa(),
   new Combee(),
   new Dartrix(),
+  new Darumaka(),
   new Dragonair(),
   new Dragoniteex(),
   new Dratini(),
