@@ -12,6 +12,7 @@ const charmeleon_1 = require("./charmeleon");
 const cleffa_1 = require("./cleffa");
 const combee_1 = require("./combee");
 const dartrix_1 = require("./dartrix");
+const darumaka_1 = require("./darumaka");
 const decidueye_ex_1 = require("./decidueye-ex");
 const dragonair_1 = require("./dragonair");
 const dragonite_ex_1 = require("./dragonite-ex");
@@ -74,6 +75,7 @@ exports.setObsidianFlames = [
     new cleffa_1.Cleffa(),
     new combee_1.Combee(),
     new dartrix_1.Dartrix(),
+    new darumaka_1.Darumaka(),
     new dragonair_1.Dragonair(),
     new dragonite_ex_1.Dragoniteex(),
     new dratini_1.Dratini(),
