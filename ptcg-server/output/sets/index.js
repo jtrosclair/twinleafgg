@@ -171,10 +171,10 @@ __exportStar(require("./set-black-bolt-white-flare"), exports);
 __exportStar(require("./set-mega-evolution-promos"), exports);
 __exportStar(require("./set-mega-evolution"), exports);
 __exportStar(require("./set-phantasmal-flames"), exports);
-__exportStar(require("./set-mega-dream"), exports);
+__exportStar(require("./set-ascended-heroes"), exports);
 __exportStar(require("./set-perfect-order"), exports);
 //TEST
-__exportStar(require("./set-test"), exports);
+//export * from './set-test';
 //Sort Later
 __exportStar(require("./set-legends-awakened"), exports);
 __exportStar(require("./set-stormfront"), exports);

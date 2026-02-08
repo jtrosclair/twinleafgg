@@ -1,0 +1,30 @@
+import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
+import { State, StoreLike } from '../../game';
+import { Effect } from '../../game/store/effects/effect';
+export declare class NsVanillish extends PokemonCard {
+    stage: Stage;
+    evolvesFrom: string;
+    tags: CardTag[];
+    cardType: CardType;
+    hp: number;
+    weakness: {
+        type: CardType.METAL;
+    }[];
+    resistance: any[];
+    retreat: CardType.COLORLESS[];
+    attacks: {
+        name: string;
+        cost: (CardType.WATER | CardType.COLORLESS)[];
+        damage: number;
+        text: string;
+    }[];
+    regulationMark: string;
+    set: string;
+    cardImage: string;
+    setNumber: string;
+    name: string;
+    fullName: string;
+    readonly DEFENDING_POKEMON_CANNOT_ATTACK_MARKER = "DEFENDING_POKEMON_CANNOT_ATTACK_MARKER";
+    reduceEffect(store: StoreLike, state: State, effect: Effect): State;
+}
