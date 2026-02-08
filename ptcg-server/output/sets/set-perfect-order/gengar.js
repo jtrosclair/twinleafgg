@@ -1,0 +1,121 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Gengar = void 0;
+const game_1 = require("../../game");
+const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
+const game_effects_1 = require("../../game/store/effects/game-effects");
+class Gengar extends game_1.PokemonCard {
+    constructor() {
+        super(...arguments);
+        this.stage = game_1.Stage.STAGE_2;
+        this.evolvesFrom = 'Haunter';
+        this.cardType = D;
+        this.hp = 130;
+        this.weakness = [{ type: F }];
+        this.retreat = [C];
+        this.powers = [{
+                name: 'Infinite Shadow',
+                useWhenInPlay: true,
+                powerType: game_1.PowerType.ABILITY,
+                text: 'If this Pokémon would be Knocked Out by damage from an opponent\'s Pokemon\'s attack, instead of discarding it, return it to your hand. (Discard all other cards attached to this Pokemon that are not Pokemon.)'
+            }];
+        this.attacks = [{
+                name: 'Mind Jack',
+                cost: [D],
+                damage: 10,
+                damageCalculation: '+',
+                text: 'This attack does 30 more damage for each of your opponent\'s Benched Pokemon.'
+            }];
+        this.regulationMark = 'J';
+        this.set = 'M3';
+        this.cardImage = 'assets/cardback.png';
+        this.setNumber = '49';
+        this.name = 'Gengar';
+        this.fullName = 'Gengar M3';
+        this.INFINITE_SHADOW_MARKER = 'INFINITE_SHADOW_MARKER';
+    }
+    reduceEffect(store, state, effect) {
+        // Infinite Shadow - mark Gengar for return when KO'd by opponent's attack
+        if (effect instanceof game_effects_1.KnockOutEffect && effect.target.getPokemonCard() === this) {
+            const player = effect.player;
+            const opponent = game_1.StateUtils.getOpponent(state, player);
+            // Check if KO was from opponent's attack
+            if (opponent.marker.hasMarker(opponent.DAMAGE_DEALT_MARKER)) {
+                const target = effect.target;
+                const pokemonCard = target.getPokemonCard();
+                if (pokemonCard && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
+                    // Get all cards attached
+                    const allCards = [...target.cards];
+                    // Separate Pokemon cards from other cards
+                    const pokemonCards = [];
+                    const otherCards = [];
+                    allCards.forEach(card => {
+                        if (card instanceof pokemon_card_1.PokemonCard && card !== pokemonCard) {
+                            pokemonCards.push(card);
+                        }
+                        else if (card !== pokemonCard) {
+                            otherCards.push(card);
+                        }
+                    });
+                    // Discard non-Pokemon cards before KO
+                    if (otherCards.length > 0) {
+                        target.moveCardsTo(otherCards, player.discard);
+                    }
+                    // Add marker to track that this Gengar should be returned to hand
+                    // Don't prevent KO - let it go to discard, then CheckTableStateEffect will return it
+                    player.marker.addMarker(this.INFINITE_SHADOW_MARKER, this);
+                }
+            }
+        }
+        // Intercept DiscardCardsEffect to prevent Gengar from being discarded
+        if (effect instanceof attack_effects_1.DiscardCardsEffect && effect.cards.includes(this)) {
+            const player = effect.player;
+            if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
+                const cardsToMove = effect.cards.filter(c => c === this);
+                if (cardsToMove.length > 0) {
+                    // Move Gengar to hand instead of discard
+                    state = (0, prefabs_1.MOVE_CARDS)(store, state, effect.target, player.hand, { cards: cardsToMove });
+                    effect.cards = effect.cards.filter(c => c !== this);
+                    player.marker.removeMarker(this.INFINITE_SHADOW_MARKER, this);
+                }
+            }
+        }
+        // CheckTableStateEffect - return Gengar from discard to hand if marker exists
+        if (effect instanceof check_effects_1.CheckTableStateEffect && state.players.some(p => p.discard.cards.includes(this))) {
+            for (const player of state.players) {
+                if (!player.marker.hasMarker(this.INFINITE_SHADOW_MARKER, this)) {
+                    continue;
+                }
+                if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
+                    player.marker.removeMarker(this.INFINITE_SHADOW_MARKER, this);
+                    continue;
+                }
+                const rescued = player.marker.markers
+                    .filter(m => m.name === this.INFINITE_SHADOW_MARKER && m.source !== undefined)
+                    .map(m => m.source);
+                const cardsInDiscard = rescued.filter(c => player.discard.cards.includes(c));
+                if (cardsInDiscard.length > 0) {
+                    cardsInDiscard.forEach(card => {
+                        store.log(state, game_1.GameLog.LOG_PLAYER_RETURNS_CARD_TO_HAND, {
+                            name: player.name,
+                            card: card.name
+                        });
+                    });
+                    state = (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: cardsInDiscard });
+                    player.marker.removeMarker(this.INFINITE_SHADOW_MARKER, this);
+                }
+            }
+        }
+        // Mind Jack - damage based on opponent's benched Pokemon
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            const opponent = effect.opponent;
+            const benchCount = opponent.bench.filter(bench => bench.cards.length > 0).length;
+            effect.damage = 10 + (benchCount * 30);
+        }
+        return state;
+    }
+}
+exports.Gengar = Gengar;

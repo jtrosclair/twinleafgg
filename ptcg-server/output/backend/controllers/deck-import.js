@@ -862,7 +862,8 @@ class DeckImport extends controller_1.Controller {
                     cardData: card,
                     cardImage: this.getCardImage(card.set, card.setNumber),
                     superType: this.getSuperTypeString(card.superType),
-                    subType: this.getSubTypeString(card)
+                    subType: this.getSubTypeString(card),
+                    markers: this.getCardMarkers(card)
                 });
             }
         }
@@ -871,6 +872,20 @@ class DeckImport extends controller_1.Controller {
             cards: results,
             count: results.length
         });
+    }
+    getCardMarkers(card) {
+        const markers = [];
+        // Get all property names from the card instance
+        for (const key in card) {
+            if (key.includes('Marker') || key.includes('MARKER')) {
+                const value = card[key];
+                // Only include string values
+                if (typeof value === 'string') {
+                    markers.push(value);
+                }
+            }
+        }
+        return markers;
     }
     parseDeckList(deckList) {
         const cardManager = game_1.CardManager.getInstance();
@@ -947,7 +962,8 @@ class DeckImport extends controller_1.Controller {
                 cardData: card || undefined,
                 cardImage: this.getCardImage(setCode, card ? card.setNumber : parsed.setNumber),
                 superType: card ? this.getSuperTypeString(card.superType) : undefined,
-                subType: card ? this.getSubTypeString(card) : undefined
+                subType: card ? this.getSubTypeString(card) : undefined,
+                markers: card ? this.getCardMarkers(card) : undefined
             };
             if (card) {
                 knownCards.push(cardResult);

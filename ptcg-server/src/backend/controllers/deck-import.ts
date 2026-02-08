@@ -854,6 +854,7 @@ interface CardResult {
   cardImage?: string;
   superType?: string;
   subType?: string;
+  markers?: string[];
 }
 
 interface UnknownCard {
@@ -955,6 +956,7 @@ export class DeckImport extends Controller {
       cardImage?: string;
       superType?: string;
       subType?: string;
+      markers?: string[];
     }
 
     const results: CardMetadata[] = [];
@@ -972,7 +974,8 @@ export class DeckImport extends Controller {
           cardData: card,
           cardImage: this.getCardImage(card.set, card.setNumber),
           superType: this.getSuperTypeString(card.superType),
-          subType: this.getSubTypeString(card)
+          subType: this.getSubTypeString(card),
+          markers: this.getCardMarkers(card)
         });
       }
     }
@@ -982,6 +985,23 @@ export class DeckImport extends Controller {
       cards: results,
       count: results.length
     });
+  }
+
+  private getCardMarkers(card: Card): string[] {
+    const markers: string[] = [];
+
+    // Get all property names from the card instance
+    for (const key in card) {
+      if (key.includes('Marker') || key.includes('MARKER')) {
+        const value = (card as any)[key];
+        // Only include string values
+        if (typeof value === 'string') {
+          markers.push(value);
+        }
+      }
+    }
+
+    return markers;
   }
 
   private parseDeckList(deckList: string): {
@@ -1083,7 +1103,8 @@ export class DeckImport extends Controller {
         cardData: card || undefined,
         cardImage: this.getCardImage(setCode, card ? card.setNumber : parsed.setNumber),
         superType: card ? this.getSuperTypeString(card.superType) : undefined,
-        subType: card ? this.getSubTypeString(card) : undefined
+        subType: card ? this.getSubTypeString(card) : undefined,
+        markers: card ? this.getCardMarkers(card) : undefined
       };
 
       if (card) {

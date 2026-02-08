@@ -26,11 +26,7 @@ class RockFightingEnergy extends energy_card_1.EnergyCard {
         var _a;
         // Provide energy when attached to Fighting Pokemon
         if (effect instanceof check_effects_1.CheckProvidedEnergyEffect && effect.source.cards.includes(this)) {
-            const checkPokemonType = new check_effects_1.CheckPokemonTypeEffect(effect.source);
-            store.reduceEffect(state, checkPokemonType);
-            if (checkPokemonType.cardTypes.includes(card_types_1.CardType.FIGHTING)) {
-                effect.energyMap.push({ card: this, provides: [card_types_1.CardType.FIGHTING] });
-            }
+            effect.energyMap.push({ card: this, provides: [card_types_1.CardType.FIGHTING] });
         }
         // Prevent effects of attacks
         if (effect instanceof attack_effects_1.AbstractAttackEffect && effect.target.cards.includes(this) && ((_a = effect.target.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.cardType) === card_types_1.CardType.FIGHTING) {

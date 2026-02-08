@@ -9,6 +9,7 @@ export declare class DeckImport extends Controller {
     onParse(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
     onParseAndSaveUnknown(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
     onGetCards(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
+    private getCardMarkers;
     private parseDeckList;
     private loadImageCache;
     private getCardImage;
