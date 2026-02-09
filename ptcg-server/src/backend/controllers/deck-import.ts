@@ -826,6 +826,8 @@ const IMPORT_SET_CODE_MAP: { [key: string]: string } = {
   'SMP': 'SMP',
   'SM': 'SMP', // Alternative notation
   'PR-SM': 'SMP',
+  // Energy set aliases
+  'MEE': 'SVE',
 };
 
 export const setCodeReplacements = [
@@ -1249,7 +1251,7 @@ export class DeckImport extends Controller {
     };
 
     // Handle basic energy with type abbreviation format: "5 Basic {G} Energy SVE 1"
-    const basicEnergyAbbrevMatch = line.match(/^(\d+)\s+Basic\s+\{([GRWLPFDMYNC])\}\s+Energy(?:\s+([A-Z]{2,4})\s+([A-Z]*\d+\w*))?$/i);
+    const basicEnergyAbbrevMatch = line.match(/^(\d+)\s+Basic\s+\{([GRWLPFDMYNC])\}\s+Energy(?:\s+([A-Z][A-Z0-9]{1,3})\s+([A-Z]*\d+\w*))?$/i);
 
     if (basicEnergyAbbrevMatch) {
       const typeAbbrev = basicEnergyAbbrevMatch[2].toUpperCase();
@@ -1277,7 +1279,7 @@ export class DeckImport extends Controller {
     }
 
     // Handle basic energy with optional set/number
-    const basicEnergyMatch = line.match(/^(\d+)\s+(Fire|Water|Grass|Lightning|Psychic|Fighting|Darkness|Metal|Fairy)\s+Energy(?:\s+([A-Z]{2,4})\s+([A-Z]*\d+\w*))?$/i);
+    const basicEnergyMatch = line.match(/^(\d+)\s+(Fire|Water|Grass|Lightning|Psychic|Fighting|Darkness|Metal|Fairy)\s+Energy(?:\s+([A-Z][A-Z0-9]{1,3})\s+([A-Z]*\d+\w*))?$/i);
 
     if (basicEnergyMatch) {
       return {
@@ -1292,7 +1294,7 @@ export class DeckImport extends Controller {
     // Standard format: QUANTITY NAME SET NUMBER
     // The tricky part is that NAME can have spaces, so we match from the end
     // Support set codes with hyphens like "PR-SV"
-    const match = line.match(/^(\d+)\s+(.+?)\s+([A-Z]{2,4}(?:-[A-Z]{2,4})?)\s+([A-Z]*\d+\w*)$/i);
+    const match = line.match(/^(\d+)\s+(.+?)\s+([A-Z][A-Z0-9]{1,3}(?:-[A-Z][A-Z0-9]{1,3})?)\s+([A-Z]*\d+\w*)$/i);
     if (match) {
       return {
         quantity: parseInt(match[1], 10),
