@@ -45,6 +45,7 @@ import { Ponyta } from './ponyta';
 import { Prinplup } from './prinplup';
 import { ProfessorOaksSetup } from './professor-oaks-setup';
 import { Psyduck } from './psyduck';
+import { Rockruff } from './rockruff';
 import { RollerSkater } from './roller-skater';
 import { Rosa } from './rosa';
 import { Roxie } from './roxie';
@@ -138,6 +139,7 @@ export const setCosmicEclipse: Card[] = [
   new ProfessorOaksSetup(),
   new Psyduck(),
   new Golduck(),
+  new Rockruff(),
   new RollerSkater(),
   new Rosa(),
   new Roxie(),
