@@ -42,6 +42,7 @@ const pidgey_1 = require("./pidgey");
 const pokemon_league_headquarters_1 = require("./pokemon-league-headquarters");
 const poppy_1 = require("./poppy");
 const pupitar_1 = require("./pupitar");
+const rockruff_1 = require("./rockruff");
 const rowlet_1 = require("./rowlet");
 const ryme_1 = require("./ryme");
 const scizor_1 = require("./scizor");
@@ -94,6 +95,7 @@ exports.setObsidianFlames = [
     new pidgey_1.Pidgey(),
     new pokemon_league_headquarters_1.PokemonLeagueHeadquarters(),
     new poppy_1.Poppy(),
+    new rockruff_1.Rockruff(),
     new rowlet_1.Rowlet(),
     new ryme_1.Ryme(),
     new scizor_1.Scizor(),

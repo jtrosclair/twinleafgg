@@ -16,6 +16,7 @@ const mew_1 = require("./mew");
 const n_1 = require("./n");
 const regirock_ex_1 = require("./regirock-ex");
 const riolu_1 = require("./riolu");
+const strong_energy_1 = require("./strong-energy");
 const team_rockets_handiwork_1 = require("./team-rockets-handiwork");
 const whismur_1 = require("./whismur");
 exports.setFatesCollide = [
@@ -27,6 +28,7 @@ exports.setFatesCollide = [
     new mew_1.Mew(),
     new n_1.N(),
     new riolu_1.Riolu(),
+    new strong_energy_1.StrongEnergy(),
     new team_rockets_handiwork_1.TeamRocketsHandiwork(),
     new whismur_1.Whismur(),
     new audino_ex_1.AudinoEx(),

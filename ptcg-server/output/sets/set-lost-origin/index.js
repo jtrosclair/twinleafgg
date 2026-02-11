@@ -56,6 +56,7 @@ const porygon_1 = require("./porygon");
 const radiant_gardevoir_1 = require("./radiant-gardevoir");
 const radiant_hisuian_sneasler_1 = require("./radiant-hisuian-sneasler");
 const roselia_1 = require("./roselia");
+const rockruff_1 = require("./rockruff");
 const rotom_v_1 = require("./rotom-v");
 const sableye_1 = require("./sableye");
 const seadra_1 = require("./seadra");
@@ -110,6 +111,7 @@ exports.setLostOrigin = [
     new radiant_hisuian_sneasler_1.RadiantHisuianSneasler(),
     new radiant_gardevoir_1.RadiantGardevoir(),
     new roselia_1.Roselia(),
+    new rockruff_1.Rockruff(),
     new rotom_v_1.RotomV(),
     new sableye_1.Sableye(),
     new seadra_1.Seadra(),

@@ -47,6 +47,7 @@ const ponyta_1 = require("./ponyta");
 const prinplup_1 = require("./prinplup");
 const professor_oaks_setup_1 = require("./professor-oaks-setup");
 const psyduck_1 = require("./psyduck");
+const rockruff_1 = require("./rockruff");
 const roller_skater_1 = require("./roller-skater");
 const rosa_1 = require("./rosa");
 const roxie_1 = require("./roxie");
@@ -138,6 +139,7 @@ exports.setCosmicEclipse = [
     new professor_oaks_setup_1.ProfessorOaksSetup(),
     new psyduck_1.Psyduck(),
     new golduck_1.Golduck(),
+    new rockruff_1.Rockruff(),
     new roller_skater_1.RollerSkater(),
     new rosa_1.Rosa(),
     new roxie_1.Roxie(),

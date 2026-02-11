@@ -34,6 +34,80 @@ export class Game extends Controller {
     res.send({ ok: true, playerStats });
   }
 
+  @Post('/validate-cards')
+  public async onValidateCards(req: Request, res: Response) {
+    try {
+      const { stateData } = req.body;
+
+      if (!stateData || typeof stateData !== 'string') {
+        res.status(400).send({
+          valid: false,
+          errors: ['stateData is required and must be a string']
+        });
+        return;
+      }
+
+      if (!StateSerializer.knownCards || StateSerializer.knownCards.length === 0) {
+        res.status(500).send({
+          valid: false,
+          errors: ['Card database not initialized']
+        });
+        return;
+      }
+
+      const base64 = new Base64();
+      let decoded: string;
+
+      try {
+        decoded = base64.decode(stateData);
+      } catch (e: any) {
+        res.status(400).send({
+          valid: false,
+          errors: ['Failed to decode base64 string: ' + (e.message || 'Invalid base64')]
+        });
+        return;
+      }
+
+      let parsed: any;
+      try {
+        parsed = JSON.parse(decoded);
+      } catch (e: any) {
+        res.status(400).send({
+          valid: false,
+          errors: ['Failed to parse state JSON: ' + (e.message || 'Invalid JSON')]
+        });
+        return;
+      }
+
+      const cardNames: string[] = parsed[1]?.cardNames;
+      if (!Array.isArray(cardNames)) {
+        res.status(400).send({
+          valid: false,
+          errors: ['Game state does not contain a cardNames array']
+        });
+        return;
+      }
+
+      const errors: string[] = [];
+      for (const originalName of cardNames) {
+        const normalized = StateSerializer.normalizeCardName(originalName);
+        if (!normalized) {
+          errors.push(`Invalid Card: ${originalName}`);
+        }
+      }
+
+      res.send({
+        valid: errors.length === 0,
+        errors
+      });
+    } catch (error: any) {
+      res.status(500).send({
+        valid: false,
+        errors: [error.message || 'Unexpected error during validation']
+      });
+    }
+  }
+
   @Post('/validate-state')
   public async onValidateState(req: Request, res: Response) {
     try {

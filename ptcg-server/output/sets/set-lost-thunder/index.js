@@ -31,6 +31,7 @@ const hoppip_1 = require("./hoppip");
 const jumpluff_1 = require("./jumpluff");
 const kirlia_1 = require("./kirlia");
 const lanturn_1 = require("./lanturn");
+const larvitar_1 = require("./larvitar");
 const lost_blender_1 = require("./lost-blender");
 const lugia_gx_1 = require("./lugia-gx");
 const magcargo_gx_1 = require("./magcargo-gx");
@@ -95,6 +96,7 @@ exports.setLostThunder = [
     new jumpluff_1.Jumpluff(),
     new kirlia_1.Kirlia(),
     new lanturn_1.Lanturn(),
+    new larvitar_1.Larvitar(),
     new lost_blender_1.LostBlender(),
     new lugia_gx_1.LugiaGX(),
     new magcargo_gx_1.MagcargoGX(),

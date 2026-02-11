@@ -6,6 +6,7 @@ const abra_1 = require("./abra");
 const alakazam_1 = require("./alakazam");
 const bayleef_1 = require("./bayleef");
 const bulbasaur_1 = require("./bulbasaur");
+const celebi_1 = require("./celebi");
 const chikorita_1 = require("./chikorita");
 const cinderace_1 = require("./cinderace");
 const clauncher_1 = require("./clauncher");
@@ -69,6 +70,7 @@ exports.setMegaEvolution = [
     new alakazam_1.Alakazam(),
     new bayleef_1.Bayleef(),
     new bulbasaur_1.Bulbasaur(),
+    new celebi_1.Celebi(),
     new chikorita_1.Chikorita(),
     new cinderace_1.Cinderace(),
     new clauncher_1.Clauncher(),

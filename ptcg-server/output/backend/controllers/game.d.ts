@@ -3,5 +3,6 @@ import { Controller } from './controller';
 export declare class Game extends Controller {
     onLogs(req: Request, res: Response): Promise<void>;
     onPlayerStats(req: Request, res: Response): Promise<void>;
+    onValidateCards(req: Request, res: Response): Promise<void>;
     onValidateState(req: Request, res: Response): Promise<void>;
 }

@@ -18,6 +18,7 @@ const kricketot_1 = require("./kricketot");
 const manaphy_ex_1 = require("./manaphy-ex");
 const max_elixir_1 = require("./max-elixir");
 const phantump_1 = require("./phantump");
+const puzzle_of_time_1 = require("./puzzle-of-time");
 const reverse_valley_1 = require("./reverse-valley");
 const splash_energy_1 = require("./splash-energy");
 const staryu_1 = require("./staryu");
@@ -40,6 +41,7 @@ exports.setBreakpoint = [
     new kricketot_1.Kricketot(),
     new max_elixir_1.MaxElixir(),
     new phantump_1.Phantump(),
+    new puzzle_of_time_1.PuzzleOfTime(),
     new reverse_valley_1.ReverseValley(),
     new splash_energy_1.SplashEnergy(),
     new staryu_1.Staryu(),

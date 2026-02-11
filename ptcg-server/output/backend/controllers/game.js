@@ -36,6 +36,74 @@ class Game extends controller_1.Controller {
         const playerStats = game.playerStats;
         res.send({ ok: true, playerStats });
     }
+    async onValidateCards(req, res) {
+        var _a;
+        try {
+            const { stateData } = req.body;
+            if (!stateData || typeof stateData !== 'string') {
+                res.status(400).send({
+                    valid: false,
+                    errors: ['stateData is required and must be a string']
+                });
+                return;
+            }
+            if (!state_serializer_1.StateSerializer.knownCards || state_serializer_1.StateSerializer.knownCards.length === 0) {
+                res.status(500).send({
+                    valid: false,
+                    errors: ['Card database not initialized']
+                });
+                return;
+            }
+            const base64 = new base64_1.Base64();
+            let decoded;
+            try {
+                decoded = base64.decode(stateData);
+            }
+            catch (e) {
+                res.status(400).send({
+                    valid: false,
+                    errors: ['Failed to decode base64 string: ' + (e.message || 'Invalid base64')]
+                });
+                return;
+            }
+            let parsed;
+            try {
+                parsed = JSON.parse(decoded);
+            }
+            catch (e) {
+                res.status(400).send({
+                    valid: false,
+                    errors: ['Failed to parse state JSON: ' + (e.message || 'Invalid JSON')]
+                });
+                return;
+            }
+            const cardNames = (_a = parsed[1]) === null || _a === void 0 ? void 0 : _a.cardNames;
+            if (!Array.isArray(cardNames)) {
+                res.status(400).send({
+                    valid: false,
+                    errors: ['Game state does not contain a cardNames array']
+                });
+                return;
+            }
+            const errors = [];
+            for (const originalName of cardNames) {
+                const normalized = state_serializer_1.StateSerializer.normalizeCardName(originalName);
+                if (!normalized) {
+                    errors.push(`Invalid Card: ${originalName}`);
+                }
+            }
+            res.send({
+                valid: errors.length === 0,
+                errors
+            });
+        }
+        catch (error) {
+            res.status(500).send({
+                valid: false,
+                errors: [error.message || 'Unexpected error during validation']
+            });
+        }
+    }
     async onValidateState(req, res) {
         try {
             const { stateData } = req.body;
@@ -140,6 +208,12 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Game.prototype, "onPlayerStats", null);
+__decorate([
+    (0, controller_1.Post)('/validate-cards'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], Game.prototype, "onValidateCards", null);
 __decorate([
     (0, controller_1.Post)('/validate-state'),
     __metadata("design:type", Function),
