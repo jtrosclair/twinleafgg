@@ -14,6 +14,7 @@ import { Mew } from './mew';
 import { N } from './n';
 import { RegirockEx } from './regirock-ex';
 import { Riolu } from './riolu';
+import { StrongEnergy } from './strong-energy';
 import { TeamRocketsHandiwork } from './team-rockets-handiwork';
 import { Whismur } from './whismur';
 
@@ -26,6 +27,7 @@ export const setFatesCollide: Card[] = [
   new Mew(),
   new N(),
   new Riolu(),
+  new StrongEnergy(),
   new TeamRocketsHandiwork(),
   new Whismur(),
   new AudinoEx(),
