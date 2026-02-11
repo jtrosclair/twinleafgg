@@ -29,6 +29,7 @@ import { Hoppip } from './hoppip';
 import { Jumpluff } from './jumpluff';
 import { Kirlia } from './kirlia';
 import { Lanturn } from './lanturn';
+import { Larvitar } from './larvitar';
 import { LostBlender } from './lost-blender';
 import { LugiaGX } from './lugia-gx';
 import { MagcargoGX } from './magcargo-gx';
@@ -94,6 +95,7 @@ export const setLostThunder: Card[] = [
   new Jumpluff(),
   new Kirlia(),
   new Lanturn(),
+  new Larvitar(),
   new LostBlender(),
   new LugiaGX(),
   new MagcargoGX(),
