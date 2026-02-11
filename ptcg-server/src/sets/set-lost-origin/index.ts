@@ -54,6 +54,7 @@ import { Porygon } from './porygon';
 import { RadiantGardevoir } from './radiant-gardevoir';
 import { RadiantHisuianSneasler } from './radiant-hisuian-sneasler';
 import { Roselia } from './roselia';
+import { Rockruff } from './rockruff';
 import { RotomV } from './rotom-v';
 import { Sableye } from './sableye';
 import { Seadra } from './seadra';
@@ -111,6 +112,7 @@ export const setLostOrigin: Card[] = [
   new RadiantHisuianSneasler(),
   new RadiantGardevoir(),
   new Roselia(),
+  new Rockruff(),
   new RotomV(),
   new Sableye(),
   new Seadra(),
