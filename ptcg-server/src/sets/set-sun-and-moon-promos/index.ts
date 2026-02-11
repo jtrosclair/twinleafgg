@@ -8,6 +8,7 @@ import { Lurantis } from './lurantis';
 import { CelebiVenusaurGXSMP, DhelmiseSMP, EeveeSnorlaxGXSMP, EspeonDeoxysGXSMP, LucarioMelmetalGXSMP, LycanrocSMP, MagikarpWailordGXSMP, MewSMP, ReshiramCharizardGXSMP, TapuKokoSMP, UmbreonDarkraiGXSMP, VenusaurSnivyGXSMP } from './other-prints';
 import { PalaceBook } from './palace-book';
 import { PikachuZekromGX } from './pikachu-and-zekrom-gx';
+import { Rockruff } from './rockruff';
 import { ShiningCelebi } from './shining-celebi';
 import { ShiningLugia } from './shining-lugia';
 import { SolgaleoGX } from './solgaleo-gx';
@@ -23,6 +24,7 @@ export const setSunAndMoonPromos: Card[] = [
   new Lurantis(),
   new PalaceBook(),
   new PikachuZekromGX(),
+  new Rockruff(),
   new ShiningCelebi(),
   new ShiningLugia(),
   new SolgaleoGX(),
