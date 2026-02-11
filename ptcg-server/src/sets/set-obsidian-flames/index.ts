@@ -40,6 +40,7 @@ import { Pidgey } from './pidgey';
 import { PokemonLeagueHeadquarters } from './pokemon-league-headquarters';
 import { Poppy } from './poppy';
 import { Pupitar } from './pupitar';
+import { Rockruff } from './rockruff';
 import { Rowlet } from './rowlet';
 import { Ryme } from './ryme';
 import { Scizor } from './scizor';
@@ -95,6 +96,7 @@ export const setObsidianFlames: Card[] = [
   new Pidgey(),
   new PokemonLeagueHeadquarters(),
   new Poppy(),
+  new Rockruff(),
   new Rowlet(),
   new Ryme(),
   new Scizor(),
