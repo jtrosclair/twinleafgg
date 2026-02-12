@@ -34,6 +34,7 @@ import { Pheromosa } from './pheromosa';
 import { Poipole } from './poipole';
 import { Rockruff } from './rockruff';
 import { Sliggoo } from './sliggoo';
+import { Sylveon } from './sylveon';
 import { UltraNecrozmaGX } from './ultra-necrozma-gx';
 import { UltraSpace } from './ultra-space';
 import { UnitEnergyFDY } from './unit-energy-fdy';
@@ -80,6 +81,7 @@ export const setForbiddenLight: Card[] = [
   new Poipole(),
   new Rockruff(),
   new Sliggoo(),
+  new Sylveon(),
   new UltraNecrozmaGX(),
   new UltraSpace(),
   new UnitEnergyFDY(),
