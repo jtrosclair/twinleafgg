@@ -22,6 +22,7 @@ import { RotoStick } from './roto-stick';
 import { Seaking } from './seaking';
 import { Sneasel } from './sneasel';
 import { Sylveon } from './sylveon';
+import { Sylveonex } from './sylveon-ex';
 import { TreasureTracker } from './treasure-tracker';
 import { Tyranitarex } from './tyranitar-ex';
 import { Umbreonex } from './umbreon-ex';
@@ -41,6 +42,7 @@ export const setPrismaticEvolution: Card[] = [
   new LarrysSkill(),
   new Glaceonex(),
   new Sylveon(),
+  new Sylveonex(),
   new Sneasel(),
   new Seaking(),
   new Regigigas(),
