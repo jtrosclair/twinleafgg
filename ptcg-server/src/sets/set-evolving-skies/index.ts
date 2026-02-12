@@ -19,6 +19,7 @@ import { GalarianArticuno } from './galarian-articuno';
 import { GalarianMoltres } from './galarian-moltres';
 import { GalarianZapdos } from './galarian_zapdos';
 import { GarbodorV } from './garbodor-v';
+import { GarbodorVMAX } from './garbodor-vmax';
 import { GyaradosV } from './gyarados-v';
 import { GyaradosVMAX } from './gyarados-vmax';
 import { Hoppip } from './hoppip';
@@ -77,6 +78,7 @@ export const setEvolvingSkies: Card[] = [
   new GalarianMoltres(),
   new GalarianZapdos(),
   new GarbodorV(),
+  new GarbodorVMAX(),
   new GyaradosV(),
   new GyaradosVMAX(),
   new Hoppip(),
