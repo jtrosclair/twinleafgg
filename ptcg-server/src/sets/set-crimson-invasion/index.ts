@@ -12,6 +12,7 @@ import { Hydreigon } from './hydreigon';
 import { KartanaGX } from './kartana-gx';
 import { Lusamine } from './lusamine';
 import { Misdreavus } from './misdreavus';
+import { PeekingRedCard } from './peeking-red-card';
 import { Regigigas } from './regigigas';
 import { Salandit } from './salandit';
 import { Salazzle } from './salazzle';
@@ -29,6 +30,7 @@ export const setCrimsonInvasion: Card[] = [
   new KartanaGX(),
   new Lusamine(),
   new Misdreavus(),
+  new PeekingRedCard(),
   new Weedle(),
   new Xerneas(),
   new Regigigas(),
