@@ -14,6 +14,7 @@ import { Crocalor } from './crocalor';
 import { Cufant } from './cufant';
 import { Deino } from './deino';
 import { DeliveryDrone } from './delivery-drone';
+import { Dendra } from './dendra';
 import { Dudunsparce } from './dudunsparce';
 import { FightingAuLait } from './fighting-au-lait';
 import { Flamigo } from './flamigo';
@@ -106,6 +107,7 @@ export const setPaldeaEvolved: Card[] = [
   new Cufant(),
   new Deino(),
   new DeliveryDrone(),
+  new Dendra(),
   new Dudunsparce(),
   new Dunsparce(),
   new FightingAuLait(),
