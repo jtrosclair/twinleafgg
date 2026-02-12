@@ -1,4 +1,5 @@
 import { Card } from '../../game/store/card/card';
+import { Allister } from './allister';
 import { Dusknoir } from './dusknoir';
 import { AromaticGrassEnergy } from './aromatic-grass-energy';
 import { Beedrill } from './beedrill';
@@ -42,6 +43,7 @@ import { Yanmega } from './yanmega';
 import { Zekrom } from './zekrom';
 
 export const setVividVoltage: Card[] = [
+  new Allister(),
   new AromaticGrassEnergy(),
   new Beedrill(),
   new Beldum(),
