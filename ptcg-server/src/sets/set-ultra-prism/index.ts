@@ -19,6 +19,7 @@ import { LunalaPrismStar } from './lunala-prism-star';
 import { Magnemite } from './magnemite';
 import { Magnezone } from './magnezone';
 import { Mars } from './mars';
+import { MissingClover } from './missing-clover';
 import { Morelull } from './morelull';
 import { MtCoronet } from './mt-coronet';
 import { Murkrow } from './murkrow';
@@ -62,6 +63,7 @@ export const setUltraPrism: Card[] = [
   new Magnemite(),
   new Magnezone(),
   new Mars(),
+  new MissingClover(),
   new Morelull(),
   new Murkrow(),
   new MtCoronet(),
