@@ -17,6 +17,7 @@ import { Exploud } from './exploud';
 import { GalarianPerrserker } from './galarian-perrserker';
 import { Galvantula } from './galvantula';
 import { TalonflameVFA } from './full-art';
+import { HerosMedal } from './heros-medal';
 import { Jirachi } from './jirachi';
 import { Joltik } from './joltik';
 import { Leon } from './leon';
@@ -60,6 +61,7 @@ export const setVividVoltage: Card[] = [
   new Exploud(),
   new GalarianPerrserker(),
   new Galvantula(),
+  new HerosMedal(),
   new Jirachi(),
   new Joltik(),
   new Leon(),
