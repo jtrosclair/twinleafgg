@@ -33,6 +33,7 @@ import { Iono } from './iono';
 import { JetEnergy } from './jet-energy';
 import { Lokix } from './lokix';
 import { LuminousEnergy } from './luminous-energy';
+import { Luvdisc } from './luvdisc';
 import { Luxray } from './luxray';
 import { Magnemite } from './magnemite';
 import { Meowscaradaex } from './meowscarada-ex';
@@ -126,6 +127,7 @@ export const setPaldeaEvolved: Card[] = [
   new JetEnergy(),
   new Lokix(),
   new LuminousEnergy(),
+  new Luvdisc(),
   new Luxray(),
   new Magnemite(),
   new Meowscaradaex(),
