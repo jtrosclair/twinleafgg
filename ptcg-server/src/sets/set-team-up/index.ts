@@ -20,6 +20,7 @@ import { EeveeSnorlaxGX } from './eevee-and-snorlax-gx';
 import { Ferrothorn } from './ferrothorn';
 import { Galvantula } from './glavantula';
 import { GengarMimikyuGX } from './gengar-and-mimikyu-gx';
+import { Grimer } from './grimer';
 import { Hitmonchan } from './hitmonchan';
 import { Hitmonlee } from './hitmonlee';
 import { IngoAndEmmet } from './ingo-and-emmet';
@@ -81,6 +82,7 @@ export const setTeamUp: Card[] = [
   new Ferrothorn(),
   new Galvantula(),
   new GengarMimikyuGX(),
+  new Grimer(),
   new Hitmonchan(),
   new Hitmonlee(),
   new IngoAndEmmet(),
