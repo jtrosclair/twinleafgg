@@ -4,6 +4,7 @@ import { Abra } from './abra';
 import { Alakazam } from './alakazam';
 import { Bayleef } from './bayleef';
 import { Bulbasaur } from './bulbasaur';
+import { Buneary } from './buneary';
 import { Celebi } from './celebi';
 import { Chikorita } from './chikorita';
 import { Cinderace } from './cinderace';
@@ -69,6 +70,7 @@ export const setMegaEvolution: Card[] = [
   new Alakazam(),
   new Bayleef(),
   new Bulbasaur(),
+  new Buneary(),
   new Celebi(),
   new Chikorita(),
   new Cinderace(),
