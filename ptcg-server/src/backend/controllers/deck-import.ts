@@ -19,8 +19,9 @@ const IMAGE_CACHE_FILE = join(__dirname, '../../../data/limitlesstcg-images.json
 const IMAGE_JSON_URL = 'https://amydev.me/twinleaf-json/image-jsons/limitlesstcg/large.json';
 
 const cardReplacements = [
-  // Diamond symbol to Prism Star conversion
+  // Diamond/star symbol to Prism Star conversion
   { from: '♢', to: 'Prism Star' },
+  { from: '{*}', to: 'Prism Star' },
 
   //Energy
   { from: 'Beast Energy FLI', to: 'Beast Energy ♢ FLI' },
