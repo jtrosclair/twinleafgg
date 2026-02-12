@@ -1,7 +1,7 @@
-import { PokemonCard, Stage, CardType, PowerType, SpecialCondition, State, StoreLike } from '../../game';
-import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
+import { PokemonCard, Stage, CardType, PowerType, SpecialCondition, State, StateUtils, StoreLike } from '../../game';
+import { AddSpecialConditionsPowerEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect, EvolveEffect } from '../../game/store/effects/game-effects';
+import { EvolveEffect } from '../../game/store/effects/game-effects';
 import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class Hypno extends PokemonCard {
@@ -54,7 +54,8 @@ export class Hypno extends PokemonCard {
         return state;
 
       // Apply Asleep condition to opponent's Active Pokémon
-      const specialConditionEffect = new AddSpecialConditionsEffect(effect, [SpecialCondition.ASLEEP]);
+      const opponent = StateUtils.getOpponent(state, player);
+      const specialConditionEffect = new AddSpecialConditionsPowerEffect(player, this, opponent.active, [SpecialCondition.ASLEEP]);
       store.reduceEffect(state, specialConditionEffect);
 
       return state;

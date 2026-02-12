@@ -29,7 +29,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
 
     yield store.prompt(state, new ShowCardsPrompt(
       player.id,
-      GameMessage.CARDS_SHOWED,
+      GameMessage.CARDS_SHOWED_BY_EFFECT,
       [topCard]
     ), () => {
       player.supporter.moveCardTo(effect.trainerCard, player.discard);

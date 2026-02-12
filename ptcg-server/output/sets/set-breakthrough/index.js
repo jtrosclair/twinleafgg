@@ -16,6 +16,7 @@ const parallel_city_1 = require("./parallel-city");
 const raikou_1 = require("./raikou");
 const town_map_1 = require("./town-map");
 const burning_energy_1 = require("./burning-energy");
+const yveltal_1 = require("./yveltal");
 // other prints
 const other_prints_2 = require("./other-prints");
 exports.setBreakthrough = [
@@ -33,6 +34,7 @@ exports.setBreakthrough = [
     new parallel_city_1.ParallelCity(),
     new raikou_1.Raikou(),
     new town_map_1.TownMap(),
+    new yveltal_1.Yveltal(),
     // other prints
     new other_prints_2.FishermanBKT(),
     new other_prints_2.FloatStoneBKT(),

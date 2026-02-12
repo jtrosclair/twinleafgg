@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setPhantasmalFlames = void 0;
 const other_prints_1 = require("./other-prints");
+const ambipom_1 = require("./ambipom");
 const battle_colosseum_1 = require("./battle-colosseum");
 const blowtorch_1 = require("./blowtorch");
 const bronzong_1 = require("./bronzong");
@@ -34,6 +35,7 @@ const mega_sharpedo_ex_1 = require("./mega-sharpedo-ex");
 const moltres_1 = require("./moltres");
 const oricorio_ex_1 = require("./oricorio-ex");
 const paldean_tauros_1 = require("./paldean-tauros");
+const punk_helmet_1 = require("./punk-helmet");
 const reshiram_1 = require("./reshiram");
 const rotom_ex_1 = require("./rotom-ex");
 const sableye_1 = require("./sableye");
@@ -45,6 +47,7 @@ const wigglytuff_1 = require("./wigglytuff");
 const wonder_patch_1 = require("./wonder-patch");
 const zacian_1 = require("./zacian");
 exports.setPhantasmalFlames = [
+    new ambipom_1.Ambipom(),
     new battle_colosseum_1.BattleColosseum(),
     new blowtorch_1.Blowtorch(),
     new bronzong_1.Bronzong(),
@@ -77,6 +80,7 @@ exports.setPhantasmalFlames = [
     new moltres_1.Moltres(),
     new oricorio_ex_1.Oricorioex(),
     new paldean_tauros_1.PaldeanTauros(),
+    new punk_helmet_1.PunkHelmet(),
     new reshiram_1.Reshiram(),
     new rotom_ex_1.Rotomex(),
     new sableye_1.Sableye(),

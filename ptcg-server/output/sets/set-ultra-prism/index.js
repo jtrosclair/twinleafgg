@@ -21,6 +21,7 @@ const lunala_prism_star_1 = require("./lunala-prism-star");
 const magnemite_1 = require("./magnemite");
 const magnezone_1 = require("./magnezone");
 const mars_1 = require("./mars");
+const missing_clover_1 = require("./missing-clover");
 const morelull_1 = require("./morelull");
 const mt_coronet_1 = require("./mt-coronet");
 const murkrow_1 = require("./murkrow");
@@ -63,6 +64,7 @@ exports.setUltraPrism = [
     new magnemite_1.Magnemite(),
     new magnezone_1.Magnezone(),
     new mars_1.Mars(),
+    new missing_clover_1.MissingClover(),
     new morelull_1.Morelull(),
     new murkrow_1.Murkrow(),
     new mt_coronet_1.MtCoronet(),

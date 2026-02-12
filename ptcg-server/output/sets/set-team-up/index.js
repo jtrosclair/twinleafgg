@@ -22,6 +22,7 @@ const eevee_and_snorlax_gx_1 = require("./eevee-and-snorlax-gx");
 const ferrothorn_1 = require("./ferrothorn");
 const glavantula_1 = require("./glavantula");
 const gengar_and_mimikyu_gx_1 = require("./gengar-and-mimikyu-gx");
+const grimer_1 = require("./grimer");
 const hitmonchan_1 = require("./hitmonchan");
 const hitmonlee_1 = require("./hitmonlee");
 const ingo_and_emmet_1 = require("./ingo-and-emmet");
@@ -37,6 +38,7 @@ const mareep_1 = require("./mareep");
 const metal_goggles_1 = require("./metal-goggles");
 const mimikyu_1 = require("./mimikyu");
 const moltres_1 = require("./moltres");
+const muk_1 = require("./muk");
 const ninetales_1 = require("./ninetales");
 const poochyena_1 = require("./poochyena");
 const ponyta_1 = require("./ponyta");
@@ -82,6 +84,7 @@ exports.setTeamUp = [
     new ferrothorn_1.Ferrothorn(),
     new glavantula_1.Galvantula(),
     new gengar_and_mimikyu_gx_1.GengarMimikyuGX(),
+    new grimer_1.Grimer(),
     new hitmonchan_1.Hitmonchan(),
     new hitmonlee_1.Hitmonlee(),
     new ingo_and_emmet_1.IngoAndEmmet(),
@@ -95,6 +98,7 @@ exports.setTeamUp = [
     new metal_goggles_1.MetalGoggles(),
     new mimikyu_1.Mimikyu(),
     new moltres_1.Moltres(),
+    new muk_1.Muk(),
     new ninetales_1.Ninetales(),
     new poochyena_1.Poochyena(),
     new ponyta_1.Ponyta(),

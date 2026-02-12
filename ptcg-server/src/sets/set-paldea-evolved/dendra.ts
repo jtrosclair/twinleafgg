@@ -22,7 +22,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
 
   yield store.prompt(state, new ChooseCardsPrompt(
     player,
-    GameMessage.CHOOSE_CARD_TO_PUT_ON_BOTTOM_OF_THE_DECK,
+    GameMessage.CHOOSE_CARDS_TO_PUT_ON_BOTTOM_OF_THE_DECK,
     player.hand,
     {},
     { min: 1, max: 1, allowCancel: false }

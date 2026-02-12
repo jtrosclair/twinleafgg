@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setVividVoltage = void 0;
+const allister_1 = require("./allister");
 const dusknoir_1 = require("./dusknoir");
 const aromatic_grass_energy_1 = require("./aromatic-grass-energy");
 const beedrill_1 = require("./beedrill");
@@ -18,6 +19,7 @@ const exploud_1 = require("./exploud");
 const galarian_perrserker_1 = require("./galarian-perrserker");
 const galvantula_1 = require("./galvantula");
 const full_art_1 = require("./full-art");
+const heros_medal_1 = require("./heros-medal");
 const jirachi_1 = require("./jirachi");
 const joltik_1 = require("./joltik");
 const leon_1 = require("./leon");
@@ -43,6 +45,7 @@ const yanma_1 = require("./yanma");
 const yanmega_1 = require("./yanmega");
 const zekrom_1 = require("./zekrom");
 exports.setVividVoltage = [
+    new allister_1.Allister(),
     new aromatic_grass_energy_1.AromaticGrassEnergy(),
     new beedrill_1.Beedrill(),
     new beldum_1.Beldum(),
@@ -59,6 +62,7 @@ exports.setVividVoltage = [
     new exploud_1.Exploud(),
     new galarian_perrserker_1.GalarianPerrserker(),
     new galvantula_1.Galvantula(),
+    new heros_medal_1.HerosMedal(),
     new jirachi_1.Jirachi(),
     new joltik_1.Joltik(),
     new leon_1.Leon(),

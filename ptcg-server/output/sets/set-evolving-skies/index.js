@@ -20,6 +20,8 @@ const full_face_guard_1 = require("./full-face-guard");
 const galarian_articuno_1 = require("./galarian-articuno");
 const galarian_moltres_1 = require("./galarian-moltres");
 const galarian_zapdos_1 = require("./galarian_zapdos");
+const garbodor_v_1 = require("./garbodor-v");
+const garbodor_vmax_1 = require("./garbodor-vmax");
 const gyarados_v_1 = require("./gyarados-v");
 const gyarados_vmax_1 = require("./gyarados-vmax");
 const hoppip_1 = require("./hoppip");
@@ -76,6 +78,8 @@ exports.setEvolvingSkies = [
     new galarian_articuno_1.GalarianArticuno(),
     new galarian_moltres_1.GalarianMoltres(),
     new galarian_zapdos_1.GalarianZapdos(),
+    new garbodor_v_1.GarbodorV(),
+    new garbodor_vmax_1.GarbodorVMAX(),
     new gyarados_v_1.GyaradosV(),
     new gyarados_vmax_1.GyaradosVMAX(),
     new hoppip_1.Hoppip(),

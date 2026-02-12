@@ -14,6 +14,7 @@ const hydreigon_1 = require("./hydreigon");
 const kartana_gx_1 = require("./kartana-gx");
 const lusamine_1 = require("./lusamine");
 const misdreavus_1 = require("./misdreavus");
+const peeking_red_card_1 = require("./peeking-red-card");
 const regigigas_1 = require("./regigigas");
 const salandit_1 = require("./salandit");
 const salazzle_1 = require("./salazzle");
@@ -30,6 +31,7 @@ exports.setCrimsonInvasion = [
     new kartana_gx_1.KartanaGX(),
     new lusamine_1.Lusamine(),
     new misdreavus_1.Misdreavus(),
+    new peeking_red_card_1.PeekingRedCard(),
     new weedle_1.Weedle(),
     new xerneas_1.Xerneas(),
     new regigigas_1.Regigigas(),

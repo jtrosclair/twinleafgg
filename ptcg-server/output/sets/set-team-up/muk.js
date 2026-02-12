@@ -1,0 +1,42 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Muk = void 0;
+const game_1 = require("../../game");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
+class Muk extends pokemon_card_1.PokemonCard {
+    constructor() {
+        super(...arguments);
+        this.stage = game_1.Stage.STAGE_1;
+        this.evolvesFrom = 'Grimer';
+        this.cardType = game_1.CardType.PSYCHIC;
+        this.hp = 130;
+        this.weakness = [{ type: game_1.CardType.PSYCHIC }];
+        this.resistance = [];
+        this.retreat = [game_1.CardType.COLORLESS, game_1.CardType.COLORLESS, game_1.CardType.COLORLESS, game_1.CardType.COLORLESS];
+        this.powers = [{
+                name: 'Poison Sacs',
+                powerType: game_1.PowerType.ABILITY,
+                text: 'The Special Condition Poisoned is not removed when your opponent\'s Pokémon evolve or devolve.'
+            }];
+        this.attacks = [{
+                name: 'Toxic Secretion',
+                cost: [game_1.CardType.PSYCHIC],
+                damage: 40,
+                text: 'Your opponent\'s Active Pokémon is now Poisoned. Put 2 damage counters instead of 1 on that Pokémon between turns.'
+            }];
+        this.set = 'TEU';
+        this.cardImage = 'assets/cardback.png';
+        this.setNumber = '63';
+        this.name = 'Muk';
+        this.fullName = 'Muk TEU';
+    }
+    reduceEffect(store, state, effect) {
+        // Toxic Secretion - apply double poison (20 damage instead of 10)
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this, 20);
+        }
+        return state;
+    }
+}
+exports.Muk = Muk;

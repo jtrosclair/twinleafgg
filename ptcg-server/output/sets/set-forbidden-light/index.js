@@ -36,6 +36,7 @@ const pheromosa_1 = require("./pheromosa");
 const poipole_1 = require("./poipole");
 const rockruff_1 = require("./rockruff");
 const sliggoo_1 = require("./sliggoo");
+const sylveon_1 = require("./sylveon");
 const ultra_necrozma_gx_1 = require("./ultra-necrozma-gx");
 const ultra_space_1 = require("./ultra-space");
 const unit_energy_fdy_1 = require("./unit-energy-fdy");
@@ -77,6 +78,7 @@ exports.setForbiddenLight = [
     new poipole_1.Poipole(),
     new rockruff_1.Rockruff(),
     new sliggoo_1.Sliggoo(),
+    new sylveon_1.Sylveon(),
     new ultra_necrozma_gx_1.UltraNecrozmaGX(),
     new ultra_space_1.UltraSpace(),
     new unit_energy_fdy_1.UnitEnergyFDY(),
