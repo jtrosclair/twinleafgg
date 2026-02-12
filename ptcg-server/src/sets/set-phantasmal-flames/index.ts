@@ -33,6 +33,7 @@ import { MegaSharpedoex } from './mega-sharpedo-ex';
 import { Moltres } from './moltres';
 import { Oricorioex } from './oricorio-ex';
 import { PaldeanTauros } from './paldean-tauros';
+import { PunkHelmet } from './punk-helmet';
 import { Reshiram } from './reshiram';
 import { Rotomex } from './rotom-ex';
 import { Sableye } from './sableye';
@@ -78,6 +79,7 @@ export const setPhantasmalFlames: Card[] = [
   new Moltres(),
   new Oricorioex(),
   new PaldeanTauros(),
+  new PunkHelmet(),
   new Reshiram(),
   new Rotomex(),
   new Sableye(),
