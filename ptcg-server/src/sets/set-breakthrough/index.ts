@@ -14,6 +14,7 @@ import { ParallelCity } from './parallel-city';
 import { Raikou } from './raikou';
 import { TownMap } from './town-map';
 import { BurningEnergy } from './burning-energy';
+import { Yveltal } from './yveltal';
 
 // other prints
 import {
@@ -37,6 +38,7 @@ export const setBreakthrough: Card[] = [
   new ParallelCity(),
   new Raikou(),
   new TownMap(),
+  new Yveltal(),
 
   // other prints
   new FishermanBKT(),
