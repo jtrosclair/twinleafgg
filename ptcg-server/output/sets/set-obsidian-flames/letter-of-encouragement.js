@@ -15,7 +15,7 @@ const game_1 = require("../../game");
 function* playCard(next, store, state, self, effect) {
     const player = effect.player;
     // No Pokemon KO last turn
-    if (!player.marker.hasMarker(self.LETTER_OF_ENCOURAGEMENT_MARKER)) {
+    if (!player.marker.hasMarker(self.OPPONENT_KNOCKOUT_MARKER)) {
         throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
     }
     if (player.deck.cards.length === 0) {
@@ -47,7 +47,7 @@ class LetterOfEncouragement extends trainer_card_1.TrainerCard {
         this.text = `You can use this card only if any of your Pokémon were Knocked Out during your opponent's last turn.
 
 Search your deck for up to 3 Basic Energy cards, reveal them, and put them into your hand. Then, shuffle your deck.`;
-        this.LETTER_OF_ENCOURAGEMENT_MARKER = 'LETTER_OF_ENCOURAGEMENT_MARKER';
+        this.OPPONENT_KNOCKOUT_MARKER = 'OPPONENT_KNOCKOUT_MARKER';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
@@ -56,21 +56,23 @@ Search your deck for up to 3 Basic Energy cards, reveal them, and put them into 
         }
         if (effect instanceof game_effects_1.KnockOutEffect) {
             const player = effect.player;
-            const opponent = state_utils_1.StateUtils.getOpponent(state, player);
-            const duringTurn = [state_1.GamePhase.PLAYER_TURN, state_1.GamePhase.ATTACK].includes(state.phase);
-            // Do not activate between turns, or when it's not opponents turn.
-            if (!duringTurn || state.players[state.activePlayer] !== opponent) {
+            // Do not activate when it is player's turn
+            if (state.players[state.activePlayer] === player) {
+                return state;
+            }
+            // Do not activate between turns
+            if (state.phase !== state_1.GamePhase.PLAYER_TURN && state.phase !== state_1.GamePhase.ATTACK) {
                 return state;
             }
             const cardList = state_utils_1.StateUtils.findCardList(state, this);
             const owner = state_utils_1.StateUtils.findOwner(state, cardList);
             if (owner === player) {
-                effect.player.marker.addMarker(this.LETTER_OF_ENCOURAGEMENT_MARKER, this);
+                effect.player.marker.addMarkerToState(this.OPPONENT_KNOCKOUT_MARKER);
             }
             return state;
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
-            effect.player.marker.removeMarker(this.LETTER_OF_ENCOURAGEMENT_MARKER);
+            effect.player.marker.removeMarker(this.OPPONENT_KNOCKOUT_MARKER);
         }
         return state;
     }

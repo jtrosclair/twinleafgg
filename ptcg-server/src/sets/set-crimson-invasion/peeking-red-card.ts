@@ -1,4 +1,4 @@
-import { GameError, GameMessage, ShuffleDeckPrompt, ConfirmPrompt } from '../../game';
+import { GameMessage, ShuffleDeckPrompt, ShowCardsPrompt, ConfirmPrompt } from '../../game';
 import { TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
@@ -30,24 +30,25 @@ export class PeekingRedCard extends TrainerCard {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
-      const opponentCards = opponent.hand.cards.filter(c => c !== this);
-      const cardCount = opponentCards.length;
+      const opponentHand = opponent.hand.cards.slice();
+      const cardCount = opponentHand.length;
 
-      // Opponent reveals their hand (automatically happens when we check it)
+      // Reveal opponent's hand to the player
+      store.prompt(state, new ShowCardsPrompt(
+        player.id,
+        GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
+        opponentHand
+      ), () => { });
 
+      // Ask if the player wants to shuffle opponent's hand
       state = store.prompt(state, new ConfirmPrompt(
         player.id,
         GameMessage.WANT_TO_USE_ABILITY,
       ), wantToUse => {
-        if (wantToUse) {
-          if (cardCount === 0 && opponent.deck.cards.length === 0) {
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
-            return;
-          }
+        if (wantToUse && cardCount > 0) {
+          opponent.hand.moveCardsTo(opponentHand, opponent.deck);
 
-          opponent.hand.moveCardsTo(opponentCards, opponent.deck);
-
-          store.prompt(state, new ShuffleDeckPrompt(opponent.id), order => {
+          state = store.prompt(state, new ShuffleDeckPrompt(opponent.id), order => {
             opponent.deck.applyOrder(order);
           });
 

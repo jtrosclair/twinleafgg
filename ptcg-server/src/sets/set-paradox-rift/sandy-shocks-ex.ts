@@ -1,10 +1,10 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardTag, EnergyType, SuperType } from '../../game/store/card/card-types';
+import { Stage, CardTag } from '../../game/store/card/card-types';
 import { State } from '../../game/store/state/state';
 import { AttackEffect, PowerEffect } from '../../game/store/effects/game-effects';
 import { StoreLike } from '../../game/store/store-like';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyPrompt, EnergyCard, GameError, GameMessage, PlayerType, PowerType, SlotType, StateUtils } from '../../game';
+import { EnergyCard, GameError, GameMessage, PowerType, StateUtils } from '../../game';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 
@@ -91,39 +91,16 @@ export class SandyShocksex extends PokemonCard {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
-      const hasEnergyInDiscard = player.discard.cards.some(c => {
+      const fightingEnergy = player.discard.cards.find(c => {
         return c instanceof EnergyCard && c.name == 'Fighting Energy';
       });
-      if (!hasEnergyInDiscard) {
+      if (!fightingEnergy) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
-      state = store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_TO_BENCH,
-        player.discard,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH],
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Fighting Energy' },
-        { allowCancel: false, min: 1, max: 1 },
-      ), transfers => {
-        transfers = transfers || [];
-        // cancelled by user
-        if (transfers.length === 0) {
-          return state;
-        }
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          // const pokemonCard = target.cards[0] as PokemonCard;
-          // if (pokemonCard.cardType !== CardType.FIRE) {
-          //   throw new GameError(GameMessage.INVALID_TARGET);
-          // }
-          player.discard.moveCardTo(transfer.card, target);
-          player.marker.addMarker(this.MAGNETIC_ABSORPTION_MARKER, this);
-        }
-
-        return state;
-      });
+      const cardList = StateUtils.findCardList(state, this);
+      player.discard.moveCardTo(fightingEnergy, cardList);
+      player.marker.addMarker(this.MAGNETIC_ABSORPTION_MARKER, this);
       return state;
     }
     return state;

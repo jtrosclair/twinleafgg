@@ -77,29 +77,15 @@ class SandyShocksex extends pokemon_card_1.PokemonCard {
             if (prizes > 4) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            const hasEnergyInDiscard = player.discard.cards.some(c => {
+            const fightingEnergy = player.discard.cards.find(c => {
                 return c instanceof game_1.EnergyCard && c.name == 'Fighting Energy';
             });
-            if (!hasEnergyInDiscard) {
+            if (!fightingEnergy) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            state = store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_TO_BENCH, player.discard, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Fighting Energy' }, { allowCancel: false, min: 1, max: 1 }), transfers => {
-                transfers = transfers || [];
-                // cancelled by user
-                if (transfers.length === 0) {
-                    return state;
-                }
-                for (const transfer of transfers) {
-                    const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                    // const pokemonCard = target.cards[0] as PokemonCard;
-                    // if (pokemonCard.cardType !== CardType.FIRE) {
-                    //   throw new GameError(GameMessage.INVALID_TARGET);
-                    // }
-                    player.discard.moveCardTo(transfer.card, target);
-                    player.marker.addMarker(this.MAGNETIC_ABSORPTION_MARKER, this);
-                }
-                return state;
-            });
+            const cardList = game_1.StateUtils.findCardList(state, this);
+            player.discard.moveCardTo(fightingEnergy, cardList);
+            player.marker.addMarker(this.MAGNETIC_ABSORPTION_MARKER, this);
             return state;
         }
         return state;
