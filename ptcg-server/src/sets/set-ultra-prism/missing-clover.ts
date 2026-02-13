@@ -15,12 +15,13 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
     throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
   }
 
-  // Count how many Missing Clover cards are in hand (including the one being played)
+  // Count how many Missing Clover cards remain in hand
+  // (the played card has already been moved to supporter by PlayItemEffect)
   const count = player.hand.cards.filter(c => c.name === 'Missing Clover').length;
   let playAllFour = false;
 
-  // If player has 4 in hand, ask if they want to play all 4 at once
-  if (count >= 4) {
+  // If player has 3 more in hand (4 total), ask if they want to play all 4 at once
+  if (count >= 3) {
     yield store.prompt(state, new ConfirmPrompt(
       player.id,
       GameMessage.WANT_TO_PLAY_ALL_CARDS_AT_ONCE
