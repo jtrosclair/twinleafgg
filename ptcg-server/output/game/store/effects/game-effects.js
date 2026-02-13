@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PutDamageCountersEffect = exports.SpecialEnergyEffect = exports.EffectOfAbilityEffect = exports.MoveCardsEffect = exports.DrawPrizesEffect = exports.EvolveEffect = exports.HealEffect = exports.KnockOutAttackEffect = exports.KnockOutEffect = exports.AttackEffect = exports.UseStadiumEffect = exports.UseAttackEffect = exports.TrainerPowerEffect = exports.PowerEffect = exports.UseEnergyPowerEffect = exports.UseTrainerPowerEffect = exports.UsePowerEffect = exports.RetreatEffect = exports.GameEffects = void 0;
+exports.PlaceDamageCountersEffect = exports.PutDamageCountersEffect = exports.SpecialEnergyEffect = exports.EffectOfAbilityEffect = exports.MoveCardsEffect = exports.DrawPrizesEffect = exports.EvolveEffect = exports.HealEffect = exports.KnockOutAttackEffect = exports.KnockOutEffect = exports.AttackEffect = exports.UseStadiumEffect = exports.UseAttackEffect = exports.TrainerPowerEffect = exports.PowerEffect = exports.UseEnergyPowerEffect = exports.UseTrainerPowerEffect = exports.UsePowerEffect = exports.RetreatEffect = exports.GameEffects = void 0;
 var GameEffects;
 (function (GameEffects) {
     GameEffects["RETREAT_EFFECT"] = "RETREAT_EFFECT";
@@ -17,6 +17,7 @@ var GameEffects;
     GameEffects["EFFECT_OF_ABILITY_EFFECT"] = "EFFECT_OF_ABILITY_EFFECT";
     GameEffects["SPECIAL_ENERGY_EFFECT"] = "SPECIAL_ENERGY_EFFECT";
     GameEffects["PUT_COUNTERS_EFFECT"] = "PUT_COUNTERS_EFFECT";
+    GameEffects["PLACE_DAMAGE_COUNTERS_EFFECT"] = "PLACE_DAMAGE_COUNTERS_EFFECT";
 })(GameEffects = exports.GameEffects || (exports.GameEffects = {}));
 class RetreatEffect {
     constructor(player, benchIndex) {
@@ -221,3 +222,14 @@ class PutDamageCountersEffect extends PowerEffect {
     }
 }
 exports.PutDamageCountersEffect = PutDamageCountersEffect;
+class PlaceDamageCountersEffect {
+    constructor(player, target, damage, source) {
+        this.type = GameEffects.PLACE_DAMAGE_COUNTERS_EFFECT;
+        this.preventDefault = false;
+        this.player = player;
+        this.target = target;
+        this.damage = damage;
+        this.source = source;
+    }
+}
+exports.PlaceDamageCountersEffect = PlaceDamageCountersEffect;

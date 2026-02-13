@@ -418,6 +418,7 @@
     "WANT_TO_DRAW_CARDS": "デッキからカードを引きますか？",
     "WANT_TO_PICK_UP_POKEMON": "ポケモンを手札に戻しますか？",
     "WANT_TO_PLAY_BOTH_CARDS_AT_ONCE": "両方のカードを一度にプレイしますか？",
+    "WANT_TO_PLAY_ALL_CARDS_AT_ONCE": "4枚のカードを一度にプレイしますか？",
     "WANT_TO_SHUFFLE_POKEMON_INTO_DECK": "ポケモンをデッキにシャッフルしますか？",
     "WANT_TO_SWITCH_POKEMON": "ポケモンを入れ替えますか？",
     "WANT_TO_USE_ABILITY": "能力を使用しますか？",

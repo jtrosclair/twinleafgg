@@ -141,7 +141,8 @@ class Munkidori extends game_1.PokemonCard {
                             const damageToMove = Math.min(30 - totalDamageMoved, Math.min(10, source.damage));
                             if (damageToMove > 0) {
                                 source.damage -= damageToMove;
-                                target.damage += damageToMove;
+                                const placeCountersEffect = new game_effects_1.PlaceDamageCountersEffect(effect.player, target, damageToMove, this);
+                                state = store.reduceEffect(state, placeCountersEffect);
                                 totalDamageMoved += damageToMove;
                             }
                             if (totalDamageMoved >= 30)

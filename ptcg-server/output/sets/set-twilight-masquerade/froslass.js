@@ -4,6 +4,7 @@ exports.Froslass = void 0;
 const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_effects_1 = require("../../game/store/effects/game-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const state_1 = require("../../game/store/state/state");
 class Froslass extends game_1.PokemonCard {
@@ -60,15 +61,23 @@ class Froslass extends game_1.PokemonCard {
                     }
                 });
                 player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-                    if (card.powers.length > 0 && card.name !== 'Froslass' &&
-                        card.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
-                        cardList.damage += (10 * numberOfFroslass);
+                    if (card.powers.length > 0 && card.name !== 'Froslass') {
+                        const powersEffect = new check_effects_1.CheckPokemonPowersEffect(player, cardList);
+                        state = store.reduceEffect(state, powersEffect);
+                        if (powersEffect.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
+                            const placeCountersEffect = new game_effects_1.PlaceDamageCountersEffect(player, cardList, 10 * numberOfFroslass, this);
+                            state = store.reduceEffect(state, placeCountersEffect);
+                        }
                     }
                 });
                 opponent.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-                    if (card.name !== 'Froslass' && card.powers.length > 0 &&
-                        card.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
-                        cardList.damage += (10 * numberOfFroslass);
+                    if (card.name !== 'Froslass' && card.powers.length > 0) {
+                        const powersEffect = new check_effects_1.CheckPokemonPowersEffect(opponent, cardList);
+                        state = store.reduceEffect(state, powersEffect);
+                        if (powersEffect.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
+                            const placeCountersEffect = new game_effects_1.PlaceDamageCountersEffect(player, cardList, 10 * numberOfFroslass, this);
+                            state = store.reduceEffect(state, placeCountersEffect);
+                        }
                     }
                 });
                 player.marker.removeMarker(this.CHILLING_CURTAIN_MARKER, this);

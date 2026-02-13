@@ -378,6 +378,35 @@ function gameReducer(store, state, effect) {
         }
         return state;
     }
+    if (effect instanceof game_effects_1.PlaceDamageCountersEffect) {
+        if (effect.preventDefault) {
+            return state;
+        }
+        const target = effect.target;
+        const targetCard = target.getPokemonCard();
+        if (targetCard === undefined) {
+            throw new game_error_1.GameError(game_message_1.GameMessage.ILLEGAL_ACTION);
+        }
+        const damage = Math.max(0, effect.damage);
+        target.damage += damage;
+        if (damage > 0) {
+            const effectName = effect.source ? effect.source.name : '';
+            store.log(state, game_message_1.GameLog.LOG_PLAYER_PLACES_DAMAGE_COUNTERS, {
+                name: effect.player.name,
+                damage: damage,
+                target: targetCard.name,
+                effect: effectName,
+            });
+            // Track damage dealt if source is provided
+            if (effect.source) {
+                const sourceCardList = state_utils_1.StateUtils.findPokemonSlot(state, effect.source);
+                if (sourceCardList) {
+                    game_stats_tracker_1.GameStatsTracker.trackDamageDealt(effect.player, sourceCardList, damage);
+                }
+            }
+        }
+        return state;
+    }
     if (effect instanceof game_effects_1.EvolveEffect) {
         const pokemonCard = effect.target.getPokemonCard();
         if (pokemonCard === undefined) {

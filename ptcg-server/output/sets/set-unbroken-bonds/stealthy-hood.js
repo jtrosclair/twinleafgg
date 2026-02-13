@@ -29,6 +29,9 @@ class StealthyHood extends trainer_card_1.TrainerCard {
                 effect.target = undefined;
             }
         }
+        if (effect instanceof game_effects_1.PlaceDamageCountersEffect && effect.target.tools.includes(this)) {
+            effect.preventDefault = true;
+        }
         return state;
     }
 }
