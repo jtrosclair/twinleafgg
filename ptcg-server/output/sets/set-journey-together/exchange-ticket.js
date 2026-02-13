@@ -32,13 +32,13 @@ class RedeemableTicket extends game_1.TrainerCard {
             this.shuffleArray(allPrizeCards);
             // Move prize cards to the bottom of the deck
             allPrizeCards.forEach(card => {
-                player.deck.cards.unshift(card);
+                player.deck.cards.push(card);
             });
             // Clear the prize cards
             prizes.forEach(p => p.cards = []);
             // Draw cards from the top of the deck to the prize cards
             for (let i = 0; i < prizeCount; i++) {
-                const card = player.deck.cards.pop();
+                const card = player.deck.cards.shift();
                 if (card) {
                     const prize = player.prizes.find(p => p.cards.length === 0);
                     if (prize) {
