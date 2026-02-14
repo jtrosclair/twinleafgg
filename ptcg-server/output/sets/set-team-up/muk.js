@@ -33,15 +33,20 @@ class Muk extends pokemon_card_1.PokemonCard {
         this.fullName = 'Muk TEU';
     }
     reduceEffect(store, state, effect) {
-        // Poison Sacs - prevent poison removal on evolution
-        if (effect instanceof game_effects_1.EvolveEffect) {
-            const player = effect.player;
+        // Poison Sacs - prevent poison from being removed on evolution
+        if (effect instanceof game_effects_1.EvolveEffect && effect.target.specialConditions.includes(game_1.SpecialCondition.POISONED)) {
             const cardList = game_1.StateUtils.findCardList(state, this);
             const mukOwner = game_1.StateUtils.findOwner(state, cardList);
             const opponent = game_1.StateUtils.getOpponent(state, mukOwner);
-            // Only applies to opponent's Pokémon evolving
-            if (player === opponent && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, mukOwner, this)) {
-                if (effect.target.specialConditions.includes(game_1.SpecialCondition.POISONED)) {
+            // Check if the evolving Pokémon belongs to the opponent
+            if (effect.player === opponent) {
+                let mukInPlay = false;
+                mukOwner.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (list) => {
+                    if (list.getPokemonCard() === this) {
+                        mukInPlay = true;
+                    }
+                });
+                if (mukInPlay && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, mukOwner, this)) {
                     effect.keepPoison = true;
                 }
             }

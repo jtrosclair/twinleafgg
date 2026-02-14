@@ -86,10 +86,12 @@ class Eevee extends pokemon_card_1.PokemonCard {
                     let cards = [];
                     return store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_EVOLVE, player.deck, { superType: card_types_1.SuperType.POKEMON, stage: card_types_1.Stage.STAGE_1, evolvesFrom: 'Eevee', cardType: eeveeloutionType }, { min: 0, max: 1, allowCancel: false }), selected => {
                         cards = selected || [];
-                        if (cards) {
-                            player.deck.moveCardsTo(cards, cardList);
-                            cardList.clearEffects();
-                            cardList.pokemonPlayedTurn = state.turn;
+                        if (cards.length > 0) {
+                            const pokemonCard = cards[0];
+                            // Move from deck to hand so EvolveEffect can move it from hand to target
+                            player.deck.moveCardsTo(cards, player.hand);
+                            const evolveEffect = new game_effects_1.EvolveEffect(player, cardList, pokemonCard);
+                            store.reduceEffect(state, evolveEffect);
                         }
                     });
                 }
