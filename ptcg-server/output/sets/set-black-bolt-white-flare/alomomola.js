@@ -17,6 +17,7 @@ class Alomomola extends pokemon_card_1.PokemonCard {
         this.retreat = [C];
         this.powers = [{
                 name: 'Gentle Fins',
+                useWhenInPlay: true,
                 powerType: pokemon_types_1.PowerType.ABILITY,
                 text: 'Once during your turn, if this Pokémon is in the Active Spot, you may put a Basic Pokémon with 70HP or less from your discard pile onto your bench.'
             }];
