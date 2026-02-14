@@ -424,7 +424,15 @@ function gameReducer(store, state, effect) {
         // effect.target.clearEffects();
         // Apply the removePokemonEffects method from the Player class
         // effect.player.removePokemonEffects(effect.target);
-        effect.target.specialConditions = [];
+        if (effect.keepPoison && effect.target.specialConditions.includes(card_types_1.SpecialCondition.POISONED)) {
+            const poisonDamage = effect.target.poisonDamage;
+            effect.target.specialConditions = [];
+            effect.target.addSpecialCondition(card_types_1.SpecialCondition.POISONED);
+            effect.target.poisonDamage = poisonDamage;
+        }
+        else {
+            effect.target.specialConditions = [];
+        }
         effect.target.marker.markers = [];
     }
     if (effect instanceof game_effects_2.MoveCardsEffect) {

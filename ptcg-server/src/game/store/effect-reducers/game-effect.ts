@@ -528,7 +528,16 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
     // effect.target.clearEffects();
     // Apply the removePokemonEffects method from the Player class
     // effect.player.removePokemonEffects(effect.target);
-    effect.target.specialConditions = [];
+
+    if (effect.keepPoison && effect.target.specialConditions.includes(SpecialCondition.POISONED)) {
+      const poisonDamage = effect.target.poisonDamage;
+      effect.target.specialConditions = [];
+      effect.target.addSpecialCondition(SpecialCondition.POISONED);
+      effect.target.poisonDamage = poisonDamage;
+    } else {
+      effect.target.specialConditions = [];
+    }
+
     effect.target.marker.markers = [];
   }
 
