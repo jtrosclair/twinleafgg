@@ -23,8 +23,7 @@ function* playCard(next, store, state, effect) {
             next();
         });
     }
-    // Move the played card from hand to supporter
-    player.hand.moveCardTo(effect.trainerCard, player.supporter);
+    // Card is already in supporter via PlayItemEffect
     effect.preventDefault = true;
     if (playAllFour) {
         // Move the other 3 Missing Clover cards from hand to supporter
@@ -40,15 +39,16 @@ function* playCard(next, store, state, effect) {
             }
             throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
         }
-        // Take a prize card
-        yield (0, prefabs_1.TAKE_X_PRIZES)(store, state, player, 1, {}, () => {
-            // Discard all 4 Missing Clover cards
-            const allCloverCards = player.supporter.cards.filter(c => c.name === 'Missing Clover');
-            for (const card of allCloverCards) {
-                player.supporter.moveCardTo(card, player.discard);
-            }
-            next();
-        });
+        // Automatically take the first available prize card
+        const firstPrize = player.prizes.find(p => p.cards.length > 0);
+        if (firstPrize) {
+            (0, prefabs_1.TAKE_SPECIFIC_PRIZES)(store, state, player, [firstPrize]);
+        }
+        // Discard all 4 Missing Clover cards
+        const allCloverCards = player.supporter.cards.filter(c => c.name === 'Missing Clover');
+        for (const card of allCloverCards) {
+            player.supporter.moveCardTo(card, player.discard);
+        }
     }
     else {
         // Play 1 card: look at the top card of your deck

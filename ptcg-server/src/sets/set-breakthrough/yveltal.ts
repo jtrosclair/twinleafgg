@@ -5,6 +5,9 @@ import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect, PowerEffect } from '../../game/store/effects/game-effects';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { PowerType } from '../../game/store/card/pokemon-types';
+import { ToolEffect } from '../../game/store/effects/play-card-effects';
+import { GameError } from '../../game/game-error';
+import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class Yveltal extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -34,9 +37,15 @@ export class Yveltal extends PokemonCard {
   public fullName: string = 'Yveltal BKT';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Fright Night ability - Tool cards have no effect
-    // Note: The actual blocking logic would be implemented in the tool card effects
-    // This ability just needs to be checked by tool cards when they try to activate
+
+    // Fright Night
+    if (effect instanceof ToolEffect) {
+      for (const player of state.players) {
+        if (player.active.getPokemonCard() === this && !IS_ABILITY_BLOCKED(store, state, player, this)) {
+          throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+        }
+      }
+    }
 
     // Pitch-Black Spear
     if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {

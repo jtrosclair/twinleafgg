@@ -7,6 +7,9 @@ const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
+const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const game_error_1 = require("../../game/game-error");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Yveltal extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -34,9 +37,14 @@ class Yveltal extends pokemon_card_1.PokemonCard {
         this.fullName = 'Yveltal BKT';
     }
     reduceEffect(store, state, effect) {
-        // Fright Night ability - Tool cards have no effect
-        // Note: The actual blocking logic would be implemented in the tool card effects
-        // This ability just needs to be checked by tool cards when they try to activate
+        // Fright Night
+        if (effect instanceof play_card_effects_1.ToolEffect) {
+            for (const player of state.players) {
+                if (player.active.getPokemonCard() === this && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
+                    throw new game_error_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
+                }
+            }
+        }
         // Pitch-Black Spear
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
             const player = effect.player;
