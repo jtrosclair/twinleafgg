@@ -11,7 +11,7 @@ export class GarbodorV extends PokemonCard {
   public stage: Stage = Stage.BASIC;
   public cardType: CardType = D;
   public hp: number = 210;
-  public weakness = [{ type: F, value: 2 }];
+  public weakness = [{ type: F }];
   public retreat = [C, C, C];
 
   public attacks = [{

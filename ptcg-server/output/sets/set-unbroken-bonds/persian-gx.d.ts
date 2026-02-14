@@ -10,7 +10,6 @@ export declare class PersianGX extends PokemonCard {
     hp: number;
     weakness: {
         type: CardType;
-        value: number;
     }[];
     retreat: CardType[];
     powers: {

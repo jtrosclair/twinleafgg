@@ -4,12 +4,13 @@ import {
   SpecialCondition,
   Stage,
   State,
+  StateUtils,
   StoreLike
 } from '../../game';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
-import { ADD_POISON_TO_PLAYER_ACTIVE, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { ADD_POISON_TO_PLAYER_ACTIVE, IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Muk extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -40,6 +41,21 @@ export class Muk extends PokemonCard {
   public fullName: string = 'Muk TEU';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    // Poison Sacs - prevent poison removal on evolution
+    if (effect instanceof EvolveEffect) {
+      const player = effect.player;
+      const cardList = StateUtils.findCardList(state, this);
+      const mukOwner = StateUtils.findOwner(state, cardList);
+      const opponent = StateUtils.getOpponent(state, mukOwner);
+
+      // Only applies to opponent's Pokémon evolving
+      if (player === opponent && !IS_ABILITY_BLOCKED(store, state, mukOwner, this)) {
+        if (effect.target.specialConditions.includes(SpecialCondition.POISONED)) {
+          effect.keepPoison = true;
+        }
+      }
+    }
+
     // Toxic Secretion - apply double poison (20 damage instead of 10)
     if (WAS_ATTACK_USED(effect, 0, this)) {
       ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this, 20);

@@ -11,7 +11,6 @@ export declare class GarbodorVMAX extends PokemonCard {
     hp: number;
     weakness: {
         type: CardType;
-        value: number;
     }[];
     retreat: CardType[];
     powers: {

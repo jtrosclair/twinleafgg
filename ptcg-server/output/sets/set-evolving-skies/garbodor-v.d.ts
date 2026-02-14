@@ -9,7 +9,6 @@ export declare class GarbodorV extends PokemonCard {
     hp: number;
     weakness: {
         type: CardType.FIGHTING;
-        value: number;
     }[];
     retreat: CardType.COLORLESS[];
     attacks: {

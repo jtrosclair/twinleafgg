@@ -15,7 +15,7 @@ class GarbodorVMAX extends pokemon_card_1.PokemonCard {
         this.evolvesFrom = 'Garbodor V';
         this.cardType = card_types_1.CardType.DARK;
         this.hp = 330;
-        this.weakness = [{ type: card_types_1.CardType.FIGHTING, value: 2 }];
+        this.weakness = [{ type: card_types_1.CardType.FIGHTING }];
         this.retreat = [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS];
         this.powers = [{
                 name: 'Rubbish Collecting',

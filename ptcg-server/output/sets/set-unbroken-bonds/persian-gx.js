@@ -15,7 +15,7 @@ class PersianGX extends pokemon_card_1.PokemonCard {
         this.tags = [card_types_1.CardTag.POKEMON_GX];
         this.cardType = card_types_1.CardType.COLORLESS;
         this.hp = 200;
-        this.weakness = [{ type: card_types_1.CardType.FIGHTING, value: 2 }];
+        this.weakness = [{ type: card_types_1.CardType.FIGHTING }];
         this.retreat = [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS];
         this.powers = [{
                 name: 'Cat Walk',

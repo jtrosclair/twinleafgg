@@ -71,7 +71,15 @@ function playPokemonReducer(store, state, effect) {
             store.reduceEffect(state, evolveEffect);
             effect.pokemonCard.marker.markers = [];
             effect.player.removePokemonEffects(effect.target);
-            effect.target.specialConditions = [];
+            if (evolveEffect.keepPoison && effect.target.specialConditions.includes(card_types_1.SpecialCondition.POISONED)) {
+                const poisonDamage = effect.target.poisonDamage;
+                effect.target.specialConditions = [];
+                effect.target.addSpecialCondition(card_types_1.SpecialCondition.POISONED);
+                effect.target.poisonDamage = poisonDamage;
+            }
+            else {
+                effect.target.specialConditions = [];
+            }
             effect.target.marker.markers = [];
             effect.target.showBasicAnimation = false;
             effect.target.triggerEvolutionAnimation = true;

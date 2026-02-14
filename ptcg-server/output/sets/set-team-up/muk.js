@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Muk = void 0;
 const game_1 = require("../../game");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
+const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Muk extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -32,6 +33,19 @@ class Muk extends pokemon_card_1.PokemonCard {
         this.fullName = 'Muk TEU';
     }
     reduceEffect(store, state, effect) {
+        // Poison Sacs - prevent poison removal on evolution
+        if (effect instanceof game_effects_1.EvolveEffect) {
+            const player = effect.player;
+            const cardList = game_1.StateUtils.findCardList(state, this);
+            const mukOwner = game_1.StateUtils.findOwner(state, cardList);
+            const opponent = game_1.StateUtils.getOpponent(state, mukOwner);
+            // Only applies to opponent's Pokémon evolving
+            if (player === opponent && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, mukOwner, this)) {
+                if (effect.target.specialConditions.includes(game_1.SpecialCondition.POISONED)) {
+                    effect.keepPoison = true;
+                }
+            }
+        }
         // Toxic Secretion - apply double poison (20 damage instead of 10)
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this, 20);

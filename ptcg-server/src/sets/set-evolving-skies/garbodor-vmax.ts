@@ -13,7 +13,7 @@ export class GarbodorVMAX extends PokemonCard {
   public evolvesFrom = 'Garbodor V';
   public cardType: CardType = CardType.DARK;
   public hp: number = 330;
-  public weakness = [{ type: CardType.FIGHTING, value: 2 }];
+  public weakness = [{ type: CardType.FIGHTING }];
   public retreat = [CardType.COLORLESS, CardType.COLORLESS, CardType.COLORLESS];
 
   public powers = [{

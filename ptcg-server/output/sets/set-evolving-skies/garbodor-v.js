@@ -13,7 +13,7 @@ class GarbodorV extends pokemon_card_1.PokemonCard {
         this.stage = card_types_1.Stage.BASIC;
         this.cardType = D;
         this.hp = 210;
-        this.weakness = [{ type: F, value: 2 }];
+        this.weakness = [{ type: F }];
         this.retreat = [C, C, C];
         this.attacks = [{
                 name: 'Trash Stench',

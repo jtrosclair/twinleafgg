@@ -12,7 +12,7 @@ export class PersianGX extends PokemonCard {
   public tags = [CardTag.POKEMON_GX];
   public cardType: CardType = CardType.COLORLESS;
   public hp: number = 200;
-  public weakness = [{ type: CardType.FIGHTING, value: 2 }];
+  public weakness = [{ type: CardType.FIGHTING }];
   public retreat = [CardType.COLORLESS, CardType.COLORLESS];
 
   public powers = [{
