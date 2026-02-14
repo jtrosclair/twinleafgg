@@ -43,7 +43,7 @@ export class PeekingRedCard extends TrainerCard {
       // Ask if the player wants to shuffle opponent's hand
       state = store.prompt(state, new ConfirmPrompt(
         player.id,
-        GameMessage.WANT_TO_USE_ABILITY,
+        GameMessage.WANT_TO_SHUFFLE_OPPONENTS_CARDS,
       ), wantToUse => {
         if (wantToUse && cardCount > 0) {
           opponent.hand.moveCardsTo(opponentHand, opponent.deck);

@@ -26,7 +26,7 @@ class PeekingRedCard extends trainer_card_1.TrainerCard {
             // Reveal opponent's hand to the player
             store.prompt(state, new game_1.ShowCardsPrompt(player.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, opponentHand), () => { });
             // Ask if the player wants to shuffle opponent's hand
-            state = store.prompt(state, new game_1.ConfirmPrompt(player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
+            state = store.prompt(state, new game_1.ConfirmPrompt(player.id, game_1.GameMessage.WANT_TO_SHUFFLE_OPPONENTS_CARDS), wantToUse => {
                 if (wantToUse && cardCount > 0) {
                     opponent.hand.moveCardsTo(opponentHand, opponent.deck);
                     state = store.prompt(state, new game_1.ShuffleDeckPrompt(opponent.id), order => {

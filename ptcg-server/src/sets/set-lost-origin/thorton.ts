@@ -56,7 +56,7 @@ export class Thorton extends TrainerCard {
 
       return store.prompt(state, new ChoosePokemonPrompt(
         player.id,
-        GameMessage.CHOOSE_POKEMON_TO_SWITCH,
+        GameMessage.CHOOSE_POKEMON_TO_SWAP,
         PlayerType.BOTTOM_PLAYER,
         [SlotType.ACTIVE, SlotType.BENCH],
         { min: 1, max: 1, allowCancel: false, blocked }
