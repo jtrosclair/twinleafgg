@@ -53,8 +53,17 @@ export class Sylveon extends PokemonCard {
         }
         const trainerCard = cards[0] as TrainerCard;
         opponent.hand.moveCardsTo(cards, opponent.discard);
+
+        // Save and reset supporterTurn so the effect resolves
+        // even if a supporter was already played this turn
+        const savedSupporterTurn = player.supporterTurn;
+        player.supporterTurn = 0;
+
         const playTrainerEffect = new TrainerEffect(player, trainerCard);
         store.reduceEffect(state, playTrainerEffect);
+
+        // Restore supporterTurn
+        player.supporterTurn = savedSupporterTurn;
       });
     }
 
