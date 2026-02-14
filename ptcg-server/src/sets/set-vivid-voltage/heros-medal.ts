@@ -1,7 +1,7 @@
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { CardTag, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
-import { State } from '../../game/store/state/state';
+import { GamePhase, State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckHpEffect } from '../../game/store/effects/check-effects';
 import { KnockOutEffect } from '../../game/store/effects/game-effects';
@@ -44,6 +44,9 @@ export class HerosMedal extends TrainerCard {
       const pokemonCard = effect.target.getPokemonCard();
 
       if (IS_TOOL_BLOCKED(store, state, effect.player, this)) { return state; }
+
+      // Only reduce prize count if knocked out by damage from an attack
+      if (state.phase !== GamePhase.ATTACK) { return state; }
 
       // Only reduce prize count if it's a VMAX Pokemon
       if (pokemonCard && pokemonCard.tags.includes(CardTag.POKEMON_VMAX)) {

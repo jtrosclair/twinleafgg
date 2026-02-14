@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.HerosMedal = void 0;
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const card_types_1 = require("../../game/store/card/card-types");
+const state_1 = require("../../game/store/state/state");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -32,6 +33,10 @@ class HerosMedal extends trainer_card_1.TrainerCard {
         if (effect instanceof game_effects_1.KnockOutEffect && effect.target.tools.includes(this)) {
             const pokemonCard = effect.target.getPokemonCard();
             if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
+                return state;
+            }
+            // Only reduce prize count if knocked out by damage from an attack
+            if (state.phase !== state_1.GamePhase.ATTACK) {
                 return state;
             }
             // Only reduce prize count if it's a VMAX Pokemon
