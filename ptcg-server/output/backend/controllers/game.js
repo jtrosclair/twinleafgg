@@ -15,6 +15,7 @@ const controller_1 = require("./controller");
 const errors_1 = require("../common/errors");
 const base64_1 = require("../../utils/base64");
 const state_serializer_1 = require("../../game/serializer/state-serializer");
+const card_types_1 = require("../../game/store/card/card-types");
 class Game extends controller_1.Controller {
     async onLogs(req, res) {
         const gameId = parseInt(req.params.id, 10);
@@ -103,6 +104,156 @@ class Game extends controller_1.Controller {
                 errors: [error.message || 'Unexpected error during validation']
             });
         }
+    }
+    async onExtractDecklists(req, res) {
+        try {
+            const { stateData } = req.body;
+            if (!stateData || typeof stateData !== 'string') {
+                res.status(400).send({
+                    ok: false,
+                    error: 'stateData is required and must be a string'
+                });
+                return;
+            }
+            if (!state_serializer_1.StateSerializer.knownCards || state_serializer_1.StateSerializer.knownCards.length === 0) {
+                res.status(500).send({
+                    ok: false,
+                    error: 'Card database not initialized'
+                });
+                return;
+            }
+            const base64 = new base64_1.Base64();
+            let serializedState;
+            try {
+                serializedState = base64.decode(stateData);
+            }
+            catch (e) {
+                res.status(400).send({
+                    ok: false,
+                    error: 'Failed to decode base64 string: ' + (e.message || 'Invalid base64')
+                });
+                return;
+            }
+            try {
+                const parsed = JSON.parse(serializedState);
+                if (parsed[1] && Array.isArray(parsed[1].cardNames)) {
+                    parsed[1].cardNames = parsed[1].cardNames.map((name) => {
+                        name = name.replace('é', 'e');
+                        const normalizedName = state_serializer_1.StateSerializer.normalizeCardName(name);
+                        return normalizedName || name;
+                    });
+                    serializedState = JSON.stringify(parsed);
+                }
+            }
+            catch (e) {
+                res.status(400).send({
+                    ok: false,
+                    error: 'Failed to parse state JSON: ' + (e.message || 'Invalid JSON')
+                });
+                return;
+            }
+            const serializer = new state_serializer_1.StateSerializer();
+            const state = serializer.deserialize(serializedState);
+            const decklists = state.players.map((player, index) => ({
+                playerIndex: index,
+                playerName: player.name,
+                decklist: this.formatDecklist(this.collectAllCards(player))
+            }));
+            res.send({ ok: true, decklists });
+        }
+        catch (error) {
+            res.status(400).send({
+                ok: false,
+                error: error.message || 'Failed to extract decklists'
+            });
+        }
+    }
+    collectAllCards(player) {
+        const cards = [];
+        const seen = new Set();
+        const addCards = (cardArray) => {
+            for (const card of cardArray) {
+                if (!seen.has(card)) {
+                    seen.add(card);
+                    cards.push(card);
+                }
+            }
+        };
+        // Standard zones
+        addCards(player.deck.cards);
+        addCards(player.hand.cards);
+        addCards(player.discard.cards);
+        addCards(player.lostzone.cards);
+        addCards(player.stadium.cards);
+        addCards(player.supporter.cards);
+        // Active pokemon slot
+        addCards(player.active.cards);
+        addCards(player.active.tools);
+        addCards(player.active.energies.cards);
+        // Bench slots
+        for (const benchSlot of player.bench) {
+            addCards(benchSlot.cards);
+            addCards(benchSlot.tools);
+            addCards(benchSlot.energies.cards);
+        }
+        // Prize cards
+        for (const prizeStack of player.prizes) {
+            addCards(prizeStack.cards);
+        }
+        return cards;
+    }
+    formatDecklist(cards) {
+        const counts = new Map();
+        for (const card of cards) {
+            const key = `${card.fullName}`;
+            const existing = counts.get(key);
+            if (existing) {
+                existing.count++;
+            }
+            else {
+                counts.set(key, {
+                    count: 1,
+                    name: card.name,
+                    set: card.set,
+                    setNumber: card.setNumber,
+                    superType: card.superType
+                });
+            }
+        }
+        const pokemon = [];
+        const trainer = [];
+        const energy = [];
+        let pokemonCount = 0;
+        let trainerCount = 0;
+        let energyCount = 0;
+        Array.from(counts.values()).forEach(entry => {
+            const line = `${entry.count} ${entry.name} ${entry.set} ${entry.setNumber}`;
+            switch (entry.superType) {
+                case card_types_1.SuperType.POKEMON:
+                    pokemon.push(line);
+                    pokemonCount += entry.count;
+                    break;
+                case card_types_1.SuperType.TRAINER:
+                    trainer.push(line);
+                    trainerCount += entry.count;
+                    break;
+                case card_types_1.SuperType.ENERGY:
+                    energy.push(line);
+                    energyCount += entry.count;
+                    break;
+            }
+        });
+        const sections = [];
+        if (pokemon.length > 0) {
+            sections.push(`Pokémon: ${pokemonCount}\n${pokemon.join('\n')}`);
+        }
+        if (trainer.length > 0) {
+            sections.push(`Trainer: ${trainerCount}\n${trainer.join('\n')}`);
+        }
+        if (energy.length > 0) {
+            sections.push(`Energy: ${energyCount}\n${energy.join('\n')}`);
+        }
+        return sections.join('\n\n');
     }
     async onValidateState(req, res) {
         try {
@@ -214,6 +365,12 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Game.prototype, "onValidateCards", null);
+__decorate([
+    (0, controller_1.Post)('/extract-decklists'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], Game.prototype, "onExtractDecklists", null);
 __decorate([
     (0, controller_1.Post)('/validate-state'),
     __metadata("design:type", Function),

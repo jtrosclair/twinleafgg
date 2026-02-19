@@ -12,7 +12,6 @@
   cursor: pointer;
   max-width: 0;
   // min-width: map-get($ptcg-size, card);
-  padding-right: map-get($padding, normal);
   visibility: hidden;
 
   >ptcg-card:first-child {
@@ -42,13 +41,15 @@
 }
 
 .title {
-  align-items: baseline;
+  align-items: center;
   border-top-left-radius: map-get($padding, small);
   border-top-right-radius: map-get($padding, small);
   display: flex;
-  padding: map-get($padding, small);
+  flex-wrap: wrap;
+  padding: 6px map-get($padding, small);
   background-color: #1a202c7a;
   position: relative;
+  gap: 2px 0;
 
   .favorite-button {
     position: absolute;
@@ -73,13 +74,12 @@
 .subtitle {
   display: flex;
   align-items: center;
-  padding: map-get($padding, small);
+  padding: 4px map-get($padding, small);
   background-color: #2127347a;
 }
 
 .subtitle-set-code {
   font-size: 10px;
-  margin: map-get($padding, small) 0;
   padding: map-get($padding, small);
 }
 
@@ -99,7 +99,12 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: -12px; // Adjust this value to control spacing between icons
+  margin-left: 4px;
+
+  ptcg-energy {
+    transform: scale(0.8);
+    transform-origin: center;
+  }
 }
 
 .subtitle-tags {
@@ -121,12 +126,21 @@
 
 .attack,
 .power {
-  margin: map-get($padding, small) 0;
-  padding: map-get($padding, small);
+  margin: 4px 0;
+  padding: 6px map-get($padding, small);
 }
 
 .attack-cost {
   display: flex;
+
+  ptcg-energy {
+    transform: scale(0.85);
+    transform-origin: center;
+  }
+
+  ptcg-energy+ptcg-energy {
+    margin-left: -4px;
+  }
 }
 
 .attack-name {
@@ -145,7 +159,6 @@
 .stats {
   border-radius: map-get($padding, small);
   display: flex;
-  padding: map-get($padding, small);
   background-color: #2127347a;
 }
 
@@ -171,6 +184,15 @@
 .stats-item-value-type {
   display: flex;
   flex-direction: row;
+
+  ptcg-energy {
+    transform: scale(0.75);
+    transform-origin: center;
+  }
+
+  ptcg-energy+ptcg-energy {
+    margin-left: -6px;
+  }
 }
 
 ptcg-energy {
@@ -235,6 +257,34 @@ ptcg-energy {
 
   &[type="energyless"] {
     background-position: -50px -50px;
+  }
+}
+
+.view-card-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 5px 12px;
+  margin-bottom: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: map-get($padding, small);
+  background-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
   }
 }
 

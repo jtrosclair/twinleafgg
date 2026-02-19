@@ -219,16 +219,33 @@ export class CardsBaseService implements OnDestroy {
   public getScanUrl(card: Card): string {
     const fullCardIdentifier = `${card.set} ${card.setNumber}`;
     const customUrl = this.customImages[fullCardIdentifier];
+
+    let url: string;
     if (customUrl) {
-      return customUrl;
+      url = customUrl;
+    } else {
+      const config = this.sessionService.session.config;
+      const scansUrl = config && config.scansUrl || '';
+      url = scansUrl
+        .replace('{cardImage}', card.cardImage)
+        .replace('{setNumber}', card.setNumber)
+        .replace('{name}', card.fullName);
     }
 
-    const config = this.sessionService.session.config;
-    const scansUrl = config && config.scansUrl || '';
-    return scansUrl
-      .replace('{cardImage}', card.cardImage)
-      .replace('{setNumber}', card.setNumber)
-      .replace('{name}', card.fullName);
+    const cardLanguage = localStorage.getItem('cardLanguage') || 'EN';
+    const validLanguages = ['EN', 'ES', 'IT', 'FR'];
+    if (validLanguages.includes(cardLanguage) && cardLanguage !== 'EN' && url.includes('_EN_')) {
+      url = url.replace('_EN_', `_${cardLanguage}_`);
+    }
+
+    const preferredCardSize = localStorage.getItem('preferredCardSize') || 'SM';
+    const validSizes = ['XS', 'SM', 'MD', 'LG'];
+    const size = validSizes.includes(preferredCardSize) ? preferredCardSize : 'SM';
+    if (size !== 'XS' && url.includes('_XS.png')) {
+      url = url.replace('_XS.png', `_${size}.png`);
+    }
+
+    return url;
   }
 
   public setGlobalArtworksMap(map: { [code: string]: string } | undefined): void {

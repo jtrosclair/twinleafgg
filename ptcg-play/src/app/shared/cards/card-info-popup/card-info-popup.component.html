@@ -1,8 +1,3 @@
-<h2 mat-dialog-title>
-  <span *ngIf="facedown" translate>CARDS_UNKNOWN</span>
-
-</h2>
-
 <mat-dialog-content>
   <ptcg-card-info-pane [card]="card" [cardList]="cardList" [facedown]="facedown" [options]="options"
     (action)="close($event)" (cardSwap)="onCardSwap($event)">

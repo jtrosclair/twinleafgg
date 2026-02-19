@@ -6,7 +6,7 @@ export declare class Nihilego extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    tag: CardTag[];
+    tags: CardTag[];
     weakness: {
         type: CardType;
     }[];
