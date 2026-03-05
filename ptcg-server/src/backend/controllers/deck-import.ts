@@ -1016,15 +1016,30 @@ export class DeckImport extends Controller {
     const cardManager = CardManager.getInstance();
     const allCards = cardManager.getAllCards();
 
+    // Normalize quotes, hyphens, and other common character variants
+    const normalizeName = (name: string): string => {
+      return name.toLowerCase()
+        .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035`]/g, "'") // smart quotes -> straight apostrophe
+        .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '\u0022') // smart double quotes -> straight
+        .replace(/-/g, ' '); // hyphens -> spaces
+    };
+
     // Build lookup maps
     const cardsByFullName = new Map<string, Card>();
     const cardsByNameSetNumber = new Map<string, Card>();
+    const cardsByNameSet = new Map<string, Card>();
 
     for (const card of allCards) {
       cardsByFullName.set(card.fullName.toLowerCase(), card);
-      // Create a key by name + set + setNumber
-      const key = `${card.name.toLowerCase()}|${card.set.toLowerCase()}|${card.setNumber}`;
+      cardsByFullName.set(normalizeName(card.fullName), card);
+      // Create keys by name + set + setNumber
+      const normalizedName = normalizeName(card.name);
+      const setLower = card.set.toLowerCase();
+      const key = `${normalizedName}|${setLower}|${card.setNumber}`;
       cardsByNameSetNumber.set(key, card);
+      // Create key by name + set only (fallback ignoring number)
+      const nameSetKey = `${normalizedName}|${setLower}`;
+      cardsByNameSet.set(nameSetKey, card);
     }
 
     const lines = deckList.split('\n');
@@ -1078,19 +1093,24 @@ export class DeckImport extends Controller {
       const fullName = `${parsed.name} ${setCode}`;
       let card = cardsByFullName.get(fullName.toLowerCase());
 
+      // Second try: normalized fullName match
       if (!card) {
-        card = cardsByFullName.get(
-          fullName.toLowerCase().replace(/-/g, ' ')
-        );
+        card = cardsByFullName.get(normalizeName(fullName));
       }
 
-      // Second try: name + set + number match
+      // Third try: name + set + number match
       if (!card) {
-        const key = `${parsed.name.toLowerCase()}|${setCode.toLowerCase()}|${parsed.setNumber}`;
+        const key = `${normalizeName(parsed.name)}|${setCode.toLowerCase()}|${parsed.setNumber}`;
         card = cardsByNameSetNumber.get(key);
       }
 
-      // Third try: just by fullName without number matching
+      // Fourth try: name + set match (ignoring number)
+      if (!card) {
+        const nameSetKey = `${normalizeName(parsed.name)}|${setCode.toLowerCase()}`;
+        card = cardsByNameSet.get(nameSetKey);
+      }
+
+      // Fifth try: just by fullName without number matching
       if (!card) {
         card = cardManager.getCardByName(fullName);
       }

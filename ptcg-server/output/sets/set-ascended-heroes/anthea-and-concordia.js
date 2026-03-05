@@ -12,7 +12,7 @@ class AntheaAndConcordia extends game_1.TrainerCard {
         this.regulationMark = 'I';
         this.set = 'ASC';
         this.cardImage = 'assets/cardback.png';
-        this.setNumber = '187';
+        this.setNumber = '182';
         this.name = 'Anthea & Concordia';
         this.fullName = 'Anthea & Concordia M2a';
         this.extraPrizes = false;

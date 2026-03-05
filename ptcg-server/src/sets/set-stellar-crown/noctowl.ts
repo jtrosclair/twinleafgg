@@ -47,24 +47,13 @@ export class Noctowl extends PokemonCard {
 
   public fullName: string = 'Noctowl SCR';
 
-  public readonly JEWEL_HUNT_MARKER = 'JEWEL_HUNT_MARKER';
-
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
-    if (effect instanceof EndTurnEffect) {
-      effect.player.marker.removeMarker(this.JEWEL_HUNT_MARKER, this);
-    }
-
     if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
       if (player.deck.cards.length === 0) {
         return state;
-      }
-
-      if (player.marker.hasMarker(this.JEWEL_HUNT_MARKER, this)) {
-        throw new GameError(GameMessage.POWER_ALREADY_USED);
       }
 
       let teraPokemonCount = 0;
@@ -118,7 +107,6 @@ export class Noctowl extends PokemonCard {
                 cards
               )], () => {
                 player.deck.moveCardsTo(cards, player.hand);
-                player.marker.addMarker(this.JEWEL_HUNT_MARKER, this);
               });
               return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
                 player.deck.applyOrder(order);
