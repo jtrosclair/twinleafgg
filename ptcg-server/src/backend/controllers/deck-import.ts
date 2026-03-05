@@ -1020,7 +1020,6 @@ export class DeckImport extends Controller {
     const normalizeName = (name: string): string => {
       return name.toLowerCase()
         .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035`]/g, "'") // smart quotes -> straight apostrophe
-        .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '\u0022') // smart double quotes -> straight
         .replace(/-/g, ' '); // hyphens -> spaces
     };
 
@@ -1061,9 +1060,12 @@ export class DeckImport extends Controller {
         continue;
       }
 
+      // Normalize smart quotes/apostrophes in the input line before parsing
+      let processedLine = trimmedLine
+        .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035`]/g, "'");
+
       // Apply card replacements to the full line before parsing
       // This handles replacements like "Pokégear 3.0 SVI 186" -> "Pokegear SVI 186"
-      let processedLine = trimmedLine;
       for (const replacement of cardReplacements) {
         processedLine = processedLine.replace(new RegExp(replacement.from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), replacement.to);
       }
