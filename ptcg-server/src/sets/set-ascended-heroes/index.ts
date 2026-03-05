@@ -20,6 +20,8 @@ import { Mismagius } from './mismagius';
 import { NightMine } from './night-mine';
 import { Numel } from './numel';
 import { NsZekrom } from './ns-zekrom';
+import { NsVanillish } from './ns-vanillish';
+import { NsVanillite } from './ns-vanillite';
 import { NsVanilluxe } from './ns-vanilluxe';
 import { LightBall } from './light-ball';
 import { PokePad } from './poke-pad';
@@ -90,6 +92,8 @@ export const setAscendedHeroes: Card[] = [
   new NightMine(),
   new Numel(),
   new NsZekrom(),
+  new NsVanillish(),
+  new NsVanillite(),
   new NsVanilluxe(),
   new PokePad(),
   new Rayquaza(),
