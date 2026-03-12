@@ -29,6 +29,7 @@ const rare_fossil_1 = require("./rare-fossil");
 const rose_tower_1 = require("./rose-tower");
 const rowlet_1 = require("./rowlet");
 const sinistea_1 = require("./sinistea");
+const spikemuth_1 = require("./spikemuth");
 const starly_1 = require("./starly");
 const swanna_1 = require("./swanna");
 const tapu_koko_1 = require("./tapu-koko");
@@ -65,6 +66,7 @@ exports.setDarknessAblaze = [
     new rose_tower_1.RoseTower(),
     new rowlet_1.Rowlet(),
     new sinistea_1.Sinistea(),
+    new spikemuth_1.Spikemuth(),
     new starly_1.Starly(),
     new swanna_1.Swanna(),
     new tapu_koko_1.TapuKoko(),
