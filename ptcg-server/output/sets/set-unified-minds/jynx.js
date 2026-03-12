@@ -42,7 +42,7 @@ class Jynx extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
-            (0, prefabs_1.REMOVE_MARKER)(this.OMINOUS_POSTURE_MARKER, this);
+            (0, prefabs_1.REMOVE_MARKER)(this.OMINOUS_POSTURE_MARKER, effect.player, this);
         }
         (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.OMINOUS_POSTURE_MARKER, this);
         if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
