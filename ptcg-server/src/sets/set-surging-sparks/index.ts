@@ -72,6 +72,7 @@ import { Miloticex } from './milotic-ex';
 import { MiraculousIntercom } from './miraculous-intercom';
 import { Ninetales } from './ninetales';
 import { Palkia } from './palkia';
+import { Passimian } from './passimian';
 import { Palossandex } from './palossand-ex';
 import { Pansear } from './pansear';
 import { BrilliantBlender } from './brilliant-blender';
@@ -237,6 +238,7 @@ export const setSurgingSparks: Card[] = [
   new Armarouge(),
   new Rotom(),
   new Victini(),
+  new Passimian(),
 
   // Reprints
   new ScrambleSwitchSSP(),

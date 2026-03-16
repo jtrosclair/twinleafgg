@@ -74,6 +74,7 @@ const milotic_ex_1 = require("./milotic-ex");
 const miraculous_intercom_1 = require("./miraculous-intercom");
 const ninetales_1 = require("./ninetales");
 const palkia_1 = require("./palkia");
+const passimian_1 = require("./passimian");
 const palossand_ex_1 = require("./palossand-ex");
 const pansear_1 = require("./pansear");
 const brilliant_blender_1 = require("./brilliant-blender");
@@ -238,6 +239,7 @@ exports.setSurgingSparks = [
     new armarouge_1.Armarouge(),
     new rotom_1.Rotom(),
     new victini_1.Victini(),
+    new passimian_1.Passimian(),
     // Reprints
     new other_prints_1.ScrambleSwitchSSP(),
     new other_prints_1.CounterGainSSP(),
