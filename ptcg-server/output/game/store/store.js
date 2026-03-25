@@ -8,7 +8,6 @@ const card_1 = require("./card/card");
 const change_avatar_action_1 = require("./actions/change-avatar-action");
 const game_error_1 = require("../game-error");
 const game_message_1 = require("../game-message");
-const show_cards_prompt_1 = require("./prompts/show-cards-prompt");
 const reorder_actions_1 = require("./actions/reorder-actions");
 const resolve_prompt_action_1 = require("./actions/resolve-prompt-action");
 const state_1 = require("./state/state");
@@ -89,7 +88,7 @@ class Store {
             this.handler.onStateChange(state);
             return state;
         }
-        if (state.prompts.some(p => p.result === undefined && p.blocksDispatch !== false)) {
+        if (state.prompts.some(p => p.result === undefined)) {
             throw new game_error_1.GameError(game_message_1.GameMessage.ACTION_IN_PROGRESS);
         }
         state = this.reduce(state, action);
@@ -139,15 +138,7 @@ class Store {
             ids: prompts.map(prompt => prompt.id),
             then: then
         };
-        const allShowCards = prompts.every(p => p instanceof show_cards_prompt_1.ShowCardsPrompt);
-        if (allShowCards) {
-            prompts.forEach(p => p.result = true);
-            const syntheticResults = prompts.map(() => true);
-            then(syntheticResults.length === 1 ? syntheticResults[0] : syntheticResults);
-        }
-        else {
-            this.promptItems.push(promptItem);
-        }
+        this.promptItems.push(promptItem);
         return state;
     }
     waitPrompt(state, callback) {
@@ -167,30 +158,28 @@ class Store {
         state.logs.push(log);
     }
     reducePrompt(state, action) {
+        // Resolve prompts actions
         const prompt = state.prompts.find(item => item.id === action.id);
-        if (prompt === undefined) {
+        const promptItem = this.promptItems.find(item => item.ids.indexOf(action.id) !== -1);
+        if (prompt === undefined || promptItem === undefined) {
             return state;
         }
         if (prompt.result !== undefined) {
-            // Idempotent: duplicate resolve (reordered updates, double-emit, remounted UI, etc.)
-            return state;
+            throw new game_error_1.GameError(game_message_1.GameMessage.PROMPT_ALREADY_RESOLVED);
         }
-        const promptItem = this.promptItems.find(item => item.ids.indexOf(action.id) !== -1);
         try {
             prompt.result = action.result;
+            const results = promptItem.ids.map(id => {
+                const p = state.prompts.find(item => item.id === id);
+                return p === undefined ? undefined : p.result;
+            });
             if (action.log !== undefined) {
                 this.log(state, action.log.message, action.log.params, action.log.client);
             }
-            if (promptItem !== undefined) {
-                const results = promptItem.ids.map(id => {
-                    const p = state.prompts.find(item => item.id === id);
-                    return p === undefined ? undefined : p.result;
-                });
-                if (results.every(result => result !== undefined)) {
-                    const itemIndex = this.promptItems.indexOf(promptItem);
-                    promptItem.then(results.length === 1 ? results[0] : results);
-                    this.promptItems.splice(itemIndex, 1);
-                }
+            if (results.every(result => result !== undefined)) {
+                const itemIndex = this.promptItems.indexOf(promptItem);
+                promptItem.then(results.length === 1 ? results[0] : results);
+                this.promptItems.splice(itemIndex, 1);
             }
             this.resolveWaitItems();
         }

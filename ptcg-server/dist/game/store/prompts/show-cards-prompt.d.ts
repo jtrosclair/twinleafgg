@@ -8,7 +8,6 @@ export declare class ShowCardsPrompt extends Prompt<true> {
     message: GameMessage;
     cards: Card[];
     readonly type: string;
-    blocksDispatch: boolean;
     options: ShowCardsOptions;
     constructor(playerId: number, message: GameMessage, cards: Card[], options?: Partial<ShowCardsOptions>);
 }
