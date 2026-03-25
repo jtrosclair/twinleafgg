@@ -34,7 +34,6 @@ const dusclops_1 = require("./dusclops");
 const dusknoir_1 = require("./dusknoir");
 const duskull_1 = require("./duskull");
 const eiscue_1 = require("./eiscue");
-const electabuzz_1 = require("./electabuzz");
 const electivire_1 = require("./electivire");
 const empoleon_1 = require("./empoleon");
 const entei_v_1 = require("./entei-v");
@@ -180,7 +179,7 @@ exports.setBrilliantStars = [
     new dusknoir_1.Dusknoir(),
     new duskull_1.Duskull(),
     new eiscue_1.Eiscue(),
-    new electabuzz_1.Electabuzz(),
+    // new Electabuzz(),
     new electivire_1.Electivire(),
     new empoleon_1.Empoleon(),
     new entei_v_1.EnteiV(),

@@ -128,7 +128,6 @@ const wobbuffet_1 = require("./wobbuffet");
 const woobat_1 = require("./woobat");
 const xerneas_1 = require("./xerneas");
 const yveltal_1 = require("./yveltal");
-const zoroark_1 = require("./zoroark");
 const zoroark_break_1 = require("./zoroark-break");
 const zorua_1 = require("./zorua");
 const zorua_2_1 = require("./zorua-2");
@@ -274,7 +273,6 @@ exports.setBreakthrough = [
     new woobat_1.Woobat(),
     new xerneas_1.Xerneas(),
     new yveltal_1.Yveltal(),
-    new zoroark_1.Zoroark(),
     new zoroark_break_1.ZoroarkBreak(),
     new zorua_1.Zorua(),
     new zorua_2_1.Zorua2(),

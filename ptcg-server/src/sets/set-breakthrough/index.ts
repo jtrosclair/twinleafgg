@@ -126,7 +126,6 @@ import { Wobbuffet } from './wobbuffet';
 import { Woobat } from './woobat';
 import { Xerneas } from './xerneas';
 import { Yveltal } from './yveltal';
-import { Zoroark } from './zoroark';
 import { ZoroarkBreak } from './zoroark-break';
 import { Zorua } from './zorua';
 import { Zorua2 } from './zorua-2';
@@ -297,7 +296,6 @@ export const setBreakthrough: Card[] = [
   new Woobat(),
   new Xerneas(),
   new Yveltal(),
-  new Zoroark(),
   new ZoroarkBreak(),
   new Zorua(),
   new Zorua2(),

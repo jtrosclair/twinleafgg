@@ -253,7 +253,7 @@ export const setBrilliantStars: Card[] = [
   new Dusknoir(),
   new Duskull(),
   new Eiscue(),
-  new Electabuzz(),
+  // new Electabuzz(),
   new Electivire(),
   new Empoleon(),
   new EnteiV(),
