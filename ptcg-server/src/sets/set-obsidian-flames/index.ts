@@ -10,6 +10,7 @@ import { Charmeleon } from './charmeleon';
 import { Cleffa } from './cleffa';
 import { Combee } from './combee';
 import { Dartrix } from './dartrix';
+import { Darumaka } from './darumaka';
 import { Decidueyeex } from './decidueye-ex';
 import { Dragonair } from './dragonair';
 import { Dragoniteex } from './dragonite-ex';
@@ -39,12 +40,14 @@ import { Pidgey } from './pidgey';
 import { PokemonLeagueHeadquarters } from './pokemon-league-headquarters';
 import { Poppy } from './poppy';
 import { Pupitar } from './pupitar';
+import { Rockruff } from './rockruff';
 import { Rowlet } from './rowlet';
 import { Ryme } from './ryme';
 import { Scizor } from './scizor';
 import { Seismitoad } from './seismitoad';
 import { Tadbulb } from './tadbulb';
 import { Thundurus } from './thundurus';
+import { Toedscool } from './toedscool';
 import { Toedscruelex } from './toedscruel-ex';
 import { Togekiss } from './togekiss';
 import { Togepi } from './togepi';
@@ -74,6 +77,7 @@ export const setObsidianFlames: Card[] = [
   new Cleffa(),
   new Combee(),
   new Dartrix(),
+  new Darumaka(),
   new Dragonair(),
   new Dragoniteex(),
   new Dratini(),
@@ -92,12 +96,14 @@ export const setObsidianFlames: Card[] = [
   new Pidgey(),
   new PokemonLeagueHeadquarters(),
   new Poppy(),
+  new Rockruff(),
   new Rowlet(),
   new Ryme(),
   new Scizor(),
   new Seismitoad(),
   new Tadbulb(),
   new Thundurus(),
+  new Toedscool(),
   new Toedscruelex(),
   new TownStore(),
   new Tympole(),

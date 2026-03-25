@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setPhantasmalFlames = void 0;
 const other_prints_1 = require("./other-prints");
+const ambipom_1 = require("./ambipom");
 const battle_colosseum_1 = require("./battle-colosseum");
 const blowtorch_1 = require("./blowtorch");
 const bronzong_1 = require("./bronzong");
@@ -26,6 +27,7 @@ const jumbo_ice_1 = require("./jumbo-ice");
 const lombre_1 = require("./lombre");
 const lotad_1 = require("./lotad");
 const ludicolo_1 = require("./ludicolo");
+const mamoswine_1 = require("./mamoswine");
 const mega_charizard_x_ex_1 = require("./mega-charizard-x-ex");
 const mega_diancie_ex_1 = require("./mega-diancie-ex");
 const mega_gengar_ex_1 = require("./mega-gengar-ex");
@@ -49,6 +51,7 @@ const wigglytuff_1 = require("./wigglytuff");
 const wonder_patch_1 = require("./wonder-patch");
 const zacian_1 = require("./zacian");
 exports.setPhantasmalFlames = [
+    new ambipom_1.Ambipom(),
     new battle_colosseum_1.BattleColosseum(),
     new blowtorch_1.Blowtorch(),
     new bronzong_1.Bronzong(),
@@ -73,6 +76,7 @@ exports.setPhantasmalFlames = [
     new lombre_1.Lombre(),
     new lotad_1.Lotad(),
     new ludicolo_1.Ludicolo(),
+    new mamoswine_1.Mamoswine(),
     new mega_charizard_x_ex_1.MegaCharizardXex(),
     new mega_diancie_ex_1.MegaDiancieex(),
     new mega_gengar_ex_1.MegaGengarex(),

@@ -32,6 +32,7 @@ import { Dusclops } from './dusclops';
 import { Dusknoir } from './dusknoir';
 import { Duskull } from './duskull';
 import { Eiscue } from './eiscue';
+import { Electabuzz } from './electabuzz';
 import { Electivire } from './electivire';
 import { Empoleon } from './empoleon';
 import { EnteiV } from './entei-v';
@@ -252,6 +253,7 @@ export const setBrilliantStars: Card[] = [
   new Dusknoir(),
   new Duskull(),
   new Eiscue(),
+  new Electabuzz(),
   new Electivire(),
   new Empoleon(),
   new EnteiV(),

@@ -28,6 +28,7 @@ import { Genesectex } from './genesect-ex';
 import { Gothita } from './gothita';
 import { Gothorita } from './gothorita';
 import { Gothitelle } from './gothitelle';
+import { Gurdurr } from './gurdurr';
 import { Harlequin } from './harlequin';
 import { Haxorus } from './haxorus';
 import { Hilda } from './hilda';
@@ -55,6 +56,7 @@ import { Solosis } from './solosis';
 import { Swadloon } from './swadloon';
 import { Tepig } from './tepig';
 import { Terrakion } from './terrakion';
+import { Timburr } from './timburr';
 import { Tirtouga } from './tirtouga';
 import { Tympole } from './tympole';
 import { Tynamo } from './tynamo';
@@ -105,8 +107,10 @@ export const setSV11: Card[] = [
   new Cobalion(),
   new Durant(),
   new Genesectex(),
+  new Gurdurr(),
   new Keldeoex(),
   new Terrakion(),
+  new Timburr(),
   new Tirtouga(),
   new Virizion(),
   new Alomomola(),

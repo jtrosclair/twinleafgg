@@ -110,7 +110,6 @@ class CoreSocket {
     createGameFromState(params, response) {
         var _a;
         try {
-            console.log('HELLO');
             // Decode the base64 state data
             const base64 = new utils_2.Base64();
             let serializedState = base64.decode(params.stateData);

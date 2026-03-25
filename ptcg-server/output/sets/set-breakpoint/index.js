@@ -96,6 +96,7 @@ const trevenant_1 = require("./trevenant");
 const trevenant_break_1 = require("./trevenant-break");
 const trubbish_1 = require("./trubbish");
 const tympole_1 = require("./tympole");
+const zoroark_1 = require("./zoroark");
 const zebstrika_1 = require("./zebstrika");
 const all_night_party_1 = require("./all-night-party");
 const bursting_balloon_1 = require("./bursting-balloon");
@@ -206,6 +207,7 @@ exports.setBreakpoint = [
     new trevenant_break_1.TrevenantBREAK(),
     new trubbish_1.Trubbish(),
     new tympole_1.Tympole(),
+    new zoroark_1.Zoroark(),
     new zebstrika_1.Zebstrika(),
     // Trainers
     new all_night_party_1.AllNightParty(),

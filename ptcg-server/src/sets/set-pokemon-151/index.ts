@@ -10,6 +10,7 @@ import { Chansey } from './chansey';
 import { Charizardex } from './charizard-ex';
 import { Charmander } from './charmander';
 import { Charmeleon } from './charmeleon';
+import { Clefable } from './clefable';
 import { Cloyster } from './cloytser';
 import { CyclingRoad } from './cycling-road';
 import { Dewgong } from './dewgong';
@@ -30,6 +31,7 @@ import { Golbat } from './golbat';
 import { Grabber } from './grabber';
 import { Hitmonchan } from './hitmonchan';
 import { Hitmonlee } from './hitmonlee';
+import { Hypno } from './hypno';
 import { Ivysaur } from './ivysaur';
 import { Jolteon } from './jolteon';
 import { Jynxex } from './jynx-ex';
@@ -84,6 +86,7 @@ export const setPokemon151: Card[] = [
   new Charizardex(),
   new Charmeleon(),
   new Charmander(),
+  new Clefable(),
   new Cloyster(),
   new CyclingRoad(),
   new Dewgong(),
@@ -103,6 +106,7 @@ export const setPokemon151: Card[] = [
   new Grabber(),
   new Hitmonchan(),
   new Hitmonlee(),
+  new Hypno(),
   new Ivysaur(),
   new Jolteon(),
   new Kangaskhanex(),

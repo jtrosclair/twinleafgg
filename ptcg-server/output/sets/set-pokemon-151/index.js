@@ -12,6 +12,7 @@ const chansey_1 = require("./chansey");
 const charizard_ex_1 = require("./charizard-ex");
 const charmander_1 = require("./charmander");
 const charmeleon_1 = require("./charmeleon");
+const clefable_1 = require("./clefable");
 const cloytser_1 = require("./cloytser");
 const cycling_road_1 = require("./cycling-road");
 const dewgong_1 = require("./dewgong");
@@ -32,6 +33,7 @@ const golbat_1 = require("./golbat");
 const grabber_1 = require("./grabber");
 const hitmonchan_1 = require("./hitmonchan");
 const hitmonlee_1 = require("./hitmonlee");
+const hypno_1 = require("./hypno");
 const ivysaur_1 = require("./ivysaur");
 const jolteon_1 = require("./jolteon");
 const jynx_ex_1 = require("./jynx-ex");
@@ -85,6 +87,7 @@ exports.setPokemon151 = [
     new charizard_ex_1.Charizardex(),
     new charmeleon_1.Charmeleon(),
     new charmander_1.Charmander(),
+    new clefable_1.Clefable(),
     new cloytser_1.Cloyster(),
     new cycling_road_1.CyclingRoad(),
     new dewgong_1.Dewgong(),
@@ -104,6 +107,7 @@ exports.setPokemon151 = [
     new grabber_1.Grabber(),
     new hitmonchan_1.Hitmonchan(),
     new hitmonlee_1.Hitmonlee(),
+    new hypno_1.Hypno(),
     new ivysaur_1.Ivysaur(),
     new jolteon_1.Jolteon(),
     new kangaskhan_ex_1.Kangaskhanex(),

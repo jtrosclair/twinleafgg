@@ -8,7 +8,7 @@ export declare class Gurdurr extends PokemonCard {
     weakness: {
         type: CardType.PSYCHIC;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;

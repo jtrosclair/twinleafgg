@@ -6,12 +6,15 @@ const abra_1 = require("./abra");
 const alakazam_1 = require("./alakazam");
 const bayleef_1 = require("./bayleef");
 const bulbasaur_1 = require("./bulbasaur");
+const buneary_1 = require("./buneary");
+const celebi_1 = require("./celebi");
 const chikorita_1 = require("./chikorita");
 const cinderace_1 = require("./cinderace");
 const clauncher_1 = require("./clauncher");
 const corphish_1 = require("./corphish");
 const crawdaunt_1 = require("./crawdaunt");
 const risky_ruins_1 = require("./risky-ruins");
+const delibird_1 = require("./delibird");
 const drizzile_1 = require("./drizzile");
 const electrike_1 = require("./electrike");
 const fighting_gong_1 = require("./fighting-gong");
@@ -73,12 +76,15 @@ exports.setMegaEvolution = [
     new alakazam_1.Alakazam(),
     new bayleef_1.Bayleef(),
     new bulbasaur_1.Bulbasaur(),
+    new buneary_1.Buneary(),
+    new celebi_1.Celebi(),
     new chikorita_1.Chikorita(),
     new cinderace_1.Cinderace(),
     new clauncher_1.Clauncher(),
     new corphish_1.Corphish(),
     new crawdaunt_1.Crawdaunt(),
     new risky_ruins_1.DangerousRuins(),
+    new delibird_1.Delibird(),
     new drizzile_1.Drizzile(),
     new electrike_1.Electrike(),
     new fighting_gong_1.FightingGong(),

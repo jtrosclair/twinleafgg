@@ -35,6 +35,7 @@ const iono_1 = require("./iono");
 const jet_energy_1 = require("./jet-energy");
 const lokix_1 = require("./lokix");
 const luminous_energy_1 = require("./luminous-energy");
+const luvdisc_1 = require("./luvdisc");
 const luxray_1 = require("./luxray");
 const magnemite_1 = require("./magnemite");
 const meowscarada_ex_1 = require("./meowscarada-ex");
@@ -126,6 +127,7 @@ exports.setPaldeaEvolved = [
     new jet_energy_1.JetEnergy(),
     new lokix_1.Lokix(),
     new luminous_energy_1.LuminousEnergy(),
+    new luvdisc_1.Luvdisc(),
     new luxray_1.Luxray(),
     new magnemite_1.Magnemite(),
     new meowscarada_ex_1.Meowscaradaex(),

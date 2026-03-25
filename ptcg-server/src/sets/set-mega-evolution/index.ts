@@ -4,12 +4,15 @@ import { Abra } from './abra';
 import { Alakazam } from './alakazam';
 import { Bayleef } from './bayleef';
 import { Bulbasaur } from './bulbasaur';
+import { Buneary } from './buneary';
+import { Celebi } from './celebi';
 import { Chikorita } from './chikorita';
 import { Cinderace } from './cinderace';
 import { Clauncher } from './clauncher';
 import { Corphish } from './corphish';
 import { Crawdaunt } from './crawdaunt';
 import { DangerousRuins } from './risky-ruins';
+import { Delibird } from './delibird';
 import { Drizzile } from './drizzile';
 import { Electrike } from './electrike';
 import { FightingGong } from './fighting-gong';
@@ -72,12 +75,15 @@ export const setMegaEvolution: Card[] = [
   new Alakazam(),
   new Bayleef(),
   new Bulbasaur(),
+  new Buneary(),
+  new Celebi(),
   new Chikorita(),
   new Cinderace(),
   new Clauncher(),
   new Corphish(),
   new Crawdaunt(),
   new DangerousRuins(),
+  new Delibird(),
   new Drizzile(),
   new Electrike(),
   new FightingGong(),
