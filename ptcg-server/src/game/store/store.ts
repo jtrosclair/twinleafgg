@@ -9,7 +9,6 @@ import { GameError } from '../game-error';
 import { GameMessage, GameLog } from '../game-message';
 import { Prompt } from './prompts/prompt';
 import { ShowCardsPrompt } from './prompts/show-cards-prompt';
-import { ChoosePrizePrompt } from './prompts/choose-prize-prompt';
 import { ReorderHandAction, ReorderBenchAction } from './actions/reorder-actions';
 import { ResolvePromptAction } from './actions/resolve-prompt-action';
 import { State, GamePhase } from './state/state';
@@ -177,25 +176,6 @@ export class Store implements StoreLike {
       prompts.forEach(p => p.result = true);
       const syntheticResults = prompts.map(() => true);
       then(syntheticResults.length === 1 ? syntheticResults[0] : syntheticResults);
-    } else if (prompts.length === 1 && prompts[0] instanceof ChoosePrizePrompt) {
-      const prizePrompt = prompts[0] as ChoosePrizePrompt;
-      const player = state.players.find(p => p.id === prizePrompt.playerId);
-      if (player) {
-        const targetPlayer = prizePrompt.options.useOpponentPrizes
-          ? state.players.find(p => p.id !== prizePrompt.playerId)
-          : player;
-        if (targetPlayer) {
-          const availablePrizes = targetPlayer.prizes.filter(p => p.cards.length > 0);
-          const count = Math.min(prizePrompt.options.count, availablePrizes.length);
-          const selected = availablePrizes.slice(0, count);
-          prizePrompt.result = selected;
-          then(selected);
-        } else {
-          this.promptItems.push(promptItem);
-        }
-      } else {
-        this.promptItems.push(promptItem);
-      }
     } else {
       this.promptItems.push(promptItem);
     }

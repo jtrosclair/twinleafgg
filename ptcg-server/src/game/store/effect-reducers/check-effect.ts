@@ -8,7 +8,6 @@ import { Effect } from '../effects/effect';
 import { KnockOutEffect, MovedToActiveEffect } from '../effects/game-effects';
 import { TAKE_SPECIFIC_PRIZES, MOVE_CARDS } from '../prefabs/prefabs';
 import { ChoosePokemonPrompt } from '../prompts/choose-pokemon-prompt';
-import { ChoosePrizePrompt } from '../prompts/choose-prize-prompt';
 import { CoinFlipPrompt } from '../prompts/coin-flip-prompt';
 import { ShuffleDeckPrompt } from '../prompts/shuffle-prompt';
 import { setupGame } from '../reducers/setup-reducer';
@@ -175,62 +174,6 @@ function chooseActivePokemons(state: State): ChoosePokemonPrompt[] {
         { min: 1, allowCancel: false }
       );
       prompts.push(choose);
-    }
-  }
-  return prompts;
-}
-
-function choosePrizeCards(store: StoreLike, state: State, prizeGroups: PrizeGroup[][]): ChoosePrizePrompt[] {
-  const prompts: ChoosePrizePrompt[] = [];
-
-  for (let i = 0; i < state.players.length; i++) {
-    const player = state.players[i];
-    for (const group of prizeGroups[i]) {
-      const prizeLeft = player.getPrizeLeft();
-      // In sudden death, taking any prize card means winning
-      if (group.count > 0 && state.isSuddenDeath) {
-        endGame(store, state, i === 0 ? GameWinner.PLAYER_1 : GameWinner.PLAYER_2);
-        return [];
-      }
-
-      // If prizes to take >= remaining prizes, automatically take all prizes and end game
-      if (group.count >= prizeLeft && prizeLeft > 0) {
-        // Use TAKE_SPECIFIC_PRIZES to properly track the prizes taken
-        const remainingPrizes = player.prizes.filter(p => p.cards.length > 0);
-        TAKE_SPECIFIC_PRIZES(store, state, player, remainingPrizes, {
-          destination: group.destination || player.hand,
-          skipReduce: false
-        });
-
-        // Track the accurate number of prizes taken using GameStatsTracker
-        GameStatsTracker.trackPrizeTaken(player, remainingPrizes.length);
-
-        // End game with this player as winner
-        endGame(store, state, i === 0 ? GameWinner.PLAYER_1 : GameWinner.PLAYER_2);
-        return [];
-      }
-
-      if (group.count > prizeLeft) {
-        group.count = prizeLeft;
-      }
-      if (group.count > 0) {
-        let message = GameMessage.CHOOSE_PRIZE_CARD;
-        // Choose a custom message based on the destination.
-        if (group.destination === player.discard) {
-          message = GameMessage.CHOOSE_PRIZE_CARD_TO_DISCARD;
-        }
-
-        const prompt = new ChoosePrizePrompt(
-          player.id,
-          message,
-          {
-            isSecret: player.prizes[0].isSecret,
-            count: group.count,
-            destination: group.destination
-          }
-        );
-        prompts.push(prompt);
-      }
     }
   }
   return prompts;
@@ -431,21 +374,42 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
     return state;
   }
 
-  // Handle prize selection first - opponent then player
-  const prizePrompts = choosePrizeCards(store, state, prizeGroups);
-  for (const prompt of prizePrompts) {
-    const player = state.players.find(p => p.id === prompt.playerId);
-    if (!player) {
-      throw new GameError(GameMessage.ILLEGAL_ACTION);
-    }
+  // Handle prize selection first - opponent then player (auto-select first X)
+  for (let i = 0; i < state.players.length; i++) {
+    const player = state.players[i];
+    for (const group of prizeGroups[i]) {
+      const prizeLeft = player.getPrizeLeft();
 
-    state = store.prompt(state, prompt, (result) => {
-      const destination: CardList = prompt.options.destination || player.hand;
-      TAKE_SPECIFIC_PRIZES(store, state, player, result, { destination });
-    });
+      // In sudden death, taking any prize card means winning
+      if (group.count > 0 && state.isSuddenDeath) {
+        endGame(store, state, i === 0 ? GameWinner.PLAYER_1 : GameWinner.PLAYER_2);
+        return state;
+      }
 
-    if (store.hasPrompts()) {
-      yield store.waitPrompt(state, () => next());
+      // If prizes to take >= remaining prizes, automatically take all prizes and end game
+      if (group.count >= prizeLeft && prizeLeft > 0) {
+        const remainingPrizes = player.prizes.filter(p => p.cards.length > 0);
+        TAKE_SPECIFIC_PRIZES(store, state, player, remainingPrizes, {
+          destination: group.destination || player.hand,
+          skipReduce: false
+        });
+
+        GameStatsTracker.trackPrizeTaken(player, remainingPrizes.length);
+        endGame(store, state, i === 0 ? GameWinner.PLAYER_1 : GameWinner.PLAYER_2);
+        return state;
+      }
+
+      if (group.count > prizeLeft) {
+        group.count = prizeLeft;
+      }
+
+      // Auto-select the first X prizes
+      if (group.count > 0) {
+        const allPrizes = player.prizes.filter(p => p.cards.length > 0);
+        const selectedPrizes = allPrizes.slice(0, group.count);
+        const destination: CardList = group.destination || player.hand;
+        TAKE_SPECIFIC_PRIZES(store, state, player, selectedPrizes, { destination });
+      }
     }
   }
 

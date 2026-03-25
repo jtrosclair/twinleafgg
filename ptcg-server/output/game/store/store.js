@@ -9,7 +9,6 @@ const change_avatar_action_1 = require("./actions/change-avatar-action");
 const game_error_1 = require("../game-error");
 const game_message_1 = require("../game-message");
 const show_cards_prompt_1 = require("./prompts/show-cards-prompt");
-const choose_prize_prompt_1 = require("./prompts/choose-prize-prompt");
 const reorder_actions_1 = require("./actions/reorder-actions");
 const resolve_prompt_action_1 = require("./actions/resolve-prompt-action");
 const state_1 = require("./state/state");
@@ -145,28 +144,6 @@ class Store {
             prompts.forEach(p => p.result = true);
             const syntheticResults = prompts.map(() => true);
             then(syntheticResults.length === 1 ? syntheticResults[0] : syntheticResults);
-        }
-        else if (prompts.length === 1 && prompts[0] instanceof choose_prize_prompt_1.ChoosePrizePrompt) {
-            const prizePrompt = prompts[0];
-            const player = state.players.find(p => p.id === prizePrompt.playerId);
-            if (player) {
-                const targetPlayer = prizePrompt.options.useOpponentPrizes
-                    ? state.players.find(p => p.id !== prizePrompt.playerId)
-                    : player;
-                if (targetPlayer) {
-                    const availablePrizes = targetPlayer.prizes.filter(p => p.cards.length > 0);
-                    const count = Math.min(prizePrompt.options.count, availablePrizes.length);
-                    const selected = availablePrizes.slice(0, count);
-                    prizePrompt.result = selected;
-                    then(selected);
-                }
-                else {
-                    this.promptItems.push(promptItem);
-                }
-            }
-            else {
-                this.promptItems.push(promptItem);
-            }
         }
         else {
             this.promptItems.push(promptItem);
