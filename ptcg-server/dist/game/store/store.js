@@ -8,6 +8,8 @@ const card_1 = require("./card/card");
 const change_avatar_action_1 = require("./actions/change-avatar-action");
 const game_error_1 = require("../game-error");
 const game_message_1 = require("../game-message");
+const show_cards_prompt_1 = require("./prompts/show-cards-prompt");
+const choose_prize_prompt_1 = require("./prompts/choose-prize-prompt");
 const reorder_actions_1 = require("./actions/reorder-actions");
 const resolve_prompt_action_1 = require("./actions/resolve-prompt-action");
 const state_1 = require("./state/state");
@@ -88,7 +90,7 @@ class Store {
             this.handler.onStateChange(state);
             return state;
         }
-        if (state.prompts.some(p => p.result === undefined)) {
+        if (state.prompts.some(p => p.result === undefined && p.blocksDispatch !== false)) {
             throw new game_error_1.GameError(game_message_1.GameMessage.ACTION_IN_PROGRESS);
         }
         state = this.reduce(state, action);
@@ -138,7 +140,35 @@ class Store {
             ids: prompts.map(prompt => prompt.id),
             then: then
         };
-        this.promptItems.push(promptItem);
+        const allShowCards = prompts.every(p => p instanceof show_cards_prompt_1.ShowCardsPrompt);
+        if (allShowCards) {
+            const syntheticResults = prompts.map(() => true);
+            then(syntheticResults.length === 1 ? syntheticResults[0] : syntheticResults);
+        }
+        else if (prompts.length === 1 && prompts[0] instanceof choose_prize_prompt_1.ChoosePrizePrompt) {
+            const prizePrompt = prompts[0];
+            const player = state.players.find(p => p.id === prizePrompt.playerId);
+            if (player) {
+                const targetPlayer = prizePrompt.options.useOpponentPrizes
+                    ? state.players.find(p => p.id !== prizePrompt.playerId)
+                    : player;
+                if (targetPlayer) {
+                    const availablePrizes = targetPlayer.prizes.filter(p => p.cards.length > 0);
+                    const count = Math.min(prizePrompt.options.count, availablePrizes.length);
+                    const selected = availablePrizes.slice(0, count);
+                    then(selected);
+                }
+                else {
+                    this.promptItems.push(promptItem);
+                }
+            }
+            else {
+                this.promptItems.push(promptItem);
+            }
+        }
+        else {
+            this.promptItems.push(promptItem);
+        }
         return state;
     }
     waitPrompt(state, callback) {
@@ -158,28 +188,30 @@ class Store {
         state.logs.push(log);
     }
     reducePrompt(state, action) {
-        // Resolve prompts actions
         const prompt = state.prompts.find(item => item.id === action.id);
-        const promptItem = this.promptItems.find(item => item.ids.indexOf(action.id) !== -1);
-        if (prompt === undefined || promptItem === undefined) {
+        if (prompt === undefined) {
             return state;
         }
         if (prompt.result !== undefined) {
-            throw new game_error_1.GameError(game_message_1.GameMessage.PROMPT_ALREADY_RESOLVED);
+            // Idempotent: duplicate resolve (reordered updates, double-emit, remounted UI, etc.)
+            return state;
         }
+        const promptItem = this.promptItems.find(item => item.ids.indexOf(action.id) !== -1);
         try {
             prompt.result = action.result;
-            const results = promptItem.ids.map(id => {
-                const p = state.prompts.find(item => item.id === id);
-                return p === undefined ? undefined : p.result;
-            });
             if (action.log !== undefined) {
                 this.log(state, action.log.message, action.log.params, action.log.client);
             }
-            if (results.every(result => result !== undefined)) {
-                const itemIndex = this.promptItems.indexOf(promptItem);
-                promptItem.then(results.length === 1 ? results[0] : results);
-                this.promptItems.splice(itemIndex, 1);
+            if (promptItem !== undefined) {
+                const results = promptItem.ids.map(id => {
+                    const p = state.prompts.find(item => item.id === id);
+                    return p === undefined ? undefined : p.result;
+                });
+                if (results.every(result => result !== undefined)) {
+                    const itemIndex = this.promptItems.indexOf(promptItem);
+                    promptItem.then(results.length === 1 ? results[0] : results);
+                    this.promptItems.splice(itemIndex, 1);
+                }
             }
             this.resolveWaitItems();
         }

@@ -8,6 +8,8 @@ import { Effect } from './effects/effect';
 import { GameError } from '../game-error';
 import { GameMessage, GameLog } from '../game-message';
 import { Prompt } from './prompts/prompt';
+import { ShowCardsPrompt } from './prompts/show-cards-prompt';
+import { ChoosePrizePrompt } from './prompts/choose-prize-prompt';
 import { ReorderHandAction, ReorderBenchAction } from './actions/reorder-actions';
 import { ResolvePromptAction } from './actions/resolve-prompt-action';
 import { State, GamePhase } from './state/state';
@@ -105,7 +107,7 @@ export class Store implements StoreLike {
       return state;
     }
 
-    if (state.prompts.some(p => p.result === undefined)) {
+    if (state.prompts.some(p => p.result === undefined && p.blocksDispatch !== false)) {
       throw new GameError(GameMessage.ACTION_IN_PROGRESS);
     }
 
@@ -170,7 +172,31 @@ export class Store implements StoreLike {
       then: then
     };
 
-    this.promptItems.push(promptItem);
+    const allShowCards = prompts.every(p => p instanceof ShowCardsPrompt);
+    if (allShowCards) {
+      const syntheticResults = prompts.map(() => true);
+      then(syntheticResults.length === 1 ? syntheticResults[0] : syntheticResults);
+    } else if (prompts.length === 1 && prompts[0] instanceof ChoosePrizePrompt) {
+      const prizePrompt = prompts[0] as ChoosePrizePrompt;
+      const player = state.players.find(p => p.id === prizePrompt.playerId);
+      if (player) {
+        const targetPlayer = prizePrompt.options.useOpponentPrizes
+          ? state.players.find(p => p.id !== prizePrompt.playerId)
+          : player;
+        if (targetPlayer) {
+          const availablePrizes = targetPlayer.prizes.filter(p => p.cards.length > 0);
+          const count = Math.min(prizePrompt.options.count, availablePrizes.length);
+          const selected = availablePrizes.slice(0, count);
+          then(selected);
+        } else {
+          this.promptItems.push(promptItem);
+        }
+      } else {
+        this.promptItems.push(promptItem);
+      }
+    } else {
+      this.promptItems.push(promptItem);
+    }
     return state;
   }
 
@@ -194,34 +220,36 @@ export class Store implements StoreLike {
   }
 
   private reducePrompt(state: State, action: ResolvePromptAction): State {
-    // Resolve prompts actions
     const prompt = state.prompts.find(item => item.id === action.id);
-    const promptItem = this.promptItems.find(item => item.ids.indexOf(action.id) !== -1);
-
-    if (prompt === undefined || promptItem === undefined) {
+    if (prompt === undefined) {
       return state;
     }
 
     if (prompt.result !== undefined) {
-      throw new GameError(GameMessage.PROMPT_ALREADY_RESOLVED);
+      // Idempotent: duplicate resolve (reordered updates, double-emit, remounted UI, etc.)
+      return state;
     }
+
+    const promptItem = this.promptItems.find(item => item.ids.indexOf(action.id) !== -1);
 
     try {
       prompt.result = action.result;
-
-      const results = promptItem.ids.map(id => {
-        const p = state.prompts.find(item => item.id === id);
-        return p === undefined ? undefined : p.result;
-      });
 
       if (action.log !== undefined) {
         this.log(state, action.log.message, action.log.params, action.log.client);
       }
 
-      if (results.every(result => result !== undefined)) {
-        const itemIndex = this.promptItems.indexOf(promptItem);
-        promptItem.then(results.length === 1 ? results[0] : results);
-        this.promptItems.splice(itemIndex, 1);
+      if (promptItem !== undefined) {
+        const results = promptItem.ids.map(id => {
+          const p = state.prompts.find(item => item.id === id);
+          return p === undefined ? undefined : p.result;
+        });
+
+        if (results.every(result => result !== undefined)) {
+          const itemIndex = this.promptItems.indexOf(promptItem);
+          promptItem.then(results.length === 1 ? results[0] : results);
+          this.promptItems.splice(itemIndex, 1);
+        }
       }
 
       this.resolveWaitItems();

@@ -8,6 +8,7 @@ class ShowCardsPrompt extends prompt_1.Prompt {
         this.message = message;
         this.cards = cards;
         this.type = 'Show cards';
+        this.blocksDispatch = false;
         // Default options
         this.options = Object.assign({}, {
             allowCancel: false
