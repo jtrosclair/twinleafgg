@@ -1,18 +1,23 @@
 import { Card, SlotType, State, StoreLike } from '../..';
 import { PokemonCard } from '../card/pokemon-card';
 import { AttackEffect } from '../effects/game-effects';
+import { AfterAttackEffect } from '../effects/game-phase-effects';
 /**
  * These prefabs are for general attack effects.
  */
 export declare function DISCARD_A_STADIUM_CARD_IN_PLAY(state: State): void;
 export declare function DRAW_CARDS_UNTIL_YOU_HAVE_X_CARDS_IN_HAND(x: number, effect: AttackEffect, state: State): State;
 export declare function HEAL_X_DAMAGE_FROM_THIS_POKEMON(damage: number, effect: AttackEffect, store: StoreLike, state: State): void;
+export declare function KNOCK_OUT_OPPONENTS_ACTIVE_POKEMON(store: StoreLike, state: State, effect: AttackEffect): State;
 export declare function PUT_X_CARDS_FROM_YOUR_DISCARD_PILE_INTO_YOUR_HAND(x: number, filterFn: (card: Card) => boolean, store: StoreLike, state: State, effect: AttackEffect): State;
 export declare function PUT_X_DAMAGE_COUNTERS_ON_ALL_YOUR_OPPONENTS_POKEMON(x: number, store: StoreLike, state: State, effect: AttackEffect): void;
 export declare function PUT_X_DAMAGE_COUNTERS_ON_YOUR_OPPONENTS_ACTIVE_POKEMON(x: number, store: StoreLike, state: State, effect: AttackEffect): State;
 export declare function PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE(x: number, store: StoreLike, state: State, effect: AttackEffect, slotTypes?: SlotType[]): State;
-export declare function SHUFFLE_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_DECK(store: StoreLike, state: State, effect: AttackEffect): State;
-export declare function FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE(store: StoreLike, state: State, effect: AttackEffect, amount: number): void;
+export declare function SHUFFLE_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_DECK(store: StoreLike, state: State, effect: AfterAttackEffect): State;
+export declare function PUT_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_HAND(store: StoreLike, state: State, effect: AfterAttackEffect): void;
+export declare function FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE(store: StoreLike, state: State, effect: AttackEffect, amount: number): State;
+export declare function FLIP_A_COIN_UNTIL_YOU_GET_TAILS_DO_X_DAMAGE_PER_HEADS(store: StoreLike, state: State, effect: AttackEffect, damagePerHeads: number): State;
+export declare function FLIP_A_COIN_UNTIL_YOU_GET_TAILS_DO_X_MORE_DAMAGE_PER_HEADS(store: StoreLike, state: State, effect: AttackEffect, damagePerHeads: number): State;
 export declare function THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS(store: StoreLike, state: State, effect: AttackEffect, amount: number): void;
 export declare function THIS_ATTACK_DOES_X_DAMAGE_FOR_EACH_POKEMON_IN_YOUR_DISCARD_PILE(damage: number, filterFn: (card: PokemonCard) => boolean, effect: AttackEffect): void;
 export declare function THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(damage: number, effect: AttackEffect, store: StoreLike, state: State): State;
@@ -22,3 +27,11 @@ export declare function YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_BURNED(store: Stor
 export declare function YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED(store: StoreLike, state: State, effect: AttackEffect): void;
 export declare function YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED(store: StoreLike, state: State, effect: AttackEffect): void;
 export declare function YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED(store: StoreLike, state: State, effect: AttackEffect): void;
+export declare function DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON(store: StoreLike, state: State, effect: AttackEffect): State;
+/**
+ * You may put up to X Energy attached to your opponent's Active Pokémon into their hand.
+ * Uses CardsToHandEffect (AbstractAttackEffect) so abilities like Charmeleon's Flare Veil can block it.
+ */
+export declare function PUT_ENERGY_FROM_OPPONENTS_ACTIVE_INTO_THEIR_HAND(store: StoreLike, state: State, effect: AttackEffect, options?: {
+    count?: number;
+}): State;

@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PlaceDamageCountersEffect = exports.PutDamageCountersEffect = exports.SpecialEnergyEffect = exports.EffectOfAbilityEffect = exports.MoveCardsEffect = exports.DrawPrizesEffect = exports.EvolveEffect = exports.HealEffect = exports.KnockOutAttackEffect = exports.KnockOutEffect = exports.AttackEffect = exports.UseStadiumEffect = exports.UseAttackEffect = exports.TrainerPowerEffect = exports.PowerEffect = exports.UseEnergyPowerEffect = exports.UseTrainerPowerEffect = exports.UsePowerEffect = exports.RetreatEffect = exports.GameEffects = void 0;
+exports.MoveDamageCountersEffect = exports.PlaceDamageCountersEffect = exports.PutDamageCountersEffect = exports.SpecialEnergyEffect = exports.EffectOfAbilityEffect = exports.MoveCardsEffect = exports.DrawPrizesEffect = exports.EvolveEffect = exports.HealEffect = exports.KnockOutAttackEffect = exports.KnockOutEffect = exports.AttackEffect = exports.UseStadiumEffect = exports.UseAttackEffect = exports.TrainerPowerEffect = exports.PowerEffect = exports.UseEnergyPowerEffect = exports.UseTrainerPowerEffect = exports.UsePowerEffect = exports.RetreatStartEffect = exports.RetreatEffect = exports.MovedToActiveEffect = exports.GameEffects = void 0;
 var GameEffects;
 (function (GameEffects) {
     GameEffects["RETREAT_EFFECT"] = "RETREAT_EFFECT";
+    GameEffects["RETREAT_START_EFFECT"] = "RETREAT_START_EFFECT";
     GameEffects["USE_ATTACK_EFFECT"] = "USE_ATTACK_EFFECT";
     GameEffects["USE_STADIUM_EFFECT"] = "USE_STADIUM_EFFECT";
     GameEffects["USE_POWER_EFFECT"] = "USE_POWER_EFFECT";
@@ -18,7 +19,18 @@ var GameEffects;
     GameEffects["SPECIAL_ENERGY_EFFECT"] = "SPECIAL_ENERGY_EFFECT";
     GameEffects["PUT_COUNTERS_EFFECT"] = "PUT_COUNTERS_EFFECT";
     GameEffects["PLACE_DAMAGE_COUNTERS_EFFECT"] = "PLACE_DAMAGE_COUNTERS_EFFECT";
+    GameEffects["MOVE_DAMAGE_COUNTERS_EFFECT"] = "MOVE_DAMAGE_COUNTERS_EFFECT";
+    GameEffects["MOVED_TO_ACTIVE_EFFECT"] = "MOVED_TO_ACTIVE_EFFECT";
 })(GameEffects = exports.GameEffects || (exports.GameEffects = {}));
+class MovedToActiveEffect {
+    constructor(player, pokemonCard) {
+        this.type = GameEffects.MOVED_TO_ACTIVE_EFFECT;
+        this.preventDefault = false;
+        this.player = player;
+        this.pokemonCard = pokemonCard;
+    }
+}
+exports.MovedToActiveEffect = MovedToActiveEffect;
 class RetreatEffect {
     constructor(player, benchIndex) {
         this.type = GameEffects.RETREAT_EFFECT;
@@ -30,6 +42,14 @@ class RetreatEffect {
     }
 }
 exports.RetreatEffect = RetreatEffect;
+class RetreatStartEffect {
+    constructor(player) {
+        this.type = GameEffects.RETREAT_START_EFFECT;
+        this.preventDefault = false;
+        this.player = player;
+    }
+}
+exports.RetreatStartEffect = RetreatStartEffect;
 class UsePowerEffect {
     constructor(player, power, card, target) {
         this.type = GameEffects.USE_POWER_EFFECT;
@@ -124,6 +144,7 @@ class KnockOutEffect {
         this.type = GameEffects.KNOCK_OUT_EFFECT;
         this.preventDefault = false;
         this.isLostCity = false;
+        this.prizeIncreased = false;
         this.player = player;
         this.target = target;
         this.prizeCount = 1;
@@ -233,3 +254,11 @@ class PlaceDamageCountersEffect {
     }
 }
 exports.PlaceDamageCountersEffect = PlaceDamageCountersEffect;
+class MoveDamageCountersEffect {
+    constructor(player) {
+        this.type = GameEffects.MOVE_DAMAGE_COUNTERS_EFFECT;
+        this.preventDefault = false;
+        this.player = player;
+    }
+}
+exports.MoveDamageCountersEffect = MoveDamageCountersEffect;

@@ -41,7 +41,7 @@ export class ChoosePokemonPrompt extends Prompt<PokemonCardList[]> {
 
   public decode(result: CardTarget[] | null, state: State): PokemonCardList[] | null {
     if (result === null) {
-      return null;  // operation cancelled
+      return result;  // operation cancelled
     }
     const player = state.players.find(p => p.id === this.playerId);
     const opponent = state.players.find(p => p.id !== this.playerId);

@@ -64,9 +64,13 @@ function initNextTurn(store, state) {
         state = (0, check_effect_1.endGame)(store, state, winner);
         return state;
     }
+    // Signal beginning of turn (for cards like Slumbering Forest, Oran Berry, etc.)
+    const beginTurn = new game_phase_effects_1.BeginTurnEffect(player);
+    store.reduceEffect(state, beginTurn);
+    // Draw card for turn (can be blocked by effects like Luvdisc's Heart Wink)
     try {
-        const beginTurn = new game_phase_effects_1.BeginTurnEffect(player);
-        store.reduceEffect(state, beginTurn);
+        const drawCardForTurn = new game_phase_effects_1.DrawCardForTurnEffect(player);
+        store.reduceEffect(state, drawCardForTurn);
     }
     catch (_a) {
         return state;

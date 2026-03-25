@@ -20,6 +20,7 @@ export declare enum PlayCardEffects {
     TOOL_EFFECT = "TOOL_EFFECT",
     SUPPORTER_EFFECT = "SUPPORTER_EFFECT",
     COIN_FLIP_EFFECT = "COIN_FLIP_EFFECT",
+    COIN_FLIP_SEQUENCE_EFFECT = "COIN_FLIP_SEQUENCE_EFFECT",
     TRAINER_CARD_TO_DECK_EFFECT = "TRAINER_CARD_TO_DECK_EFFECT",
     DISCARD_TO_HAND_EFFECT = "DISCARD_TO_HAND_EFFECT",
     TRAINER_TARGET_EFFECT = "TRAINER_TARGET_EFFECT"
@@ -109,7 +110,18 @@ export declare class CoinFlipEffect implements Effect {
     player: Player;
     callback?: (result: boolean) => void;
     result?: boolean;
+    /** When true, stadiums like Glimwood Tangle will not intercept (used for reflips). */
+    skipReflipStadium?: boolean;
     constructor(player: Player, callback?: (result: boolean) => void);
+}
+export declare class CoinFlipSequenceEffect implements Effect {
+    readonly type: string;
+    preventDefault: boolean;
+    player: Player;
+    /** 'untilTails' or fixed count */
+    mode: 'untilTails' | number;
+    callback: (results: boolean[]) => void;
+    constructor(player: Player, mode: 'untilTails' | number, callback: (results: boolean[]) => void);
 }
 export declare class TrainerToDeckEffect implements Effect {
     readonly type: string;

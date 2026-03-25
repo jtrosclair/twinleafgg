@@ -24,7 +24,7 @@ class PreventRetreatEffect extends EffectOfAttackEffect {
         this.type = 'PREVENT_RETREAT_EFFECT';
     }
     applyEffect() {
-        this.opponent.active.marker.addMarker(marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this.markerSource);
+        this.opponent.active.marker.addMarker(marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this.markerSource, 'attack', 'pokemon');
     }
 }
 exports.PreventRetreatEffect = PreventRetreatEffect;
@@ -37,8 +37,9 @@ class PreventDamageEffect extends EffectOfAttackEffect {
         this.type = 'PREVENT_DAMAGE_EFFECT';
     }
     applyEffect() {
-        this.player.active.marker.addMarker(marker_constants_1.MarkerConstants.PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN_MARKER, this.markerSource);
-        this.opponent.marker.addMarker(marker_constants_1.MarkerConstants.CLEAR_PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN_MARKER, this.markerSource);
+        this.player.active.marker.addMarker(marker_constants_1.MarkerConstants.PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN_MARKER, this.markerSource, 'attack', 'pokemon');
+        // CLEAR marker goes on player.marker — it's a turn-cycle bookkeeping signal, not tied to a specific Pokemon
+        this.opponent.marker.addMarker(marker_constants_1.MarkerConstants.CLEAR_PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN_MARKER, this.markerSource, 'attack', 'player');
     }
 }
 exports.PreventDamageEffect = PreventDamageEffect;
@@ -51,7 +52,7 @@ class PreventAttackEffect extends EffectOfAttackEffect {
         this.type = 'PREVENT_ATTACK_EFFECT';
     }
     applyEffect() {
-        this.opponent.active.marker.addMarker(marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, this.markerSource);
+        this.opponent.active.marker.addMarker(marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, this.markerSource, 'attack', 'pokemon');
     }
 }
 exports.PreventAttackEffect = PreventAttackEffect;
@@ -64,7 +65,7 @@ class ReduceDamageEffect extends EffectOfAttackEffect {
         this.type = 'REDUCE_DAMAGE_EFFECT';
     }
     applyEffect() {
-        this.opponent.active.marker.addMarker(marker_constants_1.MarkerConstants.DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this.markerSource);
+        this.opponent.active.marker.addMarker(marker_constants_1.MarkerConstants.DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this.markerSource, 'attack', 'pokemon');
     }
 }
 exports.ReduceDamageEffect = ReduceDamageEffect;

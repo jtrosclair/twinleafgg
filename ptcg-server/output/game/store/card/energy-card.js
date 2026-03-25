@@ -13,6 +13,7 @@ class EnergyCard extends card_1.Card {
         this.text = '';
         this.isBlocked = false;
         this.blendedEnergies = [];
+        this.blendedEnergyCount = 1;
     }
 }
 exports.EnergyCard = EnergyCard;

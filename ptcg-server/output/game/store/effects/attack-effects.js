@@ -22,12 +22,14 @@ var AttackEffects;
 class AbstractAttackEffect {
     constructor(base) {
         this.preventDefault = false;
-        this.attackEffect = base;
-        this.player = base.player;
-        this.opponent = base.opponent;
-        this.attack = base.attack;
-        this.source = base.player.active;
-        this.target = base.opponent.active;
+        // Extract attackEffect if base is an AbstractAttackEffect (has attackEffect property), otherwise use base directly
+        const attackEffect = 'attackEffect' in base ? base.attackEffect : base;
+        this.attackEffect = attackEffect;
+        this.player = attackEffect.player;
+        this.opponent = attackEffect.opponent;
+        this.attack = attackEffect.attack;
+        this.source = attackEffect.source;
+        this.target = attackEffect.opponent.active;
     }
 }
 exports.AbstractAttackEffect = AbstractAttackEffect;

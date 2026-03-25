@@ -10,6 +10,7 @@ import { CardList } from '../state/card-list';
 import { EnergyCard } from '../card/energy-card';
 export declare enum GameEffects {
     RETREAT_EFFECT = "RETREAT_EFFECT",
+    RETREAT_START_EFFECT = "RETREAT_START_EFFECT",
     USE_ATTACK_EFFECT = "USE_ATTACK_EFFECT",
     USE_STADIUM_EFFECT = "USE_STADIUM_EFFECT",
     USE_POWER_EFFECT = "USE_POWER_EFFECT",
@@ -23,7 +24,16 @@ export declare enum GameEffects {
     EFFECT_OF_ABILITY_EFFECT = "EFFECT_OF_ABILITY_EFFECT",
     SPECIAL_ENERGY_EFFECT = "SPECIAL_ENERGY_EFFECT",
     PUT_COUNTERS_EFFECT = "PUT_COUNTERS_EFFECT",
-    PLACE_DAMAGE_COUNTERS_EFFECT = "PLACE_DAMAGE_COUNTERS_EFFECT"
+    PLACE_DAMAGE_COUNTERS_EFFECT = "PLACE_DAMAGE_COUNTERS_EFFECT",
+    MOVE_DAMAGE_COUNTERS_EFFECT = "MOVE_DAMAGE_COUNTERS_EFFECT",
+    MOVED_TO_ACTIVE_EFFECT = "MOVED_TO_ACTIVE_EFFECT"
+}
+export declare class MovedToActiveEffect implements Effect {
+    readonly type: string;
+    preventDefault: boolean;
+    player: Player;
+    pokemonCard: PokemonCard;
+    constructor(player: Player, pokemonCard: PokemonCard);
 }
 export declare class RetreatEffect implements Effect {
     readonly type: string;
@@ -33,6 +43,12 @@ export declare class RetreatEffect implements Effect {
     ignoreStatusConditions: boolean;
     moveRetreatCostTo: CardList;
     constructor(player: Player, benchIndex: number);
+}
+export declare class RetreatStartEffect implements Effect {
+    readonly type: string;
+    preventDefault: boolean;
+    player: Player;
+    constructor(player: Player);
 }
 export declare class UsePowerEffect implements Effect {
     readonly type: string;
@@ -117,6 +133,7 @@ export declare class KnockOutEffect implements Effect {
     prizeCount: number;
     prizeDestination?: CardList;
     isLostCity: boolean;
+    prizeIncreased: boolean;
     constructor(player: Player, target: PokemonCardList);
 }
 export declare class KnockOutAttackEffect implements Effect {
@@ -143,7 +160,6 @@ export declare class EvolveEffect implements Effect {
     target: PokemonCardList;
     pokemonCard: PokemonCard;
     darkestImpulseSV?: boolean;
-    keepPoison?: boolean;
     constructor(player: Player, target: PokemonCardList, pokemonCard: PokemonCard);
 }
 export declare class DrawPrizesEffect implements Effect {
@@ -210,5 +226,11 @@ export declare class PlaceDamageCountersEffect implements Effect {
     damage: number;
     source?: PokemonCard;
     constructor(player: Player, target: PokemonCardList, damage: number, source?: PokemonCard);
+}
+export declare class MoveDamageCountersEffect implements Effect {
+    readonly type: string;
+    preventDefault: boolean;
+    player: Player;
+    constructor(player: Player);
 }
 export { Effect };

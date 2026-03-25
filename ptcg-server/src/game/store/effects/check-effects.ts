@@ -22,21 +22,21 @@ export enum CheckEffects {
   CHECK_POKEMON_PLAYED_TURN_EFFECT = 'CHECK_POKEMON_PLAYED_TURN_EFFECT',
   CHECK_TABLE_STATE_EFFECT = 'CHECK_TABLE_STATE_EFFECT',
   ADD_SPECIAL_CONDITIONS_EFFECT = 'ADD_SPECIAL_CONDITIONS_EFFECT',
-  CHECK_PRIZES_DESTINATION_EFFECT = 'CHECK_PRIZES_DESTINATION_EFFECT'
+  CHECK_PRIZES_DESTINATION_EFFECT = 'CHECK_PRIZES_DESTINATION_EFFECT',
+  CHECK_SPECIAL_CONDITION_REMOVAL_EFFECT = 'CHECK_SPECIAL_CONDITION_REMOVAL_EFFECT'
 }
 
 export class CheckPokemonPowersEffect implements Effect {
   readonly type: string = CheckEffects.CHECK_POKEMON_POWERS_EFFECT;
   public preventDefault = false;
   public player: Player;
-  public target: PokemonCardList;
+  public target: PokemonCard;
   public powers: Power[];
 
-  constructor(player: Player, target: PokemonCardList) {
+  constructor(player: Player, target: PokemonCard) {
     this.player = player;
     this.target = target;
-    const pokemonCard = target.getPokemonCard();
-    this.powers = pokemonCard ? pokemonCard.powers : [];
+    this.powers = target.powers;
   }
 }
 
@@ -201,19 +201,21 @@ export class AddSpecialConditionsPowerEffect implements Effect {
   public preventDefault = false;
   public poisonDamage?: number;
   public burnDamage?: number;
+  public confusionDamage?: number;
   public sleepFlips?: number;
   public specialConditions: SpecialCondition[];
   public player: Player;
   public source: Card;
   public target: PokemonCardList;
 
-  constructor(player: Player, source: Card, target: PokemonCardList, specialConditions: SpecialCondition[], poisonDamage: number = 10, burnDamage: number = 20, sleepFlips: number = 1) {
+  constructor(player: Player, source: Card, target: PokemonCardList, specialConditions: SpecialCondition[], poisonDamage: number = 10, burnDamage: number = 20, sleepFlips: number = 1, confusionDamage: number = 30) {
     this.player = player;
     this.source = source;
     this.target = target;
     this.specialConditions = specialConditions;
     this.poisonDamage = poisonDamage;
     this.burnDamage = burnDamage;
+    this.confusionDamage = confusionDamage;
     this.sleepFlips = sleepFlips;
   }
 }
@@ -227,5 +229,18 @@ export class CheckPrizesDestinationEffect implements Effect {
   constructor(player: Player, destination: CardList) {
     this.player = player;
     this.destination = destination;
+  }
+}
+
+export class CheckSpecialConditionRemovalEffect implements Effect {
+  readonly type: string = CheckEffects.CHECK_SPECIAL_CONDITION_REMOVAL_EFFECT;
+  public preventDefault = false;
+  public player: Player;
+  public target: PokemonCardList;
+  public preservedConditions: SpecialCondition[] = [];
+
+  constructor(player: Player, target: PokemonCardList) {
+    this.player = player;
+    this.target = target;
   }
 }

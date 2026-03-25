@@ -11,6 +11,7 @@ import { EnergyCard } from '../card/energy-card';
 
 export enum GameEffects {
   RETREAT_EFFECT = 'RETREAT_EFFECT',
+  RETREAT_START_EFFECT = 'RETREAT_START_EFFECT',
   USE_ATTACK_EFFECT = 'USE_ATTACK_EFFECT',
   USE_STADIUM_EFFECT = 'USE_STADIUM_EFFECT',
   USE_POWER_EFFECT = 'USE_POWER_EFFECT',
@@ -24,7 +25,21 @@ export enum GameEffects {
   EFFECT_OF_ABILITY_EFFECT = 'EFFECT_OF_ABILITY_EFFECT',
   SPECIAL_ENERGY_EFFECT = 'SPECIAL_ENERGY_EFFECT',
   PUT_COUNTERS_EFFECT = 'PUT_COUNTERS_EFFECT',
-  PLACE_DAMAGE_COUNTERS_EFFECT = 'PLACE_DAMAGE_COUNTERS_EFFECT'
+  PLACE_DAMAGE_COUNTERS_EFFECT = 'PLACE_DAMAGE_COUNTERS_EFFECT',
+  MOVE_DAMAGE_COUNTERS_EFFECT = 'MOVE_DAMAGE_COUNTERS_EFFECT',
+  MOVED_TO_ACTIVE_EFFECT = 'MOVED_TO_ACTIVE_EFFECT'
+}
+
+export class MovedToActiveEffect implements Effect {
+  readonly type: string = GameEffects.MOVED_TO_ACTIVE_EFFECT;
+  public preventDefault = false;
+  public player: Player;
+  public pokemonCard: PokemonCard;
+
+  constructor(player: Player, pokemonCard: PokemonCard) {
+    this.player = player;
+    this.pokemonCard = pokemonCard;
+  }
 }
 
 export class RetreatEffect implements Effect {
@@ -39,6 +54,16 @@ export class RetreatEffect implements Effect {
     this.player = player;
     this.benchIndex = benchIndex;
     this.moveRetreatCostTo = player.discard;
+  }
+}
+
+export class RetreatStartEffect implements Effect {
+  readonly type: string = GameEffects.RETREAT_START_EFFECT;
+  public preventDefault = false;
+  public player: Player;
+
+  constructor(player: Player) {
+    this.player = player;
   }
 }
 export class UsePowerEffect implements Effect {
@@ -177,6 +202,7 @@ export class KnockOutEffect implements Effect {
   public prizeCount: number;
   public prizeDestination?: CardList;
   public isLostCity: boolean = false;
+  public prizeIncreased: boolean = false;
 
   constructor(player: Player, target: PokemonCardList) {
     this.player = player;
@@ -223,7 +249,6 @@ export class EvolveEffect implements Effect {
   public target: PokemonCardList;
   public pokemonCard: PokemonCard;
   public darkestImpulseSV?: boolean;
-  public keepPoison?: boolean;
 
   constructor(player: Player, target: PokemonCardList, pokemonCard: PokemonCard) {
     this.player = player;
@@ -355,6 +380,16 @@ export class PlaceDamageCountersEffect implements Effect {
     this.target = target;
     this.damage = damage;
     this.source = source;
+  }
+}
+
+export class MoveDamageCountersEffect implements Effect {
+  readonly type: string = GameEffects.MOVE_DAMAGE_COUNTERS_EFFECT;
+  public preventDefault = false;
+  public player: Player;
+
+  constructor(player: Player) {
+    this.player = player;
   }
 }
 

@@ -64,7 +64,7 @@ export class AttachEnergyPrompt extends Prompt<CardAssign[]> {
 
   public decode(result: AttachEnergyResultType | null, state: State): CardAssign[] | null {
     if (result === null) {
-      return null;
+      return result;
     }
     const player = state.players.find(p => p.id === this.playerId);
     if (player === undefined) {

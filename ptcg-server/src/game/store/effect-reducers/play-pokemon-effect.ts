@@ -5,7 +5,7 @@ import { Effect } from '../effects/effect';
 import { BoardEffect, SpecialCondition, Stage } from '../card/card-types';
 import { State } from '../state/state';
 import { StoreLike } from '../store-like';
-import { CheckPokemonPlayedTurnEffect } from '../effects/check-effects';
+import { CheckPokemonPlayedTurnEffect, CheckSpecialConditionRemovalEffect } from '../effects/check-effects';
 import { EvolveEffect } from '../effects/game-effects';
 
 /**
@@ -21,8 +21,12 @@ function emitAnimationEvent(store: StoreLike, eventName: string, data: {
   index?: number;
 }): void {
   const game = (store as any).handler;
-  if (game && game.core && typeof game.core.emitToGame === 'function') {
-    game.core.emitToGame(game.id, `game[${game.id}]:${eventName}`, data);
+  if (game && game.core && typeof game.core.emit === 'function') {
+    game.core.emit((c: any) => {
+      if (typeof c.socket !== 'undefined') {
+        c.socket.emit(`game[${game.id}]:${eventName}`, data);
+      }
+    });
   }
 }
 
@@ -60,10 +64,11 @@ export function playPokemonReducer(store: StoreLike, state: State, effect: Effec
       throw new GameError(GameMessage.INVALID_TARGET);
     }
 
-    // Check if evolution is valid using either evolvesFrom or evolvesTo
+    // Check if evolution is valid using either evolvesFrom, evolvesTo, evolvesToStage, or evolvesFromBase
     const isValidEvolution = (isEvolved && pokemonCard.stage < stage && pokemonCard.name === evolvesFrom) ||
       (isEvolved && pokemonCard.evolvesTo.includes(effect.pokemonCard.name)) ||
-      (isEvolved && pokemonCard.evolvesToStage.includes(effect.pokemonCard.stage));
+      (isEvolved && pokemonCard.evolvesToStage.includes(effect.pokemonCard.stage)) ||
+      (isEvolved && Array.isArray(pokemonCard.evolvesFromBase) && pokemonCard.evolvesFromBase.length > 0 && pokemonCard.evolvesFromBase.includes(effect.pokemonCard.evolvesFrom));
 
     if (isValidEvolution) {
       const playedTurnEffect = new CheckPokemonPlayedTurnEffect(effect.player, effect.target);
@@ -87,16 +92,16 @@ export function playPokemonReducer(store: StoreLike, state: State, effect: Effec
       const evolveEffect = new EvolveEffect(effect.player, effect.target, effect.pokemonCard);
       store.reduceEffect(state, evolveEffect);
       effect.pokemonCard.marker.markers = [];
+
+      // Check which special conditions should be preserved during evolution
+      const checkRemovalEffect = new CheckSpecialConditionRemovalEffect(effect.player, effect.target);
+      store.reduceEffect(state, checkRemovalEffect);
+      effect.target._preservedConditionsDuringEvolution = checkRemovalEffect.preservedConditions;
+
       effect.player.removePokemonEffects(effect.target);
 
-      if (evolveEffect.keepPoison && effect.target.specialConditions.includes(SpecialCondition.POISONED)) {
-        const poisonDamage = effect.target.poisonDamage;
-        effect.target.specialConditions = [];
-        effect.target.addSpecialCondition(SpecialCondition.POISONED);
-        effect.target.poisonDamage = poisonDamage;
-      } else {
-        effect.target.specialConditions = [];
-      }
+      // Clear the preserved conditions after evolution is complete
+      effect.target._preservedConditionsDuringEvolution = undefined;
 
       effect.target.marker.markers = [];
       effect.target.showBasicAnimation = false;

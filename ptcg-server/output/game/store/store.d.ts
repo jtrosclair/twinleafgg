@@ -12,6 +12,7 @@ export declare class Store implements StoreLike {
     private promptItems;
     private waitItems;
     private logId;
+    private calculatingPlayability;
     constructor(handler: StoreHandler);
     dispatch(action: Action, clientRoleId?: number): State;
     reduceEffect(state: State, effect: Effect): State;
@@ -24,6 +25,7 @@ export declare class Store implements StoreLike {
     hasPrompts(): boolean;
     cleanup(): void;
     private reduce;
+    private calculatePlayability;
     private propagateEffect;
     private callReduceEffect;
 }

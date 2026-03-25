@@ -144,15 +144,20 @@ function* alternativeSetupGame(next: Function, store: StoreLike, state: State): 
     }
     // Opponent sets up
     yield* alternativeSetupSinglePlayer(opponent, chooseCardsOptions, state, store, next);
-    // Player is shown all opponent's mulligan hands
+    // Show both players' mulligan hands: opponent's first, then player's
     if (opponentMulligans > 0) {
       yield store.prompt(state, new ShowMulliganPrompt(player.id, GameMessage.SETUP_OPPONENT_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
       yield store.prompt(state, new ShowMulliganPrompt(opponent.id, GameMessage.SETUP_PLAYER_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
     }
-    // Player chooses how many cards to draw
-    if (opponentMulligans > 0) {
+    if (playerMulliganHands.length > 0) {
+      yield store.prompt(state, new ShowMulliganPrompt(player.id, GameMessage.SETUP_PLAYER_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
+      yield store.prompt(state, new ShowMulliganPrompt(opponent.id, GameMessage.SETUP_OPPONENT_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
+    }
+    // Player (who had Basic first) may draw up to the difference in mulligan counts
+    const extraDraws = Math.max(0, opponentMulligans - playerMulligans);
+    if (extraDraws > 0) {
       const options: { message: string, value: number }[] = [];
-      for (let i = opponentMulligans; i >= 0; i--) {
+      for (let i = extraDraws; i >= 0; i--) {
         options.push({ message: `Draw ${i} card(s)`, value: i });
       }
       yield store.prompt(state, new SelectPrompt(
@@ -185,15 +190,20 @@ function* alternativeSetupGame(next: Function, store: StoreLike, state: State): 
     }
     // Player sets up
     yield* alternativeSetupSinglePlayer(player, chooseCardsOptions, state, store, next);
-    // Opponent is shown all player's mulligan hands
+    // Show both players' mulligan hands: player's first, then opponent's
     if (playerMulligans > 0) {
       yield store.prompt(state, new ShowMulliganPrompt(opponent.id, GameMessage.SETUP_OPPONENT_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
       yield store.prompt(state, new ShowMulliganPrompt(player.id, GameMessage.SETUP_PLAYER_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
     }
-    // Opponent chooses how many cards to draw
-    if (playerMulligans > 0) {
+    if (opponentMulliganHands.length > 0) {
+      yield store.prompt(state, new ShowMulliganPrompt(opponent.id, GameMessage.SETUP_PLAYER_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
+      yield store.prompt(state, new ShowMulliganPrompt(player.id, GameMessage.SETUP_OPPONENT_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
+    }
+    // Opponent (who had Basic first) may draw up to the difference in mulligan counts
+    const extraDraws = Math.max(0, playerMulligans - opponentMulligans);
+    if (extraDraws > 0) {
       const options: { message: string, value: number }[] = [];
-      for (let i = playerMulligans; i >= 0; i--) {
+      for (let i = extraDraws; i >= 0; i--) {
         options.push({ message: `Draw ${i} card(s)`, value: i });
       }
       yield store.prompt(state, new SelectPrompt(
@@ -213,6 +223,17 @@ function* alternativeSetupGame(next: Function, store: StoreLike, state: State): 
     // Both have Basics, proceed with normal setup for both
     yield* alternativeSetupSinglePlayer(player, chooseCardsOptions, state, store, next);
     yield* alternativeSetupSinglePlayer(opponent, chooseCardsOptions, state, store, next);
+    // Show both players' mulligan hands when either mulliganed
+    if (playerMulligans > 0 || opponentMulligans > 0) {
+      if (playerMulliganHands.length > 0) {
+        yield store.prompt(state, new ShowMulliganPrompt(player.id, GameMessage.SETUP_PLAYER_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
+        yield store.prompt(state, new ShowMulliganPrompt(opponent.id, GameMessage.SETUP_OPPONENT_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
+      }
+      if (opponentMulliganHands.length > 0) {
+        yield store.prompt(state, new ShowMulliganPrompt(opponent.id, GameMessage.SETUP_PLAYER_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
+        yield store.prompt(state, new ShowMulliganPrompt(player.id, GameMessage.SETUP_OPPONENT_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
+      }
+    }
   }
 
   // Set initial Pokemon Played Turn, so players can't evolve during first turn
@@ -242,19 +263,19 @@ function* alternativeSetupSinglePlayer(player: Player, chooseCardsOptions: any, 
   // First, choose starting Pokémon (Active + Bench)
   yield store.prompt(state, new ChooseCardsPrompt(player, GameMessage.CHOOSE_STARTING_POKEMONS,
     player.hand, {}, { ...chooseCardsOptions, blocked }), choice => {
-      // Place the chosen cards as Active and Bench
-      if (choice.length > 0) {
-        // Place Active (face-down)
-        player.hand.moveCardTo(choice[0], player.active);
-        player.active.isSecret = true;
-        // Place Bench (face-down)
-        for (let i = 1; i < choice.length; i++) {
-          player.hand.moveCardTo(choice[i], player.bench[i - 1]);
-          player.bench[i - 1].isSecret = true;
-        }
+    // Place the chosen cards as Active and Bench
+    if (choice.length > 0) {
+      // Place Active (face-down)
+      player.hand.moveCardTo(choice[0], player.active);
+      player.active.isSecret = true;
+      // Place Bench (face-down)
+      for (let i = 1; i < choice.length; i++) {
+        player.hand.moveCardTo(choice[i], player.bench[i - 1]);
+        player.bench[i - 1].isSecret = true;
       }
-      next();
-    });
+    }
+    next();
+  });
 
   // Pre-Release format uses 4 prize cards, all other formats use 6
   const prizeCount = state.gameSettings?.format === Format.PRE_RELEASE ? 4 : 6;
@@ -272,20 +293,20 @@ function* alternativeSetupSinglePlayer(player: Player, chooseCardsOptions: any, 
 
     yield store.prompt(state, new ChooseCardsPrompt(player, GameMessage.CHOOSE_PRIZES_SETUP,
       tempHand, {}, { min: prizeCount, max: prizeCount, allowCancel: false, blocked: [] }), choice => {
-        // Place chosen cards as prizes
-        for (let i = 0; i < prizeCount; i++) {
-          if (choice[i]) {
-            // Find the card in the actual hand and move it to prizes
-            const cardToMove = choice[i];
-            const handIndex = player.hand.cards.indexOf(cardToMove);
-            if (handIndex !== -1) {
-              player.hand.moveCardTo(cardToMove, player.prizes[i]);
-              player.prizes[i].isSecret = true;
-            }
+      // Place chosen cards as prizes
+      for (let i = 0; i < prizeCount; i++) {
+        if (choice[i]) {
+          // Find the card in the actual hand and move it to prizes
+          const cardToMove = choice[i];
+          const handIndex = player.hand.cards.indexOf(cardToMove);
+          if (handIndex !== -1) {
+            player.hand.moveCardTo(cardToMove, player.prizes[i]);
+            player.prizes[i].isSecret = true;
           }
         }
-        next();
-      });
+      }
+      next();
+    });
   } else {
     // If not enough cards, place all remaining cards as prizes
     for (let i = 0; i < Math.min(remainingCards.length, prizeCount); i++) {
@@ -399,15 +420,20 @@ export function* setupGame(next: Function, store: StoreLike, state: State): Iter
     }
     // Opponent sets up
     yield* setupSinglePlayer(opponent, chooseCardsOptions, state, store, next);
-    // Player is shown all opponent's mulligan hands (placeholder prompt)
+    // Show both players' mulligan hands: opponent's first, then player's
     if (opponentMulligans > 0) {
       yield store.prompt(state, new ShowMulliganPrompt(player.id, GameMessage.SETUP_OPPONENT_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
       yield store.prompt(state, new ShowMulliganPrompt(opponent.id, GameMessage.SETUP_PLAYER_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
     }
-    // Player chooses how many cards to draw
-    if (opponentMulligans > 0) {
+    if (playerMulliganHands.length > 0) {
+      yield store.prompt(state, new ShowMulliganPrompt(player.id, GameMessage.SETUP_PLAYER_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
+      yield store.prompt(state, new ShowMulliganPrompt(opponent.id, GameMessage.SETUP_OPPONENT_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
+    }
+    // Player (who had Basic first) may draw up to the difference in mulligan counts
+    const extraDraws = Math.max(0, opponentMulligans - playerMulligans);
+    if (extraDraws > 0) {
       const options: { message: string, value: number }[] = [];
-      for (let i = opponentMulligans; i >= 0; i--) {
+      for (let i = extraDraws; i >= 0; i--) {
         options.push({ message: `Draw ${i} card(s)`, value: i });
       }
       yield store.prompt(state, new SelectPrompt(
@@ -440,15 +466,20 @@ export function* setupGame(next: Function, store: StoreLike, state: State): Iter
     }
     // Player sets up
     yield* setupSinglePlayer(player, chooseCardsOptions, state, store, next);
-    // Opponent is shown all player's mulligan hands (placeholder prompt)
+    // Show both players' mulligan hands: player's first, then opponent's
     if (playerMulligans > 0) {
       yield store.prompt(state, new ShowMulliganPrompt(opponent.id, GameMessage.SETUP_OPPONENT_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
       yield store.prompt(state, new ShowMulliganPrompt(player.id, GameMessage.SETUP_PLAYER_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
     }
-    // Opponent chooses how many cards to draw
-    if (playerMulligans > 0) {
+    if (opponentMulliganHands.length > 0) {
+      yield store.prompt(state, new ShowMulliganPrompt(opponent.id, GameMessage.SETUP_PLAYER_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
+      yield store.prompt(state, new ShowMulliganPrompt(player.id, GameMessage.SETUP_OPPONENT_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
+    }
+    // Opponent (who had Basic first) may draw up to the difference in mulligan counts
+    const extraDraws = Math.max(0, playerMulligans - opponentMulligans);
+    if (extraDraws > 0) {
       const options: { message: string, value: number }[] = [];
-      for (let i = playerMulligans; i >= 0; i--) {
+      for (let i = extraDraws; i >= 0; i--) {
         options.push({ message: `Draw ${i} card(s)`, value: i });
       }
       yield store.prompt(state, new SelectPrompt(
@@ -468,6 +499,17 @@ export function* setupGame(next: Function, store: StoreLike, state: State): Iter
     // Both have Basics, proceed with normal setup for both
     yield* setupSinglePlayer(player, chooseCardsOptions, state, store, next);
     yield* setupSinglePlayer(opponent, chooseCardsOptions, state, store, next);
+    // Show both players' mulligan hands when either mulliganed
+    if (playerMulligans > 0 || opponentMulligans > 0) {
+      if (playerMulliganHands.length > 0) {
+        yield store.prompt(state, new ShowMulliganPrompt(player.id, GameMessage.SETUP_PLAYER_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
+        yield store.prompt(state, new ShowMulliganPrompt(opponent.id, GameMessage.SETUP_OPPONENT_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
+      }
+      if (opponentMulliganHands.length > 0) {
+        yield store.prompt(state, new ShowMulliganPrompt(opponent.id, GameMessage.SETUP_PLAYER_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
+        yield store.prompt(state, new ShowMulliganPrompt(player.id, GameMessage.SETUP_OPPONENT_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
+      }
+    }
   }
 
   // Set initial Pokemon Played Turn, so players can't evolve during first turn
@@ -495,9 +537,9 @@ function* setupSinglePlayer(player: Player, chooseCardsOptions: any, state: Stat
   });
   yield store.prompt(state, new ChooseCardsPrompt(player, GameMessage.CHOOSE_STARTING_POKEMONS,
     player.hand, {}, { ...chooseCardsOptions, blocked }), choice => {
-      putStartingPokemonsAndPrizes(player, choice, state);
-      next();
-    });
+    putStartingPokemonsAndPrizes(player, choice, state);
+    next();
+  });
 }
 
 // Helper: Allow extra Bench placement after drawing extra cards
@@ -514,15 +556,15 @@ function* allowExtraBenchPlacement(player: Player, chooseCardsOptions: any, stat
     // Use CHOOSE_STARTING_POKEMONS as fallback prompt message
     yield store.prompt(state, new ChooseCardsPrompt(player, GameMessage.CHOOSE_STARTING_POKEMONS,
       player.hand, {}, { min: 0, max: newBasics.length, allowCancel: false, blocked }), choice => {
-        // Place any chosen new Basics onto the Bench
-        for (const card of choice) {
-          const emptyBench = player.bench.find(b => b.cards.length === 0);
-          if (emptyBench) {
-            player.hand.moveCardTo(card, emptyBench);
-          }
+      // Place any chosen new Basics onto the Bench
+      for (const card of choice) {
+        const emptyBench = player.bench.find(b => b.cards.length === 0);
+        if (emptyBench) {
+          player.hand.moveCardTo(card, emptyBench);
         }
-        next();
-      });
+      }
+      next();
+    });
   }
 }
 
@@ -580,6 +622,7 @@ export function setupPhaseReducer(store: StoreLike, state: State, action: Action
       const player = createPlayer(action.clientId, action.name, state.gameSettings?.format);
       player.deck = CardList.fromList(action.deck);
       player.deckId = action.deckId;
+      player.sleeveImagePath = action.sleeveImagePath;
       // Attach alternate artwork map to player's lists so clients can resolve images
       if (action.artworksMap) {
         const lists: any[] = [
@@ -596,6 +639,21 @@ export function setupPhaseReducer(store: StoreLike, state: State, action: Action
         lists.forEach(list => { (list as any).artworksMap = action.artworksMap; });
         // Also store on player for robustness
         (player as any).artworksMap = action.artworksMap;
+      }
+      if (action.sleeveImagePath) {
+        const lists: any[] = [
+          player.deck,
+          player.hand,
+          player.discard,
+          player.lostzone,
+          player.stadium,
+          player.supporter,
+          player.active,
+          ...player.bench,
+          ...player.prizes
+        ];
+        lists.forEach(list => { (list as any).sleeveImagePath = action.sleeveImagePath; });
+        (player as any).sleeveImagePath = action.sleeveImagePath;
       }
       player.deck.isSecret = true;
       player.deck.cards.forEach(c => {
@@ -636,7 +694,16 @@ export function setupPhaseReducer(store: StoreLike, state: State, action: Action
           state = endGame(store, state, winner);
           return;
         }
-        const deckAnalyser = new DeckAnalyser(deck);
+        const deckPayload: any = deck;
+        const deckCards: string[] = Array.isArray(deckPayload) ? deckPayload : deckPayload?.deck;
+        const sleeveImagePath: string | undefined = Array.isArray(deckPayload) ? undefined : deckPayload?.sleeveImagePath;
+        if (!Array.isArray(deckCards) || deckCards.length === 0) {
+          store.log(state, GameLog.LOG_GAME_FINISHED_BEFORE_STARTED);
+          const winner = GameWinner.NONE;
+          state = endGame(store, state, winner);
+          return;
+        }
+        const deckAnalyser = new DeckAnalyser(deckCards);
         if (!deckAnalyser.isValid(state.gameSettings?.format)) {
           // Safe exit for invalid deck (invited player): end game with no winner
           store.log(state, GameLog.LOG_GAME_FINISHED_BEFORE_STARTED);
@@ -645,8 +712,23 @@ export function setupPhaseReducer(store: StoreLike, state: State, action: Action
           return;
         }
 
-        player.deck = CardList.fromList(deck);
+        player.deck = CardList.fromList(deckCards);
         player.deck.isSecret = true;
+        if (sleeveImagePath) {
+          const lists: any[] = [
+            player.deck,
+            player.hand,
+            player.discard,
+            player.lostzone,
+            player.stadium,
+            player.supporter,
+            player.active,
+            ...player.bench,
+            ...player.prizes
+          ];
+          lists.forEach(list => { (list as any).sleeveImagePath = sleeveImagePath; });
+          (player as any).sleeveImagePath = sleeveImagePath;
+        }
         player.deck.cards.forEach(c => {
           state.cardNames.push(c.fullName);
           c.id = state.cardNames.length - 1;

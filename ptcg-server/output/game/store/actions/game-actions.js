@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PassTurnAction = exports.RetreatAction = exports.UseStadiumAction = exports.UseEnergyAbilityAction = exports.UseTrainerAbilityAction = exports.UseAbilityAction = exports.AttackAction = void 0;
+exports.PassTurnAction = exports.RetreatStartAction = exports.RetreatAction = exports.UseStadiumAction = exports.UseEnergyAbilityAction = exports.UseTrainerAbilityAction = exports.UseAbilityAction = exports.AttackAction = void 0;
 class AttackAction {
     constructor(clientId, name) {
         this.clientId = clientId;
@@ -51,6 +51,13 @@ class RetreatAction {
     }
 }
 exports.RetreatAction = RetreatAction;
+class RetreatStartAction {
+    constructor(clientId) {
+        this.clientId = clientId;
+        this.type = 'RETREAT_START_ACTION';
+    }
+}
+exports.RetreatStartAction = RetreatStartAction;
 class PassTurnAction {
     constructor(clientId) {
         this.clientId = clientId;

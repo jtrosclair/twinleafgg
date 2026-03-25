@@ -5,7 +5,6 @@ const game_error_1 = require("../game-error");
 const game_message_1 = require("../game-message");
 const play_card_action_1 = require("./actions/play-card-action");
 const card_types_1 = require("./card/card-types");
-const energy_card_1 = require("./card/energy-card");
 class StateUtils {
     static getStadium(state) {
         throw new Error('Method not implemented.');
@@ -45,33 +44,13 @@ class StateUtils {
         // BEGIN HANDLING BLEND/UNIT ENERGIES
         const blendProvides = [];
         const blendCards = [];
-        // Collect blend/unit energies and their possible provides
-        energy.forEach((energyMap, index) => {
+        // Collect blend/unit energies and their possible provides using card properties
+        energy.forEach((energyMap) => {
             const card = energyMap.card;
-            if (card instanceof energy_card_1.EnergyCard) {
-                let blendTypes;
-                switch (card.name) {
-                    case 'Blend Energy WLFM':
-                        blendTypes = [card_types_1.CardType.WATER, card_types_1.CardType.LIGHTNING, card_types_1.CardType.FIGHTING, card_types_1.CardType.METAL];
-                        break;
-                    case 'Blend Energy GRPD':
-                        blendTypes = [card_types_1.CardType.GRASS, card_types_1.CardType.FIRE, card_types_1.CardType.PSYCHIC, card_types_1.CardType.DARK];
-                        break;
-                    case 'Unit Energy GRW':
-                        blendTypes = [card_types_1.CardType.GRASS, card_types_1.CardType.FIRE, card_types_1.CardType.WATER];
-                        break;
-                    case 'Unit Energy LPM':
-                        blendTypes = [card_types_1.CardType.LIGHTNING, card_types_1.CardType.PSYCHIC, card_types_1.CardType.METAL];
-                        break;
-                    case 'Unit Energy FDY':
-                        blendTypes = [card_types_1.CardType.FIGHTING, card_types_1.CardType.DARK, card_types_1.CardType.FAIRY];
-                        break;
-                    case 'Dark Metal Energy':
-                        blendTypes = [card_types_1.CardType.DARK, card_types_1.CardType.METAL];
-                        break;
-                }
-                if (blendTypes) {
-                    blendProvides.push(blendTypes);
+            if (card.blendedEnergies && card.blendedEnergies.length > 0) {
+                const count = card.blendedEnergyCount || 1;
+                for (let i = 0; i < count; i++) {
+                    blendProvides.push([...card.blendedEnergies]);
                     blendCards.push(energyMap);
                 }
             }
@@ -149,6 +128,88 @@ class StateUtils {
             }
         }
         return true;
+    }
+    /**
+     * Returns true when every energy entry has the same provides array.
+     * Used to skip the energy selection prompt when all options are interchangeable.
+     */
+    static allEnergyProvidesIdentical(energyMap) {
+        if (energyMap.length === 0) {
+            return false;
+        }
+        const providesKey = (e) => [...e.provides].sort().join(',');
+        const firstKey = providesKey(energyMap[0]);
+        return energyMap.every(e => providesKey(e) === firstKey);
+    }
+    /**
+     * Returns a minimal set of EnergyMap entries that satisfies the cost, or null if impossible.
+     * Satisfies typed costs first, then colorless, then trims excess.
+     */
+    static selectMinimalEnergyForCost(energyMap, cost) {
+        if (cost.length === 0) {
+            return [];
+        }
+        let result = [];
+        const provides = energyMap.slice();
+        const costs = cost.filter(c => c !== card_types_1.CardType.COLORLESS);
+        // Satisfy typed costs first
+        while (costs.length > 0 && provides.length > 0) {
+            const costType = costs[0];
+            let index = provides.findIndex(p => p.provides.includes(costType));
+            if (index === -1) {
+                index = provides.findIndex(p => p.provides.includes(card_types_1.CardType.ANY));
+            }
+            if (index === -1) {
+                return null;
+            }
+            const provide = provides[index];
+            provides.splice(index, 1);
+            result.push(provide);
+            provide.provides.forEach(c => {
+                if (c === card_types_1.CardType.ANY && costs.length > 0) {
+                    costs.shift();
+                }
+                else {
+                    const i = costs.indexOf(c);
+                    if (i !== -1) {
+                        costs.splice(i, 1);
+                    }
+                }
+            });
+        }
+        if (costs.length > 0) {
+            return null;
+        }
+        // Satisfy colorless with remaining provides
+        provides.sort((p1, p2) => {
+            const s1 = p1.provides.length;
+            const s2 = p2.provides.length;
+            return s1 - s2;
+        });
+        while (provides.length > 0 && !StateUtils.checkEnoughEnergy(result, cost)) {
+            const provide = provides.shift();
+            if (provide) {
+                result.push(provide);
+            }
+        }
+        if (!StateUtils.checkEnoughEnergy(result, cost)) {
+            return null;
+        }
+        // Trim to minimal
+        let needCheck = true;
+        while (needCheck) {
+            needCheck = false;
+            for (let i = 0; i < result.length; i++) {
+                const tempCards = result.slice();
+                tempCards.splice(i, 1);
+                if (StateUtils.checkEnoughEnergy(tempCards, cost)) {
+                    result = tempCards;
+                    needCheck = true;
+                    break;
+                }
+            }
+        }
+        return result;
     }
     static getPlayerById(state, playerId) {
         const player = state.players.find(p => p.id === playerId);

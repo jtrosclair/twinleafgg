@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BetweenTurnsEffect = exports.WhoBeginsEffect = exports.EndTurnEffect = exports.ChoosePrizeEffect = exports.AfterAttackEffect = exports.ChooseStartingPokemonEffect = exports.DrewTopdeckEffect = exports.BeginTurnEffect = exports.GamePhaseEffects = void 0;
+exports.BetweenTurnsEffect = exports.WhoBeginsEffect = exports.EndTurnEffect = exports.ChoosePrizeEffect = exports.AfterAttackEffect = exports.ChooseStartingPokemonEffect = exports.DrewTopdeckEffect = exports.DrawCardForTurnEffect = exports.BeginTurnEffect = exports.GamePhaseEffects = void 0;
 var GamePhaseEffects;
 (function (GamePhaseEffects) {
     GamePhaseEffects["BEGIN_TURN_EFFECT"] = "BEGIN_TURN_EFFECT";
+    GamePhaseEffects["DRAW_CARD_FOR_TURN_EFFECT"] = "DRAW_CARD_FOR_TURN_EFFECT";
     GamePhaseEffects["END_TURN_EFFECT"] = "END_TURN_EFFECT";
     GamePhaseEffects["WHO_BEGINS_EFFECT"] = "WHO_BEGINS_EFFECT";
     GamePhaseEffects["BETWEEN_TURNS_EFFECT"] = "BETWEEN_TURNS_EFFECT";
@@ -20,6 +21,14 @@ class BeginTurnEffect {
     }
 }
 exports.BeginTurnEffect = BeginTurnEffect;
+class DrawCardForTurnEffect {
+    constructor(player) {
+        this.type = GamePhaseEffects.DRAW_CARD_FOR_TURN_EFFECT;
+        this.preventDefault = false;
+        this.player = player;
+    }
+}
+exports.DrawCardForTurnEffect = DrawCardForTurnEffect;
 class DrewTopdeckEffect {
     constructor(player, handCard) {
         this.type = GamePhaseEffects.DREW_TOPDECK_EFFECT;

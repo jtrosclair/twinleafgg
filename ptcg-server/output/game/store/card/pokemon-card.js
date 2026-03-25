@@ -14,6 +14,7 @@ class PokemonCard extends card_1.Card {
         this.evolvesFrom = '';
         this.evolvesTo = [];
         this.evolvesToStage = [];
+        this.evolvesFromBase = [];
         this.stage = card_types_1.Stage.BASIC;
         this.retreat = [];
         this.hp = 0;

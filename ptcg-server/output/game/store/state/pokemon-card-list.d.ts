@@ -11,6 +11,7 @@ export declare class PokemonCardList extends CardList {
     specialConditions: SpecialCondition[];
     poisonDamage: number;
     burnDamage: number;
+    confusionDamage: number;
     marker: Marker;
     pokemonPlayedTurn: number;
     sleepFlips: number;
@@ -30,7 +31,7 @@ export declare class PokemonCardList extends CardList {
     cannotAttackNextTurnPending: boolean;
     cannotUseAttacksNextTurn: string[];
     cannotUseAttacksNextTurnPending: string[];
-    maxHpBeforeAttack: number;
+    _preservedConditionsDuringEvolution?: SpecialCondition[];
     static readonly ATTACK_USED_MARKER = "ATTACK_USED_MARKER";
     static readonly ATTACK_USED_2_MARKER = "ATTACK_USED_2_MARKER";
     static readonly CLEAR_KNOCKOUT_MARKER = "CLEAR_KNOCKOUT_MARKER";
@@ -63,7 +64,12 @@ export declare class PokemonCardList extends CardList {
     getPokemonCard(): PokemonCard | undefined;
     isStage(stage: Stage): boolean;
     isEvolved(): boolean;
-    clearAttackEffects(): void;
+    /**
+     * Surgically remove only attack-sourced effects from this Pokemon.
+     * Unlike `clearEffects()`, this preserves special conditions, ability markers,
+     * and other non-attack state.
+     */
+    removeAttackEffects(): void;
     clearEffects(): void;
     clearAllSpecialConditions(): void;
     removeSpecialCondition(sp: SpecialCondition): void;

@@ -138,15 +138,20 @@ function* alternativeSetupGame(next, store, state) {
         }
         // Opponent sets up
         yield* alternativeSetupSinglePlayer(opponent, chooseCardsOptions, state, store, next);
-        // Player is shown all opponent's mulligan hands
+        // Show both players' mulligan hands: opponent's first, then player's
         if (opponentMulligans > 0) {
             yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(player.id, game_message_1.GameMessage.SETUP_OPPONENT_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
             yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(opponent.id, game_message_1.GameMessage.SETUP_PLAYER_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
         }
-        // Player chooses how many cards to draw
-        if (opponentMulligans > 0) {
+        if (playerMulliganHands.length > 0) {
+            yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(player.id, game_message_1.GameMessage.SETUP_PLAYER_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
+            yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(opponent.id, game_message_1.GameMessage.SETUP_OPPONENT_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
+        }
+        // Player (who had Basic first) may draw up to the difference in mulligan counts
+        const extraDraws = Math.max(0, opponentMulligans - playerMulligans);
+        if (extraDraws > 0) {
             const options = [];
-            for (let i = opponentMulligans; i >= 0; i--) {
+            for (let i = extraDraws; i >= 0; i--) {
                 options.push({ message: `Draw ${i} card(s)`, value: i });
             }
             yield store.prompt(state, new select_prompt_1.SelectPrompt(player.id, game_message_1.GameMessage.WANT_TO_DRAW_CARDS, options.map(c => c.message), { allowCancel: false }), choice => {
@@ -175,15 +180,20 @@ function* alternativeSetupGame(next, store, state) {
         }
         // Player sets up
         yield* alternativeSetupSinglePlayer(player, chooseCardsOptions, state, store, next);
-        // Opponent is shown all player's mulligan hands
+        // Show both players' mulligan hands: player's first, then opponent's
         if (playerMulligans > 0) {
             yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(opponent.id, game_message_1.GameMessage.SETUP_OPPONENT_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
             yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(player.id, game_message_1.GameMessage.SETUP_PLAYER_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
         }
-        // Opponent chooses how many cards to draw
-        if (playerMulligans > 0) {
+        if (opponentMulliganHands.length > 0) {
+            yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(opponent.id, game_message_1.GameMessage.SETUP_PLAYER_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
+            yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(player.id, game_message_1.GameMessage.SETUP_OPPONENT_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
+        }
+        // Opponent (who had Basic first) may draw up to the difference in mulligan counts
+        const extraDraws = Math.max(0, playerMulligans - opponentMulligans);
+        if (extraDraws > 0) {
             const options = [];
-            for (let i = playerMulligans; i >= 0; i--) {
+            for (let i = extraDraws; i >= 0; i--) {
                 options.push({ message: `Draw ${i} card(s)`, value: i });
             }
             yield store.prompt(state, new select_prompt_1.SelectPrompt(opponent.id, game_message_1.GameMessage.WANT_TO_DRAW_CARDS, options.map(c => c.message), { allowCancel: false }), choice => {
@@ -199,6 +209,17 @@ function* alternativeSetupGame(next, store, state) {
         // Both have Basics, proceed with normal setup for both
         yield* alternativeSetupSinglePlayer(player, chooseCardsOptions, state, store, next);
         yield* alternativeSetupSinglePlayer(opponent, chooseCardsOptions, state, store, next);
+        // Show both players' mulligan hands when either mulliganed
+        if (playerMulligans > 0 || opponentMulligans > 0) {
+            if (playerMulliganHands.length > 0) {
+                yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(player.id, game_message_1.GameMessage.SETUP_PLAYER_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
+                yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(opponent.id, game_message_1.GameMessage.SETUP_OPPONENT_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
+            }
+            if (opponentMulliganHands.length > 0) {
+                yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(opponent.id, game_message_1.GameMessage.SETUP_PLAYER_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
+                yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(player.id, game_message_1.GameMessage.SETUP_OPPONENT_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
+            }
+        }
     }
     // Set initial Pokemon Played Turn, so players can't evolve during first turn
     const first = state.players[state.activePlayer];
@@ -368,15 +389,20 @@ function* setupGame(next, store, state) {
         }
         // Opponent sets up
         yield* setupSinglePlayer(opponent, chooseCardsOptions, state, store, next);
-        // Player is shown all opponent's mulligan hands (placeholder prompt)
+        // Show both players' mulligan hands: opponent's first, then player's
         if (opponentMulligans > 0) {
             yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(player.id, game_message_1.GameMessage.SETUP_OPPONENT_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
             yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(opponent.id, game_message_1.GameMessage.SETUP_PLAYER_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
         }
-        // Player chooses how many cards to draw
-        if (opponentMulligans > 0) {
+        if (playerMulliganHands.length > 0) {
+            yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(player.id, game_message_1.GameMessage.SETUP_PLAYER_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
+            yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(opponent.id, game_message_1.GameMessage.SETUP_OPPONENT_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
+        }
+        // Player (who had Basic first) may draw up to the difference in mulligan counts
+        const extraDraws = Math.max(0, opponentMulligans - playerMulligans);
+        if (extraDraws > 0) {
             const options = [];
-            for (let i = opponentMulligans; i >= 0; i--) {
+            for (let i = extraDraws; i >= 0; i--) {
                 options.push({ message: `Draw ${i} card(s)`, value: i });
             }
             yield store.prompt(state, new select_prompt_1.SelectPrompt(player.id, game_message_1.GameMessage.WANT_TO_DRAW_CARDS, options.map(c => c.message), { allowCancel: false }), choice => {
@@ -405,15 +431,20 @@ function* setupGame(next, store, state) {
         }
         // Player sets up
         yield* setupSinglePlayer(player, chooseCardsOptions, state, store, next);
-        // Opponent is shown all player's mulligan hands (placeholder prompt)
+        // Show both players' mulligan hands: player's first, then opponent's
         if (playerMulligans > 0) {
             yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(opponent.id, game_message_1.GameMessage.SETUP_OPPONENT_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
             yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(player.id, game_message_1.GameMessage.SETUP_PLAYER_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
         }
-        // Opponent chooses how many cards to draw
-        if (playerMulligans > 0) {
+        if (opponentMulliganHands.length > 0) {
+            yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(opponent.id, game_message_1.GameMessage.SETUP_PLAYER_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
+            yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(player.id, game_message_1.GameMessage.SETUP_OPPONENT_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
+        }
+        // Opponent (who had Basic first) may draw up to the difference in mulligan counts
+        const extraDraws = Math.max(0, playerMulligans - opponentMulligans);
+        if (extraDraws > 0) {
             const options = [];
-            for (let i = playerMulligans; i >= 0; i--) {
+            for (let i = extraDraws; i >= 0; i--) {
                 options.push({ message: `Draw ${i} card(s)`, value: i });
             }
             yield store.prompt(state, new select_prompt_1.SelectPrompt(opponent.id, game_message_1.GameMessage.WANT_TO_DRAW_CARDS, options.map(c => c.message), { allowCancel: false }), choice => {
@@ -429,6 +460,17 @@ function* setupGame(next, store, state) {
         // Both have Basics, proceed with normal setup for both
         yield* setupSinglePlayer(player, chooseCardsOptions, state, store, next);
         yield* setupSinglePlayer(opponent, chooseCardsOptions, state, store, next);
+        // Show both players' mulligan hands when either mulliganed
+        if (playerMulligans > 0 || opponentMulligans > 0) {
+            if (playerMulliganHands.length > 0) {
+                yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(player.id, game_message_1.GameMessage.SETUP_PLAYER_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
+                yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(opponent.id, game_message_1.GameMessage.SETUP_OPPONENT_NO_BASIC, playerMulliganHands, { allowCancel: false }), () => next());
+            }
+            if (opponentMulliganHands.length > 0) {
+                yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(opponent.id, game_message_1.GameMessage.SETUP_PLAYER_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
+                yield store.prompt(state, new show_mulligan_prompt_1.ShowMulliganPrompt(player.id, game_message_1.GameMessage.SETUP_OPPONENT_NO_BASIC, opponentMulliganHands, { allowCancel: false }), () => next());
+            }
+        }
     }
     // Set initial Pokemon Played Turn, so players can't evolve during first turn
     const first = state.players[state.activePlayer];
@@ -526,6 +568,7 @@ function setupPhaseReducer(store, state, action) {
             const player = createPlayer(action.clientId, action.name, (_b = state.gameSettings) === null || _b === void 0 ? void 0 : _b.format);
             player.deck = card_list_1.CardList.fromList(action.deck);
             player.deckId = action.deckId;
+            player.sleeveImagePath = action.sleeveImagePath;
             // Attach alternate artwork map to player's lists so clients can resolve images
             if (action.artworksMap) {
                 const lists = [
@@ -542,6 +585,21 @@ function setupPhaseReducer(store, state, action) {
                 lists.forEach(list => { list.artworksMap = action.artworksMap; });
                 // Also store on player for robustness
                 player.artworksMap = action.artworksMap;
+            }
+            if (action.sleeveImagePath) {
+                const lists = [
+                    player.deck,
+                    player.hand,
+                    player.discard,
+                    player.lostzone,
+                    player.stadium,
+                    player.supporter,
+                    player.active,
+                    ...player.bench,
+                    ...player.prizes
+                ];
+                lists.forEach(list => { list.sleeveImagePath = action.sleeveImagePath; });
+                player.sleeveImagePath = action.sleeveImagePath;
             }
             player.deck.isSecret = true;
             player.deck.cards.forEach(c => {
@@ -573,7 +631,16 @@ function setupPhaseReducer(store, state, action) {
                     state = (0, check_effect_1.endGame)(store, state, winner);
                     return;
                 }
-                const deckAnalyser = new deck_analyser_1.DeckAnalyser(deck);
+                const deckPayload = deck;
+                const deckCards = Array.isArray(deckPayload) ? deckPayload : deckPayload === null || deckPayload === void 0 ? void 0 : deckPayload.deck;
+                const sleeveImagePath = Array.isArray(deckPayload) ? undefined : deckPayload === null || deckPayload === void 0 ? void 0 : deckPayload.sleeveImagePath;
+                if (!Array.isArray(deckCards) || deckCards.length === 0) {
+                    store.log(state, game_message_1.GameLog.LOG_GAME_FINISHED_BEFORE_STARTED);
+                    const winner = state_1.GameWinner.NONE;
+                    state = (0, check_effect_1.endGame)(store, state, winner);
+                    return;
+                }
+                const deckAnalyser = new deck_analyser_1.DeckAnalyser(deckCards);
                 if (!deckAnalyser.isValid((_a = state.gameSettings) === null || _a === void 0 ? void 0 : _a.format)) {
                     // Safe exit for invalid deck (invited player): end game with no winner
                     store.log(state, game_message_1.GameLog.LOG_GAME_FINISHED_BEFORE_STARTED);
@@ -581,8 +648,23 @@ function setupPhaseReducer(store, state, action) {
                     state = (0, check_effect_1.endGame)(store, state, winner);
                     return;
                 }
-                player.deck = card_list_1.CardList.fromList(deck);
+                player.deck = card_list_1.CardList.fromList(deckCards);
                 player.deck.isSecret = true;
+                if (sleeveImagePath) {
+                    const lists = [
+                        player.deck,
+                        player.hand,
+                        player.discard,
+                        player.lostzone,
+                        player.stadium,
+                        player.supporter,
+                        player.active,
+                        ...player.bench,
+                        ...player.prizes
+                    ];
+                    lists.forEach(list => { list.sleeveImagePath = sleeveImagePath; });
+                    player.sleeveImagePath = sleeveImagePath;
+                }
                 player.deck.cards.forEach(c => {
                     state.cardNames.push(c.fullName);
                     c.id = state.cardNames.length - 1;

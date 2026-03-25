@@ -9,5 +9,6 @@ export declare abstract class EnergyCard extends Card {
     text: string;
     isBlocked: boolean;
     blendedEnergies: CardType[];
+    blendedEnergyCount: number;
     energyEffect: EnergyEffect | undefined;
 }
