@@ -142,6 +142,7 @@ class Store {
         };
         const allShowCards = prompts.every(p => p instanceof show_cards_prompt_1.ShowCardsPrompt);
         if (allShowCards) {
+            prompts.forEach(p => p.result = true);
             const syntheticResults = prompts.map(() => true);
             then(syntheticResults.length === 1 ? syntheticResults[0] : syntheticResults);
         }
@@ -156,6 +157,7 @@ class Store {
                     const availablePrizes = targetPlayer.prizes.filter(p => p.cards.length > 0);
                     const count = Math.min(prizePrompt.options.count, availablePrizes.length);
                     const selected = availablePrizes.slice(0, count);
+                    prizePrompt.result = selected;
                     then(selected);
                 }
                 else {

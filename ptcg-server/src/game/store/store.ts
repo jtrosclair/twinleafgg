@@ -174,6 +174,7 @@ export class Store implements StoreLike {
 
     const allShowCards = prompts.every(p => p instanceof ShowCardsPrompt);
     if (allShowCards) {
+      prompts.forEach(p => p.result = true);
       const syntheticResults = prompts.map(() => true);
       then(syntheticResults.length === 1 ? syntheticResults[0] : syntheticResults);
     } else if (prompts.length === 1 && prompts[0] instanceof ChoosePrizePrompt) {
@@ -187,6 +188,7 @@ export class Store implements StoreLike {
           const availablePrizes = targetPlayer.prizes.filter(p => p.cards.length > 0);
           const count = Math.min(prizePrompt.options.count, availablePrizes.length);
           const selected = availablePrizes.slice(0, count);
+          prizePrompt.result = selected;
           then(selected);
         } else {
           this.promptItems.push(promptItem);
