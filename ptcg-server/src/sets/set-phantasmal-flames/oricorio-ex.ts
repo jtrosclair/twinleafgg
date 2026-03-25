@@ -14,6 +14,7 @@ export class Oricorioex extends PokemonCard {
   public hp: number = 190;
   public weakness = [{ type: W }];
   public retreat = [C];
+  public tags = [CardTag.POKEMON_ex];
 
   public powers = [{
     name: 'Excited Turbo',

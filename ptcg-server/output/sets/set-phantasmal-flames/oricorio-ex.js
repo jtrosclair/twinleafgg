@@ -15,6 +15,7 @@ class Oricorioex extends pokemon_card_1.PokemonCard {
         this.hp = 190;
         this.weakness = [{ type: W }];
         this.retreat = [C];
+        this.tags = [card_types_1.CardTag.POKEMON_ex];
         this.powers = [{
                 name: 'Excited Turbo',
                 useWhenInPlay: true,
