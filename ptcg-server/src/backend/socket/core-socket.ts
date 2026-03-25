@@ -144,7 +144,27 @@ export class CoreSocket {
     try {
       // Decode the base64 state data
       const base64 = new Base64();
-      const serializedState = base64.decode(params.stateData);
+      let serializedState = base64.decode(params.stateData);
+
+      // Preprocess card names with normalization and card replacements
+      try {
+        const parsed = JSON.parse(serializedState);
+        if (parsed[1] && Array.isArray(parsed[1].cardNames)) {
+          parsed[1].cardNames = parsed[1].cardNames.map((name: string) => {
+            name = name.replace('é', 'e');
+            const normalizedName = StateSerializer.normalizeCardName(name);
+            if (!normalizedName) {
+              console.warn('[sandbox] normalizeCardName returned empty for:', name);
+            }
+            return normalizedName || name;
+          });
+          serializedState = JSON.stringify(parsed);
+        } else {
+          console.warn('[sandbox] No cardNames found in parsed state. Keys:', parsed[1] ? Object.keys(parsed[1]) : 'parsed[1] is falsy');
+        }
+      } catch (parseError: any) {
+        console.error('[sandbox] Error preprocessing card names:', parseError);
+      }
 
       const serializer = new StateSerializer();
       const state = serializer.deserialize(serializedState);
@@ -173,8 +193,8 @@ export class CoreSocket {
       // Create the game from the state with the opponent client
       const game = this.core.createGameFromState(this.client, state, gameSettings, opponentClient);
       response('ok', CoreSocket.buildGameState(game));
-    } catch (error) {
-      console.error('Error creating game from state:', error, 'Params:', params.stateData?.slice(0, 100));
+    } catch (error: any) {
+      console.error('[sandbox] Error creating game from state:', error?.message || error, 'Params:', params.stateData?.slice(0, 100));
       response('error', ApiErrorEnum.ACTION_INVALID);
     }
   }

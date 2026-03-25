@@ -1,5 +1,5 @@
 export const environment = {
-  apiUrl: 'https://sim-server.prizemap.app',
+  apiUrl: 'http://localhost:8080',
   // Increase API/socket observable timeouts to be more tolerant
   timeout: 60 * 1000,
   production: true,

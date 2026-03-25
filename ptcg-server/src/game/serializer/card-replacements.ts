@@ -1,18 +1,22 @@
-export const setCodeReplacements = [
-  { from: 'PR-SH', to: 'SWSH' },
-  { from: 'SP', to: 'SWSH' },
-  { from: 'PR-SW', to: 'SWSH' },
-  { from: 'PR-SV', to: 'SVP' },
-];
+// Card replacements for normalizing card names from external sources.
+// Mirrored from ptcg-play/src/app/deck/deck-edit/card-replacements.ts
+// with numeric last words stripped (set numbers not used in server-side lookups).
 
-// Single source of truth for card replacements
-export const cardReplacements = [
+function stripNumericSuffix(s: string): string {
+  const words = s.split(' ');
+  if (words.length > 1 && /^\d+$/.test(words[words.length - 1])) {
+    words.pop();
+  }
+  return words.join(' ').trim();
+}
+
+const rawCardReplacements = [
   // Diamond symbol to Prism Star conversion
   { from: '♢', to: 'Prism Star' },
 
   //Energy
-  { from: 'Beast Energy FLI', to: 'Beast Energy ♢ FLI' },
-  { from: 'Beast Energy ◇ FLI', to: 'Beast Energy ♢ FLI' },
+  { from: 'Beast Energy ♢ FLI', to: 'Beast Energy FLI' },
+  { from: 'Beast Energy ◇ FLI', to: 'Beast Energy FLI' },
   { from: 'Grass Energy 1', to: 'Grass Energy SVE 1' },
   { from: 'Basic Grass Energy 1', to: 'Grass Energy SVE 1' },
   { from: 'Basic Grass Energy SVE 1', to: 'Grass Energy SVE 1' },
@@ -710,16 +714,14 @@ export const cardReplacements = [
   { from: 'Reshiram ex SV11W 174', to: 'Reshiram exWR SV11W 174' },
 ];
 
-// Generate exportReplacements by reversing the mapping
-export const exportReplacements = cardReplacements.map(({ from, to }) => ({ from: to, to: from }));
+// Build a Map with numeric suffixes stripped from both keys and values.
+// Uses first match when multiple entries strip to the same key.
+const cardReplacementMap = new Map<string, string>();
+for (const { from, to } of rawCardReplacements) {
+  const key = stripNumericSuffix(from);
+  if (!cardReplacementMap.has(key)) {
+    cardReplacementMap.set(key, stripNumericSuffix(to));
+  }
+}
 
-// Placeholder for export-only overrides (if needed in the future)
-export const exportOverrides = [
-  // { from: 'Some Internal Name', to: 'Some Export Name' }
-];
-
-// Final export replacements (merge reversed and overrides)
-export const finalExportReplacements = [
-  ...exportReplacements,
-  ...exportOverrides
-];
+export { cardReplacementMap, stripNumericSuffix };

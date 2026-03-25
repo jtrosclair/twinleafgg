@@ -16,6 +16,7 @@ import { deepIterate, deepClone } from '../../utils';
 import { JsonPatch } from './json-patch';
 import { JsonDiff } from './json-patch.interface';
 import { GameSettings } from '../core/game-settings';
+import { cardReplacementMap, stripNumericSuffix } from './card-replacements';
 
 export class StateSerializer {
 
@@ -39,6 +40,14 @@ export class StateSerializer {
 
   public static normalizeCardName(name: string): string {
     name = name.replace("é", 'e')
+
+    // Apply card replacements (with numeric suffixes stripped for matching)
+    const strippedName = stripNumericSuffix(name);
+    const replacement = cardReplacementMap.get(strippedName);
+    if (replacement) {
+      name = replacement;
+    }
+
     if (name == 'Zekrom ex BLK 34') {
       name = 'Zekrom ex SV11B 169';
     }
@@ -51,10 +60,6 @@ export class StateSerializer {
 
     if (name.includes("Energy XXX")) { //prevent vintage energy misnaming
       name = name.replace("Energy XXX", "Energy SVE");
-    }
-
-    if (name == 'Beast Energy FLI') {
-      name = 'Beast Energy ◇ FLI';
     }
 
     // if last word in card name is a number, remove it and trim the resulting string
@@ -144,8 +149,6 @@ export class StateSerializer {
   public deserialize(serializedState: SerializedState): State {
     const serializers = this.serializers;
     const context = this.restoreContext(serializedState);
-
-    // console.log({ context })
 
     const reviver: any = function (this: any, key: string, value: any) {
       if (value instanceof Array) {
@@ -241,7 +244,6 @@ export class StateSerializer {
       const fixedName = name?.replace("�", "é")
       const card = StateSerializer.knownCardsByFullName.get(fixedName);
       if (card === undefined) {
-        console.log({ card, fixedName })
         throw new GameError(GameCoreError.ERROR_SERIALIZER, `Unknown cards '${fixedName}'.`);
       }
       const clonedCard = deepClone(card) as Card;

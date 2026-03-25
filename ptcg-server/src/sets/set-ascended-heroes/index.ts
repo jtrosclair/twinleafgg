@@ -22,6 +22,7 @@ import { Mismagius } from './mismagius';
 import { NightMine } from './night-mine';
 import { Numel } from './numel';
 import { NsZekrom } from './ns-zekrom';
+import { NsVanillite } from './ns-vanillite';
 import { NsVanilluxe } from './ns-vanilluxe';
 import { LightBall } from './light-ball';
 import { PokePad } from './poke-pad';
@@ -70,6 +71,7 @@ import { LarrysBraviary } from './larrys-braviary';
 import { LarrysKomala } from './larrys-komala';
 import { Waitress } from './waitress';
 import { BossOrdersASC } from './other-prints';
+import { NsVanillish } from './ns-vanillish';
 
 export const setAscendedHeroes: Card[] = [
   //Start Deck 100 Reprints
@@ -105,6 +107,8 @@ export const setAscendedHeroes: Card[] = [
   new NightMine(),
   new Numel(),
   new NsZekrom(),
+  new NsVanillish(),
+  new NsVanillite(),
   new NsVanilluxe(),
   new PokePad(),
   new Rayquaza(),

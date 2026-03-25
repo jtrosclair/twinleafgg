@@ -110,9 +110,31 @@ class CoreSocket {
     createGameFromState(params, response) {
         var _a;
         try {
+            console.log('HELLO');
             // Decode the base64 state data
             const base64 = new utils_2.Base64();
-            const serializedState = base64.decode(params.stateData);
+            let serializedState = base64.decode(params.stateData);
+            // Preprocess card names with normalization and card replacements
+            try {
+                const parsed = JSON.parse(serializedState);
+                if (parsed[1] && Array.isArray(parsed[1].cardNames)) {
+                    parsed[1].cardNames = parsed[1].cardNames.map((name) => {
+                        name = name.replace('é', 'e');
+                        const normalizedName = game_1.StateSerializer.normalizeCardName(name);
+                        if (!normalizedName) {
+                            console.warn('[sandbox] normalizeCardName returned empty for:', name);
+                        }
+                        return normalizedName || name;
+                    });
+                    serializedState = JSON.stringify(parsed);
+                }
+                else {
+                    console.warn('[sandbox] No cardNames found in parsed state. Keys:', parsed[1] ? Object.keys(parsed[1]) : 'parsed[1] is falsy');
+                }
+            }
+            catch (parseError) {
+                console.error('[sandbox] Error preprocessing card names:', parseError);
+            }
             const serializer = new game_1.StateSerializer();
             const state = serializer.deserialize(serializedState);
             if (!state || !state.players || state.players.length === 0) {
@@ -139,7 +161,7 @@ class CoreSocket {
             response('ok', CoreSocket.buildGameState(game));
         }
         catch (error) {
-            console.error('Error creating game from state:', error, 'Params:', (_a = params.stateData) === null || _a === void 0 ? void 0 : _a.slice(0, 100));
+            console.error('[sandbox] Error creating game from state:', (error === null || error === void 0 ? void 0 : error.message) || error, 'Params:', (_a = params.stateData) === null || _a === void 0 ? void 0 : _a.slice(0, 100));
             response('error', errors_1.ApiErrorEnum.ACTION_INVALID);
         }
     }

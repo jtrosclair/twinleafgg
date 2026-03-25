@@ -16,6 +16,7 @@ const path_builder_1 = require("./path-builder");
 const utils_1 = require("../../utils");
 const json_patch_1 = require("./json-patch");
 const game_settings_1 = require("../core/game-settings");
+const card_replacements_1 = require("./card-replacements");
 class StateSerializer {
     constructor() {
         this.serializers = [
@@ -32,6 +33,12 @@ class StateSerializer {
     }
     static normalizeCardName(name) {
         name = name.replace("é", 'e');
+        // Apply card replacements (with numeric suffixes stripped for matching)
+        const strippedName = (0, card_replacements_1.stripNumericSuffix)(name);
+        const replacement = card_replacements_1.cardReplacementMap.get(strippedName);
+        if (replacement) {
+            name = replacement;
+        }
         if (name == 'Zekrom ex BLK 34') {
             name = 'Zekrom ex SV11B 169';
         }
@@ -41,9 +48,6 @@ class StateSerializer {
         name = name.replace('Pok�', 'Poke');
         if (name.includes("Energy XXX")) { //prevent vintage energy misnaming
             name = name.replace("Energy XXX", "Energy SVE");
-        }
-        if (name == 'Beast Energy FLI') {
-            name = 'Beast Energy ◇ FLI';
         }
         // if last word in card name is a number, remove it and trim the resulting string
         let cardWithoutSetId = name;
@@ -117,7 +121,6 @@ class StateSerializer {
     deserialize(serializedState) {
         const serializers = this.serializers;
         const context = this.restoreContext(serializedState);
-        // console.log({ context })
         const reviver = function (key, value) {
             if (value instanceof Array) {
                 return value;
@@ -197,7 +200,6 @@ class StateSerializer {
             const fixedName = name === null || name === void 0 ? void 0 : name.replace("�", "é");
             const card = StateSerializer.knownCardsByFullName.get(fixedName);
             if (card === undefined) {
-                console.log({ card, fixedName });
                 throw new game_error_1.GameError(game_message_1.GameCoreError.ERROR_SERIALIZER, `Unknown cards '${fixedName}'.`);
             }
             const clonedCard = (0, utils_1.deepClone)(card);

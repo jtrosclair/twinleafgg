@@ -12,7 +12,6 @@ export class Scheduler {
   }
 
   public run(callback: Function, counter: number = 1): void {
-    console.log({ config: config.core })
     // Job disabled in the config file, do not add it to scheduler
     if (counter === 0) {
       return;

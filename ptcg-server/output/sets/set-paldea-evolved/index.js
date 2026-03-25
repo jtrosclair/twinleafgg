@@ -16,6 +16,7 @@ const crocalor_1 = require("./crocalor");
 const cufant_1 = require("./cufant");
 const deino_1 = require("./deino");
 const delivery_drone_1 = require("./delivery-drone");
+const dendra_1 = require("./dendra");
 const dudunsparce_1 = require("./dudunsparce");
 const fighting_au_lait_1 = require("./fighting-au-lait");
 const flamigo_1 = require("./flamigo");
@@ -105,6 +106,7 @@ exports.setPaldeaEvolved = [
     new clavell_1.Clavell(),
     new cufant_1.Cufant(),
     new deino_1.Deino(),
+    new dendra_1.Dendra(),
     new delivery_drone_1.DeliveryDrone(),
     new dudunsparce_1.Dudunsparce(),
     new dunsparce_1.Dunsparce(),

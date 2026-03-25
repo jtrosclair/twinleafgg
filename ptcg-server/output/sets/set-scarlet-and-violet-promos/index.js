@@ -10,6 +10,7 @@ const pecharunt_1 = require("./pecharunt");
 const scrafty_1 = require("./scrafty");
 const tinkaton_ex_1 = require("./tinkaton-ex");
 const toxtricity_ex_1 = require("./toxtricity-ex");
+const zacian_ex_1 = require("./zacian-ex");
 exports.setScarletAndVioletPromos = [
     new ampharos_ex_1.Ampharosex(),
     new annihilape_ex_1.Annihilapeex(),
@@ -19,6 +20,7 @@ exports.setScarletAndVioletPromos = [
     new tinkaton_ex_1.Tinkatonex(),
     new toxtricity_ex_1.Toxtricityex(),
     new scrafty_1.Scrafty(),
+    new zacian_ex_1.ZacianEx(),
     // Alt arts
     new alt_arts_1.PawmotSVP(),
     new alt_arts_1.HawluchaSVP(),

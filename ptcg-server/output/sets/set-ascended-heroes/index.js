@@ -24,6 +24,7 @@ const mismagius_1 = require("./mismagius");
 const night_mine_1 = require("./night-mine");
 const numel_1 = require("./numel");
 const ns_zekrom_1 = require("./ns-zekrom");
+const ns_vanillite_1 = require("./ns-vanillite");
 const ns_vanilluxe_1 = require("./ns-vanilluxe");
 const light_ball_1 = require("./light-ball");
 const poke_pad_1 = require("./poke-pad");
@@ -72,6 +73,7 @@ const larrys_braviary_1 = require("./larrys-braviary");
 const larrys_komala_1 = require("./larrys-komala");
 const waitress_1 = require("./waitress");
 const other_prints_2 = require("./other-prints");
+const ns_vanillish_1 = require("./ns-vanillish");
 exports.setAscendedHeroes = [
     //Start Deck 100 Reprints
     new other_prints_1.SuperPotionMC(),
@@ -105,6 +107,8 @@ exports.setAscendedHeroes = [
     new night_mine_1.NightMine(),
     new numel_1.Numel(),
     new ns_zekrom_1.NsZekrom(),
+    new ns_vanillish_1.NsVanillish(),
+    new ns_vanillite_1.NsVanillite(),
     new ns_vanilluxe_1.NsVanilluxe(),
     new poke_pad_1.PokePad(),
     new rayquaza_1.Rayquaza(),
