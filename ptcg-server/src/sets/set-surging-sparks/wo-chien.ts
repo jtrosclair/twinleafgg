@@ -2,8 +2,9 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { ChoosePokemonPrompt, GameMessage, PlayerType, SlotType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
+import { DISCARD_TOP_X_CARDS_FROM_YOUR_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Wochien extends PokemonCard {
 
@@ -40,7 +41,7 @@ export class Wochien extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Hazardous Greed
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
@@ -68,10 +69,14 @@ export class Wochien extends PokemonCard {
     }
 
     // Entangling Whip
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[1]) {
+    if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
 
-      player.deck.moveTo(player.discard, 3);
+      // Legacy implementation:
+      // - Moved top 3 cards directly from deck to discard.
+      //
+      // Converted to prefab version (DISCARD_TOP_X_CARDS_FROM_YOUR_DECK).
+      return DISCARD_TOP_X_CARDS_FROM_YOUR_DECK(store, state, player, 3, this, effect);
     }
 
     return state;

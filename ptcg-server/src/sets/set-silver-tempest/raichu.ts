@@ -1,11 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import {
-  StoreLike, State, StateUtils
-} from '../../game';
-import { AttackEffect } from '../../game/store/effects/game-effects';
-import { Effect } from '../../game/store/effects/effect';
+import { StoreLike, State } from '../../game';
 
+import { Effect } from '../../game/store/effects/effect';
+import { OPPONENT_HAS_USED_VSTAR_POWER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Raichu extends PokemonCard {
 
@@ -51,9 +49,14 @@ export class Raichu extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
-      const opponent = StateUtils.getOpponent(state, effect.player);
-      if (opponent.usedVSTAR == true) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      /*
+       * Legacy pre-prefab implementation:
+       * - resolved opponent with StateUtils.getOpponent(...)
+       * - checked opponent.usedVSTAR directly
+       */
+      // Converted to prefab version (OPPONENT_HAS_USED_VSTAR_POWER).
+      if (OPPONENT_HAS_USED_VSTAR_POWER(state, effect.player)) {
         effect.damage += 100;
       }
       return state;

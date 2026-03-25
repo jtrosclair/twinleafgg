@@ -5,7 +5,7 @@ import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
 import { HealEffect } from '../../game/store/effects/game-effects';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { CLEAN_UP_SUPPORTER, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 
@@ -26,9 +26,9 @@ export class MallowAndLana extends TrainerCard {
   public fullName: string = 'Mallow & Lana CEC';
 
   public text: string =
-    'Switch your Active Pokémon with 1 of your Benched Pokémon.' +
-    '' +
-    'When you play this card, you may discard 2 other cards from your hand. If you do, heal 120 damage from the Pokémon you moved to your Bench.';
+    `Switch your Active Pokémon with 1 of your Benched Pokémon. 
+
+When you play this card, you may discard 2 other cards from your hand. If you do, heal 120 damage from the Pokémon you moved to your Bench.`;
 
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
@@ -66,7 +66,6 @@ export class MallowAndLana extends TrainerCard {
         player.switchPokemon(cardList);
 
         if (player.hand.cards.length < 2 || !activeHasDamage) {
-          CLEAN_UP_SUPPORTER(effect, player);
           return state;
         }
 
@@ -96,8 +95,6 @@ export class MallowAndLana extends TrainerCard {
               store.log(state, GameLog.LOG_PLAYER_HEALS_POKEMON, { name: player.name, pokemon: previousActiveCardList.getPokemonCard()!.name, healingAmount: 120 });
             });
           }
-
-          CLEAN_UP_SUPPORTER(effect, player);
 
         });
       });

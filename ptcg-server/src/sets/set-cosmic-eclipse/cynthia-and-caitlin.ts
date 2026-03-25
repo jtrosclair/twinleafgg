@@ -8,7 +8,7 @@ import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt'
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 import { SelectOptionPrompt } from '../../game/store/prompts/select-option-prompt';
-import { CLEAN_UP_SUPPORTER, DRAW_CARDS, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { DRAW_CARDS, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 function* playCard(next: Function, store: StoreLike, state: State,
   self: CynthiaAndCaitlin, effect: TrainerEffect): IterableIterator<State> {
@@ -45,10 +45,8 @@ function* playCard(next: Function, store: StoreLike, state: State,
         MOVE_CARDS(store, state, player.hand, player.discard, { cards: discarded, sourceCard: self });
         // Draw 3 cards
         DRAW_CARDS(player, 3);
-        CLEAN_UP_SUPPORTER(effect, player);
       }
     });
-    CLEAN_UP_SUPPORTER(effect, player);
     return state;
   }
 
@@ -88,7 +86,6 @@ function* playCard(next: Function, store: StoreLike, state: State,
         if (selected && selected.length > 0) {
           store.log(state, GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: selected[0].name });
           MOVE_CARDS(store, state, player.discard, player.hand, { cards: selected, sourceCard: self });
-          CLEAN_UP_SUPPORTER(effect, player);
         }
       });
     } else if (choice === 1) {
@@ -125,38 +122,30 @@ function* playCard(next: Function, store: StoreLike, state: State,
               // Draw 3 cards
               const drawnCards = player.deck.cards.slice(0, 3);
               player.deck.moveCardsTo(drawnCards, player.hand);
-              player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
             }
           });
         }
       });
     }
   });
-
-  CLEAN_UP_SUPPORTER(effect, player);
   return state;
 }
 
 export class CynthiaAndCaitlin extends TrainerCard {
 
   public trainerType: TrainerType = TrainerType.SUPPORTER;
-
   public set: string = 'CEC';
-
   public tags = [CardTag.TAG_TEAM];
-
   public cardImage: string = 'assets/cardback.png';
-
   public setNumber: string = '189';
-
   public name: string = 'Cynthia & Caitlin';
-
   public fullName: string = 'Cynthia & Caitlin CEC';
 
   public text: string =
-    'Put a Supporter card from your discard pile into your hand. You can\'t choose Cynthia & Caitlin or a card you discarded with the effect of this card.' +
-    '' +
-    'When you play this card, you may discard another card from your hand. If you do, draw 3 cards.';
+    `Put a Supporter card from your discard pile into your hand. You can't choose Cynthia & Caitlin or a card you discarded with the effect of this card.
+
+When you play this card, you may discard another card from your hand. If you do, draw 3 cards.`;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof TrainerEffect && effect.trainerCard === this) {
@@ -169,7 +158,6 @@ export class CynthiaAndCaitlin extends TrainerCard {
 
       if (effect.preventDefault) {
         // If prevented, just discard the card and return
-        CLEAN_UP_SUPPORTER(effect, player);
         return state;
       }
 

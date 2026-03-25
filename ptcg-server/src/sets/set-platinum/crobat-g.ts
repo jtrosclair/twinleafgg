@@ -1,12 +1,12 @@
 import { Effect } from '../../game/store/effects/effect';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { PowerType, StoreLike, State, ChoosePokemonPrompt, PlayerType, SlotType,
-  StateUtils } from '../../game';
+import { PowerType, StoreLike, State, ChoosePokemonPrompt, PlayerType, SlotType } from '../../game';
 import { Stage, CardType, CardTag, SpecialCondition } from '../../game/store/card/card-types';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { GameMessage } from '../../game/game-message';
-import { AttackEffect, PowerEffect } from '../../game/store/effects/game-effects';
+
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
+import { IS_POKEPOWER_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 function* useFlashBite(next: Function, store: StoreLike, state: State, effect: PlayPokemonEffect): IterableIterator<State> {
   const player = effect.player;
@@ -15,7 +15,7 @@ function* useFlashBite(next: Function, store: StoreLike, state: State, effect: P
     player.id,
     GameMessage.CHOOSE_POKEMON_TO_DAMAGE,
     PlayerType.TOP_PLAYER,
-    [ SlotType.ACTIVE, SlotType.BENCH ],
+    [SlotType.ACTIVE, SlotType.BENCH],
     { allowCancel: true },
   ), selected => {
     if (!selected || selected.length === 0) {
@@ -30,14 +30,13 @@ function* useFlashBite(next: Function, store: StoreLike, state: State, effect: P
   return state;
 }
 
-
 export class CrobatG extends PokemonCard {
 
   public stage: Stage = Stage.BASIC;
 
   public cardType: CardType = CardType.PSYCHIC;
 
-  public tags = [ CardTag.POKEMON_SP ];
+  public tags = [CardTag.POKEMON_SP];
 
   public hp: number = 80;
 
@@ -45,7 +44,7 @@ export class CrobatG extends PokemonCard {
 
   public resistance = [{ type: CardType.FIGHTING, value: -20 }];
 
-  public retreat = [ ];
+  public retreat = [];
 
   public powers = [{
     name: 'Flash Bite',
@@ -58,10 +57,10 @@ export class CrobatG extends PokemonCard {
   public attacks = [
     {
       name: 'Toxic Fang',
-      cost: [ CardType.PSYCHIC, CardType.COLORLESS ],
+      cost: [CardType.PSYCHIC, CardType.COLORLESS],
       damage: 0,
       text: 'The Defending Pokémon is now Poisoned. Put 2 damage counters ' +
-      ' instead of 1 on the Defending Pokémon between turns.'
+        ' instead of 1 on the Defending Pokémon between turns.'
     }
   ];
 
@@ -79,15 +78,7 @@ export class CrobatG extends PokemonCard {
 
     if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
       // Try to reduce PowerEffect, to check if something is blocking our ability
-      try {
-        const player = StateUtils.findOwner(state, effect.target);
-        const stub = new PowerEffect(player, {
-          name: 'test',
-          powerType: PowerType.ABILITY,
-          text: ''
-        }, this);
-        store.reduceEffect(state, stub);
-      } catch {
+      if (IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
         return state;
       }
 
@@ -95,7 +86,7 @@ export class CrobatG extends PokemonCard {
       return generator.next().value;
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const specialCondition = new AddSpecialConditionsEffect(effect, [SpecialCondition.POISONED]);
       specialCondition.poisonDamage = 20;
       store.reduceEffect(state, specialCondition);

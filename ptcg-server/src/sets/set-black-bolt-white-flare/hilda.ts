@@ -2,7 +2,7 @@ import { Card } from '../../game/store/card/card';
 import { GameMessage } from '../../game/game-message';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerCard } from '../../game/store/card/trainer-card';
-import { Stage, TrainerType } from '../../game/store/card/card-types';
+import { Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { StateUtils } from '../../game/store/state-utils';
@@ -10,8 +10,8 @@ import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
 import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
-import { EnergyCard, GameError, PokemonCard } from '../../game';
-import { CLEAN_UP_SUPPORTER, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { GameError, PokemonCard } from '../../game';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 function* playCard(next: Function, store: StoreLike, state: State,
   self: Hilda, effect: TrainerEffect): IterableIterator<State> {
@@ -36,7 +36,7 @@ function* playCard(next: Function, store: StoreLike, state: State,
   player.deck.cards.forEach((c, index) => {
     if (c instanceof PokemonCard && c.stage !== Stage.BASIC) {
       pokemon += 1;
-    } else if (c instanceof EnergyCard) {
+    } else if (c.superType === SuperType.ENERGY) {
       energies += 1;
     } else {
       blocked.push(index);
@@ -63,7 +63,6 @@ function* playCard(next: Function, store: StoreLike, state: State,
   });
 
   MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: self });
-  CLEAN_UP_SUPPORTER(effect, player);
 
 
   if (cards.length > 0) {

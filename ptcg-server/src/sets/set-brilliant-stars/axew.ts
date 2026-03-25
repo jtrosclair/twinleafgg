@@ -9,6 +9,7 @@ import { GameMessage } from '../../game/game-message';
 import { Card } from '../../game/store/card/card';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 function* useUltraEvolution(next: Function, store: StoreLike, state: State,
   effect: AttackEffect): IterableIterator<State> {
@@ -23,7 +24,7 @@ function* useUltraEvolution(next: Function, store: StoreLike, state: State,
     player,
     GameMessage.CHOOSE_CARD_TO_EVOLVE,
     player.deck,
-    { superType: SuperType.POKEMON, stage: Stage.STAGE_2, evolvesFrom: 'Fraxure'},
+    { superType: SuperType.POKEMON, stage: Stage.STAGE_2, evolvesFrom: 'Fraxure' },
     { min: 1, max: 1, allowCancel: true }
   ), selected => {
     cards = selected || [];
@@ -44,17 +45,17 @@ function* useUltraEvolution(next: Function, store: StoreLike, state: State,
 
 export class Axew extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  public cardType: CardType = CardType.DRAGON;
+  public cardType: CardType = N;
   public hp: number = 60;
   public weakness = [];
   public resistance = [];
-  public retreat = [CardType.COLORLESS];
+  public retreat = [C];
 
   public attacks = [{
     name: 'Ultra Evolution',
-    cost: [CardType.COLORLESS],
+    cost: [C],
     damage: 0,
-    text: 'Flip a coin. If heads, search your deck for a Haxorus and put it onto this Axew to evolve it. THen shuffle your deck.'
+    text: 'Flip a coin. If heads, search your deck for a Haxorus and put it onto this Axew to evolve it. Then, shuffle your deck.'
   }];
 
   public regulationMark: string = 'F';
@@ -64,9 +65,9 @@ export class Axew extends PokemonCard {
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '110';
 
-  public reduceEffect(store: StoreLike, state: State, effect: Effect): State { 
-    
-    if(effect instanceof AttackEffect && effect.attack === this.attacks[0]) { 
+  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       return store.prompt(state, [
         new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
@@ -74,7 +75,7 @@ export class Axew extends PokemonCard {
         if (result === true) {
           const generator = useUltraEvolution(() => generator.next(), store, state, effect);
           return generator.next().value;
-        } 
+        }
       });
     }
 

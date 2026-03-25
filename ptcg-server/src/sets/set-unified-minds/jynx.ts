@@ -47,7 +47,7 @@ export class Jynx extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
-      REMOVE_MARKER(this.OMINOUS_POSTURE_MARKER, effect.player, this);
+      REMOVE_MARKER(this.OMINOUS_POSTURE_MARKER, this);
     }
 
     REMOVE_MARKER_AT_END_OF_TURN(effect, this.OMINOUS_POSTURE_MARKER, this);

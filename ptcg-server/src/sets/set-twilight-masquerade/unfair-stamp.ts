@@ -43,30 +43,23 @@ function* playCard(next: Function, store: StoreLike, state: State,
     player.deck.moveTo(player.hand, 5);
     opponent.deck.moveTo(opponent.hand, 2);
 
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
   });
 }
 
 export class UnfairStamp extends TrainerCard {
 
   public trainerType: TrainerType = TrainerType.ITEM;
-
   public tags = [CardTag.ACE_SPEC];
-
   public set: string = 'TWM';
-
   public cardImage: string = 'assets/cardback.png';
-
   public setNumber: string = '165';
-
   public regulationMark = 'H';
-
   public name: string = 'Unfair Stamp';
-
   public fullName: string = 'Unfair Stamp TWM';
 
   public text: string =
-    `You can play this card only if one of your Pokémon was Knocked Out during your opponent\'s last turn.
+    `You can play this card only if one of your Pokémon was Knocked Out during your opponent's last turn.
 
 Each player shuffles their hand into their deck. Then, you draw 5 cards, and your opponent draws 2 cards.`;
 

@@ -9,6 +9,7 @@ import { State } from '../../game/store/state/state';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 function* playCard(next: Function, store: StoreLike, state: State, effect: TrainerEffect): IterableIterator<State> {
   const player = effect.player;
@@ -26,14 +27,13 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
     GameMessage.CHOOSE_CARD_TO_DISCARD,
     player.deck,
     {},
-    { min: 0, max: 3, allowCancel: false }
+    { min: 1, max: 3, allowCancel: false }
   ), selected => {
     cards = selected || [];
     next();
   });
 
-  player.deck.moveCardsTo(cards, player.discard);
-  player.supporter.moveCardTo(effect.trainerCard, player.discard);
+  MOVE_CARDS(store, state, player.deck, player.discard, { cards, sourceCard: effect.trainerCard });
 
   return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
     player.deck.applyOrder(order);

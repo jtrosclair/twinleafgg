@@ -1,9 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State } from '../../game';
+import { StoreLike, State, GameWinner } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
 import { endGame } from '../../game/store/effect-reducers/check-effect';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class NsSigilyph extends PokemonCard {
 
@@ -17,16 +17,16 @@ export class NsSigilyph extends PokemonCard {
 
   public attacks = [
     {
-      name: 'Psy Sphere',
+      name: 'Psychic Sphere',
       cost: [P],
       damage: 20,
       text: ''
     },
     {
-      name: 'Victory Sigil',
+      name: 'Victory Symbol',
       cost: [P, C, C],
       damage: 0,
-      text: 'If you have exactly 1 Prize card remaining when using this attack, you win this game.'
+      text: 'If you use this attack when you have exactly 1 Prize card remaining, you win this game. '
     }
   ];
 
@@ -39,15 +39,18 @@ export class NsSigilyph extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[1]) {
-
+    if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
+      const owner = state.activePlayer;
 
-      if (player.prizes.length === 6) {
-        state = endGame(store, state, player.id);
-        return state;
+      if (player.getPrizeLeft() === 6) {
+        if (owner === 0) {
+          state = endGame(store, state, GameWinner.PLAYER_1);
+        }
+        if (owner === 1) {
+          state = endGame(store, state, GameWinner.PLAYER_2);
+        }
       }
-
     }
 
     return state;

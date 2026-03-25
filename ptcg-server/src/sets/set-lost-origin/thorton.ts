@@ -56,7 +56,7 @@ export class Thorton extends TrainerCard {
 
       return store.prompt(state, new ChoosePokemonPrompt(
         player.id,
-        GameMessage.CHOOSE_POKEMON_TO_SWAP,
+        GameMessage.CHOOSE_POKEMON_TO_DAMAGE,
         PlayerType.BOTTOM_PLAYER,
         [SlotType.ACTIVE, SlotType.BENCH],
         { min: 1, max: 1, allowCancel: false, blocked }
@@ -91,7 +91,7 @@ export class Thorton extends TrainerCard {
           player.discard.moveCardTo(card, targetList);
 
           // Move Thorton to the discard pile
-          player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
         });
       });
     }

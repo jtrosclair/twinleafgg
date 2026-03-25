@@ -1,10 +1,10 @@
 import { EnergyCard, PowerType, State, StateUtils, StoreLike } from '../../game';
-import { CardType, Stage } from '../../game/store/card/card-types';
+import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { DealDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckHpEffect, CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect } from '../../game/store/effects/game-effects';
+import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 
 export class Okidogi extends PokemonCard {
@@ -60,14 +60,7 @@ export class Okidogi extends PokemonCard {
         return state;
       }
 
-      try {
-        const stub = new PowerEffect(player, {
-          name: 'test',
-          powerType: PowerType.ABILITY,
-          text: ''
-        }, this);
-        store.reduceEffect(state, stub);
-      } catch {
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
         return state;
       }
 
@@ -81,7 +74,7 @@ export class Okidogi extends PokemonCard {
           darkProvided = true;
         }
 
-        if ((em.card instanceof EnergyCard && em.card.blendedEnergies.includes(CardType.DARK)) ||
+        if ((em.card.superType === SuperType.ENERGY && (em.card as EnergyCard).blendedEnergies.includes(CardType.DARK)) ||
           (em.provides.includes(CardType.DARK) || em.provides.includes(CardType.ANY))) {
           darkProvided = true;
         }
@@ -98,14 +91,7 @@ export class Okidogi extends PokemonCard {
     if (effect instanceof CheckHpEffect && effect.target.cards.includes(this)) {
       const player = effect.player;
 
-      try {
-        const stub = new PowerEffect(player, {
-          name: 'test',
-          powerType: PowerType.ABILITY,
-          text: ''
-        }, this);
-        store.reduceEffect(state, stub);
-      } catch {
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
         return state;
       }
 
@@ -118,8 +104,8 @@ export class Okidogi extends PokemonCard {
         if (em.provides.includes(CardType.DARK)) {
           darkProvided = true;
         }
-        if ((em.card instanceof EnergyCard && em.card.blendedEnergies.includes(CardType.DARK)) ||
-            (em.provides.includes(CardType.DARK) || em.provides.includes(CardType.ANY))) {
+        if ((em.card.superType === SuperType.ENERGY && (em.card as EnergyCard).blendedEnergies.includes(CardType.DARK)) ||
+          (em.provides.includes(CardType.DARK) || em.provides.includes(CardType.ANY))) {
           darkProvided = true;
         }
       });

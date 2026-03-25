@@ -1,36 +1,49 @@
-import { UnidentifiedFossil } from "../set-silver-tempest/unidentified-fossil";
-import { VenusaurSnivyGX as VenusaurSnivyGXCEC1 } from "../set-cosmic-eclipse/venusaur-and-snivy-gx";
-import { VileplumeGX as VileplumeGXCEC4 } from "../set-cosmic-eclipse/vileplume-gx";
-import { CharizardBraixenGX as CharizardBraixenGXCEC22 } from "../set-cosmic-eclipse/charizard-braixen-gx";
-import { BlastoisePiplupGX as BlastoisePiplupGXCEC38 } from "../set-cosmic-eclipse/blastoise-piplup-gx";
-import { SolgaleoLunalaGX as SolgaleoLunalaGXCEC75 } from "../set-cosmic-eclipse/solgaleo-and-lunala-gx";
-import { OricorioGX as OricorioGXCEC95 } from "../set-cosmic-eclipse/oricorio-gx";
-import { AlolanPersianGX as AlolanPersianGXCEC129 } from "../set-cosmic-eclipse/alolan-persian-gx";
-import { ArceusDialgaPalkiaGX as ArceusDialgaPalkiaGXCEC156 } from "../set-cosmic-eclipse/arceus-dialga-palkia-gx";
-import { NaganadelGuzzlordGX as NaganadelGuzzlordGXCEC158 } from "../set-cosmic-eclipse/naganadel-guzzlord-gx";
-import { MegaLopunnyJigglypuffGX as MegaLopunnyJigglypuffGXCEC165 } from "../set-cosmic-eclipse/mega-lopuny-and-jigglypuff-gx";
-import { CynthiaAndCaitlin as CynthiaAndCaitlinCEC189 } from "../set-cosmic-eclipse/cynthia-and-caitlin";
-import { LilliesFullForce as LilliesFullForceCEC196 } from "../set-cosmic-eclipse/lillies-full-force";
-import { MallowAndLana as MallowAndLanaCEC198 } from "../set-cosmic-eclipse/mallow-and-lana";
-import { ProfessorOaksSetup as ProfessorOaksSetupCEC201 } from "../set-cosmic-eclipse/professor-oaks-setup";
-import { Rosa as RosaCEC204 } from "../set-cosmic-eclipse/rosa";
-import { Wishiwashi as WishiwashiCEC62 } from "../set-cosmic-eclipse/wishiwashi";
-import { Pikachu as PikachuCEC66 } from "../set-cosmic-eclipse/pikachu";
-import { Koffing as KoffingCEC76 } from "../set-cosmic-eclipse/koffing";
-import { Mimikyu as MimikyuCEC96 } from "../set-cosmic-eclipse/mimikyu";
-import { Excadrill as ExcadrillCEC115 } from "../set-cosmic-eclipse/excadrill";
-import { Steelix as SteelixCEC139 } from "../set-cosmic-eclipse/steelix";
-import { Stoutland as StoutlandCEC176 } from "../set-cosmic-eclipse/stoutland";
-import { GiantHearth } from "../set-sword-and-shield/giant-hearth";
-import { GreatCatcher as GreatCatcherCEC192 } from "../set-cosmic-eclipse/great-catcher";
-import { LanasFishingRod as LanasFishingRodCEC195 } from "../set-cosmic-eclipse/lanas-fishing-rod";
-import { LilliesPokeDoll as LilliesPokeDollCEC197 } from "../set-cosmic-eclipse/lillies-poke-doll";
-import { MartialArtsDojo } from "../set-unbroken-bonds/martial-arts-dojo";
-import { PowerPlant } from "../set-unbroken-bonds/power-plant";
-import { TagCall as TagCallCEC206 } from "../set-cosmic-eclipse/tag-call";
-import { DrawEnergy as DrawEnergyCEC209 } from "../set-cosmic-eclipse/draw-energy";
-import { TogepiCleffaIgglybuffGX as TogepiCleffaIgglybuffGXCEC143 } from "../set-cosmic-eclipse/togepi-cleffa-igglybuff-gx";
+import { UnidentifiedFossil } from '../set-silver-tempest/unidentified-fossil';
+import { VenusaurSnivyGX as VenusaurSnivyGXCEC1 } from '../set-cosmic-eclipse/venusaur-and-snivy-gx';
+import { VileplumeGX as VileplumeGXCEC4 } from '../set-cosmic-eclipse/vileplume-gx';
+import { CharizardBraixenGX as CharizardBraixenGXCEC22 } from '../set-cosmic-eclipse/charizard-braixen-gx';
+import { BlastoisePiplupGX as BlastoisePiplupGXCEC38 } from '../set-cosmic-eclipse/blastoise-piplup-gx';
+import { SolgaleoLunalaGX as SolgaleoLunalaGXCEC75 } from '../set-cosmic-eclipse/solgaleo-and-lunala-gx';
+import { OricorioGX as OricorioGXCEC95 } from '../set-cosmic-eclipse/oricorio-gx';
+import { AlolanPersianGX as AlolanPersianGXCEC129 } from '../set-cosmic-eclipse/alolan-persian-gx';
+import { ArceusDialgaPalkiaGX as ArceusDialgaPalkiaGXCEC156 } from '../set-cosmic-eclipse/arceus-dialga-palkia-gx';
+import { NaganadelGuzzlordGX as NaganadelGuzzlordGXCEC158 } from '../set-cosmic-eclipse/naganadel-guzzlord-gx';
+import { MegaLopunnyJigglypuffGX as MegaLopunnyJigglypuffGXCEC165 } from '../set-cosmic-eclipse/mega-lopuny-and-jigglypuff-gx';
+import { CynthiaAndCaitlin as CynthiaAndCaitlinCEC189 } from '../set-cosmic-eclipse/cynthia-and-caitlin';
+import { LilliesFullForce as LilliesFullForceCEC196 } from '../set-cosmic-eclipse/lillies-full-force';
+import { MallowAndLana as MallowAndLanaCEC198 } from '../set-cosmic-eclipse/mallow-and-lana';
+import { ProfessorOaksSetup as ProfessorOaksSetupCEC201 } from '../set-cosmic-eclipse/professor-oaks-setup';
+import { Rosa as RosaCEC204 } from '../set-cosmic-eclipse/rosa';
+import { Wishiwashi as WishiwashiCEC62 } from '../set-cosmic-eclipse/wishiwashi';
+import { Pikachu as PikachuCEC66 } from '../set-cosmic-eclipse/pikachu';
+import { Koffing as KoffingCEC76 } from '../set-cosmic-eclipse/koffing';
+import { Mimikyu as MimikyuCEC96 } from '../set-cosmic-eclipse/mimikyu';
+import { Excadrill as ExcadrillCEC115 } from '../set-cosmic-eclipse/excadrill';
+import { Steelix as SteelixCEC139 } from '../set-cosmic-eclipse/steelix';
+import { Stoutland as StoutlandCEC176 } from '../set-cosmic-eclipse/stoutland';
+import { GiantHearth } from '../set-sword-and-shield/giant-hearth';
+import { GreatCatcher as GreatCatcherCEC192 } from '../set-cosmic-eclipse/great-catcher';
+import { LanasFishingRod as LanasFishingRodCEC195 } from '../set-cosmic-eclipse/lanas-fishing-rod';
+import { LilliesPokeDoll as LilliesPokeDollCEC197 } from '../set-cosmic-eclipse/lillies-poke-doll';
+import { MartialArtsDojo } from '../set-unbroken-bonds/martial-arts-dojo';
+import { PowerPlant } from '../set-unbroken-bonds/power-plant';
+import { TagCall as TagCallCEC206 } from '../set-cosmic-eclipse/tag-call';
+import { DrawEnergy as DrawEnergyCEC209 } from '../set-cosmic-eclipse/draw-energy';
+import { TogepiCleffaIgglybuffGX as TogepiCleffaIgglybuffGXCEC143 } from '../set-cosmic-eclipse/togepi-cleffa-igglybuff-gx';
 import { GuzmaAndHala } from './guzma-and-hala';
+import { VolcaronaGx } from './volcarona-gx';
+import { FlygonGx } from './flygon-gx';
+import { ReshiramAndZekromGx } from './reshiram-and-zekrom-gx';
+import { SilvallyGx } from './silvally-gx';
+import { NsResolve } from './ns-resolve';
+import { RedAndBlue } from './red-and-blue';
+import { RollerSkater } from './roller-skater';
+import { Torkoal } from './torkoal';
+import { Weavile } from './weavile';
+import { Piplup } from './piplup';
+import { Magnemite } from './magnemite';
+import { Gallade } from './gallade';
+import { IslandChallengeAmulet } from './island-challenge-amulet';
 
 export class GuzmaAndHalaCEC extends GuzmaAndHala {
   public set: string = 'CEC';
@@ -311,4 +324,106 @@ export class TogepiCleffaIgglybuffGX2CEC extends TogepiCleffaIgglybuffGXCEC143 {
   public setNumber = '143a';
   public fullName: string = 'Togepi & Cleffa & Igglybuff-GX2 CEC';
   public set = 'CEC';
+}
+
+export class VolcaronaGx2 extends VolcaronaGx {
+  public set: string = 'CEC';
+  public setNumber: string = '213';
+  public fullName: string = 'Volcarona-GX CEC 213';
+}
+
+export class FlygonGx2 extends FlygonGx {
+  public set: string = 'CEC';
+  public setNumber: string = '218';
+  public fullName: string = 'Flygon-GX CEC 218';
+}
+
+export class ReshiramAndZekromGx2 extends ReshiramAndZekromGx {
+  public set: string = 'CEC';
+  public setNumber: string = '222';
+  public fullName: string = 'Reshiram & Zekrom-GX CEC 222';
+}
+
+export class SilvallyGx2 extends SilvallyGx {
+  public set: string = 'CEC';
+  public setNumber: string = '227';
+  public fullName: string = 'Silvally-GX CEC 227';
+}
+
+export class NsResolve2 extends NsResolve {
+  public set: string = 'CEC';
+  public setNumber: string = '232';
+  public fullName: string = 'N\'s Resolve CEC 232';
+}
+
+export class RedAndBlue2 extends RedAndBlue {
+  public set: string = 'CEC';
+  public setNumber: string = '234';
+  public fullName: string = 'Red & Blue CEC 234';
+}
+
+export class RollerSkater2 extends RollerSkater {
+  public set: string = 'CEC';
+  public setNumber: string = '235';
+  public fullName: string = 'Roller Skater CEC 235';
+}
+
+export class Torkoal2 extends Torkoal {
+  public set: string = 'CEC';
+  public setNumber: string = '237';
+  public fullName: string = 'Torkoal CEC 237';
+}
+
+export class Weavile2 extends Weavile {
+  public set: string = 'CEC';
+  public setNumber: string = '238';
+  public fullName: string = 'Weavile CEC 238';
+}
+
+export class Piplup2 extends Piplup {
+  public set: string = 'CEC';
+  public setNumber: string = '239';
+  public fullName: string = 'Piplup CEC 239';
+}
+
+export class Magnemite2 extends Magnemite {
+  public set: string = 'CEC';
+  public setNumber: string = '242';
+  public fullName: string = 'Magnemite CEC 242';
+}
+
+export class Gallade2 extends Gallade {
+  public set: string = 'CEC';
+  public setNumber: string = '244';
+  public fullName: string = 'Gallade CEC 244';
+}
+
+export class VolcaronaGx3 extends VolcaronaGx {
+  public set: string = 'CEC';
+  public setNumber: string = '252';
+  public fullName: string = 'Volcarona-GX CEC 252';
+}
+
+export class FlygonGx3 extends FlygonGx {
+  public set: string = 'CEC';
+  public setNumber: string = '256';
+  public fullName: string = 'Flygon-GX CEC 256';
+}
+
+export class ReshiramAndZekromGx3 extends ReshiramAndZekromGx {
+  public set: string = 'CEC';
+  public setNumber: string = '259';
+  public fullName: string = 'Reshiram & Zekrom-GX CEC 259';
+}
+
+export class SilvallyGx3 extends SilvallyGx {
+  public set: string = 'CEC';
+  public setNumber: string = '262';
+  public fullName: string = 'Silvally-GX CEC 262';
+}
+
+export class IslandChallengeAmulet2 extends IslandChallengeAmulet {
+  public set: string = 'CEC';
+  public setNumber: string = '265';
+  public fullName: string = 'Island Challenge Amulet CEC 265';
 }

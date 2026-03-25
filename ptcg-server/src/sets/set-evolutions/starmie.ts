@@ -1,12 +1,12 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, EnergyType, SuperType, BoardEffect } from '../../game/store/card/card-types';
 import { Attack, PowerType } from '../../game/store/card/pokemon-types';
-import { StoreLike, State, GameMessage, Card, ChooseCardsPrompt, EnergyCard, GameError, PlayerType } from '../../game';
+import { StoreLike, State, GameMessage, Card, ChooseCardsPrompt, GameError, PlayerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { PowerEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { DiscardToHandEffect } from '../../game/store/effects/play-card-effects';
-import { ADD_PARALYZED_TO_PLAYER_ACTIVE, AFTER_ATTACK, COIN_FLIP_PROMPT, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { ADD_PARALYZED_TO_PLAYER_ACTIVE, AFTER_ATTACK, COIN_FLIP_PROMPT, MOVE_CARDS, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 function* useSpaceBeacon(next: Function, store: StoreLike, state: State,
   effect: PowerEffect, self: Card): IterableIterator<State> {
@@ -19,7 +19,7 @@ function* useSpaceBeacon(next: Function, store: StoreLike, state: State,
 
   let basicEnergies = 0;
   player.discard.cards.forEach(c => {
-    if (c instanceof EnergyCard && c.energyType === EnergyType.BASIC) {
+    if (c.superType === SuperType.ENERGY && c.energyType === EnergyType.BASIC) {
       basicEnergies += 1;
     }
   });
@@ -125,7 +125,7 @@ export class Starmie extends PokemonCard {
       player.marker.removeMarker(this.SPACE_BEACON_MARKER, this);
     }
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
       if (player.marker.hasMarker(this.SPACE_BEACON_MARKER, this)) {
         throw new GameError(GameMessage.POWER_ALREADY_USED);

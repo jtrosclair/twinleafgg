@@ -2,8 +2,9 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, State, StoreLike, GameMessage, SuperType, PlayerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect } from '../../game/store/effects/game-effects';
+
 import { ChooseCardsPrompt } from '../../game';
+import { MOVE_CARDS, SHUFFLE_DECK, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Skiploom extends PokemonCard {
 
@@ -48,7 +49,7 @@ export class Skiploom extends PokemonCard {
   public fullName: string = 'Skiploom LOT';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
       // checking if this pokemon is in play
@@ -64,9 +65,6 @@ export class Skiploom extends PokemonCard {
 
       player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
         if (cardList.getPokemonCard() === this) {
-          // putting this card into the lost zone
-          cardList.moveTo(player.lostzone);
-          cardList.clearEffects();
           // replacing the card with a jumpluff from the deck
           return store.prompt(state, new ChooseCardsPrompt(
             player,
@@ -75,8 +73,41 @@ export class Skiploom extends PokemonCard {
             { superType: SuperType.POKEMON, name: 'Jumpluff' },
             { min: 0, max: 1, allowCancel: false }
           ), selected => {
-            const cards = selected || [];
-            player.deck.moveCardsTo(cards, cardList);
+            const jumpluffCards = selected || [];
+            if (jumpluffCards.length === 0) {
+              return state;
+            }
+
+            const jumpluff = jumpluffCards[0];
+
+            // First: Move Jumpluff from deck to cardList
+            state = MOVE_CARDS(store, state, player.deck, cardList, {
+              cards: [jumpluff],
+              sourceCard: this,
+              sourceEffect: this.powers[0]
+            });
+
+            // Collect all cards in cardList except Jumpluff
+            // This includes Skiploom, energies, and tools
+            const allCards = [...cardList.cards, ...cardList.tools];
+            const cardsToLostZone = allCards.filter(c => c !== jumpluff);
+
+            // Move all cards except Jumpluff to Lost Zone
+            if (cardsToLostZone.length > 0) {
+              state = MOVE_CARDS(store, state, cardList, player.lostzone, {
+                cards: cardsToLostZone,
+                sourceCard: this,
+                sourceEffect: this.powers[0]
+              });
+            }
+
+            // Clear effects on cardList
+            cardList.clearEffects();
+
+            // Shuffle deck
+            state = SHUFFLE_DECK(store, state, player);
+
+            return state;
           });
         }
       });

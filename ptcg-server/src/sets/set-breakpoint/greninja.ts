@@ -3,9 +3,10 @@ import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, GameMessage, PlayerType, GameError, StateUtils, ConfirmPrompt, ChooseEnergyPrompt, Card } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect, AttackEffect } from '../../game/store/effects/game-effects';
+import { PowerEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
+import { CheckProvidedEnergyEffect, CheckPokemonPowersEffect } from '../../game/store/effects/check-effects';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Greninja extends PokemonCard {
 
@@ -57,7 +58,7 @@ export class Greninja extends PokemonCard {
     }
 
     // Shadow Stitching
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
@@ -66,7 +67,7 @@ export class Greninja extends PokemonCard {
     }
 
     // Mist Slash
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[1]) {
+    if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
 
       state = store.prompt(state, new ConfirmPrompt(
@@ -96,6 +97,24 @@ export class Greninja extends PokemonCard {
     }
 
     // the shadow ability blocking
+    if (effect instanceof CheckPokemonPowersEffect) {
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+
+      // Check if Shadow Stitching marker is active on opponent
+      if (opponent.marker.hasMarker(this.CLEAR_SHADOW_STITCHING_MARKER, this)) {
+        // Check if the target belongs to the opponent
+        const targetCardList = StateUtils.findCardList(state, effect.target);
+        const targetOwner = StateUtils.findOwner(state, targetCardList);
+        if (targetOwner === opponent) {
+          // Filter out all abilities
+          effect.powers = effect.powers.filter(power =>
+            power.powerType !== PowerType.ABILITY
+          );
+        }
+      }
+    }
+
     if (effect instanceof PowerEffect && effect.power.powerType === PowerType.ABILITY) {
       const player = effect.player;
 

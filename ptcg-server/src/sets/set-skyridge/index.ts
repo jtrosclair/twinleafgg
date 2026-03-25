@@ -1,4 +1,5 @@
 import { Card } from '../../game/store/card/card';
+import { AncientRuins } from './ancient-ruins';
 import { BuriedFossil } from './buried-fossil';
 import { DesertShaman } from './desert-shaman';
 import { Ditto } from './ditto';
@@ -13,14 +14,20 @@ import { MysteryPlateAlpha } from './mystery-plate-alpha';
 import { MysteryPlateBeta } from './mystery-plate-beta';
 import { MysteryPlateDelta } from './mystery-plate-delta';
 import { MysteryPlateGamma } from './mystery-plate-gamma';
+import { MysteryZone } from './mystery-zone';
 import { Oracle } from './oracle';
 import { RelicHunter } from './relic-hunter';
 import { UndergroundExpedition } from './underground-expedition';
 
 // Other prints
-import { FishermanSK } from './other-prints';
+import {
+  ApricornMakerSK,
+  CrystalShardSK,
+  FishermanSK
+} from './other-prints';
 
 export const setSkyridge: Card[] = [
+  new AncientRuins(),
   new BuriedFossil(),
   new DesertShaman(),
   new Ditto(),
@@ -35,10 +42,13 @@ export const setSkyridge: Card[] = [
   new MysteryPlateBeta(),
   new MysteryPlateDelta(),
   new MysteryPlateGamma(),
+  new MysteryZone(),
   new Oracle(),
   new RelicHunter(),
   new UndergroundExpedition(),
 
   // Other prints
+  new ApricornMakerSK(),
+  new CrystalShardSK(),
   new FishermanSK(),
 ];

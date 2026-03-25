@@ -5,11 +5,12 @@ import { TrainerCard } from '../../game/store/card/trainer-card';
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
 import { CheckAttackCostEffect, CheckPokemonAttacksEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
+import { AttackEffect } from '../../game/store/effects/game-effects';
 
 export class TeamAquaTechnicalMachine01 extends TrainerCard {
   public trainerType: TrainerType = TrainerType.ITEM;
@@ -17,7 +18,7 @@ export class TeamAquaTechnicalMachine01 extends TrainerCard {
   public set: string = 'MA';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '79';
-  public name: string = 'Team Aqua Technichal Machine 01';
+  public name: string = 'Team Aqua Technical Machine 01';
   public fullName: string = 'Team Aqua Technichal Machine 01 MA';
 
   public attacks: Attack[] = [{

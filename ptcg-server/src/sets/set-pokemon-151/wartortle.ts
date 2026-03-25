@@ -3,52 +3,41 @@ import { GameMessage } from '../../game/game-message';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { State } from '../../game/store/state/state';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+
 import { StoreLike } from '../../game/store/store-like';
 import { Effect } from '../../game/store/effects/effect';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Wartortle extends PokemonCard {
+  public stage = Stage.STAGE_1;
+  public evolvesFrom = 'Squirtle';
+  public cardType = W;
+  public hp = 100;
+  public weakness = [{ type: L }];
+  public retreat = [C, C];
+
+  attacks = [{
+    name: 'Free Diving',
+    cost: [W],
+    damage: 0,
+    text: 'Put up to 3 [W] Energy cards from your discard pile into your hand.'
+  },
+  {
+    name: 'Spinning Attack',
+    cost: [W, W],
+    damage: 50,
+    text: ''
+  }];
 
   public regulationMark = 'G';
-
-  public stage = Stage.STAGE_1;
-
-  public evolvesFrom = 'Squirtle';
-
-  public cardType = CardType.WATER;
-
-  public hp = 100;
-
-  public weakness = [{ type: CardType.LIGHTNING, }];
-
-  retreat = [CardType.COLORLESS, CardType.COLORLESS];
-  attacks = [
-    {
-      name: 'Free Diving',
-      cost: [CardType.WATER],
-      damage: 0,
-      text: 'Put up to 3 Water Energy cards from your discard pile into your hand.'
-    },
-    {
-      name: 'Spinning Attack',
-      cost: [CardType.WATER, CardType.WATER],
-      damage: 50,
-      text: ''
-    }
-  ];
-
   public set: string = 'MEW';
-
   public cardImage: string = 'assets/cardback.png';
-
   public setNumber: string = '8';
-
   public name: string = 'Wartortle';
-
   public fullName: string = 'Wartortle MEW';
 
   reduceEffect(store: StoreLike, state: State, effect: Effect) {
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       const prompt = new ChooseCardsPrompt(
         player,

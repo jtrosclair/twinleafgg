@@ -1,9 +1,9 @@
-import { Bill } from "../set-base-set/bill";
-import { Copycat } from "../set-ex-dragon-frontiers/copycat";
-import { EnergySwitchPK } from "../set-ex-power-keepers/other-prints";
-import { FullHeal } from "../set-base-set/full-heal";
-import { PokeBall } from "../set-jungle/pokeball";
-import { ProfessorElmsTrainingMethod } from "../set-ex-unseen-forces/professors-elm-training-method";
+import { Bill } from '../set-base-set/bill';
+import { Copycat } from '../set-ex-dragon-frontiers/copycat';
+import { EnergySwitchPK } from '../set-ex-power-keepers/other-prints';
+import { FullHeal } from '../set-base-set/full-heal';
+import { PokeBall } from '../set-jungle/pokeball';
+import { ProfessorElmsTrainingMethod } from '../set-ex-unseen-forces/professors-elm-training-method';
 import { DoubleColorlessEnergy } from '../set-base-set/double-colorless-energy';
 import { Fisherman } from '../set-celestial-storm/fisherman';
 import { Pokegear30 } from '../set-scarlet-and-violet/pokegear-30';
@@ -46,7 +46,7 @@ export class PokemonCommunicationHS extends PokemonCommunication {
 
 export class PokemonReversalHS extends PokemonReversal {
   public fullName = 'Pokemon Reversal HS';
-  public name = 'Pokemon Reversal';
+  public name = 'Pokémon Reversal';
   public set = 'HS';
   public setNumber = '99';
   public text = 'Flip a coin. If heads, choose 1 of your opponent\'s Benched Pokémon and switch it with your opponent\'s Active Pokémon.';

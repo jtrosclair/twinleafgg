@@ -1,6 +1,7 @@
 import { Card } from '../../game/store/card/card';
 import { BillsMaintenance } from './bills-maintenance';
 import { Blastoiseex } from './blastoise-ex';
+import { Bulbasaur } from './bulbasaur';
 import { CeliosNetwork } from './celios-network';
 import { Diglett } from './diglett';
 import { Ditto } from './ditto';
@@ -8,6 +9,9 @@ import { Electrodeex } from './electrode-ex';
 import { Exeggcute } from './exeggcute';
 import { Exeggutor } from './exeggutor';
 import { GreatBall } from './great-ball';
+import { Ivysaur } from './ivysaur';
+import { MrMimeex } from './mr-mime-ex';
+import { MrMimeex2 } from './mr-mime-ex2';
 import { Nidoqueen } from './nidoqueen';
 import { NidoranFemale } from './nidoran-female';
 import { Nidorina } from './nidorina';
@@ -18,17 +22,25 @@ import { PokeDexHANDY909 } from './pokedex-handy909';
 import { Porygon } from './porygon';
 import { Raticate } from './raticate';
 import { Squirtle } from './squirtle';
+import { Venusaurex } from './venusaur-ex';
 import { Voltorb } from './voltorb';
 import { Wartortle } from './wartortle';
 
 // Other prints
-import { PokemonReversalRG } from './other-prints';
-import { SwitchRG } from './other-prints';
-import { VsSeekerFL } from './other-prints';
+import {
+  EnergyRemoval2RG,
+  LifeHerbRG,
+  MultiEnergyRG,
+  PokemonReversalRG,
+  ProfOaksResearchRG,
+  SwitchRG,
+  VsSeekerRG,
+} from './other-prints';
 
 export const setEXFireRedLeafGreen: Card[] = [
   new BillsMaintenance(),
   new Blastoiseex(),
+  new Bulbasaur(),
   new CeliosNetwork(),
   new Diglett(),
   new Ditto(),
@@ -36,6 +48,9 @@ export const setEXFireRedLeafGreen: Card[] = [
   new Exeggcute(),
   new Exeggutor(),
   new GreatBall(),
+  new Ivysaur(),
+  new MrMimeex(),
+  new MrMimeex2(),
   new Nidoqueen(),
   new NidoranFemale(),
   new Nidorina(),
@@ -46,11 +61,16 @@ export const setEXFireRedLeafGreen: Card[] = [
   new Porygon(),
   new Raticate(),
   new Squirtle(),
+  new Venusaurex(),
   new Voltorb(),
   new Wartortle(),
 
   // Other prints
+  new EnergyRemoval2RG(),
+  new LifeHerbRG(),
+  new MultiEnergyRG(),
+  new ProfOaksResearchRG(),
   new PokemonReversalRG(),
   new SwitchRG(),
-  new VsSeekerFL(),
+  new VsSeekerRG(),
 ];

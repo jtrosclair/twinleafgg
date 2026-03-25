@@ -1,11 +1,11 @@
-import { EnergyCard, GameError, PokemonCard } from '../../game';
+import { GameError, PokemonCard } from '../../game';
 import { GameLog, GameMessage } from '../../game/game-message';
 import { Card } from '../../game/store/card/card';
-import { EnergyType, TrainerType } from '../../game/store/card/card-types';
+import { EnergyType, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
 import { DiscardToHandEffect, TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { CLEAN_UP_SUPPORTER, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
 import { StateUtils } from '../../game/store/state-utils';
@@ -18,7 +18,7 @@ function* playCard(next: Function, store: StoreLike, state: State,
   const opponent = StateUtils.getOpponent(state, player);
   let cards: Card[] = [];
 
-  const pokemonAndEnergyInDiscardPile = player.discard.cards.filter(c => c instanceof PokemonCard || (c instanceof EnergyCard && c.energyType === EnergyType.BASIC)).length;
+  const pokemonAndEnergyInDiscardPile = player.discard.cards.filter(c => c instanceof PokemonCard || (c.superType === SuperType.ENERGY && c.energyType === EnergyType.BASIC)).length;
 
   if (pokemonAndEnergyInDiscardPile === 0) {
     throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
@@ -38,7 +38,7 @@ function* playCard(next: Function, store: StoreLike, state: State,
   let energies = 0;
   const blocked: number[] = [];
   player.discard.cards.forEach((c, index) => {
-    if (c instanceof EnergyCard && c.energyType === EnergyType.BASIC) {
+    if (c.superType === SuperType.ENERGY && c.energyType === EnergyType.BASIC) {
       energies += 1;
     } else if (c instanceof PokemonCard) {
       pokemons += 1;
@@ -67,8 +67,6 @@ function* playCard(next: Function, store: StoreLike, state: State,
   });
 
   MOVE_CARDS(store, state, player.discard, player.hand, { cards, sourceCard: self });
-
-  CLEAN_UP_SUPPORTER(effect, player);
 
   if (cards.length > 0) {
     yield store.prompt(state, new ShowCardsPrompt(
@@ -109,7 +107,7 @@ export class Klara extends TrainerCard {
 
       if (discardEffect.preventDefault) {
         // If prevented, just discard the card and return
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
         return state;
       }
 

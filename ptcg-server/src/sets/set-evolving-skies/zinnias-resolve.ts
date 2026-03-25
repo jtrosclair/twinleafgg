@@ -10,7 +10,7 @@ import { Card } from '../../game/store/card/card';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { CardList } from '../../game/store/state/card-list';
 import { StateUtils } from '../../game/store/state-utils';
-import { CLEAN_UP_SUPPORTER, DRAW_CARDS, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { DRAW_CARDS, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 function* playCard(next: Function, store: StoreLike, state: State,
   self: ZinniasResolve, effect: TrainerEffect): IterableIterator<State> {
   const player = effect.player;
@@ -49,29 +49,22 @@ function* playCard(next: Function, store: StoreLike, state: State,
   const cardsToDraw = opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
 
   DRAW_CARDS(player, cardsToDraw);
-  CLEAN_UP_SUPPORTER(effect, player);
   return state;
 }
 export class ZinniasResolve extends TrainerCard {
 
   public regulationMark = 'E';
-
   public trainerType: TrainerType = TrainerType.SUPPORTER;
-
   public set: string = 'EVS';
-
-  public cardImage: string = 'assets/cardback.png';
-
   public setNumber: string = '164';
-
+  public cardImage: string = 'assets/cardback.png';
   public name: string = 'Zinnia\'s Resolve';
-
   public fullName: string = 'Zinnia\'s Resolve EVS';
 
   public text: string =
-    'You can play this card only if you discard 2 other cards from your hand.' +
-    '' +
-    'Draw a card for each of your opponent\'s Pokémon in play.';
+    `You can play this card only if you discard 2 other cards from your hand.
+
+Draw a card for each of your opponent's Pokémon in play.`;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof TrainerEffect && effect.trainerCard === this) {

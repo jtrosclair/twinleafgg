@@ -1,39 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, BoardEffect } from '../../game/store/card/card-types';
-import { ChoosePokemonPrompt, GameError, GameMessage, PlayerType, PokemonCardList, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
+import { GameError, GameMessage, PlayerType, PowerType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect } from '../../game/store/effects/game-effects';
+
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-
-function* useBigRoar(next: Function, store: StoreLike, state: State,
-  effect: PowerEffect): IterableIterator<State> {
-  const player = effect.player;
-  const opponent = StateUtils.getOpponent(state, player);
-  const hasBench = opponent.bench.some(b => b.cards.length > 0);
-
-  if (hasBench === false) {
-    throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-  }
-
-  let targets: PokemonCardList[] = [];
-  yield store.prompt(state, new ChoosePokemonPrompt(
-    opponent.id,
-    GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-    PlayerType.BOTTOM_PLAYER,
-    [SlotType.BENCH],
-    { allowCancel: false }
-  ), results => {
-    targets = results || [];
-    next();
-  });
-
-  if (targets.length > 0) {
-    opponent.active.clearEffects();
-    opponent.switchPokemon(targets[0]);
-
-  }
-}
+import { SWITCH_OUT_OPPONENT_ACTIVE_POKEMON, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Shinx extends PokemonCard {
   public stage = Stage.BASIC;
@@ -77,14 +49,12 @@ export class Shinx extends PokemonCard {
       player.marker.removeMarker(this.BIG_ROAR_MARKER, this);
     }
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
-      const generator = useBigRoar(() => generator.next(), store, state, effect);
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
       if (player.active.cards[0] !== this) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
-
 
       if (player.marker.hasMarker(this.BIG_ROAR_MARKER, this)) {
         throw new GameError(GameMessage.POWER_ALREADY_USED);
@@ -97,7 +67,13 @@ export class Shinx extends PokemonCard {
           cardList.addBoardEffect(BoardEffect.ABILITY_USED);
         }
       });
-      return generator.next().value;
+
+      // Legacy implementation:
+      // - Used a custom ChoosePokemonPrompt where the opponent chose their replacement Active.
+      // - Switched opponent Active to the selected Benched Pokémon.
+      //
+      // Converted to prefab version (SWITCH_OUT_OPPONENT_ACTIVE_POKEMON).
+      return SWITCH_OUT_OPPONENT_ACTIVE_POKEMON(store, state, player, { allowCancel: false });
     }
     return state;
   }

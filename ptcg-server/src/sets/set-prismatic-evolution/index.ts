@@ -1,5 +1,5 @@
 import { Card } from '../../game/store/card/card';
-import { ApplinPRE, DipplinPRE, HydrappleexPRE, TealMaskOgerponexPRE, HearthflameMaskOgerponexPRE, GoldeenPRE, WellspringMaskOgerponexPRE, JolteonPRE, IronHandsexPRE, IronThornsexPRE, DuskullPRE, DusclopsPRE, DusknoirPRE, ScreamTailPRE, FlutterManePRE, MunkidoriPRE, FezandipitiPRE, IronBoulderPRE, GroudonPRE, BloodmoonUrsalunaPRE, GreatTuskPRE, SandyShocksexPRE, OkidogiPRE, CornerstoneMaskOgerponexPRE, RoaringMoonPRE, DuraludonPRE, ArchaludonPRE, DreepyPRE, DrakloakPRE, DragapultexPRE, EeveePRE, NoctowlPRE, DunsparcePRE, DudunsparcePRE, FanRotomPRE, TerapagosexPRE, AreaZeroUnderdepthsPRE, BindingMochiPRE, BriarPRE, BuddyBuddyPoffinPRE, BugCatchingSetPRE, CarminePRE, CyphermaniacsCodebreakingPRE, CrispinPRE, EarthenVesselPRE, ExplorersGuidancePRE, FestivalGroundsPRE, GlassTrumpetPRE, KieranPRE, MaximumBeltPRE, PrimeCatcherPRE, ProfessorSadasVitalityPRE, ProfessorTurosScenarioPRE, RescueBoardPRE, ScoopUpCyclonePRE, SparklingCrystalPRE, TechnoRadarPRE, ProfessorsResearchO, ProfessorsResearchE, ProfessorsResearchR, ProfessorsResearchS, JaninesSecretArt } from './alt-arts';
+import { ApplinPRE, DipplinPRE, HydrappleexPRE, TealMaskOgerponexPRE, HearthflameMaskOgerponexPRE, GoldeenPRE, WellspringMaskOgerponexPRE, JolteonPRE, IronHandsexPRE, IronThornsexPRE, DuskullPRE, DusclopsPRE, DusknoirPRE, ScreamTailPRE, FlutterManePRE, MunkidoriPRE, FezandipitiPRE, IronBoulderPRE, GroudonPRE, BloodmoonUrsalunaPRE, GreatTuskPRE, SandyShocksexPRE, OkidogiPRE, CornerstoneMaskOgerponexPRE, RoaringMoonPRE, DuraludonPRE, ArchaludonPRE, DreepyPRE, DrakloakPRE, DragapultexPRE, EeveePRE, NoctowlPRE, DunsparcePRE, DudunsparcePRE, FanRotomPRE, TerapagosexPRE, AreaZeroUnderdepthsPRE, BindingMochiPRE, BriarPRE, BuddyBuddyPoffinPRE, BugCatchingSetPRE, CarminePRE, CyphermaniacsCodebreakingPRE, CrispinPRE, EarthenVesselPRE, ExplorersGuidancePRE, FestivalGroundsPRE, GlassTrumpetPRE, KieranPRE, MaximumBeltPRE, PrimeCatcherPRE, ProfessorSadasVitalityPRE, ProfessorTurosScenarioPRE, RescueBoardPRE, ScoopUpCyclonePRE, SparklingCrystalPRE, TechnoRadarPRE, ProfessorsResearchO, ProfessorsResearchE, ProfessorsResearchR, ProfessorsResearchS } from './alt-arts';
 import { Amarys } from './amarys';
 import { BlackBeltsTraining } from './black-belts-training';
 import { Bronzor } from './bronzor';
@@ -22,7 +22,6 @@ import { RotoStick } from './roto-stick';
 import { Seaking } from './seaking';
 import { Sneasel } from './sneasel';
 import { Sylveon } from './sylveon';
-import { Sylveonex } from './sylveon-ex';
 import { TreasureTracker } from './treasure-tracker';
 import { Tyranitarex } from './tyranitar-ex';
 import { Umbreonex } from './umbreon-ex';
@@ -42,12 +41,10 @@ export const setPrismaticEvolution: Card[] = [
   new LarrysSkill(),
   new Glaceonex(),
   new Sylveon(),
-  new Sylveonex(),
   new Sneasel(),
   new Seaking(),
   new Regigigas(),
   new Riolu(),
-  new JaninesSecretArt(),
   new MaxRod(),
   new RotoStick(),
   new TreasureTracker(),

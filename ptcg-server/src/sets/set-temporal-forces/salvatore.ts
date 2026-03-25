@@ -8,8 +8,9 @@ import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { Card } from '../../game/store/card/card';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
-import { CardManager, PokemonCard, PlayerType, CardTarget, PokemonCardList, ChoosePokemonPrompt, SlotType } from '../../game';
+import { CardManager, PokemonCard, PlayerType, CardTarget, PokemonCardList, ChoosePokemonPrompt, SlotType, PowerType } from '../../game';
 import { SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
+import { CheckPokemonPowersEffect } from '../../game/store/effects/check-effects';
 
 function* playCard(next: Function, store: StoreLike, state: State, effect: TrainerEffect): IterableIterator<State> {
   const player = effect.player;
@@ -53,8 +54,12 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
   // Blocking pokemon cards, that cannot be valid evolutions
   const blocked: number[] = [];
   player.deck.cards.forEach((card, index) => {
-    if (card instanceof PokemonCard && !evolutionNames.includes(card.name) && card.powers.length === 0) {
-      blocked.push(index);
+    if (card instanceof PokemonCard && !evolutionNames.includes(card.name)) {
+      const powersEffect = new CheckPokemonPowersEffect(player, card);
+      state = store.reduceEffect(state, powersEffect);
+      if (powersEffect.powers.some(power => power.powerType === PowerType.ABILITY)) {
+        blocked.push(index);
+      }
     }
   });
 
@@ -72,7 +77,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
 
   // Canceled by user, he didn't found the card in the deck
   if (cards.length === 0) {
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
     SHUFFLE_DECK(store, state, player);
     return state;
   }
@@ -99,13 +104,13 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
   });
 
   if (targets.length === 0) {
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
     SHUFFLE_DECK(store, state, player);
     return state; // canceled by user
   }
   const pokemonCard = targets[0].getPokemonCard();
   if (pokemonCard === undefined) {
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
     SHUFFLE_DECK(store, state, player);
     return state; // invalid target?
   }
@@ -115,7 +120,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
   targets[0].clearEffects();
   targets[0].pokemonPlayedTurn = state.turn;
 
-  player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
 
   SHUFFLE_DECK(store, state, player);
 }

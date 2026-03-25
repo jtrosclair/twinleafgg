@@ -2,10 +2,11 @@ import { StateUtils } from '../../game/store/state-utils';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { CardTag, TrainerType } from '../../game/store/card/card-types';
 import { PowerEffect, UseStadiumEffect } from '../../game/store/effects/game-effects';
+import { CheckPokemonPowersEffect } from '../../game/store/effects/check-effects';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { GameError, GameMessage } from '../../game';
+import { GameError, GameMessage, PokemonCardList, PowerType } from '../../game';
 
 export class PathToThePeak extends TrainerCard {
 
@@ -27,8 +28,41 @@ export class PathToThePeak extends TrainerCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    if (effect instanceof CheckPokemonPowersEffect && StateUtils.getStadiumCard(state) === this) {
+      const targetPokemon = effect.target;
+      if (!targetPokemon) {
+        return state;
+      }
+
+      // Check if target is in play
+      const targetCardList = StateUtils.findCardList(state, targetPokemon);
+      if (!(targetCardList instanceof PokemonCardList)) {
+        return state;
+      }
+
+      // Check if Pokemon has a Rule Box
+      if (targetPokemon.tags.includes(CardTag.POKEMON_V) ||
+        targetPokemon.tags.includes(CardTag.POKEMON_VMAX) ||
+        targetPokemon.tags.includes(CardTag.POKEMON_VSTAR) ||
+        targetPokemon.tags.includes(CardTag.POKEMON_ex) ||
+        targetPokemon.tags.includes(CardTag.POKEMON_EX) ||
+        targetPokemon.tags.includes(CardTag.BREAK) ||
+        targetPokemon.tags.includes(CardTag.POKEMON_GX) ||
+        targetPokemon.tags.includes(CardTag.PRISM_STAR) ||
+        targetPokemon.tags.includes(CardTag.RADIANT)) {
+        // Filter out all abilities
+        effect.powers = effect.powers.filter(power =>
+          power.powerType !== PowerType.ABILITY
+        );
+      }
+    }
+
     if (effect instanceof PowerEffect && StateUtils.getStadiumCard(state) === this &&
       !effect.power.exemptFromAbilityLock) {
+
+      if (effect.power.useFromDiscard || effect.power.useFromHand) {
+        return state;
+      }
 
       const pokemonCard = effect.card;
       if (pokemonCard.tags.includes(CardTag.POKEMON_V) ||

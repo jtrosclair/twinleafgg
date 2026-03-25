@@ -1,26 +1,37 @@
-import { BillsMaintenance } from "../set-ex-firered-leafgreen/bills-maintenance";
-import { EnergySwitchPK } from "../set-ex-power-keepers/other-prints";
-import { PokeNav } from "../set-ex-ruby-and-sapphire/pokenav";
-import { RareCandy } from "../set-ex-holon-phantoms/rare-candy";
-import { TvReporter } from "../set-ex-dragon/tv-reporter";
-import { RainbowEnergyPL } from "../set-platinum/other-prints";
-import { ArticunoGX as ArticunoGXCES31 } from "../set-celestial-storm/articuno-gx";
-import { ElectrodeGX as ElectrodeGXCES48 } from "../set-celestial-storm/electrode-gx";
-import { BanetteGX as BanetteGXCES66 } from "../set-celestial-storm/banette-gx";
-import { RayquazaGX as RayquazaGXCES109 } from "../set-celestial-storm/rayquaza-gx";
-import { ApricornMaker as ApricornMakerCES124 } from "../set-celestial-storm/apricorn-maker";
-import { BillsMaintenance as BillsMaintenanceRG87 } from "../set-ex-firered-leafgreen/bills-maintenance";
-import { Copycat as CopycatDF73 } from "../set-ex-dragon-frontiers/copycat";
-import { StevensResolve as StevensResolveCES145 } from "../set-celestial-storm/stevens-resolve";
-import { TateAndLiza as TateAndLizaCES148 } from "../set-celestial-storm/tate-and-liza";
-import { TvReporter as TvReporterDR88 } from "../set-ex-dragon/tv-reporter";
-import { HustleBelt as HustleBeltCES134 } from "../set-celestial-storm/hustle-belt";
-import { PokeNav as PokeNavRS88 } from "../set-ex-ruby-and-sapphire/pokenav";
-import { RainbowEnergyPL as RainbowEnergyPLPL121 } from "../set-platinum/other-prints";
-import { Sceptile as SceptileCES10 } from "../set-celestial-storm/sceptile";
+import { BillsMaintenance } from '../set-ex-firered-leafgreen/bills-maintenance';
+import { EnergySwitchPK } from '../set-ex-power-keepers/other-prints';
+import { PokeNav } from '../set-ex-ruby-and-sapphire/pokenav';
+import { RareCandy } from '../set-ex-holon-phantoms/rare-candy';
+import { TvReporter } from '../set-ex-dragon/tv-reporter';
+import { RainbowEnergyPL } from '../set-platinum/other-prints';
+import { ArticunoGX as ArticunoGXCES31 } from '../set-celestial-storm/articuno-gx';
+import { ElectrodeGX as ElectrodeGXCES48 } from '../set-celestial-storm/electrode-gx';
+import { BanetteGX as BanetteGXCES66 } from '../set-celestial-storm/banette-gx';
+import { RayquazaGX as RayquazaGXCES109 } from '../set-celestial-storm/rayquaza-gx';
+import { ApricornMaker as ApricornMakerCES124 } from '../set-celestial-storm/apricorn-maker';
+import { BillsMaintenance as BillsMaintenanceRG87 } from '../set-ex-firered-leafgreen/bills-maintenance';
+import { Copycat as CopycatDF73 } from '../set-ex-dragon-frontiers/copycat';
+import { StevensResolve as StevensResolveCES145 } from '../set-celestial-storm/stevens-resolve';
+import { TateAndLiza as TateAndLizaCES148 } from '../set-celestial-storm/tate-and-liza';
+import { TvReporter as TvReporterDR88 } from '../set-ex-dragon/tv-reporter';
+import { HustleBelt as HustleBeltCES134 } from '../set-celestial-storm/hustle-belt';
+import { PokeNav as PokeNavRS88 } from '../set-ex-ruby-and-sapphire/pokenav';
+import { RainbowEnergyPL as RainbowEnergyPLPL121 } from '../set-platinum/other-prints';
+import { Sceptile as SceptileCES10 } from '../set-celestial-storm/sceptile';
 import { AcroBike } from '../set-primal-clash/acro-bike';
 import { SuperScoopUp } from '../set-diamond-and-pearl/super-scoop-up';
 import { Switch } from '../set-scarlet-and-violet/switch';
+import { Combusken } from '../set-dark-explorers/combusken';
+import { FriendBall } from '../set-skyridge/friend-ball';
+import { UndergroundExpedition } from '../set-skyridge/underground-expedition';
+import { ShiftryGx } from './shiftry-gx';
+import { BlazikenGx } from './blaziken-gx';
+import { MrMimeGX } from './mr-mime-gx';
+import { ScizorGx } from './scizor-gx';
+import { StakatakaGx } from './stakataka-gx';
+import { Lisia } from './lisia';
+import { LifeHerb } from './life-herb';
+import { RainbowBrush } from './rainbow-brush';
 
 export class AcroBikeCES extends AcroBike {
   public fullName = 'Acro Bike CES';
@@ -205,4 +216,106 @@ export class RayquazaGX4CES extends RayquazaGXCES109 {
   public setNumber = '177a';
   public fullName: string = 'Rayquaza-GX4 CES';
   public set = 'CES';
+}
+
+export class CombuskenCES extends Combusken {
+  public set: string = 'CES';
+  public setNumber: string = '27';
+  public fullName: string = 'Combusken CES';
+}
+
+export class FriendBallCES extends FriendBall {
+  public set: string = 'CES';
+  public setNumber: string = '131';
+  public fullName: string = 'Friend Ball CES';
+}
+
+export class UndergroundExpeditionCES extends UndergroundExpedition {
+  public set: string = 'CES';
+  public setNumber: string = '150';
+  public fullName: string = 'Underground Expedition CES';
+}
+
+export class ShiftryGx2 extends ShiftryGx {
+  public set: string = 'CES';
+  public setNumber: string = '152';
+  public fullName: string = 'Shiftry-GX CES 152';
+}
+
+export class BlazikenGx2 extends BlazikenGx {
+  public set: string = 'CES';
+  public setNumber: string = '153';
+  public fullName: string = 'Blaziken-GX CES 153';
+}
+
+export class MrMimeGx2 extends MrMimeGX {
+  public set: string = 'CES';
+  public setNumber: string = '156';
+  public fullName: string = 'Mr. Mime-GX CES 156';
+}
+
+export class ScizorGx2 extends ScizorGx {
+  public set: string = 'CES';
+  public setNumber: string = '158';
+  public fullName: string = 'Scizor-GX CES 158';
+}
+
+export class StakatakaGx2 extends StakatakaGx {
+  public set: string = 'CES';
+  public setNumber: string = '159';
+  public fullName: string = 'Stakataka-GX CES 159';
+}
+
+export class Lisia2 extends Lisia {
+  public set: string = 'CES';
+  public setNumber: string = '164';
+  public fullName: string = 'Lisia CES 164';
+}
+
+export class UndergroundExpedition2 extends UndergroundExpedition {
+  public set: string = 'CES';
+  public setNumber: string = '168';
+  public fullName: string = 'Underground Expedition CES 168';
+}
+
+export class ShiftryGx3 extends ShiftryGx {
+  public set: string = 'CES';
+  public setNumber: string = '169';
+  public fullName: string = 'Shiftry-GX CES 169';
+}
+
+export class BlazikenGx3 extends BlazikenGx {
+  public set: string = 'CES';
+  public setNumber: string = '170';
+  public fullName: string = 'Blaziken-GX CES 170';
+}
+
+export class MrMimeGx3 extends MrMimeGX {
+  public set: string = 'CES';
+  public setNumber: string = '173';
+  public fullName: string = 'Mr. Mime-GX CES 173';
+}
+
+export class ScizorGx3 extends ScizorGx {
+  public set: string = 'CES';
+  public setNumber: string = '175';
+  public fullName: string = 'Scizor-GX CES 175';
+}
+
+export class StakatakaGx3 extends StakatakaGx {
+  public set: string = 'CES';
+  public setNumber: string = '176';
+  public fullName: string = 'Stakataka-GX CES 176';
+}
+
+export class LifeHerb2 extends LifeHerb {
+  public set: string = 'CES';
+  public setNumber: string = '180';
+  public fullName: string = 'Life Herb CES 180';
+}
+
+export class RainbowBrush2 extends RainbowBrush {
+  public set: string = 'CES';
+  public setNumber: string = '182';
+  public fullName: string = 'Rainbow Brush CES 182';
 }

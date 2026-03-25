@@ -20,10 +20,11 @@ import { Cetitan } from './cetitan';
 import { Cetoddle } from './cetoddle';
 import { Charcadet } from './charcadet';
 import { Charcadet2 } from './charcadet-2';
-import { CherishCarrier } from './cherish-carrier';
+import { PreciousTrolley } from './precious-trolley';
 import { ChienPao } from './chien-pao';
 import { ChillTeaserToy } from './chill-teaser-toy';
 import { ClemontsQuickWit } from './clemonts-quick-wit';
+import { Clobbopus } from './clobbopus';
 import { Cofagrigus } from './cofagrigus';
 import { Crocalor } from './crocalor';
 import { Cyclizarex } from './cyclizar-ex';
@@ -43,6 +44,7 @@ import { Espurr } from './espurr';
 import { Eternatus } from './eternatus';
 import { ExcitingStadium } from './exciting-stadium';
 import { Exeggcute } from './exeggcute';
+import { Flittle } from './flittle';
 import { Flygonex } from './flygon-ex';
 import { Fuecoco } from './fuecoco';
 import { Gastrodon } from './gastrodon';
@@ -50,6 +52,7 @@ import { ArchaludonexFA, ArchaludonexSIR, CounterGainUR, CyranoFA, FeebasIR, Hyd
 import { Gimmighoul } from './gimmighoul';
 import { Gholdengo } from './gholdengo';
 import { GougingFire } from './gouging-fire';
+import { Grapploct } from './grapploct';
 import { GravityMountain } from './gravity-mountain';
 import { HelperBell } from './helper.bell';
 import { HoOh } from './ho-oh';
@@ -71,8 +74,8 @@ import { Mesprit } from './mesprit';
 import { Miloticex } from './milotic-ex';
 import { MiraculousIntercom } from './miraculous-intercom';
 import { Ninetales } from './ninetales';
+import { PaldeanTauros } from './paldean-tauros';
 import { Palkia } from './palkia';
-import { Passimian } from './passimian';
 import { Palossandex } from './palossand-ex';
 import { Pansear } from './pansear';
 import { BrilliantBlender } from './brilliant-blender';
@@ -156,7 +159,7 @@ export const setSurgingSparks: Card[] = [
   new HoOh(),
   new Azumarill(),
   new BrilliantBlender(),
-  new CherishCarrier(),
+  new PreciousTrolley(),
   new Marill(),
   new TeraOrb(),
   new Trapinch(),
@@ -184,6 +187,7 @@ export const setSurgingSparks: Card[] = [
   new Sylveonex(),
   new LisiasAppeal(),
   new Sandygast(),
+  new PaldeanTauros(),
   new Palossandex(),
   new Capsakid(),
   new Shroodle(),
@@ -202,6 +206,9 @@ export const setSurgingSparks: Card[] = [
   new EnergySearchPro(),
   new Surfer(),
   new GougingFire(),
+  new Grapploct(),
+  new Clobbopus(),
+  new Flittle(),
   new AlolanDiglett(),
   new AlolanDugtrio(),
   new AmuletofHope(),
@@ -238,7 +245,6 @@ export const setSurgingSparks: Card[] = [
   new Armarouge(),
   new Rotom(),
   new Victini(),
-  new Passimian(),
 
   // Reprints
   new ScrambleSwitchSSP(),

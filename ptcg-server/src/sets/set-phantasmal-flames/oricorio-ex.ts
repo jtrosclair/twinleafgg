@@ -1,14 +1,12 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, EnergyType, SuperType, CardTag } from '../../game/store/card/card-types';
-import {
-  PowerType, StoreLike, State, StateUtils,
-  GameError, GameMessage, EnergyCard, PlayerType, SlotType
-} from '../../game';
+import { PowerType, StoreLike, State, StateUtils, GameError, GameMessage, EnergyCard, PlayerType, SlotType } from '../../game';
 import { CardTarget } from '../../game/store/actions/play-card-action';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect } from '../../game/store/effects/game-effects';
+
 import { AttachEnergyPrompt } from '../../game/store/prompts/attach-energy-prompt';
 import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Oricorioex extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -21,11 +19,11 @@ export class Oricorioex extends PokemonCard {
     name: 'Excited Turbo',
     useWhenInPlay: true,
     powerType: PowerType.ABILITY,
-    text: 'As often as you like during your turn, if you have any [R] Mega Evolution Pokémon ex in play, you may use this Ability. You may attach a Basic [R] Energy card from your hand to 1 of your benched [R] Pokémon.'
+    text: 'As often as you like during your turn, if you have any [R] Mega Evolution Pokémon ex in play, you may use this Ability. Attach a Basic [R] Energy card from your hand to 1 of your Benched [R] Pokémon.'
   }];
 
   public attacks = [{
-    name: 'Buster Tail',
+    name: 'Fire Wing',
     cost: [R, R, C],
     damage: 110,
     text: ''
@@ -40,7 +38,7 @@ export class Oricorioex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
       const hasMegaEvolutionPokemonInPlay = player.active.cards.some(c => {
@@ -72,9 +70,9 @@ export class Oricorioex extends PokemonCard {
       });
 
       const hasEnergyInHand = player.hand.cards.some(c => {
-        return c instanceof EnergyCard
+        return c.superType === SuperType.ENERGY
           && c.energyType === EnergyType.BASIC
-          && c.provides.includes(CardType.FIRE);
+          && (c as EnergyCard).provides.includes(CardType.FIRE);
       });
       if (!hasEnergyInHand) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);

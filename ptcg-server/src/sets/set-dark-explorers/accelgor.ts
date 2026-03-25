@@ -1,11 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType } from '../../game/store/card/card-types';
+import { Stage, CardType, SpecialCondition } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
-import { ADD_PARALYZED_TO_PLAYER_ACTIVE, ADD_POISON_TO_PLAYER_ACTIVE, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
-import { StateUtils } from '../../game/store/state-utils';
+import { WAS_ATTACK_USED, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
+import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
+import { SHUFFLE_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_DECK } from '../../game/store/prefabs/attack-effects';
 
 
 export class Accelgor extends PokemonCard {
@@ -14,25 +14,25 @@ export class Accelgor extends PokemonCard {
 
   public evolvesFrom = 'Shelmet';
 
-  public cardType: CardType = CardType.GRASS;
+  public cardType: CardType = G;
 
   public hp: number = 90;
 
-  public weakness = [{ type: CardType.FIRE }];
+  public weakness = [{ type: R }];
 
   public retreat = [];
 
   public attacks = [{
     name: 'Hammer In',
-    cost: [CardType.GRASS],
+    cost: [G],
     damage: 20,
     text: ''
   }, {
     name: 'Deck and Cover',
-    cost: [CardType.COLORLESS, CardType.COLORLESS],
+    cost: [C, C],
     damage: 50,
-    text: 'The Defending Pokemon is now Paralyzed and Poisoned. Shuffle this ' +
-      'Pokemon and all cards attached to it into your deck.'
+    text: 'The Defending Pokémon is now Paralyzed and Poisoned. Shuffle this ' +
+      'Pokémon and all cards attached to it into your deck.'
   }];
 
   public set: string = 'DEX';
@@ -47,17 +47,18 @@ export class Accelgor extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    // Deck and Cover - apply special conditions during attack
+    if (WAS_ATTACK_USED(effect, 1, this)) {
+      const addSpecialCondition = new AddSpecialConditionsEffect(effect, [
+        SpecialCondition.PARALYZED,
+        SpecialCondition.POISONED
+      ]);
+      store.reduceEffect(state, addSpecialCondition);
+    }
+
+    // Deck and Cover - shuffle self into deck after attack
     if (AFTER_ATTACK(effect, 1, this)) {
-      const player = effect.player;
-      player.active.moveTo(player.deck);
-      player.active.clearEffects();
-
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, player), this);
-      ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, player), this);
-
-      return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-        player.deck.applyOrder(order);
-      });
+      return SHUFFLE_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_DECK(store, state, effect);
     }
 
     return state;

@@ -5,6 +5,7 @@ import { AntiquePlumeFossil } from './antique-plume-fossil';
 import { Archen } from './archen';
 import { Archeops } from './archeops';
 import { Axew } from './axew';
+import { Karrablast } from './karrablast';
 import { BraveBangle } from './brave-bangle';
 import { Carracosta } from './carracosta';
 import { Cobalion } from './cobalion';
@@ -13,6 +14,7 @@ import { Dewott } from './dewott';
 import { Drillbur } from './drillbur';
 import { Ducklett } from './ducklett';
 import { Duosion } from './duosion';
+import { Durant } from './durant';
 import { Eelektrik } from './eelektrik';
 import { Emboar } from './emboar';
 import { Emolga } from './emolga';
@@ -26,7 +28,7 @@ import { Genesectex } from './genesect-ex';
 import { Gothita } from './gothita';
 import { Gothorita } from './gothorita';
 import { Gothitelle } from './gothitelle';
-import { Gurdurr } from './gurdurr';
+import { Harlequin } from './harlequin';
 import { Haxorus } from './haxorus';
 import { Hilda } from './hilda';
 import { IgnitionEnergy } from './ignition-energy';
@@ -37,7 +39,7 @@ import { Larvesta } from './larvesta';
 import { Meloettaex } from './meloetta-ex';
 import { NsPlan } from './ns-plan';
 import { Oshawott } from './oshawott';
-import { AirBalloonSV11, CarracostaAR, AlomomolaAR, CherenSV11, EnergyRetrievalSV11, LarvestaAR, PrismEnergySV11, ProfessorsResearchSV11, SeismitoadAR, TirtougaAR, ServineAR, SnivyAR, TympoleAR, VictiniAR, VolcaronaAR, HaxorusAR, FraxureAR, AxewAR, CobalionAR, DrillburAR, EelektrikAR, CottoneeAR, EmolgaAR, PalpitoadAR, TynamoAR, ExcadrillexFA, FennelFA, GenesectexFA, KyuremexFA, MeloettaexFA, SerperiorexFA, ZekromexFA, ExcadrillexSIR, GenesectexSIR, KyuremexSIR, MeloettaexSIR, SerperiorexSIR, ZekromexSIR, ZekromexBR, JoltikAR, GalvantulaAR, DewottAR, EmboarAR, FrillishAR, OshawottAR, PigniteAR, SamurottAR, TepigAR, VirizionAR, ArchenAR, ArcheopsAR, DeinoAR, TerrakionAR, ZoroarkAR, ZoruaAR, ZweilousAR, ReshiramexFA, KeldeoexFA, WhimsicottexFA, HydreigonexFA, JellicentexFA, BouffalantexFA, HildaFA, HildaSIR, BouffalantexSIR, HydreigonexSIR, JellicentexSIR, KeldeoexSIR, ReshiramexSIR, WhimsicottexSIR, ReshiramexWR, ToolScrapperSV11, NsPlanFA, NsPlanSIR, VictiniRRB, VictiniRRW } from './other-prints';
+import { AirBalloonSV11, CarracostaAR, AlomomolaAR, CherenSV11, EnergyRetrievalSV11, LarvestaAR, PrismEnergySV11, ProfessorsResearchSV11, SeismitoadAR, TirtougaAR, ServineAR, SnivyAR, TympoleAR, VictiniAR, VolcaronaAR, HaxorusAR, FraxureAR, AxewAR, CobalionAR, DrillburAR, EelektrikAR, CottoneeAR, EmolgaAR, PalpitoadAR, TynamoAR, ExcadrillexFA, FennelFA, GenesectexFA, KyuremexFA, MeloettaexFA, SerperiorexFA, ZekromexFA, ExcadrillexSIR, GenesectexSIR, KyuremexSIR, MeloettaexSIR, SerperiorexSIR, ZekromexSIR, ZekromexBR, JoltikAR, GalvantulaAR, DewottAR, EmboarAR, FrillishAR, OshawottAR, PigniteAR, SamurottAR, TepigAR, VirizionAR, ArchenAR, ArcheopsAR, DeinoAR, TerrakionAR, ZoroarkAR, ZoruaAR, ZweilousAR, ReshiramexFA, KeldeoexFA, WhimsicottexFA, HydreigonexFA, JellicentexFA, BouffalantexFA, HildaFA, HildaSIR, BouffalantexSIR, HydreigonexSIR, JellicentexSIR, KeldeoexSIR, ReshiramexSIR, WhimsicottexSIR, ReshiramexWR, ToolScrapperSV11, NsPlanFA, NsPlanSIR, VictiniRRB, VictiniRRW, Pokegear30SV11 } from './other-prints';
 import { Palpitoad } from './palpitoad';
 import { Pignite } from './pignite';
 import { Purrloin } from './purrloin';
@@ -47,12 +49,12 @@ import { Samurott } from './samurott';
 import { Seismitoad } from './seismitoad';
 import { Serperiorex } from './serperior-ex';
 import { Servine } from './servine';
+import { Shelmet } from './shelmet';
 import { Snivy } from './snivy';
 import { Solosis } from './solosis';
 import { Swadloon } from './swadloon';
 import { Tepig } from './tepig';
 import { Terrakion } from './terrakion';
-import { Timburr } from './timburr';
 import { Tirtouga } from './tirtouga';
 import { Tympole } from './tympole';
 import { Tynamo } from './tynamo';
@@ -65,6 +67,8 @@ import { Zoroark } from './zoroark';
 import { Zorua } from './zorua';
 
 export const setSV11: Card[] = [
+  new Harlequin(),
+  new Purrloin(),
   new Gothita(),
   new Gothorita(),
   new Gothitelle(),
@@ -86,24 +90,23 @@ export const setSV11: Card[] = [
   new Hilda(),
   new Foongus(),
   new Amoongus(),
-  new Purrloin(),
   new Zorua(),
   new Zoroark(),
   new Solosis(),
   new Swadloon(),
   new Duosion(),
   new Reuniclus(),
-
+  new Shelmet(),
+  new Karrablast(),
   new AntiquePlumeFossil(),
   new Archen(),
   new Archeops(),
   new Carracosta(),
   new Cobalion(),
+  new Durant(),
   new Genesectex(),
-  new Gurdurr(),
   new Keldeoex(),
   new Terrakion(),
-  new Timburr(),
   new Tirtouga(),
   new Virizion(),
   new Alomomola(),
@@ -122,7 +125,7 @@ export const setSV11: Card[] = [
 
   new CherenSV11(),
   new ProfessorsResearchSV11(),
-
+  new Pokegear30SV11(),
   new EnergyRetrievalSV11(),
   new ToolScrapperSV11(),
   new AirBalloonSV11(),

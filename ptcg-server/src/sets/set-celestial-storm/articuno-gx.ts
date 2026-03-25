@@ -1,14 +1,13 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { Stage, CardType, SuperType, CardTag } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, GameMessage, PlayerType, SlotType, MoveEnergyPrompt, ConfirmPrompt, Card, PokemonCardList,/* GameError,*/ EnergyCard } from '../../game';
+import { PowerType, StoreLike, State, GameMessage, PlayerType, SlotType, MoveEnergyPrompt, ConfirmPrompt, Card, PokemonCardList } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
 import { StateUtils } from '../../game/store/state-utils';
 import { CardTarget } from '../../game';
-import { PowerEffect, AttackEffect } from '../../game/store/effects/game-effects';
-import { BLOCK_IF_GX_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { BLOCK_IF_GX_ATTACK_USED, IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class ArticunoGX extends PokemonCard {
   public tags = [CardTag.POKEMON_GX];
@@ -52,14 +51,7 @@ export class ArticunoGX extends PokemonCard {
       const player = effect.player;
 
       // Try to reduce PowerEffect, to check if something is blocking our ability
-      try {
-        const stub = new PowerEffect(player, {
-          name: 'test',
-          powerType: PowerType.ABILITY,
-          text: ''
-        }, this);
-        store.reduceEffect(state, stub);
-      } catch {
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
         return state;
       }
 
@@ -89,7 +81,7 @@ export class ArticunoGX extends PokemonCard {
               return;
             }
             blockedTo.push(target);
-            if (cardList.energies.cards.some(c => c instanceof EnergyCard && c.name === 'Water Energy')) {
+            if (cardList.energies.cards.some(c => c.superType === SuperType.ENERGY && c.name === 'Water Energy')) {
               hasEnergyOnBench = true;
             }
           });
@@ -118,7 +110,7 @@ export class ArticunoGX extends PokemonCard {
     }
 
     // Cold Crush-GX
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[1]) {
+    if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

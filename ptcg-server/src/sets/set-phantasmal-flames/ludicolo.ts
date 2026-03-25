@@ -1,14 +1,10 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, BoardEffect } from '../../game/store/card/card-types';
-import {
-  PowerType, StoreLike, State,
-  GameError, GameMessage, PlayerType, SlotType,
-  PokemonCardList,
-  ChoosePokemonPrompt
-} from '../../game';
+import { PowerType, StoreLike, State, GameError, GameMessage, PlayerType, SlotType, PokemonCardList, ChoosePokemonPrompt } from '../../game';
 import { CardTarget } from '../../game/store/actions/play-card-action';
 import { Effect } from '../../game/store/effects/effect';
-import { HealEffect, PowerEffect } from '../../game/store/effects/game-effects';
+import { HealEffect } from '../../game/store/effects/game-effects';
+import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Ludicolo extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -22,11 +18,11 @@ export class Ludicolo extends PokemonCard {
     name: 'Excited Healing',
     useWhenInPlay: true,
     powerType: PowerType.ABILITY,
-    text: 'Once during your turn, if you have a [G] Mega Evolution Pokémon ex in play, you may heal 60 damage from 1 of your Pokemon.'
+    text: 'Once during your turn, if you have any [G] Mega Evolution Pokémon ex in play, you may use this Ability. Heal 60 damage from 1 of your Pokémon.'
   }];
 
   public attacks = [{
-    name: 'Knock Down',
+    name: 'Lunge Out',
     cost: [G, C],
     damage: 120,
     text: ''
@@ -43,7 +39,7 @@ export class Ludicolo extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
       const hasMegaEvolutionPokemonInPlay = player.active.cards.some(c => {

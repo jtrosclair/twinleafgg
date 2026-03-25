@@ -1,5 +1,5 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, EnergyType, CardTag } from '../../game/store/card/card-types';
+import { Stage, CardType, EnergyType, CardTag, SuperType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { GamePhase, State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
@@ -8,7 +8,7 @@ import { StateUtils } from '../../game/store/state-utils';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { EnergyCard } from '../../game';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class AegislashEX extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -64,14 +64,14 @@ export class AegislashEX extends PokemonCard {
       const checkEnergy = new CheckProvidedEnergyEffect(opponent, opponentPokemon);
       store.reduceEffect(state, checkEnergy);
 
-      if (IS_POKEBODY_BLOCKED(store, state, player, this)) {
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
         return state;
       }
 
       checkEnergy.energyMap.forEach(em => {
         const energyCard = em.card;
-        if (energyCard instanceof EnergyCard &&
-          energyCard.energyType === EnergyType.SPECIAL) {
+        if (energyCard.superType === SuperType.ENERGY &&
+          (energyCard as EnergyCard).energyType === EnergyType.SPECIAL) {
 
           if (effect instanceof PutDamageEffect
             && opponent.active.cards.includes(energyCard)) {

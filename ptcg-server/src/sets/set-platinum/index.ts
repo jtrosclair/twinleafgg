@@ -6,6 +6,7 @@ import { CrobatG } from './crobat-g';
 import { Delcatty } from './delcatty';
 import { Dialga } from './dialga';
 import { GalacticHQ } from './galactic-hq';
+import { LevelMax } from './level-max';
 import { LookersInvestigation } from './lookers-investigation';
 import { PokeTurn } from './poke-turn';
 import { PokemonRescue } from './pokemon-rescue';
@@ -15,10 +16,12 @@ import { Ralts } from './ralts';
 import { Giratina } from './giratina';
 import { GiratinaLVX } from './giratina-lv-x';
 import { Kirlia } from './kirlia';
+import { Mareep } from './mareep';
 import { PalkiaG } from './palkia-g';
 import { PalkiaGLVX } from './palkia-g-lv-x';
 import { DialgaG } from './dialga-g';
 import { DialgaGLVX } from './dialga-g-lv-x';
+import { TeamGalacticsInventionG101EnergyGain } from './team-galactics-invention-g-101-energy-gain';
 import { Vulpix } from './vulpix';
 
 // Other prints
@@ -31,6 +34,7 @@ export const setPlatinum: Card[] = [
   new Delcatty(),
   new Dialga(),
   new GalacticHQ(),
+  new LevelMax(),
   new LookersInvestigation(),
   new PokeTurn(),
   new PokemonRescue(),
@@ -40,11 +44,13 @@ export const setPlatinum: Card[] = [
   new Giratina(),
   new GiratinaLVX(),
   new Kirlia(),
+  new Mareep(),
   new PalkiaG(),
   new PalkiaGLVX(),
   new DialgaG(),
   new DialgaGLVX(),
   new Vulpix(),
+  new TeamGalacticsInventionG101EnergyGain(),
 
   // Other prints
   new RainbowEnergyPL(),

@@ -1,7 +1,6 @@
-import { VenusaurexSCR, BlastoiseexSCR, YamaskSCR, Raboot2SCR, Crabominable2SCR, Joltik2SCR, Zeraora2SCR, Milcery2SCR, Gulpin2SCR, Archaludon2SCR, Hydrappleex2SCR, Cinderaceex2SCR, Laprasex2SCR, Galvantulaex2SCR, Medichamex2SCR, Orthwormex2SCR, Briar2SCR, Crispin2SCR, Kofu2SCR, Lacey2SCR, Hydrappleex3SCR, Galvantulaex3SCR, Terapagosex2SCR, Briar3SCR, Lacey3SCR, Terapagosex3SCR, AreaZeroUnderdepths2SCR } from './other-prints';
+import { VenusaurexSCR, BlastoiseexSCR, YamaskSCR, Crabominable2SCR, Gulpin2SCR } from './other-prints';
 import { Card } from '../../game/store/card/card';
 import { Archaludon } from './archaludon';
-import { Applin } from './applin';
 import { AreaZeroUnderdepths } from './area-zero-underdepths';
 import { Bouffalant } from './bouffalant';
 import { Briar } from './briar';
@@ -24,7 +23,7 @@ import { Garganaclex } from './garganacl-ex';
 import { GlassTrumpet } from './glass-trumpet';
 import { SparklingCrystal } from './sparkling-crystal';
 import { GravityGemstone } from './gravity-gemstone';
-import { GreatTree } from './great-tree';
+import { GreatTree } from './grand-tree';
 import { Gulpin } from './gulpin';
 import { Hoothoot } from './hoothoot';
 import { Hydrappleex } from './hydrapple-ex';
@@ -36,13 +35,16 @@ import { Lacey } from './lacey';
 import { Laprasex } from './lapras-ex';
 import { Medichamex } from './medicham-ex';
 import { Meditite } from './meditite';
+import { MedititeSCR77 } from './meditite77';
 import { Melmetal } from './melmetal';
 import { Meltan } from './meltan';
 import { Milcery } from './milcery';
 import { Noctowl } from './noctowl';
+import { Ponyta } from './ponyta';
 import { ArchaludonIR, AreaZeroUnderdepthsHR, BraveryCharmHR, BriarFA, BriarSIR, BulbasaurIR, CinderaceexFA, CrispinFA, GalvantulaexFA, GalvantulaexSIR, HydrappleexFA, HydrappleexSIR, JoltikIR, KofuFA, LaceyFA, LaceySIR, LaprasexFA, MedichamexFA, MedititeIR, MilceryIR, OrthwormexFA, RabootIR, SquirtleIR, TerapagosexHR, TerapagosexSIR, ZeraoraIR } from './other-prints';
 import { Raboot } from './raboot';
 import { RagingBolt } from './raging-bolt';
+import { Rapidash } from './rapidash';
 import { Salandit } from './salandit';
 import { Salazzle } from './salazzle';
 import { Scorbunny } from './scorbunny';
@@ -57,7 +59,6 @@ import { AntiqueCoverFossil } from './antique-cover-fossil';
 import { Toedscool } from './toedscool';
 
 export const setStellarCrown: Card[] = [
-  new Applin(),
   new Archaludon(),
   new AreaZeroUnderdepths(),
   new Bouffalant(),
@@ -92,12 +93,15 @@ export const setStellarCrown: Card[] = [
   new Laprasex(),
   new Medichamex(),
   new Meditite(),
+  new MedititeSCR77(),
   new Melmetal(),
   new Meltan(),
   new Noctowl(),
+  new Ponyta(),
   // new Orthwormex(),
   new Raboot(),
   new RagingBolt(),
+  new Rapidash(),
   new Salandit(),
   new Salazzle(),
   new Scorbunny(),
@@ -144,28 +148,6 @@ export const setStellarCrown: Card[] = [
   new VenusaurexSCR(),
   new BlastoiseexSCR(),
   new YamaskSCR(),
-  new Raboot2SCR(),
   new Crabominable2SCR(),
-  new Joltik2SCR(),
-  new Zeraora2SCR(),
-  new Milcery2SCR(),
-  new Gulpin2SCR(),
-  new Archaludon2SCR(),
-  new Hydrappleex2SCR(),
-  new Cinderaceex2SCR(),
-  new Laprasex2SCR(),
-  new Galvantulaex2SCR(),
-  new Medichamex2SCR(),
-  new Orthwormex2SCR(),
-  new Briar2SCR(),
-  new Crispin2SCR(),
-  new Kofu2SCR(),
-  new Lacey2SCR(),
-  new Hydrappleex3SCR(),
-  new Galvantulaex3SCR(),
-  new Terapagosex2SCR(),
-  new Briar3SCR(),
-  new Lacey3SCR(),
-  new Terapagosex3SCR(),
-  new AreaZeroUnderdepths2SCR(),
+  new Gulpin2SCR()
 ];

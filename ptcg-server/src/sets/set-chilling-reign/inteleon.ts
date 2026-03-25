@@ -1,11 +1,12 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, CardTag, BoardEffect } from '../../game/store/card/card-types';
+import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, ChoosePokemonPrompt, PlayerType, SlotType, GameError, PowerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EffectOfAbilityEffect, PowerEffect } from '../../game/store/effects/game-effects';
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { GameMessage } from '../../game/game-message';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { ABILITY_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Inteleon extends PokemonCard {
 
@@ -65,7 +66,7 @@ export class Inteleon extends PokemonCard {
       player.marker.removeMarker(this.QUICK_SHOOTING_MARKER, this);
     }
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
       if (player.marker.hasMarker(this.QUICK_SHOOTING_MARKER, this)) {
@@ -83,21 +84,15 @@ export class Inteleon extends PokemonCard {
         const targets = selected || [];
 
         if (targets.length > 0) {
-          const damageEffect = new EffectOfAbilityEffect(player, this.powers[0], this, targets[0]);
-          store.reduceEffect(state, damageEffect);
-          if (damageEffect.target) {
-            damageEffect.target.damage += 20;
-          }
+          const placeCountersEffect = new PlaceDamageCountersEffect(player, targets[0], 20, this);
+          state = store.reduceEffect(state, placeCountersEffect);
         }
+
         player.marker.addMarker(this.QUICK_SHOOTING_MARKER, this);
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (cardList.getPokemonCard() === this) {
-            cardList.addBoardEffect(BoardEffect.ABILITY_USED);
-          }
-        });
+        ABILITY_USED(player, this);
       });
     }
+
     return state;
   }
-
 }

@@ -8,7 +8,9 @@ import { Maxie } from './maxie';
 import { Raikouex } from './raikou-ex';
 import { Sceptileex } from './sceptile-ex';
 import { Suicuneex } from './suicune-ex';
+import { Swampertex } from './swampert-ex';
 import { TeamAquaBall } from './team-aqua-ball';
+import { TeamAquaConspirator } from './team-aqua-conspirator';
 import { TeamAquaHideout } from './team-aqua-hideout';
 import { TeamAquasCacnea } from './team-aquas-cacnea';
 import { TeamAquasCacturne } from './team-aquas-cacturne';
@@ -17,10 +19,15 @@ import { TeamAquasElectrike } from './team-aquas-electrike';
 import { TeamAquasKyogre } from './team-aquas-kyogre';
 import { TeamAquasLanturn } from './team-aquas-lanturn';
 import { TeamAquasManectric } from './team-aquas-manectric';
+import { TeamAquasWalrein } from './team-aquas-walrein';
 import { TeamAquaTechnicalMachine01 } from './team-aqua-technical-machine-01';
 import { TeamMagmaBall } from './team-magma-ball';
 import { TeamMagmaConspirator } from './team-magma-conspirator';
+import { TeamMagmaHideout } from './team-magma-hideout';
+import { TeamMagmaTechnicalMachine01 } from './team-magma-technical-machine-01';
 import { TeamMagmasBaltoy } from './team-magmas-baltoy';
+import { TeamMagmasBaltoy2 } from './team-magmas-baltoy2';
+import { TeamMagmasBaltoy3 } from './team-magmas-baltoy3';
 import { TeamMagmasCamerupt } from './team-magmas-camerupt';
 import { TeamMagmasClaydol } from './team-magmas-claydol';
 import { TeamMagmasGroudon } from './team-magmas-groudon';
@@ -29,6 +36,7 @@ import { TeamMagmasZangoose } from './team-magmas-zangoose';
 
 // Other prints
 import { DualBallMA } from './other-prints';
+import { StrengthCharmMA } from './other-prints';
 import { WarpPointMA } from './other-prints';
 
 export const setEXTeamMagmaVsTeamAqua: Card[] = [
@@ -41,7 +49,9 @@ export const setEXTeamMagmaVsTeamAqua: Card[] = [
   new Raikouex(),
   new Sceptileex(),
   new Suicuneex(),
+  new Swampertex(),
   new TeamAquaBall(),
+  new TeamAquaConspirator(),
   new TeamAquaHideout(),
   new TeamAquasCacnea(),
   new TeamAquasCacturne(),
@@ -50,10 +60,15 @@ export const setEXTeamMagmaVsTeamAqua: Card[] = [
   new TeamAquasKyogre(),
   new TeamAquasLanturn(),
   new TeamAquasManectric(),
+  new TeamAquasWalrein(),
   new TeamAquaTechnicalMachine01(),
   new TeamMagmaBall(),
   new TeamMagmaConspirator(),
+  new TeamMagmaTechnicalMachine01(),
+  new TeamMagmaHideout(),
   new TeamMagmasBaltoy(),
+  new TeamMagmasBaltoy2(),
+  new TeamMagmasBaltoy3(),
   new TeamMagmasCamerupt(),
   new TeamMagmasClaydol(),
   new TeamMagmasGroudon(),
@@ -62,5 +77,6 @@ export const setEXTeamMagmaVsTeamAqua: Card[] = [
 
   // Other prints
   new DualBallMA(),
+  new StrengthCharmMA(),
   new WarpPointMA(),
 ];

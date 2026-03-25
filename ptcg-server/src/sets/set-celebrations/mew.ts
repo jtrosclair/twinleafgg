@@ -6,9 +6,10 @@ import { CardList } from '../../game/store/state/card-list';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { GameMessage } from '../../game/game-message';
 import { GameError, PokemonCard, PowerType, ShowCardsPrompt, ShuffleDeckPrompt, StateUtils } from '../../game';
-import { PowerEffect } from '../../game/store/effects/game-effects';
+
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { ABILITY_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Mew extends PokemonCard {
 
@@ -61,7 +62,7 @@ export class Mew extends PokemonCard {
       return state;
     }
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
       if (player.deck.cards.length === 0) {
@@ -85,8 +86,9 @@ export class Mew extends PokemonCard {
         GameMessage.CHOOSE_CARD_TO_HAND,
         deckTop,
         { superType: SuperType.TRAINER, trainerType: TrainerType.ITEM },
-        { min: 0, max: 1, allowCancel: true }
+        { min: 0, max: 1, allowCancel: false }
       ), selected => {
+        ABILITY_USED(player, this);
         player.marker.addMarker(this.MYSTERIOUS_TAIL_MARKER, this);
         deckTop.moveCardsTo(selected, player.hand);
         deckTop.moveTo(player.deck);

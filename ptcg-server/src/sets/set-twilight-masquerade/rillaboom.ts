@@ -2,11 +2,12 @@ import { PokemonCard, Stage, CardType, State, StoreLike, StateUtils } from '../.
 import { DealDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckAttackCostEffect, CheckRetreatCostEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Rillaboom extends PokemonCard {
-  public stage: Stage = Stage.STAGE_2;
+  public stage: Stage = Stage.BASIC;
   public evolvesFrom = 'Thwackey';
   public cardType: CardType = CardType.GRASS;
   public hp: number = 180;
@@ -39,7 +40,7 @@ export class Rillaboom extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
       opponent.active.marker.addMarker(this.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
@@ -79,7 +80,7 @@ export class Rillaboom extends PokemonCard {
       effect.player.active.marker.removeMarker(this.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[1]) {
+    if (WAS_ATTACK_USED(effect, 1, this)) {
 
       const player = effect.player;
 

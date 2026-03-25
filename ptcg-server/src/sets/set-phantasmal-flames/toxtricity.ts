@@ -1,16 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, EnergyType } from '../../game/store/card/card-types';
-import {
-  PowerType,
-  GameMessage, PlayerType, SlotType, AttachEnergyPrompt, StateUtils, State, StoreLike,
-  GameError,
-  CardTarget
-} from '../../game';
-import { PowerEffect } from '../../game/store/effects/game-effects';
+import { PowerType, GameMessage, PlayerType, SlotType, AttachEnergyPrompt, StateUtils, State, StoreLike, GameError, CardTarget } from '../../game';
+
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { ABILITY_USED, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
+import { ABILITY_USED, SHUFFLE_DECK, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Toxtricity extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -21,7 +16,7 @@ export class Toxtricity extends PokemonCard {
   public retreat = [C, C];
 
   public powers = [{
-    name: 'Bad Boost',
+    name: 'Sinister Surge',
     useWhenInPlay: true,
     powerType: PowerType.ABILITY,
     text: 'Once during your turn, you may search your deck for a Basic [D] Energy card and attach it to 1 of your [D] Pokémon. Then, shuffle your deck. If you attached Energy to a Pokémon in this way, put 2 damage counters on that Pokémon.'
@@ -49,7 +44,7 @@ export class Toxtricity extends PokemonCard {
       player.marker.removeMarker(this.BAD_BOOST_MARKER, this);
     }
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
       if (player.marker.hasMarker(this.BAD_BOOST_MARKER, this)) {

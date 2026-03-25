@@ -2,10 +2,10 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, EnergyType, SuperType } from '../../game/store/card/card-types';
-import { StoreLike, State, GameError, GameMessage, EnergyCard, StateUtils, ChooseCardsPrompt } from '../../game';
+import { StoreLike, State, GameError, GameMessage, StateUtils, ChooseCardsPrompt, EnergyCard } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
-import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+
+import { MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class OriginFormeDialgaV extends PokemonCard {
 
@@ -52,14 +52,13 @@ export class OriginFormeDialgaV extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
 
       const hasMetalEnergyInDiscard = player.discard.cards.some(c => {
-        return c instanceof EnergyCard
+        return c.superType === SuperType.ENERGY
           && c.energyType === EnergyType.BASIC
-          && c.provides.includes(CardType.METAL);
+          && (c as EnergyCard).provides.includes(CardType.METAL);
       });
       if (!hasMetalEnergyInDiscard) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);

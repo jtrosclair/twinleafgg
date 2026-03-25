@@ -4,6 +4,8 @@ import { Camerupt } from './camerupt';
 import { CrystalShard } from './crystal-shard';
 import { Electrike } from './electrike';
 import { Electrike2 } from './electrike2';
+import { EnergyCharge } from './energy-charge';
+import { Golbat } from './golbat';
 import { HealEnergy } from './heal-energy';
 import { Jirachi } from './jirachi';
 import { Koffing } from './koffing';
@@ -26,9 +28,13 @@ import { RayquazaStar } from './rayquaza-star';
 import { Sableye } from './sableye';
 import { Salamenceex } from './salamence-ex';
 import { ScrambleEnergy } from './scramble-energy';
+import { Seedot } from './seedot';
 import { Slugma } from './slugma';
 import { SpaceCenter } from './space-center';
 import { Weezing } from './weezing';
+
+// Other prints
+import { BalloonBerryDX, LadyOutingDX } from './other-prints';
 
 export const setEXDeoxys: Card[] = [
   new Altaria(),
@@ -36,6 +42,8 @@ export const setEXDeoxys: Card[] = [
   new CrystalShard(),
   new Electrike(),
   new Electrike2(),
+  new EnergyCharge(),
+  new Golbat(),
   new HealEnergy(),
   new Jirachi(),
   new Koffing(),
@@ -58,7 +66,12 @@ export const setEXDeoxys: Card[] = [
   new Sableye(),
   new Salamenceex(),
   new ScrambleEnergy(),
+  new Seedot(),
   new Slugma(),
   new SpaceCenter(),
   new Weezing(),
+
+  // Other prints
+  new BalloonBerryDX(),
+  new LadyOutingDX(),
 ];

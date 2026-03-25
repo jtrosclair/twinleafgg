@@ -3,30 +3,22 @@ import { Stage, CardType, CardTag, EnergyType, SuperType } from '../../game/stor
 import { StoreLike, State, GameMessage, GameError, PlayerType, SlotType, StateUtils, PowerType, AttachEnergyPrompt, EnergyCard } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { PowerEffect } from '../../game/store/effects/game-effects';
+
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class ShadowRiderCalyrexVMAX extends PokemonCard {
 
   public stage: Stage = Stage.VMAX;
-
   public evolvesFrom = 'Shadow Rider Calyrex V';
-
   public regulationMark = 'E';
-
-  public cardType: CardType = CardType.PSYCHIC;
-
+  public cardType: CardType = P;
   public tags = [CardTag.POKEMON_VMAX];
-
   public hp: number = 320;
-
-  public weakness = [{ type: CardType.DARK }];
-
-  public resistance = [{ type: CardType.FIGHTING, value: -30 }];
-
-  public retreat = [CardType.COLORLESS, CardType.COLORLESS];
+  public weakness = [{ type: D }];
+  public resistance = [{ type: F, value: -30 }];
+  public retreat = [C, C];
 
   public powers = [{
     name: 'Underworld Door',
@@ -38,22 +30,17 @@ export class ShadowRiderCalyrexVMAX extends PokemonCard {
   public attacks = [
     {
       name: 'Max Geist',
-      cost: [CardType.PSYCHIC],
+      cost: [C, C, C],
       damage: 10,
       text: 'This attack does 30 more damage for each [P] Energy attached to all of your Pokémon.'
     }
   ];
 
   public set: string = 'CRE';
-
   public cardImage: string = 'assets/cardback.png';
-
   public setNumber: string = '75';
-
   public name: string = 'Shadow Rider Calyrex VMAX';
-
   public fullName: string = 'Shadow Rider Calyrex VMAX CRE';
-
   public readonly UNDERWORLD_DOOR_MARKER = 'UNDERWORLD_DOOR_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
@@ -62,7 +49,7 @@ export class ShadowRiderCalyrexVMAX extends PokemonCard {
       player.marker.removeMarker(this.UNDERWORLD_DOOR_MARKER, this);
     }
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
       const hasBench = player.bench.some(b => b.cards.length > 0);
@@ -122,7 +109,7 @@ export class ShadowRiderCalyrexVMAX extends PokemonCard {
         const checkProvidedEnergyEffect = new CheckProvidedEnergyEffect(player, cardList);
         store.reduceEffect(state, checkProvidedEnergyEffect);
         checkProvidedEnergyEffect.energyMap.forEach(energy => {
-          if (energy.provides.includes(CardType.PSYCHIC) || energy.provides.includes(CardType.ANY)){
+          if (energy.provides.includes(CardType.PSYCHIC) || energy.provides.includes(CardType.ANY)) {
             energies++;
           }
         });

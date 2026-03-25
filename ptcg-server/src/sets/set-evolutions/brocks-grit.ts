@@ -2,16 +2,15 @@ import { Card } from '../../game/store/card/card';
 import { GameError } from '../../game/game-error';
 import { GameLog, GameMessage } from '../../game/game-message';
 import { TrainerCard } from '../../game/store/card/trainer-card';
-import { TrainerType, EnergyType } from '../../game/store/card/card-types';
+import { EnergyType, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
-import { EnergyCard } from '../../game/store/card/energy-card';
 import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
 import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
-import { CLEAN_UP_SUPPORTER, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 export class BrocksGrit extends TrainerCard {
 
@@ -39,7 +38,7 @@ export class BrocksGrit extends TrainerCard {
       const blocked: number[] = [];
       player.discard.cards.forEach((c, index) => {
         const isPokemon = c instanceof PokemonCard;
-        const isBasicEnergy = c instanceof EnergyCard && c.energyType === EnergyType.BASIC;
+        const isBasicEnergy = c.superType === SuperType.ENERGY && c.energyType === EnergyType.BASIC;
         if (isPokemon || isBasicEnergy) {
           pokemonsOrEnergyInDiscard += 1;
         } else {
@@ -65,7 +64,6 @@ export class BrocksGrit extends TrainerCard {
           store.log(state, GameLog.LOG_PLAYER_RETURNS_TO_DECK_FROM_DISCARD, { name: player.name, card: card.name });
         });
         MOVE_CARDS(store, state, player.discard, player.deck, { cards: cards, sourceCard: this });
-        CLEAN_UP_SUPPORTER(effect, player);
 
         return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
           player.deck.applyOrder(order);

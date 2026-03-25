@@ -1,39 +1,54 @@
-import { SerperiorV as SerperiorVSIT7 } from "../set-silver-tempest/serperior-v";
-import { AlolanVulpixV as AlolanVulpixVSIT33 } from "../set-silver-tempest/alolan-vulpix-v";
-import { RegielekiV as RegielekiVSIT57 } from "../set-silver-tempest/regieleki-v";
-import { UnownV as UnownVSIT65 } from "../set-silver-tempest/unown-v";
-import { MagearnaV as MagearnaVSIT128 } from "../set-silver-tempest/magearna-v";
-import { RegidragoV as RegidragoVSIT135 } from "../set-silver-tempest/regidrago-v";
-import { LugiaV as LugiaVSIT138 } from "../set-silver-tempest/lugia-v";
-import { Candice as CandiceSIT152 } from "../set-silver-tempest/candice";
-import { FurisodeGirl as FurisodeGirlSIT157 } from "../set-silver-tempest/furisode-girl";
-import { Lance as LanceSIT159 } from "../set-silver-tempest/lance";
-import { Serena as SerenaSIT164 } from "../set-silver-tempest/serena";
-import { Worker as WorkerSIT167 } from "../set-silver-tempest/worker";
-import { SerperiorVSTAR as SerperiorVSTARSIT8 } from "../set-silver-tempest/serperior-vstar";
-import { AlolanVulpixVSTAR as AlolanVulpixVSTARSIT34 } from "../set-silver-tempest/alolan-vulpix-vstar";
-import { RegielekiVMAX as RegielekiVMAXSIT58 } from "../set-silver-tempest/regieleki-vmax";
-import { UnownVSTAR as UnownVSTARSIT66 } from "../set-silver-tempest/unown-vstar";
-import { RegidragoVSTAR as RegidragoVSTARSIT136 } from "../set-silver-tempest/regidrago-vstar";
-import { LugiaVSTAR as LugiaVSTARSIT139 } from "../set-silver-tempest/lugia-vstar";
-import { EnergySwitchPK } from "../set-ex-power-keepers/other-prints";
-import { GapejawBog } from "../set-astral-radiance/gapejaw-bog";
-import { LeafyCamoPoncho as LeafyCamoPonchoSIT160 } from "../set-silver-tempest/leafy-camo-poncho";
-import { VGuardEnergy as VGuardEnergySIT169 } from "../set-silver-tempest/v-guard-energy";
-import { Braixen as BraixenSIT26 } from "../set-silver-tempest/braixen";
-import { Flaaffy } from "../set-evolving-skies/flaaffy";
-import { Gardevoir as GardevoirSIT69 } from "../set-silver-tempest/gardevoir";
-import { Druddigon } from "../set-brilliant-stars/druddigon";
-import { KricketuneV } from "../set-battle-styles/kricketune-v";
-import { BlazikenV } from "../set-chilling-reign/blaziken-v";
-import { BlazikenVMAX } from "../set-chilling-reign/blaziken-vmax";
-import { RayquazaVMAX } from "../set-evolving-skies/rayquaza-vmax";
-import { DuraludonVMAX } from "../set-evolving-skies/duraludon-vmax";
-import { BlisseyV } from "../set-chilling-reign/blissey-v";
-import { JudgeUL } from "../set-unleashed/other-prints";
-import { Raihan } from "../set-evolving-skies/raihan";
-import { RayquazaVMAX as RayquazaVMAXEVS111 } from "../set-evolving-skies/rayquaza-vmax";
-import { DuraludonVMAX as DuraludonVMAXEVS123 } from "../set-evolving-skies/duraludon-vmax";
+import { SerperiorV as SerperiorVSIT7 } from '../set-silver-tempest/serperior-v';
+import { AlolanVulpixV as AlolanVulpixVSIT33 } from '../set-silver-tempest/alolan-vulpix-v';
+import { RegielekiV as RegielekiVSIT57 } from '../set-silver-tempest/regieleki-v';
+import { UnownV as UnownVSIT65 } from '../set-silver-tempest/unown-v';
+import { MagearnaV as MagearnaVSIT128 } from '../set-silver-tempest/magearna-v';
+import { RegidragoV as RegidragoVSIT135 } from '../set-silver-tempest/regidrago-v';
+import { LugiaV as LugiaVSIT138 } from '../set-silver-tempest/lugia-v';
+import { Candice as CandiceSIT152 } from '../set-silver-tempest/candice';
+import { FurisodeGirl as FurisodeGirlSIT157 } from '../set-silver-tempest/furisode-girl';
+import { Lance as LanceSIT159 } from '../set-silver-tempest/lance';
+import { Serena as SerenaSIT164 } from '../set-silver-tempest/serena';
+import { Worker as WorkerSIT167 } from '../set-silver-tempest/worker';
+import { SerperiorVSTAR as SerperiorVSTARSIT8 } from '../set-silver-tempest/serperior-vstar';
+import { AlolanVulpixVSTAR as AlolanVulpixVSTARSIT34 } from '../set-silver-tempest/alolan-vulpix-vstar';
+import { RegielekiVMAX as RegielekiVMAXSIT58 } from '../set-silver-tempest/regieleki-vmax';
+import { UnownVSTAR as UnownVSTARSIT66 } from '../set-silver-tempest/unown-vstar';
+import { RegidragoVSTAR as RegidragoVSTARSIT136 } from '../set-silver-tempest/regidrago-vstar';
+import { LugiaVSTAR as LugiaVSTARSIT139 } from '../set-silver-tempest/lugia-vstar';
+import { EnergySwitchPK } from '../set-ex-power-keepers/other-prints';
+import { GapejawBog } from '../set-astral-radiance/gapejaw-bog';
+import { LeafyCamoPoncho as LeafyCamoPonchoSIT160 } from '../set-silver-tempest/leafy-camo-poncho';
+import { VGuardEnergy as VGuardEnergySIT169 } from '../set-silver-tempest/v-guard-energy';
+import { Braixen as BraixenSIT26 } from '../set-silver-tempest/braixen';
+import { Flaaffy } from '../set-evolving-skies/flaaffy';
+import { Gardevoir as GardevoirSIT69 } from '../set-silver-tempest/gardevoir';
+import { Druddigon } from '../set-brilliant-stars/druddigon';
+import { KricketuneV } from '../set-battle-styles/kricketune-v';
+import { BlazikenV } from '../set-chilling-reign/blaziken-v';
+import { BlazikenVMAX } from '../set-chilling-reign/blaziken-vmax';
+import { RayquazaVMAX } from '../set-evolving-skies/rayquaza-vmax';
+import { DuraludonVMAX } from '../set-evolving-skies/duraludon-vmax';
+import { BlisseyV } from '../set-chilling-reign/blissey-v';
+import { JudgeUL } from '../set-unleashed/other-prints';
+import { Raihan } from '../set-evolving-skies/raihan';
+import { RayquazaVMAX as RayquazaVMAXEVS111 } from '../set-evolving-skies/rayquaza-vmax';
+import { DuraludonVMAX as DuraludonVMAXEVS123 } from '../set-evolving-skies/duraludon-vmax';
+import { Sandile } from '../set-emerging-powers/sandile';
+import { Mareanie } from '../set-sun-and-moon/mareanie';
+import { Metang } from '../set-celestial-storm/metang';
+import { Fletchling } from '../set-steam-siege/fletchling';
+import { GymTrainer } from '../set-shining-fates/gym-trainer';
+import { ChesnaughtV } from './chesnaught-v';
+import { ReshiramV } from './reshiram-v';
+import { OmastarV } from './omastar-v';
+import { MawileV } from './mawile-v';
+import { HisuianArcanineV } from './hisuian-arcanine-v';
+import { SkuntankV } from './skuntank-v';
+import { HoOhV } from './ho-oh-v';
+import { Brandon } from './brandon';
+import { Wallace } from './wallace';
+import { MawileVstar } from './mawile-vstar';
 export class SerperiorV2SIT extends SerperiorVSIT7 {
   public setNumber = '170';
   public fullName: string = 'Serperior V2 SIT';
@@ -314,4 +329,118 @@ export class DuraludonVMAX2SIT extends DuraludonVMAXEVS123 {
   public setNumber = 'TG30';
   public fullName: string = 'Duraludon VMAX2 SIT';
   public set = 'SIT';
+}
+
+export class SandileSIT extends Sandile {
+  public set: string = 'SIT';
+  public setNumber: string = '111';
+  public fullName: string = 'Sandile SIT 111';
+}
+
+export class MareanieSIT extends Mareanie {
+  public set: string = 'SIT';
+  public setNumber: string = '114';
+  public fullName: string = 'Mareanie SIT 114';
+}
+
+export class MetangSIT extends Metang {
+  public set: string = 'SIT';
+  public setNumber: string = '118';
+  public fullName: string = 'Metang SIT 118';
+}
+
+export class FletchlingSIT extends Fletchling {
+  public set: string = 'SIT';
+  public setNumber: string = '150';
+  public fullName: string = 'Fletchling SIT 150';
+}
+
+export class GymTrainerSIT extends GymTrainer {
+  public set: string = 'SIT';
+  public setNumber: string = '158';
+  public fullName: string = 'Gym Trainer SIT 158';
+}
+
+export class ChesnaughtV2 extends ChesnaughtV {
+  public set: string = 'SIT';
+  public setNumber: string = '171';
+  public fullName: string = 'Chesnaught V SIT 171';
+}
+
+export class ReshiramV2 extends ReshiramV {
+  public set: string = 'SIT';
+  public setNumber: string = '172';
+  public fullName: string = 'Reshiram V SIT 172';
+}
+
+export class OmastarV2 extends OmastarV {
+  public set: string = 'SIT';
+  public setNumber: string = '174';
+  public fullName: string = 'Omastar V SIT 174';
+}
+
+export class MawileV2 extends MawileV {
+  public set: string = 'SIT';
+  public setNumber: string = '178';
+  public fullName: string = 'Mawile V SIT 178';
+}
+
+export class HisuianArcanineV2 extends HisuianArcanineV {
+  public set: string = 'SIT';
+  public setNumber: string = '179';
+  public fullName: string = 'Hisuian Arcanine V SIT 179';
+}
+
+export class SkuntankV2 extends SkuntankV {
+  public set: string = 'SIT';
+  public setNumber: string = '180';
+  public fullName: string = 'Skuntank V SIT 180';
+}
+
+export class SkuntankV3 extends SkuntankV {
+  public set: string = 'SIT';
+  public setNumber: string = '181';
+  public fullName: string = 'Skuntank V SIT 181';
+}
+
+export class HoOhV2 extends HoOhV {
+  public set: string = 'SIT';
+  public setNumber: string = '187';
+  public fullName: string = 'Ho-Oh V SIT 187';
+}
+
+export class Brandon2 extends Brandon {
+  public set: string = 'SIT';
+  public setNumber: string = '188';
+  public fullName: string = 'Brandon SIT 188';
+}
+
+export class GymTrainer2 extends GymTrainer {
+  public set: string = 'SIT';
+  public setNumber: string = '191';
+  public fullName: string = 'Gym Trainer SIT 191';
+}
+
+export class Wallace2 extends Wallace {
+  public set: string = 'SIT';
+  public setNumber: string = '194';
+  public fullName: string = 'Wallace SIT 194';
+}
+
+export class MawileVstar2 extends MawileVstar {
+  public set: string = 'SIT';
+  public setNumber: string = '200';
+  public fullName: string = 'Mawile VSTAR SIT 200';
+}
+
+export class Brandon3 extends Brandon {
+  public set: string = 'SIT';
+  public setNumber: string = '203';
+  public fullName: string = 'Brandon SIT 203';
+}
+
+export class Wallace3 extends Wallace {
+  public set: string = 'SIT';
+  public setNumber: string = '208';
+  public fullName: string = 'Wallace SIT 208';
 }

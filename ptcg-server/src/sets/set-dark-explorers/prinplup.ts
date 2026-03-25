@@ -2,8 +2,9 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, CoinFlipPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+
 import { GameMessage } from '../../game/game-message';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Prinplup extends PokemonCard {
 
@@ -11,24 +12,24 @@ export class Prinplup extends PokemonCard {
 
   public evolvesFrom = 'Piplup';
 
-  public cardType: CardType = CardType.WATER;
+  public cardType: CardType = W;
 
   public hp: number = 80;
 
-  public weakness = [{ type: CardType.LIGHTNING }];
+  public weakness = [{ type: L }];
 
-  public retreat = [ CardType.COLORLESS, CardType.COLORLESS ];
+  public retreat = [C, C];
 
   public attacks = [
     {
       name: 'Razor Wing',
-      cost: [ CardType.COLORLESS ],
+      cost: [C],
       damage: 20,
       text: ''
     },
     {
       name: 'Fury Attack',
-      cost: [ CardType.WATER, CardType.COLORLESS, CardType.COLORLESS ],
+      cost: [W, C, C],
       damage: 30,
       text: 'Flip 3 coins. This attack does 30 damage times the number of heads.'
     }
@@ -45,7 +46,7 @@ export class Prinplup extends PokemonCard {
   public setNumber: string = '28';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[1]) {
+    if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
       return store.prompt(state, [
         new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP),

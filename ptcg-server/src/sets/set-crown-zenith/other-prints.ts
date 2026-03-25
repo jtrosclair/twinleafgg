@@ -1,103 +1,127 @@
-import { Kricketot } from "../set-astral-radiance/kricketot";
-import { Cherubi } from "../set-battle-styles/cherubi";
-import { Snorunt } from "../set-chilling-reign/snorunt";
-import { RotomV } from "../set-lost-origin/rotom-v";
-import { MewV } from "../set-fusion-strike/mew-v";
-import { Lunatone } from "../set-pokemon-go/lunatone";
-import { Solrock } from "../set-pokemon-go/solrock";
-import { Riolu } from "../set-brilliant-stars/riolu";
-import { RayquazaV } from "../set-evolving-skies/rayquaza-v";
-import { RayquazaVMAX } from "../set-evolving-skies/rayquaza-vmax";
-import { RayquazaVMAX as RayquazaVMAXEVS111 } from "../set-evolving-skies/rayquaza-vmax";
-import { DuraludonV } from "../set-evolving-skies/duraludon-v";
-import { DuraludonVMAX } from "../set-evolving-skies/duraludon-vmax";
-import { Ditto } from "../set-pokemon-go/ditto";
-import { StoutlandV } from "../set-battle-styles/stoutland-v";
-import { GreedentV } from "../set-fusion-strike/greedent-v";
-import { Bede } from "../set-sword-and-shield/bede";
-import { CrushingHammer } from "../set-scarlet-and-violet/crushing-hammer";
-import { EnergyRetrieval } from "../set-base-set/energy-retrieval";
-import { EnergySearch } from "../set-fossil/energy-search";
-import { EnergySwitchPK } from "../set-ex-power-keepers/other-prints";
-import { GreatBall } from "../set-ex-firered-leafgreen/great-ball";
-import { Hop } from "../set-sword-and-shield/hop";
-import { Leon } from "../set-vivid-voltage/leon";
-import { Nessa } from "../set-vivid-voltage/nessa";
-import { PokeBall } from "../set-jungle/pokeball";
-import { PokemonCatcher } from "../set-emerging-powers/pokemon-catcher";
-import { Potion } from "../set-base-set/potion";
-import { Raihan } from "../set-evolving-skies/raihan";
-import { RareCandy } from "../set-ex-holon-phantoms/rare-candy";
-import { Switch } from "../set-base-set/switch";
-import { TrekkingShoes } from "../set-astral-radiance/trekking-shoes";
-import { UltraBall } from "../set-scarlet-and-violet/ultra-ball";
-import { ElesasSparkle } from "../set-fusion-strike/elesas-sparkle";
-import { ProfessorsResearch } from "../set-scarlet-and-violet/professors-research";
-import { Volo } from "../set-lost-origin/volo";
-import { GrassEnergy } from "../set-base-set-energy/grass-energy";
-import { FireEnergy } from "../set-base-set-energy/fire-energy";
-import { WaterEnergy } from "../set-base-set-energy/water-energy";
-import { LightningEnergy } from "../set-base-set-energy/lightning-energy";
-import { PsychicEnergy } from "../set-base-set-energy/psychic-energy";
-import { FightingEnergy } from "../set-base-set-energy/fighting-energy";
-import { DarknessEnergy } from "../set-diamond-and-pearl/basic-energies";
-import { MetalEnergy } from "../set-diamond-and-pearl/basic-energies";
-import { Kricketune } from "../set-astral-radiance/kricketune";
-import { Magmortar } from "../set-brilliant-stars/magmortar";
-import { Oricorio } from "../set-fusion-strike/oricorio";
-import { Lapras } from "../set-brilliant-stars/lapras";
-import { Manaphy } from "../set-brilliant-stars/manaphy";
-import { Keldeo } from "../set-astral-radiance/keldeo";
-import { Electivire } from "../set-brilliant-stars/electivire";
-import { Mew } from "../set-celebrations/mew";
-import { Lunatone as LunatonePGO34 } from "../set-pokemon-go/lunatone";
-import { Deoxys } from "../set-fusion-strike/deoxys";
-import { Diancie } from "../set-astral-radiance/diancie";
-import { Comfey } from "../set-lost-origin/comfey";
-import { Solrock as SolrockPGO39 } from "../set-pokemon-go/solrock";
-import { Absol as AbsolASR97 } from "../set-astral-radiance/absol";
-import { Magnezone } from "../set-astral-radiance/magnezone";
-import { Altaria } from "../set-evolving-skies/altaria";
-import { Ditto as DittoPGO53 } from "../set-pokemon-go/ditto";
-import { Dunsparce } from "../set-fusion-strike/dunsparce";
-import { Miltank } from "../set-astral-radiance/miltank";
-import { Bibarel } from "../set-brilliant-stars/bibarel";
-import { Riolu as RioluBRS78 } from "../set-brilliant-stars/riolu";
-import { Swablu } from "../set-evolving-skies/swablu";
-import { Duskull } from "../set-brilliant-stars/duskull";
-import { Bidoof as BidoofCRZ111 } from "../set-crown-zenith/bidoof";
-import { Pikachu as PikachuLOR52 } from "../set-lost-origin/pikachu";
-import { Mareep } from "../set-evolving-skies/mareep";
-import { EnteiV } from "../set-brilliant-stars/entei-v";
-import { SuicuneV } from "../set-evolving-skies/suicune-v";
-import { LumineonV } from "../set-brilliant-stars/lumineon-v";
-import { RaikouV } from "../set-brilliant-stars/raikou-v";
-import { ZeraoraVMAX as ZeraoraVMAXCRZ54 } from "../set-crown-zenith/zeraora-vmax";
-import { ZeraoraVSTAR as ZeraoraVSTARCRZ55 } from "../set-crown-zenith/zeraora-vstar";
-import { ZacianV as ZacianVCEL16 } from "../set-celebrations/zacian-v";
-import { DrapionV } from "../set-lost-origin/drapion-v";
-import { DarkraiVSTAR } from "../set-astral-radiance/darkrai-vstar";
-import { HisuianSamurottV } from "../set-astral-radiance/hisuian-samurott-v";
-import { HisuianSamurottVSTAR } from "../set-astral-radiance/hisuian-samurott-vstar";
-import { ZamazentaV as ZamazentaVCRZ98 } from "../set-crown-zenith/zamazenta-v";
-import { RegigigasVSTAR as RegigigasVSTARCRZ114 } from "../set-crown-zenith/regigigas-vstar";
-import { HisuianZoroarkVSTAR } from "../set-lost-origin/hisuian-zoroark-vstar";
-import { Adaman } from "../set-astral-radiance/adaman";
-import { CherensCare } from "../set-brilliant-stars/cherens-care";
-import { ColresssExperiment } from "../set-lost-origin/colress's-experiment";
-import { CynthiasAmbition } from "../set-brilliant-stars/cynthias-ambition";
-import { GardeniasVigor } from "../set-astral-radiance/gardenias-vigor";
-import { Grant } from "../set-astral-radiance/grant";
-import { Irida } from "../set-astral-radiance/irida";
-import { Melony } from "../set-chilling-reign/melony";
-import { Raihan as RaihanEVS152 } from "../set-evolving-skies/raihan";
-import { Roxanne } from "../set-astral-radiance/roxanne";
-import { OriginFormePalkiaVSTAR } from "../set-astral-radiance/origin-forme-palkia-vstar";
-import { OriginFormeDialgaVSTAR } from "../set-astral-radiance/origin-forme-dialga-vstar";
-import { GiratinaVSTAR } from "../set-lost-origin/giratina-vstar";
-import { ArceusVSTAR } from "../set-brilliant-stars/arceus-vstar";
+import { Kricketot } from '../set-astral-radiance/kricketot';
+import { Cherubi } from '../set-battle-styles/cherubi';
+import { Snorunt } from '../set-chilling-reign/snorunt';
+import { RotomV } from '../set-lost-origin/rotom-v';
+import { MewV } from '../set-fusion-strike/mew-v';
+import { Lunatone } from '../set-pokemon-go/lunatone';
+import { Solrock } from '../set-pokemon-go/solrock';
+import { Riolu } from '../set-brilliant-stars/riolu';
+import { RayquazaV } from '../set-evolving-skies/rayquaza-v';
+import { RayquazaVMAX } from '../set-evolving-skies/rayquaza-vmax';
+import { RayquazaVMAX as RayquazaVMAXEVS111 } from '../set-evolving-skies/rayquaza-vmax';
+import { DuraludonV } from '../set-evolving-skies/duraludon-v';
+import { DuraludonVMAX } from '../set-evolving-skies/duraludon-vmax';
+import { Ditto } from '../set-pokemon-go/ditto';
+import { StoutlandV } from '../set-battle-styles/stoutland-v';
+import { GreedentV } from '../set-fusion-strike/greedent-v';
+import { Bede } from '../set-sword-and-shield/bede';
+import { CrushingHammer } from '../set-scarlet-and-violet/crushing-hammer';
+import { EnergyRetrieval } from '../set-base-set/energy-retrieval';
+import { EnergySearch } from '../set-fossil/energy-search';
+import { EnergySwitchPK } from '../set-ex-power-keepers/other-prints';
+import { GreatBall } from '../set-ex-firered-leafgreen/great-ball';
+import { Hop } from '../set-sword-and-shield/hop';
+import { Leon } from '../set-vivid-voltage/leon';
+import { Nessa } from '../set-vivid-voltage/nessa';
+import { PokeBall } from '../set-jungle/pokeball';
+import { PokemonCatcher } from '../set-scarlet-and-violet/pokemon-catcher';
+import { Potion } from '../set-base-set/potion';
+import { Raihan } from '../set-evolving-skies/raihan';
+import { RareCandy } from '../set-ex-holon-phantoms/rare-candy';
+import { Switch } from '../set-base-set/switch';
+import { TrekkingShoes } from '../set-astral-radiance/trekking-shoes';
+import { UltraBall } from '../set-scarlet-and-violet/ultra-ball';
+import { ElesasSparkle } from '../set-fusion-strike/elesas-sparkle';
+import { ProfessorsResearch } from '../set-scarlet-and-violet/professors-research';
+import { Volo } from '../set-lost-origin/volo';
+import { GrassEnergy } from '../set-base-set-energy/grass-energy';
+import { FireEnergy } from '../set-base-set-energy/fire-energy';
+import { WaterEnergy } from '../set-base-set-energy/water-energy';
+import { LightningEnergy } from '../set-base-set-energy/lightning-energy';
+import { PsychicEnergy } from '../set-base-set-energy/psychic-energy';
+import { FightingEnergy } from '../set-base-set-energy/fighting-energy';
+import { DarknessEnergy } from '../set-diamond-and-pearl/basic-energies';
+import { MetalEnergy } from '../set-diamond-and-pearl/basic-energies';
+import { Kricketune } from '../set-astral-radiance/kricketune';
+import { Magmortar } from '../set-brilliant-stars/magmortar';
+import { Oricorio } from '../set-fusion-strike/oricorio';
+import { Lapras } from '../set-brilliant-stars/lapras';
+import { Manaphy } from '../set-brilliant-stars/manaphy';
+import { Keldeo } from '../set-astral-radiance/keldeo';
+import { Electivire } from '../set-brilliant-stars/electivire';
+import { Mew } from '../set-celebrations/mew';
+import { Lunatone as LunatonePGO34 } from '../set-pokemon-go/lunatone';
+import { Deoxys } from '../set-fusion-strike/deoxys';
+import { Diancie } from '../set-astral-radiance/diancie';
+import { Comfey } from '../set-lost-origin/comfey';
+import { Solrock as SolrockPGO39 } from '../set-pokemon-go/solrock';
+import { Absol as AbsolASR97 } from '../set-astral-radiance/absol';
+import { Magnezone } from '../set-astral-radiance/magnezone';
+import { Altaria } from '../set-evolving-skies/altaria';
+import { Ditto as DittoPGO53 } from '../set-pokemon-go/ditto';
+import { Dunsparce } from '../set-fusion-strike/dunsparce';
+import { Miltank } from '../set-astral-radiance/miltank';
+import { Bibarel } from '../set-brilliant-stars/bibarel';
+import { Riolu as RioluBRS78 } from '../set-brilliant-stars/riolu';
+import { Swablu } from '../set-evolving-skies/swablu';
+import { Duskull } from '../set-brilliant-stars/duskull';
+import { Bidoof as BidoofCRZ111 } from '../set-crown-zenith/bidoof';
+import { Pikachu as PikachuLOR52 } from '../set-lost-origin/pikachu';
+import { Mareep } from '../set-evolving-skies/mareep';
+import { EnteiV } from '../set-brilliant-stars/entei-v';
+import { SuicuneV } from '../set-evolving-skies/suicune-v';
+import { LumineonV } from '../set-brilliant-stars/lumineon-v';
+import { RaikouV } from '../set-brilliant-stars/raikou-v';
+import { ZeraoraVMAX as ZeraoraVMAXCRZ54 } from '../set-crown-zenith/zeraora-vmax';
+import { ZeraoraVSTAR as ZeraoraVSTARCRZ55 } from '../set-crown-zenith/zeraora-vstar';
+import { ZacianV as ZacianVCEL16 } from '../set-celebrations/zacian-v';
+import { DrapionV } from '../set-lost-origin/drapion-v';
+import { DarkraiVSTAR } from '../set-astral-radiance/darkrai-vstar';
+import { HisuianSamurottV } from '../set-astral-radiance/hisuian-samurott-v';
+import { HisuianSamurottVSTAR } from '../set-astral-radiance/hisuian-samurott-vstar';
+import { ZamazentaV as ZamazentaVCRZ98 } from '../set-crown-zenith/zamazenta-v';
+import { RegigigasVSTAR as RegigigasVSTARCRZ114 } from '../set-crown-zenith/regigigas-vstar';
+import { HisuianZoroarkVSTAR } from '../set-lost-origin/hisuian-zoroark-vstar';
+import { Adaman } from '../set-astral-radiance/adaman';
+import { CherensCare } from '../set-brilliant-stars/cherens-care';
+import { ColresssExperiment } from '../set-lost-origin/colress\'s-experiment';
+import { CynthiasAmbition } from '../set-brilliant-stars/cynthias-ambition';
+import { GardeniasVigor } from '../set-astral-radiance/gardenias-vigor';
+import { Grant } from '../set-astral-radiance/grant';
+import { Irida } from '../set-astral-radiance/irida';
+import { Melony } from '../set-chilling-reign/melony';
+import { Raihan as RaihanEVS152 } from '../set-evolving-skies/raihan';
+import { Roxanne } from '../set-astral-radiance/roxanne';
+import { OriginFormePalkiaVSTAR } from '../set-astral-radiance/origin-forme-palkia-vstar';
+import { OriginFormeDialgaVSTAR } from '../set-astral-radiance/origin-forme-dialga-vstar';
+import { GiratinaVSTAR } from '../set-lost-origin/giratina-vstar';
+import { ArceusVSTAR } from '../set-brilliant-stars/arceus-vstar';
 import { LostVacuum } from '../set-lost-origin/lost-vacuum';
 import { RescueCarrier } from '../set-evolving-skies/rescue-carrier';
+import { Sunkern } from '../set-silver-tempest/sunkern';
+import { Grubbin } from '../set-fusion-strike/grubbin';
+import { CharizardV } from '../set-brilliant-stars/charizard-v';
+import { CharizardVstar } from '../set-brilliant-stars/charizard-vstar';
+import { SimisearV } from '../set-brilliant-stars/simisear-v';
+import { Seel } from '../set-lost-origin/seel';
+import { GalarianMrMime } from '../set-battle-styles/galarian-mr-mime';
+import { Corphish } from '../set-brilliant-stars/corphish';
+import { Shinx } from '../set-battle-styles/shinx';
+import { Luxio } from '../set-battle-styles/luxio';
+import { Emolga } from '../set-evolving-skies/emolga';
+import { Zeraora } from '../set-fusion-strike/zeraora';
+import { Dusclops } from '../set-brilliant-stars/dusclops';
+import { Graveler } from '../set-fusion-strike/graveler';
+import { Baltoy } from '../set-fusion-strike/baltoy';
+import { Koffing } from '../set-ex-deoxys/koffing';
+import { Krokorok } from '../set-vivid-voltage/krokorok';
+import { Metang } from '../set-celestial-storm/metang';
+import { Pawniard } from '../set-astral-radiance/pawniard';
+import { Snorlax } from '../set-fusion-strike/snorlax';
+import { Starly } from '../set-brilliant-stars/starly';
+import { Bea } from '../set-vivid-voltage/bea';
+import { FriendsInHisui } from './friends-in-hisui';
+import { FriendsInSinnoh } from './friends-in-sinnoh';
 
 export class LostVacuumCRZ extends LostVacuum {
   public fullName = 'Lost Vacuum CRZ';
@@ -696,4 +720,148 @@ export class ArceusVSTARCRZ extends ArceusVSTAR {
   public setNumber = 'GG70';
   public fullName: string = 'Arceus VSTAR CRZ';
   public set = 'CRZ';
+}
+
+export class SunkernCRZ extends Sunkern {
+  public set: string = 'CRZ';
+  public setNumber: string = '7';
+  public fullName: string = 'Sunkern CRZ 7';
+}
+
+export class GrubbinCRZ extends Grubbin {
+  public set: string = 'CRZ';
+  public setNumber: string = '15';
+  public fullName: string = 'Grubbin CRZ 15';
+}
+
+export class CharizardVCRZ extends CharizardV {
+  public set: string = 'CRZ';
+  public setNumber: string = '18';
+  public fullName: string = 'Charizard V CRZ 18';
+}
+
+export class CharizardVstarCRZ extends CharizardVstar {
+  public set: string = 'CRZ';
+  public setNumber: string = '19';
+  public fullName: string = 'Charizard VSTAR CRZ 19';
+}
+
+export class SimisearVCRZ extends SimisearV {
+  public set: string = 'CRZ';
+  public setNumber: string = '22';
+  public fullName: string = 'Simisear V CRZ 22';
+}
+
+export class SeelCRZ extends Seel {
+  public set: string = 'CRZ';
+  public setNumber: string = '29';
+  public fullName: string = 'Seel CRZ 29';
+}
+
+export class GalarianMrMimeCRZ extends GalarianMrMime {
+  public set: string = 'CRZ';
+  public setNumber: string = '30';
+  public fullName: string = 'Galarian Mr. Mime CRZ 30';
+}
+
+export class CorphishCRZ extends Corphish {
+  public set: string = 'CRZ';
+  public setNumber: string = '33';
+  public fullName: string = 'Corphish CRZ 33';
+}
+
+export class ShinxCRZ extends Shinx {
+  public set: string = 'CRZ';
+  public setNumber: string = '39';
+  public fullName: string = 'Shinx CRZ 39';
+}
+
+export class LuxioCRZ extends Luxio {
+  public set: string = 'CRZ';
+  public setNumber: string = '41';
+  public fullName: string = 'Luxio CRZ 41';
+}
+
+export class EmolgaCRZ extends Emolga {
+  public set: string = 'CRZ';
+  public setNumber: string = '47';
+  public fullName: string = 'Emolga CRZ 47';
+}
+
+export class ZeraoraCRZ extends Zeraora {
+  public set: string = 'CRZ';
+  public setNumber: string = '52';
+  public fullName: string = 'Zeraora CRZ 52';
+}
+
+export class DusclopsCRZ extends Dusclops {
+  public set: string = 'CRZ';
+  public setNumber: string = '63';
+  public fullName: string = 'Dusclops CRZ 63';
+}
+
+export class GravelerCRZ extends Graveler {
+  public set: string = 'CRZ';
+  public setNumber: string = '68';
+  public fullName: string = 'Graveler CRZ 68';
+}
+
+export class BaltoyCRZ extends Baltoy {
+  public set: string = 'CRZ';
+  public setNumber: string = '70';
+  public fullName: string = 'Baltoy CRZ 70';
+}
+
+export class KoffingCRZ extends Koffing {
+  public set: string = 'CRZ';
+  public setNumber: string = '75';
+  public fullName: string = 'Koffing CRZ 75';
+}
+
+export class KrokorokCRZ extends Krokorok {
+  public set: string = 'CRZ';
+  public setNumber: string = '79';
+  public fullName: string = 'Krokorok CRZ 79';
+}
+
+export class MetangCRZ extends Metang {
+  public set: string = 'CRZ';
+  public setNumber: string = '90';
+  public fullName: string = 'Metang CRZ 90';
+}
+
+export class PawniardCRZ extends Pawniard {
+  public set: string = 'CRZ';
+  public setNumber: string = '91';
+  public fullName: string = 'Pawniard CRZ 91';
+}
+
+export class SnorlaxCRZ extends Snorlax {
+  public set: string = 'CRZ';
+  public setNumber: string = '109';
+  public fullName: string = 'Snorlax CRZ 109';
+}
+
+export class StarlyCRZ extends Starly {
+  public set: string = 'CRZ';
+  public setNumber: string = '110';
+  public fullName: string = 'Starly CRZ 110';
+}
+
+export class BeaCRZ extends Bea {
+  public set: string = 'CRZ';
+  public setNumber: string = '123';
+  public fullName: string = 'Bea CRZ 123';
+}
+
+export class FriendsInHisui2 extends FriendsInHisui {
+  public set: string = 'CRZ';
+  public setNumber: string = '148';
+  public fullName: string = 'Friends in Hisui CRZ 148';
+}
+
+export class FriendsInSinnoh2 extends FriendsInSinnoh {
+  public set: string = 'CRZ';
+  public setNumber: string = '149';
+  public fullName: string = 'Friends in Sinnoh CRZ 149';
 }

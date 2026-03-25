@@ -2,8 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { CoinFlipEffect } from '../../game/store/effects/play-card-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, FLIP_UNTIL_TAILS_AND_COUNT_HEADS } from '../../game/store/prefabs/prefabs';
 
 export class Poochyena extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -37,24 +36,9 @@ export class Poochyena extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      let headsCount = 0;
-
-      const flipUntilTails = () => {
-        const coinFlipEffect = new CoinFlipEffect(player, (result: boolean) => {
-          if (result) {
-            // Heads - increment count and flip again
-            headsCount++;
-            flipUntilTails();
-          } else {
-            // Tails - calculate final damage
-            effect.damage = 10 * headsCount;
-          }
-        });
-        store.reduceEffect(state, coinFlipEffect);
-      };
-
-      flipUntilTails();
+      return FLIP_UNTIL_TAILS_AND_COUNT_HEADS(store, state, effect.player, headsCount => {
+        effect.damage = 10 * headsCount;
+      });
     }
     return state;
   }

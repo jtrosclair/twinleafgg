@@ -1,11 +1,11 @@
-import { EnergyCard, GameError, PokemonCard } from '../../game';
+import { GameError, PokemonCard } from '../../game';
 import { GameLog, GameMessage } from '../../game/game-message';
 import { Card } from '../../game/store/card/card';
-import { CardType, TrainerType } from '../../game/store/card/card-types';
+import { CardType, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { CLEAN_UP_SUPPORTER, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
 import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
@@ -33,7 +33,7 @@ function* playCard(next: Function, store: StoreLike, state: State,
   let pokemon = 0;
   const blocked: number[] = [];
   player.deck.cards.forEach((c, index) => {
-    if (c instanceof EnergyCard) {
+    if (c.superType === SuperType.ENERGY) {
       energy += 1;
     } else if (c instanceof PokemonCard && c.cardType === CardType.DARK) {
       pokemon += 1;
@@ -62,7 +62,6 @@ function* playCard(next: Function, store: StoreLike, state: State,
   });
 
   MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: self });
-  CLEAN_UP_SUPPORTER(effect, player);
 
   cards.forEach((card, index) => {
     store.log(state, GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });

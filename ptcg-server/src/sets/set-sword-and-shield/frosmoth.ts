@@ -1,13 +1,12 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, EnergyType, SuperType } from '../../game/store/card/card-types';
-import {
-  PowerType, StoreLike, State, StateUtils,
-  GameError, GameMessage, EnergyCard, PlayerType, SlotType
-} from '../../game';
+import { PowerType, StoreLike, State, StateUtils, GameError, GameMessage, EnergyCard, PlayerType, SlotType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect } from '../../game/store/effects/game-effects';
+
 import { AttachEnergyPrompt } from '../../game/store/prompts/attach-energy-prompt';
 import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
+import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Frosmoth extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -42,7 +41,7 @@ export class Frosmoth extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
       const hasEnergyInHand = player.hand.cards.some(c => {
@@ -51,6 +50,22 @@ export class Frosmoth extends PokemonCard {
           && c.provides.includes(CardType.WATER);
       });
       if (!hasEnergyInHand) {
+        throw new GameError(GameMessage.CANNOT_USE_POWER);
+      }
+
+      let hasWaterPokemonOnBench = false;
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
+        if (cardList === player.active) {
+          return;
+        }
+        const checkPokemonTypeEffect = new CheckPokemonTypeEffect(cardList);
+        store.reduceEffect(state, checkPokemonTypeEffect);
+        if (checkPokemonTypeEffect.cardTypes.includes(CardType.WATER)) {
+          hasWaterPokemonOnBench = true;
+        }
+      });
+
+      if (!hasWaterPokemonOnBench) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
@@ -66,6 +81,11 @@ export class Frosmoth extends PokemonCard {
         transfers = transfers || [];
         for (const transfer of transfers) {
           const target = StateUtils.getTarget(state, player, transfer.to);
+          const checkTransferTypeEffect = new CheckPokemonTypeEffect(target);
+          store.reduceEffect(state, checkTransferTypeEffect);
+          if (!checkTransferTypeEffect.cardTypes.includes(CardType.WATER)) {
+            throw new GameError(GameMessage.INVALID_TARGET);
+          }
           const energyCard = transfer.card as EnergyCard;
           const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
           store.reduceEffect(state, attachEnergyEffect);

@@ -5,7 +5,7 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { OrderCardsPrompt } from '../../game/store/prompts/order-cards-prompt';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { PowerType, StoreLike, State, ConfirmPrompt, GameMessage } from '../../game';
-import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { IS_POKEPOWER_BLOCKED, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 function* usePsychicRestore(next: Function, store: StoreLike, state: State, effect: AttackEffect): IterableIterator<State> {
   const player = effect.player;
@@ -102,14 +102,7 @@ export class Uxie extends PokemonCard {
       }
 
       // Try to reduce PowerEffect, to check if something is blocking our ability
-      try {
-        const stub = new PowerEffect(player, {
-          name: 'test',
-          powerType: PowerType.POKEPOWER,
-          text: ''
-        }, this);
-        store.reduceEffect(state, stub);
-      } catch {
+      if (IS_POKEPOWER_BLOCKED(store, state, player, this)) {
         return state;
       }
 
@@ -118,12 +111,16 @@ export class Uxie extends PokemonCard {
         GameMessage.WANT_TO_USE_ABILITY,
       ), wantToUse => {
         if (wantToUse) {
+          // Emit the actual Poké-Power use so reactive effects can see it.
+          const powerEffect = new PowerEffect(player, this.powers[0], this);
+          store.reduceEffect(state, powerEffect);
+
           player.deck.moveTo(player.hand, cardsToDraw);
         }
       });
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const generator = usePsychicRestore(() => generator.next(), store, state, effect);
       return generator.next().value;
     }

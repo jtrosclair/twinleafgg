@@ -1,12 +1,10 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, EnergyType, SuperType } from '../../game/store/card/card-types';
-import {
-  StoreLike, State, PowerType, EnergyCard, GameError, GameMessage,
-  CoinFlipPrompt, PokemonCardList, ChooseCardsPrompt
-} from '../../game';
-import { AttackEffect, PowerEffect } from '../../game/store/effects/game-effects';
+import { StoreLike, State, PowerType, EnergyCard, GameError, GameMessage, CoinFlipPrompt, PokemonCardList, ChooseCardsPrompt } from '../../game';
+import { PowerEffect } from '../../game/store/effects/game-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 
 function* useRebirth(next: Function, store: StoreLike, state: State,
@@ -123,14 +121,14 @@ export class HoOhEx extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
 
       let basicEnergies = 0;
       const typeMap: { [key: number]: boolean } = {};
       player.active.cards.forEach(c => {
-        if (c instanceof EnergyCard && c.energyType === EnergyType.BASIC) {
-          const cardType = c.provides[0];
+        if (c.superType === SuperType.ENERGY && (c as EnergyCard).energyType === EnergyType.BASIC) {
+          const cardType = (c as EnergyCard).provides[0];
           if (typeMap[cardType] === undefined) {
             basicEnergies += 1;
             typeMap[cardType] = true;
@@ -142,7 +140,7 @@ export class HoOhEx extends PokemonCard {
       return state;
     }
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const generator = useRebirth(() => generator.next(), store, state, this, effect);
       return generator.next().value;
     }

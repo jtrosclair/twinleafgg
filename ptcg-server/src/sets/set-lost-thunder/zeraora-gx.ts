@@ -3,18 +3,16 @@ import { Stage, CardType, CardTag, EnergyType, SuperType } from '../../game/stor
 import { AttachEnergyPrompt, EnergyCard, GameError, GameMessage, PlayerType, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckProvidedEnergyEffect, CheckRetreatCostEffect } from '../../game/store/effects/check-effects';
-import { AttackEffect, PowerEffect } from '../../game/store/effects/game-effects';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { BLOCK_IF_GX_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { BLOCK_IF_GX_ATTACK_USED, IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class ZeraoraGX extends PokemonCard {
   public stage: Stage = Stage.BASIC;
   public tags = [CardTag.POKEMON_GX];
-  public cardType: CardType = CardType.LIGHTNING;
+  public cardType: CardType = L;
   public hp: number = 190;
-  public weakness = [{ type: CardType.FIGHTING }];
-  public resistance = [{ type: CardType.METAL, value: -20 }];
-  public retreat = [CardType.COLORLESS, CardType.COLORLESS];
+  public weakness = [{ type: F }];
+  public resistance = [{ type: M, value: -20 }];
+  public retreat = [C, C];
 
   public powers = [{
     name: 'Thunderclap Zone',
@@ -24,13 +22,13 @@ export class ZeraoraGX extends PokemonCard {
 
   public attacks = [{
     name: 'Plasma Fists',
-    cost: [CardType.LIGHTNING, CardType.LIGHTNING, CardType.COLORLESS],
+    cost: [L, L, C],
     damage: 160,
     text: 'This Pokémon can\'t attack during your next turn.'
   },
   {
     name: 'Full Voltage-GX',
-    cost: [CardType.LIGHTNING],
+    cost: [L],
     damage: 0,
     text: 'Attach 5 basic Energy cards from your discard pile to your Pokémon in any way you like. (You can\'t use more than 1 GX attack in a game.)'
   }];
@@ -41,21 +39,7 @@ export class ZeraoraGX extends PokemonCard {
   public name = 'Zeraora-GX';
   public fullName = 'Zeraora GX LOT';
 
-  public readonly ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-  public readonly ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
-
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
-    if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
-      effect.player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-      effect.player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-      console.log('marker cleared');
-    }
-
-    if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-      effect.player.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
-      console.log('second marker added');
-    }
 
     if (effect instanceof CheckRetreatCostEffect) {
       const player = effect.player;
@@ -63,14 +47,7 @@ export class ZeraoraGX extends PokemonCard {
       const owner = StateUtils.findOwner(state, cardList);
 
       // Check to see if anything is blocking our Ability
-      try {
-        const stub = new PowerEffect(player, {
-          name: 'test',
-          powerType: PowerType.ABILITY,
-          text: ''
-        }, this);
-        store.reduceEffect(state, stub);
-      } catch {
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
         return state;
       }
 
@@ -89,7 +66,7 @@ export class ZeraoraGX extends PokemonCard {
       state = store.reduceEffect(state, checkProvidedEnergy);
 
       checkProvidedEnergy.energyMap.forEach(energy => {
-        if (energy.provides.includes(CardType.LIGHTNING)) {
+        if (energy.provides.includes(L)) {
           effect.cost = [];
           return state;
         }
@@ -101,34 +78,23 @@ export class ZeraoraGX extends PokemonCard {
       });
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
-
-      // Check marker
-      if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-        console.log('attack blocked');
-        throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
-      }
-      effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
-      console.log('marker added');
+    // Plasma Fists
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      const player = effect.player;
+      player.active.cannotAttackNextTurnPending = true;
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[1]) {
+    if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
 
       const hasEnergyInDiscard = player.discard.cards.some(c => {
-        return c instanceof EnergyCard
+        return c.superType === SuperType.ENERGY
           && c.energyType === EnergyType.BASIC
-          && c.provides.includes(CardType.LIGHTNING);
+          && (c as EnergyCard).provides.includes(L);
       });
 
       if (!hasEnergyInDiscard) {
         throw new GameError(GameMessage.CANNOT_USE_ATTACK);
-      }
-
-      // Check marker
-      if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-        console.log('attack blocked');
-        throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
       }
 
       BLOCK_IF_GX_ATTACK_USED(player);
@@ -153,10 +119,8 @@ export class ZeraoraGX extends PokemonCard {
           player.discard.moveCardTo(transfer.card, target);
         }
       });
-
     }
 
     return state;
   }
-
 }

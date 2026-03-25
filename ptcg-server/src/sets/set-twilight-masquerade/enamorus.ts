@@ -2,8 +2,9 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, PlayerType, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+
 import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Enamorus extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -14,18 +15,18 @@ export class Enamorus extends PokemonCard {
   public retreat = [C];
 
   public attacks = [{
-      name: 'Heart Sign',
-      cost: [C],
-      damage: 30,
-      text: ''
-    },
-    {
-      name: 'Love Resonance',
-      cost: [P, C, C],
-      damage: 80,
-      damageCalculation: '+',
-      text: 'If any of your Pokémon in play are the same type as any of your opponent\'s Pokémon in play, this attack does 120 more damage.'
-    }];
+    name: 'Heart Sign',
+    cost: [C],
+    damage: 30,
+    text: ''
+  },
+  {
+    name: 'Love Resonance',
+    cost: [P, C, C],
+    damage: 80,
+    damageCalculation: '+',
+    text: 'If any of your Pokémon in play are the same type as any of your opponent\'s Pokémon in play, this attack does 120 more damage.'
+  }];
 
   public regulationMark = 'H';
   public set: string = 'TWM';
@@ -36,7 +37,7 @@ export class Enamorus extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[1]) {
+    if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

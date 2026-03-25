@@ -16,6 +16,7 @@ import { Cyclizar } from './cyclizar';
 import { DefianceVest } from './defiance-vest';
 import { Deoxys } from './deoxys';
 import { Doublade } from './doublade';
+import { Durant } from './durant';
 import { EarthenVessel } from './earthen-vessel';
 import { Elekid } from './elekid';
 import { Flamigo } from './flamigo';
@@ -47,6 +48,7 @@ import { Latios } from './latios';
 import { LuxuriousCape } from './luxurious-cape';
 import { Magby } from './magby';
 import { Mantyke } from './mantyke';
+import { MedicalEnergy } from './medical-energy';
 import { Mela } from './mela';
 import { Mewtwoex } from './mewtwo-ex';
 import { Minior } from './minior';
@@ -110,6 +112,7 @@ export const setParadoxRift: Card[] = [
   new DefianceVest(),
   new Deoxys(),
   new Doublade(),
+  new Durant(),
   new EarthenVessel(),
   new Elekid(),
   new Flamigo(),
@@ -138,6 +141,7 @@ export const setParadoxRift: Card[] = [
   new LuxuriousCape(),
   new Magby(),
   new Mantyke(),
+  new MedicalEnergy(),
   new Mela(),
   new Mewtwoex(),
   new Minior(),

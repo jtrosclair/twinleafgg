@@ -2,8 +2,8 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { DealDamageEffect } from '../../game/store/effects/attack-effects';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+
+import { THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Beldum extends PokemonCard {
 
@@ -19,7 +19,7 @@ export class Beldum extends PokemonCard {
 
   public weakness = [{ type: CardType.FIRE }];
 
-  public retreat = [ CardType.COLORLESS ];
+  public retreat = [CardType.COLORLESS];
 
   public attacks = [
     {
@@ -48,15 +48,14 @@ export class Beldum extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[1]) {
-
-      const player = effect.player;
-        
-      const dealDamage = new DealDamageEffect(effect, 10);
-      dealDamage.target = player.active;
-      return store.reduceEffect(state, dealDamage);
+    if (WAS_ATTACK_USED(effect, 1, this)) {
+      // Legacy implementation:
+      // - Created DealDamageEffect for 10 and targeted player.active directly.
+      //
+      // Converted to prefab version (THIS_POKEMON_DOES_DAMAGE_TO_ITSELF).
+      return THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 10);
     }
     return state;
   }
-        
+
 }

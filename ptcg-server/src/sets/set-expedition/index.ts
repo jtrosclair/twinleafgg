@@ -12,13 +12,17 @@ import { Dratini } from './dratini';
 import { FullHeal } from './full-heal';
 import { Gastly } from './gastly';
 import { Gengar } from './gengar';
+import { Haunter } from './haunter';
 import { Ivysaur } from './ivysaur';
 import { MultiTechnicalMachine01 } from './multi-technical-machine-01';
+import { Oddish } from './oddish';
 import { PokemonNurse } from './pokemon-nurse';
 import { Venusaur } from './venusaur';
+import { Vileplume } from './vileplume';
 
 // Other prints
 import {
+  BillsMaintenanceEX,
   CopycatEX,
   DualBallEX,
   EnergyRemoval2EX,
@@ -27,9 +31,9 @@ import {
   ProfessorElmsTrainingMethodEX,
   ProfessorOaksResearchEX,
   StrengthCharmEX,
+  SuperScoopUpEX,
   SwitchEX,
 } from './other-prints';
-
 export const setExpedition: Card[] = [
   new Bulbasaur(),
   new Charizard(),
@@ -43,12 +47,16 @@ export const setExpedition: Card[] = [
   new FullHeal(),
   new Gastly(),
   new Gengar(),
+  new Haunter(),
   new Ivysaur(),
   new MultiTechnicalMachine01(),
+  new Oddish(),
   new PokemonNurse(),
   new Venusaur(),
+  new Vileplume(),
 
   // Other prints
+  new BillsMaintenanceEX(),
   new CopycatEX(),
   new DualBallEX(),
   new EnergySearchEX(),
@@ -57,6 +65,7 @@ export const setExpedition: Card[] = [
   new ProfessorElmsTrainingMethodEX(),
   new ProfessorOaksResearchEX(),
   new StrengthCharmEX(),
+  new SuperScoopUpEX(),
   new SwitchEX(),
 
   // Basic energies

@@ -9,21 +9,40 @@ import { CrystalBeach } from './crystal-beach';
 import { Delcattyex } from './delcatty-ex';
 import { Diglett } from './diglett';
 import { Dugtrio } from './dugtrio';
+import { Electrike } from './electrike';
+import { Exploudex } from './exploud-ex';
 import { Fearow } from './fearow';
 import { Grovyle } from './grovyle';
+import { Ivysaur } from './ivysaur';
+import { Ivysaur2 } from './ivysaur2';
 import { Jirachiex } from './jirachi-ex';
 import { Kyogreex } from './kyogre-ex';
+import { Lombre } from './lombre';
+import { Marshtomp } from './marshtomp';
+import { Mudkip } from './mudkip';
 import { MysteriousShard } from './mysterious-shard';
 import { Sceptileex } from './sceptile-ex';
+import { Shiftryex } from './shiftry-ex';
 import { Shuppet } from './shuppet';
 import { Spearow } from './spearow';
+import { Swampert } from './swampert';
+import { Swampertex } from './swampert-ex';
 import { Tauros } from './tauros';
 import { Treecko } from './treecko';
 import { Treecko2 } from './treecko2';
+import { Venusaur } from './venusaur';
 import { Windstorm } from './windstorm';
 
 // Other prints
-import { PotionCG } from './other-prints';
+import {
+  BillsMaintenanceCG,
+  DualBallCG,
+  EnergySearchCG,
+  PokeBallCG,
+  PokeNavCG,
+  PotionCG,
+  WarpPointCG,
+} from './other-prints';
 
 export const setEXCrystalGuardians: Card[] = [
   new AlakazamStar(),
@@ -36,19 +55,36 @@ export const setEXCrystalGuardians: Card[] = [
   new Delcattyex(),
   new Diglett(),
   new Dugtrio(),
+  new Electrike(),
+  new Exploudex(),
   new Fearow(),
   new Grovyle(),
+  new Ivysaur(),
+  new Ivysaur2(),
   new Jirachiex(),
   new Kyogreex(),
+  new Lombre(),
+  new Marshtomp(),
+  new Mudkip(),
   new MysteriousShard(),
   new Sceptileex(),
+  new Shiftryex(),
   new Shuppet(),
   new Spearow(),
+  new Swampert(),
+  new Swampertex(),
   new Tauros(),
   new Treecko(),
   new Treecko2(),
+  new Venusaur(),
   new Windstorm(),
 
   // Other prints
+  new BillsMaintenanceCG(),
+  new DualBallCG(),
+  new EnergySearchCG(),
+  new PokeBallCG(),
+  new PokeNavCG(),
   new PotionCG(),
+  new WarpPointCG(),
 ];

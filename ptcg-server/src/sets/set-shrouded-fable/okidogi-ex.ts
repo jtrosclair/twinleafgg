@@ -4,34 +4,29 @@ import { StoreLike, State, StateUtils, ChooseCardsPrompt, GameMessage, ShuffleDe
 import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect } from '../../game/store/effects/game-effects';
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 
 export class Okidogiex extends PokemonCard {
 
   public stage: Stage = Stage.BASIC;
-
   public tags = [CardTag.POKEMON_ex];
-
   public regulationMark = 'H';
-
-  public cardType: CardType = CardType.DARK;
-
-  public weakness = [{ type: CardType.FIGHTING }];
-
+  public cardType: CardType = D;
+  public weakness = [{ type: F }];
   public hp: number = 250;
-
-  public retreat = [CardType.COLORLESS, CardType.COLORLESS, CardType.COLORLESS];
+  public retreat = [C, C, C];
 
   public attacks = [
     {
       name: 'Poisonous Musculature',
-      cost: [CardType.COLORLESS],
+      cost: [C],
       damage: 0,
-      text: 'Attach up to 2 Basic Darkness Energy from your deck to this Pokémon, then shuffle your deck. If you attached any Energy this way, this Pokémon is now Poisoned.'
+      text: 'Search your deck for up to 2 Basic [D] Energy cards and attach them to this Pokémon. Then, shuffle your deck. If you attached Energy to a Pokémon in this way, this Pokémon is now Poisoned. '
     },
     {
       name: 'Chain-Crazed',
-      cost: [CardType.DARK, CardType.DARK, CardType.COLORLESS],
+      cost: [D, D, C],
       damage: 130,
       damageCalculation: '+',
       text: 'If this Pokémon is Poisoned, this attack does 130 more damage.'
@@ -39,18 +34,14 @@ export class Okidogiex extends PokemonCard {
   ];
 
   public set: string = 'SFA';
-
   public cardImage: string = 'assets/cardback.png';
-
   public setNumber: string = '36';
-
   public name: string = 'Okidogi ex';
-
   public fullName: string = 'Okidogi ex SFA';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
 
       const cardList = StateUtils.findCardList(state, this);
@@ -81,7 +72,7 @@ export class Okidogiex extends PokemonCard {
       });
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[1]) {
+    if (WAS_ATTACK_USED(effect, 1, this)) {
 
       const player = effect.player;
       if (player.active.specialConditions.includes(SpecialCondition.POISONED)) {

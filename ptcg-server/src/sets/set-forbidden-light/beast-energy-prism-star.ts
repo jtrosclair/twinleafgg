@@ -22,9 +22,9 @@ export class BeastEnergy extends EnergyCard {
 
   public cardImage = 'assets/cardback.png';
 
-  public name = 'Beast Energy ◇';
+  public name = 'Beast Energy';
 
-  public fullName = 'Beast Energy ◇ FLI';
+  public fullName = 'Beast Energy FLI';
 
   public text =
     'This card provides [C] Energy.' +

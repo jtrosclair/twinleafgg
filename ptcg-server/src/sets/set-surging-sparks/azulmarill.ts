@@ -1,50 +1,41 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, PowerType, PlayerType } from '../../game';
-import { AttackEffect, PowerEffect } from '../../game/store/effects/game-effects';
+import { PowerEffect } from '../../game/store/effects/game-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckAttackCostEffect } from '../../game/store/effects/check-effects';
 import { DealDamageEffect } from '../../game/store/effects/attack-effects';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Azumarill extends PokemonCard {
 
   public stage: Stage = Stage.STAGE_1;
-
   public evolvesFrom = 'Marill';
-
   public regulationMark = 'H';
-
-  public cardType: CardType = CardType.PSYCHIC;
-
+  public cardType: CardType = P;
   public hp: number = 120;
-
-  public weakness = [{ type: CardType.METAL }];
-
-  public retreat = [CardType.COLORLESS, CardType.COLORLESS];
+  public weakness = [{ type: M }];
+  public retreat = [C, C];
 
   public powers = [{
-    name: 'Sparkly Bubbles',
+    name: 'Glistening Bubbles',
     powerType: PowerType.ABILITY,
-    text: 'If you have a Tera Pokémon in play, this Pokémon\'s Double Edge attack can be used for 1 Psychic Energy.'
+    text: 'If you have any Tera Pokémon in play, this Pokémon can use the Double-Edge attack for [P].'
   }];
 
   public attacks = [
     {
-      name: 'Double Edge',
-      cost: [CardType.PSYCHIC, CardType.PSYCHIC, CardType.PSYCHIC, CardType.PSYCHIC],
+      name: 'Double-Edge',
+      cost: [P, P, P, P],
       damage: 230,
       text: 'This Pokémon does 50 damage to itself.'
     }
   ];
 
   public set: string = 'SSP';
-
   public cardImage: string = 'assets/cardback.png';
-
   public setNumber: string = '74';
-
   public name: string = 'Azumarill';
-
   public fullName: string = 'Azumarill SSP';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
@@ -88,7 +79,7 @@ export class Azumarill extends PokemonCard {
       return state;
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
 
       const player = effect.player;
 

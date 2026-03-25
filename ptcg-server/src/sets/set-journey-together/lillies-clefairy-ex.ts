@@ -1,18 +1,19 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, PowerType, StateUtils, PlayerType } from '../../game';
-import { AttackEffect, EffectOfAbilityEffect } from '../../game/store/effects/game-effects';
+import { EffectOfAbilityEffect } from '../../game/store/effects/game-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckPokemonStatsEffect } from '../../game/store/effects/check-effects';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class LilliesClefairyex extends PokemonCard {
 
   public stage: Stage = Stage.BASIC;
   public tags = [CardTag.POKEMON_ex, CardTag.LILLIES];
-  public cardType: CardType = CardType.PSYCHIC;
+  public cardType: CardType = P;
   public hp: number = 190;
-  public weakness = [{ type: CardType.METAL }];
-  public retreat = [CardType.COLORLESS];
+  public weakness = [{ type: M }];
+  public retreat = [C];
 
   public powers = [{
     name: 'Fairy Zone',
@@ -23,7 +24,7 @@ export class LilliesClefairyex extends PokemonCard {
   public attacks = [
     {
       name: 'Full Moon Rondo',
-      cost: [CardType.PSYCHIC, CardType.COLORLESS],
+      cost: [P, C],
       damage: 20,
       damageCalculation: '+',
       text: 'This attack does 20 more damage for each Benched Pokémon (both yours and your opponent\'s).'
@@ -67,7 +68,7 @@ export class LilliesClefairyex extends PokemonCard {
     }
 
     // Full Moon Rondo
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
       //Get number of benched pokemon

@@ -1,199 +1,242 @@
-/* eslint-disable quotes */
-import { TrainerCard } from '../../game/store/card/trainer-card';
+import { Card, CardTarget, ChooseCardsPrompt, ChoosePokemonPrompt, GameError, GameMessage, Player, PlayerType, PokemonCardList, SelectPrompt, SlotType, StateUtils } from '../../game';
 import { EnergyType, SuperType, TrainerType } from '../../game/store/card/card-types';
-import { StoreLike } from '../../game/store/store-like';
-import { State } from '../../game/store/state/state';
+import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { Card, CardList, CardTarget, ChooseCardsPrompt, ChoosePokemonPrompt, EnergyCard, GameError, GameMessage, PlayerType, PokemonCardList, SelectOptionPrompt, SlotType, StateUtils } from '../../game';
 import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { State } from '../../game/store/state/state';
+import { StoreLike } from '../../game/store/store-like';
 
 export class Blowtorch extends TrainerCard {
   public trainerType: TrainerType = TrainerType.ITEM;
   public regulationMark = 'I';
   public set: string = 'PFL';
-  public name: string = 'Blowtorch';
-  public fullName: string = 'Blowtorch M2';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '86';
+  public name: string = 'Blowtorch';
+  public fullName: string = 'Blowtorch PFL';
 
-  public text: string = `You can use this card only if you discard a Basic [R] Energy card from your hand. Discard a Pokémon Tool or Special Energy card from 1 of your opponent's Pokémon, or discard a Stadium in play.`;
+  public text: string =
+    'You can use this card only if you discard a Basic [R] Energy card from your hand.\n\nDiscard a Pokémon Tool or Special Energy card from 1 of your opponent\'s Pokémon, or discard a Stadium in play.';
+
+  public canPlay(store: StoreLike, state: State, player: Player): boolean {
+    const opponent = StateUtils.getOpponent(state, player);
+
+    if (!player.hand.cards.some(c => c.superType === SuperType.ENERGY && c.name === 'Fire Energy')) {
+      return false;
+    }
+
+    let pokemonsWithTool = 0;
+    opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card, target) => {
+      if (cardList.tools.length > 0) {
+        pokemonsWithTool += 1;
+      }
+    });
+
+    let specialEnergy = 0;
+    opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card, target) => {
+      if (cardList.energies.cards.some(c => c.superType === SuperType.ENERGY && c.energyType === EnergyType.SPECIAL)) {
+        specialEnergy += 1;
+      }
+    });
+
+    const stadiumCard = StateUtils.getStadiumCard(state);
+
+    if (pokemonsWithTool === 0 && stadiumCard === undefined && specialEnergy === 0) {
+      return false;
+    }
+
+    // No other restrictions - card can be played
+    return true;
+  }
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+
     if (effect instanceof TrainerEffect && effect.trainerCard === this) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
-      // Check if player has a Basic Fire Energy in hand
-      const hasBasicFireEnergy = player.hand.cards.some(c => {
-        return c instanceof EnergyCard && c.energyType === EnergyType.BASIC && c.name === 'Fire Energy';
-      });
-
-      if (!hasBasicFireEnergy) {
+      if (!player.hand.cards.some(c => c.superType === SuperType.ENERGY && c.name === 'Fire Energy')) {
         throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }
 
-      // Count opponent's Pokemon with Tools or Special Energy
-      let opponentPokemonsWithTargets = 0;
+      let pokemonsWithTool = 0;
       const blocked: CardTarget[] = [];
-
-      opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, _card, target) => {
-        const hasTools = cardList.tools.length > 0;
-        const hasSpecialEnergy = cardList.cards.some(c =>
-          c instanceof EnergyCard && c.energyType === EnergyType.SPECIAL
-        );
-
-        if (hasTools || hasSpecialEnergy) {
-          opponentPokemonsWithTargets += 1;
+      opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card, target) => {
+        if (cardList.tools.length > 0) {
+          pokemonsWithTool += 1;
         } else {
           blocked.push(target);
         }
       });
 
+      let specialEnergy = 0;
+      opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card, target) => {
+        if (cardList.energies.cards.some(c => c.superType === SuperType.ENERGY && c.energyType === EnergyType.SPECIAL)) {
+          specialEnergy += 1;
+        }
+      });
+
       const stadiumCard = StateUtils.getStadiumCard(state);
 
-      // Check if there are any valid targets
-      if (opponentPokemonsWithTargets === 0 && stadiumCard === undefined) {
+      if (pokemonsWithTool === 0 && stadiumCard === undefined && specialEnergy === 0) {
         throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }
 
-      // Move card to supporter zone temporarily
-      player.hand.moveCardTo(effect.trainerCard, player.supporter);
+      // We will discard this card after prompt confirmation
       effect.preventDefault = true;
+      player.hand.moveCardTo(effect.trainerCard, player.supporter);
 
-      // Prompt to discard Basic Fire Energy
-      state = store.prompt(state, new ChooseCardsPrompt(
+      store.prompt(state, new ChooseCardsPrompt(
         player,
         GameMessage.CHOOSE_CARD_TO_DISCARD,
         player.hand,
-        { superType: SuperType.ENERGY },
+        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Fire Energy' },
         { allowCancel: false, min: 1, max: 1 }
       ), cards => {
         cards = cards || [];
-        if (cards.length === 0) {
-          player.supporter.moveCardTo(this, player.hand);
-          return state;
-        }
-        MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: this });
-      });
 
-      // If both Pokemon targets and Stadium exist, give choice
-      if (opponentPokemonsWithTargets >= 1 && stadiumCard !== undefined) {
-        const options: { message: GameMessage, action: () => State }[] = [
-          {
-            message: GameMessage.CHOICE_TOOL,
-            action: () => {
-              return this.discardFromOpponentPokemon(store, state, player, opponent, blocked);
-            }
-          },
-          {
-            message: GameMessage.CHOICE_STADIUM,
-            action: () => {
-              const stadiumCard = StateUtils.getStadiumCard(state);
-              if (stadiumCard === undefined) {
-                throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
+        player.hand.moveCardsTo(cards, player.discard);
+
+        const toolOption = {
+          message: GameMessage.CHOICE_TOOL,
+          action: () => {
+            let targets: PokemonCardList[] = [];
+            return store.prompt(state, new ChoosePokemonPrompt(
+              player.id,
+              GameMessage.CHOOSE_POKEMON_TO_DISCARD_CARDS,
+              PlayerType.TOP_PLAYER,
+              [SlotType.ACTIVE, SlotType.BENCH],
+              { min: 1, max: 1, allowCancel: false, blocked }
+            ), results => {
+              targets = results || [];
+
+              if (targets.length === 0) {
+                return state;
               }
 
-              const cardList = StateUtils.findCardList(state, stadiumCard);
+              const cardList = targets[0];
               const owner = StateUtils.findOwner(state, cardList);
-              MOVE_CARDS(store, state, cardList, owner.discard, { sourceCard: this });
-
+              if (cardList.tools.length > 0) {
+                if (cardList.tools.length > 1) {
+                  return store.prompt(state, new ChooseCardsPrompt(
+                    player,
+                    GameMessage.CHOOSE_CARD_TO_DISCARD,
+                    cardList,
+                    { superType: SuperType.TRAINER, trainerType: TrainerType.TOOL },
+                    { min: 1, max: 1, allowCancel: false }
+                  ), selected => {
+                    if (selected && selected.length > 0) {
+                      cardList.moveCardTo(selected[0], owner.discard);
+                    }
+                    player.supporter.moveCardTo(this, player.discard);
+                    return state;
+                  });
+                } else {
+                  cardList.moveCardTo(cardList.tools[0], owner.discard);
+                }
+              }
               player.supporter.moveCardTo(this, player.discard);
               return state;
-            }
+            });
           }
-        ];
+        };
 
-        return store.prompt(state, new SelectOptionPrompt(
+        const stadiumOption = {
+          message: GameMessage.CHOICE_STADIUM,
+          action: () => {
+            const stadiumCard = StateUtils.getStadiumCard(state);
+            if (stadiumCard == undefined) {
+              throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
+            }
+
+            // Discard Stadium
+            const cardList = StateUtils.findCardList(state, stadiumCard);
+            const owner = StateUtils.findOwner(state, cardList);
+            MOVE_CARDS(store, state, cardList, owner.discard, { sourceCard: this });
+
+            player.supporter.moveCardTo(this, player.discard);
+            return state;
+          }
+        };
+
+        const specialEnergyBlocked: CardTarget[] = [];
+        opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card, target) => {
+          if (cardList.energies.cards.some(c => c.superType === SuperType.ENERGY && c.energyType === EnergyType.SPECIAL)) {
+            return;
+          } else {
+            specialEnergyBlocked.push(target);
+          }
+        });
+
+        const specialEnergyOption = {
+          message: GameMessage.CHOICE_SPECIAL_ENERGY,
+          action: () => {
+            return store.prompt(state, new ChoosePokemonPrompt(
+              player.id,
+              GameMessage.CHOOSE_POKEMON_TO_DISCARD_CARDS,
+              PlayerType.TOP_PLAYER,
+              [SlotType.ACTIVE, SlotType.BENCH],
+              { allowCancel: false, blocked: specialEnergyBlocked }
+            ), results => {
+
+              if (results.length === 0) {
+                return state;
+              }
+
+              const target = results[0];
+              let cards: Card[] = [];
+
+              state = store.prompt(state, new ChooseCardsPrompt(
+                player,
+                GameMessage.CHOOSE_CARD_TO_DISCARD,
+                target,
+                { superType: SuperType.ENERGY, energyType: EnergyType.SPECIAL },
+                { min: 1, max: 1, allowCancel: false }
+              ), selected => {
+                cards = selected || [];
+                if (cards.length > 0) {
+
+                  target.moveCardsTo(cards, opponent.discard);
+                }
+
+                return state;
+              });
+            });
+          }
+        };
+
+        const options: { message: GameMessage, action: () => void }[] = [];
+
+        if (pokemonsWithTool > 0) {
+          options.push(toolOption);
+        }
+
+        if (specialEnergy > 0) {
+          options.push(specialEnergyOption);
+        }
+
+        if (stadiumCard !== undefined) {
+          options.push(stadiumOption);
+        }
+
+        return store.prompt(state, new SelectPrompt(
           player.id,
-          GameMessage.DISCARD_STADIUM_OR_TOOL,
+          GameMessage.DISCARD_STADIUM_OR_TOOL_OR_SPECIAL_ENERGY,
           options.map(c => c.message),
           { allowCancel: false }
         ), choice => {
-          const result = options[choice].action();
-          return result;
+          const option = options[choice];
+
+          if (option.action) {
+            option.action();
+          }
+
+          player.supporter.moveCardTo(this, player.discard);
+          return state;
         });
-      }
-
-      // Only Stadium available
-      if (opponentPokemonsWithTargets === 0 && stadiumCard !== undefined) {
-        const cardList = StateUtils.findCardList(state, stadiumCard);
-        const owner = StateUtils.findOwner(state, cardList);
-        MOVE_CARDS(store, state, cardList, owner.discard, { sourceCard: this });
-
-        player.supporter.moveCardTo(this, player.discard);
-        return state;
-      }
-
-      // Only Pokemon targets available
-      if (opponentPokemonsWithTargets >= 1 && stadiumCard === undefined) {
-        return this.discardFromOpponentPokemon(store, state, player, opponent, blocked);
-      }
-
-      player.supporter.moveCardTo(this, player.discard);
-      return state;
+      });
     }
     return state;
-  }
-
-  private discardFromOpponentPokemon(
-    store: StoreLike,
-    state: State,
-    player: any,
-    opponent: any,
-    blocked: CardTarget[]
-  ): State {
-    return store.prompt(state, new ChoosePokemonPrompt(
-      player.id,
-      GameMessage.CHOOSE_POKEMON_TO_DISCARD_CARDS,
-      PlayerType.TOP_PLAYER,
-      [SlotType.ACTIVE, SlotType.BENCH],
-      { min: 1, max: 1, allowCancel: false, blocked }
-    ), (results: PokemonCardList[]) => {
-      const targets = results || [];
-
-      if (targets.length === 0) {
-        player.supporter.moveCardTo(this, player.discard);
-        return state;
-      }
-
-      const target = targets[0];
-      const tools = target.tools;
-      const specialEnergies = target.cards.filter(c =>
-        c instanceof EnergyCard && c.energyType === EnergyType.SPECIAL
-      );
-
-      const discardableCards: Card[] = [...tools, ...specialEnergies];
-
-      if (discardableCards.length === 0) {
-        player.supporter.moveCardTo(this, player.discard);
-        return state;
-      }
-
-      if (discardableCards.length === 1) {
-        // Only one card, discard it directly
-        target.moveCardTo(discardableCards[0], opponent.discard);
-        player.supporter.moveCardTo(this, player.discard);
-        return state;
-      }
-
-      // Multiple cards, prompt to choose one
-      const cardList = new CardList();
-      cardList.cards = [...discardableCards];
-
-      return store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_DISCARD,
-        cardList,
-        {},
-        { min: 1, max: 1, allowCancel: false }
-      ), selectedCards => {
-        if (selectedCards && selectedCards.length === 1) {
-          target.moveCardTo(selectedCards[0], opponent.discard);
-        }
-        player.supporter.moveCardTo(this, player.discard);
-        return state;
-      });
-    });
   }
 }

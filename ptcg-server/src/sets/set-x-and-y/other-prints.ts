@@ -1,13 +1,18 @@
-import { Yveltal } from "../set-steam-siege/yveltal";
-import { Xerneas } from "../set-steam-siege/xerneas";
-import { GreatBall } from "../set-ex-firered-leafgreen/great-ball";
-import { MaxRevive } from "../set-generations/max-revive";
-import { RedCard } from "../set-generations/red-card";
-import { TeamFlareGrunt } from "../set-generations/team-flare-grunt";
-import { RainbowEnergyPL } from "../set-platinum/other-prints";
-import { YveltalEx as YveltalExXY79 } from "../set-x-and-y/yveltal-ex";
-import { XerneasEX as XerneasEXXY97 } from "../set-x-and-y/xerneas-ex";
+import { Yveltal } from '../set-steam-siege/yveltal';
+import { Xerneas } from '../set-steam-siege/xerneas';
+import { GreatBall } from '../set-ex-firered-leafgreen/great-ball';
+import { MaxRevive } from '../set-generations/max-revive';
+import { RedCard } from '../set-generations/red-card';
+import { TeamFlareGrunt } from '../set-generations/team-flare-grunt';
+import { RainbowEnergyPL } from '../set-platinum/other-prints';
+import { YveltalEx as YveltalExXY79 } from '../set-x-and-y/yveltal-ex';
+import { XerneasEX as XerneasEXXY97 } from '../set-x-and-y/xerneas-ex';
 import { ProfessorJuniper } from '../set-black-and-white/professor-juniper';
+import { Venipede } from '../set-black-and-white/venipede';
+import { VenusaurEx } from './venusaur-ex';
+import { BlastoiseEx } from './blastoise-ex';
+import { EmolgaEx } from './emolga-ex';
+import { SkarmoryEx } from './skarmory-ex';
 
 export class ProfessorSycamoreXY extends ProfessorJuniper {
   public set: string = 'XY';
@@ -67,4 +72,34 @@ export class XerneasEX2XY extends XerneasEXXY97 {
   public setNumber = '146';
   public fullName: string = 'Xerneas-EX2 XY';
   public set = 'XY';
+}
+
+export class VenipedeXY extends Venipede {
+  public set: string = 'XY';
+  public setNumber: string = '51';
+  public fullName: string = 'Venipede XY';
+}
+
+export class VenusaurEx2 extends VenusaurEx {
+  public set: string = 'XY';
+  public setNumber: string = '141';
+  public fullName: string = 'Venusaur-EX XY 141';
+}
+
+export class BlastoiseEx2 extends BlastoiseEx {
+  public set: string = 'XY';
+  public setNumber: string = '142';
+  public fullName: string = 'Blastoise-EX XY 142';
+}
+
+export class EmolgaEx2 extends EmolgaEx {
+  public set: string = 'XY';
+  public setNumber: string = '143';
+  public fullName: string = 'Emolga-EX XY 143';
+}
+
+export class SkarmoryEx2 extends SkarmoryEx {
+  public set: string = 'XY';
+  public setNumber: string = '145';
+  public fullName: string = 'Skarmory-EX XY 145';
 }

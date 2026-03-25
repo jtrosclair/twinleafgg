@@ -18,7 +18,7 @@ function* playCard(next: Function, store: StoreLike, state: State,
   const player = effect.player;
 
   // No Pokemon KO last turn
-  if (!player.marker.hasMarker(self.OPPONENT_KNOCKOUT_MARKER)) {
+  if (!player.marker.hasMarker(self.LETTER_OF_ENCOURAGEMENT_MARKER)) {
     throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
   }
 
@@ -42,7 +42,7 @@ function* playCard(next: Function, store: StoreLike, state: State,
 
     player.deck.moveCardsTo(cards, player.hand);
 
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
 
     return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
       player.deck.applyOrder(order);
@@ -63,7 +63,7 @@ export class LetterOfEncouragement extends TrainerCard {
 
 Search your deck for up to 3 Basic Energy cards, reveal them, and put them into your hand. Then, shuffle your deck.`;
 
-  public readonly OPPONENT_KNOCKOUT_MARKER = 'OPPONENT_KNOCKOUT_MARKER';
+  public readonly LETTER_OF_ENCOURAGEMENT_MARKER = 'LETTER_OF_ENCOURAGEMENT_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
@@ -74,26 +74,24 @@ Search your deck for up to 3 Basic Energy cards, reveal them, and put them into 
 
     if (effect instanceof KnockOutEffect) {
       const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+      const duringTurn = [GamePhase.PLAYER_TURN, GamePhase.ATTACK].includes(state.phase);
 
-      // Do not activate when it is player's turn
-      if (state.players[state.activePlayer] === player) {
-        return state;
-      }
-      // Do not activate between turns
-      if (state.phase !== GamePhase.PLAYER_TURN && state.phase !== GamePhase.ATTACK) {
+      // Do not activate between turns, or when it's not opponents turn.
+      if (!duringTurn || state.players[state.activePlayer] !== opponent) {
         return state;
       }
 
       const cardList = StateUtils.findCardList(state, this);
       const owner = StateUtils.findOwner(state, cardList);
       if (owner === player) {
-        effect.player.marker.addMarkerToState(this.OPPONENT_KNOCKOUT_MARKER);
+        effect.player.marker.addMarker(this.LETTER_OF_ENCOURAGEMENT_MARKER, this);
       }
       return state;
     }
 
     if (effect instanceof EndTurnEffect) {
-      effect.player.marker.removeMarker(this.OPPONENT_KNOCKOUT_MARKER);
+      effect.player.marker.removeMarker(this.LETTER_OF_ENCOURAGEMENT_MARKER);
     }
 
     return state;

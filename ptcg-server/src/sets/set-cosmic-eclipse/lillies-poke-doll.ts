@@ -1,9 +1,9 @@
 import { GameError, GameLog, GameMessage, PokemonCard, Power, PowerType, State, StateUtils, StoreLike, TrainerCard } from '../..';
 import { CardType, PokemonType, Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect, PowerEffect, RetreatEffect } from '../../game/store/effects/game-effects';
+import { KnockOutEffect, RetreatEffect } from '../../game/store/effects/game-effects';
 import { PlayItemEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class LilliesPokeDoll extends TrainerCard {
 
@@ -32,7 +32,8 @@ export class LilliesPokeDoll extends TrainerCard {
   public attacksThisTurn: number = 0;
   public maxAttacksThisTurn: number = 1;
   public allowSubsequentAttackChoice: boolean = false;
-  public maxTools: number = 0;
+  public evolvesFromBase: string[] = [];
+  public maxTools: number = 1;
   public set: string = 'CEC';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '197';
@@ -58,7 +59,7 @@ This card can't retreat. If this card is Knocked Out, your opponent can't take a
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
       const pokeDollCardList = StateUtils.findCardList(state, this);
 

@@ -1,9 +1,9 @@
 import { PokemonCard, CardType, Stage, PowerType, GameError, GameMessage, PokemonCardList, State, StoreLike, AttachEnergyPrompt, CardTarget, EnergyCard, EnergyType, PlayerType, SlotType, StateUtils, SuperType, SpecialCondition, CardTag } from '../../game';
 import { KnockOutOpponentEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect, PowerEffect } from '../../game/store/effects/game-effects';
+
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { BLOCK_IF_GX_ATTACK_USED, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { BLOCK_IF_GX_ATTACK_USED, MOVE_CARDS, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class DarkraiGX extends PokemonCard {
   public cardType: CardType = CardType.DARK;
@@ -47,7 +47,7 @@ export class DarkraiGX extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
       const slots: PokemonCardList[] = player.bench.filter(b => b.cards.length === 0);
 
@@ -76,9 +76,9 @@ export class DarkraiGX extends PokemonCard {
       });
 
       const hasEnergyInDiscard = player.discard.cards.some(c => {
-        return c instanceof EnergyCard
+        return c.superType === SuperType.ENERGY
           && c.energyType === EnergyType.BASIC
-          && c.provides.includes(CardType.DARK);
+          && (c as EnergyCard).provides.includes(CardType.DARK);
       });
       if (!hasEnergyInDiscard) {
         return state;
@@ -130,11 +130,11 @@ export class DarkraiGX extends PokemonCard {
       }
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       effect.ignoreResistance = true;
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[1]) {
+    if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

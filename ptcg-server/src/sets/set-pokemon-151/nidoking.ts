@@ -1,7 +1,8 @@
 import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, StateUtils, SpecialCondition } from '../../game';
 import { CheckAttackCostEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect, AttackEffect } from '../../game/store/effects/game-effects';
+import { PowerEffect } from '../../game/store/effects/game-effects';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 
 export class Nidoking extends PokemonCard {
@@ -33,13 +34,13 @@ export class Nidoking extends PokemonCard {
 
   public getColorlessReduction(state: State): number {
     const player = StateUtils.findOwner(state, this.cards);
-    const hasNidoqueen = player.bench.some(b => b.cards[0].name === 'Nidoqueen');
+    const hasNidoqueen = player.bench.some(b => b.getPokemonCard()?.name === 'Nidoqueen');
     return hasNidoqueen ? 2 : 0;
   }
 
   public getDarkReduction(state: State): number {
     const player = StateUtils.findOwner(state, this.cards);
-    const hasNidoqueen = player.bench.some(b => b.cards[0].name === 'Nidoqueen');
+    const hasNidoqueen = player.bench.some(b => b.getPokemonCard()?.name === 'Nidoqueen');
     return hasNidoqueen ? 2 : 0;
   }
 
@@ -85,7 +86,7 @@ export class Nidoking extends PokemonCard {
       }
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
       opponent.active.addSpecialCondition(SpecialCondition.POISONED);

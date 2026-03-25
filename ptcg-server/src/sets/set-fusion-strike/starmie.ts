@@ -2,8 +2,9 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, ChooseCardsPrompt, GameMessage, PlayerType, SlotType, DamageMap, PutDamagePrompt, StateUtils, EnergyCard, CardList } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+
 import { DiscardCardsEffect, PutCountersEffect } from '../../game/store/effects/attack-effects';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Starmie extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -30,20 +31,20 @@ export class Starmie extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
 
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
       const blocked: number[] = [];
       player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        if (cardList.cards.some(c => c instanceof EnergyCard && c.provides.includes(CardType.WATER))) {
+        if (cardList.cards.some(c => c.superType === SuperType.ENERGY && (c as EnergyCard).provides.includes(CardType.WATER))) {
           blocked.push();
         }
-        if (cardList.cards.some(c => c instanceof EnergyCard && c.provides.includes(CardType.ANY))) {
+        if (cardList.cards.some(c => c.superType === SuperType.ENERGY && (c as EnergyCard).provides.includes(CardType.ANY))) {
           blocked.push();
         }
-        if (cardList.cards.some(c => c instanceof EnergyCard && c.blendedEnergies.includes(CardType.WATER))) {
+        if (cardList.cards.some(c => c.superType === SuperType.ENERGY && (c as EnergyCard).blendedEnergies.includes(CardType.WATER))) {
           blocked.push();
         }
       });

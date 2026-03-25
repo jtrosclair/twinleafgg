@@ -1,11 +1,9 @@
-import { BossOrdersMEG, EnergySwitchPKMEG, RareCandyMEG, SwitchMEG, UltraBallMEG, Bulbasaur2MEG, Ivysaur2MEG, Ninjask2MEG, Snover2MEG, Clawitizer2MEG, Inteleon2MEG, Houndstone2MEG, Garganacl2MEG, Steelix2MEG, Gumshoos2MEG, MegaVenusaurEx2MEG, MegaCameruptEx2MEG, MegaAbomasnowEx2MEG, MegaManectricEx2MEG, MegaGardevoirex2MEG, MegaLucarioex2MEG, MegaAbsolex2MEG, MegaMawileEx2MEG, MegaLatiasex2MEG, MegaKangaskhanex2MEG, AirBalloonMEG, BuddyBuddyPoffinMEG, FightingGong2MEG, LilliesDetermination2MEG, MegaSignal2MEG, MysteryGarden2MEG, NightlyStretcherMEG, PowerProtein2MEG, RareCandy2MEG, WallysCompassion2MEG, MegaVenusaurEx3MEG, MegaGardevoirex3MEG, MegaLucarioex3MEG, MegaAbsolex3MEG, MegaLatiasex3MEG, MegaKangaskhanex3MEG, LilliesDetermination3MEG, WallysCompassion3MEG, MegaGardevoirex4MEG, MegaLucarioex4MEG } from './other-prints';
+import { BossOrdersMEG, EnergySwitchPKMEG, RareCandyMEG, RepelMEG, SwitchMEG, UltraBallMEG, Bulbasaur2MEG, Ivysaur2MEG, Ninjask2MEG, Snover2MEG, Clawitizer2MEG, Inteleon2MEG, Houndstone2MEG, Garganacl2MEG, Steelix2MEG, Gumshoos2MEG, MegaVenusaurEx2MEG, MegaCameruptEx2MEG, MegaAbomasnowEx2MEG, MegaManectricEx2MEG, MegaGardevoirex2MEG, MegaLucarioex2MEG, MegaAbsolex2MEG, MegaMawileEx2MEG, MegaLatiasex2MEG, MegaKangaskhanex2MEG, AirBalloonMEG, BuddyBuddyPoffinMEG, FightingGong2MEG, LilliesDetermination2MEG, MegaSignal2MEG, MysteryGarden2MEG, NightlyStretcherMEG, PowerProtein2MEG, RareCandy2MEG, WallysCompassion2MEG, MegaVenusaurEx3MEG, MegaGardevoirex3MEG, MegaLucarioex3MEG, MegaAbsolex3MEG, MegaLatiasex3MEG, MegaKangaskhanex3MEG, LilliesDetermination3MEG, WallysCompassion3MEG, MegaGardevoirex4MEG, MegaLucarioex4MEG } from './other-prints';
 import { Card } from '../../game/store/card/card';
 import { Abra } from './abra';
 import { Alakazam } from './alakazam';
 import { Bayleef } from './bayleef';
 import { Bulbasaur } from './bulbasaur';
-import { Buneary } from './buneary';
-import { Celebi } from './celebi';
 import { Chikorita } from './chikorita';
 import { Cinderace } from './cinderace';
 import { Clauncher } from './clauncher';
@@ -13,7 +11,6 @@ import { Corphish } from './corphish';
 import { Crawdaunt } from './crawdaunt';
 import { DangerousRuins } from './risky-ruins';
 import { Drizzile } from './drizzile';
-import { Delibird } from './delibird';
 import { Electrike } from './electrike';
 import { FightingGong } from './fighting-gong';
 import { Garganacl } from './garganacl';
@@ -32,6 +29,7 @@ import { Lunatone } from './lunatone';
 import { LushForest } from './forest-of-vitality';
 import { Magnemite } from './magnemite';
 import { Makuhita } from './makuhita';
+import { Marshadow } from './marshadow';
 import { MegaAbomasnowEx } from './mega-abomasnow-ex';
 import { MegaAbsolex } from './mega-absol-ex';
 import { MegaCameruptEx } from './mega-camerupt-ex';
@@ -52,33 +50,34 @@ import { Ninjask } from './ninjask';
 import { Numel } from './numel';
 import { Onix } from './onix';
 import { PowerProtein } from './power-protein';
+import { Raboot } from './raboot';
 import { Ralts } from './ralts';
-import { Repel } from './repel';
 import { Riolu } from './riolu';
+import { Scorbunny } from './scorbunny';
+import { Snom } from './snom';
 import { Snover } from './snover';
 import { Sobble } from './sobble';
 import { Solrock } from './solrock';
 import { Steelix } from './steelix';
+import { StrangeTimepiece } from './strange-timepiece';
 import { SurfingBeach } from './surfing-beach';
 import { WallysCompassion } from './wallys-compassion';
 import { Xerneas } from './xerneas';
 import { Yungoos } from './yungoos';
 import { Yveltal } from './yveltal';
+import { IronDefender } from './iron-defender';
 
 export const setMegaEvolution: Card[] = [
   new Abra(),
   new Alakazam(),
   new Bayleef(),
   new Bulbasaur(),
-  new Buneary(),
-  new Celebi(),
   new Chikorita(),
   new Cinderace(),
   new Clauncher(),
   new Corphish(),
   new Crawdaunt(),
   new DangerousRuins(),
-  new Delibird(),
   new Drizzile(),
   new Electrike(),
   new FightingGong(),
@@ -88,6 +87,7 @@ export const setMegaEvolution: Card[] = [
   new Gumshoos(),
   new Hariyama(),
   new Houndstone(),
+  new IronDefender(),
   new Ivysaur(),
   new Kadabra(),
   new Kirlia(),
@@ -98,6 +98,7 @@ export const setMegaEvolution: Card[] = [
   new LushForest(),
   new Magnemite(),
   new Makuhita(),
+  new Marshadow(),
   new MegaAbomasnowEx(),
   new MegaAbsolex(),
   new MegaCameruptEx(),
@@ -118,13 +119,17 @@ export const setMegaEvolution: Card[] = [
   new Numel(),
   new Onix(),
   new PowerProtein(),
+  new Raboot(),
   new Ralts(),
-  new Repel(),
+  new RepelMEG(),
   new Riolu(),
+  new Scorbunny(),
+  new Snom(),
   new Snover(),
   new Sobble(),
   new Solrock(),
   new Steelix(),
+  new StrangeTimepiece(),
   new SurfingBeach(),
   new WallysCompassion(),
   new Xerneas(),

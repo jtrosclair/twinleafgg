@@ -5,14 +5,12 @@ import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
-import { CLEAN_UP_SUPPORTER } from '../../game/store/prefabs/prefabs';
-
 export class Pokedex extends TrainerCard {
   public trainerType: TrainerType = TrainerType.ITEM;
 
   public set: string = 'BLW'; // Replace with the appropriate set abbreviation
 
-  public name: string = 'Pokedex';
+  public name: string = 'Pokédex';
 
   public fullName: string = 'Pokedex BLW'; // Replace with the appropriate set abbreviation
 
@@ -45,8 +43,6 @@ export class Pokedex extends TrainerCard {
 
         deckTop.applyOrder(order);
         deckTop.moveToTopOfDestination(player.deck);
-
-        CLEAN_UP_SUPPORTER(effect, player);
 
       });
     }

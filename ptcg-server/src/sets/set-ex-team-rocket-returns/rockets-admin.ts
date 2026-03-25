@@ -2,8 +2,8 @@ import { StoreLike, State, GameError, GameMessage, ShuffleDeckPrompt, StateUtils
 import { TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
+import { MoveCardsEffect } from '../../game/store/effects/game-effects';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-
 export class RocketsAdmin extends TrainerCard {
   public trainerType: TrainerType = TrainerType.SUPPORTER;
   public set: string = 'TRR';
@@ -36,16 +36,21 @@ export class RocketsAdmin extends TrainerCard {
         throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }
 
-      player.hand.moveCardsTo(cards, player.deck);
-      opponent.hand.moveCardsTo(opponentCards, opponent.deck);
+      const playerMoveEffect = new MoveCardsEffect(player.hand, player.deck, { cards, sourceCard: this });
+      state = store.reduceEffect(state, playerMoveEffect);
+
+      const opponentMoveEffect = new MoveCardsEffect(opponent.hand, opponent.deck, { cards: opponentCards, sourceCard: this });
+      state = store.reduceEffect(state, opponentMoveEffect);
 
       store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
       });
 
-      store.prompt(state, new ShuffleDeckPrompt(opponent.id), order => {
-        opponent.deck.applyOrder(order);
-      });
+      if (!opponentMoveEffect.preventDefault) {
+        store.prompt(state, new ShuffleDeckPrompt(opponent.id), order => {
+          opponent.deck.applyOrder(order);
+        });
+      }
 
       const maxPlayerDraw = player.getPrizeLeft();
       const maxOpponentDraw = opponent.getPrizeLeft();
@@ -71,20 +76,20 @@ export class RocketsAdmin extends TrainerCard {
               opponentOptions.push({ message: `Draw ${i} card(s)`, value: i });
             }
 
-            store.prompt(state, new SelectPrompt(
-              opponent.id,
-              GameMessage.WANT_TO_DRAW_CARDS,
-              opponentOptions.map(c => c.message),
-              { allowCancel: false }
-            ), opponentChoice => {
-              const opponentNumCardsToDraw = opponentOptions[opponentChoice].value;
-              opponent.deck.moveTo(opponent.hand, opponentNumCardsToDraw);
-            });
+            if (!opponentMoveEffect.preventDefault) {
+              store.prompt(state, new SelectPrompt(
+                opponent.id,
+                GameMessage.WANT_TO_DRAW_CARDS,
+                opponentOptions.map(c => c.message),
+                { allowCancel: false }
+              ), opponentChoice => {
+                const opponentNumCardsToDraw = opponentOptions[opponentChoice].value;
+                opponent.deck.moveTo(opponent.hand, opponentNumCardsToDraw);
+              });
+            }
           }
         });
       }
-
-      player.supporter.moveCardTo(effect.trainerCard, player.discard);
 
     }
 

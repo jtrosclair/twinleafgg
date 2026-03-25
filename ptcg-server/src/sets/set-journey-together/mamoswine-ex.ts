@@ -1,21 +1,11 @@
-import {
-  ChooseCardsPrompt,
-  GameError,
-  GameMessage,
-  PlayerType,
-  PowerType,
-  ShowCardsPrompt,
-  ShuffleDeckPrompt,
-  State,
-  StateUtils,
-  StoreLike
-} from '../../game';
+import { ChooseCardsPrompt, GameError, GameMessage, PlayerType, PowerType, ShowCardsPrompt, ShuffleDeckPrompt, State, StateUtils, StoreLike } from '../../game';
 import { BoardEffect, CardTag, CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect, PowerEffect } from '../../game/store/effects/game-effects';
+
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Mamoswineex extends PokemonCard {
 
@@ -28,19 +18,19 @@ export class Mamoswineex extends PokemonCard {
   public retreat = [C, C, C, C];
 
   public powers = [{
-    name: 'Mammoth Ride',
+    name: 'Mammoth Hauler',
     useWhenInPlay: true,
     powerType: PowerType.ABILITY,
-    text: 'Once during your turn, you may search your deck for 1 Pokémon, reveal it, and put it into your hand. Then shuffle your deck.'
+    text: 'Once during your turn, you may search your deck for a Pokémon, reveal it, and put it into your hand. Then, shuffle your deck.'
   }];
 
   public attacks = [
     {
-      name: 'Roaring March',
+      name: 'Rumbling March',
       cost: [F, F],
       damage: 180,
       damageCalculation: '+',
-      text: 'This attack does 40 more damage for each of your Benched Stage 2 Pokémon.'
+      text: 'This attack does 40 more damage for each Stage 2 Pokémon on your Bench.'
     }
   ];
 
@@ -65,7 +55,7 @@ export class Mamoswineex extends PokemonCard {
       player.marker.removeMarker(this.MAMMOTH_RIDE_MARKER, this);
     }
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
@@ -113,7 +103,7 @@ export class Mamoswineex extends PokemonCard {
       return state;
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
 
       const player = effect.player;
 

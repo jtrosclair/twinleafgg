@@ -7,10 +7,10 @@ import {
   Card
 } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect } from '../../game/store/effects/game-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { IS_POKEPOWER_BLOCKED, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { PowerEffect } from '../../game/store/effects/game-effects';
 
 export class Pachirisu extends PokemonCard {
 
@@ -48,14 +48,7 @@ export class Pachirisu extends PokemonCard {
       const player = effect.player;
 
       // Try to reduce PowerEffect, to check if something is blocking our ability
-      try {
-        const stub = new PowerEffect(player, {
-          name: 'test',
-          powerType: PowerType.POKEPOWER,
-          text: ''
-        }, this);
-        store.reduceEffect(state, stub);
-      } catch {
+      if (IS_POKEPOWER_BLOCKED(store, state, player, this)) {
         return state;
       }
       state = store.prompt(state, new ConfirmPrompt(
@@ -63,11 +56,13 @@ export class Pachirisu extends PokemonCard {
         GameMessage.WANT_TO_USE_ABILITY,
       ), wantToUse => {
         if (wantToUse) {
+          const powerEffect = new PowerEffect(player, this.powers[0], this);
+          store.reduceEffect(state, powerEffect);
 
           const hasEnergyInHand = player.hand.cards.some(c => {
-            return c instanceof EnergyCard
+            return c.superType === SuperType.ENERGY
               && c.energyType === EnergyType.BASIC
-              && c.provides.includes(CardType.LIGHTNING);
+              && (c as EnergyCard).provides.includes(CardType.LIGHTNING);
           });
           if (!hasEnergyInHand) {
             throw new GameError(GameMessage.CANNOT_USE_POWER);

@@ -1,8 +1,9 @@
 import { TrainerCard, TrainerType, Stage, CardType, PokemonType, Power, PowerType, StoreLike, State, GameLog, StateUtils, GameError, GameMessage, PokemonCard } from '../../game';
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect, RetreatEffect, KnockOutEffect } from '../../game/store/effects/game-effects';
+import { RetreatEffect, KnockOutEffect } from '../../game/store/effects/game-effects';
 import { PlayItemEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class MysteriousFossil extends TrainerCard {
 
@@ -30,6 +31,7 @@ export class MysteriousFossil extends TrainerCard {
   public attacksThisTurn: number = 0;
   public maxAttacksThisTurn: number = 1;
   public allowSubsequentAttackChoice: boolean = false;
+  public evolvesFromBase: string[] = [];
   public maxTools: number = 1;
   public set: string = 'FO';
   public cardImage: string = 'assets/cardback.png';
@@ -53,7 +55,7 @@ export class MysteriousFossil extends TrainerCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const cardList = effect.player.active;
       const player = effect.player;
 

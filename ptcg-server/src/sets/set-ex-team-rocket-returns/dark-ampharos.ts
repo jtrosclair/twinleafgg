@@ -3,7 +3,6 @@ import { Effect } from '../../game/store/effects/effect';
 import { EvolveEffect } from '../../game/store/effects/game-effects';
 import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
-
 export class DarkAmpharos extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
   public cardType: CardType = L;
@@ -19,20 +18,18 @@ export class DarkAmpharos extends PokemonCard {
     text: 'As long as Dark Ampharos is in play, whenever your opponent plays an Evolution card from his or her hand to evolve 1 of his or her Pokémon, put 2 damage counters on that Pokémon. You can\'t use more than 1 Darkest Impulse Poké-Body each turn.'
   }];
 
-  public attacks = [
-    {
-      name: 'Ram',
-      cost: [C, C],
-      damage: 30,
-      text: ''
-    },
-    {
-      name: 'Shock Bolt',
-      cost: [L, C, C],
-      damage: 70,
-      text: 'Discard all Lightning Energy attached to Dark Ampharos.'
-    }
-  ];
+  public attacks = [{
+    name: 'Ram',
+    cost: [C, C],
+    damage: 30,
+    text: ''
+  },
+  {
+    name: 'Shock Bolt',
+    cost: [L, C, C],
+    damage: 70,
+    text: 'Discard all [L] Energy attached to Dark Ampharos.'
+  }];
 
   public set: string = 'TRR';
   public setNumber: string = '2';
@@ -66,7 +63,7 @@ export class DarkAmpharos extends PokemonCard {
     }
 
     // Handle Shock Bolt attack
-    // if (effect instanceof AttackEffect && effect.attack === this.attacks[1]) {
+    // if (WAS_ATTACK_USED(effect, 1, this)) {
     //   const player = effect.player;
     //   const cardList = player.active;
 

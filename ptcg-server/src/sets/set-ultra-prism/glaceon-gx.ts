@@ -4,8 +4,9 @@ import { PowerType, StoreLike, State, GameMessage, PlayerType, SlotType, GameErr
 import { Effect } from '../../game/store/effects/effect';
 import { StateUtils } from '../../game';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { PowerEffect, AttackEffect } from '../../game/store/effects/game-effects';
-import { BLOCK_IF_GX_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { PowerEffect } from '../../game/store/effects/game-effects';
+import { CheckPokemonPowersEffect } from '../../game/store/effects/check-effects';
+import { BLOCK_IF_GX_ATTACK_USED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class GlaceonGX extends PokemonCard {
 
@@ -58,6 +59,50 @@ export class GlaceonGX extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Freezing Gaze
+    if (effect instanceof CheckPokemonPowersEffect) {
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+
+      // checking if this is the active Pokemon
+      if (player.active.getPokemonCard() !== this
+        && opponent.active.getPokemonCard() !== this) {
+        return state;
+      }
+
+      // checking if the effect is one you own
+      let doesPlayerOwn = false;
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
+        if (card === this) {
+          doesPlayerOwn = true;
+        }
+      });
+      if (doesPlayerOwn) {
+        return state;
+      }
+
+      // Only filter opponent's Pokemon
+      const targetOwner = StateUtils.findOwner(state, StateUtils.findCardList(state, effect.target));
+      if (targetOwner === player) {
+        return state;
+      }
+
+      const targetPokemon = effect.target;
+      if (targetPokemon && (targetPokemon.tags.includes(CardTag.POKEMON_GX) || targetPokemon.tags.includes(CardTag.POKEMON_EX))) {
+        // Try to reduce PowerEffect, to check if something is blocking our ability
+        try {
+          const powerEffect = new PowerEffect(player, this.powers[0], this);
+          store.reduceEffect(state, powerEffect);
+        } catch {
+          return state;
+        }
+
+        // Filter out all abilities except Freezing Gaze
+        effect.powers = effect.powers.filter(power =>
+          power.powerType !== PowerType.ABILITY || power.name === 'Freezing Gaze'
+        );
+      }
+    }
+
     if (effect instanceof PowerEffect && effect.power.powerType === PowerType.ABILITY && effect.power.name !== 'Freezing Gaze') {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
@@ -93,7 +138,7 @@ export class GlaceonGX extends PokemonCard {
     }
 
     // Frost Spear
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
@@ -119,7 +164,7 @@ export class GlaceonGX extends PokemonCard {
     }
 
     // Polar Spear-GX
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[1]) {
+    if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
       // Check if player has used GX attack
       BLOCK_IF_GX_ATTACK_USED(player);

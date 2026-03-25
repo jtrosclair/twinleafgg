@@ -1,13 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, GameError, GameMessage, StateUtils } from '../../game';
+import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { AttackEffect, PowerEffect, UseAttackEffect } from '../../game/store/effects/game-effects';
 import { CheckAttackCostEffect } from '../../game/store/effects/check-effects';
+import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class BloodmoonUrsalunaex extends PokemonCard {
-
   public tags = [CardTag.POKEMON_ex];
   public stage: Stage = Stage.BASIC;
   public cardType: CardType = C;
@@ -21,14 +19,12 @@ export class BloodmoonUrsalunaex extends PokemonCard {
     text: 'Blood Moon used by this Pokémon costs [C] less for each Prize card your opponent has taken.'
   }];
 
-  public attacks = [
-    {
-      name: 'Blood Moon',
-      cost: [C, C, C, C, C],
-      damage: 240,
-      text: 'During your next turn, this Pokémon can\'t attack.'
-    }
-  ];
+  public attacks = [{
+    name: 'Blood Moon',
+    cost: [C, C, C, C, C],
+    damage: 240,
+    text: 'During your next turn, this Pokémon can\'t attack.'
+  }];
 
   public regulationMark = 'H';
   public set: string = 'TWM';
@@ -44,32 +40,13 @@ export class BloodmoonUrsalunaex extends PokemonCard {
   //   return 6 - remainingPrizes;
   // }
 
-  public readonly ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-  public readonly ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
-
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
-    if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
-      effect.player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-      effect.player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-    }
-
-    if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-      effect.player.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
-    }
 
     if (effect instanceof CheckAttackCostEffect && effect.attack === this.attacks[0]) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
-      try {
-        const stub = new PowerEffect(player, {
-          name: 'test',
-          powerType: PowerType.ABILITY,
-          text: ''
-        }, this);
-        store.reduceEffect(state, stub);
-      } catch {
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
         return state;
       }
 
@@ -100,15 +77,12 @@ export class BloodmoonUrsalunaex extends PokemonCard {
       return state;
     }
 
-    if (effect instanceof UseAttackEffect && effect.source.cards.includes(this)) {
-      if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-        throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
-      }
+    // Blood Moon
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      const player = effect.player;
+      player.active.cannotAttackNextTurnPending = true;
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
-      effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
-    }
     return state;
   }
 }

@@ -7,9 +7,8 @@ import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
-import { EnergyCard } from '../../game/store/card/energy-card';
 import { Card, CardList } from '../../game';
-import { CLEAN_UP_SUPPORTER, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 function* playCard(next: Function, store: StoreLike, state: State, effect: TrainerEffect): IterableIterator<State> {
   const player = effect.player;
@@ -18,7 +17,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
   // Player has no Basic Energy in the discard pile
   let basicEnergyCards = 0;
   player.discard.cards.forEach(c => {
-    if (c instanceof EnergyCard && c.energyType === EnergyType.BASIC) {
+    if (c.superType === SuperType.ENERGY && c.energyType === EnergyType.BASIC) {
       basicEnergyCards++;
     }
   });
@@ -64,7 +63,6 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
       // Recover discarded Pokemon
       MOVE_CARDS(store, state, player.discard, player.hand, { cards, sourceCard: effect.trainerCard });
       // Discard item card
-      CLEAN_UP_SUPPORTER(effect, player);
     }
   });
 }

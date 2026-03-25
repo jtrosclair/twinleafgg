@@ -1,7 +1,7 @@
-import { PokemonCard, Stage, CardTag, CardType, StoreLike, State, EnergyCard, EnergyType, GameError, GameMessage, AttachEnergyPrompt, PlayerType, SlotType, SuperType, StateUtils, DiscardEnergyPrompt, SpecialCondition } from "../../game";
-import { AddSpecialConditionsEffect } from "../../game/store/effects/attack-effects";
-import { Effect } from "../../game/store/effects/effect";
-import { WAS_ATTACK_USED } from "../../game/store/prefabs/prefabs";
+import { PokemonCard, Stage, CardTag, CardType, StoreLike, State, EnergyCard, EnergyType, GameError, GameMessage, AttachEnergyPrompt, PlayerType, SlotType, SuperType, StateUtils, DiscardEnergyPrompt, SpecialCondition } from '../../game';
+import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
+import { Effect } from '../../game/store/effects/effect';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Regiceex extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -38,9 +38,9 @@ export class Regiceex extends PokemonCard {
       const player = effect.player;
 
       const hasEnergyInDiscard = player.discard.cards.some(c => {
-        return c instanceof EnergyCard
-          && c.energyType === EnergyType.BASIC
-          && c.provides && c.provides.includes(CardType.WATER);
+        return c.superType === SuperType.ENERGY
+          && (c as EnergyCard).energyType === EnergyType.BASIC
+          && (c as EnergyCard).provides && (c as EnergyCard).provides.includes(CardType.WATER);
       });
       if (!hasEnergyInDiscard) {
         throw new GameError(GameMessage.CANNOT_USE_ATTACK);

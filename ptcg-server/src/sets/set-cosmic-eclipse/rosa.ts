@@ -3,8 +3,7 @@ import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerCard } from '../../game/store/card/trainer-card';
-import { EnergyCard } from '../../game/store/card/energy-card';
-import { EnergyType, TrainerType } from '../../game/store/card/card-types';
+import { EnergyType, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { GamePhase, State } from '../../game/store/state/state';
 import { StateUtils } from '../../game/store/state-utils';
@@ -15,7 +14,7 @@ import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { KnockOutEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { CLEAN_UP_SUPPORTER, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 function* playCard(next: Function, store: StoreLike, state: State,
   self: Rosa, effect: TrainerEffect): IterableIterator<State> {
@@ -34,7 +33,7 @@ function* playCard(next: Function, store: StoreLike, state: State,
   const blocked: number[] = [];
   player.deck.cards.forEach((c, index) => {
     const isPokemon = c instanceof PokemonCard;
-    const isBasicEnergy = c instanceof EnergyCard && c.energyType === EnergyType.BASIC;
+    const isBasicEnergy = c.superType === SuperType.ENERGY && c.energyType === EnergyType.BASIC;
     const isTrainer = c instanceof TrainerCard;
     if (!isPokemon && !isBasicEnergy && !isTrainer) {
       blocked.push(index);
@@ -72,8 +71,6 @@ function* playCard(next: Function, store: StoreLike, state: State,
     ), () => next());
   }
 
-  CLEAN_UP_SUPPORTER(effect, player);
-
   return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
     player.deck.applyOrder(order);
   });
@@ -82,21 +79,16 @@ function* playCard(next: Function, store: StoreLike, state: State,
 export class Rosa extends TrainerCard {
 
   public trainerType: TrainerType = TrainerType.SUPPORTER;
-
   public set: string = 'CEC';
-
+  public setNumber: string = '204';
   public cardImage: string = 'assets/cardback.png';
-
   public name: string = 'Rosa';
-
   public fullName: string = 'Rosa CEC';
 
-  public setNumber: string = '204';
-
   public text: string =
-    `You can play this card only if 1 of your Pokemon was Knocked Out during your opponent\'s last turn.
+    `You can play this card only if 1 of your Pokémon was Knocked Out during your opponent's last turn.
 
-Search your deck for a Pokemon, a Trainer card, and a basic Energy card, reveal them, and put them into your hand. Then, shuffle your deck.`;
+Search your deck for a Pokémon, a Trainer card, and a basic Energy card, reveal them, and put them into your hand. Then, shuffle your deck.`;
 
   public readonly ROSA_MARKER = 'ROSA_MARKER';
 

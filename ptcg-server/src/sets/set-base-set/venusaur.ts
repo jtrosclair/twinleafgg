@@ -6,7 +6,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 import { CardTarget, Card, GameError, GameMessage, PlayerType, SlotType, StateUtils } from '../..';
-import { BLOCK_IF_HAS_SPECIAL_CONDITION, IS_POKEPOWER_BLOCKED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { BLOCK_IF_HAS_SPECIAL_CONDITION, IS_POKEMON_POWER_BLOCKED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 
 export class Venusaur extends PokemonCard {
@@ -43,7 +43,7 @@ export class Venusaur extends PokemonCard {
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
-      if (IS_POKEPOWER_BLOCKED(store, state, player, this)) {
+      if (IS_POKEMON_POWER_BLOCKED(store, state, player, this)) {
         throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
       }
 
@@ -58,12 +58,6 @@ export class Venusaur extends PokemonCard {
         checkProvidedEnergy.energyMap.forEach(em => {
           if (!em.provides.includes(CardType.GRASS) && !em.provides.includes(CardType.ANY)) {
             blockedCards.push(em.card);
-          }
-        });
-
-        cardList.cards.forEach(em => {
-          if (cardList.getPokemons().includes(em as PokemonCard)) {
-            blockedCards.push(em);
           }
         });
 
@@ -96,23 +90,7 @@ export class Venusaur extends PokemonCard {
           const source = StateUtils.getTarget(state, player, transfer.from);
           const target = StateUtils.getTarget(state, player, transfer.to);
 
-          if (transfer.card instanceof PokemonCard) {
-            // If card is in source energies, move it from there; otherwise move from main cards array
-            if (source.energies.cards.includes(transfer.card)) {
-              source.energies.moveCardTo(transfer.card, target.energies);
-              // Also ensure it's in target's main cards array
-              if (!target.cards.includes(transfer.card)) {
-                target.cards.push(transfer.card);
-              }
-            } else {
-              source.moveCardTo(transfer.card, target);
-              if (!target.energies.cards.includes(transfer.card)) {
-                target.energies.cards.push(transfer.card);
-              }
-            }
-          } else {
-            source.moveCardTo(transfer.card, target);
-          }
+          source.moveCardTo(transfer.card, target);
         }
       });
     }

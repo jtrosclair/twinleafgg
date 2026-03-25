@@ -8,7 +8,7 @@ import { GameError } from '../../game/game-error';
 import { GameLog, GameMessage } from '../../game/game-message';
 import { Card } from '../../game/store/card/card';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
-import { ShowCardsPrompt, ShuffleDeckPrompt, StateUtils } from '../../game';
+import { Player, ShowCardsPrompt, ShuffleDeckPrompt, StateUtils } from '../../game';
 
 function* playCard(next: Function, store: StoreLike, state: State, self: PalPad, effect: TrainerEffect): IterableIterator<State> {
   const player = effect.player;
@@ -50,7 +50,7 @@ function* playCard(next: Function, store: StoreLike, state: State, self: PalPad,
     }
 
   }
-  player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
   return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
     player.deck.applyOrder(order);
   });
@@ -76,6 +76,17 @@ export class PalPad extends TrainerCard {
     'Shuffle up to 2 Supporter cards from your discard pile into' +
     'your deck.';
 
+  public canPlay(store: StoreLike, state: State, player: Player): boolean {
+    const hasSupporter = player.discard.cards.some(c => {
+      return c instanceof TrainerCard && c.trainerType === TrainerType.SUPPORTER;
+    });
+
+    if (!hasSupporter) {
+      return false;
+    }
+    return true;
+  }
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof TrainerEffect && effect.trainerCard === this) {
       const player = effect.player;
@@ -86,7 +97,7 @@ export class PalPad extends TrainerCard {
 
       if (discardEffect.preventDefault) {
         // If prevented, just discard the card and return
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
         return state;
       }
 

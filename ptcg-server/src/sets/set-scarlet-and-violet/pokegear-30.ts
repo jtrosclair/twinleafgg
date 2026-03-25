@@ -12,6 +12,7 @@ import { GameMessage } from '../../game/game-message';
 import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
 import { StateUtils } from '../../game/store/state-utils';
 import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
+import { Player } from '../../game';
 
 function* playCard(next: Function, store: StoreLike, state: State, effect: TrainerEffect): IterableIterator<State> {
   const player = effect.player;
@@ -50,7 +51,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
       cards
     ), () => next());
   }
-  player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
   return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
     player.deck.applyOrder(order);
   });
@@ -68,7 +69,7 @@ export class Pokegear30 extends TrainerCard {
 
   public setNumber: string = '186';
 
-  public name: string = 'Pokegear 3.0';
+  public name: string = 'Pokégear 3.0';
 
   public fullName: string = 'Pokegear SVI';
 
@@ -76,6 +77,13 @@ export class Pokegear30 extends TrainerCard {
     'Look at the top 7 cards of your deck. You may reveal a Supporter card ' +
     'you find there and put it into your hand. Shuffle the other cards back ' +
     'into your deck.';
+
+  public canPlay(store: StoreLike, state: State, player: Player): boolean {
+    if (player.deck.cards.length === 0) {
+      return false;
+    }
+    return true;
+  }
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof TrainerEffect && effect.trainerCard === this) {

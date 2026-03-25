@@ -1,16 +1,14 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, EnergyType, SuperType } from '../../game/store/card/card-types';
-import {
-  PowerType, StoreLike, State, StateUtils, GameError, GameMessage,
-  EnergyCard, PlayerType, SlotType, PokemonCardList, ChooseCardsPrompt
-} from '../../game';
+import { PowerType, StoreLike, State, StateUtils, GameError, GameMessage, EnergyCard, PlayerType, SlotType, PokemonCardList, ChooseCardsPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect, AttackEffect } from '../../game/store/effects/game-effects';
+import { AttackEffect } from '../../game/store/effects/game-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { AttachEnergyPrompt } from '../../game/store/prompts/attach-energy-prompt';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
+import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 function* useFlareDestroy(next: Function, store: StoreLike, state: State,
   effect: AttackEffect): IterableIterator<State> {
@@ -20,7 +18,7 @@ function* useFlareDestroy(next: Function, store: StoreLike, state: State,
   const checkProvidedEnergy = new CheckProvidedEnergyEffect(player);
   state = store.reduceEffect(state, checkProvidedEnergy);
 
-  if (player.active.cards.some(c => c instanceof EnergyCard)) {
+  if (player.active.cards.some(c => c.superType === SuperType.ENERGY)) {
     yield store.prompt(state, new ChooseCardsPrompt(
       player,
       GameMessage.CHOOSE_ENERGIES_TO_DISCARD,
@@ -37,7 +35,7 @@ function* useFlareDestroy(next: Function, store: StoreLike, state: State,
   }
 
   // Defending Pokemon has no energy cards attached
-  if (opponent.active.cards.some(c => c instanceof EnergyCard)) {
+  if (opponent.active.cards.some(c => c.superType === SuperType.ENERGY)) {
     yield store.prompt(state, new ChooseCardsPrompt(
       player,
       GameMessage.CHOOSE_ENERGIES_TO_DISCARD,
@@ -95,12 +93,12 @@ export class Typhlosion extends PokemonCard {
       return state;
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const generator = useFlareDestroy(() => generator.next(), store, state, effect);
       return generator.next().value;
     }
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
       const cardList = StateUtils.findCardList(state, this) as PokemonCardList;
 

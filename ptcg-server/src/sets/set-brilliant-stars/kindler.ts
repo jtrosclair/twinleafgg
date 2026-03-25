@@ -1,11 +1,11 @@
-import { CardList, ChooseCardsPrompt, EnergyCard } from '../../game';
+import { CardList, ChooseCardsPrompt } from '../../game';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { EnergyType, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { CLEAN_UP_SUPPORTER, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
@@ -25,7 +25,7 @@ function* playCard(next: Function, store: StoreLike, state: State,
   }
 
   const hasEnergyInHand = player.hand.cards.some(c => {
-    return c instanceof EnergyCard && c.energyType === EnergyType.BASIC && c.name === 'Fire Energy';
+    return c.superType === SuperType.ENERGY && c.energyType === EnergyType.BASIC && c.name === 'Fire Energy';
   });
 
   if (!hasEnergyInHand) {
@@ -65,8 +65,6 @@ function* playCard(next: Function, store: StoreLike, state: State,
     deckTop.moveCardsTo(selected, player.hand);
     deckTop.moveTo(player.deck);
 
-    CLEAN_UP_SUPPORTER(effect, player);
-
 
     return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
       player.deck.applyOrder(order);
@@ -92,9 +90,9 @@ export class Kindler extends TrainerCard {
   public fullName: string = 'Kindler BRS';
 
   public text: string =
-    'You can use this card only if you discard a [R] Energy card from your hand.' +
-    '' +
-    'Look at the top 7 cards of your deck and put up to 2 of them into your hand. Shuffle the other cards back into your deck.';
+    `You can use this card only if you discard a [R] Energy card from your hand. 
+
+Look at the top 7 cards of your deck and put up to 2 of them into your hand. Shuffle the other cards back into your deck.`;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 

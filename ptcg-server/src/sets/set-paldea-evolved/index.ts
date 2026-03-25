@@ -14,7 +14,6 @@ import { Crocalor } from './crocalor';
 import { Cufant } from './cufant';
 import { Deino } from './deino';
 import { DeliveryDrone } from './delivery-drone';
-import { Dendra } from './dendra';
 import { Dudunsparce } from './dudunsparce';
 import { FightingAuLait } from './fighting-au-lait';
 import { Flamigo } from './flamigo';
@@ -33,7 +32,6 @@ import { Iono } from './iono';
 import { JetEnergy } from './jet-energy';
 import { Lokix } from './lokix';
 import { LuminousEnergy } from './luminous-energy';
-import { Luvdisc } from './luvdisc';
 import { Luxray } from './luxray';
 import { Magnemite } from './magnemite';
 import { Meowscaradaex } from './meowscarada-ex';
@@ -108,7 +106,6 @@ export const setPaldeaEvolved: Card[] = [
   new Cufant(),
   new Deino(),
   new DeliveryDrone(),
-  new Dendra(),
   new Dudunsparce(),
   new Dunsparce(),
   new FightingAuLait(),
@@ -127,7 +124,6 @@ export const setPaldeaEvolved: Card[] = [
   new JetEnergy(),
   new Lokix(),
   new LuminousEnergy(),
-  new Luvdisc(),
   new Luxray(),
   new Magnemite(),
   new Meowscaradaex(),

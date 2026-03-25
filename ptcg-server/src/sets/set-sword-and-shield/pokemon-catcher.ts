@@ -4,8 +4,8 @@ import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
-import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { PlayerType, SlotType, CoinFlipPrompt, StateUtils, GameError, GameMessage } from '../../game';
+import { TrainerEffect, CoinFlipEffect } from '../../game/store/effects/play-card-effects';
+import { PlayerType, SlotType, StateUtils, GameError, GameMessage } from '../../game';
 
 function* playCard(next: Function, store: StoreLike, state: State, effect: TrainerEffect): IterableIterator<State> {
   const player = effect.player;
@@ -17,13 +17,13 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
   }
 
   let coinResult: boolean = false;
-  yield store.prompt(state, new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP), result => {
+  const coinFlipEffect = new CoinFlipEffect(player, (result: boolean) => {
     coinResult = result;
     next();
   });
+  yield store.reduceEffect(state, coinFlipEffect);
 
   if (coinResult === false) {
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return state;
   }
 
@@ -36,20 +36,16 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
   ), result => {
     const cardList = result[0];
     opponent.switchPokemon(cardList);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
   });
 }
 
 export class PokemonCatcher extends TrainerCard {
-
   public trainerType: TrainerType = TrainerType.ITEM;
-
   public regulationMark = 'G';
-
-  public set: string = 'BW';
-
-  public name: string = 'Pokemon Catcher';
-
+  public set: string = 'SSH';
+  public setNumber: string = '175';
+  public name: string = 'Pokémon Catcher';
   public fullName: string = 'Pokemon Catcher SSH';
 
   public text: string =

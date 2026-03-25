@@ -1,11 +1,11 @@
-import { EnergyCard, GameError, SelectPrompt } from '../../game';
+import { GameError, SelectPrompt } from '../../game';
 import { GameLog, GameMessage } from '../../game/game-message';
 import { Card } from '../../game/store/card/card';
 import { EnergyType, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { CLEAN_UP_SUPPORTER, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
 import { State } from '../../game/store/state/state';
@@ -34,7 +34,7 @@ export class EnergyRecycleSystem extends TrainerCard {
       let basicEnergyInDiscard: number = 0;
       const blocked: number[] = [];
       player.discard.cards.forEach((c, index) => {
-        const isBasicEnergy = c instanceof EnergyCard && c.energyType === EnergyType.BASIC;
+        const isBasicEnergy = c.superType === SuperType.ENERGY && c.energyType === EnergyType.BASIC;
         if (isBasicEnergy) {
           basicEnergyInDiscard += 1;
         } else {
@@ -72,7 +72,6 @@ export class EnergyRecycleSystem extends TrainerCard {
               });
 
               MOVE_CARDS(store, state, player.discard, player.deck, { cards: cards, sourceCard: this });
-              CLEAN_UP_SUPPORTER(effect, player);
 
               return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
                 player.deck.applyOrder(order);
@@ -99,7 +98,6 @@ export class EnergyRecycleSystem extends TrainerCard {
               });
 
               MOVE_CARDS(store, state, player.discard, player.hand, { cards: cards, sourceCard: this });
-              CLEAN_UP_SUPPORTER(effect, player);
 
               return state;
             });

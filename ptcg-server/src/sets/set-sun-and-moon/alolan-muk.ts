@@ -1,17 +1,18 @@
-import { EnergyCard, Card, ChooseCardsPrompt, CoinFlipPrompt, PlayerType } from '../../game';
+import { Card, ChooseCardsPrompt, CoinFlipPrompt, PlayerType } from '../../game';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
-import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
+import { CheckPokemonTypeEffect, CheckPokemonPowersEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect, EffectOfAbilityEffect, PowerEffect } from '../../game/store/effects/game-effects';
+import { EffectOfAbilityEffect, PowerEffect } from '../../game/store/effects/game-effects';
 import { StateUtils } from '../../game/store/state-utils';
 import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class AlolanMuk extends PokemonCard {
 
@@ -52,13 +53,13 @@ export class AlolanMuk extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
 
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
       // Defending Pokemon has no energy cards attached
-      if (!opponent.active.cards.some(c => c instanceof EnergyCard)) {
+      if (!opponent.active.cards.some(c => c.superType === SuperType.ENERGY)) {
         return state;
       }
 
@@ -80,6 +81,34 @@ export class AlolanMuk extends PokemonCard {
           });
         }
       });
+    }
+
+    if (effect instanceof CheckPokemonPowersEffect) {
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+
+      let playerHasAlolanMukInPlay = false;
+      let opponentHasAlolanMukInPlay = false;
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
+        if (card === this) {
+          playerHasAlolanMukInPlay = true;
+        }
+      });
+      opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card) => {
+        if (card === this) {
+          opponentHasAlolanMukInPlay = true;
+        }
+      });
+
+      if (playerHasAlolanMukInPlay || opponentHasAlolanMukInPlay) {
+        const targetPokemon = effect.target;
+        if (targetPokemon && targetPokemon.stage === Stage.BASIC) {
+          // Filter out all abilities
+          effect.powers = effect.powers.filter(power =>
+            power.powerType !== PowerType.ABILITY
+          );
+        }
+      }
     }
 
     if (effect instanceof PowerEffect && effect.power.powerType === PowerType.ABILITY && effect.power.name !== 'Power of Alchemy') {

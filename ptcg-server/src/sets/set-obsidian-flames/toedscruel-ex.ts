@@ -1,10 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { EnergyCard, PlayerType, PowerType, State, StateUtils, StoreLike } from '../../game';
+import { Stage, CardType, CardTag, SuperType } from '../../game/store/card/card-types';
+import { PlayerType, PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { AbstractAttackEffect, ApplyWeaknessEffect, DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { AttackEffect, PowerEffect } from '../../game/store/effects/game-effects';
+import { PowerEffect } from '../../game/store/effects/game-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Toedscruelex extends PokemonCard {
   public regulationMark = 'G';
@@ -61,7 +62,7 @@ export class Toedscruelex extends PokemonCard {
         return state;
       }
 
-      if (sourceCard && effect.target.cards.some(c => c instanceof EnergyCard)) {
+      if (sourceCard && effect.target.cards.some(c => c.superType === SuperType.ENERGY)) {
 
         // Try to reduce PowerEffect, to check if something is blocking our ability
         try {
@@ -92,7 +93,7 @@ export class Toedscruelex extends PokemonCard {
       }
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
 
       let pokesWithGrass = 0;

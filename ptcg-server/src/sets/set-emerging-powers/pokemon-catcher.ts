@@ -6,8 +6,6 @@ import { Effect } from '../../game/store/effects/effect';
 import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { PlayerType, SlotType, StateUtils, GameError, GameMessage } from '../../game';
-import { CLEAN_UP_SUPPORTER } from '../../game/store/prefabs/prefabs';
-
 function* playCard(next: Function, store: StoreLike, state: State, self: PokemonCatcher, effect: TrainerEffect): IterableIterator<State> {
   const player = effect.player;
   const opponent = StateUtils.getOpponent(state, player);
@@ -29,9 +27,7 @@ function* playCard(next: Function, store: StoreLike, state: State, self: Pokemon
   ), result => {
     const cardList = result[0];
     opponent.switchPokemon(cardList);
-    CLEAN_UP_SUPPORTER(effect, player);
   });
-  CLEAN_UP_SUPPORTER(effect, player);
 }
 
 export class PokemonCatcher extends TrainerCard {
@@ -39,7 +35,7 @@ export class PokemonCatcher extends TrainerCard {
   public set: string = 'EPO';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '95';
-  public name: string = 'Pokemon Catcher';
+  public name: string = 'Pokémon Catcher';
   public fullName: string = 'Pokemon Catcher EPO';
   public text: string = 'Switch your opponent\'s Active Pokémon with 1 of their Benched Pokémon.';
 

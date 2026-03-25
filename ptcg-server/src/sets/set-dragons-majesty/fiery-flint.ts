@@ -12,7 +12,7 @@ import { CardList } from '../../game/store/state/card-list';
 import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
 import { StateUtils } from '../../game/store/state-utils';
 import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
-import { CLEAN_UP_SUPPORTER, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 
 function* playCard(next: Function, store: StoreLike, state: State,
@@ -81,8 +81,6 @@ function* playCard(next: Function, store: StoreLike, state: State,
     ), () => next());
   }
 
-  CLEAN_UP_SUPPORTER(effect, player);
-
   return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
     player.deck.applyOrder(order);
   });
@@ -90,21 +88,16 @@ function* playCard(next: Function, store: StoreLike, state: State,
 export class FieryFlint extends TrainerCard {
 
   public trainerType: TrainerType = TrainerType.ITEM;
-
   public set: string = 'DRM';
-
   public cardImage: string = 'assets/cardback.png';
-
   public setNumber: string = '60';
-
   public name: string = 'Fiery Flint';
-
   public fullName: string = 'Fiery Flint DRM';
 
   public text: string =
-    'You can play this card only if you discard 2 other cards from your hand.' +
-    '' +
-    'Search your deck for up to 4 [R] Energy cards, reveal them, and put them into your hand. Then, shuffle your deck.';
+    `You can play this card only if you discard 2 other cards from your hand.
+
+Search your deck for up to 4 [R] Energy cards, reveal them, and put them into your hand. Then, shuffle your deck.`;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof TrainerEffect && effect.trainerCard === this) {

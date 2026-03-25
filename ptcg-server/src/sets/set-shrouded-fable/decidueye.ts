@@ -2,52 +2,43 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, EnergyType } from '../../game/store/card/card-types';
 import { StoreLike, State, GameMessage, ChooseCardsPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Decidueye extends PokemonCard {
 
   public regulationMark = 'H';
-
   public stage: Stage = Stage.STAGE_2;
-
   public evolvesFrom = 'Dartrix';
-
-  public cardType: CardType = CardType.GRASS;
-
+  public cardType: CardType = G;
   public hp: number = 150;
-
-  public weakness = [{ type: CardType.FIRE }];
-
-  public retreat = [CardType.COLORLESS, CardType.COLORLESS];
+  public weakness = [{ type: R }];
+  public retreat = [C, C];
 
   public attacks = [
     {
       name: 'Stock Up on Feathers',
-      cost: [CardType.COLORLESS],
+      cost: [C],
       damage: 0,
       text: 'Draw cards until you have 7 cards in your hand.'
     },
     {
-      name: 'Strong Shot',
-      cost: [CardType.GRASS],
+      name: 'Power Shot',
+      cost: [G],
       damage: 170,
-      text: 'Discard 1 Basic Grass Energy from your hand. If you can\'t, this attack does nothing.'
+      text: 'Discard a Basic [G] Energy from your hand. If you can\'t, this attack does nothing.'
     }
   ];
 
   public set: string = 'SFA';
-
   public cardImage: string = 'assets/cardback.png';
-
   public setNumber: string = '5';
-
   public name: string = 'Decidueye';
-
   public fullName: string = 'Decidueye SFA';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
 
       while (player.hand.cards.length < 7) {
@@ -58,7 +49,7 @@ export class Decidueye extends PokemonCard {
       }
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[1]) {
+    if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
 
       // Prompt player to choose cards to discard 

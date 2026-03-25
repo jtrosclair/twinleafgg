@@ -15,7 +15,7 @@ export class SnorlaxDoll extends TrainerCard {
   public cardTypez: CardType = CardType.COLORLESS;
 
   public movedToActiveThisTurn = false;
-
+  public evolvesFromBase: string[] = [];
   public pokemonType = PokemonType.NORMAL;
   public evolvesFrom = '';
   public cardTag = [CardTag.PLAY_DURING_SETUP];
@@ -33,7 +33,6 @@ export class SnorlaxDoll extends TrainerCard {
   public setNumber: string = '175';
   public name: string = 'Snorlax Doll';
   public fullName: string = 'Snorlax Doll PAR';
-  public legacyFullName: string = 'Snorlax Doll SIT';
   public regulationMark = 'G';
   public maxTools: number = 1;
   public powers: Power[] = [

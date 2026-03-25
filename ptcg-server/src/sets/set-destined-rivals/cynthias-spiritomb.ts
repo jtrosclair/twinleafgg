@@ -2,7 +2,8 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class CynthiasSpiritomb extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -17,7 +18,7 @@ export class CynthiasSpiritomb extends PokemonCard {
       name: 'Raging Curse',
       cost: [C],
       damage: 10,
-      damageCalculator: 'x',
+      damageCalculation: 'x',
       text: 'This attack does 10 damage for each damage counter on all your Benched Cynthia\'s Pokemon. Don\'t apply Weakness for this attack\'s damage.',
     }
   ];
@@ -30,7 +31,7 @@ export class CynthiasSpiritomb extends PokemonCard {
   public fullName: string = 'Cynthia\'s Spiritomb DRI';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       let totalDamage = 0;
 

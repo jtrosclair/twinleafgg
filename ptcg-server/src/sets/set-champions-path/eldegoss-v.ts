@@ -1,4 +1,3 @@
-import { AttackEffect, PowerEffect } from '../../game/store/effects/game-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType, TrainerType, BoardEffect } from '../../game/store/card/card-types';
@@ -13,7 +12,7 @@ import {
   PlayerType,
   TrainerCard
 } from '../../game';
-import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { AFTER_ATTACK, CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 export class EldegossV extends PokemonCard {
 
@@ -71,14 +70,7 @@ export class EldegossV extends PokemonCard {
       }
 
       // Try to reduce PowerEffect, to check if something is blocking our ability
-      try {
-        const stub = new PowerEffect(player, {
-          name: 'test',
-          powerType: PowerType.ABILITY,
-          text: ''
-        }, this);
-        store.reduceEffect(state, stub);
-      } catch {
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
         return state;
       }
       state = store.prompt(state, new ConfirmPrompt(
@@ -124,14 +116,15 @@ export class EldegossV extends PokemonCard {
       });
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
-      const player = effect.player;
+    if (AFTER_ATTACK(effect, 0, this)) {
+      CONFIRMATION_PROMPT(store, state, effect.player, () => {
+        const player = effect.player;
+        player.active.clearEffects();
+        player.active.moveTo(player.deck);
 
-      player.active.clearEffects();
-      player.active.moveTo(player.deck);
-
-      return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-        player.deck.applyOrder(order);
+        return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
+          player.deck.applyOrder(order);
+        });
       });
     }
     return state;

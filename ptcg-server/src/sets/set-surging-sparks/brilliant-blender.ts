@@ -47,7 +47,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
   }
 
   player.deck.moveCardsTo(cards, player.discard);
-  player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
 
   return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
     player.deck.applyOrder(order);
@@ -57,23 +57,16 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
 export class BrilliantBlender extends TrainerCard {
 
   public trainerType: TrainerType = TrainerType.ITEM;
-
   public tags = [CardTag.ACE_SPEC];
-
   public regulationMark = 'H';
-
   public set: string = 'SSP';
-
   public name: string = 'Brilliant Blender';
-
   public fullName: string = 'Brilliant Blender SSP';
-
   public cardImage: string = 'assets/cardback.png';
-
   public setNumber: string = '164';
 
   public text: string =
-    'Search your deck for up to 5 cards and discard them. Then shuffle your deck.';
+    'Search your deck for up to 5 cards and discard them. Then, shuffle your deck.';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 

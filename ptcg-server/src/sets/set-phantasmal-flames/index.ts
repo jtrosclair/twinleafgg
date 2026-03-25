@@ -1,6 +1,5 @@
-import { Ludicolo2PFL, Zacian2PFL, Toxtricity2PFL, Wigglytuff2PFL, MegaCharizardXex2PFL, Oricorioex2PFL, Rotomex2PFL, MegaSharpedoex2PFL, MegaLopunnyex2PFL, BattleColosseum2PFL, Dawn2PFL, Firebreather2PFL, GrimsleysGambit2PFL, SacredCharm2PFL, SwitchPFL, IgnitionEnergyPFL, MegaCharizardXex3PFL, Rotomex3PFL, MegaSharpedoex3PFL, MegaLopunnyex3PFL, Dawn3PFL, MegaCharizardXex4PFL } from './other-prints';
+import { Ludicolo2PFL, Zacian2PFL, Toxtricity2PFL, Wigglytuff2PFL, MegaCharizardXex2PFL, Oricorioex2PFL, Rotomex2PFL, MegaSharpedoex2PFL, MegaLopunnyex2PFL, BattleColosseum2PFL, Dawn2PFL, Firebreather2PFL, GrimsleysGambit2PFL, SacredCharm2PFL, SwitchPFL, IgnitionEnergyPFL, MegaCharizardXex3PFL, Rotomex3PFL, MegaSharpedoex3PFL, MegaLopunnyex3PFL, Dawn3PFL, Blowtorch2PFL, MegaCharizardXex4PFL } from './other-prints';
 import { Card } from '../../game';
-import { Ambipom } from './ambipom';
 import { BattleColosseum } from './battle-colosseum';
 import { Blowtorch } from './blowtorch';
 import { Bronzong } from './bronzong';
@@ -14,6 +13,7 @@ import { Charmeleon } from './charmeleon';
 import { Darmanitan } from './darmanitan';
 import { Darumaka } from './darumaka';
 import { Dawn } from './dawn';
+import { Empoleonex } from './empoleon-ex';
 import { Firebreather } from './firebreather';
 import { Gastly } from './gastly';
 import { Genesect } from './genesect';
@@ -24,15 +24,17 @@ import { JumboIce } from './jumbo-ice';
 import { Lombre } from './lombre';
 import { Lotad } from './lotad';
 import { Ludicolo } from './ludicolo';
-import { Mamoswine } from './mamoswine';
 import { MegaCharizardXex } from './mega-charizard-x-ex';
 import { MegaDiancieex } from './mega-diancie-ex';
 import { MegaGengarex } from './mega-gengar-ex';
+import { MegaHeracrossex } from './mega-heracross-ex';
 import { MegaLopunnyex } from './mega-lopunny-ex';
 import { MegaSharpedoex } from './mega-sharpedo-ex';
 import { Moltres } from './moltres';
 import { Oricorioex } from './oricorio-ex';
 import { PaldeanTauros } from './paldean-tauros';
+import { Piplup } from './piplup';
+import { Prinplup } from './prinplup';
 import { PunkHelmet } from './punk-helmet';
 import { Reshiram } from './reshiram';
 import { Rotomex } from './rotom-ex';
@@ -46,7 +48,6 @@ import { WonderPatch } from './wonder-patch';
 import { Zacian } from './zacian';
 
 export const setPhantasmalFlames: Card[] = [
-  new Ambipom(),
   new BattleColosseum(),
   new Blowtorch(),
   new Bronzong(),
@@ -60,6 +61,7 @@ export const setPhantasmalFlames: Card[] = [
   new Darmanitan(),
   new Darumaka(),
   new Dawn(),
+  new Empoleonex(),
   new Firebreather(),
   new Gastly(),
   new Genesect(),
@@ -70,17 +72,19 @@ export const setPhantasmalFlames: Card[] = [
   new Lombre(),
   new Lotad(),
   new Ludicolo(),
-  new Mamoswine(),
   new MegaCharizardXex(),
   new MegaDiancieex(),
   new MegaGengarex(),
+  new MegaHeracrossex(),
   new MegaLopunnyex(),
   new MegaSharpedoex(),
   new Moltres(),
   new Oricorioex(),
   new PaldeanTauros(),
-  new PunkHelmet(),
   new Reshiram(),
+  new Piplup(),
+  new Prinplup(),
+  new PunkHelmet(),
   new Rotomex(),
   new Sableye(),
   new SacredCharm(),
@@ -111,5 +115,6 @@ export const setPhantasmalFlames: Card[] = [
   new MegaSharpedoex3PFL(),
   new MegaLopunnyex3PFL(),
   new Dawn3PFL(),
+  new Blowtorch2PFL(),
   new MegaCharizardXex4PFL(),
 ];

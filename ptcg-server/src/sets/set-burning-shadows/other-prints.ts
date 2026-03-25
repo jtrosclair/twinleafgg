@@ -1,27 +1,39 @@
-import { SuperScoopUp } from "../set-diamond-and-pearl/super-scoop-up";
-import { SalazzleGX as SalazzleGXBUS25 } from "../set-burning-shadows/salazzle-gx";
-import { TapuFiniGX as TapuFiniGXBUS39 } from "../set-burning-shadows/tapu-fini-gx";
-import { NecrozmaGX as NecrozmaGXBUS63 } from "../set-burning-shadows/necrozma-gx";
-import { MarshadowGX as MarshadowGXBUS80 } from "../set-burning-shadows/marshadow-gx";
-import { DarkraiGX as DarkraiGXBUS88 } from "../set-burning-shadows/darkrai-gx";
-import { GardevoirGX as GardevoirGXBUS93 } from "../set-burning-shadows/gardevoir-gx";
-import { NoivernGX as NoivernGXBUS99 } from "../set-burning-shadows/noivern-gx";
-import { Acerola as AcerolaBUS112 } from "../set-burning-shadows/acerola";
-import { Kiawe as KiaweBUS116 } from "../set-burning-shadows/kiawe";
-import { Plumeria as PlumeriaBUS120 } from "../set-burning-shadows/plumeria";
-import { Sophocles as SophoclesBUS123 } from "../set-burning-shadows/sophocles";
-import { TapuBuluGX as TapuBuluGXBUS130 } from "../set-burning-shadows/tapu-bulu-gx";
-import { BodybuildingDumbbells as BodybuildingDumbbellsBUS113 } from "../set-burning-shadows/bodybuilding-dumbbells";
-import { ChoiceBand } from "../set-guardians-rising/choice-band";
-import { EscapeRopeBUS as EscapeRopeBUSBUS114 } from "../set-burning-shadows/other-prints";
-import { SuperScoopUp as SuperScoopUpDP115 } from "../set-diamond-and-pearl/super-scoop-up";
-import { FireEnergy } from "../set-base-set-energy/fire-energy";
-import { DarknessEnergy } from "../set-diamond-and-pearl/basic-energies";
-import { FairyEnergy } from "../set-x-and-y/basic-energies";
+import { SuperScoopUp } from '../set-diamond-and-pearl/super-scoop-up';
+import { SalazzleGX as SalazzleGXBUS25 } from '../set-burning-shadows/salazzle-gx';
+import { TapuFiniGX as TapuFiniGXBUS39 } from '../set-burning-shadows/tapu-fini-gx';
+import { NecrozmaGX as NecrozmaGXBUS63 } from '../set-burning-shadows/necrozma-gx';
+import { MarshadowGX as MarshadowGXBUS80 } from '../set-burning-shadows/marshadow-gx';
+import { DarkraiGX as DarkraiGXBUS88 } from '../set-burning-shadows/darkrai-gx';
+import { GardevoirGX as GardevoirGXBUS93 } from '../set-burning-shadows/gardevoir-gx';
+import { NoivernGX as NoivernGXBUS99 } from '../set-burning-shadows/noivern-gx';
+import { Acerola as AcerolaBUS112 } from '../set-burning-shadows/acerola';
+import { Kiawe as KiaweBUS116 } from '../set-burning-shadows/kiawe';
+import { Plumeria as PlumeriaBUS120 } from '../set-burning-shadows/plumeria';
+import { Sophocles as SophoclesBUS123 } from '../set-burning-shadows/sophocles';
+import { TapuBuluGX as TapuBuluGXBUS130 } from '../set-burning-shadows/tapu-bulu-gx';
+import { BodybuildingDumbbells as BodybuildingDumbbellsBUS113 } from '../set-burning-shadows/bodybuilding-dumbbells';
+import { ChoiceBand } from '../set-guardians-rising/choice-band';
+import { EscapeRopeBUS as EscapeRopeBUSBUS114 } from '../set-burning-shadows/other-prints';
+import { SuperScoopUp as SuperScoopUpDP115 } from '../set-diamond-and-pearl/super-scoop-up';
+import { FireEnergy } from '../set-base-set-energy/fire-energy';
+import { DarknessEnergy } from '../set-diamond-and-pearl/basic-energies';
+import { FairyEnergy } from '../set-x-and-y/basic-energies';
 import { EscapeRope } from '../set-battle-styles/escape-rope';
 import { Guzma } from './guzma';
 import { RescueStretcher } from '../set-guardians-rising/rescue-stretcher';
 import { WeaknessPolicy } from '../set-primal-clash/weakness-policy';
+import { Charmander } from './charmander';
+import { CharizardGX } from './charizard-gx';
+import { Kirlia } from './kirlia';
+import { Meowth } from '../set-boundaries-crossed/meowth';
+import { PorygonZ } from './porygon-z';
+import { GolisopodGx } from './golisopod-gx';
+import { HoOhGx } from './ho-oh-gx';
+import { MachampGx } from './machamp-gx';
+import { Wicke } from './wicke';
+import { LycanrocGx } from './lycanroc-gx';
+import { AlolanMukGx2 } from './alolan-muk-gx-2';
+import { MultiSwitch } from '../set-guardians-rising/multi-switch';
 
 export class EscapeRopeBUS extends EscapeRope {
   public fullName = 'Escape Rope BUS';
@@ -240,4 +252,88 @@ export class Kiawe2BUS extends KiaweBUS116 {
   public setNumber = '116a';
   public fullName: string = 'Kiawe2 BUS';
   public set = 'BUS';
+}
+
+export class CharmanderAlt extends Charmander {
+  public setNumber = '18a';
+  public fullName: string = 'CharmanderAlt BUS';
+  public set = 'BUS';
+}
+
+export class CharizardGXBUS150 extends CharizardGX {
+  public setNumber = '150';
+  public fullName: string = 'Charizard-GX BUS 150';
+  public set = 'BUS';
+}
+
+export class Kirlia2 extends Kirlia {
+  public set: string = 'BUS';
+  public setNumber: string = '92a';
+  public fullName: string = 'Kirlia BUS 92a';
+}
+
+export class MeowthBUS extends Meowth {
+  public set: string = 'BUS';
+  public setNumber: string = '101';
+  public fullName: string = 'Meowth BUS';
+}
+
+export class PorygonZ2 extends PorygonZ {
+  public set: string = 'BUS';
+  public setNumber: string = '105a';
+  public fullName: string = 'Porygon-Z BUS 105a';
+}
+
+export class GolisopodGx2 extends GolisopodGx {
+  public set: string = 'BUS';
+  public setNumber: string = '129';
+  public fullName: string = 'Golisopod-GX BUS 129';
+}
+
+export class HoOhGx2 extends HoOhGx {
+  public set: string = 'BUS';
+  public setNumber: string = '131';
+  public fullName: string = 'Ho-Oh-GX BUS 131';
+}
+
+export class MachampGx2 extends MachampGx {
+  public set: string = 'BUS';
+  public setNumber: string = '135';
+  public fullName: string = 'Machamp-GX BUS 135';
+}
+
+export class Wicke2 extends Wicke {
+  public set: string = 'BUS';
+  public setNumber: string = '147';
+  public fullName: string = 'Wicke BUS 147';
+}
+
+export class GolisopodGx3 extends GolisopodGx {
+  public set: string = 'BUS';
+  public setNumber: string = '148';
+  public fullName: string = 'Golisopod-GX BUS 148';
+}
+
+export class MachampGx3 extends MachampGx {
+  public set: string = 'BUS';
+  public setNumber: string = '154';
+  public fullName: string = 'Machamp-GX BUS 154';
+}
+
+export class LycanrocGx2 extends LycanrocGx {
+  public set: string = 'BUS';
+  public setNumber: string = '155';
+  public fullName: string = 'Lycanroc-GX BUS 155';
+}
+
+export class AlolanMukGx3 extends AlolanMukGx2 {
+  public set: string = 'BUS';
+  public setNumber: string = '157';
+  public fullName: string = 'Alolan Muk-GX BUS 157';
+}
+
+export class MultiSwitchBUS extends MultiSwitch {
+  public set: string = 'BUS';
+  public setNumber: string = '164';
+  public fullName: string = 'Multi Switch BUS';
 }

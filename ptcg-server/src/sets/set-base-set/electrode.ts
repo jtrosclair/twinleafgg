@@ -1,5 +1,5 @@
 import { GameMessage, PlayerType, PokemonCardList, SelectPrompt, SlotType, StateUtils } from '../../game';
-import { CardType, EnergyType, SpecialCondition, Stage } from '../../game/store/card/card-types';
+import { CardType, EnergyType, SpecialCondition, Stage, SuperType } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { Power, PowerType } from '../../game/store/card/pokemon-types';
@@ -7,11 +7,11 @@ import { checkState } from '../../game/store/effect-reducers/check-effect';
 import { DealDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect, PowerEffect } from '../../game/store/effects/game-effects';
 import { CoinFlipPrompt } from '../../game/store/prompts/coin-flip-prompt';
 import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
+import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Electrode extends PokemonCard implements EnergyCard {
 
@@ -63,11 +63,19 @@ export class Electrode extends PokemonCard implements EnergyCard {
   public text: string = '';
   public isBlocked = false;
   public blendedEnergies: CardType[] = [];
+  public blendedEnergyCount = 1;
   public energyEffect: any = undefined;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    // Auto-detect if we've been removed from energies and reset superType back to POKEMON
+    if (this.superType === SuperType.ENERGY) {
+      const cardList = StateUtils.findCardList(state, this);
+      if (!(cardList instanceof PokemonCardList) || !cardList.energies.cards.includes(this)) {
+        this.superType = SuperType.POKEMON;
+      }
+    }
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
       const cardList = StateUtils.findCardList(state, this) as PokemonCardList;
 
@@ -79,7 +87,6 @@ export class Electrode extends PokemonCard implements EnergyCard {
 
       cardList.damage = 999;
       state = checkState(store, state);
-
 
       if (store.hasPrompts()) {
         state = store.waitPrompt(state, () => { });
@@ -114,7 +121,6 @@ export class Electrode extends PokemonCard implements EnergyCard {
           return state;
         }
 
-        // Set energy properties but keep the superType as POKEMON
         this.chosenEnergyType = option.value;
         this.provides = [option.value, option.value];
 
@@ -137,6 +143,7 @@ export class Electrode extends PokemonCard implements EnergyCard {
             if (!targets[0].energies.cards.includes(this)) {
               targets[0].energies.cards.push(this);
             }
+            this.superType = SuperType.ENERGY;
           }
         });
       });
@@ -147,7 +154,7 @@ export class Electrode extends PokemonCard implements EnergyCard {
       effect.energyMap.push({ card: this, provides: this.provides });
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       return store.prompt(state, new CoinFlipPrompt(
         effect.player.id, GameMessage.FLIP_COIN
       ), (result) => {

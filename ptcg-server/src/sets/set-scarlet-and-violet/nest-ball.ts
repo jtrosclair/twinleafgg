@@ -2,7 +2,7 @@ import { Card } from '../../game/store/card/card';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { Effect } from '../../game/store/effects/effect';
-import { PokemonCardList } from '../../game';
+import { Player, PokemonCardList } from '../../game';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Stage, TrainerType, SuperType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
@@ -45,7 +45,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
 
   // Operation canceled by the user
   if (cards.length === 0) {
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
     SHUFFLE_DECK(store, state, player);
     return state;
   }
@@ -56,7 +56,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
     store.reduceEffect(state, playPokemonFromDeckEffect);
   });
 
-  player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
 
   SHUFFLE_DECK(store, state, player);
   return state;
@@ -72,6 +72,20 @@ export class NestBall extends TrainerCard {
   public fullName: string = 'Nest Ball SVI';
   public text: string = 'Search your deck for a Basic Pokémon and put it onto your Bench. Then, shuffle your deck.';
 
+  public canPlay(store: StoreLike, state: State, player: Player): boolean {
+    // No cards left in deck, return false
+    if (player.deck.cards.length === 0) {
+      return false;
+    }
+    // Check if bench has open slots
+    const openSlots = player.bench.filter(b => b.cards.length === 0);
+
+    // No open slots, return false
+    if (openSlots.length === 0) {
+      return false;
+    }
+    return true;
+  }
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 

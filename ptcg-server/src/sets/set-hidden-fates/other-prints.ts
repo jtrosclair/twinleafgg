@@ -1,64 +1,93 @@
-import { Slowpoke } from "../set-lost-thunder/slowpoke";
-import { BillsAnalysis } from "../set-team-up/bills-analysis";
-import { LtSurgesStrategy } from "../set-unbroken-bonds/lt-surges-strategy";
-import { MoltresZapdosArticunoGX as MoltresZapdosArticunoGXHIF44 } from "../set-hidden-fates/moltres-zapdos-articuno-gx";
-import { Rowlet } from "../set-sun-and-moon/rowlet";
-import { Dartrix } from "../set-sun-and-moon/dartrix";
-import { FroakieFrubbles } from "../set-forbidden-light/froakie-2";
-import { Frogadier } from "../set-forbidden-light/frogadier";
-import { Shuppet } from "../set-celestial-storm/shuppet";
-import { Inkay } from "../set-forbidden-light/inkay";
-import { Malamar } from "../set-forbidden-light/malamar";
-import { Poipole } from "../set-forbidden-light/poipole";
-import { Sudowoodo } from "../set-guardians-rising/sudowoodo";
-import { Riolu } from "../set-ultra-prism/riolu";
-import { Lucario } from "../set-ultra-prism/lucario";
-import { Rockruff } from "../set-forbidden-light/rockruff";
-import { Buzzwole } from "../set-forbidden-light/buzzwole";
-import { Zorua } from "../set-shining-legends/zorua";
-import { Magnezone } from "../set-ultra-prism/magnezone";
-import { Ralts } from "../set-burning-shadows/ralts";
-import { Diancie } from "../set-burning-shadows/diancie";
-import { Gible } from "../set-ultra-prism/gible";
-import { Gabite } from "../set-ultra-prism/gabite";
-import { Garchomp } from "../set-ultra-prism/garchomp";
-import { Eevee as EeveeSUM101 } from "../set-sun-and-moon/eevee";
-import { Noibat } from "../set-burning-shadows/noibat";
-import { Oranguru } from "../set-sun-and-moon/oranguru";
-import { DecidueyeGX } from "../set-sun-and-moon/decidueye-gx";
-import { AlolanNinetalesGX } from "../set-guardians-rising/alolan-ninetales-gx";
-import { ArticunoGX } from "../set-celestial-storm/articuno-gx";
-import { GlaceonGX } from "../set-ultra-prism/glaceon-gx";
-import { GreninjaGX } from "../set-forbidden-light/greninja-gx";
-import { ElectrodeGX } from "../set-celestial-storm/electrode-gx";
-import { MewtwoGX as MewtwoGXSLG39 } from "../set-shining-legends/mewtwo-gx";
-import { EspeonGX } from "../set-sun-and-moon/espeon-gx";
-import { BanetteGX } from "../set-celestial-storm/banette-gx";
-import { NaganadelGX } from "../set-forbidden-light/naganadel-gx";
-import { LucarioGX } from "../set-sun-and-moon-promos/lucario-gx";
-import { LycanrocGX } from "../set-guardians-rising/lycanroc-gx";
-import { BuzzwoleGX } from "../set-crimson-invasion/buzzwole-gx";
-import { DarkraiGX } from "../set-burning-shadows/darkrai-gx";
-import { GuzzlordGX } from "../set-crimson-invasion/guzzlord-gx";
-import { KartanaGX } from "../set-crimson-invasion/kartana-gx";
-import { GardevoirGX } from "../set-burning-shadows/gardevoir-gx";
-import { SylveonGX } from "../set-guardians-rising/sylveon-gx";
-import { NoivernGX } from "../set-burning-shadows/noivern-gx";
-import { SilvallyGX } from "../set-ultra-prism/silvally-gx";
-import { DrampaGX } from "../set-guardians-rising/drampa-gx";
-import { Cynthia } from "../set-ultra-prism/cynthia";
-import { FishermanHS } from "../set-heartgold-and-soulsilver/other-prints";
-import { LadyFLI } from "../set-forbidden-light/other-prints";
-import { AetherParadiseConvserationArea } from "../set-guardians-rising/aether-paradise-conservation-area";
-import { BrookletHill } from "../set-guardians-rising/brooklet-hill";
-import { MtCoronet } from "../set-ultra-prism/mt-coronet";
-import { ShrineOfPunishment } from "../set-celestial-storm/shrine-of-punishment";
-import { TapuBuluGX } from "../set-burning-shadows/tapu-bulu-gx";
-import { TapuFiniGX } from "../set-burning-shadows/tapu-fini-gx";
-import { TapuKokoGX } from "../set-guardians-rising/tapu-koko-gx";
-import { TapuLeleGX } from "../set-guardians-rising/tapu-lele-gx";
+import { Slowpoke } from '../set-lost-thunder/slowpoke';
+import { BillsAnalysis } from '../set-team-up/bills-analysis';
+import { LtSurgesStrategy } from '../set-unbroken-bonds/lt-surges-strategy';
+import { MoltresZapdosArticunoGX as MoltresZapdosArticunoGXHIF44 } from '../set-hidden-fates/moltres-zapdos-articuno-gx';
+import { Rowlet } from '../set-sun-and-moon/rowlet';
+import { Dartrix } from '../set-sun-and-moon/dartrix';
+import { FroakieFrubbles } from '../set-forbidden-light/froakie-2';
+import { Frogadier } from '../set-forbidden-light/frogadier';
+import { Shuppet } from '../set-celestial-storm/shuppet';
+import { Inkay } from '../set-forbidden-light/inkay';
+import { Malamar } from '../set-forbidden-light/malamar';
+import { Poipole } from '../set-forbidden-light/poipole';
+import { Sudowoodo } from '../set-guardians-rising/sudowoodo';
+import { Riolu } from '../set-ultra-prism/riolu';
+import { Lucario } from '../set-ultra-prism/lucario';
+import { Rockruff } from '../set-forbidden-light/rockruff';
+import { Buzzwole } from '../set-forbidden-light/buzzwole';
+import { Zorua } from '../set-shining-legends/zorua';
+import { Magnezone } from '../set-ultra-prism/magnezone';
+import { Ralts } from '../set-burning-shadows/ralts';
+import { Diancie } from '../set-burning-shadows/diancie';
+import { Gible } from '../set-ultra-prism/gible';
+import { Gabite } from '../set-ultra-prism/gabite';
+import { Garchomp } from '../set-ultra-prism/garchomp';
+import { Eevee as EeveeSUM101 } from '../set-sun-and-moon/eevee';
+import { Noibat } from '../set-burning-shadows/noibat';
+import { Oranguru } from '../set-sun-and-moon/oranguru';
+import { DecidueyeGX } from '../set-sun-and-moon/decidueye-gx';
+import { AlolanNinetalesGX } from '../set-guardians-rising/alolan-ninetales-gx';
+import { ArticunoGX } from '../set-celestial-storm/articuno-gx';
+import { GlaceonGX } from '../set-ultra-prism/glaceon-gx';
+import { GreninjaGX } from '../set-forbidden-light/greninja-gx';
+import { ElectrodeGX } from '../set-celestial-storm/electrode-gx';
+import { MewtwoGX as MewtwoGXSLG39 } from '../set-shining-legends/mewtwo-gx';
+import { EspeonGX } from '../set-sun-and-moon/espeon-gx';
+import { BanetteGX } from '../set-celestial-storm/banette-gx';
+import { NaganadelGX } from '../set-forbidden-light/naganadel-gx';
+import { LucarioGX } from '../set-sun-and-moon-promos/lucario-gx';
+import { LycanrocGX } from '../set-guardians-rising/lycanroc-gx';
+import { BuzzwoleGX } from '../set-crimson-invasion/buzzwole-gx';
+import { DarkraiGX } from '../set-burning-shadows/darkrai-gx';
+import { GuzzlordGX } from '../set-crimson-invasion/guzzlord-gx';
+import { KartanaGX } from '../set-crimson-invasion/kartana-gx';
+import { GardevoirGX } from '../set-burning-shadows/gardevoir-gx';
+import { SylveonGX } from '../set-guardians-rising/sylveon-gx';
+import { NoivernGX } from '../set-burning-shadows/noivern-gx';
+import { SilvallyGX } from '../set-ultra-prism/silvally-gx';
+import { DrampaGX } from '../set-guardians-rising/drampa-gx';
+import { Cynthia } from '../set-ultra-prism/cynthia';
+import { FishermanHS } from '../set-heartgold-and-soulsilver/other-prints';
+import { LadyFLI } from '../set-forbidden-light/other-prints';
+import { AetherParadiseConvserationArea } from '../set-guardians-rising/aether-paradise-conservation-area';
+import { BrookletHill } from '../set-guardians-rising/brooklet-hill';
+import { MtCoronet } from '../set-ultra-prism/mt-coronet';
+import { ShrineOfPunishment } from '../set-celestial-storm/shrine-of-punishment';
+import { TapuBuluGX } from '../set-burning-shadows/tapu-bulu-gx';
+import { TapuFiniGX } from '../set-burning-shadows/tapu-fini-gx';
+import { TapuKokoGX } from '../set-guardians-rising/tapu-koko-gx';
+import { TapuLeleGX } from '../set-guardians-rising/tapu-lele-gx';
 import { BrocksGrit } from '../set-evolutions/brocks-grit';
 import { Guzma } from '../set-burning-shadows/guzma';
+import { CharizardGX as CharizardGXBUS } from '../set-burning-shadows/charizard-gx';
+import { Scyther } from '../set-celestial-storm/scyther';
+import { Pheromosa } from '../set-forbidden-light/pheromosa';
+import { Xurkitree } from '../set-forbidden-light/xurkitree';
+import { Guzzlord } from '../set-forbidden-light/guzzlord';
+import { Magnemite } from '../set-forbidden-light/magnemite';
+import { Magneton } from '../set-ultra-prism/magneton';
+import { Beldum } from '../set-guardians-rising/beldum';
+import { Metang } from '../set-guardians-rising/metang';
+import { Celesteela } from '../set-celestial-storm/celesteela';
+import { Kartana } from '../set-celestial-storm/kartana';
+import { Swablu } from '../set-dragons-majesty/swablu';
+import { TypeNull } from '../set-crimson-invasion/type-null';
+import { GolisopodGx } from '../set-burning-shadows/golisopod-gx';
+import { TurtonatorGx } from '../set-guardians-rising/turtonator-gx';
+import { ZygardeGx } from '../set-forbidden-light/zygarde-gx';
+import { UmbreonGx } from '../set-sun-and-moon/umbreon-gx';
+import { AetherFoundationEmployee } from '../set-lost-thunder/aether-foundation-employee';
+import { Hiker } from '../set-celestial-storm/hiker';
+import { Charmeleon } from '../set-base-set/charmeleon';
+import { Staryu } from '../set-team-up/staryu';
+import { Pikachu } from '../set-black-and-white-promos/pikachu';
+import { BlaineSLastStand } from '../set-dragons-majesty/blaines-last-stand';
+import { GiovannisExile } from '../set-unbroken-bonds/giovannis-exile';
+import { KogasTrap } from '../set-unbroken-bonds/kogas-trap';
+import { MistysDetermination } from '../set-evolutions/mistys-determination';
+import { PokemonCenterLady } from '../set-flashfire/pokemon-center-lady';
+import { SabrinasSuggestion } from '../set-team-up/sabrinas-suggestion';
+import { JessieAndJames } from './jessie-and-james';
 
 export class BrocksGritHIF extends BrocksGrit {
   public fullName = 'Brock\'s Grit HIF';
@@ -429,4 +458,184 @@ export class TapuLeleGXHIF extends TapuLeleGX {
   public setNumber = 'SV94';
   public fullName: string = 'Tapu Lele-GX HIF';
   public set = 'HIF';
+}
+
+export class CharizardGXHIF extends CharizardGXBUS {
+  public setNumber = 'SV49';
+  public fullName: string = 'Charizard-GX HIF SV49';
+  public set = 'HIF';
+}
+
+export class ScytherHIF extends Scyther {
+  public set: string = 'HIF';
+  public setNumber: string = 'SV1';
+  public fullName: string = 'Scyther HIF';
+}
+
+export class PheromosaHIF extends Pheromosa {
+  public set: string = 'HIF';
+  public setNumber: string = 'SV5';
+  public fullName: string = 'Pheromosa HIF';
+}
+
+export class XurkitreeHIF extends Xurkitree {
+  public set: string = 'HIF';
+  public setNumber: string = 'SV14';
+  public fullName: string = 'Xurkitree HIF';
+}
+
+export class GuzzlordHIF extends Guzzlord {
+  public set: string = 'HIF';
+  public setNumber: string = 'SV26';
+  public fullName: string = 'Guzzlord HIF';
+}
+
+export class MagnemiteHIF extends Magnemite {
+  public set: string = 'HIF';
+  public setNumber: string = 'SV27';
+  public fullName: string = 'Magnemite HIF';
+}
+
+export class MagnetonHIF extends Magneton {
+  public set: string = 'HIF';
+  public setNumber: string = 'SV28';
+  public fullName: string = 'Magneton HIF';
+}
+
+export class BeldumHIF extends Beldum {
+  public set: string = 'HIF';
+  public setNumber: string = 'SV30';
+  public fullName: string = 'Beldum HIF';
+}
+
+export class MetangHIF extends Metang {
+  public set: string = 'HIF';
+  public setNumber: string = 'SV31';
+  public fullName: string = 'Metang HIF';
+}
+
+export class CelesteelaHIF extends Celesteela {
+  public set: string = 'HIF';
+  public setNumber: string = 'SV32';
+  public fullName: string = 'Celesteela HIF';
+}
+
+export class KartanaHIF extends Kartana {
+  public set: string = 'HIF';
+  public setNumber: string = 'SV33';
+  public fullName: string = 'Kartana HIF';
+}
+
+export class SwabluHIF extends Swablu {
+  public set: string = 'HIF';
+  public setNumber: string = 'SV42';
+  public fullName: string = 'Swablu HIF';
+}
+
+export class TypeNullHIF extends TypeNull {
+  public set: string = 'HIF';
+  public setNumber: string = 'SV45';
+  public fullName: string = 'Type: Null HIF';
+}
+
+export class GolisopodGxHIF extends GolisopodGx {
+  public set: string = 'HIF';
+  public setNumber: string = 'SV48';
+  public fullName: string = 'Golisopod-GX HIF';
+}
+
+export class TurtonatorGxHIF extends TurtonatorGx {
+  public set: string = 'HIF';
+  public setNumber: string = 'SV52';
+  public fullName: string = 'Turtonator-GX HIF';
+}
+
+export class ZygardeGxHIF extends ZygardeGx {
+  public set: string = 'HIF';
+  public setNumber: string = 'SV65';
+  public fullName: string = 'Zygarde-GX HIF';
+}
+
+export class UmbreonGxHIF extends UmbreonGx {
+  public set: string = 'HIF';
+  public setNumber: string = 'SV69';
+  public fullName: string = 'Umbreon-GX HIF';
+}
+
+export class AetherFoundationEmployeeHIF extends AetherFoundationEmployee {
+  public set: string = 'HIF';
+  public setNumber: string = 'SV81';
+  public fullName: string = 'Aether Foundation Employee HIF';
+}
+
+export class HikerHIF extends Hiker {
+  public set: string = 'HIF';
+  public setNumber: string = 'SV85';
+  public fullName: string = 'Hiker HIF';
+}
+
+export class CharmeleonHIF extends Charmeleon {
+  public set: string = 'HIF';
+  public setNumber: string = '8';
+  public fullName: string = 'Charmeleon HIF 8';
+}
+
+export class StaryuHIF extends Staryu {
+  public set: string = 'HIF';
+  public setNumber: string = '13';
+  public fullName: string = 'Staryu HIF';
+}
+
+export class PikachuHIF extends Pikachu {
+  public set: string = 'HIF';
+  public setNumber: string = '19';
+  public fullName: string = 'Pikachu HIF';
+}
+
+export class BlainesLastStandHIF extends BlaineSLastStand {
+  public set: string = 'HIF';
+  public setNumber: string = '52';
+  public fullName: string = 'Blaine\'s Last Stand HIF';
+}
+
+export class GiovannisExileHIF extends GiovannisExile {
+  public set: string = 'HIF';
+  public setNumber: string = '57';
+  public fullName: string = 'Giovanni\'s Exile HIF';
+}
+
+export class KogasTrapHIF extends KogasTrap {
+  public set: string = 'HIF';
+  public setNumber: string = '59';
+  public fullName: string = 'Koga\'s Trap HIF';
+}
+
+export class MistysDeterminationHIF extends MistysDetermination {
+  public set: string = 'HIF';
+  public setNumber: string = '62';
+  public fullName: string = 'Misty\'s Determination HIF';
+}
+
+export class PokemonCenterLadyHIF extends PokemonCenterLady {
+  public set: string = 'HIF';
+  public setNumber: string = '64';
+  public fullName: string = 'Pokémon Center Lady HIF';
+}
+
+export class SabrinasSuggestionHIF extends SabrinasSuggestion {
+  public set: string = 'HIF';
+  public setNumber: string = '65';
+  public fullName: string = 'Sabrina\'s Suggestion HIF';
+}
+
+export class GiovannisExile2 extends GiovannisExile {
+  public set: string = 'HIF';
+  public setNumber: string = '67';
+  public fullName: string = 'Giovanni\'s Exile HIF 67';
+}
+
+export class JessieAndJames2 extends JessieAndJames {
+  public set: string = 'HIF';
+  public setNumber: string = '68';
+  public fullName: string = 'Jessie & James HIF 68';
 }

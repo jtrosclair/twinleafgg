@@ -1,8 +1,8 @@
 import { CardTag, CardType, PokemonCard, Stage, State, StoreLike, ShuffleDeckPrompt, ChoosePokemonPrompt, PlayerType, SlotType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+
 import { GameMessage } from '../../game/game-message';
-import { DAMAGE_OPPONENT_POKEMON } from '../../game/store/prefabs/prefabs';
+import { DAMAGE_OPPONENT_POKEMON, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class MegaSkarmoryex extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -16,7 +16,7 @@ export class MegaSkarmoryex extends PokemonCard {
   public attacks = [{
     name: 'Sonic Ripper',
     cost: [M, M, C],
-    damage: 220,
+    damage: 0,
     text: 'Shuffle all Energy from this Pokemon into your deck. This attack does 220 damage to 1 of your opponent\'s Pokemon. (Don\'t apply Weakness and Resistance for Benched Pokemon.)',
   }];
 
@@ -28,7 +28,7 @@ export class MegaSkarmoryex extends PokemonCard {
   public fullName: string = 'Mega Skarmory ex M3';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
 
       // Get all energy cards from this Pokemon

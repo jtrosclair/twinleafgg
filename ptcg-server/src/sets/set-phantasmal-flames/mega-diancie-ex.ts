@@ -1,9 +1,7 @@
 import { CardTag, CardType, DiscardEnergyPrompt, GameMessage, GamePhase, PokemonCard, PowerType, Stage, State, StateUtils, StoreLike, PlayerType, SlotType, SuperType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { PowerEffect } from '../../game/store/effects/game-effects';
-
+import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 export class MegaDiancieex extends PokemonCard {
   public stage: Stage = Stage.BASIC;
   public tags = [CardTag.POKEMON_SV_MEGA, CardTag.POKEMON_ex];
@@ -13,7 +11,7 @@ export class MegaDiancieex extends PokemonCard {
   public retreat = [C];
 
   public powers = [{
-    name: 'Shadow Hiding',
+    name: 'Diamond Coat',
     powerType: PowerType.ABILITY,
     text: 'This Pokémon takes 30 less damage from attacks (after applying Weakness and Resistance).'
   }];
@@ -23,7 +21,7 @@ export class MegaDiancieex extends PokemonCard {
     cost: [P, P],
     damage: 120,
     damageCalculation: 'x',
-    text: 'You may discard up to 2 Energy from this Pokémon. If you do, this attack does 120 more damage for each card you discarded in this way.'
+    text: 'Discard up to 2 Energy cards from this Pokémon, and this attack does 120 damage for each card you discarded in this way.'
   }];
 
   public regulationMark: string = 'I';
@@ -82,14 +80,7 @@ export class MegaDiancieex extends PokemonCard {
       const player = StateUtils.findOwner(state, effect.target);
 
       // Try to reduce PowerEffect, to check if something is blocking our ability
-      try {
-        const stub = new PowerEffect(player, {
-          name: 'test',
-          powerType: PowerType.ABILITY,
-          text: ''
-        }, this);
-        store.reduceEffect(state, stub);
-      } catch {
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
         return state;
       }
       effect.damage = Math.max(0, effect.damage - 30);

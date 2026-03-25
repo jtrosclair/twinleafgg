@@ -1,11 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils, CoinFlipPrompt, Card, ChooseCardsPrompt,
-  EnergyCard } from '../../game';
+import { StoreLike, State, StateUtils, CoinFlipPrompt, Card, ChooseCardsPrompt } from '../../game';
 import { AttackEffect } from '../../game/store/effects/game-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { GameMessage } from '../../game/game-message';
 import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 function* useWhirlpool(next: Function, store: StoreLike, state: State,
   effect: AttackEffect): IterableIterator<State> {
@@ -14,7 +14,7 @@ function* useWhirlpool(next: Function, store: StoreLike, state: State,
   const opponent = StateUtils.getOpponent(state, player);
 
   // Defending Pokemon has no energy cards attached
-  if (!opponent.active.cards.some(c => c instanceof EnergyCard)) {
+  if (!opponent.active.cards.some(c => c.superType === SuperType.ENERGY)) {
     return state;
   }
 
@@ -59,19 +59,19 @@ export class Zweilous extends PokemonCard {
 
   public weakness = [{ type: CardType.DRAGON }];
 
-  public retreat = [ CardType.COLORLESS, CardType.COLORLESS ];
+  public retreat = [CardType.COLORLESS, CardType.COLORLESS];
 
   public attacks = [
     {
       name: 'Crunch',
-      cost: [ CardType.COLORLESS, CardType.COLORLESS ],
+      cost: [CardType.COLORLESS, CardType.COLORLESS],
       damage: 30,
       text: 'Flip a coin. If heads, discard an Energy attached to ' +
         'the Defending Pokemon.'
     },
     {
       name: 'Dragon Claw',
-      cost: [ CardType.PSYCHIC, CardType.DARK, CardType.DARK ],
+      cost: [CardType.PSYCHIC, CardType.DARK, CardType.DARK],
       damage: 80,
       text: ''
     }
@@ -88,7 +88,7 @@ export class Zweilous extends PokemonCard {
   public setNumber: string = '95';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const generator = useWhirlpool(() => generator.next(), store, state, effect);
       return generator.next().value;
     }

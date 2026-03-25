@@ -8,9 +8,10 @@ import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { GameMessage } from '../../game';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { AttackEffect, PowerEffect } from '../../game/store/effects/game-effects';
+
 import { CardTag } from '../../game/store/card/card-types';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class KricketuneV extends PokemonCard {
 
@@ -32,7 +33,7 @@ export class KricketuneV extends PokemonCard {
     name: 'Exciting Stage',
     useWhenInPlay: true,
     powerType: PowerType.ABILITY,
-    text: 'Once during your turn, , you may draw cards until you have ' +
+    text: 'Once during your turn, you may draw cards until you have ' +
       '3 cards in your hand. If this Pokémon is in the Active Spot, ' +
       'you may draw cards until you have 4 cards in your hand ' +
       'instead. You can\'t use more than 1 Exciting Stage Ability ' +
@@ -44,8 +45,7 @@ export class KricketuneV extends PokemonCard {
       name: 'X-Scissor',
       cost: [CardType.GRASS, CardType.COLORLESS, CardType.COLORLESS],
       damage: 80,
-      text: 'Flip a coin. If heads, this attack does 80 more damage.' +
-        ''
+      text: 'Flip a coin. If heads, this attack does 80 more damage.'
     }
   ];
 
@@ -72,7 +72,7 @@ export class KricketuneV extends PokemonCard {
       player.marker.removeMarker(this.EXCITING_STAGE_MARKER, this);
     }
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
       if (player.marker.hasMarker(this.EXCITING_STAGE_MARKER)) {
         throw new GameError(GameMessage.POWER_ALREADY_USED);
@@ -98,9 +98,7 @@ export class KricketuneV extends PokemonCard {
       return state;
     }
 
-
-
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       return store.prompt(state, [
         new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)

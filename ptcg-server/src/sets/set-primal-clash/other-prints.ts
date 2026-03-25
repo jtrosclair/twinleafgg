@@ -1,19 +1,27 @@
-import { EnergyRetrieval } from "../set-base-set/energy-retrieval";
-import { EscapeRopeBUS } from "../set-burning-shadows/other-prints";
-import { ExpShare } from "../set-scarlet-and-violet/exp-share";
-import { RareCandy } from "../set-ex-holon-phantoms/rare-candy";
-import { WailordEx as WailordExPRC38 } from "../set-primal-clash/wailord-ex";
-import { GroudonEx as GroudonExPRC85 } from "../set-primal-clash/groudon-ex";
-import { PrimalGroudonEx as PrimalGroudonExPRC86 } from "../set-primal-clash/primal-groudon-ex";
-import { GardevoirEx as GardevoirExPRC105 } from "../set-primal-clash/gardevoir-ex";
-import { MGardevoirEx as MGardevoirExPRC106 } from "../set-primal-clash/mega-gardevoir-ex";
-import { ArchiesAceInTheHole as ArchiesAceInTheHolePRC124 } from "../set-primal-clash/archies-ace-in-the hole";
-import { MaxiesHiddenBallTrick as MaxiesHiddenBallTrickPRC133 } from "../set-primal-clash/maxies-hidden-ball-trick";
-import { Teammates as TeammatesPRC141 } from "../set-primal-clash/teammates";
-import { DiveBall as DiveBallPRC125 } from "../set-primal-clash/dive-ball";
-import { EnhancedHammer } from "../set-twilight-masquerade/enhanced-hammer";
-import { Switch } from "../set-base-set/switch";
-import { WeaknessPolicy as WeaknessPolicyPRC142 } from "../set-primal-clash/weakness-policy";
+import { EnergyRetrieval } from '../set-base-set/energy-retrieval';
+import { EscapeRopeBUS } from '../set-burning-shadows/other-prints';
+import { ExpShare } from '../set-scarlet-and-violet/exp-share';
+import { RareCandy } from '../set-ex-holon-phantoms/rare-candy';
+import { WailordEx as WailordExPRC38 } from '../set-primal-clash/wailord-ex';
+import { GroudonEx as GroudonExPRC85 } from '../set-primal-clash/groudon-ex';
+import { PrimalGroudonEx as PrimalGroudonExPRC86 } from '../set-primal-clash/primal-groudon-ex';
+import { GardevoirEx as GardevoirExPRC105 } from '../set-primal-clash/gardevoir-ex';
+import { MGardevoirEx as MGardevoirExPRC106 } from '../set-primal-clash/mega-gardevoir-ex';
+import { ArchiesAceInTheHole as ArchiesAceInTheHolePRC124 } from '../set-primal-clash/archies-ace-in-the hole';
+import { MaxiesHiddenBallTrick as MaxiesHiddenBallTrickPRC133 } from '../set-primal-clash/maxies-hidden-ball-trick';
+import { Teammates as TeammatesPRC141 } from '../set-primal-clash/teammates';
+import { DiveBall as DiveBallPRC125 } from '../set-primal-clash/dive-ball';
+import { EnhancedHammer } from '../set-twilight-masquerade/enhanced-hammer';
+import { Switch } from '../set-base-set/switch';
+import { WeaknessPolicy as WeaknessPolicyPRC142 } from '../set-primal-clash/weakness-policy';
+import { TrevenantEx } from './trevenant-ex';
+import { CameruptEx } from './camerupt-ex';
+import { KyogreEx } from './kyogre-ex';
+import { PrimalKyogreEx } from './primal-kyogre-ex';
+import { SharpedoEx } from './sharpedo-ex';
+import { AggronEx } from './aggron-ex';
+import { MAggronEx } from './m-aggron-ex';
+import { ProfessorBirchsObservations } from './professor-birchs-observations';
 export class EnergyRetrievalPRC extends EnergyRetrieval {
   public setNumber = '126';
   public fullName: string = 'Energy Retrieval PRC';
@@ -108,4 +116,52 @@ export class WeaknessPolicy2PRC extends WeaknessPolicyPRC142 {
   public setNumber = '164';
   public fullName: string = 'Weakness Policy2 PRC';
   public set = 'PRC';
+}
+
+export class TrevenantEx2 extends TrevenantEx {
+  public set: string = 'PRC';
+  public setNumber: string = '145';
+  public fullName: string = 'Trevenant-EX PRC 145';
+}
+
+export class CameruptEx2 extends CameruptEx {
+  public set: string = 'PRC';
+  public setNumber: string = '146';
+  public fullName: string = 'Camerupt-EX PRC 146';
+}
+
+export class KyogreEx2 extends KyogreEx {
+  public set: string = 'PRC';
+  public setNumber: string = '148';
+  public fullName: string = 'Kyogre-EX PRC 148';
+}
+
+export class PrimalKyogreEx2 extends PrimalKyogreEx {
+  public set: string = 'PRC';
+  public setNumber: string = '149';
+  public fullName: string = 'Primal Kyogre-EX PRC 149';
+}
+
+export class SharpedoEx2 extends SharpedoEx {
+  public set: string = 'PRC';
+  public setNumber: string = '152';
+  public fullName: string = 'Sharpedo-EX PRC 152';
+}
+
+export class AggronEx2 extends AggronEx {
+  public set: string = 'PRC';
+  public setNumber: string = '153';
+  public fullName: string = 'Aggron-EX PRC 153';
+}
+
+export class MAggronEx2 extends MAggronEx {
+  public set: string = 'PRC';
+  public setNumber: string = '154';
+  public fullName: string = 'M Aggron-EX PRC 154';
+}
+
+export class ProfessorBirchsObservations2 extends ProfessorBirchsObservations {
+  public set: string = 'PRC';
+  public setNumber: string = '159';
+  public fullName: string = 'Professor Birch\'s Observations PRC 159';
 }

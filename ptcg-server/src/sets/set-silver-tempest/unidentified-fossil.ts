@@ -1,7 +1,8 @@
 import { TrainerCard, TrainerType, Stage, CardType, PokemonType, Power, PowerType, StoreLike, State, GameLog, StateUtils, GameError, GameMessage, PokemonCard } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect, RetreatEffect } from '../../game/store/effects/game-effects';
+import { RetreatEffect } from '../../game/store/effects/game-effects';
 import { PlayItemEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class UnidentifiedFossil extends TrainerCard {
 
@@ -33,6 +34,7 @@ export class UnidentifiedFossil extends TrainerCard {
   public fullName: string = 'Unidentified Fossil SIT';
   public regulationMark = 'F';
   public maxTools: number = 1;
+  public evolvesFromBase: string[] = [];
 
   public powers: Power[] = [
     {
@@ -54,7 +56,7 @@ This card can't retreat.`,
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
       store.log(state, GameLog.LOG_PLAYER_DISCARDS_CARD, { name: player.name, card: this.name, effect: 'Unidentified Fossil' });

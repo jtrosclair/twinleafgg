@@ -67,7 +67,7 @@ export class Crispin extends TrainerCard {
         if (cardList.cards.length === 2) {
           state = store.prompt(state, new AttachEnergyPrompt(
             player.id,
-            GameMessage.ATTACH_ENERGY_TO_ACTIVE,
+            GameMessage.ATTACH_ENERGY_CARDS,
             cardList,
             PlayerType.BOTTOM_PLAYER,
             [SlotType.BENCH, SlotType.ACTIVE],
@@ -92,7 +92,7 @@ export class Crispin extends TrainerCard {
           cardList.moveCardTo(remainingCard, player.hand);
         }
 
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
 
         return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
           player.deck.applyOrder(order);

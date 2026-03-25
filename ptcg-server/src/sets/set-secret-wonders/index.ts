@@ -1,6 +1,8 @@
 import { BebesSearchSW, PlusPowerSW, PotionSW, SwitchSW, DarknessEnergySpecialSW, MetalEnergyN1SW } from './other-prints';
 import { Card } from '../../game/store/card/card';
+import { Bulbasaur } from './bulbasaur';
 import { Duskull } from './duskull';
+import { Flaaffy } from './flaaffy';
 import { Gallade } from './gallade';
 import { Gardevoir } from './gardevoir';
 import { GardevoirLVX } from './gardevoir-lv-x';
@@ -8,21 +10,27 @@ import { Hoppip } from './hoppip';
 import { Kirlia } from './kirlia';
 import { Mew } from './mew';
 import { Minun } from './minun';
+import { Murkrow } from './murkrow';
 import { Pidgeotto } from './pidgeotto';
 import { Pidgey } from './pidgey';
 import { Plusle } from './plusle';
 import { Ralts } from './ralts';
 import { RoseannesResearch } from './roseannes-research';
+import { Sentret } from './sentret';
 import { Skiploom } from './skiploom';
+import { Trapinch } from './trapinch';
 
 // Other Prints
 import { NightMaintenanceSW } from './other-prints';
 
 export const setSecretWonders: Card[] = [
+  new Bulbasaur(),
   new Duskull(),
+  new Flaaffy(),
   new Gallade(),
   new Mew(),
   new Minun(),
+  new Murkrow(),
   new Pidgeotto(),
   new Pidgey(),
   new Plusle(),
@@ -32,7 +40,9 @@ export const setSecretWonders: Card[] = [
   new GardevoirLVX(),
   new Hoppip(),
   new RoseannesResearch(),
+  new Sentret(),
   new Skiploom(),
+  new Trapinch(),
 
   // Other Prints
   new NightMaintenanceSW(),

@@ -40,7 +40,7 @@ export class PotHelmet extends TrainerCard {
 
       const player = StateUtils.findOwner(state, effect.target);
 
-      if (sourceCard && (sourceCard.tags.includes(CardTag.POKEMON_V) || sourceCard.tags.includes(CardTag.POKEMON_VMAX) || sourceCard.tags.includes(CardTag.POKEMON_VSTAR) || sourceCard.tags.includes(CardTag.POKEMON_ex) || sourceCard.tags.includes(CardTag.RADIANT))) {
+      if (sourceCard && sourceCard.tags.includes(CardTag.POKEMON_V || CardTag.POKEMON_VMAX || CardTag.POKEMON_VSTAR || sourceCard.tags.includes(CardTag.POKEMON_ex || CardTag.RADIANT))) {
         return state;
       }
 

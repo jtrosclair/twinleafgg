@@ -2,7 +2,7 @@ import { Card } from '../../game/store/card/card';
 import { GameLog, GameMessage } from '../../game/game-message';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerCard } from '../../game/store/card/trainer-card';
-import { TrainerType, CardType, isCoreFormat } from '../../game/store/card/card-types';
+import { TrainerType, CardType, Format } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { StateUtils } from '../../game/store/state-utils';
@@ -12,7 +12,7 @@ import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
 import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { GameError } from '../../game';
-import { CLEAN_UP_SUPPORTER, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 function* playCard(next: Function, store: StoreLike, state: State,
   self: Irida, effect: TrainerEffect): IterableIterator<State> {
@@ -40,7 +40,7 @@ function* playCard(next: Function, store: StoreLike, state: State,
   player.deck.cards.forEach((c, index) => {
     if (c instanceof PokemonCard && c.cardType === CardType.WATER) {
       pokemons += 1;
-    } else if (c instanceof TrainerCard && (c.trainerType === TrainerType.ITEM || (!isCoreFormat(format) && c.trainerType === TrainerType.TOOL))) {
+    } else if (c instanceof TrainerCard && (c.trainerType === TrainerType.ITEM || (format === Format.SWSH && c.trainerType === TrainerType.TOOL))) {
       itemsOrTools += 1;
     } else {
       blocked.push(index);
@@ -67,7 +67,6 @@ function* playCard(next: Function, store: StoreLike, state: State,
   });
 
   MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: self });
-  CLEAN_UP_SUPPORTER(effect, player);
 
 
   cards.forEach((card, index) => {
@@ -81,7 +80,6 @@ function* playCard(next: Function, store: StoreLike, state: State,
       cards
     ), () => next());
   }
-  CLEAN_UP_SUPPORTER(effect, player);
   return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
     player.deck.applyOrder(order);
   });
@@ -90,21 +88,15 @@ function* playCard(next: Function, store: StoreLike, state: State,
 export class Irida extends TrainerCard {
 
   public trainerType: TrainerType = TrainerType.SUPPORTER;
-
   public regulationMark = 'F';
-
   public set: string = 'ASR';
-
   public cardImage: string = 'assets/cardback.png';
-
   public setNumber: string = '147';
-
   public name: string = 'Irida';
-
   public fullName: string = 'Irida ASR';
 
   public text: string =
-    'Search your deck for a W Pokemon and an Item ' +
+    'Search your deck for a [W] Pokémon and an Item ' +
     'card, reveal them, and put them into your hand. ' +
     'Then, shuffle your deck.';
 

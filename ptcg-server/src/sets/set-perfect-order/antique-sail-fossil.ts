@@ -1,9 +1,9 @@
 import { TrainerCard, TrainerType, Stage, CardType, PokemonType, Power, PowerType, StoreLike, State, GameLog, StateUtils, GameError, GameMessage, PokemonCard } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect, RetreatEffect } from '../../game/store/effects/game-effects';
+import { RetreatEffect } from '../../game/store/effects/game-effects';
 import { PlayItemEffect, PlayPokemonEffect, TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
-import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { IS_ABILITY_BLOCKED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class AntiqueSailFossil extends TrainerCard {
   public trainerType = TrainerType.ITEM;
@@ -26,6 +26,7 @@ export class AntiqueSailFossil extends TrainerCard {
   public attacksThisTurn: number = 0;
   public maxAttacksThisTurn: number = 1;
   public allowSubsequentAttackChoice: boolean = false;
+  public evolvesFromBase: string[] = [];
   public maxTools: number = 1;
 
   public powers: Power[] = [{
@@ -52,7 +53,7 @@ export class AntiqueSailFossil extends TrainerCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Discard from play
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
       store.log(state, GameLog.LOG_PLAYER_DISCARDS_CARD, { name: player.name, card: this.name, effect: 'Antique Sail Fossil' });
       const cardList = StateUtils.findCardList(state, this);

@@ -43,7 +43,7 @@ export class RedeemableTicket extends TrainerCard {
 
       // Move prize cards to the bottom of the deck
       allPrizeCards.forEach(card => {
-        player.deck.cards.push(card);
+        player.deck.cards.unshift(card);
       });
 
       // Clear the prize cards
@@ -51,7 +51,7 @@ export class RedeemableTicket extends TrainerCard {
 
       // Draw cards from the top of the deck to the prize cards
       for (let i = 0; i < prizeCount; i++) {
-        const card = player.deck.cards.shift();
+        const card = player.deck.cards.pop();
         if (card) {
           const prize = player.prizes.find(p => p.cards.length === 0);
           if (prize) {

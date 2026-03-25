@@ -2,6 +2,7 @@ import { StoreLike, State, GameError, GameMessage, StateUtils, SelectPrompt, Gam
 import { TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
+import { MoveCardsEffect } from '../../game/store/effects/game-effects';
 import { DRAW_UP_TO_X_CARDS, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
 import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
 
@@ -36,11 +37,18 @@ export class TeamGalacticsWager extends TrainerCard {
         throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }
 
-      player.hand.moveCardsTo(cards, player.deck);
-      opponent.hand.moveCardsTo(opponentCards, opponent.deck);
+      const playerMoveEffect = new MoveCardsEffect(player.hand, player.deck, { cards, sourceCard: this });
+      state = store.reduceEffect(state, playerMoveEffect);
+
+      const opponentMoveEffect = new MoveCardsEffect(opponent.hand, opponent.deck, { cards: opponentCards, sourceCard: this });
+      state = store.reduceEffect(state, opponentMoveEffect);
 
       SHUFFLE_DECK(store, state, player);
-      SHUFFLE_DECK(store, state, opponent);
+
+      // Dew Guard prevents RPS and the rest of the effect fizzles (ruling from @Shutterstock)
+      if (opponentMoveEffect.preventDefault) {
+        return state;
+      }
 
       const options = [
         { value: 'Rock', message: 'Rock' },
@@ -80,13 +88,17 @@ export class TeamGalacticsWager extends TrainerCard {
           || (playerChosenValue === 0 && opponentChosenValue === 2)) {
           maxPlayerDraw = 6;
           maxOpponentDraw = 3;
+        }
 
-          DRAW_UP_TO_X_CARDS(store, state, player, maxPlayerDraw);
+        // Draw cards based on who won
+        DRAW_UP_TO_X_CARDS(store, state, player, maxPlayerDraw);
+
+        if (!opponentMoveEffect.preventDefault) {
           DRAW_UP_TO_X_CARDS(store, state, opponent, maxOpponentDraw);
         }
       });
 
-      player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
 
     }
 

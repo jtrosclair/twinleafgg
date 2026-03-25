@@ -9,10 +9,10 @@ import { GameMessage } from '../../game/game-message';
 import { DiscardCardsEffect, AbstractAttackEffect } from '../../game/store/effects/attack-effects';
 import { StateUtils } from '../../game/store/state-utils';
 import { Card } from '../../game/store/card/card';
-import { EnergyCard } from '../../game/store/card/energy-card';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { PlayerType } from '../../game/store/actions/play-card-action';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 function* useWhirlpool(next: Function, store: StoreLike, state: State,
   effect: AttackEffect): IterableIterator<State> {
@@ -21,7 +21,7 @@ function* useWhirlpool(next: Function, store: StoreLike, state: State,
   const opponent = StateUtils.getOpponent(state, player);
 
   // Defending Pokemon has no energy cards attached
-  if (!opponent.active.cards.some(c => c instanceof EnergyCard)) {
+  if (!opponent.active.cards.some(c => c.superType === SuperType.ENERGY)) {
     return state;
   }
 
@@ -67,17 +67,17 @@ export class Buizel extends PokemonCard {
     value: 10
   }];
 
-  public retreat = [ CardType.COLORLESS ];
+  public retreat = [CardType.COLORLESS];
 
   public attacks = [{
     name: 'Whirlpool',
-    cost: [ CardType.WATER ],
+    cost: [CardType.WATER],
     damage: 0,
     text: 'Flip a coin. If heads, discard an Energy attached to ' +
       'the Defending Pokemon.'
   }, {
     name: 'Super Fast',
-    cost: [ CardType.WATER, CardType.WATER ],
+    cost: [CardType.WATER, CardType.WATER],
     damage: 30,
     text: 'If you have Pachirisu in play, flip a coin. If heads, prevent all ' +
       'effects of an attack, including damage, done to Buizel during your ' +
@@ -96,12 +96,12 @@ export class Buizel extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const generator = useWhirlpool(() => generator.next(), store, state, effect);
       return generator.next().value;
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[1]) {
+    if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
 
       let isPachirisuInPlay = false;

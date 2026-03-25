@@ -1,10 +1,15 @@
-import { ChooseCardsPrompt, GameMessage, State, StoreLike } from '../../game';
-import { CardType, EnergyType, Stage, SuperType } from '../../game/store/card/card-types';
+import { ADD_SLEEP_TO_PLAYER_ACTIVE, AFTER_ATTACK, MOVE_CARDS, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
+import { GameMessage } from '../../game/game-message';
+import {
+  CardType,
+  EnergyType,
+  Stage,
+  SuperType
+} from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP } from '../../game/store/prefabs/attack-effects';
-import { MOVE_CARDS, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-
+import { State, StoreLike } from '../../game';
 export class Skitty2 extends PokemonCard {
   public stage: Stage = Stage.BASIC;
   public cardType: CardType = C;
@@ -30,7 +35,6 @@ export class Skitty2 extends PokemonCard {
   public setNumber: string = '44';
   public name: string = 'Skitty';
   public fullName: string = 'Skitty RS2';
-  public legacyFullName: string = 'Skitty RS 44';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
@@ -53,8 +57,8 @@ export class Skitty2 extends PokemonCard {
       });
     }
 
-    if (WAS_ATTACK_USED(effect, 1, this)) {
-      YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP(store, state, effect);
+    if (AFTER_ATTACK(effect, 1, this)) {
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
     }
 
     return state;

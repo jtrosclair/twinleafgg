@@ -5,7 +5,7 @@ import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { PlayerType, SlotType, CoinFlipPrompt, StateUtils, GameError, GameMessage } from '../../game';
+import { PlayerType, SlotType, CoinFlipPrompt, StateUtils, GameError, GameMessage, Player } from '../../game';
 
 function* playCard(next: Function, store: StoreLike, state: State, self: PokemonCatcher, effect: TrainerEffect): IterableIterator<State> {
   const player = effect.player;
@@ -26,7 +26,7 @@ function* playCard(next: Function, store: StoreLike, state: State, self: Pokemon
   });
 
   if (coinResult === false) {
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
     return state;
   }
 
@@ -39,10 +39,10 @@ function* playCard(next: Function, store: StoreLike, state: State, self: Pokemon
   ), result => {
     const cardList = result[0];
     opponent.switchPokemon(cardList);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
   });
 
-  player.supporter.moveCardTo(effect.trainerCard, player.discard);
+
 }
 
 export class PokemonCatcher extends TrainerCard {
@@ -57,13 +57,23 @@ export class PokemonCatcher extends TrainerCard {
 
   public setNumber: string = '187';
 
-  public name: string = 'Pokemon Catcher';
+  public name: string = 'Pokémon Catcher';
 
   public fullName: string = 'Pokemon Catcher SVI';
 
   public text: string =
     'Flip a coin. If heads, switch 1 of your opponent\'s Benched Pokemon ' +
     'with their Active Pokemon.';
+
+  public canPlay(store: StoreLike, state: State, player: Player): boolean {
+    const opponent = StateUtils.getOpponent(state, player);
+    const hasBench = opponent.bench.some(b => b.cards.length > 0);
+
+    if (!hasBench) {
+      return false;
+    }
+    return true;
+  }
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof TrainerEffect && effect.trainerCard === this) {

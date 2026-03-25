@@ -7,9 +7,9 @@ import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-pro
 import { SupporterEffect, TrainerEffect } from '../../game/store/effects/play-card-effects';
 import {
   PlayerType, SlotType, StateUtils, CardTarget, GameError, GameMessage,
-  PokemonCardList, ChooseCardsPrompt, Card, EnergyCard
+  PokemonCardList, ChooseCardsPrompt, Card
 } from '../../game';
-import { CLEAN_UP_SUPPORTER, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 function* playCard(next: Function, store: StoreLike, state: State, effect: TrainerEffect, trainerCard: TrainerCard): IterableIterator<State> {
   const player = effect.player;
@@ -18,7 +18,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
   let hasPokemonWithEnergy = false;
   const blocked: CardTarget[] = [];
   opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card, target) => {
-    if (cardList.energies.cards.some(c => c instanceof EnergyCard && c.energyType === EnergyType.SPECIAL)) {
+    if (cardList.energies.cards.some(c => c.superType === SuperType.ENERGY && c.energyType === EnergyType.SPECIAL)) {
       hasPokemonWithEnergy = true;
     } else {
       blocked.push(target);
@@ -65,7 +65,6 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
       const supporterEffect = new SupporterEffect(player, effect.trainerCard);
       store.reduceEffect(state, supporterEffect);
     } catch {
-      CLEAN_UP_SUPPORTER(effect, player);
       return state;
     }
   }
@@ -85,7 +84,6 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
 
   if (cards.length > 0) {
     // Discard trainer only when user selected a Pokemon
-    CLEAN_UP_SUPPORTER(effect, player);
     // Discard selected special energy card
     MOVE_CARDS(store, state, target, opponent.discard, { cards, sourceCard: trainerCard });
   }

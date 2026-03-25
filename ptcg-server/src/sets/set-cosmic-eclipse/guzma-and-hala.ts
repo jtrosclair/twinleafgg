@@ -1,13 +1,13 @@
-import { ChooseCardsPrompt, EnergyCard, GameError, ShowCardsPrompt, ShuffleDeckPrompt, StateUtils } from '../../game';
+import { ChooseCardsPrompt, GameError, ShowCardsPrompt, ShuffleDeckPrompt, StateUtils } from '../../game';
 import { GameLog, GameMessage } from '../../game/game-message';
-import { CardTag, EnergyType, TrainerType } from '../../game/store/card/card-types';
+import { CardTag, EnergyType, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 import { SelectOptionPrompt } from '../../game/store/prompts/select-option-prompt';
-import { CLEAN_UP_SUPPORTER, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 function* playCard(next: Function, store: StoreLike, state: State,
   self: GuzmaAndHala, effect: TrainerEffect): IterableIterator<State> {
@@ -48,8 +48,6 @@ function* playCard(next: Function, store: StoreLike, state: State,
           return state;
         });
       }
-
-      CLEAN_UP_SUPPORTER(effect, player);
 
       return store.prompt(state, new ShowCardsPrompt(
         opponent.id,
@@ -99,8 +97,6 @@ function* playCard(next: Function, store: StoreLike, state: State,
           });
         }
 
-        CLEAN_UP_SUPPORTER(effect, player);
-
         return store.prompt(state, new ShowCardsPrompt(
           opponent.id,
           GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
@@ -125,7 +121,7 @@ function* playCard(next: Function, store: StoreLike, state: State,
         // Search for tool, special energy, and stadium
         const blocked: number[] = [];
         player.deck.cards.forEach((card, index) => {
-          if (!((card instanceof EnergyCard && card.energyType === EnergyType.SPECIAL) ||
+          if (!((card.superType === SuperType.ENERGY && card.energyType === EnergyType.SPECIAL) ||
             (card instanceof TrainerCard && card.trainerType === TrainerType.TOOL) ||
             (card instanceof TrainerCard && card.trainerType === TrainerType.STADIUM))) {
             blocked.push(index);
@@ -148,8 +144,6 @@ function* playCard(next: Function, store: StoreLike, state: State,
               return state;
             });
           }
-
-          CLEAN_UP_SUPPORTER(effect, player);
 
           return store.prompt(state, new ShowCardsPrompt(
             opponent.id,

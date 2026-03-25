@@ -1,6 +1,7 @@
 import { PokemonCard, Stage, CardType, Resistance, StoreLike, State, StateUtils, GameMessage, ChooseCardsPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+
+import { MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Girafarig extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -37,7 +38,7 @@ export class Girafarig extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       // Get Lost
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
@@ -48,15 +49,13 @@ export class Girafarig extends PokemonCard {
         {},
         { min: 2, max: 2 }
       ), selected => {
-        if (selected && selected.length === 2) {
-          selected.forEach(card => {
-            opponent.discard.moveCardsTo(selected, player.lostzone);
-          });
+        if (selected) {
+          MOVE_CARDS(store, state, opponent.discard, opponent.lostzone, { cards: selected, sourceCard: this, sourceEffect: this.attacks[0] });
         }
       });
     }
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[1]) {
+    if (WAS_ATTACK_USED(effect, 1, this)) {
       // Mind Shock
       effect.ignoreWeakness = true;
       effect.ignoreResistance = true;

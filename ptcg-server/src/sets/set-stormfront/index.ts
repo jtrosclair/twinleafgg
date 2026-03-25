@@ -2,6 +2,8 @@ import { EnergySwitchPKSF, GreatBallSF, PotionSF, SwitchSF, CharmanderSF, Charme
 import { Card } from '../../game/store/card/card';
 import { Combee } from './combee';
 import { Dusclops } from './dusclops';
+import { Dusclops2 } from './dusclops2';
+import { Duskull } from './duskull';
 import { Gastly } from './gastly';
 import { Gengar } from './gengar';
 import { Gyarados } from './gyarados';
@@ -15,6 +17,7 @@ import { Magikarp } from './magikarp';
 import { MarleysRequest } from './marleys-request';
 import { PokeBlower } from './poke-blower';
 import { PokeDrawer } from './poke-drawer';
+import { RegigigasLVX } from './regigigas-lv-x';
 import { Sableye } from './sableye';
 
 // Other prints
@@ -27,6 +30,8 @@ import {
 export const setStormfront: Card[] = [
   new Combee(),
   new Dusclops(),
+  new Dusclops2(),
+  new Duskull(),
   new Gengar(),
   new Gyarados(),
   new Haunter(),
@@ -39,9 +44,9 @@ export const setStormfront: Card[] = [
   new MarleysRequest(),
   new PokeBlower(),
   new PokeDrawer(),
+  new RegigigasLVX(),
   new Sableye(),
   new Gastly(),
-
   // Other prints
   new CycloneEnergySF(),
   new PremierBallSF(),

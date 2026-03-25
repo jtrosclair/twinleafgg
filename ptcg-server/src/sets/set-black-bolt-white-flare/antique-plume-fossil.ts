@@ -1,8 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, PokemonType, TrainerType } from '../../game/store/card/card-types';
 import { GameError, GameLog, GameMessage, Power, PowerType, State, StateUtils, StoreLike, TrainerCard } from '../../game';
-import { PowerEffect, RetreatEffect } from '../../game/store/effects/game-effects';
+import { RetreatEffect } from '../../game/store/effects/game-effects';
 import { PlayItemEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class AntiquePlumeFossil extends TrainerCard {
   public trainerType = TrainerType.ITEM;
@@ -23,10 +24,11 @@ export class AntiquePlumeFossil extends TrainerCard {
   public maxTools: number = 1;
   public evolvesTo = [];
   public evolvesToStage = [];
+  public evolvesFromBase: string[] = [];
 
   public powers: Power[] = [{
     name: 'Antique Plume Fossil',
-    text: `Play this card as if it were a 60-HP [C] Basic Pokémon. This card can't be affected by any Special Conditions and can'\' retreat.
+    text: `Play this card as if it were a 60-HP [C] Basic Pokémon. This card can't be affected by any Special Conditions and can't retreat.
 
 At any time during your turn, you may discard this card from play.`,
     useWhenInPlay: true,
@@ -44,7 +46,7 @@ At any time during your turn, you may discard this card from play.`,
 
   public reduceEffect(store: StoreLike, state: State, effect: any): State {
 
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
       store.log(state, GameLog.LOG_PLAYER_DISCARDS_CARD, { name: player.name, card: this.name, effect: 'Antique Plume Fossil' });

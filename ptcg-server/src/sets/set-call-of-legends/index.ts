@@ -3,6 +3,7 @@ import { CheerleadersCheer } from './cheerleaders-cheer';
 import { Jirachi } from './jirachi';
 import { LostRemover } from './lost-remover';
 import { LostWorld } from './lost-world';
+import { Lucario } from './lucario';
 import { MimeJr } from './mime-jr';
 import { MrMime } from './mr-mime';
 import { Pachirisu } from './pachirisu';
@@ -15,15 +16,32 @@ import { Umbreon } from './umbreon';
 import {
   CleffaCL,
   CopycatCL,
+  DualBallCL,
+  NinetalesCL,
   ProfessorElmsTrainingMethodCL,
-  SmeargleCL
+  QuilavaCL,
+  SmeargleCL,
+  VulpixCL
 } from './other-prints';
+
+// Basic energies
+import {
+  GrassEnergy,
+  FireEnergy,
+  WaterEnergy,
+  LightningEnergy,
+  PsychicEnergy,
+  FightingEnergy,
+  DarknessEnergy,
+  MetalEnergy,
+} from './basic-energies';
 
 export const setCallOfLegends: Card[] = [
   new CheerleadersCheer(),
   new Jirachi(),
   new LostRemover(),
   new LostWorld(),
+  new Lucario(),
   new MimeJr(),
   new MrMime(),
   new Pachirisu(),
@@ -35,6 +53,20 @@ export const setCallOfLegends: Card[] = [
   // Other prints
   new CleffaCL(),
   new CopycatCL(),
+  new DualBallCL(),
+  new NinetalesCL(),
   new ProfessorElmsTrainingMethodCL(),
+  new QuilavaCL(),
   new SmeargleCL(),
+  new VulpixCL(),
+
+  // Basic energies
+  new GrassEnergy(),
+  new FireEnergy(),
+  new WaterEnergy(),
+  new LightningEnergy(),
+  new PsychicEnergy(),
+  new FightingEnergy(),
+  new DarknessEnergy(),
+  new MetalEnergy(),
 ];
