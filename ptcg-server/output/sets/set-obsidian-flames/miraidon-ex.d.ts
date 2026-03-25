@@ -7,7 +7,7 @@ export declare class Miraidonex extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    retreat: any[];
+    retreat: never[];
     tags: CardTag[];
     attacks: {
         name: string;

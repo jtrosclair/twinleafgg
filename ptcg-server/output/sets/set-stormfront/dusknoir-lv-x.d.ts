@@ -10,7 +10,7 @@ export declare class DusknoirLvX extends PokemonCard {
         type: CardType;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         useWhenInPlay: boolean;

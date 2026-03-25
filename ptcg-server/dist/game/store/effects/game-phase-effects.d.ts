@@ -4,6 +4,7 @@ import { Card } from '../card/card';
 import { Attack } from '../card/pokemon-types';
 export declare enum GamePhaseEffects {
     BEGIN_TURN_EFFECT = "BEGIN_TURN_EFFECT",
+    DRAW_CARD_FOR_TURN_EFFECT = "DRAW_CARD_FOR_TURN_EFFECT",
     END_TURN_EFFECT = "END_TURN_EFFECT",
     WHO_BEGINS_EFFECT = "WHO_BEGINS_EFFECT",
     BETWEEN_TURNS_EFFECT = "BETWEEN_TURNS_EFFECT",
@@ -13,6 +14,12 @@ export declare enum GamePhaseEffects {
     AFTER_ATTACK_EFFECT = "AFTER_ATTACK_EFFECT"
 }
 export declare class BeginTurnEffect implements Effect {
+    readonly type: string;
+    preventDefault: boolean;
+    player: Player;
+    constructor(player: Player);
+}
+export declare class DrawCardForTurnEffect implements Effect {
     readonly type: string;
     preventDefault: boolean;
     player: Player;

@@ -14,6 +14,7 @@ class PokemonCardList extends card_list_1.CardList {
         this.specialConditions = [];
         this.poisonDamage = 10;
         this.burnDamage = 20;
+        this.confusionDamage = 30;
         this.marker = new card_marker_1.Marker();
         this.pokemonPlayedTurn = 0;
         this.sleepFlips = 1;
@@ -31,7 +32,6 @@ class PokemonCardList extends card_list_1.CardList {
         this.cannotAttackNextTurnPending = false;
         this.cannotUseAttacksNextTurn = [];
         this.cannotUseAttacksNextTurnPending = [];
-        this.maxHpBeforeAttack = 0;
     }
     getPokemons() {
         const result = [];
@@ -66,6 +66,9 @@ class PokemonCardList extends card_list_1.CardList {
             else if (card.name === 'Claw Fossil') {
                 result.push(card);
             }
+            else if (card.name === 'Root Fossil') {
+                result.push(card);
+            }
         }
         return result;
     }
@@ -97,50 +100,48 @@ class PokemonCardList extends card_list_1.CardList {
         if ((pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.stage) === card_types_1.Stage.VUNION) {
             return false;
         }
-        // LV_X placed on a Basic Pokémon is not considered evolved
-        if ((pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.stage) === card_types_1.Stage.LV_X && pokemons.length === 2 && pokemons.some(p => p.stage === card_types_1.Stage.BASIC)) {
+        // LV_X placed on a Pokémon is not considered evolved
+        if ((pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.stage) === card_types_1.Stage.LV_X && pokemons.length === 2) {
             return false;
         }
         // Otherwise, it's evolved
         return true;
     }
-    clearAttackEffects() {
-        this.marker.markers = [];
+    /**
+     * Surgically remove only attack-sourced effects from this Pokemon.
+     * Unlike `clearEffects()`, this preserves special conditions, ability markers,
+     * and other non-attack state.
+     */
+    removeAttackEffects() {
+        this.marker.removeAttackEffects();
+        this.cannotAttackNextTurn = false;
+        this.cannotAttackNextTurnPending = false;
+        this.cannotUseAttacksNextTurn = [];
+        this.cannotUseAttacksNextTurnPending = [];
+        this.damageReductionNextTurn = 0;
     }
     clearEffects() {
-        this.marker.removeMarker(PokemonCardList.ATTACK_USED_MARKER);
-        this.marker.removeMarker(PokemonCardList.ATTACK_USED_2_MARKER);
-        this.marker.removeMarker(PokemonCardList.CLEAR_KNOCKOUT_MARKER);
-        this.marker.removeMarker(PokemonCardList.NEXT_TURN_MORE_DAMAGE_MARKER);
-        this.marker.removeMarker(PokemonCardList.NEXT_TURN_MORE_DAMAGE_MARKER_2);
-        this.marker.removeMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER);
-        this.marker.removeMarker(PokemonCardList.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER);
-        this.marker.removeMarker(PokemonCardList.PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN_MARKER);
-        this.marker.removeMarker(PokemonCardList.CLEAR_PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN_MARKER);
-        this.marker.removeMarker(PokemonCardList.DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER);
-        this.marker.removeMarker(PokemonCardList.CLEAR_DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER);
-        this.marker.removeMarker(PokemonCardList.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER);
-        this.marker.removeMarker(PokemonCardList.DURING_OPPONENTS_NEXT_TURN_DEFENDING_POKEMON_TAKES_MORE_DAMAGE_MARKER);
-        this.marker.removeMarker(PokemonCardList.CLEAR_DURING_OPPONENTS_NEXT_TURN_DEFENDING_POKEMON_TAKES_MORE_DAMAGE_MARKER);
-        this.marker.removeMarker(PokemonCardList.PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER);
-        this.marker.removeMarker(PokemonCardList.CLEAR_PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER);
-        this.marker.removeMarker(PokemonCardList.PREVENT_ALL_DAMAGE_BY_POKEMON_WITH_ABILITIES_MARKER);
-        this.marker.removeMarker(PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN);
-        this.marker.removeMarker(PokemonCardList.CLEAR_PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN);
-        this.marker.removeMarker(PokemonCardList.OPPONENT_CANNOT_PLAY_ITEM_CARDS_MARKER);
-        this.marker.removeMarker(PokemonCardList.PREVENT_ALL_DAMAGE_DONE_BY_OPPONENTS_BASIC_POKEMON_MARKER);
-        this.marker.removeMarker(PokemonCardList.CLEAR_PREVENT_ALL_DAMAGE_DONE_BY_OPPONENTS_BASIC_POKEMON_MARKER);
+        // Nuclear option: wipe all markers (used by evolution/KO)
         this.marker.markers = [];
         this.triggerEvolutionAnimation = false;
         this.showBasicAnimation = false;
         this.triggerAttackAnimation = false;
-        this.removeSpecialCondition(card_types_1.SpecialCondition.POISONED);
-        this.removeSpecialCondition(card_types_1.SpecialCondition.ASLEEP);
-        this.removeSpecialCondition(card_types_1.SpecialCondition.BURNED);
-        this.removeSpecialCondition(card_types_1.SpecialCondition.CONFUSED);
-        this.removeSpecialCondition(card_types_1.SpecialCondition.PARALYZED);
+        // Check if we're in an evolution context (preserved conditions are set)
+        const preservedConditions = this._preservedConditionsDuringEvolution || [];
+        // Only remove special conditions that are not preserved
+        const conditionsToRemove = [
+            card_types_1.SpecialCondition.POISONED,
+            card_types_1.SpecialCondition.ASLEEP,
+            card_types_1.SpecialCondition.BURNED,
+            card_types_1.SpecialCondition.CONFUSED,
+            card_types_1.SpecialCondition.PARALYZED
+        ].filter(condition => !preservedConditions.includes(condition));
+        conditionsToRemove.forEach(condition => {
+            this.removeSpecialCondition(condition);
+        });
         this.poisonDamage = 10;
         this.burnDamage = 20;
+        this.confusionDamage = 30;
         this.damageReductionNextTurn = 0;
         this.cannotAttackNextTurn = false;
         this.cannotAttackNextTurnPending = false;
@@ -173,6 +174,9 @@ class PokemonCardList extends card_list_1.CardList {
         }
         if (sp === card_types_1.SpecialCondition.BURNED) {
             this.burnDamage = 20;
+        }
+        if (sp === card_types_1.SpecialCondition.CONFUSED) {
+            this.confusionDamage = 30;
         }
         if (this.specialConditions.includes(sp)) {
             return;
@@ -210,7 +214,7 @@ class PokemonCardList extends card_list_1.CardList {
     }
     //Rule-Box Pokemon
     hasRuleBox() {
-        return this.cards.some(c => c.tags.includes(card_types_1.CardTag.POKEMON_ex) || c.tags.includes(card_types_1.CardTag.RADIANT) || c.tags.includes(card_types_1.CardTag.POKEMON_V) || c.tags.includes(card_types_1.CardTag.POKEMON_VMAX) || c.tags.includes(card_types_1.CardTag.POKEMON_VSTAR) || c.tags.includes(card_types_1.CardTag.POKEMON_GX) || c.tags.includes(card_types_1.CardTag.PRISM_STAR) || c.tags.includes(card_types_1.CardTag.BREAK) || c.tags.includes(card_types_1.CardTag.POKEMON_SV_MEGA));
+        return this.cards.some(c => c.tags.includes(card_types_1.CardTag.POKEMON_ex) || c.tags.includes(card_types_1.CardTag.RADIANT) || c.tags.includes(card_types_1.CardTag.POKEMON_V) || c.tags.includes(card_types_1.CardTag.POKEMON_VMAX) || c.tags.includes(card_types_1.CardTag.POKEMON_VSTAR) || c.tags.includes(card_types_1.CardTag.POKEMON_GX) || c.tags.includes(card_types_1.CardTag.PRISM_STAR) || c.tags.includes(card_types_1.CardTag.BREAK) || c.tags.includes(card_types_1.CardTag.POKEMON_SV_MEGA) || c.tags.includes(card_types_1.CardTag.LEGEND) || c.tags.includes(card_types_1.CardTag.POKEMON_LV_X) || c.tags.includes(card_types_1.CardTag.POKEMON_VUNION) || c.tags.includes(card_types_1.CardTag.TAG_TEAM) || c.tags.includes(card_types_1.CardTag.MEGA));
     }
     vPokemon() {
         return this.cards.some(c => c.tags.includes(card_types_1.CardTag.POKEMON_V) || c.tags.includes(card_types_1.CardTag.POKEMON_VMAX) || c.tags.includes(card_types_1.CardTag.POKEMON_VSTAR) || c.tags.includes(card_types_1.CardTag.POKEMON_VUNION));

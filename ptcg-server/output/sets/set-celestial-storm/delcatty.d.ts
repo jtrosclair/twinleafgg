@@ -8,7 +8,7 @@ export declare class Delcatty extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType[];
     powers: {
         name: string;

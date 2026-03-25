@@ -13,8 +13,8 @@ export declare class DevolutionSpray extends TrainerCard {
     trainerType: TrainerType;
     cardType: CardType;
     hp: number;
-    retreat: any[];
-    attacks: any[];
+    retreat: never[];
+    attacks: never[];
     text: string;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

@@ -5,6 +5,7 @@ import { PokemonCardList } from '../state/pokemon-card-list';
 import { Resistance, Weakness, Attack, Power } from '../card/pokemon-types';
 import { EnergyMap } from '../prompts/choose-energy-prompt';
 import { Card } from '../card/card';
+import { PokemonCard } from '../card/pokemon-card';
 import { CardList } from '../state/card-list';
 export declare enum CheckEffects {
     CHECK_HP_EFFECT = "CHECK_HP_EFFECT",
@@ -19,15 +20,16 @@ export declare enum CheckEffects {
     CHECK_POKEMON_PLAYED_TURN_EFFECT = "CHECK_POKEMON_PLAYED_TURN_EFFECT",
     CHECK_TABLE_STATE_EFFECT = "CHECK_TABLE_STATE_EFFECT",
     ADD_SPECIAL_CONDITIONS_EFFECT = "ADD_SPECIAL_CONDITIONS_EFFECT",
-    CHECK_PRIZES_DESTINATION_EFFECT = "CHECK_PRIZES_DESTINATION_EFFECT"
+    CHECK_PRIZES_DESTINATION_EFFECT = "CHECK_PRIZES_DESTINATION_EFFECT",
+    CHECK_SPECIAL_CONDITION_REMOVAL_EFFECT = "CHECK_SPECIAL_CONDITION_REMOVAL_EFFECT"
 }
 export declare class CheckPokemonPowersEffect implements Effect {
     readonly type: string;
     preventDefault: boolean;
     player: Player;
-    target: PokemonCardList;
+    target: PokemonCard;
     powers: Power[];
-    constructor(player: Player, target: PokemonCardList);
+    constructor(player: Player, target: PokemonCard);
 }
 export declare class CheckPokemonAttacksEffect implements Effect {
     readonly type: string;
@@ -108,12 +110,13 @@ export declare class AddSpecialConditionsPowerEffect implements Effect {
     preventDefault: boolean;
     poisonDamage?: number;
     burnDamage?: number;
+    confusionDamage?: number;
     sleepFlips?: number;
     specialConditions: SpecialCondition[];
     player: Player;
     source: Card;
     target: PokemonCardList;
-    constructor(player: Player, source: Card, target: PokemonCardList, specialConditions: SpecialCondition[], poisonDamage?: number, burnDamage?: number, sleepFlips?: number);
+    constructor(player: Player, source: Card, target: PokemonCardList, specialConditions: SpecialCondition[], poisonDamage?: number, burnDamage?: number, sleepFlips?: number, confusionDamage?: number);
 }
 export declare class CheckPrizesDestinationEffect implements Effect {
     readonly type: string;
@@ -121,4 +124,12 @@ export declare class CheckPrizesDestinationEffect implements Effect {
     player: Player;
     destination: CardList;
     constructor(player: Player, destination: CardList);
+}
+export declare class CheckSpecialConditionRemovalEffect implements Effect {
+    readonly type: string;
+    preventDefault: boolean;
+    player: Player;
+    target: PokemonCardList;
+    preservedConditions: SpecialCondition[];
+    constructor(player: Player, target: PokemonCardList);
 }

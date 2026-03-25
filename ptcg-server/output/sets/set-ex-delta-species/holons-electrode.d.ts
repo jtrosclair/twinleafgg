@@ -12,7 +12,7 @@ export declare class HolonsElectrode extends PokemonCard implements EnergyCard {
     weakness: {
         type: CardType.FIGHTING;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;

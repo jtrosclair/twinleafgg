@@ -7,7 +7,7 @@ export declare class Sneasel extends PokemonCard {
     weakness: {
         type: CardType.GRASS;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;

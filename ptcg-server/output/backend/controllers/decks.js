@@ -16,57 +16,12 @@ const game_1 = require("../../game");
 const controller_1 = require("./controller");
 const errors_1 = require("../common/errors");
 const storage_1 = require("../../storage");
-const theme_decks_1 = require("../../game/store/prefabs/theme-decks");
 const card_types_1 = require("../../game/store/card/card-types");
 const any_printing_allowed_1 = require("../../game/store/card/any-printing-allowed");
 class Decks extends controller_1.Controller {
     async onList(req, res) {
         res.send({ error: errors_1.ApiErrorEnum.PROFILE_INVALID });
         return;
-        const userId = req.body.userId;
-        const user = await storage_1.User.findOne(userId, { relations: ['decks'] });
-        if (user === undefined) {
-            res.send({ error: errors_1.ApiErrorEnum.PROFILE_INVALID });
-            return;
-        }
-        const decks = user.decks.map(deck => {
-            const cards = JSON.parse(deck.cards);
-            return Object.assign({ id: deck.id, name: deck.name, isValid: deck.isValid, cards, cardTypes: JSON.parse(deck.cardTypes), manualArchetype1: deck.manualArchetype1, manualArchetype2: deck.manualArchetype2, format: getValidFormatsForCardList(cards) }, (deck.artworks ? { artworks: JSON.parse(deck.artworks) } : {}));
-        });
-        // Inject theme decks (with negative IDs)
-        const themeDecks = theme_decks_1.THEME_DECKS.map(deck => (Object.assign(Object.assign({}, deck), { 
-            // Ensure the structure matches user decks
-            cardTypes: [], deckItems: [] })));
-        res.send({ ok: true, decks: [...decks, ...themeDecks] });
-    }
-    async onGet(req, res) {
-        res.send({ error: errors_1.ApiErrorEnum.DECK_INVALID });
-        return;
-        const userId = req.body.userId;
-        const deckId = parseInt(req.params.id, 10);
-        // Check if this is a theme deck
-        const themeDeck = theme_decks_1.THEME_DECKS.find(d => d.id === deckId);
-        if (themeDeck) {
-            res.send({ ok: true, deck: themeDeck });
-            return;
-        }
-        const entity = await storage_1.Deck.findOne(deckId, { relations: ['user'] });
-        if (entity === undefined || entity.user.id !== userId) {
-            res.send({ error: errors_1.ApiErrorEnum.DECK_INVALID });
-            return;
-        }
-        // Try to parse artworks from entity if present (future-proofing)
-        let artworks = undefined;
-        if (entity.artworks) {
-            try {
-                artworks = JSON.parse(entity.artworks);
-            }
-            catch (error) {
-                // Ignore parsing errors for artworks
-            }
-        }
-        const deck = Object.assign({ id: entity.id, name: entity.name, isValid: entity.isValid, cardTypes: JSON.parse(entity.cardTypes), cards: JSON.parse(entity.cards), manualArchetype1: entity.manualArchetype1, manualArchetype2: entity.manualArchetype2 }, (artworks ? { artworks } : {}));
-        res.send({ ok: true, deck });
     }
     async onSave(req, res) {
         const body = req.body;
@@ -389,13 +344,6 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], Decks.prototype, "onList", null);
-__decorate([
-    (0, controller_1.Get)('/get/:id'),
-    (0, services_1.AuthToken)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", Promise)
-], Decks.prototype, "onGet", null);
 __decorate([
     (0, controller_1.Post)('/save'),
     (0, services_1.AuthToken)(),

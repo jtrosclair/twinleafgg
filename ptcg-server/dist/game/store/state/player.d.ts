@@ -8,12 +8,14 @@ export declare class Player {
     id: number;
     name: string;
     deckId?: number;
+    sleeveImagePath?: string;
     deck: CardList;
     hand: CardList;
     discard: CardList;
     lostzone: CardList;
     stadium: CardList;
     supporter: CardList;
+    get playZone(): CardList;
     active: PokemonCardList;
     bench: PokemonCardList[];
     prizes: CardList[];
@@ -81,9 +83,15 @@ export declare class Player {
     prizesTaken: number;
     prizesTakenThisTurn: number;
     prizesTakenLastTurn: number;
+    playableCardIds: number[];
     gameStats: GameStats;
     getPrizeLeft(): number;
     forEachPokemon(player: PlayerType, handler: (cardList: PokemonCardList, pokemonCard: PokemonCard, target: CardTarget) => void): void;
+    /**
+     * Remove all attack-sourced markers from the player level.
+     * Preserves ability markers, trainer markers, and other non-attack state.
+     */
+    removeAttackEffects(): void;
     removePokemonEffects(target: PokemonCardList): void;
     getPokemonInPlay(): PokemonCardList[];
     vPokemon(): boolean;

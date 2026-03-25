@@ -11,7 +11,7 @@ export declare class Silcoon extends PokemonCard {
     weakness: {
         type: CardType.FIRE;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     powers: {
         name: string;

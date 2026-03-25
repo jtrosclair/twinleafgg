@@ -11,7 +11,7 @@ export declare class NoivernGX extends PokemonCard {
     weakness: {
         type: CardType.FAIRY;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: ({
         name: string;
         cost: (CardType.PSYCHIC | CardType.DARK | CardType.COLORLESS)[];

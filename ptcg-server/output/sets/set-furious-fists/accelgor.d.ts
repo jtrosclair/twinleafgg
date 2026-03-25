@@ -10,7 +10,7 @@ export declare class Accelgor extends PokemonCard {
     weakness: {
         type: CardType.FIRE;
     }[];
-    retreat: any[];
+    retreat: never[];
     readonly AFTERIMAGE_MARKER = "ACCELGOR_FFI_AFTERIMAGE_MARKER";
     readonly CLEAR_AFTERIMAGE_MARKER = "ACCELGOR_FFI_CLEAR_AFTERIMAGE_MARKER";
     attacks: ({

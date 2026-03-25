@@ -18,7 +18,7 @@ export declare class Gyarados extends PokemonCard {
     retreat: CardType.COLORLESS[];
     attacks: ({
         name: string;
-        cost: any[];
+        cost: never[];
         damage: number;
         damageCalculation: string;
         text: string;

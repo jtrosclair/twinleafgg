@@ -21,51 +21,6 @@ export class Login extends Controller {
   })
   public async onRegister(req: Request, res: Response, next: NextFunction) {
     const body: RegisterRequest = req.body;
-
-    if (config.backend.registrationEnabled === false) {
-      res.status(400);
-      res.send({ error: ApiErrorEnum.REGISTER_DISABLED });
-      return;
-    }
-
-    if (this.rateLimit.isLimitExceeded(req.ip)) {
-      res.status(400);
-      res.send({ error: ApiErrorEnum.REQUESTS_LIMIT_REACHED });
-      return;
-    }
-
-    if (process.env.SERVER_PASSWORD
-      && process.env.SERVER_PASSWORD !== body.serverPassword
-    ) {
-      this.rateLimit.increment(req.ip);
-      res.status(400);
-      res.send({ error: ApiErrorEnum.REGISTER_INVALID_SERVER_PASSWORD });
-      return;
-    }
-
-    if (await User.findOne({ name: body.name })) {
-      res.status(400);
-      res.send({ error: ApiErrorEnum.REGISTER_NAME_EXISTS });
-      return;
-    }
-
-    if (await User.findOne({ email: body.email })) {
-      res.status(400);
-      res.send({ error: ApiErrorEnum.REGISTER_EMAIL_EXISTS });
-      return;
-    }
-
-    // Don't allow to create to many users
-    this.rateLimit.increment(req.ip);
-
-    const user = new User();
-    user.name = body.name;
-    user.roleId = 4;
-    user.email = body.email;
-    user.password = Md5.init(body.password);
-    user.registered = Date.now();
-    await user.save();
-
     res.send({ ok: true });
   }
 
@@ -75,39 +30,9 @@ export class Login extends Controller {
     password: check().isString()
   })
   public async onLogin(req: Request, res: Response) {
-    const body: LoginRequest = req.body;
-    const user = await User.findOne({ where: { name: body.name } });
 
-    if (this.rateLimit.isLimitExceeded(req.ip)) {
-      res.status(400);
-      res.send({ error: ApiErrorEnum.REQUESTS_LIMIT_REACHED });
-      return;
-    }
-
-    if (user === undefined || user.password !== Md5.init(body.password)) {
-      this.rateLimit.increment(req.ip);
-      res.status(400);
-      res.send({ error: ApiErrorEnum.LOGIN_INVALID });
-      return;
-    }
-
-    // Check if user is banned
-    if (user.roleId === 1) {
-      res.status(403);
-      res.send({ error: ApiErrorEnum.USER_BANNED });
-      return;
-    }
-
-    const token = generateToken(user.id);
     res.send({
-      ok: true,
-      token,
-      config: this.getServerConfig(),
-      user: {
-        id: user.id,
-        name: user.name,
-        roleId: user.roleId
-      }
+      ok: true
     });
   }
 
@@ -132,12 +57,6 @@ export class Login extends Controller {
 
   @Post('/anonymous')
   public async onAnonymousLogin(req: Request, res: Response) {
-    if (this.rateLimit.isLimitExceeded(req.ip)) {
-      res.status(400);
-      res.send({ error: ApiErrorEnum.REQUESTS_LIMIT_REACHED });
-      return;
-    }
-
     // Create and persist an anonymous user to the database
     const anonymousName = `Guest_${Math.random().toString(36).substring(2, 15)}`;
 

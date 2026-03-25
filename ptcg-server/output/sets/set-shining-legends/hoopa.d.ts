@@ -3,7 +3,7 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 export declare class Hoopa extends PokemonCard {
-    tags: any[];
+    tags: never[];
     stage: Stage;
     cardType: CardType;
     hp: number;

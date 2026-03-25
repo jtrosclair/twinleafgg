@@ -6,7 +6,7 @@ export declare class Sableye extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    weakness: any[];
+    weakness: never[];
     retreat: CardType.COLORLESS[];
     attacks: ({
         name: string;

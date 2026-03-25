@@ -19,7 +19,7 @@ export declare class AlolanSandslash extends PokemonCard {
     readonly CLEAR_CURVE_STRIKE_MARKER = "ALOLAN_SANDSLASH_CEC_CLEAR_CURVE_STRIKE_MARKER";
     attacks: ({
         name: string;
-        cost: any[];
+        cost: never[];
         damage: number;
         text: string;
         damageCalculation?: undefined;

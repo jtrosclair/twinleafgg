@@ -10,19 +10,17 @@ const card_types_1 = require("../card/card-types");
  */
 function emitAnimationEvent(store, eventName, data) {
     const game = store.handler;
-    if (game && game.core && typeof game.core.emitToGame === 'function') {
-        game.core.emitToGame(game.id, `game[${game.id}]:${eventName}`, data);
+    if (game && game.core && typeof game.core.emit === 'function') {
+        game.core.emit((c) => {
+            if (typeof c.socket !== 'undefined') {
+                c.socket.emit(`game[${game.id}]:${eventName}`, data);
+            }
+        });
     }
 }
 function playPokemonFromDeckReducer(store, state, effect) {
     /* Play pokemon card from deck */
     if (effect instanceof play_card_effects_1.PlayPokemonFromDeckEffect) {
-        const stage = effect.pokemonCard.stage;
-        const isBasic = stage === card_types_1.Stage.BASIC;
-        // Only allow Basic Pokémon to be played from deck
-        if (!isBasic) {
-            throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_TARGET);
-        }
         // Check if target is empty (for Basic Pokémon)
         if (effect.target.cards.length === 0) {
             store.log(state, game_message_1.GameLog.LOG_PLAYER_PLAYS_BASIC_POKEMON, {

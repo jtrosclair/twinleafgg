@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PlayPokemonFromDeckEffect = exports.TrainerTargetEffect = exports.DiscardToHandEffect = exports.TrainerToDeckEffect = exports.CoinFlipEffect = exports.SupporterEffect = exports.ToolEffect = exports.EnergyEffect = exports.TrainerEffect = exports.PlayItemEffect = exports.AttachPokemonToolEffect = exports.PlayStadiumEffect = exports.PlaySupporterEffect = exports.PlayPokemonEffect = exports.AttachEnergyEffect = exports.PlayCardEffects = void 0;
+exports.PlayPokemonFromDeckEffect = exports.TrainerTargetEffect = exports.DiscardToHandEffect = exports.TrainerToDeckEffect = exports.CoinFlipSequenceEffect = exports.CoinFlipEffect = exports.SupporterEffect = exports.ToolEffect = exports.EnergyEffect = exports.TrainerEffect = exports.PlayItemEffect = exports.AttachPokemonToolEffect = exports.PlayStadiumEffect = exports.PlaySupporterEffect = exports.PlayPokemonEffect = exports.AttachEnergyEffect = exports.PlayCardEffects = void 0;
 const card_types_1 = require("../card/card-types");
 var PlayCardEffects;
 (function (PlayCardEffects) {
@@ -16,6 +16,7 @@ var PlayCardEffects;
     PlayCardEffects["TOOL_EFFECT"] = "TOOL_EFFECT";
     PlayCardEffects["SUPPORTER_EFFECT"] = "SUPPORTER_EFFECT";
     PlayCardEffects["COIN_FLIP_EFFECT"] = "COIN_FLIP_EFFECT";
+    PlayCardEffects["COIN_FLIP_SEQUENCE_EFFECT"] = "COIN_FLIP_SEQUENCE_EFFECT";
     PlayCardEffects["TRAINER_CARD_TO_DECK_EFFECT"] = "TRAINER_CARD_TO_DECK_EFFECT";
     PlayCardEffects["DISCARD_TO_HAND_EFFECT"] = "DISCARD_TO_HAND_EFFECT";
     PlayCardEffects["TRAINER_TARGET_EFFECT"] = "TRAINER_TARGET_EFFECT";
@@ -130,6 +131,16 @@ class CoinFlipEffect {
     }
 }
 exports.CoinFlipEffect = CoinFlipEffect;
+class CoinFlipSequenceEffect {
+    constructor(player, mode, callback) {
+        this.type = PlayCardEffects.COIN_FLIP_SEQUENCE_EFFECT;
+        this.preventDefault = false;
+        this.player = player;
+        this.mode = mode;
+        this.callback = callback;
+    }
+}
+exports.CoinFlipSequenceEffect = CoinFlipSequenceEffect;
 class TrainerToDeckEffect {
     constructor(player, card) {
         this.type = PlayCardEffects.TRAINER_CARD_TO_DECK_EFFECT;

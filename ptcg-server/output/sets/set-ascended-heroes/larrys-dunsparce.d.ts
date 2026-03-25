@@ -8,8 +8,8 @@ export declare class LarrysDunsparce extends PokemonCard {
     weakness: {
         type: CardType.FIGHTING;
     }[];
-    resistance: any[];
-    retreat: any[];
+    resistance: never[];
+    retreat: never[];
     attacks: {
         name: string;
         cost: CardType.COLORLESS[];

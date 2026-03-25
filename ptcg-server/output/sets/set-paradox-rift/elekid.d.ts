@@ -9,10 +9,10 @@ export declare class Elekid extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: {
         name: string;
-        cost: any[];
+        cost: never[];
         damage: number;
         text: string;
     }[];

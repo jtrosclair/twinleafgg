@@ -45,24 +45,6 @@ class BotClient {
     }
     async loadDeck() {
         return [];
-        // If a pending deck was set (passed during game creation), use it
-        if (this.pendingDeck) {
-            const deck = this.pendingDeck;
-            this.pendingDeck = null;
-            return deck;
-        }
-        const deckRows = await storage_1.Deck.find({
-            user: { id: this.user.id },
-            isValid: true
-        });
-        const decks = deckRows
-            .map(d => JSON.parse(d.cards))
-            .filter((cards) => this.validateDeck(cards));
-        if (decks.length === 0) {
-            throw new game_error_1.GameError(game_message_1.GameMessage.ERROR_BOT_NO_DECK);
-        }
-        const num = Math.round(Math.random() * (decks.length - 1));
-        return decks[num];
     }
     validateDeck(cards) {
         const cardManager = card_manager_1.CardManager.getInstance();

@@ -10,7 +10,7 @@ export declare class Beedrill extends PokemonCard {
     weakness: {
         type: CardType.FIRE;
     }[];
-    retreat: any[];
+    retreat: never[];
     readonly ALLERGIC_SHOCK_MARKER = "BEEDRILL_PRC_ALLERGIC_SHOCK_MARKER";
     readonly CLEAR_ALLERGIC_SHOCK_MARKER = "BEEDRILL_PRC_CLEAR_ALLERGIC_SHOCK_MARKER";
     attacks: ({

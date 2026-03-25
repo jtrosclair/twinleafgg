@@ -8,7 +8,7 @@ export declare class Venomoth extends PokemonCard {
     weakness: {
         type: import("../../game").CardType.FIRE;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: ({
         name: string;
         cost: import("../../game").CardType.COLORLESS[];

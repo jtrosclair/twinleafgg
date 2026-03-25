@@ -24,7 +24,7 @@ class ChoosePokemonPrompt extends prompt_1.Prompt {
     }
     decode(result, state) {
         if (result === null) {
-            return result; // operation cancelled
+            return null; // operation cancelled
         }
         const player = state.players.find(p => p.id === this.playerId);
         const opponent = state.players.find(p => p.id !== this.playerId);

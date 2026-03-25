@@ -6,7 +6,7 @@ export declare class Wynaut extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    retreat: any[];
+    retreat: never[];
     readonly PEPPY_PICK_MARKER = "WYNAUT_UNM_PEPPY_PICK_MARKER";
     powers: {
         name: string;

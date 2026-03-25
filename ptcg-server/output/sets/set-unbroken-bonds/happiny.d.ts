@@ -6,7 +6,7 @@ export declare class Happiny extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    retreat: any[];
+    retreat: never[];
     readonly PLAYHOUSE_HEAL_MARKER = "HAPPINY_PLAYHOUSE_HEAL_MARKER";
     powers: {
         name: string;

@@ -27,7 +27,7 @@ class MoveEnergyPrompt extends prompt_1.Prompt {
     }
     decode(result, state) {
         if (result === null) {
-            return result; // operation cancelled
+            return null; // operation cancelled
         }
         const player = state.players.find(p => p.id === this.playerId);
         if (player === undefined) {

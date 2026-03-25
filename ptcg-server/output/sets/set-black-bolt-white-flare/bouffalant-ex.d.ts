@@ -11,7 +11,7 @@ export declare class Bouffalantex extends PokemonCard {
     weakness: {
         type: import("../../game").CardType.FIGHTING;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: import("../../game").CardType.COLORLESS[];
     powers: {
         name: string;

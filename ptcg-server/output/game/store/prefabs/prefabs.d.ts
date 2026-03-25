@@ -147,7 +147,7 @@ export declare function TAKE_SPECIFIC_PRIZES(store: StoreLike, state: State, pla
 export declare function TAKE_X_PRIZES(store: StoreLike, state: State, player: Player, count: number, options?: TakeXPrizesOptions, callback?: (chosenPrizes: CardList[]) => void): State;
 export declare function TAKE_X_MORE_PRIZE_CARDS(effect: KnockOutEffect, state: State): State;
 export declare function PLAY_POKEMON_FROM_HAND_TO_BENCH(state: State, player: Player, card: Card): void;
-export declare function DEVOLVE_POKEMON(store: StoreLike, state: State, target: PokemonCardList, destination: CardList): State;
+export declare function DEVOLVE_POKEMON(store: StoreLike, state: State, target: PokemonCardList, destination: CardList): State | undefined;
 export type DevolutionDestination = 'hand' | 'deck' | 'discard' | 'lostzone';
 /**
  * Compound helper for text like:
@@ -340,7 +340,7 @@ export declare function CAN_EVOLVE_ON_FIRST_TURN_GOING_SECOND(state: State, play
  * Finds `card` and moves it from its current CardList to `destination`.
  */
 export declare function MOVE_CARD_TO(state: State, card: Card, destination: CardList): void;
-export declare function SWITCH_ACTIVE_WITH_BENCHED(store: StoreLike, state: State, player: Player): State;
+export declare function SWITCH_ACTIVE_WITH_BENCHED(store: StoreLike, state: State, player: Player): State | undefined;
 export interface SwitchInOpponentBenchedPokemonOptions {
     allowCancel?: boolean;
     blocked?: CardTarget[];

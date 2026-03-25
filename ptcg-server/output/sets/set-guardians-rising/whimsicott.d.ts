@@ -14,7 +14,7 @@ export declare class Whimsicott extends PokemonCard {
         type: CardType.DARK;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: ({
         name: string;
         cost: CardType.COLORLESS[];

@@ -20,7 +20,7 @@ class ChooseAttackPrompt extends prompt_1.Prompt {
     }
     decode(result, state) {
         if (result === null) {
-            return result; // operation cancelled
+            return null; // operation cancelled
         }
         const index = result.index;
         if (index < 0 || index >= this.cards.length) {

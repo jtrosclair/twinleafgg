@@ -11,7 +11,7 @@ export declare class Lycanroc extends PokemonCard {
     weakness: {
         type: CardType.GRASS;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     powers: Power[];
     attacks: Attack[];

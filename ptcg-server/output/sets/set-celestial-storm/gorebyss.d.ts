@@ -10,7 +10,7 @@ export declare class Gorebyss extends PokemonCard {
     weakness: {
         type: CardType.GRASS;
     }[];
-    retreat: any[];
+    retreat: never[];
     readonly DEFLECTING_SPLASH_MARKER = "GOREBYSS_CES_DEFLECTING_SPLASH_MARKER";
     readonly CLEAR_DEFLECTING_SPLASH_MARKER = "GOREBYSS_CES_CLEAR_DEFLECTING_SPLASH_MARKER";
     attacks: {

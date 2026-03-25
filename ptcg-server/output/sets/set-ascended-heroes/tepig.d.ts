@@ -6,7 +6,7 @@ export declare class Tepig extends PokemonCard {
     weakness: {
         type: CardType.WATER;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;

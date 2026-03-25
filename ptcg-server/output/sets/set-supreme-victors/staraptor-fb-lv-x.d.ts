@@ -13,7 +13,7 @@ export declare class StaraptorFBLVX extends PokemonCard {
         type: import("../../game").CardType.FIGHTING;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;

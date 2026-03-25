@@ -12,7 +12,7 @@ export declare class MarillMisprint extends Marill {
     set: string;
     setNumber: string;
     fullName: string;
-    retreat: any[];
+    retreat: never[];
 }
 export declare class MysteriousFossilSS extends MysteriousFossil {
     set: string;

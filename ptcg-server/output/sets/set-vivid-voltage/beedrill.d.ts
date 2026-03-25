@@ -8,7 +8,7 @@ export declare class Beedrill extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    retreat: any[];
+    retreat: never[];
     set: string;
     setNumber: string;
     cardImage: string;

@@ -11,7 +11,7 @@ export declare class CynthiasGarchompex extends PokemonCard {
     weakness: {
         type: CardType.GRASS;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: {
         name: string;
         cost: CardType.FIGHTING[];

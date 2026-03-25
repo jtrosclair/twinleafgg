@@ -8,7 +8,7 @@ export declare class LarrysKomala extends PokemonCard {
     weakness: {
         type: CardType.LIGHTNING;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     powers: {
         name: string;

@@ -19,7 +19,7 @@ export declare class Wynaut extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: any[];
+        cost: never[];
         damage: number;
         text: string;
     }[];

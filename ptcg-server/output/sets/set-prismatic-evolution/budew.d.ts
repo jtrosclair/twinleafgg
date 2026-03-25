@@ -9,10 +9,10 @@ export declare class Budew extends PokemonCard {
     weakness: {
         type: CardType.FIRE;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: {
         name: string;
-        cost: any[];
+        cost: never[];
         damage: number;
         text: string;
     }[];

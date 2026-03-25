@@ -10,7 +10,7 @@ export declare class Nidorina extends PokemonCard {
     weakness: {
         type: CardType.PSYCHIC;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;

@@ -6,7 +6,7 @@ export declare class Azurill extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    retreat: any[];
+    retreat: never[];
     readonly GROWING_UP_MARKER = "AZURILL_CEC_GROWING_UP_MARKER";
     powers: {
         name: string;

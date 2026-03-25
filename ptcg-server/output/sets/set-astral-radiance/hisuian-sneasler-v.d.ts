@@ -10,10 +10,10 @@ export declare class HisuianSneaslerV extends PokemonCard {
     weakness: {
         type: CardType.FIGHTING;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: ({
         name: string;
-        cost: any[];
+        cost: never[];
         damage: number;
         text: string;
         damageCalculation?: undefined;

@@ -12,7 +12,7 @@ export declare class Dragonite extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType[];
     powers: {
         name: string;

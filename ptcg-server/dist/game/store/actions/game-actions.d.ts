@@ -38,6 +38,11 @@ export declare class RetreatAction implements Action {
     readonly type: string;
     constructor(clientId: number, benchIndex: number);
 }
+export declare class RetreatStartAction implements Action {
+    clientId: number;
+    readonly type: string;
+    constructor(clientId: number);
+}
 export declare class PassTurnAction implements Action {
     clientId: number;
     readonly type: string;

@@ -11,7 +11,7 @@ export declare class Cinderace extends PokemonCard {
     weakness: {
         type: CardType.WATER;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;

@@ -11,7 +11,7 @@ export declare class Delcattyex extends PokemonCard {
     weakness: {
         type: CardType.FIGHTING;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;

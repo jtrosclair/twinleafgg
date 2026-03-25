@@ -75,34 +75,12 @@ export class Replays extends Controller {
   public async onMatchGet(req: Request, res: Response) {
     res.send({ error: ApiErrorEnum.PROFILE_INVALID });
     return;
-    const matchId: number = parseInt(req.params.id, 10);
-    const entity = await Match.findOne(matchId);
-
-    if (entity === undefined) {
-      res.send({ error: ApiErrorEnum.GAME_INVALID_ID });
-      return;
-    }
-
-    const base64 = new Base64();
-    const replayData = base64.encode(entity.replayData);
-    res.send({ ok: true, replayData });
   }
 
   @Get('/get/:id')
   @AuthToken()
   public async onGet(req: Request, res: Response) {
-    const userId: number = req.body.userId;
-    const replayId: number = parseInt(req.params.id, 10);
-    const entity = await Replay.findOne(replayId, { relations: ['user'] });
-
-    if (entity === undefined || entity.user.id !== userId) {
-      res.send({ error: ApiErrorEnum.REPLAY_INVALID });
-      return;
-    }
-
-    const base64 = new Base64();
-    const replayData = base64.encode(entity.replayData);
-    res.send({ ok: true, replayData });
+    res.send({ ok: true });
   }
 
   @Post('/save')

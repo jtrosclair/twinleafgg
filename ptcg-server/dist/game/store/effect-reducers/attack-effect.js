@@ -213,6 +213,12 @@ function attackReducer(store, state, effect) {
         if (effect.poisonDamage !== undefined) {
             target.poisonDamage = effect.poisonDamage;
         }
+        if (effect.burnDamage !== undefined) {
+            target.burnDamage = effect.burnDamage;
+        }
+        if (effect.confusionDamage !== undefined) {
+            target.confusionDamage = effect.confusionDamage;
+        }
         return state;
     }
     if (effect instanceof attack_effects_1.RemoveSpecialConditionsEffect) {

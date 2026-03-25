@@ -13,7 +13,7 @@ export declare class Bulbasaur extends PokemonCard {
     retreat: CardType.COLORLESS[];
     attacks: ({
         name: string;
-        cost: any[];
+        cost: never[];
         damage: number;
         text: string;
         damageCalculation?: undefined;

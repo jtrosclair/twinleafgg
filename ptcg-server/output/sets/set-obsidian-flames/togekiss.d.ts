@@ -10,7 +10,7 @@ export declare class Togekiss extends PokemonCard {
     weakness: {
         type: CardType.METAL;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;

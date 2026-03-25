@@ -11,10 +11,10 @@ export declare class AlolanRattata extends PokemonCard {
         type: CardType;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: {
         name: string;
-        cost: any[];
+        cost: never[];
         damage: number;
         text: string;
     }[];

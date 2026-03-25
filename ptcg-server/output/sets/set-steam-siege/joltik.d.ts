@@ -11,7 +11,7 @@ export declare class Joltik extends PokemonCard {
         type: CardType.METAL;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: {
         name: string;
         cost: CardType.LIGHTNING[];

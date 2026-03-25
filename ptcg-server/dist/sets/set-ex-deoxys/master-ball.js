@@ -5,7 +5,6 @@ const trainer_card_1 = require("../../game/store/card/trainer-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const trainer_prefabs_1 = require("../../game/store/prefabs/trainer-prefabs");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class MasterBall extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -49,7 +48,6 @@ class MasterBall extends trainer_card_1.TrainerCard {
                         state = store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, chosenCards), () => state);
                     }
                 }
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                     player.deck.applyOrder(order);
                 });

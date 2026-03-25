@@ -8,8 +8,8 @@ export declare class Tatsugiri extends PokemonCard {
     regulationMark: string;
     cardType: CardType;
     hp: number;
-    weakness: any[];
-    resistance: any[];
+    weakness: never[];
+    resistance: never[];
     retreat: CardType[];
     powers: {
         name: string;

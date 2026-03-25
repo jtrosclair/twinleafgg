@@ -13,7 +13,7 @@ export declare class Emolga extends PokemonCard {
         type: CardType.FIGHTING;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     readonly NUZZLY_GATHERING_MARKER = "NUZZLY_GATHERING_MARKER";
     powers: {
         name: string;

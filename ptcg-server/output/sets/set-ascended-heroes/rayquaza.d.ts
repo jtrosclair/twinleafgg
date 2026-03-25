@@ -6,8 +6,8 @@ export declare class Rayquaza extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    weakness: any[];
-    resistance: any[];
+    weakness: never[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     attacks: ({
         name: string;

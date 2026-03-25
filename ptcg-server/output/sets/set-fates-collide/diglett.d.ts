@@ -7,7 +7,7 @@ export declare class Diglett extends PokemonCard {
     weakness: {
         type: CardType.GRASS;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: {
         name: string;
         cost: CardType.FIGHTING[];

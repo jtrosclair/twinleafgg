@@ -4,7 +4,7 @@ export declare class Mimikyu extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    weakness: any[];
+    weakness: never[];
     retreat: CardType.COLORLESS[];
     attacks: ({
         name: string;

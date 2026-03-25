@@ -28,43 +28,6 @@ export class ResetPassword extends Controller {
     res.status(400);
     res.send({ error: ApiErrorEnum.REQUESTS_LIMIT_REACHED });
     return;
-    const body: { email: string, language?: string } = req.body;
-
-    if (this.rateLimit.isLimitExceeded(req.ip)) {
-      res.status(400);
-      res.send({ error: ApiErrorEnum.REQUESTS_LIMIT_REACHED });
-      return;
-    }
-
-    // Don't allow to create to many reset-password requests
-    this.rateLimit.increment(req.ip);
-
-    const user = await User.findOne({ email: body.email });
-
-    if (user === undefined) {
-      res.status(400);
-      res.send({ error: ApiErrorEnum.LOGIN_INVALID });
-      return;
-    }
-
-    const token = this.generateToken(user.id);
-    const language = body.language ? String(body.language) : 'en';
-    const template = resetPasswordTemplates[language] || resetPasswordTemplates['en'];
-    const params = {
-      appName: config.email.appName,
-      publicAddress: config.email.publicAddress,
-      token
-    };
-
-    try {
-      await this.mailer.sendEmail(body.email, template, params);
-    } catch (error) {
-      res.status(400);
-      res.send({ error: ApiErrorEnum.CANNOT_SEND_MESSAGE });
-      return;
-    }
-
-    res.send({ ok: true });
   }
 
   @Post('/changePassword')

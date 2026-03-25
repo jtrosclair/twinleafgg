@@ -16,7 +16,7 @@ export declare class Abra extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: Attack[];
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

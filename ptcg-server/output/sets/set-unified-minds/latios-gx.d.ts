@@ -10,7 +10,7 @@ export declare class LatiosGx extends PokemonCard {
     weakness: {
         type: CardType.PSYCHIC;
     }[];
-    retreat: any[];
+    retreat: never[];
     readonly TAG_PURGE_MARKER = "LATIOS_GX_UNM_TAG_PURGE_MARKER";
     readonly CLEAR_TAG_PURGE_MARKER = "LATIOS_GX_UNM_CLEAR_TAG_PURGE_MARKER";
     readonly CLEAR_VISION_MARKER = "LATIOS_GX_UNM_CLEAR_VISION_MARKER";

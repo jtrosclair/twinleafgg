@@ -12,6 +12,7 @@ export declare abstract class PokemonCard extends Card {
     evolvesFrom: string;
     evolvesTo: string[];
     evolvesToStage: Stage[];
+    evolvesFromBase: string[];
     legacyFullName?: string;
     stage: Stage;
     retreat: CardType[];

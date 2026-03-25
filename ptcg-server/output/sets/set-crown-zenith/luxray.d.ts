@@ -12,7 +12,7 @@ export declare class Luxray extends PokemonCard {
     weakness: {
         type: CardType.FIGHTING;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;

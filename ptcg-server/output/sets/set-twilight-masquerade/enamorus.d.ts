@@ -9,7 +9,7 @@ export declare class Enamorus extends PokemonCard {
     weakness: {
         type: CardType.METAL;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     attacks: ({
         name: string;

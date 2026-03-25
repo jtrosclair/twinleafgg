@@ -7,7 +7,7 @@ export declare class Chimchar extends PokemonCard {
     weakness: {
         type: CardType.WATER;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: {
         name: string;
         cost: CardType.FIRE[];

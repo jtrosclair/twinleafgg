@@ -11,7 +11,7 @@ export declare class Garchomp extends PokemonCard {
         type: CardType.COLORLESS;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;

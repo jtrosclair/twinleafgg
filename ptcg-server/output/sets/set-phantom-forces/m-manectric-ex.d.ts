@@ -15,7 +15,7 @@ export declare class MManectricEx extends PokemonCard {
         type: CardType.METAL;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: {
         name: string;
         cost: (CardType.LIGHTNING | CardType.COLORLESS)[];

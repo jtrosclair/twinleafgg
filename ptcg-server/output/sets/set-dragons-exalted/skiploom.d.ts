@@ -14,7 +14,7 @@ export declare class Skiploom extends PokemonCard {
         type: CardType.WATER;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: {
         name: string;
         cost: CardType.GRASS[];

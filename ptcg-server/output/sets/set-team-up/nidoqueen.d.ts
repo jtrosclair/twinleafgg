@@ -11,7 +11,7 @@ export declare class Nidoqueen extends PokemonCard {
     weakness: {
         type: import("../../game").CardType.PSYCHIC;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: import("../../game").CardType.COLORLESS[];
     powers: {
         name: string;

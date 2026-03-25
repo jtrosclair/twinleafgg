@@ -12,7 +12,7 @@ export declare class Magneton extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType[];
     attacks: {
         name: string;

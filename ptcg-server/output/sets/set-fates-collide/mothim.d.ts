@@ -14,7 +14,7 @@ export declare class Mothim extends PokemonCard {
         type: CardType.FIGHTING;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         useWhenInPlay: boolean;

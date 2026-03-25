@@ -7,8 +7,8 @@ export declare class Haxorus extends PokemonCard {
     evolvesFrom: string;
     cardType: import("../../game").CardType.DRAGON;
     hp: number;
-    weakness: any[];
-    resistance: any[];
+    weakness: never[];
+    resistance: never[];
     retreat: import("../../game").CardType.COLORLESS[];
     attacks: ({
         name: string;

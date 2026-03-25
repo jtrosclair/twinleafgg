@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CheckPrizesDestinationEffect = exports.AddSpecialConditionsPowerEffect = exports.CheckTableStateEffect = exports.CheckProvidedEnergyEffect = exports.CheckAttackCostEffect = exports.CheckRetreatCostEffect = exports.CheckPokemonTypeEffect = exports.CheckPokemonStatsEffect = exports.CheckPokemonPlayedTurnEffect = exports.CheckHpEffect = exports.CheckPokemonAttacksEffect = exports.CheckPokemonPowersEffect = exports.CheckEffects = void 0;
+exports.CheckSpecialConditionRemovalEffect = exports.CheckPrizesDestinationEffect = exports.AddSpecialConditionsPowerEffect = exports.CheckTableStateEffect = exports.CheckProvidedEnergyEffect = exports.CheckAttackCostEffect = exports.CheckRetreatCostEffect = exports.CheckPokemonTypeEffect = exports.CheckPokemonStatsEffect = exports.CheckPokemonPlayedTurnEffect = exports.CheckHpEffect = exports.CheckPokemonAttacksEffect = exports.CheckPokemonPowersEffect = exports.CheckEffects = void 0;
 const card_types_1 = require("../card/card-types");
 var CheckEffects;
 (function (CheckEffects) {
@@ -17,6 +17,7 @@ var CheckEffects;
     CheckEffects["CHECK_TABLE_STATE_EFFECT"] = "CHECK_TABLE_STATE_EFFECT";
     CheckEffects["ADD_SPECIAL_CONDITIONS_EFFECT"] = "ADD_SPECIAL_CONDITIONS_EFFECT";
     CheckEffects["CHECK_PRIZES_DESTINATION_EFFECT"] = "CHECK_PRIZES_DESTINATION_EFFECT";
+    CheckEffects["CHECK_SPECIAL_CONDITION_REMOVAL_EFFECT"] = "CHECK_SPECIAL_CONDITION_REMOVAL_EFFECT";
 })(CheckEffects = exports.CheckEffects || (exports.CheckEffects = {}));
 class CheckPokemonPowersEffect {
     constructor(player, target) {
@@ -24,8 +25,7 @@ class CheckPokemonPowersEffect {
         this.preventDefault = false;
         this.player = player;
         this.target = target;
-        const pokemonCard = target.getPokemonCard();
-        this.powers = pokemonCard ? pokemonCard.powers : [];
+        this.powers = target.powers;
     }
 }
 exports.CheckPokemonPowersEffect = CheckPokemonPowersEffect;
@@ -153,7 +153,7 @@ class CheckTableStateEffect {
 }
 exports.CheckTableStateEffect = CheckTableStateEffect;
 class AddSpecialConditionsPowerEffect {
-    constructor(player, source, target, specialConditions, poisonDamage = 10, burnDamage = 20, sleepFlips = 1) {
+    constructor(player, source, target, specialConditions, poisonDamage = 10, burnDamage = 20, sleepFlips = 1, confusionDamage = 30) {
         this.type = CheckEffects.ADD_SPECIAL_CONDITIONS_EFFECT;
         this.preventDefault = false;
         this.player = player;
@@ -162,6 +162,7 @@ class AddSpecialConditionsPowerEffect {
         this.specialConditions = specialConditions;
         this.poisonDamage = poisonDamage;
         this.burnDamage = burnDamage;
+        this.confusionDamage = confusionDamage;
         this.sleepFlips = sleepFlips;
     }
 }
@@ -175,3 +176,13 @@ class CheckPrizesDestinationEffect {
     }
 }
 exports.CheckPrizesDestinationEffect = CheckPrizesDestinationEffect;
+class CheckSpecialConditionRemovalEffect {
+    constructor(player, target) {
+        this.type = CheckEffects.CHECK_SPECIAL_CONDITION_REMOVAL_EFFECT;
+        this.preventDefault = false;
+        this.preservedConditions = [];
+        this.player = player;
+        this.target = target;
+    }
+}
+exports.CheckSpecialConditionRemovalEffect = CheckSpecialConditionRemovalEffect;

@@ -10,7 +10,7 @@ export declare class Parasect extends PokemonCard {
     weakness: {
         type: CardType.FIRE;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     powers: {
         name: string;

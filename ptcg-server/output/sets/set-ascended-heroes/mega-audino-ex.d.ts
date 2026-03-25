@@ -8,7 +8,7 @@ export declare class MegaAudinoex extends PokemonCard {
     weakness: {
         type: CardType.FIGHTING;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     attacks: ({
         name: string;

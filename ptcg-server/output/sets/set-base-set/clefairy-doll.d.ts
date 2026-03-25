@@ -10,11 +10,11 @@ export declare class ClefairyDoll extends TrainerCard {
     set: string;
     fullName: string;
     evolvesFrom: string;
-    cardTag: any[];
-    tools: any[];
-    archetype: any[];
-    evolvesTo: any[];
-    evolvesToStage: any[];
+    cardTag: never[];
+    tools: never[];
+    archetype: never[];
+    evolvesTo: never[];
+    evolvesToStage: never[];
     trainerType: TrainerType;
     hp: number;
     stage: Stage;
@@ -26,10 +26,10 @@ export declare class ClefairyDoll extends TrainerCard {
     allowSubsequentAttackChoice: boolean;
     evolvesFromBase: string[];
     maxTools: number;
-    weakness: any[];
-    resistance: any[];
-    retreat: any[];
-    attacks: any[];
+    weakness: never[];
+    resistance: never[];
+    retreat: never[];
+    attacks: never[];
     powers: {
         name: string;
         powerType: PowerType;

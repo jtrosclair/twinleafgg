@@ -6,7 +6,7 @@ export declare class Pichu extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;
@@ -14,7 +14,7 @@ export declare class Pichu extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: any[];
+        cost: never[];
         damage: number;
         text: string;
     }[];

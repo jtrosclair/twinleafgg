@@ -10,7 +10,7 @@ export declare class Garchomp extends PokemonCard {
     weakness: {
         type: CardType.FAIRY;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: ({
         name: string;
         cost: CardType.COLORLESS[];

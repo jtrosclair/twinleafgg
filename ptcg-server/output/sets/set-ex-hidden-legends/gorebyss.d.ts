@@ -10,7 +10,7 @@ export declare class Gorebyss extends PokemonCard {
     weakness: {
         type: CardType.LIGHTNING;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: ({
         name: string;
         cost: CardType.COLORLESS[];

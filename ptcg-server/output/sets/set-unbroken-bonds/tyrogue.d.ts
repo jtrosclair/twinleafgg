@@ -6,7 +6,7 @@ export declare class Tyrogue extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;

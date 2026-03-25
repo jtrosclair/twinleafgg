@@ -10,7 +10,7 @@ export declare class Weavile extends PokemonCard {
     weakness: {
         type: CardType.METAL;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: {
         name: string;
         cost: (CardType.DARK | CardType.COLORLESS)[];

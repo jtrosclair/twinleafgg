@@ -11,7 +11,7 @@ export declare class Beedrill extends PokemonCard {
         type: CardType.FIRE;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: ({
         name: string;
         cost: CardType.GRASS[];

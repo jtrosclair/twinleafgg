@@ -7,7 +7,7 @@ export declare class Zapdos extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    weakness: any[];
+    weakness: never[];
     resistance: {
         type: CardType;
         value: number;

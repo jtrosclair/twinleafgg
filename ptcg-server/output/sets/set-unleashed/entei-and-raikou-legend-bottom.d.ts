@@ -13,7 +13,7 @@ export declare class EnteiAndRaikouLegendBottom extends PokemonCard {
     } | {
         type: import("../../game").CardType.FIGHTING;
     })[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         text: string;

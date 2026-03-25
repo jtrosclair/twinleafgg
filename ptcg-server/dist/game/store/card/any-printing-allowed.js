@@ -55,5 +55,6 @@ exports.ANY_PRINTING_ALLOWED = [
     'Tool Scrapper',
     'Double Colorless Energy',
     'Lady',
-    'Max Potion'
+    'Max Potion',
+    'Pokédex'
 ];

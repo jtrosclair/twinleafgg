@@ -29,37 +29,6 @@ class ResetPassword extends controller_1.Controller {
         res.status(400);
         res.send({ error: errors_1.ApiErrorEnum.REQUESTS_LIMIT_REACHED });
         return;
-        const body = req.body;
-        if (this.rateLimit.isLimitExceeded(req.ip)) {
-            res.status(400);
-            res.send({ error: errors_1.ApiErrorEnum.REQUESTS_LIMIT_REACHED });
-            return;
-        }
-        // Don't allow to create to many reset-password requests
-        this.rateLimit.increment(req.ip);
-        const user = await storage_1.User.findOne({ email: body.email });
-        if (user === undefined) {
-            res.status(400);
-            res.send({ error: errors_1.ApiErrorEnum.LOGIN_INVALID });
-            return;
-        }
-        const token = this.generateToken(user.id);
-        const language = body.language ? String(body.language) : 'en';
-        const template = email_1.resetPasswordTemplates[language] || email_1.resetPasswordTemplates['en'];
-        const params = {
-            appName: config_1.config.email.appName,
-            publicAddress: config_1.config.email.publicAddress,
-            token
-        };
-        try {
-            await this.mailer.sendEmail(body.email, template, params);
-        }
-        catch (error) {
-            res.status(400);
-            res.send({ error: errors_1.ApiErrorEnum.CANNOT_SEND_MESSAGE });
-            return;
-        }
-        res.send({ ok: true });
     }
     async onChangePassword(req, res) {
         const body = req.body;

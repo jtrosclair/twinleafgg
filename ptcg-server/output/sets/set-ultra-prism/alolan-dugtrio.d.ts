@@ -17,7 +17,7 @@ export declare class AlolanDugtrio extends PokemonCard {
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;
-        cost: any[];
+        cost: never[];
         damage: number;
         damageCalculation: "x";
         text: string;

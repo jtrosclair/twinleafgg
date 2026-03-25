@@ -9,7 +9,7 @@ export declare class Azumarillex extends PokemonCard {
     weakness: {
         type: CardType.METAL;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     powers: {
         name: string;

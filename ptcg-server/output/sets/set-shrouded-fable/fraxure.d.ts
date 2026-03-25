@@ -8,8 +8,8 @@ export declare class Fraxure extends PokemonCard {
     evolvesFrom: string;
     cardType: CardType;
     hp: number;
-    weakness: any[];
-    resistance: any[];
+    weakness: never[];
+    resistance: never[];
     retreat: CardType[];
     powers: {
         name: string;

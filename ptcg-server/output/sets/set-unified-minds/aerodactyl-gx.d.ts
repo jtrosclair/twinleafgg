@@ -11,7 +11,7 @@ export declare class AerodactylGx extends PokemonCard {
     weakness: {
         type: CardType.GRASS;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;

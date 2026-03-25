@@ -3,7 +3,7 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 export declare class Granbull extends PokemonCard {
-    tags: any[];
+    tags: never[];
     stage: Stage;
     evolvesFrom: string;
     cardType: CardType;

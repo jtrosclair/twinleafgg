@@ -6,7 +6,7 @@ import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 export declare class DragoniumZDragonClaw extends TrainerCard {
     trainerType: TrainerType;
-    tags: any[];
+    tags: never[];
     set: string;
     cardImage: string;
     setNumber: string;

@@ -6,10 +6,10 @@ import { AfterAttackEffect } from '../effects/game-phase-effects';
  * These prefabs are for general attack effects.
  */
 export declare function DISCARD_A_STADIUM_CARD_IN_PLAY(state: State): void;
-export declare function DRAW_CARDS_UNTIL_YOU_HAVE_X_CARDS_IN_HAND(x: number, effect: AttackEffect, state: State): State;
+export declare function DRAW_CARDS_UNTIL_YOU_HAVE_X_CARDS_IN_HAND(x: number, effect: AttackEffect, state: State): State | undefined;
 export declare function HEAL_X_DAMAGE_FROM_THIS_POKEMON(damage: number, effect: AttackEffect, store: StoreLike, state: State): void;
 export declare function KNOCK_OUT_OPPONENTS_ACTIVE_POKEMON(store: StoreLike, state: State, effect: AttackEffect): State;
-export declare function PUT_X_CARDS_FROM_YOUR_DISCARD_PILE_INTO_YOUR_HAND(x: number, filterFn: (card: Card) => boolean, store: StoreLike, state: State, effect: AttackEffect): State;
+export declare function PUT_X_CARDS_FROM_YOUR_DISCARD_PILE_INTO_YOUR_HAND(x: number, filterFn: ((card: Card) => boolean) | undefined, store: StoreLike, state: State, effect: AttackEffect): State;
 export declare function PUT_X_DAMAGE_COUNTERS_ON_ALL_YOUR_OPPONENTS_POKEMON(x: number, store: StoreLike, state: State, effect: AttackEffect): void;
 export declare function PUT_X_DAMAGE_COUNTERS_ON_YOUR_OPPONENTS_ACTIVE_POKEMON(x: number, store: StoreLike, state: State, effect: AttackEffect): State;
 export declare function PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE(x: number, store: StoreLike, state: State, effect: AttackEffect, slotTypes?: SlotType[]): State;
@@ -19,7 +19,7 @@ export declare function FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE(store: StoreLike, 
 export declare function FLIP_A_COIN_UNTIL_YOU_GET_TAILS_DO_X_DAMAGE_PER_HEADS(store: StoreLike, state: State, effect: AttackEffect, damagePerHeads: number): State;
 export declare function FLIP_A_COIN_UNTIL_YOU_GET_TAILS_DO_X_MORE_DAMAGE_PER_HEADS(store: StoreLike, state: State, effect: AttackEffect, damagePerHeads: number): State;
 export declare function THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS(store: StoreLike, state: State, effect: AttackEffect, amount: number): void;
-export declare function THIS_ATTACK_DOES_X_DAMAGE_FOR_EACH_POKEMON_IN_YOUR_DISCARD_PILE(damage: number, filterFn: (card: PokemonCard) => boolean, effect: AttackEffect): void;
+export declare function THIS_ATTACK_DOES_X_DAMAGE_FOR_EACH_POKEMON_IN_YOUR_DISCARD_PILE(damage: number, filterFn: ((card: PokemonCard) => boolean) | undefined, effect: AttackEffect): void;
 export declare function THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(damage: number, effect: AttackEffect, store: StoreLike, state: State): State;
 export declare function THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON(damage: number, effect: AttackEffect, store: StoreLike, state: State): State;
 export declare function YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP(store: StoreLike, state: State, effect: AttackEffect): void;

@@ -14,7 +14,7 @@ export declare class Dodrio extends PokemonCard {
         type: CardType;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;

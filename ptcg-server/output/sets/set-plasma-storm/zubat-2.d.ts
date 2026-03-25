@@ -14,7 +14,7 @@ export declare class Zubat2 extends PokemonCard {
         value: number;
     }[];
     retreat: CardType.COLORLESS[];
-    powers: any[];
+    powers: never[];
     attacks: {
         name: string;
         cost: CardType.COLORLESS[];

@@ -8,7 +8,7 @@ export declare class CarbinkBreak extends PokemonCard {
     evolvesFrom: string;
     cardType: CardType;
     hp: number;
-    retreat: any[];
+    retreat: never[];
     attacks: {
         name: string;
         cost: CardType.FIGHTING[];

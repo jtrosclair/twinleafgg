@@ -6,7 +6,7 @@ export declare class Togepi extends PokemonCard {
     weakness: {
         type: CardType.METAL;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;

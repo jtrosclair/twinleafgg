@@ -7,7 +7,7 @@ export declare class Shinx extends PokemonCard {
     weakness: {
         type: CardType.FIGHTING;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: {
         name: string;
         cost: CardType.LIGHTNING[];

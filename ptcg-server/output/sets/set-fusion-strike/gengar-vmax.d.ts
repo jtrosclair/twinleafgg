@@ -11,7 +11,7 @@ export declare class GengarVMAX extends PokemonCard {
     weakness: {
         type: CardType.FIGHTING;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;

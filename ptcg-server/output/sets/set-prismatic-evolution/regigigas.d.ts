@@ -9,7 +9,7 @@ export declare class Regigigas extends PokemonCard {
     weakness: {
         type: CardType.FIGHTING;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;

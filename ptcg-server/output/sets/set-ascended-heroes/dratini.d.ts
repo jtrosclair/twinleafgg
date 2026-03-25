@@ -4,8 +4,8 @@ export declare class Dratini extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    weakness: any[];
-    resistance: any[];
+    weakness: never[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;

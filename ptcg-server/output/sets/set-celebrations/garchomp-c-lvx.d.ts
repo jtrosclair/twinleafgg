@@ -11,7 +11,7 @@ export declare class GarchompCLvX extends PokemonCard {
     weakness: {
         type: CardType.COLORLESS;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;

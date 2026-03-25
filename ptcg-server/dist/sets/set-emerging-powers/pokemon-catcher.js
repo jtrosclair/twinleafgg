@@ -6,7 +6,6 @@ const card_types_1 = require("../../game/store/card/card-types");
 const choose_pokemon_prompt_1 = require("../../game/store/prompts/choose-pokemon-prompt");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_1 = require("../../game");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* playCard(next, store, state, self, effect) {
     const player = effect.player;
     const opponent = game_1.StateUtils.getOpponent(state, player);
@@ -19,9 +18,7 @@ function* playCard(next, store, state, self, effect) {
     yield store.prompt(state, new choose_pokemon_prompt_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_SWITCH, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.BENCH], { allowCancel: false }), result => {
         const cardList = result[0];
         opponent.switchPokemon(cardList);
-        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     });
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
 }
 class PokemonCatcher extends trainer_card_1.TrainerCard {
     constructor() {
@@ -30,7 +27,7 @@ class PokemonCatcher extends trainer_card_1.TrainerCard {
         this.set = 'EPO';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '95';
-        this.name = 'Pokemon Catcher';
+        this.name = 'Pokémon Catcher';
         this.fullName = 'Pokemon Catcher EPO';
         this.text = 'Switch your opponent\'s Active Pokémon with 1 of their Benched Pokémon.';
     }

@@ -7,7 +7,7 @@ export declare class Pichu extends PokemonCard {
     tags: CardTag[];
     cardType: CardType;
     hp: number;
-    retreat: any[];
+    retreat: never[];
     evolvesTo: string[];
     powers: {
         name: string;

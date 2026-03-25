@@ -11,7 +11,7 @@ export declare class FloatzelGLLVX extends PokemonCard {
     weakness: {
         type: CardType.LIGHTNING;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;

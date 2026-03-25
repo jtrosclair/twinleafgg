@@ -8,7 +8,7 @@ export declare class ErikasDratini extends PokemonCard {
     cardType: CardType;
     tags: CardTag[];
     hp: number;
-    weakness: any[];
+    weakness: never[];
     resistance: {
         type: CardType.PSYCHIC;
         value: number;

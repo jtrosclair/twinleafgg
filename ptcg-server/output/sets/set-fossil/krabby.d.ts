@@ -9,7 +9,7 @@ export declare class Krabby extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType[];
     attacks: {
         name: string;

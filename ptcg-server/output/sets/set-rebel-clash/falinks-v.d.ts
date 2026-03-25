@@ -10,7 +10,7 @@ export declare class FalinksV extends PokemonCard {
     weakness: {
         type: CardType.PSYCHIC;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     powers: {
         name: string;

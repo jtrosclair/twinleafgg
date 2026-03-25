@@ -12,7 +12,7 @@ export declare class Espeon extends PokemonCard {
     weakness: {
         type: CardType.PSYCHIC;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         useWhenInPlay: boolean;

@@ -62,27 +62,9 @@ class Replays extends controller_1.Controller {
     async onMatchGet(req, res) {
         res.send({ error: errors_1.ApiErrorEnum.PROFILE_INVALID });
         return;
-        const matchId = parseInt(req.params.id, 10);
-        const entity = await storage_1.Match.findOne(matchId);
-        if (entity === undefined) {
-            res.send({ error: errors_1.ApiErrorEnum.GAME_INVALID_ID });
-            return;
-        }
-        const base64 = new utils_1.Base64();
-        const replayData = base64.encode(entity.replayData);
-        res.send({ ok: true, replayData });
     }
     async onGet(req, res) {
-        const userId = req.body.userId;
-        const replayId = parseInt(req.params.id, 10);
-        const entity = await storage_1.Replay.findOne(replayId, { relations: ['user'] });
-        if (entity === undefined || entity.user.id !== userId) {
-            res.send({ error: errors_1.ApiErrorEnum.REPLAY_INVALID });
-            return;
-        }
-        const base64 = new utils_1.Base64();
-        const replayData = base64.encode(entity.replayData);
-        res.send({ ok: true, replayData });
+        res.send({ ok: true });
     }
     async onSave(req, res) {
         const body = req.body;

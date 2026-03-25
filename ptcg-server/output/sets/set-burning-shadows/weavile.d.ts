@@ -6,7 +6,7 @@ export declare class Weavile extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    retreat: any[];
+    retreat: never[];
     weakness: {
         type: CardType;
     }[];

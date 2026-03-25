@@ -6,7 +6,7 @@ export declare class Moltres extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    weakness: any[];
+    weakness: never[];
     resistance: {
         type: CardType.FIGHTING;
         value: number;

@@ -15,7 +15,7 @@ export declare class Haunter extends PokemonCard {
         type: CardType.COLORLESS;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: {
         name: string;
         cost: CardType.PSYCHIC[];

@@ -17,7 +17,7 @@ export declare class Shiftryex extends PokemonCard {
         type: CardType.PSYCHIC;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;

@@ -8,7 +8,7 @@ export declare class Drizzile extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType[];
     powers: {
         name: string;

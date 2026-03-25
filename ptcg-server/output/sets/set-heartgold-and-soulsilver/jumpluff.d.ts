@@ -14,7 +14,7 @@ export declare class Jumpluff extends PokemonCard {
         type: CardType.FIGHTING;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: ({
         name: string;
         cost: CardType.GRASS[];

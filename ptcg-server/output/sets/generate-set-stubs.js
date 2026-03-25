@@ -1,3 +1,4 @@
+"use strict";
 // @ts-nocheck
 // Card Stub Generator: card-data.json → TypeScript stubs
 // Usage: npx ts-node ptcg-server/src/sets/generate-set-stubs.ts <set-directory-name> [--dry-run] [--force]

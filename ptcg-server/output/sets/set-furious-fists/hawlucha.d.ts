@@ -15,7 +15,7 @@ export declare class Hawlucha extends PokemonCard {
         type: CardType;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;

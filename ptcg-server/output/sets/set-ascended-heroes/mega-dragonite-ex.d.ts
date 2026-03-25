@@ -6,8 +6,8 @@ export declare class MegaDragoniteex extends PokemonCard {
     tags: CardTag[];
     cardType: CardType;
     hp: number;
-    weakness: any[];
-    resistance: any[];
+    weakness: never[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     powers: {
         name: string;

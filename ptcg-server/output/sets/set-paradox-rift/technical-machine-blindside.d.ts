@@ -7,7 +7,7 @@ import { StoreLike } from '../../game/store/store-like';
 export declare class TechnicalMachineBlindside extends TrainerCard {
     trainerType: TrainerType;
     regulationMark: string;
-    tags: any[];
+    tags: never[];
     set: string;
     cardImage: string;
     setNumber: string;

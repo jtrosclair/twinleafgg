@@ -10,7 +10,7 @@ export declare class Ribombee extends PokemonCard {
     weakness: {
         type: CardType.METAL;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: {
         name: string;
         cost: CardType.COLORLESS[];

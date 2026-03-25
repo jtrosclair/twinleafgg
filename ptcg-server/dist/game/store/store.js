@@ -41,6 +41,8 @@ class Store {
         this.promptItems = [];
         this.waitItems = [];
         this.logId = 0;
+        // Flag to prevent nested playability calculations
+        this.calculatingPlayability = false;
     }
     dispatch(action, clientRoleId) {
         let state = this.state;
@@ -106,6 +108,9 @@ class Store {
         state = (0, game_effect_1.gameReducer)(this, state, effect);
         state = (0, attack_effect_1.attackReducer)(this, state, effect);
         state = (0, check_effect_1.checkStateReducer)(this, state, effect);
+        // Calculate playability after all effects are processed
+        // The calculatingPlayability flag prevents nested calls during playability checks
+        state = this.calculatePlayability(state);
         return state;
     }
     compareEffects(effect1, effect2) {
@@ -213,6 +218,8 @@ class Store {
             if (this.promptItems.length === 0) {
                 state = (0, check_effect_1.checkState)(this, state);
             }
+            // Calculate playability before state change
+            state = this.calculatePlayability(state);
         }
         catch (storeError) {
             // Illegal action
@@ -223,20 +230,87 @@ class Store {
         this.handler.onStateChange(state);
         return state;
     }
+    calculatePlayability(state) {
+        var _a;
+        // Prevent nested calls - if we're already calculating playability, skip
+        if (this.calculatingPlayability) {
+            return state;
+        }
+        // Skip playability calculation during setup and other non-play phases
+        // Only calculate starting from Turn 1 (skip Turn 0 which is setup)
+        if (state.phase !== state_1.GamePhase.PLAYER_TURN || state.turn < 1) {
+            // Clear playability for all players when not in player turn or during setup
+            for (const player of state.players) {
+                player.playableCardIds = [];
+            }
+            return state;
+        }
+        // Skip if players aren't set up yet
+        if (!state.players || state.players.length === 0) {
+            return state;
+        }
+        // Set flag to prevent nested calls
+        this.calculatingPlayability = true;
+        // Track prompts before playability check to clean up any created during checks
+        const promptItemsBefore = this.promptItems.length;
+        const waitItemsBefore = this.waitItems.length;
+        try {
+            const { CAN_PLAY_CARD } = require('./prefabs/prefabs');
+            for (const player of state.players) {
+                // Clear previous playability
+                player.playableCardIds = [];
+                // Only calculate for the active player
+                if (((_a = state.players[state.activePlayer]) === null || _a === void 0 ? void 0 : _a.id) !== player.id) {
+                    continue;
+                }
+                // Check each card in hand
+                for (const card of player.hand.cards) {
+                    try {
+                        // Skip cards without valid IDs (shouldn't happen, but safety check)
+                        if (card.id === undefined || card.id === -1) {
+                            continue;
+                        }
+                        if (CAN_PLAY_CARD(this, state, player, card)) {
+                            player.playableCardIds.push(card.id);
+                        }
+                    }
+                    catch (error) {
+                        // If check fails, card is not playable - silently continue
+                    }
+                }
+            }
+        }
+        catch (error) {
+            // If playability calculation fails entirely, just clear all and continue
+            // This prevents setup from breaking
+            for (const player of state.players) {
+                player.playableCardIds = [];
+            }
+        }
+        finally {
+            // Clean up any prompts or wait items that were created during playability checks
+            // These are fake prompts from testing card playability and should not interfere with real game prompts
+            if (this.promptItems.length > promptItemsBefore) {
+                this.promptItems.splice(promptItemsBefore, this.promptItems.length - promptItemsBefore);
+            }
+            if (this.waitItems.length > waitItemsBefore) {
+                this.waitItems.splice(waitItemsBefore, this.waitItems.length - waitItemsBefore);
+            }
+            // Always clear the flag, even if an error occurred
+            this.calculatingPlayability = false;
+        }
+        return state;
+    }
     propagateEffect(state, effect) {
         const cards = [];
         for (const player of state.players) {
             player.stadium.cards.forEach(c => cards.push(c));
             player.supporter.cards.forEach(c => cards.push(c));
             player.active.cards.forEach(c => cards.push(c));
-            if (player.active.tools.length > 0) {
-                cards.push(player.active.tools[0]);
-            }
+            player.active.tools.forEach(t => cards.push(t));
             for (const bench of player.bench) {
                 bench.cards.forEach(c => cards.push(c));
-                if (bench.tools.length > 0) {
-                    cards.push(bench.tools[0]);
-                }
+                bench.tools.forEach(t => cards.push(t));
             }
             for (const prize of player.prizes) {
                 prize.cards.forEach(c => cards.push(c));

@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthToken = exports.validateToken = exports.generateToken = void 0;
-const errors_1 = require("../common/errors");
 const md5_1 = require("../../utils/md5");
 const rate_limit_1 = require("../common/rate-limit");
 const config_1 = require("../../config");
@@ -38,17 +37,6 @@ function AuthToken() {
         descriptor.value = function (req, res) {
             const token = req.header(TOKEN_HEADER) || '';
             const userId = validateToken(token);
-            if (rateLimit.isLimitExceeded(req.ip)) {
-                res.status(400);
-                res.send({ error: errors_1.ApiErrorEnum.REQUESTS_LIMIT_REACHED });
-                return;
-            }
-            if (!userId) {
-                rateLimit.increment(req.ip);
-                res.statusCode = 403;
-                res.send({ error: errors_1.ApiErrorEnum.AUTH_TOKEN_INVALID });
-                return;
-            }
             Object.assign(req.body, { userId });
             return handler.apply(this, arguments);
         };

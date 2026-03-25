@@ -11,7 +11,7 @@ export declare class Tangrowth extends PokemonCard {
     weakness: {
         type: import("../../game").CardType.FIRE;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: import("../../game").CardType.COLORLESS[];
     powers: {
         name: string;

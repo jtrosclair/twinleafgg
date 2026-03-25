@@ -12,7 +12,7 @@ export declare class Crobat extends PokemonCard {
     weakness: {
         type: CardType.PSYCHIC;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: {
         name: string;
         cost: (CardType.GRASS | CardType.METAL | CardType.COLORLESS)[];

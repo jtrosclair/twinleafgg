@@ -19,7 +19,7 @@ export declare class SandboxModifyPokemonAction implements Action {
             [key: string]: boolean;
         };
     };
-    benchIndex?: number;
+    benchIndex?: number | undefined;
     readonly type: string;
     constructor(clientId: number, targetPlayerId: number, location: 'active' | 'bench', modifications: {
         damage?: number;
@@ -36,5 +36,5 @@ export declare class SandboxModifyPokemonAction implements Action {
         markers?: {
             [key: string]: boolean;
         };
-    }, benchIndex?: number);
+    }, benchIndex?: number | undefined);
 }

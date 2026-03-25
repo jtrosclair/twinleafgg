@@ -11,7 +11,7 @@ export declare class DuraludonVMAX extends PokemonCard {
     evolvesFrom: string;
     cardType: CardType;
     hp: number;
-    weakness: any[];
+    weakness: never[];
     retreat: CardType[];
     powers: {
         name: string;

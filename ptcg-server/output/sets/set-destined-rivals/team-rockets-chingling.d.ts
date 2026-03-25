@@ -14,10 +14,10 @@ export declare class TeamRocketsChingling extends PokemonCard {
         type: CardType.FIGHTING;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: {
         name: string;
-        cost: any[];
+        cost: never[];
         damage: number;
         text: string;
     }[];

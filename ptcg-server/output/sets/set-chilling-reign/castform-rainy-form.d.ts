@@ -10,8 +10,8 @@ export declare class CastformRainyForm extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    resistance: any[];
-    retreat: any[];
+    resistance: never[];
+    retreat: never[];
     powers: {
         name: string;
         text: string;

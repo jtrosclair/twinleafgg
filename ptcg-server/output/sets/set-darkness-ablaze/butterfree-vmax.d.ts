@@ -11,7 +11,7 @@ export declare class ButterfreeVmax extends PokemonCard {
     weakness: {
         type: CardType.FIRE;
     }[];
-    retreat: any[];
+    retreat: never[];
     attacks: {
         name: string;
         cost: (CardType.GRASS | CardType.COLORLESS)[];

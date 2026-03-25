@@ -34,6 +34,14 @@ function playerTurnReducer(store, state, action) {
             player.active.clearEffects();
             return state;
         }
+        if (action instanceof game_actions_1.RetreatStartAction) {
+            const player = state.players[state.activePlayer];
+            if (player === undefined || player.id !== action.clientId) {
+                throw new game_error_1.GameError(game_message_1.GameMessage.NOT_YOUR_TURN);
+            }
+            state = store.reduceEffect(state, new game_effects_1.RetreatStartEffect(player));
+            return state;
+        }
         if (action instanceof game_actions_1.AttackAction) {
             const player = state.players[state.activePlayer];
             if (player === undefined || player.id !== action.clientId) {
@@ -106,7 +114,11 @@ function playerTurnReducer(store, state, action) {
                 let power;
                 if (action.target.slot === play_card_action_1.SlotType.ACTIVE || action.target.slot === play_card_action_1.SlotType.BENCH) {
                     const target = state_utils_1.StateUtils.getTarget(state, player, action.target);
-                    const powersEffect = new check_effects_1.CheckPokemonPowersEffect(player, target);
+                    const targetPokemon = target.getPokemonCard();
+                    if (!targetPokemon) {
+                        throw new game_error_1.GameError(game_message_1.GameMessage.INVALID_TARGET);
+                    }
+                    const powersEffect = new check_effects_1.CheckPokemonPowersEffect(player, targetPokemon);
                     state = store.reduceEffect(state, powersEffect);
                     power = [...pokemonCard.powers, ...powersEffect.powers].find(a => a.name === action.name);
                 }

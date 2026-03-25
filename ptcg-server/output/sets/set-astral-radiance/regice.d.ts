@@ -9,7 +9,7 @@ export declare class Regice extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType[];
     attacks: {
         name: string;

@@ -8,7 +8,7 @@ export declare class Regiceex extends PokemonCard {
     weakness: {
         type: CardType.LIGHTNING;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;

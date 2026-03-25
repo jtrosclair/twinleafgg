@@ -12,7 +12,7 @@ export declare class Hydreigonex extends PokemonCard {
     weakness: {
         type: import("../../game").CardType.GRASS;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: import("../../game").CardType.COLORLESS[];
     powers: {
         name: string;

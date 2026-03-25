@@ -45,20 +45,7 @@ export function AuthToken() {
       const token = req.header(TOKEN_HEADER) || '';
       const userId = validateToken(token);
 
-      if (rateLimit.isLimitExceeded(req.ip)) {
-        res.status(400);
-        res.send({error: ApiErrorEnum.REQUESTS_LIMIT_REACHED});
-        return;
-      }
-
-      if (!userId) {
-        rateLimit.increment(req.ip);
-        res.statusCode = 403;
-        res.send({error: ApiErrorEnum.AUTH_TOKEN_INVALID});
-        return;
-      }
-
-      Object.assign(req.body, {userId});
+      Object.assign(req.body, { userId });
       return handler.apply(this, arguments);
     };
   };

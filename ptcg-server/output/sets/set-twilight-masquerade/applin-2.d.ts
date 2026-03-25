@@ -10,7 +10,7 @@ export declare class Applin2 extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType[];
     attacks: {
         name: string;

@@ -11,7 +11,7 @@ export declare class Ursaring extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType[];
     attacks: {
         name: string;

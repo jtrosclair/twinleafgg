@@ -30,7 +30,7 @@ class AttachEnergyPrompt extends prompt_1.Prompt {
     }
     decode(result, state) {
         if (result === null) {
-            return result;
+            return null;
         }
         const player = state.players.find(p => p.id === this.playerId);
         if (player === undefined) {

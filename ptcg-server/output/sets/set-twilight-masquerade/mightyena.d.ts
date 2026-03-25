@@ -10,7 +10,7 @@ export declare class Mightyena extends PokemonCard {
     weakness: {
         type: CardType.GRASS;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     attacks: ({
         name: string;

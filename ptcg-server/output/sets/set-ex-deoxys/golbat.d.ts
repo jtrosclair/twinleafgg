@@ -10,7 +10,7 @@ export declare class Golbat extends PokemonCard {
     weakness: {
         type: CardType.PSYCHIC;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;

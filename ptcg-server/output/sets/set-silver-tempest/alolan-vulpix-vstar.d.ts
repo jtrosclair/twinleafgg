@@ -20,7 +20,7 @@ export declare class AlolanVulpixVSTAR extends PokemonCard {
         text: string;
     } | {
         name: string;
-        cost: any[];
+        cost: never[];
         damage: number;
         text: string;
         shredAttack?: undefined;

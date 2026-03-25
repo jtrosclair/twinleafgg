@@ -15,7 +15,7 @@ export declare class CorviknightVmax extends PokemonCard {
         type: CardType.GRASS;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;

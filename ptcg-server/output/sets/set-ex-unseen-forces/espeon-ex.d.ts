@@ -9,7 +9,7 @@ export declare class Espeonex extends PokemonCard {
     weakness: {
         type: CardType.PSYCHIC;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: Power[];
     attacks: ({
         name: string;

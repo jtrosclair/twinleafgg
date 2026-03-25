@@ -17,7 +17,7 @@
     "resolveJsonModule": true,
     "noEmitOnError": false, // CHANGED
     "allowSyntheticDefaultImports": true,
-    "strict": false, // CHANGED
+    "strict": true, // CHANGED
     "noUnusedLocals": false, // CHANGED
     "typeRoots": [
       "node_modules/@types"

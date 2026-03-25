@@ -11,7 +11,7 @@ export declare class Thwackey extends PokemonCard {
     weakness: {
         type: CardType;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType[];
     powers: {
         name: string;

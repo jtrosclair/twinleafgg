@@ -18,7 +18,7 @@ export declare class Core {
     connect(client: Client): Promise<Client>;
     disconnect(client: Client, reason?: string): Promise<void>;
     createGame(client: Client, deck: string[], gameSettings?: GameSettings, invited?: Client, deckId1?: number, deckId2?: number): Game;
-    createGameWithDecks(client: Client, deck: string[], gameSettings: GameSettings, client2: Client, deck2: string[], artworksMap1?: {
+    createGameWithDecks(client: Client, deck: string[], gameSettings: GameSettings | undefined, client2: Client, deck2: string[], artworksMap1?: {
         [code: string]: {
             imageUrl: string;
             holoType?: string;

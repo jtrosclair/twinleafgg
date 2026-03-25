@@ -9,8 +9,8 @@ export declare class Tatsugiriex extends PokemonCard {
     regulationMark: string;
     cardType: CardType;
     hp: number;
-    weakness: any[];
-    resistance: any[];
+    weakness: never[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     attacks: ({
         name: string;

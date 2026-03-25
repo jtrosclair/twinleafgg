@@ -8,7 +8,7 @@ export declare class Persian extends PokemonCard {
     weakness: {
         type: import("../../game").CardType.FIGHTING;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;

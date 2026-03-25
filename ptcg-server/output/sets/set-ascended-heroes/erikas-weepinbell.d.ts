@@ -9,7 +9,7 @@ export declare class ErikasWeepinbell extends PokemonCard {
     weakness: {
         type: CardType.FIRE;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;

@@ -12,7 +12,7 @@ export declare class Muk extends PokemonCard {
     weakness: {
         type: CardType.PSYCHIC;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType[];
     powers: {
         name: string;

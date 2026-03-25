@@ -14,7 +14,7 @@ export declare class Jolteon extends PokemonCard {
         type: CardType.METAL;
         value: number;
     }[];
-    retreat: any[];
+    retreat: never[];
     powers: {
         name: string;
         powerType: PowerType;

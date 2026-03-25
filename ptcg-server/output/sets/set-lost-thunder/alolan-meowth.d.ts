@@ -17,7 +17,7 @@ export declare class AlolanMeowth extends PokemonCard {
     retreat: CardType[];
     attacks: {
         name: string;
-        cost: any[];
+        cost: never[];
         damage: number;
         damageCalculation: string;
         text: string;

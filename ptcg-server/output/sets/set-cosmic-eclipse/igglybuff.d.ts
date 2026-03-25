@@ -6,7 +6,7 @@ export declare class Igglybuff extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    retreat: any[];
+    retreat: never[];
     readonly SLEEPY_VOICE_MARKER = "IGGLYBUFF_CEC_SLEEPY_VOICE_MARKER";
     powers: {
         name: string;

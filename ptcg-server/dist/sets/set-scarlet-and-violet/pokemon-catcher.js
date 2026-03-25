@@ -21,15 +21,12 @@ function* playCard(next, store, state, self, effect) {
         next();
     });
     if (coinResult === false) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return state;
     }
     yield store.prompt(state, new choose_pokemon_prompt_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_SWITCH, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.BENCH], { allowCancel: false }), result => {
         const cardList = result[0];
         opponent.switchPokemon(cardList);
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
     });
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
 }
 class PokemonCatcher extends trainer_card_1.TrainerCard {
     constructor() {
@@ -39,10 +36,18 @@ class PokemonCatcher extends trainer_card_1.TrainerCard {
         this.set = 'SVI';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '187';
-        this.name = 'Pokemon Catcher';
+        this.name = 'Pokémon Catcher';
         this.fullName = 'Pokemon Catcher SVI';
         this.text = 'Flip a coin. If heads, switch 1 of your opponent\'s Benched Pokemon ' +
             'with their Active Pokemon.';
+    }
+    canPlay(store, state, player) {
+        const opponent = game_1.StateUtils.getOpponent(state, player);
+        const hasBench = opponent.bench.some(b => b.cards.length > 0);
+        if (!hasBench) {
+            return false;
+        }
+        return true;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

@@ -6,7 +6,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { PowerType } from '../../game';
 export declare class Minun extends PokemonCard {
     stage: Stage;
-    tags: any[];
+    tags: never[];
     cardType: CardType;
     weakness: {
         type: CardType;

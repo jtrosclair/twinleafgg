@@ -12,8 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Login = void 0;
 const services_1 = require("../services");
 const controller_1 = require("./controller");
-const errors_1 = require("../common/errors");
-const md5_1 = require("../../utils/md5");
 const storage_1 = require("../../storage");
 const rate_limit_1 = require("../common/rate-limit");
 const config_1 = require("../../config");
@@ -24,74 +22,11 @@ class Login extends controller_1.Controller {
     }
     async onRegister(req, res, next) {
         const body = req.body;
-        if (config_1.config.backend.registrationEnabled === false) {
-            res.status(400);
-            res.send({ error: errors_1.ApiErrorEnum.REGISTER_DISABLED });
-            return;
-        }
-        if (this.rateLimit.isLimitExceeded(req.ip)) {
-            res.status(400);
-            res.send({ error: errors_1.ApiErrorEnum.REQUESTS_LIMIT_REACHED });
-            return;
-        }
-        if (process.env.SERVER_PASSWORD
-            && process.env.SERVER_PASSWORD !== body.serverPassword) {
-            this.rateLimit.increment(req.ip);
-            res.status(400);
-            res.send({ error: errors_1.ApiErrorEnum.REGISTER_INVALID_SERVER_PASSWORD });
-            return;
-        }
-        if (await storage_1.User.findOne({ name: body.name })) {
-            res.status(400);
-            res.send({ error: errors_1.ApiErrorEnum.REGISTER_NAME_EXISTS });
-            return;
-        }
-        if (await storage_1.User.findOne({ email: body.email })) {
-            res.status(400);
-            res.send({ error: errors_1.ApiErrorEnum.REGISTER_EMAIL_EXISTS });
-            return;
-        }
-        // Don't allow to create to many users
-        this.rateLimit.increment(req.ip);
-        const user = new storage_1.User();
-        user.name = body.name;
-        user.roleId = 4;
-        user.email = body.email;
-        user.password = md5_1.Md5.init(body.password);
-        user.registered = Date.now();
-        await user.save();
         res.send({ ok: true });
     }
     async onLogin(req, res) {
-        const body = req.body;
-        const user = await storage_1.User.findOne({ where: { name: body.name } });
-        if (this.rateLimit.isLimitExceeded(req.ip)) {
-            res.status(400);
-            res.send({ error: errors_1.ApiErrorEnum.REQUESTS_LIMIT_REACHED });
-            return;
-        }
-        if (user === undefined || user.password !== md5_1.Md5.init(body.password)) {
-            this.rateLimit.increment(req.ip);
-            res.status(400);
-            res.send({ error: errors_1.ApiErrorEnum.LOGIN_INVALID });
-            return;
-        }
-        // Check if user is banned
-        if (user.roleId === 1) {
-            res.status(403);
-            res.send({ error: errors_1.ApiErrorEnum.USER_BANNED });
-            return;
-        }
-        const token = (0, services_1.generateToken)(user.id);
         res.send({
-            ok: true,
-            token,
-            config: this.getServerConfig(),
-            user: {
-                id: user.id,
-                name: user.name,
-                roleId: user.roleId
-            }
+            ok: true
         });
     }
     async onRefreshToken(req, res) {
@@ -106,11 +41,6 @@ class Login extends controller_1.Controller {
         res.send({ ok: true, config: this.getServerConfig() });
     }
     async onAnonymousLogin(req, res) {
-        if (this.rateLimit.isLimitExceeded(req.ip)) {
-            res.status(400);
-            res.send({ error: errors_1.ApiErrorEnum.REQUESTS_LIMIT_REACHED });
-            return;
-        }
         // Create and persist an anonymous user to the database
         const anonymousName = `Guest_${Math.random().toString(36).substring(2, 15)}`;
         const user = new storage_1.User();

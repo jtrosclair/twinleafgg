@@ -29,7 +29,7 @@ export declare abstract class AbstractAttackEffect {
     target: PokemonCardList;
     source: PokemonCardList;
     preventDefault: boolean;
-    constructor(base: AttackEffect);
+    constructor(base: AttackEffect | AbstractAttackEffect);
 }
 export declare class ApplyWeaknessEffect extends AbstractAttackEffect implements Effect {
     readonly type: string;
@@ -74,7 +74,7 @@ export declare class PutCountersEffect extends AbstractAttackEffect implements E
     readonly type: string;
     preventDefault: boolean;
     damage: number;
-    constructor(base: AttackEffect, damage: number);
+    constructor(base: AttackEffect | AbstractAttackEffect, damage: number);
 }
 export declare class KOEffect extends AbstractAttackEffect implements Effect {
     readonly type: string;
@@ -125,6 +125,8 @@ export declare class AddSpecialConditionsEffect extends AbstractAttackEffect imp
     readonly type: string;
     preventDefault: boolean;
     poisonDamage?: number;
+    burnDamage?: number;
+    confusionDamage?: number;
     specialConditions: SpecialCondition[];
     constructor(base: AttackEffect, specialConditions: SpecialCondition[]);
 }

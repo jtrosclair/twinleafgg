@@ -9,7 +9,7 @@ export declare class Numel extends PokemonCard {
     weakness: {
         type: CardType.WATER;
     }[];
-    resistance: any[];
+    resistance: never[];
     retreat: CardType.COLORLESS[];
     powers: {
         name: string;
