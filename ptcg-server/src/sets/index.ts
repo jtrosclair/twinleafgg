@@ -9,6 +9,9 @@ export * from './set-wotc-promos';
 export * from './set-gym-heros';
 export * from './set-gym-challenge';
 
+//Game Boy
+export * from './set-game-boy-exclusives';
+
 //Retro Energy
 export * from './set-base-set-energy';
 
@@ -45,15 +48,20 @@ export * from './set-ex-firered-leafgreen';
 export * from './set-ex-legend-maker';
 
 export * from './set-nintendo-promos';
+export * from './set-unnumbered-promos';
 
 //POP Series
 export * from './set-pop-series-2';
+export * from './set-pop-series-3';
 export * from './set-pop-series-4';
 export * from './set-pop-series-5';
+export * from './set-pop-series-8';
 
 //Japan Promos ex-era
 export * from './set-pcg-l-promotional-cards';
 export * from './set-pcg-p-promotional-cards';
+export * from './set-pokepark-premium-files';
+export * from './set-gift-box-mew-lucario';
 
 // VS Packs
 export * from './set-vs-pack-auras-lucario';
@@ -180,9 +188,10 @@ export * from './set-mega-evolution';
 export * from './set-phantasmal-flames';
 export * from './set-ascended-heroes';
 export * from './set-perfect-order';
+export * from './set-chaos-rising';
 
 //TEST
-//export * from './set-test';
+export * from './set-test';
 
 //Sort Later
 export * from './set-legends-awakened';

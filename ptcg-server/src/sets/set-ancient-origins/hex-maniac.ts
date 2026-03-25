@@ -4,7 +4,8 @@ import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
 import { PowerEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { ADD_MARKER, HAS_MARKER, MOVE_CARD_TO, REMOVE_MARKER } from '../../game/store/prefabs/prefabs';
+import { CheckPokemonPowersEffect } from '../../game/store/effects/check-effects';
+import { ADD_MARKER, HAS_MARKER, REMOVE_MARKER } from '../../game/store/prefabs/prefabs';
 import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
@@ -40,8 +41,19 @@ export class HexManiac extends TrainerCard {
 
       ADD_MARKER(this.HEX_MANIAC_MARKER, player, this);
       ADD_MARKER(this.HEX_MANIAC_MARKER, opponent, this);
+    }
 
-      MOVE_CARD_TO(state, effect.trainerCard, player.discard);
+    if (effect instanceof CheckPokemonPowersEffect) {
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+
+      // Check if Hex Maniac marker is active on either player
+      if (HAS_MARKER(this.HEX_MANIAC_MARKER, player, this) || HAS_MARKER(this.HEX_MANIAC_MARKER, opponent, this)) {
+        // Filter out all abilities
+        effect.powers = effect.powers.filter(power =>
+          power.powerType !== PowerType.ABILITY
+        );
+      }
     }
 
     if (effect instanceof PowerEffect && HAS_MARKER(this.HEX_MANIAC_MARKER, effect.player, this)

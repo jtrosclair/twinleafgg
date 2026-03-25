@@ -1,8 +1,8 @@
-import { EnergyCard, StateUtils } from '../../game';
-import { TrainerType } from '../../game/store/card/card-types';
+import { StateUtils } from '../../game';
+import { SuperType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
-import { CLEAN_UP_SUPPORTER, MOVE_CARDS, MULTIPLE_COIN_FLIPS_PROMPT } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS, MULTIPLE_COIN_FLIPS_PROMPT } from '../../game/store/prefabs/prefabs';
 import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
@@ -27,16 +27,14 @@ export class SuperEnergyRemoval2 extends TrainerCard {
       MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 2, result => {
         if (result[0] && result[1]) {
           // Both heads: Discard all Energy from Defending Pokémon
-          const cards = opponent.active.cards.filter(c => c instanceof EnergyCard);
+          const cards = opponent.active.cards.filter(c => c.superType === SuperType.ENERGY);
           MOVE_CARDS(store, state, opponent.active, opponent.discard, { cards, sourceCard: this });
         } else if (!result[0] && !result[1]) {
           // Both tails: Discard all Energy from Active Pokémon
-          const cards = player.active.cards.filter(c => c instanceof EnergyCard);
+          const cards = player.active.cards.filter(c => c.superType === SuperType.ENERGY);
           MOVE_CARDS(store, state, player.active, player.discard, { cards, sourceCard: this });
         }
       });
-
-      CLEAN_UP_SUPPORTER(effect, player);
     }
     return state;
   }

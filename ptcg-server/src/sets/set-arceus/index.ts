@@ -13,8 +13,11 @@ import { ArceusPsychic } from './arceus-psychic';
 import { ArceusWater } from './arceus-water';
 import { BeginningDoor } from './beginning-door';
 import { ExpertBelt } from './expert-belt';
+import { Froslass } from './froslass';
 import { Gengar } from './gengar';
+import { LuckyEgg } from './lucky-egg';
 import { Spiritomb } from './spiritomb';
+import { UltimateZone } from './ultimate-zone';
 
 export const setArceus: Card[] = [
   new BeginningDoor(),
@@ -31,6 +34,9 @@ export const setArceus: Card[] = [
   new ArceusLvX1(),
   new ArceusLvX2(),
   new ArceusLvX3(),
+  new Froslass(),
   new Gengar(),
-  new Spiritomb()
+  new LuckyEgg(),
+  new Spiritomb(),
+  new UltimateZone()
 ];

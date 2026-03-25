@@ -1,4 +1,5 @@
 import { Card } from '../../game/store/card/card';
+import { ApricornForest } from './apricorn-forest';
 import { Blissey } from './blissey';
 import { BoostEnergy } from './boost-energy';
 import { Chansey } from './chansey';
@@ -6,12 +7,14 @@ import { Chinchou } from './chinchou';
 import { Chinchou2 } from './chinchou2';
 import { Eevee } from './eevee';
 import { Espeon } from './espeon';
+import { Furret } from './furret';
 import { Gloom } from './gloom';
 import { Horsea } from './horsea';
 import { Kingdra } from './kingdra';
 import { Lugia } from './lugia';
 import { Magnemite } from './magnemite';
 import { MetalEnergySpecial } from './metal-energy-special';
+import { Oddish } from './oddish';
 import { Porygon } from './porygon';
 import { Porygon2 } from './porygon2';
 import { Seadra } from './seadra';
@@ -26,6 +29,7 @@ import { RainbowEnergyAQ } from './other-prints';
 import { WarpEnergyAQ } from './other-prints';
 
 export const setAquapolis: Card[] = [
+  new ApricornForest(),
   new Blissey(),
   new BoostEnergy(),
   new Chansey(),
@@ -33,12 +37,14 @@ export const setAquapolis: Card[] = [
   new Chinchou2(),
   new Eevee(),
   new Espeon(),
+  new Furret(),
   new Gloom(),
   new Horsea(),
   new Kingdra(),
   new Lugia(),
   new Magnemite(),
   new MetalEnergySpecial(),
+  new Oddish(),
   new Porygon(),
   new Porygon2(),
   new Seadra(),
