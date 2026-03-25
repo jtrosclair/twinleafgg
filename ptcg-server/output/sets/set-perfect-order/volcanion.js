@@ -39,7 +39,7 @@ class Volcanion extends game_1.PokemonCard {
             let headsCount = 0;
             let flipsDone = 0;
             // Count Water Energy attached to this Pokemon
-            const waterEnergyCount = player.active.cards.filter(card => card instanceof game_1.EnergyCard && card.provides.includes(game_1.CardType.WATER)).length;
+            const waterEnergyCount = player.active.cards.filter(card => card.superType === game_1.SuperType.ENERGY && card.provides.includes(game_1.CardType.WATER)).length;
             if (waterEnergyCount === 0) {
                 effect.damage = 0;
                 return state;

@@ -11,6 +11,7 @@ const game_error_1 = require("../../game/game-error");
 const game_message_1 = require("../../game/game-message");
 const choose_pokemon_prompt_1 = require("../../game/store/prompts/choose-pokemon-prompt");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Archeops extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -40,7 +41,7 @@ class Archeops extends pokemon_card_1.PokemonCard {
         this.setNumber = '67';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             const benched = opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
@@ -77,15 +78,7 @@ class Archeops extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: pokemon_types_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             throw new game_error_1.GameError(game_message_1.GameMessage.BLOCKED_BY_ABILITY);

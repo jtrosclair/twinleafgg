@@ -34,7 +34,6 @@ class ProfessorKukui extends trainer_card_1.TrainerCard {
             effect.preventDefault = true;
             player.deck.moveTo(player.hand, 2);
             player.marker.addMarker(this.PROFESSOR_KUKUI_MARKER, this);
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
         }
         if (effect instanceof attack_effects_1.DealDamageEffect) {

@@ -41,20 +41,22 @@ class LuxrayV extends pokemon_card_1.PokemonCard {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
+            // "Your opponent reveals their hand." — show all cards in opponent's hand to the player
+            if (opponent.hand.cards.length > 0) {
+                (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, player, opponent.hand.cards);
+            }
             let cards = [];
             store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, opponent.hand, { superType: card_types_1.SuperType.TRAINER }, { min: 0, max: 1, allowCancel: false }), selected => {
                 cards = selected || [];
-                // Operation canceled by the user
                 if (cards.length === 0) {
-                    return state;
+                    return;
                 }
                 (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.discard, { cards, sourceCard: this, sourceEffect: this.attacks[0] });
             });
         }
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            const opponent = game_1.StateUtils.getOpponent(state, player);
-            const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(opponent);
+            const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
             state = store.reduceEffect(state, checkProvidedEnergy);
             store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.active, { superType: card_types_1.SuperType.ENERGY }, { min: 2, max: 2, allowCancel: false }), selected => {
                 selected = selected || [];

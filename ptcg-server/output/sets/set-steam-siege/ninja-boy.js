@@ -48,9 +48,7 @@ class NinjaBoy extends trainer_card_1.TrainerCard {
                         target[0].moveCardTo(card, player.deck);
                         player.deck.moveCardTo(card, target[0]);
                     });
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                     store.log(state, game_message_1.GameLog.LOG_PLAYER_SWITCHES_POKEMON_WITH_POKEMON_FROM_DECK, { name: player.name, card: target[0].getPokemonCard().name, secondCard: cards[0].name });
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                     return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                         player.deck.applyOrder(order);
                     });

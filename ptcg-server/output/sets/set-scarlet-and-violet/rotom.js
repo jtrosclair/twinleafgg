@@ -1,11 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Rotom = void 0;
-const game_1 = require("../../game");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
+const game_message_1 = require("../../game/game-message");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const game_1 = require("../../game");
 class Rotom extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -37,17 +38,17 @@ class Rotom extends pokemon_card_1.PokemonCard {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
-            store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: card_types_1.SuperType.TRAINER, trainerType: card_types_1.TrainerType.ITEM }, { min: 0, max: 1, allowCancel: false }), selected => {
+            store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: card_types_1.SuperType.TRAINER, trainerType: game_1.TrainerType.ITEM }, { min: 0, max: 1, allowCancel: false }), selected => {
                 if (selected) {
                     (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, selected);
                     (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: selected });
                 }
             });
         }
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
             (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED)(store, state, effect);
+                    (0, prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
                 }
             });
         }

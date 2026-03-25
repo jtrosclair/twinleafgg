@@ -5,6 +5,7 @@ const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Bronzong extends pokemon_card_1.PokemonCard {
@@ -48,10 +49,14 @@ class Bronzong extends pokemon_card_1.PokemonCard {
             if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
-            opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList) => {
+            opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card) => {
                 const pokemon = cardList.getPokemonCard();
-                if (pokemon && pokemon.powers.some(p => p.powerType === game_1.PowerType.POKEPOWER)) {
-                    cardList.damage += 10;
+                if (pokemon) {
+                    const powersEffect = new check_effects_1.CheckPokemonPowersEffect(opponent, card);
+                    state = store.reduceEffect(state, powersEffect);
+                    if (powersEffect.powers.some(p => p.powerType === game_1.PowerType.POKEPOWER)) {
+                        cardList.damage += 10;
+                    }
                 }
             });
         }

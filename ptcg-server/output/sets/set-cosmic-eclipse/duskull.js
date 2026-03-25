@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Duskull = void 0;
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Duskull extends game_1.PokemonCard {
     constructor() {
@@ -34,7 +33,7 @@ class Duskull extends game_1.PokemonCard {
         this.fullName = 'Duskull CEC';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.hand.cards.length < 3) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -79,7 +78,7 @@ class Duskull extends game_1.PokemonCard {
                 });
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { min: 1, max: 1, allowCancel: false }), selected => {
                 const targets = selected || [];

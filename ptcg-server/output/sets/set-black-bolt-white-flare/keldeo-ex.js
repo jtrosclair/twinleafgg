@@ -3,8 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Keldeoex = void 0;
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Keldeoex extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -36,15 +35,12 @@ class Keldeoex extends game_1.PokemonCard {
         this.fullName = 'Keldeo ex SV11W';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && this.movedToActiveThisTurn) {
-            this.movedToActiveThisTurn = false;
-        }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            if (this.movedToActiveThisTurn) {
-                effect.damage += 120;
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            if ((0, prefabs_1.MOVED_TO_ACTIVE_THIS_TURN)(effect.player, this)) {
+                effect.damage += 90;
             }
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const applyWeakness = new attack_effects_1.ApplyWeaknessEffect(effect, 120);

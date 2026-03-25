@@ -6,27 +6,34 @@ const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* useCrossFusionStrike(next, store, state, effect) {
     const player = effect.player;
     const opponent = game_1.StateUtils.getOpponent(state, player);
-    const benchPokemon = player.bench.map(b => b.getPokemonCard()).filter(card => card !== undefined);
-    const fusionStrike = benchPokemon.filter(card => card.tags.includes(card_types_1.CardTag.FUSION_STRIKE));
+    const benched = player.bench.filter(b => {
+        var _a;
+        return b.cards.length > 0 &&
+            ((_a = b.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.tags.includes(card_types_1.CardTag.FUSION_STRIKE));
+    });
+    const fusionStrike = benched.map(b => b.getPokemonCard()).filter((c) => c !== undefined);
+    if (fusionStrike.length === 0) {
+        return state;
+    }
     let selected;
-    yield store.prompt(state, new game_1.ChooseAttackPrompt(player.id, game_1.GameMessage.CHOOSE_ATTACK_TO_COPY, benchPokemon && fusionStrike, { allowCancel: false }), result => {
+    yield store.prompt(state, new game_1.ChooseAttackPrompt(player.id, game_1.GameMessage.CHOOSE_ATTACK_TO_COPY, fusionStrike, { allowCancel: false }), result => {
         selected = result;
         next();
     });
-    const attack = selected;
-    if (attack === null) {
+    if (!selected || selected.copycatAttack) {
         return state;
     }
     store.log(state, game_1.GameLog.LOG_PLAYER_COPIES_ATTACK, {
         name: player.name,
-        attack: attack.name
+        attack: selected.name
     });
     // Perform attack
-    const attackEffect = new game_effects_1.AttackEffect(player, opponent, attack);
-    store.reduceEffect(state, attackEffect);
+    const attackEffect = new game_effects_1.AttackEffect(player, opponent, selected);
+    state = store.reduceEffect(state, attackEffect);
     if (store.hasPrompts()) {
         yield store.waitPrompt(state, () => next());
     }
@@ -40,27 +47,27 @@ class MewVMAX extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.tags = [card_types_1.CardTag.POKEMON_VMAX, card_types_1.CardTag.FUSION_STRIKE];
-        this.regulationMark = 'E';
         this.stage = card_types_1.Stage.VMAX;
         this.evolvesFrom = 'Mew V';
-        this.cardType = card_types_1.CardType.PSYCHIC;
+        this.cardType = P;
         this.hp = 310;
-        this.weakness = [{ type: card_types_1.CardType.DARK }];
+        this.weakness = [{ type: D }];
         this.retreat = [];
         this.attacks = [{
                 name: 'Cross Fusion Strike',
-                cost: [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS],
+                cost: [C, C],
+                copycatAttack: true,
                 damage: 0,
                 text: 'Choose 1 of your Benched Fusion Strike Pokémon\'s attacks and use it as this attack.'
             },
             {
                 name: 'Max Miracle',
-                cost: [card_types_1.CardType.PSYCHIC, card_types_1.CardType.PSYCHIC],
+                cost: [P, P],
                 damage: 130,
                 shredAttack: true,
                 text: 'This attack\'s damage isn\'t affected by any effects on your opponent\'s Active Pokémon.'
-            }
-        ];
+            }];
+        this.regulationMark = 'E';
         this.set = 'FST';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '114';
@@ -68,7 +75,7 @@ class MewVMAX extends pokemon_card_1.PokemonCard {
         this.fullName = 'Mew VMAX FST';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const applyWeakness = new attack_effects_1.ApplyWeaknessEffect(effect, 130);
@@ -81,7 +88,7 @@ class MewVMAX extends pokemon_card_1.PokemonCard {
                 state = store.reduceEffect(state, afterDamage);
             }
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useCrossFusionStrike(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

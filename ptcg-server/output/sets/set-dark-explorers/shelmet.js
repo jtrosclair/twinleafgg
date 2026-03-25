@@ -9,15 +9,15 @@ class Shelmet extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.stage = card_types_1.Stage.BASIC;
-        this.cardType = card_types_1.CardType.GRASS;
+        this.cardType = G;
         this.hp = 60;
-        this.weakness = [{ type: card_types_1.CardType.FIRE }];
-        this.retreat = [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS];
+        this.weakness = [{ type: R }];
+        this.retreat = [C, C, C];
         this.attacks = [{
                 name: 'Body Slam',
-                cost: [card_types_1.CardType.GRASS, card_types_1.CardType.GRASS],
+                cost: [G, G],
                 damage: 20,
-                text: 'Flip a coin. If heads, the Defending Pokemon is now Paralyzed.'
+                text: 'Flip a coin. If heads, the Defending Pokémon is now Paralyzed.'
             }];
         this.set = 'DEX';
         this.name = 'Shelmet';

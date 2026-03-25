@@ -4,7 +4,7 @@ exports.Archen = void 0;
 const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Archen extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -32,7 +32,7 @@ class Archen extends pokemon_card_1.PokemonCard {
         this.setNumber = '53';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             // Check if card is in the discard
             if (!player.discard.cards.includes(this)) {

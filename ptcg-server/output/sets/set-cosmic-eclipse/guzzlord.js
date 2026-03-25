@@ -36,13 +36,13 @@ class Guzzlord extends pokemon_card_1.PokemonCard {
         this.usedRedBanquet = false;
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             this.usedRedBanquet = false;
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             (0, prefabs_1.MOVE_CARDS)(store, state, opponent.deck, opponent.discard, { count: 1, sourceCard: this, sourceEffect: this.attacks[0] });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             this.usedRedBanquet = true;
         }
         if (effect instanceof game_effects_1.KnockOutEffect && effect.target === effect.player.active) {
@@ -50,11 +50,6 @@ class Guzzlord extends pokemon_card_1.PokemonCard {
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Do not activate between turns, or when it's not opponents turn.
             if (state.phase !== game_1.GamePhase.ATTACK || state.players[state.activePlayer] !== opponent) {
-                return state;
-            }
-            // Guzzy wasn't attacking
-            const pokemonCard = opponent.active.getPokemonCard();
-            if (pokemonCard !== this) {
                 return state;
             }
             // Check if the attack that caused the KnockOutEffect is "Red Banquet"

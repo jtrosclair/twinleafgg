@@ -8,19 +8,19 @@ export declare class Okidogiex extends PokemonCard {
     regulationMark: string;
     cardType: CardType;
     weakness: {
-        type: CardType;
+        type: CardType.FIGHTING;
     }[];
     hp: number;
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     attacks: ({
         name: string;
-        cost: CardType[];
+        cost: CardType.COLORLESS[];
         damage: number;
         text: string;
         damageCalculation?: undefined;
     } | {
         name: string;
-        cost: CardType[];
+        cost: (CardType.DARK | CardType.COLORLESS)[];
         damage: number;
         damageCalculation: string;
         text: string;

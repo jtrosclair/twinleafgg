@@ -15,7 +15,7 @@ export declare class CynthiasSpiritomb extends PokemonCard {
         name: string;
         cost: CardType.COLORLESS[];
         damage: number;
-        damageCalculator: string;
+        damageCalculation: string;
         text: string;
     }[];
     regulationMark: string;

@@ -14,18 +14,17 @@ function* playCard(next, store, state, effect) {
         throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
     }
     let coinResult = false;
-    yield store.prompt(state, new game_1.CoinFlipPrompt(player.id, game_1.GameMessage.COIN_FLIP), result => {
+    const coinFlipEffect = new play_card_effects_1.CoinFlipEffect(player, (result) => {
         coinResult = result;
         next();
     });
+    yield store.reduceEffect(state, coinFlipEffect);
     if (coinResult === false) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return state;
     }
     return store.prompt(state, new choose_pokemon_prompt_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_SWITCH, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.BENCH], { allowCancel: false }), result => {
         const cardList = result[0];
         opponent.switchPokemon(cardList);
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
     });
 }
 class PokemonCatcher extends trainer_card_1.TrainerCard {
@@ -33,8 +32,9 @@ class PokemonCatcher extends trainer_card_1.TrainerCard {
         super(...arguments);
         this.trainerType = card_types_1.TrainerType.ITEM;
         this.regulationMark = 'G';
-        this.set = 'BW';
-        this.name = 'Pokemon Catcher';
+        this.set = 'SSH';
+        this.setNumber = '175';
+        this.name = 'Pokémon Catcher';
         this.fullName = 'Pokemon Catcher SSH';
         this.text = 'Flip a coin. If heads, switch 1 of your opponent\'s Benched Pokemon ' +
             'with their Active Pokemon.';

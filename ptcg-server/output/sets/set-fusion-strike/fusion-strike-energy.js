@@ -44,6 +44,9 @@ class FusionStrikeEnergy extends energy_card_1.EnergyCard {
                 }
             }
         }
+        if (effect instanceof game_effects_1.PlaceDamageCountersEffect && effect.target.energies.cards.includes(this)) {
+            effect.preventDefault = true;
+        }
         // Prevent attaching to non Fusion Strike Pokemon
         if (effect instanceof play_card_effects_1.AttachEnergyEffect) {
             if (effect.energyCard === this && !((_c = effect.target.getPokemonCard()) === null || _c === void 0 ? void 0 : _c.tags.includes(card_types_1.CardTag.FUSION_STRIKE))) {

@@ -30,8 +30,8 @@ class EspeonEX extends pokemon_card_1.PokemonCard {
         this.set = 'BKP';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '52';
-        this.name = 'Espeon EX';
-        this.fullName = 'Espeon EX BKP';
+        this.name = 'Espeon-EX';
+        this.fullName = 'Espeon-EX BKP';
     }
     reduceEffect(store, state, effect) {
         // Miraculous Shine

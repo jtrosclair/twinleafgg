@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ZacianVASR = exports.GalarianMoltresVASR = exports.GalarianZapdosVASR = exports.ShadowRiderCalyrexVMAXASR = exports.ShadowRiderCalyrexVASR = exports.GalarianArticunoVASR = exports.IceRiderCalyrexVMAXASR = exports.IceRiderCalyrexVASR = exports.StarmieV3ASR = exports.Mightyena2ASR = exports.FalinksASR = exports.GardevoirASR = exports.FrosmothASR = exports.FlappleASR = exports.DoubleTurboEnergyASR = exports.TrekkingShoes2ASR = exports.TempleofSinnoh2ASR = exports.PathToThePeakASR = exports.JubilifeVillage2ASR = exports.ChoiceBeltASR = exports.OriginFormeDialgaVSTAR3ASR = exports.HisuianSamurottVSTAR3ASR = exports.OriginFormePalkiaVSTAR3ASR = exports.Roxanne3ASR = exports.Irida3ASR = exports.Grant3ASR = exports.GardeniasVigor3ASR = exports.Cyllene3ASR = exports.Adaman3ASR = exports.OriginFormeDialgaVSTAR2ASR = exports.HisuianSamurottVSTAR2ASR = exports.HisuianDecidueyeVSTAR2ASR = exports.OriginFormePalkiaVSTAR2ASR = exports.Roxanne2ASR = exports.Irida2ASR = exports.Grant2ASR = exports.GardeniasVigor2ASR = exports.Cyllene2ASR = exports.Adaman2ASR = exports.WyrdeerV2ASR = exports.OranguruV2ASR = exports.GarchompV2ASR = exports.OriginFormeDialgaV2ASR = exports.HisuianSamurottV2ASR = exports.HisuianDecidueyeV2ASR = exports.LuxrayV2ASR = exports.OriginFormePalkiaV2ASR = exports.StarmieV2ASR = exports.UnidentifiedFossilASR = exports.BronzongASR = void 0;
-exports.ShadowRiderCalyrexVMAX2ASR = exports.IceRiderCalyrexVMAX2ASR = exports.PiersASR = exports.MelonyASR = exports.GarchompV3ASR = void 0;
+exports.Zisu3 = exports.Kamado3 = exports.Choy3 = exports.MachampVmax2 = exports.HisuianTyphlosionVstar2 = exports.HeatranVmax2 = exports.HisuianLilligantVstar2 = exports.Zisu2 = exports.Kamado2 = exports.Choy2 = exports.HisuianSneaslerV3 = exports.HisuianSneaslerV2 = exports.MachampV3 = exports.MachampV2 = exports.HisuianTyphlosionV2 = exports.HeatranV2 = exports.HisuianLilligantV3 = exports.HisuianLilligantV2 = exports.BeedrillV3 = exports.BeedrillV2 = exports.DewottASR = exports.BarboachASR = exports.ShadowRiderCalyrexVMAX2ASR = exports.IceRiderCalyrexVMAX2ASR = exports.PiersASR = exports.MelonyASR = exports.GarchompV3ASR = void 0;
 const unidentified_fossil_1 = require("../set-silver-tempest/unidentified-fossil");
 const starmie_v_1 = require("../set-astral-radiance/starmie-v");
 const origin_forme_palkia_v_1 = require("../set-astral-radiance/origin-forme-palkia-v");
@@ -46,6 +46,21 @@ const piers_1 = require("../set-champions-path/piers");
 const ice_rider_calyrex_vmax_2 = require("../set-chilling-reign/ice-rider-calyrex-vmax");
 const shadow_rider_calyrex_vmax_2 = require("../set-chilling-reign/shadow-rider-calyrex-vmax");
 const bronzong_1 = require("../set-battle-styles/bronzong");
+const barboach_1 = require("../set-rebel-clash/barboach");
+const dewott_1 = require("../set-vivid-voltage/dewott");
+const beedrill_v_1 = require("./beedrill-v");
+const hisuian_lilligant_v_1 = require("./hisuian-lilligant-v");
+const heatran_v_1 = require("./heatran-v");
+const hisuian_typhlosion_v_1 = require("./hisuian-typhlosion-v");
+const machamp_v_1 = require("./machamp-v");
+const hisuian_sneasler_v_1 = require("./hisuian-sneasler-v");
+const choy_1 = require("./choy");
+const kamado_1 = require("./kamado");
+const zisu_1 = require("./zisu");
+const hisuian_lilligant_vstar_1 = require("./hisuian-lilligant-vstar");
+const heatran_vmax_1 = require("./heatran-vmax");
+const hisuian_typhlosion_vstar_1 = require("./hisuian-typhlosion-vstar");
+const machamp_vmax_1 = require("./machamp-vmax");
 class BronzongASR extends bronzong_1.Bronzong {
     constructor() {
         super(...arguments);
@@ -541,3 +556,206 @@ class ShadowRiderCalyrexVMAX2ASR extends shadow_rider_calyrex_vmax_2.ShadowRider
     }
 }
 exports.ShadowRiderCalyrexVMAX2ASR = ShadowRiderCalyrexVMAX2ASR;
+// Reprints from other sets
+class BarboachASR extends barboach_1.Barboach {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '35';
+        this.fullName = 'Barboach ASR 35';
+    }
+}
+exports.BarboachASR = BarboachASR;
+class DewottASR extends dewott_1.Dewott {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '42';
+        this.fullName = 'Dewott ASR 42';
+    }
+}
+exports.DewottASR = DewottASR;
+// Alt-art V cards
+class BeedrillV2 extends beedrill_v_1.BeedrillV {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '160';
+        this.fullName = 'Beedrill V ASR 160';
+    }
+}
+exports.BeedrillV2 = BeedrillV2;
+class BeedrillV3 extends beedrill_v_1.BeedrillV {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '161';
+        this.fullName = 'Beedrill V ASR 161';
+    }
+}
+exports.BeedrillV3 = BeedrillV3;
+class HisuianLilligantV2 extends hisuian_lilligant_v_1.HisuianLilligantV {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '162';
+        this.fullName = 'Hisuian Lilligant V ASR 162';
+    }
+}
+exports.HisuianLilligantV2 = HisuianLilligantV2;
+class HisuianLilligantV3 extends hisuian_lilligant_v_1.HisuianLilligantV {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '163';
+        this.fullName = 'Hisuian Lilligant V ASR 163';
+    }
+}
+exports.HisuianLilligantV3 = HisuianLilligantV3;
+class HeatranV2 extends heatran_v_1.HeatranV {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '165';
+        this.fullName = 'Heatran V ASR 165';
+    }
+}
+exports.HeatranV2 = HeatranV2;
+class HisuianTyphlosionV2 extends hisuian_typhlosion_v_1.HisuianTyphlosionV {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '169';
+        this.fullName = 'Hisuian Typhlosion V ASR 169';
+    }
+}
+exports.HisuianTyphlosionV2 = HisuianTyphlosionV2;
+class MachampV2 extends machamp_v_1.MachampV {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '171';
+        this.fullName = 'Machamp V ASR 171';
+    }
+}
+exports.MachampV2 = MachampV2;
+class MachampV3 extends machamp_v_1.MachampV {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '172';
+        this.fullName = 'Machamp V ASR 172';
+    }
+}
+exports.MachampV3 = MachampV3;
+class HisuianSneaslerV2 extends hisuian_sneasler_v_1.HisuianSneaslerV {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '174';
+        this.fullName = 'Hisuian Sneasler V ASR 174';
+    }
+}
+exports.HisuianSneaslerV2 = HisuianSneaslerV2;
+class HisuianSneaslerV3 extends hisuian_sneasler_v_1.HisuianSneaslerV {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '175';
+        this.fullName = 'Hisuian Sneasler V ASR 175';
+    }
+}
+exports.HisuianSneaslerV3 = HisuianSneaslerV3;
+// Alt-art Trainer cards
+class Choy2 extends choy_1.Choy {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '182';
+        this.fullName = 'Choy ASR 182';
+    }
+}
+exports.Choy2 = Choy2;
+class Kamado2 extends kamado_1.Kamado {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '187';
+        this.fullName = 'Kamado ASR 187';
+    }
+}
+exports.Kamado2 = Kamado2;
+class Zisu2 extends zisu_1.Zisu {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '189';
+        this.fullName = 'Zisu ASR 189';
+    }
+}
+exports.Zisu2 = Zisu2;
+// Rainbow rare VSTAR/VMAX cards
+class HisuianLilligantVstar2 extends hisuian_lilligant_vstar_1.HisuianLilligantVstar {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '190';
+        this.fullName = 'Hisuian Lilligant VSTAR ASR 190';
+    }
+}
+exports.HisuianLilligantVstar2 = HisuianLilligantVstar2;
+class HeatranVmax2 extends heatran_vmax_1.HeatranVmax {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '191';
+        this.fullName = 'Heatran VMAX ASR 191';
+    }
+}
+exports.HeatranVmax2 = HeatranVmax2;
+class HisuianTyphlosionVstar2 extends hisuian_typhlosion_vstar_1.HisuianTyphlosionVstar {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '193';
+        this.fullName = 'Hisuian Typhlosion VSTAR ASR 193';
+    }
+}
+exports.HisuianTyphlosionVstar2 = HisuianTyphlosionVstar2;
+class MachampVmax2 extends machamp_vmax_1.MachampVmax {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '194';
+        this.fullName = 'Machamp VMAX ASR 194';
+    }
+}
+exports.MachampVmax2 = MachampVmax2;
+// Rainbow rare Trainer cards
+class Choy3 extends choy_1.Choy {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '200';
+        this.fullName = 'Choy ASR 200';
+    }
+}
+exports.Choy3 = Choy3;
+class Kamado3 extends kamado_1.Kamado {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '205';
+        this.fullName = 'Kamado ASR 205';
+    }
+}
+exports.Kamado3 = Kamado3;
+class Zisu3 extends zisu_1.Zisu {
+    constructor() {
+        super(...arguments);
+        this.set = 'ASR';
+        this.setNumber = '207';
+        this.fullName = 'Zisu ASR 207';
+    }
+}
+exports.Zisu3 = Zisu3;

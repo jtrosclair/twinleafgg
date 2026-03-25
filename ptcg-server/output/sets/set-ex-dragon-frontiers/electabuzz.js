@@ -33,11 +33,15 @@ class Electabuzz extends pokemon_card_1.PokemonCard {
         this.setNumber = '29';
         this.name = 'Electabuzz';
         this.fullName = 'Electabuzz DF';
+        this.POWER_DRAW_MARKER = 'POWER_DRAW_MARKER';
     }
     reduceEffect(store, state, effect) {
         if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
+            if (player.marker.hasMarker(this.POWER_DRAW_MARKER, this)) {
+                throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
+            }
             const cardList = game_1.StateUtils.findCardList(state, effect.card);
             if (cardList.getPokemons().length < 2) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -45,6 +49,7 @@ class Electabuzz extends pokemon_card_1.PokemonCard {
             const bottomCards = player.deck.cards.slice(-1);
             player.deck.moveCardsTo(bottomCards, player.hand);
             (0, prefabs_1.ABILITY_USED)(player, this);
+            (0, prefabs_1.ADD_MARKER)(this.POWER_DRAW_MARKER, player, this);
         }
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             (0, attack_effects_1.THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS)(store, state, effect, 30);

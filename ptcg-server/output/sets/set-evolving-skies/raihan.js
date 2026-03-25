@@ -5,7 +5,6 @@ const game_1 = require("../../game");
 const game_error_1 = require("../../game/game-error");
 const game_message_1 = require("../../game/game-message");
 const card_types_1 = require("../../game/store/card/card-types");
-const energy_card_1 = require("../../game/store/card/energy-card");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
@@ -28,14 +27,14 @@ function* playCard(next, store, state, self, effect) {
         throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
     }
     const hasEnergyInDiscard = player.discard.cards.some(c => {
-        return c instanceof energy_card_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC;
+        return c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC;
     });
     if (!hasEnergyInDiscard) {
         throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
     }
     const blocked = [];
     player.discard.cards.forEach((c, index) => {
-        const isBasicEnergy = c instanceof energy_card_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC;
+        const isBasicEnergy = c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC;
         if (!isBasicEnergy) {
             blocked.push(index);
         }
@@ -56,7 +55,6 @@ function* playCard(next, store, state, self, effect) {
                 next();
                 player.hand.moveCardTo(self, player.supporter);
                 (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: cards, sourceCard: self });
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
                     player.deck.applyOrder(order);
                 });

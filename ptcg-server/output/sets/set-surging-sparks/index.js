@@ -22,10 +22,11 @@ const cetitan_1 = require("./cetitan");
 const cetoddle_1 = require("./cetoddle");
 const charcadet_1 = require("./charcadet");
 const charcadet_2_1 = require("./charcadet-2");
-const cherish_carrier_1 = require("./cherish-carrier");
+const precious_trolley_1 = require("./precious-trolley");
 const chien_pao_1 = require("./chien-pao");
 const chill_teaser_toy_1 = require("./chill-teaser-toy");
 const clemonts_quick_wit_1 = require("./clemonts-quick-wit");
+const clobbopus_1 = require("./clobbopus");
 const cofagrigus_1 = require("./cofagrigus");
 const crocalor_1 = require("./crocalor");
 const cyclizar_ex_1 = require("./cyclizar-ex");
@@ -45,6 +46,7 @@ const espurr_1 = require("./espurr");
 const eternatus_1 = require("./eternatus");
 const exciting_stadium_1 = require("./exciting-stadium");
 const exeggcute_1 = require("./exeggcute");
+const flittle_1 = require("./flittle");
 const flygon_ex_1 = require("./flygon-ex");
 const fuecoco_1 = require("./fuecoco");
 const gastrodon_1 = require("./gastrodon");
@@ -52,6 +54,7 @@ const full_art_1 = require("./full-art");
 const gimmighoul_1 = require("./gimmighoul");
 const gholdengo_1 = require("./gholdengo");
 const gouging_fire_1 = require("./gouging-fire");
+const grapploct_1 = require("./grapploct");
 const gravity_mountain_1 = require("./gravity-mountain");
 const helper_bell_1 = require("./helper.bell");
 const ho_oh_1 = require("./ho-oh");
@@ -73,8 +76,8 @@ const mesprit_1 = require("./mesprit");
 const milotic_ex_1 = require("./milotic-ex");
 const miraculous_intercom_1 = require("./miraculous-intercom");
 const ninetales_1 = require("./ninetales");
+const paldean_tauros_1 = require("./paldean-tauros");
 const palkia_1 = require("./palkia");
-const passimian_1 = require("./passimian");
 const palossand_ex_1 = require("./palossand-ex");
 const pansear_1 = require("./pansear");
 const brilliant_blender_1 = require("./brilliant-blender");
@@ -157,7 +160,7 @@ exports.setSurgingSparks = [
     new ho_oh_1.HoOh(),
     new azulmarill_1.Azumarill(),
     new brilliant_blender_1.BrilliantBlender(),
-    new cherish_carrier_1.CherishCarrier(),
+    new precious_trolley_1.PreciousTrolley(),
     new marill_1.Marill(),
     new tera_orb_1.TeraOrb(),
     new trapinch_1.Trapinch(),
@@ -185,6 +188,7 @@ exports.setSurgingSparks = [
     new sylveon_ex_1.Sylveonex(),
     new lisias_appeal_1.LisiasAppeal(),
     new sandygast_1.Sandygast(),
+    new paldean_tauros_1.PaldeanTauros(),
     new palossand_ex_1.Palossandex(),
     new capsakid_1.Capsakid(),
     new shroodle_1.Shroodle(),
@@ -203,6 +207,9 @@ exports.setSurgingSparks = [
     new energy_search_pro_1.EnergySearchPro(),
     new surfer_1.Surfer(),
     new gouging_fire_1.GougingFire(),
+    new grapploct_1.Grapploct(),
+    new clobbopus_1.Clobbopus(),
+    new flittle_1.Flittle(),
     new alolan_diglett_1.AlolanDiglett(),
     new alolan_dugtrio_1.AlolanDugtrio(),
     new amulet_of_hope_1.AmuletofHope(),
@@ -239,7 +246,6 @@ exports.setSurgingSparks = [
     new armarouge_1.Armarouge(),
     new rotom_1.Rotom(),
     new victini_1.Victini(),
-    new passimian_1.Passimian(),
     // Reprints
     new other_prints_1.ScrambleSwitchSSP(),
     new other_prints_1.CounterGainSSP(),

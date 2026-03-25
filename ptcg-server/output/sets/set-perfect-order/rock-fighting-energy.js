@@ -20,7 +20,7 @@ class RockFightingEnergy extends energy_card_1.EnergyCard {
         this.setNumber = '80';
         this.text = `This card provides [F] Energy while this card is attached to a Pokémon.
   
-  Prevent all effects of attacks used by your opponent\'s Pokémon done to the [F] Pokémon this card is attached to. (Existing effects are not removed. Damage is not an effect.)`;
+  Prevent all effects of attacks used by your opponent's Pokémon done to the [F] Pokémon this card is attached to. (Existing effects are not removed. Damage is not an effect.)`;
     }
     reduceEffect(store, state, effect) {
         var _a;

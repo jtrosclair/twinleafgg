@@ -36,7 +36,6 @@ function* playCard(next, store, state, self, effect) {
         next();
     });
     (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.deck, { cards, sourceCard: self });
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     cards.forEach((card, index) => {
         store.log(state, game_message_1.GameLog.LOG_PLAYER_RETURNS_TO_DECK_FROM_DISCARD, { name: player.name, card: card.name });
     });

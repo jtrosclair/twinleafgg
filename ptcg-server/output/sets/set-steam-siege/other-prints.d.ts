@@ -1,10 +1,12 @@
-import { GardevoirSpiritLink } from "../set-primal-clash/gardevoir-spirit-link";
-import { VolcanionEX as VolcanionEXSTS26 } from "../set-steam-siege/volcanion-ex";
-import { GardevoirEx as GardevoirExSTS78 } from "../set-steam-siege/gardevoir-ex";
-import { MGardevoirEx as MGardevoirExSTS79 } from "../set-steam-siege/mega-gardevoir-ex";
-import { PokemonRanger as PokemonRangerSTS104 } from "../set-steam-siege/pokemon-ranger";
-import { ProfessorSycamoreXY } from "../set-x-and-y/other-prints";
+import { GardevoirSpiritLink } from '../set-primal-clash/gardevoir-spirit-link';
+import { VolcanionEX as VolcanionEXSTS26 } from '../set-steam-siege/volcanion-ex';
+import { GardevoirEx as GardevoirExSTS78 } from '../set-steam-siege/gardevoir-ex';
+import { MGardevoirEx as MGardevoirExSTS79 } from '../set-steam-siege/mega-gardevoir-ex';
+import { PokemonRanger as PokemonRangerSTS104 } from '../set-steam-siege/pokemon-ranger';
+import { ProfessorSycamoreXY } from '../set-x-and-y/other-prints';
 import { MagearnaEX } from './magearna-ex';
+import { SteelixEx } from './steelix-ex';
+import { MSteelixEx } from './m-steelix-ex';
 export declare class MagearnaEXSTS extends MagearnaEX {
     set: string;
     setNumber: string;
@@ -49,4 +51,14 @@ export declare class GardevoirEx3STS extends GardevoirExSTS78 {
     setNumber: string;
     fullName: string;
     set: string;
+}
+export declare class SteelixEx2 extends SteelixEx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class MSteelixEx2 extends MSteelixEx {
+    set: string;
+    setNumber: string;
+    fullName: string;
 }

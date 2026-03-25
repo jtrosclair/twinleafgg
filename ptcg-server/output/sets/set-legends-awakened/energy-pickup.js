@@ -19,7 +19,7 @@ class EnergyPickup extends game_1.TrainerCard {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;
             const hasEnergyInDiscard = player.discard.cards.some(c => {
-                return c instanceof game_1.EnergyCard
+                return c.superType === card_types_1.SuperType.ENERGY
                     && c.energyType === card_types_1.EnergyType.BASIC;
             });
             if (!hasEnergyInDiscard) {
@@ -29,7 +29,6 @@ class EnergyPickup extends game_1.TrainerCard {
                 new game_1.CoinFlipPrompt(player.id, game_1.GameMessage.COIN_FLIP)
             ], result => {
                 if (!result) {
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                     return state;
                 }
                 if (result === true) {
@@ -38,13 +37,11 @@ class EnergyPickup extends game_1.TrainerCard {
                         transfers = transfers || [];
                         // cancelled by user
                         if (transfers.length === 0) {
-                            player.supporter.moveCardTo(effect.trainerCard, player.discard);
                             return;
                         }
                         for (const transfer of transfers) {
                             const target = game_1.StateUtils.getTarget(state, player, transfer.to);
                             player.discard.moveCardTo(transfer.card, target);
-                            player.supporter.moveCardTo(effect.trainerCard, player.discard);
                         }
                     });
                     return state;

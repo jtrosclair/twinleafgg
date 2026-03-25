@@ -26,7 +26,6 @@ function* playCard(next, store, state, effect) {
     if (cards.length > 0) {
         yield store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });
@@ -41,7 +40,7 @@ class MegaSignal extends trainer_card_1.TrainerCard {
         this.cardImage = 'assets/cardback.png';
         this.name = 'Mega Signal';
         this.fullName = 'Mega Signal M1S';
-        this.text = 'Search your deck for 1 Mega Evolution Pokémon ex, reveal it, and put it into your hand. Then shuffle your deck.';
+        this.text = 'Search your deck for a Mega Evolution Pokémon ex, reveal it, and put it into your hand. Then, shuffle your deck.';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

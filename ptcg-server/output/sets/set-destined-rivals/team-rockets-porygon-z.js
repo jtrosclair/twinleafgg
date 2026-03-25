@@ -4,7 +4,6 @@ exports.TeamRocketsPorygonZ = void 0;
 const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
@@ -49,7 +48,7 @@ class TeamRocketsPorygonZ extends pokemon_card_1.PokemonCard {
             effect.player.marker.removeMarker(this.RECONSTITUTE_MARKER, this);
         }
         // Reconstitute ability
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             // Check if ability was already used this turn
             if (player.marker.hasMarker(this.RECONSTITUTE_MARKER, this)) {
@@ -85,7 +84,7 @@ class TeamRocketsPorygonZ extends pokemon_card_1.PokemonCard {
             return state;
         }
         // Control R attack
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // Count Team Rocket Supporters in discard pile
             const teamRocketSupporters = player.discard.cards.filter(card => card instanceof trainer_card_1.TrainerCard &&

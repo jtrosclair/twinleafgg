@@ -7,7 +7,6 @@ const trainer_card_1 = require("../../game/store/card/trainer-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
-const energy_card_1 = require("../../game/store/card/energy-card");
 const shuffle_prompt_1 = require("../../game/store/prompts/shuffle-prompt");
 const trainer_prefabs_1 = require("../../game/store/prefabs/trainer-prefabs");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -33,7 +32,7 @@ class BrocksGrit extends trainer_card_1.TrainerCard {
             const blocked = [];
             player.discard.cards.forEach((c, index) => {
                 const isPokemon = c instanceof pokemon_card_1.PokemonCard;
-                const isBasicEnergy = c instanceof energy_card_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC;
+                const isBasicEnergy = c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC;
                 if (isPokemon || isBasicEnergy) {
                     pokemonsOrEnergyInDiscard += 1;
                 }
@@ -52,7 +51,6 @@ class BrocksGrit extends trainer_card_1.TrainerCard {
                     store.log(state, game_message_1.GameLog.LOG_PLAYER_RETURNS_TO_DECK_FROM_DISCARD, { name: player.name, card: card.name });
                 });
                 (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.deck, { cards: cards, sourceCard: this });
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
                     player.deck.applyOrder(order);
                 });

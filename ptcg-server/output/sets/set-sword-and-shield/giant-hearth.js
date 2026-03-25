@@ -50,7 +50,7 @@ class GiantHearth extends trainer_card_1.TrainerCard {
         this.setNumber = '197';
         this.text = 'Once during each player\'s turn, that player may discard a card from ' +
             'their hand. If they do, that player searches their deck for up to ' +
-            '2 R Energy cards, reveals them, and puts them into their hand. ' +
+            '2 [R] Energy cards, reveals them, and puts them into their hand. ' +
             'Then, that player shuffles their deck.';
     }
     reduceEffect(store, state, effect) {

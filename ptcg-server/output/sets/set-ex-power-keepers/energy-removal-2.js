@@ -30,7 +30,6 @@ function* playCard(next, store, state, effect) {
         next();
     });
     if (coinResult === false) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return state;
     }
     let targets = [];
@@ -39,7 +38,6 @@ function* playCard(next, store, state, effect) {
         next();
     });
     if (targets.length === 0) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return state;
     }
     const target = targets[0];
@@ -49,7 +47,6 @@ function* playCard(next, store, state, effect) {
         next();
     });
     target.moveCardsTo(cards, opponent.discard);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return state;
 }
 class EnergyRemoval2 extends trainer_card_1.TrainerCard {

@@ -32,7 +32,6 @@ function* playCard(next, store, state, effect) {
             // Recover discarded energies
             player.discard.moveCardsTo(selected, player.hand);
         }
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
     });
 }
 class FireCrystal extends trainer_card_1.TrainerCard {
@@ -54,7 +53,6 @@ class FireCrystal extends trainer_card_1.TrainerCard {
             store.reduceEffect(state, discardEffect);
             if (discardEffect.preventDefault) {
                 // If prevented, just discard the card and return
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             }
             const generator = playCard(() => generator.next(), store, state, effect);

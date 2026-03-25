@@ -31,7 +31,7 @@ class NsPlan extends trainer_card_1.TrainerCard {
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
                 pokemonCount += 1;
                 const basicEnergyAttached = cardList.cards.some(c => {
-                    return c instanceof game_1.EnergyCard;
+                    return c.superType === card_types_1.SuperType.ENERGY;
                 });
                 hasEnergy = hasEnergy || basicEnergyAttached;
             });
@@ -66,7 +66,6 @@ class NsPlan extends trainer_card_1.TrainerCard {
                         }
                     }
                 }
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             });
         }
         return state;

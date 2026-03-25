@@ -4,6 +4,7 @@ exports.Aipom = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
+const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Aipom extends pokemon_card_1.PokemonCard {
@@ -34,7 +35,9 @@ class Aipom extends pokemon_card_1.PokemonCard {
         this.SNAPPY_MOVE_MARKER = 'SNAPPY_MOVE_MARKER';
     }
     reduceEffect(store, state, effect) {
-        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.SNAPPY_MOVE_MARKER, this);
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.SNAPPY_MOVE_MARKER, effect.player)) {
+            effect.player.marker.removeMarker(this.SNAPPY_MOVE_MARKER);
+        }
         if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const cardList = game_1.StateUtils.findCardList(state, this);
@@ -51,6 +54,9 @@ class Aipom extends pokemon_card_1.PokemonCard {
             if (!aipomCard) {
                 return state;
             }
+            (0, prefabs_1.ADD_MARKER)(this.SNAPPY_MOVE_MARKER, player, this);
+            (0, prefabs_1.ABILITY_USED)(player, this);
+            (0, prefabs_1.DRAW_CARDS)(player, 1);
             const pokemons = aipomSlot.getPokemons();
             const otherCards = aipomSlot.cards.filter(card => !(card instanceof pokemon_card_1.PokemonCard) &&
                 !pokemons.includes(card) &&
@@ -71,8 +77,6 @@ class Aipom extends pokemon_card_1.PokemonCard {
                 (0, prefabs_1.MOVE_CARDS)(store, state, aipomSlot, player.deck, { cards: pokemons, toBottom: true });
             }
             aipomSlot.clearEffects();
-            (0, prefabs_1.DRAW_CARDS)(player, 1);
-            (0, prefabs_1.ADD_MARKER)(this.SNAPPY_MOVE_MARKER, player, this);
         }
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(10, effect, store, state);

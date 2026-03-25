@@ -34,8 +34,7 @@ function* playCard(next, store, state, effect) {
         const healEffect = new game_effects_1.HealEffect(player, player.active, 30);
         store.reduceEffect(state, healEffect);
         player.active.clearEffects();
-        player.switchPokemon(targets[0]);
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
+        player.switchPokemon(targets[0], store, state);
         return state;
     }
     return state;

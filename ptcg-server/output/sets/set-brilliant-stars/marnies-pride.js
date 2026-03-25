@@ -5,7 +5,6 @@ const game_1 = require("../../game");
 const game_error_1 = require("../../game/game-error");
 const game_message_1 = require("../../game/game-message");
 const card_types_1 = require("../../game/store/card/card-types");
-const energy_card_1 = require("../../game/store/card/energy-card");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -26,7 +25,7 @@ class MarniesPride extends trainer_card_1.TrainerCard {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;
             const supporterTurn = player.supporterTurn;
-            if (!player.discard.cards.some(c => c instanceof energy_card_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC)) {
+            if (!player.discard.cards.some(c => c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC)) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
             if (supporterTurn > 0) {
@@ -41,7 +40,6 @@ class MarniesPride extends trainer_card_1.TrainerCard {
                     const target = state_utils_1.StateUtils.getTarget(state, player, transfer.to);
                     (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this });
                 }
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return state;
             });
             return state;

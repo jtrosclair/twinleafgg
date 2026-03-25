@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Dipplin = void 0;
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Dipplin extends game_1.PokemonCard {
     constructor() {
@@ -35,7 +34,7 @@ class Dipplin extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Handle the Do the Wave attack
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const activePokemon = opponent.active.getPokemonCard();

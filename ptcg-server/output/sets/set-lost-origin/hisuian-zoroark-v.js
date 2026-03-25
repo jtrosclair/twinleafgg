@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.HisuianZoroarkV = void 0;
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class HisuianZoroarkV extends game_1.PokemonCard {
@@ -46,7 +45,7 @@ class HisuianZoroarkV extends game_1.PokemonCard {
             (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
             this.usedVoidReturn = false;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const hasBench = player.bench.some(b => b.cards.length > 0);
             if (hasBench === false) {

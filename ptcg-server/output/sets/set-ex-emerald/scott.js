@@ -42,7 +42,6 @@ class Scott extends game_1.TrainerCard {
                 (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: cards, sourceCard: this });
                 (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         }
         return state;
     }

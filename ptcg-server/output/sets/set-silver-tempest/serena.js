@@ -44,7 +44,6 @@ class Serena extends trainer_card_1.TrainerCard {
                                     break;
                                 }
                                 player.deck.moveTo(player.hand, 1);
-                                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                             }
                             return state;
                         });
@@ -71,7 +70,6 @@ class Serena extends trainer_card_1.TrainerCard {
                                     store.reduceEffect(state, supporterEffect);
                                 }
                                 catch (_d) {
-                                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                                     return state;
                                 }
                             }
@@ -79,7 +77,6 @@ class Serena extends trainer_card_1.TrainerCard {
                                 throw new game_1.GameError(game_message_1.GameMessage.INVALID_TARGET);
                             }
                             opponent.switchPokemon(cardList);
-                            player.supporter.moveCardTo(effect.trainerCard, player.discard);
                             return state;
                         });
                     }

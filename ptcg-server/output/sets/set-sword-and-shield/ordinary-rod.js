@@ -14,7 +14,7 @@ function* playCard(next, store, state, self, effect) {
     const player = effect.player;
     const opponent = state_utils_1.StateUtils.getOpponent(state, player);
     let cards = [];
-    const pokemonAndEnergyInDiscardPile = player.discard.cards.filter(c => c instanceof game_1.PokemonCard || (c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC)).length;
+    const pokemonAndEnergyInDiscardPile = player.discard.cards.filter(c => c instanceof game_1.PokemonCard || (c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC)).length;
     if (pokemonAndEnergyInDiscardPile === 0) {
         throw new game_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
     }
@@ -25,7 +25,7 @@ function* playCard(next, store, state, self, effect) {
     let energies = 0;
     const blocked = [];
     player.discard.cards.forEach((c, index) => {
-        if (c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC) {
+        if (c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC) {
             energies += 1;
         }
         else if (c instanceof game_1.PokemonCard) {
@@ -43,14 +43,12 @@ function* playCard(next, store, state, self, effect) {
         next();
     });
     player.discard.moveCardsTo(cards, player.deck);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     cards.forEach((card, index) => {
         store.log(state, game_message_1.GameLog.LOG_PLAYER_RETURNS_TO_DECK_FROM_DISCARD, { name: player.name, card: card.name });
     });
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });
@@ -65,10 +63,10 @@ class OrdinaryRod extends trainer_card_1.TrainerCard {
         this.regulationMark = 'D';
         this.name = 'Ordinary Rod';
         this.fullName = 'Ordinary Rod SSH';
-        this.text = 'Choose 1 or both:' +
-            '' +
-            'Shuffle up to 2 Pokémon from your discard pile into your deck.' +
-            'Shuffle up to 2 basic Energy cards from your discard pile into your deck.';
+        this.text = `Choose 1 or both:
+
+  • Shuffle up to 2 Pokémon from your discard pile into your deck.
+  • Shuffle up to 2 basic Energy cards from your discard pile into your deck.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

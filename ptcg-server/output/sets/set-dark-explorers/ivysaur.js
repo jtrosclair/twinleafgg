@@ -10,21 +10,21 @@ class Ivysaur extends pokemon_card_1.PokemonCard {
         super(...arguments);
         this.stage = card_types_1.Stage.STAGE_1;
         this.evolvesFrom = 'Bulbasaur';
-        this.cardType = card_types_1.CardType.GRASS;
+        this.cardType = G;
         this.hp = 90;
-        this.weakness = [{ type: card_types_1.CardType.FIRE }];
-        this.resistance = [{ type: card_types_1.CardType.WATER, value: -20 }];
-        this.retreat = [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS];
+        this.weakness = [{ type: R }];
+        this.resistance = [{ type: W, value: -20 }];
+        this.retreat = [C, C, C];
         this.attacks = [
             {
                 name: 'Sleep Powder',
-                cost: [card_types_1.CardType.GRASS, card_types_1.CardType.COLORLESS],
+                cost: [G, C],
                 damage: 30,
                 text: 'The Defending Pokémon is now Asleep.',
             },
             {
                 name: 'Poison Powder',
-                cost: [card_types_1.CardType.GRASS, card_types_1.CardType.GRASS, card_types_1.CardType.COLORLESS],
+                cost: [G, G, C],
                 damage: 80,
                 text: 'The Defending Pokémon is now Poisoned.',
             }

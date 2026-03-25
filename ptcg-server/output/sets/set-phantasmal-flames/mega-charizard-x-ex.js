@@ -32,7 +32,7 @@ class MegaCharizardXex extends game_1.PokemonCard {
             const player = effect.player;
             let totalEnergy = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
-                const basicEnergyCount = cardList.cards.filter(card => card instanceof game_1.EnergyCard && (card.provides.includes(game_1.CardType.FIRE) || card.provides.includes(game_1.CardType.ANY))).length;
+                const basicEnergyCount = cardList.cards.filter(card => card.superType === game_1.SuperType.ENERGY && (card.provides.includes(game_1.CardType.FIRE) || card.provides.includes(game_1.CardType.ANY))).length;
                 totalEnergy += basicEnergyCount;
             });
             // Create blocked map for energy that doesn't provide Fire or Any type
@@ -41,7 +41,7 @@ class MegaCharizardXex extends game_1.PokemonCard {
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
                 const blockedIndices = [];
                 cardList.cards.forEach((energyCard, index) => {
-                    if (energyCard instanceof game_1.EnergyCard) {
+                    if (energyCard.superType === game_1.SuperType.ENERGY) {
                         // Block energy that doesn't provide Fire or Any type
                         if (!energyCard.provides.includes(game_1.CardType.FIRE) && !energyCard.provides.includes(game_1.CardType.ANY)) {
                             blockedIndices.push(index);

@@ -1,21 +1,27 @@
-import { Xerneas } from "../set-steam-siege/xerneas";
-import { Yveltal } from "../set-steam-siege/yveltal";
-import { XerneasEX } from "../set-x-and-y/xerneas-ex";
-import { YveltalEx } from "../set-x-and-y/yveltal-ex";
-import { Dragalge } from "../set-flashfire/dragalge";
-import { GroudonEx } from "../set-primal-clash/groudon-ex";
-import { HoopaEX } from "../set-ancient-origins/hoopa-ex";
-import { Meloetta } from "../set-x-and-y-promos/meloetta";
-import { MewEx } from "../set-legendary-treasures/mew-ex";
-import { Froakie as FroakieBKP38 } from "../set-breakpoint/froakie";
-import { Volcanion } from "../set-steam-siege/volcanion";
-import { XerneasEX as XerneasEXXY97 } from "../set-x-and-y/xerneas-ex";
-import { YveltalEx as YveltalExXY79 } from "../set-x-and-y/yveltal-ex";
-import { VolcanionEX } from "../set-steam-siege/volcanion-ex";
-import { MagearnaEX } from "../set-steam-siege/magearna-ex";
-import { Jirachi as JirachiXYP67 } from "../set-x-and-y-promos/jirachi";
-import { Karen as KarenXYP177 } from "../set-x-and-y-promos/karen";
+import { Xerneas } from '../set-steam-siege/xerneas';
+import { Yveltal } from '../set-steam-siege/yveltal';
+import { XerneasEX } from '../set-x-and-y/xerneas-ex';
+import { YveltalEx } from '../set-x-and-y/yveltal-ex';
+import { Dragalge } from '../set-flashfire/dragalge';
+import { GroudonEx } from '../set-primal-clash/groudon-ex';
+import { HoopaEX } from '../set-ancient-origins/hoopa-ex';
+import { Meloetta } from '../set-x-and-y-promos/meloetta';
+import { MewEx } from '../set-legendary-treasures/mew-ex';
+import { PalaceBook } from '../set-sun-and-moon-promos/palace-book';
+import { Froakie as FroakieBKP38 } from '../set-breakpoint/froakie';
+import { Volcanion } from '../set-steam-siege/volcanion';
+import { XerneasEX as XerneasEXXY97 } from '../set-x-and-y/xerneas-ex';
+import { YveltalEx as YveltalExXY79 } from '../set-x-and-y/yveltal-ex';
+import { VolcanionEX } from '../set-steam-siege/volcanion-ex';
+import { MagearnaEX } from '../set-steam-siege/magearna-ex';
+import { Jirachi as JirachiXYP67 } from '../set-x-and-y-promos/jirachi';
+import { Karen as KarenXYP177 } from '../set-x-and-y-promos/karen';
 import { Bronzong } from '../set-phantom-forces/bronzong';
+export declare class PalaceBookXYP extends PalaceBook {
+    setNumber: string;
+    fullName: string;
+    set: string;
+}
 export declare class BronzongXYP extends Bronzong {
     fullName: string;
     set: string;

@@ -23,9 +23,7 @@ function* playCard(next, store, state, effect) {
             next();
         });
         if (targets.length > 0) {
-            opponent.active.clearEffects();
             opponent.switchPokemon(targets[0]);
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
     }
     if (playerHasBench) {
@@ -34,12 +32,9 @@ function* playCard(next, store, state, effect) {
             next();
         });
         if (targets.length > 0) {
-            player.active.clearEffects();
             player.switchPokemon(targets[0]);
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
     }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return state;
 }
 class EscapeRope extends trainer_card_1.TrainerCard {

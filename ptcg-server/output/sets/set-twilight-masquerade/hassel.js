@@ -36,7 +36,6 @@ function* playCard(next, store, state, self, effect) {
     return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, deckTop, {}, { min: 0, max: 3, allowCancel: false }), selected => {
         deckTop.moveCardsTo(selected, player.hand);
         deckTop.moveTo(player.deck);
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
             player.deck.applyOrder(order);
             return state;

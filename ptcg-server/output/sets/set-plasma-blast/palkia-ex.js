@@ -37,7 +37,14 @@ class PalkiaEX extends game_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             const player = effect.player;
-            (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
+            const hasBenched = player.bench.some(b => b.cards.length > 0);
+            if (hasBenched) {
+                (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
+                    if (result) {
+                        (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, player);
+                    }
+                });
+            }
         }
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
@@ -47,7 +54,7 @@ class PalkiaEX extends game_1.PokemonCard {
             let totalPlasmaEnergy = 0;
             checkEnergy.energyMap.forEach(em => {
                 const energyCard = em.card;
-                if (energyCard instanceof game_1.EnergyCard && energyCard.name === 'Plasma Energy') {
+                if (energyCard.superType === game_1.SuperType.ENERGY && energyCard.name === 'Plasma Energy') {
                     totalPlasmaEnergy += 1;
                 }
             });

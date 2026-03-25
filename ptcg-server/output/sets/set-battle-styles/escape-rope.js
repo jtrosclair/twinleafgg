@@ -6,7 +6,6 @@ const card_types_1 = require("../../game/store/card/card-types");
 const choose_pokemon_prompt_1 = require("../../game/store/prompts/choose-pokemon-prompt");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_1 = require("../../game");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* playCard(next, store, state, effect) {
     const player = effect.player;
     const opponent = game_1.StateUtils.getOpponent(state, player);
@@ -25,7 +24,7 @@ function* playCard(next, store, state, effect) {
             next();
         });
         if (targets.length > 0) {
-            opponent.switchPokemon(targets[0]);
+            opponent.switchPokemon(targets[0], store, state);
         }
     }
     if (playerHasBench) {
@@ -34,10 +33,9 @@ function* playCard(next, store, state, effect) {
             next();
         });
         if (targets.length > 0) {
-            player.switchPokemon(targets[0]);
+            player.switchPokemon(targets[0], store, state);
         }
     }
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return state;
 }
 class EscapeRope extends trainer_card_1.TrainerCard {

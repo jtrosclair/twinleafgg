@@ -5,7 +5,6 @@ const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class FullHeal extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -24,7 +23,6 @@ class FullHeal extends trainer_card_1.TrainerCard {
                 throw new game_1.GameError(game_1.GameStoreMessage.CANNOT_PLAY_THIS_CARD);
             }
             player.active.specialConditions = [];
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         }
         return state;
     }

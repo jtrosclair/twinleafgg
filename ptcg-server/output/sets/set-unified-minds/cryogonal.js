@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Cryogonal = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Cryogonal extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -30,7 +30,7 @@ class Cryogonal extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Frozen Lock
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             opponent.marker.addMarker(this.FROZEN_LOCK_MARKER, this);
         }

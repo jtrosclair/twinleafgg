@@ -61,7 +61,7 @@ class PokemonReversalHS extends pokemon_reversal_1.PokemonReversal {
     constructor() {
         super(...arguments);
         this.fullName = 'Pokemon Reversal HS';
-        this.name = 'Pokemon Reversal';
+        this.name = 'Pokémon Reversal';
         this.set = 'HS';
         this.setNumber = '99';
         this.text = 'Flip a coin. If heads, choose 1 of your opponent\'s Benched Pokémon and switch it with your opponent\'s Active Pokémon.';

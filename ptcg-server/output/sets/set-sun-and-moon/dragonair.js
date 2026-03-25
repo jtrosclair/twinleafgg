@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Dragonair = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Dragonair extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -45,7 +45,7 @@ class Dragonair extends pokemon_card_1.PokemonCard {
             effect.player.marker.addMarker(this.DRAGONS_WISH_2_MARKER, this);
             player.usedDragonsWish = true;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             effect.player.marker.addMarker(this.DRAGONS_WISH_MARKER, this);
         }
         return state;

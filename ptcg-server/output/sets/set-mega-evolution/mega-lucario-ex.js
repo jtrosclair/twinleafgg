@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MegaLucarioex = void 0;
 const game_1 = require("../../game");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class MegaLucarioex extends game_1.PokemonCard {
     constructor() {
@@ -24,7 +23,7 @@ class MegaLucarioex extends game_1.PokemonCard {
                 name: 'Mega Brave',
                 cost: [F, F],
                 damage: 270,
-                text: 'During your next turn, this Pokemon can\'t use Mega Brave.',
+                text: 'During your next turn, this Pokémon can\'t use Mega Brave.',
             }];
         this.regulationMark = 'I';
         this.set = 'MEG';
@@ -32,8 +31,6 @@ class MegaLucarioex extends game_1.PokemonCard {
         this.cardImage = 'assets/cardback.png';
         this.name = 'Mega Lucario ex';
         this.fullName = 'Mega Lucario ex M1L';
-        this.MEGA_BRAVE_MARKER = 'MEGA_BRAVE_MARKER';
-        this.CLEAR_MEGA_BRAVE_MARKER = 'CLEAR_MEGA_BRAVE_MARKER';
     }
     reduceEffect(store, state, effect) {
         // Aura Jab
@@ -53,19 +50,9 @@ class MegaLucarioex extends game_1.PokemonCard {
         }
         // Mega Brave
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
-            if ((0, prefabs_1.HAS_MARKER)(this.MEGA_BRAVE_MARKER, effect.player, this)) {
-                throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
-            }
-            (0, prefabs_1.ADD_MARKER)(this.MEGA_BRAVE_MARKER, effect.player, this);
-            effect.player.marker.addMarker(this.MEGA_BRAVE_MARKER, this);
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.MEGA_BRAVE_MARKER, this)) {
-            if (!effect.player.marker.hasMarker(this.CLEAR_MEGA_BRAVE_MARKER, this)) {
-                effect.player.marker.addMarker(this.CLEAR_MEGA_BRAVE_MARKER, this);
-            }
-            else if (effect.player.marker.hasMarker(this.CLEAR_MEGA_BRAVE_MARKER, this)) {
-                effect.player.marker.removeMarker(this.MEGA_BRAVE_MARKER, this);
-                effect.player.marker.removeMarker(this.CLEAR_MEGA_BRAVE_MARKER, this);
+            const player = effect.player;
+            if (!player.active.cannotUseAttacksNextTurnPending.includes('Mega Brave')) {
+                player.active.cannotUseAttacksNextTurnPending.push('Mega Brave');
             }
         }
         return state;

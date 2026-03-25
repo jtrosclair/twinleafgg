@@ -4,13 +4,13 @@ exports.Dragonite = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
 const game_message_1 = require("../../game/game-message");
 const show_cards_prompt_1 = require("../../game/store/prompts/show-cards-prompt");
 const state_utils_1 = require("../../game/store/state-utils");
 const game_1 = require("../../game");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Dragonite extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -45,7 +45,7 @@ class Dragonite extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.FAST_CALL_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             if (player.deck.cards.length === 0) {

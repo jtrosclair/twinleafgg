@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Yveltal = void 0;
-const game_1 = require("../../game");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
 class Yveltal extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -30,11 +30,8 @@ class Yveltal extends pokemon_card_1.PokemonCard {
         this.fullName = 'Yveltal SHF';
     }
     reduceEffect(store, state, effect) {
-        // Amazing Destruction
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            const player = effect.player;
-            const opponent = game_1.StateUtils.getOpponent(state, player);
-            opponent.active.damage += 999;
+            (0, attack_effects_1.KNOCK_OUT_OPPONENTS_ACTIVE_POKEMON)(store, state, effect);
         }
         return state;
     }

@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZoroarkGX3SLG = exports.UltraBall2SLG = exports.MewtwoGX4SLG = exports.ZoroarkGX2SLG = exports.MewtwoGX3SLG = exports.PokemonBreeder2SLG = exports.MewtwoGX2SLG = exports.DoubleColorlessEnergySLG = exports.UltraBallSLG = exports.SwitchSLG = exports.SuperScoopUpSLG = exports.SophoclesSLG = exports.PokemonCatcherSLG = exports.PokemonBreederSLG = exports.LillieSLG = exports.HauSLG = exports.GreatBallSLG = exports.EnergyRetrievalSLG = void 0;
+exports.RaichuGx2 = exports.EnteiGx3 = exports.EnteiGx2 = exports.ZoroarkGX3SLG = exports.UltraBall2SLG = exports.MewtwoGX4SLG = exports.ZoroarkGX2SLG = exports.MewtwoGX3SLG = exports.PokemonBreeder2SLG = exports.MewtwoGX2SLG = exports.DoubleColorlessEnergySLG = exports.UltraBallSLG = exports.SwitchSLG = exports.SuperScoopUpSLG = exports.SophoclesSLG = exports.PokemonCatcherSLG = exports.PokemonBreederSLG = exports.LillieSLG = exports.HauSLG = exports.GreatBallSLG = exports.EnergyRetrievalSLG = void 0;
 const energy_retrieval_1 = require("../set-base-set/energy-retrieval");
 const great_ball_1 = require("../set-ex-firered-leafgreen/great-ball");
 const hau_1 = require("../set-celestial-storm/hau");
 const lillie_1 = require("../set-ultra-prism/lillie");
 const pokemon_breeder_1 = require("../set-base-set/pokemon-breeder");
-const pokemon_catcher_1 = require("../set-emerging-powers/pokemon-catcher");
+const pokemon_catcher_1 = require("../set-scarlet-and-violet/pokemon-catcher");
 const sophocles_1 = require("../set-burning-shadows/sophocles");
 const super_scoop_up_1 = require("../set-diamond-and-pearl/super-scoop-up");
 const switch_1 = require("../set-base-set/switch");
@@ -16,6 +16,8 @@ const mewtwo_gx_1 = require("../set-shining-legends/mewtwo-gx");
 const pokemon_breeder_2 = require("../set-base-set/pokemon-breeder");
 const zoroark_gx_1 = require("../set-shining-legends/zoroark-gx");
 const ultra_ball_2 = require("../set-scarlet-and-violet/ultra-ball");
+const entei_gx_1 = require("./entei-gx");
+const raichu_gx_1 = require("./raichu-gx");
 class EnergyRetrievalSLG extends energy_retrieval_1.EnergyRetrieval {
     constructor() {
         super(...arguments);
@@ -178,3 +180,30 @@ class ZoroarkGX3SLG extends zoroark_gx_1.ZoroarkGX {
     }
 }
 exports.ZoroarkGX3SLG = ZoroarkGX3SLG;
+class EnteiGx2 extends entei_gx_1.EnteiGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'SLG';
+        this.setNumber = '71';
+        this.fullName = 'Entei GX SLG 71';
+    }
+}
+exports.EnteiGx2 = EnteiGx2;
+class EnteiGx3 extends entei_gx_1.EnteiGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'SLG';
+        this.setNumber = '74';
+        this.fullName = 'Entei GX SLG 74';
+    }
+}
+exports.EnteiGx3 = EnteiGx3;
+class RaichuGx2 extends raichu_gx_1.RaichuGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'SLG';
+        this.setNumber = '75';
+        this.fullName = 'Raichu GX SLG 75';
+    }
+}
+exports.RaichuGx2 = RaichuGx2;

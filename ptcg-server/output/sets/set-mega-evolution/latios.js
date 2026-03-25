@@ -5,7 +5,7 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
-const energy_card_1 = require("../../game/store/card/energy-card");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Latios extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -39,11 +39,11 @@ class Latios extends pokemon_card_1.PokemonCard {
             return state;
         }
         const activePokemon = player.active.getPokemonCard();
-        if (activePokemon && activePokemon.name === 'M Latias-EX' && activePokemon.movedToActiveThisTurn) {
+        if (activePokemon && activePokemon.name === 'M Latias-EX' && (0, prefabs_1.MOVED_TO_ACTIVE_THIS_TURN)(player, activePokemon)) {
             if (!player.marker.hasMarker(this.LUSTER_ASSIST_MARKER, this)) {
                 let hasEnergyOnBench = false;
                 player.bench.forEach((b) => {
-                    if (b.cards.some((c) => c instanceof energy_card_1.EnergyCard)) {
+                    if (b.cards.some((c) => c.superType === card_types_1.SuperType.ENERGY)) {
                         hasEnergyOnBench = true;
                     }
                 });

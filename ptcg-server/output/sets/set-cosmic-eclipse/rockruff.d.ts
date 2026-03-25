@@ -3,16 +3,17 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 export declare class Rockruff extends PokemonCard {
+    usedRoar: boolean;
     stage: Stage;
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.GRASS;
     }[];
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: (CardType.FIGHTING | CardType.COLORLESS)[];
         damage: number;
         text: string;
     }[];
@@ -21,6 +22,5 @@ export declare class Rockruff extends PokemonCard {
     cardImage: string;
     name: string;
     fullName: string;
-    usedRoar: boolean;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

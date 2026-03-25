@@ -10,7 +10,7 @@ class DeltaRainbowEnergy extends energy_card_1.EnergyCard {
         this.provides = [card_types_1.CardType.COLORLESS];
         this.energyType = card_types_1.EnergyType.SPECIAL;
         this.set = 'HP';
-        this.name = 'Delta Rainbow Energy';
+        this.name = 'δ Rainbow Energy';
         this.fullName = 'Delta Rainbow Energy HP';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '98';

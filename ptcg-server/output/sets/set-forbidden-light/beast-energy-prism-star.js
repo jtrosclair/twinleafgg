@@ -16,8 +16,8 @@ class BeastEnergy extends energy_card_1.EnergyCard {
         this.set = 'FLI';
         this.setNumber = '117';
         this.cardImage = 'assets/cardback.png';
-        this.name = 'Beast Energy ◇';
-        this.fullName = 'Beast Energy ◇ FLI';
+        this.name = 'Beast Energy';
+        this.fullName = 'Beast Energy FLI';
         this.text = 'This card provides [C] Energy.' +
             '\n\n' +
             'While this card is attached to an Ultra Beast, it provides every type of Energy but provides only 1 Energy at a time. The attacks of the Ultra Beast this card is attached to do 30 more damage to your opponent\'s Active Pokémon (before applying Weakness and Resistance).';

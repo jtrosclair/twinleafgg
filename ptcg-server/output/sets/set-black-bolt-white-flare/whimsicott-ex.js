@@ -4,10 +4,10 @@ exports.Whimsicottex = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attach_energy_prompt_1 = require("../../game/store/prompts/attach-energy-prompt");
 const show_cards_prompt_1 = require("../../game/store/prompts/show-cards-prompt");
 const shuffle_prompt_1 = require("../../game/store/prompts/shuffle-prompt");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* useEnergyGift(next, store, state, effect) {
     const player = effect.player;
     if (player.deck.cards.length === 0) {
@@ -57,12 +57,12 @@ class Whimsicottex extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Energy Gift
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useEnergyGift(() => generator.next(), store, state, effect);
             return generator.next().value;
         }
         // Wonder Cotton
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             state = store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(player.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, opponent.hand.cards), () => {

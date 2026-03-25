@@ -76,7 +76,7 @@ class GardevoirLVX extends pokemon_card_1.PokemonCard {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
-            let leastHP = 9999999999999999;
+            let leastHP = Infinity;
             // figuring out which pokemon actually has the least hp
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {
                 if (card !== player.active) {

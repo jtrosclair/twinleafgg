@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Haunter = void 0;
-const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const card_types_1 = require("../../game/store/card/card-types");
-const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
+const card_types_1 = require("../../game/store/card/card-types");
+const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
+const game_message_1 = require("../../game/game-message");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 class Haunter extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -35,10 +35,10 @@ class Haunter extends pokemon_card_1.PokemonCard {
         this.fullName = 'Haunter SK';
     }
     reduceEffect(store, state, effect) {
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED)(store, state, effect);
+                    (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
                 }
             });
         }
@@ -47,7 +47,7 @@ class Haunter extends pokemon_card_1.PokemonCard {
             if (player.hand.cards.length === 0) {
                 return state;
             }
-            state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {}, { allowCancel: true, min: 0, max: 2 }), cards => {
+            state = store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {}, { allowCancel: true, min: 0, max: 2 }), cards => {
                 cards = cards || [];
                 if (cards.length === 0) {
                     return;

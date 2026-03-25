@@ -33,11 +33,9 @@ function* playCard(next, store, state, effect) {
         let coinFlip = false;
         yield store.prompt(state, new coin_flip_prompt_1.CoinFlipPrompt(player.id, game_message_1.GameMessage.COIN_FLIP), result => {
             coinFlip = result;
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
             next();
         });
         if (coinFlip === false) {
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
         }
         yield store.prompt(state, new choose_pokemon_prompt_1.ChoosePokemonPrompt(player.id, game_message_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, play_card_action_1.PlayerType.TOP_PLAYER, [play_card_action_1.SlotType.ACTIVE, play_card_action_1.SlotType.BENCH], { allowCancel: false }), targets => {
@@ -46,7 +44,6 @@ function* playCard(next, store, state, effect) {
             }
             next();
         });
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return state;
     }
     // Discard second Poke-Blower +
@@ -61,7 +58,6 @@ function* playCard(next, store, state, effect) {
             return;
         }
         opponent.switchPokemon(targets[0]);
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
     });
 }
 class PokeBlower extends trainer_card_1.TrainerCard {

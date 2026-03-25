@@ -9,7 +9,6 @@ const show_cards_prompt_1 = require("../../game/store/prompts/show-cards-prompt"
 const shuffle_prompt_1 = require("../../game/store/prompts/shuffle-prompt");
 const game_message_1 = require("../../game/game-message");
 const game_1 = require("../../game");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* playCard(next, store, state, effect) {
     const player = effect.player;
     const opponent = game_1.StateUtils.getOpponent(state, player);
@@ -34,7 +33,6 @@ function* playCard(next, store, state, effect) {
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });

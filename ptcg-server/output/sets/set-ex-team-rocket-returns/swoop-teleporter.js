@@ -59,7 +59,6 @@ class SwoopTeleporter extends trainer_card_1.TrainerCard {
                         (0, prefabs_1.MOVE_CARD_TO)(state, card, target[0]);
                     });
                     store.log(state, game_message_1.GameLog.LOG_PLAYER_SWITCHES_POKEMON_WITH_POKEMON_FROM_DECK, { name: player.name, card: target[0].getPokemonCard().name, secondCard: cards[0].name });
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                     (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                 });
             });

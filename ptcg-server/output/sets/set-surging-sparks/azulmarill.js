@@ -7,25 +7,26 @@ const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Azumarill extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.stage = card_types_1.Stage.STAGE_1;
         this.evolvesFrom = 'Marill';
         this.regulationMark = 'H';
-        this.cardType = card_types_1.CardType.PSYCHIC;
+        this.cardType = P;
         this.hp = 120;
-        this.weakness = [{ type: card_types_1.CardType.METAL }];
-        this.retreat = [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS];
+        this.weakness = [{ type: M }];
+        this.retreat = [C, C];
         this.powers = [{
-                name: 'Sparkly Bubbles',
+                name: 'Glistening Bubbles',
                 powerType: game_1.PowerType.ABILITY,
-                text: 'If you have a Tera Pokémon in play, this Pokémon\'s Double Edge attack can be used for 1 Psychic Energy.'
+                text: 'If you have any Tera Pokémon in play, this Pokémon can use the Double-Edge attack for [P].'
             }];
         this.attacks = [
             {
-                name: 'Double Edge',
-                cost: [card_types_1.CardType.PSYCHIC, card_types_1.CardType.PSYCHIC, card_types_1.CardType.PSYCHIC, card_types_1.CardType.PSYCHIC],
+                name: 'Double-Edge',
+                cost: [P, P, P, P],
                 damage: 230,
                 text: 'This Pokémon does 50 damage to itself.'
             }
@@ -70,7 +71,7 @@ class Azumarill extends pokemon_card_1.PokemonCard {
             }
             return state;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const dealDamage = new attack_effects_1.DealDamageEffect(effect, 50);
             dealDamage.target = player.active;

@@ -6,9 +6,9 @@ const card_types_1 = require("../../game/store/card/card-types");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const trainer_prefabs_1 = require("../../game/store/prefabs/trainer-prefabs");
+const game_effects_1 = require("../../game/store/effects/game-effects");
 class TeamAquaTechnicalMachine01 extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -17,7 +17,7 @@ class TeamAquaTechnicalMachine01 extends trainer_card_1.TrainerCard {
         this.set = 'MA';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '79';
-        this.name = 'Team Aqua Technichal Machine 01';
+        this.name = 'Team Aqua Technical Machine 01';
         this.fullName = 'Team Aqua Technichal Machine 01 MA';
         this.attacks = [{
                 name: 'Miracle',

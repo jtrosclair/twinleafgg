@@ -19,6 +19,7 @@ export declare class AntiquePlumeFossil extends TrainerCard {
     maxTools: number;
     evolvesTo: any[];
     evolvesToStage: any[];
+    evolvesFromBase: string[];
     powers: Power[];
     regulationMark: string;
     set: string;

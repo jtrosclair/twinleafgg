@@ -6,7 +6,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Lilligant extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -19,7 +19,7 @@ class Lilligant extends pokemon_card_1.PokemonCard {
         this.powers = [{
                 name: 'Sunny Day',
                 powerType: game_1.PowerType.ABILITY,
-                text: 'Attacks used by your [G] Pokémon and [R] Pokémon do 20 more damage to your opponent\'s Active Pokémon(before applying Weakness and Resistance).'
+                text: 'Attacks used by your [G] Pokémon and [R] Pokémon do 20 more damage to your opponent\'s Active Pokémon (before applying Weakness and Resistance).'
             }];
         this.attacks = [{
                 name: 'Spinning Attack',
@@ -38,15 +38,7 @@ class Lilligant extends pokemon_card_1.PokemonCard {
         if (effect instanceof attack_effects_1.DealDamageEffect) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const hasLilligantInPlay = player.bench.some(b => b.cards.includes(this)) || player.active.cards.includes(this);

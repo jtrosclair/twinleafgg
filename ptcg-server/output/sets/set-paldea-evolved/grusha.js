@@ -18,6 +18,12 @@ class Grusha extends trainer_card_1.TrainerCard {
         this.fullName = 'Grusha PAL';
         this.text = 'Draw cards until you have 5 cards in your hand. If none of your Pokémon have any Energy attached, draw cards until you have 7 cards in your hand instead.';
     }
+    canPlay(store, state, player) {
+        if (player.supporterTurn > 0) {
+            return false;
+        }
+        return player.deck.cards.length > 0;
+    }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;
@@ -37,7 +43,6 @@ class Grusha extends trainer_card_1.TrainerCard {
                         break;
                     }
                     player.deck.moveTo(player.hand, 1);
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 }
             }
             else {
@@ -46,7 +51,6 @@ class Grusha extends trainer_card_1.TrainerCard {
                         break;
                     }
                     player.deck.moveTo(player.hand, 1);
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 }
                 return state;
             }

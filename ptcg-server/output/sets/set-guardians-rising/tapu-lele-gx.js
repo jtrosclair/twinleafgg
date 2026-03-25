@@ -51,15 +51,7 @@ class TapuLeleGX extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
@@ -92,7 +84,7 @@ class TapuLeleGX extends pokemon_card_1.PokemonCard {
             });
         }
         // Energy Drive
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const playerProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
@@ -105,7 +97,7 @@ class TapuLeleGX extends pokemon_card_1.PokemonCard {
                 .reduce((left, p) => left + p.provides.length, 0);
             effect.damage = (playerEnergyCount + opponentEnergyCount) * 20;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const blocked = [];
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {

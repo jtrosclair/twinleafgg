@@ -4,7 +4,6 @@ exports.MegaDiancieex = void 0;
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 class MegaDiancieex extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -15,7 +14,7 @@ class MegaDiancieex extends game_1.PokemonCard {
         this.weakness = [{ type: M }];
         this.retreat = [C];
         this.powers = [{
-                name: 'Shadow Hiding',
+                name: 'Diamond Coat',
                 powerType: game_1.PowerType.ABILITY,
                 text: 'This Pokémon takes 30 less damage from attacks (after applying Weakness and Resistance).'
             }];
@@ -24,7 +23,7 @@ class MegaDiancieex extends game_1.PokemonCard {
                 cost: [P, P],
                 damage: 120,
                 damageCalculation: 'x',
-                text: 'You may discard up to 2 Energy from this Pokémon. If you do, this attack does 120 more damage for each card you discarded in this way.'
+                text: 'Discard up to 2 Energy cards from this Pokémon, and this attack does 120 damage for each card you discarded in this way.'
             }];
         this.regulationMark = 'I';
         this.set = 'PFL';
@@ -64,15 +63,7 @@ class MegaDiancieex extends game_1.PokemonCard {
             }
             const player = game_1.StateUtils.findOwner(state, effect.target);
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             effect.damage = Math.max(0, effect.damage - 30);

@@ -2,26 +2,24 @@ import { PokemonCard, Stage, CardType, CardTag, StoreLike, State } from '../../g
 import { Effect } from '../../game/store/effects/effect';
 export declare class ZeraoraV extends PokemonCard {
     stage: Stage;
+    tags: CardTag[];
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.FIGHTING;
     }[];
-    retreat: CardType[];
-    tags: CardTag[];
-    regulationMark: string;
+    retreat: CardType.COLORLESS[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: (CardType.LIGHTNING | CardType.COLORLESS)[];
         damage: number;
         text: string;
     }[];
+    regulationMark: string;
     set: string;
     name: string;
     fullName: string;
     cardImage: string;
     setNumber: string;
-    readonly ATTACK_USED_MARKER = "ATTACK_USED_MARKER";
-    readonly ATTACK_USED_2_MARKER = "ATTACK_USED_2_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

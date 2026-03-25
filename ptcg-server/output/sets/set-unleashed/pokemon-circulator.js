@@ -23,7 +23,6 @@ class PokemonCirculator extends trainer_card_1.TrainerCard {
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             effect.preventDefault = true;
             (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, opponent);
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

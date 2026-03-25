@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Karen2XYP = exports.YveltalEx3XYP = exports.Jirachi2XYP = exports.MagearnaEXXYP = exports.VolcanionEXXYP = exports.YveltalEx2XYP = exports.XerneasEX2XYP = exports.VolcanionXYP = exports.Froakie2XYP = exports.MewExXYP = exports.MeloettaXYP = exports.HoopaEXXYP = exports.GroudonExXYP = exports.DragalgeXYP = exports.YveltalExXYP = exports.XerneasEXXYP = exports.YveltalXYP = exports.XerneasXYP = exports.BronzongXYP = void 0;
+exports.Karen2XYP = exports.YveltalEx3XYP = exports.Jirachi2XYP = exports.MagearnaEXXYP = exports.VolcanionEXXYP = exports.YveltalEx2XYP = exports.XerneasEX2XYP = exports.VolcanionXYP = exports.Froakie2XYP = exports.MewExXYP = exports.MeloettaXYP = exports.HoopaEXXYP = exports.GroudonExXYP = exports.DragalgeXYP = exports.YveltalExXYP = exports.XerneasEXXYP = exports.YveltalXYP = exports.XerneasXYP = exports.BronzongXYP = exports.PalaceBookXYP = void 0;
 const xerneas_1 = require("../set-steam-siege/xerneas");
 const yveltal_1 = require("../set-steam-siege/yveltal");
 const xerneas_ex_1 = require("../set-x-and-y/xerneas-ex");
@@ -10,6 +10,7 @@ const groudon_ex_1 = require("../set-primal-clash/groudon-ex");
 const hoopa_ex_1 = require("../set-ancient-origins/hoopa-ex");
 const meloetta_1 = require("../set-x-and-y-promos/meloetta");
 const mew_ex_1 = require("../set-legendary-treasures/mew-ex");
+const palace_book_1 = require("../set-sun-and-moon-promos/palace-book");
 const froakie_1 = require("../set-breakpoint/froakie");
 const volcanion_1 = require("../set-steam-siege/volcanion");
 const xerneas_ex_2 = require("../set-x-and-y/xerneas-ex");
@@ -19,6 +20,15 @@ const magearna_ex_1 = require("../set-steam-siege/magearna-ex");
 const jirachi_1 = require("../set-x-and-y-promos/jirachi");
 const karen_1 = require("../set-x-and-y-promos/karen");
 const bronzong_1 = require("../set-phantom-forces/bronzong");
+class PalaceBookXYP extends palace_book_1.PalaceBook {
+    constructor() {
+        super(...arguments);
+        this.setNumber = 'NAN83';
+        this.fullName = 'Palace Book XYP';
+        this.set = 'XYP';
+    }
+}
+exports.PalaceBookXYP = PalaceBookXYP;
 class BronzongXYP extends bronzong_1.Bronzong {
     constructor() {
         super(...arguments);

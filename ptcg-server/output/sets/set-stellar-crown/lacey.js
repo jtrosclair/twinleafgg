@@ -25,7 +25,6 @@ function* playCard(next, store, state, self, effect) {
     const opponent = game_1.StateUtils.getOpponent(state, player);
     const cardsToDraw = opponent.getPrizeLeft() > 3 ? 4 : 8;
     player.deck.moveTo(player.hand, cardsToDraw);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return state;
 }
 class Lacey extends trainer_card_1.TrainerCard {

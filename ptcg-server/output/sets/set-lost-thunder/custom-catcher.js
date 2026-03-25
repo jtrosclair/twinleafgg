@@ -50,7 +50,6 @@ function* playCard(next, store, state, effect) {
                 // Discard trainer only when user selected a Pokemon
                 player.active.clearEffects();
                 player.switchPokemon(target[0]);
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             });
         });
@@ -65,10 +64,10 @@ class CustomCatcher extends trainer_card_1.TrainerCard {
         this.fullName = 'Custom Catcher LOT';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '171';
-        this.text = 'You may play 2 Custom Catcher cards at once.' +
-            '' +
-            '• If you played 1 card, draw cards until you have 3 cards in your hand.' +
-            '• If you played 2 cards, switch 1 of your opponent\'s Benched Pokémon with their Active Pokémon. (This effect works one time for 2 cards.)';
+        this.text = `You may play 2 Custom Catcher cards at once.
+
+  • If you played 1 card, draw cards until you have 3 cards in your hand.
+  • If you played 2 cards, switch 1 of your opponent's Benched Pokémon with their Active Pokémon. (This effect works one time for 2 cards.)`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

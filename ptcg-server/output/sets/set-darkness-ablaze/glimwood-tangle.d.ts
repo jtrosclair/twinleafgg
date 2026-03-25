@@ -10,7 +10,7 @@ export declare class GlimwoodTangle extends TrainerCard {
     set: string;
     name: string;
     fullName: string;
+    readonly GLIMWOOD_REFLIP_USED = "GLIMWOOD_REFLIP_USED";
     text: string;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
-    private handleCoinFlip;
 }

@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.setStellarCrown = void 0;
 const other_prints_1 = require("./other-prints");
 const archaludon_1 = require("./archaludon");
-const applin_1 = require("./applin");
 const area_zero_underdepths_1 = require("./area-zero-underdepths");
 const bouffalant_1 = require("./bouffalant");
 const briar_1 = require("./briar");
@@ -26,7 +25,7 @@ const garganacl_ex_1 = require("./garganacl-ex");
 const glass_trumpet_1 = require("./glass-trumpet");
 const sparkling_crystal_1 = require("./sparkling-crystal");
 const gravity_gemstone_1 = require("./gravity-gemstone");
-const great_tree_1 = require("./great-tree");
+const grand_tree_1 = require("./grand-tree");
 const gulpin_1 = require("./gulpin");
 const hoothoot_1 = require("./hoothoot");
 const hydrapple_ex_1 = require("./hydrapple-ex");
@@ -38,13 +37,16 @@ const lacey_1 = require("./lacey");
 const lapras_ex_1 = require("./lapras-ex");
 const medicham_ex_1 = require("./medicham-ex");
 const meditite_1 = require("./meditite");
+const meditite77_1 = require("./meditite77");
 const melmetal_1 = require("./melmetal");
 const meltan_1 = require("./meltan");
 const milcery_1 = require("./milcery");
 const noctowl_1 = require("./noctowl");
+const ponyta_1 = require("./ponyta");
 const other_prints_2 = require("./other-prints");
 const raboot_1 = require("./raboot");
 const raging_bolt_1 = require("./raging-bolt");
+const rapidash_1 = require("./rapidash");
 const salandit_1 = require("./salandit");
 const salazzle_1 = require("./salazzle");
 const scorbunny_1 = require("./scorbunny");
@@ -58,7 +60,6 @@ const marill_1 = require("./marill");
 const antique_cover_fossil_1 = require("./antique-cover-fossil");
 const toedscool_1 = require("./toedscool");
 exports.setStellarCrown = [
-    new applin_1.Applin(),
     new archaludon_1.Archaludon(),
     new area_zero_underdepths_1.AreaZeroUnderdepths(),
     new bouffalant_1.Bouffalant(),
@@ -81,7 +82,7 @@ exports.setStellarCrown = [
     new glass_trumpet_1.GlassTrumpet(),
     new sparkling_crystal_1.SparklingCrystal(),
     new gravity_gemstone_1.GravityGemstone(),
-    new great_tree_1.GreatTree(),
+    new grand_tree_1.GreatTree(),
     new gulpin_1.Gulpin(),
     new hoothoot_1.Hoothoot(),
     new hydrapple_ex_1.Hydrappleex(),
@@ -93,12 +94,15 @@ exports.setStellarCrown = [
     new lapras_ex_1.Laprasex(),
     new medicham_ex_1.Medichamex(),
     new meditite_1.Meditite(),
+    new meditite77_1.MedititeSCR77(),
     new melmetal_1.Melmetal(),
     new meltan_1.Meltan(),
     new noctowl_1.Noctowl(),
+    new ponyta_1.Ponyta(),
     // new Orthwormex(),
     new raboot_1.Raboot(),
     new raging_bolt_1.RagingBolt(),
+    new rapidash_1.Rapidash(),
     new salandit_1.Salandit(),
     new salazzle_1.Salazzle(),
     new scorbunny_1.Scorbunny(),
@@ -143,28 +147,6 @@ exports.setStellarCrown = [
     new other_prints_1.VenusaurexSCR(),
     new other_prints_1.BlastoiseexSCR(),
     new other_prints_1.YamaskSCR(),
-    new other_prints_1.Raboot2SCR(),
     new other_prints_1.Crabominable2SCR(),
-    new other_prints_1.Joltik2SCR(),
-    new other_prints_1.Zeraora2SCR(),
-    new other_prints_1.Milcery2SCR(),
-    new other_prints_1.Gulpin2SCR(),
-    new other_prints_1.Archaludon2SCR(),
-    new other_prints_1.Hydrappleex2SCR(),
-    new other_prints_1.Cinderaceex2SCR(),
-    new other_prints_1.Laprasex2SCR(),
-    new other_prints_1.Galvantulaex2SCR(),
-    new other_prints_1.Medichamex2SCR(),
-    new other_prints_1.Orthwormex2SCR(),
-    new other_prints_1.Briar2SCR(),
-    new other_prints_1.Crispin2SCR(),
-    new other_prints_1.Kofu2SCR(),
-    new other_prints_1.Lacey2SCR(),
-    new other_prints_1.Hydrappleex3SCR(),
-    new other_prints_1.Galvantulaex3SCR(),
-    new other_prints_1.Terapagosex2SCR(),
-    new other_prints_1.Briar3SCR(),
-    new other_prints_1.Lacey3SCR(),
-    new other_prints_1.Terapagosex3SCR(),
-    new other_prints_1.AreaZeroUnderdepths2SCR(),
+    new other_prints_1.Gulpin2SCR()
 ];

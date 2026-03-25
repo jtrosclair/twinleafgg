@@ -6,6 +6,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 // function* useApexDragon(next: Function, store: StoreLike, state: State,
 //   effect: PowerEffect): IterableIterator<State> {
 //   const player = effect.player;
@@ -79,7 +80,7 @@ class Ditto extends pokemon_card_1.PokemonCard {
         this.fullName = 'Ditto PGO';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const pokemonCard = player.active.getPokemonCard();
             if (pokemonCard !== this) {

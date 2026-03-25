@@ -6,7 +6,6 @@ const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const card_types_2 = require("../../game/store/card/card-types");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Oranguru extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -38,7 +37,7 @@ class Oranguru extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Resource Management
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             (0, prefabs_1.BLOCK_IF_DISCARD_EMPTY)(player);
             let cards = [];
@@ -48,7 +47,7 @@ class Oranguru extends pokemon_card_1.PokemonCard {
             });
         }
         // Profound Knowledge
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const specialCondition = new attack_effects_1.AddSpecialConditionsEffect(effect, [card_types_2.SpecialCondition.CONFUSED]);
             return store.reduceEffect(state, specialCondition);
         }

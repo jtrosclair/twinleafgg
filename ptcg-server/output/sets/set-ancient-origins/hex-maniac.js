@@ -6,6 +6,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const trainer_prefabs_1 = require("../../game/store/prefabs/trainer-prefabs");
 class HexManiac extends trainer_card_1.TrainerCard {
@@ -29,7 +30,15 @@ class HexManiac extends trainer_card_1.TrainerCard {
             }
             (0, prefabs_1.ADD_MARKER)(this.HEX_MANIAC_MARKER, player, this);
             (0, prefabs_1.ADD_MARKER)(this.HEX_MANIAC_MARKER, opponent, this);
-            (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
+        }
+        if (effect instanceof check_effects_1.CheckPokemonPowersEffect) {
+            const player = effect.player;
+            const opponent = game_1.StateUtils.getOpponent(state, player);
+            // Check if Hex Maniac marker is active on either player
+            if ((0, prefabs_1.HAS_MARKER)(this.HEX_MANIAC_MARKER, player, this) || (0, prefabs_1.HAS_MARKER)(this.HEX_MANIAC_MARKER, opponent, this)) {
+                // Filter out all abilities
+                effect.powers = effect.powers.filter(power => power.powerType !== game_1.PowerType.ABILITY);
+            }
         }
         if (effect instanceof game_effects_1.PowerEffect && (0, prefabs_1.HAS_MARKER)(this.HEX_MANIAC_MARKER, effect.player, this)
             && (effect.power.powerType === game_1.PowerType.ABILITY)) {

@@ -4,13 +4,13 @@ exports.TornadusEx = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const game_message_1 = require("../../game/game-message");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* usePowerBlast(next, store, state, effect) {
     const player = effect.player;
     // Active Pokemon has no energy cards attached
-    if (!player.active.energies.cards.some(c => c instanceof game_1.EnergyCard)) {
+    if (!player.active.energies.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
         return state;
     }
     let flipResult = false;
@@ -35,23 +35,23 @@ class TornadusEx extends pokemon_card_1.PokemonCard {
         super(...arguments);
         this.tags = [card_types_1.CardTag.POKEMON_EX];
         this.stage = card_types_1.Stage.BASIC;
-        this.cardType = card_types_1.CardType.COLORLESS;
+        this.cardType = C;
         this.hp = 170;
-        this.weakness = [{ type: card_types_1.CardType.LIGHTNING }];
-        this.resistance = [{ type: card_types_1.CardType.FIGHTING, value: -20 }];
-        this.retreat = [card_types_1.CardType.COLORLESS];
+        this.weakness = [{ type: L }];
+        this.resistance = [{ type: F, value: -20 }];
+        this.retreat = [C];
         this.attacks = [
             {
                 name: 'Blow Through',
-                cost: [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS],
+                cost: [C, C],
                 damage: 30,
                 text: 'If there is any Stadium card in play, this attack does 30 ' +
                     'more damage.'
             }, {
                 name: 'Power Blast',
-                cost: [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS],
+                cost: [C, C, C],
                 damage: 100,
-                text: 'Flip a coin. If tails, discard an Energy attached to this Pokemon.'
+                text: 'Flip a coin. If tails, discard an Energy attached to this Pokémon.'
             },
         ];
         this.set = 'DEX';
@@ -61,13 +61,13 @@ class TornadusEx extends pokemon_card_1.PokemonCard {
         this.setNumber = '90';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             if (game_1.StateUtils.getStadiumCard(state) !== undefined) {
                 effect.damage += 30;
             }
             return state;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const generator = usePowerBlast(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

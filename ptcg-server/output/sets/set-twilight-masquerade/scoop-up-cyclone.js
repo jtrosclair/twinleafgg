@@ -19,7 +19,7 @@ class ScoopUpCyclone extends trainer_card_1.TrainerCard {
         this.fullName = 'Scoop Up Cyclone TWM';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '162';
-        this.text = 'Put 1 of your Pokemon and all cards attached to it into your hand.';
+        this.text = 'Put 1 of your Pokémon and all cards attached to it into your hand.';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
@@ -48,7 +48,6 @@ class ScoopUpCyclone extends trainer_card_1.TrainerCard {
                     if (pokemons.length > 0) {
                         (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.hand, { cards: pokemons });
                     }
-                    (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
                 }
             });
         }

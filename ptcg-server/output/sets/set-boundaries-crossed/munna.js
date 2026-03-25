@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Munna = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const state_utils_1 = require("../../game/store/state-utils");
 const game_error_1 = require("../../game/game-error");
@@ -11,6 +10,7 @@ const game_message_1 = require("../../game/game-message");
 const coin_flip_prompt_1 = require("../../game/store/prompts/coin-flip-prompt");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Munna extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -45,7 +45,7 @@ class Munna extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.LONG_DISTANCE_HYPNOSIS_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             if (player.marker.hasMarker(this.LONG_DISTANCE_HYPNOSIS_MARKER, this)) {

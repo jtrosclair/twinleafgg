@@ -5,10 +5,9 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const game_2 = require("../../game");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const game_3 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* useBurningCharge(next, store, state, effect) {
     const player = effect.player;
     if (player.deck.cards.length === 0) {
@@ -47,8 +46,7 @@ class Flareonex extends pokemon_card_1.PokemonCard {
         this.hp = 270;
         this.weakness = [{ type: W }];
         this.retreat = [C, C];
-        this.attacks = [
-            {
+        this.attacks = [{
                 name: 'Burning Charge',
                 cost: [R, C],
                 damage: 130,
@@ -59,41 +57,24 @@ class Flareonex extends pokemon_card_1.PokemonCard {
                 cost: [R, W, L],
                 damage: 280,
                 text: 'During your next turn, this Pokemon can\'t attack.'
-            }
-        ];
+            }];
         this.regulationMark = 'H';
         this.set = 'PRE';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '14';
         this.name = 'Flareon ex';
         this.fullName = 'Flareon ex PRE';
-        // for preventing the pokemon from attacking on the next turn
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
         // Burning Charge
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-                throw new game_2.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
-            }
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useBurningCharge(() => generator.next(), store, state, effect);
             return generator.next().value;
         }
         // Carnelian
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
-            // Check marker
-            if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-                throw new game_2.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
-            }
-            effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
-            effect.player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-            effect.player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-            effect.player.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            const player = effect.player;
+            player.active.cannotAttackNextTurnPending = true;
         }
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
             const player = effect.player;

@@ -44,7 +44,7 @@ class Magneton extends pokemon_card_1.PokemonCard {
         if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            const energyInDiscard = player.discard.cards.filter(c => c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC).length;
+            const energyInDiscard = player.discard.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC).length;
             // Must have energy in discard
             if (energyInDiscard === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);

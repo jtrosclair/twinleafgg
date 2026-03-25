@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Sawsbuck = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Sawsbuck extends game_1.PokemonCard {
@@ -38,7 +37,7 @@ class Sawsbuck extends game_1.PokemonCard {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             effect.player.marker.removeMarker(this.CHANGING_SEASONS_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if ((0, prefabs_1.HAS_MARKER)(this.CHANGING_SEASONS_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);

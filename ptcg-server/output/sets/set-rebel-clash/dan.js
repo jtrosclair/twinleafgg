@@ -57,7 +57,6 @@ class Dan extends trainer_card_1.TrainerCard {
                     (0, prefabs_1.DRAW_CARDS)(player, 2);
                 }
             });
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

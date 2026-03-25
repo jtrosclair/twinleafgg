@@ -1,36 +1,49 @@
-import { UnidentifiedFossil } from "../set-silver-tempest/unidentified-fossil";
-import { VenusaurSnivyGX as VenusaurSnivyGXCEC1 } from "../set-cosmic-eclipse/venusaur-and-snivy-gx";
-import { VileplumeGX as VileplumeGXCEC4 } from "../set-cosmic-eclipse/vileplume-gx";
-import { CharizardBraixenGX as CharizardBraixenGXCEC22 } from "../set-cosmic-eclipse/charizard-braixen-gx";
-import { BlastoisePiplupGX as BlastoisePiplupGXCEC38 } from "../set-cosmic-eclipse/blastoise-piplup-gx";
-import { SolgaleoLunalaGX as SolgaleoLunalaGXCEC75 } from "../set-cosmic-eclipse/solgaleo-and-lunala-gx";
-import { OricorioGX as OricorioGXCEC95 } from "../set-cosmic-eclipse/oricorio-gx";
-import { AlolanPersianGX as AlolanPersianGXCEC129 } from "../set-cosmic-eclipse/alolan-persian-gx";
-import { ArceusDialgaPalkiaGX as ArceusDialgaPalkiaGXCEC156 } from "../set-cosmic-eclipse/arceus-dialga-palkia-gx";
-import { NaganadelGuzzlordGX as NaganadelGuzzlordGXCEC158 } from "../set-cosmic-eclipse/naganadel-guzzlord-gx";
-import { MegaLopunnyJigglypuffGX as MegaLopunnyJigglypuffGXCEC165 } from "../set-cosmic-eclipse/mega-lopuny-and-jigglypuff-gx";
-import { CynthiaAndCaitlin as CynthiaAndCaitlinCEC189 } from "../set-cosmic-eclipse/cynthia-and-caitlin";
-import { LilliesFullForce as LilliesFullForceCEC196 } from "../set-cosmic-eclipse/lillies-full-force";
-import { MallowAndLana as MallowAndLanaCEC198 } from "../set-cosmic-eclipse/mallow-and-lana";
-import { ProfessorOaksSetup as ProfessorOaksSetupCEC201 } from "../set-cosmic-eclipse/professor-oaks-setup";
-import { Rosa as RosaCEC204 } from "../set-cosmic-eclipse/rosa";
-import { Wishiwashi as WishiwashiCEC62 } from "../set-cosmic-eclipse/wishiwashi";
-import { Pikachu as PikachuCEC66 } from "../set-cosmic-eclipse/pikachu";
-import { Koffing as KoffingCEC76 } from "../set-cosmic-eclipse/koffing";
-import { Mimikyu as MimikyuCEC96 } from "../set-cosmic-eclipse/mimikyu";
-import { Excadrill as ExcadrillCEC115 } from "../set-cosmic-eclipse/excadrill";
-import { Steelix as SteelixCEC139 } from "../set-cosmic-eclipse/steelix";
-import { Stoutland as StoutlandCEC176 } from "../set-cosmic-eclipse/stoutland";
-import { GiantHearth } from "../set-sword-and-shield/giant-hearth";
-import { GreatCatcher as GreatCatcherCEC192 } from "../set-cosmic-eclipse/great-catcher";
-import { LanasFishingRod as LanasFishingRodCEC195 } from "../set-cosmic-eclipse/lanas-fishing-rod";
-import { LilliesPokeDoll as LilliesPokeDollCEC197 } from "../set-cosmic-eclipse/lillies-poke-doll";
-import { MartialArtsDojo } from "../set-unbroken-bonds/martial-arts-dojo";
-import { PowerPlant } from "../set-unbroken-bonds/power-plant";
-import { TagCall as TagCallCEC206 } from "../set-cosmic-eclipse/tag-call";
-import { DrawEnergy as DrawEnergyCEC209 } from "../set-cosmic-eclipse/draw-energy";
-import { TogepiCleffaIgglybuffGX as TogepiCleffaIgglybuffGXCEC143 } from "../set-cosmic-eclipse/togepi-cleffa-igglybuff-gx";
+import { UnidentifiedFossil } from '../set-silver-tempest/unidentified-fossil';
+import { VenusaurSnivyGX as VenusaurSnivyGXCEC1 } from '../set-cosmic-eclipse/venusaur-and-snivy-gx';
+import { VileplumeGX as VileplumeGXCEC4 } from '../set-cosmic-eclipse/vileplume-gx';
+import { CharizardBraixenGX as CharizardBraixenGXCEC22 } from '../set-cosmic-eclipse/charizard-braixen-gx';
+import { BlastoisePiplupGX as BlastoisePiplupGXCEC38 } from '../set-cosmic-eclipse/blastoise-piplup-gx';
+import { SolgaleoLunalaGX as SolgaleoLunalaGXCEC75 } from '../set-cosmic-eclipse/solgaleo-and-lunala-gx';
+import { OricorioGX as OricorioGXCEC95 } from '../set-cosmic-eclipse/oricorio-gx';
+import { AlolanPersianGX as AlolanPersianGXCEC129 } from '../set-cosmic-eclipse/alolan-persian-gx';
+import { ArceusDialgaPalkiaGX as ArceusDialgaPalkiaGXCEC156 } from '../set-cosmic-eclipse/arceus-dialga-palkia-gx';
+import { NaganadelGuzzlordGX as NaganadelGuzzlordGXCEC158 } from '../set-cosmic-eclipse/naganadel-guzzlord-gx';
+import { MegaLopunnyJigglypuffGX as MegaLopunnyJigglypuffGXCEC165 } from '../set-cosmic-eclipse/mega-lopuny-and-jigglypuff-gx';
+import { CynthiaAndCaitlin as CynthiaAndCaitlinCEC189 } from '../set-cosmic-eclipse/cynthia-and-caitlin';
+import { LilliesFullForce as LilliesFullForceCEC196 } from '../set-cosmic-eclipse/lillies-full-force';
+import { MallowAndLana as MallowAndLanaCEC198 } from '../set-cosmic-eclipse/mallow-and-lana';
+import { ProfessorOaksSetup as ProfessorOaksSetupCEC201 } from '../set-cosmic-eclipse/professor-oaks-setup';
+import { Rosa as RosaCEC204 } from '../set-cosmic-eclipse/rosa';
+import { Wishiwashi as WishiwashiCEC62 } from '../set-cosmic-eclipse/wishiwashi';
+import { Pikachu as PikachuCEC66 } from '../set-cosmic-eclipse/pikachu';
+import { Koffing as KoffingCEC76 } from '../set-cosmic-eclipse/koffing';
+import { Mimikyu as MimikyuCEC96 } from '../set-cosmic-eclipse/mimikyu';
+import { Excadrill as ExcadrillCEC115 } from '../set-cosmic-eclipse/excadrill';
+import { Steelix as SteelixCEC139 } from '../set-cosmic-eclipse/steelix';
+import { Stoutland as StoutlandCEC176 } from '../set-cosmic-eclipse/stoutland';
+import { GiantHearth } from '../set-sword-and-shield/giant-hearth';
+import { GreatCatcher as GreatCatcherCEC192 } from '../set-cosmic-eclipse/great-catcher';
+import { LanasFishingRod as LanasFishingRodCEC195 } from '../set-cosmic-eclipse/lanas-fishing-rod';
+import { LilliesPokeDoll as LilliesPokeDollCEC197 } from '../set-cosmic-eclipse/lillies-poke-doll';
+import { MartialArtsDojo } from '../set-unbroken-bonds/martial-arts-dojo';
+import { PowerPlant } from '../set-unbroken-bonds/power-plant';
+import { TagCall as TagCallCEC206 } from '../set-cosmic-eclipse/tag-call';
+import { DrawEnergy as DrawEnergyCEC209 } from '../set-cosmic-eclipse/draw-energy';
+import { TogepiCleffaIgglybuffGX as TogepiCleffaIgglybuffGXCEC143 } from '../set-cosmic-eclipse/togepi-cleffa-igglybuff-gx';
 import { GuzmaAndHala } from './guzma-and-hala';
+import { VolcaronaGx } from './volcarona-gx';
+import { FlygonGx } from './flygon-gx';
+import { ReshiramAndZekromGx } from './reshiram-and-zekrom-gx';
+import { SilvallyGx } from './silvally-gx';
+import { NsResolve } from './ns-resolve';
+import { RedAndBlue } from './red-and-blue';
+import { RollerSkater } from './roller-skater';
+import { Torkoal } from './torkoal';
+import { Weavile } from './weavile';
+import { Piplup } from './piplup';
+import { Magnemite } from './magnemite';
+import { Gallade } from './gallade';
+import { IslandChallengeAmulet } from './island-challenge-amulet';
 export declare class GuzmaAndHalaCEC extends GuzmaAndHala {
     set: string;
     setNumber: string;
@@ -265,4 +278,89 @@ export declare class TogepiCleffaIgglybuffGX2CEC extends TogepiCleffaIgglybuffGX
     setNumber: string;
     fullName: string;
     set: string;
+}
+export declare class VolcaronaGx2 extends VolcaronaGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class FlygonGx2 extends FlygonGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class ReshiramAndZekromGx2 extends ReshiramAndZekromGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class SilvallyGx2 extends SilvallyGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class NsResolve2 extends NsResolve {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class RedAndBlue2 extends RedAndBlue {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class RollerSkater2 extends RollerSkater {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class Torkoal2 extends Torkoal {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class Weavile2 extends Weavile {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class Piplup2 extends Piplup {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class Magnemite2 extends Magnemite {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class Gallade2 extends Gallade {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class VolcaronaGx3 extends VolcaronaGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class FlygonGx3 extends FlygonGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class ReshiramAndZekromGx3 extends ReshiramAndZekromGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class SilvallyGx3 extends SilvallyGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class IslandChallengeAmulet2 extends IslandChallengeAmulet {
+    set: string;
+    setNumber: string;
+    fullName: string;
 }

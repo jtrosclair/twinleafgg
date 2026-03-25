@@ -20,6 +20,7 @@ export declare class ElectrodeGX extends PokemonCard {
         name: string;
         useWhenInPlay: boolean;
         powerType: PowerType;
+        knocksOutSelf: boolean;
         text: string;
     }[];
     attacks: ({

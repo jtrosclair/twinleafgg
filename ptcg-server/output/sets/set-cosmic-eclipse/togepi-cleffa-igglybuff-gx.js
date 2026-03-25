@@ -4,7 +4,6 @@ exports.TogepiCleffaIgglybuffGX = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -53,7 +52,7 @@ class TogepiCleffaIgglybuffGX extends pokemon_card_1.PokemonCard {
             effect.player.marker.addMarker(this.SUPREME_PUFF_MARKER_2, this);
         }
         // Rolling Panic
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const flipCoin = (heads = 0) => {
                 return store.prompt(state, [
@@ -69,7 +68,7 @@ class TogepiCleffaIgglybuffGX extends pokemon_card_1.PokemonCard {
             return flipCoin();
         }
         // Supreme Puff-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;

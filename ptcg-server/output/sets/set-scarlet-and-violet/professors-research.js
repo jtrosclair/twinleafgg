@@ -19,6 +19,16 @@ class ProfessorsResearch extends trainer_card_1.TrainerCard {
         this.fullName = 'Professor\'s Research SVI';
         this.text = 'Discard your hand and draw 7 cards.';
     }
+    canPlay(store, state, player) {
+        const supporterTurn = player.supporterTurn;
+        if (supporterTurn > 0) {
+            return false;
+        }
+        if (player.deck.cards.length === 0) {
+            return false;
+        }
+        return true;
+    }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;

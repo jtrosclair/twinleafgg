@@ -5,7 +5,6 @@ const trainer_card_1 = require("../../game/store/card/trainer-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_1 = require("../../game");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class EnergyLoto extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -27,27 +26,15 @@ class EnergyLoto extends trainer_card_1.TrainerCard {
             effect.preventDefault = true;
             player.deck.moveTo(temp, 7);
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, temp, { superType: card_types_1.SuperType.ENERGY }, { allowCancel: false, min: 0, max: 1 }), chosenCards => {
-                if (chosenCards.length == 0) {
-                    // No Energy chosen, shuffle all back
-                    temp.cards.forEach(card => {
-                        temp.moveCardTo(card, player.deck);
-                    });
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
-                }
-                if (chosenCards.length > 0) {
-                    // Move chosen Energy to hand
+                if (chosenCards && chosenCards.length > 0) {
+                    // Move chosen Energy to hand and reveal it to opponent
                     const energyCard = chosenCards[0];
                     temp.moveCardTo(energyCard, player.hand);
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
-                    temp.moveTo(player.deck);
-                    chosenCards.forEach((card, index) => {
-                        store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
-                    });
-                    if (chosenCards.length > 0) {
-                        state = store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, chosenCards), () => state);
-                    }
+                    store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: energyCard.name });
+                    state = store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, chosenCards), () => state);
                 }
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
+                // Shuffle remaining cards back into deck
+                temp.moveTo(player.deck);
                 return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                     player.deck.applyOrder(order);
                 });

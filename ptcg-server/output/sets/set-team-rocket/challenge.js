@@ -32,7 +32,6 @@ class Challenge extends trainer_card_1.TrainerCard {
                 }
                 else {
                     (0, prefabs_1.DRAW_CARDS)(player, 2);
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 }
                 return state;
             }
@@ -67,7 +66,6 @@ class Challenge extends trainer_card_1.TrainerCard {
                     // Challenge declined
                     (0, prefabs_1.DRAW_CARDS)(player, 2);
                 }
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
             });
         }
         return state;

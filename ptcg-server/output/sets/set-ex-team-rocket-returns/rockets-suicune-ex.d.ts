@@ -1,6 +1,7 @@
-import { PokemonCard, Stage, CardType, PowerType, CardTag } from '../../game';
-import { StoreLike, State } from '../../game';
+import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
+import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
+import { PowerType, State, StoreLike } from '../../game';
 export declare class RocketsSuicuneex extends PokemonCard {
     stage: Stage;
     tags: CardTag[];

@@ -70,7 +70,7 @@ class Gyarados extends pokemon_card_1.PokemonCard {
                     let hasPokemonWithEnergy = false;
                     const blocked = [];
                     opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card, target) => {
-                        if (cardList.cards.some(c => c instanceof game_1.EnergyCard)) {
+                        if (cardList.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                             hasPokemonWithEnergy = true;
                             oppSpecialPokemon++;
                         }

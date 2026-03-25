@@ -6,9 +6,9 @@ const card_list_1 = require("../../game/store/state/card-list");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
 const game_message_1 = require("../../game/game-message");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Comfey extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -45,7 +45,7 @@ class Comfey extends game_1.PokemonCard {
             player.marker.removeMarker(this.FLOWER_SELECTING_MARKER, this);
             return state;
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_message_1.GameMessage.CANNOT_USE_POWER);

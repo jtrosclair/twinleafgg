@@ -7,7 +7,6 @@ const game_message_1 = require("../../game/game-message");
 const card_types_1 = require("../../game/store/card/card-types");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Peonia extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -50,7 +49,6 @@ class Peonia extends trainer_card_1.TrainerCard {
                         return state;
                     });
                 });
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             });
         }
         return state;

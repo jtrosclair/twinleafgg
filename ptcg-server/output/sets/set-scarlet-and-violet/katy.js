@@ -14,6 +14,9 @@ function* playCard(next, store, state, self, effect) {
     if (supporterTurn > 0) {
         throw new game_1.GameError(game_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
     }
+    if (player.hand.cards.length === 0 && player.deck.cards.length === 0) {
+        throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
+    }
     player.hand.moveCardTo(effect.trainerCard, player.supporter);
     // We will discard this card after prompt confirmation
     effect.preventDefault = true;
@@ -25,7 +28,6 @@ function* playCard(next, store, state, self, effect) {
         });
     }
     player.deck.moveTo(player.hand, 8);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     const endTurnEffect = new game_phase_effects_1.EndTurnEffect(player);
     store.reduceEffect(state, endTurnEffect);
     return state;
@@ -41,6 +43,16 @@ class Katy extends trainer_card_1.TrainerCard {
         this.name = 'Katy';
         this.fullName = 'Katy SVI';
         this.text = 'Shuffle your hand into your deck. Then, draw 8 cards. Your turn ends.';
+    }
+    canPlay(store, state, player) {
+        const supporterTurn = player.supporterTurn;
+        if (supporterTurn > 0) {
+            return false;
+        }
+        if (player.hand.cards.length === 0 && player.deck.cards.length === 0) {
+            return false;
+        }
+        return true;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

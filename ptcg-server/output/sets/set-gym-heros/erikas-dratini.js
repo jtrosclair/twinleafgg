@@ -12,6 +12,7 @@ class ErikasDratini extends pokemon_card_1.PokemonCard {
         super(...arguments);
         this.stage = card_types_1.Stage.BASIC;
         this.cardType = C;
+        this.tags = [card_types_1.CardTag.ERIKAS];
         this.hp = 40;
         this.weakness = [];
         this.resistance = [{ type: P, value: -30 }];

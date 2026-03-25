@@ -18,7 +18,6 @@ function* playCard(next, store, state, self, effect) {
     if (player.hand.cards.filter(c => c !== self).length < 2 || player.deck.cards.length === 0) {
         throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
     }
-    effect.preventDefault = true;
     const handTemp = new card_list_1.CardList();
     handTemp.cards = player.hand.cards.filter(c => c !== self);
     yield store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_DISCARD, handTemp, {}, { min: 2, max: 2, allowCancel: false }), selected => {
@@ -37,7 +36,6 @@ function* playCard(next, store, state, self, effect) {
             next();
         }
     });
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });
@@ -55,6 +53,18 @@ class UltraBall extends trainer_card_1.TrainerCard {
         this.text = `You can use this card only if you discard 2 other cards from your hand.
 
 Search your deck for a Pokemon, reveal it, and put it into your hand. Then, shuffle your deck.`;
+    }
+    canPlay(store, state, player) {
+        // Check if player has at least 2 other cards in hand (excluding Ultra Ball)
+        const otherCards = player.hand.cards.filter(c => c !== this);
+        if (otherCards.length < 2) {
+            return false;
+        }
+        // Check if deck has cards
+        if (player.deck.cards.length === 0) {
+            return false;
+        }
+        return true;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

@@ -1,16 +1,17 @@
-import { RareCandy } from "../set-ex-holon-phantoms/rare-candy";
-import { ConkeldurrV as ConkeldurrVPGO40 } from "../set-pokemon-go/conkeldurr-v";
-import { SlakingV as SlakingVPGO58 } from "../set-pokemon-go/slaking-v";
-import { ProfessorsResearch } from "../set-scarlet-and-violet/professors-research";
-import { ProfessorsResearch as ProfessorsResearchSVI189 } from "../set-scarlet-and-violet/professors-research";
-import { LureModule as LureModulePGO67 } from "../set-pokemon-go/lure-module";
+import { ConkeldurrV as ConkeldurrVPGO40 } from '../set-pokemon-go/conkeldurr-v';
+import { SlakingV as SlakingVPGO58 } from '../set-pokemon-go/slaking-v';
+import { ProfessorsResearch } from '../set-scarlet-and-violet/professors-research';
+import { ProfessorsResearch as ProfessorsResearchSVI189 } from '../set-scarlet-and-violet/professors-research';
+import { LureModule as LureModulePGO67 } from '../set-pokemon-go/lure-module';
 import { RadiantCharizard } from '../set-crown-zenith/radiant-charizard';
+import { RareCandy } from '../set-scarlet-and-violet/rare-candy';
 export declare class RadiantCharizardPGO extends RadiantCharizard {
     fullName: string;
     set: string;
     setNumber: string;
 }
 export declare class RareCandyPGO extends RareCandy {
+    regulationMark: string;
     setNumber: string;
     fullName: string;
     set: string;

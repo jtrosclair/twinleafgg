@@ -1,17 +1,21 @@
-import { EnergySearch } from "../set-fossil/energy-search";
-import { GreatBall } from "../set-ex-firered-leafgreen/great-ball";
-import { PokeBall } from "../set-jungle/pokeball";
-import { Switch } from "../set-base-set/switch";
-import { TownMap } from "../set-breakthrough/town-map";
-import { LandorusEx as LandorusExBCR89 } from "../set-boundaries-crossed/landorus-ex";
-import { Bianca } from "../set-emerging-powers/bianca";
-import { Cheren } from "../set-emerging-powers/cheren";
-import { Skyla as SkylaBCR134 } from "../set-boundaries-crossed/skyla";
-import { Terrakion } from "../set-noble-victories/terrakion";
-import { Altaria } from "../set-dragons-exalted/altaria";
-import { RockyHelmet as RockyHelmetSVI193 } from "../set-scarlet-and-violet/rocky-helmet";
+import { EnergySearch } from '../set-fossil/energy-search';
+import { GreatBall } from '../set-ex-firered-leafgreen/great-ball';
+import { PokeBall } from '../set-jungle/pokeball';
+import { Switch } from '../set-base-set/switch';
+import { TownMap } from '../set-breakthrough/town-map';
+import { LandorusEx as LandorusExBCR89 } from '../set-boundaries-crossed/landorus-ex';
+import { Bianca } from '../set-emerging-powers/bianca';
+import { Cheren } from '../set-emerging-powers/cheren';
+import { Skyla as SkylaBCR134 } from '../set-boundaries-crossed/skyla';
+import { Terrakion } from '../set-noble-victories/terrakion';
+import { Altaria } from '../set-dragons-exalted/altaria';
+import { RockyHelmet as RockyHelmetSVI193 } from '../set-scarlet-and-violet/rocky-helmet';
 import { KeldeoEx } from './keldeo-ex';
 import { RockyHelmet } from '../set-scarlet-and-violet/rocky-helmet';
+import { CelebiEx } from './celebi-ex';
+import { CresseliaEx } from './cresselia-ex';
+import { BlackKyuremEx } from './black-kyurem-ex';
+import { WhiteKyuremEx } from './white-kyurem-ex';
 export declare class KeldeoExBCR extends KeldeoEx {
     setNumber: string;
     fullName: string;
@@ -81,4 +85,24 @@ export declare class RockyHelmet2BCR extends RockyHelmetSVI193 {
     setNumber: string;
     fullName: string;
     set: string;
+}
+export declare class CelebiEx2 extends CelebiEx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class CresseliaEx2 extends CresseliaEx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class BlackKyuremEx2 extends BlackKyuremEx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class WhiteKyuremEx2 extends WhiteKyuremEx {
+    set: string;
+    setNumber: string;
+    fullName: string;
 }

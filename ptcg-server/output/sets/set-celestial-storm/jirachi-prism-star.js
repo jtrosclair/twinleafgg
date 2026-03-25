@@ -48,7 +48,7 @@ class JirachiPrismStar extends pokemon_card_1.PokemonCard {
             return generator.next().value;
         }
         // Attack
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Second part of the attack

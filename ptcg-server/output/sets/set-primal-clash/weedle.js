@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Weedle = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* useMultiply(next, store, state, effect) {
     const player = effect.player;
     const slots = player.bench.filter(b => b.cards.length === 0);
@@ -47,7 +47,7 @@ class Weedle extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Multiply
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useMultiply(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

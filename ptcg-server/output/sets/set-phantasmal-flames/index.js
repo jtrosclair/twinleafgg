@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setPhantasmalFlames = void 0;
 const other_prints_1 = require("./other-prints");
-const ambipom_1 = require("./ambipom");
 const battle_colosseum_1 = require("./battle-colosseum");
 const blowtorch_1 = require("./blowtorch");
 const bronzong_1 = require("./bronzong");
@@ -16,6 +15,7 @@ const charmeleon_1 = require("./charmeleon");
 const darmanitan_1 = require("./darmanitan");
 const darumaka_1 = require("./darumaka");
 const dawn_1 = require("./dawn");
+const empoleon_ex_1 = require("./empoleon-ex");
 const firebreather_1 = require("./firebreather");
 const gastly_1 = require("./gastly");
 const genesect_1 = require("./genesect");
@@ -26,15 +26,17 @@ const jumbo_ice_1 = require("./jumbo-ice");
 const lombre_1 = require("./lombre");
 const lotad_1 = require("./lotad");
 const ludicolo_1 = require("./ludicolo");
-const mamoswine_1 = require("./mamoswine");
 const mega_charizard_x_ex_1 = require("./mega-charizard-x-ex");
 const mega_diancie_ex_1 = require("./mega-diancie-ex");
 const mega_gengar_ex_1 = require("./mega-gengar-ex");
+const mega_heracross_ex_1 = require("./mega-heracross-ex");
 const mega_lopunny_ex_1 = require("./mega-lopunny-ex");
 const mega_sharpedo_ex_1 = require("./mega-sharpedo-ex");
 const moltres_1 = require("./moltres");
 const oricorio_ex_1 = require("./oricorio-ex");
 const paldean_tauros_1 = require("./paldean-tauros");
+const piplup_1 = require("./piplup");
+const prinplup_1 = require("./prinplup");
 const punk_helmet_1 = require("./punk-helmet");
 const reshiram_1 = require("./reshiram");
 const rotom_ex_1 = require("./rotom-ex");
@@ -47,7 +49,6 @@ const wigglytuff_1 = require("./wigglytuff");
 const wonder_patch_1 = require("./wonder-patch");
 const zacian_1 = require("./zacian");
 exports.setPhantasmalFlames = [
-    new ambipom_1.Ambipom(),
     new battle_colosseum_1.BattleColosseum(),
     new blowtorch_1.Blowtorch(),
     new bronzong_1.Bronzong(),
@@ -61,6 +62,7 @@ exports.setPhantasmalFlames = [
     new darmanitan_1.Darmanitan(),
     new darumaka_1.Darumaka(),
     new dawn_1.Dawn(),
+    new empoleon_ex_1.Empoleonex(),
     new firebreather_1.Firebreather(),
     new gastly_1.Gastly(),
     new genesect_1.Genesect(),
@@ -71,17 +73,19 @@ exports.setPhantasmalFlames = [
     new lombre_1.Lombre(),
     new lotad_1.Lotad(),
     new ludicolo_1.Ludicolo(),
-    new mamoswine_1.Mamoswine(),
     new mega_charizard_x_ex_1.MegaCharizardXex(),
     new mega_diancie_ex_1.MegaDiancieex(),
     new mega_gengar_ex_1.MegaGengarex(),
+    new mega_heracross_ex_1.MegaHeracrossex(),
     new mega_lopunny_ex_1.MegaLopunnyex(),
     new mega_sharpedo_ex_1.MegaSharpedoex(),
     new moltres_1.Moltres(),
     new oricorio_ex_1.Oricorioex(),
     new paldean_tauros_1.PaldeanTauros(),
-    new punk_helmet_1.PunkHelmet(),
     new reshiram_1.Reshiram(),
+    new piplup_1.Piplup(),
+    new prinplup_1.Prinplup(),
+    new punk_helmet_1.PunkHelmet(),
     new rotom_ex_1.Rotomex(),
     new sableye_1.Sableye(),
     new sacred_charm_1.SacredCharm(),
@@ -112,5 +116,6 @@ exports.setPhantasmalFlames = [
     new other_prints_1.MegaSharpedoex3PFL(),
     new other_prints_1.MegaLopunnyex3PFL(),
     new other_prints_1.Dawn3PFL(),
+    new other_prints_1.Blowtorch2PFL(),
     new other_prints_1.MegaCharizardXex4PFL(),
 ];

@@ -6,9 +6,9 @@ const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const state_utils_1 = require("../../game/store/state-utils");
 const state_1 = require("../../game/store/state/state");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Cloyster extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -49,20 +49,12 @@ class Cloyster extends pokemon_card_1.PokemonCard {
             }
             const player = state_utils_1.StateUtils.findOwner(state, effect.target);
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: pokemon_types_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             effect.damage = Math.max(0, effect.damage - 30);
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             const hasBench = opponent.bench.some(b => b.cards.length > 0);

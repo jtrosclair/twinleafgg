@@ -44,7 +44,7 @@ class HeavyBaton extends trainer_card_1.TrainerCard {
                 return state;
             }
             // Get all basic energy cards from the active Pokemon
-            const basicEnergyCards = active.cards.filter(c => c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC);
+            const basicEnergyCards = active.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC);
             if (basicEnergyCards.length === 0) {
                 return state;
             }

@@ -6,6 +6,8 @@ const card_types_1 = require("../../game/store/card/card-types");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const game_1 = require("../../game");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
 class RadiantJirachi extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -38,15 +40,7 @@ class RadiantJirachi extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_effects_1.KnockOutEffect && effect.target.cards.includes(this) && effect.player.marker.hasMarker(effect.player.DAMAGE_DEALT_MARKER)) {
             // This Pokemon was knocked out
             const player = effect.player;
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: pokemon_types_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             let cards = [];
@@ -61,24 +55,11 @@ class RadiantJirachi extends pokemon_card_1.PokemonCard {
                 });
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            const player = effect.player;
-            const opponent = game_1.StateUtils.getOpponent(state, player);
-            let coin1Result = false;
-            let coin2Result = false;
-            return store.prompt(state, new game_1.CoinFlipPrompt(player.id, game_1.GameMessage.COIN_FLIP), (result) => {
-                coin1Result = result;
-                return store.prompt(state, new game_1.CoinFlipPrompt(player.id, game_1.GameMessage.COIN_FLIP), (result) => {
-                    coin2Result = result;
-                    if (coin1Result && coin2Result) {
-                        // Both heads
-                        opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, cardList => {
-                            if (cardList.getPokemonCard() === opponent.active.cards[0]) {
-                                cardList.damage += 999;
-                            }
-                        });
-                    }
-                });
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, effect.player, 2, results => {
+                if (results.every(r => r)) {
+                    (0, attack_effects_1.KNOCK_OUT_OPPONENTS_ACTIVE_POKEMON)(store, state, effect);
+                }
             });
         }
         return state;

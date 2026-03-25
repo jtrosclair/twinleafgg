@@ -49,7 +49,6 @@ function* playCard(next, store, state, self, effect) {
                 player.discard.moveCardTo(transfer.card, target);
             }
         }
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         while (player.hand.cards.length < 6) {
             if (player.deck.cards.length === 0) {
                 break;

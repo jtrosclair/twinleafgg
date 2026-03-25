@@ -40,7 +40,6 @@ class ComputerError extends trainer_card_1.TrainerCard {
                     opponent.deck.moveTo(opponent.hand, opponentNumCardsToDraw);
                 });
             });
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
             // Pretty much just for Chaos Gym: if used while not your turn, there is no end turn effect
             // Better to refer to whoever's turn it is, but idk how to do that
             if (effect.player === game_1.StateUtils.findOwner(state, game_1.StateUtils.findCardList(state, this))) {

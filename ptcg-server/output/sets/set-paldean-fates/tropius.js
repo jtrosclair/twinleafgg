@@ -44,7 +44,7 @@ class Tropius extends pokemon_card_1.PokemonCard {
             }
             // Get attached energy cards
             const attachedEnergies = player.active.cards.filter(card => {
-                return card instanceof game_1.EnergyCard;
+                return card.superType === card_types_1.SuperType.ENERGY;
             });
             store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_TO_BENCH, player.active, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY }, { allowCancel: false, min: attachedEnergies.length, max: attachedEnergies.length, sameTarget: true }), transfers => {
                 transfers = transfers || [];

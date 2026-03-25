@@ -4,8 +4,8 @@ exports.Metagross = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Metagross extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -47,15 +47,7 @@ class Metagross extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
@@ -69,20 +61,14 @@ class Metagross extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
-            effect.player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-            effect.player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-            effect.player.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
-        }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            // Check marker
-            if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-                effect.damage += 100;
-            }
-            effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
-        }
+        // Refs: set-boundaries-crossed/meloetta.ts (Echoed Voice), prefabs/prefabs.ts (NEXT_TURN_ATTACK_BONUS)
+        (0, prefabs_1.NEXT_TURN_ATTACK_BONUS)(effect, {
+            attack: this.attacks[0],
+            source: this,
+            bonusDamage: 100,
+            bonusMarker: this.ATTACK_USED_MARKER,
+            clearMarker: this.ATTACK_USED_2_MARKER
+        });
         return state;
     }
 }

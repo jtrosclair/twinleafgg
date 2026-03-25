@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LaprasCRZ = exports.OricorioCRZ = exports.MagmortarCRZ = exports.KricketuneCRZ = exports.MetalEnergyCRZ = exports.DarknessEnergyCRZ = exports.FightingEnergyCRZ = exports.PsychicEnergyCRZ = exports.LightningEnergyCRZ = exports.WaterEnergyCRZ = exports.FireEnergyCRZ = exports.GrassEnergyCRZ = exports.VoloCRZ = exports.ProfessorsResearchCRZ = exports.ElesasSparkleCRZ = exports.UltraBallCRZ = exports.TrekkingShoesCRZ = exports.SwitchCRZ = exports.RareCandyCRZ = exports.RaihanCRZ = exports.PotionCRZ = exports.PokemonCatcherCRZ = exports.PokeBallCRZ = exports.NessaCRZ = exports.LeonCRZ = exports.HopCRZ = exports.GreatBallCRZ = exports.EnergySwitchPKCRZ = exports.EnergySearchCRZ = exports.EnergyRetrievalCRZ = exports.CrushingHammerCRZ = exports.BedeCRZ = exports.GreedentVCRZ = exports.StoutlandVCRZ = exports.DittoCRZ = exports.DuraludonVMAXCRZ = exports.DuraludonVCRZ = exports.RayquazaVMAX2CRZ = exports.RayquazaVMAXCRZ = exports.RayquazaVCRZ = exports.RioluCRZ = exports.SolrockCRZ = exports.LunatoneCRZ = exports.MewVCRZ = exports.RotomVCRZ = exports.SnoruntCRZ = exports.CherubiCRZ = exports.KricketotCRZ = exports.RescueCarrierCRZ = exports.LostVacuumCRZ = void 0;
 exports.ArceusVSTARCRZ = exports.GiratinaVSTARCRZ = exports.OriginFormeDialgaVSTARCRZ = exports.OriginFormePalkiaVSTARCRZ = exports.RoxanneCRZ = exports.Raihan2CRZ = exports.MelonyCRZ = exports.IridaCRZ = exports.GrantCRZ = exports.GardeniasVigorCRZ = exports.CynthiasAmbitionCRZ = exports.ColresssExperimentCRZ = exports.CherensCareCRZ = exports.AdamanCRZ = exports.HisuianZoroarkVSTARCRZ = exports.RegigigasVSTAR2CRZ = exports.ZamazentaV2CRZ = exports.HisuianSamurottVSTARCRZ = exports.HisuianSamurottVCRZ = exports.DarkraiVSTARCRZ = exports.DrapionVCRZ = exports.ZacianV2CRZ = exports.ZeraoraVSTAR2CRZ = exports.ZeraoraVMAX2CRZ = exports.RaikouVCRZ = exports.LumineonVCRZ = exports.SuicuneVCRZ = exports.EnteiVCRZ = exports.MareepCRZ = exports.Pikachu2CRZ = exports.Bidoof2CRZ = exports.DuskullCRZ = exports.SwabluCRZ = exports.Riolu2CRZ = exports.BibarelCRZ = exports.MiltankCRZ = exports.DunsparceCRZ = exports.Ditto2CRZ = exports.AltariaCRZ = exports.MagnezoneCRZ = exports.Absol2CRZ = exports.Solrock2CRZ = exports.ComfeyCRZ = exports.DiancieCRZ = exports.DeoxysCRZ = exports.Lunatone2CRZ = exports.MewCRZ = exports.ElectivireCRZ = exports.KeldeoCRZ = exports.ManaphyCRZ = void 0;
+exports.FriendsInSinnoh2 = exports.FriendsInHisui2 = exports.BeaCRZ = exports.StarlyCRZ = exports.SnorlaxCRZ = exports.PawniardCRZ = exports.MetangCRZ = exports.KrokorokCRZ = exports.KoffingCRZ = exports.BaltoyCRZ = exports.GravelerCRZ = exports.DusclopsCRZ = exports.ZeraoraCRZ = exports.EmolgaCRZ = exports.LuxioCRZ = exports.ShinxCRZ = exports.CorphishCRZ = exports.GalarianMrMimeCRZ = exports.SeelCRZ = exports.SimisearVCRZ = exports.CharizardVstarCRZ = exports.CharizardVCRZ = exports.GrubbinCRZ = exports.SunkernCRZ = void 0;
 const kricketot_1 = require("../set-astral-radiance/kricketot");
 const cherubi_1 = require("../set-battle-styles/cherubi");
 const snorunt_1 = require("../set-chilling-reign/snorunt");
@@ -28,7 +29,7 @@ const hop_1 = require("../set-sword-and-shield/hop");
 const leon_1 = require("../set-vivid-voltage/leon");
 const nessa_1 = require("../set-vivid-voltage/nessa");
 const pokeball_1 = require("../set-jungle/pokeball");
-const pokemon_catcher_1 = require("../set-emerging-powers/pokemon-catcher");
+const pokemon_catcher_1 = require("../set-scarlet-and-violet/pokemon-catcher");
 const potion_1 = require("../set-base-set/potion");
 const raihan_1 = require("../set-evolving-skies/raihan");
 const rare_candy_1 = require("../set-ex-holon-phantoms/rare-candy");
@@ -102,6 +103,30 @@ const giratina_vstar_1 = require("../set-lost-origin/giratina-vstar");
 const arceus_vstar_1 = require("../set-brilliant-stars/arceus-vstar");
 const lost_vacuum_1 = require("../set-lost-origin/lost-vacuum");
 const rescue_carrier_1 = require("../set-evolving-skies/rescue-carrier");
+const sunkern_1 = require("../set-silver-tempest/sunkern");
+const grubbin_1 = require("../set-fusion-strike/grubbin");
+const charizard_v_1 = require("../set-brilliant-stars/charizard-v");
+const charizard_vstar_1 = require("../set-brilliant-stars/charizard-vstar");
+const simisear_v_1 = require("../set-brilliant-stars/simisear-v");
+const seel_1 = require("../set-lost-origin/seel");
+const galarian_mr_mime_1 = require("../set-battle-styles/galarian-mr-mime");
+const corphish_1 = require("../set-brilliant-stars/corphish");
+const shinx_1 = require("../set-battle-styles/shinx");
+const luxio_1 = require("../set-battle-styles/luxio");
+const emolga_1 = require("../set-evolving-skies/emolga");
+const zeraora_1 = require("../set-fusion-strike/zeraora");
+const dusclops_1 = require("../set-brilliant-stars/dusclops");
+const graveler_1 = require("../set-fusion-strike/graveler");
+const baltoy_1 = require("../set-fusion-strike/baltoy");
+const koffing_1 = require("../set-ex-deoxys/koffing");
+const krokorok_1 = require("../set-vivid-voltage/krokorok");
+const metang_1 = require("../set-celestial-storm/metang");
+const pawniard_1 = require("../set-astral-radiance/pawniard");
+const snorlax_1 = require("../set-fusion-strike/snorlax");
+const starly_1 = require("../set-brilliant-stars/starly");
+const bea_1 = require("../set-vivid-voltage/bea");
+const friends_in_hisui_1 = require("./friends-in-hisui");
+const friends_in_sinnoh_1 = require("./friends-in-sinnoh");
 class LostVacuumCRZ extends lost_vacuum_1.LostVacuum {
     constructor() {
         super(...arguments);
@@ -1002,3 +1027,219 @@ class ArceusVSTARCRZ extends arceus_vstar_1.ArceusVSTAR {
     }
 }
 exports.ArceusVSTARCRZ = ArceusVSTARCRZ;
+class SunkernCRZ extends sunkern_1.Sunkern {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '7';
+        this.fullName = 'Sunkern CRZ 7';
+    }
+}
+exports.SunkernCRZ = SunkernCRZ;
+class GrubbinCRZ extends grubbin_1.Grubbin {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '15';
+        this.fullName = 'Grubbin CRZ 15';
+    }
+}
+exports.GrubbinCRZ = GrubbinCRZ;
+class CharizardVCRZ extends charizard_v_1.CharizardV {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '18';
+        this.fullName = 'Charizard V CRZ 18';
+    }
+}
+exports.CharizardVCRZ = CharizardVCRZ;
+class CharizardVstarCRZ extends charizard_vstar_1.CharizardVstar {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '19';
+        this.fullName = 'Charizard VSTAR CRZ 19';
+    }
+}
+exports.CharizardVstarCRZ = CharizardVstarCRZ;
+class SimisearVCRZ extends simisear_v_1.SimisearV {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '22';
+        this.fullName = 'Simisear V CRZ 22';
+    }
+}
+exports.SimisearVCRZ = SimisearVCRZ;
+class SeelCRZ extends seel_1.Seel {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '29';
+        this.fullName = 'Seel CRZ 29';
+    }
+}
+exports.SeelCRZ = SeelCRZ;
+class GalarianMrMimeCRZ extends galarian_mr_mime_1.GalarianMrMime {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '30';
+        this.fullName = 'Galarian Mr. Mime CRZ 30';
+    }
+}
+exports.GalarianMrMimeCRZ = GalarianMrMimeCRZ;
+class CorphishCRZ extends corphish_1.Corphish {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '33';
+        this.fullName = 'Corphish CRZ 33';
+    }
+}
+exports.CorphishCRZ = CorphishCRZ;
+class ShinxCRZ extends shinx_1.Shinx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '39';
+        this.fullName = 'Shinx CRZ 39';
+    }
+}
+exports.ShinxCRZ = ShinxCRZ;
+class LuxioCRZ extends luxio_1.Luxio {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '41';
+        this.fullName = 'Luxio CRZ 41';
+    }
+}
+exports.LuxioCRZ = LuxioCRZ;
+class EmolgaCRZ extends emolga_1.Emolga {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '47';
+        this.fullName = 'Emolga CRZ 47';
+    }
+}
+exports.EmolgaCRZ = EmolgaCRZ;
+class ZeraoraCRZ extends zeraora_1.Zeraora {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '52';
+        this.fullName = 'Zeraora CRZ 52';
+    }
+}
+exports.ZeraoraCRZ = ZeraoraCRZ;
+class DusclopsCRZ extends dusclops_1.Dusclops {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '63';
+        this.fullName = 'Dusclops CRZ 63';
+    }
+}
+exports.DusclopsCRZ = DusclopsCRZ;
+class GravelerCRZ extends graveler_1.Graveler {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '68';
+        this.fullName = 'Graveler CRZ 68';
+    }
+}
+exports.GravelerCRZ = GravelerCRZ;
+class BaltoyCRZ extends baltoy_1.Baltoy {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '70';
+        this.fullName = 'Baltoy CRZ 70';
+    }
+}
+exports.BaltoyCRZ = BaltoyCRZ;
+class KoffingCRZ extends koffing_1.Koffing {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '75';
+        this.fullName = 'Koffing CRZ 75';
+    }
+}
+exports.KoffingCRZ = KoffingCRZ;
+class KrokorokCRZ extends krokorok_1.Krokorok {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '79';
+        this.fullName = 'Krokorok CRZ 79';
+    }
+}
+exports.KrokorokCRZ = KrokorokCRZ;
+class MetangCRZ extends metang_1.Metang {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '90';
+        this.fullName = 'Metang CRZ 90';
+    }
+}
+exports.MetangCRZ = MetangCRZ;
+class PawniardCRZ extends pawniard_1.Pawniard {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '91';
+        this.fullName = 'Pawniard CRZ 91';
+    }
+}
+exports.PawniardCRZ = PawniardCRZ;
+class SnorlaxCRZ extends snorlax_1.Snorlax {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '109';
+        this.fullName = 'Snorlax CRZ 109';
+    }
+}
+exports.SnorlaxCRZ = SnorlaxCRZ;
+class StarlyCRZ extends starly_1.Starly {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '110';
+        this.fullName = 'Starly CRZ 110';
+    }
+}
+exports.StarlyCRZ = StarlyCRZ;
+class BeaCRZ extends bea_1.Bea {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '123';
+        this.fullName = 'Bea CRZ 123';
+    }
+}
+exports.BeaCRZ = BeaCRZ;
+class FriendsInHisui2 extends friends_in_hisui_1.FriendsInHisui {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '148';
+        this.fullName = 'Friends in Hisui CRZ 148';
+    }
+}
+exports.FriendsInHisui2 = FriendsInHisui2;
+class FriendsInSinnoh2 extends friends_in_sinnoh_1.FriendsInSinnoh {
+    constructor() {
+        super(...arguments);
+        this.set = 'CRZ';
+        this.setNumber = '149';
+        this.fullName = 'Friends in Sinnoh CRZ 149';
+    }
+}
+exports.FriendsInSinnoh2 = FriendsInSinnoh2;

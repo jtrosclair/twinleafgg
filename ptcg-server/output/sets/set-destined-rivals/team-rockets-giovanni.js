@@ -7,7 +7,6 @@ const card_types_1 = require("../../game/store/card/card-types");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const choose_pokemon_prompt_1 = require("../../game/store/prompts/choose-pokemon-prompt");
 const state_utils_1 = require("../../game/store/state-utils");
 class TeamRocketsGiovanni extends trainer_card_1.TrainerCard {
@@ -70,7 +69,6 @@ class TeamRocketsGiovanni extends trainer_card_1.TrainerCard {
                 blocked: blocked
             }), targets => {
                 if (!targets || targets.length === 0) {
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                     return state;
                 }
                 // Switch player's Pokémon
@@ -79,13 +77,11 @@ class TeamRocketsGiovanni extends trainer_card_1.TrainerCard {
                 // Then have player choose which of opponent's benched Pokémon to switch to active
                 return store.prompt(state, new choose_pokemon_prompt_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_SWITCH, play_card_action_1.PlayerType.TOP_PLAYER, [play_card_action_1.SlotType.BENCH], { allowCancel: false }), oppTargets => {
                     if (!oppTargets || oppTargets.length === 0) {
-                        player.supporter.moveCardTo(effect.trainerCard, player.discard);
                         return state;
                     }
                     // Switch opponent's Pokémon
                     opponent.active.clearEffects();
                     opponent.switchPokemon(oppTargets[0]);
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     return state;
                 });
             });

@@ -4,13 +4,13 @@ exports.PikachuVUNIONTopLeft = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const pikachu_v_union_tr_1 = require("./pikachu-v-union-tr");
 const pikachu_v_union_bl_1 = require("./pikachu-v-union-bl");
 const pikachu_v_union_br_1 = require("./pikachu-v-union-br");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class PikachuVUNIONTopLeft extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -65,7 +65,7 @@ class PikachuVUNIONTopLeft extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // assemblin the v-union
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const slots = player.bench.filter(b => b.cards.length === 0);
             if (player.assembledVUNIONs.includes(this.name)) {
@@ -116,7 +116,7 @@ class PikachuVUNIONTopLeft extends pokemon_card_1.PokemonCard {
             }
         }
         // Union Gain
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let lightningsInDiscard = 0;
             // checking for energies in the discard
@@ -146,7 +146,7 @@ class PikachuVUNIONTopLeft extends pokemon_card_1.PokemonCard {
             }
         }
         // Shocking Shock
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             return store.prompt(state, [
                 new game_1.CoinFlipPrompt(player.id, game_1.GameMessage.COIN_FLIP)
@@ -158,7 +158,7 @@ class PikachuVUNIONTopLeft extends pokemon_card_1.PokemonCard {
             });
         }
         // Disconnect
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             opponent.marker.addMarker(this.OPPONENT_CANNOT_PLAY_ITEM_CARDS_MARKER, this);

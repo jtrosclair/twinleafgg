@@ -12,6 +12,7 @@ const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const state_utils_1 = require("../../game/store/state-utils");
 const pokemon_card_list_1 = require("../../game/store/state/pokemon-card-list");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class AlolanMuk extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -39,11 +40,11 @@ class AlolanMuk extends pokemon_card_1.PokemonCard {
         this.setNumber = '58';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             // Defending Pokemon has no energy cards attached
-            if (!opponent.active.cards.some(c => c instanceof game_1.EnergyCard)) {
+            if (!opponent.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                 return state;
             }
             return store.prompt(state, [
@@ -57,6 +58,29 @@ class AlolanMuk extends pokemon_card_1.PokemonCard {
                     });
                 }
             });
+        }
+        if (effect instanceof check_effects_1.CheckPokemonPowersEffect) {
+            const player = effect.player;
+            const opponent = state_utils_1.StateUtils.getOpponent(state, player);
+            let playerHasAlolanMukInPlay = false;
+            let opponentHasAlolanMukInPlay = false;
+            player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
+                if (card === this) {
+                    playerHasAlolanMukInPlay = true;
+                }
+            });
+            opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card) => {
+                if (card === this) {
+                    opponentHasAlolanMukInPlay = true;
+                }
+            });
+            if (playerHasAlolanMukInPlay || opponentHasAlolanMukInPlay) {
+                const targetPokemon = effect.target;
+                if (targetPokemon && targetPokemon.stage === card_types_1.Stage.BASIC) {
+                    // Filter out all abilities
+                    effect.powers = effect.powers.filter(power => power.powerType !== pokemon_types_1.PowerType.ABILITY);
+                }
+            }
         }
         if (effect instanceof game_effects_1.PowerEffect && effect.power.powerType === pokemon_types_1.PowerType.ABILITY && effect.power.name !== 'Power of Alchemy') {
             const player = effect.player;

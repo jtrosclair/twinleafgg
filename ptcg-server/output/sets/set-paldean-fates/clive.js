@@ -32,7 +32,6 @@ class Clive extends trainer_card_1.TrainerCard {
             state = store.prompt(state, new game_1.ShowCardsPrompt(player.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, opponent.hand.cards), () => {
                 const cardsToMove = cardsInOpponentHand.length * 2;
                 player.deck.moveTo(player.hand, cardsToMove);
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
             });
         }
         return state;

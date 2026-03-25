@@ -16,7 +16,7 @@ class JustifiedGloves extends trainer_card_1.TrainerCard {
         this.setNumber = '143';
         this.name = 'Justified Gloves';
         this.fullName = 'Justified Gloves CRE 143';
-        this.text = 'The attacks of the Pokémon this card is attached to do 30 more damage to your opponent\'s Active P Pokémon (before applying Weakness and Resistance).';
+        this.text = 'The attacks of the Pokémon this card is attached to do 30 more damage to your opponent\'s Active [D] Pokémon (before applying Weakness and Resistance).';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.DealDamageEffect && effect.source.tools.includes(this)) {

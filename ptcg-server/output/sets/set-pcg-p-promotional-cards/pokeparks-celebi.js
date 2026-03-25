@@ -1,12 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PokeParksCelebi = void 0;
-const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const card_types_1 = require("../../game/store/card/card-types");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_1 = require("../../game");
+const card_types_1 = require("../../game/store/card/card-types");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 class PokeParksCelebi extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -54,10 +53,10 @@ class PokeParksCelebi extends pokemon_card_1.PokemonCard {
                 effect.target.removeSpecialCondition(condition);
             });
         }
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED)(store, state, effect);
+                    (0, prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
                 }
             });
         }

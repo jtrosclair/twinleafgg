@@ -25,9 +25,7 @@ function* playCard(next, store, state, self, effect) {
     });
     if (cards.length > 0) {
         player.discard.moveCardsTo(cards, player.deck);
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
     }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });

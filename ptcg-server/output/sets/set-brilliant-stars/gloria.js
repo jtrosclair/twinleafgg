@@ -5,7 +5,6 @@ const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Gloria extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -64,7 +63,6 @@ class Gloria extends trainer_card_1.TrainerCard {
                         player.deck.moveCardTo(card, slots[index]);
                         slots[index].pokemonPlayedTurn = state.turn;
                     });
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                         player.deck.applyOrder(order);
                     });

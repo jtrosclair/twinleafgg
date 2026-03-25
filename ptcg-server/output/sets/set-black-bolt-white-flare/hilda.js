@@ -30,7 +30,7 @@ function* playCard(next, store, state, self, effect) {
         if (c instanceof game_1.PokemonCard && c.stage !== card_types_1.Stage.BASIC) {
             pokemon += 1;
         }
-        else if (c instanceof game_1.EnergyCard) {
+        else if (c.superType === card_types_1.SuperType.ENERGY) {
             energies += 1;
         }
         else {
@@ -48,7 +48,6 @@ function* playCard(next, store, state, self, effect) {
         next();
     });
     (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: self });
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }

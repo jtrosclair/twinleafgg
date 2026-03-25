@@ -4,9 +4,9 @@ exports.Mamoswineex = void 0;
 const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Mamoswineex extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -18,18 +18,18 @@ class Mamoswineex extends pokemon_card_1.PokemonCard {
         this.weakness = [{ type: G }];
         this.retreat = [C, C, C, C];
         this.powers = [{
-                name: 'Mammoth Ride',
+                name: 'Mammoth Hauler',
                 useWhenInPlay: true,
                 powerType: game_1.PowerType.ABILITY,
-                text: 'Once during your turn, you may search your deck for 1 Pokémon, reveal it, and put it into your hand. Then shuffle your deck.'
+                text: 'Once during your turn, you may search your deck for a Pokémon, reveal it, and put it into your hand. Then, shuffle your deck.'
             }];
         this.attacks = [
             {
-                name: 'Roaring March',
+                name: 'Rumbling March',
                 cost: [F, F],
                 damage: 180,
                 damageCalculation: '+',
-                text: 'This attack does 40 more damage for each of your Benched Stage 2 Pokémon.'
+                text: 'This attack does 40 more damage for each Stage 2 Pokémon on your Bench.'
             }
         ];
         this.regulationMark = 'I';
@@ -49,7 +49,7 @@ class Mamoswineex extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.MAMMOTH_RIDE_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (player.marker.hasMarker(this.MAMMOTH_RIDE_MARKER, this)) {
@@ -79,7 +79,7 @@ class Mamoswineex extends pokemon_card_1.PokemonCard {
             });
             return state;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let stage2Count = 0;
             player.bench.forEach(bench => {

@@ -5,13 +5,12 @@ const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Pokedex extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
         this.trainerType = card_types_1.TrainerType.ITEM;
         this.set = 'BS'; // Replace with the appropriate set abbreviation
-        this.name = 'Pokedex';
+        this.name = 'Pokedéx';
         this.fullName = 'Pokedex BS'; // Replace with the appropriate set abbreviation
         this.cardImage = 'assets/cardback.png'; // Replace with the appropriate card image path
         this.setNumber = '87'; // Replace with the appropriate set number
@@ -34,7 +33,6 @@ class Pokedex extends trainer_card_1.TrainerCard {
                 }
                 deckTop.applyOrder(rearrangedCards);
                 deckTop.moveTo(player.deck);
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             });
         }
         return state;

@@ -42,7 +42,6 @@ function* playCard(next, store, state, effect) {
         // Discard selected special energy card
         target.moveCardsTo(cards, opponent.discard);
     }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return state;
 }
 class EnhancedHammer extends trainer_card_1.TrainerCard {

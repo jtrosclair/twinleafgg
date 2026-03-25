@@ -56,7 +56,7 @@ class ChienPao extends pokemon_card_1.PokemonCard {
         }
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (!player.active.energies.cards.some(c => c instanceof game_1.EnergyCard)) {
+            if (!player.active.energies.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                 return state;
             }
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);

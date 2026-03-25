@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RockyHelmet2BCR = exports.AltariaBCR = exports.TerrakionBCR = exports.Skyla2BCR = exports.CherenBCR = exports.BiancaBCR = exports.LandorusEx2BCR = exports.TownMapBCR = exports.SwitchBCR = exports.PokeBallBCR = exports.GreatBallBCR = exports.EnergySearchBCR = exports.RockyHelmetBCR = exports.KeldeoExBCR = void 0;
+exports.WhiteKyuremEx2 = exports.BlackKyuremEx2 = exports.CresseliaEx2 = exports.CelebiEx2 = exports.RockyHelmet2BCR = exports.AltariaBCR = exports.TerrakionBCR = exports.Skyla2BCR = exports.CherenBCR = exports.BiancaBCR = exports.LandorusEx2BCR = exports.TownMapBCR = exports.SwitchBCR = exports.PokeBallBCR = exports.GreatBallBCR = exports.EnergySearchBCR = exports.RockyHelmetBCR = exports.KeldeoExBCR = void 0;
 const energy_search_1 = require("../set-fossil/energy-search");
 const great_ball_1 = require("../set-ex-firered-leafgreen/great-ball");
 const pokeball_1 = require("../set-jungle/pokeball");
@@ -15,6 +15,10 @@ const altaria_1 = require("../set-dragons-exalted/altaria");
 const rocky_helmet_1 = require("../set-scarlet-and-violet/rocky-helmet");
 const keldeo_ex_1 = require("./keldeo-ex");
 const rocky_helmet_2 = require("../set-scarlet-and-violet/rocky-helmet");
+const celebi_ex_1 = require("./celebi-ex");
+const cresselia_ex_1 = require("./cresselia-ex");
+const black_kyurem_ex_1 = require("./black-kyurem-ex");
+const white_kyurem_ex_1 = require("./white-kyurem-ex");
 class KeldeoExBCR extends keldeo_ex_1.KeldeoEx {
     constructor() {
         super(...arguments);
@@ -141,3 +145,39 @@ class RockyHelmet2BCR extends rocky_helmet_1.RockyHelmet {
     }
 }
 exports.RockyHelmet2BCR = RockyHelmet2BCR;
+class CelebiEx2 extends celebi_ex_1.CelebiEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'BCR';
+        this.setNumber = '141';
+        this.fullName = 'Celebi-EX BCR 141';
+    }
+}
+exports.CelebiEx2 = CelebiEx2;
+class CresseliaEx2 extends cresselia_ex_1.CresseliaEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'BCR';
+        this.setNumber = '143';
+        this.fullName = 'Cresselia-EX BCR 143';
+    }
+}
+exports.CresseliaEx2 = CresseliaEx2;
+class BlackKyuremEx2 extends black_kyurem_ex_1.BlackKyuremEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'BCR';
+        this.setNumber = '145';
+        this.fullName = 'Black Kyurem-EX BCR 145';
+    }
+}
+exports.BlackKyuremEx2 = BlackKyuremEx2;
+class WhiteKyuremEx2 extends white_kyurem_ex_1.WhiteKyuremEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'BCR';
+        this.setNumber = '146';
+        this.fullName = 'White Kyurem-EX BCR 146';
+    }
+}
+exports.WhiteKyuremEx2 = WhiteKyuremEx2;

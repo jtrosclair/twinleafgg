@@ -5,14 +5,15 @@ const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class IronMoth extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.stage = game_1.Stage.BASIC;
-        this.cardType = game_1.CardType.FIRE;
+        this.cardType = R;
         this.hp = 130;
-        this.weakness = [{ type: game_1.CardType.WATER }];
-        this.retreat = [game_1.CardType.COLORLESS, game_1.CardType.COLORLESS];
+        this.weakness = [{ type: W }];
+        this.retreat = [C, C];
         this.tags = [game_1.CardTag.FUTURE];
         this.powers = [{
                 name: 'Thermal Reactor',
@@ -22,7 +23,7 @@ class IronMoth extends game_1.PokemonCard {
             }];
         this.attacks = [{
                 name: 'Heat Ray',
-                cost: [game_1.CardType.FIRE, game_1.CardType.FIRE, game_1.CardType.COLORLESS],
+                cost: [R, R, C],
                 damage: 120,
                 text: 'During your next turn, this Pokémon can\'t use Heat Ray.'
             }];
@@ -32,8 +33,6 @@ class IronMoth extends game_1.PokemonCard {
         this.fullName = 'Iron Moth PAR';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '28';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
         this.ABILITY_USED_MARKER = 'ABILITY_USED_MARKER';
     }
     reduceEffect(store, state, effect) {
@@ -71,7 +70,7 @@ class IronMoth extends game_1.PokemonCard {
                         return;
                     }
                     blockedTo.push(target);
-                    if (cardList.energies.cards.some(c => c instanceof game_1.EnergyCard)) {
+                    if (cardList.energies.cards.some(c => c.superType === game_1.SuperType.ENERGY)) {
                         hasEnergyOnBench = true;
                     }
                 });
@@ -101,18 +100,11 @@ class IronMoth extends game_1.PokemonCard {
                 });
             }
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
-            effect.player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-            effect.player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-            effect.player.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
-        }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-                throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            const player = effect.player;
+            if (!player.active.cannotUseAttacksNextTurnPending.includes('Heat Ray')) {
+                player.active.cannotUseAttacksNextTurnPending.push('Heat Ray');
             }
-            effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
         }
         return state;
     }

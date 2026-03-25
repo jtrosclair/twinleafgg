@@ -36,7 +36,6 @@ class ColresssExperiment extends trainer_card_1.TrainerCard {
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, deckTop, {}, { min: 3, max: 3, allowCancel: true }), selected => {
                 deckTop.moveCardsTo(selected, player.hand);
                 deckTop.moveTo(player.lostzone);
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             });
         }

@@ -7,6 +7,7 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const coin_flip_prompt_1 = require("../../game/store/prompts/coin-flip-prompt");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Sandshrew extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -31,7 +32,7 @@ class Sandshrew extends pokemon_card_1.PokemonCard {
         this.fullName = 'Sandshrew BS';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             opponent.marker.addMarker(game_1.PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN, this);

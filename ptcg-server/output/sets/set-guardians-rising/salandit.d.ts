@@ -1,5 +1,5 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { CardType, Stage } from '../../game/store/card/card-types';
+import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 export declare class Salandit extends PokemonCard {
@@ -7,25 +7,25 @@ export declare class Salandit extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.WATER;
     }[];
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     attacks: ({
         name: string;
-        cost: CardType[];
+        cost: CardType.FIRE[];
         damage: number;
         text: string;
         damageCalculation?: undefined;
     } | {
         name: string;
-        cost: CardType[];
+        cost: CardType.COLORLESS[];
         damage: number;
-        damageCalculation: string;
+        damageCalculation: "+";
         text: string;
     })[];
     set: string;
-    cardImage: string;
     setNumber: string;
+    cardImage: string;
     name: string;
     fullName: string;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;

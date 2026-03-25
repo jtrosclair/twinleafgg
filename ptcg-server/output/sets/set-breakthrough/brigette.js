@@ -38,8 +38,9 @@ class Brigette extends trainer_card_1.TrainerCard {
                 }
                 const blocked = [];
                 player.deck.cards.forEach((c, index) => {
-                    // eslint-disable-next-line no-empty
-                    if (c instanceof game_1.PokemonCard && c.stage === card_types_1.Stage.BASIC && !c.tags.includes(card_types_1.CardTag.POKEMON_EX)) {
+                    // Block any card that is not a Basic Pokémon (EX or non-EX allowed)
+                    if (c instanceof game_1.PokemonCard && c.stage === card_types_1.Stage.BASIC) {
+                        // allowed
                     }
                     else {
                         blocked.push(index);
@@ -50,13 +51,27 @@ class Brigette extends trainer_card_1.TrainerCard {
                 effect.preventDefault = true;
                 let cards = [];
                 const maxCards = Math.min(3, openSlots.length);
-                return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH, player.deck, { superType: card_types_1.SuperType.POKEMON, stage: card_types_1.Stage.BASIC }, { min: 0, max: maxCards, allowCancel: false }), selectedCards => {
+                return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH, player.deck, { superType: card_types_1.SuperType.POKEMON, stage: card_types_1.Stage.BASIC }, { min: 0, max: maxCards, allowCancel: false, blocked }), selectedCards => {
                     cards = selectedCards || [];
+                    // If an EX was chosen together with other cards, re-prompt to choose a single Basic Pokémon (EX or non-EX)
+                    if (cards.length > 1 && cards.some(card => card.tags.includes(card_types_1.CardTag.POKEMON_EX))) {
+                        return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH, player.deck, { superType: card_types_1.SuperType.POKEMON, stage: card_types_1.Stage.BASIC }, { min: 1, max: 1, allowCancel: false, blocked }), singleCards => {
+                            const chosen = singleCards || [];
+                            if (chosen.length === 0) {
+                                return state;
+                            }
+                            (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, slots[0], { cards: [chosen[0]], sourceCard: this });
+                            slots[0].pokemonPlayedTurn = state.turn;
+                            return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
+                                player.deck.applyOrder(order);
+                            });
+                        });
+                    }
+                    // Move each selected card specifically (don't move the whole deck)
                     cards.forEach((card, index) => {
-                        (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, slots[index], { sourceCard: this });
+                        (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, slots[index], { cards: [card], sourceCard: this });
                         slots[index].pokemonPlayedTurn = state.turn;
                     });
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                         player.deck.applyOrder(order);
                     });

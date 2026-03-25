@@ -2,44 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Zoroark = void 0;
 const game_1 = require("../../game");
-const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-function* useFoulPlay(next, store, state, effect) {
-    const player = effect.player;
-    const opponent = game_1.StateUtils.getOpponent(state, player);
-    const pokemonCard = opponent.active.getPokemonCard();
-    if (pokemonCard === undefined || pokemonCard.attacks.length === 0) {
-        return state;
-    }
-    let selected;
-    yield store.prompt(state, new game_1.ChooseAttackPrompt(player.id, game_1.GameMessage.CHOOSE_ATTACK_TO_COPY, [pokemonCard], { allowCancel: false }), result => {
-        selected = result;
-        next();
-    });
-    const attack = selected;
-    if (attack === null) {
-        return state;
-    }
-    if (attack.copycatAttack === true) {
-        return state;
-    }
-    store.log(state, game_1.GameLog.LOG_PLAYER_COPIES_ATTACK, {
-        name: player.name,
-        attack: attack.name
-    });
-    // Perform attack
-    const attackEffect = new game_effects_1.AttackEffect(player, opponent, attack);
-    store.reduceEffect(state, attackEffect);
-    if (store.hasPrompts()) {
-        yield store.waitPrompt(state, () => next());
-    }
-    if (attackEffect.damage > 0) {
-        const dealDamage = new attack_effects_1.DealDamageEffect(attackEffect, attackEffect.damage);
-        state = store.reduceEffect(state, dealDamage);
-    }
-    return state;
-}
 class Zoroark extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -60,6 +23,7 @@ class Zoroark extends game_1.PokemonCard {
                 name: 'Foul Play',
                 cost: [C, C, C],
                 damage: 0,
+                copycatAttack: true,
                 text: 'Choose 1 of your opponent\'s Active Pokémon\'s attacks and use it as this attack.'
             }];
         this.regulationMark = 'I';
@@ -83,8 +47,7 @@ class Zoroark extends game_1.PokemonCard {
         }
         // Foul Play
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
-            const generator = useFoulPlay(() => generator.next(), store, state, effect);
-            return generator.next().value;
+            return (0, prefabs_1.COPY_OPPONENT_ACTIVE_ATTACK)(store, state, effect);
         }
         return state;
     }

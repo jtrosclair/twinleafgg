@@ -4,28 +4,30 @@ import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 export declare class MewVMAX extends PokemonCard {
     tags: CardTag[];
-    regulationMark: string;
     stage: Stage;
     evolvesFrom: string;
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.DARK;
     }[];
     retreat: any[];
     attacks: ({
         name: string;
-        cost: CardType[];
+        cost: CardType.COLORLESS[];
+        copycatAttack: boolean;
         damage: number;
         text: string;
         shredAttack?: undefined;
     } | {
         name: string;
-        cost: CardType[];
+        cost: CardType.PSYCHIC[];
         damage: number;
         shredAttack: boolean;
         text: string;
+        copycatAttack?: undefined;
     })[];
+    regulationMark: string;
     set: string;
     cardImage: string;
     setNumber: string;

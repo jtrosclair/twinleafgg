@@ -39,7 +39,7 @@ class SurpriseTimeMachine extends trainer_card_1.TrainerCard {
                 if (results && results.length > 0) {
                     const targetPokemon = results[0];
                     //Devolve
-                    targetPokemon.moveCardsTo([targetPokemon.cards[targetPokemon.cards.length - 1]], player.deck);
+                    (0, prefabs_1.DEVOLVE_POKEMON)(store, state, targetPokemon, player.deck);
                     //Evolve
                     const blocked2 = [];
                     player.deck.cards.forEach((card, index) => {
@@ -52,7 +52,6 @@ class SurpriseTimeMachine extends trainer_card_1.TrainerCard {
                     store.reduceEffect(state, checkHpEffect);
                     if (targetPokemon.damage >= checkHpEffect.hp) {
                         (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
-                        player.supporter.moveCardTo(effect.trainerCard, player.discard);
                         return state;
                     }
                     let cards = [];
@@ -67,7 +66,6 @@ class SurpriseTimeMachine extends trainer_card_1.TrainerCard {
                     targetPokemon.clearEffects();
                     targetPokemon.pokemonPlayedTurn = state.turn;
                 }
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             });
         }

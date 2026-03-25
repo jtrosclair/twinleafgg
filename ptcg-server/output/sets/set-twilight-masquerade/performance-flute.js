@@ -44,7 +44,6 @@ class PerformanceFlute extends trainer_card_1.TrainerCard {
                 if (cards.length === 0) {
                     return store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, deckTop.cards), () => {
                         deckTop.moveTo(opponent.deck);
-                        player.supporter.moveCardTo(effect.trainerCard, player.discard);
                         return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                             player.deck.applyOrder(order);
                             return state;
@@ -56,7 +55,6 @@ class PerformanceFlute extends trainer_card_1.TrainerCard {
                     slots[index].pokemonPlayedTurn = state.turn;
                 });
                 deckTop.moveTo(opponent.deck);
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return store.prompt(state, new game_1.ShuffleDeckPrompt(opponent.id), order => {
                     opponent.deck.applyOrder(order);
                     return state;

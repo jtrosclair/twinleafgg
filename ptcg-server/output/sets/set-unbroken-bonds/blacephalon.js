@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Blacephalon = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Blacephalon extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -36,7 +36,7 @@ class Blacephalon extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Blazer
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             return store.prompt(state, new game_1.ChoosePrizePrompt(player.id, game_1.GameMessage.CHOOSE_PRIZE_CARD, { count: 1, allowCancel: false }), prizes => {
                 if (prizes && prizes.length > 0) {
@@ -51,7 +51,7 @@ class Blacephalon extends game_1.PokemonCard {
             });
         }
         // Fireball Circus
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, { superType: game_1.SuperType.ENERGY, name: 'Fire Energy' }, { min: 1, allowCancel: false }), selected => {
                 effect.damage += (50 * selected.length);

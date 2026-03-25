@@ -7,6 +7,7 @@ const coin_flip_prompt_1 = require("../../game/store/prompts/coin-flip-prompt");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_1 = require("../../game");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Poliwhirl extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -38,7 +39,7 @@ class Poliwhirl extends pokemon_card_1.PokemonCard {
         ];
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const pokemonCard = opponent.active.getPokemonCard();
@@ -73,7 +74,7 @@ class Poliwhirl extends pokemon_card_1.PokemonCard {
             });
             this.forgottenAttack = null;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             return store.prompt(state, [
                 new coin_flip_prompt_1.CoinFlipPrompt(effect.player.id, game_1.GameMessage.COIN_FLIP),
                 new coin_flip_prompt_1.CoinFlipPrompt(effect.player.id, game_1.GameMessage.COIN_FLIP)

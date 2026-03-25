@@ -18,9 +18,9 @@ class LuckyEnergy extends energy_card_1.EnergyCard {
         this.setNumber = '158';
         this.name = 'Lucky Energy';
         this.fullName = 'Lucky Energy CRE';
-        this.text = 'As long as this card is attached to a Pokémon, it provides [C] Energy. ' +
-            '' +
-            'If the Pokémon this card is attached to is in the Active Spot and is damaged by an attack from your opponent\'s Pokémon (even if it is Knocked Out), draw a card.';
+        this.text = `As long as this card is attached to a Pokémon, it provides [C] Energy. 
+
+If the Pokémon this card is attached to is in the Active Spot and is damaged by an attack from your opponent's Pokémon (even if it is Knocked Out), draw a card.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.cards.includes(this)) {

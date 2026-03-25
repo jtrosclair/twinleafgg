@@ -6,9 +6,9 @@ const card_list_1 = require("../../game/store/state/card-list");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
 const game_message_1 = require("../../game/game-message");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Mew extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -46,7 +46,7 @@ class Mew extends game_1.PokemonCard {
             player.marker.removeMarker(this.MYSTERIOUS_TAIL_MARKER, this);
             return state;
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_message_1.GameMessage.CANNOT_USE_POWER);
@@ -60,7 +60,8 @@ class Mew extends game_1.PokemonCard {
             const deckTop = new card_list_1.CardList();
             player.deck.moveTo(deckTop, 6);
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            return store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, deckTop, { superType: card_types_1.SuperType.TRAINER, trainerType: card_types_1.TrainerType.ITEM }, { min: 0, max: 1, allowCancel: true }), selected => {
+            return store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, deckTop, { superType: card_types_1.SuperType.TRAINER, trainerType: card_types_1.TrainerType.ITEM }, { min: 0, max: 1, allowCancel: false }), selected => {
+                (0, prefabs_1.ABILITY_USED)(player, this);
                 player.marker.addMarker(this.MYSTERIOUS_TAIL_MARKER, this);
                 deckTop.moveCardsTo(selected, player.hand);
                 deckTop.moveTo(player.deck);

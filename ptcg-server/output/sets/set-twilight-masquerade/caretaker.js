@@ -40,7 +40,6 @@ class Caretaker extends trainer_card_1.TrainerCard {
             else {
                 player.supporter.moveTo(player.discard);
             }
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
         }
         return state;

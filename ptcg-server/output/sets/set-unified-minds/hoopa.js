@@ -4,7 +4,7 @@ exports.Hoopa = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Hoopa extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -19,6 +19,7 @@ class Hoopa extends pokemon_card_1.PokemonCard {
                 name: 'Evil Admonition',
                 cost: [card_types_1.CardType.COLORLESS],
                 damage: 10,
+                damageCalculation: '+',
                 text: 'This attack does 20 more damage for each of your opponent\'s Pokémon that has an Ability.'
             },
             {
@@ -34,18 +35,23 @@ class Hoopa extends pokemon_card_1.PokemonCard {
         this.fullName = 'Hoopa UNM';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            const benchPokemon = opponent.bench.map(b => b.getPokemonCard()).filter(card => card !== undefined);
-            const vPokemons = benchPokemon.filter(card => card.powers.length && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, opponent, card));
-            const opponentActive = opponent.active.getPokemonCard();
-            if (opponentActive && opponentActive.powers.length && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, opponent, opponentActive))
-                vPokemons.push(opponentActive);
-            const vPokes = vPokemons.length;
-            effect.damage += vPokes * 20;
+            let pokemonWithUsableAbilities = 0;
+            opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card) => {
+                if (cardList.getPokemonCard()) {
+                    const powersEffect = new check_effects_1.CheckPokemonPowersEffect(opponent, card);
+                    state = store.reduceEffect(state, powersEffect);
+                    if (powersEffect.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
+                        pokemonWithUsableAbilities++;
+                    }
+                }
+            });
+            effect.damage += pokemonWithUsableAbilities * 20;
+            return state;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             effect.ignoreResistance = true;
             effect.ignoreWeakness = true;
         }

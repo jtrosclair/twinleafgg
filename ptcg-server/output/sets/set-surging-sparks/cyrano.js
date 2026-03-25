@@ -48,7 +48,7 @@ class Cyrano extends trainer_card_1.TrainerCard {
         this.setNumber = '170';
         this.name = 'Cyrano';
         this.fullName = 'Cyrano SSP';
-        this.text = 'Search your deck for up to 3 Pokémon ex, reveal them, and put them into your hand. Then shuffle your deck.';
+        this.text = 'Search your deck for up to 3 Pokémon ex, reveal them, and put them into your hand. Then, shuffle your deck.';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

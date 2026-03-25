@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Skitty2 = void 0;
-const game_1 = require("../../game");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
+const game_message_1 = require("../../game/game-message");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Skitty2 extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -31,13 +31,12 @@ class Skitty2 extends pokemon_card_1.PokemonCard {
         this.setNumber = '44';
         this.name = 'Skitty';
         this.fullName = 'Skitty RS2';
-        this.legacyFullName = 'Skitty RS 44';
     }
     reduceEffect(store, state, effect) {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
-            store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { min: 0, max: 2, allowCancel: false }), selected => {
+            store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { min: 0, max: 2, allowCancel: false }), selected => {
                 if (selected) {
                     (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, selected);
                     (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: selected });
@@ -45,8 +44,8 @@ class Skitty2 extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
-            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP)(store, state, effect);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
+            (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         return state;
     }

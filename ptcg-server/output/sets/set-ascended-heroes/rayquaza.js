@@ -3,8 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Rayquaza = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Rayquaza extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -33,20 +32,10 @@ class Rayquaza extends pokemon_card_1.PokemonCard {
         this.setNumber = '153';
         this.name = 'Rayquaza';
         this.fullName = 'Rayquaza M2a';
-        this.movedToActiveThisTurn = false;
     }
     reduceEffect(store, state, effect) {
-        // Reset flag at end of turn
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && this.movedToActiveThisTurn) {
-            this.movedToActiveThisTurn = false;
-        }
-        // Set flag when another Pokemon retreats (this one might be switching in)
-        if (effect instanceof game_effects_1.RetreatEffect && effect.player.active.getPokemonCard() !== this) {
-            this.movedToActiveThisTurn = true;
-        }
-        // Handle Assault Break attack - add 90 damage if moved from bench this turn
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            if (this.movedToActiveThisTurn) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            if ((0, prefabs_1.MOVED_TO_ACTIVE_THIS_TURN)(effect.player, this)) {
                 effect.damage += 90;
             }
         }

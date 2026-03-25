@@ -5,7 +5,6 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Feraligatr extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -30,15 +29,15 @@ class Feraligatr extends pokemon_card_1.PokemonCard {
             }];
         this.set = 'DRM';
         this.cardImage = 'assets/cardback.png';
-        this.setNumber = '16';
+        this.setNumber = '24';
         this.name = 'Feraligatr';
         this.fullName = 'Feraligatr DRM';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInHand = player.hand.cards.some(c => {
-                return c instanceof game_1.EnergyCard && c.name === 'Water Energy';
+                return c.superType === card_types_1.SuperType.ENERGY && c.name === 'Water Energy';
             });
             if (!hasEnergyInHand) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -58,7 +57,7 @@ class Feraligatr extends pokemon_card_1.PokemonCard {
             const blocked = [];
             const basicEnergyCards = [];
             player.discard.cards.forEach((c, index) => {
-                const isBasicWaterEnergy = c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC && c.name === 'Water Energy';
+                const isBasicWaterEnergy = c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC && c.name === 'Water Energy';
                 if (isBasicWaterEnergy) {
                     energyInDiscard += 1;
                     basicEnergyCards.push(c);
@@ -69,7 +68,7 @@ class Feraligatr extends pokemon_card_1.PokemonCard {
             });
             effect.damage += energyInDiscard * 20;
             player.discard.cards.forEach(cards => {
-                if (cards instanceof game_1.EnergyCard && cards.energyType === card_types_1.EnergyType.BASIC && cards.name === 'Water Energy') {
+                if (cards.superType === card_types_1.SuperType.ENERGY && cards.energyType === card_types_1.EnergyType.BASIC && cards.name === 'Water Energy') {
                     (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.deck, { cards: basicEnergyCards, sourceCard: this, sourceEffect: this.attacks[0] });
                 }
             });

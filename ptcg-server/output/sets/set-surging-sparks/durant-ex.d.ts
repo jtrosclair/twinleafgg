@@ -21,6 +21,7 @@ export declare class Durantex extends PokemonCard {
         name: string;
         cost: (CardType.GRASS | CardType.COLORLESS)[];
         damage: number;
+        damageCalculation: string;
         text: string;
     }[];
     regulationMark: string;

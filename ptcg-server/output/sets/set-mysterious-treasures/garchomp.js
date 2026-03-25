@@ -44,7 +44,7 @@ class Garchomp extends pokemon_card_1.PokemonCard {
             }
             const energyTypes = [];
             effect.source.cards.forEach(card => {
-                if (card instanceof game_1.EnergyCard) {
+                if (card.superType === card_types_1.SuperType.ENERGY) {
                     energyTypes.push(card.provides[0]);
                 }
             });

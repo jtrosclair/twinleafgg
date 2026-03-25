@@ -34,7 +34,6 @@ class ProfessorElm extends trainer_card_1.TrainerCard {
             }
             (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, 7);
             (0, prefabs_1.ADD_MARKER)(this.PROFESSOR_ELM_MARKER, player, this);
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
         }
         if (effect instanceof play_card_effects_1.PlayItemEffect

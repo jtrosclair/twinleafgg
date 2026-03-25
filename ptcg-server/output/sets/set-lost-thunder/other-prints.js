@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Sightseer2LOT = exports.ProfessorElmLecture2LOT = exports.NetBall2LOT = exports.Electropower2LOT = exports.SpellTag2LOT = exports.NetBall3LOT = exports.LostBlender2LOT = exports.Electropower3LOT = exports.CustomCatcher2LOT = exports.CounterGain2LOT = exports.AdventureBag2LOT = exports.LugiaGX3LOT = exports.MimikyuGX3LOT = exports.AlolanNinetalesGX3LOT = exports.ZeraoraGX3LOT = exports.BlacephalonGX3LOT = exports.MagcargoGX3LOT = exports.ShuckleGX3LOT = exports.ProfessorElmLecture3LOT = exports.Mina2LOT = exports.JudgeULLOT = exports.Faba2LOT = exports.LugiaGX2LOT = exports.MimikyuGX2LOT = exports.AlolanNinetalesGX2LOT = exports.BlacephalonGX2LOT = exports.MagcargoGX2LOT = exports.ShuckleGX2LOT = exports.ZeraoraGXLOT = void 0;
+exports.WaitAndSeeHammer2 = exports.ChoiceHelmet2 = exports.GenesectGx3 = exports.TyranitarGx3 = exports.SigilyphGx3 = exports.SuicuneGx3 = exports.VirizionGx3 = exports.SceptileGx3 = exports.Whitney2 = exports.Morty2 = exports.Kahili2 = exports.GenesectGx2 = exports.TyranitarGx2 = exports.SigilyphGx2 = exports.ZeraoraGx2 = exports.SuicuneGx2 = exports.VirizionGx2 = exports.SceptileGx2 = exports.Sightseer2LOT = exports.ProfessorElmLecture2LOT = exports.NetBall2LOT = exports.Electropower2LOT = exports.SpellTag2LOT = exports.NetBall3LOT = exports.LostBlender2LOT = exports.Electropower3LOT = exports.CustomCatcher2LOT = exports.CounterGain2LOT = exports.AdventureBag2LOT = exports.LugiaGX3LOT = exports.MimikyuGX3LOT = exports.AlolanNinetalesGX3LOT = exports.ZeraoraGX3LOT = exports.BlacephalonGX3LOT = exports.MagcargoGX3LOT = exports.ShuckleGX3LOT = exports.ProfessorElmLecture3LOT = exports.Mina2LOT = exports.JudgeULLOT = exports.Faba2LOT = exports.LugiaGX2LOT = exports.MimikyuGX2LOT = exports.AlolanNinetalesGX2LOT = exports.BlacephalonGX2LOT = exports.MagcargoGX2LOT = exports.ShuckleGX2LOT = exports.ZeraoraGXLOT = void 0;
 const zeraora_gx_1 = require("../set-lost-thunder/zeraora-gx");
 const shuckle_gx_1 = require("../set-lost-thunder/shuckle-gx");
 const magcargo_gx_1 = require("../set-lost-thunder/magcargo-gx");
@@ -21,6 +21,18 @@ const lost_blender_1 = require("../set-lost-thunder/lost-blender");
 const net_ball_1 = require("../set-lost-thunder/net-ball");
 const spell_tag_1 = require("../set-lost-thunder/spell-tag");
 const sightseer_1 = require("../set-lost-thunder/sightseer");
+const sceptile_gx_1 = require("./sceptile-gx");
+const virizion_gx_1 = require("./virizion-gx");
+const suicune_gx_1 = require("./suicune-gx");
+const zeraora_gx_3 = require("./zeraora-gx");
+const sigilyph_gx_1 = require("./sigilyph-gx");
+const tyranitar_gx_1 = require("./tyranitar-gx");
+const genesect_gx_1 = require("./genesect-gx");
+const kahili_1 = require("./kahili");
+const morty_1 = require("./morty");
+const whitney_1 = require("./whitney");
+const choice_helmet_1 = require("./choice-helmet");
+const wait_and_see_hammer_1 = require("./wait-and-see-hammer");
 class ZeraoraGXLOT extends zeraora_gx_1.ZeraoraGX {
     constructor() {
         super(...arguments);
@@ -282,3 +294,165 @@ class Sightseer2LOT extends sightseer_1.Sightseer {
     }
 }
 exports.Sightseer2LOT = Sightseer2LOT;
+class SceptileGx2 extends sceptile_gx_1.SceptileGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOT';
+        this.setNumber = '196';
+        this.fullName = 'Sceptile-GX LOT 196';
+    }
+}
+exports.SceptileGx2 = SceptileGx2;
+class VirizionGx2 extends virizion_gx_1.VirizionGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOT';
+        this.setNumber = '197';
+        this.fullName = 'Virizion-GX LOT 197';
+    }
+}
+exports.VirizionGx2 = VirizionGx2;
+class SuicuneGx2 extends suicune_gx_1.SuicuneGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOT';
+        this.setNumber = '200';
+        this.fullName = 'Suicune-GX LOT 200';
+    }
+}
+exports.SuicuneGx2 = SuicuneGx2;
+class ZeraoraGx2 extends zeraora_gx_3.ZeraoraGX {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOT';
+        this.setNumber = '201';
+        this.fullName = 'Zeraora-GX LOT 201';
+    }
+}
+exports.ZeraoraGx2 = ZeraoraGx2;
+class SigilyphGx2 extends sigilyph_gx_1.SigilyphGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOT';
+        this.setNumber = '202';
+        this.fullName = 'Sigilyph-GX LOT 202';
+    }
+}
+exports.SigilyphGx2 = SigilyphGx2;
+class TyranitarGx2 extends tyranitar_gx_1.TyranitarGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOT';
+        this.setNumber = '203';
+        this.fullName = 'Tyranitar-GX LOT 203';
+    }
+}
+exports.TyranitarGx2 = TyranitarGx2;
+class GenesectGx2 extends genesect_gx_1.GenesectGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOT';
+        this.setNumber = '204';
+        this.fullName = 'Genesect-GX LOT 204';
+    }
+}
+exports.GenesectGx2 = GenesectGx2;
+class Kahili2 extends kahili_1.Kahili {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOT';
+        this.setNumber = '210';
+        this.fullName = 'Kahili LOT 210';
+    }
+}
+exports.Kahili2 = Kahili2;
+class Morty2 extends morty_1.Morty {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOT';
+        this.setNumber = '212';
+        this.fullName = 'Morty LOT 212';
+    }
+}
+exports.Morty2 = Morty2;
+class Whitney2 extends whitney_1.Whitney {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOT';
+        this.setNumber = '214';
+        this.fullName = 'Whitney LOT 214';
+    }
+}
+exports.Whitney2 = Whitney2;
+class SceptileGx3 extends sceptile_gx_1.SceptileGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOT';
+        this.setNumber = '216';
+        this.fullName = 'Sceptile-GX LOT 216';
+    }
+}
+exports.SceptileGx3 = SceptileGx3;
+class VirizionGx3 extends virizion_gx_1.VirizionGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOT';
+        this.setNumber = '217';
+        this.fullName = 'Virizion-GX LOT 217';
+    }
+}
+exports.VirizionGx3 = VirizionGx3;
+class SuicuneGx3 extends suicune_gx_1.SuicuneGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOT';
+        this.setNumber = '220';
+        this.fullName = 'Suicune-GX LOT 220';
+    }
+}
+exports.SuicuneGx3 = SuicuneGx3;
+class SigilyphGx3 extends sigilyph_gx_1.SigilyphGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOT';
+        this.setNumber = '222';
+        this.fullName = 'Sigilyph-GX LOT 222';
+    }
+}
+exports.SigilyphGx3 = SigilyphGx3;
+class TyranitarGx3 extends tyranitar_gx_1.TyranitarGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOT';
+        this.setNumber = '223';
+        this.fullName = 'Tyranitar-GX LOT 223';
+    }
+}
+exports.TyranitarGx3 = TyranitarGx3;
+class GenesectGx3 extends genesect_gx_1.GenesectGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOT';
+        this.setNumber = '224';
+        this.fullName = 'Genesect-GX LOT 224';
+    }
+}
+exports.GenesectGx3 = GenesectGx3;
+class ChoiceHelmet2 extends choice_helmet_1.ChoiceHelmet {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOT';
+        this.setNumber = '229';
+        this.fullName = 'Choice Helmet LOT 229';
+    }
+}
+exports.ChoiceHelmet2 = ChoiceHelmet2;
+class WaitAndSeeHammer2 extends wait_and_see_hammer_1.WaitAndSeeHammer {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOT';
+        this.setNumber = '236';
+        this.fullName = 'Wait and See Hammer LOT 236';
+    }
+}
+exports.WaitAndSeeHammer2 = WaitAndSeeHammer2;

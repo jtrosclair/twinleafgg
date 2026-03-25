@@ -31,7 +31,5 @@ export declare class Sceptileex extends PokemonCard {
     name: string;
     fullName: string;
     readonly POISON_RING_MARKER: string;
-    readonly ATTACK_USED_MARKER = "ATTACK_USED_MARKER";
-    readonly ATTACK_USED_2_MARKER = "ATTACK_USED_2_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

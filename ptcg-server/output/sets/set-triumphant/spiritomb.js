@@ -39,19 +39,13 @@ class Spiritomb extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.POKEPOWER,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
                 if (wantToUse) {
+                    const powerEffect = new game_effects_1.PowerEffect(player, this.powers[0], this);
+                    store.reduceEffect(state, powerEffect);
                     opponent.hand.moveTo(opponent.deck);
                     (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
                     (0, prefabs_1.DRAW_CARDS)(opponent, 6);

@@ -8,7 +8,6 @@ const game_message_1 = require("../../game/game-message");
 const game_1 = require("../../game");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* playCard(next, store, state, effect) {
     const player = effect.player;
     const opponent = state_utils_1.StateUtils.getOpponent(state, player);
@@ -32,7 +31,6 @@ function* playCard(next, store, state, effect) {
                     source.damage -= 20;
                     target.damage += 20;
                 }
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             }
         });
     });

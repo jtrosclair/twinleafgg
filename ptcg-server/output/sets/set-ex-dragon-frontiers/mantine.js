@@ -5,7 +5,6 @@ const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Mantine extends pokemon_card_1.PokemonCard {
@@ -52,19 +51,11 @@ class Mantine extends pokemon_card_1.PokemonCard {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             //Must have basic energy in discard
-            if (!player.discard.cards.some(c => c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC)) {
+            if (!player.discard.cards.some(c => c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             //check if power is blocked
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: pokemon_types_1.PowerType.POKEPOWER,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             //power effect
@@ -92,7 +83,7 @@ class Mantine extends pokemon_card_1.PokemonCard {
             });
             return state;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             (0, attack_effects_1.HEAL_X_DAMAGE_FROM_THIS_POKEMON)(10, effect, store, state);
         }
         return state;

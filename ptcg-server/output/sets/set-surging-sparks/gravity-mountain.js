@@ -18,7 +18,7 @@ class GravityMountain extends trainer_card_1.TrainerCard {
         this.setNumber = '177';
         this.name = 'Gravity Mountain';
         this.fullName = 'Gravity Mountain SSP';
-        this.text = 'The maximum HP of all Stage 2 Pokémon in play is reduced by 30.';
+        this.text = 'Each Stage 2 Pokémon in play (both yours and your opponent\'s) gets -30 HP. ';
     }
     reduceEffect(store, state, effect) {
         var _a;

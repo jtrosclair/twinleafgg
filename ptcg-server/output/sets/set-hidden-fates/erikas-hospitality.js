@@ -29,7 +29,6 @@ function* playCard(next, store, state, self, effect) {
     const opponentBenched = opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
     const cardsToDraw = opponentBenched + 1;
     player.deck.moveTo(player.hand, cardsToDraw);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return state;
 }
 class ErikasHospitality extends trainer_card_1.TrainerCard {

@@ -15,7 +15,6 @@ class LushForest extends trainer_card_1.TrainerCard {
         this.set = 'MEG';
         this.name = 'Forest of Vitality';
         this.fullName = 'Forest of Vitality MEG';
-        this.legacyFullName = 'Lush Forest M1S';
         this.regulationMark = 'I';
         this.text = 'Each player\'s [G] Pokémon can evolve into another [G] Pokémon during the turn they play those Pokémon. (Players can\'t evolve a Pokémon during their first turn.)';
     }

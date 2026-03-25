@@ -8,13 +8,13 @@ export declare class Meditite extends PokemonCard {
     stage: Stage;
     cardType: CardType;
     hp: number;
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     weakness: {
-        type: CardType;
+        type: CardType.PSYCHIC;
     }[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: (CardType.FIGHTING | CardType.COLORLESS)[];
         damage: number;
         text: string;
     }[];

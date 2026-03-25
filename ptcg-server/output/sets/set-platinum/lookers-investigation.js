@@ -39,14 +39,12 @@ class LookersInvestigation extends trainer_card_1.TrainerCard {
                     (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck);
                     (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                     (0, prefabs_1.DRAW_CARDS)(player, 5);
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 }
                 else if (choice === 1) {
                     // Option 2
                     (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck);
                     (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
                     (0, prefabs_1.DRAW_CARDS)(opponent, 5);
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 }
             });
         }

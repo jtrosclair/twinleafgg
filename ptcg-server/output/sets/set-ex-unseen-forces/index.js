@@ -6,9 +6,12 @@ const ariados_1 = require("./ariados");
 const bayleef_1 = require("./bayleef");
 const chikorita_1 = require("./chikorita");
 const corsola_1 = require("./corsola");
+const cyndaquil_1 = require("./cyndaquil");
+const energy_root_1 = require("./energy-root");
 const espeon_ex_1 = require("./espeon-ex");
 const fluffy_berry_1 = require("./fluffy-berry");
 const forretress_1 = require("./forretress");
+const gligar_1 = require("./gligar");
 const hitmonlee_1 = require("./hitmonlee");
 const hitmontop_1 = require("./hitmontop");
 const houndoom_1 = require("./houndoom");
@@ -21,9 +24,11 @@ const oddish_1 = require("./oddish");
 const onix_1 = require("./onix");
 const pineco_1 = require("./pineco");
 const pokemon_reversal_1 = require("./pokemon-reversal");
+const porygon2_1 = require("./porygon2");
 const professors_elm_training_method_1 = require("./professors-elm-training-method");
 const scyther_1 = require("./scyther");
 const scizor_ex_1 = require("./scizor-ex");
+const shuckle_1 = require("./shuckle");
 const solid_rage_1 = require("./solid-rage");
 const stantler_1 = require("./stantler");
 const slowpoke_1 = require("./slowpoke");
@@ -38,6 +43,7 @@ const tyrogue_1 = require("./tyrogue");
 const umbreon_ex_1 = require("./umbreon-ex");
 const unown_e_1 = require("./unown-e");
 const ursaring_1 = require("./ursaring");
+const wooper_1 = require("./wooper");
 // Other prints
 const other_prints_1 = require("./other-prints");
 exports.setEXUnseenForces = [
@@ -46,9 +52,13 @@ exports.setEXUnseenForces = [
     new bayleef_1.Bayleef(),
     new chikorita_1.Chikorita(),
     new corsola_1.Corsola(),
+    new cyndaquil_1.Cyndaquil(),
+    new other_prints_1.EnergyRemoval2UF(),
+    new energy_root_1.EnergyRoot(),
     new espeon_ex_1.Espeonex(),
     new fluffy_berry_1.FluffyBerry(),
     new forretress_1.Forretress(),
+    new gligar_1.Gligar(),
     new hitmonlee_1.Hitmonlee(),
     new hitmontop_1.Hitmontop(),
     new houndoom_1.Houndoom(),
@@ -61,9 +71,11 @@ exports.setEXUnseenForces = [
     new onix_1.Onix(),
     new pineco_1.Pineco(),
     new pokemon_reversal_1.PokemonReversal(),
+    new porygon2_1.Porygon2(),
     new professors_elm_training_method_1.ProfessorElmsTrainingMethod(),
     new scyther_1.Scyther(),
     new scizor_ex_1.Scizorex(),
+    new shuckle_1.Shuckle(),
     new solid_rage_1.SolidRage(),
     new stantler_1.Stantler(),
     new slowpoke_1.Slowpoke(),
@@ -78,8 +90,13 @@ exports.setEXUnseenForces = [
     new umbreon_ex_1.Umbreonex(),
     new unown_e_1.UnownE(),
     new ursaring_1.Ursaring(),
+    new wooper_1.Wooper(),
     // Other prints
     new other_prints_1.BoostEnergyUF(),
+    new other_prints_1.CycloneEnergyUF(),
+    new other_prints_1.DarknessEnergySpecialUF(),
+    new other_prints_1.MetalEnergySpecialUF(),
     new other_prints_1.PokeBallUF(),
     new other_prints_1.WarpEnergyUF(),
+    new other_prints_1.WarpPointUF(),
 ];

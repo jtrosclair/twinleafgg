@@ -8,6 +8,7 @@ const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const state_utils_1 = require("../../game/store/state-utils");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Dragonite extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -37,7 +38,7 @@ class Dragonite extends pokemon_card_1.PokemonCard {
         this.setNumber = '149';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // Discard 2 cards from your deck 
             player.deck.moveTo(player.discard, 2);

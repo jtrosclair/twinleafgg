@@ -7,7 +7,7 @@ const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const state_1 = require("../../game/store/state/state");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Machamp extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -48,15 +48,7 @@ class Machamp extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: pokemon_types_1.PowerType.POKEMON_POWER,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_POKEMON_POWER_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const targetPlayer = game_1.StateUtils.findOwner(state, effect.target);

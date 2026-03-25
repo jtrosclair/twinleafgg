@@ -51,7 +51,6 @@ class PokemonRetriever extends trainer_card_1.TrainerCard {
                                 store.log(state, game_message_1.GameLog.LOG_PLAYER_RETURNS_TO_DECK_FROM_DISCARD, { name: player.name, card: card.name });
                             });
                             player.discard.moveCardsTo(cards, player.deck);
-                            player.supporter.moveCardTo(effect.trainerCard, player.discard);
                             return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
                                 player.deck.applyOrder(order);
                             });
@@ -68,7 +67,6 @@ class PokemonRetriever extends trainer_card_1.TrainerCard {
                                 store.log(state, game_message_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                             });
                             player.discard.moveCardsTo(cards, player.hand);
-                            player.supporter.moveCardTo(effect.trainerCard, player.discard);
                             return state;
                         });
                     }

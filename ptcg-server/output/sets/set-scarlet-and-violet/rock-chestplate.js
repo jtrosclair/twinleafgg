@@ -16,7 +16,7 @@ class RockChestplate extends game_1.TrainerCard {
         this.setNumber = '192';
         this.name = 'Rock Chestplate';
         this.fullName = 'Rock Chestplate SVI';
-        this.text = 'The F Pokémon this card is attached to takes 30 less damage from attacks from your opponent\'s Pokémon (after applying Weakness and Resistance).';
+        this.text = 'The [F] Pokémon this card is attached to takes 30 less damage from attacks from your opponent\'s Pokémon (after applying Weakness and Resistance).';
     }
     reduceEffect(store, state, effect) {
         // Reduce damage by 30

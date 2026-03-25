@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Rotom = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Rotom extends game_1.PokemonCard {
     constructor() {
@@ -44,7 +43,7 @@ class Rotom extends game_1.PokemonCard {
                 (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
             }
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             let toolCount = 0;
             [player.active, ...player.bench].forEach(list => {

@@ -38,7 +38,6 @@ class Ghetsis extends trainer_card_1.TrainerCard {
             (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
             // Draw cards equal to the number of Item cards shuffled
             (0, prefabs_1.DRAW_CARDS)(player, itemsShown.length);
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
         }
         return state;

@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DragoniteEX = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class DragoniteEX extends game_1.PokemonCard {
@@ -48,15 +47,7 @@ class DragoniteEX extends game_1.PokemonCard {
             if (discardEffect.preventDefault) {
                 return state;
             }
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             return store.prompt(state, new game_1.ConfirmPrompt(player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), confirmed => {
@@ -79,11 +70,11 @@ class DragoniteEX extends game_1.PokemonCard {
                 return state;
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Defending Pokemon has no energy cards attached
-            if (!opponent.active.energies.cards.some(c => c instanceof game_1.EnergyCard)) {
+            if (!opponent.active.energies.cards.some(c => c.superType === game_1.SuperType.ENERGY)) {
                 return state;
             }
             let card;

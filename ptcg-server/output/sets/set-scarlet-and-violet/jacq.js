@@ -36,7 +36,6 @@ function* playCard(next, store, state, effect) {
         next();
     });
     player.deck.moveCardsTo(cards, player.hand);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
@@ -55,6 +54,16 @@ class Jacq extends trainer_card_1.TrainerCard {
         this.name = 'Jacq';
         this.fullName = 'Jacq SVI';
         this.text = 'Search your deck for up to 2 Evolution Pokémon, reveal them, and put them into your hand. Then, shuffle your deck.';
+    }
+    canPlay(store, state, player) {
+        const supporterTurn = player.supporterTurn;
+        if (supporterTurn > 0) {
+            return false;
+        }
+        if (player.deck.cards.length === 0) {
+            return false;
+        }
+        return true;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

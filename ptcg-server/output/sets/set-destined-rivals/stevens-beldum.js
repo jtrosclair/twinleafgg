@@ -13,14 +13,12 @@ class StevensBeldum extends game_1.PokemonCard {
         this.weakness = [{ type: R }];
         this.resistance = [{ type: G, value: -30 }];
         this.retreat = [C];
-        this.attacks = [
-            {
+        this.attacks = [{
                 name: 'Metal Slash',
                 cost: [M, C],
                 damage: 30,
                 text: ''
-            }
-        ];
+            }];
         this.regulationMark = 'I';
         this.set = 'DRI';
         this.setNumber = '143';

@@ -3,8 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.VolcanionEX = void 0;
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class VolcanionEX extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -32,28 +31,17 @@ class VolcanionEX extends game_1.PokemonCard {
         this.cardImage = 'assets/cardback.png';
         this.name = 'Volcanion-EX';
         this.fullName = 'Volcanion EX STS';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
         this.STEAM_UP_MARKER = 'STEAM_UP_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
-            effect.player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-            effect.player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-            effect.player.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
-        }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            // Check marker
-            if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-                throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
-            }
-            effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
-        }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        // Volcanic Heat
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (player.hand.cards.filter(c => c instanceof game_1.EnergyCard && c.energyType === game_1.EnergyType.BASIC && c.name === 'Fire Energy').length === 0) {
+            player.active.cannotAttackNextTurnPending = true;
+        }
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
+            const player = effect.player;
+            if (player.hand.cards.filter(c => c.superType === game_1.SuperType.ENERGY && c.energyType === game_1.EnergyType.BASIC && c.name === 'Fire Energy').length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, { superType: game_1.SuperType.ENERGY, energyType: game_1.EnergyType.BASIC, name: 'Fire Energy' }, { min: 1, max: 1, allowCancel: false }), selected => {

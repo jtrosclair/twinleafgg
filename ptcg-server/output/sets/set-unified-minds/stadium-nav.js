@@ -37,7 +37,6 @@ class StadiumNav extends trainer_card_1.TrainerCard {
             ], results => {
                 results.forEach(r => { heads += r ? 1 : 0; });
                 if (heads === 0) {
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                     return state;
                 }
                 let cards = [];
@@ -52,7 +51,6 @@ class StadiumNav extends trainer_card_1.TrainerCard {
                 });
                 store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, { superType: card_types_1.SuperType.TRAINER, trainerType: card_types_1.TrainerType.STADIUM }, { min: 0, max: heads, allowCancel: false, blocked }), selected => {
                     cards = selected || [];
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                     if (cards.length > 0) {
                         player.deck.moveCardsTo(cards, player.hand);
                         return store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => {

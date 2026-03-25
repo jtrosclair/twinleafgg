@@ -30,7 +30,6 @@ class RedCard extends trainer_card_1.TrainerCard {
                 opponent.deck.applyOrder(order);
             });
             opponent.deck.moveTo(opponent.hand, 4);
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

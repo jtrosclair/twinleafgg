@@ -5,7 +5,6 @@ const trainer_card_1 = require("../../game/store/card/trainer-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class AncientBoosterEnergyCapsule extends trainer_card_1.TrainerCard {
@@ -46,32 +45,20 @@ class AncientBoosterEnergyCapsule extends trainer_card_1.TrainerCard {
                 effect.hp += 60;
             }
         }
-        if (effect instanceof check_effects_1.AddSpecialConditionsPowerEffect) {
-            const cardList = effect.target;
-            if (cardList instanceof game_1.PokemonCardList && cardList.tools.includes(this)) {
-                const card = cardList.getPokemonCard();
-                if (card && card.tags.includes(card_types_1.CardTag.ANCIENT)) {
-                    // Try to reduce ToolEffect, to check if something is blocking the tool from working
-                    if (!(0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
-                        // Prevent all special conditions
-                        effect.specialConditions = [];
-                    }
-                }
+        // Legacy implementation:
+        // - Handled AddSpecialConditionsPowerEffect and AddSpecialConditionsEffect separately.
+        // - Cleared incoming conditions when attached Pokémon was Ancient and tool wasn't blocked.
+        //
+        // Converted to prefab version (PREVENT_AND_CLEAR_SPECIAL_CONDITIONS).
+        (0, prefabs_1.PREVENT_AND_CLEAR_SPECIAL_CONDITIONS)(state, effect, {
+            shouldApply: (target, owner) => {
+                const card = target.getPokemonCard();
+                return target.tools.includes(this)
+                    && !!card
+                    && card.tags.includes(card_types_1.CardTag.ANCIENT)
+                    && !(0, prefabs_1.IS_TOOL_BLOCKED)(store, state, owner, this);
             }
-        }
-        if (effect instanceof attack_effects_1.AddSpecialConditionsEffect) {
-            const cardList = effect.target;
-            if (cardList instanceof game_1.PokemonCardList && cardList.tools.includes(this)) {
-                const card = cardList.getPokemonCard();
-                if (card && card.tags.includes(card_types_1.CardTag.ANCIENT)) {
-                    // Try to reduce ToolEffect, to check if something is blocking the tool from working
-                    if (!(0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
-                        // Prevent all special conditions
-                        effect.specialConditions = [];
-                    }
-                }
-            }
-        }
+        });
         return state;
     }
 }

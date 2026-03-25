@@ -4,7 +4,7 @@ exports.Arcanineex = void 0;
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Arcanineex extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -38,11 +38,11 @@ class Arcanineex extends game_1.PokemonCard {
         this.fullName = 'Arcanine ex SVI';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            effect.damage = effect.player.active.damage * 10;
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            effect.damage += effect.player.active.damage * 10;
             return state;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
             state = store.reduceEffect(state, checkProvidedEnergy);

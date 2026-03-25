@@ -4,12 +4,13 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
 export declare class GalarianObstagoon extends PokemonCard {
     stage: Stage;
+    evolvesFrom: string;
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.GRASS;
     }[];
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     powers: {
         name: string;
         powerType: PowerType;
@@ -18,16 +19,16 @@ export declare class GalarianObstagoon extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: CardType.COLORLESS[];
         damage: number;
         text: string;
     }[];
+    regulationMark: string;
     set: string;
     name: string;
     fullName: string;
     cardImage: string;
     setNumber: string;
-    evolvesFrom: string;
     readonly WICKED_RULER_MARKER = "WICKED_RULER_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

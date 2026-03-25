@@ -84,7 +84,7 @@ class GreninjaVUNIONTopLeft extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // assemblin the v-union
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const slots = player.bench.filter(b => b.cards.length === 0);
             if (player.assembledVUNIONs.includes(this.name)) {
@@ -138,14 +138,7 @@ class GreninjaVUNIONTopLeft extends pokemon_card_1.PokemonCard {
         if (effect instanceof play_card_effects_1.PlayItemEffect && effect.target && effect.target.cards.includes(this)) {
             /*const player = StateUtils.findOwner(state, effect.target);
       
-            try {
-              const stub = new PowerEffect(player, {
-                name: 'test',
-                powerType: PowerType.ABILITY,
-                text: ''
-              }, this);
-              store.reduceEffect(state, stub);
-            } catch {
+            if (IS_ABILITY_BLOCKED(store, state, player, this)) {
               return state;
             }*/
             // effect.preventDefault = true;
@@ -169,7 +162,7 @@ class GreninjaVUNIONTopLeft extends pokemon_card_1.PokemonCard {
             player.marker.addMarker(this.FEEL_THE_WAY_MARKER, this);
         }
         // Union Gain
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let watersInDiscard = 0;
             // checking for energies in the discard
@@ -199,7 +192,7 @@ class GreninjaVUNIONTopLeft extends pokemon_card_1.PokemonCard {
             }
         }
         // Twister Shuriken
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const opponent = effect.opponent;
             opponent.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
                 if (target.slot === game_1.SlotType.BENCH) {

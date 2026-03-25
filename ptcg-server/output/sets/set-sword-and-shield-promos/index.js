@@ -78,9 +78,13 @@ exports.setSwordAndShieldPromos = [
     new morpeko_v_union_bl_1.MorpekoVUNIONBottomLeft(),
     new morpeko_v_union_br_1.MorpekoVUNIONBottomRight(),
     // Other prints
+    new other_prints_2.BossOrdersSWSH(),
     new other_prints_2.BronzongSWSH(),
+    new other_prints_2.KirliaSWSH(),
     new other_prints_2.MarnieSWSH(),
     new other_prints_2.MarnieSWSH2(),
+    new other_prints_2.ProfessorsResearchSWSH(),
+    new other_prints_2.HisuianSamurottSWSH(),
     new other_prints_2.ZeraoraVSWSH(),
     new other_prints_2.ZeraoraVMAXSWSH(),
     new other_prints_2.ZeraoraVSTARSWSH(),

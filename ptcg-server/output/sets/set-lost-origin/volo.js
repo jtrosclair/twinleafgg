@@ -50,7 +50,6 @@ class Volo extends game_1.TrainerCard {
                     cardList.moveCardsTo(pokemons, player.discard);
                     cardList.moveTo(player.discard);
                     cardList.clearEffects();
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 }
             });
         }

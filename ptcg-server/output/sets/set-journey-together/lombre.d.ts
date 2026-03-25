@@ -14,7 +14,5 @@ export declare class Lombre extends PokemonCard {
     setNumber: string;
     name: string;
     fullName: string;
-    private readonly ATTACK_USED_MARKER;
-    private readonly ATTACK_USED_2_MARKER;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

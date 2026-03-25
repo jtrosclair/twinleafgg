@@ -37,7 +37,6 @@ class ShadowTriad extends trainer_card_1.TrainerCard {
                     return state;
                 }
                 state = (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards });
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
             });
         }
         return state;

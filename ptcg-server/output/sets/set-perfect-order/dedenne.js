@@ -5,9 +5,7 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const energy_card_1 = require("../../game/store/card/energy-card");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-const card_types_2 = require("../../game/store/card/card-types");
 class Dedenne extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -49,7 +47,7 @@ class Dedenne extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // Count Basic Lightning Energy in discard
-            const lightningEnergyInDiscard = player.discard.cards.filter(c => c instanceof energy_card_1.EnergyCard &&
+            const lightningEnergyInDiscard = player.discard.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY &&
                 c.energyType === card_types_1.EnergyType.BASIC &&
                 c.provides.includes(card_types_1.CardType.LIGHTNING));
             if (lightningEnergyInDiscard.length === 0) {
@@ -67,7 +65,7 @@ class Dedenne extends pokemon_card_1.PokemonCard {
             if (lightningPokemon.length === 0) {
                 return state;
             }
-            return store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_CARDS, player.discard, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { superType: card_types_2.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, provides: [card_types_1.CardType.LIGHTNING] }, { allowCancel: false, min: 0, max: maxToAttach }), transfers => {
+            return store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_CARDS, player.discard, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, provides: [card_types_1.CardType.LIGHTNING] }, { allowCancel: false, min: 0, max: maxToAttach }), transfers => {
                 transfers = transfers || [];
                 for (const transfer of transfers) {
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);

@@ -2,9 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReshiramCharizardGX = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class ReshiramCharizardGX extends game_1.PokemonCard {
@@ -16,8 +14,7 @@ class ReshiramCharizardGX extends game_1.PokemonCard {
         this.hp = 270;
         this.weakness = [{ type: W }];
         this.retreat = [C, C, C];
-        this.attacks = [
-            {
+        this.attacks = [{
                 name: 'Outrage',
                 cost: [R, C],
                 damage: 30,
@@ -40,19 +37,16 @@ class ReshiramCharizardGX extends game_1.PokemonCard {
                 text: 'If this Pokemon has at least 3 extra [R] Energy attached to it (in addition to this attack\'s cost), ' +
                     'this attack does 100 more damage, and this attack\'s damage isn\'t affected by any effects on your ' +
                     'opponent\'s Active Pokemon. (You can\'t use more than 1 GX attack in a game.)'
-            },
-        ];
+            },];
         this.set = 'UNB';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '20';
         this.name = 'Reshiram & Charizard-GX';
         this.fullName = 'Reshiram & Charizard-GX UNB';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
         // Outrage
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const cardList = game_1.StateUtils.findCardList(state, this);
             if (!(cardList instanceof game_1.PokemonCardList)) {
                 return state;
@@ -60,23 +54,14 @@ class ReshiramCharizardGX extends game_1.PokemonCard {
             effect.damage += cardList.damage;
         }
         // Flare Strike
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
-            const marker = effect.player.marker;
-            if (marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
-                throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            const player = effect.player;
+            if (!player.active.cannotUseAttacksNextTurnPending.includes('Flare Strike')) {
+                player.active.cannotUseAttacksNextTurnPending.push('Flare Strike');
             }
-            marker.addMarker(this.ATTACK_USED_MARKER, this);
-        }
-        // Flare Strike -- Some silly-looking code to handle the attack next turn logic
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
-            effect.player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-            effect.player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-            effect.player.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
         }
         // Double Blaze-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);

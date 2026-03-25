@@ -8,7 +8,6 @@ const card_types_1 = require("../../game/store/card/card-types");
 const state_1 = require("../../game/store/state/state");
 const state_utils_1 = require("../../game/store/state-utils");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const shuffle_prompt_1 = require("../../game/store/prompts/shuffle-prompt");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -48,20 +47,18 @@ Each player shuffles their hand into their deck. Then, you draw 5 cards, and you
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             effect.preventDefault = true;
             const cards = player.hand.cards.filter(c => c !== this);
-            // Shuffle hands into decks
-            (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck, { cards, sourceCard: this });
-            (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck, { sourceCard: this });
-            return store.prompt(state, [
-                new shuffle_prompt_1.ShuffleDeckPrompt(player.id),
-                new shuffle_prompt_1.ShuffleDeckPrompt(opponent.id)
-            ], deckOrder => {
-                player.deck.applyOrder(deckOrder[0]);
-                opponent.deck.applyOrder(deckOrder[1]);
-                // Draw new hands
-                (0, prefabs_1.DRAW_CARDS)(player, 5);
+            const playerMoveEffect = new game_effects_1.MoveCardsEffect(player.hand, player.deck, { cards, sourceCard: this });
+            state = store.reduceEffect(state, playerMoveEffect);
+            const opponentMoveEffect = new game_effects_1.MoveCardsEffect(opponent.hand, opponent.deck, { sourceCard: this });
+            state = store.reduceEffect(state, opponentMoveEffect);
+            // opponent shuffle and draw
+            if (!opponentMoveEffect.preventDefault) {
+                (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
                 (0, prefabs_1.DRAW_CARDS)(opponent, 3);
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
-            });
+            }
+            // player shuffle and draw
+            (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
+            (0, prefabs_1.DRAW_CARDS)(player, 5);
         }
         // Track when a Team Rocket's Pokemon is knocked out
         if (effect instanceof game_effects_1.KnockOutEffect) {

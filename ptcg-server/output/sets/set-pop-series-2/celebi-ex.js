@@ -8,6 +8,7 @@ const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const game_effects_1 = require("../../game/store/effects/game-effects");
 class Celebiex extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -48,6 +49,8 @@ class Celebiex extends pokemon_card_1.PokemonCard {
             }
             (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, wantToUse => {
                 if (wantToUse) {
+                    const powerEffect = new game_effects_1.PowerEffect(player, this.powers[0], this);
+                    store.reduceEffect(state, powerEffect);
                     const deckTop = new game_1.CardList();
                     return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DECK, player.discard, {}, { min: 1, max: 1, allowCancel: false }), selected => {
                         if (selected.length === 0)

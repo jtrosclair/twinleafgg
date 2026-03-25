@@ -17,6 +17,19 @@ class Giacomo extends trainer_card_1.TrainerCard {
         this.fullName = 'Giacomo PAL';
         this.text = 'Discard a Special Energy from each of your opponent\'s Pokémon.';
     }
+    canPlay(store, state, player) {
+        if (player.supporterTurn > 0) {
+            return false;
+        }
+        const opponent = game_1.StateUtils.getOpponent(state, player);
+        let hasPokemonWithSpecialEnergy = false;
+        opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList) => {
+            if (cardList.energies.cards.some(c => c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.SPECIAL)) {
+                hasPokemonWithSpecialEnergy = true;
+            }
+        });
+        return hasPokemonWithSpecialEnergy;
+    }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;
@@ -25,7 +38,7 @@ class Giacomo extends trainer_card_1.TrainerCard {
             let hasPokemonWithEnergy = false;
             const blocked = [];
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card, target) => {
-                if (cardList.energies.cards.some(c => c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.SPECIAL)) {
+                if (cardList.energies.cards.some(c => c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.SPECIAL)) {
                     hasPokemonWithEnergy = true;
                     oppSpecialPokemon++;
                 }
@@ -61,7 +74,6 @@ class Giacomo extends trainer_card_1.TrainerCard {
                     target.moveCardTo(card, opponent.discard);
                 });
             }
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
         }
         return state;

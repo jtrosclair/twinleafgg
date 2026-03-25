@@ -7,7 +7,6 @@ const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const game_1 = require("../../game");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 class Metagross extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -44,11 +43,11 @@ class Metagross extends pokemon_card_1.PokemonCard {
             return state;
         }
         (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.SUPER_CONNECTIVITY_MARKER, this);
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInDiscard = player.discard.cards.some(c => {
-                return c instanceof game_1.EnergyCard
-                    && (c.provides.includes(card_types_1.CardType.PSYCHIC) || (c.provides.includes(card_types_1.CardType.METAL)));
+                return c.superType === card_types_1.SuperType.ENERGY
+                    && (c.provides.includes(card_types_1.CardType.PSYCHIC) || c.provides.includes(card_types_1.CardType.METAL));
             });
             if (!hasEnergyInDiscard) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);

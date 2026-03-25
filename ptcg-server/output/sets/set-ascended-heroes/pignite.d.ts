@@ -1,5 +1,5 @@
-import { PokemonCard, Stage, CardType, StoreLike, State } from "../../game";
-import { Effect } from "../../game/store/effects/effect";
+import { PokemonCard, Stage, CardType, StoreLike, State } from '../../game';
+import { Effect } from '../../game/store/effects/effect';
 export declare class Pignite extends PokemonCard {
     stage: Stage;
     evolvesFrom: string;

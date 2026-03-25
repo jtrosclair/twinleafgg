@@ -10,7 +10,6 @@ const game_effects_1 = require("../../game/store/effects/game-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const costs_1 = require("../../game/store/prefabs/costs");
 const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 class GarchompCLVX extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -44,22 +43,12 @@ class GarchompCLVX extends pokemon_card_1.PokemonCard {
         this.setNumber = '145';
         this.name = 'Garchomp C';
         this.fullName = 'Garchomp C LV.X SV';
-        this.DRAGON_RUSH_MARKER = 'DRAGON_RUSH_MARKER';
-        this.DRAGON_RUSH_MARKER_2 = 'DRAGON_RUSH_MARKER_2';
     }
     reduceEffect(store, state, effect) {
         // Healing Breath
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.POKEPOWER,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
@@ -76,20 +65,12 @@ class GarchompCLVX extends pokemon_card_1.PokemonCard {
         }
         // Dragon Rush
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            if (effect.player.marker.hasMarker(this.DRAGON_RUSH_MARKER, this)) {
-                throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
-            }
+            const player = effect.player;
             (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 2);
             (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(80, effect, store, state);
-            effect.player.marker.addMarker(this.DRAGON_RUSH_MARKER, this);
-        }
-        // removing the markers for preventing the pokemon from attacking
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.DRAGON_RUSH_MARKER_2, this)) {
-            effect.player.marker.removeMarker(this.DRAGON_RUSH_MARKER, this);
-            effect.player.marker.removeMarker(this.DRAGON_RUSH_MARKER_2, this);
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.DRAGON_RUSH_MARKER, this)) {
-            effect.player.marker.addMarker(this.DRAGON_RUSH_MARKER_2, this);
+            if (!player.active.cannotUseAttacksNextTurnPending.includes('Dragon Rush')) {
+                player.active.cannotUseAttacksNextTurnPending.push('Dragon Rush');
+            }
         }
         // making sure it gets put on the active pokemon
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {

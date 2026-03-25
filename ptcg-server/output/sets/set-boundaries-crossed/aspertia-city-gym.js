@@ -17,7 +17,7 @@ class AspertiaCityGym extends trainer_card_1.TrainerCard {
         this.fullName = 'Aspertia City Gym BCR';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '127';
-        this.text = 'Each C Pokemon in play (both yours and your opponent\'s) gets +20 HP.';
+        this.text = 'Each [C] Pokemon in play (both yours and your opponent\'s) gets +20 HP.';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof check_effects_1.CheckHpEffect && state_utils_1.StateUtils.getStadiumCard(state) === this) {

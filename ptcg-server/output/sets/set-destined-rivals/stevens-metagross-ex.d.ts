@@ -33,5 +33,6 @@ export declare class StevensMetagrossex extends PokemonCard {
     cardImage: string;
     name: string;
     fullName: string;
+    readonly X_BOOT_MARKER = "X_BOOT_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

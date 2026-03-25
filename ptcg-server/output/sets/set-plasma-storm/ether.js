@@ -41,13 +41,11 @@ class Ether extends game_1.TrainerCard {
                             temp.moveCardTo(transfer.card, target); // Move card to target
                         }
                     }
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                     return state;
                 });
             }
             else {
                 temp.moveToTopOfDestination(player.deck);
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
             }
             return state;
         }

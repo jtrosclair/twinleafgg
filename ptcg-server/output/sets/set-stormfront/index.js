@@ -4,6 +4,8 @@ exports.setStormfront = void 0;
 const other_prints_1 = require("./other-prints");
 const combee_1 = require("./combee");
 const dusclops_1 = require("./dusclops");
+const dusclops2_1 = require("./dusclops2");
+const duskull_1 = require("./duskull");
 const gastly_1 = require("./gastly");
 const gengar_1 = require("./gengar");
 const gyarados_1 = require("./gyarados");
@@ -17,12 +19,15 @@ const magikarp_1 = require("./magikarp");
 const marleys_request_1 = require("./marleys-request");
 const poke_blower_1 = require("./poke-blower");
 const poke_drawer_1 = require("./poke-drawer");
+const regigigas_lv_x_1 = require("./regigigas-lv-x");
 const sableye_1 = require("./sableye");
 // Other prints
 const other_prints_2 = require("./other-prints");
 exports.setStormfront = [
     new combee_1.Combee(),
     new dusclops_1.Dusclops(),
+    new dusclops2_1.Dusclops2(),
+    new duskull_1.Duskull(),
     new gengar_1.Gengar(),
     new gyarados_1.Gyarados(),
     new haunter_1.Haunter(),
@@ -35,6 +40,7 @@ exports.setStormfront = [
     new marleys_request_1.MarleysRequest(),
     new poke_blower_1.PokeBlower(),
     new poke_drawer_1.PokeDrawer(),
+    new regigigas_lv_x_1.RegigigasLVX(),
     new sableye_1.Sableye(),
     new gastly_1.Gastly(),
     // Other prints

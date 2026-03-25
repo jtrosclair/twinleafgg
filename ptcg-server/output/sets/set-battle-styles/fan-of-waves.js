@@ -6,7 +6,6 @@ const card_types_1 = require("../../game/store/card/card-types");
 const choose_pokemon_prompt_1 = require("../../game/store/prompts/choose-pokemon-prompt");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_1 = require("../../game");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class FanOfWaves extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -43,17 +42,14 @@ class FanOfWaves extends trainer_card_1.TrainerCard {
                 targets = results || [];
             });
             if (targets.length === 0) {
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return state;
             }
             const target = targets[0];
             state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, target, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.SPECIAL }, { min: 1, max: 1, allowCancel: false }), selected => {
                 const cards = selected;
                 const opponentDeckBottom = new game_1.CardList();
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 cards.forEach(card => {
                     opponentDeckBottom.moveCardTo(card, opponent.deck);
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 });
                 return state;
             });

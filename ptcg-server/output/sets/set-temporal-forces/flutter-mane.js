@@ -4,6 +4,7 @@ exports.FlutterMane = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_effects_1 = require("../../game/store/effects/game-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_1 = require("../../game");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -37,6 +38,23 @@ class FlutterMane extends pokemon_card_1.PokemonCard {
         this.fullName = 'Flutter Mane TEF';
     }
     reduceEffect(store, state, effect) {
+        if (effect instanceof check_effects_1.CheckPokemonPowersEffect) {
+            const player = effect.player;
+            const opponent = game_1.StateUtils.getOpponent(state, player);
+            const cardList = game_1.StateUtils.findCardList(state, this);
+            const owner = game_1.StateUtils.findOwner(state, cardList);
+            // Only proceed if Flutter Mane is in the Active spot
+            if (owner.active.getPokemonCard() !== this) {
+                return state;
+            }
+            // Only filter opponent's Active Pokemon abilities
+            const targetOwner = game_1.StateUtils.findOwner(state, game_1.StateUtils.findCardList(state, effect.target));
+            if (targetOwner === owner || game_1.StateUtils.findCardList(state, effect.target) !== opponent.active) {
+                return state;
+            }
+            // Filter out all abilities except Midnight Fluttering
+            effect.powers = effect.powers.filter(power => power.powerType !== pokemon_types_1.PowerType.ABILITY || power.name === 'Midnight Fluttering');
+        }
         if (effect instanceof game_effects_1.PowerEffect && effect.power.powerType === pokemon_types_1.PowerType.ABILITY && effect.power.name !== 'Midnight Fluttering') {
             const player = effect.player;
             const cardList = game_1.StateUtils.findCardList(state, this);

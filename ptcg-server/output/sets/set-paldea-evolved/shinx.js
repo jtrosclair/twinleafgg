@@ -4,26 +4,9 @@ exports.Shinx = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-function* useBigRoar(next, store, state, effect) {
-    const player = effect.player;
-    const opponent = game_1.StateUtils.getOpponent(state, player);
-    const hasBench = opponent.bench.some(b => b.cards.length > 0);
-    if (hasBench === false) {
-        throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
-    }
-    let targets = [];
-    yield store.prompt(state, new game_1.ChoosePokemonPrompt(opponent.id, game_1.GameMessage.CHOOSE_POKEMON_TO_SWITCH, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH], { allowCancel: false }), results => {
-        targets = results || [];
-        next();
-    });
-    if (targets.length > 0) {
-        opponent.active.clearEffects();
-        opponent.switchPokemon(targets[0]);
-    }
-}
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Shinx extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -61,8 +44,7 @@ class Shinx extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.BIG_ROAR_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
-            const generator = useBigRoar(() => generator.next(), store, state, effect);
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.active.cards[0] !== this) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -76,7 +58,12 @@ class Shinx extends pokemon_card_1.PokemonCard {
                     cardList.addBoardEffect(card_types_1.BoardEffect.ABILITY_USED);
                 }
             });
-            return generator.next().value;
+            // Legacy implementation:
+            // - Used a custom ChoosePokemonPrompt where the opponent chose their replacement Active.
+            // - Switched opponent Active to the selected Benched Pokémon.
+            //
+            // Converted to prefab version (SWITCH_OUT_OPPONENT_ACTIVE_POKEMON).
+            return (0, prefabs_1.SWITCH_OUT_OPPONENT_ACTIVE_POKEMON)(store, state, player, { allowCancel: false });
         }
         return state;
     }

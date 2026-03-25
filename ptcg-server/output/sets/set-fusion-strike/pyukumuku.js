@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Pyukumuku = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Pyukumuku extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -36,7 +36,7 @@ class Pyukumuku extends game_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.PYUK_MARKER, this)) {
             effect.player.marker.removeMarker(this.PYUK_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.PYUK_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);

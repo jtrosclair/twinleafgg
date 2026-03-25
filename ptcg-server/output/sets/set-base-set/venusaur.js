@@ -38,7 +38,7 @@ class Venusaur extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEMON_POWER_BLOCKED)(store, state, player, this)) {
                 throw new __1.GameError(__1.GameMessage.BLOCKED_BY_EFFECT);
             }
             (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
@@ -50,11 +50,6 @@ class Venusaur extends pokemon_card_1.PokemonCard {
                 checkProvidedEnergy.energyMap.forEach(em => {
                     if (!em.provides.includes(card_types_1.CardType.GRASS) && !em.provides.includes(card_types_1.CardType.ANY)) {
                         blockedCards.push(em.card);
-                    }
-                });
-                cardList.cards.forEach(em => {
-                    if (cardList.getPokemons().includes(em)) {
-                        blockedCards.push(em);
                     }
                 });
                 const blocked = [];
@@ -75,25 +70,7 @@ class Venusaur extends pokemon_card_1.PokemonCard {
                 for (const transfer of transfers) {
                     const source = __1.StateUtils.getTarget(state, player, transfer.from);
                     const target = __1.StateUtils.getTarget(state, player, transfer.to);
-                    if (transfer.card instanceof pokemon_card_1.PokemonCard) {
-                        // If card is in source energies, move it from there; otherwise move from main cards array
-                        if (source.energies.cards.includes(transfer.card)) {
-                            source.energies.moveCardTo(transfer.card, target.energies);
-                            // Also ensure it's in target's main cards array
-                            if (!target.cards.includes(transfer.card)) {
-                                target.cards.push(transfer.card);
-                            }
-                        }
-                        else {
-                            source.moveCardTo(transfer.card, target);
-                            if (!target.energies.cards.includes(transfer.card)) {
-                                target.energies.cards.push(transfer.card);
-                            }
-                        }
-                    }
-                    else {
-                        source.moveCardTo(transfer.card, target);
-                    }
+                    source.moveCardTo(transfer.card, target);
                 }
             });
         }

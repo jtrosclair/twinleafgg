@@ -7,7 +7,6 @@ const play_card_action_1 = require("../../game/store/actions/play-card-action");
 const card_types_1 = require("../../game/store/card/card-types");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const choose_pokemon_prompt_1 = require("../../game/store/prompts/choose-pokemon-prompt");
 const state_utils_1 = require("../../game/store/state-utils");
 function* playCard(next, store, state, effect) {
@@ -28,7 +27,6 @@ function* playCard(next, store, state, effect) {
             store.reduceEffect(state, supporterEffect);
         }
         catch (_a) {
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         // playTwoCards = true;
@@ -44,7 +42,6 @@ function* playCard(next, store, state, effect) {
             }
             else {
                 // If no target, effect ends
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return state;
             }
             store.log(state, game_message_1.GameLog.LOG_PLAYER_SWITCHES_POKEMON_TO_ACTIVE, { name: player.name, card: targets[0].getPokemonCard().name });
@@ -53,7 +50,6 @@ function* playCard(next, store, state, effect) {
             effect.preventDefault = true;
             const playerHasBench = player.bench.some(b => b.cards.length > 0);
             if (!playerHasBench) {
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             }
             let target = [];
@@ -70,14 +66,12 @@ function* playCard(next, store, state, effect) {
                         store.reduceEffect(state, supporterEffect);
                     }
                     catch (_a) {
-                        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                         return state;
                     }
                 }
                 player.active.clearEffects();
                 player.switchPokemon(target[0]);
                 store.log(state, game_message_1.GameLog.LOG_PLAYER_SWITCHES_POKEMON_TO_ACTIVE, { name: player.name, card: target[0].getPokemonCard().name });
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return state;
             });
         });

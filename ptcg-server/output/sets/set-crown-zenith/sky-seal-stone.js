@@ -7,6 +7,7 @@ const trainer_card_1 = require("../../game/store/card/trainer-card");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const pokemon_card_list_1 = require("../../game/store/state/pokemon-card-list");
 const state_1 = require("../../game/store/state/state");
 class SkySealStone extends trainer_card_1.TrainerCard {
     constructor() {
@@ -18,6 +19,7 @@ class SkySealStone extends trainer_card_1.TrainerCard {
         this.cardImage = 'assets/cardback.png';
         this.name = 'Sky Seal Stone';
         this.fullName = 'Sky Seal Stone CRZ';
+        this.text = 'The Pokémon V this card is attached to can use the VSTAR Power on this card.';
         this.extraPrizes = false;
         this.powers = [
             {
@@ -25,25 +27,26 @@ class SkySealStone extends trainer_card_1.TrainerCard {
                 powerType: game_1.PowerType.ABILITY,
                 useWhenInPlay: true,
                 exemptFromAbilityLock: true,
-                text: 'The Pokémon V this card is attached to can use the VSTAR Power on this card.' +
-                    '' +
-                    'During your turn, you may use this Ability. During this turn, if your opponent\'s Active Pokémon VSTAR or Active Pokémon VMAX is Knocked Out by damage from an attack from your Basic Pokémon V, take 1 more Prize card. (You can\'t use more than 1 VSTAR Power in a game.) '
+                text: 'During your turn, you may use this Ability. During this turn, if your opponent\'s Active Pokémon VSTAR or Active Pokémon VMAX is Knocked Out by damage from an attack from your Basic Pokémon V, take 1 more Prize card. (You can\'t use more than 1 VSTAR Power in a game.)'
             }
         ];
     }
     reduceEffect(store, state, effect) {
         var _a;
         // Add ability to card if attached to a V
-        if (effect instanceof check_effects_1.CheckPokemonPowersEffect
-            && effect.target.tools.includes(this)
-            && !effect.powers.find(p => p.name === this.powers[0].name)) {
-            const hasValidCard = effect.target.cards.some(card => card.tags.some(tag => tag === card_types_1.CardTag.POKEMON_V ||
-                tag === card_types_1.CardTag.POKEMON_VSTAR ||
-                tag === card_types_1.CardTag.POKEMON_VMAX));
-            if (!hasValidCard) {
-                return state;
+        if (effect instanceof check_effects_1.CheckPokemonPowersEffect && !effect.powers.find(p => p.name === this.powers[0].name)) {
+            // Find the PokemonCardList that contains the target PokemonCard
+            const cardList = game_1.StateUtils.findCardList(state, effect.target);
+            if (cardList instanceof pokemon_card_list_1.PokemonCardList && cardList.tools.includes(this)) {
+                const hasValidCard = effect.target.tags.some(tag => tag === card_types_1.CardTag.POKEMON_V ||
+                    tag === card_types_1.CardTag.POKEMON_VSTAR ||
+                    tag === card_types_1.CardTag.POKEMON_VMAX ||
+                    tag === card_types_1.CardTag.POKEMON_VUNION);
+                if (!hasValidCard) {
+                    return state;
+                }
+                effect.powers.push(this.powers[0]);
             }
-            effect.powers.push(this.powers[0]);
             return state;
         }
         // Set extraPrizes to true when power is activated

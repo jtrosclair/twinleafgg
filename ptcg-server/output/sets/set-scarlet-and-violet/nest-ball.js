@@ -31,7 +31,6 @@ function* playCard(next, store, state, effect) {
     });
     // Operation canceled by the user
     if (cards.length === 0) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         return state;
     }
@@ -40,7 +39,6 @@ function* playCard(next, store, state, effect) {
         const playPokemonFromDeckEffect = new play_card_effects_2.PlayPokemonFromDeckEffect(player, card, slots[index]);
         store.reduceEffect(state, playPokemonFromDeckEffect);
     });
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
     return state;
 }
@@ -55,6 +53,19 @@ class NestBall extends trainer_card_1.TrainerCard {
         this.name = 'Nest Ball';
         this.fullName = 'Nest Ball SVI';
         this.text = 'Search your deck for a Basic Pokémon and put it onto your Bench. Then, shuffle your deck.';
+    }
+    canPlay(store, state, player) {
+        // No cards left in deck, return false
+        if (player.deck.cards.length === 0) {
+            return false;
+        }
+        // Check if bench has open slots
+        const openSlots = player.bench.filter(b => b.cards.length === 0);
+        // No open slots, return false
+        if (openSlots.length === 0) {
+            return false;
+        }
+        return true;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

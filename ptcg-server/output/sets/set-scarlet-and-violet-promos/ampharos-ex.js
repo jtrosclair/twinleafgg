@@ -4,9 +4,8 @@ exports.Ampharosex = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const __1 = require("../..");
-const game_effects_1 = require("../../game/store/effects/game-effects");
-const check_effects_1 = require("../../game/store/effects/check-effects");
-const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const costs_1 = require("../../game/store/prefabs/costs");
 class Ampharosex extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -40,25 +39,14 @@ class Ampharosex extends pokemon_card_1.PokemonCard {
         this.fullName = 'Ampharos ex SVP';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            state = store.prompt(state, new __1.ConfirmPrompt(effect.player.id, __1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
-                if (wantToUse) {
-                    const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
-                    state = store.reduceEffect(state, checkProvidedEnergy);
-                    state = store.prompt(state, new __1.ChooseEnergyPrompt(player.id, __1.GameMessage.CHOOSE_ENERGIES_TO_DISCARD, checkProvidedEnergy.energyMap, [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS], { allowCancel: false }), energy => {
-                        const cards = (energy || []).map(e => e.card);
-                        const discardEnergy = new attack_effects_1.DiscardCardsEffect(effect, cards);
-                        discardEnergy.target = player.active;
-                        store.reduceEffect(state, discardEnergy);
-                        effect.damage += 100;
-                        return state;
-                    });
-                    return state;
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
+                if (result) {
+                    (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 2);
+                    effect.damage += 100;
                 }
-                return state;
-            });
-            return state;
+            }, __1.GameMessage.WANT_TO_USE_EFFECT_OF_ATTACK);
         }
         return state;
     }

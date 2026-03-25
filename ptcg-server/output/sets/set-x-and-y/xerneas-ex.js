@@ -32,18 +32,17 @@ class XerneasEX extends pokemon_card_1.PokemonCard {
         this.fullName = 'Xerneas-EX XY';
         this.setNumber = '97';
         this.cardImage = 'assets/cardback.png';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON)(30, effect, store, state);
         }
-        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_2_MARKER, this);
-        (0, prefabs_1.REPLACE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_MARKER, this.ATTACK_USED_2_MARKER, this);
+        // X Blast
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
-            (0, prefabs_1.BLOCK_EFFECT_IF_MARKER)(this.ATTACK_USED_2_MARKER, effect.player, this);
-            (0, prefabs_1.ADD_MARKER)(this.ATTACK_USED_MARKER, effect.player, this);
+            const player = effect.player;
+            if (!player.active.cannotUseAttacksNextTurnPending.includes('X Blast')) {
+                player.active.cannotUseAttacksNextTurnPending.push('X Blast');
+            }
         }
         return state;
     }

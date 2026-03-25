@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Lusamine2UPR = exports.Volkner2UPR = exports.Lillie2UPR = exports.EscapeBoard2UPR = exports.Cynthia2UPR = exports.UnitEnergyLPM2UPR = exports.UnitEnergyGRW2UPR = exports.EscapeBoard3UPR = exports.CrushingHammerUPR = exports.DialgaGX3UPR = exports.DuskManeNecrozmaGX3UPR = exports.DawnWingsNecrozmaGX3UPR = exports.GlaceonGX3UPR = exports.Volkner3UPR = exports.PokemonFanClub2UPR = exports.Mars2UPR = exports.LusamineUPR = exports.Lillie3UPR = exports.Gardenia2UPR = exports.Cynthia3UPR = exports.DialgaGX2UPR = exports.DuskManeNecrozmaGX2UPR = exports.DawnWingsNecrozmaGX2UPR = exports.GlaceonGX2UPR = exports.UnidentifiedFossilUPR = exports.PalPadUPR = exports.CosmoemUPR = void 0;
+exports.PeekingRedCardUPR = exports.MissingClover2 = exports.PalkiaGx3 = exports.CelesteelaGx2 = exports.XurkitreeGx2 = exports.PheromosaGx2 = exports.LeafeonGx3 = exports.Looker2 = exports.LanaUPR = exports.PalkiaGx2 = exports.LeafeonGx2 = exports.DewpiderUPR = exports.Lusamine2UPR = exports.Volkner2UPR = exports.Lillie2UPR = exports.EscapeBoard2UPR = exports.Cynthia2UPR = exports.UnitEnergyLPM2UPR = exports.UnitEnergyGRW2UPR = exports.EscapeBoard3UPR = exports.CrushingHammerUPR = exports.DialgaGX3UPR = exports.DuskManeNecrozmaGX3UPR = exports.DawnWingsNecrozmaGX3UPR = exports.GlaceonGX3UPR = exports.Volkner3UPR = exports.PokemonFanClub2UPR = exports.Mars2UPR = exports.LusamineUPR = exports.Lillie3UPR = exports.Gardenia2UPR = exports.Cynthia3UPR = exports.DialgaGX2UPR = exports.DuskManeNecrozmaGX2UPR = exports.DawnWingsNecrozmaGX2UPR = exports.GlaceonGX2UPR = exports.UnidentifiedFossilUPR = exports.PalPadUPR = exports.CosmoemUPR = void 0;
 const cosmoem_1 = require("../set-sun-and-moon/cosmoem");
 const pal_pad_1 = require("../set-scarlet-and-violet/pal-pad");
 const unidentified_fossil_1 = require("../set-silver-tempest/unidentified-fossil");
@@ -20,6 +20,16 @@ const escape_board_1 = require("../set-ultra-prism/escape-board");
 const unit_energy_grw_1 = require("../set-ultra-prism/unit-energy-grw");
 const unit_energy_lpm_1 = require("../set-ultra-prism/unit-energy-lpm");
 const lusamine_2 = require("../set-crimson-invasion/lusamine");
+const dewpider_1 = require("../set-sun-and-moon/dewpider");
+const leafeon_gx_1 = require("./leafeon-gx");
+const palkia_gx_1 = require("./palkia-gx");
+const lana_1 = require("../set-burning-shadows/lana");
+const looker_1 = require("./looker");
+const pheromosa_gx_1 = require("./pheromosa-gx");
+const xurkitree_gx_1 = require("./xurkitree-gx");
+const celesteela_gx_1 = require("./celesteela-gx");
+const missing_clover_1 = require("./missing-clover");
+const peeking_red_card_1 = require("../set-crimson-invasion/peeking-red-card");
 class CosmoemUPR extends cosmoem_1.Cosmoem {
     constructor() {
         super(...arguments);
@@ -263,3 +273,111 @@ class Lusamine2UPR extends lusamine_2.Lusamine {
     }
 }
 exports.Lusamine2UPR = Lusamine2UPR;
+class DewpiderUPR extends dewpider_1.Dewpider {
+    constructor() {
+        super(...arguments);
+        this.set = 'UPR';
+        this.setNumber = '16';
+        this.fullName = 'Dewpider UPR';
+    }
+}
+exports.DewpiderUPR = DewpiderUPR;
+class LeafeonGx2 extends leafeon_gx_1.LeafeonGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'UPR';
+        this.setNumber = '139';
+        this.fullName = 'Leafeon-GX UPR 139';
+    }
+}
+exports.LeafeonGx2 = LeafeonGx2;
+class PalkiaGx2 extends palkia_gx_1.PalkiaGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'UPR';
+        this.setNumber = '147';
+        this.fullName = 'Palkia-GX UPR 147';
+    }
+}
+exports.PalkiaGx2 = PalkiaGx2;
+class LanaUPR extends lana_1.Lana {
+    constructor() {
+        super(...arguments);
+        this.set = 'UPR';
+        this.setNumber = '150';
+        this.fullName = 'Lana UPR';
+    }
+}
+exports.LanaUPR = LanaUPR;
+class Looker2 extends looker_1.Looker {
+    constructor() {
+        super(...arguments);
+        this.set = 'UPR';
+        this.setNumber = '152';
+        this.fullName = 'Looker UPR 152';
+    }
+}
+exports.Looker2 = Looker2;
+class LeafeonGx3 extends leafeon_gx_1.LeafeonGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'UPR';
+        this.setNumber = '157';
+        this.fullName = 'Leafeon-GX UPR 157';
+    }
+}
+exports.LeafeonGx3 = LeafeonGx3;
+class PheromosaGx2 extends pheromosa_gx_1.PheromosaGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'UPR';
+        this.setNumber = '158';
+        this.fullName = 'Pheromosa-GX UPR 158';
+    }
+}
+exports.PheromosaGx2 = PheromosaGx2;
+class XurkitreeGx2 extends xurkitree_gx_1.XurkitreeGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'UPR';
+        this.setNumber = '160';
+        this.fullName = 'Xurkitree-GX UPR 160';
+    }
+}
+exports.XurkitreeGx2 = XurkitreeGx2;
+class CelesteelaGx2 extends celesteela_gx_1.CelesteelaGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'UPR';
+        this.setNumber = '162';
+        this.fullName = 'Celesteela-GX UPR 162';
+    }
+}
+exports.CelesteelaGx2 = CelesteelaGx2;
+class PalkiaGx3 extends palkia_gx_1.PalkiaGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'UPR';
+        this.setNumber = '165';
+        this.fullName = 'Palkia-GX UPR 165';
+    }
+}
+exports.PalkiaGx3 = PalkiaGx3;
+class MissingClover2 extends missing_clover_1.MissingClover {
+    constructor() {
+        super(...arguments);
+        this.set = 'UPR';
+        this.setNumber = '168';
+        this.fullName = 'Missing Clover UPR 168';
+    }
+}
+exports.MissingClover2 = MissingClover2;
+class PeekingRedCardUPR extends peeking_red_card_1.PeekingRedCard {
+    constructor() {
+        super(...arguments);
+        this.set = 'UPR';
+        this.setNumber = '169';
+        this.fullName = 'Peeking Red Card UPR';
+    }
+}
+exports.PeekingRedCardUPR = PeekingRedCardUPR;

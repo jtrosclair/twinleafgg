@@ -18,9 +18,9 @@ class Cassiopeia extends trainer_card_1.TrainerCard {
         this.setNumber = '56';
         this.name = 'Cassiopeia';
         this.fullName = 'Cassiopeia SFA';
-        this.text = 'You can play this card only when it is the last card in your hand. ' +
-            '' +
-            'Search your deck for up to 2 cards and put them into your hand. Then, shuffle your deck.';
+        this.text = `You can play this card only when it is the last card in your hand.
+
+Search your deck for up to 2 cards and put them into your hand. Then, shuffle your deck.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

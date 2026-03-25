@@ -85,7 +85,7 @@ class NsZoroarkex extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.TRADE_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.hand.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -102,7 +102,7 @@ class NsZoroarkex extends pokemon_card_1.PokemonCard {
             });
             return state;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useNightJoker(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

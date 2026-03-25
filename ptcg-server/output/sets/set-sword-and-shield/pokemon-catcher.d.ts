@@ -7,6 +7,7 @@ export declare class PokemonCatcher extends TrainerCard {
     trainerType: TrainerType;
     regulationMark: string;
     set: string;
+    setNumber: string;
     name: string;
     fullName: string;
     text: string;

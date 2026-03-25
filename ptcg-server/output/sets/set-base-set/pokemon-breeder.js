@@ -13,7 +13,6 @@ const card_manager_1 = require("../../game/cards/card-manager");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
 const game_effects_1 = require("../../game/store/effects/game-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function isMatchingStage2(stage1, basic, stage2) {
     for (const card of stage1) {
         if (card.name === stage2.evolvesFrom && basic.name === card.evolvesFrom) {
@@ -85,7 +84,6 @@ function* playCard(next, store, state, effect) {
             const evolveEffect = new game_effects_1.EvolveEffect(player, targets[0], pokemonCard);
             store.reduceEffect(state, evolveEffect);
             // Discard trainer only when user selected a Pokemon
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         }
     });
 }

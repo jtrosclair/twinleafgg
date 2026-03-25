@@ -8,6 +8,7 @@ const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_message_1 = require("../../game/game-message");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Inteleon extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -49,7 +50,7 @@ class Inteleon extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.QUICK_SHOOTING_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.QUICK_SHOOTING_MARKER, this)) {
                 throw new game_1.GameError(game_message_1.GameMessage.POWER_ALREADY_USED);
@@ -57,18 +58,11 @@ class Inteleon extends pokemon_card_1.PokemonCard {
             return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_message_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { min: 1, max: 1, allowCancel: false }), selected => {
                 const targets = selected || [];
                 if (targets.length > 0) {
-                    const damageEffect = new game_effects_1.EffectOfAbilityEffect(player, this.powers[0], this, targets[0]);
-                    store.reduceEffect(state, damageEffect);
-                    if (damageEffect.target) {
-                        damageEffect.target.damage += 20;
-                    }
+                    const placeCountersEffect = new game_effects_1.PlaceDamageCountersEffect(player, targets[0], 20, this);
+                    state = store.reduceEffect(state, placeCountersEffect);
                 }
                 player.marker.addMarker(this.QUICK_SHOOTING_MARKER, this);
-                player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
-                    if (cardList.getPokemonCard() === this) {
-                        cardList.addBoardEffect(card_types_1.BoardEffect.ABILITY_USED);
-                    }
-                });
+                (0, prefabs_1.ABILITY_USED)(player, this);
             });
         }
         return state;

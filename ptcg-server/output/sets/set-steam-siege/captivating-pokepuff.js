@@ -38,14 +38,12 @@ class CaptivatingPokePuff extends trainer_card_1.TrainerCard {
                 const cards = selected || [];
                 // Operation canceled by the user
                 if (cards.length === 0) {
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                     return;
                 }
                 cards.forEach((card, index) => {
                     opponent.hand.moveCardTo(card, slots[index]);
                     slots[index].pokemonPlayedTurn = state.turn;
                 });
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
             });
         }
         return state;

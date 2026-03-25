@@ -1,11 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Swampert = void 0;
-const game_1 = require("../../game");
-const card_types_1 = require("../../game/store/card/card-types");
-const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const game_error_1 = require("../../game/game-error");
+const game_message_1 = require("../../game/game-message");
+const card_types_1 = require("../../game/store/card/card-types");
+const state_utils_1 = require("../../game/store/state-utils");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
+const game_1 = require("../../game");
 class Swampert extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -38,25 +40,25 @@ class Swampert extends pokemon_card_1.PokemonCard {
         (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.WATER_CALL_MARKER, this);
         if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (!player.hand.cards.some(card => card instanceof game_1.EnergyCard && card.provides.includes(card_types_1.CardType.WATER))) {
-                throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
+            if (!player.hand.cards.some(card => card.superType === card_types_1.SuperType.ENERGY && card.provides.includes(card_types_1.CardType.WATER))) {
+                throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_USE_POWER);
             }
             (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             if ((0, prefabs_1.HAS_MARKER)(this.WATER_CALL_MARKER, player, this)) {
-                throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
+                throw new game_error_1.GameError(game_message_1.GameMessage.POWER_ALREADY_USED);
             }
             (0, prefabs_1.ABILITY_USED)(player, this);
             (0, prefabs_1.ADD_MARKER)(this.WATER_CALL_MARKER, player, this);
-            store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_TO_BENCH, player.hand, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE], { superType: card_types_1.SuperType.ENERGY, name: 'Water Energy' }, { allowCancel: false, min: 1, max: 1 }), transfers => {
+            store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_message_1.GameMessage.ATTACH_ENERGY_TO_BENCH, player.hand, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE], { superType: card_types_1.SuperType.ENERGY, name: 'Water Energy' }, { allowCancel: false, min: 1, max: 1 }), transfers => {
                 transfers = transfers || [];
                 for (const transfer of transfers) {
-                    const target = game_1.StateUtils.getTarget(state, player, transfer.to);
+                    const target = state_utils_1.StateUtils.getTarget(state, player, transfer.to);
                     player.hand.moveCardTo(transfer.card, target);
                 }
             });
         }
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP)(store, state, effect);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         return state;
     }

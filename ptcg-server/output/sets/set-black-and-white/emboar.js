@@ -38,7 +38,7 @@ class Emboar extends pokemon_card_1.PokemonCard {
         if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInHand = player.hand.cards.some(c => {
-                return c instanceof game_1.EnergyCard
+                return c.superType === card_types_1.SuperType.ENERGY
                     && c.energyType === card_types_1.EnergyType.BASIC
                     && c.provides.includes(card_types_1.CardType.FIRE);
             });

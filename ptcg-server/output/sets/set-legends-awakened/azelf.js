@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Azelf = void 0;
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_1 = require("../../game");
 const marker_constants_1 = require("../../game/store/markers/marker-constants");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const game_effects_1 = require("../../game/store/effects/game-effects");
 class Azelf extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -40,19 +40,13 @@ class Azelf extends pokemon_card_1.PokemonCard {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.POKEPOWER,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             return store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
                 if (wantToUse) {
+                    const powerEffect = new game_effects_1.PowerEffect(player, this.powers[0], this);
+                    store.reduceEffect(state, powerEffect);
                     const opponent = game_1.StateUtils.getOpponent(state, player);
                     const prizes = player.prizes.filter(p => p.isSecret);
                     prizes.forEach(p => { p.isSecret = false; });

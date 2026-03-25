@@ -3,8 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Palafinex = void 0;
 const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
-const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Palafinex extends game_1.PokemonCard {
     constructor() {
@@ -33,34 +31,17 @@ class Palafinex extends game_1.PokemonCard {
         this.cardImage = 'assets/cardback.png';
         this.fullName = 'Palafin ex TWM';
         this.name = 'Palafin ex';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
-            const player = effect.player;
-            player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-            player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-        }
         if (effect instanceof game_effects_1.EvolveEffect && effect.pokemonCard === this) {
             if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_EVOLVE);
             }
         }
-        if (effect instanceof game_effects_1.UseAttackEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-            throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
-        }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
+        // Giga Impact
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-            player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-            const player = effect.player;
-            player.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
+            player.active.cannotAttackNextTurnPending = true;
         }
         return state;
     }

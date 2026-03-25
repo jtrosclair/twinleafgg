@@ -45,7 +45,6 @@ function* playCard(next, store, state, self, effect) {
         player.deck.applyOrder(order);
     });
     player.deck.moveTo(player.hand, 3);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
 }
 class Miriam extends trainer_card_1.TrainerCard {
     constructor() {
@@ -58,6 +57,24 @@ class Miriam extends trainer_card_1.TrainerCard {
         this.name = 'Miriam';
         this.fullName = 'Miriam SVI';
         this.text = 'Shuffle up to 5 Pokémon from your discard pile into your deck. If you shuffled any cards into your deck in this way, draw 3 cards.';
+    }
+    canPlay(store, state, player) {
+        const supporterTurn = player.supporterTurn;
+        if (supporterTurn > 0) {
+            return false;
+        }
+        let pokemonsInDiscard = 0;
+        player.discard.cards.forEach((c, index) => {
+            const isPokemon = c instanceof pokemon_card_1.PokemonCard;
+            if (isPokemon) {
+                pokemonsInDiscard += 1;
+            }
+        });
+        // Player does not have correct cards in discard
+        if (pokemonsInDiscard === 0) {
+            return false;
+        }
+        return true;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

@@ -11,8 +11,7 @@ class TealMaskOgerpon extends game_1.PokemonCard {
         this.hp = 110;
         this.weakness = [{ type: R }];
         this.retreat = [C];
-        this.attacks = [
-            {
+        this.attacks = [{
                 name: 'Grass Dance',
                 cost: [C],
                 damage: 0,
@@ -23,29 +22,24 @@ class TealMaskOgerpon extends game_1.PokemonCard {
                 cost: [G, G, C],
                 damage: 120,
                 text: 'During your next turn, this Pokémon can\'t use Ogre Hammer.'
-            },
-        ];
-        this.set = 'DRI';
+            }];
         this.regulationMark = 'I';
+        this.set = 'DRI';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '26';
         this.name = 'Teal Mask Ogerpon';
         this.fullName = 'Teal Mask Ogerpon DRI';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             return (0, prefabs_1.ATTACH_ENERGY_PROMPT)(store, state, player, game_1.PlayerType.BOTTOM_PLAYER, game_1.SlotType.DECK, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { energyType: game_1.EnergyType.BASIC, name: 'Grass Energy' }, { min: 0, max: 1, allowCancel: false });
         }
-        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_2_MARKER, this);
-        (0, prefabs_1.REPLACE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_MARKER, this.ATTACK_USED_2_MARKER, this);
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
-            if ((0, prefabs_1.HAS_MARKER)(this.ATTACK_USED_MARKER, effect.player, this) || (0, prefabs_1.HAS_MARKER)(this.ATTACK_USED_2_MARKER, effect.player, this)) {
-                throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
+            const player = effect.player;
+            if (!player.active.cannotUseAttacksNextTurnPending.includes('Ogre Hammer')) {
+                player.active.cannotUseAttacksNextTurnPending.push('Ogre Hammer');
             }
-            (0, prefabs_1.ADD_MARKER)(this.ATTACK_USED_MARKER, effect.player, this);
         }
         return state;
     }

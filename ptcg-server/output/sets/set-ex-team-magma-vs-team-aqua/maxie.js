@@ -107,7 +107,6 @@ class Maxie extends trainer_card_1.TrainerCard {
                     option.action();
                 });
             }
-            player.supporter.moveCardTo(this, player.discard);
         }
         return state;
     }

@@ -4,14 +4,14 @@ exports.MegaVenusaurEx = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_2 = require("../../game");
-const game_effects_2 = require("../../game/store/effects/game-effects");
+const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* moveEnergy(next, store, state, effect) {
     const player = effect.player;
     let pokemonWithEnergy = 0;
     player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (cardList.cards.some(c => c instanceof game_2.EnergyCard)) {
+        if (cardList.cards.some(c => c.superType === game_1.SuperType.ENERGY)) {
             pokemonWithEnergy++;
         }
     });
@@ -63,13 +63,13 @@ class MegaVenusaurEx extends pokemon_card_1.PokemonCard {
         this.fullName = 'Mega Venusaur ex M1L';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const generator = moveEnergy(() => generator.next(), store, state, effect);
             return generator.next().value;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            const healEffect = new game_effects_2.HealEffect(player, player.active, 30);
+            const healEffect = new game_effects_1.HealEffect(player, player.active, 30);
             state = store.reduceEffect(state, healEffect);
         }
         return state;

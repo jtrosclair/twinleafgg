@@ -22,7 +22,7 @@ class Melony extends trainer_card_1.TrainerCard {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;
             // Check if there's Water Energy in discard
-            const hasWaterEnergyInDiscard = player.discard.cards.some(c => c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC && c.name === 'Water Energy');
+            const hasWaterEnergyInDiscard = player.discard.cards.some(c => c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC && c.name === 'Water Energy');
             if (!hasWaterEnergyInDiscard) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
@@ -69,7 +69,6 @@ class Melony extends trainer_card_1.TrainerCard {
                     (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, targetList, { cards: [transfer.card], sourceCard: this, sourceEffect: effect });
                     // Draw 3 cards
                     (0, prefabs_1.DRAW_CARDS)(player, 3);
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 });
             });
         }

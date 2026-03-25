@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MewVMAXLOR = exports.NessaLOR = exports.CookLOR = exports.BossOrdersLOR = exports.AdventurersDiscoveryLOR = exports.EternatusVMAXLOR = exports.EternatusVLOR = exports.CrobatVLOR = exports.Snorlax2LOR = exports.HisuianArcanine2LOR = exports.Banette2LOR = exports.Gengar2LOR = exports.Pikachu2LOR = exports.CharizardLOR = exports.LostVacuum2LOR = exports.DarkPatchLOR = exports.CollapsedStadiumLOR = exports.BoxOfDisaster2LOR = exports.HisuianZoroarkVSTAR3LOR = exports.GiratinaVSTAR3LOR = exports.Volo3LOR = exports.Thorton3LOR = exports.MissFortuneSisters3LOR = exports.LadyFLI3LOR = exports.ColresssExperiment3LOR = exports.Arezu3LOR = exports.HisuianZoroarkVSTAR2LOR = exports.HisuianGoodraVSTAR2LOR = exports.GiratinaVSTAR2LOR = exports.DrapionVSTAR2LOR = exports.MagnezoneVSTAR2LOR = exports.KyuremVMAX2LOR = exports.Volo2LOR = exports.Thorton2LOR = exports.MissFortuneSisters2LOR = exports.LadyFLI2LOR = exports.ColresssExperiment2LOR = exports.Arezu2LOR = exports.PidgeotV2LOR = exports.HisuianGoodraV2LOR = exports.GiratinaV3LOR = exports.GiratinaV2LOR = exports.GalarianPerrserkerV3LOR = exports.GalarianPerrserkerV2LOR = exports.DrapionV2LOR = exports.RotomV3LOR = exports.RotomV2LOR = exports.MagnezoneV2LOR = exports.KyuremV2LOR = exports.DelphoxV2LOR = void 0;
+exports.Iscan3 = exports.Fantina3 = exports.AerodactylVstar2 = exports.Iscan2 = exports.Fantina2 = exports.AerodactylV3 = exports.AerodactylV2 = exports.EnamorusV2 = exports.HisuianElectrodeVLOR = exports.GoomyLOR = exports.MurkrowLOR = exports.RhyhornLOR = exports.DucklettLOR = exports.BlipbugLOR = void 0;
 const delphox_v_1 = require("../set-lost-origin/delphox-v");
 const kyurem_v_1 = require("../set-lost-origin/kyurem-v");
 const magnezone_v_1 = require("../set-lost-origin/magnezone-v");
@@ -40,6 +41,17 @@ const boss_orders_1 = require("../set-paldea-evolved/boss-orders");
 const cook_1 = require("../set-fusion-strike/cook");
 const nessa_1 = require("../set-vivid-voltage/nessa");
 const mew_vmax_1 = require("../set-fusion-strike/mew-vmax");
+const blipbug_1 = require("../set-sword-and-shield/blipbug");
+const ducklett_1 = require("../set-boundaries-crossed/ducklett");
+const rhyhorn_1 = require("../set-primal-clash/rhyhorn");
+const murkrow_1 = require("../set-dragons-exalted/murkrow");
+const goomy_1 = require("../set-fusion-strike/goomy");
+const hisuian_electrode_v_1 = require("../set-sword-and-shield-promos/hisuian-electrode-v");
+const enamorus_v_1 = require("./enamorus-v");
+const aerodactyl_v_1 = require("./aerodactyl-v");
+const fantina_1 = require("./fantina");
+const iscan_1 = require("./iscan");
+const aerodactyl_vstar_1 = require("./aerodactyl-vstar");
 class DelphoxV2LOR extends delphox_v_1.DelphoxV {
     constructor() {
         super(...arguments);
@@ -490,3 +502,129 @@ class MewVMAXLOR extends mew_vmax_1.MewVMAX {
     }
 }
 exports.MewVMAXLOR = MewVMAXLOR;
+class BlipbugLOR extends blipbug_1.Blipbug {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOR';
+        this.setNumber = '18';
+        this.fullName = 'Blipbug LOR 18';
+    }
+}
+exports.BlipbugLOR = BlipbugLOR;
+class DucklettLOR extends ducklett_1.Ducklett {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOR';
+        this.setNumber = '46';
+        this.fullName = 'Ducklett LOR 46';
+    }
+}
+exports.DucklettLOR = DucklettLOR;
+class RhyhornLOR extends rhyhorn_1.Rhyhorn {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOR';
+        this.setNumber = '89';
+        this.fullName = 'Rhyhorn LOR 89';
+    }
+}
+exports.RhyhornLOR = RhyhornLOR;
+class MurkrowLOR extends murkrow_1.Murkrow {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOR';
+        this.setNumber = '114';
+        this.fullName = 'Murkrow LOR 114';
+    }
+}
+exports.MurkrowLOR = MurkrowLOR;
+class GoomyLOR extends goomy_1.Goomy {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOR';
+        this.setNumber = '132';
+        this.fullName = 'Goomy LOR 132';
+    }
+}
+exports.GoomyLOR = GoomyLOR;
+class HisuianElectrodeVLOR extends hisuian_electrode_v_1.HisuianElectrodeV {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOR';
+        this.setNumber = '172';
+        this.fullName = 'Hisuian Electrode V LOR 172';
+    }
+}
+exports.HisuianElectrodeVLOR = HisuianElectrodeVLOR;
+class EnamorusV2 extends enamorus_v_1.EnamorusV {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOR';
+        this.setNumber = '178';
+        this.fullName = 'Enamorus V LOR 178';
+    }
+}
+exports.EnamorusV2 = EnamorusV2;
+class AerodactylV2 extends aerodactyl_v_1.AerodactylV {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOR';
+        this.setNumber = '179';
+        this.fullName = 'Aerodactyl V LOR 179';
+    }
+}
+exports.AerodactylV2 = AerodactylV2;
+class AerodactylV3 extends aerodactyl_v_1.AerodactylV {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOR';
+        this.setNumber = '180';
+        this.fullName = 'Aerodactyl V LOR 180';
+    }
+}
+exports.AerodactylV3 = AerodactylV3;
+class Fantina2 extends fantina_1.Fantina {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOR';
+        this.setNumber = '191';
+        this.fullName = 'Fantina LOR 191';
+    }
+}
+exports.Fantina2 = Fantina2;
+class Iscan2 extends iscan_1.Iscan {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOR';
+        this.setNumber = '192';
+        this.fullName = 'Iscan LOR 192';
+    }
+}
+exports.Iscan2 = Iscan2;
+class AerodactylVstar2 extends aerodactyl_vstar_1.AerodactylVstar {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOR';
+        this.setNumber = '199';
+        this.fullName = 'Aerodactyl VSTAR LOR 199';
+    }
+}
+exports.AerodactylVstar2 = AerodactylVstar2;
+class Fantina3 extends fantina_1.Fantina {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOR';
+        this.setNumber = '206';
+        this.fullName = 'Fantina LOR 206';
+    }
+}
+exports.Fantina3 = Fantina3;
+class Iscan3 extends iscan_1.Iscan {
+    constructor() {
+        super(...arguments);
+        this.set = 'LOR';
+        this.setNumber = '207';
+        this.fullName = 'Iscan LOR 207';
+    }
+}
+exports.Iscan3 = Iscan3;

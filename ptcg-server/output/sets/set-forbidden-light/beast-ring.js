@@ -15,9 +15,9 @@ class BeastRing extends trainer_card_1.TrainerCard {
         this.setNumber = '102';
         this.name = 'Beast Ring';
         this.fullName = 'Beast Ring FLI';
-        this.text = 'You can play this card only if your opponent has exactly 3 or 4 Prize cards remaining.' +
-            '' +
-            'Search your deck for up to 2 basic Energy cards and attach them to 1 of your Ultra Beasts. Then, shuffle your deck.';
+        this.text = `You can play this card only if your opponent has exactly 3 or 4 Prize cards remaining.
+
+Search your deck for up to 2 basic Energy cards and attach them to 1 of your Ultra Beasts. Then, shuffle your deck.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
@@ -48,7 +48,6 @@ class BeastRing extends trainer_card_1.TrainerCard {
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
                     player.deck.moveCardTo(transfer.card, target);
                 }
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             });
         }

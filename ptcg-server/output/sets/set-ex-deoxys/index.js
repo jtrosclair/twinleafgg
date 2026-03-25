@@ -6,6 +6,8 @@ const camerupt_1 = require("./camerupt");
 const crystal_shard_1 = require("./crystal-shard");
 const electrike_1 = require("./electrike");
 const electrike2_1 = require("./electrike2");
+const energy_charge_1 = require("./energy-charge");
+const golbat_1 = require("./golbat");
 const heal_energy_1 = require("./heal-energy");
 const jirachi_1 = require("./jirachi");
 const koffing_1 = require("./koffing");
@@ -28,15 +30,20 @@ const rayquaza_star_1 = require("./rayquaza-star");
 const sableye_1 = require("./sableye");
 const salamence_ex_1 = require("./salamence-ex");
 const scramble_energy_1 = require("./scramble-energy");
+const seedot_1 = require("./seedot");
 const slugma_1 = require("./slugma");
 const space_center_1 = require("./space-center");
 const weezing_1 = require("./weezing");
+// Other prints
+const other_prints_1 = require("./other-prints");
 exports.setEXDeoxys = [
     new altaria_1.Altaria(),
     new camerupt_1.Camerupt(),
     new crystal_shard_1.CrystalShard(),
     new electrike_1.Electrike(),
     new electrike2_1.Electrike2(),
+    new energy_charge_1.EnergyCharge(),
+    new golbat_1.Golbat(),
     new heal_energy_1.HealEnergy(),
     new jirachi_1.Jirachi(),
     new koffing_1.Koffing(),
@@ -59,7 +66,11 @@ exports.setEXDeoxys = [
     new sableye_1.Sableye(),
     new salamence_ex_1.Salamenceex(),
     new scramble_energy_1.ScrambleEnergy(),
+    new seedot_1.Seedot(),
     new slugma_1.Slugma(),
     new space_center_1.SpaceCenter(),
     new weezing_1.Weezing(),
+    // Other prints
+    new other_prints_1.BalloonBerryDX(),
+    new other_prints_1.LadyOutingDX(),
 ];

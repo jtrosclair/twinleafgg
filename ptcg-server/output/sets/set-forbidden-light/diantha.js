@@ -41,7 +41,6 @@ class Diantha extends trainer_card_1.TrainerCard {
             effect.preventDefault = true;
             state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, {}, { min: 2, max: 2, allowCancel: false }), cards => {
                 player.discard.moveCardsTo(cards, player.hand);
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             });
         }

@@ -21,7 +21,6 @@ function* playCard(next, store, state, effect) {
     });
     cards.forEach(c => c.cards.moveToTopOfDestination(player.deck));
     (0, prefabs_1.DRAW_CARDS)(player, 1);
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
 }
 class SwitchingCups extends trainer_card_1.TrainerCard {
     constructor() {

@@ -13,7 +13,7 @@ class Charmeleon extends pokemon_card_1.PokemonCard {
         this.weakness = [{ type: W }];
         this.retreat = [C, C];
         this.attacks = [{
-                name: 'Bonk',
+                name: 'Steady Firebreathing',
                 cost: [R],
                 damage: 40,
                 text: '',

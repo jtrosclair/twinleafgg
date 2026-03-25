@@ -41,7 +41,6 @@ class Cyllene extends trainer_card_1.TrainerCard {
             ], results => {
                 results.forEach(r => { heads += r ? 1 : 0; });
                 if (heads === 0) {
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     return state;
                 }
                 const deckTop = new game_1.CardList();
@@ -75,14 +74,12 @@ class Cyllene extends trainer_card_1.TrainerCard {
                             }
                             deckTop.applyOrder(order);
                             deckTop.moveToTopOfDestination(player.deck);
-                            player.supporter.moveCardTo(effect.trainerCard, player.discard);
                             if (cardsToMove.length > 0) {
                                 return store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cardsToMove), () => state);
                             }
                             return state;
                         });
                     }
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                     return state;
                 });
             });

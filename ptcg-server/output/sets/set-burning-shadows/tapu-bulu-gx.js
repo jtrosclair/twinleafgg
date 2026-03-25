@@ -6,7 +6,6 @@ const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 // BUS Tapu Bulu-GX 130 (https://limitlesstcg.com/cards/BUS/130)
 class TapuBuluGX extends pokemon_card_1.PokemonCard {
@@ -45,7 +44,7 @@ class TapuBuluGX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Jet Punch
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
                 if (wantToUse) {
@@ -63,7 +62,7 @@ class TapuBuluGX extends pokemon_card_1.PokemonCard {
             });
         }
         // Absorption GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
             // Check if player has used GX attack
             (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);

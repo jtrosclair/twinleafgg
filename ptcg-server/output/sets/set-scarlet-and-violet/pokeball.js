@@ -13,6 +13,9 @@ function* playCard(next, store, state, effect) {
     const player = effect.player;
     const opponent = game_1.StateUtils.getOpponent(state, player);
     let coinResult = false;
+    if (player.deck.cards.length === 0) {
+        throw new game_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
+    }
     // We will discard this card after prompt confirmation
     effect.preventDefault = true;
     yield store.prompt(state, new coin_flip_prompt_1.CoinFlipPrompt(player.id, game_message_1.GameMessage.COIN_FLIP), (result) => {
@@ -36,7 +39,6 @@ function* playCard(next, store, state, effect) {
         }
         player.deck.moveCardsTo(cards, player.hand);
     }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), (order) => {
         player.deck.applyOrder(order);
     });
@@ -52,6 +54,12 @@ class Pokeball extends trainer_card_1.TrainerCard {
         this.name = 'Poké Ball';
         this.fullName = 'Poké Ball SVI';
         this.text = 'Flip a coin. If heads, search your deck for a Pokémon, reveal it, and put it into your hand. Shuffle your deck afterward.';
+    }
+    canPlay(store, state, player) {
+        if (player.deck.cards.length === 0) {
+            return false;
+        }
+        return true;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

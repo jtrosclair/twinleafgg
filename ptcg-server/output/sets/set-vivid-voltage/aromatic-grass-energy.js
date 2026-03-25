@@ -18,7 +18,6 @@ class AromaticGrassEnergy extends energy_card_1.EnergyCard {
         this.regulationMark = 'D';
         this.name = 'Aromatic Grass Energy';
         this.fullName = 'Aromatic Grass Energy VIV';
-        this.legacyFullName = 'Aromatic Energy VIV';
         this.text = `As long as this card is attached to a Pokémon, it provides[G] Energy.
     
 The [G] Pokémon this card is attached to recovers from all Special Conditions and can't be affected by any Special Conditions.`;

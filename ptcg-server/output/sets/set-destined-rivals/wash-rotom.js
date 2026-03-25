@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.WashRotom = void 0;
 const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class WashRotom extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -30,7 +31,7 @@ class WashRotom extends game_1.PokemonCard {
         this.fullName = 'Wash Rotom DRI';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
                 const healEffect = new game_effects_1.HealEffect(player, cardList, 10);
@@ -38,7 +39,7 @@ class WashRotom extends game_1.PokemonCard {
                 return state;
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             let toolCount = 0;
             [player.active, ...player.bench].forEach(list => {

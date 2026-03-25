@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Eevee2SUM = exports.Switch2SUM = exports.NestBall2SUM = exports.TaurosGX3SUM = exports.EspeonGX3SUM = exports.LurantisGX3SUM = exports.TeamSkullGrunt2SUM = exports.ProfessorKukui2SUM = exports.Lillie2SUM = exports.TaurosGX2SUM = exports.EspeonGX2SUM = exports.LurantisGX2SUM = exports.UltraBallSUM = exports.SwitchSUM = exports.PotionSUM = exports.PokemonCatcherSUM = exports.PokeBallSUM = exports.LillieSUM = exports.GreatBallSUM = exports.EnergySwitchPKSUM = exports.CrushingHammerSUM = exports.UltraBallSUMSR = exports.RotomDexSR = exports.RareCandySUM = exports.NestBallSUM = exports.HauSUM = exports.ExpShareSUM = exports.EnergyRetrievalSUM = exports.DoubleColorlessEnergySUM = void 0;
+exports.GumshoosGx3 = exports.SolgaleoGx3 = exports.UmbreonGx3 = exports.LunalaGx3 = exports.LaprasGx3 = exports.Ilima2 = exports.GumshoosGx2 = exports.SolgaleoGx2 = exports.UmbreonGx2 = exports.LunalaGx2 = exports.LaprasGx2 = exports.Eevee2SUM = exports.Switch2SUM = exports.NestBall2SUM = exports.TaurosGX3SUM = exports.EspeonGX3SUM = exports.LurantisGX3SUM = exports.TeamSkullGrunt2SUM = exports.ProfessorKukui2SUM = exports.Lillie2SUM = exports.TaurosGX2SUM = exports.EspeonGX2SUM = exports.LurantisGX2SUM = exports.UltraBallSUM = exports.SwitchSUM = exports.PotionSUM = exports.PokemonCatcherSUM = exports.PokeBallSUM = exports.LillieSUM = exports.GreatBallSUM = exports.EnergySwitchPKSUM = exports.CrushingHammerSUM = exports.UltraBallSUMSR = exports.RotomDexSR = exports.RareCandySUM = exports.NestBallSUM = exports.HauSUM = exports.ExpShareSUM = exports.DoubleColorlessEnergySUM = void 0;
 const crushing_hammer_1 = require("../set-scarlet-and-violet/crushing-hammer");
 const other_prints_1 = require("../set-ex-power-keepers/other-prints");
 const great_ball_1 = require("../set-ex-firered-leafgreen/great-ball");
 const lillie_1 = require("../set-ultra-prism/lillie");
 const pokeball_1 = require("../set-jungle/pokeball");
-const pokemon_catcher_1 = require("../set-emerging-powers/pokemon-catcher");
+const pokemon_catcher_1 = require("../set-scarlet-and-violet/pokemon-catcher");
 const potion_1 = require("../set-base-set/potion");
 const switch_1 = require("../set-base-set/switch");
 const ultra_ball_1 = require("../set-scarlet-and-violet/ultra-ball");
@@ -20,12 +20,17 @@ const nest_ball_1 = require("../set-scarlet-and-violet/nest-ball");
 const switch_2 = require("../set-base-set/switch");
 const eevee_1 = require("../set-sun-and-moon/eevee");
 const double_colorless_energy_1 = require("../set-base-set/double-colorless-energy");
-const energy_retrieval_1 = require("../set-scarlet-and-violet/energy-retrieval");
 const exp_share_1 = require("../set-scarlet-and-violet/exp-share");
 const hau_1 = require("../set-celestial-storm/hau");
 const nest_ball_2 = require("../set-scarlet-and-violet/nest-ball");
 const rare_candy_1 = require("../set-scarlet-and-violet/rare-candy");
 const rotom_dex_1 = require("./rotom-dex");
+const lapras_gx_1 = require("./lapras-gx");
+const lunala_gx_1 = require("./lunala-gx");
+const umbreon_gx_1 = require("./umbreon-gx");
+const solgaleo_gx_1 = require("./solgaleo-gx");
+const gumshoos_gx_1 = require("./gumshoos-gx");
+const ilima_1 = require("./ilima");
 class DoubleColorlessEnergySUM extends double_colorless_energy_1.DoubleColorlessEnergy {
     constructor() {
         super(...arguments);
@@ -36,15 +41,6 @@ class DoubleColorlessEnergySUM extends double_colorless_energy_1.DoubleColorless
     }
 }
 exports.DoubleColorlessEnergySUM = DoubleColorlessEnergySUM;
-class EnergyRetrievalSUM extends energy_retrieval_1.EnergyRetrieval {
-    constructor() {
-        super(...arguments);
-        this.setNumber = '116';
-        this.fullName = 'Energy Retrieval SUM';
-        this.set = 'SUM';
-    }
-}
-exports.EnergyRetrievalSUM = EnergyRetrievalSUM;
 class ExpShareSUM extends exp_share_1.ExpShare {
     constructor() {
         super(...arguments);
@@ -148,7 +144,7 @@ class PokemonCatcherSUM extends pokemon_catcher_1.PokemonCatcher {
     constructor() {
         super(...arguments);
         this.setNumber = '126';
-        this.fullName = 'Pokemon Catcher SUM';
+        this.fullName = 'Pokémon Catcher SUM';
         this.set = 'SUM';
     }
 }
@@ -288,3 +284,102 @@ class Eevee2SUM extends eevee_1.Eevee {
     }
 }
 exports.Eevee2SUM = Eevee2SUM;
+class LaprasGx2 extends lapras_gx_1.LaprasGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'SUM';
+        this.setNumber = '139';
+        this.fullName = 'Lapras-GX SUM 139';
+    }
+}
+exports.LaprasGx2 = LaprasGx2;
+class LunalaGx2 extends lunala_gx_1.LunalaGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'SUM';
+        this.setNumber = '141';
+        this.fullName = 'Lunala-GX SUM 141';
+    }
+}
+exports.LunalaGx2 = LunalaGx2;
+class UmbreonGx2 extends umbreon_gx_1.UmbreonGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'SUM';
+        this.setNumber = '142';
+        this.fullName = 'Umbreon-GX SUM 142';
+    }
+}
+exports.UmbreonGx2 = UmbreonGx2;
+class SolgaleoGx2 extends solgaleo_gx_1.SolgaleoGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'SUM';
+        this.setNumber = '143';
+        this.fullName = 'Solgaleo-GX SUM 143';
+    }
+}
+exports.SolgaleoGx2 = SolgaleoGx2;
+class GumshoosGx2 extends gumshoos_gx_1.GumshoosGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'SUM';
+        this.setNumber = '145';
+        this.fullName = 'Gumshoos-GX SUM 145';
+    }
+}
+exports.GumshoosGx2 = GumshoosGx2;
+class Ilima2 extends ilima_1.Ilima {
+    constructor() {
+        super(...arguments);
+        this.set = 'SUM';
+        this.setNumber = '146';
+        this.fullName = 'Ilima SUM 146';
+    }
+}
+exports.Ilima2 = Ilima2;
+class LaprasGx3 extends lapras_gx_1.LaprasGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'SUM';
+        this.setNumber = '151';
+        this.fullName = 'Lapras-GX SUM 151';
+    }
+}
+exports.LaprasGx3 = LaprasGx3;
+class LunalaGx3 extends lunala_gx_1.LunalaGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'SUM';
+        this.setNumber = '153';
+        this.fullName = 'Lunala-GX SUM 153';
+    }
+}
+exports.LunalaGx3 = LunalaGx3;
+class UmbreonGx3 extends umbreon_gx_1.UmbreonGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'SUM';
+        this.setNumber = '154';
+        this.fullName = 'Umbreon-GX SUM 154';
+    }
+}
+exports.UmbreonGx3 = UmbreonGx3;
+class SolgaleoGx3 extends solgaleo_gx_1.SolgaleoGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'SUM';
+        this.setNumber = '155';
+        this.fullName = 'Solgaleo-GX SUM 155';
+    }
+}
+exports.SolgaleoGx3 = SolgaleoGx3;
+class GumshoosGx3 extends gumshoos_gx_1.GumshoosGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'SUM';
+        this.setNumber = '157';
+        this.fullName = 'Gumshoos-GX SUM 157';
+    }
+}
+exports.GumshoosGx3 = GumshoosGx3;

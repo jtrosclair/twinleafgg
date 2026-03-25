@@ -35,7 +35,7 @@ class ThundurusEX extends game_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            const hasEnergyInDiscard = player.discard.cards.some(c => c instanceof game_1.EnergyCard);
+            const hasEnergyInDiscard = player.discard.cards.some(c => c.superType === game_1.SuperType.ENERGY);
             let validTargets = false;
             const blockedTo = [];
             player.bench.forEach((bench, index) => {
@@ -73,10 +73,10 @@ class ThundurusEX extends game_1.PokemonCard {
             const checkEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, pokemon);
             store.reduceEffect(state, checkEnergy);
             let hasPlasmaEnergy = false;
-            const defendingPokemonHasEnergy = opponent.active.energies.cards.some(c => c instanceof game_1.EnergyCard);
+            const defendingPokemonHasEnergy = opponent.active.energies.cards.some(c => c.superType === game_1.SuperType.ENERGY);
             checkEnergy.energyMap.forEach(em => {
                 const energyCard = em.card;
-                if (energyCard instanceof game_1.EnergyCard && energyCard.name === 'Plasma Energy') {
+                if (energyCard.superType === game_1.SuperType.ENERGY && energyCard.name === 'Plasma Energy') {
                     hasPlasmaEnergy = true;
                 }
             });

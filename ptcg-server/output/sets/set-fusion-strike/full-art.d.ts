@@ -1,7 +1,7 @@
-import { Flaaffy } from '../set-evolving-skies/flaaffy';
 import { TrainingCourt } from '../set-rebel-clash/training-court';
 import { FireEnergy } from '../set-scarlet-and-violet-energy/fire-energy';
 import { GrassEnergy } from '../set-scarlet-and-violet-energy/grass-energy';
+import { CelebiV } from '../set-chilling-reign/celebi-v';
 import { ElesasSparkle } from './elesas-sparkle';
 import { GenesectV } from './genesect-v';
 import { MewV } from './mew-v';
@@ -10,6 +10,11 @@ import { PowerTablet } from './power-tablet';
 import { Schoolboy } from './schoolboy';
 import { Schoolgirl } from './schoolgirl';
 import { Shauna } from './shauna';
+export declare class CelebiVFA extends CelebiV {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
 export declare class MewVFA extends MewV {
     setNumber: string;
     fullName: string;
@@ -47,11 +52,6 @@ export declare class MewVMAXHR extends MewVMAX {
     fullName: string;
 }
 export declare class MewVMAXAA extends MewVMAX {
-    setNumber: string;
-    fullName: string;
-}
-export declare class FlaaffySR extends Flaaffy {
-    set: string;
     setNumber: string;
     fullName: string;
 }

@@ -51,9 +51,10 @@ class Hoppip extends pokemon_card_1.PokemonCard {
             }
         }
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            const conditions = effect.target.specialConditions.slice();
+            const player = effect.player;
+            const conditions = player.active.specialConditions.slice();
             conditions.forEach((condition) => {
-                effect.target.removeSpecialCondition(condition);
+                player.active.removeSpecialCondition(condition);
             });
         }
         return state;

@@ -1,35 +1,39 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { PowerType } from '../../game/store/card/pokemon-types';
-import { State, StoreLike } from '../../game';
+import { PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-export declare class NaganadelGX extends PokemonCard {
+export declare class NaganadelGx extends PokemonCard {
     tags: CardTag[];
     stage: Stage;
+    evolvesFrom: string;
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.FAIRY;
     }[];
-    retreat: CardType[];
-    evolvesFrom: string;
+    retreat: CardType.COLORLESS[];
+    readonly ULTRA_CONVERSION_MARKER = "NAGANADEL_GX_UNM_ULTRA_CONVERSION_MARKER";
     powers: {
         name: string;
-        powerType: PowerType;
         useWhenInPlay: boolean;
+        powerType: PowerType;
         text: string;
     }[];
-    attacks: {
+    attacks: ({
         name: string;
-        cost: CardType[];
+        cost: (CardType.PSYCHIC | CardType.COLORLESS)[];
         damage: number;
         text: string;
-    }[];
+    } | {
+        name: string;
+        cost: CardType.LIGHTNING[];
+        damage: number;
+        text: string;
+    })[];
     set: string;
-    cardImage: string;
     setNumber: string;
+    cardImage: string;
     name: string;
     fullName: string;
-    readonly ULTRA_CONVERSION_MARKER = "ULTRA_CONVERSION_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

@@ -35,7 +35,6 @@ class Mars extends trainer_card_1.TrainerCard {
                 const randomCard = opponent.hand.cards[randomIndex];
                 opponent.hand.moveCardTo(randomCard, opponent.discard);
             }
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

@@ -7,6 +7,7 @@ const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Toedscruelex extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -55,7 +56,7 @@ class Toedscruelex extends pokemon_card_1.PokemonCard {
             if (!isToedscruelInPlay) {
                 return state;
             }
-            if (sourceCard && effect.target.cards.some(c => c instanceof game_1.EnergyCard)) {
+            if (sourceCard && effect.target.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                 // Try to reduce PowerEffect, to check if something is blocking our ability
                 try {
                     const player = game_1.StateUtils.findOwner(state, effect.target);
@@ -84,7 +85,7 @@ class Toedscruelex extends pokemon_card_1.PokemonCard {
                 effect.preventDefault = true;
             }
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let pokesWithGrass = 0;
             player.bench.forEach((cardList, card) => {

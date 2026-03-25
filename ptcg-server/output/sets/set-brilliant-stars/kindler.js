@@ -19,7 +19,7 @@ function* playCard(next, store, state, self, effect) {
         throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
     }
     const hasEnergyInHand = player.hand.cards.some(c => {
-        return c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC && c.name === 'Fire Energy';
+        return c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC && c.name === 'Fire Energy';
     });
     if (!hasEnergyInHand) {
         throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
@@ -39,7 +39,6 @@ function* playCard(next, store, state, self, effect) {
     return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, deckTop, {}, { min: 0, max: 2, allowCancel: false }), selected => {
         deckTop.moveCardsTo(selected, player.hand);
         deckTop.moveTo(player.deck);
-        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
             player.deck.applyOrder(order);
             return state;
@@ -56,9 +55,9 @@ class Kindler extends trainer_card_1.TrainerCard {
         this.regulationMark = 'F';
         this.name = 'Kindler';
         this.fullName = 'Kindler BRS';
-        this.text = 'You can use this card only if you discard a [R] Energy card from your hand.' +
-            '' +
-            'Look at the top 7 cards of your deck and put up to 2 of them into your hand. Shuffle the other cards back into your deck.';
+        this.text = `You can use this card only if you discard a [R] Energy card from your hand. 
+
+Look at the top 7 cards of your deck and put up to 2 of them into your hand. Shuffle the other cards back into your deck.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

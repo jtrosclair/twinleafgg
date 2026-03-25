@@ -39,7 +39,7 @@ class Groudon extends pokemon_card_1.PokemonCard {
             // Move top 5 cards from deckTop
             player.deck.moveTo(deckTop, 5);
             // Filter for Energy cards
-            const energyCount = deckTop.cards.filter(c => c instanceof game_1.EnergyCard);
+            const energyCount = deckTop.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY);
             // Move all cards to discard
             deckTop.moveTo(player.discard, deckTop.cards.length);
             effect.damage = energyCount.length * 80;

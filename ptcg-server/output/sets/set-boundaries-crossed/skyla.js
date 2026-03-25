@@ -18,7 +18,6 @@ function* playCard(next, store, state, effect, self) {
         throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
     }
     (0, prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND)(store, state, player, self, { superType: card_types_1.SuperType.TRAINER }, { min: 0, max: 1, allowCancel: false });
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });

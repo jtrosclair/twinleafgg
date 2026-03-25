@@ -9,6 +9,10 @@ export declare class Frillish extends PokemonCard {
     weakness: {
         type: CardType.DARK;
     }[];
+    resistance: {
+        type: CardType.FIGHTING;
+        value: number;
+    }[];
     retreat: CardType.COLORLESS[];
     attacks: {
         name: string;

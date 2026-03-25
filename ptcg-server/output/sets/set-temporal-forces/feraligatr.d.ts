@@ -2,9 +2,8 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { StoreLike, State } from '../../game';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+import { Effect } from '../../game/store/effects/effect';
 export declare class Feraligatr extends PokemonCard {
-    regulationMark: string;
     stage: Stage;
     evolvesFrom: string;
     cardType: CardType;
@@ -25,13 +24,12 @@ export declare class Feraligatr extends PokemonCard {
         damage: number;
         text: string;
     }[];
+    regulationMark: string;
     set: string;
     cardImage: string;
     setNumber: string;
     name: string;
     fullName: string;
     readonly TORRENTIAL_HEART_MARKER = "TORRENTIAL_HEART_MARKER";
-    readonly ATTACK_USED_MARKER = "ATTACK_USED_MARKER";
-    readonly ATTACK_USED_2_MARKER = "ATTACK_USED_2_MARKER";
-    reduceEffect(store: StoreLike, state: State, effect: AttackEffect): State;
+    reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

@@ -50,7 +50,6 @@ function* playCard(next, store, state, self, effect) {
         next();
     });
     if (targets.length === 0) {
-        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         return state;
     }
     const cardList = targets[0];
@@ -60,7 +59,6 @@ function* playCard(next, store, state, self, effect) {
             store.reduceEffect(state, supporterEffect);
         }
         catch (_a) {
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
     }
@@ -70,7 +68,6 @@ function* playCard(next, store, state, self, effect) {
         cards = selected;
         next();
     });
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     (0, prefabs_1.MOVE_CARDS)(store, state, target, opponent.discard, { cards, sourceCard: self });
     return state;
 }

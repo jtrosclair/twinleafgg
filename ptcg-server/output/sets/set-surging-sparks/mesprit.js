@@ -3,10 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Mesprit = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const play_card_action_1 = require("../../game/store/actions/play-card-action");
 const game_1 = require("../../game");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Mesprit extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -35,7 +35,7 @@ class Mesprit extends pokemon_card_1.PokemonCard {
         this.fullName = 'Mesprit SSP';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInHand = player.hand.cards.some(c => {
                 return c instanceof game_1.EnergyCard
@@ -55,7 +55,7 @@ class Mesprit extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             let isUxieInPlay = false;
             let isAzelfInPlay = false;

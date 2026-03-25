@@ -35,5 +35,4 @@ export declare class Scizor extends PokemonCard {
     name: string;
     fullName: string;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
-    private hasActuallyUsableAbility;
 }

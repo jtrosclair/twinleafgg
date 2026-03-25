@@ -6,8 +6,8 @@ const card_list_1 = require("../../game/store/state/card-list");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
 const game_message_1 = require("../../game/game-message");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class GiratinaV extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -40,7 +40,7 @@ class GiratinaV extends game_1.PokemonCard {
         this.FLOWER_SELECTING_MARKER = 'FLOWER_SELECTING_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const deckTop = new card_list_1.CardList();
             player.deck.moveTo(deckTop, 4);
@@ -50,7 +50,7 @@ class GiratinaV extends game_1.PokemonCard {
                 return state;
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const applyWeakness = new attack_effects_1.ApplyWeaknessEffect(effect, 160);

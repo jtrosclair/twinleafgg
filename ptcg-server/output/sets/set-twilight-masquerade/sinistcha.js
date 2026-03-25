@@ -4,7 +4,6 @@ exports.Sinistcha = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Sinistcha extends pokemon_card_1.PokemonCard {
@@ -44,11 +43,11 @@ class Sinistcha extends pokemon_card_1.PokemonCard {
             (0, attack_effects_1.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE)(4, store, state, effect);
         }
         // Spill the Tea
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             let totalGrassEnergy = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
-                const grassCount = cardList.cards.filter(card => card instanceof game_1.EnergyCard && card.name === 'Grass Energy').length;
+                const grassCount = cardList.cards.filter(card => card.superType === card_types_1.SuperType.ENERGY && card.name === 'Grass Energy').length;
                 totalGrassEnergy += grassCount;
             });
             return store.prompt(state, new game_1.DiscardEnergyPrompt(player.id, game_1.GameMessage.CHOOSE_ENERGIES_TO_DISCARD, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], // Card source is target Pokemon

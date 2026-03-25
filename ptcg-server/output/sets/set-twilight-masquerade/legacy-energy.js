@@ -13,7 +13,7 @@ class LegacyEnergy extends game_1.EnergyCard {
         this.energyType = game_1.EnergyType.SPECIAL;
         this.tags = [game_1.CardTag.ACE_SPEC];
         this.set = 'TWM';
-        this.regulationMark = 'G';
+        this.regulationMark = 'H';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '167';
         this.name = 'Legacy Energy';

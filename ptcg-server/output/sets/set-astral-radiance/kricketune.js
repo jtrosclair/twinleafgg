@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Kricketune = void 0;
 const game_1 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Kricketune extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -69,15 +69,7 @@ class Kricketune extends game_1.PokemonCard {
                 return state;
             }
             // Check if the ability is disabled by calling PowerEffect stub
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             // Finally, if we haven't boosted HP in this CheckHpEffect yet, add +40

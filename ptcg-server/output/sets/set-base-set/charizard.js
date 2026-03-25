@@ -7,6 +7,7 @@ const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_1 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Charizard extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -39,7 +40,7 @@ class Charizard extends pokemon_card_1.PokemonCard {
         this.ENERGY_BURN_MARKER = 'ENERGY_BURN_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const cardList = game_1.StateUtils.findCardList(state, this);
             if (cardList.specialConditions.includes(card_types_1.SpecialCondition.ASLEEP) ||

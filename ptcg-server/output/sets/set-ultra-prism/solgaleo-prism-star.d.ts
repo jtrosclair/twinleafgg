@@ -8,16 +8,16 @@ export declare class SolgaleoPrismStar extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.FIRE;
     }[];
     resistance: {
-        type: CardType;
+        type: CardType.PSYCHIC;
         value: number;
     }[];
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: CardType.METAL[];
         damage: number;
         text: string;
     }[];
@@ -26,7 +26,5 @@ export declare class SolgaleoPrismStar extends PokemonCard {
     cardImage: string;
     name: string;
     fullName: string;
-    readonly ATTACK_USED_MARKER = "ATTACK_USED_MARKER";
-    readonly ATTACK_USED_2_MARKER = "ATTACK_USED_2_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

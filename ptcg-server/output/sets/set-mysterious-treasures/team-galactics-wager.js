@@ -4,6 +4,7 @@ exports.TeamGalacticsWager = void 0;
 const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
+const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const trainer_prefabs_1 = require("../../game/store/prefabs/trainer-prefabs");
 class TeamGalacticsWager extends trainer_card_1.TrainerCard {
@@ -32,10 +33,15 @@ class TeamGalacticsWager extends trainer_card_1.TrainerCard {
             if (cards.length === 0 && player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            player.hand.moveCardsTo(cards, player.deck);
-            opponent.hand.moveCardsTo(opponentCards, opponent.deck);
+            const playerMoveEffect = new game_effects_1.MoveCardsEffect(player.hand, player.deck, { cards, sourceCard: this });
+            state = store.reduceEffect(state, playerMoveEffect);
+            const opponentMoveEffect = new game_effects_1.MoveCardsEffect(opponent.hand, opponent.deck, { cards: opponentCards, sourceCard: this });
+            state = store.reduceEffect(state, opponentMoveEffect);
             (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
-            (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
+            // Dew Guard prevents RPS and the rest of the effect fizzles (ruling from @Shutterstock)
+            if (opponentMoveEffect.preventDefault) {
+                return state;
+            }
             const options = [
                 { value: 'Rock', message: 'Rock' },
                 { value: 'Paper', message: 'Paper' },
@@ -65,11 +71,13 @@ class TeamGalacticsWager extends trainer_card_1.TrainerCard {
                     || (playerChosenValue === 0 && opponentChosenValue === 2)) {
                     maxPlayerDraw = 6;
                     maxOpponentDraw = 3;
-                    (0, prefabs_1.DRAW_UP_TO_X_CARDS)(store, state, player, maxPlayerDraw);
+                }
+                // Draw cards based on who won
+                (0, prefabs_1.DRAW_UP_TO_X_CARDS)(store, state, player, maxPlayerDraw);
+                if (!opponentMoveEffect.preventDefault) {
                     (0, prefabs_1.DRAW_UP_TO_X_CARDS)(store, state, opponent, maxOpponentDraw);
                 }
             });
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

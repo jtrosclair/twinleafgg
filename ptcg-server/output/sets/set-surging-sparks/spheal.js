@@ -1,10 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Spheal = void 0;
-const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const card_types_1 = require("../../game/store/card/card-types");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
+const card_types_1 = require("../../game/store/card/card-types");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 class Spheal extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -29,8 +28,8 @@ class Spheal extends pokemon_card_1.PokemonCard {
         this.fullName = 'Spheal SSP';
     }
     reduceEffect(store, state, effect) {
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP)(store, state, effect);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         return state;
     }

@@ -40,7 +40,6 @@ class Cassius extends trainer_card_1.TrainerCard {
                     cardList.moveCardsTo(cardList.getPokemons(), player.deck);
                     cardList.moveTo(player.deck);
                     (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 }
             });
         }

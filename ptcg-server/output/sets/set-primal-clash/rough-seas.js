@@ -18,7 +18,7 @@ class RoughSeas extends trainer_card_1.TrainerCard {
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '137';
         this.text = 'Once during each player\'s turn, that player may heal 30 damage ' +
-            'from each of his or her W Pokemon and L Pokemon.';
+            'from each of his or her [W] Pokémon and [L] Pokémon.';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof game_effects_1.UseStadiumEffect && state_utils_1.StateUtils.getStadiumCard(state) === this) {

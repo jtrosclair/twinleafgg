@@ -7,6 +7,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const state_utils_1 = require("../../game/store/state-utils");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 class CursedStone extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -23,9 +24,12 @@ class CursedStone extends trainer_card_1.TrainerCard {
             const player = effect.player;
             // idk why this hits both player's pokemon, it might be getting confused as to what the player specified is so it defaults to both, but hey, it works, so i don't care.
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-                const pokemon = cardList.getPokemonCard();
-                if (pokemon && pokemon.powers.length > 0 && pokemon.powers.some(power => power.powerType === game_1.PowerType.POKEPOWER)) {
-                    cardList.damage += (10);
+                if (card) {
+                    const powersEffect = new check_effects_1.CheckPokemonPowersEffect(player, card);
+                    state = store.reduceEffect(state, powersEffect);
+                    if (powersEffect.powers.some(power => power.powerType === game_1.PowerType.POKEPOWER)) {
+                        cardList.damage += (10);
+                    }
                 }
             });
             if (effect instanceof game_effects_1.UseStadiumEffect && state_utils_1.StateUtils.getStadiumCard(state) === this) {

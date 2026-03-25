@@ -44,7 +44,7 @@ class DeoxysEX extends game_1.PokemonCard {
             let hasPlasmaEnergy = false;
             checkEnergy.energyMap.forEach(em => {
                 const energyCard = em.card;
-                if (energyCard instanceof game_1.EnergyCard && energyCard.name === 'Plasma Energy') {
+                if (energyCard.superType === game_1.SuperType.ENERGY && energyCard.name === 'Plasma Energy') {
                     hasPlasmaEnergy = true;
                 }
             });

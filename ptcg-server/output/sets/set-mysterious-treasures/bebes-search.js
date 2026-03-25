@@ -37,7 +37,6 @@ class BebesSearch extends trainer_card_1.TrainerCard {
                 player.hand.moveCardsTo(cards, player.deck);
                 (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND)(store, state, player, {}, { min: 0, max: 1 });
             });
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
         }
         return state;

@@ -4,33 +4,32 @@ exports.Zapdosex = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Zapdosex extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.stage = card_types_1.Stage.BASIC;
-        this.regulationMark = 'G';
         this.tags = [card_types_1.CardTag.POKEMON_ex];
-        this.cardType = card_types_1.CardType.LIGHTNING;
+        this.cardType = L;
         this.hp = 200;
-        this.weakness = [{ type: card_types_1.CardType.LIGHTNING }];
-        this.resistance = [{ type: card_types_1.CardType.FIGHTING, value: -30 }];
-        this.retreat = [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS];
+        this.weakness = [{ type: L }];
+        this.resistance = [{ type: F, value: -30 }];
+        this.retreat = [C, C];
         this.powers = [{
                 name: 'Voltaic Float',
                 powerType: pokemon_types_1.PowerType.ABILITY,
-                text: 'If this Pokémon has any Lightning Energy attached, it has no ' +
-                    'Retreat Cost.'
+                text: 'If this Pokémon has any [L] Energy attached, it has no Retreat Cost.'
             }];
         this.attacks = [{
                 name: 'Multishot Lightning',
-                cost: [card_types_1.CardType.LIGHTNING, card_types_1.CardType.LIGHTNING, card_types_1.CardType.LIGHTNING],
+                cost: [L, L, L],
                 damage: 120,
                 text: 'This attack also does 90 damage to 1 of your opponent\'s Benched Pokémon that has any damage counters on it. (Don\'t apply Weakness and Resistance for Benched Pokémon.)'
             }];
+        this.regulationMark = 'G';
         this.set = 'MEW';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '145';
@@ -41,15 +40,7 @@ class Zapdosex extends pokemon_card_1.PokemonCard {
         if (effect instanceof check_effects_1.CheckRetreatCostEffect && effect.player.active.getPokemonCard() === this) {
             const player = effect.player;
             // Check to see if anything is blocking our Ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: pokemon_types_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, player.active);
@@ -63,7 +54,7 @@ class Zapdosex extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const damagedBenchedPokemon = opponent.bench.filter(b => b.cards.length > 0 && b.damage > 0);

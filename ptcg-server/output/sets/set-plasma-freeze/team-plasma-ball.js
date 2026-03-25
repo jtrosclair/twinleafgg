@@ -40,7 +40,6 @@ class TeamPlasmaBall extends trainer_card_1.TrainerCard {
                 }
                 (0, prefabs_1.MOVE_CARDS_TO_HAND)(store, state, player, cards);
                 (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
         }

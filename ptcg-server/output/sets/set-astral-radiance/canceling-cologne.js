@@ -6,8 +6,10 @@ const card_types_1 = require("../../game/store/card/card-types");
 const __1 = require("../..");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
-const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
+const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const trainer_prefabs_1 = require("../../game/store/prefabs/trainer-prefabs");
 class CancelingCologne extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -19,35 +21,34 @@ class CancelingCologne extends trainer_card_1.TrainerCard {
         this.setNumber = '136';
         this.fullName = 'Canceling Cologne ASR';
         this.text = 'Until the end of your turn, your opponent\'s Active Pokémon has no Abilities. (This includes Pokémon that come into play during that turn.)';
-        this.CANCELING_COLOGNE_MARKER = 'CANCELING_COLOGNE';
+        this.CANCELING_COLOGNE_MARKER = 'CANCELING_COLOGNE_MARKER';
     }
     reduceEffect(store, state, effect) {
+        if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
+            const player = effect.player;
+            const opponent = __1.StateUtils.getOpponent(state, player);
+            (0, prefabs_1.ADD_MARKER)(this.CANCELING_COLOGNE_MARKER, opponent, this);
+        }
+        if (effect instanceof check_effects_1.CheckPokemonPowersEffect) {
+            const player = effect.player;
+            const opponent = __1.StateUtils.getOpponent(state, player);
+            // Check if Canceling Cologne marker is active on either player
+            if ((0, prefabs_1.HAS_MARKER)(this.CANCELING_COLOGNE_MARKER, player, this) || (0, prefabs_1.HAS_MARKER)(this.CANCELING_COLOGNE_MARKER, opponent, this)) {
+                // Filter out all abilities
+                effect.powers = effect.powers.filter(power => power.powerType !== pokemon_types_1.PowerType.ABILITY);
+            }
+        }
+        if (effect instanceof game_effects_1.PowerEffect && (0, prefabs_1.HAS_MARKER)(this.CANCELING_COLOGNE_MARKER, effect.player, this)
+            && (effect.power.powerType === pokemon_types_1.PowerType.ABILITY)) {
+            throw new __1.GameError(__1.GameMessage.CANNOT_USE_POWER);
+        }
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
             const player = effect.player;
             const opponent = __1.StateUtils.getOpponent(state, player);
-            if (opponent.marker.hasMarker(this.CANCELING_COLOGNE_MARKER)) {
-                opponent.marker.removeMarker(this.CANCELING_COLOGNE_MARKER);
-            }
-        }
-        if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
-            const player = effect.player;
-            const opponent = __1.StateUtils.getOpponent(state, player);
-            opponent.marker.addMarker(this.CANCELING_COLOGNE_MARKER, this);
-            // We will discard this card after prompt confirmation
-            effect.preventDefault = true;
-            player.hand.moveCardTo(effect.trainerCard, player.supporter);
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
-        }
-        if (effect instanceof game_effects_1.PowerEffect && !effect.power.exemptFromAbilityLock) {
-            const player = effect.player;
-            const opponent = __1.StateUtils.getOpponent(state, player);
-            const pokemonCard = effect.card;
-            const activePokemon = opponent.active.cards[0]; // Assuming activePokemon is the first card in the array
-            if (opponent.marker.hasMarker(this.CANCELING_COLOGNE_MARKER)) {
-                if (pokemonCard === activePokemon) {
-                    effect.preventDefault = true;
-                    return state;
-                }
+            const owner = __1.StateUtils.findOwner(state, __1.StateUtils.findCardList(state, this));
+            if (player === owner) {
+                (0, prefabs_1.REMOVE_MARKER)(this.CANCELING_COLOGNE_MARKER, player, this);
+                (0, prefabs_1.REMOVE_MARKER)(this.CANCELING_COLOGNE_MARKER, opponent, this);
             }
         }
         return state;

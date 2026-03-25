@@ -48,6 +48,7 @@ class MegaKangaskhanex extends game_1.PokemonCard {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             (0, prefabs_1.DRAW_CARDS)(player, 2);
+            (0, prefabs_1.ABILITY_USED)(player, this);
             player.usedRunErrand = true;
         }
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {

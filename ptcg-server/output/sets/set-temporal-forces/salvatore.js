@@ -9,6 +9,7 @@ const game_message_1 = require("../../game/game-message");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
 const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 function* playCard(next, store, state, effect) {
     const player = effect.player;
     const supporterTurn = player.supporterTurn;
@@ -43,8 +44,12 @@ function* playCard(next, store, state, effect) {
     // Blocking pokemon cards, that cannot be valid evolutions
     const blocked = [];
     player.deck.cards.forEach((card, index) => {
-        if (card instanceof game_1.PokemonCard && !evolutionNames.includes(card.name) && card.powers.length === 0) {
-            blocked.push(index);
+        if (card instanceof game_1.PokemonCard && !evolutionNames.includes(card.name)) {
+            const powersEffect = new check_effects_1.CheckPokemonPowersEffect(player, card);
+            state = store.reduceEffect(state, powersEffect);
+            if (powersEffect.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
+                blocked.push(index);
+            }
         }
     });
     let cards = [];
@@ -54,7 +59,6 @@ function* playCard(next, store, state, effect) {
     });
     // Canceled by user, he didn't found the card in the deck
     if (cards.length === 0) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         return state;
     }
@@ -71,13 +75,11 @@ function* playCard(next, store, state, effect) {
         next();
     });
     if (targets.length === 0) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         return state; // canceled by user
     }
     const pokemonCard = targets[0].getPokemonCard();
     if (pokemonCard === undefined) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         return state; // invalid target?
     }
@@ -85,7 +87,6 @@ function* playCard(next, store, state, effect) {
     player.deck.moveCardTo(evolution, targets[0]);
     targets[0].clearEffects();
     targets[0].pokemonPlayedTurn = state.turn;
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
 }
 class Salvatore extends trainer_card_1.TrainerCard {

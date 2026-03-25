@@ -11,7 +11,6 @@ const game_3 = require("../../game");
 const game_4 = require("../../game");
 const game_5 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_6 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 // CES Banette-GX 66 (https://limitlesstcg.com/cards/CES/66)
@@ -59,7 +58,7 @@ class BanetteGX extends pokemon_card_1.PokemonCard {
             player.marker.removeMarker(this.SHADY_MARKER, this);
         }
         // Shady Move
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_4.StateUtils.getOpponent(state, player);
             if (player.active.getPokemonCard() !== this) {
@@ -97,7 +96,7 @@ class BanetteGX extends pokemon_card_1.PokemonCard {
             });
         }
         // Shadow Chant
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let supportersInDiscard = 0;
             player.discard.cards.forEach(c => {
@@ -112,7 +111,7 @@ class BanetteGX extends pokemon_card_1.PokemonCard {
             effect.damage += supportersInDiscard * 10;
         }
         // Shadowy Hunter-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             // Check if player has used GX attack
             (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);

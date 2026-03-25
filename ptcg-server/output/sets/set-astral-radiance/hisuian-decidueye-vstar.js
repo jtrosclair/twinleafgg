@@ -35,6 +35,7 @@ class HisuianDecidueyeVSTAR extends game_1.PokemonCard {
         this.fullName = 'Hisuian Decidueye VSTAR ASR';
     }
     reduceEffect(store, state, effect) {
+        // Star of Fortune: VSTAR power - draw until you have 8 cards in hand
         if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.usedVSTAR === true) {
@@ -43,21 +44,27 @@ class HisuianDecidueyeVSTAR extends game_1.PokemonCard {
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, 8);
             player.usedVSTAR = true;
+            player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
+                if (cardList.getPokemonCard() === this) {
+                    cardList.addBoardEffect(card_types_1.BoardEffect.ABILITY_USED);
+                }
+            });
+            (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, 8);
         }
+        // Somersault Feathers: discard up to 3 energy from hand, +30 damage per card discarded
+        // Fix: damage must be modified INSIDE the callback since prompt is async
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            let energyDiscarded = 0;
-            state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, { superType: card_types_1.SuperType.ENERGY }, { allowCancel: true, min: 0, max: 3 }), cards => {
+            const attackEffect = effect;
+            return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, { superType: card_types_1.SuperType.ENERGY }, { allowCancel: true, min: 0, max: 3 }), cards => {
                 cards = cards || [];
                 if (cards.length === 0) {
                     return;
                 }
                 (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: this, sourceEffect: this.attacks[0] });
-                energyDiscarded = cards.length;
+                attackEffect.damage += cards.length * 30;
             });
-            effect.damage += energyDiscarded * 30;
         }
         return state;
     }

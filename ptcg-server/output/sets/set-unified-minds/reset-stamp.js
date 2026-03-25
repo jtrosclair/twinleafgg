@@ -30,7 +30,6 @@ class ResetStamp extends trainer_card_1.TrainerCard {
                 opponent.deck.applyOrder(order);
             });
             opponent.deck.moveTo(opponent.hand, Math.min(opponent.getPrizeLeft(), opponent.deck.cards.length));
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

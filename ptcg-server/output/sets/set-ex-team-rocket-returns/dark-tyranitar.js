@@ -50,7 +50,7 @@ class DarkTyranitar extends pokemon_card_1.PokemonCard {
                     return;
                 }
                 // ex era ruling is that this should mean unevolved
-                if (cardList.getPokemons().length === 1 || card.tags.includes(card_types_1.CardTag.LEGEND)) {
+                if (!cardList.isEvolved()) {
                     cardList.damage += (10);
                 }
             });

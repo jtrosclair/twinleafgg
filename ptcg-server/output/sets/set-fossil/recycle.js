@@ -50,18 +50,15 @@ class Recycle extends game_1.TrainerCard {
                                 }
                                 deckTop.applyOrder(order);
                                 deckTop.moveToTopOfDestination(player.deck);
-                                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                                 if (cardsToMove.length > 0) {
                                     return store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cardsToMove), () => state);
                                 }
                                 return state;
                             });
                         }
-                        player.supporter.moveCardTo(effect.trainerCard, player.discard);
                         return state;
                     });
                 }
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
             });
         }
         return state;

@@ -6,7 +6,9 @@ const cleffa_1 = require("./cleffa");
 const darkness_energy_special_1 = require("./darkness-energy-special");
 const double_gust_1 = require("./double-gust");
 const hoothoot_1 = require("./hoothoot");
+const hoppip_1 = require("./hoppip");
 const mary_1 = require("./mary");
+const natu_1 = require("./natu");
 const noctowl_1 = require("./noctowl");
 const pichu_1 = require("./pichu");
 const professor_elm_1 = require("./professor-elm");
@@ -21,7 +23,9 @@ exports.setNeoGenesis = [
     new darkness_energy_special_1.DarknessEnergySpecial(),
     new double_gust_1.DoubleGust(),
     new hoothoot_1.Hoothoot(),
+    new hoppip_1.Hoppip(),
     new mary_1.Mary(),
+    new natu_1.Natu(),
     new noctowl_1.Noctowl(),
     new pichu_1.Pichu(),
     new professor_elm_1.ProfessorElm(),

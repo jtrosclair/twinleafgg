@@ -16,6 +16,7 @@ export declare class Electrodeex extends PokemonCard {
         name: string;
         useWhenInPlay: boolean;
         powerType: PowerType;
+        knocksOutSelf: boolean;
         text: string;
     }[];
     attacks: {

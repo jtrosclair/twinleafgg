@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZoroarkNXD = exports.Chandelure2NXD = exports.EmboarNXD = exports.MewtwoEx2NXD = exports.ZekromEx2NXD = exports.ReshiramEx2NXD = exports.ShayminEX2NXD = exports.ExpShareNXD = exports.RioluNXD = exports.ZekromNXD = exports.ReshiramNXD = exports.LevelBallNXD = exports.DoubleColorlessEnergyNXD = void 0;
+exports.HydreigonNXD = exports.ZoroarkNXD = exports.Chandelure2NXD = exports.EmboarNXD = exports.RegigigasEx2NXD = exports.MewtwoEx2NXD = exports.ZekromEx2NXD = exports.KyuremEx2NXD = exports.ReshiramEx2NXD = exports.ShayminEX2NXD = exports.ExpShareNXD = exports.RioluNXD = exports.ZekromNXD = exports.ReshiramNXD = exports.LevelBallNXD = exports.DoubleColorlessEnergyNXD = void 0;
 const reshiram_1 = require("../set-black-and-white/reshiram");
 const zekrom_1 = require("../set-black-and-white/zekrom");
 const riolu_1 = require("../set-legendary-treasures/riolu");
@@ -12,7 +12,10 @@ const mewtwo_ex_1 = require("../set-next-destinies/mewtwo-ex");
 const emboar_1 = require("../set-black-and-white/emboar");
 const chandelure_1 = require("../set-noble-victories/chandelure");
 const zoroark_1 = require("../set-black-and-white/zoroark");
+const hydreigon_1 = require("../set-noble-victories/hydreigon");
 const double_colorless_energy_1 = require("../set-base-set/double-colorless-energy");
+const kyurem_ex_1 = require("../set-next-destinies/kyurem-ex");
+const regigigas_ex_1 = require("../set-next-destinies/regigigas-ex");
 const level_ball_1 = require("./level-ball");
 class DoubleColorlessEnergyNXD extends double_colorless_energy_1.DoubleColorlessEnergy {
     constructor() {
@@ -87,6 +90,14 @@ class ReshiramEx2NXD extends reshiram_ex_1.ReshiramEx {
     }
 }
 exports.ReshiramEx2NXD = ReshiramEx2NXD;
+class KyuremEx2NXD extends kyurem_ex_1.KyuremEx {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '96';
+        this.fullName = 'Kyurem-EX NXD 96';
+    }
+}
+exports.KyuremEx2NXD = KyuremEx2NXD;
 class ZekromEx2NXD extends zekrom_ex_1.ZekromEx {
     constructor() {
         super(...arguments);
@@ -105,6 +116,14 @@ class MewtwoEx2NXD extends mewtwo_ex_1.MewtwoEx {
     }
 }
 exports.MewtwoEx2NXD = MewtwoEx2NXD;
+class RegigigasEx2NXD extends regigigas_ex_1.RegigigasEx {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '99';
+        this.fullName = 'Regigigas-EX NXD 99';
+    }
+}
+exports.RegigigasEx2NXD = RegigigasEx2NXD;
 class EmboarNXD extends emboar_1.Emboar {
     constructor() {
         super(...arguments);
@@ -132,3 +151,12 @@ class ZoroarkNXD extends zoroark_1.Zoroark {
     }
 }
 exports.ZoroarkNXD = ZoroarkNXD;
+class HydreigonNXD extends hydreigon_1.Hydreigon {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '103';
+        this.fullName = 'Hydreigon NXD';
+        this.set = 'NXD';
+    }
+}
+exports.HydreigonNXD = HydreigonNXD;

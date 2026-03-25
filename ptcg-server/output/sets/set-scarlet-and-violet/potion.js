@@ -37,7 +37,6 @@ function* playCard(next, store, state, effect) {
         const healEffect = new game_effects_1.HealEffect(player, target, 30);
         store.reduceEffect(state, healEffect);
     });
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return state;
 }
 class Potion extends trainer_card_1.TrainerCard {
@@ -51,6 +50,18 @@ class Potion extends trainer_card_1.TrainerCard {
         this.name = 'Potion';
         this.fullName = 'Potion SVI';
         this.text = 'Heal 30 damage from 1 of your Pokemon.';
+    }
+    canPlay(store, state, player) {
+        let hasPokemonWithDamage = false;
+        player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
+            if (cardList.damage !== 0) {
+                hasPokemonWithDamage = true;
+            }
+        });
+        if (hasPokemonWithDamage === false) {
+            return false;
+        }
+        return true;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

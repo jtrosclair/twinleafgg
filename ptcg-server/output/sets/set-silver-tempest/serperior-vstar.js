@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SerperiorVSTAR = void 0;
 const game_1 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class SerperiorVSTAR extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -37,7 +37,7 @@ class SerperiorVSTAR extends game_1.PokemonCard {
         this.fullName = 'Serperior VSTAR SIT 8';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(player);
             store.reduceEffect(state, checkProvidedEnergyEffect);
@@ -47,7 +47,7 @@ class SerperiorVSTAR extends game_1.PokemonCard {
             });
             effect.damage = energyCount * 60;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // const blockedMap: { source: CardTarget, blocked: number[] }[] = [];
             // player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {

@@ -4,9 +4,9 @@ exports.Thundurus = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const choose_pokemon_prompt_1 = require("../../game/store/prompts/choose-pokemon-prompt");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Thundurus extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -39,7 +39,7 @@ class Thundurus extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Thunderous Gale
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // Check for Tornadus on your Bench
             const hasTornadus = player.bench.some(b => b.cards.length > 0 && b.cards[0].name.toLowerCase().includes('tornadus'));
@@ -49,7 +49,7 @@ class Thundurus extends pokemon_card_1.PokemonCard {
             return state;
         }
         // Raging Thunder
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const benched = player.bench.filter(b => b.cards.length > 0);
             if (benched.length === 0) {

@@ -2,8 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Sableye = void 0;
 const game_1 = require("../../game");
-const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Sableye extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -34,17 +33,17 @@ class Sableye extends game_1.PokemonCard {
         this.fullName = 'Sableye TEF';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            const blocked = [];
+            const blockedFrom = [];
             let hasDamagedBench = false;
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card, target) => {
                 if (cardList.damage === 0 && target.slot !== game_1.SlotType.ACTIVE) {
-                    blocked.push(target);
+                    blockedFrom.push(target);
                 }
                 if (target.slot === game_1.SlotType.ACTIVE) {
-                    blocked.push(target);
+                    blockedFrom.push(target);
                 }
                 if (cardList.damage > 0 && target.slot === game_1.SlotType.BENCH) {
                     hasDamagedBench = true;
@@ -59,37 +58,20 @@ class Sableye extends game_1.PokemonCard {
                     blockedTo.push(target);
                 }
             });
-            const maxAllowedDamage = [];
-            opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card, target) => {
-                const checkHpEffect = new check_effects_1.CheckHpEffect(opponent, cardList);
-                store.reduceEffect(state, checkHpEffect);
-                maxAllowedDamage.push({ target, damage: checkHpEffect.hp });
-            });
-            return store.prompt(state, new game_1.MoveDamagePrompt(effect.player.id, game_1.GameMessage.MOVE_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], maxAllowedDamage, {
+            // Legacy implementation:
+            // - Built a custom MoveDamagePrompt scoped to opponent targets.
+            // - Manually enforced source != opponent active and destination == opponent active.
+            // - Moved damage counters one by one from benched sources to opponent active.
+            //
+            // Converted to prefab version (MOVE_DAMAGE_COUNTERS).
+            return (0, prefabs_1.MOVE_DAMAGE_COUNTERS)(store, state, player, {
+                playerType: game_1.PlayerType.TOP_PLAYER,
+                slots: [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH],
                 min: 0,
                 allowCancel: false,
-                blockedTo: blockedTo,
+                blockedFrom,
+                blockedTo,
                 singleDestinationTarget: true
-            }), transfers => {
-                if (transfers === null) {
-                    return;
-                }
-                for (const transfer of transfers) {
-                    const source = game_1.StateUtils.getTarget(state, player, transfer.from);
-                    const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                    if (target !== opponent.active) {
-                        throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
-                    }
-                    if (source == opponent.active) {
-                        throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
-                    }
-                    if (source.damage > 0) {
-                        const damageToMove = Math.min(source.damage);
-                        source.damage -= damageToMove;
-                        target.damage += damageToMove;
-                    }
-                }
-                return state;
             });
         }
         return state;

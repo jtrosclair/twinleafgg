@@ -5,7 +5,6 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -15,12 +14,12 @@ class ShadowRiderCalyrexVMAX extends pokemon_card_1.PokemonCard {
         this.stage = card_types_1.Stage.VMAX;
         this.evolvesFrom = 'Shadow Rider Calyrex V';
         this.regulationMark = 'E';
-        this.cardType = card_types_1.CardType.PSYCHIC;
+        this.cardType = P;
         this.tags = [card_types_1.CardTag.POKEMON_VMAX];
         this.hp = 320;
-        this.weakness = [{ type: card_types_1.CardType.DARK }];
-        this.resistance = [{ type: card_types_1.CardType.FIGHTING, value: -30 }];
-        this.retreat = [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS];
+        this.weakness = [{ type: D }];
+        this.resistance = [{ type: F, value: -30 }];
+        this.retreat = [C, C];
         this.powers = [{
                 name: 'Underworld Door',
                 useWhenInPlay: true,
@@ -30,7 +29,7 @@ class ShadowRiderCalyrexVMAX extends pokemon_card_1.PokemonCard {
         this.attacks = [
             {
                 name: 'Max Geist',
-                cost: [card_types_1.CardType.PSYCHIC],
+                cost: [C, C, C],
                 damage: 10,
                 text: 'This attack does 30 more damage for each [P] Energy attached to all of your Pokémon.'
             }
@@ -47,7 +46,7 @@ class ShadowRiderCalyrexVMAX extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.UNDERWORLD_DOOR_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasBench = player.bench.some(b => b.cards.length > 0);
             if (!hasBench) {

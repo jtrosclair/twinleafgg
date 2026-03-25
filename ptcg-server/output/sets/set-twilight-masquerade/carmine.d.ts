@@ -11,7 +11,7 @@ export declare class Carmine extends TrainerCard {
     setNumber: string;
     name: string;
     fullName: string;
-    firstTurn: boolean;
     text: string;
+    firstTurn: boolean;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

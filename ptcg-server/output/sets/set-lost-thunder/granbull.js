@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Granbull = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 // LOT Granbull 138 (https://limitlesstcg.com/cards/LOT/138)
 class Granbull extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -38,7 +38,7 @@ class Granbull extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // All Out
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.hand.cards.length === 0) {
                 effect.damage += 130;

@@ -5,6 +5,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class AntiquePlumeFossil extends game_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -26,9 +27,10 @@ class AntiquePlumeFossil extends game_1.TrainerCard {
         this.maxTools = 1;
         this.evolvesTo = [];
         this.evolvesToStage = [];
+        this.evolvesFromBase = [];
         this.powers = [{
                 name: 'Antique Plume Fossil',
-                text: `Play this card as if it were a 60-HP [C] Basic Pokémon. This card can't be affected by any Special Conditions and can'\' retreat.
+                text: `Play this card as if it were a 60-HP [C] Basic Pokémon. This card can't be affected by any Special Conditions and can't retreat.
 
 At any time during your turn, you may discard this card from play.`,
                 useWhenInPlay: true,
@@ -44,7 +46,7 @@ At any time during your turn, you may discard this card from play.`,
         this.fullName = 'Antique Plume Fossil SV11W';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             store.log(state, game_1.GameLog.LOG_PLAYER_DISCARDS_CARD, { name: player.name, card: this.name, effect: 'Antique Plume Fossil' });
             const cardList = game_1.StateUtils.findCardList(state, this);

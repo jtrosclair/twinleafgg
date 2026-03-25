@@ -6,8 +6,6 @@ const abra_1 = require("./abra");
 const alakazam_1 = require("./alakazam");
 const bayleef_1 = require("./bayleef");
 const bulbasaur_1 = require("./bulbasaur");
-const buneary_1 = require("./buneary");
-const celebi_1 = require("./celebi");
 const chikorita_1 = require("./chikorita");
 const cinderace_1 = require("./cinderace");
 const clauncher_1 = require("./clauncher");
@@ -15,7 +13,6 @@ const corphish_1 = require("./corphish");
 const crawdaunt_1 = require("./crawdaunt");
 const risky_ruins_1 = require("./risky-ruins");
 const drizzile_1 = require("./drizzile");
-const delibird_1 = require("./delibird");
 const electrike_1 = require("./electrike");
 const fighting_gong_1 = require("./fighting-gong");
 const garganacl_1 = require("./garganacl");
@@ -34,6 +31,7 @@ const lunatone_1 = require("./lunatone");
 const forest_of_vitality_1 = require("./forest-of-vitality");
 const magnemite_1 = require("./magnemite");
 const makuhita_1 = require("./makuhita");
+const marshadow_1 = require("./marshadow");
 const mega_abomasnow_ex_1 = require("./mega-abomasnow-ex");
 const mega_absol_ex_1 = require("./mega-absol-ex");
 const mega_camerupt_ex_1 = require("./mega-camerupt-ex");
@@ -54,32 +52,33 @@ const ninjask_1 = require("./ninjask");
 const numel_1 = require("./numel");
 const onix_1 = require("./onix");
 const power_protein_1 = require("./power-protein");
+const raboot_1 = require("./raboot");
 const ralts_1 = require("./ralts");
-const repel_1 = require("./repel");
 const riolu_1 = require("./riolu");
+const scorbunny_1 = require("./scorbunny");
+const snom_1 = require("./snom");
 const snover_1 = require("./snover");
 const sobble_1 = require("./sobble");
 const solrock_1 = require("./solrock");
 const steelix_1 = require("./steelix");
+const strange_timepiece_1 = require("./strange-timepiece");
 const surfing_beach_1 = require("./surfing-beach");
 const wallys_compassion_1 = require("./wallys-compassion");
 const xerneas_1 = require("./xerneas");
 const yungoos_1 = require("./yungoos");
 const yveltal_1 = require("./yveltal");
+const iron_defender_1 = require("./iron-defender");
 exports.setMegaEvolution = [
     new abra_1.Abra(),
     new alakazam_1.Alakazam(),
     new bayleef_1.Bayleef(),
     new bulbasaur_1.Bulbasaur(),
-    new buneary_1.Buneary(),
-    new celebi_1.Celebi(),
     new chikorita_1.Chikorita(),
     new cinderace_1.Cinderace(),
     new clauncher_1.Clauncher(),
     new corphish_1.Corphish(),
     new crawdaunt_1.Crawdaunt(),
     new risky_ruins_1.DangerousRuins(),
-    new delibird_1.Delibird(),
     new drizzile_1.Drizzile(),
     new electrike_1.Electrike(),
     new fighting_gong_1.FightingGong(),
@@ -89,6 +88,7 @@ exports.setMegaEvolution = [
     new gumshoos_1.Gumshoos(),
     new hariyama_1.Hariyama(),
     new houndstone_1.Houndstone(),
+    new iron_defender_1.IronDefender(),
     new ivysaur_1.Ivysaur(),
     new kadabra_1.Kadabra(),
     new kirlia_1.Kirlia(),
@@ -99,6 +99,7 @@ exports.setMegaEvolution = [
     new forest_of_vitality_1.LushForest(),
     new magnemite_1.Magnemite(),
     new makuhita_1.Makuhita(),
+    new marshadow_1.Marshadow(),
     new mega_abomasnow_ex_1.MegaAbomasnowEx(),
     new mega_absol_ex_1.MegaAbsolex(),
     new mega_camerupt_ex_1.MegaCameruptEx(),
@@ -119,13 +120,17 @@ exports.setMegaEvolution = [
     new numel_1.Numel(),
     new onix_1.Onix(),
     new power_protein_1.PowerProtein(),
+    new raboot_1.Raboot(),
     new ralts_1.Ralts(),
-    new repel_1.Repel(),
+    new other_prints_1.RepelMEG(),
     new riolu_1.Riolu(),
+    new scorbunny_1.Scorbunny(),
+    new snom_1.Snom(),
     new snover_1.Snover(),
     new sobble_1.Sobble(),
     new solrock_1.Solrock(),
     new steelix_1.Steelix(),
+    new strange_timepiece_1.StrangeTimepiece(),
     new surfing_beach_1.SurfingBeach(),
     new wallys_compassion_1.WallysCompassion(),
     new xerneas_1.Xerneas(),

@@ -1,5 +1,5 @@
-import { PokemonCard, Stage, CardTag, CardType, StoreLike, State } from "../../game";
-import { Effect } from "../../game/store/effects/effect";
+import { PokemonCard, Stage, CardTag, CardType, StoreLike, State } from '../../game';
+import { Effect } from '../../game/store/effects/effect';
 export declare class ErikasOddish extends PokemonCard {
     stage: Stage;
     tags: CardTag[];

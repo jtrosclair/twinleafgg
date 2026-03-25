@@ -1,4 +1,6 @@
-import { Attack, CardType, PokemonCard, Stage, State, StoreLike, Weakness } from '../../game';
+import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { Stage, CardType } from '../../game/store/card/card-types';
+import { Attack, StoreLike, State, Weakness } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 export declare class Drifblim extends PokemonCard {
     stage: Stage;

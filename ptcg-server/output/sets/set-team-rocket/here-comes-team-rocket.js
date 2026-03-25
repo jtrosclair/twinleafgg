@@ -36,7 +36,6 @@ class HereComesTeamRocket extends trainer_card_1.TrainerCard {
                     prize.isPublic = true;
                 }
             });
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

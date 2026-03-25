@@ -53,7 +53,6 @@ class CafeMaster extends trainer_card_1.TrainerCard {
                 (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
             // Move supporter card to discard pile
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
             // Check if we should end turn based on active Pokemon
             const playerActive = player.active.getPokemonCard();
             if (playerActive &&

@@ -35,7 +35,7 @@ class Onix extends game_1.PokemonCard {
             //I couldn't find a prefab that moves energies from the discard to the hand.
             const player = effect.player;
             const hasEnergyInDiscard = player.discard.cards.some(c => {
-                return c instanceof game_1.EnergyCard;
+                return c.superType === game_1.SuperType.ENERGY;
             });
             if (!hasEnergyInDiscard) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_ATTACK);

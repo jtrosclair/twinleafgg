@@ -55,14 +55,14 @@ class Clawitizer extends game_1.PokemonCard {
                 catch (_a) {
                     return state;
                 }
-                const energyCards = player.hand.cards.filter(c => c instanceof game_1.EnergyCard && c.energyType === game_1.EnergyType.BASIC && c.name === 'Water Energy');
+                const energyCards = player.hand.cards.filter(c => c.superType === game_1.SuperType.ENERGY && c.energyType === game_1.EnergyType.BASIC && c.name === 'Water Energy');
                 if (energyCards.length === 0) {
                     return state;
                 }
                 state = store.prompt(state, new game_1.ConfirmPrompt(player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
                     if (wantToUse) {
                         const hasEnergyInHand = player.hand.cards.some(c => {
-                            return c instanceof game_1.EnergyCard
+                            return c.superType === game_1.SuperType.ENERGY
                                 && c.energyType === game_1.EnergyType.BASIC
                                 && c.provides.includes(game_1.CardType.WATER);
                         });

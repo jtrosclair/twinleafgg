@@ -1,9 +1,9 @@
+import { Stage, CardType } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { CardType, Stage } from '../../game/store/card/card-types';
 export declare class Bronzor extends PokemonCard {
     stage: Stage;
-    cardType: CardType;
     hp: number;
+    cardType: CardType;
     weakness: {
         type: CardType.FIRE;
     }[];

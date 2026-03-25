@@ -5,6 +5,7 @@ const __1 = require("../..");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class RoboSubstitute extends __1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -29,6 +30,7 @@ class RoboSubstitute extends __1.TrainerCard {
         this.attacksThisTurn = 0;
         this.maxAttacksThisTurn = 1;
         this.allowSubsequentAttackChoice = false;
+        this.evolvesFromBase = [];
         this.maxTools = 1;
         this.set = 'PHF';
         this.cardImage = 'assets/cardback.png';
@@ -49,7 +51,7 @@ class RoboSubstitute extends __1.TrainerCard {
     }
     // public text = 'Play this card as if it were a 30 HP [C] Basic Pokémon. At any time during your turn (before your attack), you may discard this card from play. This card can\'t retreat. If this card is Knocked Out, your opponent can\'t take any Prize cards for it.';
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const cardList = __1.StateUtils.findCardList(state, this);
             const player = effect.player;
             if (player.bench.every(b => b.cards.length === 0)) {

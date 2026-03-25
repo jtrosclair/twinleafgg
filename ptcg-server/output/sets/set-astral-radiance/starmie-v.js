@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StarmieV = void 0;
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
 class StarmieV extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -20,13 +20,14 @@ class StarmieV extends pokemon_card_1.PokemonCard {
         this.attacks = [
             {
                 name: 'Swift',
-                cost: [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS],
+                cost: [C, C],
                 damage: 50,
+                shredAttack: true,
                 text: 'This attack\'s damage isn\'t affected by Weakness or Resistance, or by any effects on your opponent\'s Active Pokémon.'
             },
             {
                 name: 'Energy Spiral',
-                cost: [card_types_1.CardType.WATER, card_types_1.CardType.WATER],
+                cost: [W, W],
                 damage: 50,
                 damageCalculation: 'x',
                 text: 'This attack does 50 damage for each Energy attached to all of your opponent\'s Pokémon.'
@@ -39,21 +40,10 @@ class StarmieV extends pokemon_card_1.PokemonCard {
         this.fullName = 'Starmie V ASR';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            // Make damage ignore weakness
-            effect.ignoreWeakness = true;
-            // Make damage ignore resistance
-            effect.ignoreResistance = true;
-            const player = effect.player;
-            const opponent = game_1.StateUtils.getOpponent(state, player);
-            const damage = 50;
-            if (damage > 0) {
-                opponent.active.damage += damage;
-                const afterDamage = new attack_effects_1.AfterDamageEffect(effect, damage);
-                state = store.reduceEffect(state, afterDamage);
-            }
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS)(store, state, effect, 50);
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             let energies = 0;

@@ -7,6 +7,7 @@ const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class EspeonVMAX extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -38,7 +39,7 @@ class EspeonVMAX extends pokemon_card_1.PokemonCard {
         this.fullName = 'Espeon VMAX EVS';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             let energies = 0;
@@ -69,7 +70,7 @@ class EspeonVMAX extends pokemon_card_1.PokemonCard {
             if (!isToedscruelInPlay) {
                 return state;
             }
-            if (sourceCard && effect.target.cards.some(c => c instanceof game_1.EnergyCard)) {
+            if (sourceCard && effect.target.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                 // Try to reduce PowerEffect, to check if something is blocking our ability
                 try {
                     const player = game_1.StateUtils.findOwner(state, effect.target);

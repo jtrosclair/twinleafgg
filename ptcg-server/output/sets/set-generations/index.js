@@ -6,6 +6,7 @@ const basic_energies_1 = require("./basic-energies");
 const charmeleon_1 = require("./charmeleon");
 const jolteon_ex_1 = require("./jolteon-ex");
 const max_revive_1 = require("./max-revive");
+const meowstic_1 = require("./meowstic");
 const meowstic_ex_1 = require("./meowstic-ex");
 const red_card_1 = require("./red-card");
 const revitalizer_1 = require("./revitalizer");
@@ -13,6 +14,7 @@ const team_flare_grunt_1 = require("./team-flare-grunt");
 exports.setGenerations = [
     new jolteon_ex_1.JolteonEX(),
     new max_revive_1.MaxRevive(),
+    new meowstic_1.Meowstic(),
     new meowstic_ex_1.MeowsticEX(),
     new red_card_1.RedCard(),
     new revitalizer_1.Revitalizer(),

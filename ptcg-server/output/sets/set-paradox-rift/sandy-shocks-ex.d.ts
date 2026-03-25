@@ -31,8 +31,6 @@ export declare class SandyShocksex extends PokemonCard {
     cardImage: string;
     name: string;
     fullName: string;
-    readonly ATTACK_USED_MARKER = "ATTACK_USED_MARKER";
-    readonly ATTACK_USED_2_MARKER = "ATTACK_USED_2_MARKER";
     readonly MAGNETIC_ABSORPTION_MARKER = "MAGNETIC_ABSORPTION_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

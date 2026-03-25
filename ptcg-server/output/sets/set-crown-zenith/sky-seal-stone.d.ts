@@ -12,6 +12,7 @@ export declare class SkySealStone extends TrainerCard {
     cardImage: string;
     name: string;
     fullName: string;
+    text: string;
     extraPrizes: boolean;
     powers: {
         name: string;

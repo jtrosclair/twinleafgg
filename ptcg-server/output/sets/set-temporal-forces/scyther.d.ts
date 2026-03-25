@@ -17,13 +17,11 @@ export declare class Scyther extends PokemonCard {
         damage: number;
         text: string;
     }[];
-    readonly ATTACK_USED_MARKER = "ATTACK_USED_MARKER";
-    readonly ATTACK_USED_2_MARKER = "ATTACK_USED_2_MARKER";
+    regulationMark: string;
     set: string;
     name: string;
     fullName: string;
     setNumber: string;
-    regulationMark: string;
     cardImage: string;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

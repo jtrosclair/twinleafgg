@@ -41,11 +41,11 @@ class MegaSableyeTyranitarGX extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         var _a, _b;
         // Greedy Crush (thank god for iron hands)
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             this.usedGreedyCrush = true;
         }
         // Gigafall-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             this.usedGreedyCrush = false;

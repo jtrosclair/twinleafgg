@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HaunterMEP = exports.MegaKangaskhanexMEP = exports.OricorioexMEP = exports.MegaCharizardXexMEP = exports.CharcadetMEP = exports.ToxtricityMEP = exports.ZacianMEP = exports.CeruledgeMEP = exports.MegaVenusaurExMEP = exports.MegaLucarioexMEP = exports.MegaLatiasexMEP = exports.RioluMEP = exports.Alakazam2MEP = exports.LunatoneMEP = exports.AlakazamMEP = exports.InteleonMEP = exports.MeganiumMEP = void 0;
+exports.DoubladeMEP = exports.TyrantrumMEP = exports.BarbaracleMEP = exports.SerperiorMEP = exports.HaunterMEP = exports.MegaKangaskhanexMEP = exports.OricorioexMEP = exports.MegaCharizardXexMEP = exports.CharcadetMEP = exports.ToxtricityMEP = exports.ZacianMEP = exports.CeruledgeMEP = exports.MegaVenusaurExMEP = exports.MegaLucarioexMEP = exports.MegaLatiasexMEP = exports.RioluMEP = exports.Alakazam2MEP = exports.LunatoneMEP = exports.AlakazamMEP = exports.InteleonMEP = exports.MeganiumMEP = void 0;
 const meganium_1 = require("../set-mega-evolution/meganium");
 const inteleon_1 = require("../set-mega-evolution/inteleon");
 const alakazam_1 = require("../set-mega-evolution/alakazam");
@@ -18,6 +18,10 @@ const mega_charizard_x_ex_1 = require("../set-phantasmal-flames/mega-charizard-x
 const oricorio_ex_1 = require("../set-phantasmal-flames/oricorio-ex");
 const mega_kangaskhan_ex_1 = require("../set-mega-evolution/mega-kangaskhan-ex");
 const haunter_1 = require("../set-phantasmal-flames/haunter");
+const serperior_1 = require("../set-perfect-order/serperior");
+const barbaracle_1 = require("../set-perfect-order/barbaracle");
+const tyrantrum_1 = require("../set-perfect-order/tyrantrum");
+const doublade_1 = require("../set-perfect-order/doublade");
 class MeganiumMEP extends meganium_1.Meganium {
     constructor() {
         super(...arguments);
@@ -171,3 +175,39 @@ class HaunterMEP extends haunter_1.Haunter {
     }
 }
 exports.HaunterMEP = HaunterMEP;
+class SerperiorMEP extends serperior_1.Serperior {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '64';
+        this.fullName = 'Serperior MEP';
+        this.set = 'MEP';
+    }
+}
+exports.SerperiorMEP = SerperiorMEP;
+class BarbaracleMEP extends barbaracle_1.Barbaracle {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '65';
+        this.fullName = 'Barbaracle MEP';
+        this.set = 'MEP';
+    }
+}
+exports.BarbaracleMEP = BarbaracleMEP;
+class TyrantrumMEP extends tyrantrum_1.Tyrantrum {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '66';
+        this.fullName = 'Tyrantrum MEP';
+        this.set = 'MEP';
+    }
+}
+exports.TyrantrumMEP = TyrantrumMEP;
+class DoubladeMEP extends doublade_1.Doublade {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '67';
+        this.fullName = 'Doublade MEP';
+        this.set = 'MEP';
+    }
+}
+exports.DoubladeMEP = DoubladeMEP;

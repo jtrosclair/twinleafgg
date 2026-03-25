@@ -45,14 +45,12 @@ class Waitress extends game_1.TrainerCard {
                         // Put remaining cards back into deck
                         deckTop.moveTo(player.deck);
                         (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
-                        player.supporter.moveCardTo(effect.trainerCard, player.discard);
                     });
                 }
                 else {
                     // No energy selected, put all cards back
                     deckTop.moveTo(player.deck);
                     (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 }
             });
         }

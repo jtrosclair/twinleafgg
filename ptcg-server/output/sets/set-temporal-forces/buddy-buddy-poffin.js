@@ -38,7 +38,6 @@ class BuddyBuddyPoffin extends trainer_card_1.TrainerCard {
                 cards.forEach((card, index) => {
                     const playPokemonFromDeckEffect = new play_card_effects_1.PlayPokemonFromDeckEffect(player, card, openSlots[index]);
                     store.reduceEffect(state, playPokemonFromDeckEffect);
-                    store.log(state, game_1.GameLog.LOG_PLAYER_PLAYS_BASIC_POKEMON, { name: player.name, card: card.name });
                 });
                 player.supporter.moveCardTo(this, player.discard);
                 return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {

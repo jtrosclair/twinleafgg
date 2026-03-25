@@ -35,7 +35,6 @@ function* playCard(next, store, state, self, effect) {
                     return state;
                 });
             }
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => state);
         });
         return state;
@@ -65,7 +64,6 @@ function* playCard(next, store, state, self, effect) {
                         return state;
                     });
                 }
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => state);
             });
         }
@@ -80,7 +78,7 @@ function* playCard(next, store, state, self, effect) {
                 // Search for tool, special energy, and stadium
                 const blocked = [];
                 player.deck.cards.forEach((card, index) => {
-                    if (!((card instanceof game_1.EnergyCard && card.energyType === card_types_1.EnergyType.SPECIAL) ||
+                    if (!((card.superType === card_types_1.SuperType.ENERGY && card.energyType === card_types_1.EnergyType.SPECIAL) ||
                         (card instanceof trainer_card_1.TrainerCard && card.trainerType === card_types_1.TrainerType.TOOL) ||
                         (card instanceof trainer_card_1.TrainerCard && card.trainerType === card_types_1.TrainerType.STADIUM))) {
                         blocked.push(index);
@@ -95,7 +93,6 @@ function* playCard(next, store, state, self, effect) {
                             return state;
                         });
                     }
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     return store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => state);
                 });
             });

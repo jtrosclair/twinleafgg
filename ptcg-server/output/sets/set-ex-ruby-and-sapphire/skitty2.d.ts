@@ -1,7 +1,7 @@
-import { State, StoreLike } from '../../game';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
+import { State, StoreLike } from '../../game';
 export declare class Skitty2 extends PokemonCard {
     stage: Stage;
     cardType: CardType;
@@ -21,6 +21,5 @@ export declare class Skitty2 extends PokemonCard {
     setNumber: string;
     name: string;
     fullName: string;
-    legacyFullName: string;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

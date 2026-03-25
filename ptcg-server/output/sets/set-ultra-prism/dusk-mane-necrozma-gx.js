@@ -8,7 +8,6 @@ const game_2 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_3 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 // UPR Dusk Mane Necrozma-GX 90 (https://limitlesstcg.com/cards/UPR/90)
 class DuskManeNecrozmaGX extends pokemon_card_1.PokemonCard {
@@ -49,7 +48,7 @@ class DuskManeNecrozmaGX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Meteor Tempest
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
             state = store.reduceEffect(state, checkProvidedEnergy);
@@ -61,7 +60,7 @@ class DuskManeNecrozmaGX extends pokemon_card_1.PokemonCard {
             });
         }
         // Sun's Eclipse-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
             const opponent = game_2.StateUtils.getOpponent(state, player);
             if (player.getPrizeLeft() <= opponent.getPrizeLeft()) {

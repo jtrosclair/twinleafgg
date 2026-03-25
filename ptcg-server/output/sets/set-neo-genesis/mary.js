@@ -32,7 +32,6 @@ class Mary extends trainer_card_1.TrainerCard {
                 });
                 state = store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                     player.deck.applyOrder(order);
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 });
             });
         }

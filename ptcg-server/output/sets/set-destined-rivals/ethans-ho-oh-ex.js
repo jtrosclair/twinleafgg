@@ -43,7 +43,7 @@ class EthansHoOhex extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.SHINING_FEATHER_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             (0, prefabs_1.BLOCK_EFFECT_IF_MARKER)(this.SHINING_FEATHER_MARKER, player, this);
             const hasEnergyInHand = player.hand.cards.some(c => {

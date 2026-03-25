@@ -4,7 +4,6 @@ exports.Rayquaza = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const energy_card_1 = require("../../game/store/card/energy-card");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 class Rayquaza extends pokemon_card_1.PokemonCard {
@@ -62,7 +61,7 @@ class Rayquaza extends pokemon_card_1.PokemonCard {
         }
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            const energies = player.active.cards.filter(card => card instanceof energy_card_1.EnergyCard && card.name.includes('Holon Energy'));
+            const energies = player.active.cards.filter(card => card.superType === card_types_1.SuperType.ENERGY && card.name.includes('Holon Energy'));
             if (energies.length === 0) {
                 player.active.damage += 70;
             }

@@ -63,7 +63,6 @@ function* playCard(next, store, state, effect) {
     });
     // Canceled by user, he didn't found the card in the deck
     if (cards.length === 0) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         return state;
     }
@@ -80,13 +79,11 @@ function* playCard(next, store, state, effect) {
         next();
     });
     if (targets.length === 0) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         return state; // canceled by user
     }
     const pokemonCard = targets[0].getPokemonCard();
     if (pokemonCard === undefined) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
         return state; // invalid target?
     }
@@ -94,7 +91,6 @@ function* playCard(next, store, state, effect) {
     player.deck.moveCardTo(evolution, targets[0]);
     targets[0].clearEffects();
     targets[0].pokemonPlayedTurn = state.turn;
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
 }
 class DuskStone extends trainer_card_1.TrainerCard {

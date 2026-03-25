@@ -16,9 +16,9 @@ class RegenerativeEnergy extends energy_card_1.EnergyCard {
         this.setNumber = '168';
         this.name = 'Regenerative Energy';
         this.fullName = 'Regenerative Energy SIT';
-        this.text = 'As long as this card is attached to a Pokémon, it provides [C] Energy.' +
-            '' +
-            'Whenever you play a Pokémon from your hand to evolve the Pokémon V this card is attached to, heal 100 damage from that Pokémon.';
+        this.text = `As long as this card is attached to a Pokémon, it provides [C] Energy.
+
+Whenever you play a Pokémon from your hand to evolve the Pokémon V this card is attached to, heal 100 damage from that Pokémon.`;
     }
     reduceEffect(store, state, effect) {
         var _a;

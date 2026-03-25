@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Togetic = void 0;
 const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Togetic extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -29,7 +30,7 @@ class Togetic extends game_1.PokemonCard {
         this.fullName = 'Togetic SSP';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const target = player.active;
             const healEffect = new game_effects_1.HealEffect(player, target, 30);

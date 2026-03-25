@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PokemonCatcherDEX = exports.ArcheopsDEX = exports.TornadusEx2DEX = exports.RaikouEx2DEX = exports.UltraBallDEX = exports.NDEX = exports.CherenDEX = exports.RareCandyDEX = exports.ProfessorJuniperDEX = exports.EnhancedHammerDEX = exports.DarkraiExDEX = exports.DarkPatchDEX = void 0;
+exports.GardevoirDEX = exports.GroudonEx2 = exports.KyogreEx2 = exports.EnteiEx2 = exports.PokemonCatcherDEX = exports.ArcheopsDEX = exports.TornadusEx2DEX = exports.RaikouEx2DEX = exports.UltraBallDEX = exports.NDEX = exports.CherenDEX = exports.RareCandyDEX = exports.ProfessorJuniperDEX = exports.EnhancedHammerDEX = exports.DarkraiExDEX = exports.DarkPatchDEX = void 0;
 const cheren_1 = require("../set-emerging-powers/cheren");
 const n_1 = require("../set-fates-collide/n");
 const ultra_ball_1 = require("../set-scarlet-and-violet/ultra-ball");
@@ -13,6 +13,10 @@ const darkrai_ex_1 = require("./darkrai-ex");
 const enhanced_hammer_1 = require("../set-twilight-masquerade/enhanced-hammer");
 const professor_juniper_1 = require("../set-black-and-white/professor-juniper");
 const rare_candy_1 = require("../set-scarlet-and-violet/rare-candy");
+const entei_ex_1 = require("./entei-ex");
+const kyogre_ex_1 = require("./kyogre-ex");
+const groudon_ex_1 = require("./groudon-ex");
+const gardevoir_1 = require("./gardevoir");
 class DarkPatchDEX extends dark_patch_1.DarkPatch {
     constructor() {
         super(...arguments);
@@ -123,3 +127,35 @@ class PokemonCatcherDEX extends pokemon_catcher_1.PokemonCatcher {
     }
 }
 exports.PokemonCatcherDEX = PokemonCatcherDEX;
+class EnteiEx2 extends entei_ex_1.EnteiEx {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '103';
+        this.fullName = 'Entei-EX DEX 103';
+    }
+}
+exports.EnteiEx2 = EnteiEx2;
+class KyogreEx2 extends kyogre_ex_1.KyogreEx {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '104';
+        this.fullName = 'Kyogre-EX DEX 104';
+    }
+}
+exports.KyogreEx2 = KyogreEx2;
+class GroudonEx2 extends groudon_ex_1.GroudonEx {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '106';
+        this.fullName = 'Groudon-EX DEX 106';
+    }
+}
+exports.GroudonEx2 = GroudonEx2;
+class GardevoirDEX extends gardevoir_1.Gardevoir {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '109';
+        this.fullName = 'Gardevoir DEX 109';
+    }
+}
+exports.GardevoirDEX = GardevoirDEX;

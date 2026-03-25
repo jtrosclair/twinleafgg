@@ -6,7 +6,6 @@ const card_types_1 = require("../../game/store/card/card-types");
 const choose_pokemon_prompt_1 = require("../../game/store/prompts/choose-pokemon-prompt");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_1 = require("../../game");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* playCard(next, store, state, effect) {
     const player = effect.player;
     const hasBench = player.bench.some(b => b.cards.length > 0);
@@ -25,9 +24,8 @@ function* playCard(next, store, state, effect) {
         return state;
     }
     // Discard trainer only when user selected a Pokemon
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     player.active.clearEffects();
-    player.switchPokemon(targets[0]);
+    player.switchPokemon(targets[0], store, state);
     return state;
 }
 class Switch extends trainer_card_1.TrainerCard {

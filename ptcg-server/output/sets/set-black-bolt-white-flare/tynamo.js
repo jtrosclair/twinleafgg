@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Tynamo = void 0;
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Tynamo extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -26,7 +26,7 @@ class Tynamo extends game_1.PokemonCard {
         this.fullName = 'Tynamo SV11B';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const healEffect = new attack_effects_1.HealTargetEffect(effect, 10);
             healEffect.target = effect.player.active;
             store.reduceEffect(state, healEffect);

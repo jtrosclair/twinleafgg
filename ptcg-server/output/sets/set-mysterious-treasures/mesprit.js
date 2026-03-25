@@ -55,7 +55,7 @@ class Mesprit extends pokemon_card_1.PokemonCard {
                     isAzelfInPlay = true;
                 }
             });
-            let isTrioInPlay = isMespritInPlay && isUxieInPlay && isAzelfInPlay;
+            const isTrioInPlay = isMespritInPlay && isUxieInPlay && isAzelfInPlay;
             if (!isTrioInPlay) {
                 return state;
             }

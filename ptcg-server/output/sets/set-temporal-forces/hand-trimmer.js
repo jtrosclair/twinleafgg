@@ -45,9 +45,7 @@ class HandTrimmer extends trainer_card_1.TrainerCard {
                     const cards = selected || [];
                     player.hand.moveCardsTo(cards, player.discard);
                 });
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
             }
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
         }
         return state;

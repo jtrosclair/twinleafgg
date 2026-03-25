@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Victini = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const __1 = require("../..");
 const check_effects_1 = require("../../game/store/effects/check-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Victini extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -36,7 +36,7 @@ class Victini extends pokemon_card_1.PokemonCard {
         this.fullName = 'Victini TEF';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const cards = player.hand.cards.filter(c => c !== this);
             if (cards.length > 0) {
@@ -48,7 +48,7 @@ class Victini extends pokemon_card_1.PokemonCard {
             player.deck.moveTo(player.hand, 6);
             return state;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = __1.StateUtils.getOpponent(state, player);
             const oppActive = opponent.active;

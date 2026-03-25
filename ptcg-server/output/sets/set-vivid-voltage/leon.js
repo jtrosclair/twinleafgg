@@ -30,7 +30,6 @@ class Leon extends trainer_card_1.TrainerCard {
             supporterTurn == 1;
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             (0, prefabs_1.ADD_MARKER)(this.LEON_MARKER, player, this);
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         if (effect instanceof attack_effects_1.DealDamageEffect && (0, prefabs_1.HAS_MARKER)(this.LEON_MARKER, effect.player, this) && effect.damage > 0) {
             const player = effect.player;

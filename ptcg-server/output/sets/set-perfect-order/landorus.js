@@ -39,7 +39,7 @@ class Landorus extends game_1.PokemonCard {
         // Screw Knuckle - return energy to hand
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this) && effect instanceof game_effects_1.AttackEffect) {
             const player = effect.player;
-            const energiesAttached = player.active.cards.filter(card => card instanceof game_1.EnergyCard);
+            const energiesAttached = player.active.cards.filter(card => card.superType === game_1.SuperType.ENERGY);
             if (energiesAttached.length === 0) {
                 return state;
             }

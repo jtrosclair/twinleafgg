@@ -8,7 +8,6 @@ const card_list_1 = require("../../game/store/state/card-list");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
 const game_error_1 = require("../../game/game-error");
 const game_message_1 = require("../../game/game-message");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* playCard(next, store, state, effect) {
     const player = effect.player;
     if (player.deck.cards.length < 3) {
@@ -20,7 +19,6 @@ function* playCard(next, store, state, effect) {
     player.deck.moveTo(deckBottom, 3);
     return store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARDS_ORDER, deckBottom, {}, { min: 3, max: 3, allowCancel: false }), selected => {
         deckBottom.moveCardsTo(selected, player.deck);
-        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     });
 }
 class ExpeditionUniform extends trainer_card_1.TrainerCard {

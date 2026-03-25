@@ -4,22 +4,16 @@ exports.GBooster = void 0;
 const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
-const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const costs_1 = require("../../game/store/prefabs/costs");
 function* playCard(next, store, state, effect) {
     var _a;
     const player = effect.player;
-    const opponent = effect.opponent;
     if (((_a = player.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.name) !== 'Genesect-EX') {
         throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_ATTACK);
     }
-    if (effect.damage > 0) {
-        opponent.active.damage += effect.damage;
-        const afterDamage = new attack_effects_1.AfterDamageEffect(effect, effect.damage);
-        state = store.reduceEffect(state, afterDamage);
-    }
+    // Ref: set-paradox-rift/technical-machine-turbo-energize.ts (tool-provided attack execution)
     (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 2);
     return state;
 }
@@ -43,9 +37,12 @@ class GBooster extends trainer_card_1.TrainerCard {
         this.text = 'The Genesect-EX this card is attached to can also use the attack on this card. (You still need the necessary Energy to use this attack.)';
     }
     reduceEffect(store, state, effect) {
-        var _a;
+        var _a, _b;
         if (effect instanceof check_effects_1.CheckAttackCostEffect && effect.attack === this.attacks[0]) {
             const pokemonCard = effect.player.active.getPokemonCard();
+            if ((pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.name) !== 'Genesect-EX') {
+                throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_ATTACK);
+            }
             if (pokemonCard && 'getColorlessReduction' in pokemonCard) {
                 const colorlessReudction = pokemonCard.getColorlessReduction(state);
                 for (let i = 0; i < colorlessReudction && effect.cost.includes(card_types_1.CardType.COLORLESS); i++) {
@@ -56,7 +53,9 @@ class GBooster extends trainer_card_1.TrainerCard {
                 }
             }
         }
-        if (effect instanceof check_effects_1.CheckPokemonAttacksEffect && ((_a = effect.player.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.tools.includes(this)) &&
+        if (effect instanceof check_effects_1.CheckPokemonAttacksEffect
+            && ((_a = effect.player.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.name) === 'Genesect-EX'
+            && ((_b = effect.player.active.getPokemonCard()) === null || _b === void 0 ? void 0 : _b.tools.includes(this)) &&
             !effect.attacks.includes(this.attacks[0])) {
             effect.attacks.push(this.attacks[0]);
         }

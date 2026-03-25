@@ -8,7 +8,6 @@ const card_list_1 = require("../../game/store/state/card-list");
 const game_error_1 = require("../../game/game-error");
 const game_message_1 = require("../../game/game-message");
 const confirm_cards_prompt_1 = require("../../game/store/prompts/confirm-cards-prompt");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class TrekkingShoes extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -36,14 +35,12 @@ class TrekkingShoes extends trainer_card_1.TrainerCard {
                 if (selected !== null) {
                     // Add card to hand
                     deckTop.moveCardsTo(deckTop.cards, player.hand);
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 }
                 else {
                     // Discard card
                     deckTop.moveTo(player.discard);
                     // Draw a card
                     player.deck.moveTo(player.hand, 1);
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 }
             });
         }

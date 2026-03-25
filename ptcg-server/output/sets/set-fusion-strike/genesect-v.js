@@ -6,20 +6,20 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const game_2 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const card_types_2 = require("../../game/store/card/card-types");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class GenesectV extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.tags = [card_types_2.CardTag.POKEMON_V, card_types_2.CardTag.FUSION_STRIKE];
         this.regulationMark = 'E';
         this.stage = card_types_1.Stage.BASIC;
-        this.cardType = card_types_1.CardType.METAL;
+        this.cardType = M;
         this.hp = 190;
-        this.weakness = [{ type: card_types_1.CardType.FIRE }];
-        this.retreat = [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS];
+        this.weakness = [{ type: R }];
+        this.retreat = [C, C];
         this.powers = [{
                 name: 'Fusion Strike System',
                 useWhenInPlay: true,
@@ -28,45 +28,25 @@ class GenesectV extends pokemon_card_1.PokemonCard {
                     'as many cards in your hand as you have Fusion Strike ' +
                     'Pokémon in play.'
             }];
-        this.attacks = [
-            {
+        this.attacks = [{
                 name: 'Techno Blast',
-                cost: [card_types_1.CardType.METAL, card_types_1.CardType.METAL, card_types_1.CardType.COLORLESS],
+                cost: [M, M, C],
                 damage: 210,
-                text: 'During your next turn, this Pokémon can\'t attack. '
-            }
-        ];
+                text: 'During your next turn, this Pokémon can\'t attack.'
+            }];
         this.set = 'FST';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '185';
         this.name = 'Genesect V';
         this.fullName = 'Genesect V FST';
         this.FUSION_STRIKE_SYSTEM_MARKER = 'FUSION_STRIKE_SYSTEM_MARKER';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(_store, state, effect) {
         var _a, _b;
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.active.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
+        // Techno Blast
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            player.active.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-            player.active.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-            console.log('marker cleared');
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.active.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-            const player = effect.player;
-            player.active.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
-            console.log('second marker added');
-        }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            const player = effect.player;
-            // Check marker
-            if (player.active.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-                console.log('attack blocked');
-                throw new game_1.GameError(game_2.GameMessage.BLOCKED_BY_EFFECT);
-            }
-            player.active.marker.addMarker(this.ATTACK_USED_MARKER, this);
-            console.log('marker added');
+            player.active.cannotAttackNextTurnPending = true;
         }
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
@@ -76,7 +56,7 @@ class GenesectV extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.FUSION_STRIKE_SYSTEM_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.FUSION_STRIKE_SYSTEM_MARKER, this)) {
                 throw new game_1.GameError(game_2.GameMessage.POWER_ALREADY_USED);

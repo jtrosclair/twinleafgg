@@ -4,14 +4,18 @@ exports.setEXDeltaSpecies = void 0;
 const bagon_1 = require("./bagon");
 const bagon2_1 = require("./bagon2");
 const beldum_1 = require("./beldum");
+const crobat_1 = require("./crobat");
 const ditto_1 = require("./ditto");
 const dragonair_1 = require("./dragonair");
+const dragonair2_1 = require("./dragonair2");
 const dragonite_1 = require("./dragonite");
 const dratini_1 = require("./dratini");
+const dratini2_1 = require("./dratini2");
 const eevee_1 = require("./eevee");
 const eevee2_1 = require("./eevee2");
 const flareon_ex_1 = require("./flareon-ex");
 const gardevoir_1 = require("./gardevoir");
+const groudon_star_1 = require("./groudon-star");
 const holon_energy_ff_1 = require("./holon-energy-ff");
 const holon_farmer_1 = require("./holon-farmer");
 const holon_lass_1 = require("./holon-lass");
@@ -26,7 +30,10 @@ const holons_magneton_1 = require("./holons-magneton");
 const holons_voltorb_1 = require("./holons-voltorb");
 const jolteon_ex_1 = require("./jolteon-ex");
 const kirlia_1 = require("./kirlia");
+const koffing_1 = require("./koffing");
 const larvitar_1 = require("./larvitar");
+const magnemite_1 = require("./magnemite");
+const marowak_1 = require("./marowak");
 const meowth_1 = require("./meowth");
 const metagross_1 = require("./metagross");
 const metang_1 = require("./metang");
@@ -40,19 +47,25 @@ const salamence_1 = require("./salamence");
 const shelgon_1 = require("./shelgon");
 const shelgon2_1 = require("./shelgon2");
 const vaporeon_ex_1 = require("./vaporeon-ex");
+const weezing_1 = require("./weezing");
+const zubat_1 = require("./zubat");
 const other_prints_1 = require("./other-prints");
 exports.setEXDeltaSpecies = [
     new bagon_1.Bagon(),
     new bagon2_1.Bagon2(),
     new beldum_1.Beldum(),
+    new crobat_1.Crobat(),
     new ditto_1.Ditto(),
     new dragonair_1.Dragonair(),
+    new dragonair2_1.Dragonair2(),
     new dragonite_1.Dragonite(),
     new dratini_1.Dratini(),
+    new dratini2_1.Dratini2(),
     new eevee_1.Eevee(),
     new eevee2_1.Eevee2(),
     new flareon_ex_1.Flareonex(),
     new gardevoir_1.Gardevoir(),
+    new groudon_star_1.GroudonStar(),
     new holon_energy_ff_1.HolonEnergyFF(),
     new holon_farmer_1.HolonFarmer(),
     new holon_lass_1.HolonLass(),
@@ -67,7 +80,10 @@ exports.setEXDeltaSpecies = [
     new holons_voltorb_1.HolonsVoltorb(),
     new jolteon_ex_1.Jolteonex(),
     new kirlia_1.Kirlia(),
+    new koffing_1.Koffing(),
     new larvitar_1.Larvitar(),
+    new magnemite_1.Magnemite(),
+    new marowak_1.Marowak(),
     new meowth_1.Meowth(),
     new metagross_1.Metagross(),
     new metang_1.Metang(),
@@ -81,5 +97,12 @@ exports.setEXDeltaSpecies = [
     new shelgon_1.Shelgon(),
     new shelgon2_1.Shelgon2(),
     new vaporeon_ex_1.Vaporeonex(),
+    new weezing_1.Weezing(),
+    new zubat_1.Zubat(),
+    // Other Prints
+    new other_prints_1.DarknessEnergySpecialDS(),
+    new other_prints_1.GreatBallDS(),
+    new other_prints_1.MetalEnergySpecialDS(),
+    new other_prints_1.DualBallDS(),
     new other_prints_1.SuperScoopUpDS(),
 ];

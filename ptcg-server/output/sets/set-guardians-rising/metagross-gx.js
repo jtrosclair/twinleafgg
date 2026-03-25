@@ -54,7 +54,7 @@ class MetagrossGX extends pokemon_card_1.PokemonCard {
             player.marker.removeMarker(this.GEOTECH_MARKER, this);
         }
         // Geotech System
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInDiscard = player.discard.cards.some(c => {
                 return c instanceof game_1.EnergyCard
@@ -82,7 +82,7 @@ class MetagrossGX extends pokemon_card_1.PokemonCard {
             });
         }
         // Giga Hammer
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             // Check marker
             if (effect.player.marker.hasMarker(this.HAMMER_MARKER_1, this)) {
                 console.log('attack blocked');
@@ -92,7 +92,7 @@ class MetagrossGX extends pokemon_card_1.PokemonCard {
             console.log('marker added');
         }
         // Algorithm-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             // Check if player has used GX attack
             (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);

@@ -6,7 +6,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Seismitoad extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -35,7 +35,6 @@ class Seismitoad extends pokemon_card_1.PokemonCard {
         this.fullName = 'Seismitoad OBF';
         this.NEXT_TURN_MORE_DAMAGE_MARKER = 'NEXT_TURN_MORE_DAMAGE_MARKER';
         this.NEXT_TURN_MORE_DAMAGE_MARKER_2 = 'NEXT_TURN_MORE_DAMAGE_MARKER_2';
-        this.usedAttack = false;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof check_effects_1.CheckAttackCostEffect &&
@@ -60,31 +59,14 @@ class Seismitoad extends pokemon_card_1.PokemonCard {
             }
             return state;
         }
-        if (effect instanceof game_effects_1.AttackEffect) {
-            this.usedAttack = true;
-        }
-        if (effect instanceof game_phase_effects_1.BeginTurnEffect) {
-            if (this.usedAttack) {
-                this.usedAttack = false;
-            }
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect) {
-            if (!this.usedAttack) {
-                this.usedAttack = false;
-                effect.player.marker.removeMarker(this.NEXT_TURN_MORE_DAMAGE_MARKER, this);
-                effect.player.marker.removeMarker(this.NEXT_TURN_MORE_DAMAGE_MARKER_2, this);
-            }
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.NEXT_TURN_MORE_DAMAGE_MARKER, this)) {
-            effect.player.marker.addMarker(this.NEXT_TURN_MORE_DAMAGE_MARKER_2, this);
-        }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            // Check marker
-            if (effect.player.marker.hasMarker(this.NEXT_TURN_MORE_DAMAGE_MARKER, this)) {
-                effect.damage += 100;
-            }
-            effect.player.marker.addMarker(this.NEXT_TURN_MORE_DAMAGE_MARKER, this);
-        }
+        // Refs: set-boundaries-crossed/meloetta.ts (Echoed Voice), prefabs/prefabs.ts (NEXT_TURN_ATTACK_BONUS)
+        (0, prefabs_1.NEXT_TURN_ATTACK_BONUS)(effect, {
+            attack: this.attacks[0],
+            source: this,
+            bonusDamage: 100,
+            bonusMarker: this.NEXT_TURN_MORE_DAMAGE_MARKER,
+            clearMarker: this.NEXT_TURN_MORE_DAMAGE_MARKER_2
+        });
         return state;
     }
 }

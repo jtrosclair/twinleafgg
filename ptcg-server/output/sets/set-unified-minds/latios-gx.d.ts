@@ -1,16 +1,19 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State, PowerType } from '../../game';
+import { PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-export declare class LatiosGX extends PokemonCard {
-    stage: Stage;
+export declare class LatiosGx extends PokemonCard {
     tags: CardTag[];
+    stage: Stage;
     cardType: CardType;
     hp: number;
     weakness: {
         type: CardType.PSYCHIC;
     }[];
     retreat: any[];
+    readonly TAG_PURGE_MARKER = "LATIOS_GX_UNM_TAG_PURGE_MARKER";
+    readonly CLEAR_TAG_PURGE_MARKER = "LATIOS_GX_UNM_CLEAR_TAG_PURGE_MARKER";
+    readonly CLEAR_VISION_MARKER = "LATIOS_GX_UNM_CLEAR_VISION_MARKER";
     powers: {
         name: string;
         powerType: PowerType;
@@ -23,12 +26,9 @@ export declare class LatiosGX extends PokemonCard {
         text: string;
     }[];
     set: string;
-    cardImage: string;
     setNumber: string;
+    cardImage: string;
     name: string;
     fullName: string;
-    readonly TAG_PURGE_MARKER = "TAG_PURGE_MARKER";
-    readonly CLEAR_TAG_PURGE_MARKER = "CLEAR_TAG_PURGE_MARKER";
-    readonly CLEAR_VISION_GX_MARKER = "CLEAR_VISION_GX_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

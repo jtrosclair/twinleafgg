@@ -38,7 +38,6 @@ class ProfessorsLetter extends trainer_card_1.TrainerCard {
                     store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => { });
                 }
                 player.deck.moveCardsTo(cards, player.hand);
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
                     player.deck.applyOrder(order);
                 });

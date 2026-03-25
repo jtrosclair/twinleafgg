@@ -1,4 +1,4 @@
-import { State, StoreLike } from '../../game';
+import { Player, State, StoreLike } from '../../game';
 import { TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
@@ -11,5 +11,6 @@ export declare class Clavell extends TrainerCard {
     name: string;
     fullName: string;
     text: string;
+    canPlay(store: StoreLike, state: State, player: Player): boolean;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

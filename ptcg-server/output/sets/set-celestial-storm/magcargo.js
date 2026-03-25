@@ -7,10 +7,10 @@ const game_message_1 = require("../../game/game-message");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
 const shuffle_prompt_1 = require("../../game/store/prompts/shuffle-prompt");
 const card_list_1 = require("../../game/store/state/card-list");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* useSmoothOver(next, store, state, self, effect) {
     const player = effect.player;
     let cards = [];
@@ -65,7 +65,7 @@ class Magcargo extends pokemon_card_1.PokemonCard {
         this.setNumber = '24';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const generator = useSmoothOver(() => generator.next(), store, state, this, effect);
             return generator.next().value;
         }

@@ -29,7 +29,6 @@ function* playCard(next, store, state, effect) {
         yield store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
     player.deck.moveCardsTo(cards, player.discard);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });
@@ -45,7 +44,7 @@ class BrilliantBlender extends trainer_card_1.TrainerCard {
         this.fullName = 'Brilliant Blender SSP';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '164';
-        this.text = 'Search your deck for up to 5 cards and discard them. Then shuffle your deck.';
+        this.text = 'Search your deck for up to 5 cards and discard them. Then, shuffle your deck.';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

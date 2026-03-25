@@ -35,7 +35,7 @@ class MegatonBlower extends trainer_card_1.TrainerCard {
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Function to discard special energy and tools from a PokemonCardList
             const discardSpecialEnergyAndTools = (pokemonCardList) => {
-                const cardsToDiscard = pokemonCardList.cards.filter(card => (card instanceof game_1.EnergyCard && card.energyType === card_types_1.EnergyType.SPECIAL) ||
+                const cardsToDiscard = pokemonCardList.cards.filter(card => (card.superType === card_types_1.SuperType.ENERGY && card.energyType === card_types_1.EnergyType.SPECIAL) ||
                     (card instanceof trainer_card_1.TrainerCard && card.trainerType === card_types_1.TrainerType.TOOL));
                 if (cardsToDiscard.length > 0) {
                     state = (0, prefabs_1.MOVE_CARDS)(store, state, pokemonCardList, opponent.discard, { cards: cardsToDiscard });

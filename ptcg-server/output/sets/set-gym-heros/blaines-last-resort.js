@@ -25,7 +25,6 @@ class BlainesLastResort extends trainer_card_1.TrainerCard {
                 throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
             (0, prefabs_1.DRAW_CARDS)(player, 5);
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

@@ -19,6 +19,13 @@ class BattleColosseum extends trainer_card_1.TrainerCard {
         this.text = 'Prevent all damage counters from being placed on Benched Pokémon (both yours and your opponent\'s) by effects of attacks and Abilities from the opponent\'s Pokémon. (Damage from attacks is still taken.)';
     }
     reduceEffect(store, state, effect) {
+        if (effect instanceof game_effects_1.MoveDamageCountersEffect && state_utils_1.StateUtils.getStadiumCard(state) === this) {
+            const activePlayer = state.players[state.activePlayer];
+            const opponentOfActive = state_utils_1.StateUtils.getOpponent(state, activePlayer);
+            if (effect.player === opponentOfActive) {
+                effect.preventDefault = true;
+            }
+        }
         // Also prevent damage counters from effects like PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE
         if (effect instanceof attack_effects_1.PutCountersEffect && state_utils_1.StateUtils.getStadiumCard(state) === this) {
             const sourcePokemon = effect.source;

@@ -35,7 +35,7 @@ function* playCard(next, store, state, self, effect) {
         else if (c instanceof trainer_card_1.TrainerCard && c.trainerType === card_types_1.TrainerType.SUPPORTER) {
             supporters += 1;
         }
-        else if (c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC) {
+        else if (c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC) {
             energies += 1;
         }
         else {
@@ -54,7 +54,6 @@ function* playCard(next, store, state, self, effect) {
         next();
     });
     player.deck.moveCardsTo(cards, player.hand);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     cards.forEach((card, index) => {
         store.log(state, game_message_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
     });

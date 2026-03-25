@@ -5,6 +5,7 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
+const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
 class MoltresZapdosArticunoGX extends pokemon_card_1.PokemonCard {
@@ -35,13 +36,16 @@ class MoltresZapdosArticunoGX extends pokemon_card_1.PokemonCard {
         this.cardImage = 'assets/cardback.png';
         this.name = 'Moltres & Zapdos & Articuno-GX';
         this.fullName = 'Moltres & Zapdos & Articuno-GX HIF';
+        this.usedSkyLegends = false;
     }
     reduceEffect(store, state, effect) {
+        // Sky Legends-GX - check energy, select targets, and apply damage during attack
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
-            // Check for the extra energy cost.
+            this.usedSkyLegends = true;
+            // Check for the extra energy cost (R, W, L, C = 1 of each plus the C cost)
             const extraEffectCost = [R, W, L, C];
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
             store.reduceEffect(state, checkProvidedEnergy);
@@ -50,13 +54,17 @@ class MoltresZapdosArticunoGX extends pokemon_card_1.PokemonCard {
                 return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { min: 1, max: 3, allowCancel: false }), selected => {
                     const targets = selected || [];
                     (0, prefabs_1.DAMAGE_OPPONENT_POKEMON)(store, state, effect, 110, targets);
-                    (0, attack_effects_1.SHUFFLE_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_DECK)(store, state, effect);
-                    return state;
                 });
             }
-            else {
-                (0, attack_effects_1.SHUFFLE_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_DECK)(store, state, effect);
-            }
+        }
+        // Sky Legends-GX - shuffle after attack
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this) && this.usedSkyLegends) {
+            this.usedSkyLegends = false;
+            return (0, attack_effects_1.SHUFFLE_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_DECK)(store, state, effect);
+        }
+        // Clean up flags at end of turn
+        if (effect instanceof game_phase_effects_1.EndTurnEffect) {
+            this.usedSkyLegends = false;
         }
         return state;
     }

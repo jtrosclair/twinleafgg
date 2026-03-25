@@ -6,6 +6,7 @@ const trainer_card_1 = require("../../game/store/card/trainer-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const game_effects_1 = require("../../game/store/effects/game-effects");
 class Marnie extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -37,13 +38,17 @@ class Marnie extends trainer_card_1.TrainerCard {
             if (player.hand.cards.length === 0 && opponent.hand.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            player.hand.moveCardsTo(cards, deckBottom);
-            opponent.hand.moveTo(opponentDeckBottom);
+            const playerMoveEffect = new game_effects_1.MoveCardsEffect(player.hand, deckBottom, { cards, sourceCard: this });
+            state = store.reduceEffect(state, playerMoveEffect);
+            const opponentMoveEffect = new game_effects_1.MoveCardsEffect(opponent.hand, opponentDeckBottom, { sourceCard: this });
+            state = store.reduceEffect(state, opponentMoveEffect);
             deckBottom.moveTo(player.deck);
             opponentDeckBottom.moveTo(opponent.deck);
             player.deck.moveTo(player.hand, Math.min(5, player.deck.cards.length));
-            opponent.deck.moveTo(opponent.hand, Math.min(4, opponent.deck.cards.length));
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
+            // Check if moving cards from opponent's hand was prevented
+            if (!opponentMoveEffect.preventDefault) {
+                opponent.deck.moveTo(opponent.hand, Math.min(4, opponent.deck.cards.length));
+            }
         }
         return state;
     }

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Kiawe2BUS = exports.Acerola2BUS = exports.DarkraiGX2BUS = exports.TapuFiniGX2BUS = exports.FairyEnergyBUS = exports.DarknessEnergyBUS = exports.FireEnergyBUS = exports.SuperScoopUp2BUS = exports.EscapeRopeBUS2BUS = exports.ChoiceBandBUS = exports.BodybuildingDumbbells2BUS = exports.NoivernGX3BUS = exports.GardevoirGX3BUS = exports.DarkraiGX4BUS = exports.MarshadowGX3BUS = exports.NecrozmaGX3BUS = exports.TapuFiniGX4BUS = exports.SalazzleGX3BUS = exports.TapuBuluGX2BUS = exports.Sophocles2BUS = exports.Plumeria2BUS = exports.Kiawe3BUS = exports.Acerola3BUS = exports.NoivernGX2BUS = exports.GardevoirGX2BUS = exports.DarkraiGX3BUS = exports.MarshadowGX2BUS = exports.NecrozmaGX2BUS = exports.TapuFiniGX3BUS = exports.SalazzleGX2BUS = exports.SuperScoopUpBUS = exports.WeaknessPolicyBUS = exports.RescueStretcherBUS = exports.GuzmaBUS2 = exports.GuzmaBUS = exports.EscapeRopeBUS = void 0;
+exports.MultiSwitchBUS = exports.AlolanMukGx3 = exports.LycanrocGx2 = exports.MachampGx3 = exports.GolisopodGx3 = exports.Wicke2 = exports.MachampGx2 = exports.HoOhGx2 = exports.GolisopodGx2 = exports.PorygonZ2 = exports.MeowthBUS = exports.Kirlia2 = exports.CharizardGXBUS150 = exports.CharmanderAlt = exports.Kiawe2BUS = exports.Acerola2BUS = exports.DarkraiGX2BUS = exports.TapuFiniGX2BUS = exports.FairyEnergyBUS = exports.DarknessEnergyBUS = exports.FireEnergyBUS = exports.SuperScoopUp2BUS = exports.EscapeRopeBUS2BUS = exports.ChoiceBandBUS = exports.BodybuildingDumbbells2BUS = exports.NoivernGX3BUS = exports.GardevoirGX3BUS = exports.DarkraiGX4BUS = exports.MarshadowGX3BUS = exports.NecrozmaGX3BUS = exports.TapuFiniGX4BUS = exports.SalazzleGX3BUS = exports.TapuBuluGX2BUS = exports.Sophocles2BUS = exports.Plumeria2BUS = exports.Kiawe3BUS = exports.Acerola3BUS = exports.NoivernGX2BUS = exports.GardevoirGX2BUS = exports.DarkraiGX3BUS = exports.MarshadowGX2BUS = exports.NecrozmaGX2BUS = exports.TapuFiniGX3BUS = exports.SalazzleGX2BUS = exports.SuperScoopUpBUS = exports.WeaknessPolicyBUS = exports.RescueStretcherBUS = exports.GuzmaBUS2 = exports.GuzmaBUS = exports.EscapeRopeBUS = void 0;
 const super_scoop_up_1 = require("../set-diamond-and-pearl/super-scoop-up");
 const salazzle_gx_1 = require("../set-burning-shadows/salazzle-gx");
 const tapu_fini_gx_1 = require("../set-burning-shadows/tapu-fini-gx");
@@ -25,6 +25,18 @@ const escape_rope_1 = require("../set-battle-styles/escape-rope");
 const guzma_1 = require("./guzma");
 const rescue_stretcher_1 = require("../set-guardians-rising/rescue-stretcher");
 const weakness_policy_1 = require("../set-primal-clash/weakness-policy");
+const charmander_1 = require("./charmander");
+const charizard_gx_1 = require("./charizard-gx");
+const kirlia_1 = require("./kirlia");
+const meowth_1 = require("../set-boundaries-crossed/meowth");
+const porygon_z_1 = require("./porygon-z");
+const golisopod_gx_1 = require("./golisopod-gx");
+const ho_oh_gx_1 = require("./ho-oh-gx");
+const machamp_gx_1 = require("./machamp-gx");
+const wicke_1 = require("./wicke");
+const lycanroc_gx_1 = require("./lycanroc-gx");
+const alolan_muk_gx_2_1 = require("./alolan-muk-gx-2");
+const multi_switch_1 = require("../set-guardians-rising/multi-switch");
 class EscapeRopeBUS extends escape_rope_1.EscapeRope {
     constructor() {
         super(...arguments);
@@ -353,3 +365,129 @@ class Kiawe2BUS extends kiawe_1.Kiawe {
     }
 }
 exports.Kiawe2BUS = Kiawe2BUS;
+class CharmanderAlt extends charmander_1.Charmander {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '18a';
+        this.fullName = 'CharmanderAlt BUS';
+        this.set = 'BUS';
+    }
+}
+exports.CharmanderAlt = CharmanderAlt;
+class CharizardGXBUS150 extends charizard_gx_1.CharizardGX {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '150';
+        this.fullName = 'Charizard-GX BUS 150';
+        this.set = 'BUS';
+    }
+}
+exports.CharizardGXBUS150 = CharizardGXBUS150;
+class Kirlia2 extends kirlia_1.Kirlia {
+    constructor() {
+        super(...arguments);
+        this.set = 'BUS';
+        this.setNumber = '92a';
+        this.fullName = 'Kirlia BUS 92a';
+    }
+}
+exports.Kirlia2 = Kirlia2;
+class MeowthBUS extends meowth_1.Meowth {
+    constructor() {
+        super(...arguments);
+        this.set = 'BUS';
+        this.setNumber = '101';
+        this.fullName = 'Meowth BUS';
+    }
+}
+exports.MeowthBUS = MeowthBUS;
+class PorygonZ2 extends porygon_z_1.PorygonZ {
+    constructor() {
+        super(...arguments);
+        this.set = 'BUS';
+        this.setNumber = '105a';
+        this.fullName = 'Porygon-Z BUS 105a';
+    }
+}
+exports.PorygonZ2 = PorygonZ2;
+class GolisopodGx2 extends golisopod_gx_1.GolisopodGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'BUS';
+        this.setNumber = '129';
+        this.fullName = 'Golisopod-GX BUS 129';
+    }
+}
+exports.GolisopodGx2 = GolisopodGx2;
+class HoOhGx2 extends ho_oh_gx_1.HoOhGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'BUS';
+        this.setNumber = '131';
+        this.fullName = 'Ho-Oh-GX BUS 131';
+    }
+}
+exports.HoOhGx2 = HoOhGx2;
+class MachampGx2 extends machamp_gx_1.MachampGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'BUS';
+        this.setNumber = '135';
+        this.fullName = 'Machamp-GX BUS 135';
+    }
+}
+exports.MachampGx2 = MachampGx2;
+class Wicke2 extends wicke_1.Wicke {
+    constructor() {
+        super(...arguments);
+        this.set = 'BUS';
+        this.setNumber = '147';
+        this.fullName = 'Wicke BUS 147';
+    }
+}
+exports.Wicke2 = Wicke2;
+class GolisopodGx3 extends golisopod_gx_1.GolisopodGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'BUS';
+        this.setNumber = '148';
+        this.fullName = 'Golisopod-GX BUS 148';
+    }
+}
+exports.GolisopodGx3 = GolisopodGx3;
+class MachampGx3 extends machamp_gx_1.MachampGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'BUS';
+        this.setNumber = '154';
+        this.fullName = 'Machamp-GX BUS 154';
+    }
+}
+exports.MachampGx3 = MachampGx3;
+class LycanrocGx2 extends lycanroc_gx_1.LycanrocGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'BUS';
+        this.setNumber = '155';
+        this.fullName = 'Lycanroc-GX BUS 155';
+    }
+}
+exports.LycanrocGx2 = LycanrocGx2;
+class AlolanMukGx3 extends alolan_muk_gx_2_1.AlolanMukGx2 {
+    constructor() {
+        super(...arguments);
+        this.set = 'BUS';
+        this.setNumber = '157';
+        this.fullName = 'Alolan Muk-GX BUS 157';
+    }
+}
+exports.AlolanMukGx3 = AlolanMukGx3;
+class MultiSwitchBUS extends multi_switch_1.MultiSwitch {
+    constructor() {
+        super(...arguments);
+        this.set = 'BUS';
+        this.setNumber = '164';
+        this.fullName = 'Multi Switch BUS';
+    }
+}
+exports.MultiSwitchBUS = MultiSwitchBUS;

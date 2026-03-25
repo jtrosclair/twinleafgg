@@ -51,7 +51,6 @@ function* playCard(next, store, state, self, effect) {
     player.hand.moveCardTo(self, player.discard);
     player.hand.moveCardsTo(cards, player.discard);
     player.discard.moveCardsTo(recovered, player.hand);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return state;
 }
 class DowsingMachine extends trainer_card_1.TrainerCard {
@@ -76,7 +75,6 @@ class DowsingMachine extends trainer_card_1.TrainerCard {
             store.reduceEffect(state, discardEffect);
             if (discardEffect.preventDefault) {
                 // If prevented, just discard the card and return
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             }
             const generator = playCard(() => generator.next(), store, state, this, effect);

@@ -42,7 +42,6 @@ function* playCard(next, store, state, self, effect) {
     });
     deckTop.moveCardsTo(cards, player.hand);
     deckTop.moveTo(player.deck);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     if (cards.length > 0) {
         yield store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }

@@ -1,0 +1,34 @@
+import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { Stage, CardType } from '../../game/store/card/card-types';
+import { StoreLike, State } from '../../game';
+import { Effect } from '../../game/store/effects/effect';
+export declare class Onix extends PokemonCard {
+    readonly SCREECH_MARKER = "ONIX_CES_SCREECH_MARKER";
+    readonly CLEAR_SCREECH_MARKER = "ONIX_CES_CLEAR_SCREECH_MARKER";
+    stage: Stage;
+    cardType: CardType;
+    hp: number;
+    weakness: {
+        type: CardType.GRASS;
+    }[];
+    retreat: CardType.COLORLESS[];
+    attacks: ({
+        name: string;
+        cost: CardType.COLORLESS[];
+        damage: number;
+        text: string;
+        damageCalculation?: undefined;
+    } | {
+        name: string;
+        cost: CardType.FIGHTING[];
+        damage: number;
+        damageCalculation: "+";
+        text: string;
+    })[];
+    set: string;
+    setNumber: string;
+    cardImage: string;
+    name: string;
+    fullName: string;
+    reduceEffect(store: StoreLike, state: State, effect: Effect): State;
+}

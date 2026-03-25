@@ -52,7 +52,7 @@ class Raticate extends pokemon_card_1.PokemonCard {
             let trainers = 0;
             const blocked = [];
             player.discard.cards.forEach((c, index) => {
-                if (c instanceof game_1.EnergyCard) {
+                if (c.superType === card_types_1.SuperType.ENERGY) {
                     energies += 1;
                 }
                 else if (c instanceof pokemon_card_1.PokemonCard) {

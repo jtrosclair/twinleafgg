@@ -11,6 +11,7 @@ const zacian_v_union_br_1 = require("./zacian-v-union-br");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class ZacianVUNIONTopLeft extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -66,7 +67,7 @@ class ZacianVUNIONTopLeft extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // assemblin the v-union
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const slots = player.bench.filter(b => b.cards.length === 0);
             if (player.assembledVUNIONs.includes(this.name)) {
@@ -117,7 +118,7 @@ class ZacianVUNIONTopLeft extends pokemon_card_1.PokemonCard {
             }
         }
         // Union Gain
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let metalsInDiscard = 0;
             // checking for energies in the discard
@@ -147,7 +148,7 @@ class ZacianVUNIONTopLeft extends pokemon_card_1.PokemonCard {
             }
         }
         // Dance of the Crowned Sword
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = effect.opponent;
             opponent.active.marker.addMarker(this.DANCE_REDUCED_DAMAGE_MARKER, this);
             opponent.marker.addMarker(this.DANCE_REDUCED_DAMAGE_MARKER, this);
@@ -168,7 +169,7 @@ class ZacianVUNIONTopLeft extends pokemon_card_1.PokemonCard {
         // Master Blade
         if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[3]) {
             const player = effect.player;
-            if (!player.active.cards.some(c => c instanceof game_1.EnergyCard)) {
+            if (!player.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                 return state;
             }
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);

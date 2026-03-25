@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SwitchEX = exports.StrengthCharmEX = exports.ProfessorOaksResearchEX = exports.ProfessorElmsTrainingMethodEX = exports.PokemonReversalEX = exports.EnergySearchEX = exports.EnergyRemoval2EX = exports.DualBallEX = exports.CopycatEX = void 0;
+exports.SwitchEX = exports.SuperScoopUpEX = exports.StrengthCharmEX = exports.ProfessorOaksResearchEX = exports.ProfessorElmsTrainingMethodEX = exports.PokemonReversalEX = exports.EnergySearchEX = exports.EnergyRemoval2EX = exports.DualBallEX = exports.CopycatEX = exports.BillsMaintenanceEX = void 0;
+const bills_maintenance_1 = require("../set-ex-firered-leafgreen/bills-maintenance");
 const copycat_1 = require("../set-ex-dragon-frontiers/copycat");
 const dual_ball_1 = require("../set-unleashed/dual-ball");
 const energy_removal_2_1 = require("../set-ex-power-keepers/energy-removal-2");
@@ -9,7 +10,18 @@ const pokemon_reversal_1 = require("../set-ex-unseen-forces/pokemon-reversal");
 const professors_elm_training_method_1 = require("../set-ex-unseen-forces/professors-elm-training-method");
 const professor_oaks_research_1 = require("../set-ex-dragon-frontiers/professor-oaks-research");
 const strength_charm_1 = require("../set-ex-dragon-frontiers/strength-charm");
+const super_scoop_up_1 = require("../set-diamond-and-pearl/super-scoop-up");
 const switch_1 = require("../set-scarlet-and-violet/switch");
+class BillsMaintenanceEX extends bills_maintenance_1.BillsMaintenance {
+    constructor() {
+        super(...arguments);
+        this.fullName = 'Bill\'s Maintenance EX';
+        this.set = 'EX';
+        this.setNumber = '137';
+        this.text = 'If you have any cards in your hand, shuffle 1 of them into your deck, then draw 3 cards.';
+    }
+}
+exports.BillsMaintenanceEX = BillsMaintenanceEX;
 class CopycatEX extends copycat_1.Copycat {
     constructor() {
         super(...arguments);
@@ -90,6 +102,16 @@ class StrengthCharmEX extends strength_charm_1.StrengthCharm {
     }
 }
 exports.StrengthCharmEX = StrengthCharmEX;
+class SuperScoopUpEX extends super_scoop_up_1.SuperScoopUp {
+    constructor() {
+        super(...arguments);
+        this.fullName = 'Super Scoop Up EX';
+        this.set = 'EX';
+        this.setNumber = '151';
+        this.text = 'Flip a coin. If heads, return 1 of your Pokémon and all cards attached to it to your hand.';
+    }
+}
+exports.SuperScoopUpEX = SuperScoopUpEX;
 class SwitchEX extends switch_1.Switch {
     constructor() {
         super(...arguments);

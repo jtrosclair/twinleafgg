@@ -57,7 +57,7 @@ class Delcatty extends game_1.PokemonCard {
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
                 pokemonCount += 1;
                 const reactEnergyAttached = cardList.cards.some(c => {
-                    return c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC;
+                    return c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC;
                 });
                 hasReactEnergy = hasReactEnergy || reactEnergyAttached;
             });

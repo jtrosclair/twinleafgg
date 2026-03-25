@@ -30,6 +30,6 @@ export declare class Chandelure extends PokemonCard {
     fullName: string;
     cardImage: string;
     setNumber: string;
-    readonly CURSED_SHADOW_MAREKER = "CURSED_SHADOW_MAREKER";
+    readonly CURSED_SHADOW_MARKER = "CURSED_SHADOW_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

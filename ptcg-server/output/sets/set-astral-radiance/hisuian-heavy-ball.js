@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.HisuianHeavyBall = void 0;
 const game_1 = require("../../game");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class HisuianHeavyBall extends game_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -52,7 +51,6 @@ class HisuianHeavyBall extends game_1.TrainerCard {
                             p.isSecret = true;
                         }
                     });
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     this.shuffleFaceDownPrizeCards(player.prizes.filter((p, index) => originallyFaceDown[index]));
                     return state;
                 }

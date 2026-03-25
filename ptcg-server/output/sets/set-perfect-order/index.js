@@ -80,6 +80,8 @@ const gengar_1 = require("./gengar");
 const skorupi_1 = require("./skorupi");
 const drapion_1 = require("./drapion");
 const chien_pao_1 = require("./chien-pao");
+const lapras_ex_1 = require("./lapras-ex");
+const other_prints_1 = require("./other-prints");
 exports.setPerfectOrder = [
     new barbaracle_1.Barbaracle(),
     new binacle_1.Binacle,
@@ -160,4 +162,43 @@ exports.setPerfectOrder = [
     new skorupi_1.Skorupi(),
     new drapion_1.Drapion(),
     new chien_pao_1.ChienPao(),
+    new lapras_ex_1.Laprasex(),
+    // IRs, FAs, SIRs, HR
+    new other_prints_1.SpewpaIR(),
+    new other_prints_1.RowletIR(),
+    new other_prints_1.TalonflameIR(),
+    new other_prints_1.AurorusIR(),
+    new other_prints_1.DedenneIR(),
+    new other_prints_1.ClefairyIR(),
+    new other_prints_1.EspurrIR(),
+    new other_prints_1.ProbopassIR(),
+    new other_prints_1.TyruntIR(),
+    new other_prints_1.DrapionIR(),
+    new other_prints_1.DoubladeIR(),
+    new other_prints_1.RaticateIR(),
+    new other_prints_1.DecidueyeexFA(),
+    new other_prints_1.SalazzleexFA(),
+    new other_prints_1.MegaStarmieexFA(),
+    new other_prints_1.MegaClefableexFA(),
+    new other_prints_1.MegaZygardeexFA(),
+    new other_prints_1.YveltalexFA(),
+    new other_prints_1.MegaSkarmoryexFA(),
+    new other_prints_1.MeowthexFA(),
+    new other_prints_1.EnergyRecyclerFA(),
+    new other_prints_1.SacredAshFA(),
+    new other_prints_1.PokePadFA(),
+    new other_prints_1.WondrousPatchFA(),
+    new other_prints_1.TarragonFA(),
+    new other_prints_1.NaveenFA(),
+    new other_prints_1.RosasEncouragementFA(),
+    new other_prints_1.JacintheFA(),
+    new other_prints_1.ForestOfVitalityFA(),
+    new other_prints_1.LumioiseCityFA(),
+    new other_prints_1.MegaStarmieexSIR(),
+    new other_prints_1.MegaClefableexSIR(),
+    new other_prints_1.MegaZygardeexSIR(),
+    new other_prints_1.MeowthexSIR(),
+    new other_prints_1.RosasEncouragementSIR(),
+    new other_prints_1.JacintheSIR(),
+    new other_prints_1.MegaZygardeexHR(),
 ];

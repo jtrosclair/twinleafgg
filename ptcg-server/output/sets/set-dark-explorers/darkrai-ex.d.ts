@@ -8,13 +8,13 @@ export declare class DarkraiEx extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.FIGHTING;
     }[];
     resistance: {
-        type: CardType;
+        type: CardType.PSYCHIC;
         value: number;
     }[];
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     powers: {
         name: string;
         powerType: PowerType;
@@ -22,7 +22,7 @@ export declare class DarkraiEx extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: (CardType.DARK | CardType.COLORLESS)[];
         damage: number;
         text: string;
     }[];

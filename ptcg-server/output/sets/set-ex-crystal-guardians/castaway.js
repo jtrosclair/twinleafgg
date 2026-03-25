@@ -19,7 +19,7 @@ function* playCard(next, store, state, self, effect) {
     const blocked = [];
     player.deck.cards.forEach((c, index) => {
         const isSupporter = c instanceof trainer_card_1.TrainerCard && c.trainerType === card_types_1.TrainerType.SUPPORTER;
-        const isBasicEnergy = c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC;
+        const isBasicEnergy = c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC;
         const isTool = c instanceof trainer_card_1.TrainerCard && c.trainerType === card_types_1.TrainerType.TOOL;
         if (!isSupporter && !isBasicEnergy && !isTool) {
             blocked.push(index);
@@ -38,7 +38,6 @@ function* playCard(next, store, state, self, effect) {
     if (cards.length > 0) {
         yield store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });

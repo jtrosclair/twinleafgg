@@ -52,7 +52,6 @@ class Lass extends trainer_card_1.TrainerCard {
                         player.deck.applyOrder(playerOrder);
                         return store.prompt(state, new game_1.ShuffleDeckPrompt(opponent.id), opponentOrder => {
                             opponent.deck.applyOrder(opponentOrder);
-                            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                             return state;
                         });
                     });

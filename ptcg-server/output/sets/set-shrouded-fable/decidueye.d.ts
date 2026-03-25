@@ -9,15 +9,20 @@ export declare class Decidueye extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.FIRE;
     }[];
-    retreat: CardType[];
-    attacks: {
+    retreat: CardType.COLORLESS[];
+    attacks: ({
         name: string;
-        cost: CardType[];
+        cost: CardType.COLORLESS[];
         damage: number;
         text: string;
-    }[];
+    } | {
+        name: string;
+        cost: CardType.GRASS[];
+        damage: number;
+        text: string;
+    })[];
     set: string;
     cardImage: string;
     setNumber: string;

@@ -123,7 +123,7 @@ class Girafarig extends pokemon_card_1.PokemonCard {
             const pokemon = opponent.active;
             let specialEnergyCount = 0;
             pokemon.cards.forEach(c => {
-                if (c instanceof game_1.EnergyCard) {
+                if (c.superType === card_types_1.SuperType.ENERGY) {
                     if (c.energyType === card_types_1.EnergyType.SPECIAL) {
                         specialEnergyCount++;
                     }

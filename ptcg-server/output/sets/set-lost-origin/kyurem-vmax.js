@@ -5,10 +5,10 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class KyuremVMAX extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -49,7 +49,7 @@ class KyuremVMAX extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.GLACIATED_WORLD_MARKER, this);
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // Prompt player to choose cards to discard 
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.active, { superType: card_types_1.SuperType.ENERGY }, { allowCancel: false, min: 0 }), cards => {
@@ -67,7 +67,7 @@ class KyuremVMAX extends pokemon_card_1.PokemonCard {
                 return state;
             });
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const temp = new game_1.CardList();
             if (player.deck.cards.length === 0) {

@@ -5,8 +5,7 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const __1 = require("../..");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
-const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Rabsca extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -36,7 +35,7 @@ class Rabsca extends pokemon_card_1.PokemonCard {
         this.fullName = 'Rabsca TEF';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = __1.StateUtils.getOpponent(state, player);
             const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(opponent);
@@ -45,36 +44,28 @@ class Rabsca extends pokemon_card_1.PokemonCard {
                 .reduce((left, p) => left + p.provides.length, 0);
             effect.damage += energyCount * 30;
         }
-        if ((effect instanceof attack_effects_1.PutDamageEffect) || (effect instanceof attack_effects_1.PutCountersEffect)) {
-            const player = effect.player;
-            const opponent = __1.StateUtils.getOpponent(state, player);
-            if (effect.target === player.active || effect.target === opponent.active) {
-                return state;
-            }
-            const targetPlayer = __1.StateUtils.findOwner(state, effect.target);
-            let isRabscaInPlay = false;
-            targetPlayer.forEachPokemon(__1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-                if (card === this) {
-                    isRabscaInPlay = true;
-                }
+        /*
+         * Legacy pre-prefab implementation:
+         * - manually intercepted PutDamageEffect / PutCountersEffect
+         * - manually checked bench-only targeting and Rabsca-in-play ownership
+         * - manually stubbed PowerEffect for ability lock handling
+         * - prevented by setting effect.preventDefault = true
+         */
+        // Converted to prefab version:
+        // - PREVENT_DAMAGE_TO_YOUR_BENCHED_POKEMON_FROM_OPPONENT_ATTACKS
+        // - PREVENT_EFFECTS_TO_YOUR_BENCHED_POKEMON_FROM_OPPONENT_ATTACKS
+        state.players.forEach(owner => {
+            (0, prefabs_1.PREVENT_DAMAGE_TO_YOUR_BENCHED_POKEMON_FROM_OPPONENT_ATTACKS)(store, state, effect, {
+                owner,
+                source: this,
+                includeSourcePokemon: true
             });
-            if (!isRabscaInPlay) {
-                return state;
-            }
-            // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: __1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
-                return state;
-            }
-            effect.preventDefault = true;
-        }
+            (0, prefabs_1.PREVENT_EFFECTS_TO_YOUR_BENCHED_POKEMON_FROM_OPPONENT_ATTACKS)(store, state, effect, {
+                owner,
+                source: this,
+                includeSourcePokemon: true
+            });
+        });
         return state;
     }
 }

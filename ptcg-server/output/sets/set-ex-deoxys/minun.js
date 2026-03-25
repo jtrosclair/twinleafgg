@@ -4,7 +4,7 @@ exports.Minun = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Minun extends pokemon_card_1.PokemonCard {
@@ -34,51 +34,29 @@ class Minun extends pokemon_card_1.PokemonCard {
         this.fullName = 'Minun DX';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             (0, prefabs_1.BLOCK_IF_DISCARD_EMPTY)(player);
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, {}, { min: 1, max: 1, allowCancel: false }), cards => {
                 (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: cards, sourceCard: this, sourceEffect: this.attacks[0] });
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            let benchPokemon = [];
-            const pokemonWithAbilities = [];
-            const opponentActive = opponent.active.getPokemonCard();
-            const stubPowerEffectForActive = new game_effects_1.PowerEffect(opponent, {
-                name: 'test',
-                powerType: game_1.PowerType.POKEBODY,
-                text: ''
-            }, opponent.active.getPokemonCard());
-            try {
-                store.reduceEffect(state, stubPowerEffectForActive);
-                if (opponentActive && opponentActive.powers.length) {
-                    pokemonWithAbilities.push(opponent.active);
+            const pokemonWithPokeBodies = [];
+            opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card) => {
+                if (cardList.getPokemonCard()) {
+                    const powersEffect = new check_effects_1.CheckPokemonPowersEffect(opponent, card);
+                    state = store.reduceEffect(state, powersEffect);
+                    if (powersEffect.powers.some(power => power.powerType === game_1.PowerType.POKEBODY)) {
+                        pokemonWithPokeBodies.push(cardList);
+                    }
                 }
-            }
-            catch (_a) {
-                // no abilities in active
-            }
-            if (opponent.bench.some(b => b.cards.length > 0)) {
-                const stubPowerEffectForBench = new game_effects_1.PowerEffect(opponent, {
-                    name: 'test',
-                    powerType: game_1.PowerType.POKEBODY,
-                    text: ''
-                }, opponent.bench.filter(b => b.cards.length > 0)[0].getPokemonCard());
-                try {
-                    store.reduceEffect(state, stubPowerEffectForBench);
-                    benchPokemon = opponent.bench.map(b => b).filter(card => card !== undefined);
-                    pokemonWithAbilities.push(...benchPokemon.filter(card => { var _a; return (_a = card.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.powers.length; }));
-                }
-                catch (_b) {
-                    // no abilities on bench
-                }
-            }
+            });
             effect.ignoreWeakness = true;
             effect.ignoreResistance = true;
-            pokemonWithAbilities.forEach(target => {
+            pokemonWithPokeBodies.forEach(target => {
                 const damageEffect = new attack_effects_1.PutDamageEffect(effect, 20);
                 damageEffect.target = target;
                 store.reduceEffect(state, damageEffect);

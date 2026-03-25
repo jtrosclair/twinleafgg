@@ -45,7 +45,7 @@ class DarkDragonair extends pokemon_card_1.PokemonCard {
         (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.EVOLUTIONARY_LIGHT_MARKER, this);
         if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEMON_POWER_BLOCKED)(store, state, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
             }
             (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);

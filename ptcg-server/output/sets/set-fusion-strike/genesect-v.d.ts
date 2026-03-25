@@ -12,9 +12,9 @@ export declare class GenesectV extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.FIRE;
     }[];
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     powers: {
         name: string;
         useWhenInPlay: boolean;
@@ -23,7 +23,7 @@ export declare class GenesectV extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: (CardType.METAL | CardType.COLORLESS)[];
         damage: number;
         text: string;
     }[];
@@ -33,7 +33,5 @@ export declare class GenesectV extends PokemonCard {
     name: string;
     fullName: string;
     readonly FUSION_STRIKE_SYSTEM_MARKER = "FUSION_STRIKE_SYSTEM_MARKER";
-    readonly ATTACK_USED_MARKER = "ATTACK_USED_MARKER";
-    readonly ATTACK_USED_2_MARKER = "ATTACK_USED_2_MARKER";
     reduceEffect(_store: StoreLike, state: State, effect: Effect): State;
 }

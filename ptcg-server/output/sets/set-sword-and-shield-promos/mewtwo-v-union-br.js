@@ -4,10 +4,10 @@ exports.MewtwoVUNIONBottomRight = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const mewtwo_v_union_tl_1 = require("./mewtwo-v-union-tl");
 const mewtwo_v_union_tr_1 = require("./mewtwo-v-union-tr");
 const mewtwo_v_union_bl_1 = require("./mewtwo-v-union-bl");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class MewtwoVUNIONBottomRight extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -50,7 +50,7 @@ class MewtwoVUNIONBottomRight extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // assemblin the v-union
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const slots = player.bench.filter(b => b.cards.length === 0);
             if (player.assembledVUNIONs.includes(this.name)) {

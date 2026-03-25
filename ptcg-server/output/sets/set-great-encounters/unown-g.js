@@ -90,7 +90,7 @@ class UnownG extends pokemon_card_1.PokemonCard {
         this.setNumber = '57';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const generator = usePower(() => generator.next(), store, state, this, effect);
             return generator.next().value;
         }

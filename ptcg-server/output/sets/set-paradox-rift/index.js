@@ -18,6 +18,7 @@ const cyclizar_1 = require("./cyclizar");
 const defiance_vest_1 = require("./defiance-vest");
 const deoxys_1 = require("./deoxys");
 const doublade_1 = require("./doublade");
+const durant_1 = require("./durant");
 const earthen_vessel_1 = require("./earthen-vessel");
 const elekid_1 = require("./elekid");
 const flamigo_1 = require("./flamigo");
@@ -49,6 +50,7 @@ const latios_1 = require("./latios");
 const luxurious_cape_1 = require("./luxurious-cape");
 const magby_1 = require("./magby");
 const mantyke_1 = require("./mantyke");
+const medical_energy_1 = require("./medical-energy");
 const mela_1 = require("./mela");
 const mewtwo_ex_1 = require("./mewtwo-ex");
 const minior_1 = require("./minior");
@@ -112,6 +114,7 @@ exports.setParadoxRift = [
     new defiance_vest_1.DefianceVest(),
     new deoxys_1.Deoxys(),
     new doublade_1.Doublade(),
+    new durant_1.Durant(),
     new earthen_vessel_1.EarthenVessel(),
     new elekid_1.Elekid(),
     new flamigo_1.Flamigo(),
@@ -140,6 +143,7 @@ exports.setParadoxRift = [
     new luxurious_cape_1.LuxuriousCape(),
     new magby_1.Magby(),
     new mantyke_1.Mantyke(),
+    new medical_energy_1.MedicalEnergy(),
     new mela_1.Mela(),
     new mewtwo_ex_1.Mewtwoex(),
     new minior_1.Minior(),

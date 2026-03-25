@@ -28,7 +28,6 @@ class MrStonesProject extends trainer_card_1.TrainerCard {
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            (0, prefabs_1.BLOCK_IF_DISCARD_EMPTY)(player);
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             const options = [
                 {
@@ -41,7 +40,6 @@ class MrStonesProject extends trainer_card_1.TrainerCard {
                                 store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => { });
                             }
                             (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: cards, sourceCard: this });
-                            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                             store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                                 player.deck.applyOrder(order);
                             });
@@ -53,13 +51,12 @@ class MrStonesProject extends trainer_card_1.TrainerCard {
                     message: game_1.GameMessage.CHOOSE_ENERGY_FROM_DISCARD,
                     action: () => {
                         let cards = [];
-                        store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { min: 1, max: 2, allowCancel: false }), selected => {
+                        store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { min: 0, max: 2, allowCancel: false }), selected => {
                             cards = selected || [];
                             if (cards.length > 0) {
                                 store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => { });
                             }
                             (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: cards, sourceCard: this });
-                            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                         });
                         return state;
                     }

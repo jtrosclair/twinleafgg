@@ -1,64 +1,93 @@
-import { Slowpoke } from "../set-lost-thunder/slowpoke";
-import { BillsAnalysis } from "../set-team-up/bills-analysis";
-import { LtSurgesStrategy } from "../set-unbroken-bonds/lt-surges-strategy";
-import { MoltresZapdosArticunoGX as MoltresZapdosArticunoGXHIF44 } from "../set-hidden-fates/moltres-zapdos-articuno-gx";
-import { Rowlet } from "../set-sun-and-moon/rowlet";
-import { Dartrix } from "../set-sun-and-moon/dartrix";
-import { FroakieFrubbles } from "../set-forbidden-light/froakie-2";
-import { Frogadier } from "../set-forbidden-light/frogadier";
-import { Shuppet } from "../set-celestial-storm/shuppet";
-import { Inkay } from "../set-forbidden-light/inkay";
-import { Malamar } from "../set-forbidden-light/malamar";
-import { Poipole } from "../set-forbidden-light/poipole";
-import { Sudowoodo } from "../set-guardians-rising/sudowoodo";
-import { Riolu } from "../set-ultra-prism/riolu";
-import { Lucario } from "../set-ultra-prism/lucario";
-import { Rockruff } from "../set-forbidden-light/rockruff";
-import { Buzzwole } from "../set-forbidden-light/buzzwole";
-import { Zorua } from "../set-shining-legends/zorua";
-import { Magnezone } from "../set-ultra-prism/magnezone";
-import { Ralts } from "../set-burning-shadows/ralts";
-import { Diancie } from "../set-burning-shadows/diancie";
-import { Gible } from "../set-ultra-prism/gible";
-import { Gabite } from "../set-ultra-prism/gabite";
-import { Garchomp } from "../set-ultra-prism/garchomp";
-import { Eevee as EeveeSUM101 } from "../set-sun-and-moon/eevee";
-import { Noibat } from "../set-burning-shadows/noibat";
-import { Oranguru } from "../set-sun-and-moon/oranguru";
-import { DecidueyeGX } from "../set-sun-and-moon/decidueye-gx";
-import { AlolanNinetalesGX } from "../set-guardians-rising/alolan-ninetales-gx";
-import { ArticunoGX } from "../set-celestial-storm/articuno-gx";
-import { GlaceonGX } from "../set-ultra-prism/glaceon-gx";
-import { GreninjaGX } from "../set-forbidden-light/greninja-gx";
-import { ElectrodeGX } from "../set-celestial-storm/electrode-gx";
-import { MewtwoGX as MewtwoGXSLG39 } from "../set-shining-legends/mewtwo-gx";
-import { EspeonGX } from "../set-sun-and-moon/espeon-gx";
-import { BanetteGX } from "../set-celestial-storm/banette-gx";
-import { NaganadelGX } from "../set-forbidden-light/naganadel-gx";
-import { LucarioGX } from "../set-sun-and-moon-promos/lucario-gx";
-import { LycanrocGX } from "../set-guardians-rising/lycanroc-gx";
-import { BuzzwoleGX } from "../set-crimson-invasion/buzzwole-gx";
-import { DarkraiGX } from "../set-burning-shadows/darkrai-gx";
-import { GuzzlordGX } from "../set-crimson-invasion/guzzlord-gx";
-import { KartanaGX } from "../set-crimson-invasion/kartana-gx";
-import { GardevoirGX } from "../set-burning-shadows/gardevoir-gx";
-import { SylveonGX } from "../set-guardians-rising/sylveon-gx";
-import { NoivernGX } from "../set-burning-shadows/noivern-gx";
-import { SilvallyGX } from "../set-ultra-prism/silvally-gx";
-import { DrampaGX } from "../set-guardians-rising/drampa-gx";
-import { Cynthia } from "../set-ultra-prism/cynthia";
-import { FishermanHS } from "../set-heartgold-and-soulsilver/other-prints";
-import { LadyFLI } from "../set-forbidden-light/other-prints";
-import { AetherParadiseConvserationArea } from "../set-guardians-rising/aether-paradise-conservation-area";
-import { BrookletHill } from "../set-guardians-rising/brooklet-hill";
-import { MtCoronet } from "../set-ultra-prism/mt-coronet";
-import { ShrineOfPunishment } from "../set-celestial-storm/shrine-of-punishment";
-import { TapuBuluGX } from "../set-burning-shadows/tapu-bulu-gx";
-import { TapuFiniGX } from "../set-burning-shadows/tapu-fini-gx";
-import { TapuKokoGX } from "../set-guardians-rising/tapu-koko-gx";
-import { TapuLeleGX } from "../set-guardians-rising/tapu-lele-gx";
+import { Slowpoke } from '../set-lost-thunder/slowpoke';
+import { BillsAnalysis } from '../set-team-up/bills-analysis';
+import { LtSurgesStrategy } from '../set-unbroken-bonds/lt-surges-strategy';
+import { MoltresZapdosArticunoGX as MoltresZapdosArticunoGXHIF44 } from '../set-hidden-fates/moltres-zapdos-articuno-gx';
+import { Rowlet } from '../set-sun-and-moon/rowlet';
+import { Dartrix } from '../set-sun-and-moon/dartrix';
+import { FroakieFrubbles } from '../set-forbidden-light/froakie-2';
+import { Frogadier } from '../set-forbidden-light/frogadier';
+import { Shuppet } from '../set-celestial-storm/shuppet';
+import { Inkay } from '../set-forbidden-light/inkay';
+import { Malamar } from '../set-forbidden-light/malamar';
+import { Poipole } from '../set-forbidden-light/poipole';
+import { Sudowoodo } from '../set-guardians-rising/sudowoodo';
+import { Riolu } from '../set-ultra-prism/riolu';
+import { Lucario } from '../set-ultra-prism/lucario';
+import { Rockruff } from '../set-forbidden-light/rockruff';
+import { Buzzwole } from '../set-forbidden-light/buzzwole';
+import { Zorua } from '../set-shining-legends/zorua';
+import { Magnezone } from '../set-ultra-prism/magnezone';
+import { Ralts } from '../set-burning-shadows/ralts';
+import { Diancie } from '../set-burning-shadows/diancie';
+import { Gible } from '../set-ultra-prism/gible';
+import { Gabite } from '../set-ultra-prism/gabite';
+import { Garchomp } from '../set-ultra-prism/garchomp';
+import { Eevee as EeveeSUM101 } from '../set-sun-and-moon/eevee';
+import { Noibat } from '../set-burning-shadows/noibat';
+import { Oranguru } from '../set-sun-and-moon/oranguru';
+import { DecidueyeGX } from '../set-sun-and-moon/decidueye-gx';
+import { AlolanNinetalesGX } from '../set-guardians-rising/alolan-ninetales-gx';
+import { ArticunoGX } from '../set-celestial-storm/articuno-gx';
+import { GlaceonGX } from '../set-ultra-prism/glaceon-gx';
+import { GreninjaGX } from '../set-forbidden-light/greninja-gx';
+import { ElectrodeGX } from '../set-celestial-storm/electrode-gx';
+import { MewtwoGX as MewtwoGXSLG39 } from '../set-shining-legends/mewtwo-gx';
+import { EspeonGX } from '../set-sun-and-moon/espeon-gx';
+import { BanetteGX } from '../set-celestial-storm/banette-gx';
+import { NaganadelGX } from '../set-forbidden-light/naganadel-gx';
+import { LucarioGX } from '../set-sun-and-moon-promos/lucario-gx';
+import { LycanrocGX } from '../set-guardians-rising/lycanroc-gx';
+import { BuzzwoleGX } from '../set-crimson-invasion/buzzwole-gx';
+import { DarkraiGX } from '../set-burning-shadows/darkrai-gx';
+import { GuzzlordGX } from '../set-crimson-invasion/guzzlord-gx';
+import { KartanaGX } from '../set-crimson-invasion/kartana-gx';
+import { GardevoirGX } from '../set-burning-shadows/gardevoir-gx';
+import { SylveonGX } from '../set-guardians-rising/sylveon-gx';
+import { NoivernGX } from '../set-burning-shadows/noivern-gx';
+import { SilvallyGX } from '../set-ultra-prism/silvally-gx';
+import { DrampaGX } from '../set-guardians-rising/drampa-gx';
+import { Cynthia } from '../set-ultra-prism/cynthia';
+import { FishermanHS } from '../set-heartgold-and-soulsilver/other-prints';
+import { LadyFLI } from '../set-forbidden-light/other-prints';
+import { AetherParadiseConvserationArea } from '../set-guardians-rising/aether-paradise-conservation-area';
+import { BrookletHill } from '../set-guardians-rising/brooklet-hill';
+import { MtCoronet } from '../set-ultra-prism/mt-coronet';
+import { ShrineOfPunishment } from '../set-celestial-storm/shrine-of-punishment';
+import { TapuBuluGX } from '../set-burning-shadows/tapu-bulu-gx';
+import { TapuFiniGX } from '../set-burning-shadows/tapu-fini-gx';
+import { TapuKokoGX } from '../set-guardians-rising/tapu-koko-gx';
+import { TapuLeleGX } from '../set-guardians-rising/tapu-lele-gx';
 import { BrocksGrit } from '../set-evolutions/brocks-grit';
 import { Guzma } from '../set-burning-shadows/guzma';
+import { CharizardGX as CharizardGXBUS } from '../set-burning-shadows/charizard-gx';
+import { Scyther } from '../set-celestial-storm/scyther';
+import { Pheromosa } from '../set-forbidden-light/pheromosa';
+import { Xurkitree } from '../set-forbidden-light/xurkitree';
+import { Guzzlord } from '../set-forbidden-light/guzzlord';
+import { Magnemite } from '../set-forbidden-light/magnemite';
+import { Magneton } from '../set-ultra-prism/magneton';
+import { Beldum } from '../set-guardians-rising/beldum';
+import { Metang } from '../set-guardians-rising/metang';
+import { Celesteela } from '../set-celestial-storm/celesteela';
+import { Kartana } from '../set-celestial-storm/kartana';
+import { Swablu } from '../set-dragons-majesty/swablu';
+import { TypeNull } from '../set-crimson-invasion/type-null';
+import { GolisopodGx } from '../set-burning-shadows/golisopod-gx';
+import { TurtonatorGx } from '../set-guardians-rising/turtonator-gx';
+import { ZygardeGx } from '../set-forbidden-light/zygarde-gx';
+import { UmbreonGx } from '../set-sun-and-moon/umbreon-gx';
+import { AetherFoundationEmployee } from '../set-lost-thunder/aether-foundation-employee';
+import { Hiker } from '../set-celestial-storm/hiker';
+import { Charmeleon } from '../set-base-set/charmeleon';
+import { Staryu } from '../set-team-up/staryu';
+import { Pikachu } from '../set-black-and-white-promos/pikachu';
+import { BlaineSLastStand } from '../set-dragons-majesty/blaines-last-stand';
+import { GiovannisExile } from '../set-unbroken-bonds/giovannis-exile';
+import { KogasTrap } from '../set-unbroken-bonds/kogas-trap';
+import { MistysDetermination } from '../set-evolutions/mistys-determination';
+import { PokemonCenterLady } from '../set-flashfire/pokemon-center-lady';
+import { SabrinasSuggestion } from '../set-team-up/sabrinas-suggestion';
+import { JessieAndJames } from './jessie-and-james';
 export declare class BrocksGritHIF extends BrocksGrit {
     fullName: string;
     set: string;
@@ -368,4 +397,154 @@ export declare class TapuLeleGXHIF extends TapuLeleGX {
     setNumber: string;
     fullName: string;
     set: string;
+}
+export declare class CharizardGXHIF extends CharizardGXBUS {
+    setNumber: string;
+    fullName: string;
+    set: string;
+}
+export declare class ScytherHIF extends Scyther {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class PheromosaHIF extends Pheromosa {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class XurkitreeHIF extends Xurkitree {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class GuzzlordHIF extends Guzzlord {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class MagnemiteHIF extends Magnemite {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class MagnetonHIF extends Magneton {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class BeldumHIF extends Beldum {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class MetangHIF extends Metang {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class CelesteelaHIF extends Celesteela {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class KartanaHIF extends Kartana {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class SwabluHIF extends Swablu {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class TypeNullHIF extends TypeNull {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class GolisopodGxHIF extends GolisopodGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class TurtonatorGxHIF extends TurtonatorGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class ZygardeGxHIF extends ZygardeGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class UmbreonGxHIF extends UmbreonGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class AetherFoundationEmployeeHIF extends AetherFoundationEmployee {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class HikerHIF extends Hiker {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class CharmeleonHIF extends Charmeleon {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class StaryuHIF extends Staryu {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class PikachuHIF extends Pikachu {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class BlainesLastStandHIF extends BlaineSLastStand {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class GiovannisExileHIF extends GiovannisExile {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class KogasTrapHIF extends KogasTrap {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class MistysDeterminationHIF extends MistysDetermination {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class PokemonCenterLadyHIF extends PokemonCenterLady {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class SabrinasSuggestionHIF extends SabrinasSuggestion {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class GiovannisExile2 extends GiovannisExile {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class JessieAndJames2 extends JessieAndJames {
+    set: string;
+    setNumber: string;
+    fullName: string;
 }

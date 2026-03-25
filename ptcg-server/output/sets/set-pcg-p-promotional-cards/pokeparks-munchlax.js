@@ -1,14 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PokeParksMunchlax = void 0;
-const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const card_types_1 = require("../../game/store/card/card-types");
-const state_1 = require("../../game/store/state/state");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
-const attack_effects_2 = require("../../game/store/effects/attack-effects");
+const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const game_1 = require("../../game");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const card_types_1 = require("../../game/store/card/card-types");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 class PokeParksMunchlax extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -45,22 +43,22 @@ class PokeParksMunchlax extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (effect instanceof attack_effects_2.PutDamageEffect && effect.target.cards.includes(this) && (0, prefabs_1.HAS_MARKER)(this.DEFENSE_CURL_MARKER, effect.target, this)) {
+        if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.cards.includes(this) && (0, prefabs_1.HAS_MARKER)(this.DEFENSE_CURL_MARKER, effect.target, this)) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
             const opponent = game_1.StateUtils.findOwner(state, effect.source);
             if (player === opponent) {
                 return state;
             }
             // It's not an attack
-            if (state.phase !== state_1.GamePhase.ATTACK) {
+            if (state.phase !== game_1.GamePhase.ATTACK) {
                 return state;
             }
             effect.preventDefault = true;
         }
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
             (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED)(store, state, effect);
+                    (0, prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
                 }
             });
         }

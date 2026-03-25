@@ -9,6 +9,8 @@ const game_message_1 = require("../../game/game-message");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_1 = require("../../game");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Chimecho extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -31,20 +33,24 @@ class Chimecho extends pokemon_card_1.PokemonCard {
         this.OPPONENT_CANNOT_PLAY_ITEM_CARDS_MARKER = 'OPPONENT_CANNOT_PLAY_ITEM_CARDS_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             opponent.marker.addMarker(this.OPPONENT_CANNOT_PLAY_ITEM_CARDS_MARKER, this);
         }
-        if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard.powers.length > 0) {
+        if (effect instanceof play_card_effects_1.PlayPokemonEffect) {
             const player = effect.player;
-            if (player.marker.hasMarker(this.OPPONENT_CANNOT_PLAY_ITEM_CARDS_MARKER, this)) {
+            const powersEffect = new check_effects_1.CheckPokemonPowersEffect(player, effect.pokemonCard);
+            state = store.reduceEffect(state, powersEffect);
+            if (player.marker.hasMarker(this.OPPONENT_CANNOT_PLAY_ITEM_CARDS_MARKER, this) && powersEffect.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
                 throw new game_1.GameError(game_message_1.GameMessage.BLOCKED_BY_EFFECT);
             }
         }
-        if (effect instanceof game_effects_1.EvolveEffect && effect.pokemonCard.powers.length > 0) {
+        if (effect instanceof game_effects_1.EvolveEffect) {
             const player = effect.player;
-            if (player.marker.hasMarker(this.OPPONENT_CANNOT_PLAY_ITEM_CARDS_MARKER, this)) {
+            const powersEffect = new check_effects_1.CheckPokemonPowersEffect(player, effect.pokemonCard);
+            state = store.reduceEffect(state, powersEffect);
+            if (player.marker.hasMarker(this.OPPONENT_CANNOT_PLAY_ITEM_CARDS_MARKER, this) && powersEffect.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
                 throw new game_1.GameError(game_message_1.GameMessage.BLOCKED_BY_EFFECT);
             }
         }

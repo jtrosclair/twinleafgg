@@ -41,7 +41,6 @@ function* playCard(next, store, state, self, effect) {
         store.log(state, game_message_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
     });
     (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards, sourceCard: self });
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     if (cards.length > 0) {
         yield store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
@@ -66,7 +65,6 @@ class Lusamine extends trainer_card_1.TrainerCard {
             store.reduceEffect(state, discardEffect);
             if (discardEffect.preventDefault) {
                 // If prevented, just discard the card and return
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             }
             const generator = playCard(() => generator.next(), store, state, this, effect);

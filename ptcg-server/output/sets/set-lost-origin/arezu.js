@@ -51,7 +51,6 @@ function* playCard(next, store, state, self, effect) {
         // else {
         player.deck.moveCardsTo(cards, player.hand);
         player.hand.moveCardTo(self, player.discard);
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {

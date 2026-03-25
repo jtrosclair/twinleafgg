@@ -6,7 +6,6 @@ const card_types_1 = require("../../game/store/card/card-types");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_1 = require("../../game");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class SagesTraining extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -41,7 +40,6 @@ class SagesTraining extends trainer_card_1.TrainerCard {
                 player.ancientSupporter = true;
                 deckTop.moveCardsTo(selected, player.hand);
                 deckTop.moveTo(player.discard);
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             });
         }
         return state;

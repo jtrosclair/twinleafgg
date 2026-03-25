@@ -16,7 +16,7 @@ class CelebrationFanfare extends trainer_card_1.TrainerCard {
         this.setNumber = '174';
         this.name = 'Celebration Fanfare';
         this.fullName = 'Celebration Fanfare SVP';
-        this.text = 'Once during each player\'s turn, that player may heal 10 damage from each of their Pokémon.If they do, that player\'s turn ends.';
+        this.text = 'Once during each player\'s turn, that player may heal 10 damage from each of their Pokémon. If they do, that player\'s turn ends.';
     }
     useStadium(store, state, effect) {
         const player = effect.player;

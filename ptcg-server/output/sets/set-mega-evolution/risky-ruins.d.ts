@@ -10,7 +10,6 @@ export declare class DangerousRuins extends TrainerCard {
     set: string;
     name: string;
     fullName: string;
-    legacyFullName: string;
     text: string;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

@@ -32,5 +32,6 @@ export declare class MagearnaEX extends PokemonCard {
     name: string;
     fullName: string;
     readonly SOUL_BLASER_MARKER = "SOUL_BLASER_MARKER";
+    readonly SOUL_BLASER_CLEAR_MARKER = "SOUL_BLASER_CLEAR_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

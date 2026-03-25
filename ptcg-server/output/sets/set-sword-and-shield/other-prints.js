@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.QuickBall2SSH = exports.OrdinaryRod2SSH = exports.MetalSaucer2SSH = exports.AirBalloon2SSH = exports.ZacianV3SSH = exports.ProfessorsResearch3SSH = exports.Bede3SSH = exports.StonjournerVMAX2SSH = exports.ProfessorsResearch2SSH = exports.Bede2SSH = exports.CramorantV2SSH = exports.ZacianV2SSH = exports.StonjournerV2SSH = exports.VitalityBandSSH = exports.RareCandySSH = exports.PotionSSH = exports.PokemonCatcherSSH = exports.Pokegear30HSSSH = exports.PalPadSSH = exports.LumBerrySSH = exports.EnergySwitchPKSSH = exports.EnergySearchSSH = exports.EnergyRetrievalSSH = exports.CrushingHammerSSH = exports.ProfessorsResearchSSH = exports.MarnieSSH2 = exports.MarnieSSH = exports.GreatBallSSH = void 0;
+exports.ZamazentaV3 = exports.TeamYellGrunt3 = exports.SnorlaxVmax2 = exports.MorpekoVmax2 = exports.LaprasVmax2 = exports.TeamYellGrunt2 = exports.SnorlaxV2 = exports.ZamazentaV2 = exports.SableyeV2 = exports.IndeedeeV2 = exports.WobbuffetV2 = exports.MorpekoV2 = exports.LaprasV2 = exports.TorkoalV2 = exports.DhelmiseV2 = exports.PokemonCenterLadySSH = exports.LuckyEggSSH = exports.HyperPotionSSH = exports.QuickBall2SSH = exports.OrdinaryRod2SSH = exports.MetalSaucer2SSH = exports.AirBalloon2SSH = exports.ZacianV3SSH = exports.ProfessorsResearch3SSH = exports.Bede3SSH = exports.StonjournerVMAX2SSH = exports.ProfessorsResearch2SSH = exports.Bede2SSH = exports.CramorantV2SSH = exports.ZacianV2SSH = exports.StonjournerV2SSH = exports.VitalityBandSSH = exports.RareCandySSH = exports.PotionSSH = exports.PokemonCatcherSSH = exports.Pokegear30HSSSH = exports.PalPadSSH = exports.LumBerrySSH = exports.EnergySwitchPKSSH = exports.EnergySearchSSH = exports.EnergyRetrievalSSH = exports.CrushingHammerSSH = exports.ProfessorsResearchSSH = exports.MarnieSSH2 = exports.MarnieSSH = exports.GreatBallSSH = void 0;
 const crushing_hammer_1 = require("../set-scarlet-and-violet/crushing-hammer");
 const energy_retrieval_1 = require("../set-base-set/energy-retrieval");
 const energy_search_1 = require("../set-fossil/energy-search");
@@ -8,7 +8,7 @@ const other_prints_1 = require("../set-ex-power-keepers/other-prints");
 const lum_berry_1 = require("../set-ex-emerald/lum-berry");
 const pal_pad_1 = require("../set-scarlet-and-violet/pal-pad");
 const other_prints_2 = require("../set-heartgold-and-soulsilver/other-prints");
-const pokemon_catcher_1 = require("../set-emerging-powers/pokemon-catcher");
+const pokemon_catcher_1 = require("../set-scarlet-and-violet/pokemon-catcher");
 const potion_1 = require("../set-base-set/potion");
 const rare_candy_1 = require("../set-ex-holon-phantoms/rare-candy");
 const vitality_band_1 = require("../set-scarlet-and-violet/vitality-band");
@@ -25,6 +25,22 @@ const quick_ball_1 = require("../set-sword-and-shield/quick-ball");
 const great_ball_1 = require("../set-paldea-evolved/great-ball");
 const marnie_1 = require("./marnie");
 const professors_research_2 = require("../set-scarlet-and-violet/professors-research");
+const hyper_potion_1 = require("../set-champions-path/hyper-potion");
+const lucky_egg_1 = require("../set-arceus/lucky-egg");
+const pokemon_center_lady_1 = require("../set-flashfire/pokemon-center-lady");
+const dhelmise_v_1 = require("./dhelmise-v");
+const torkoal_v_1 = require("./torkoal-v");
+const lapras_v_1 = require("./lapras-v");
+const morpeko_v_1 = require("./morpeko-v");
+const wobbuffet_v_1 = require("./wobbuffet-v");
+const indeedee_v_1 = require("./indeedee-v");
+const sableye_v_1 = require("./sableye-v");
+const zamazenta_v_1 = require("./zamazenta-v");
+const snorlax_v_1 = require("./snorlax-v");
+const team_yell_grunt_1 = require("./team-yell-grunt");
+const lapras_vmax_1 = require("./lapras-vmax");
+const morpeko_vmax_1 = require("./morpeko-vmax");
+const snorlax_vmax_1 = require("./snorlax-vmax");
 class GreatBallSSH extends great_ball_1.GreatBall {
     constructor() {
         super(...arguments);
@@ -131,7 +147,7 @@ class PokemonCatcherSSH extends pokemon_catcher_1.PokemonCatcher {
     constructor() {
         super(...arguments);
         this.setNumber = '175';
-        this.fullName = 'Pokemon Catcher SSH';
+        this.fullName = 'Pokémon Catcher SSH';
         this.set = 'SSH';
     }
 }
@@ -280,3 +296,165 @@ class QuickBall2SSH extends quick_ball_1.QuickBall {
     }
 }
 exports.QuickBall2SSH = QuickBall2SSH;
+class HyperPotionSSH extends hyper_potion_1.HyperPotion {
+    constructor() {
+        super(...arguments);
+        this.set = 'SSH';
+        this.setNumber = '166';
+        this.fullName = 'Hyper Potion SSH';
+    }
+}
+exports.HyperPotionSSH = HyperPotionSSH;
+class LuckyEggSSH extends lucky_egg_1.LuckyEgg {
+    constructor() {
+        super(...arguments);
+        this.set = 'SSH';
+        this.setNumber = '167';
+        this.fullName = 'Lucky Egg SSH';
+    }
+}
+exports.LuckyEggSSH = LuckyEggSSH;
+class PokemonCenterLadySSH extends pokemon_center_lady_1.PokemonCenterLady {
+    constructor() {
+        super(...arguments);
+        this.set = 'SSH';
+        this.setNumber = '176';
+        this.fullName = 'Pokémon Center Lady SSH';
+    }
+}
+exports.PokemonCenterLadySSH = PokemonCenterLadySSH;
+class DhelmiseV2 extends dhelmise_v_1.DhelmiseV {
+    constructor() {
+        super(...arguments);
+        this.set = 'SSH';
+        this.setNumber = '187';
+        this.fullName = 'Dhelmise V SSH 187';
+    }
+}
+exports.DhelmiseV2 = DhelmiseV2;
+class TorkoalV2 extends torkoal_v_1.TorkoalV {
+    constructor() {
+        super(...arguments);
+        this.set = 'SSH';
+        this.setNumber = '188';
+        this.fullName = 'Torkoal V SSH 188';
+    }
+}
+exports.TorkoalV2 = TorkoalV2;
+class LaprasV2 extends lapras_v_1.LaprasV {
+    constructor() {
+        super(...arguments);
+        this.set = 'SSH';
+        this.setNumber = '189';
+        this.fullName = 'Lapras V SSH 189';
+    }
+}
+exports.LaprasV2 = LaprasV2;
+class MorpekoV2 extends morpeko_v_1.MorpekoV {
+    constructor() {
+        super(...arguments);
+        this.set = 'SSH';
+        this.setNumber = '190';
+        this.fullName = 'Morpeko V SSH 190';
+    }
+}
+exports.MorpekoV2 = MorpekoV2;
+class WobbuffetV2 extends wobbuffet_v_1.WobbuffetV {
+    constructor() {
+        super(...arguments);
+        this.set = 'SSH';
+        this.setNumber = '191';
+        this.fullName = 'Wobbuffet V SSH 191';
+    }
+}
+exports.WobbuffetV2 = WobbuffetV2;
+class IndeedeeV2 extends indeedee_v_1.IndeedeeV {
+    constructor() {
+        super(...arguments);
+        this.set = 'SSH';
+        this.setNumber = '192';
+        this.fullName = 'Indeedee V SSH 192';
+    }
+}
+exports.IndeedeeV2 = IndeedeeV2;
+class SableyeV2 extends sableye_v_1.SableyeV {
+    constructor() {
+        super(...arguments);
+        this.set = 'SSH';
+        this.setNumber = '194';
+        this.fullName = 'Sableye V SSH 194';
+    }
+}
+exports.SableyeV2 = SableyeV2;
+class ZamazentaV2 extends zamazenta_v_1.ZamazentaV {
+    constructor() {
+        super(...arguments);
+        this.set = 'SSH';
+        this.setNumber = '196';
+        this.fullName = 'Zamazenta V SSH 196';
+    }
+}
+exports.ZamazentaV2 = ZamazentaV2;
+class SnorlaxV2 extends snorlax_v_1.SnorlaxV {
+    constructor() {
+        super(...arguments);
+        this.set = 'SSH';
+        this.setNumber = '197';
+        this.fullName = 'Snorlax V SSH 197';
+    }
+}
+exports.SnorlaxV2 = SnorlaxV2;
+class TeamYellGrunt2 extends team_yell_grunt_1.TeamYellGrunt {
+    constructor() {
+        super(...arguments);
+        this.set = 'SSH';
+        this.setNumber = '202';
+        this.fullName = 'Team Yell Grunt SSH 202';
+    }
+}
+exports.TeamYellGrunt2 = TeamYellGrunt2;
+class LaprasVmax2 extends lapras_vmax_1.LaprasVmax {
+    constructor() {
+        super(...arguments);
+        this.set = 'SSH';
+        this.setNumber = '203';
+        this.fullName = 'Lapras VMAX SSH 203';
+    }
+}
+exports.LaprasVmax2 = LaprasVmax2;
+class MorpekoVmax2 extends morpeko_vmax_1.MorpekoVmax {
+    constructor() {
+        super(...arguments);
+        this.set = 'SSH';
+        this.setNumber = '204';
+        this.fullName = 'Morpeko VMAX SSH 204';
+    }
+}
+exports.MorpekoVmax2 = MorpekoVmax2;
+class SnorlaxVmax2 extends snorlax_vmax_1.SnorlaxVmax {
+    constructor() {
+        super(...arguments);
+        this.set = 'SSH';
+        this.setNumber = '206';
+        this.fullName = 'Snorlax VMAX SSH 206';
+    }
+}
+exports.SnorlaxVmax2 = SnorlaxVmax2;
+class TeamYellGrunt3 extends team_yell_grunt_1.TeamYellGrunt {
+    constructor() {
+        super(...arguments);
+        this.set = 'SSH';
+        this.setNumber = '210';
+        this.fullName = 'Team Yell Grunt SSH 210';
+    }
+}
+exports.TeamYellGrunt3 = TeamYellGrunt3;
+class ZamazentaV3 extends zamazenta_v_1.ZamazentaV {
+    constructor() {
+        super(...arguments);
+        this.set = 'SSH';
+        this.setNumber = '212';
+        this.fullName = 'Zamazenta V SSH 212';
+    }
+}
+exports.ZamazentaV3 = ZamazentaV3;

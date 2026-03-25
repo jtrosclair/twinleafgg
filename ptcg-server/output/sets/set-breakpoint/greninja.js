@@ -8,6 +8,7 @@ const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Greninja extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -46,14 +47,14 @@ class Greninja extends pokemon_card_1.PokemonCard {
             player.marker.removeMarker(this.SHADOW_STITCHING_MARKER, this);
         }
         // Shadow Stitching
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             player.active.marker.addMarker(this.SHADOW_STITCHING_MARKER, this);
             opponent.marker.addMarker(this.CLEAR_SHADOW_STITCHING_MARKER, this);
         }
         // Mist Slash
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
                 if (wantToUse) {
@@ -68,6 +69,20 @@ class Greninja extends pokemon_card_1.PokemonCard {
             });
         }
         // the shadow ability blocking
+        if (effect instanceof check_effects_1.CheckPokemonPowersEffect) {
+            const player = effect.player;
+            const opponent = game_1.StateUtils.getOpponent(state, player);
+            // Check if Shadow Stitching marker is active on opponent
+            if (opponent.marker.hasMarker(this.CLEAR_SHADOW_STITCHING_MARKER, this)) {
+                // Check if the target belongs to the opponent
+                const targetCardList = game_1.StateUtils.findCardList(state, effect.target);
+                const targetOwner = game_1.StateUtils.findOwner(state, targetCardList);
+                if (targetOwner === opponent) {
+                    // Filter out all abilities
+                    effect.powers = effect.powers.filter(power => power.powerType !== game_1.PowerType.ABILITY);
+                }
+            }
+        }
         if (effect instanceof game_effects_1.PowerEffect && effect.power.powerType === game_1.PowerType.ABILITY) {
             const player = effect.player;
             if (!player.marker.hasMarker(this.CLEAR_SHADOW_STITCHING_MARKER, this)) {

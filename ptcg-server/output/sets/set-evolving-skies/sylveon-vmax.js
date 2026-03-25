@@ -5,6 +5,8 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 class SylveonVMAX extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -38,8 +40,7 @@ class SylveonVMAX extends pokemon_card_1.PokemonCard {
         this.fullName = 'Sylveon VMAX EVS';
     }
     reduceEffect(store, state, effect) {
-        var _a, _b, _c;
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInHand = player.hand.cards.some(c => {
                 return c instanceof game_1.EnergyCard;
@@ -60,23 +61,22 @@ class SylveonVMAX extends pokemon_card_1.PokemonCard {
                     store.reduceEffect(state, healEffect);
                 }
             });
-            if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+            if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
                 const player = effect.player;
-                let damage = 70;
-                let types = 0;
-                const countedTypes = new Set();
-                if (((_b = (_a = player.active) === null || _a === void 0 ? void 0 : _a.getPokemonCard()) === null || _b === void 0 ? void 0 : _b.cardType) !== card_types_1.CardType.PSYCHIC) {
-                    countedTypes.add((_c = player.active.getPokemonCard()) === null || _c === void 0 ? void 0 : _c.cardType);
-                }
-                player.bench.forEach(benchSpot => {
-                    const card = benchSpot.getPokemonCard();
-                    if ((card === null || card === void 0 ? void 0 : card.cardType) !== card_types_1.CardType.PSYCHIC && !countedTypes.has(card === null || card === void 0 ? void 0 : card.cardType)) {
-                        countedTypes.add(card === null || card === void 0 ? void 0 : card.cardType);
-                        types++;
+                const playerBench = player.bench;
+                const uniqueTypes = new Set();
+                playerBench.forEach(c => {
+                    if (c.getPokemonCard() instanceof pokemon_card_1.PokemonCard) {
+                        const card = c.getPokemonCard();
+                        const checkEffect = new check_effects_1.CheckPokemonTypeEffect(c);
+                        store.reduceEffect(state, checkEffect);
+                        console.log('Card Types:', checkEffect.cardTypes);
+                        console.log('Additional Types:', card === null || card === void 0 ? void 0 : card.additionalCardTypes);
+                        checkEffect.cardTypes.forEach(type => uniqueTypes.add(type));
                     }
                 });
-                damage += types * 30;
-                effect.damage = damage;
+                // Set the damage based on the count of unique Pokémon types
+                effect.damage += 30 * uniqueTypes.size;
                 return state;
             }
             return state;

@@ -35,7 +35,6 @@ function* playCard(next, store, state, effect) {
     cards.forEach((card, index) => {
         opponent.discard.moveCardTo(card, slots[index]);
         slots[index].pokemonPlayedTurn = state.turn;
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
     });
 }
 class TargetWhistle extends trainer_card_1.TrainerCard {

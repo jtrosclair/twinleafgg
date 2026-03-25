@@ -32,7 +32,6 @@ class ProfessorJuniper extends trainer_card_1.TrainerCard {
             const cards = player.hand.cards.filter(c => c !== this);
             state = (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: this });
             player.deck.moveTo(player.hand, 7);
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         }
         return state;
     }

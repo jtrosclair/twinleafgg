@@ -7,6 +7,7 @@ const trainer_card_1 = require("../../game/store/card/trainer-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const state_utils_1 = require("../../game/store/state-utils");
 const game_effects_1 = require("../../game/store/effects/game-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 const pokemon_card_list_1 = require("../../game/store/state/pokemon-card-list");
 const game_1 = require("../../game");
 class SilentLab extends trainer_card_1.TrainerCard {
@@ -22,6 +23,20 @@ class SilentLab extends trainer_card_1.TrainerCard {
             'and in each player\'s discard pile has no Abilities.';
     }
     reduceEffect(store, state, effect) {
+        if (effect instanceof check_effects_1.CheckPokemonPowersEffect && state_utils_1.StateUtils.getStadiumCard(state) === this) {
+            const targetPokemon = effect.target;
+            if (!targetPokemon) {
+                return state;
+            }
+            const cardList = effect.target;
+            const isBasic = cardList instanceof pokemon_card_list_1.PokemonCardList
+                ? cardList.isStage(card_types_1.Stage.BASIC)
+                : targetPokemon.stage === card_types_1.Stage.BASIC;
+            if (isBasic) {
+                // Filter out all abilities
+                effect.powers = effect.powers.filter(power => power.powerType !== game_1.PowerType.ABILITY);
+            }
+        }
         if (effect instanceof game_effects_1.PowerEffect && state_utils_1.StateUtils.getStadiumCard(state) === this) {
             const pokemonCard = effect.card;
             const cardList = state_utils_1.StateUtils.findCardList(state, pokemonCard);

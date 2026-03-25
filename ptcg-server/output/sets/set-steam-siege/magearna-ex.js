@@ -6,7 +6,6 @@ const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 class MagearnaEX extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -35,6 +34,7 @@ class MagearnaEX extends pokemon_card_1.PokemonCard {
         this.name = 'Magearna-EX';
         this.fullName = 'Magearna-EX STS';
         this.SOUL_BLASER_MARKER = 'SOUL_BLASER_MARKER';
+        this.SOUL_BLASER_CLEAR_MARKER = 'SOUL_BLASER_CLEAR_MARKER';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof attack_effects_1.AbstractAttackEffect) {
@@ -71,21 +71,15 @@ class MagearnaEX extends pokemon_card_1.PokemonCard {
                 effect.preventDefault = true;
             }
         }
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            (0, prefabs_1.ADD_MARKER)(this.SOUL_BLASER_MARKER, this, this);
-            (0, prefabs_1.ADD_MARKER)(this.SOUL_BLASER_MARKER, effect.player, this);
-            if ((0, prefabs_1.HAS_MARKER)(this.SOUL_BLASER_MARKER, this, this)) {
-                effect.damage = 60;
-            }
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.SOUL_BLASER_MARKER, effect.player, this)) {
-            (0, prefabs_1.REMOVE_MARKER)(this.SOUL_BLASER_MARKER, effect.player, this);
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && !(0, prefabs_1.HAS_MARKER)(this.SOUL_BLASER_MARKER, effect.player, this)) {
-            effect.player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-                (0, prefabs_1.REMOVE_MARKER)(this.SOUL_BLASER_MARKER, effect.player, card);
-            });
-        }
+        // Refs: set-jungle/scyther.ts (Swords Dance), prefabs/prefabs.ts (NEXT_TURN_ATTACK_BASE_DAMAGE)
+        (0, prefabs_1.NEXT_TURN_ATTACK_BASE_DAMAGE)(effect, {
+            setupAttack: this.attacks[0],
+            boostedAttack: this.attacks[0],
+            source: this,
+            baseDamage: 60,
+            bonusMarker: this.SOUL_BLASER_MARKER,
+            clearMarker: this.SOUL_BLASER_CLEAR_MARKER
+        });
         return state;
     }
 }

@@ -6,6 +6,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 class TeamRocketsArbok extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -48,7 +49,9 @@ class TeamRocketsArbok extends pokemon_card_1.PokemonCard {
             if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
-            if (pokemonCard.powers.length > 0 && pokemonCard.powers[0].powerType === game_1.PowerType.ABILITY && !pokemonCard.tags.includes(card_types_1.CardTag.TEAM_ROCKET)) {
+            const powersEffect = new check_effects_1.CheckPokemonPowersEffect(player, effect.pokemonCard);
+            state = store.reduceEffect(state, powersEffect);
+            if (powersEffect.powers.some(power => power.powerType === game_1.PowerType.ABILITY) && !pokemonCard.tags.includes(card_types_1.CardTag.TEAM_ROCKET)) {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_ABILITY);
             }
         }

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ResetStamp2UNM = exports.CherishBall2UNM = exports.WeaknessGuardEnergy2UNM = exports.RecycleEnergyN12UNM = exports.ViridianForestUNM = exports.UTurnBoard2UNM = exports.TagSwitch2UNM = exports.ResetStamp3UNM = exports.KarateBelt2UNM = exports.CherishBall3UNM = exports.GarchompGiratinaGX3UNM = exports.MegaSableyeTyranitarGX4UNM = exports.MewtwoMewGX3UNM = exports.RaichuAlolanRaichuGX4UNM = exports.KeldeoGX3UNM = exports.SlowpokePsyduckGX4UNM = exports.RowletAlolanExeggutorGX4UNM = exports.MistysFavor2UNM = exports.Grimsley2UNM = exports.GarchompGiratinaGX2UNM = exports.MegaSableyeTyranitarGX3UNM = exports.MegaSableyeTyranitarGX2UNM = exports.LatiosGX2UNM = exports.MewtwoMewGX2UNM = exports.RaichuAlolanRaichuGX3UNM = exports.RaichuAlolanRaichuGX2UNM = exports.KeldeoGX2UNM = exports.SlowpokePsyduckGX3UNM = exports.SlowpokePsyduckGX2UNM = exports.RowletAlolanExeggutorGX3UNM = exports.RowletAlolanExeggutorGX2UNM = exports.UnidentifiedFossilUNM = exports.MurkrowUNM = exports.Riolu2UNM = void 0;
+exports.DragoniteGx3 = exports.MawileGx3 = exports.AerodactylGx3 = exports.LatiosGx3 = exports.HeatranGx3 = exports.PokeManiac2 = exports.CoachTrainer2 = exports.Channeler2 = exports.BluesTactics2 = exports.NaganadelGx2 = exports.DragoniteGx2 = exports.MawileGx2 = exports.AerodactylGx2 = exports.LatiosGx2 = exports.HeatranGx2 = exports.JirachiGx2 = exports.Litwick2 = exports.ResetStamp2UNM = exports.CherishBall2UNM = exports.WeaknessGuardEnergy2UNM = exports.RecycleEnergyN12UNM = exports.ViridianForestUNM = exports.UTurnBoard2UNM = exports.TagSwitch2UNM = exports.ResetStamp3UNM = exports.KarateBelt2UNM = exports.CherishBall3UNM = exports.GarchompGiratinaGX3UNM = exports.MegaSableyeTyranitarGX4UNM = exports.MewtwoMewGX3UNM = exports.RaichuAlolanRaichuGX4UNM = exports.KeldeoGX3UNM = exports.SlowpokePsyduckGX4UNM = exports.RowletAlolanExeggutorGX4UNM = exports.MistysFavor2UNM = exports.Grimsley2UNM = exports.GarchompGiratinaGX2UNM = exports.MegaSableyeTyranitarGX3UNM = exports.MegaSableyeTyranitarGX2UNM = exports.MewtwoMewGX2UNM = exports.RaichuAlolanRaichuGX3UNM = exports.RaichuAlolanRaichuGX2UNM = exports.KeldeoGX2UNM = exports.SlowpokePsyduckGX3UNM = exports.SlowpokePsyduckGX2UNM = exports.RowletAlolanExeggutorGX3UNM = exports.RowletAlolanExeggutorGX2UNM = exports.UnidentifiedFossilUNM = exports.MurkrowUNM = exports.Riolu2UNM = void 0;
+exports.GiantBomb2 = exports.NaganadelGx3 = void 0;
 const riolu_1 = require("../set-unified-minds/riolu");
 const murkrow_1 = require("../set-unbroken-bonds/murkrow");
 const unidentified_fossil_1 = require("../set-silver-tempest/unidentified-fossil");
@@ -8,7 +9,6 @@ const rowlet_and_alolan_exeggutor_gx_1 = require("../set-unified-minds/rowlet-an
 const slowpoke_and_psyduck_gx_1 = require("../set-unified-minds/slowpoke-and-psyduck-gx");
 const keldeo_gx_1 = require("../set-unified-minds/keldeo-gx");
 const raichu_and_alolan_raichu_gx_1 = require("../set-unified-minds/raichu-and-alolan-raichu-gx");
-const latios_gx_1 = require("../set-unified-minds/latios-gx");
 const mewtwo_and_mew_gx_1 = require("../set-unified-minds/mewtwo-and-mew-gx");
 const mega_sableye_tyranitar_gx_1 = require("../set-unified-minds/mega-sableye-tyranitar-gx");
 const garchomp_and_giratina_gx_1 = require("../set-unified-minds/garchomp-and-giratina-gx");
@@ -22,6 +22,19 @@ const u_turn_board_1 = require("../set-unified-minds/u-turn-board");
 const viridian_forest_1 = require("../set-team-up/viridian-forest");
 const other_prints_1 = require("../set-neo-genesis/other-prints");
 const weakness_guard_energy_1 = require("../set-unified-minds/weakness-guard-energy");
+const litwick_1 = require("./litwick");
+const jirachi_gx_1 = require("./jirachi-gx");
+const heatran_gx_1 = require("./heatran-gx");
+const latios_gx_1 = require("./latios-gx");
+const aerodactyl_gx_1 = require("./aerodactyl-gx");
+const mawile_gx_1 = require("./mawile-gx");
+const dragonite_gx_1 = require("./dragonite-gx");
+const naganadel_gx_1 = require("./naganadel-gx");
+const blues_tactics_1 = require("./blues-tactics");
+const channeler_1 = require("./channeler");
+const coach_trainer_1 = require("./coach-trainer");
+const poke_maniac_1 = require("./poke-maniac");
+const giant_bomb_1 = require("./giant-bomb");
 class Riolu2UNM extends riolu_1.Riolu {
     constructor() {
         super(...arguments);
@@ -121,15 +134,6 @@ class MewtwoMewGX2UNM extends mewtwo_and_mew_gx_1.MewtwoMewGX {
     }
 }
 exports.MewtwoMewGX2UNM = MewtwoMewGX2UNM;
-class LatiosGX2UNM extends latios_gx_1.LatiosGX {
-    constructor() {
-        super(...arguments);
-        this.setNumber = '223';
-        this.fullName = 'Latios-GX2 UNM';
-        this.set = 'UNM';
-    }
-}
-exports.LatiosGX2UNM = LatiosGX2UNM;
 class MegaSableyeTyranitarGX2UNM extends mega_sableye_tyranitar_gx_1.MegaSableyeTyranitarGX {
     constructor() {
         super(...arguments);
@@ -328,3 +332,174 @@ class ResetStamp2UNM extends reset_stamp_1.ResetStamp {
     }
 }
 exports.ResetStamp2UNM = ResetStamp2UNM;
+class Litwick2 extends litwick_1.Litwick {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '28';
+        this.fullName = 'Litwick UNM 28';
+    }
+}
+exports.Litwick2 = Litwick2;
+class JirachiGx2 extends jirachi_gx_1.JirachiGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '79a';
+        this.fullName = 'Jirachi-GX UNM 79a';
+    }
+}
+exports.JirachiGx2 = JirachiGx2;
+class HeatranGx2 extends heatran_gx_1.HeatranGX {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '216';
+        this.fullName = 'Heatran-GX UNM 216';
+    }
+}
+exports.HeatranGx2 = HeatranGx2;
+class LatiosGx2 extends latios_gx_1.LatiosGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '223';
+        this.fullName = 'Latios-GX UNM 223';
+    }
+}
+exports.LatiosGx2 = LatiosGx2;
+class AerodactylGx2 extends aerodactyl_gx_1.AerodactylGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '224';
+        this.fullName = 'Aerodactyl-GX UNM 224';
+    }
+}
+exports.AerodactylGx2 = AerodactylGx2;
+class MawileGx2 extends mawile_gx_1.MawileGX {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '227';
+        this.fullName = 'Mawile-GX UNM 227';
+    }
+}
+exports.MawileGx2 = MawileGx2;
+class DragoniteGx2 extends dragonite_gx_1.DragoniteGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '229';
+        this.fullName = 'Dragonite-GX UNM 229';
+    }
+}
+exports.DragoniteGx2 = DragoniteGx2;
+class NaganadelGx2 extends naganadel_gx_1.NaganadelGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '230';
+        this.fullName = 'Naganadel-GX UNM 230';
+    }
+}
+exports.NaganadelGx2 = NaganadelGx2;
+class BluesTactics2 extends blues_tactics_1.BluesTactics {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '231';
+        this.fullName = 'Blue\'s Tactics UNM 231';
+    }
+}
+exports.BluesTactics2 = BluesTactics2;
+class Channeler2 extends channeler_1.Channeler {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '232';
+        this.fullName = 'Channeler UNM 232';
+    }
+}
+exports.Channeler2 = Channeler2;
+class CoachTrainer2 extends coach_trainer_1.CoachTrainer {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '233';
+        this.fullName = 'Coach Trainer UNM 233';
+    }
+}
+exports.CoachTrainer2 = CoachTrainer2;
+class PokeManiac2 extends poke_maniac_1.PokeManiac {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '236';
+        this.fullName = 'Poké Maniac UNM 236';
+    }
+}
+exports.PokeManiac2 = PokeManiac2;
+class HeatranGx3 extends heatran_gx_1.HeatranGX {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '238';
+        this.fullName = 'Heatran-GX UNM 238';
+    }
+}
+exports.HeatranGx3 = HeatranGx3;
+class LatiosGx3 extends latios_gx_1.LatiosGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '243';
+        this.fullName = 'Latios-GX UNM 243';
+    }
+}
+exports.LatiosGx3 = LatiosGx3;
+class AerodactylGx3 extends aerodactyl_gx_1.AerodactylGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '244';
+        this.fullName = 'Aerodactyl-GX UNM 244';
+    }
+}
+exports.AerodactylGx3 = AerodactylGx3;
+class MawileGx3 extends mawile_gx_1.MawileGX {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '246';
+        this.fullName = 'Mawile-GX UNM 246';
+    }
+}
+exports.MawileGx3 = MawileGx3;
+class DragoniteGx3 extends dragonite_gx_1.DragoniteGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '248';
+        this.fullName = 'Dragonite-GX UNM 248';
+    }
+}
+exports.DragoniteGx3 = DragoniteGx3;
+class NaganadelGx3 extends naganadel_gx_1.NaganadelGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '249';
+        this.fullName = 'Naganadel-GX UNM 249';
+    }
+}
+exports.NaganadelGx3 = NaganadelGx3;
+class GiantBomb2 extends giant_bomb_1.GiantBomb {
+    constructor() {
+        super(...arguments);
+        this.set = 'UNM';
+        this.setNumber = '251';
+        this.fullName = 'Giant Bomb UNM 251';
+    }
+}
+exports.GiantBomb2 = GiantBomb2;

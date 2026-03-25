@@ -8,7 +8,6 @@ const game_1 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const state_utils_1 = require("../../game/store/state-utils");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class ArticunoGX extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -50,15 +49,7 @@ class ArticunoGX extends pokemon_card_1.PokemonCard {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
@@ -81,7 +72,7 @@ class ArticunoGX extends pokemon_card_1.PokemonCard {
                             return;
                         }
                         blockedTo.push(target);
-                        if (cardList.energies.cards.some(c => c instanceof game_1.EnergyCard && c.name === 'Water Energy')) {
+                        if (cardList.energies.cards.some(c => c.superType === card_types_1.SuperType.ENERGY && c.name === 'Water Energy')) {
                             hasEnergyOnBench = true;
                         }
                     });
@@ -100,7 +91,7 @@ class ArticunoGX extends pokemon_card_1.PokemonCard {
             });
         }
         // Cold Crush-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             // Check if player has used GX attack

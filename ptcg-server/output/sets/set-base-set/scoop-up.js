@@ -54,8 +54,6 @@ class ScoopUp extends trainer_card_1.TrainerCard {
                     if (basicPokemonCards.length > 0) {
                         (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.hand, { cards: basicPokemonCards });
                     }
-                    // Move the trainer card to discard
-                    (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
                 }
             });
         }

@@ -1,0 +1,36 @@
+import { TrainerCard } from '../../game/store/card/trainer-card';
+import { CardType, PokemonType, Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
+import { Power, StoreLike, State } from '../../game';
+import { Effect } from '../../game/store/effects/effect';
+export declare class RoboSubstituteTeamFlareGear extends TrainerCard {
+    trainerType: TrainerType;
+    superType: SuperType;
+    stage: Stage;
+    cardType: CardType;
+    pokemonType: PokemonType;
+    evolvesFrom: string;
+    cardTag: any[];
+    tools: any[];
+    evolvesTo: any[];
+    evolvesToStage: any[];
+    archetype: any[];
+    hp: number;
+    weakness: any[];
+    retreat: any[];
+    resistance: any[];
+    attacks: any[];
+    attacksThisTurn: number;
+    maxAttacksThisTurn: number;
+    allowSubsequentAttackChoice: boolean;
+    maxTools: number;
+    movedToActiveThisTurn: boolean;
+    evolvesFromBase: string[];
+    set: string;
+    setNumber: string;
+    cardImage: string;
+    name: string;
+    fullName: string;
+    text: string;
+    powers: Power[];
+    reduceEffect(store: StoreLike, state: State, effect: Effect): State;
+}

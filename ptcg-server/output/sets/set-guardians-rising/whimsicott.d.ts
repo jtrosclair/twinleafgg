@@ -1,0 +1,37 @@
+import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { Stage, CardType } from '../../game/store/card/card-types';
+import { StoreLike, State } from '../../game';
+import { Effect } from '../../game/store/effects/effect';
+export declare class Whimsicott extends PokemonCard {
+    stage: Stage;
+    evolvesFrom: string;
+    cardType: CardType;
+    hp: number;
+    weakness: {
+        type: CardType.METAL;
+    }[];
+    resistance: {
+        type: CardType.DARK;
+        value: number;
+    }[];
+    retreat: any[];
+    attacks: ({
+        name: string;
+        cost: CardType.COLORLESS[];
+        damage: number;
+        text: string;
+    } | {
+        name: string;
+        cost: CardType.FAIRY[];
+        damage: number;
+        text: string;
+    })[];
+    set: string;
+    setNumber: string;
+    cardImage: string;
+    name: string;
+    fullName: string;
+    readonly WAGES_OF_FLUFF_MARKER = "WAGES_OF_FLUFF_MARKER";
+    readonly CLEAR_WAGES_OF_FLUFF_MARKER = "CLEAR_WAGES_OF_FLUFF_MARKER";
+    reduceEffect(store: StoreLike, state: State, effect: Effect): State;
+}

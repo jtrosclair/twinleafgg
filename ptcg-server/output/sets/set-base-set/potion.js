@@ -36,7 +36,6 @@ function* playCard(next, store, state, effect) {
         const healEffect = new game_effects_1.HealEffect(player, target, 20);
         store.reduceEffect(state, healEffect);
     });
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return state;
 }
 class Potion extends trainer_card_1.TrainerCard {

@@ -4,9 +4,9 @@ exports.Scizor = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Scizor extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -38,27 +38,16 @@ class Scizor extends pokemon_card_1.PokemonCard {
         this.fullName = 'Scizor OBF';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             let pokemonWithUsableAbilities = 0;
-            // Check active Pokemon
-            const opponentActive = opponent.active.getPokemonCard();
-            if (opponentActive && opponentActive.powers.length > 0) {
-                // Check if the ability is actually usable
-                if (this.hasActuallyUsableAbility(store, state, opponent, opponentActive)) {
-                    pokemonWithUsableAbilities++;
-                }
-            }
-            // Check bench Pokemon
-            opponent.bench.forEach(benchSlot => {
-                if (benchSlot.cards.length > 0) {
-                    const benchPokemon = benchSlot.getPokemonCard();
-                    if (benchPokemon && benchPokemon.powers.length > 0) {
-                        // Check if the ability is actually usable
-                        if (this.hasActuallyUsableAbility(store, state, opponent, benchPokemon)) {
-                            pokemonWithUsableAbilities++;
-                        }
+            opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card) => {
+                if (cardList.getPokemonCard()) {
+                    const powersEffect = new check_effects_1.CheckPokemonPowersEffect(opponent, card);
+                    state = store.reduceEffect(state, powersEffect);
+                    if (powersEffect.powers.some(power => power.powerType === pokemon_types_1.PowerType.ABILITY)) {
+                        pokemonWithUsableAbilities++;
                     }
                 }
             });
@@ -66,16 +55,6 @@ class Scizor extends pokemon_card_1.PokemonCard {
             return state;
         }
         return state;
-    }
-    hasActuallyUsableAbility(store, state, player, pokemon) {
-        for (const power of pokemon.powers) {
-            if (power.powerType === pokemon_types_1.PowerType.ABILITY) {
-                if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, pokemon) || power.exemptFromAbilityLock || power.exemptFromInitialize || power.abilityLock) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }
 exports.Scizor = Scizor;

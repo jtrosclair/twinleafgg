@@ -40,7 +40,6 @@ function* playCard(next, store, state, self, effect) {
     const opponentBenched = opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
     const cardsToDraw = opponentBenched;
     player.deck.moveTo(player.hand, cardsToDraw);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return state;
 }
 class MortysConviction extends trainer_card_1.TrainerCard {
@@ -53,9 +52,9 @@ class MortysConviction extends trainer_card_1.TrainerCard {
         this.setNumber = '155';
         this.name = 'Morty\'s Conviction';
         this.fullName = 'Morty\'s Conviction TEF';
-        this.text = 'You can use this card only if you discard another card from your hand.' +
-            '' +
-            'Draw a card for each of your opponent\'s Benched Pokémon.';
+        this.text = `You can use this card only if you discard another card from your hand.
+
+Draw a card for each of your opponent's Benched Pokémon.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

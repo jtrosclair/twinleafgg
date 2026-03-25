@@ -5,6 +5,7 @@ const other_prints_1 = require("./other-prints");
 const basic_energies_1 = require("./basic-energies");
 const chimchar_1 = require("./chimchar");
 const cleffa_1 = require("./cleffa");
+const dusknoir_1 = require("./dusknoir");
 const empoleon_1 = require("./empoleon");
 const haunter_1 = require("./haunter");
 const infernape_1 = require("./infernape");
@@ -21,6 +22,7 @@ const other_prints_2 = require("./other-prints");
 exports.setDiamondAndPearl = [
     new chimchar_1.Chimchar(),
     new cleffa_1.Cleffa(),
+    new dusknoir_1.Dusknoir(),
     new empoleon_1.Empoleon(),
     new haunter_1.Haunter(),
     new infernape_1.Infernape(),

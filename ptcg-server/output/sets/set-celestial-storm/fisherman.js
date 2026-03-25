@@ -4,7 +4,6 @@ exports.Fisherman = void 0;
 const game_error_1 = require("../../game/game-error");
 const game_message_1 = require("../../game/game-message");
 const card_types_1 = require("../../game/store/card/card-types");
-const energy_card_1 = require("../../game/store/card/energy-card");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -16,7 +15,7 @@ function* playCard(next, store, state, self, effect) {
     }
     let basicEnergies = 0;
     player.discard.cards.forEach(c => {
-        if (c instanceof energy_card_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC) {
+        if (c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC) {
             basicEnergies += 1;
         }
     });
@@ -46,7 +45,6 @@ function* playCard(next, store, state, self, effect) {
         return state;
     }
     (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: recovered, sourceCard: self, sourceEffect: self.attacks[0] });
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return state;
 }
 class Fisherman extends trainer_card_1.TrainerCard {
@@ -68,7 +66,6 @@ class Fisherman extends trainer_card_1.TrainerCard {
             store.reduceEffect(state, discardEffect);
             if (discardEffect.preventDefault) {
                 // If prevented, just discard the card and return
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             }
             const generator = playCard(() => generator.next(), store, state, this, effect);

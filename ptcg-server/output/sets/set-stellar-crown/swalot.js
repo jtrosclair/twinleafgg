@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Swalot = void 0;
-const card_types_1 = require("../../game/store/card/card-types");
-const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const check_effects_1 = require("../../game/store/effects/check-effects");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const card_types_1 = require("../../game/store/card/card-types");
+const check_effects_1 = require("../../game/store/effects/check-effects");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 class Swalot extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -51,8 +50,8 @@ class Swalot extends pokemon_card_1.PokemonCard {
                 effect.damage += 160;
             }
         }
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
-            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED)(store, state, effect);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         return state;
     }

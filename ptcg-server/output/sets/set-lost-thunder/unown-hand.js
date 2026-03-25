@@ -6,7 +6,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const game_2 = require("../../game");
 const check_effect_1 = require("../../game/store/effect-reducers/check-effect");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class UnownHAND extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -32,7 +32,7 @@ class UnownHAND extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // HAND
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const owner = state.activePlayer;
             if (player.active.getPokemonCard() !== this || player.hand.cards.length < 35) {

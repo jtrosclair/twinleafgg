@@ -34,7 +34,6 @@ class StevensAdvice extends trainer_card_1.TrainerCard {
             const opponentBenched = opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
             const totalOpponentPokemon = opponentBenched + 1;
             player.deck.moveTo(player.hand, Math.min(totalOpponentPokemon, player.deck.cards.length));
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

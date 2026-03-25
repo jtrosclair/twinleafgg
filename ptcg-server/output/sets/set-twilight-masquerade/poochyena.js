@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Poochyena = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Poochyena extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -36,23 +35,9 @@ class Poochyena extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            const player = effect.player;
-            let headsCount = 0;
-            const flipUntilTails = () => {
-                const coinFlipEffect = new play_card_effects_1.CoinFlipEffect(player, (result) => {
-                    if (result) {
-                        // Heads - increment count and flip again
-                        headsCount++;
-                        flipUntilTails();
-                    }
-                    else {
-                        // Tails - calculate final damage
-                        effect.damage = 10 * headsCount;
-                    }
-                });
-                store.reduceEffect(state, coinFlipEffect);
-            };
-            flipUntilTails();
+            return (0, prefabs_1.FLIP_UNTIL_TAILS_AND_COUNT_HEADS)(store, state, effect.player, headsCount => {
+                effect.damage = 10 * headsCount;
+            });
         }
         return state;
     }

@@ -30,7 +30,6 @@ function* playCard(next, store, state, effect) {
         });
         player.deck.moveCardsTo(cards, player.hand);
     }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), (order) => {
         player.deck.applyOrder(order);
     });
@@ -46,6 +45,9 @@ class DeliveryDrone extends trainer_card_1.TrainerCard {
         this.name = 'Delivery Drone';
         this.fullName = 'Delivery Drone PAL';
         this.text = 'Flip 2 coins. If both of them are heads, search your deck for a card and put it into your hand. Then, shuffle your deck.';
+    }
+    canPlay(store, state, player) {
+        return player.deck.cards.length > 0;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

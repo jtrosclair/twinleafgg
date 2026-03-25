@@ -5,8 +5,8 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-const check_effects_1 = require("../../game/store/effects/check-effects");
 const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 class HolonsMagnemite extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -34,15 +34,24 @@ class HolonsMagnemite extends pokemon_card_1.PokemonCard {
         this.setNumber = '70';
         this.name = 'Holon\'s Magnemite';
         this.fullName = 'Holon\'s Magnemite DS';
+        // EnergyCard interface properties
         this.provides = [card_types_1.CardType.COLORLESS];
         this.energyType = card_types_1.EnergyType.SPECIAL;
-        // EnergyCard interface properties
-        this.text = '';
+        this.text = 'This card provides [C] Energy.';
         this.isBlocked = false;
         this.blendedEnergies = [];
+        this.blendedEnergyCount = 1;
         this.energyEffect = undefined;
     }
     reduceEffect(store, state, effect) {
+        // Auto-detect if we've been removed from energies (e.g. discarded, returned to hand)
+        // and reset superType back to POKEMON
+        if (this.superType === card_types_1.SuperType.ENERGY) {
+            const cardList = game_1.StateUtils.findCardList(state, this);
+            if (!(cardList instanceof game_1.PokemonCardList) || !cardList.energies.cards.includes(this)) {
+                this.superType = card_types_1.SuperType.POKEMON;
+            }
+        }
         // The Special Energy Stuff
         if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
@@ -60,9 +69,10 @@ class HolonsMagnemite extends pokemon_card_1.PokemonCard {
                 if (!targets[0].energies.cards.includes(this)) {
                     targets[0].energies.cards.push(this);
                 }
+                this.superType = card_types_1.SuperType.ENERGY;
             });
         }
-        // Provide energy when attached as energy and included in CheckProvidedEnergyEffect
+        // Provide energy when attached as energy
         if (effect instanceof check_effects_1.CheckProvidedEnergyEffect && effect.source.energies.cards.includes(this)) {
             effect.energyMap.push({ card: this, provides: this.provides });
         }

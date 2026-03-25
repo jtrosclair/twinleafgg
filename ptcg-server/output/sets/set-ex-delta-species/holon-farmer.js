@@ -33,7 +33,7 @@ class HolonFarmer extends trainer_card_1.TrainerCard {
             let energies = 0;
             const blocked = [];
             player.discard.cards.forEach((c, index) => {
-                if (c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC) {
+                if (c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC) {
                     energies += 1;
                 }
                 else if (c instanceof game_1.PokemonCard) {
@@ -58,7 +58,6 @@ class HolonFarmer extends trainer_card_1.TrainerCard {
                     (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
                 }
                 (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             });
         }
         return state;

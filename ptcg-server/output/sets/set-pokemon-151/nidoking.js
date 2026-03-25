@@ -4,6 +4,7 @@ exports.Nidoking = void 0;
 const game_1 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Nidoking extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -33,12 +34,12 @@ class Nidoking extends game_1.PokemonCard {
     }
     getColorlessReduction(state) {
         const player = game_1.StateUtils.findOwner(state, this.cards);
-        const hasNidoqueen = player.bench.some(b => b.cards[0].name === 'Nidoqueen');
+        const hasNidoqueen = player.bench.some(b => { var _a; return ((_a = b.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.name) === 'Nidoqueen'; });
         return hasNidoqueen ? 2 : 0;
     }
     getDarkReduction(state) {
         const player = game_1.StateUtils.findOwner(state, this.cards);
-        const hasNidoqueen = player.bench.some(b => b.cards[0].name === 'Nidoqueen');
+        const hasNidoqueen = player.bench.some(b => { var _a; return ((_a = b.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.name) === 'Nidoqueen'; });
         return hasNidoqueen ? 2 : 0;
     }
     reduceEffect(store, state, effect) {
@@ -78,7 +79,7 @@ class Nidoking extends game_1.PokemonCard {
                 }
             }
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             opponent.active.addSpecialCondition(game_1.SpecialCondition.POISONED);

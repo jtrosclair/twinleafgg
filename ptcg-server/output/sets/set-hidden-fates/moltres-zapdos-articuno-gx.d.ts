@@ -27,5 +27,6 @@ export declare class MoltresZapdosArticunoGX extends PokemonCard {
     cardImage: string;
     name: string;
     fullName: string;
+    private usedSkyLegends;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

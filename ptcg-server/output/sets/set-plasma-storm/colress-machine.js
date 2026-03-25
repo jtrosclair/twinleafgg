@@ -52,7 +52,6 @@ class ColressMachine extends trainer_card_1.TrainerCard {
                     player.deck.moveCardTo(transfer.card, target);
                 }
                 (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             });
         }

@@ -43,7 +43,6 @@ function* playCard(next, store, state, self, effect) {
         next();
     });
     player.discard.moveCardsTo(cards, player.hand);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
@@ -71,7 +70,6 @@ class Nessa extends trainer_card_1.TrainerCard {
             store.reduceEffect(state, discardEffect);
             if (discardEffect.preventDefault) {
                 // If prevented, just discard the card and return
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             }
             const generator = playCard(() => generator.next(), store, state, this, effect);

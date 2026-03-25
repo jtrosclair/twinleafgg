@@ -9,18 +9,18 @@ export declare class GougingFire extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.WATER;
     }[];
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     attacks: ({
         name: string;
-        cost: CardType[];
+        cost: CardType.FIRE[];
         damage: number;
         text: string;
         damageCalculation?: undefined;
     } | {
         name: string;
-        cost: CardType[];
+        cost: (CardType.FIRE | CardType.COLORLESS)[];
         damage: number;
         damageCalculation: string;
         text: string;

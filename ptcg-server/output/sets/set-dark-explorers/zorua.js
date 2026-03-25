@@ -3,10 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Zorua = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_message_1 = require("../../game/game-message");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
 const shuffle_prompt_1 = require("../../game/store/prompts/shuffle-prompt");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* useAscension(next, store, state, effect) {
     const player = effect.player;
     if (player.deck.cards.length === 0) {
@@ -31,21 +31,21 @@ class Zorua extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.stage = card_types_1.Stage.BASIC;
-        this.cardType = card_types_1.CardType.DARK;
+        this.cardType = D;
         this.hp = 50;
-        this.weakness = [{ type: card_types_1.CardType.FIGHTING }];
-        this.resistance = [{ type: card_types_1.CardType.PSYCHIC, value: -20 }];
-        this.retreat = [card_types_1.CardType.COLORLESS];
+        this.weakness = [{ type: F }];
+        this.resistance = [{ type: P, value: -20 }];
+        this.retreat = [C];
         this.attacks = [{
                 name: 'Ascension',
-                cost: [card_types_1.CardType.DARK],
+                cost: [D],
                 damage: 0,
-                text: 'Search your deck for a card that evolves from this Pokemon ' +
-                    'and put it onto this Pokemon. (This counts as evolving this Pokemon.) ' +
+                text: 'Search your deck for a card that evolves from this Pokémon ' +
+                    'and put it onto this Pokémon. (This counts as evolving this Pokémon.) ' +
                     'Shuffle your deck afterward.'
             }, {
                 name: 'Scratch',
-                cost: [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS],
+                cost: [C, C],
                 damage: 20,
                 text: ''
             }];
@@ -56,7 +56,7 @@ class Zorua extends pokemon_card_1.PokemonCard {
         this.setNumber = '69';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useAscension(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

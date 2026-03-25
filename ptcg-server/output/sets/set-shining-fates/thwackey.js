@@ -4,8 +4,8 @@ exports.Thwackey = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_1 = require("../../game");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 class Thwackey extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -37,31 +37,15 @@ class Thwackey extends pokemon_card_1.PokemonCard {
         this.setNumber = '12';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof check_effects_1.CheckRetreatCostEffect && effect.player.active.cards.includes(this)) {
+        // Ability: Lay of the Land (passive - no retreat cost if any stadium is in play)
+        // Ref: set-rebel-clash/cinderace-v.ts (Field Runner - CheckRetreatCostEffect + getStadiumCard)
+        if (effect instanceof check_effects_1.CheckRetreatCostEffect && effect.player.active.getPokemonCard() === this) {
             const player = effect.player;
-            // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: pokemon_types_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
-            // Getting stadium in play
-            const stadiumCard = game_1.StateUtils.getStadiumCard(state);
-            // If no stadium in play, return state
-            if (stadiumCard === undefined) {
-                return state;
-            }
-            // Figuring out owner of Stadium
-            const cardList = game_1.StateUtils.findCardList(state, stadiumCard);
-            const stadiumOwner = game_1.StateUtils.findOwner(state, cardList);
-            // If stadium in play, remove retreat cost from Thwackey in play
-            if (stadiumCard !== undefined && stadiumOwner === player) {
+            // Any stadium in play (opponent's or player's) satisfies the condition
+            if (game_1.StateUtils.getStadiumCard(state) !== undefined) {
                 effect.cost = [];
             }
         }

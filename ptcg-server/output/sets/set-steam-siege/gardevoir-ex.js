@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GardevoirEx = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const costs_1 = require("../../game/store/prefabs/costs");
 class GardevoirEx extends pokemon_card_1.PokemonCard {
@@ -41,8 +40,8 @@ class GardevoirEx extends pokemon_card_1.PokemonCard {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
-            const playerActiveEnergy = player.active.cards.filter(card => card instanceof game_1.EnergyCard);
-            const opponentActiveEnergy = opponent.active.cards.filter(card => card instanceof game_1.EnergyCard);
+            const playerActiveEnergy = player.active.cards.filter(card => card.superType === card_types_1.SuperType.ENERGY);
+            const opponentActiveEnergy = opponent.active.cards.filter(card => card.superType === card_types_1.SuperType.ENERGY);
             if (playerActiveEnergy.length === opponentActiveEnergy.length) {
                 effect.damage += 70;
             }

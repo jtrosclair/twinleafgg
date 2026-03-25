@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TeamRocketsPorygon2 = void 0;
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class TeamRocketsPorygon2 extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -32,7 +32,7 @@ class TeamRocketsPorygon2 extends pokemon_card_1.PokemonCard {
         this.fullName = 'Team Rocket\'s Porygon2 DRI';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // Count Team Rocket Supporters in discard pile
             const teamRocketSupporters = player.discard.cards.filter(card => card instanceof trainer_card_1.TrainerCard &&

@@ -9,6 +9,7 @@ const state_utils_1 = require("../../game/store/state-utils");
 const game_message_1 = require("../../game/game-message");
 const coin_flip_prompt_1 = require("../../game/store/prompts/coin-flip-prompt");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Squirtle extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -36,7 +37,7 @@ class Squirtle extends pokemon_card_1.PokemonCard {
         this.setNumber = '29';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             return store.prompt(state, [
                 new coin_flip_prompt_1.CoinFlipPrompt(player.id, game_message_1.GameMessage.COIN_FLIP)
@@ -54,15 +55,7 @@ class Squirtle extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: pokemon_types_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             // Target is this Squirtle
@@ -76,7 +69,7 @@ class Squirtle extends pokemon_card_1.PokemonCard {
                     }, this);
                     store.reduceEffect(state, stub);
                 }
-                catch (_b) {
+                catch (_a) {
                     return state;
                 }
                 effect.preventDefault = true;

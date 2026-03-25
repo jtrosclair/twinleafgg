@@ -40,7 +40,7 @@ class Thorton extends trainer_card_1.TrainerCard {
                     blocked.push();
                 }
             });
-            return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_message_1.GameMessage.CHOOSE_POKEMON_TO_SWAP, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { min: 1, max: 1, allowCancel: false, blocked }), selected => {
+            return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_message_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { min: 1, max: 1, allowCancel: false, blocked }), selected => {
                 const targets = selected || [];
                 if (targets.length === 0) {
                     throw new game_1.GameError(game_message_1.GameMessage.INVALID_TARGET);
@@ -59,7 +59,6 @@ class Thorton extends trainer_card_1.TrainerCard {
                     // Move the selected card from the discard to the target slot
                     player.discard.moveCardTo(card, targetList);
                     // Move Thorton to the discard pile
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 });
             });
         }

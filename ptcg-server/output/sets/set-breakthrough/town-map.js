@@ -25,7 +25,6 @@ class TownMap extends trainer_card_1.TrainerCard {
                 p.isSecret = false;
             });
             effect.player.hand.moveCardTo(effect.trainerCard, effect.player.supporter);
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

@@ -7,6 +7,7 @@ const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Munkidori extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -39,7 +40,7 @@ class Munkidori extends game_1.PokemonCard {
         this.ADRENA_BRAIN_MARKER = 'ADRENA_BRAIN_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const specialConditionEffect = new attack_effects_1.AddSpecialConditionsEffect(effect, [game_1.SpecialCondition.CONFUSED]);
             store.reduceEffect(state, specialConditionEffect);
         }
@@ -50,7 +51,7 @@ class Munkidori extends game_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ADRENA_BRAIN_MARKER, this)) {
             effect.player.marker.removeMarker(this.ADRENA_BRAIN_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const maxAllowedDamage = [];
@@ -96,13 +97,13 @@ class Munkidori extends game_1.PokemonCard {
                             hasDarkAttached = true;
                         }
                         const energyCard = em.card;
-                        if (energyCard instanceof game_1.EnergyCard && energyCard.provides.includes(game_1.CardType.DARK)) {
+                        if (energyCard.superType === game_1.SuperType.ENERGY && energyCard.provides.includes(game_1.CardType.DARK)) {
                             hasDarkAttached = true;
                         }
-                        if (energyCard instanceof game_1.EnergyCard && energyCard.provides.includes(game_1.CardType.ANY)) {
+                        if (energyCard.superType === game_1.SuperType.ENERGY && energyCard.provides.includes(game_1.CardType.ANY)) {
                             hasDarkAttached = true;
                         }
-                        if (energyCard instanceof game_1.EnergyCard && ((_a = energyCard.blendedEnergies) === null || _a === void 0 ? void 0 : _a.includes(game_1.CardType.DARK))) {
+                        if (energyCard.superType === game_1.SuperType.ENERGY && ((_a = energyCard.blendedEnergies) === null || _a === void 0 ? void 0 : _a.includes(game_1.CardType.DARK))) {
                             hasDarkAttached = true;
                         }
                     });
@@ -140,6 +141,11 @@ class Munkidori extends game_1.PokemonCard {
                             }*/
                             const damageToMove = Math.min(30 - totalDamageMoved, Math.min(10, source.damage));
                             if (damageToMove > 0) {
+                                const moveEffect = new game_effects_1.MoveDamageCountersEffect(effect.player);
+                                state = store.reduceEffect(state, moveEffect);
+                                if (moveEffect.preventDefault) {
+                                    continue;
+                                }
                                 source.damage -= damageToMove;
                                 const placeCountersEffect = new game_effects_1.PlaceDamageCountersEffect(effect.player, target, damageToMove, this);
                                 state = store.reduceEffect(state, placeCountersEffect);

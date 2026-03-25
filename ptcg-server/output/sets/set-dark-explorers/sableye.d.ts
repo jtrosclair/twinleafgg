@@ -7,13 +7,18 @@ export declare class Sableye extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: any[];
-    retreat: CardType[];
-    attacks: {
+    retreat: CardType.COLORLESS[];
+    attacks: ({
         name: string;
-        cost: CardType[];
+        cost: CardType.COLORLESS[];
         damage: number;
         text: string;
-    }[];
+    } | {
+        name: string;
+        cost: CardType.DARK[];
+        damage: number;
+        text: string;
+    })[];
     set: string;
     name: string;
     fullName: string;

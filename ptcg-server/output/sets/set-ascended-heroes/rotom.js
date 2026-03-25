@@ -4,9 +4,9 @@ exports.Rotom = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* useRotocall(next, store, state, effect) {
     const player = effect.player;
     if (player.deck.cards.length === 0) {
@@ -84,12 +84,12 @@ class Rotom extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Rotocall attack
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useRotocall(() => generator.next(), store, state, effect);
             return generator.next().value;
         }
         // Gadget Show attack
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             let toolCount = 0;
             // Count tools on all player's Pokemon

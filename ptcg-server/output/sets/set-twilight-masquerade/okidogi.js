@@ -6,7 +6,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Okidogi extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -45,15 +45,7 @@ class Okidogi extends pokemon_card_1.PokemonCard {
             if (effect.damage === 0 || game_1.StateUtils.getOpponent(state, player).active !== effect.target) {
                 return state;
             }
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(player, effect.source);
@@ -63,7 +55,7 @@ class Okidogi extends pokemon_card_1.PokemonCard {
                 if (em.provides.includes(card_types_1.CardType.DARK)) {
                     darkProvided = true;
                 }
-                if ((em.card instanceof game_1.EnergyCard && em.card.blendedEnergies.includes(card_types_1.CardType.DARK)) ||
+                if ((em.card.superType === card_types_1.SuperType.ENERGY && em.card.blendedEnergies.includes(card_types_1.CardType.DARK)) ||
                     (em.provides.includes(card_types_1.CardType.DARK) || em.provides.includes(card_types_1.CardType.ANY))) {
                     darkProvided = true;
                 }
@@ -76,15 +68,7 @@ class Okidogi extends pokemon_card_1.PokemonCard {
         }
         if (effect instanceof check_effects_1.CheckHpEffect && effect.target.cards.includes(this)) {
             const player = effect.player;
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_b) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(player, effect.target);
@@ -94,7 +78,7 @@ class Okidogi extends pokemon_card_1.PokemonCard {
                 if (em.provides.includes(card_types_1.CardType.DARK)) {
                     darkProvided = true;
                 }
-                if ((em.card instanceof game_1.EnergyCard && em.card.blendedEnergies.includes(card_types_1.CardType.DARK)) ||
+                if ((em.card.superType === card_types_1.SuperType.ENERGY && em.card.blendedEnergies.includes(card_types_1.CardType.DARK)) ||
                     (em.provides.includes(card_types_1.CardType.DARK) || em.provides.includes(card_types_1.CardType.ANY))) {
                     darkProvided = true;
                 }

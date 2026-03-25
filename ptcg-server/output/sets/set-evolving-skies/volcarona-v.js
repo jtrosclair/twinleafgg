@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.VolcaronaV = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_1 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
@@ -39,17 +38,17 @@ class VolcaronaV extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Surging Flames
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // counting the energies
-            const energiesInDiscard = player.discard.cards.filter(c => c instanceof game_1.EnergyCard && c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC).length;
+            const energiesInDiscard = player.discard.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC).length;
             if (energiesInDiscard === 0) {
                 return state;
             }
             effect.damage += 20 * energiesInDiscard;
             // slapping those energies back into the deck
             player.discard.cards.forEach(c => {
-                if (c instanceof game_1.EnergyCard && c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC) {
+                if (c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC) {
                     (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.deck, { cards: [c], sourceCard: this, sourceEffect: this.attacks[0] });
                 }
             });
@@ -58,9 +57,9 @@ class VolcaronaV extends pokemon_card_1.PokemonCard {
             });
         }
         // Fire Blast
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            if (!player.active.cards.some(c => c instanceof game_1.EnergyCard)) {
+            if (!player.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                 return state;
             }
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);

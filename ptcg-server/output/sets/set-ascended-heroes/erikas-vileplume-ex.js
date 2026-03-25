@@ -39,7 +39,7 @@ class ErikasVileplumeex extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Envious Scent ability
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.ENVIOUS_SCENT_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);

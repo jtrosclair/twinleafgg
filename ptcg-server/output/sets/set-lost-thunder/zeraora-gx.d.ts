@@ -8,13 +8,13 @@ export declare class ZeraoraGX extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.FIGHTING;
     }[];
     resistance: {
-        type: CardType;
+        type: CardType.METAL;
         value: number;
     }[];
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     powers: {
         name: string;
         powerType: PowerType;
@@ -22,7 +22,7 @@ export declare class ZeraoraGX extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: (CardType.LIGHTNING | CardType.COLORLESS)[];
         damage: number;
         text: string;
     }[];
@@ -31,7 +31,5 @@ export declare class ZeraoraGX extends PokemonCard {
     setNumber: string;
     name: string;
     fullName: string;
-    readonly ATTACK_USED_MARKER = "ATTACK_USED_MARKER";
-    readonly ATTACK_USED_2_MARKER = "ATTACK_USED_2_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

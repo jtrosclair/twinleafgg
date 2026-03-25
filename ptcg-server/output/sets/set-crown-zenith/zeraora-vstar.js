@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ZeraoraVSTAR = void 0;
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* useLightningStormStar(next, store, state, effect) {
     const player = effect.player;
@@ -59,7 +58,7 @@ class ZeraoraVSTAR extends game_1.PokemonCard {
         this.setNumber = '55';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const stadiumCard = game_1.StateUtils.getStadiumCard(state);
             if (stadiumCard !== undefined) {
                 state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_DISCARD_STADIUM), wantToUse => {
@@ -74,7 +73,7 @@ class ZeraoraVSTAR extends game_1.PokemonCard {
                 });
             }
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const generator = useLightningStormStar(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

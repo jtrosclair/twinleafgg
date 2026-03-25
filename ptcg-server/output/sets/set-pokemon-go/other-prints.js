@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LureModule2PGO = exports.ProfessorsResearch2PGO = exports.ProfessorsResearchPGO = exports.SlakingV2PGO = exports.ConkeldurrV3PGO = exports.ConkeldurrV2PGO = exports.RareCandyPGO = exports.RadiantCharizardPGO = void 0;
-const rare_candy_1 = require("../set-ex-holon-phantoms/rare-candy");
 const conkeldurr_v_1 = require("../set-pokemon-go/conkeldurr-v");
 const slaking_v_1 = require("../set-pokemon-go/slaking-v");
 const professors_research_1 = require("../set-scarlet-and-violet/professors-research");
 const professors_research_2 = require("../set-scarlet-and-violet/professors-research");
 const lure_module_1 = require("../set-pokemon-go/lure-module");
 const radiant_charizard_1 = require("../set-crown-zenith/radiant-charizard");
+const rare_candy_1 = require("../set-scarlet-and-violet/rare-candy");
 class RadiantCharizardPGO extends radiant_charizard_1.RadiantCharizard {
     constructor() {
         super(...arguments);
@@ -20,6 +20,7 @@ exports.RadiantCharizardPGO = RadiantCharizardPGO;
 class RareCandyPGO extends rare_candy_1.RareCandy {
     constructor() {
         super(...arguments);
+        this.regulationMark = 'F';
         this.setNumber = '69';
         this.fullName = 'Rare Candy PGO';
         this.set = 'PGO';

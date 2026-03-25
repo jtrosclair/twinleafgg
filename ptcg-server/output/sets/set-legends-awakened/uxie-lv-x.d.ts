@@ -28,7 +28,5 @@ export declare class UxieLVX extends PokemonCard {
     name: string;
     fullName: string;
     readonly TRADE_OFF_MARKER = "TRADE_OFF_MARKER";
-    readonly ATTACK_USED_MARKER = "ATTACK_USED_MARKER";
-    readonly ATTACK_USED_2_MARKER = "ATTACK_USED_2_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

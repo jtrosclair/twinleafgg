@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Jumpluff = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Jumpluff extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -29,14 +29,15 @@ class Jumpluff extends pokemon_card_1.PokemonCard {
         this.fullName = 'Jumpluff LOT';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            let pokemonCount = 0;
-            player.lostzone.cards.forEach(c => {
-                if (c instanceof pokemon_card_1.PokemonCard /* && !c.tags.includes(CardTag.PRISM_STAR)*/) {
-                    pokemonCount += 1;
-                }
-            });
+            /*
+             * Legacy pre-prefab implementation:
+             * - looped player.lostzone and counted Pokemon cards
+             * - optional Prism Star exclusion was commented in-place
+             */
+            // Converted to prefab version (COUNT_MATCHING_CARDS_IN_ZONE).
+            const pokemonCount = (0, prefabs_1.COUNT_MATCHING_CARDS_IN_ZONE)(player, 'lostzone', {}, c => c instanceof pokemon_card_1.PokemonCard /* && !c.tags.includes(CardTag.PRISM_STAR)*/);
             effect.damage = pokemonCount * 20;
         }
         return state;

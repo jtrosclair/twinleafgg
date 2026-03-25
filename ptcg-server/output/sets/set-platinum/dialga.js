@@ -6,6 +6,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const game_effects_1 = require("../../game/store/effects/game-effects");
 class Dialga extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -48,6 +49,8 @@ class Dialga extends pokemon_card_1.PokemonCard {
             }
             (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, wantToUse => {
                 if (wantToUse) {
+                    const powerEffect = new game_effects_1.PowerEffect(player, this.powers[0], this);
+                    store.reduceEffect(state, powerEffect);
                     const blocked = [];
                     player.discard.cards.forEach((c, index) => {
                         const isPokemon = c instanceof pokemon_card_1.PokemonCard && c.stage !== card_types_1.Stage.LV_X;

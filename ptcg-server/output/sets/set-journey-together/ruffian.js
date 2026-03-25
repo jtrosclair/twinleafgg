@@ -25,7 +25,7 @@ class Ruffian extends game_1.TrainerCard {
             let energyOrToolcard = false;
             const blocked = [];
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card, target) => {
-                if (cardList.energies.cards.some(c => c instanceof game_1.EnergyCard && c.energyType === game_1.EnergyType.SPECIAL)) {
+                if (cardList.energies.cards.some(c => c.superType === game_1.SuperType.ENERGY && c.energyType === game_1.EnergyType.SPECIAL)) {
                     energyOrToolcard = true;
                 }
                 else if (cardList.tools.some(c => c instanceof game_1.TrainerCard && c.trainerType === game_1.TrainerType.TOOL)) {
@@ -55,7 +55,7 @@ class Ruffian extends game_1.TrainerCard {
                             // removing special energies
                             let specialEnergies = 0;
                             target.energies.cards.forEach(card => {
-                                if (card instanceof game_1.EnergyCard && card.energyType === game_1.EnergyType.SPECIAL) {
+                                if (card.superType === game_1.SuperType.ENERGY && card.energyType === game_1.EnergyType.SPECIAL) {
                                     specialEnergies++;
                                 }
                             });
@@ -77,7 +77,7 @@ class Ruffian extends game_1.TrainerCard {
                 // removing special energies
                 let specialEnergies = 0;
                 target.energies.cards.forEach(card => {
-                    if (card instanceof game_1.EnergyCard && card.energyType === game_1.EnergyType.SPECIAL) {
+                    if (card.superType === game_1.SuperType.ENERGY && card.energyType === game_1.EnergyType.SPECIAL) {
                         specialEnergies++;
                     }
                 });

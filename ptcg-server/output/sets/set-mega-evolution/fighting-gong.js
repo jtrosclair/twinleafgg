@@ -18,7 +18,7 @@ function* playCard(next, store, state, effect) {
     let trainers = 0;
     const blocked = [];
     player.deck.cards.forEach((c, index) => {
-        if (c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC && c.name === 'Fighting Energy') {
+        if (c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC && c.name === 'Fighting Energy') {
             trainers += 1;
         }
         else if (c instanceof game_1.PokemonCard && c.cardType === card_types_1.CardType.FIGHTING && c.stage === card_types_1.Stage.BASIC) {
@@ -42,7 +42,6 @@ function* playCard(next, store, state, effect) {
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });

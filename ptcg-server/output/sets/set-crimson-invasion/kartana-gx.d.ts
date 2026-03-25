@@ -4,6 +4,7 @@ import { PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 export declare class KartanaGX extends PokemonCard {
     tags: CardTag[];
+    private wantsToShuffle;
     stage: Stage;
     cardType: CardType;
     hp: number;

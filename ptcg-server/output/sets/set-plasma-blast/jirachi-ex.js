@@ -7,6 +7,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* useStellarGuidance(next, store, state, self, effect) {
     const player = effect.player;
     if (player.deck.cards.length === 0) {
@@ -69,7 +70,7 @@ class JirachiEX extends pokemon_card_1.PokemonCard {
             const generator = useStellarGuidance(() => generator.next(), store, state, this, effect);
             return generator.next().value;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const asleepEffect = new attack_effects_1.AddSpecialConditionsEffect(effect, [card_types_1.SpecialCondition.ASLEEP]);
             asleepEffect.target = player.active;

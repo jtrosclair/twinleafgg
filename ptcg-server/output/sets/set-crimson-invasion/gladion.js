@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Gladion = void 0;
 const game_1 = require("../../game");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Gladion extends game_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -48,7 +47,6 @@ class Gladion extends game_1.TrainerCard {
                 player.supporter.moveCardTo(gladion, player.prizes[chosenPrizeIndex]);
                 prizes.forEach(p => { p.isSecret = true; });
                 player.prizes = this.shuffleFaceDownPrizeCards(player.prizes);
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             });
             return state;
         }

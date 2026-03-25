@@ -4,8 +4,8 @@ exports.Vaporeon = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Vaporeon extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -34,7 +34,7 @@ class Vaporeon extends pokemon_card_1.PokemonCard {
         this.fullName = 'Vaporeon JU';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             return store.prompt(state, [
                 new game_1.CoinFlipPrompt(player.id, game_1.GameMessage.COIN_FLIP)
@@ -47,7 +47,7 @@ class Vaporeon extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             // Check attack cost
             const checkCost = new check_effects_1.CheckAttackCostEffect(player, this.attacks[1]);

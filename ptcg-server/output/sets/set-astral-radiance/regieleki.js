@@ -4,7 +4,6 @@ exports.Regieleki = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -38,7 +37,7 @@ class Regieleki extends pokemon_card_1.PokemonCard {
         this.fullName = 'Regieleki ASR';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasTrainer = player.discard.cards.some(c => c instanceof game_1.TrainerCard);
             if (!hasTrainer) {
@@ -46,7 +45,7 @@ class Regieleki extends pokemon_card_1.PokemonCard {
             }
             (0, prefabs_1.SEARCH_DISCARD_PILE_FOR_CARDS_TO_HAND)(store, state, player, this, { superType: card_types_1.SuperType.TRAINER }, { min: 1, max: 1, allowCancel: false }, this.attacks[0]);
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const hasBenched = opponent.bench.some(b => b.cards.length > 0);

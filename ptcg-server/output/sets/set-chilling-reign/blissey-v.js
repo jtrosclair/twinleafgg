@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BlisseyV = void 0;
 const game_1 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class BlisseyV extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -59,7 +59,7 @@ class BlisseyV extends game_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.EndTurnEffect && this.usedBlissfulBlast) {
             this.usedBlissfulBlast = false;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let energies = 0;
             const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(player, player.active);

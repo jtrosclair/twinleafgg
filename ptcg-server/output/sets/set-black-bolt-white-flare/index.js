@@ -7,6 +7,7 @@ const antique_plume_fossil_1 = require("./antique-plume-fossil");
 const archen_1 = require("./archen");
 const archeops_1 = require("./archeops");
 const axew_1 = require("./axew");
+const karrablast_1 = require("./karrablast");
 const brave_bangle_1 = require("./brave-bangle");
 const carracosta_1 = require("./carracosta");
 const cobalion_1 = require("./cobalion");
@@ -15,6 +16,7 @@ const dewott_1 = require("./dewott");
 const drillbur_1 = require("./drillbur");
 const ducklett_1 = require("./ducklett");
 const duosion_1 = require("./duosion");
+const durant_1 = require("./durant");
 const eelektrik_1 = require("./eelektrik");
 const emboar_1 = require("./emboar");
 const emolga_1 = require("./emolga");
@@ -28,7 +30,7 @@ const genesect_ex_1 = require("./genesect-ex");
 const gothita_1 = require("./gothita");
 const gothorita_1 = require("./gothorita");
 const gothitelle_1 = require("./gothitelle");
-const gurdurr_1 = require("./gurdurr");
+const harlequin_1 = require("./harlequin");
 const haxorus_1 = require("./haxorus");
 const hilda_1 = require("./hilda");
 const ignition_energy_1 = require("./ignition-energy");
@@ -49,12 +51,12 @@ const samurott_1 = require("./samurott");
 const seismitoad_1 = require("./seismitoad");
 const serperior_ex_1 = require("./serperior-ex");
 const servine_1 = require("./servine");
+const shelmet_1 = require("./shelmet");
 const snivy_1 = require("./snivy");
 const solosis_1 = require("./solosis");
 const swadloon_1 = require("./swadloon");
 const tepig_1 = require("./tepig");
 const terrakion_1 = require("./terrakion");
-const timburr_1 = require("./timburr");
 const tirtouga_1 = require("./tirtouga");
 const tympole_1 = require("./tympole");
 const tynamo_1 = require("./tynamo");
@@ -66,6 +68,8 @@ const zekrom_ex_1 = require("./zekrom-ex");
 const zoroark_1 = require("./zoroark");
 const zorua_1 = require("./zorua");
 exports.setSV11 = [
+    new harlequin_1.Harlequin(),
+    new purrloin_1.Purrloin(),
     new gothita_1.Gothita(),
     new gothorita_1.Gothorita(),
     new gothitelle_1.Gothitelle(),
@@ -87,23 +91,23 @@ exports.setSV11 = [
     new hilda_1.Hilda(),
     new foongus_1.Foongus(),
     new amoongus_1.Amoongus(),
-    new purrloin_1.Purrloin(),
     new zorua_1.Zorua(),
     new zoroark_1.Zoroark(),
     new solosis_1.Solosis(),
     new swadloon_1.Swadloon(),
     new duosion_1.Duosion(),
     new reuniclus_1.Reuniclus(),
+    new shelmet_1.Shelmet(),
+    new karrablast_1.Karrablast(),
     new antique_plume_fossil_1.AntiquePlumeFossil(),
     new archen_1.Archen(),
     new archeops_1.Archeops(),
     new carracosta_1.Carracosta(),
     new cobalion_1.Cobalion(),
+    new durant_1.Durant(),
     new genesect_ex_1.Genesectex(),
-    new gurdurr_1.Gurdurr(),
     new keldeo_ex_1.Keldeoex(),
     new terrakion_1.Terrakion(),
-    new timburr_1.Timburr(),
     new tirtouga_1.Tirtouga(),
     new virizion_1.Virizion(),
     new alomomola_1.Alomomola(),
@@ -121,6 +125,7 @@ exports.setSV11 = [
     new ducklett_1.Ducklett(),
     new other_prints_1.CherenSV11(),
     new other_prints_1.ProfessorsResearchSV11(),
+    new other_prints_1.Pokegear30SV11(),
     new other_prints_1.EnergyRetrievalSV11(),
     new other_prints_1.ToolScrapperSV11(),
     new other_prints_1.AirBalloonSV11(),

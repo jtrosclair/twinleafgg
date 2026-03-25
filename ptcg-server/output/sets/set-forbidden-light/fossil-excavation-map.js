@@ -35,7 +35,6 @@ class FossilExcavationMap extends game_1.TrainerCard {
                         if (cards.length > 0) {
                             return store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => { });
                         }
-                        player.supporter.moveCardTo(effect.trainerCard, player.discard);
                         return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                             player.deck.applyOrder(order);
                         });
@@ -52,7 +51,6 @@ class FossilExcavationMap extends game_1.TrainerCard {
                         if (cards.length > 0) {
                             return store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => { });
                         }
-                        player.supporter.moveCardTo(effect.trainerCard, player.discard);
                     }
                 }
             ];

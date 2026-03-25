@@ -32,7 +32,6 @@ function* playCard(next, store, state, effect) {
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });
@@ -45,11 +44,17 @@ class Pokegear30 extends trainer_card_1.TrainerCard {
         this.set = 'SVI';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '186';
-        this.name = 'Pokegear 3.0';
+        this.name = 'Pokégear 3.0';
         this.fullName = 'Pokegear SVI';
         this.text = 'Look at the top 7 cards of your deck. You may reveal a Supporter card ' +
             'you find there and put it into your hand. Shuffle the other cards back ' +
             'into your deck.';
+    }
+    canPlay(store, state, player) {
+        if (player.deck.cards.length === 0) {
+            return false;
+        }
+        return true;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

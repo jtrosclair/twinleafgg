@@ -34,6 +34,7 @@ export declare class HolonsCastform extends PokemonCard implements EnergyCard {
     text: string;
     isBlocked: boolean;
     blendedEnergies: CardType[];
+    blendedEnergyCount: number;
     energyEffect: any;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

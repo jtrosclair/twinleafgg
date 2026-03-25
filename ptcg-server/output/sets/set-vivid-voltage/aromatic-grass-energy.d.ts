@@ -11,7 +11,6 @@ export declare class AromaticGrassEnergy extends EnergyCard {
     regulationMark: string;
     name: string;
     fullName: string;
-    legacyFullName: string;
     text: string;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

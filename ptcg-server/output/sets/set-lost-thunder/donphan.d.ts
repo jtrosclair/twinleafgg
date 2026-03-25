@@ -29,6 +29,5 @@ export declare class Donphan extends PokemonCard {
     fullName: string;
     readonly NEXT_TURN_MORE_DAMAGE_MARKER = "NEXT_TURN_MORE_DAMAGE_MARKER";
     readonly NEXT_TURN_MORE_DAMAGE_MARKER_2 = "NEXT_TURN_MORE_DAMAGE_MARKER_2";
-    usedAttack: boolean;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

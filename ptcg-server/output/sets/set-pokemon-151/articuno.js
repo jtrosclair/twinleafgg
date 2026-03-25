@@ -5,8 +5,8 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Articuno extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -38,15 +38,7 @@ class Articuno extends pokemon_card_1.PokemonCard {
         if (effect instanceof check_effects_1.CheckRetreatCostEffect) {
             const player = effect.player;
             // Check to see if anything is blocking our Ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
@@ -66,7 +58,7 @@ class Articuno extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             const benched = opponent.bench.filter(b => b.cards.length > 0);
             benched.forEach(target => {

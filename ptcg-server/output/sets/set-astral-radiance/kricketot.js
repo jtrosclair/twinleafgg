@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Kricketot = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const coin_flip_prompt_1 = require("../../game/store/prompts/coin-flip-prompt");
 const game_message_1 = require("../../game/game-message");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Kricketot extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -28,7 +28,7 @@ class Kricketot extends pokemon_card_1.PokemonCard {
         this.fullName = 'Kricketot ASR';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             return store.prompt(state, new coin_flip_prompt_1.CoinFlipPrompt(effect.player.id, game_message_1.GameMessage.COIN_FLIP), flipResult => {
                 if (flipResult) {
                     effect.damage += 20;

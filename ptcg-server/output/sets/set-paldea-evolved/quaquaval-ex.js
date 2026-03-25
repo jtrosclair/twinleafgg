@@ -4,7 +4,7 @@ exports.Quaquavalex = void 0;
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Quaquavalex extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -65,9 +65,9 @@ class Quaquavalex extends game_1.PokemonCard {
                 });
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            if (!player.active.cards.some(c => c instanceof game_1.EnergyCard)) {
+            if (!player.active.cards.some(c => c.superType === game_1.SuperType.ENERGY)) {
                 return state;
             }
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);

@@ -1,0 +1,32 @@
+import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { Stage, CardType } from '../../game/store/card/card-types';
+import { PowerType, StoreLike, State } from '../../game';
+import { Effect } from '../../game/store/effects/effect';
+export declare class Eevee extends PokemonCard {
+    stage: Stage;
+    cardType: CardType;
+    hp: number;
+    weakness: {
+        type: CardType.FIGHTING;
+    }[];
+    retreat: CardType.COLORLESS[];
+    powers: {
+        name: string;
+        powerType: PowerType;
+        text: string;
+    }[];
+    attacks: {
+        name: string;
+        cost: CardType.COLORLESS[];
+        damage: number;
+        text: string;
+    }[];
+    readonly RESONANT_EVOLUTION_MARKER = "EEVEE_ASR_RESONANT_EVOLUTION_MARKER";
+    regulationMark: string;
+    set: string;
+    setNumber: string;
+    cardImage: string;
+    name: string;
+    fullName: string;
+    reduceEffect(store: StoreLike, state: State, effect: Effect): State;
+}

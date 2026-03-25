@@ -5,8 +5,8 @@ const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Spiritomb extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -41,7 +41,7 @@ class Spiritomb extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.BUILDING_SPITE_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.BUILDING_SPITE_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
@@ -58,7 +58,7 @@ class Spiritomb extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             // Get Spiritomb's damage
             const spiritombDamage = effect.player.active.damage;
             // Calculate 30 damage per counter

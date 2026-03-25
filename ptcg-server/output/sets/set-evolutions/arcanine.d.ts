@@ -1,0 +1,33 @@
+import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { Stage, CardType } from '../../game/store/card/card-types';
+import { PowerType, StoreLike, State } from '../../game';
+import { Effect } from '../../game/store/effects/effect';
+export declare class Arcanine extends PokemonCard {
+    stage: Stage;
+    evolvesFrom: string;
+    cardType: CardType;
+    hp: number;
+    weakness: {
+        type: CardType.WATER;
+    }[];
+    retreat: CardType.COLORLESS[];
+    powers: {
+        name: string;
+        useWhenInPlay: boolean;
+        powerType: PowerType;
+        text: string;
+    }[];
+    attacks: {
+        name: string;
+        cost: (CardType.FIRE | CardType.COLORLESS)[];
+        damage: number;
+        text: string;
+    }[];
+    set: string;
+    setNumber: string;
+    cardImage: string;
+    name: string;
+    fullName: string;
+    readonly BURNING_ROAD_MARKER = "ARCANINE_EVO_BURNING_ROAD";
+    reduceEffect(store: StoreLike, state: State, effect: Effect): State;
+}

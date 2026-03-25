@@ -4,7 +4,6 @@ exports.Haunter = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const state_1 = require("../../game/store/state/state");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
@@ -50,22 +49,14 @@ class Haunter extends pokemon_card_1.PokemonCard {
                 || effect.target.specialConditions.includes(card_types_1.SpecialCondition.CONFUSED)) {
                 return state;
             }
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.POKEMON_POWER,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_POKEMON_POWER_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             try {
                 const coinFlip = new play_card_effects_1.CoinFlipEffect(player);
                 store.reduceEffect(state, coinFlip);
             }
-            catch (_b) {
+            catch (_a) {
                 return state;
             }
             const coinFlipResult = (0, prefabs_1.SIMULATE_COIN_FLIP)(store, state, player);
@@ -75,7 +66,7 @@ class Haunter extends pokemon_card_1.PokemonCard {
             }
             return state;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const sleepEffect = new attack_effects_1.AddSpecialConditionsEffect(effect, [card_types_1.SpecialCondition.ASLEEP]);
             store.reduceEffect(state, sleepEffect);
             return state;

@@ -17,9 +17,9 @@ class ReversalEnergy extends energy_card_1.EnergyCard {
         this.setNumber = '192';
         this.name = 'Reversal Energy';
         this.fullName = 'Reversal Energy PAL';
-        this.text = 'As long as this card is attached to a Pokémon, it provides [C] Energy.' +
-            '' +
-            'If you have more Prize cards remaining than your opponent, and if this card is attached to an Evolution Pokémon that doesn\'t have a Rule Box (Pokémon ex, Pokémon V, etc. have Rule Boxes), this card provides every type of Energy but provides only 3 Energy at a time.';
+        this.text = `As long as this card is attached to a Pokémon, it provides [C] Energy.
+
+If you have more Prize cards remaining than your opponent, and if this card is attached to an Evolution Pokémon that doesn't have a Rule Box (Pokémon ex, Pokémon V, etc. have Rule Boxes), this card provides every type of Energy but provides only 3 Energy at a time.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof check_effects_1.CheckProvidedEnergyEffect && effect.source.cards.includes(this)) {

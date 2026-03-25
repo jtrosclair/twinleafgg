@@ -33,8 +33,6 @@ class UxieLVX extends game_1.PokemonCard {
         this.name = 'Uxie';
         this.fullName = 'Uxie Lv. X LA';
         this.TRADE_OFF_MARKER = 'TRADE_OFF_MARKER';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
         if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
@@ -54,11 +52,12 @@ class UxieLVX extends game_1.PokemonCard {
             });
         }
         (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.TRADE_OFF_MARKER, this);
-        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_2_MARKER, this);
-        (0, prefabs_1.REPLACE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_MARKER, this.ATTACK_USED_2_MARKER, this);
+        // Zen Blade
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            (0, prefabs_1.BLOCK_EFFECT_IF_MARKER)(this.ATTACK_USED_2_MARKER, effect.player, this);
-            (0, prefabs_1.ADD_MARKER)(this.ATTACK_USED_MARKER, effect.player, this);
+            const player = effect.player;
+            if (!player.active.cannotUseAttacksNextTurnPending.includes('Zen Blade')) {
+                player.active.cannotUseAttacksNextTurnPending.push('Zen Blade');
+            }
         }
         //Lv. X Stuff
         // making sure it gets put on the active pokemon

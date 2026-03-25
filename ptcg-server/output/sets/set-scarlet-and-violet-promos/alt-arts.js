@@ -1021,6 +1021,7 @@ class StevensBeldumIR extends stevens_beldum_1.StevensBeldum {
     constructor() {
         super(...arguments);
         this.fullName = 'Steven\'s BeldumIR SVP';
+        this.set = 'SVP';
         this.setNumber = '207';
     }
 }

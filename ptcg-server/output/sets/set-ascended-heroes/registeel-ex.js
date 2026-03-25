@@ -37,7 +37,7 @@ class Registeelex extends game_1.PokemonCard {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInDiscard = player.discard.cards.some(c => {
-                return c instanceof game_1.EnergyCard
+                return c.superType === game_1.SuperType.ENERGY
                     && c.energyType === game_1.EnergyType.BASIC
                     && c.provides && c.provides.includes(game_1.CardType.METAL);
             });

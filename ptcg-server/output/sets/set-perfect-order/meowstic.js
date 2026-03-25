@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Meowstic = void 0;
-const game_1 = require("../../game");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-class Meowstic extends game_1.PokemonCard {
+const card_types_1 = require("../../game/store/card/card-types");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
+class Meowstic extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
-        this.stage = game_1.Stage.STAGE_1;
+        this.stage = card_types_1.Stage.STAGE_1;
         this.evolvesFrom = 'Espurr';
         this.cardType = P;
         this.hp = 100;
@@ -36,13 +36,13 @@ class Meowstic extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Perplex - confuse opponent's Active Pokemon
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED)(store, state, effect);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_CONFUSION_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         // Psychic - damage based on opponent's energy
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = effect.opponent;
-            const energyCount = opponent.active.cards.filter(card => card instanceof game_1.EnergyCard).length;
+            const energyCount = opponent.active.cards.filter(card => card.superType === card_types_1.SuperType.ENERGY).length;
             effect.damage = 30 + (energyCount * 30);
         }
         return state;

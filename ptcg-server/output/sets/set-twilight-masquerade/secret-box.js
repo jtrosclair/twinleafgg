@@ -65,11 +65,9 @@ function* playCard(next, store, state, self, effect) {
         next();
     });
     if (cards.length === 0) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return state;
     }
     player.deck.moveCardsTo(cards, player.hand);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     cards.forEach((card, index) => {
         store.log(state, game_message_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
     });
@@ -91,9 +89,9 @@ class SecretBox extends trainer_card_1.TrainerCard {
         this.setNumber = '163';
         this.name = 'Secret Box';
         this.fullName = 'Secret Box TWM';
-        this.text = 'You can use this card only if you discard 3 other cards from your hand.' +
-            '' +
-            'Search your deck for an Item card, a Pokémon Tool card, a Supporter card, and a Stadium card, reveal them, and put them into your hand.Then, shuffle your deck.';
+        this.text = `You can use this card only if you discard 3 other cards from your hand.
+
+Search your deck for an Item card, a Pokémon Tool card, a Supporter card, and a Stadium card, reveal them, and put them into your hand. Then, shuffle your deck.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

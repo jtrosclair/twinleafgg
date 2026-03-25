@@ -14,7 +14,6 @@ export declare class Alomomola extends PokemonCard {
     retreat: import("../../game").CardType.COLORLESS[];
     powers: {
         name: string;
-        useWhenInPlay: boolean;
         powerType: PowerType;
         text: string;
     }[];

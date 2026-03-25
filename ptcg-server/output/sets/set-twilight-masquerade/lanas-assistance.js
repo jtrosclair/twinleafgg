@@ -22,7 +22,7 @@ function* playCard(next, store, state, self, effect) {
     const blocked = [];
     player.discard.cards.forEach((c, index) => {
         const isPokemon = c instanceof game_1.PokemonCard && !(c.tags.includes(card_types_1.CardTag.POKEMON_ex) || c.tags.includes(card_types_1.CardTag.POKEMON_V) || c.tags.includes(card_types_1.CardTag.POKEMON_VMAX) || c.tags.includes(card_types_1.CardTag.POKEMON_VSTAR));
-        const isBasicEnergy = c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC;
+        const isBasicEnergy = c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC;
         if (isPokemon || isBasicEnergy) {
             pokemonsOrEnergyInDiscard += 1;
         }
@@ -41,7 +41,6 @@ function* playCard(next, store, state, self, effect) {
     });
     (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
     player.discard.moveCardsTo(cards, player.hand);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
 }
 class LanasAssistance extends trainer_card_1.TrainerCard {
     constructor() {
@@ -63,7 +62,6 @@ class LanasAssistance extends trainer_card_1.TrainerCard {
             store.reduceEffect(state, discardEffect);
             if (discardEffect.preventDefault) {
                 // If prevented, just discard the card and return
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             }
             const generator = playCard(() => generator.next(), store, state, this, effect);

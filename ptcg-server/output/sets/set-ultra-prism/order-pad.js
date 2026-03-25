@@ -21,7 +21,6 @@ function* playCard(next, store, state, effect) {
     let coin1Result = false;
     yield store.prompt(state, new coin_flip_prompt_1.CoinFlipPrompt(player.id, game_message_1.GameMessage.COIN_FLIP), (result) => {
         coin1Result = result;
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         next();
     });
     let cards = [];
@@ -32,10 +31,8 @@ function* playCard(next, store, state, effect) {
         });
         if (cards.length > 0) {
             player.deck.moveCardsTo(cards, player.hand);
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         yield store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => state);
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), (order) => {
             player.deck.applyOrder(order);
         });

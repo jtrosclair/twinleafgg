@@ -1,66 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PuzzleOfTime = void 0;
-const trainer_card_1 = require("../../game/store/card/trainer-card");
+const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
+const trainer_card_1 = require("../../game/store/card/trainer-card");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const confirm_prompt_1 = require("../../game/store/prompts/confirm-prompt");
-const game_error_1 = require("../../game/game-error");
-const game_message_1 = require("../../game/game-message");
-const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
-const card_list_1 = require("../../game/store/state/card-list");
-const order_cards_prompt_1 = require("../../game/store/prompts/order-cards-prompt");
-function* playCard(next, store, state, effect) {
-    const player = effect.player;
-    const name = effect.trainerCard.name;
-    if (player.deck.cards.length === 0) {
-        throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
-    }
-    const count = player.hand.cards.reduce((sum, c) => {
-        return sum + (c.name === name ? 1 : 0);
-    }, 0);
-    let playTwoCards = false;
-    if (count >= 2) {
-        yield store.prompt(state, new confirm_prompt_1.ConfirmPrompt(player.id, game_message_1.GameMessage.WANT_TO_PLAY_BOTH_CARDS_AT_ONCE), result => {
-            playTwoCards = result;
-            next();
-        });
-    }
-    if (playTwoCards === false) {
-        // Play 1 card: Look at the top 3 cards and put them back in any order
-        const deckTop = new card_list_1.CardList();
-        player.deck.moveTo(deckTop, 3);
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
-        return store.prompt(state, new order_cards_prompt_1.OrderCardsPrompt(player.id, game_message_1.GameMessage.CHOOSE_CARDS_ORDER, deckTop, { allowCancel: false }), order => {
-            if (order === null) {
-                return state;
-            }
-            deckTop.applyOrder(order);
-            deckTop.moveToTopOfDestination(player.deck);
-            return state;
-        });
-    }
-    // Play 2 cards: Put 2 cards from discard pile into hand
-    if (player.discard.cards.length === 0) {
-        throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
-    }
-    // Discard second Puzzle of Time
-    const second = player.hand.cards.find(c => {
-        return c.name === name && c !== effect.trainerCard;
-    });
-    if (second !== undefined) {
-        player.hand.moveCardTo(second, player.discard);
-    }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
-    let cards = [];
-    yield store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, {}, { min: 0, max: 2, allowCancel: false }), selected => {
-        cards = selected || [];
-        next();
-    });
-    // Move selected cards to hand
-    player.discard.moveCardsTo(cards, player.hand);
-    return state;
-}
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class PuzzleOfTime extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -70,15 +15,52 @@ class PuzzleOfTime extends trainer_card_1.TrainerCard {
         this.fullName = 'Puzzle of Time BKP';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '109';
-        this.text = 'You may play 2 Puzzle of Time cards at once. ' +
-            '' +
-            '• If you played 1 card, look at the top 3 cards of your deck and put them back in any order. ' +
+        this.text = 'You may play 2 Puzzle of Time cards at once.\n\n' +
+            '• If you played 1 card, look at the top 3 cards of your deck and put them back in any order.\n' +
             '• If you played 2 cards, put 2 cards from your discard pile into your hand.';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
-            const generator = playCard(() => generator.next(), store, state, effect);
-            return generator.next().value;
+            const player = effect.player;
+            if (player.deck.cards.length === 0 && player.hand.cards.filter(c => c.name === 'Puzzle of Time').length < 2) {
+                throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
+            }
+            state = store.prompt(state, new game_1.SelectOptionPrompt(player.id, game_1.GameMessage.CHOOSE_OPTION, [
+                'play 1 card, look at the top 3 cards of your deck and put them back in any order.',
+                'play 2 cards, put 2 cards from your discard pile into your hand.'
+            ], {
+                allowCancel: false,
+                defaultValue: 0
+            }), choice => {
+                if (choice === 0) {
+                    if (player.deck.cards.length === 0) {
+                        throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
+                    }
+                    const deckTop = new game_1.CardList();
+                    player.deck.moveTo(deckTop, 3);
+                    return store.prompt(state, new game_1.OrderCardsPrompt(player.id, game_1.GameMessage.CHOOSE_CARDS_ORDER, deckTop, { allowCancel: false }), order => {
+                        if (order === null) {
+                            return state;
+                        }
+                        deckTop.applyOrder(order);
+                        deckTop.moveToTopOfDestination(player.deck);
+                    });
+                }
+                else if (choice === 1) {
+                    if (player.discard.cards.length === 0) {
+                        throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
+                    }
+                    if (player.hand.cards.filter(c => c.name === 'Puzzle of Time').length === 0) {
+                        throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
+                    }
+                    const secondPuzzle = player.hand.cards.find(c => c.name === 'Puzzle of Time');
+                    const mincards = Math.min(player.discard.cards.length, 2);
+                    (0, prefabs_1.SEARCH_DISCARD_PILE_FOR_CARDS_TO_HAND)(store, state, player, this, {}, { min: mincards, max: mincards, allowCancel: false }, effect);
+                    if (secondPuzzle) {
+                        (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: [secondPuzzle], sourceCard: this });
+                    }
+                }
+            });
         }
         return state;
     }

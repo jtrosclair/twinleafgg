@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MetagrossGX4GRI = exports.EnhancedHammer2GRI = exports.ChoiceBand2GRI = exports.SylveonGX2GRI = exports.TapuLeleGX2GRI = exports.Garbodor2GRI = exports.AlolanVulpix2GRI = exports.FightingEnergyGRI = exports.LightningEnergyGRI = exports.GrassEnergyGRI = exports.RareCandyGRI = exports.EnhancedHammer3GRI = exports.AquaPatch2GRI = exports.DrampaGX3GRI = exports.SylveonGX4GRI = exports.MetagrossGX3GRI = exports.LycanrocGX3GRI = exports.TapuLeleGX4GRI = exports.TapuKokoGX3GRI = exports.AlolanNinetalesGX3GRI = exports.DecidueyeGXGRI = exports.Mallow2GRI = exports.HauGRI = exports.DrampaGX2GRI = exports.SylveonGX3GRI = exports.MetagrossGX2GRI = exports.LycanrocGX2GRI = exports.TapuLeleGX3GRI = exports.TapuKokoGX2GRI = exports.AlolanNinetalesGX2GRI = exports.EnergyRecyclerGRI = exports.RescueStretcherGRI = exports.MaxPotionGRI3 = exports.MaxPotionGRI2 = exports.MaxPotionGRI = exports.FieldBlowerGRI2 = exports.FieldBlowerGRI = exports.EnhancedHammerGRI = exports.EnergyLotoGRI = exports.DoubleColorlessEnergyGRISR = exports.AlolanVulpixGRI = void 0;
+exports.IncineroarGxGRI = exports.Hala2 = exports.KommoOGx2 = exports.ToxapexGx2 = exports.VikavoltGx2 = exports.WishiwashiGx2 = exports.TurtonatorGx2 = exports.MachopGRI = exports.AlolanSandshrew2 = exports.MetagrossGX4GRI = exports.EnhancedHammer2GRI = exports.ChoiceBand2GRI = exports.SylveonGX2GRI = exports.TapuLeleGX2GRI = exports.Garbodor2GRI = exports.AlolanVulpix2GRI = exports.FightingEnergyGRI = exports.LightningEnergyGRI = exports.GrassEnergyGRI = exports.RareCandyGRI = exports.EnhancedHammer3GRI = exports.AquaPatch2GRI = exports.DrampaGX3GRI = exports.SylveonGX4GRI = exports.MetagrossGX3GRI = exports.LycanrocGX3GRI = exports.TapuLeleGX4GRI = exports.TapuKokoGX3GRI = exports.AlolanNinetalesGX3GRI = exports.DecidueyeGXGRI = exports.Mallow2GRI = exports.HauGRI = exports.DrampaGX2GRI = exports.SylveonGX3GRI = exports.MetagrossGX2GRI = exports.LycanrocGX2GRI = exports.TapuLeleGX3GRI = exports.TapuKokoGX2GRI = exports.AlolanNinetalesGX2GRI = exports.EnergyRecyclerGRI = exports.RescueStretcherGRI = exports.MaxPotionGRI3 = exports.MaxPotionGRI2 = exports.MaxPotionGRI = exports.FieldBlowerGRI2 = exports.FieldBlowerGRI = exports.EnhancedHammerGRI = exports.EnergyLotoGRI = exports.DoubleColorlessEnergyGRISR = exports.AlolanVulpixGRI = void 0;
+exports.KommoOGx3 = exports.ToxapexGx3 = exports.VikavoltGx3 = exports.WishiwashiGx3 = exports.PrimarinaGxGRI = exports.TurtonatorGx3 = void 0;
 const energy_recycler_1 = require("../set-battle-styles/energy-recycler");
 const alolan_ninetales_gx_1 = require("../set-guardians-rising/alolan-ninetales-gx");
 const tapu_koko_gx_1 = require("../set-guardians-rising/tapu-koko-gx");
@@ -28,6 +29,16 @@ const field_blower_1 = require("./field-blower");
 const max_potion_1 = require("../set-emerging-powers/max-potion");
 const rescue_stretcher_1 = require("./rescue-stretcher");
 const energy_loto_1 = require("../set-astral-radiance/energy-loto");
+const alolan_sandshrew_1 = require("./alolan-sandshrew");
+const machop_1 = require("../set-evolutions/machop");
+const turtonator_gx_1 = require("./turtonator-gx");
+const wishiwashi_gx_1 = require("./wishiwashi-gx");
+const vikavolt_gx_1 = require("./vikavolt-gx");
+const toxapex_gx_1 = require("./toxapex-gx");
+const kommo_o_gx_1 = require("./kommo-o-gx");
+const hala_1 = require("./hala");
+const incineroar_gx_1 = require("../set-sun-and-moon/incineroar-gx");
+const primarina_gx_1 = require("../set-sun-and-moon/primarina-gx");
 class AlolanVulpixGRI extends alolan_vulpix_2.AlolanVulpix {
     constructor() {
         super(...arguments);
@@ -401,3 +412,138 @@ class MetagrossGX4GRI extends metagross_gx_1.MetagrossGX {
     }
 }
 exports.MetagrossGX4GRI = MetagrossGX4GRI;
+class AlolanSandshrew2 extends alolan_sandshrew_1.AlolanSandshrew {
+    constructor() {
+        super(...arguments);
+        this.set = 'GRI';
+        this.setNumber = '19a';
+        this.fullName = 'Alolan Sandshrew GRI 19a';
+    }
+}
+exports.AlolanSandshrew2 = AlolanSandshrew2;
+class MachopGRI extends machop_1.Machop {
+    constructor() {
+        super(...arguments);
+        this.set = 'GRI';
+        this.setNumber = '62';
+        this.fullName = 'Machop GRI';
+    }
+}
+exports.MachopGRI = MachopGRI;
+class TurtonatorGx2 extends turtonator_gx_1.TurtonatorGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'GRI';
+        this.setNumber = '131';
+        this.fullName = 'Turtonator-GX GRI 131';
+    }
+}
+exports.TurtonatorGx2 = TurtonatorGx2;
+class WishiwashiGx2 extends wishiwashi_gx_1.WishiwashiGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'GRI';
+        this.setNumber = '133';
+        this.fullName = 'Wishiwashi-GX GRI 133';
+    }
+}
+exports.WishiwashiGx2 = WishiwashiGx2;
+class VikavoltGx2 extends vikavolt_gx_1.VikavoltGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'GRI';
+        this.setNumber = '134';
+        this.fullName = 'Vikavolt-GX GRI 134';
+    }
+}
+exports.VikavoltGx2 = VikavoltGx2;
+class ToxapexGx2 extends toxapex_gx_1.ToxapexGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'GRI';
+        this.setNumber = '136';
+        this.fullName = 'Toxapex-GX GRI 136';
+    }
+}
+exports.ToxapexGx2 = ToxapexGx2;
+class KommoOGx2 extends kommo_o_gx_1.KommoOGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'GRI';
+        this.setNumber = '141';
+        this.fullName = 'Kommo-o-GX GRI 141';
+    }
+}
+exports.KommoOGx2 = KommoOGx2;
+class Hala2 extends hala_1.Hala {
+    constructor() {
+        super(...arguments);
+        this.set = 'GRI';
+        this.setNumber = '143';
+        this.fullName = 'Hala GRI 143';
+    }
+}
+exports.Hala2 = Hala2;
+class IncineroarGxGRI extends incineroar_gx_1.IncineroarGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'GRI';
+        this.setNumber = '147';
+        this.fullName = 'Incineroar-GX GRI';
+    }
+}
+exports.IncineroarGxGRI = IncineroarGxGRI;
+class TurtonatorGx3 extends turtonator_gx_1.TurtonatorGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'GRI';
+        this.setNumber = '148';
+        this.fullName = 'Turtonator-GX GRI 148';
+    }
+}
+exports.TurtonatorGx3 = TurtonatorGx3;
+class PrimarinaGxGRI extends primarina_gx_1.PrimarinaGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'GRI';
+        this.setNumber = '149';
+        this.fullName = 'Primarina-GX GRI';
+    }
+}
+exports.PrimarinaGxGRI = PrimarinaGxGRI;
+class WishiwashiGx3 extends wishiwashi_gx_1.WishiwashiGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'GRI';
+        this.setNumber = '151';
+        this.fullName = 'Wishiwashi-GX GRI 151';
+    }
+}
+exports.WishiwashiGx3 = WishiwashiGx3;
+class VikavoltGx3 extends vikavolt_gx_1.VikavoltGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'GRI';
+        this.setNumber = '152';
+        this.fullName = 'Vikavolt-GX GRI 152';
+    }
+}
+exports.VikavoltGx3 = VikavoltGx3;
+class ToxapexGx3 extends toxapex_gx_1.ToxapexGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'GRI';
+        this.setNumber = '154';
+        this.fullName = 'Toxapex-GX GRI 154';
+    }
+}
+exports.ToxapexGx3 = ToxapexGx3;
+class KommoOGx3 extends kommo_o_gx_1.KommoOGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'GRI';
+        this.setNumber = '159';
+        this.fullName = 'Kommo-o-GX GRI 159';
+    }
+}
+exports.KommoOGx3 = KommoOGx3;

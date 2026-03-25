@@ -12,6 +12,6 @@ export declare class LetterOfEncouragement extends TrainerCard {
     name: string;
     fullName: string;
     text: string;
-    readonly OPPONENT_KNOCKOUT_MARKER = "OPPONENT_KNOCKOUT_MARKER";
+    readonly LETTER_OF_ENCOURAGEMENT_MARKER = "LETTER_OF_ENCOURAGEMENT_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

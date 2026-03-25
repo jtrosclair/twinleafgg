@@ -23,6 +23,8 @@ __exportStar(require("./set-vending-series"), exports);
 __exportStar(require("./set-wotc-promos"), exports);
 __exportStar(require("./set-gym-heros"), exports);
 __exportStar(require("./set-gym-challenge"), exports);
+//Game Boy
+__exportStar(require("./set-game-boy-exclusives"), exports);
 //Retro Energy
 __exportStar(require("./set-base-set-energy"), exports);
 __exportStar(require("./set-neo-genesis"), exports);
@@ -53,13 +55,18 @@ __exportStar(require("./set-ex-power-keepers"), exports);
 __exportStar(require("./set-ex-firered-leafgreen"), exports);
 __exportStar(require("./set-ex-legend-maker"), exports);
 __exportStar(require("./set-nintendo-promos"), exports);
+__exportStar(require("./set-unnumbered-promos"), exports);
 //POP Series
 __exportStar(require("./set-pop-series-2"), exports);
+__exportStar(require("./set-pop-series-3"), exports);
 __exportStar(require("./set-pop-series-4"), exports);
 __exportStar(require("./set-pop-series-5"), exports);
+__exportStar(require("./set-pop-series-8"), exports);
 //Japan Promos ex-era
 __exportStar(require("./set-pcg-l-promotional-cards"), exports);
 __exportStar(require("./set-pcg-p-promotional-cards"), exports);
+__exportStar(require("./set-pokepark-premium-files"), exports);
+__exportStar(require("./set-gift-box-mew-lucario"), exports);
 // VS Packs
 __exportStar(require("./set-vs-pack-auras-lucario"), exports);
 //DP Era
@@ -173,8 +180,9 @@ __exportStar(require("./set-mega-evolution"), exports);
 __exportStar(require("./set-phantasmal-flames"), exports);
 __exportStar(require("./set-ascended-heroes"), exports);
 __exportStar(require("./set-perfect-order"), exports);
+__exportStar(require("./set-chaos-rising"), exports);
 //TEST
-//export * from './set-test';
+__exportStar(require("./set-test"), exports);
 //Sort Later
 __exportStar(require("./set-legends-awakened"), exports);
 __exportStar(require("./set-stormfront"), exports);

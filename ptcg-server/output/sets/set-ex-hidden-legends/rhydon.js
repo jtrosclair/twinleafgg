@@ -7,6 +7,7 @@ const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const state_utils_1 = require("../../game/store/state-utils");
 const play_card_action_1 = require("../../game/store/actions/play-card-action");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Rhydon extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -66,9 +67,13 @@ class Rhydon extends pokemon_card_1.PokemonCard {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
-            const opponentActive = opponent.active.getPokemonCard();
-            if (opponentActive && (opponentActive.powers.some(power => power.powerType === pokemon_types_1.PowerType.POKEBODY) || opponentActive.powers.some(power => power.powerType === pokemon_types_1.PowerType.POKEPOWER))) {
-                (0, prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE)(effect, store, state, 20);
+            const opponentActivePokemon = opponent.active.getPokemonCard();
+            if (opponentActivePokemon) {
+                const powersEffect = new check_effects_1.CheckPokemonPowersEffect(opponent, opponentActivePokemon);
+                state = store.reduceEffect(state, powersEffect);
+                if (powersEffect.powers.some(power => power.powerType === pokemon_types_1.PowerType.POKEBODY || power.powerType === pokemon_types_1.PowerType.POKEPOWER)) {
+                    (0, prefabs_1.THIS_ATTACK_DOES_X_MORE_DAMAGE)(effect, store, state, 20);
+                }
             }
         }
         return state;

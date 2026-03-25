@@ -22,7 +22,6 @@ function* playCard(next, store, state, self, effect) {
     // Draw cards
     const cardsToDraw = player.getPrizeLeft() === 6 ? 8 : 6;
     player.deck.moveTo(player.hand, cardsToDraw);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return state;
 }
 class LilliesDetermination extends trainer_card_1.TrainerCard {
@@ -36,6 +35,14 @@ class LilliesDetermination extends trainer_card_1.TrainerCard {
         this.cardImage = 'assets/cardback.png';
         this.fullName = 'Lillie\'s Determination M1L';
         this.text = 'Shuffle your hand into your deck. Then, draw 6 cards. If you have exactly 6 Prize cards remaining, draw 8 cards instead.';
+    }
+    canPlay(store, state, player) {
+        // Check if supporter already played this turn
+        if (player.supporterTurn > 0) {
+            return false;
+        }
+        // No other restrictions - card can be played
+        return true;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

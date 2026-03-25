@@ -4,7 +4,6 @@ exports.GardevoirGX = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
@@ -59,10 +58,10 @@ class GardevoirGX extends pokemon_card_1.PokemonCard {
             player.marker.removeMarker(this.SPRING_MARKER, this);
         }
         // Secret Spring
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInHand = player.hand.cards.some(c => {
-                return c instanceof game_1.EnergyCard && c.name === 'Fairy Energy';
+                return c.superType === card_types_1.SuperType.ENERGY && c.name === 'Fairy Energy';
             });
             if (!hasEnergyInHand) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -85,7 +84,7 @@ class GardevoirGX extends pokemon_card_1.PokemonCard {
             });
         }
         // Infinite Force
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const playerProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
@@ -99,7 +98,7 @@ class GardevoirGX extends pokemon_card_1.PokemonCard {
             effect.damage = (playerEnergyCount + opponentEnergyCount) * 30;
         }
         // Twilight-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             // Check if player has used GX attack
             (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);

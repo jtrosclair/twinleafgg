@@ -12,6 +12,7 @@ const confirm_prompt_1 = require("../../game/store/prompts/confirm-prompt");
 const choose_pokemon_prompt_1 = require("../../game/store/prompts/choose-pokemon-prompt");
 const play_card_action_1 = require("../../game/store/actions/play-card-action");
 const game_message_1 = require("../../game/game-message");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* useWhirlwind(next, store, state, effect) {
     const player = effect.player;
     const opponent = state_utils_1.StateUtils.getOpponent(state, player);
@@ -66,7 +67,7 @@ class Beautifly extends pokemon_card_1.PokemonCard {
         this.setNumber = '5';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useWhirlwind(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

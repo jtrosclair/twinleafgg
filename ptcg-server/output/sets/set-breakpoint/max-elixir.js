@@ -38,7 +38,6 @@ class MaxElixir extends game_1.TrainerCard {
                     }
                 }
                 temp.moveToTopOfDestination(player.deck);
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                     player.deck.applyOrder(order);
                     return state;

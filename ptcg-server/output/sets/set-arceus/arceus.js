@@ -72,7 +72,7 @@ class Arceus extends pokemon_card_1.PokemonCard {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(80, effect, store, state);
-            const energies = player.active.cards.filter(card => card instanceof game_1.EnergyCard);
+            const energies = player.active.cards.filter(card => card.superType === card_types_1.SuperType.ENERGY);
             (0, prefabs_1.MOVE_CARDS)(store, state, player.active, player.lostzone, { cards: energies });
         }
         return state;

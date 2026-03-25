@@ -8,19 +8,24 @@ export declare class Zorua extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.FIGHTING;
     }[];
     resistance: {
-        type: CardType;
+        type: CardType.PSYCHIC;
         value: number;
     }[];
-    retreat: CardType[];
-    attacks: {
+    retreat: CardType.COLORLESS[];
+    attacks: ({
         name: string;
-        cost: CardType[];
+        cost: CardType.DARK[];
         damage: number;
         text: string;
-    }[];
+    } | {
+        name: string;
+        cost: CardType.COLORLESS[];
+        damage: number;
+        text: string;
+    })[];
     set: string;
     name: string;
     fullName: string;

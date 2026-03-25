@@ -27,10 +27,8 @@ function* playCard(next, store, state, effect) {
         next();
     });
     if (coinResult === false) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return state;
     }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     active.addSpecialCondition(card_types_1.SpecialCondition.ASLEEP);
     return state;
 }

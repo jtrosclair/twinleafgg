@@ -47,7 +47,7 @@ class TeamRocketsZapdos extends pokemon_card_1.PokemonCard {
                     if (!opponent.bench.some(b => b.cards.length > 0)) {
                         return state;
                     }
-                    if (!opponent.active.cards.some(c => c instanceof game_1.EnergyCard)) {
+                    if (!opponent.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                         return state;
                     }
                     return store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_TO_BENCH, opponent.active, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY }, { allowCancel: false, min: 1, max: 1 }), transfers => {
@@ -62,7 +62,7 @@ class TeamRocketsZapdos extends pokemon_card_1.PokemonCard {
         }
         // Bad Thunder
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
-            if (effect.player.active.cards.some(c => c instanceof game_1.EnergyCard && c.name === 'Team Rocket Energy')) {
+            if (effect.player.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY && c.name === 'Team Rocket Energy')) {
                 effect.damage += 60;
             }
         }

@@ -60,7 +60,7 @@ class TeamRocketsArticuno extends pokemon_card_1.PokemonCard {
         }
         // Dark Frost
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            if (effect.player.active.cards.some(c => c instanceof game_1.EnergyCard && c.name === 'Team Rocket Energy')) {
+            if (effect.player.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY && c.name === 'Team Rocket Energy')) {
                 effect.damage += 60;
             }
         }

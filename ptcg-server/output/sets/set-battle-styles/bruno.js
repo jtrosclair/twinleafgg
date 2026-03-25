@@ -46,7 +46,6 @@ class Bruno extends trainer_card_1.TrainerCard {
             (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.deck, { cards: player.hand.cards.filter(c => c !== this) });
             (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             (0, prefabs_1.DRAW_CARDS)(player, cardsToDraw);
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         }
         (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.BRUNO_MARKER, this);
         return state;

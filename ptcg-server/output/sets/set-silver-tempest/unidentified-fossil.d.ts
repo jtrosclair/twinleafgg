@@ -25,6 +25,7 @@ export declare class UnidentifiedFossil extends TrainerCard {
     fullName: string;
     regulationMark: string;
     maxTools: number;
+    evolvesFromBase: string[];
     powers: Power[];
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

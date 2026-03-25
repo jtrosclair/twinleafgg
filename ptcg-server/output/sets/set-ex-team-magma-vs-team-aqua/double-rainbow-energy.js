@@ -29,7 +29,11 @@ class DoubleRainbowEnergy extends energy_card_1.EnergyCard {
             }
         }
         // Reduce damage done to opponent's Pokemon by 10
-        if ((effect instanceof attack_effects_1.DealDamageEffect) && effect.source.cards.includes(this)) {
+        if ((effect instanceof attack_effects_1.DealDamageEffect) && effect.source.cards.includes(this) && effect.target === effect.opponent.active) {
+            effect.damage -= 10;
+        }
+        else if (effect instanceof attack_effects_1.PutDamageEffect && effect.source.cards.includes(this) && effect.target !== effect.opponent.active) {
+            // Reduction not only on active
             effect.damage -= 10;
         }
         // Provide energy 

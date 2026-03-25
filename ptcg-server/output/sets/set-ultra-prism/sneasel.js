@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Sneasel = void 0;
 const game_1 = require("../../game");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Sneasel extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -35,7 +35,7 @@ class Sneasel extends pokemon_card_1.PokemonCard {
         this.fullName = 'Sneasel UPR';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             return store.prompt(state, [
                 new game_1.CoinFlipPrompt(effect.player.id, game_1.GameMessage.COIN_FLIP),
             ], heads => {
@@ -44,16 +44,16 @@ class Sneasel extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Opponent has no energy cards attached
-            if (!opponent.active.energies.cards.some(c => c instanceof game_1.EnergyCard) && !opponent.bench.some(c => c.energies.cards.some(c => c instanceof game_1.EnergyCard))) {
+            if (!opponent.active.energies.cards.some(c => c.superType === game_1.SuperType.ENERGY) && !opponent.bench.some(b => b.energies.cards.some(c => c.superType === game_1.SuperType.ENERGY))) {
                 return state;
             }
             const blocked = [];
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card, target) => {
-                if (!cardList.energies.cards.some(c => c instanceof game_1.EnergyCard)) {
+                if (!cardList.energies.cards.some(c => c.superType === game_1.SuperType.ENERGY)) {
                     blocked.push(target);
                 }
             });

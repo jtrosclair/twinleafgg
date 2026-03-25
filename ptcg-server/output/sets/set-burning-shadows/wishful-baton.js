@@ -10,7 +10,6 @@ const attach_energy_prompt_1 = require("../../game/store/prompts/attach-energy-p
 const play_card_action_1 = require("../../game/store/actions/play-card-action");
 const state_utils_1 = require("../../game/store/state-utils");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-const energy_card_1 = require("../../game/store/card/energy-card");
 const card_list_1 = require("../../game/store/state/card-list");
 class WishfulBaton extends trainer_card_1.TrainerCard {
     constructor() {
@@ -44,7 +43,7 @@ class WishfulBaton extends trainer_card_1.TrainerCard {
                 return state;
             }
             // Get all basic energy cards from the active Pokemon
-            const basicEnergyCards = active.cards.filter(c => c instanceof energy_card_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC);
+            const basicEnergyCards = active.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC);
             if (basicEnergyCards.length === 0) {
                 return state;
             }

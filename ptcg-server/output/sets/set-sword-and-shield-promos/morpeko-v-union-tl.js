@@ -4,11 +4,11 @@ exports.MorpekoVUNIONTopLeft = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const morpeko_v_union_tr_1 = require("./morpeko-v-union-tr");
 const morpeko_v_union_bl_1 = require("./morpeko-v-union-bl");
 const morpeko_v_union_br_1 = require("./morpeko-v-union-br");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class MorpekoVUNIONTopLeft extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -63,7 +63,7 @@ class MorpekoVUNIONTopLeft extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // assemblin the v-union
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const slots = player.bench.filter(b => b.cards.length === 0);
             if (player.assembledVUNIONs.includes(this.name)) {
@@ -114,7 +114,7 @@ class MorpekoVUNIONTopLeft extends pokemon_card_1.PokemonCard {
             }
         }
         // Union Gain
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let lightningsInDiscard = 0;
             // checking for energies in the discard
@@ -144,7 +144,7 @@ class MorpekoVUNIONTopLeft extends pokemon_card_1.PokemonCard {
             }
         }
         // All You Can Eat
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             if (player.hand.cards.length >= 10) {
                 return state;
@@ -157,9 +157,9 @@ class MorpekoVUNIONTopLeft extends pokemon_card_1.PokemonCard {
             }
         }
         // Burst Wheel
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
-            const energies = player.active.cards.filter(card => card instanceof game_1.EnergyCard);
+            const energies = player.active.cards.filter(card => card.superType === card_types_1.SuperType.ENERGY);
             const discardEnergy = new attack_effects_1.DiscardCardsEffect(effect, energies);
             discardEnergy.target = player.active;
             store.reduceEffect(state, discardEnergy);

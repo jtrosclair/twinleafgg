@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Girafarig = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Girafarig extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -33,19 +33,17 @@ class Girafarig extends game_1.PokemonCard {
         this.fullName = 'Girafarig LOT';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             // Get Lost
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, opponent.discard, {}, { min: 2, max: 2 }), selected => {
-                if (selected && selected.length === 2) {
-                    selected.forEach(card => {
-                        opponent.discard.moveCardsTo(selected, player.lostzone);
-                    });
+                if (selected) {
+                    (0, prefabs_1.MOVE_CARDS)(store, state, opponent.discard, opponent.lostzone, { cards: selected, sourceCard: this, sourceEffect: this.attacks[0] });
                 }
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             // Mind Shock
             effect.ignoreWeakness = true;
             effect.ignoreResistance = true;

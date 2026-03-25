@@ -74,7 +74,6 @@ class Xerosic extends trainer_card_1.TrainerCard {
                                 store.reduceEffect(state, supporterEffect);
                             }
                             catch (_a) {
-                                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                                 return state;
                             }
                         }
@@ -131,7 +130,6 @@ class Xerosic extends trainer_card_1.TrainerCard {
                         state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, target.energies, { energyType: card_types_1.EnergyType.SPECIAL }, { min: 1, max: 1, allowCancel: false }), selected => {
                             cards = selected || [];
                             if (cards.length > 0) {
-                                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                                 target.moveCardsTo(cards, opponent.discard);
                             }
                             return state;

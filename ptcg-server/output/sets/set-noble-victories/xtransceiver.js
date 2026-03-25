@@ -31,10 +31,8 @@ function* playCard(next, store, state, effect) {
         player.deck.moveCardsTo(cards, player.hand);
     }
     else {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return state;
     }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     const opponent = game_1.StateUtils.getOpponent(state, player);
     yield store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => state);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), (order) => {

@@ -31,7 +31,6 @@ class Surfer extends trainer_card_1.TrainerCard {
             return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_message_1.GameMessage.CHOOSE_POKEMON_TO_SWITCH, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH], { allowCancel: false }), result => {
                 const cardList = result[0];
                 player.switchPokemon(cardList);
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 while (player.hand.cards.length < 5) {
                     if (player.deck.cards.length === 0) {
                         break;

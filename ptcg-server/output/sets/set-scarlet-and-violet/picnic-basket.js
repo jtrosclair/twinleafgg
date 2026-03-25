@@ -16,6 +16,28 @@ class PicnicBasket extends game_1.TrainerCard {
         this.fullName = 'Picnic Basket SVI';
         this.text = 'Heal 30 damage from each Pokémon (both yours and your opponent\'s).';
     }
+    canPlay(store, state, player) {
+        const opponent = game_1.StateUtils.getOpponent(state, player);
+        // Check if any Pokémon have damage
+        let hasDamagedPokemon = false;
+        const damagedPokemon = [];
+        player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
+            if (cardList.damage > 0) {
+                hasDamagedPokemon = true;
+                damagedPokemon.push({ target, damage: cardList.damage });
+            }
+        });
+        opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card, target) => {
+            if (cardList.damage > 0) {
+                hasDamagedPokemon = true;
+                damagedPokemon.push({ target, damage: cardList.damage });
+            }
+        });
+        if (!hasDamagedPokemon) {
+            return false;
+        }
+        return true;
+    }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;

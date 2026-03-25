@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GengarMimikyuGX = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class GengarMimikyuGX extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -39,17 +39,19 @@ class GengarMimikyuGX extends game_1.PokemonCard {
         this.CANNOT_PLAY_CARDS_FROM_HAND_MARKER = 'CANT_PLAY_CARDS_FROM_HAND_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const trainerCount = opponent.hand.cards.filter(card => card instanceof game_1.TrainerCard).length;
             effect.damage = 50 * trainerCount;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
+            (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
+            player.usedGX = true;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             opponent.marker.addMarker(this.CANNOT_PLAY_CARDS_FROM_HAND_MARKER, this);
-            const extraEnergy = player.active.cards.filter(card => card instanceof game_1.EnergyCard && card.provides.includes(game_1.CardType.PSYCHIC)).length > 1;
+            const extraEnergy = player.active.cards.filter(card => card.superType === game_1.SuperType.ENERGY && card.provides.includes(game_1.CardType.PSYCHIC)).length > 1;
             if (extraEnergy) {
                 [player, opponent].forEach(p => {
                     while (p.hand.cards.length < 7) {

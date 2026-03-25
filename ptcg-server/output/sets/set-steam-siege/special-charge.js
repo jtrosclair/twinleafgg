@@ -12,7 +12,7 @@ function* playCard(next, store, state, self, effect) {
     const player = effect.player;
     const opponent = game_1.StateUtils.getOpponent(state, player);
     const specialEnergyCards = player.discard.cards.filter(c => {
-        return c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.SPECIAL;
+        return c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.SPECIAL;
     }).length;
     if (specialEnergyCards === 0) {
         throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
@@ -35,7 +35,6 @@ function* playCard(next, store, state, self, effect) {
             state = store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => state);
         }
     }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });

@@ -7,7 +7,6 @@ const trainer_card_1 = require("../../game/store/card/trainer-card");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const choose_pokemon_prompt_1 = require("../../game/store/prompts/choose-pokemon-prompt");
 function* playCard(next, store, state, effect) {
     const player = effect.player;
@@ -38,7 +37,6 @@ function* playCard(next, store, state, effect) {
         return state;
     }
     // Discard trainer only when user selected a Pokemon
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     targets.forEach(target => {
         // Heal Pokemon
         const healEffect = new game_effects_1.HealEffect(player, target, 120);

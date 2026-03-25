@@ -4,7 +4,6 @@ exports.ElectrodeGX = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const discard_energy_prompt_1 = require("../../game/store/prompts/discard-energy-prompt");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class ElectrodeGX extends pokemon_card_1.PokemonCard {
@@ -22,6 +21,7 @@ class ElectrodeGX extends pokemon_card_1.PokemonCard {
                 name: 'Extra Energy Bomb',
                 useWhenInPlay: true,
                 powerType: game_1.PowerType.ABILITY,
+                knocksOutSelf: true,
                 text: 'Once during your turn (before your attack), you may attach 5 Energy cards from your discard pile to your Pokémon, except Pokémon-GX or Pokémon-EX, in any way you like. If you do, this Pokémon is Knocked Out.'
             }];
         this.attacks = [
@@ -47,10 +47,10 @@ class ElectrodeGX extends pokemon_card_1.PokemonCard {
         this.fullName = 'Electrode-GX CES';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInHand = player.discard.cards.some(c => {
-                return c instanceof game_1.EnergyCard;
+                return c.superType === card_types_1.SuperType.ENERGY;
             });
             if (!hasEnergyInHand) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -87,7 +87,7 @@ class ElectrodeGX extends pokemon_card_1.PokemonCard {
                 });
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             // return store.prompt(state, new ChoosePokemonPrompt(
@@ -100,7 +100,7 @@ class ElectrodeGX extends pokemon_card_1.PokemonCard {
             //   targets.forEach(target => {
             let totalEnergy = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
-                const energyCount = cardList.cards.filter(card => card instanceof game_1.EnergyCard).length;
+                const energyCount = cardList.cards.filter(card => card.superType === card_types_1.SuperType.ENERGY).length;
                 totalEnergy += energyCount;
             });
             console.log('Total Energy: ' + totalEnergy);

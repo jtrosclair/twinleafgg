@@ -3,6 +3,7 @@ import { TrainerType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
+import { Player } from '../../game';
 export declare class Penny extends TrainerCard {
     trainerType: TrainerType;
     regulationMark: string;
@@ -12,5 +13,6 @@ export declare class Penny extends TrainerCard {
     name: string;
     fullName: string;
     text: string;
+    canPlay(store: StoreLike, state: State, player: Player): boolean;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

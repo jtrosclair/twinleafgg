@@ -43,6 +43,8 @@ class JolteonStar extends pokemon_card_1.PokemonCard {
                 if (result) {
                     const player = effect.player;
                     const opponent = game_1.StateUtils.getOpponent(state, effect.player);
+                    const powerEffect = new game_effects_1.PowerEffect(player, this.powers[0], this);
+                    store.reduceEffect(state, powerEffect);
                     const effectOfAbility = new game_effects_1.EffectOfAbilityEffect(effect.player, this.powers[0], this, opponent.active);
                     store.reduceEffect(state, effectOfAbility);
                     if (effectOfAbility.target) {

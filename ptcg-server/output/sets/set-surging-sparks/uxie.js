@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Uxie = void 0;
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Uxie extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -29,7 +29,7 @@ class Uxie extends game_1.PokemonCard {
         this.fullName = 'Uxie SSP';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             const activeDamageEffect = new attack_effects_1.PutCountersEffect(effect, 20);
             activeDamageEffect.target = opponent.active;

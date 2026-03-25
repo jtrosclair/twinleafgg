@@ -38,9 +38,17 @@ class HolonsVoltorb extends pokemon_card_1.PokemonCard {
         this.text = '';
         this.isBlocked = false;
         this.blendedEnergies = [];
+        this.blendedEnergyCount = 1;
         this.energyEffect = undefined;
     }
     reduceEffect(store, state, effect) {
+        // Auto-detect if we've been removed from energies and reset superType back to POKEMON
+        if (this.superType === card_types_1.SuperType.ENERGY) {
+            const cardList = game_1.StateUtils.findCardList(state, this);
+            if (!(cardList instanceof game_1.PokemonCardList) || !cardList.energies.cards.includes(this)) {
+                this.superType = card_types_1.SuperType.POKEMON;
+            }
+        }
         // The Special Energy Stuff
         if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
@@ -58,6 +66,7 @@ class HolonsVoltorb extends pokemon_card_1.PokemonCard {
                 if (!targets[0].energies.cards.includes(this)) {
                     targets[0].energies.cards.push(this);
                 }
+                this.superType = card_types_1.SuperType.ENERGY;
             });
         }
         // Provide energy when attached as energy and included in CheckProvidedEnergyEffect

@@ -5,6 +5,7 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const game_1 = require("../../game");
 class Dudunsparce extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -31,8 +32,8 @@ class Dudunsparce extends pokemon_card_1.PokemonCard {
         this.fullName = 'Dudunsparce PAL';
     }
     reduceEffect(store, state, effect) {
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
-            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED)(store, state, effect);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
+            (0, prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE)(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
             (0, attack_effects_1.SHUFFLE_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_DECK)(store, state, effect);
         }
         return state;

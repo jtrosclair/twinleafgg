@@ -8,7 +8,6 @@ const game_phase_effects_1 = require("../../game/store/effects/game-phase-effect
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const state_utils_1 = require("../../game/store/state-utils");
 const attack_effects_2 = require("../../game/store/effects/attack-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 // SMP Jolteon-GX 173 (https://limitlesstcg.com/cards/SMP/173)
 class JolteonGX extends pokemon_card_1.PokemonCard {
@@ -53,7 +52,7 @@ class JolteonGX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Electrobullet
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             const hasBenched = opponent.bench.some(b => b.cards.length > 0);
@@ -70,7 +69,7 @@ class JolteonGX extends pokemon_card_1.PokemonCard {
             });
         }
         // Swift Run-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             // Check if player has used GX attack

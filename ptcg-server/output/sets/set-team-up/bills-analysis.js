@@ -25,7 +25,6 @@ function* playCard(next, store, state, self, effect) {
     return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, deckTop, { superType: card_types_1.SuperType.TRAINER }, { min: 0, max: 2, allowCancel: false }), selected => {
         deckTop.moveCardsTo(selected, player.hand);
         deckTop.moveTo(player.deck);
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         const opponent = game_1.StateUtils.getOpponent(state, player);
         if (selected.length > 0) {
             store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, selected), () => next());

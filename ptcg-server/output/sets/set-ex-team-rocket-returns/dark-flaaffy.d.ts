@@ -3,9 +3,9 @@ import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 export declare class DarkFlaaffy extends PokemonCard {
-    tags: CardTag[];
     stage: Stage;
     evolvesFrom: string;
+    tags: CardTag[];
     cardType: CardType;
     additionalCardTypes: CardType.DARK[];
     hp: number;
@@ -24,7 +24,5 @@ export declare class DarkFlaaffy extends PokemonCard {
     cardImage: string;
     name: string;
     fullName: string;
-    readonly ATTACK_USED_MARKER = "ATTACK_USED_MARKER";
-    readonly ATTACK_USED_2_MARKER = "ATTACK_USED_2_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

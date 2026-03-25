@@ -4,10 +4,8 @@ exports.Blastoise = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
-const attach_energy_prompt_1 = require("../../game/store/prompts/attach-energy-prompt");
-const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Blastoise extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -39,7 +37,7 @@ class Blastoise extends pokemon_card_1.PokemonCard {
         this.cardImage = 'assets/cardback.png';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(player);
             store.reduceEffect(state, checkProvidedEnergyEffect);
@@ -52,25 +50,17 @@ class Blastoise extends pokemon_card_1.PokemonCard {
             effect.damage += energyCount * 10;
             return state;
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            const hasEnergyInHand = player.hand.cards.some(c => {
-                return c instanceof game_1.EnergyCard
-                    && c.energyType === card_types_1.EnergyType.BASIC
-                    && c.provides.includes(card_types_1.CardType.WATER);
-            });
-            if (!hasEnergyInHand) {
-                throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
-            }
-            return store.prompt(state, new attach_energy_prompt_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_CARDS, player.hand, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH, game_1.SlotType.ACTIVE], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Water Energy' }, { allowCancel: true }), transfers => {
-                transfers = transfers || [];
-                for (const transfer of transfers) {
-                    const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                    const energyCard = transfer.card;
-                    const attachEnergyEffect = new play_card_effects_1.AttachEnergyEffect(player, energyCard, target);
-                    store.reduceEffect(state, attachEnergyEffect);
-                }
-            });
+            /*
+             * Legacy pre-prefab implementation:
+             * - manually checked for basic Water Energy in hand
+             * - opened AttachEnergyPrompt against hand -> Active/Bench
+             * - resolved transfer targets with StateUtils.getTarget
+             * - attached cards with AttachEnergyEffect
+             */
+            // Converted to prefab version (AS_OFTEN_AS_YOU_LIKE_ATTACH_BASIC_TYPE_ENERGY_FROM_HAND).
+            return (0, prefabs_1.AS_OFTEN_AS_YOU_LIKE_ATTACH_BASIC_TYPE_ENERGY_FROM_HAND)(store, state, player, card_types_1.CardType.WATER);
         }
         return state;
     }

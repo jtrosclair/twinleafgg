@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Haunter = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Haunter extends pokemon_card_1.PokemonCard {
@@ -39,7 +38,7 @@ class Haunter extends pokemon_card_1.PokemonCard {
         if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, game_1.StateUtils.getOpponent(state, effect.player), this);
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
             if (!opponent.active.specialConditions.includes(card_types_1.SpecialCondition.ASLEEP)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_ATTACK);

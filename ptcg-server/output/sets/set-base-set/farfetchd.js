@@ -4,9 +4,9 @@ exports.Farfetchd = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const coin_flip_prompt_1 = require("../../game/store/prompts/coin-flip-prompt");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_1 = require("../../game");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Farfetchd extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -42,7 +42,7 @@ class Farfetchd extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.LEEK_SLAP_MARKER, this);
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (effect.player.marker.hasMarker(this.LEEK_SLAP_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.LEEK_SLAP_CANNOT_BE_USED_AGAIN);

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.setGreatEncounters = void 0;
 const other_prints_1 = require("./other-prints");
 const baltoy_1 = require("./baltoy");
+const beedrill_1 = require("./beedrill");
 const buizel_1 = require("./buizel");
 const claydol_1 = require("./claydol");
 const dialga_lv_x_1 = require("./dialga-lv-x");
@@ -18,6 +19,7 @@ const weedle_1 = require("./weedle");
 // Other prints
 const other_prints_2 = require("./other-prints");
 exports.setGreatEncounters = [
+    new beedrill_1.Beedrill(),
     new buizel_1.Buizel(),
     new floatzel_1.Floatzel(),
     new baltoy_1.Baltoy(),

@@ -41,7 +41,7 @@ class Flygon extends game_1.PokemonCard {
         if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInHand = player.hand.cards.some(c => {
-                return c instanceof game_1.EnergyCard && (c.energyType === game_1.EnergyType.BASIC || c.name === 'Delta Rainbow Energy');
+                return c.superType === game_1.SuperType.ENERGY && (c.energyType === game_1.EnergyType.BASIC || c.name === 'Delta Rainbow Energy');
             });
             if ((0, prefabs_1.HAS_MARKER)(this.DELTA_SUPPLY_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
@@ -52,9 +52,7 @@ class Flygon extends game_1.PokemonCard {
             (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             const blocked = [];
             player.hand.cards.forEach((card, index) => {
-                if (card instanceof game_1.EnergyCard && (card.energyType === game_1.EnergyType.BASIC || card.name === 'Delta Rainbow Energy')) {
-                }
-                else {
+                if (!(card.superType === game_1.SuperType.ENERGY && (card.energyType === game_1.EnergyType.BASIC || card.name === 'Delta Rainbow Energy'))) {
                     blocked.push(index);
                 }
             });

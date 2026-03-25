@@ -23,7 +23,6 @@ function* playCard(next, store, state, self, effect) {
     });
     const cardsNumber = opponent.hand.cards.length;
     (0, prefabs_1.DRAW_CARDS)(player, cardsNumber);
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return state;
 }
 class Copycat extends trainer_card_1.TrainerCard {

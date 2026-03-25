@@ -17,9 +17,9 @@ class GreensExploration extends trainer_card_1.TrainerCard {
         this.setNumber = '175';
         this.name = 'Green\'s Exploration';
         this.fullName = 'Green\'s Exploration UNB';
-        this.text = 'You can play this card only if you have no Pokémon with Abilities in play.' +
-            '' +
-            'Search your deck for up to 2 Trainer cards, reveal them, and put them into your hand. Then, shuffle your deck.';
+        this.text = `You can play this card only if you have no Pokémon with Abilities in play.
+
+Search your deck for up to 2 Trainer cards, reveal them, and put them into your hand. Then, shuffle your deck.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
@@ -76,7 +76,6 @@ class GreensExploration extends trainer_card_1.TrainerCard {
                     });
                     state = store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => state);
                 }
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             });
         }

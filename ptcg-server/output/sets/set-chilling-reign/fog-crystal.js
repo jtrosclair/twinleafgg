@@ -19,7 +19,7 @@ function* playCard(next, store, state, effect, self) {
     let trainers = 0;
     const blocked = [];
     player.deck.cards.forEach((c, index) => {
-        if (c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC && c.name === 'Psychic Energy') {
+        if (c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC && c.name === 'Psychic Energy') {
             trainers += 1;
         }
         else if (c instanceof game_1.PokemonCard && c.cardType === card_types_1.CardType.PSYCHIC && c.stage === card_types_1.Stage.BASIC) {
@@ -43,7 +43,6 @@ function* playCard(next, store, state, effect, self) {
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });

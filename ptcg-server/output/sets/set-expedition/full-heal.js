@@ -23,7 +23,6 @@ class FullHeal extends trainer_card_1.TrainerCard {
             conditions === null || conditions === void 0 ? void 0 : conditions.forEach(condition => {
                 player.active.removeSpecialCondition(condition);
             });
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

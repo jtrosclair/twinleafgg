@@ -1,5 +1,7 @@
-import { PokemonCard, Stage, CardType, StoreLike, State } from '../../game';
+import { CardType, Stage } from '../../game/store/card/card-types';
+import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
+import { State, StoreLike } from '../../game';
 export declare class Meowstic extends PokemonCard {
     stage: Stage;
     evolvesFrom: string;

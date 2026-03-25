@@ -23,7 +23,7 @@ class SpikyEnergy extends energy_card_1.EnergyCard {
             'from your opponent\'s Pokémon (even if it is Knocked Out), put 2 damage counters on the Attacking Pokémon.';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof attack_effects_1.AfterDamageEffect && effect.target.cards.includes(this) && state.phase === state_1.GamePhase.ATTACK) {
+        if (effect instanceof attack_effects_1.DealDamageEffect && effect.target.cards.includes(this) && state.phase === state_1.GamePhase.ATTACK) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
             const opponent = effect.player;
             if (player === opponent || player.active !== effect.target)
@@ -31,7 +31,9 @@ class SpikyEnergy extends energy_card_1.EnergyCard {
             if ((0, prefabs_1.IS_SPECIAL_ENERGY_BLOCKED)(store, state, effect.player, this, effect.target)) {
                 return state;
             }
-            effect.source.damage += 20;
+            const putCountersEffect = new attack_effects_1.PutCountersEffect(effect, 20);
+            putCountersEffect.target = effect.source;
+            store.reduceEffect(state, putCountersEffect);
         }
         return state;
     }

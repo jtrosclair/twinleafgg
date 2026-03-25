@@ -1,12 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeraoraVSTARSWSH = exports.ZeraoraVMAXSWSH = exports.ZeraoraVSWSH = exports.MarnieSWSH2 = exports.MarnieSWSH = exports.CharizardSWSH = exports.BronzongSWSH = void 0;
+exports.ZeraoraVSTARSWSH = exports.ZeraoraVMAXSWSH = exports.ZeraoraVSWSH = exports.HisuianSamurottSWSH = exports.MarnieSWSH2 = exports.ProfessorsResearchSWSH = exports.MarnieSWSH = exports.KirliaSWSH = exports.CharizardSWSH = exports.BronzongSWSH = exports.BossOrdersSWSH = void 0;
+const boss_orders_1 = require("../set-paldea-evolved/boss-orders");
 const bronzong_1 = require("../set-battle-styles/bronzong");
 const charizard_1 = require("../set-vivid-voltage/charizard");
+const kirlia_1 = require("../set-silver-tempest/kirlia");
 const marnie_1 = require("../set-sword-and-shield/marnie");
+const professors_research_1 = require("../set-scarlet-and-violet/professors-research");
+const hisuian_samurott_1 = require("../set-astral-radiance/hisuian-samurott");
 const zeraora_v_1 = require("../set-crown-zenith/zeraora-v");
 const zeraora_vmax_1 = require("../set-crown-zenith/zeraora-vmax");
 const zeraora_vstar_1 = require("../set-crown-zenith/zeraora-vstar");
+class BossOrdersSWSH extends boss_orders_1.BossOrders {
+    constructor() {
+        super(...arguments);
+        this.fullName = 'Boss Orders SWSH';
+        this.set = 'SWSH';
+        this.setNumber = '251';
+    }
+}
+exports.BossOrdersSWSH = BossOrdersSWSH;
 class BronzongSWSH extends bronzong_1.Bronzong {
     constructor() {
         super(...arguments);
@@ -25,6 +38,15 @@ class CharizardSWSH extends charizard_1.Charizard {
     }
 }
 exports.CharizardSWSH = CharizardSWSH;
+class KirliaSWSH extends kirlia_1.Kirlia {
+    constructor() {
+        super(...arguments);
+        this.fullName = 'Kirlia SWSH';
+        this.set = 'SWSH';
+        this.setNumber = '271';
+    }
+}
+exports.KirliaSWSH = KirliaSWSH;
 class MarnieSWSH extends marnie_1.Marnie {
     constructor() {
         super(...arguments);
@@ -34,6 +56,15 @@ class MarnieSWSH extends marnie_1.Marnie {
     }
 }
 exports.MarnieSWSH = MarnieSWSH;
+class ProfessorsResearchSWSH extends professors_research_1.ProfessorsResearch {
+    constructor() {
+        super(...arguments);
+        this.fullName = 'Professor\'s Research SWSH';
+        this.set = 'SWSH';
+        this.setNumber = '152';
+    }
+}
+exports.ProfessorsResearchSWSH = ProfessorsResearchSWSH;
 class MarnieSWSH2 extends marnie_1.Marnie {
     constructor() {
         super(...arguments);
@@ -43,6 +74,15 @@ class MarnieSWSH2 extends marnie_1.Marnie {
     }
 }
 exports.MarnieSWSH2 = MarnieSWSH2;
+class HisuianSamurottSWSH extends hisuian_samurott_1.HisuianSamurott {
+    constructor() {
+        super(...arguments);
+        this.fullName = 'Hisuian Samurott SWSH';
+        this.set = 'SWSH';
+        this.setNumber = '207';
+    }
+}
+exports.HisuianSamurottSWSH = HisuianSamurottSWSH;
 class ZeraoraVSWSH extends zeraora_v_1.ZeraoraV {
     constructor() {
         super(...arguments);

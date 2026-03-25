@@ -41,14 +41,12 @@ class LostRemover extends trainer_card_1.TrainerCard {
             store.prompt(state, new choose_pokemon_prompt_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DISCARD_CARDS, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { allowCancel: false, blocked }), results => {
                 targets = results || [];
                 if (targets.length === 0) {
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                     return state;
                 }
                 const target = targets[0];
                 store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, target.energies, { energyType: card_types_1.EnergyType.SPECIAL }, { min: 1, max: 1, allowCancel: false }), selected => {
                     (0, prefabs_1.MOVE_CARDS)(store, state, target, opponent.lostzone, { cards: selected, sourceCard: this });
                 });
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             });
         }
         return state;

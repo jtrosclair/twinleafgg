@@ -39,7 +39,7 @@ class Servine extends game_1.PokemonCard {
             return store.prompt(state, new game_2.CoinFlipPrompt(player.id, game_2.GameMessage.COIN_FLIP), flipResult => {
                 if (flipResult) {
                     // Defending Pokemon has no energy cards attached
-                    if (!opponent.active.cards.some(c => c instanceof game_2.EnergyCard)) {
+                    if (!opponent.active.cards.some(c => c.superType === game_2.SuperType.ENERGY)) {
                         return state;
                     }
                     let cards = [];

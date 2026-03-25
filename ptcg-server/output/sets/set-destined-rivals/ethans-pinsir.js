@@ -6,6 +6,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const marker_constants_1 = require("../../game/store/markers/marker-constants");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class EthansPinsir extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -39,7 +40,7 @@ class EthansPinsir extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         var _a;
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(marker_constants_1.MarkerConstants.REVENGE_MARKER)) {
                 effect.damage += 100;

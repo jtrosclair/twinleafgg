@@ -16,14 +16,16 @@ class RosasEncouragement extends trainer_card_1.TrainerCard {
         this.setNumber = '75';
         this.name = 'Rosa\'s Encouragement';
         this.fullName = 'Rosa\'s Encouragement M3';
-        this.text = 'You can\'t use this card if you have more Prize cards remaining than your opponent.\n\nAttach up to 2 Basic Energy cards from your discard pile to 1 of your Stage 2 Pokemon.';
+        this.text = `You can use this card only if you have more Prize cards remaining than your opponent.
+
+Attach up to 2 Basic Energy cards from your discard pile to 1 of your Stage 2 Pokémon.`;
     }
     canPlay(store, state, player) {
         const opponent = game_1.StateUtils.getOpponent(state, player);
         if (player.supporterTurn > 0) {
             return false;
         }
-        if (player.getPrizeLeft() > opponent.getPrizeLeft()) {
+        if (player.getPrizeLeft() <= opponent.getPrizeLeft()) {
             return false;
         }
         const basicEnergyInDiscard = player.discard.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY &&
@@ -52,7 +54,7 @@ class RosasEncouragement extends trainer_card_1.TrainerCard {
                 throw new game_error_1.GameError(game_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
             }
             // Check if player has more Prize cards remaining than opponent
-            if (player.getPrizeLeft() > opponent.getPrizeLeft()) {
+            if (player.getPrizeLeft() <= opponent.getPrizeLeft()) {
                 throw new game_error_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
             // Check for Basic Energy in discard
@@ -81,7 +83,6 @@ class RosasEncouragement extends trainer_card_1.TrainerCard {
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
                     player.discard.moveCardTo(transfer.card, target);
                 }
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
             });
         }
         return state;

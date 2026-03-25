@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Aromatisse = void 0;
 const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
-const energy_card_1 = require("../../game/store/card/energy-card");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Aromatisse extends game_1.PokemonCard {
     constructor() {
@@ -44,7 +43,7 @@ class Aromatisse extends game_1.PokemonCard {
             (0, prefabs_1.ABILITY_USED)(player, this);
             player.marker.addMarkerToState(this.FRAGRANCE_COLLECTION_MARKER);
             // Filter deck for Basic Psychic Energy
-            const basicPsychicEnergy = player.deck.cards.filter(card => card instanceof energy_card_1.EnergyCard &&
+            const basicPsychicEnergy = player.deck.cards.filter(card => card.superType === game_1.SuperType.ENERGY &&
                 card.energyType === game_1.EnergyType.BASIC &&
                 card.provides.includes(game_1.CardType.PSYCHIC));
             if (basicPsychicEnergy.length === 0) {

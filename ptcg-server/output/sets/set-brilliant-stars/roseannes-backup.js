@@ -19,7 +19,7 @@ function* playCard(next, store, state, self, effect) {
     const hasValidCard = player.discard.cards.some(c => c instanceof pokemon_card_1.PokemonCard ||
         (c instanceof trainer_card_1.TrainerCard && c.trainerType === card_types_1.TrainerType.TOOL) ||
         (c instanceof trainer_card_1.TrainerCard && c.trainerType === card_types_1.TrainerType.STADIUM) ||
-        c instanceof game_1.EnergyCard);
+        c.superType === card_types_1.SuperType.ENERGY);
     if (!hasValidCard) {
         throw new game_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
     }
@@ -47,10 +47,10 @@ function* playCard(next, store, state, self, effect) {
         else if (c instanceof trainer_card_1.TrainerCard && c.trainerType === card_types_1.TrainerType.STADIUM) {
             stadiums += 1;
         }
-        else if (c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC) {
+        else if (c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC) {
             basicEnergies += 1;
         }
-        else if (c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.SPECIAL) {
+        else if (c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.SPECIAL) {
             specialEnergies += 1;
         }
         else {
@@ -72,7 +72,6 @@ function* playCard(next, store, state, self, effect) {
         next();
     });
     (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.deck, { cards, sourceCard: self });
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     cards.forEach((card, index) => {
         store.log(state, game_message_1.GameLog.LOG_PLAYER_RETURNS_TO_DECK_FROM_DISCARD, { name: player.name, card: card.name });
     });

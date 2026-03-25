@@ -60,7 +60,6 @@ class DesertShaman extends trainer_card_1.TrainerCard {
                     }
                 });
             }
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

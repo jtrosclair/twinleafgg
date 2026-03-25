@@ -42,13 +42,15 @@ class Beheeyem extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             (0, prefabs_1.ADD_MARKER)(this.OPPONENT_CANNOT_PLAY_ITEM_CARDS_MARKER, opponent, this);
-            (0, attack_effects_1.SHUFFLE_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_DECK)(store, state, effect);
         }
         if (effect instanceof play_card_effects_1.PlayItemEffect) {
             const player = effect.player;
             if ((0, prefabs_1.HAS_MARKER)(this.OPPONENT_CANNOT_PLAY_ITEM_CARDS_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
             }
+        }
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
+            (0, attack_effects_1.SHUFFLE_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_DECK)(store, state, effect);
         }
         (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.OPPONENT_CANNOT_PLAY_ITEM_CARDS_MARKER, this);
         return state;

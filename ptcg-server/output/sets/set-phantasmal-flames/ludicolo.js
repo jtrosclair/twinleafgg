@@ -5,6 +5,7 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Ludicolo extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -18,10 +19,10 @@ class Ludicolo extends pokemon_card_1.PokemonCard {
                 name: 'Excited Healing',
                 useWhenInPlay: true,
                 powerType: game_1.PowerType.ABILITY,
-                text: 'Once during your turn, if you have a [G] Mega Evolution Pokémon ex in play, you may heal 60 damage from 1 of your Pokemon.'
+                text: 'Once during your turn, if you have any [G] Mega Evolution Pokémon ex in play, you may use this Ability. Heal 60 damage from 1 of your Pokémon.'
             }];
         this.attacks = [{
-                name: 'Knock Down',
+                name: 'Lunge Out',
                 cost: [G, C],
                 damage: 120,
                 text: ''
@@ -35,7 +36,7 @@ class Ludicolo extends pokemon_card_1.PokemonCard {
         this.EXCITED_HEALING_MARKER = 'EXCITED_HEALING_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasMegaEvolutionPokemonInPlay = player.active.cards.some(c => {
                 return c instanceof pokemon_card_1.PokemonCard

@@ -8,7 +8,6 @@ const check_effects_1 = require("../../game/store/effects/check-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_error_1 = require("../../game/game-error");
 const game_message_1 = require("../../game/game-message");
-const energy_card_1 = require("../../game/store/card/energy-card");
 const attach_energy_prompt_1 = require("../../game/store/prompts/attach-energy-prompt");
 const play_card_action_1 = require("../../game/store/actions/play-card-action");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -28,7 +27,7 @@ class WonderPatch extends trainer_card_1.TrainerCard {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;
             const hasEnergyInDiscard = player.discard.cards.some(c => {
-                return c instanceof energy_card_1.EnergyCard
+                return c.superType === card_types_1.SuperType.ENERGY
                     && c.energyType === card_types_1.EnergyType.BASIC
                     && c.provides.includes(card_types_1.CardType.PSYCHIC);
             });
@@ -69,7 +68,6 @@ class WonderPatch extends trainer_card_1.TrainerCard {
                     const target = state_utils_1.StateUtils.getTarget(state, player, transfer.to);
                     (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this });
                 }
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             });
         }
         return state;

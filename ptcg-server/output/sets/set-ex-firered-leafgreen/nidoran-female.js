@@ -30,7 +30,7 @@ class NidoranFemale extends pokemon_card_1.PokemonCard {
         this.set = 'RG';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '70';
-        this.name = 'Nidoran F';
+        this.name = 'Nidoran ♀';
         this.fullName = 'Nidoran F RG';
     }
     reduceEffect(store, state, effect) {

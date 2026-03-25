@@ -17,6 +17,9 @@ class GreatBall extends trainer_card_1.TrainerCard {
         this.fullName = 'Great Ball PAL';
         this.text = 'Look at the top 7 cards of your deck. You may reveal a Pokémon you find there and put it into your hand. Shuffle the other cards back into your deck.';
     }
+    canPlay(store, state, player) {
+        return player.deck.cards.length > 0;
+    }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;

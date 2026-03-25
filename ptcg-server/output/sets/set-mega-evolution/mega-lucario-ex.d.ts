@@ -22,7 +22,5 @@ export declare class MegaLucarioex extends PokemonCard {
     cardImage: string;
     name: string;
     fullName: string;
-    readonly MEGA_BRAVE_MARKER = "MEGA_BRAVE_MARKER";
-    readonly CLEAR_MEGA_BRAVE_MARKER = "CLEAR_MEGA_BRAVE_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

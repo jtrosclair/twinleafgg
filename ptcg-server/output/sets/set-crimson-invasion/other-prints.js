@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Regigigas2CIN = exports.GuzzlordGX2CIN = exports.WaterEnergyCIN = exports.WarpEnergySFCIN = exports.CounterEnergy2CIN = exports.WishfulBatonCIN = exports.CounterCatcher2CIN = exports.SilvallyGX3CIN = exports.KartanaGX3CIN = exports.GuzzlordGX4CIN = exports.BuzzwoleGX3CIN = exports.Lusamine2CIN = exports.Gladion2CIN = exports.SilvallyGX2CIN = exports.KartanaGX2CIN = exports.GuzzlordGX3CIN = exports.BuzzwoleGX2CIN = exports.CounterCatcherCIN = exports.SilvallyGXCIN = void 0;
+exports.AlolanExeggutorGx3 = exports.NihilegoGx3 = exports.AlolanGolemGx3 = exports.GyaradosGx3 = exports.OliviaCIN = exports.AlolanExeggutorGx2 = exports.NihilegoGx2 = exports.AlolanGolemGx2 = exports.GyaradosGx2 = exports.Regigigas2CIN = exports.GuzzlordGX2CIN = exports.WaterEnergyCIN = exports.WarpEnergySFCIN = exports.CounterEnergy2CIN = exports.WishfulBatonCIN = exports.CounterCatcher2CIN = exports.SilvallyGX3CIN = exports.KartanaGX3CIN = exports.GuzzlordGX4CIN = exports.BuzzwoleGX3CIN = exports.Lusamine2CIN = exports.Gladion2CIN = exports.SilvallyGX2CIN = exports.KartanaGX2CIN = exports.GuzzlordGX3CIN = exports.BuzzwoleGX2CIN = exports.CounterCatcherCIN = exports.SilvallyGXCIN = void 0;
 const silvally_gx_1 = require("../set-ultra-prism/silvally-gx");
 const counter_catcher_1 = require("../set-paradox-rift/counter-catcher");
 const buzzwole_gx_1 = require("../set-crimson-invasion/buzzwole-gx");
@@ -15,6 +15,11 @@ const counter_energy_1 = require("../set-crimson-invasion/counter-energy");
 const other_prints_1 = require("../set-stormfront/other-prints");
 const water_energy_1 = require("../set-base-set-energy/water-energy");
 const regigigas_1 = require("../set-crimson-invasion/regigigas");
+const gyarados_gx_1 = require("./gyarados-gx");
+const alolan_golem_gx_1 = require("./alolan-golem-gx");
+const nihilego_gx_1 = require("./nihilego-gx");
+const alolan_exeggutor_gx_1 = require("./alolan-exeggutor-gx");
+const olivia_1 = require("../set-burning-shadows/olivia");
 class SilvallyGXCIN extends silvally_gx_1.SilvallyGX {
     constructor() {
         super(...arguments);
@@ -186,3 +191,84 @@ class Regigigas2CIN extends regigigas_1.Regigigas {
     }
 }
 exports.Regigigas2CIN = Regigigas2CIN;
+class GyaradosGx2 extends gyarados_gx_1.GyaradosGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CIN';
+        this.setNumber = '101';
+        this.fullName = 'Gyarados-GX CIN 101';
+    }
+}
+exports.GyaradosGx2 = GyaradosGx2;
+class AlolanGolemGx2 extends alolan_golem_gx_1.AlolanGolemGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CIN';
+        this.setNumber = '102';
+        this.fullName = 'Alolan Golem-GX CIN 102';
+    }
+}
+exports.AlolanGolemGx2 = AlolanGolemGx2;
+class NihilegoGx2 extends nihilego_gx_1.NihilegoGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CIN';
+        this.setNumber = '103';
+        this.fullName = 'Nihilego-GX CIN 103';
+    }
+}
+exports.NihilegoGx2 = NihilegoGx2;
+class AlolanExeggutorGx2 extends alolan_exeggutor_gx_1.AlolanExeggutorGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CIN';
+        this.setNumber = '107';
+        this.fullName = 'Alolan Exeggutor-GX CIN 107';
+    }
+}
+exports.AlolanExeggutorGx2 = AlolanExeggutorGx2;
+class OliviaCIN extends olivia_1.Olivia {
+    constructor() {
+        super(...arguments);
+        this.set = 'CIN';
+        this.setNumber = '111';
+        this.fullName = 'Olivia CIN';
+    }
+}
+exports.OliviaCIN = OliviaCIN;
+class GyaradosGx3 extends gyarados_gx_1.GyaradosGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CIN';
+        this.setNumber = '112';
+        this.fullName = 'Gyarados-GX CIN 112';
+    }
+}
+exports.GyaradosGx3 = GyaradosGx3;
+class AlolanGolemGx3 extends alolan_golem_gx_1.AlolanGolemGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CIN';
+        this.setNumber = '113';
+        this.fullName = 'Alolan Golem-GX CIN 113';
+    }
+}
+exports.AlolanGolemGx3 = AlolanGolemGx3;
+class NihilegoGx3 extends nihilego_gx_1.NihilegoGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CIN';
+        this.setNumber = '114';
+        this.fullName = 'Nihilego-GX CIN 114';
+    }
+}
+exports.NihilegoGx3 = NihilegoGx3;
+class AlolanExeggutorGx3 extends alolan_exeggutor_gx_1.AlolanExeggutorGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CIN';
+        this.setNumber = '118';
+        this.fullName = 'Alolan Exeggutor-GX CIN 118';
+    }
+}
+exports.AlolanExeggutorGx3 = AlolanExeggutorGx3;

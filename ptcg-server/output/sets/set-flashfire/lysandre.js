@@ -25,7 +25,6 @@ function* playCard(next, store, state, effect) {
         store.reduceEffect(state, supporterEffect);
     }
     catch (_a) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return state;
     }
     return store.prompt(state, new choose_pokemon_prompt_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_SWITCH, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.BENCH], { allowCancel: false }), result => {
@@ -36,12 +35,10 @@ function* playCard(next, store, state, effect) {
                 store.reduceEffect(state, supporterEffect);
             }
             catch (_a) {
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             }
         }
         opponent.switchPokemon(cardList);
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return state;
     });
 }

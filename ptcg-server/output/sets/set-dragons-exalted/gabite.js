@@ -4,9 +4,9 @@ exports.Gabite = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Gabite extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -46,7 +46,7 @@ class Gabite extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.DRAGON_CALL_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (player.marker.hasMarker(this.DRAGON_CALL_MARKER, this)) {

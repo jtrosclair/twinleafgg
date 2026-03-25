@@ -25,7 +25,6 @@ class TrashExchange extends trainer_card_1.TrainerCard {
             (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.deck);
             (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             player.deck.moveTo(player.discard, discardCount);
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

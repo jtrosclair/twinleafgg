@@ -23,11 +23,11 @@ class MegaManectricEx extends game_1.PokemonCard {
                 text: 'During your opponent\'s next turn, prevent all damage done to this Pokémon by attacks from Basic Pokémon.'
             },
             {
-                name: 'Riot Blast',
+                name: 'Riotous Blasting',
                 cost: [L, L, L],
                 damage: 200,
                 damageCalculation: '+',
-                text: 'You may discard all Energy attached to this Pokémon. If you do, this attack does 130 more damage.'
+                text: 'You may discard all Energy from this Pokémon and have this attack do 130 more damage.'
             }];
         this.set = 'MEG';
         this.cardImage = 'assets/cardback.png';

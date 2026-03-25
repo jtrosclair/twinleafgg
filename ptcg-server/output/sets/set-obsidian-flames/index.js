@@ -12,7 +12,6 @@ const charmeleon_1 = require("./charmeleon");
 const cleffa_1 = require("./cleffa");
 const combee_1 = require("./combee");
 const dartrix_1 = require("./dartrix");
-const darumaka_1 = require("./darumaka");
 const decidueye_ex_1 = require("./decidueye-ex");
 const dragonair_1 = require("./dragonair");
 const dragonite_ex_1 = require("./dragonite-ex");
@@ -42,14 +41,12 @@ const pidgey_1 = require("./pidgey");
 const pokemon_league_headquarters_1 = require("./pokemon-league-headquarters");
 const poppy_1 = require("./poppy");
 const pupitar_1 = require("./pupitar");
-const rockruff_1 = require("./rockruff");
 const rowlet_1 = require("./rowlet");
 const ryme_1 = require("./ryme");
 const scizor_1 = require("./scizor");
 const seismitoad_1 = require("./seismitoad");
 const tadbulb_1 = require("./tadbulb");
 const thundurus_1 = require("./thundurus");
-const toedscool_1 = require("./toedscool");
 const toedscruel_ex_1 = require("./toedscruel-ex");
 const togekiss_1 = require("./togekiss");
 const togepi_1 = require("./togepi");
@@ -76,7 +73,6 @@ exports.setObsidianFlames = [
     new cleffa_1.Cleffa(),
     new combee_1.Combee(),
     new dartrix_1.Dartrix(),
-    new darumaka_1.Darumaka(),
     new dragonair_1.Dragonair(),
     new dragonite_ex_1.Dragoniteex(),
     new dratini_1.Dratini(),
@@ -95,14 +91,12 @@ exports.setObsidianFlames = [
     new pidgey_1.Pidgey(),
     new pokemon_league_headquarters_1.PokemonLeagueHeadquarters(),
     new poppy_1.Poppy(),
-    new rockruff_1.Rockruff(),
     new rowlet_1.Rowlet(),
     new ryme_1.Ryme(),
     new scizor_1.Scizor(),
     new seismitoad_1.Seismitoad(),
     new tadbulb_1.Tadbulb(),
     new thundurus_1.Thundurus(),
-    new toedscool_1.Toedscool(),
     new toedscruel_ex_1.Toedscruelex(),
     new town_store_1.TownStore(),
     new tympole_1.Tympole(),

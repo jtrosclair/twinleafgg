@@ -8,6 +8,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
 const shuffle_prompt_1 = require("../../game/store/prompts/shuffle-prompt");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* playCard(next, store, state, effect) {
     const player = effect.player;
     let cards = [];
@@ -16,12 +17,11 @@ function* playCard(next, store, state, effect) {
     }
     effect.preventDefault = true;
     player.hand.moveCardTo(effect.trainerCard, player.supporter);
-    yield store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.deck, {}, { min: 0, max: 3, allowCancel: false }), selected => {
+    yield store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.deck, {}, { min: 1, max: 3, allowCancel: false }), selected => {
         cards = selected || [];
         next();
     });
-    player.deck.moveCardsTo(cards, player.discard);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
+    (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.discard, { cards, sourceCard: effect.trainerCard });
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });

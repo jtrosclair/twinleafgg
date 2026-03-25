@@ -4,7 +4,6 @@ exports.Rosa = void 0;
 const game_error_1 = require("../../game/game-error");
 const game_message_1 = require("../../game/game-message");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
-const energy_card_1 = require("../../game/store/card/energy-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const state_1 = require("../../game/store/state/state");
 const state_utils_1 = require("../../game/store/state-utils");
@@ -29,7 +28,7 @@ function* playCard(next, store, state, self, effect) {
     const blocked = [];
     player.deck.cards.forEach((c, index) => {
         const isPokemon = c instanceof pokemon_card_1.PokemonCard;
-        const isBasicEnergy = c instanceof energy_card_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC;
+        const isBasicEnergy = c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC;
         const isTrainer = c instanceof trainer_card_1.TrainerCard;
         if (!isPokemon && !isBasicEnergy && !isTrainer) {
             blocked.push(index);
@@ -51,7 +50,6 @@ function* playCard(next, store, state, self, effect) {
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });
@@ -61,13 +59,13 @@ class Rosa extends trainer_card_1.TrainerCard {
         super(...arguments);
         this.trainerType = card_types_1.TrainerType.SUPPORTER;
         this.set = 'CEC';
+        this.setNumber = '204';
         this.cardImage = 'assets/cardback.png';
         this.name = 'Rosa';
         this.fullName = 'Rosa CEC';
-        this.setNumber = '204';
-        this.text = `You can play this card only if 1 of your Pokemon was Knocked Out during your opponent\'s last turn.
+        this.text = `You can play this card only if 1 of your Pokémon was Knocked Out during your opponent's last turn.
 
-Search your deck for a Pokemon, a Trainer card, and a basic Energy card, reveal them, and put them into your hand. Then, shuffle your deck.`;
+Search your deck for a Pokémon, a Trainer card, and a basic Energy card, reveal them, and put them into your hand. Then, shuffle your deck.`;
         this.ROSA_MARKER = 'ROSA_MARKER';
     }
     reduceEffect(store, state, effect) {

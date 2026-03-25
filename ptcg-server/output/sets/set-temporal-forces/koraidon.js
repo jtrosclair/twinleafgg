@@ -4,10 +4,10 @@ exports.Koraidon = void 0;
 /* eslint-disable indent */
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const card_types_2 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Koraidon extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -41,7 +41,7 @@ class Koraidon extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         var _a, _b;
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let ancientPokemonCount = 0;
             if ((_b = (_a = player.active) === null || _a === void 0 ? void 0 : _a.getPokemonCard()) === null || _b === void 0 ? void 0 : _b.tags.includes(card_types_2.CardTag.ANCIENT)) {
@@ -55,7 +55,7 @@ class Koraidon extends pokemon_card_1.PokemonCard {
             });
             effect.damage = 30 * ancientPokemonCount;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const applyWeakness = new attack_effects_1.ApplyWeaknessEffect(effect, 130);

@@ -54,7 +54,6 @@ class Archie extends trainer_card_1.TrainerCard {
                 });
                 (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
-            player.supporter.moveCardTo(this, player.discard);
         }
         return state;
     }

@@ -62,7 +62,7 @@ class SolgaleoGX extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             const hasBench = player.bench.some(b => b.cards.length > 0);
             const hasEnergyInDiscard = player.discard.cards.some(c => {
-                return c instanceof __1.EnergyCard
+                return c.superType === card_types_1.SuperType.ENERGY
                     && c.energyType === card_types_1.EnergyType.BASIC;
             });
             if (!hasEnergyInDiscard) {

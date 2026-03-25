@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MegaFroslassex = void 0;
-const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const card_types_1 = require("../../game/store/card/card-types");
-const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
+const card_types_1 = require("../../game/store/card/card-types");
+const state_utils_1 = require("../../game/store/state-utils");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 class MegaFroslassex extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -40,13 +39,13 @@ class MegaFroslassex extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         // Rebellion attack - 50x damage based on opponent's hand size
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            const opponent = game_1.StateUtils.getOpponent(state, effect.player);
+            const opponent = state_utils_1.StateUtils.getOpponent(state, effect.player);
             const handCount = opponent.hand.cards.length;
             effect.damage = 50 * handCount;
         }
         // Absolute Snow attack - 150 damage and put opponent's Active Pokemon to sleep
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
-            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP)(store, state, effect);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 1, this)) {
+            (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         return state;
     }

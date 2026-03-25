@@ -19,6 +19,7 @@ export declare class Magneton extends PokemonCard {
         name: string;
         powerType: PowerType;
         useWhenInPlay: boolean;
+        knocksOutSelf: boolean;
         text: string;
     }[];
     attacks: {

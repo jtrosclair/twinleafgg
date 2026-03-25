@@ -2,26 +2,25 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Terapagos = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Terapagos extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.stage = game_1.Stage.BASIC;
-        this.cardType = game_1.CardType.COLORLESS;
+        this.cardType = C;
         this.hp = 120;
-        this.weakness = [{ type: game_1.CardType.FIGHTING }];
-        this.retreat = [game_1.CardType.COLORLESS, game_1.CardType.COLORLESS];
+        this.weakness = [{ type: F }];
+        this.retreat = [C, C];
         this.attacks = [
             {
                 name: 'Prism Charge',
-                cost: [game_1.CardType.COLORLESS],
+                cost: [C],
                 damage: 0,
-                text: 'Search your deck for up to 3 Basic Energy all of different types, and attach them to your Tera Pokémon in any way you like. Then shuffle your deck.'
+                text: 'Search your deck for up to 3 Basic Energy cards of different types and attach them to your Tera Pokémon in any way you like. Then, shuffle your deck.'
             },
             {
                 name: 'Hard Tackle',
-                cost: [game_1.CardType.COLORLESS, game_1.CardType.COLORLESS, game_1.CardType.COLORLESS],
+                cost: [C, C, C],
                 damage: 100,
                 text: ''
             }
@@ -34,7 +33,7 @@ class Terapagos extends game_1.PokemonCard {
         this.fullName = 'Terapagos SSP';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let teraPokemonInPlay = false;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (list, card) => {

@@ -24,7 +24,6 @@ class TransparentWalls extends trainer_card_1.TrainerCard {
         if ((0, trainer_prefabs_1.WAS_TRAINER_USED)(effect, this)) {
             const player = effect.player;
             (0, prefabs_1.ADD_MARKER)(this.TRANSPARENT_WALLS_MARKER, player, this);
-            (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
         }
         if (effect instanceof attack_effects_1.PutDamageEffect) {
             const player = effect.player;

@@ -49,7 +49,7 @@ class Zapdos extends pokemon_card_1.PokemonCard {
         }
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (player.discard.cards.some(c => c instanceof game_1.EnergyCard && c.provides.includes(card_types_1.CardType.LIGHTNING))) {
+            if (player.discard.cards.some(c => c.superType === card_types_1.SuperType.ENERGY && c.provides.includes(card_types_1.CardType.LIGHTNING))) {
                 (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                     if (result) {
                         store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_ATTACH, player.discard, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, provides: [card_types_1.CardType.LIGHTNING] }, { min: 1, max: 1, allowCancel: false }), cards => {

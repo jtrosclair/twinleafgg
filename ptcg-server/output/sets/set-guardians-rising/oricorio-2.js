@@ -8,7 +8,7 @@ const game_2 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const state_utils_1 = require("../../game/store/state-utils");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 // GRI Oricorio 56 (https://limitlesstcg.com/cards/GRI/56)
 class Oricorio2 extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -42,7 +42,7 @@ class Oricorio2 extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Supernatural Dance
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             let pokemonCount = 0;
@@ -74,7 +74,7 @@ class Oricorio2 extends pokemon_card_1.PokemonCard {
             });
         }
         // Revelation Dance
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             if (!state_utils_1.StateUtils.getStadiumCard(state)) {
                 effect.damage = 0;
             }

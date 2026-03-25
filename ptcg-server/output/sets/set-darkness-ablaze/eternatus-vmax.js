@@ -7,6 +7,7 @@ const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_1 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class EternatusVMAX extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -114,7 +115,7 @@ class EternatusVMAX extends pokemon_card_1.PokemonCard {
             }
         }
         // Dread End
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let darksInPlay = 0;
             const activeType = new check_effects_1.CheckPokemonTypeEffect(player.active);

@@ -7,7 +7,6 @@ const state_1 = require("../../game/store/state/state");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const state_utils_1 = require("../../game/store/state-utils");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Scizor extends pokemon_card_1.PokemonCard {
@@ -63,7 +62,7 @@ class Scizor extends pokemon_card_1.PokemonCard {
             }
             checkEnergy.energyMap.forEach(em => {
                 const energyCard = em.card;
-                if (energyCard instanceof game_1.EnergyCard &&
+                if (energyCard.superType === card_types_1.SuperType.ENERGY &&
                     energyCard.energyType === card_types_1.EnergyType.SPECIAL) {
                     if (effect instanceof attack_effects_1.PutDamageEffect
                         && opponent.active.cards.includes(energyCard)) {

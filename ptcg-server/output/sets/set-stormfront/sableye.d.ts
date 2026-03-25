@@ -9,10 +9,10 @@ export declare class Sableye extends PokemonCard {
     cardType: CardType;
     hp: number;
     resistance: {
-        type: CardType;
+        type: CardType.COLORLESS;
         value: number;
     }[];
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     powers: {
         name: string;
         powerType: PowerType;
@@ -20,7 +20,7 @@ export declare class Sableye extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: CardType.DARK[];
         damage: number;
         text: string;
     }[];

@@ -8,7 +8,7 @@ class Slowpoke extends game_1.PokemonCard {
         super(...arguments);
         this.regulationMark = 'H';
         this.stage = game_1.Stage.BASIC;
-        this.cardType = W;
+        this.cardType = P;
         this.hp = 80;
         this.weakness = [{ type: D }];
         this.resistance = [{ type: F, value: -30 }];

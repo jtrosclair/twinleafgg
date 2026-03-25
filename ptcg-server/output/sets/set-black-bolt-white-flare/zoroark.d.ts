@@ -15,10 +15,12 @@ export declare class Zoroark extends PokemonCard {
         damage: number;
         damageCalculation: string;
         text: string;
+        copycatAttack?: undefined;
     } | {
         name: string;
         cost: CardType.COLORLESS[];
         damage: number;
+        copycatAttack: boolean;
         text: string;
         damageCalculation?: undefined;
     })[];

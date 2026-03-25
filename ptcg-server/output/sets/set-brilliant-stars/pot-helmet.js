@@ -30,7 +30,7 @@ class PotHelmet extends trainer_card_1.TrainerCard {
                 return state;
             }
             const player = state_utils_1.StateUtils.findOwner(state, effect.target);
-            if (sourceCard && (sourceCard.tags.includes(card_types_1.CardTag.POKEMON_V) || sourceCard.tags.includes(card_types_1.CardTag.POKEMON_VMAX) || sourceCard.tags.includes(card_types_1.CardTag.POKEMON_VSTAR) || sourceCard.tags.includes(card_types_1.CardTag.POKEMON_ex) || sourceCard.tags.includes(card_types_1.CardTag.RADIANT))) {
+            if (sourceCard && sourceCard.tags.includes(card_types_1.CardTag.POKEMON_V || card_types_1.CardTag.POKEMON_VMAX || card_types_1.CardTag.POKEMON_VSTAR || sourceCard.tags.includes(card_types_1.CardTag.POKEMON_ex || card_types_1.CardTag.RADIANT))) {
                 return state;
             }
             // Check if damage target is owned by this card's owner 

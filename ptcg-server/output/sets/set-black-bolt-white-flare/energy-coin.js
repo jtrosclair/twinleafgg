@@ -51,7 +51,7 @@ class EnergyCoin extends trainer_card_1.TrainerCard {
         this.setNumber = '81';
         this.name = 'Energy Coin';
         this.fullName = 'Energy Coin SV11B';
-        this.text = 'Flip 2 coins. If both of them are heads, search your deck for 1 Basic Energy card and attach it to one of your Pokémon. Then shuffle your deck.';
+        this.text = 'Flip 2 coins. If both of them are heads, search your deck for a Basic Energy card and attach it to 1 of your Pokémon. Then, shuffle your deck.';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

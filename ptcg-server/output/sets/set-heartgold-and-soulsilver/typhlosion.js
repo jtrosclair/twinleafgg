@@ -4,18 +4,18 @@ exports.Typhlosion = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const attach_energy_prompt_1 = require("../../game/store/prompts/attach-energy-prompt");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* useFlareDestroy(next, store, state, effect) {
     const player = effect.player;
     const opponent = game_1.StateUtils.getOpponent(state, player);
     const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
     state = store.reduceEffect(state, checkProvidedEnergy);
-    if (player.active.cards.some(c => c instanceof game_1.EnergyCard)) {
+    if (player.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
         yield store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_ENERGIES_TO_DISCARD, player.active, { superType: card_types_1.SuperType.ENERGY }, { min: 1, max: 1, allowCancel: false }), selected => {
             const cards = selected || [];
             const discardEnergy = new attack_effects_1.DiscardCardsEffect(effect, cards);
@@ -25,7 +25,7 @@ function* useFlareDestroy(next, store, state, effect) {
         });
     }
     // Defending Pokemon has no energy cards attached
-    if (opponent.active.cards.some(c => c instanceof game_1.EnergyCard)) {
+    if (opponent.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
         yield store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_ENERGIES_TO_DISCARD, opponent.active, { superType: card_types_1.SuperType.ENERGY }, { min: 1, max: 1, allowCancel: false }), selected => {
             const cards = selected || [];
             const discardEnergy = new attack_effects_1.DiscardCardsEffect(effect, cards);
@@ -71,11 +71,11 @@ class Typhlosion extends pokemon_card_1.PokemonCard {
             player.marker.removeMarker(this.AFTERBURNER_MARKER, this);
             return state;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useFlareDestroy(() => generator.next(), store, state, effect);
             return generator.next().value;
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const cardList = game_1.StateUtils.findCardList(state, this);
             if (cardList.specialConditions.length > 0) {

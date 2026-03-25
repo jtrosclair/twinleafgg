@@ -16,10 +16,10 @@ class Carmine extends trainer_card_1.TrainerCard {
         this.setNumber = '145';
         this.name = 'Carmine';
         this.fullName = 'Carmine TWM';
+        this.text = `If you go first, you can use this card on your first turn.
+
+Discard your hand and draw 5 cards.`;
         this.firstTurn = true;
-        this.text = 'If you go first, you can use this card on your first turn.' +
-            '' +
-            'Discard your hand and draw 5 cards.';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
@@ -37,7 +37,6 @@ class Carmine extends trainer_card_1.TrainerCard {
             const cards = player.hand.cards.filter(c => c !== this);
             player.hand.moveCardsTo(cards, player.discard);
             player.deck.moveTo(player.hand, 5);
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

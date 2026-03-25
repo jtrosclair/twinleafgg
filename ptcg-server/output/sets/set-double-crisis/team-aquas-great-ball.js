@@ -20,7 +20,7 @@ function* playCard(next, store, state, effect, self) {
     player.deck.cards.forEach((card, index) => {
         // eslint-disable-next-line no-empty    
         if ((card instanceof game_1.PokemonCard && card.stage === card_types_1.Stage.BASIC && card.tags.includes(card_types_1.CardTag.TEAM_AQUA)) ||
-            (card instanceof game_1.EnergyCard && card.energyType === card_types_1.EnergyType.BASIC && card.name === 'Water Energy')) {
+            (card.superType === card_types_1.SuperType.ENERGY && card.energyType === card_types_1.EnergyType.BASIC && card.name === 'Water Energy')) {
             /**/
         }
         else {
@@ -47,7 +47,6 @@ function* playCard(next, store, state, effect, self) {
     if (cards.length > 0) {
         yield store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });

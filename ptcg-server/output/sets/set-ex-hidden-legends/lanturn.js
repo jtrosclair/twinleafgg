@@ -8,7 +8,6 @@ const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
 const card_types_2 = require("../../game/store/card/card-types");
-const energy_card_1 = require("../../game/store/card/energy-card");
 const card_list_1 = require("../../game/store/state/card-list");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Lanturn extends pokemon_card_1.PokemonCard {
@@ -59,7 +58,7 @@ class Lanturn extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // Check if there is a basic Energy in the knocked out Pokémon
-            const basicEnergies = effect.target.cards.filter(c => c instanceof energy_card_1.EnergyCard && c.energyType === card_types_2.EnergyType.BASIC);
+            const basicEnergies = effect.target.cards.filter(c => c.superType === card_types_2.SuperType.ENERGY && c.energyType === card_types_2.EnergyType.BASIC);
             if (basicEnergies.length === 0) {
                 return state;
             }

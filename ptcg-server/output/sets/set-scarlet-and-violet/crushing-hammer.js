@@ -30,7 +30,6 @@ function* playCard(next, store, state, effect) {
         next();
     });
     if (coinResult === false) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return state;
     }
     let targets = [];
@@ -39,7 +38,6 @@ function* playCard(next, store, state, effect) {
         next();
     });
     if (targets.length === 0) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return state;
     }
     const target = targets[0];
@@ -49,7 +47,6 @@ function* playCard(next, store, state, effect) {
         next();
     });
     target.moveCardsTo(cards, opponent.discard);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return state;
 }
 class CrushingHammer extends trainer_card_1.TrainerCard {
@@ -64,6 +61,19 @@ class CrushingHammer extends trainer_card_1.TrainerCard {
         this.fullName = 'Crushing Hammer SVI';
         this.text = 'Flip a coin. If heads, discard an Energy attached to 1 of your ' +
             'opponent\'s Pokemon.';
+    }
+    canPlay(store, state, player) {
+        const opponent = game_1.StateUtils.getOpponent(state, player);
+        let hasPokemonWithEnergy = false;
+        opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card, target) => {
+            if (cardList.energies.cards.length > 0) {
+                hasPokemonWithEnergy = true;
+            }
+        });
+        if (!hasPokemonWithEnergy) {
+            return false;
+        }
+        return true;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

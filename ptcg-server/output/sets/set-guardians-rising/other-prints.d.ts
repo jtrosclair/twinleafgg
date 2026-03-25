@@ -1,23 +1,23 @@
-import { EnergyRecycler } from "../set-battle-styles/energy-recycler";
-import { AlolanNinetalesGX as AlolanNinetalesGXGRI22 } from "../set-guardians-rising/alolan-ninetales-gx";
-import { TapuKokoGX as TapuKokoGXGRI47 } from "../set-guardians-rising/tapu-koko-gx";
-import { TapuLeleGX as TapuLeleGXGRI60 } from "../set-guardians-rising/tapu-lele-gx";
-import { LycanrocGX as LycanrocGXGRI74 } from "../set-guardians-rising/lycanroc-gx";
-import { MetagrossGX as MetagrossGXGRI85 } from "../set-guardians-rising/metagross-gx";
-import { SylveonGX as SylveonGXGRI92 } from "../set-guardians-rising/sylveon-gx";
-import { DrampaGX as DrampaGXGRI115 } from "../set-guardians-rising/drampa-gx";
-import { Hau } from "../set-celestial-storm/hau";
-import { Mallow as MallowGRI127 } from "../set-guardians-rising/mallow";
-import { DecidueyeGX } from "../set-sun-and-moon/decidueye-gx";
-import { AquaPatch as AquaPatchGRI119 } from "../set-guardians-rising/aqua-patch";
-import { EnhancedHammer as EnhancedHammerTWM148 } from "../set-twilight-masquerade/enhanced-hammer";
-import { RareCandy } from "../set-ex-holon-phantoms/rare-candy";
-import { GrassEnergy } from "../set-base-set-energy/grass-energy";
-import { LightningEnergy } from "../set-base-set-energy/lightning-energy";
-import { FightingEnergy } from "../set-base-set-energy/fighting-energy";
-import { AlolanVulpix as AlolanVulpixHIFSV8 } from "../set-hidden-fates/alolan-vulpix";
-import { Garbodor as GarbodorGRI51 } from "../set-guardians-rising/garbodor";
-import { ChoiceBand as ChoiceBandGRI121 } from "../set-guardians-rising/choice-band";
+import { EnergyRecycler } from '../set-battle-styles/energy-recycler';
+import { AlolanNinetalesGX as AlolanNinetalesGXGRI22 } from '../set-guardians-rising/alolan-ninetales-gx';
+import { TapuKokoGX as TapuKokoGXGRI47 } from '../set-guardians-rising/tapu-koko-gx';
+import { TapuLeleGX as TapuLeleGXGRI60 } from '../set-guardians-rising/tapu-lele-gx';
+import { LycanrocGX as LycanrocGXGRI74 } from '../set-guardians-rising/lycanroc-gx';
+import { MetagrossGX as MetagrossGXGRI85 } from '../set-guardians-rising/metagross-gx';
+import { SylveonGX as SylveonGXGRI92 } from '../set-guardians-rising/sylveon-gx';
+import { DrampaGX as DrampaGXGRI115 } from '../set-guardians-rising/drampa-gx';
+import { Hau } from '../set-celestial-storm/hau';
+import { Mallow as MallowGRI127 } from '../set-guardians-rising/mallow';
+import { DecidueyeGX } from '../set-sun-and-moon/decidueye-gx';
+import { AquaPatch as AquaPatchGRI119 } from '../set-guardians-rising/aqua-patch';
+import { EnhancedHammer as EnhancedHammerTWM148 } from '../set-twilight-masquerade/enhanced-hammer';
+import { RareCandy } from '../set-ex-holon-phantoms/rare-candy';
+import { GrassEnergy } from '../set-base-set-energy/grass-energy';
+import { LightningEnergy } from '../set-base-set-energy/lightning-energy';
+import { FightingEnergy } from '../set-base-set-energy/fighting-energy';
+import { AlolanVulpix as AlolanVulpixHIFSV8 } from '../set-hidden-fates/alolan-vulpix';
+import { Garbodor as GarbodorGRI51 } from '../set-guardians-rising/garbodor';
+import { ChoiceBand as ChoiceBandGRI121 } from '../set-guardians-rising/choice-band';
 import { AlolanVulpix } from '../set-hidden-fates/alolan-vulpix';
 import { DoubleColorlessEnergy } from '../set-base-set/double-colorless-energy';
 import { EnhancedHammer } from '../set-twilight-masquerade/enhanced-hammer';
@@ -25,6 +25,16 @@ import { FieldBlower } from './field-blower';
 import { MaxPotion } from '../set-emerging-powers/max-potion';
 import { RescueStretcher } from './rescue-stretcher';
 import { EnergyLoto } from '../set-astral-radiance/energy-loto';
+import { AlolanSandshrew } from './alolan-sandshrew';
+import { Machop } from '../set-evolutions/machop';
+import { TurtonatorGx } from './turtonator-gx';
+import { WishiwashiGx } from './wishiwashi-gx';
+import { VikavoltGx } from './vikavolt-gx';
+import { ToxapexGx } from './toxapex-gx';
+import { KommoOGx } from './kommo-o-gx';
+import { Hala } from './hala';
+import { IncineroarGx } from '../set-sun-and-moon/incineroar-gx';
+import { PrimarinaGx } from '../set-sun-and-moon/primarina-gx';
 export declare class AlolanVulpixGRI extends AlolanVulpix {
     fullName: string;
     setNumber: string;
@@ -233,4 +243,79 @@ export declare class MetagrossGX4GRI extends MetagrossGXGRI85 {
     setNumber: string;
     fullName: string;
     set: string;
+}
+export declare class AlolanSandshrew2 extends AlolanSandshrew {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class MachopGRI extends Machop {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class TurtonatorGx2 extends TurtonatorGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class WishiwashiGx2 extends WishiwashiGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class VikavoltGx2 extends VikavoltGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class ToxapexGx2 extends ToxapexGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class KommoOGx2 extends KommoOGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class Hala2 extends Hala {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class IncineroarGxGRI extends IncineroarGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class TurtonatorGx3 extends TurtonatorGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class PrimarinaGxGRI extends PrimarinaGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class WishiwashiGx3 extends WishiwashiGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class VikavoltGx3 extends VikavoltGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class ToxapexGx3 extends ToxapexGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class KommoOGx3 extends KommoOGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
 }

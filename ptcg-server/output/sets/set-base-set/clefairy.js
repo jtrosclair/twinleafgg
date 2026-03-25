@@ -87,7 +87,7 @@ class Clefairy extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const generator = useMetronome(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

@@ -30,7 +30,8 @@ class LilliesPokeDoll extends __1.TrainerCard {
         this.attacksThisTurn = 0;
         this.maxAttacksThisTurn = 1;
         this.allowSubsequentAttackChoice = false;
-        this.maxTools = 0;
+        this.evolvesFromBase = [];
+        this.maxTools = 1;
         this.set = 'CEC';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '197';
@@ -53,7 +54,7 @@ This card can't retreat. If this card is Knocked Out, your opponent can't take a
     //   '' +
     //   'This card can\'t retreat. If this card is Knocked Out, your opponent can\'t take any Prize cards for it.';
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const pokeDollCardList = __1.StateUtils.findCardList(state, this);
             if (player.active.cards[0] !== this) {

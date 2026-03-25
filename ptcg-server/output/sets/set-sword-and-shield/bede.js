@@ -40,7 +40,6 @@ class Bede extends trainer_card_1.TrainerCard {
                     const target = state_utils_1.StateUtils.getTarget(state, player, transfer.to);
                     player.hand.moveCardTo(transfer.card, target);
                 }
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             });
             return state;

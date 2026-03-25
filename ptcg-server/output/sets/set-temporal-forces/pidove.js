@@ -5,10 +5,10 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_message_1 = require("../../game/game-message");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_2 = require("../../game");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
 const check_effects_1 = require("../../game/store/effects/check-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Pidove extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -39,7 +39,7 @@ class Pidove extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Emergency Evolution
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.deck.cards.length === 0) {
                 return state;

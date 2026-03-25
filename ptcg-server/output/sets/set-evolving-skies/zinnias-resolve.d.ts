@@ -7,8 +7,8 @@ export declare class ZinniasResolve extends TrainerCard {
     regulationMark: string;
     trainerType: TrainerType;
     set: string;
-    cardImage: string;
     setNumber: string;
+    cardImage: string;
     name: string;
     fullName: string;
     text: string;

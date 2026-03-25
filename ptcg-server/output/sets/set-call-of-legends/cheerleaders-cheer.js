@@ -36,7 +36,6 @@ class CheerleadersCheer extends trainer_card_1.TrainerCard {
                     }
                 }, game_1.GameMessage.WANT_TO_DRAW_CARDS);
             }
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

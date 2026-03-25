@@ -1,12 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SeasManaphy5 = void 0;
-const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const card_types_1 = require("../../game/store/card/card-types");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_1 = require("../../game");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
+const card_types_1 = require("../../game/store/card/card-types");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 class SeasManaphy5 extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -19,7 +18,7 @@ class SeasManaphy5 extends pokemon_card_1.PokemonCard {
                 name: 'Natural Cure',
                 useWhenInPlay: false,
                 powerType: game_1.PowerType.POKEBODY,
-                text: 'Whenever you attach a Water Energy card from your hand to Sea\'s Manaphy, remove all Special Conditions from Sea\'s Manaphy.'
+                text: 'Whenever you attach a [W] Energy card from your hand to Sea\'s Manaphy, remove all Special Conditions from Sea\'s Manaphy.'
             }];
         this.attacks = [{
                 name: 'Water Pulse',
@@ -54,8 +53,8 @@ class SeasManaphy5 extends pokemon_card_1.PokemonCard {
                 effect.target.removeSpecialCondition(condition);
             });
         }
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP)(store, state, effect);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         return state;
     }

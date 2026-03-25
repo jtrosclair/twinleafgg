@@ -1,0 +1,22 @@
+import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { Stage, CardType } from '../../game/store/card/card-types';
+export declare class Timburr extends PokemonCard {
+    stage: Stage;
+    cardType: CardType;
+    hp: number;
+    weakness: {
+        type: CardType.PSYCHIC;
+    }[];
+    retreat: CardType.COLORLESS[];
+    attacks: {
+        name: string;
+        cost: CardType.FIGHTING[];
+        damage: number;
+        text: string;
+    }[];
+    set: string;
+    name: string;
+    fullName: string;
+    cardImage: string;
+    setNumber: string;
+}

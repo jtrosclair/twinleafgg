@@ -29,6 +29,7 @@ class AntiqueSailFossil extends game_1.TrainerCard {
         this.attacksThisTurn = 0;
         this.maxAttacksThisTurn = 1;
         this.allowSubsequentAttackChoice = false;
+        this.evolvesFromBase = [];
         this.maxTools = 1;
         this.powers = [{
                 name: 'Antique Sail Fossil',
@@ -53,7 +54,7 @@ class AntiqueSailFossil extends game_1.TrainerCard {
     }
     reduceEffect(store, state, effect) {
         // Discard from play
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             store.log(state, game_1.GameLog.LOG_PLAYER_DISCARDS_CARD, { name: player.name, card: this.name, effect: 'Antique Sail Fossil' });
             const cardList = game_1.StateUtils.findCardList(state, this);

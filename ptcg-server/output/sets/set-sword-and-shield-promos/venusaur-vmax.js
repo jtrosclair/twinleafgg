@@ -4,7 +4,7 @@ exports.VenusaurVMAX = void 0;
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class VenusaurVMAX extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -37,7 +37,7 @@ class VenusaurVMAX extends game_1.PokemonCard {
         this.fullName = 'Venusaur VMAX SWSH 102';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
                 const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(player, cardList);
@@ -51,7 +51,7 @@ class VenusaurVMAX extends game_1.PokemonCard {
                 effect.damage += 30 * grassEnergy;
                 return state;
             });
-            if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+            if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
                 const player = effect.player;
                 const healTargetEffect = new attack_effects_1.HealTargetEffect(effect, 30);
                 healTargetEffect.target = player.active;

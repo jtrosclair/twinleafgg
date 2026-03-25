@@ -64,7 +64,7 @@ class AlakazamEx extends pokemon_card_1.PokemonCard {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const opponent = effect.opponent;
             opponent.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {
-                const goodEnergy = card.cards.filter(card => card instanceof game_1.EnergyCard);
+                const goodEnergy = card.cards.filter(card => card.superType === card_types_1.SuperType.ENERGY);
                 if (goodEnergy.length > 0) {
                     const damage = new attack_effects_1.PutCountersEffect(effect, 30);
                     damage.target = card;

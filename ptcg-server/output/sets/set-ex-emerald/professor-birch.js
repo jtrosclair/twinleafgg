@@ -28,7 +28,6 @@ class ProfessorBirch extends trainer_card_1.TrainerCard {
             }
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, 6);
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         }
         return state;
     }

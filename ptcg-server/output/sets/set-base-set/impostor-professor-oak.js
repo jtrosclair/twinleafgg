@@ -26,7 +26,6 @@ class ImpostorProfessorOak extends trainer_card_1.TrainerCard {
             // Draw 7 cards for the opponent
             (0, prefabs_1.DRAW_CARDS)(opponent, 7);
             // Discard the played Trainer card
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         return state;

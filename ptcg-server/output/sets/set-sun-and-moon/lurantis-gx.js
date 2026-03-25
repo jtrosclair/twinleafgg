@@ -4,7 +4,6 @@ exports.LurantisGX = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -47,7 +46,7 @@ class LurantisGX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Flower Supply
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInDiscard = player.discard.cards.some(c => {
                 return c instanceof game_1.EnergyCard
@@ -69,14 +68,14 @@ class LurantisGX extends pokemon_card_1.PokemonCard {
             });
         }
         // Solar Blade
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const healTargetEffect = new attack_effects_1.HealTargetEffect(effect, 30);
             healTargetEffect.target = player.active;
             state = store.reduceEffect(state, healTargetEffect);
         }
         // Chloroscythe-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
             // Check if player has used GX attack
             (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);

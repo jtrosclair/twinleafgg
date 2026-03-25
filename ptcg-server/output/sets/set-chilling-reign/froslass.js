@@ -6,8 +6,7 @@ const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
-const game_message_1 = require("../../game/game-message");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* useLeParfum(next, store, state, self, effect) {
     const player = effect.player;
     if (player.deck.cards.length === 0) {
@@ -25,7 +24,7 @@ function* useLeParfum(next, store, state, self, effect) {
     catch (_a) {
         return state;
     }
-    yield state = store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_message_1.GameMessage.ATTACH_ENERGY_TO_BENCH, player.discard, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Water Energy' }, { allowCancel: true, min: 0, max: 1 }), transfers => {
+    yield state = store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_TO_BENCH, player.discard, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Water Energy' }, { allowCancel: true, min: 0, max: 1 }), transfers => {
         transfers = transfers || [];
         // cancelled by user
         if (transfers.length === 0) {
@@ -65,31 +64,16 @@ class Froslass extends pokemon_card_1.PokemonCard {
         this.cardImage = 'assets/cardback.png';
         this.name = 'Froslass';
         this.fullName = 'Froslass CRE';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const generator = useLeParfum(() => generator.next(), store, state, this, effect);
             return generator.next().value;
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
-            effect.player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-            effect.player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-            console.log('marker cleared');
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-            effect.player.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
-            console.log('second marker added');
-        }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            // Check marker
-            if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-                console.log('attack blocked');
-                throw new game_1.GameError(game_message_1.GameMessage.BLOCKED_BY_EFFECT);
-            }
-            effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
-            console.log('marker added');
+        // Crystal Breath
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            const player = effect.player;
+            player.active.cannotAttackNextTurnPending = true;
         }
         return state;
     }

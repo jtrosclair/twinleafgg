@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Lombre = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Lombre extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -16,7 +16,7 @@ class Lombre extends game_1.PokemonCard {
         this.powers = [{
                 name: 'Aqua Lift',
                 powerType: game_1.PowerType.POKEBODY,
-                text: 'If Lombre has any Water Energy attached to it, the Retreat Cost for Lombre is 0.'
+                text: 'If Lombre has any [W] Energy attached to it, the Retreat Cost for Lombre is 0.'
             }];
         this.attacks = [
             {
@@ -42,15 +42,7 @@ class Lombre extends game_1.PokemonCard {
                 return state;
             }
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.POKEBODY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
@@ -62,7 +54,7 @@ class Lombre extends game_1.PokemonCard {
             }
         }
         // Handle Ambush attack
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // Flip a coin
             state = store.prompt(state, new game_1.CoinFlipPrompt(player.id, game_1.GameMessage.FLIP_COIN), result => {

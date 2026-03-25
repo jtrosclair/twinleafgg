@@ -41,7 +41,6 @@ class Peony extends trainer_card_1.TrainerCard {
                         store.log(state, game_message_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                     });
                 }
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                     player.deck.applyOrder(order);
                 });

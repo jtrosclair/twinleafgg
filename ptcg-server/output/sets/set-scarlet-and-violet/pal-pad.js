@@ -34,7 +34,6 @@ function* playCard(next, store, state, self, effect) {
             state = store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => state);
         }
     }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });
@@ -52,6 +51,15 @@ class PalPad extends trainer_card_1.TrainerCard {
         this.text = 'Shuffle up to 2 Supporter cards from your discard pile into' +
             'your deck.';
     }
+    canPlay(store, state, player) {
+        const hasSupporter = player.discard.cards.some(c => {
+            return c instanceof trainer_card_1.TrainerCard && c.trainerType === card_types_1.TrainerType.SUPPORTER;
+        });
+        if (!hasSupporter) {
+            return false;
+        }
+        return true;
+    }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;
@@ -60,7 +68,6 @@ class PalPad extends trainer_card_1.TrainerCard {
             store.reduceEffect(state, discardEffect);
             if (discardEffect.preventDefault) {
                 // If prevented, just discard the card and return
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             }
             // If not prevented, proceed with the original effect

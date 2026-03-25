@@ -51,9 +51,7 @@ class HolonScientist extends trainer_card_1.TrainerCard {
                     (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, opponent.hand.cards.length);
                 });
             }
-            player.hand.moveCardTo(effect.trainerCard, player.supporter);
             effect.preventDefault = true;
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         return state;

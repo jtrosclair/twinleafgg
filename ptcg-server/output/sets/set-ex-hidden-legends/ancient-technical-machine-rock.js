@@ -5,9 +5,9 @@ const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const trainer_prefabs_1 = require("../../game/store/prefabs/trainer-prefabs");
+const game_effects_1 = require("../../game/store/effects/game-effects");
 class AncientTechnicalMachineRock extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);

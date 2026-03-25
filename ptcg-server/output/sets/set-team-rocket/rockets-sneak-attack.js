@@ -26,7 +26,6 @@ class RocketsSneakAttack extends trainer_card_1.TrainerCard {
                 cards = selected || [];
                 (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck, { cards });
                 (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
-                (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
             });
         }
         return state;

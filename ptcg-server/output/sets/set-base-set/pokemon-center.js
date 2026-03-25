@@ -28,12 +28,11 @@ class PokemonCenter extends trainer_card_1.TrainerCard {
                     state = store.reduceEffect(state, healEffect);
                     // Only discard energy if healing occurred
                     if (healAmount > 0) {
-                        const cards = cardList.cards.filter(c => c instanceof __1.EnergyCard);
+                        const cards = cardList.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY);
                         (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.discard, { cards, sourceCard: this });
                     }
                 }
             });
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         return state;

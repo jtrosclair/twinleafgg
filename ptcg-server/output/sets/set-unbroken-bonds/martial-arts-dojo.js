@@ -24,7 +24,7 @@ class MartialArtsDojo extends trainer_card_1.TrainerCard {
         if (effect instanceof attack_effects_1.DealDamageEffect && game_1.StateUtils.getStadiumCard(state) === this) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            const hasBasicFightingEnergy = player.active.cards.filter(c => c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC && c.name === 'Fighting Energy').length > 0;
+            const hasBasicFightingEnergy = player.active.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC && c.name === 'Fighting Energy').length > 0;
             if (player.active.cards.some(c => c.tags.includes(card_types_1.CardTag.ULTRA_BEAST)) ||
                 !hasBasicFightingEnergy) {
                 return state;

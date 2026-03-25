@@ -17,6 +17,12 @@ class Clavell extends trainer_card_1.TrainerCard {
         this.fullName = 'Clavell PAL';
         this.text = 'Search your deck for up to 3 Basic Pokémon with 120 HP or less, reveal them, and put them into your hand. Then, shuffle your deck.';
     }
+    canPlay(store, state, player) {
+        if (player.supporterTurn > 0) {
+            return false;
+        }
+        return player.deck.cards.length > 0;
+    }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;

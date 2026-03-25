@@ -38,7 +38,7 @@ class Fezandipitiex extends pokemon_card_1.PokemonCard {
         this.OPPONENT_KNOCKOUT_MARKER = 'OPPONENT_KNOCKOUT_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (!player.marker.hasMarker(this.OPPONENT_KNOCKOUT_MARKER)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -83,7 +83,7 @@ class Fezandipitiex extends pokemon_card_1.PokemonCard {
             }
             player.usedTableTurner = false;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { min: 1, max: 1, allowCancel: false }), selected => {
                 const targets = selected || [];

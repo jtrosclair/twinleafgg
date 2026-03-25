@@ -37,7 +37,6 @@ function* playCard(next, store, state, self, effect) {
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), (order) => {
         player.deck.applyOrder(order);
         (0, prefabs_1.DRAW_CARDS)(player, 1);
-        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     });
 }
 class Maintenance extends trainer_card_1.TrainerCard {

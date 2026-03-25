@@ -14,6 +14,7 @@ class SnorlaxDoll extends game_1.TrainerCard {
         this.cardType = game_1.CardType.COLORLESS;
         this.cardTypez = game_1.CardType.COLORLESS;
         this.movedToActiveThisTurn = false;
+        this.evolvesFromBase = [];
         this.pokemonType = game_1.PokemonType.NORMAL;
         this.evolvesFrom = '';
         this.cardTag = [game_1.CardTag.PLAY_DURING_SETUP];
@@ -31,7 +32,6 @@ class SnorlaxDoll extends game_1.TrainerCard {
         this.setNumber = '175';
         this.name = 'Snorlax Doll';
         this.fullName = 'Snorlax Doll PAR';
-        this.legacyFullName = 'Snorlax Doll SIT';
         this.regulationMark = 'G';
         this.maxTools = 1;
         this.powers = [

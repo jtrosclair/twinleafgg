@@ -1,6 +1,6 @@
-import { Meganium } from "../set-heartgold-and-soulsilver/meganium-prime";
-import { Typhlosion } from "../set-heartgold-and-soulsilver/typhlosion";
-import { Cleffa } from "../set-heartgold-and-soulsilver/cleffa";
+import { Meganium } from '../set-heartgold-and-soulsilver/meganium-prime';
+import { Typhlosion } from '../set-heartgold-and-soulsilver/typhlosion';
+import { Cleffa } from '../set-heartgold-and-soulsilver/cleffa';
 export declare class MeganiumHSP extends Meganium {
     setNumber: string;
     fullName: string;

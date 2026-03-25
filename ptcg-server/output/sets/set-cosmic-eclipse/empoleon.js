@@ -74,12 +74,12 @@ class Empoleon extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Recall attack
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useRecall(() => generator.next(), store, state, this, effect);
             return generator.next().value;
         }
         // Aquafall attack - discard all energy after damage is dealt
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             (0, prefabs_1.DISCARD_ALL_ENERGY_FROM_POKEMON)(store, state, effect, this);
         }
         return state;

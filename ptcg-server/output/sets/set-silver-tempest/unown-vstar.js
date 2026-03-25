@@ -62,7 +62,7 @@ class UnownVSTAR extends pokemon_card_1.PokemonCard {
             (0, prefabs_1.ADD_MARKER)(this.STAR_CIPHER_MARKER, player, this);
             player.usedVSTAR = true;
         }
-        if (effect instanceof check_effects_1.CheckPokemonPowersEffect && effect.target.cards.includes(this)) {
+        if (effect instanceof check_effects_1.CheckPokemonPowersEffect && effect.target === this) {
             const player = effect.player;
             const cardList = game_1.StateUtils.findCardList(state, this);
             const owner = game_1.StateUtils.findOwner(state, cardList);

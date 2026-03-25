@@ -34,7 +34,6 @@ function* playCard(next, store, state, effect, self) {
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
 }
 class RescueCarrier extends trainer_card_1.TrainerCard {
     constructor() {

@@ -51,7 +51,6 @@ class DoubleGust extends trainer_card_1.TrainerCard {
                             opponent.switchPokemon(targetCard.target);
                         }
                     }
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 });
             });
         }

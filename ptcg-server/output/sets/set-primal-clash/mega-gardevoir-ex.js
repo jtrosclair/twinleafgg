@@ -54,7 +54,7 @@ class MGardevoirEx extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             let fairyEnergies = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {
-                const goodEnergy = card.cards.filter(card => card instanceof game_1.EnergyCard && card.name === 'Fairy Energy');
+                const goodEnergy = card.cards.filter(card => card.superType === card_types_1.SuperType.ENERGY && card.name === 'Fairy Energy');
                 fairyEnergies += goodEnergy.length;
             });
             effect.damage = fairyEnergies * 30;

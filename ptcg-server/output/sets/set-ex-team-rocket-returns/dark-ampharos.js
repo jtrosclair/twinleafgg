@@ -19,8 +19,7 @@ class DarkAmpharos extends game_1.PokemonCard {
                 powerType: game_1.PowerType.ABILITY,
                 text: 'As long as Dark Ampharos is in play, whenever your opponent plays an Evolution card from his or her hand to evolve 1 of his or her Pokémon, put 2 damage counters on that Pokémon. You can\'t use more than 1 Darkest Impulse Poké-Body each turn.'
             }];
-        this.attacks = [
-            {
+        this.attacks = [{
                 name: 'Ram',
                 cost: [C, C],
                 damage: 30,
@@ -30,9 +29,8 @@ class DarkAmpharos extends game_1.PokemonCard {
                 name: 'Shock Bolt',
                 cost: [L, C, C],
                 damage: 70,
-                text: 'Discard all Lightning Energy attached to Dark Ampharos.'
-            }
-        ];
+                text: 'Discard all [L] Energy attached to Dark Ampharos.'
+            }];
         this.set = 'TRR';
         this.setNumber = '2';
         this.cardImage = 'assets/cardback.png';
@@ -66,7 +64,7 @@ class DarkAmpharos extends game_1.PokemonCard {
             effect.darkestImpulseSV = true;
         }
         // Handle Shock Bolt attack
-        // if (effect instanceof AttackEffect && effect.attack === this.attacks[1]) {
+        // if (WAS_ATTACK_USED(effect, 1, this)) {
         //   const player = effect.player;
         //   const cardList = player.active;
         //   // Discard all Lightning Energy

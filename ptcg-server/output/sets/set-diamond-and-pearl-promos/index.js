@@ -2,11 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setDiamondAndPearlPromos = void 0;
 const other_prints_1 = require("./other-prints");
+const toxicroak_g_1 = require("./toxicroak-g");
 // Other Prints
 const other_prints_2 = require("./other-prints");
 const other_prints_3 = require("./other-prints");
 const other_prints_4 = require("./other-prints");
 exports.setDiamondAndPearlPromos = [
+    new toxicroak_g_1.ToxicroakG(),
     // Other Prints
     new other_prints_2.DialgaLVXDPP(),
     new other_prints_3.DialgaLVXDPP2(),

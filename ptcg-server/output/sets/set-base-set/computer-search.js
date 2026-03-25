@@ -39,7 +39,6 @@ function* playCard(next, store, state, self, effect) {
         cards = selected || [];
         next();
     });
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: self });
     return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);

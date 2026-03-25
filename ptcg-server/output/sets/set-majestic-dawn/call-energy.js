@@ -27,7 +27,8 @@ class CallEnergy extends energy_card_1.EnergyCard {
             }];
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof check_effects_1.CheckPokemonPowersEffect && effect.target.cards.includes(this) &&
+        if (effect instanceof check_effects_1.CheckPokemonPowersEffect && game_1.StateUtils.findCardList(state, effect.target) instanceof game_1.PokemonCardList &&
+            game_1.StateUtils.findCardList(state, effect.target).cards.includes(this) &&
             !effect.powers.find(p => p.name === this.powers[0].name)) {
             effect.powers.push(this.powers[0]);
         }

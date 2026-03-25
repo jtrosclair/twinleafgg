@@ -4,7 +4,6 @@ exports.GalarianMoltresV = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_message_1 = require("../../game/game-message");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
@@ -48,13 +47,13 @@ class GalarianMoltresV extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.DIREFLAME_WINGS_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.DIREFLAME_WINGS_MARKER, this)) {
                 throw new game_1.GameError(game_message_1.GameMessage.POWER_ALREADY_USED);
             }
             const hasEnergyInDiscard = player.discard.cards.some(c => {
-                return c instanceof game_1.EnergyCard
+                return c.superType === card_types_1.SuperType.ENERGY
                     && c.energyType === card_types_1.EnergyType.BASIC
                     && c.provides.includes(card_types_1.CardType.DARK);
             });
@@ -76,7 +75,7 @@ class GalarianMoltresV extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.DIREFLAME_WINGS_MARKER, this)) {
             effect.player.marker.removeMarker(this.DIREFLAME_WINGS_MARKER, this);
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const dealDamage = new attack_effects_1.DealDamageEffect(effect, 30);
             dealDamage.target = player.active;

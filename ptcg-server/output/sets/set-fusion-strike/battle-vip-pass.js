@@ -15,10 +15,9 @@ class BattleVIPPass extends trainer_card_1.TrainerCard {
         this.regulationMark = 'E';
         this.name = 'Battle VIP Pass';
         this.fullName = 'Battle VIP Pass FST';
-        this.text = 'You can use this card only during your first turn. ' +
-            '' +
-            'Search your deck for up to 2 Basic Pokémon and put ' +
-            'them onto your Bench. Then, shuffle your deck.';
+        this.text = `You can use this card only during your first turn.
+
+Search your deck for up to 2 Basic Pokémon and put them onto your Bench. Then, shuffle your deck.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

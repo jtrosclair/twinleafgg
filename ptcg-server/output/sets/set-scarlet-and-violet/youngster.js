@@ -24,7 +24,6 @@ function* playCard(next, store, state, self, effect) {
         });
     }
     player.deck.moveTo(player.hand, 5);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return state;
 }
 class Youngster extends trainer_card_1.TrainerCard {
@@ -38,6 +37,16 @@ class Youngster extends trainer_card_1.TrainerCard {
         this.name = 'Youngster';
         this.fullName = 'Youngster SVI';
         this.text = 'Shuffle your hand into your deck. Then, draw 5 cards.';
+    }
+    canPlay(store, state, player) {
+        const supporterTurn = player.supporterTurn;
+        if (supporterTurn > 0) {
+            return false;
+        }
+        if (player.hand.cards.length === 0 && player.deck.cards.length === 0) {
+            return false;
+        }
+        return true;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

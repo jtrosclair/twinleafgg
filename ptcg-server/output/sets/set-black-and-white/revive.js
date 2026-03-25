@@ -26,7 +26,6 @@ function* playCard(next, store, state, effect) {
     return store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH, player.discard, { superType: card_types_1.SuperType.POKEMON, stage: card_types_1.Stage.BASIC }, { min: 1, max: 1, allowCancel: true }), selected => {
         if (selected && selected.length > 0) {
             // Discard trainer only when user selected a Pokemon
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             // Recover discarded Pokemon
             state = (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, slots[0], { cards: selected, sourceCard: effect.trainerCard });
         }

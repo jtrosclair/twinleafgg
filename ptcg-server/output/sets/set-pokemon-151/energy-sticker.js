@@ -34,7 +34,6 @@ class EnergySticker extends game_1.TrainerCard {
                 new game_1.CoinFlipPrompt(player.id, game_1.GameMessage.COIN_FLIP)
             ], result => {
                 if (!result) {
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                     return state;
                 }
                 if (result === true) {
@@ -43,13 +42,11 @@ class EnergySticker extends game_1.TrainerCard {
                         transfers = transfers || [];
                         // cancelled by user
                         if (transfers.length === 0) {
-                            player.supporter.moveCardTo(effect.trainerCard, player.discard);
                             return;
                         }
                         for (const transfer of transfers) {
                             const target = game_1.StateUtils.getTarget(state, player, transfer.to);
                             player.discard.moveCardTo(transfer.card, target);
-                            player.supporter.moveCardTo(effect.trainerCard, player.discard);
                         }
                     });
                     return state;

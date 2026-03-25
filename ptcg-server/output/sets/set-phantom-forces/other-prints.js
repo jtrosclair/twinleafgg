@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AegislashEX2PHF = exports.MGengarEx2PHF = exports.Xerosic2PHF = exports.LysandresTrumpCard2PHF = exports.AZ2PHF = exports.GengarEx2PHF = exports.DoubleColorlessEnergyPHF = exports.ShaunaPHF = exports.RollerSkatesPHF = exports.ProfessorSycamoreXYPHF = exports.EnhancedHammerPHF = exports.AegislashEXPHF = void 0;
+exports.DialgaEx2 = exports.MManectricEx3 = exports.FlorgesEx2 = exports.MalamarEx2 = exports.ManectricEx2 = exports.FurfrouPHF = exports.SliggooPHF = exports.GoomyPHF = exports.MManectricEx2 = exports.AegislashEX2PHF = exports.MGengarEx2PHF = exports.Xerosic2PHF = exports.LysandresTrumpCard2PHF = exports.AZ2PHF = exports.GengarEx2PHF = exports.DoubleColorlessEnergyPHF = exports.ShaunaPHF = exports.RollerSkatesPHF = exports.ProfessorSycamoreXYPHF = exports.EnhancedHammerPHF = exports.AegislashEXPHF = void 0;
 const enhanced_hammer_1 = require("../set-twilight-masquerade/enhanced-hammer");
 const other_prints_1 = require("../set-x-and-y/other-prints");
 const roller_skates_1 = require("../set-x-and-y/roller-skates");
@@ -13,6 +13,14 @@ const xerosic_1 = require("../set-phantom-forces/xerosic");
 const mega_gengar_ex_1 = require("../set-phantom-forces/mega-gengar-ex");
 const aegislash_ex_1 = require("../set-phantom-forces/aegislash-ex");
 const aegislash_ex_2 = require("./aegislash-ex");
+const m_manectric_ex_1 = require("./m-manectric-ex");
+const goomy_1 = require("../set-flashfire/goomy");
+const sliggoo_1 = require("../set-flashfire/sliggoo");
+const furfrou_1 = require("../set-flashfire/furfrou");
+const manectric_ex_1 = require("./manectric-ex");
+const malamar_ex_1 = require("./malamar-ex");
+const florges_ex_1 = require("./florges-ex");
+const dialga_ex_1 = require("./dialga-ex");
 class AegislashEXPHF extends aegislash_ex_2.AegislashEX {
     constructor() {
         super(...arguments);
@@ -120,3 +128,84 @@ class AegislashEX2PHF extends aegislash_ex_1.AegislashEX {
     }
 }
 exports.AegislashEX2PHF = AegislashEX2PHF;
+class MManectricEx2 extends m_manectric_ex_1.MManectricEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PHF';
+        this.setNumber = '24a';
+        this.fullName = 'M Manectric-EX PHF 24a';
+    }
+}
+exports.MManectricEx2 = MManectricEx2;
+class GoomyPHF extends goomy_1.Goomy {
+    constructor() {
+        super(...arguments);
+        this.set = 'PHF';
+        this.setNumber = '75';
+        this.fullName = 'Goomy PHF';
+    }
+}
+exports.GoomyPHF = GoomyPHF;
+class SliggooPHF extends sliggoo_1.Sliggoo {
+    constructor() {
+        super(...arguments);
+        this.set = 'PHF';
+        this.setNumber = '76';
+        this.fullName = 'Sliggoo PHF';
+    }
+}
+exports.SliggooPHF = SliggooPHF;
+class FurfrouPHF extends furfrou_1.Furfrou {
+    constructor() {
+        super(...arguments);
+        this.set = 'PHF';
+        this.setNumber = '90';
+        this.fullName = 'Furfrou PHF';
+    }
+}
+exports.FurfrouPHF = FurfrouPHF;
+class ManectricEx2 extends manectric_ex_1.ManectricEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PHF';
+        this.setNumber = '113';
+        this.fullName = 'Manectric-EX PHF 113';
+    }
+}
+exports.ManectricEx2 = ManectricEx2;
+class MalamarEx2 extends malamar_ex_1.MalamarEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PHF';
+        this.setNumber = '115';
+        this.fullName = 'Malamar-EX PHF 115';
+    }
+}
+exports.MalamarEx2 = MalamarEx2;
+class FlorgesEx2 extends florges_ex_1.FlorgesEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PHF';
+        this.setNumber = '116';
+        this.fullName = 'Florges-EX PHF 116';
+    }
+}
+exports.FlorgesEx2 = FlorgesEx2;
+class MManectricEx3 extends m_manectric_ex_1.MManectricEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PHF';
+        this.setNumber = '120';
+        this.fullName = 'M Manectric-EX PHF 120';
+    }
+}
+exports.MManectricEx3 = MManectricEx3;
+class DialgaEx2 extends dialga_ex_1.DialgaEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PHF';
+        this.setNumber = '122';
+        this.fullName = 'Dialga-EX PHF 122';
+    }
+}
+exports.DialgaEx2 = DialgaEx2;

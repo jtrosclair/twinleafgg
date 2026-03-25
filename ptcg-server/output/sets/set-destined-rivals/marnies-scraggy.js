@@ -33,7 +33,7 @@ class MarniesScraggy extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // If defending Pokemon has no energy cards attached, return early
-            if (!opponent.active.cards.some(c => c instanceof game_1.EnergyCard)) {
+            if (!opponent.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                 return state;
             }
             let card;

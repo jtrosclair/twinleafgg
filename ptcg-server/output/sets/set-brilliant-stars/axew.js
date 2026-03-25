@@ -3,11 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Axew = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const coin_flip_prompt_1 = require("../../game/store/prompts/coin-flip-prompt");
 const game_message_1 = require("../../game/game-message");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
 const shuffle_prompt_1 = require("../../game/store/prompts/shuffle-prompt");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* useUltraEvolution(next, store, state, effect) {
     const player = effect.player;
     if (player.deck.cards.length === 0) {
@@ -32,16 +32,16 @@ class Axew extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.stage = card_types_1.Stage.BASIC;
-        this.cardType = card_types_1.CardType.DRAGON;
+        this.cardType = N;
         this.hp = 60;
         this.weakness = [];
         this.resistance = [];
-        this.retreat = [card_types_1.CardType.COLORLESS];
+        this.retreat = [C];
         this.attacks = [{
                 name: 'Ultra Evolution',
-                cost: [card_types_1.CardType.COLORLESS],
+                cost: [C],
                 damage: 0,
-                text: 'Flip a coin. If heads, search your deck for a Haxorus and put it onto this Axew to evolve it. THen shuffle your deck.'
+                text: 'Flip a coin. If heads, search your deck for a Haxorus and put it onto this Axew to evolve it. Then, shuffle your deck.'
             }];
         this.regulationMark = 'F';
         this.set = 'BRS';
@@ -51,7 +51,7 @@ class Axew extends pokemon_card_1.PokemonCard {
         this.setNumber = '110';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             return store.prompt(state, [
                 new coin_flip_prompt_1.CoinFlipPrompt(player.id, game_message_1.GameMessage.COIN_FLIP)

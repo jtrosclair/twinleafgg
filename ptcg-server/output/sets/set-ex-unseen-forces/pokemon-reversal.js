@@ -10,7 +10,7 @@ class PokemonReversal extends trainer_card_1.TrainerCard {
         super(...arguments);
         this.trainerType = card_types_1.TrainerType.ITEM;
         this.set = 'UF';
-        this.name = 'Pokemon Reversal';
+        this.name = 'Pokémon Reversal';
         this.fullName = 'Pokemon Reversal UF';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '88';
@@ -40,7 +40,6 @@ class PokemonReversal extends trainer_card_1.TrainerCard {
                         }
                     });
                 }
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
             });
         }
         return state;

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SilvallyGXHIF = exports.NoivernGXHIF = exports.SylveonGXHIF = exports.GardevoirGXHIF = exports.KartanaGXHIF = exports.GuzzlordGXHIF = exports.DarkraiGXHIF = exports.BuzzwoleGXHIF = exports.LycanrocGXHIF = exports.LucarioGXHIF = exports.NaganadelGXHIF = exports.BanetteGXHIF = exports.EspeonGXHIF = exports.MewtwoGX2HIF = exports.ElectrodeGXHIF = exports.GreninjaGXHIF = exports.GlaceonGXHIF = exports.ArticunoGXHIF = exports.AlolanNinetalesGXHIF = exports.DecidueyeGXHIF = exports.OranguruHIF = exports.NoibatHIF = exports.Eevee3HIF = exports.GarchompHIF = exports.GabiteHIF = exports.GibleHIF = exports.DiancieHIF = exports.RaltsHIF = exports.MagnezoneHIF = exports.ZoruaHIF = exports.BuzzwoleHIF = exports.RockruffHIF = exports.LucarioHIF = exports.RioluHIF = exports.SudowoodoHIF = exports.PoipoleHIF = exports.MalamarHIF = exports.InkayHIF = exports.ShuppetHIF = exports.FrogadierHIF = exports.FroakieFrubblesHIF = exports.DartrixHIF = exports.RowletHIF = exports.MoltresZapdosArticunoGX3HIF = exports.MoltresZapdosArticunoGX2HIF = exports.LtSurgesStrategyHIF = exports.BillsAnalysisHIF = exports.SlowpokeHIF = exports.GuzmaHIF = exports.BrocksGritHIF = void 0;
-exports.TapuLeleGXHIF = exports.TapuKokoGXHIF = exports.TapuFiniGXHIF = exports.TapuBuluGXHIF = exports.ShrineOfPunishmentHIF = exports.MtCoronetHIF = exports.BrookletHillHIF = exports.AetherParadiseConvserationAreaHIF = exports.LadyFLIHIF = exports.FishermanHSHIF = exports.CynthiaHIF = exports.DrampaGXHIF = void 0;
+exports.JessieAndJames2 = exports.GiovannisExile2 = exports.SabrinasSuggestionHIF = exports.PokemonCenterLadyHIF = exports.MistysDeterminationHIF = exports.KogasTrapHIF = exports.GiovannisExileHIF = exports.BlainesLastStandHIF = exports.PikachuHIF = exports.StaryuHIF = exports.CharmeleonHIF = exports.HikerHIF = exports.AetherFoundationEmployeeHIF = exports.UmbreonGxHIF = exports.ZygardeGxHIF = exports.TurtonatorGxHIF = exports.GolisopodGxHIF = exports.TypeNullHIF = exports.SwabluHIF = exports.KartanaHIF = exports.CelesteelaHIF = exports.MetangHIF = exports.BeldumHIF = exports.MagnetonHIF = exports.MagnemiteHIF = exports.GuzzlordHIF = exports.XurkitreeHIF = exports.PheromosaHIF = exports.ScytherHIF = exports.CharizardGXHIF = exports.TapuLeleGXHIF = exports.TapuKokoGXHIF = exports.TapuFiniGXHIF = exports.TapuBuluGXHIF = exports.ShrineOfPunishmentHIF = exports.MtCoronetHIF = exports.BrookletHillHIF = exports.AetherParadiseConvserationAreaHIF = exports.LadyFLIHIF = exports.FishermanHSHIF = exports.CynthiaHIF = exports.DrampaGXHIF = void 0;
 const slowpoke_1 = require("../set-lost-thunder/slowpoke");
 const bills_analysis_1 = require("../set-team-up/bills-analysis");
 const lt_surges_strategy_1 = require("../set-unbroken-bonds/lt-surges-strategy");
@@ -63,6 +63,35 @@ const tapu_koko_gx_1 = require("../set-guardians-rising/tapu-koko-gx");
 const tapu_lele_gx_1 = require("../set-guardians-rising/tapu-lele-gx");
 const brocks_grit_1 = require("../set-evolutions/brocks-grit");
 const guzma_1 = require("../set-burning-shadows/guzma");
+const charizard_gx_1 = require("../set-burning-shadows/charizard-gx");
+const scyther_1 = require("../set-celestial-storm/scyther");
+const pheromosa_1 = require("../set-forbidden-light/pheromosa");
+const xurkitree_1 = require("../set-forbidden-light/xurkitree");
+const guzzlord_1 = require("../set-forbidden-light/guzzlord");
+const magnemite_1 = require("../set-forbidden-light/magnemite");
+const magneton_1 = require("../set-ultra-prism/magneton");
+const beldum_1 = require("../set-guardians-rising/beldum");
+const metang_1 = require("../set-guardians-rising/metang");
+const celesteela_1 = require("../set-celestial-storm/celesteela");
+const kartana_1 = require("../set-celestial-storm/kartana");
+const swablu_1 = require("../set-dragons-majesty/swablu");
+const type_null_1 = require("../set-crimson-invasion/type-null");
+const golisopod_gx_1 = require("../set-burning-shadows/golisopod-gx");
+const turtonator_gx_1 = require("../set-guardians-rising/turtonator-gx");
+const zygarde_gx_1 = require("../set-forbidden-light/zygarde-gx");
+const umbreon_gx_1 = require("../set-sun-and-moon/umbreon-gx");
+const aether_foundation_employee_1 = require("../set-lost-thunder/aether-foundation-employee");
+const hiker_1 = require("../set-celestial-storm/hiker");
+const charmeleon_1 = require("../set-base-set/charmeleon");
+const staryu_1 = require("../set-team-up/staryu");
+const pikachu_1 = require("../set-black-and-white-promos/pikachu");
+const blaines_last_stand_1 = require("../set-dragons-majesty/blaines-last-stand");
+const giovannis_exile_1 = require("../set-unbroken-bonds/giovannis-exile");
+const kogas_trap_1 = require("../set-unbroken-bonds/kogas-trap");
+const mistys_determination_1 = require("../set-evolutions/mistys-determination");
+const pokemon_center_lady_1 = require("../set-flashfire/pokemon-center-lady");
+const sabrinas_suggestion_1 = require("../set-team-up/sabrinas-suggestion");
+const jessie_and_james_1 = require("./jessie-and-james");
 class BrocksGritHIF extends brocks_grit_1.BrocksGrit {
     constructor() {
         super(...arguments);
@@ -621,3 +650,273 @@ class TapuLeleGXHIF extends tapu_lele_gx_1.TapuLeleGX {
     }
 }
 exports.TapuLeleGXHIF = TapuLeleGXHIF;
+class CharizardGXHIF extends charizard_gx_1.CharizardGX {
+    constructor() {
+        super(...arguments);
+        this.setNumber = 'SV49';
+        this.fullName = 'Charizard-GX HIF SV49';
+        this.set = 'HIF';
+    }
+}
+exports.CharizardGXHIF = CharizardGXHIF;
+class ScytherHIF extends scyther_1.Scyther {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = 'SV1';
+        this.fullName = 'Scyther HIF';
+    }
+}
+exports.ScytherHIF = ScytherHIF;
+class PheromosaHIF extends pheromosa_1.Pheromosa {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = 'SV5';
+        this.fullName = 'Pheromosa HIF';
+    }
+}
+exports.PheromosaHIF = PheromosaHIF;
+class XurkitreeHIF extends xurkitree_1.Xurkitree {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = 'SV14';
+        this.fullName = 'Xurkitree HIF';
+    }
+}
+exports.XurkitreeHIF = XurkitreeHIF;
+class GuzzlordHIF extends guzzlord_1.Guzzlord {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = 'SV26';
+        this.fullName = 'Guzzlord HIF';
+    }
+}
+exports.GuzzlordHIF = GuzzlordHIF;
+class MagnemiteHIF extends magnemite_1.Magnemite {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = 'SV27';
+        this.fullName = 'Magnemite HIF';
+    }
+}
+exports.MagnemiteHIF = MagnemiteHIF;
+class MagnetonHIF extends magneton_1.Magneton {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = 'SV28';
+        this.fullName = 'Magneton HIF';
+    }
+}
+exports.MagnetonHIF = MagnetonHIF;
+class BeldumHIF extends beldum_1.Beldum {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = 'SV30';
+        this.fullName = 'Beldum HIF';
+    }
+}
+exports.BeldumHIF = BeldumHIF;
+class MetangHIF extends metang_1.Metang {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = 'SV31';
+        this.fullName = 'Metang HIF';
+    }
+}
+exports.MetangHIF = MetangHIF;
+class CelesteelaHIF extends celesteela_1.Celesteela {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = 'SV32';
+        this.fullName = 'Celesteela HIF';
+    }
+}
+exports.CelesteelaHIF = CelesteelaHIF;
+class KartanaHIF extends kartana_1.Kartana {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = 'SV33';
+        this.fullName = 'Kartana HIF';
+    }
+}
+exports.KartanaHIF = KartanaHIF;
+class SwabluHIF extends swablu_1.Swablu {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = 'SV42';
+        this.fullName = 'Swablu HIF';
+    }
+}
+exports.SwabluHIF = SwabluHIF;
+class TypeNullHIF extends type_null_1.TypeNull {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = 'SV45';
+        this.fullName = 'Type: Null HIF';
+    }
+}
+exports.TypeNullHIF = TypeNullHIF;
+class GolisopodGxHIF extends golisopod_gx_1.GolisopodGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = 'SV48';
+        this.fullName = 'Golisopod-GX HIF';
+    }
+}
+exports.GolisopodGxHIF = GolisopodGxHIF;
+class TurtonatorGxHIF extends turtonator_gx_1.TurtonatorGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = 'SV52';
+        this.fullName = 'Turtonator-GX HIF';
+    }
+}
+exports.TurtonatorGxHIF = TurtonatorGxHIF;
+class ZygardeGxHIF extends zygarde_gx_1.ZygardeGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = 'SV65';
+        this.fullName = 'Zygarde-GX HIF';
+    }
+}
+exports.ZygardeGxHIF = ZygardeGxHIF;
+class UmbreonGxHIF extends umbreon_gx_1.UmbreonGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = 'SV69';
+        this.fullName = 'Umbreon-GX HIF';
+    }
+}
+exports.UmbreonGxHIF = UmbreonGxHIF;
+class AetherFoundationEmployeeHIF extends aether_foundation_employee_1.AetherFoundationEmployee {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = 'SV81';
+        this.fullName = 'Aether Foundation Employee HIF';
+    }
+}
+exports.AetherFoundationEmployeeHIF = AetherFoundationEmployeeHIF;
+class HikerHIF extends hiker_1.Hiker {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = 'SV85';
+        this.fullName = 'Hiker HIF';
+    }
+}
+exports.HikerHIF = HikerHIF;
+class CharmeleonHIF extends charmeleon_1.Charmeleon {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = '8';
+        this.fullName = 'Charmeleon HIF 8';
+    }
+}
+exports.CharmeleonHIF = CharmeleonHIF;
+class StaryuHIF extends staryu_1.Staryu {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = '13';
+        this.fullName = 'Staryu HIF';
+    }
+}
+exports.StaryuHIF = StaryuHIF;
+class PikachuHIF extends pikachu_1.Pikachu {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = '19';
+        this.fullName = 'Pikachu HIF';
+    }
+}
+exports.PikachuHIF = PikachuHIF;
+class BlainesLastStandHIF extends blaines_last_stand_1.BlaineSLastStand {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = '52';
+        this.fullName = 'Blaine\'s Last Stand HIF';
+    }
+}
+exports.BlainesLastStandHIF = BlainesLastStandHIF;
+class GiovannisExileHIF extends giovannis_exile_1.GiovannisExile {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = '57';
+        this.fullName = 'Giovanni\'s Exile HIF';
+    }
+}
+exports.GiovannisExileHIF = GiovannisExileHIF;
+class KogasTrapHIF extends kogas_trap_1.KogasTrap {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = '59';
+        this.fullName = 'Koga\'s Trap HIF';
+    }
+}
+exports.KogasTrapHIF = KogasTrapHIF;
+class MistysDeterminationHIF extends mistys_determination_1.MistysDetermination {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = '62';
+        this.fullName = 'Misty\'s Determination HIF';
+    }
+}
+exports.MistysDeterminationHIF = MistysDeterminationHIF;
+class PokemonCenterLadyHIF extends pokemon_center_lady_1.PokemonCenterLady {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = '64';
+        this.fullName = 'Pokémon Center Lady HIF';
+    }
+}
+exports.PokemonCenterLadyHIF = PokemonCenterLadyHIF;
+class SabrinasSuggestionHIF extends sabrinas_suggestion_1.SabrinasSuggestion {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = '65';
+        this.fullName = 'Sabrina\'s Suggestion HIF';
+    }
+}
+exports.SabrinasSuggestionHIF = SabrinasSuggestionHIF;
+class GiovannisExile2 extends giovannis_exile_1.GiovannisExile {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = '67';
+        this.fullName = 'Giovanni\'s Exile HIF 67';
+    }
+}
+exports.GiovannisExile2 = GiovannisExile2;
+class JessieAndJames2 extends jessie_and_james_1.JessieAndJames {
+    constructor() {
+        super(...arguments);
+        this.set = 'HIF';
+        this.setNumber = '68';
+        this.fullName = 'Jessie & James HIF 68';
+    }
+}
+exports.JessieAndJames2 = JessieAndJames2;

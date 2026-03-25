@@ -29,7 +29,7 @@ class EthansAdventure extends game_1.TrainerCard {
             const blocked = [];
             player.deck.cards.forEach((c, index) => {
                 const isPokemon = c instanceof game_1.PokemonCard && c.tags.includes(game_1.CardTag.ETHANS);
-                const isBasicEnergy = c instanceof game_1.EnergyCard && c.energyType === game_1.EnergyType.BASIC && c.name === 'Fire Energy';
+                const isBasicEnergy = c.superType === game_1.SuperType.ENERGY && c.energyType === game_1.EnergyType.BASIC && c.name === 'Fire Energy';
                 if (!isPokemon && !isBasicEnergy) {
                     blocked.push(index);
                 }

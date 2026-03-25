@@ -7,7 +7,7 @@ const game_1 = require("../../game");
 const card_types_2 = require("../../game/store/card/card-types");
 const game_2 = require("../../game");
 const game_3 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Trumbeak extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -39,7 +39,7 @@ class Trumbeak extends pokemon_card_1.PokemonCard {
         this.fullName = 'Trumbeak LOT';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (opponent.deck.cards.length === 0) {
@@ -51,14 +51,13 @@ class Trumbeak extends pokemon_card_1.PokemonCard {
             cards.push(card);
             const deckTop = new game_3.CardList();
             opponent.deck.moveTo(deckTop, 1);
-            console.log(deckTop);
             return store.prompt(state, new game_2.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, deckTop, { superType: card_types_2.SuperType.TRAINER, trainerType: card_types_1.TrainerType.SUPPORTER }, { min: 0, max: 1, allowCancel: false }), selected => {
                 const cards = selected || [];
                 if (!cards) {
                     deckTop.moveTo(opponent.deck, 1);
                 }
                 if (cards) {
-                    deckTop.moveCardsTo(cards, opponent.discard);
+                    deckTop.moveCardsTo(cards, opponent.lostzone);
                 }
             });
         }

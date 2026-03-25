@@ -4,59 +4,42 @@ exports.SolgaleoPrismStar = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
-const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class SolgaleoPrismStar extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.tags = [card_types_1.CardTag.PRISM_STAR];
         this.stage = card_types_1.Stage.BASIC;
-        this.cardType = card_types_1.CardType.METAL;
+        this.cardType = M;
         this.hp = 160;
-        this.weakness = [{ type: card_types_1.CardType.FIRE }];
-        this.resistance = [{ type: card_types_1.CardType.PSYCHIC, value: -20 }];
-        this.retreat = [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS];
-        this.attacks = [
-            {
+        this.weakness = [{ type: R }];
+        this.resistance = [{ type: P, value: -20 }];
+        this.retreat = [C, C, C];
+        this.attacks = [{
                 name: 'Radiant Star',
-                cost: [card_types_1.CardType.METAL],
+                cost: [M],
                 damage: 0,
                 text: 'For each of your opponent\'s Pokémon in play, attach a [M] Energy card from your discard pile to your Pokémon in any way you like.'
             },
             {
                 name: 'Corona Impact',
-                cost: [card_types_1.CardType.METAL, card_types_1.CardType.METAL, card_types_1.CardType.METAL, card_types_1.CardType.METAL],
+                cost: [M, M, M, M],
                 damage: 160,
                 text: 'This Pokémon can\'t attack during your next turn.'
-            },
-        ];
+            }];
         this.set = 'UPR';
         this.setNumber = '89';
         this.cardImage = 'assets/cardback.png';
         this.name = 'Solgaleo Prism Star';
         this.fullName = 'Solgaleo Prism Star FLI';
-        // for preventing the pokemon from attacking on the next turn
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
-        // Remove markers when the pokemon is played
-        if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
-            const player = effect.player;
-            player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-            player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-        }
-        // Prevent all attacks, including TMs
-        if (effect instanceof game_effects_1.UseAttackEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-            throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
-        }
         // Radiant Star
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const hasEnergyInDiscard = player.discard.cards.some(c => {
-                return c instanceof game_1.EnergyCard
+                return c.superType === card_types_1.SuperType.ENERGY
                     && c.energyType === card_types_1.EnergyType.BASIC
                     && c.name === 'Metal Energy';
             });
@@ -79,15 +62,9 @@ class SolgaleoPrismStar extends pokemon_card_1.PokemonCard {
             });
         }
         // Corona Impact
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
-            effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
-            effect.player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-            effect.player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-            effect.player.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            const player = effect.player;
+            player.active.cannotAttackNextTurnPending = true;
         }
         return state;
     }

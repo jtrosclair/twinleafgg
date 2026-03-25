@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Terrakion = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const marker_constants_1 = require("../../game/store/markers/marker-constants");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Terrakion extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -33,7 +33,7 @@ class Terrakion extends game_1.PokemonCard {
         this.fullName = 'Terrakion SV11W';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(marker_constants_1.MarkerConstants.REVENGE_MARKER)) {
                 effect.damage += 80;

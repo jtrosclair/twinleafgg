@@ -60,6 +60,9 @@ class IronThornsex extends pokemon_card_1.PokemonCard {
             if (!ruleBoxTags.some(tag => effect.card.tags.includes(tag))) {
                 return state;
             }
+            if (effect.power.useFromDiscard || effect.power.useFromHand) {
+                return state;
+            }
             // Try reducing ability for each player  
             try {
                 const powerEffect = new game_effects_1.PowerEffect(player, this.powers[0], this);
@@ -82,7 +85,7 @@ class IronThornsex extends pokemon_card_1.PokemonCard {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_ABILITY);
             }
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             (0, prefabs_1.ADD_MARKER)(this.BOLT_CYCLONE_MARKER, effect.player, this);
             return state;
         }

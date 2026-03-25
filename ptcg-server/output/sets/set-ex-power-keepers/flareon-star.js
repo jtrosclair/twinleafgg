@@ -9,6 +9,7 @@ const check_effects_1 = require("../../game/store/effects/check-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const game_effects_1 = require("../../game/store/effects/game-effects");
 class FlareonStar extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -44,6 +45,8 @@ class FlareonStar extends pokemon_card_1.PokemonCard {
                 if (!result) {
                     return state;
                 }
+                const powerEffect = new game_effects_1.PowerEffect(player, this.powers[0], this);
+                store.reduceEffect(state, powerEffect);
                 (0, prefabs_1.ADD_BURN_TO_PLAYER_ACTIVE)(store, state, player, this);
                 (0, prefabs_1.ADD_BURN_TO_PLAYER_ACTIVE)(store, state, opponent, this);
             });

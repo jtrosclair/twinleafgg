@@ -29,5 +29,6 @@ export declare class Electabuzz extends PokemonCard {
     setNumber: string;
     name: string;
     fullName: string;
+    readonly POWER_DRAW_MARKER = "POWER_DRAW_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

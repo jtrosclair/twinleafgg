@@ -17,12 +17,12 @@ class SingleStrikeStyleMustard extends trainer_card_1.TrainerCard {
         this.trainerType = card_types_1.TrainerType.SUPPORTER;
         this.set = 'BST';
         this.cardImage = 'assets/cardback.png';
-        this.setNumber = '132';
+        this.setNumber = '134';
         this.name = 'Single Strike Style Mustard';
         this.fullName = 'Single Strike Style Mustard BST';
-        this.text = 'You can play this card only when it is the last card in your hand. ' +
-            '' +
-            'Search your deck for a Single Strike Pokémon and put it onto your Bench. Then, shuffle your deck. If you searched your deck in this way, draw 5 cards.';
+        this.text = `You can play this card only when it is the last card in your hand.
+
+Search your deck for a Single Strike Pokémon and put it onto your Bench. Then, shuffle your deck. If you searched your deck in this way, draw 5 cards.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
@@ -53,7 +53,6 @@ class SingleStrikeStyleMustard extends trainer_card_1.TrainerCard {
                 return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                     player.deck.applyOrder(order);
                     player.deck.moveTo(player.hand, 5);
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 });
             });
         }

@@ -32,7 +32,6 @@ class DrumsOfAwakening extends trainer_card_1.TrainerCard {
                 }
             });
             player.deck.moveTo(player.hand, ancientPokemonCount);
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

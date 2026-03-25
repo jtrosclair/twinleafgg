@@ -40,7 +40,6 @@ class Revive extends trainer_card_1.TrainerCard {
                     (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, slot, { cards: [card], sourceCard: this });
                     slot.damage = damage;
                     slot.pokemonPlayedTurn = state.turn;
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     return state;
                 }
             });

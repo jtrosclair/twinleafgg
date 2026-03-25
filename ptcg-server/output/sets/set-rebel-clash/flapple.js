@@ -70,7 +70,7 @@ class Flapple extends pokemon_card_1.PokemonCard {
             return store.prompt(state, new game_1.CoinFlipPrompt(player.id, game_message_1.GameMessage.COIN_FLIP), flipResult => {
                 if (flipResult) {
                     // Defending Pokemon has no energy cards attached
-                    if (!opponent.active.cards.some(c => c instanceof game_1.EnergyCard)) {
+                    if (!opponent.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                         return state;
                     }
                     let cards = [];

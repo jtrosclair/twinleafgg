@@ -4,7 +4,6 @@ exports.NecrozmaGX = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 // BUS Necrozma-GX 63 (https://limitlesstcg.com/cards/BUS/63)
@@ -58,21 +57,13 @@ class NecrozmaGX extends pokemon_card_1.PokemonCard {
             }
             const player = game_1.StateUtils.findOwner(state, effect.target);
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             effect.preventDefault = true;
         }
         // Prismatic Burst
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const psychicEnergy = player.active.cards.filter(card => card instanceof game_1.EnergyCard && card.name === 'Psychic Energy');
             const discardEnergy = new attack_effects_1.DiscardCardsEffect(effect, psychicEnergy);
@@ -81,7 +72,7 @@ class NecrozmaGX extends pokemon_card_1.PokemonCard {
             effect.damage += psychicEnergy.length * 60;
         }
         // Black Ray-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Check if player has used GX attack

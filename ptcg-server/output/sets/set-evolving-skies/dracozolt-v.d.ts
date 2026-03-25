@@ -1,0 +1,29 @@
+import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
+import { StoreLike, State } from '../../game';
+import { Effect } from '../../game/store/effects/effect';
+export declare class DracozoltV extends PokemonCard {
+    tags: CardTag[];
+    stage: Stage;
+    cardType: CardType;
+    hp: number;
+    weakness: {
+        type: CardType.FIGHTING;
+    }[];
+    retreat: CardType.COLORLESS[];
+    readonly PRIMEVAL_BEAK_MARKER = "DRACOZOLT_V_EVS_PRIMEVAL_BEAK_MARKER";
+    readonly CLEAR_PRIMEVAL_BEAK_MARKER = "DRACOZOLT_V_EVS_CLEAR_PRIMEVAL_BEAK_MARKER";
+    attacks: {
+        name: string;
+        cost: (CardType.LIGHTNING | CardType.COLORLESS)[];
+        damage: number;
+        text: string;
+    }[];
+    regulationMark: string;
+    set: string;
+    setNumber: string;
+    cardImage: string;
+    name: string;
+    fullName: string;
+    reduceEffect(store: StoreLike, state: State, effect: Effect): State;
+}

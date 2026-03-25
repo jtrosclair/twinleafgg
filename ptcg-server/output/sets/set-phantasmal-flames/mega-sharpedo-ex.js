@@ -14,13 +14,13 @@ class MegaSharpedoex extends game_1.PokemonCard {
         this.weakness = [{ type: G }];
         this.retreat = [];
         this.attacks = [{
-                name: 'Greedy Fangs',
+                name: 'Greedy Fang',
                 cost: [D],
                 damage: 70,
                 text: 'Draw 2 cards.',
             },
             {
-                name: 'Hungry Jaw',
+                name: 'Hungry Jaws',
                 cost: [D, D],
                 damage: 120,
                 damageCalculation: '+',

@@ -4,7 +4,6 @@ exports.Gallade = void 0;
 const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -43,7 +42,7 @@ class Gallade extends pokemon_card_1.PokemonCard {
         this.BUDDY_CATCH_MARKER = 'BUDDY_CATCH_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasBench = player.bench.some(b => b.cards.length > 0);
             const blockedFrom = [];
@@ -77,11 +76,14 @@ class Gallade extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.BUDDY_CATCH_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (player.marker.hasMarker(this.BUDDY_CATCH_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
+            }
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
+                throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, { superType: card_types_1.SuperType.TRAINER, trainerType: card_types_1.TrainerType.SUPPORTER }, { min: 0, max: 1, allowCancel: false }), cards => {
                 (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: this, sourceEffect: this.powers[0] });

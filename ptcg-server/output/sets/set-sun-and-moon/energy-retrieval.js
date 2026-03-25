@@ -29,7 +29,6 @@ function* playCard(next, store, state, effect) {
             // Recover discarded Pokemon
             player.discard.moveCardsTo(cards, player.hand);
         }
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
     });
 }
 class EnergyRetrieval extends trainer_card_1.TrainerCard {

@@ -7,15 +7,20 @@ export declare class Minun extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.FIGHTING;
     }[];
-    retreat: CardType[];
-    attacks: {
+    retreat: CardType.COLORLESS[];
+    attacks: ({
         name: string;
-        cost: CardType[];
+        cost: CardType.COLORLESS[];
         damage: number;
         text: string;
-    }[];
+    } | {
+        name: string;
+        cost: CardType.LIGHTNING[];
+        damage: number;
+        text: string;
+    })[];
     set: string;
     cardImage: string;
     setNumber: string;

@@ -18,7 +18,7 @@ function* playCard(next, store, state, effect) {
     // We will discard this card after prompt confirmation
     effect.preventDefault = true;
     // Defending Pokemon has no energy cards attached
-    if (!opponent.active.cards.some(c => c instanceof game_1.EnergyCard)) {
+    if (!opponent.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
         return state;
     }
     let card;
@@ -35,7 +35,6 @@ function* playCard(next, store, state, effect) {
                 player.hand.moveCardTo(transfer.card, target);
             }
         });
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return state;
     });
 }

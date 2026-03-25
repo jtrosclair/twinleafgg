@@ -51,11 +51,6 @@ Move 1 Energy card attached to the Defending Pokémon to another of your opponen
                                     blockedCards.push(em.card);
                                 }
                             });
-                            cardList.cards.forEach(em => {
-                                if (cardList.getPokemons().includes(em)) {
-                                    blockedCards.push(em);
-                                }
-                            });
                             const blocked = [];
                             blockedCards.forEach(bc => {
                                 const index = cardList.cards.indexOf(bc);
@@ -74,28 +69,9 @@ Move 1 Energy card attached to the Defending Pokémon to another of your opponen
                             for (const transfer of transfers) {
                                 const source = game_1.StateUtils.getTarget(state, player, transfer.from);
                                 const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                                if (transfer.card instanceof game_1.PokemonCard) {
-                                    // If card is in source energies, move it from there; otherwise move from main cards array
-                                    if (source.energies.cards.includes(transfer.card)) {
-                                        source.energies.moveCardTo(transfer.card, target.energies);
-                                        // Also ensure it's in target's main cards array
-                                        if (!target.cards.includes(transfer.card)) {
-                                            target.cards.push(transfer.card);
-                                        }
-                                    }
-                                    else {
-                                        source.moveCardTo(transfer.card, target);
-                                        if (!target.energies.cards.includes(transfer.card)) {
-                                            target.energies.cards.push(transfer.card);
-                                        }
-                                    }
-                                }
-                                else {
-                                    source.moveCardTo(transfer.card, target);
-                                }
+                                source.moveCardTo(transfer.card, target);
                             }
                         });
-                        player.supporter.moveCardTo(effect.trainerCard, player.discard);
                     }
                 },
                 {
@@ -114,7 +90,6 @@ Move 1 Energy card attached to the Defending Pokémon to another of your opponen
                                     opponent.switchPokemon(targetCard.target);
                                 }
                             }
-                            player.supporter.moveCardTo(effect.trainerCard, player.discard);
                             return state;
                         });
                     }
@@ -123,7 +98,6 @@ Move 1 Energy card attached to the Defending Pokémon to another of your opponen
             return store.prompt(state, new select_option_prompt_1.SelectOptionPrompt(player.id, game_1.GameMessage.CHOOSE_OPTION, options.map(opt => opt.message), { allowCancel: false }), choice => {
                 const option = options[choice];
                 option.action();
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             });
         }

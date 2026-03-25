@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Sigilyph = void 0;
 const game_1 = require("../../game");
+const check_effects_1 = require("../../game/store/effects/check-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Sigilyph extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -25,26 +27,25 @@ class Sigilyph extends game_1.PokemonCard {
         this.cardImage = 'assets/cardback.png';
         this.name = 'Sigilyph';
         this.fullName = 'Sigilyph PLB';
-        // public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-        //   if (effect instanceof CheckTableStateEffect) {
-        //     state.players.forEach(player => {
-        //       if (!StateUtils.isPokemonInPlay(player, this)) {
-        //         return;
-        //       }
-        //       player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        //         if (card !== this) {
-        //           return;
-        //         }
-        //         if (!IS_ABILITY_BLOCKED(store, state, player, this)) {
-        //           cardList.maxTools = 4;
-        //         } else {
-        //           cardList.maxTools = 1;
-        //         }
-        //       });
-        //     });
-        //   }
-        //   return state;
-        // }
+    }
+    reduceEffect(store, state, effect) {
+        if (effect instanceof check_effects_1.CheckTableStateEffect) {
+            state.players.forEach(player => {
+                player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
+                    if (card !== this) {
+                        return;
+                    }
+                    // Ref: set-phantasmal-flames/rotom-ex.ts (dynamic maxTools from Ability)
+                    const abilityBlocked = (0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this);
+                    this.maxTools = abilityBlocked ? 1 : 4;
+                    while (cardList.tools.length > this.maxTools) {
+                        const tool = cardList.tools[cardList.tools.length - 1];
+                        cardList.moveCardTo(tool, player.discard);
+                    }
+                });
+            });
+        }
+        return state;
     }
 }
 exports.Sigilyph = Sigilyph;

@@ -5,7 +5,7 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Zoroark extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -35,7 +35,7 @@ class Zoroark extends pokemon_card_1.PokemonCard {
         this.fullName = 'Zoroark EVS';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             if (!effect.player.discard.cards.some(b => b instanceof pokemon_card_1.PokemonCard && b.stage === card_types_1.Stage.STAGE_1 && b.name !== this.name)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }

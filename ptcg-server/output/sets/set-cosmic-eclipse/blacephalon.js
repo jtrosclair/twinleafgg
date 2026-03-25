@@ -10,13 +10,14 @@ class Blacephalon extends pokemon_card_1.PokemonCard {
         super(...arguments);
         this.stage = card_types_1.Stage.BASIC;
         this.tags = [card_types_1.CardTag.ULTRA_BEAST];
-        this.cardType = card_types_1.CardType.PSYCHIC;
+        this.cardType = P;
         this.hp = 110;
-        this.weakness = [{ type: card_types_1.CardType.DARK }];
-        this.retreat = [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS];
+        this.weakness = [{ type: D }];
+        this.resistance = [{ type: F, value: -20 }];
+        this.retreat = [C, C];
         this.attacks = [{
                 name: 'Fireworks Bomb',
-                cost: [card_types_1.CardType.PSYCHIC, card_types_1.CardType.COLORLESS],
+                cost: [P, C],
                 damage: 0,
                 text: 'Put 4 damage counters on your opponent\'s Pokemon in any way you like. If your opponent has exactly 3 Prize cards remaining, put 12 damage counters on them instead.'
             }];

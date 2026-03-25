@@ -5,7 +5,6 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -17,7 +16,7 @@ function* useSpaceBeacon(next, store, state, effect, self) {
     }
     let basicEnergies = 0;
     player.discard.cards.forEach(c => {
-        if (c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC) {
+        if (c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC) {
             basicEnergies += 1;
         }
     });
@@ -85,7 +84,7 @@ class Starmie extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.SPACE_BEACON_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.SPACE_BEACON_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);

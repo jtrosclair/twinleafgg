@@ -4,10 +4,10 @@ exports.Turtwig = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const state_1 = require("../../game/store/state/state");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const state_utils_1 = require("../../game/store/state-utils");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Turtwig extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -48,15 +48,7 @@ class Turtwig extends pokemon_card_1.PokemonCard {
             }
             const player = state_utils_1.StateUtils.findOwner(state, effect.target);
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: pokemon_types_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             effect.damage = Math.max(0, effect.damage - 20);

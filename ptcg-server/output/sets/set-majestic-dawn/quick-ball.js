@@ -33,7 +33,6 @@ function* playCard(next, store, state, effect) {
     if (pokemon !== undefined) {
         player.deck.moveCardTo(pokemon, player.hand);
     }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });

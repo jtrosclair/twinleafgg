@@ -62,7 +62,6 @@ function* playCard(next, store, state, self, effect) {
         yield store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
     (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.deck, { cards, sourceCard: self });
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });

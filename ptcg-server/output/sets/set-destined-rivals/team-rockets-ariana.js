@@ -9,7 +9,6 @@ const play_card_effects_1 = require("../../game/store/effects/play-card-effects"
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const play_card_action_1 = require("../../game/store/actions/play-card-action");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class TeamRocketsAriana extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -64,7 +63,6 @@ class TeamRocketsAriana extends trainer_card_1.TrainerCard {
                 }
                 player.deck.moveTo(player.hand, 1);
             }
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.rocketSupporter) {

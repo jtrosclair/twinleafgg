@@ -9,7 +9,6 @@ export declare class LushForest extends TrainerCard {
     set: string;
     name: string;
     fullName: string;
-    legacyFullName: string;
     regulationMark: string;
     text: string;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;

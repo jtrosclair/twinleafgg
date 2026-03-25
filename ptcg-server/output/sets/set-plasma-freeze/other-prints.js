@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UltraBallPLF = exports.GarbodorPLF = exports.SigilyphPLF = exports.EmpoleonPLF = exports.Ghetsis2PLF = exports.LatiasEX2PLF = exports.DeoxysEX2PLF = exports.ThundurusEX2PLF = exports.PlasmaEnergyPLF = exports.ProfessorJuniperPLF = exports.MaxPotionPLF = void 0;
+exports.TornadusEx2 = exports.LatiosEx2 = exports.HeatranEx2 = exports.UltraBallPLF = exports.GarbodorPLF = exports.SigilyphPLF = exports.EmpoleonPLF = exports.Ghetsis2PLF = exports.LatiasEX2PLF = exports.DeoxysEX2PLF = exports.ThundurusEX2PLF = exports.PlasmaEnergyPLF = exports.ProfessorJuniperPLF = exports.MaxPotionPLF = void 0;
 const plasma_energy_1 = require("../set-plasma-storm/plasma-energy");
 const thundurus_ex_1 = require("../set-plasma-freeze/thundurus-ex");
 const deoxys_ex_1 = require("../set-plasma-freeze/deoxys-ex");
@@ -12,6 +12,9 @@ const garbodor_1 = require("../set-dragons-exalted/garbodor");
 const ultra_ball_1 = require("../set-scarlet-and-violet/ultra-ball");
 const max_potion_1 = require("../set-emerging-powers/max-potion");
 const professor_juniper_1 = require("../set-black-and-white/professor-juniper");
+const heatran_ex_1 = require("./heatran-ex");
+const latios_ex_1 = require("./latios-ex");
+const tornadus_ex_1 = require("./tornadus-ex");
 class MaxPotionPLF extends max_potion_1.MaxPotion {
     constructor() {
         super(...arguments);
@@ -111,3 +114,30 @@ class UltraBallPLF extends ultra_ball_1.UltraBall {
     }
 }
 exports.UltraBallPLF = UltraBallPLF;
+class HeatranEx2 extends heatran_ex_1.HeatranEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PLF';
+        this.setNumber = '109';
+        this.fullName = 'Heatran-EX PLF 109';
+    }
+}
+exports.HeatranEx2 = HeatranEx2;
+class LatiosEx2 extends latios_ex_1.LatiosEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PLF';
+        this.setNumber = '113';
+        this.fullName = 'Latios-EX PLF 113';
+    }
+}
+exports.LatiosEx2 = LatiosEx2;
+class TornadusEx2 extends tornadus_ex_1.TornadusEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PLF';
+        this.setNumber = '114';
+        this.fullName = 'Tornadus-EX PLF 114';
+    }
+}
+exports.TornadusEx2 = TornadusEx2;

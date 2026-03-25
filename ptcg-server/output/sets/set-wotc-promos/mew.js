@@ -4,7 +4,6 @@ exports.Mew = void 0;
 const game_1 = require("../../game");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Mew extends pokemon_card_1.PokemonCard {
@@ -36,7 +35,7 @@ class Mew extends pokemon_card_1.PokemonCard {
         this.fullName = 'Mew PR';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(opponent);
@@ -45,7 +44,7 @@ class Mew extends pokemon_card_1.PokemonCard {
                 .reduce((left, p) => left + p.provides.length, 0);
             effect.damage = energyCount * 10;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const options = [

@@ -1,5 +1,7 @@
-import { Attack, CardType, PokemonCard, Stage, State, StoreLike, Weakness } from '../../game';
+import { CardType, Stage } from '../../game/store/card/card-types';
+import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
+import { Attack, State, StoreLike, Weakness } from '../../game';
 export declare class Poliwhirl extends PokemonCard {
     stage: Stage;
     evolvesFrom: string;

@@ -1,14 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Poliwrath = void 0;
-const game_1 = require("../../game");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-class Poliwrath extends game_1.PokemonCard {
+const card_types_1 = require("../../game/store/card/card-types");
+const game_message_1 = require("../../game/game-message");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
+const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+class Poliwrath extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
-        this.stage = game_1.Stage.STAGE_2;
+        this.stage = card_types_1.Stage.STAGE_2;
         this.evolvesFrom = 'Poliwhirl';
         this.cardType = W;
         this.hp = 170;
@@ -38,8 +39,8 @@ class Poliwrath extends game_1.PokemonCard {
         this.shuffleIntoDeck = false;
     }
     reduceEffect(store, state, effect) {
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP)(store, state, effect);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             return (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, (result) => {
@@ -48,7 +49,7 @@ class Poliwrath extends game_1.PokemonCard {
                 }
                 effect.damage += 120;
                 this.shuffleIntoDeck = true;
-            }, game_1.GameMessage.WANT_TO_DEAL_MORE_DAMAGE);
+            }, game_message_1.GameMessage.WANT_TO_DEAL_MORE_DAMAGE);
         }
         if (effect instanceof game_phase_effects_1.AfterAttackEffect && this.shuffleIntoDeck) {
             const player = effect.player;

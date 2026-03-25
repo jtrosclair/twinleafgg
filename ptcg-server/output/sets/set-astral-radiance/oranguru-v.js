@@ -6,7 +6,6 @@ const play_card_effects_1 = require("../../game/store/effects/play-card-effects"
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const state_utils_1 = require("../../game/store/state-utils");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -50,8 +49,11 @@ class OranguruV extends pokemon_card_1.PokemonCard {
         // Back Order
         if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (player.marker.hasMarker(this.BACK_ORDER_MARKER)) {
+            if (player.marker.hasMarker(this.BACK_ORDER_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
+            }
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
+                throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             if (player.active.getPokemonCard() !== this) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -59,6 +61,12 @@ class OranguruV extends pokemon_card_1.PokemonCard {
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
+            player.marker.addMarker(this.BACK_ORDER_MARKER, this);
+            player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
+                if (cardList.getPokemonCard() === this) {
+                    cardList.addBoardEffect(card_types_1.BoardEffect.ABILITY_USED);
+                }
+            });
             const blocked = [];
             player.deck.cards.forEach((c, index) => {
                 if (!(c instanceof game_1.TrainerCard && c.trainerType === card_types_1.TrainerType.TOOL)) {
@@ -68,7 +76,7 @@ class OranguruV extends pokemon_card_1.PokemonCard {
             (0, prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND)(store, state, player, this, { superType: card_types_1.SuperType.TRAINER }, { min: 0, max: 2, allowCancel: false, blocked }, this.powers[0]);
         }
         // Psychic
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             const opponentProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(opponent);
@@ -77,7 +85,7 @@ class OranguruV extends pokemon_card_1.PokemonCard {
                 .reduce((left, p) => left + p.provides.length, 0);
             effect.damage += opponentEnergyCount * 50;
         }
-        // marker gaming
+        // Remove once-per-turn marker at end of turn
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.BACK_ORDER_MARKER, this)) {
             const player = effect.player;
             player.marker.removeMarker(this.BACK_ORDER_MARKER, this);

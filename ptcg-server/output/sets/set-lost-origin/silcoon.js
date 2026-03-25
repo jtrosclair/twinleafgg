@@ -8,6 +8,7 @@ const coin_flip_prompt_1 = require("../../game/store/prompts/coin-flip-prompt");
 const game_message_1 = require("../../game/game-message");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const game_1 = require("../../game");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Silcoon extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -39,7 +40,7 @@ class Silcoon extends pokemon_card_1.PokemonCard {
         this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER = 'DEFENDING_POKEMON_CANNOT_ATTACK_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             return store.prompt(state, [

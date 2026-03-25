@@ -42,6 +42,9 @@ class Azumarillex extends game_1.PokemonCard {
                 transfers = transfers || [];
                 if (transfers.length > 0) {
                     for (const transfer of transfers) {
+                        if (game_1.StateUtils.getTarget(state, player, transfer.to) !== game_1.StateUtils.findCardList(state, this)) {
+                            throw new game_1.GameError(game_1.GameMessage.INVALID_TARGET);
+                        }
                         const source = game_1.StateUtils.getTarget(state, player, transfer.from);
                         const target = game_1.StateUtils.getTarget(state, player, transfer.to);
                         source.moveCardTo(transfer.card, target);

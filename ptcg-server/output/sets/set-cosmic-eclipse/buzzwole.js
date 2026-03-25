@@ -49,7 +49,7 @@ class Buzzwole extends pokemon_card_1.PokemonCard {
                 effect.damage += (20 * prizesTaken);
             }
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const target = player.active;
             const healEffect = new game_effects_1.HealEffect(player, target, 30);

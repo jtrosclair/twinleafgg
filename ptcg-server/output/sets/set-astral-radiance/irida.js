@@ -33,7 +33,7 @@ function* playCard(next, store, state, self, effect) {
         if (c instanceof pokemon_card_1.PokemonCard && c.cardType === card_types_1.CardType.WATER) {
             pokemons += 1;
         }
-        else if (c instanceof trainer_card_1.TrainerCard && (c.trainerType === card_types_1.TrainerType.ITEM || (!(0, card_types_1.isCoreFormat)(format) && c.trainerType === card_types_1.TrainerType.TOOL))) {
+        else if (c instanceof trainer_card_1.TrainerCard && (c.trainerType === card_types_1.TrainerType.ITEM || (format === card_types_1.Format.SWSH && c.trainerType === card_types_1.TrainerType.TOOL))) {
             itemsOrTools += 1;
         }
         else {
@@ -51,14 +51,12 @@ function* playCard(next, store, state, self, effect) {
         next();
     });
     (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: self });
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     cards.forEach((card, index) => {
         store.log(state, game_message_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
     });
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });
@@ -73,7 +71,7 @@ class Irida extends trainer_card_1.TrainerCard {
         this.setNumber = '147';
         this.name = 'Irida';
         this.fullName = 'Irida ASR';
-        this.text = 'Search your deck for a W Pokemon and an Item ' +
+        this.text = 'Search your deck for a [W] Pokémon and an Item ' +
             'card, reveal them, and put them into your hand. ' +
             'Then, shuffle your deck.';
     }

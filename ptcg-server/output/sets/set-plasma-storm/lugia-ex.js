@@ -9,6 +9,7 @@ const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const state_utils_1 = require("../../game/store/state-utils");
 const game_1 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class LugiaEx extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -38,13 +39,13 @@ class LugiaEx extends pokemon_card_1.PokemonCard {
         this.setNumber = '108';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const pokemon = player.active;
             const checkEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, pokemon);
             store.reduceEffect(state, checkEnergy);
             // Check if there's at least one Plasma Energy attached
-            const hasPlasmaEnergy = checkEnergy.energyMap.some(em => em.card instanceof game_1.EnergyCard && em.card.name === 'Plasma Energy');
+            const hasPlasmaEnergy = checkEnergy.energyMap.some(em => em.card.superType === card_types_1.SuperType.ENERGY && em.card.name === 'Plasma Energy');
             // If no Plasma Energy is attached, the attack does nothing
             if (!hasPlasmaEnergy) {
                 effect.damage = 0;
@@ -75,15 +76,7 @@ class LugiaEx extends pokemon_card_1.PokemonCard {
             if (pokemonCard !== this) {
                 return state;
             }
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: pokemon_types_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             if (effect.prizeCount > 0) {

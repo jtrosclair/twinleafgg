@@ -40,7 +40,7 @@ function* playCard(next, store, state, self, effect) {
         max = eligibleIndices.length;
     }
     else {
-        min = 1;
+        min = 3;
         max = 3;
     }
     yield store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_DECK, player.discard, {}, { min, max, allowCancel: false, blocked }), selected => {
@@ -51,7 +51,6 @@ function* playCard(next, store, state, self, effect) {
         store.log(state, game_message_1.GameLog.LOG_PLAYER_RETURNS_TO_DECK_FROM_DISCARD, { name: player.name, card: card.name });
     });
     player.discard.moveCardsTo(cards, player.deck);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });

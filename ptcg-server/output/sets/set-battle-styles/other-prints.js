@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SingleStrikeEnergy2BST = exports.RapidStrikeEnergy2BST = exports.LevelBall2BST = exports.ExpShare2BST = exports.Houndoom2BST = exports.Octillery2BST = exports.SingleStrikeStyleMustard3BST = exports.KorrinasFocus3BST = exports.Cheryl3BST = exports.Bruno3BST = exports.RapidStrikeUrshifuVMAX3BST = exports.RapidStrikeUrshifuVMAX2BST = exports.SingleStrikeUrshifuVMAX3BST = exports.SingleStrikeUrshifuVMAX2BST = exports.TapuKokoVMAX2BST = exports.VictiniVMAX2BST = exports.FlappleVMAX2BST = exports.SingleStrikeStyleMustard2BST = exports.KorrinasFocus2BST = exports.Cheryl2BST = exports.Bruno2BST = exports.StoutlandV2BST = exports.TyranitarV3BST = exports.TyranitarV2BST = exports.RapidStrikeUrshifuV3BST = exports.RapidStrikeUrshifuV2BST = exports.SingleStrikeUrshifuV3BST = exports.SingleStrikeUrshifuV2BST = exports.NecrozmaV2BST = exports.MimikyuV2BST = exports.TapuKokoV2BST = exports.EmpoleonV3BST = exports.EmpoleonV2BST = exports.VictiniV2BST = exports.FlappleV2BST = exports.KricketuneV2BST = exports.ExpShareBST = void 0;
+exports.RapidStrikeStyleMustard3 = exports.Phoebe3 = exports.CorviknightVmax2 = exports.RapidStrikeStyleMustard2 = exports.Phoebe2 = exports.CorviknightV2 = exports.SpearowBST = exports.TimburrBST = exports.TepigBST = exports.SingleStrikeEnergy2BST = exports.RapidStrikeEnergy2BST = exports.LevelBall2BST = exports.ExpShare2BST = exports.Houndoom2BST = exports.Octillery2BST = exports.SingleStrikeStyleMustard3BST = exports.KorrinasFocus3BST = exports.Cheryl3BST = exports.Bruno3BST = exports.RapidStrikeUrshifuVMAX3BST = exports.RapidStrikeUrshifuVMAX2BST = exports.SingleStrikeUrshifuVMAX3BST = exports.SingleStrikeUrshifuVMAX2BST = exports.TapuKokoVMAX2BST = exports.VictiniVMAX2BST = exports.FlappleVMAX2BST = exports.SingleStrikeStyleMustard2BST = exports.KorrinasFocus2BST = exports.Cheryl2BST = exports.Bruno2BST = exports.StoutlandV2BST = exports.TyranitarV3BST = exports.TyranitarV2BST = exports.RapidStrikeUrshifuV3BST = exports.RapidStrikeUrshifuV2BST = exports.SingleStrikeUrshifuV3BST = exports.SingleStrikeUrshifuV2BST = exports.NecrozmaV2BST = exports.MimikyuV2BST = exports.TapuKokoV2BST = exports.EmpoleonV3BST = exports.EmpoleonV2BST = exports.VictiniV2BST = exports.FlappleV2BST = exports.KricketuneV2BST = exports.ExpShareBST = void 0;
 const exp_share_1 = require("../set-scarlet-and-violet/exp-share");
 const kricketune_v_1 = require("../set-battle-styles/kricketune-v");
 const flapple_v_1 = require("../set-battle-styles/flapple-v");
@@ -28,6 +28,13 @@ const exp_share_2 = require("../set-scarlet-and-violet/exp-share");
 const level_ball_1 = require("../set-battle-styles/level-ball");
 const rapid_strike_energy_1 = require("../set-battle-styles/rapid-strike-energy");
 const single_strike_energy_1 = require("../set-battle-styles/single-strike-energy");
+const tepig_1 = require("../set-sword-and-shield-promos/tepig");
+const timburr_1 = require("../set-black-and-white/timburr");
+const spearow_1 = require("../set-roaring-skies/spearow");
+const corviknight_v_1 = require("./corviknight-v");
+const phoebe_1 = require("./phoebe");
+const rapid_strike_style_mustard_1 = require("./rapid-strike-style-mustard");
+const corviknight_vmax_1 = require("./corviknight-vmax");
 class ExpShareBST extends exp_share_1.ExpShare {
     constructor() {
         super(...arguments);
@@ -202,7 +209,7 @@ exports.KorrinasFocus2BST = KorrinasFocus2BST;
 class SingleStrikeStyleMustard2BST extends single_strike_style_mustard_1.SingleStrikeStyleMustard {
     constructor() {
         super(...arguments);
-        this.setNumber = '162';
+        this.setNumber = '163';
         this.fullName = 'Single Strike Style Mustard2 BST';
         this.set = 'BST';
     }
@@ -301,7 +308,7 @@ exports.KorrinasFocus3BST = KorrinasFocus3BST;
 class SingleStrikeStyleMustard3BST extends single_strike_style_mustard_1.SingleStrikeStyleMustard {
     constructor() {
         super(...arguments);
-        this.setNumber = '176';
+        this.setNumber = '177';
         this.fullName = 'Single Strike Style Mustard3 BST';
         this.set = 'BST';
     }
@@ -361,3 +368,84 @@ class SingleStrikeEnergy2BST extends single_strike_energy_1.SingleStrikeEnergy {
     }
 }
 exports.SingleStrikeEnergy2BST = SingleStrikeEnergy2BST;
+class TepigBST extends tepig_1.Tepig {
+    constructor() {
+        super(...arguments);
+        this.set = 'BST';
+        this.setNumber = '23';
+        this.fullName = 'Tepig BST';
+    }
+}
+exports.TepigBST = TepigBST;
+class TimburrBST extends timburr_1.Timburr {
+    constructor() {
+        super(...arguments);
+        this.set = 'BST';
+        this.setNumber = '73';
+        this.fullName = 'Timburr BST';
+    }
+}
+exports.TimburrBST = TimburrBST;
+class SpearowBST extends spearow_1.Spearow {
+    constructor() {
+        super(...arguments);
+        this.set = 'BST';
+        this.setNumber = '111';
+        this.fullName = 'Spearow BST';
+    }
+}
+exports.SpearowBST = SpearowBST;
+class CorviknightV2 extends corviknight_v_1.CorviknightV {
+    constructor() {
+        super(...arguments);
+        this.set = 'BST';
+        this.setNumber = '156';
+        this.fullName = 'Corviknight V BST 156';
+    }
+}
+exports.CorviknightV2 = CorviknightV2;
+class Phoebe2 extends phoebe_1.Phoebe {
+    constructor() {
+        super(...arguments);
+        this.set = 'BST';
+        this.setNumber = '161';
+        this.fullName = 'Phoebe BST 161';
+    }
+}
+exports.Phoebe2 = Phoebe2;
+class RapidStrikeStyleMustard2 extends rapid_strike_style_mustard_1.RapidStrikeStyleMustard {
+    constructor() {
+        super(...arguments);
+        this.set = 'BST';
+        this.setNumber = '162';
+        this.fullName = 'Rapid Strike Style Mustard BST 162';
+    }
+}
+exports.RapidStrikeStyleMustard2 = RapidStrikeStyleMustard2;
+class CorviknightVmax2 extends corviknight_vmax_1.CorviknightVmax {
+    constructor() {
+        super(...arguments);
+        this.set = 'BST';
+        this.setNumber = '171';
+        this.fullName = 'Corviknight VMAX BST 171';
+    }
+}
+exports.CorviknightVmax2 = CorviknightVmax2;
+class Phoebe3 extends phoebe_1.Phoebe {
+    constructor() {
+        super(...arguments);
+        this.set = 'BST';
+        this.setNumber = '175';
+        this.fullName = 'Phoebe BST 175';
+    }
+}
+exports.Phoebe3 = Phoebe3;
+class RapidStrikeStyleMustard3 extends rapid_strike_style_mustard_1.RapidStrikeStyleMustard {
+    constructor() {
+        super(...arguments);
+        this.set = 'BST';
+        this.setNumber = '176';
+        this.fullName = 'Rapid Strike Style Mustard BST 176';
+    }
+}
+exports.RapidStrikeStyleMustard3 = RapidStrikeStyleMustard3;

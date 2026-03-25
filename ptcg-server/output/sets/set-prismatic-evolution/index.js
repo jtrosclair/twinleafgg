@@ -24,7 +24,6 @@ const roto_stick_1 = require("./roto-stick");
 const seaking_1 = require("./seaking");
 const sneasel_1 = require("./sneasel");
 const sylveon_1 = require("./sylveon");
-const sylveon_ex_1 = require("./sylveon-ex");
 const treasure_tracker_1 = require("./treasure-tracker");
 const tyranitar_ex_1 = require("./tyranitar-ex");
 const umbreon_ex_1 = require("./umbreon-ex");
@@ -43,12 +42,10 @@ exports.setPrismaticEvolution = [
     new larrys_skill_1.LarrysSkill(),
     new glaceon_ex_1.Glaceonex(),
     new sylveon_1.Sylveon(),
-    new sylveon_ex_1.Sylveonex(),
     new sneasel_1.Sneasel(),
     new seaking_1.Seaking(),
     new regigigas_1.Regigigas(),
     new riolu_1.Riolu(),
-    new alt_arts_1.JaninesSecretArt(),
     new max_rod_1.MaxRod(),
     new roto_stick_1.RotoStick(),
     new treasure_tracker_1.TreasureTracker(),

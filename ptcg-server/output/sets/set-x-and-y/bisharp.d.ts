@@ -1,0 +1,32 @@
+import { CardType, Stage } from '../../game/store/card/card-types';
+import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { Effect } from '../../game/store/effects/effect';
+import { State, StoreLike } from '../../game';
+export declare class Bisharp extends PokemonCard {
+    stage: Stage;
+    evolvesFrom: string;
+    cardType: CardType;
+    hp: number;
+    weakness: {
+        type: CardType.FIRE;
+    }[];
+    resistance: {
+        type: CardType.PSYCHIC;
+        value: number;
+    }[];
+    retreat: CardType.COLORLESS[];
+    attacks: {
+        name: string;
+        cost: (CardType.METAL | CardType.COLORLESS)[];
+        damage: number;
+        text: string;
+    }[];
+    set: string;
+    setNumber: string;
+    cardImage: string;
+    name: string;
+    fullName: string;
+    readonly NEXT_TURN_MORE_DAMAGE_MARKER = "BISHARP_NEXT_TURN_MORE_DAMAGE_MARKER";
+    readonly NEXT_TURN_MORE_DAMAGE_MARKER_2 = "BISHARP_NEXT_TURN_MORE_DAMAGE_MARKER_2";
+    reduceEffect(store: StoreLike, state: State, effect: Effect): State;
+}

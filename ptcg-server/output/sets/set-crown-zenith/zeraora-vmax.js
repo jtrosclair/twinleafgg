@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ZeraoraVMAX = void 0;
 const game_1 = require("../../game");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 const costs_1 = require("../../game/store/prefabs/costs");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class ZeraoraVMAX extends game_1.PokemonCard {
@@ -42,7 +43,9 @@ class ZeraoraVMAX extends game_1.PokemonCard {
             const opponent = game_1.StateUtils.getOpponent(state, player);
             let numOpPokemonWithAbilities = 0;
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card, target) => {
-                if (card.powers != null && card.powers.length > 0 && card.powers.some((power) => power.powerType == game_1.PowerType.ABILITY)) {
+                const powersEffect = new check_effects_1.CheckPokemonPowersEffect(opponent, card);
+                state = store.reduceEffect(state, powersEffect);
+                if (powersEffect.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
                     numOpPokemonWithAbilities++;
                 }
             });

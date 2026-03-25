@@ -38,8 +38,6 @@ class RocketsScytherex extends pokemon_card_1.PokemonCard {
         this.fullName = 'Rocket\'s Scyther ex TRR';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '102';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
         // Dual Armor
@@ -57,19 +55,19 @@ class RocketsScytherex extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        // Slashing Strike
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
-            (0, prefabs_1.BLOCK_EFFECT_IF_MARKER)(this.ATTACK_USED_2_MARKER, effect.player, this);
-            (0, prefabs_1.ADD_MARKER)(this.ATTACK_USED_MARKER, effect.player, this);
-        }
-        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_2_MARKER, this);
-        (0, prefabs_1.REPLACE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_MARKER, this.ATTACK_USED_2_MARKER, this);
         if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, effect.player, result => {
                 if (result) {
                     (0, prefabs_1.SWITCH_ACTIVE_WITH_BENCHED)(store, state, effect.player);
                 }
             }, game_1.GameMessage.WANT_TO_SWITCH_POKEMON);
+        }
+        // Slashing Strike
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            const player = effect.player;
+            if (!player.active.cannotUseAttacksNextTurnPending.includes('Slashing Strike')) {
+                player.active.cannotUseAttacksNextTurnPending.push('Slashing Strike');
+            }
         }
         return state;
     }

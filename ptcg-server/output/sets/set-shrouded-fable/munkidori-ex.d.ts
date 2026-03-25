@@ -7,13 +7,12 @@ import { PowerType } from '../../game';
 export declare class Munkidoriex extends PokemonCard {
     stage: Stage;
     tags: CardTag[];
-    regulationMark: string;
     cardType: CardType;
     weakness: {
-        type: CardType;
+        type: CardType.FIGHTING;
     }[];
     hp: number;
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     powers: {
         name: string;
         powerType: PowerType;
@@ -21,16 +20,15 @@ export declare class Munkidoriex extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: (CardType.DARK | CardType.COLORLESS)[];
         damage: number;
         text: string;
     }[];
+    regulationMark: string;
     set: string;
     cardImage: string;
     setNumber: string;
     name: string;
     fullName: string;
-    readonly ATTACK_USED_MARKER = "ATTACK_USED_MARKER";
-    readonly ATTACK_USED_2_MARKER = "ATTACK_USED_2_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

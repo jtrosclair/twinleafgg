@@ -36,6 +36,12 @@ class RocketsMission extends trainer_card_1.TrainerCard {
             effect.preventDefault = true;
             if (cards.length == 1) {
                 player.hand.moveCardsTo(player.hand.cards, player.discard);
+                let cardsToDraw = 3;
+                if (cards[0] instanceof game_1.PokemonCard && (cards[0].tags.includes(card_types_1.CardTag.ROCKETS) || cards[0].tags.includes(card_types_1.CardTag.DARK))) {
+                    cardsToDraw = 4;
+                }
+                (0, prefabs_1.DRAW_CARDS)(player, cardsToDraw);
+                return state;
             }
             if (cards.length > 1) {
                 state = store.prompt(state, new game_1.ChooseCardsPrompt(effect.player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {}, { allowCancel: false, min: 1, max: 1 }), cards => {
@@ -54,7 +60,6 @@ class RocketsMission extends trainer_card_1.TrainerCard {
                     (0, prefabs_1.DRAW_CARDS)(player, cardsToDraw);
                 });
             }
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
         }
         return state;

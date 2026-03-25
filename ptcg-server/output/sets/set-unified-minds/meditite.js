@@ -23,15 +23,13 @@ class Meditite extends pokemon_card_1.PokemonCard {
         this.fullName = 'Meditite UNM';
         this.setNumber = '109';
         this.cardImage = 'assets/cardback.png';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
-        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_2_MARKER, this);
-        (0, prefabs_1.REPLACE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_MARKER, this.ATTACK_USED_2_MARKER, this);
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            (0, prefabs_1.BLOCK_EFFECT_IF_MARKER)(this.ATTACK_USED_2_MARKER, effect.player, this);
-            (0, prefabs_1.ADD_MARKER)(this.ATTACK_USED_MARKER, effect.player, this);
+            const player = effect.player;
+            if (!player.active.cannotUseAttacksNextTurnPending.includes('Spirited Headbutt')) {
+                player.active.cannotUseAttacksNextTurnPending.push('Spirited Headbutt');
+            }
         }
         return state;
     }

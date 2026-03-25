@@ -3,8 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Kyurem = void 0;
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Kyurem extends game_1.PokemonCard {
     constructor() {
@@ -34,22 +32,8 @@ class Kyurem extends game_1.PokemonCard {
         this.setNumber = '31';
         this.name = 'Kyurem';
         this.fullName = 'Kyurem PLF';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
-            effect.player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-            effect.player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-            effect.player.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
-        }
-        if (effect instanceof game_effects_1.AttackEffect) {
-            if ((0, prefabs_1.HAS_MARKER)(this.ATTACK_USED_MARKER, effect.player, this) || (0, prefabs_1.HAS_MARKER)(this.ATTACK_USED_2_MARKER, effect.player, this)) {
-                throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
-            }
-        }
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
@@ -66,13 +50,10 @@ class Kyurem extends game_1.PokemonCard {
                 store.reduceEffect(state, damageEffect);
             });
         }
-        // Knuckle Impact
+        // Blizzard Burn
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
-            // Check marker
-            if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-                throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
-            }
-            effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
+            const player = effect.player;
+            player.active.cannotAttackNextTurnPending = true;
         }
         return state;
     }

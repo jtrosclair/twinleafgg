@@ -25,7 +25,6 @@ class DangerousLaser extends trainer_card_1.TrainerCard {
             const active = opponent.active;
             active.addSpecialCondition(card_types_1.SpecialCondition.BURNED);
             active.addSpecialCondition(card_types_1.SpecialCondition.CONFUSED);
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

@@ -41,20 +41,21 @@ class TeamRocketsHypno extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const opponent = effect.opponent;
-            let tails = 0;
+            let coinFlips = 0;
             opponent.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, card => {
-                if (opponent.active === card) {
+                if (card === opponent.active) {
                     return;
                 }
-                (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
-                    if (!result) {
-                        tails++;
-                    }
-                });
+                coinFlips++;
             });
-            effect.ignoreResistance = true;
-            effect.ignoreWeakness = true;
-            effect.damage = (80 * tails);
+            if (coinFlips > 0) {
+                (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, effect.opponent, coinFlips, results => {
+                    const tails = results.filter(r => !r).length;
+                    effect.damage = 80 * tails;
+                    effect.ignoreResistance = true;
+                    effect.ignoreWeakness = true;
+                });
+            }
         }
         return state;
     }

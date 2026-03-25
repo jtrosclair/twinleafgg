@@ -4,67 +4,51 @@ exports.Zacian = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Zacian extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.stage = card_types_1.Stage.BASIC;
-        this.cardType = card_types_1.CardType.METAL;
+        this.cardType = M;
         this.hp = 120;
-        this.weakness = [{ type: card_types_1.CardType.FIRE }];
-        this.resistance = [{ type: card_types_1.CardType.GRASS, value: -30 }];
-        this.retreat = [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS];
+        this.weakness = [{ type: R }];
+        this.resistance = [{ type: G, value: -30 }];
+        this.retreat = [C, C];
         this.attacks = [{
                 name: 'Iron Roar',
-                cost: [card_types_1.CardType.METAL],
+                cost: [M],
                 damage: 30,
                 text: 'Attach a Basic [M] Energy card from your discard pile to 1 of your Benched Pokemon.'
             },
             {
                 name: 'Brave Blade',
-                cost: [card_types_1.CardType.METAL, card_types_1.CardType.METAL, card_types_1.CardType.COLORLESS],
+                cost: [M, M, C],
                 damage: 130,
                 text: 'During your next turn, this Pokémon can\'t attack.'
             }];
-        this.set = 'PAR';
         this.regulationMark = 'G';
+        this.set = 'PAR';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '136';
         this.name = 'Zacian';
         this.fullName = 'Zacian PAR';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
-            effect.player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-            effect.player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-            console.log('marker cleared');
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-            effect.player.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
-            console.log('second marker added');
-        }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-                console.log('attack blocked');
-                throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
-            }
             const hasBench = player.bench.some(b => b.cards.length > 0);
             if (!hasBench) {
                 return state;
             }
             const hasEnergyInDiscard = player.discard.cards.some(c => {
-                return c instanceof game_1.EnergyCard && c.provides.includes(card_types_1.CardType.METAL);
+                return c.superType === card_types_1.SuperType.ENERGY && c.provides.includes(M);
             });
             if (!hasEnergyInDiscard) {
                 return state;
             }
             const blocked = [];
             player.discard.cards.forEach((card, index) => {
-                if (card instanceof game_1.EnergyCard && !card.provides.includes(card_types_1.CardType.METAL)) {
+                if (card.superType === card_types_1.SuperType.ENERGY && !card.provides.includes(M)) {
                     blocked.push(index);
                 }
             });
@@ -77,13 +61,10 @@ class Zacian extends pokemon_card_1.PokemonCard {
             });
             return state;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
-            if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this) || effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
-                console.log('attack blocked');
-                throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
-            }
-            effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
-            console.log('marker added');
+        // Brave Blade
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            const player = effect.player;
+            player.active.cannotAttackNextTurnPending = true;
         }
         return state;
     }

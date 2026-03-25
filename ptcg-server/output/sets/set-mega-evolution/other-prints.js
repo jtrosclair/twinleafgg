@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LilliesDetermination3MEG = exports.MegaKangaskhanex3MEG = exports.MegaLatiasex3MEG = exports.MegaAbsolex3MEG = exports.MegaLucarioex3MEG = exports.MegaGardevoirex3MEG = exports.MegaVenusaurEx3MEG = exports.WallysCompassion2MEG = exports.RareCandy2MEG = exports.PowerProtein2MEG = exports.NightlyStretcherMEG = exports.MysteryGarden2MEG = exports.MegaSignal2MEG = exports.LilliesDetermination2MEG = exports.FightingGong2MEG = exports.BuddyBuddyPoffinMEG = exports.AirBalloonMEG = exports.MegaKangaskhanex2MEG = exports.MegaLatiasex2MEG = exports.MegaMawileEx2MEG = exports.MegaAbsolex2MEG = exports.MegaLucarioex2MEG = exports.MegaGardevoirex2MEG = exports.MegaManectricEx2MEG = exports.MegaAbomasnowEx2MEG = exports.MegaCameruptEx2MEG = exports.MegaVenusaurEx2MEG = exports.Gumshoos2MEG = exports.Steelix2MEG = exports.Garganacl2MEG = exports.Houndstone2MEG = exports.Inteleon2MEG = exports.Clawitizer2MEG = exports.Snover2MEG = exports.Ninjask2MEG = exports.Ivysaur2MEG = exports.Bulbasaur2MEG = exports.UltraBallMEG = exports.SwitchMEG = exports.RareCandyMEG = exports.EnergySwitchPKMEG = exports.BossOrdersMEG = exports.RareCandyM1S = exports.NightStretcherM1S = exports.MegaVenusaurExM1S = exports.MegaLucarioexM1S = exports.MegaKangaskhanexM1S = exports.MegaGardevoirexM1S = exports.InteleonM1S = exports.BulbasaurM1S = void 0;
-exports.MegaLucarioex4MEG = exports.MegaGardevoirex4MEG = exports.WallysCompassion3MEG = void 0;
+exports.MegaKangaskhanex3MEG = exports.MegaLatiasex3MEG = exports.MegaAbsolex3MEG = exports.MegaLucarioex3MEG = exports.MegaGardevoirex3MEG = exports.MegaVenusaurEx3MEG = exports.WallysCompassion2MEG = exports.RareCandy2MEG = exports.PowerProtein2MEG = exports.NightlyStretcherMEG = exports.MysteryGarden2MEG = exports.MegaSignal2MEG = exports.LilliesDetermination2MEG = exports.FightingGong2MEG = exports.BuddyBuddyPoffinMEG = exports.AirBalloonMEG = exports.MegaKangaskhanex2MEG = exports.MegaLatiasex2MEG = exports.MegaMawileEx2MEG = exports.MegaAbsolex2MEG = exports.MegaLucarioex2MEG = exports.MegaGardevoirex2MEG = exports.MegaManectricEx2MEG = exports.MegaAbomasnowEx2MEG = exports.MegaCameruptEx2MEG = exports.MegaVenusaurEx2MEG = exports.Gumshoos2MEG = exports.Steelix2MEG = exports.Garganacl2MEG = exports.Houndstone2MEG = exports.Inteleon2MEG = exports.Clawitizer2MEG = exports.Snover2MEG = exports.Ninjask2MEG = exports.Ivysaur2MEG = exports.Bulbasaur2MEG = exports.UltraBallMEG = exports.SwitchMEG = exports.RareCandyMEG = exports.EnergySwitchPKMEG = exports.RepelMEG = exports.BossOrdersMEG = exports.RareCandyM1S = exports.NightStretcherM1S = exports.MegaVenusaurExM1S = exports.MegaLucarioexM1S = exports.MegaKangaskhanexM1S = exports.MegaGardevoirexM1S = exports.InteleonM1S = exports.BulbasaurM1S = void 0;
+exports.MegaLucarioex4MEG = exports.MegaGardevoirex4MEG = exports.WallysCompassion3MEG = exports.LilliesDetermination3MEG = void 0;
 const boss_orders_1 = require("../set-paldea-evolved/boss-orders");
+const repel_1 = require("../set-sun-and-moon/repel");
 const other_prints_1 = require("../set-ex-power-keepers/other-prints");
 const rare_candy_1 = require("../set-ex-holon-phantoms/rare-candy");
 const switch_1 = require("../set-base-set/switch");
@@ -126,6 +127,16 @@ class BossOrdersMEG extends boss_orders_1.BossOrders {
     }
 }
 exports.BossOrdersMEG = BossOrdersMEG;
+class RepelMEG extends repel_1.Repel {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '126';
+        this.fullName = 'Repel M1L';
+        this.set = 'MEG';
+        this.regulationMark = 'I';
+    }
+}
+exports.RepelMEG = RepelMEG;
 class EnergySwitchPKMEG extends other_prints_1.EnergySwitchPK {
     constructor() {
         super(...arguments);

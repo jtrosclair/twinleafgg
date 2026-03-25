@@ -4,7 +4,6 @@ exports.Durantex = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Durantex extends pokemon_card_1.PokemonCard {
@@ -17,16 +16,17 @@ class Durantex extends pokemon_card_1.PokemonCard {
         this.weakness = [{ type: R }];
         this.retreat = [C, C];
         this.powers = [{
-                name: 'Sudden Scrape',
+                name: 'Sudden Shearing',
                 useWhenInPlay: false,
                 powerType: game_1.PowerType.ABILITY,
-                text: 'When you play this Pokemon from your hand onto your Bench during your turn, you may use this ability. Discard the top card of your opponent\'s deck.'
+                text: 'When you play this Pokémon from your hand onto your Bench during your turn, you may discard the top card of your opponent\'s deck.'
             }];
         this.attacks = [{
-                name: 'Revenge Crush',
+                name: 'Vengeful Crush',
                 cost: [G, C, C],
                 damage: 120,
-                text: 'This attack does 30 more damage for each Prize Card your opponent has taken.'
+                damageCalculation: '+',
+                text: 'This attack does 30 more damage for each Prize card your opponent has taken.'
             }];
         this.regulationMark = 'H';
         this.set = 'SSP';
@@ -41,15 +41,7 @@ class Durantex extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {

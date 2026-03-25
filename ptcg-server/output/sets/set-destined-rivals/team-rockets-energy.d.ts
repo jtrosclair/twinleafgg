@@ -5,6 +5,8 @@ import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 export declare class TeamRocketsEnergy extends EnergyCard {
     provides: CardType[];
+    blendedEnergies: CardType[];
+    blendedEnergyCount: number;
     tags: CardTag[];
     energyType: EnergyType;
     regulationMark: string;
@@ -14,8 +16,5 @@ export declare class TeamRocketsEnergy extends EnergyCard {
     name: string;
     fullName: string;
     text: string;
-    private getExistingEnergy;
-    private countEnergyType;
-    private getEnergyToProvide;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

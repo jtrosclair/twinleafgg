@@ -4,12 +4,12 @@ exports.MewtwoVUNIONTopLeft = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const mewtwo_v_union_tr_1 = require("./mewtwo-v-union-tr");
 const mewtwo_v_union_bl_1 = require("./mewtwo-v-union-bl");
 const mewtwo_v_union_br_1 = require("./mewtwo-v-union-br");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class MewtwoVUNIONTopLeft extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -70,7 +70,7 @@ class MewtwoVUNIONTopLeft extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // assemblin the v-union
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const slots = player.bench.filter(b => b.cards.length === 0);
             if (player.assembledVUNIONs.includes(this.name)) {
@@ -121,8 +121,11 @@ class MewtwoVUNIONTopLeft extends pokemon_card_1.PokemonCard {
             }
         }
         // Photon Barrier
-        if (effect instanceof attack_effects_1.AbstractAttackEffect && effect.target.cards.includes(this)) {
+        if (effect instanceof attack_effects_1.AbstractAttackEffect && effect.target.cards.includes(this) && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this)) {
             const sourceCard = effect.source.getPokemonCard();
+            if (game_1.StateUtils.findOwner(state, effect.source) === game_1.StateUtils.findOwner(state, effect.target)) {
+                return state;
+            }
             if (sourceCard) {
                 // Allow Weakness & Resistance
                 if (effect instanceof attack_effects_1.ApplyWeaknessEffect) {
@@ -139,12 +142,12 @@ class MewtwoVUNIONTopLeft extends pokemon_card_1.PokemonCard {
             }
         }
         // Union Gain
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let psychicsInDiscard = 0;
             // checking for energies in the discard
             player.discard.cards.forEach(card => {
-                if (card instanceof game_1.EnergyCard && card.energyType === card_types_1.EnergyType.BASIC && card.name === 'Psychic Energy') {
+                if (card.superType === card_types_1.SuperType.ENERGY && card.energyType === card_types_1.EnergyType.BASIC && card.name === 'Psychic Energy') {
                     psychicsInDiscard++;
                 }
             });
@@ -169,14 +172,14 @@ class MewtwoVUNIONTopLeft extends pokemon_card_1.PokemonCard {
             }
         }
         // Super Regeneration
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const healing = new attack_effects_1.HealTargetEffect(effect, 200);
             healing.target = player.active;
             store.reduceEffect(state, healing);
         }
         // Psyplosion
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const maxAllowedDamage = [];

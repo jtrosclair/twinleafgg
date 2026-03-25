@@ -23,6 +23,9 @@ class PowerPlant extends trainer_card_1.TrainerCard {
         if (effect instanceof game_effects_1.PowerEffect && state_utils_1.StateUtils.getStadiumCard(state) === this) {
             const pokemonCard = effect.card;
             const isEXorGX = pokemonCard.tags.includes(card_types_1.CardTag.POKEMON_GX) || pokemonCard.tags.includes(card_types_1.CardTag.POKEMON_EX);
+            if (effect.power.useFromDiscard || effect.power.useFromHand) {
+                return state;
+            }
             if (!effect.power.exemptFromAbilityLock) {
                 if (isEXorGX && pokemonCard.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
                     throw new game_error_1.GameError(game_message_1.GameMessage.BLOCKED_BY_EFFECT);

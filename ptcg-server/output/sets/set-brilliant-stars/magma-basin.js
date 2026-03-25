@@ -34,7 +34,7 @@ class MagmaBasin extends trainer_card_1.TrainerCard {
                 }
             });
             const hasEnergyInDiscard = player.discard.cards.some(c => {
-                return c instanceof game_1.EnergyCard && c.name == 'Fire Energy';
+                return c.superType === card_types_1.SuperType.ENERGY && c.name == 'Fire Energy';
             });
             if (!hasEnergyInDiscard) {
                 throw new game_1.GameError(game_message_1.GameMessage.CANNOT_USE_STADIUM);

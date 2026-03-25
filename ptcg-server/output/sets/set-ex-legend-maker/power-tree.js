@@ -35,7 +35,7 @@ class PowerTree extends trainer_card_1.TrainerCard {
             let specialEnergyInDiscard = 0;
             const blocked = [];
             player.discard.cards.forEach((c, index) => {
-                if (c instanceof game_1.EnergyCard) {
+                if (c.superType === card_types_1.SuperType.ENERGY) {
                     if (c.energyType === card_types_1.EnergyType.BASIC) {
                         basicEnergyInDiscard += 1;
                     }

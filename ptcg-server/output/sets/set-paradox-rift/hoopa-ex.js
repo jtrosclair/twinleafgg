@@ -4,9 +4,8 @@ exports.Hoopaex = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Hoopaex extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -37,36 +36,22 @@ class Hoopaex extends pokemon_card_1.PokemonCard {
         this.setNumber = '98';
         this.name = 'Hoopa ex';
         this.fullName = 'Hoopa ex PAR';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
-            effect.player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-            effect.player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-            console.log('marker cleared');
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-            effect.player.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
-            console.log('second marker added');
-        }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             let totalEnergy = 0;
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card) => {
-                totalEnergy += cardList.cards.filter(c => c instanceof game_1.EnergyCard).length;
+                totalEnergy += cardList.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY).length;
             });
             effect.damage = totalEnergy * 50;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
-            // Check marker
-            if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-                console.log('attack blocked');
-                throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            const player = effect.player;
+            if (!player.active.cannotUseAttacksNextTurnPending.includes('Bandit\'s Fist')) {
+                player.active.cannotUseAttacksNextTurnPending.push('Bandit\'s Fist');
             }
-            effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
-            console.log('marker added');
         }
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
             const player = effect.player;

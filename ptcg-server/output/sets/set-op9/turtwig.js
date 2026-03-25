@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Turtwig = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const play_card_action_1 = require("../../game/store/actions/play-card-action");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Turtwig extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -38,13 +38,13 @@ class Turtwig extends pokemon_card_1.PokemonCard {
         this.fullName = 'Turtwig OP9';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const healEffect = new attack_effects_1.HealTargetEffect(effect, 10);
             healEffect.target = player.active;
             return store.reduceEffect(state, healEffect);
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             let isChimcharInPlay = false;
             player.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {

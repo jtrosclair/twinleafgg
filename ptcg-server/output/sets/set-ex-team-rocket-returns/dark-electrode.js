@@ -69,9 +69,7 @@ class DarkElectrode extends pokemon_card_1.PokemonCard {
             }
             const blocked = [];
             player.deck.cards.forEach((card, index) => {
-                if (card instanceof game_1.EnergyCard && (card.name === 'Darkness Energy' || card.name === 'Dark Metal Energy')) {
-                }
-                else {
+                if (!(card.superType === card_types_1.SuperType.ENERGY && (card.name === 'Darkness Energy' || card.name === 'Dark Metal Energy'))) {
                     blocked.push(index);
                 }
             });
@@ -105,11 +103,6 @@ class DarkElectrode extends pokemon_card_1.PokemonCard {
                         checkProvidedEnergy.energyMap.forEach(em => {
                             if (em.provides.length === 0) {
                                 blockedCards.push(em.card);
-                            }
-                        });
-                        cardList.cards.forEach(em => {
-                            if (cardList.getPokemons().includes(em)) {
-                                blockedCards.push(em);
                             }
                         });
                         const blocked = [];

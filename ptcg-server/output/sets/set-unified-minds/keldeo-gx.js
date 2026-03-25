@@ -65,7 +65,7 @@ class KeldeoGX extends game_1.PokemonCard {
             }
         }
         // Sonic Edge
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const applyWeakness = new attack_effects_1.ApplyWeaknessEffect(effect, 110);
@@ -80,7 +80,7 @@ class KeldeoGX extends game_1.PokemonCard {
             return state;
         }
         // Resolute Blade-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NidoqueenSMP = exports.Zapdos2SMP = exports.CharizardSMP = exports.GiratinaSMP = exports.RaikouSMP = exports.GlaceonGXSMP = exports.DelcattySMP = exports.UltraNecrozmaGXSMP = exports.NaganadelGXSMP = exports.MalamarSMP = exports.DuskManeNecrozmaGXSMP = exports.DawnWingsNecrozmaGXSMP = exports.Mimikyu2SMP = exports.Lucario2SMP = exports.SilvallyGXSMP = exports.LatiosSMP = exports.MarshadowSMP = exports.ZoroarkGXSMP = exports.ZoruaSMP = exports.SalazzleSMP = exports.BuzzwoleGXSMP = exports.SalazzleGXSMP = exports.MarshadowGXSMP = exports.NecrozmaGXSMP = exports.LucarioSMP = exports.TapuKokoGX2SMP = exports.CosmogSMP = exports.DecidueyeGXSMP = exports.EspeonGXSMP = exports.TapuKokoGXSMP = exports.TapuBuluGXSMP = exports.TapuKoko3SMP = exports.VikavoltSMP = exports.Popplio2SMP = exports.Rowlet2SMP = exports.Oricorio2SMP = exports.OranguruSMP = exports.PassimianSMP = exports.VenusaurSnivyGXSMP = exports.TapuKokoSMP = exports.ReshiramCharizardGXSMP = exports.EspeonDeoxysGXSMP = exports.DhelmiseSMP = exports.CelebiVenusaurGXSMP = exports.MewSMP = exports.MagikarpWailordGXSMP = exports.EeveeSnorlaxGXSMP = exports.LycanrocSMP = exports.LucarioMelmetalGXSMP = exports.UmbreonDarkraiGXSMP = void 0;
-exports.SolgaleoGX3SMP = exports.PikachuZekromGX2SMP = exports.ReshiramCharizardGX2SMP = exports.CharizardBraixenGXSMP = exports.Charizard2SMP = exports.BlacephalonSMP = exports.PhioneSMP = exports.EnteiSMP = exports.BuzzwoleSMP = exports.Mewtwo2SMP = exports.MoltresZapdosArticunoGXSMP = exports.NecrozmaSMP = exports.GarchompGiratinaGXSMP = exports.MewtwoMewGXSMP = exports.PersianSMP = exports.VolcanionSMP = exports.JirachiSMP = void 0;
+exports.CharizardGXSMP60 = exports.SolgaleoGX3SMP = exports.PikachuZekromGX2SMP = exports.ReshiramCharizardGX2SMP = exports.CharizardBraixenGXSMP = exports.Charizard2SMP = exports.BlacephalonSMP = exports.PhioneSMP = exports.EnteiSMP = exports.BuzzwoleSMP = exports.Mewtwo2SMP = exports.MoltresZapdosArticunoGXSMP = exports.NecrozmaSMP = exports.GarchompGiratinaGXSMP = exports.MewtwoMewGXSMP = exports.PersianSMP = exports.VolcanionSMP = exports.JirachiSMP = void 0;
 const passimian_1 = require("../set-sun-and-moon/passimian");
 const oranguru_1 = require("../set-sun-and-moon/oranguru");
 const oricorio_2_1 = require("../set-guardians-rising/oricorio-2");
@@ -69,6 +69,7 @@ const reshiram_and_charizard_gx_2 = require("../set-unbroken-bonds/reshiram-and-
 const tapu_koko_2 = require("./tapu-koko");
 const espeon_and_deoxys_gx_1 = require("../set-unified-minds/espeon-and-deoxys-gx");
 const umbreon_and_darkrai_gx_1 = require("../set-unified-minds/umbreon-and-darkrai-gx");
+const charizard_gx_1 = require("../set-burning-shadows/charizard-gx");
 class UmbreonDarkraiGXSMP extends umbreon_and_darkrai_gx_1.UmbreonDarkraiGX {
     constructor() {
         super(...arguments);
@@ -672,3 +673,12 @@ class SolgaleoGX3SMP extends solgaleo_gx_1.SolgaleoGX {
     }
 }
 exports.SolgaleoGX3SMP = SolgaleoGX3SMP;
+class CharizardGXSMP60 extends charizard_gx_1.CharizardGX {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '60';
+        this.fullName = 'Charizard-GX SMP 60';
+        this.set = 'SMP';
+    }
+}
+exports.CharizardGXSMP60 = CharizardGXSMP60;

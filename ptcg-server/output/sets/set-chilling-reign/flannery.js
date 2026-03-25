@@ -13,7 +13,7 @@ function* playCard(next, store, state, effect, trainerCard) {
     let hasPokemonWithEnergy = false;
     const blocked = [];
     opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card, target) => {
-        if (cardList.energies.cards.some(c => c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.SPECIAL)) {
+        if (cardList.energies.cards.some(c => c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.SPECIAL)) {
             hasPokemonWithEnergy = true;
         }
         else {
@@ -47,7 +47,6 @@ function* playCard(next, store, state, effect, trainerCard) {
             store.reduceEffect(state, supporterEffect);
         }
         catch (_a) {
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
     }
@@ -59,7 +58,6 @@ function* playCard(next, store, state, effect, trainerCard) {
     });
     if (cards.length > 0) {
         // Discard trainer only when user selected a Pokemon
-        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         // Discard selected special energy card
         (0, prefabs_1.MOVE_CARDS)(store, state, target, opponent.discard, { cards, sourceCard: trainerCard });
     }

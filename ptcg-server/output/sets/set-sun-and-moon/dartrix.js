@@ -6,7 +6,6 @@ const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const game_2 = require("../../game");
 const state_utils_1 = require("../../game/store/state-utils");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 // CIN Dartrix 57 (https://limitlesstcg.com/cards/CIN/57)
 class Dartrix extends pokemon_card_1.PokemonCard {
@@ -36,7 +35,7 @@ class Dartrix extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Sharp Blade Quill
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             const hasBenched = opponent.bench.some(b => b.cards.length > 0);
@@ -49,7 +48,7 @@ class Dartrix extends pokemon_card_1.PokemonCard {
             });
         }
         // Leaf Blade
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             return store.prompt(state, [
                 new game_2.CoinFlipPrompt(player.id, game_1.GameMessage.COIN_FLIP)

@@ -36,7 +36,6 @@ class TeamRocketsHandiwork extends trainer_card_1.TrainerCard {
             ], (result) => {
                 const heads = result.filter(r => !!r).length;
                 (0, prefabs_1.MOVE_CARDS)(store, state, opponent.deck, opponent.discard, { count: heads * 2, sourceCard: this });
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
             });
         }
         return state;

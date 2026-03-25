@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Accelgor = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Accelgor extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -31,12 +31,8 @@ class Accelgor extends pokemon_card_1.PokemonCard {
         this.fullName = 'Accelgor FST';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_phase_effects_1.EndTurnEffect) {
-            this.movedToActiveThisTurn = false;
-            console.log('movedToActiveThisTurn = false');
-        }
         if (effect instanceof check_effects_1.CheckAttackCostEffect && effect.attack === this.attacks[0]) {
-            if (this.movedToActiveThisTurn) {
+            if ((0, prefabs_1.MOVED_TO_ACTIVE_THIS_TURN)(effect.player, this)) {
                 effect.cost = [card_types_1.CardType.GRASS];
             }
         }

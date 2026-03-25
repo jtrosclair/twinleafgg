@@ -7,7 +7,6 @@ const trainer_card_1 = require("../../game/store/card/trainer-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
-const energy_card_1 = require("../../game/store/card/energy-card");
 const shuffle_prompt_1 = require("../../game/store/prompts/shuffle-prompt");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* playCard(next, store, state, self, effect) {
@@ -15,7 +14,7 @@ function* playCard(next, store, state, self, effect) {
     let energyInDiscard = 0;
     const blocked = [];
     player.discard.cards.forEach((c, index) => {
-        const isBasicEnergy = c instanceof energy_card_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC;
+        const isBasicEnergy = c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC;
         if (isBasicEnergy) {
             energyInDiscard += 1;
         }
@@ -35,7 +34,6 @@ function* playCard(next, store, state, self, effect) {
         next();
     });
     (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.deck, { cards, sourceCard: self });
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });

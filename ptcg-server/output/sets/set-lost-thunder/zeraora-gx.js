@@ -5,19 +5,17 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class ZeraoraGX extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.stage = card_types_1.Stage.BASIC;
         this.tags = [card_types_1.CardTag.POKEMON_GX];
-        this.cardType = card_types_1.CardType.LIGHTNING;
+        this.cardType = L;
         this.hp = 190;
-        this.weakness = [{ type: card_types_1.CardType.FIGHTING }];
-        this.resistance = [{ type: card_types_1.CardType.METAL, value: -20 }];
-        this.retreat = [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS];
+        this.weakness = [{ type: F }];
+        this.resistance = [{ type: M, value: -20 }];
+        this.retreat = [C, C];
         this.powers = [{
                 name: 'Thunderclap Zone',
                 powerType: game_1.PowerType.ABILITY,
@@ -25,13 +23,13 @@ class ZeraoraGX extends pokemon_card_1.PokemonCard {
             }];
         this.attacks = [{
                 name: 'Plasma Fists',
-                cost: [card_types_1.CardType.LIGHTNING, card_types_1.CardType.LIGHTNING, card_types_1.CardType.COLORLESS],
+                cost: [L, L, C],
                 damage: 160,
                 text: 'This Pokémon can\'t attack during your next turn.'
             },
             {
                 name: 'Full Voltage-GX',
-                cost: [card_types_1.CardType.LIGHTNING],
+                cost: [L],
                 damage: 0,
                 text: 'Attach 5 basic Energy cards from your discard pile to your Pokémon in any way you like. (You can\'t use more than 1 GX attack in a game.)'
             }];
@@ -40,33 +38,14 @@ class ZeraoraGX extends pokemon_card_1.PokemonCard {
         this.setNumber = '201';
         this.name = 'Zeraora-GX';
         this.fullName = 'Zeraora GX LOT';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
-            effect.player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-            effect.player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-            console.log('marker cleared');
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-            effect.player.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
-            console.log('second marker added');
-        }
         if (effect instanceof check_effects_1.CheckRetreatCostEffect) {
             const player = effect.player;
             const cardList = game_1.StateUtils.findCardList(state, this);
             const owner = game_1.StateUtils.findOwner(state, cardList);
             // Check to see if anything is blocking our Ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             let isZeraoraGXInPlay = false;
@@ -81,7 +60,7 @@ class ZeraoraGX extends pokemon_card_1.PokemonCard {
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, player.active);
             state = store.reduceEffect(state, checkProvidedEnergy);
             checkProvidedEnergy.energyMap.forEach(energy => {
-                if (energy.provides.includes(card_types_1.CardType.LIGHTNING)) {
+                if (energy.provides.includes(L)) {
                     effect.cost = [];
                     return state;
                 }
@@ -91,29 +70,20 @@ class ZeraoraGX extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            // Check marker
-            if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-                console.log('attack blocked');
-                throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
-            }
-            effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
-            console.log('marker added');
+        // Plasma Fists
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            const player = effect.player;
+            player.active.cannotAttackNextTurnPending = true;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const hasEnergyInDiscard = player.discard.cards.some(c => {
-                return c instanceof game_1.EnergyCard
+                return c.superType === card_types_1.SuperType.ENERGY
                     && c.energyType === card_types_1.EnergyType.BASIC
-                    && c.provides.includes(card_types_1.CardType.LIGHTNING);
+                    && c.provides.includes(L);
             });
             if (!hasEnergyInDiscard) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_ATTACK);
-            }
-            // Check marker
-            if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-                console.log('attack blocked');
-                throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
             }
             (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;

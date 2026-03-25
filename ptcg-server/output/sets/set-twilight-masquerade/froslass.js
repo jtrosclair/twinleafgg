@@ -7,29 +7,28 @@ const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const state_1 = require("../../game/store/state/state");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Froslass extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.stage = card_types_1.Stage.STAGE_1;
         this.evolvesFrom = 'Snorunt';
-        this.regulationMark = 'H';
-        this.cardType = card_types_1.CardType.WATER;
-        this.weakness = [{ type: card_types_1.CardType.METAL }];
+        this.cardType = W;
+        this.weakness = [{ type: M }];
         this.hp = 90;
-        this.retreat = [card_types_1.CardType.COLORLESS];
+        this.retreat = [C];
         this.powers = [{
                 name: 'Freezing Shroud',
                 powerType: game_1.PowerType.ABILITY,
                 text: 'During Pokémon Checkup, put 1 damage counter on each Pokémon in play that has any Abilities (excluding any Froslass).'
             }];
-        this.attacks = [
-            {
+        this.attacks = [{
                 name: 'Frost Smash',
-                cost: [card_types_1.CardType.WATER, card_types_1.CardType.COLORLESS],
+                cost: [W, C],
                 damage: 60,
                 text: ''
-            }
-        ];
+            }];
+        this.regulationMark = 'H';
         this.set = 'TWM';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '53';
@@ -41,15 +40,7 @@ class Froslass extends game_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.BetweenTurnsEffect && effect.player.marker.hasMarker(this.CHILLING_CURTAIN_MARKER, this)) {
             if (state.phase === state_1.GamePhase.BETWEEN_TURNS) {
                 const player = effect.player;
-                try {
-                    const stub = new game_effects_1.PowerEffect(player, {
-                        name: 'test',
-                        powerType: game_1.PowerType.ABILITY,
-                        text: ''
-                    }, this);
-                    store.reduceEffect(state, stub);
-                }
-                catch (_a) {
+                if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                     return state;
                 }
                 const opponent = game_1.StateUtils.getOpponent(state, player);
@@ -61,8 +52,8 @@ class Froslass extends game_1.PokemonCard {
                     }
                 });
                 player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-                    if (card.powers.length > 0 && card.name !== 'Froslass') {
-                        const powersEffect = new check_effects_1.CheckPokemonPowersEffect(player, cardList);
+                    if (card.name !== 'Froslass') {
+                        const powersEffect = new check_effects_1.CheckPokemonPowersEffect(player, card);
                         state = store.reduceEffect(state, powersEffect);
                         if (powersEffect.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
                             const placeCountersEffect = new game_effects_1.PlaceDamageCountersEffect(player, cardList, 10 * numberOfFroslass, this);
@@ -71,8 +62,8 @@ class Froslass extends game_1.PokemonCard {
                     }
                 });
                 opponent.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-                    if (card.name !== 'Froslass' && card.powers.length > 0) {
-                        const powersEffect = new check_effects_1.CheckPokemonPowersEffect(opponent, cardList);
+                    if (card.name !== 'Froslass') {
+                        const powersEffect = new check_effects_1.CheckPokemonPowersEffect(opponent, card);
                         state = store.reduceEffect(state, powersEffect);
                         if (powersEffect.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
                             const placeCountersEffect = new game_effects_1.PlaceDamageCountersEffect(player, cardList, 10 * numberOfFroslass, this);

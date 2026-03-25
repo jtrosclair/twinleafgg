@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GardevoirSylveonGX = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class GardevoirSylveonGX extends game_1.PokemonCard {
@@ -45,7 +44,7 @@ class GardevoirSylveonGX extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Fairy Song
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasBench = player.bench.some(b => b.cards.length > 0);
             if (hasBench === false) {
@@ -66,7 +65,7 @@ class GardevoirSylveonGX extends game_1.PokemonCard {
             });
         }
         // Kaleidostorm
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             return store.prompt(state, new game_1.MoveEnergyPrompt(player.id, game_1.GameMessage.MOVE_ENERGY_CARDS, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { superType: game_1.SuperType.ENERGY }, { allowCancel: true }), transfers => {
                 if (transfers === null) {
@@ -80,7 +79,7 @@ class GardevoirSylveonGX extends game_1.PokemonCard {
             });
         }
         // Magical Miracle-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);

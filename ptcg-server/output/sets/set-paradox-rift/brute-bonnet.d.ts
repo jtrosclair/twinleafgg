@@ -8,9 +8,9 @@ export declare class BruteBonnet extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.GRASS;
     }[];
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     powers: {
         name: string;
         useWhenInPlay: boolean;
@@ -19,18 +19,16 @@ export declare class BruteBonnet extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: (CardType.DARK | CardType.COLORLESS)[];
         damage: number;
         text: string;
     }[];
-    set: string;
     regulationMark: string;
+    set: string;
     cardImage: string;
     setNumber: string;
     name: string;
     fullName: string;
-    readonly ATTACK_USED_MARKER = "ATTACK_USED_MARKER";
-    readonly ATTACK_USED_2_MARKER = "ATTACK_USED_2_MARKER";
     readonly TOXIC_POWDER_MARKER = "TOXIC_POWDER_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

@@ -52,7 +52,6 @@ class MaxRevive extends trainer_card_1.TrainerCard {
                         }
                         deckTop.applyOrder(order);
                         deckTop.moveToTopOfDestination(player.deck);
-                        player.supporter.moveCardTo(effect.trainerCard, player.discard);
                         if (cards.length > 0) {
                             const opponent = game_1.StateUtils.getOpponent(state, player);
                             return store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => state);

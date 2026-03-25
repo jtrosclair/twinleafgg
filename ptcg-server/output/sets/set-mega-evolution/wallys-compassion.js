@@ -14,7 +14,7 @@ function* playCard(next, store, state, effect) {
     const blocked = [];
     let hasMegaPokemon = false;
     player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        if (card.tags.includes(card_types_1.CardTag.MEGA) && card.tags.includes(card_types_1.CardTag.POKEMON_ex) && cardList.damage > 0) {
+        if (card.tags.includes(card_types_1.CardTag.POKEMON_SV_MEGA) && card.tags.includes(card_types_1.CardTag.POKEMON_ex) && cardList.damage > 0) {
             hasMegaPokemon = true;
         }
         else {
@@ -30,15 +30,13 @@ function* playCard(next, store, state, effect) {
         next();
     });
     if (targets.length === 0) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return state;
     }
     const target = targets[0];
     const healEffect = new game_effects_1.HealEffect(player, target, target.damage);
     store.reduceEffect(state, healEffect);
-    const energy = target.cards.filter(c => c instanceof game_1.EnergyCard);
+    const energy = target.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY);
     target.moveCardsTo(energy, player.hand);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return state;
 }
 class WallysCompassion extends trainer_card_1.TrainerCard {

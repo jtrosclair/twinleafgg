@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Weedle = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* useBugHunch(next, store, state, effect) {
     const player = effect.player;
     const opponent = effect.opponent;
@@ -44,7 +44,7 @@ class Weedle extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Bug Hunch
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useBugHunch(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

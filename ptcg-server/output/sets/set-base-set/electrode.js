@@ -8,9 +8,9 @@ const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const check_effect_1 = require("../../game/store/effect-reducers/check-effect");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const coin_flip_prompt_1 = require("../../game/store/prompts/coin-flip-prompt");
 const choose_pokemon_prompt_1 = require("../../game/store/prompts/choose-pokemon-prompt");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Electrode extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -48,10 +48,18 @@ class Electrode extends pokemon_card_1.PokemonCard {
         this.text = '';
         this.isBlocked = false;
         this.blendedEnergies = [];
+        this.blendedEnergyCount = 1;
         this.energyEffect = undefined;
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        // Auto-detect if we've been removed from energies and reset superType back to POKEMON
+        if (this.superType === card_types_1.SuperType.ENERGY) {
+            const cardList = game_1.StateUtils.findCardList(state, this);
+            if (!(cardList instanceof game_1.PokemonCardList) || !cardList.energies.cards.includes(this)) {
+                this.superType = card_types_1.SuperType.POKEMON;
+            }
+        }
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const cardList = game_1.StateUtils.findCardList(state, this);
             if (cardList.specialConditions.includes(card_types_1.SpecialCondition.ASLEEP) ||
@@ -84,7 +92,6 @@ class Electrode extends pokemon_card_1.PokemonCard {
                 if (!option) {
                     return state;
                 }
-                // Set energy properties but keep the superType as POKEMON
                 this.chosenEnergyType = option.value;
                 this.provides = [option.value, option.value];
                 return store.prompt(state, new choose_pokemon_prompt_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_ATTACH_CARDS, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { allowCancel: false }), targets => {
@@ -99,6 +106,7 @@ class Electrode extends pokemon_card_1.PokemonCard {
                         if (!targets[0].energies.cards.includes(this)) {
                             targets[0].energies.cards.push(this);
                         }
+                        this.superType = card_types_1.SuperType.ENERGY;
                     }
                 });
             });
@@ -107,7 +115,7 @@ class Electrode extends pokemon_card_1.PokemonCard {
         if (effect instanceof check_effects_1.CheckProvidedEnergyEffect && effect.source.energies.cards.includes(this)) {
             effect.energyMap.push({ card: this, provides: this.provides });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             return store.prompt(state, new coin_flip_prompt_1.CoinFlipPrompt(effect.player.id, game_1.GameMessage.FLIP_COIN), (result) => {
                 if (!result) {
                     const selfDamage = new attack_effects_1.DealDamageEffect(effect, 10);

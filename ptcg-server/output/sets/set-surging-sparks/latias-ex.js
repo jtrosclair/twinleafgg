@@ -4,50 +4,37 @@ exports.Latiasex = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Latiasex extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.stage = card_types_1.Stage.BASIC;
-        this.cardType = card_types_1.CardType.PSYCHIC;
         this.tags = [card_types_1.CardTag.POKEMON_ex];
+        this.cardType = P;
         this.hp = 210;
-        this.weakness = [{ type: card_types_1.CardType.DARK }];
-        this.resistance = [{ type: card_types_1.CardType.FIGHTING, value: -30 }];
-        this.retreat = [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS];
+        this.weakness = [{ type: D }];
+        this.resistance = [{ type: F, value: -30 }];
+        this.retreat = [C, C];
         this.powers = [{
-                name: 'Skyline',
+                name: 'Skyliner',
                 powerType: game_1.PowerType.ABILITY,
-                text: 'Your Basic Pokémon have no Retreat Cost.'
+                text: 'Your Basic Pokémon in play have no Retreat Cost.'
             }];
-        this.attacks = [
-            {
-                name: 'Infinity Blade',
-                cost: [card_types_1.CardType.PSYCHIC, card_types_1.CardType.PSYCHIC, card_types_1.CardType.COLORLESS],
+        this.attacks = [{
+                name: 'Eon Blade',
+                cost: [P, P, C],
                 damage: 200,
-                text: 'This Pokémon can\'t attack during your next turn.'
-            },
-        ];
-        this.set = 'SSP';
+                text: 'During your next turn, this Pokémon can\'t attack.'
+            }];
         this.regulationMark = 'H';
+        this.set = 'SSP';
         this.setNumber = '76';
         this.cardImage = 'assets/cardback.png';
         this.name = 'Latias ex';
         this.fullName = 'Latias ex SSP';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
-            effect.player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-            effect.player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-            effect.player.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
-        }
         if (effect instanceof check_effects_1.CheckRetreatCostEffect) {
             const player = effect.player;
             const cardList = game_1.StateUtils.findCardList(state, this);
@@ -70,12 +57,14 @@ class Latiasex extends pokemon_card_1.PokemonCard {
             }
             return state;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            // Check marker
-            if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-                throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
-            }
-            effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
+        // Infinity Blade
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            const player = effect.player;
+            // Legacy implementation:
+            // - Set player.active.cannotAttackNextTurnPending = true directly.
+            //
+            // Converted to prefab version (THIS_POKEMON_CANNOT_ATTACK_NEXT_TURN).
+            (0, prefabs_1.THIS_POKEMON_CANNOT_ATTACK_NEXT_TURN)(player);
         }
         return state;
     }

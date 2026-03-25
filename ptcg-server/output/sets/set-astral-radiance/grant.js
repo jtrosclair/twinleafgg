@@ -44,12 +44,16 @@ class Grant extends trainer_card_1.TrainerCard {
             // We will discard this card after prompt confirmation
             effect.preventDefault = true;
             player.marker.addMarker(this.GRANT_MARKER, this);
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         }
         if (effect instanceof attack_effects_1.DealDamageEffect) {
             const player = effect.player;
             if (player.marker.hasMarker(this.GRANT_MARKER, this) && effect.damage > 0) {
-                effect.damage += 30;
+                // Only boost [F] Pokemon attacks
+                const checkType = new check_effects_1.CheckPokemonTypeEffect(effect.source);
+                store.reduceEffect(state, checkType);
+                if (checkType.cardTypes.includes(game_1.CardType.FIGHTING)) {
+                    effect.damage += 30;
+                }
             }
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.GRANT_MARKER, this)) {

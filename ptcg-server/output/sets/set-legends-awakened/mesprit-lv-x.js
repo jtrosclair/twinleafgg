@@ -61,7 +61,7 @@ class MespritLVX extends game_1.PokemonCard {
                     isAzelfInPlay = true;
                 }
             });
-            let isTrioInPlay = isMespritInPlay && isUxieInPlay && isAzelfInPlay;
+            const isTrioInPlay = isMespritInPlay && isUxieInPlay && isAzelfInPlay;
             if (!isTrioInPlay) {
                 effect.damage = 0;
                 return state;

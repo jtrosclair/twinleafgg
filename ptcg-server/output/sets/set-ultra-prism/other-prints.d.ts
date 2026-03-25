@@ -1,22 +1,32 @@
-import { Cosmoem } from "../set-sun-and-moon/cosmoem";
-import { PalPad } from "../set-scarlet-and-violet/pal-pad";
-import { UnidentifiedFossil } from "../set-silver-tempest/unidentified-fossil";
-import { GlaceonGX as GlaceonGXUPR39 } from "../set-ultra-prism/glaceon-gx";
-import { DawnWingsNecrozmaGX as DawnWingsNecrozmaGXUPR63 } from "../set-ultra-prism/dawn-wings-necrozma-gx";
-import { DuskManeNecrozmaGX as DuskManeNecrozmaGXUPR90 } from "../set-ultra-prism/dusk-mane-necrozma-gx";
-import { DialgaGX as DialgaGXUPR100 } from "../set-ultra-prism/dialga-gx";
-import { Cynthia as CynthiaUPR119 } from "../set-ultra-prism/cynthia";
-import { Gardenia as GardeniaUPR124 } from "../set-ultra-prism/gardenia";
-import { Lillie as LillieUPR125 } from "../set-ultra-prism/lillie";
-import { Lusamine } from "../set-crimson-invasion/lusamine";
-import { Mars as MarsUPR128 } from "../set-ultra-prism/mars";
-import { PokemonFanClub as PokemonFanClubP49 } from "../set-pop-series-4/pokemon-fan-club";
-import { Volkner as VolknerUPR135 } from "../set-ultra-prism/volkner";
-import { CrushingHammer } from "../set-scarlet-and-violet/crushing-hammer";
-import { EscapeBoard as EscapeBoardUPR122 } from "../set-ultra-prism/escape-board";
-import { UnitEnergyGRW as UnitEnergyGRWUPR137 } from "../set-ultra-prism/unit-energy-grw";
-import { UnitEnergyLPM as UnitEnergyLPMUPR138 } from "../set-ultra-prism/unit-energy-lpm";
-import { Lusamine as LusamineCIN96 } from "../set-crimson-invasion/lusamine";
+import { Cosmoem } from '../set-sun-and-moon/cosmoem';
+import { PalPad } from '../set-scarlet-and-violet/pal-pad';
+import { UnidentifiedFossil } from '../set-silver-tempest/unidentified-fossil';
+import { GlaceonGX as GlaceonGXUPR39 } from '../set-ultra-prism/glaceon-gx';
+import { DawnWingsNecrozmaGX as DawnWingsNecrozmaGXUPR63 } from '../set-ultra-prism/dawn-wings-necrozma-gx';
+import { DuskManeNecrozmaGX as DuskManeNecrozmaGXUPR90 } from '../set-ultra-prism/dusk-mane-necrozma-gx';
+import { DialgaGX as DialgaGXUPR100 } from '../set-ultra-prism/dialga-gx';
+import { Cynthia as CynthiaUPR119 } from '../set-ultra-prism/cynthia';
+import { Gardenia as GardeniaUPR124 } from '../set-ultra-prism/gardenia';
+import { Lillie as LillieUPR125 } from '../set-ultra-prism/lillie';
+import { Lusamine } from '../set-crimson-invasion/lusamine';
+import { Mars as MarsUPR128 } from '../set-ultra-prism/mars';
+import { PokemonFanClub as PokemonFanClubP49 } from '../set-pop-series-4/pokemon-fan-club';
+import { Volkner as VolknerUPR135 } from '../set-ultra-prism/volkner';
+import { CrushingHammer } from '../set-scarlet-and-violet/crushing-hammer';
+import { EscapeBoard as EscapeBoardUPR122 } from '../set-ultra-prism/escape-board';
+import { UnitEnergyGRW as UnitEnergyGRWUPR137 } from '../set-ultra-prism/unit-energy-grw';
+import { UnitEnergyLPM as UnitEnergyLPMUPR138 } from '../set-ultra-prism/unit-energy-lpm';
+import { Lusamine as LusamineCIN96 } from '../set-crimson-invasion/lusamine';
+import { Dewpider } from '../set-sun-and-moon/dewpider';
+import { LeafeonGx } from './leafeon-gx';
+import { PalkiaGx } from './palkia-gx';
+import { Lana } from '../set-burning-shadows/lana';
+import { Looker } from './looker';
+import { PheromosaGx } from './pheromosa-gx';
+import { XurkitreeGx } from './xurkitree-gx';
+import { CelesteelaGx } from './celesteela-gx';
+import { MissingClover } from './missing-clover';
+import { PeekingRedCard } from '../set-crimson-invasion/peeking-red-card';
 export declare class CosmoemUPR extends Cosmoem {
     setNumber: string;
     fullName: string;
@@ -151,4 +161,64 @@ export declare class Lusamine2UPR extends LusamineCIN96 {
     setNumber: string;
     fullName: string;
     set: string;
+}
+export declare class DewpiderUPR extends Dewpider {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class LeafeonGx2 extends LeafeonGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class PalkiaGx2 extends PalkiaGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class LanaUPR extends Lana {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class Looker2 extends Looker {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class LeafeonGx3 extends LeafeonGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class PheromosaGx2 extends PheromosaGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class XurkitreeGx2 extends XurkitreeGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class CelesteelaGx2 extends CelesteelaGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class PalkiaGx3 extends PalkiaGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class MissingClover2 extends MissingClover {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class PeekingRedCardUPR extends PeekingRedCard {
+    set: string;
+    setNumber: string;
+    fullName: string;
 }

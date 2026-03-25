@@ -54,7 +54,7 @@ class BronzongG extends game_1.PokemonCard {
                 pokemonCount += 1;
                 // Only consider Pokémon SP for energy movement
                 if ((_a = card.tags) === null || _a === void 0 ? void 0 : _a.includes(card_types_1.CardTag.POKEMON_SP)) {
-                    const basicEnergyAttached = cardList.cards.some(c => c instanceof game_1.EnergyCard);
+                    const basicEnergyAttached = cardList.cards.some(c => c.superType === card_types_1.SuperType.ENERGY);
                     hasEnergy = hasEnergy || basicEnergyAttached;
                 }
             });

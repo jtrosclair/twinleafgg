@@ -6,6 +6,8 @@ const card_types_1 = require("../../game/store/card/card-types");
 const state_1 = require("../../game/store/state/state");
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
+const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class FullFaceGuard extends trainer_card_1.TrainerCard {
     constructor() {
@@ -31,13 +33,18 @@ class FullFaceGuard extends trainer_card_1.TrainerCard {
                 return state;
             }
             const player = game_1.StateUtils.findOwner(state, effect.target);
-            if (sourceCard && sourceCard.powers.length === 0) {
-                // Check if damage target is owned by this card's owner 
-                const targetPlayer = game_1.StateUtils.findOwner(state, effect.target);
-                if (targetPlayer === player) {
-                    effect.reduceDamage(20);
+            if (sourceCard) {
+                // Check if source Pokemon has no abilities using CheckPokemonPowersEffect
+                const powersEffect = new check_effects_1.CheckPokemonPowersEffect(effect.player, sourceCard);
+                state = store.reduceEffect(state, powersEffect);
+                const hasAbilities = powersEffect.powers.some(power => power.powerType === pokemon_types_1.PowerType.ABILITY);
+                if (!hasAbilities) {
+                    // Check if damage target is owned by this card's owner 
+                    const targetPlayer = game_1.StateUtils.findOwner(state, effect.target);
+                    if (targetPlayer === player) {
+                        effect.reduceDamage(20);
+                    }
                 }
-                return state;
             }
             return state;
         }

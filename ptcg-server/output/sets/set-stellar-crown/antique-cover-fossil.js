@@ -28,12 +28,13 @@ class AntiqueCoverFossil extends game_1.TrainerCard {
         this.attacksThisTurn = 0;
         this.maxAttacksThisTurn = 1;
         this.allowSubsequentAttackChoice = false;
+        this.evolvesFromBase = [];
         this.maxTools = 1;
         this.evolvesTo = [];
         this.evolvesToStage = [];
         this.powers = [{
                 name: 'Antique Cover Fossil',
-                text: `Play this card as if it were a 60-HP [C] Basic Pokémon. This card can't be affected by any Special Conditions and can'\' retreat.
+                text: `Play this card as if it were a 60-HP [C] Basic Pokémon. This card can't be affected by any Special Conditions and can't retreat.
 
 At any time during your turn, you may discard this card from play.`,
                 useWhenInPlay: true,
@@ -54,7 +55,7 @@ At any time during your turn, you may discard this card from play.`,
         this.fullName = 'Antique Cover Fossil SCR';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const pokeDollCardList = game_1.StateUtils.findCardList(state, this);
             if (player.active.cards[0] !== this) {

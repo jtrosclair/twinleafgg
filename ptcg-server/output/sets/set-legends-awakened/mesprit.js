@@ -42,6 +42,8 @@ class Mesprit extends pokemon_card_1.PokemonCard {
             }
             (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
+                    const powerEffect = new game_effects_1.PowerEffect(player, this.powers[0], this);
+                    store.reduceEffect(state, powerEffect);
                     const opponent = game_1.StateUtils.getOpponent(state, player);
                     (0, prefabs_1.ADD_MARKER)(this.PSYCHIC_BIND_MARKER, opponent, this);
                     // Log the ability usage

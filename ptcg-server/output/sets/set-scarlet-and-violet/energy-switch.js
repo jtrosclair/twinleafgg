@@ -6,7 +6,6 @@ const game_message_1 = require("../../game/game-message");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const energy_card_1 = require("../../game/store/card/energy-card");
 const play_card_action_1 = require("../../game/store/actions/play-card-action");
 const move_energy_prompt_1 = require("../../game/store/prompts/move-energy-prompt");
 const state_utils_1 = require("../../game/store/state-utils");
@@ -18,7 +17,7 @@ function* playCard(next, store, state, effect) {
     player.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
         pokemonCount += 1;
         const basicEnergyAttached = cardList.cards.some(c => {
-            return c instanceof energy_card_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC;
+            return c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC;
         });
         hasBasicEnergy = hasBasicEnergy || basicEnergyAttached;
     });
@@ -32,7 +31,6 @@ function* playCard(next, store, state, effect) {
         transfers = result || [];
         next();
     });
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     transfers.forEach(transfer => {
         const source = state_utils_1.StateUtils.getTarget(state, player, transfer.from);
         const target = state_utils_1.StateUtils.getTarget(state, player, transfer.to);
@@ -51,6 +49,22 @@ class EnergySwitch extends trainer_card_1.TrainerCard {
         this.name = 'Energy Switch';
         this.fullName = 'Energy Switch SVI';
         this.text = 'Move a basic Energy from 1 of your Pokemon to another of your Pokemon.';
+    }
+    canPlay(store, state, player) {
+        // Player has no Basic Energy in the discard pile
+        let hasBasicEnergy = false;
+        let pokemonCount = 0;
+        player.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
+            pokemonCount += 1;
+            const basicEnergyAttached = cardList.cards.some(c => {
+                return c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC;
+            });
+            hasBasicEnergy = hasBasicEnergy || basicEnergyAttached;
+        });
+        if (!hasBasicEnergy || pokemonCount <= 1) {
+            return false;
+        }
+        return true;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

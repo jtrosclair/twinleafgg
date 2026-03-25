@@ -2,8 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Floragato = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Floragato extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -33,25 +32,15 @@ class Floragato extends game_1.PokemonCard {
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '14';
         this.regulationMark = 'G';
-        this.magicWhip = false;
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
-            this.magicWhip = true;
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && this.magicWhip == true) {
-            const player = effect.player;
-            const opponent = game_1.StateUtils.getOpponent(state, player);
-            state = store.prompt(state, new game_1.ChoosePokemonPrompt(opponent.id, game_1.GameMessage.CHOOSE_POKEMON_TO_SWITCH, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH], { allowCancel: false }), result => {
-                if (result) {
-                    if (result.length > 0) {
-                        opponent.active.clearEffects();
-                        opponent.switchPokemon(result[0]);
-                        this.magicWhip = false;
-                        return state;
-                    }
-                }
-            });
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            // Legacy implementation:
+            // - Set a `magicWhip` flag on attack use and switched on EndTurnEffect.
+            // - Used a custom ChoosePokemonPrompt where the opponent chose their replacement Active.
+            //
+            // Converted to prefab version (SWITCH_OUT_OPPONENT_ACTIVE_POKEMON).
+            return (0, prefabs_1.SWITCH_OUT_OPPONENT_ACTIVE_POKEMON)(store, state, effect.player, { allowCancel: false });
         }
         return state;
     }

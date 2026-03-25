@@ -7,13 +7,13 @@ export declare class Treecko extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.FIRE;
     }[];
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     evolvesInto: string;
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: CardType.GRASS[];
         damage: number;
         text: string;
     }[];

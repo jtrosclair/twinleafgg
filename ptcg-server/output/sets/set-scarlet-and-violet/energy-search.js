@@ -27,7 +27,6 @@ function* playCard(next, store, state, effect) {
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });
@@ -43,6 +42,12 @@ class EnergySearch extends trainer_card_1.TrainerCard {
         this.name = 'Energy Search';
         this.fullName = 'Energy Search SVI';
         this.text = 'Search your deck for a Basic Energy card, reveal it, and put it into your hand. Then, shuffle your deck.';
+    }
+    canPlay(store, state, player) {
+        if (player.deck.cards.length === 0) {
+            return false;
+        }
+        return true;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

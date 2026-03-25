@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GardevoirEx3STS = exports.VolcanionEX3STS = exports.ProfessorSycamoreXYSTS = exports.PokemonRanger2STS = exports.MGardevoirEx2STS = exports.GardevoirEx2STS = exports.VolcanionEX2STS = exports.GardevoirSpiritLinkSTS = exports.MagearnaEXSTS = void 0;
+exports.MSteelixEx2 = exports.SteelixEx2 = exports.GardevoirEx3STS = exports.VolcanionEX3STS = exports.ProfessorSycamoreXYSTS = exports.PokemonRanger2STS = exports.MGardevoirEx2STS = exports.GardevoirEx2STS = exports.VolcanionEX2STS = exports.GardevoirSpiritLinkSTS = exports.MagearnaEXSTS = void 0;
 const gardevoir_spirit_link_1 = require("../set-primal-clash/gardevoir-spirit-link");
 const volcanion_ex_1 = require("../set-steam-siege/volcanion-ex");
 const gardevoir_ex_1 = require("../set-steam-siege/gardevoir-ex");
@@ -8,6 +8,8 @@ const mega_gardevoir_ex_1 = require("../set-steam-siege/mega-gardevoir-ex");
 const pokemon_ranger_1 = require("../set-steam-siege/pokemon-ranger");
 const other_prints_1 = require("../set-x-and-y/other-prints");
 const magearna_ex_1 = require("./magearna-ex");
+const steelix_ex_1 = require("./steelix-ex");
+const m_steelix_ex_1 = require("./m-steelix-ex");
 class MagearnaEXSTS extends magearna_ex_1.MagearnaEX {
     constructor() {
         super(...arguments);
@@ -89,3 +91,21 @@ class GardevoirEx3STS extends gardevoir_ex_1.GardevoirEx {
     }
 }
 exports.GardevoirEx3STS = GardevoirEx3STS;
+class SteelixEx2 extends steelix_ex_1.SteelixEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'STS';
+        this.setNumber = '108';
+        this.fullName = 'Steelix-EX STS 108';
+    }
+}
+exports.SteelixEx2 = SteelixEx2;
+class MSteelixEx2 extends m_steelix_ex_1.MSteelixEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'STS';
+        this.setNumber = '109';
+        this.fullName = 'M Steelix-EX STS 109';
+    }
+}
+exports.MSteelixEx2 = MSteelixEx2;

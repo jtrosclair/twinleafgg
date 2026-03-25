@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Venusaur = void 0;
-const game_1 = require("../../game");
-const card_types_1 = require("../../game/store/card/card-types");
-const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const game_message_1 = require("../../game/game-message");
+const card_types_1 = require("../../game/store/card/card-types");
+const state_utils_1 = require("../../game/store/state-utils");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
+const game_1 = require("../../game");
 class Venusaur extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -37,8 +38,8 @@ class Venusaur extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.AttachEnergyEffect) {
             const player = effect.player;
-            const cardList = game_1.StateUtils.findCardList(state, this);
-            const owner = game_1.StateUtils.findOwner(state, cardList);
+            const cardList = state_utils_1.StateUtils.findCardList(state, this);
+            const owner = state_utils_1.StateUtils.findOwner(state, cardList);
             const active = effect.player.active;
             let isVenusaurInPlay = false;
             owner.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
@@ -60,14 +61,14 @@ class Venusaur extends pokemon_card_1.PokemonCard {
                             // Once per turn
                             (0, prefabs_1.ADD_MARKER)(this.HARVEST_BOUNTY_MARKER, player, this);
                             (0, prefabs_1.ABILITY_USED)(player, this);
-                            store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_CARDS, player.hand, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE], { superType: card_types_1.SuperType.ENERGY }, { allowCancel: false, min: 1, max: 1 }), transfers => {
+                            store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_message_1.GameMessage.ATTACH_ENERGY_CARDS, player.hand, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE], { superType: card_types_1.SuperType.ENERGY }, { allowCancel: false, min: 1, max: 1 }), transfers => {
                                 transfers = transfers || [];
                                 if (transfers.length === 0) {
                                     return state;
                                 }
                                 // Attach second energy
                                 for (const transfer of transfers) {
-                                    const target = game_1.StateUtils.getTarget(state, player, transfer.to);
+                                    const target = state_utils_1.StateUtils.getTarget(state, player, transfer.to);
                                     const energyCard = transfer.card;
                                     const attachEnergyEffect = new play_card_effects_1.AttachEnergyEffect(player, energyCard, target);
                                     store.reduceEffect(state, attachEnergyEffect);
@@ -78,10 +79,10 @@ class Venusaur extends pokemon_card_1.PokemonCard {
                 }
             }
         }
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, result => {
                 if (result) {
-                    (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED)(store, state, effect);
+                    (0, prefabs_1.ADD_PARALYZED_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
                 }
             });
         }

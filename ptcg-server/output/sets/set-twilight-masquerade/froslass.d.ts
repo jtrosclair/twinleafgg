@@ -6,13 +6,12 @@ import { StoreLike } from '../../game/store/store-like';
 export declare class Froslass extends PokemonCard {
     stage: Stage;
     evolvesFrom: string;
-    regulationMark: string;
     cardType: CardType;
     weakness: {
-        type: CardType;
+        type: CardType.METAL;
     }[];
     hp: number;
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     powers: {
         name: string;
         powerType: PowerType;
@@ -20,10 +19,11 @@ export declare class Froslass extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: (CardType.WATER | CardType.COLORLESS)[];
         damage: number;
         text: string;
     }[];
+    regulationMark: string;
     set: string;
     cardImage: string;
     setNumber: string;

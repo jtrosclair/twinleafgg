@@ -23,6 +23,7 @@ export declare class RoboSubstitute extends TrainerCard {
     attacksThisTurn: number;
     maxAttacksThisTurn: number;
     allowSubsequentAttackChoice: boolean;
+    evolvesFromBase: string[];
     maxTools: number;
     set: string;
     cardImage: string;

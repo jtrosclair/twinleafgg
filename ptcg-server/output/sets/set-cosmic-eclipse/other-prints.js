@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TogepiCleffaIgglybuffGX2CEC = exports.DrawEnergy2CEC = exports.TagCall2CEC = exports.PowerPlantCEC = exports.MartialArtsDojoCEC = exports.LilliesPokeDoll2CEC = exports.LanasFishingRod2CEC = exports.GreatCatcher2CEC = exports.GiantHearthCEC = exports.MegaLopunnyJigglypuffGX4CEC = exports.NaganadelGuzzlordGX4CEC = exports.ArceusDialgaPalkiaGX4CEC = exports.AlolanPersianGX3CEC = exports.OricorioGX3CEC = exports.SolgaleoLunalaGX3CEC = exports.BlastoisePiplupGX4CEC = exports.CharizardBraixenGX3CEC = exports.VileplumeGX3CEC = exports.VenusaurSnivyGX3CEC = exports.Stoutland2CEC = exports.Steelix2CEC = exports.Excadrill2CEC = exports.Mimikyu3CEC = exports.Koffing2CEC = exports.Pikachu2CEC = exports.Wishiwashi2CEC = exports.Rosa2CEC = exports.ProfessorOaksSetup2CEC = exports.MallowAndLana2CEC = exports.LilliesFullForce2CEC = exports.CynthiaAndCaitlin2CEC = exports.MegaLopunnyJigglypuffGX3CEC = exports.MegaLopunnyJigglypuffGX2CEC = exports.NaganadelGuzzlordGX3CEC = exports.NaganadelGuzzlordGX2CEC = exports.ArceusDialgaPalkiaGX3CEC = exports.ArceusDialgaPalkiaGX2CEC = exports.AlolanPersianGX2CEC = exports.OricorioGX2CEC = exports.SolgaleoLunalaGX2CEC = exports.BlastoisePiplupGX3CEC = exports.BlastoisePiplupGX2CEC = exports.CharizardBraixenGX2CEC = exports.VileplumeGX2CEC = exports.VenusaurSnivyGX2CEC = exports.UnidentifiedFossilCEC = exports.GuzmaAndHalaCEC = void 0;
+exports.ReshiramAndZekromGx2 = exports.FlygonGx2 = exports.VolcaronaGx2 = exports.TogepiCleffaIgglybuffGX2CEC = exports.DrawEnergy2CEC = exports.TagCall2CEC = exports.PowerPlantCEC = exports.MartialArtsDojoCEC = exports.LilliesPokeDoll2CEC = exports.LanasFishingRod2CEC = exports.GreatCatcher2CEC = exports.GiantHearthCEC = exports.MegaLopunnyJigglypuffGX4CEC = exports.NaganadelGuzzlordGX4CEC = exports.ArceusDialgaPalkiaGX4CEC = exports.AlolanPersianGX3CEC = exports.OricorioGX3CEC = exports.SolgaleoLunalaGX3CEC = exports.BlastoisePiplupGX4CEC = exports.CharizardBraixenGX3CEC = exports.VileplumeGX3CEC = exports.VenusaurSnivyGX3CEC = exports.Stoutland2CEC = exports.Steelix2CEC = exports.Excadrill2CEC = exports.Mimikyu3CEC = exports.Koffing2CEC = exports.Pikachu2CEC = exports.Wishiwashi2CEC = exports.Rosa2CEC = exports.ProfessorOaksSetup2CEC = exports.MallowAndLana2CEC = exports.LilliesFullForce2CEC = exports.CynthiaAndCaitlin2CEC = exports.MegaLopunnyJigglypuffGX3CEC = exports.MegaLopunnyJigglypuffGX2CEC = exports.NaganadelGuzzlordGX3CEC = exports.NaganadelGuzzlordGX2CEC = exports.ArceusDialgaPalkiaGX3CEC = exports.ArceusDialgaPalkiaGX2CEC = exports.AlolanPersianGX2CEC = exports.OricorioGX2CEC = exports.SolgaleoLunalaGX2CEC = exports.BlastoisePiplupGX3CEC = exports.BlastoisePiplupGX2CEC = exports.CharizardBraixenGX2CEC = exports.VileplumeGX2CEC = exports.VenusaurSnivyGX2CEC = exports.UnidentifiedFossilCEC = exports.GuzmaAndHalaCEC = void 0;
+exports.IslandChallengeAmulet2 = exports.SilvallyGx3 = exports.ReshiramAndZekromGx3 = exports.FlygonGx3 = exports.VolcaronaGx3 = exports.Gallade2 = exports.Magnemite2 = exports.Piplup2 = exports.Weavile2 = exports.Torkoal2 = exports.RollerSkater2 = exports.RedAndBlue2 = exports.NsResolve2 = exports.SilvallyGx2 = void 0;
 const unidentified_fossil_1 = require("../set-silver-tempest/unidentified-fossil");
 const venusaur_and_snivy_gx_1 = require("../set-cosmic-eclipse/venusaur-and-snivy-gx");
 const vileplume_gx_1 = require("../set-cosmic-eclipse/vileplume-gx");
@@ -34,6 +35,19 @@ const tag_call_1 = require("../set-cosmic-eclipse/tag-call");
 const draw_energy_1 = require("../set-cosmic-eclipse/draw-energy");
 const togepi_cleffa_igglybuff_gx_1 = require("../set-cosmic-eclipse/togepi-cleffa-igglybuff-gx");
 const guzma_and_hala_1 = require("./guzma-and-hala");
+const volcarona_gx_1 = require("./volcarona-gx");
+const flygon_gx_1 = require("./flygon-gx");
+const reshiram_and_zekrom_gx_1 = require("./reshiram-and-zekrom-gx");
+const silvally_gx_1 = require("./silvally-gx");
+const ns_resolve_1 = require("./ns-resolve");
+const red_and_blue_1 = require("./red-and-blue");
+const roller_skater_1 = require("./roller-skater");
+const torkoal_1 = require("./torkoal");
+const weavile_1 = require("./weavile");
+const piplup_1 = require("./piplup");
+const magnemite_1 = require("./magnemite");
+const gallade_1 = require("./gallade");
+const island_challenge_amulet_1 = require("./island-challenge-amulet");
 class GuzmaAndHalaCEC extends guzma_and_hala_1.GuzmaAndHala {
     constructor() {
         super(...arguments);
@@ -457,3 +471,156 @@ class TogepiCleffaIgglybuffGX2CEC extends togepi_cleffa_igglybuff_gx_1.TogepiCle
     }
 }
 exports.TogepiCleffaIgglybuffGX2CEC = TogepiCleffaIgglybuffGX2CEC;
+class VolcaronaGx2 extends volcarona_gx_1.VolcaronaGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CEC';
+        this.setNumber = '213';
+        this.fullName = 'Volcarona-GX CEC 213';
+    }
+}
+exports.VolcaronaGx2 = VolcaronaGx2;
+class FlygonGx2 extends flygon_gx_1.FlygonGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CEC';
+        this.setNumber = '218';
+        this.fullName = 'Flygon-GX CEC 218';
+    }
+}
+exports.FlygonGx2 = FlygonGx2;
+class ReshiramAndZekromGx2 extends reshiram_and_zekrom_gx_1.ReshiramAndZekromGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CEC';
+        this.setNumber = '222';
+        this.fullName = 'Reshiram & Zekrom-GX CEC 222';
+    }
+}
+exports.ReshiramAndZekromGx2 = ReshiramAndZekromGx2;
+class SilvallyGx2 extends silvally_gx_1.SilvallyGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CEC';
+        this.setNumber = '227';
+        this.fullName = 'Silvally-GX CEC 227';
+    }
+}
+exports.SilvallyGx2 = SilvallyGx2;
+class NsResolve2 extends ns_resolve_1.NsResolve {
+    constructor() {
+        super(...arguments);
+        this.set = 'CEC';
+        this.setNumber = '232';
+        this.fullName = 'N\'s Resolve CEC 232';
+    }
+}
+exports.NsResolve2 = NsResolve2;
+class RedAndBlue2 extends red_and_blue_1.RedAndBlue {
+    constructor() {
+        super(...arguments);
+        this.set = 'CEC';
+        this.setNumber = '234';
+        this.fullName = 'Red & Blue CEC 234';
+    }
+}
+exports.RedAndBlue2 = RedAndBlue2;
+class RollerSkater2 extends roller_skater_1.RollerSkater {
+    constructor() {
+        super(...arguments);
+        this.set = 'CEC';
+        this.setNumber = '235';
+        this.fullName = 'Roller Skater CEC 235';
+    }
+}
+exports.RollerSkater2 = RollerSkater2;
+class Torkoal2 extends torkoal_1.Torkoal {
+    constructor() {
+        super(...arguments);
+        this.set = 'CEC';
+        this.setNumber = '237';
+        this.fullName = 'Torkoal CEC 237';
+    }
+}
+exports.Torkoal2 = Torkoal2;
+class Weavile2 extends weavile_1.Weavile {
+    constructor() {
+        super(...arguments);
+        this.set = 'CEC';
+        this.setNumber = '238';
+        this.fullName = 'Weavile CEC 238';
+    }
+}
+exports.Weavile2 = Weavile2;
+class Piplup2 extends piplup_1.Piplup {
+    constructor() {
+        super(...arguments);
+        this.set = 'CEC';
+        this.setNumber = '239';
+        this.fullName = 'Piplup CEC 239';
+    }
+}
+exports.Piplup2 = Piplup2;
+class Magnemite2 extends magnemite_1.Magnemite {
+    constructor() {
+        super(...arguments);
+        this.set = 'CEC';
+        this.setNumber = '242';
+        this.fullName = 'Magnemite CEC 242';
+    }
+}
+exports.Magnemite2 = Magnemite2;
+class Gallade2 extends gallade_1.Gallade {
+    constructor() {
+        super(...arguments);
+        this.set = 'CEC';
+        this.setNumber = '244';
+        this.fullName = 'Gallade CEC 244';
+    }
+}
+exports.Gallade2 = Gallade2;
+class VolcaronaGx3 extends volcarona_gx_1.VolcaronaGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CEC';
+        this.setNumber = '252';
+        this.fullName = 'Volcarona-GX CEC 252';
+    }
+}
+exports.VolcaronaGx3 = VolcaronaGx3;
+class FlygonGx3 extends flygon_gx_1.FlygonGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CEC';
+        this.setNumber = '256';
+        this.fullName = 'Flygon-GX CEC 256';
+    }
+}
+exports.FlygonGx3 = FlygonGx3;
+class ReshiramAndZekromGx3 extends reshiram_and_zekrom_gx_1.ReshiramAndZekromGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CEC';
+        this.setNumber = '259';
+        this.fullName = 'Reshiram & Zekrom-GX CEC 259';
+    }
+}
+exports.ReshiramAndZekromGx3 = ReshiramAndZekromGx3;
+class SilvallyGx3 extends silvally_gx_1.SilvallyGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CEC';
+        this.setNumber = '262';
+        this.fullName = 'Silvally-GX CEC 262';
+    }
+}
+exports.SilvallyGx3 = SilvallyGx3;
+class IslandChallengeAmulet2 extends island_challenge_amulet_1.IslandChallengeAmulet {
+    constructor() {
+        super(...arguments);
+        this.set = 'CEC';
+        this.setNumber = '265';
+        this.fullName = 'Island Challenge Amulet CEC 265';
+    }
+}
+exports.IslandChallengeAmulet2 = IslandChallengeAmulet2;

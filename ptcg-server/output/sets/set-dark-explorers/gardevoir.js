@@ -7,15 +7,16 @@ const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Gardevoir extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.stage = card_types_1.Stage.STAGE_2;
         this.evolvesFrom = 'Kirlia';
-        this.cardType = card_types_1.CardType.PSYCHIC;
+        this.cardType = P;
         this.hp = 110;
-        this.weakness = [{ type: card_types_1.CardType.PSYCHIC }];
-        this.retreat = [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS];
+        this.weakness = [{ type: P }];
+        this.retreat = [C, C];
         this.powers = [{
                 name: 'Psychic Mirage',
                 powerType: pokemon_types_1.PowerType.ABILITY,
@@ -23,7 +24,7 @@ class Gardevoir extends pokemon_card_1.PokemonCard {
             }];
         this.attacks = [{
                 name: 'Mind Shock',
-                cost: [card_types_1.CardType.PSYCHIC, card_types_1.CardType.PSYCHIC, card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS],
+                cost: [P, P, C, C],
                 damage: 60,
                 text: 'This attack\'s damage isn\'t affected by Weakness or Resistance. '
             }];
@@ -58,7 +59,7 @@ class Gardevoir extends pokemon_card_1.PokemonCard {
                     return state;
                 }
                 effect.source.cards.forEach(c => {
-                    if (c instanceof game_1.EnergyCard && !effect.energyMap.some(e => e.card === c)) {
+                    if (c.superType === card_types_1.SuperType.ENERGY && !effect.energyMap.some(e => e.card === c)) {
                         const providedTypes = c.provides.filter(type => type === card_types_1.CardType.PSYCHIC);
                         if (providedTypes.length > 0) {
                             effect.energyMap.push({ card: c, provides: [card_types_1.CardType.PSYCHIC, card_types_1.CardType.PSYCHIC] });
@@ -69,7 +70,7 @@ class Gardevoir extends pokemon_card_1.PokemonCard {
             }
             return state;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             effect.ignoreWeakness = true;
             effect.ignoreResistance = true;
         }

@@ -19,9 +19,9 @@ class RapidStrikeStyleMustard extends trainer_card_1.TrainerCard {
         this.setNumber = '132';
         this.name = 'Rapid Strike Style Mustard';
         this.fullName = 'Rapid Strike Style Mustard BST';
-        this.text = 'You can play this card only when it is the last card in your hand. ' +
-            '' +
-            'Put a Rapid Strike Pokémon from your discard pile onto your Bench. If you do, draw 5 cards.';
+        this.text = `You can play this card only when it is the last card in your hand.
+
+Put a Rapid Strike Pokémon from your discard pile onto your Bench. If you do, draw 5 cards.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

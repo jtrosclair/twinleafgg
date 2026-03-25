@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RareCandy2PLB = exports.DusknoirPLB = exports.ExeggcutePLB = exports.PalkiaEX2PLB = exports.JirachiEX2PLB = exports.GenesectEX2PLB = exports.VirizionEX2PLB = exports.PlasmaEnergyPLB = exports.RareCandyPLB = exports.PokemonCatcherPLB = exports.PlumeFossilPLB = exports.EnergyRetrievalPLB = exports.CaitlinPLB = exports.BlastoisePLB = exports.ProfessorJuniperPLB = exports.MasterBallPLB = exports.UltraBallPLB = exports.ScoopUpCyclonePLB = void 0;
+exports.VirizionPLB = exports.Iris2 = exports.DialgaEx2 = exports.CoverFossilPLB = exports.RareCandy2PLB = exports.DusknoirPLB = exports.ExeggcutePLB = exports.PalkiaEX2PLB = exports.JirachiEX2PLB = exports.GenesectEX2PLB = exports.VirizionEX2PLB = exports.PlasmaEnergyPLB = exports.RareCandyPLB = exports.PokemonCatcherPLB = exports.PlumeFossilPLB = exports.EnergyRetrievalPLB = exports.CaitlinPLB = exports.BlastoisePLB = exports.ProfessorJuniperPLB = exports.MasterBallPLB = exports.UltraBallPLB = exports.ScoopUpCyclonePLB = void 0;
 const blastoise_1 = require("../set-boundaries-crossed/blastoise");
 const caitlin_1 = require("../set-chilling-reign/caitlin");
 const energy_retrieval_1 = require("../set-base-set/energy-retrieval");
 const plume_fossil_1 = require("../set-noble-victories/plume-fossil");
-const pokemon_catcher_1 = require("../set-emerging-powers/pokemon-catcher");
+const pokemon_catcher_1 = require("../set-scarlet-and-violet/pokemon-catcher");
 const rare_candy_1 = require("../set-ex-holon-phantoms/rare-candy");
 const plasma_energy_1 = require("../set-plasma-storm/plasma-energy");
 const virizion_ex_1 = require("../set-plasma-blast/virizion-ex");
@@ -19,6 +19,10 @@ const ultra_ball_1 = require("../set-scarlet-and-violet/ultra-ball");
 const master_ball_1 = require("../set-temporal-forces/master-ball");
 const professor_juniper_1 = require("../set-black-and-white/professor-juniper");
 const scoop_up_cyclone_1 = require("../set-twilight-masquerade/scoop-up-cyclone");
+const cover_fossil_1 = require("../set-noble-victories/cover-fossil");
+const dialga_ex_1 = require("./dialga-ex");
+const iris_1 = require("./iris");
+const virizion_1 = require("../set-noble-victories/virizion");
 class ScoopUpCyclonePLB extends scoop_up_cyclone_1.ScoopUpCyclone {
     constructor() {
         super(...arguments);
@@ -181,3 +185,39 @@ class RareCandy2PLB extends rare_candy_2.RareCandy {
     }
 }
 exports.RareCandy2PLB = RareCandy2PLB;
+class CoverFossilPLB extends cover_fossil_1.CoverFossil {
+    constructor() {
+        super(...arguments);
+        this.set = 'PLB';
+        this.setNumber = '79';
+        this.fullName = 'Cover Fossil PLB';
+    }
+}
+exports.CoverFossilPLB = CoverFossilPLB;
+class DialgaEx2 extends dialga_ex_1.DialgaEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PLB';
+        this.setNumber = '99';
+        this.fullName = 'Dialga-EX PLB 99';
+    }
+}
+exports.DialgaEx2 = DialgaEx2;
+class Iris2 extends iris_1.Iris {
+    constructor() {
+        super(...arguments);
+        this.set = 'PLB';
+        this.setNumber = '101';
+        this.fullName = 'Iris PLB 101';
+    }
+}
+exports.Iris2 = Iris2;
+class VirizionPLB extends virizion_1.Virizion {
+    constructor() {
+        super(...arguments);
+        this.set = 'PLB';
+        this.setNumber = '103';
+        this.fullName = 'Virizion PLB';
+    }
+}
+exports.VirizionPLB = VirizionPLB;

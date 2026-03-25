@@ -17,9 +17,9 @@ class MegaGengarex extends game_1.PokemonCard {
         this.weakness = [{ type: F }];
         this.retreat = [C, C];
         this.powers = [{
-                name: 'Shadow Hiding',
+                name: 'Shadowy Concealment',
                 powerType: game_1.PowerType.ABILITY,
-                text: 'Whenever 1 of your [D] Pokemon is Knocked Out by damage from an attack from your opponent\'s Pokemon ex, your opponent takes 1 less Prize card.This effect does not stack.'
+                text: 'If 1 of your [D] Pokémon is Knocked Out by damage from an attack from your opponent\'s Pokémon ex, that player takes 1 fewer Prize card. The effect of Shadowy Concealment doesn\'t stack.'
             }];
         this.attacks = [{
                 name: 'Void Gale',

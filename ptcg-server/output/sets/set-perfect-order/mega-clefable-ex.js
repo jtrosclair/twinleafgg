@@ -53,7 +53,7 @@ class MegaClefableex extends game_1.PokemonCard {
         // Shooting Moon - discard energy from hand for damage
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            const energiesInHand = player.hand.cards.filter(card => card instanceof game_1.EnergyCard && card.superType === game_1.SuperType.ENERGY);
+            const energiesInHand = player.hand.cards.filter(card => card.superType === game_1.SuperType.ENERGY);
             if (energiesInHand.length === 0) {
                 return state;
             }

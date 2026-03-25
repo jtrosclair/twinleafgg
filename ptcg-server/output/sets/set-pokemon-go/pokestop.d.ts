@@ -12,7 +12,6 @@ export declare class Pokestop extends TrainerCard {
     set: string;
     name: string;
     fullName: string;
-    legacyFullName: string;
     text: string;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
     useStadium(store: StoreLike, state: State, effect: UseStadiumEffect): State;

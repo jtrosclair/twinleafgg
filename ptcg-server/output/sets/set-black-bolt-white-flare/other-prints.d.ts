@@ -2,6 +2,7 @@ import { ToolScrapper } from '../set-dragons-exalted/tool-scrapper';
 import { Cheren } from '../set-emerging-powers/cheren';
 import { PrismEnergy } from '../set-next-destinies/prism-energy';
 import { EnergyRetrieval } from '../set-scarlet-and-violet/energy-retrieval';
+import { Pokegear30 } from '../set-scarlet-and-violet/pokegear-30';
 import { ProfessorsResearch } from '../set-scarlet-and-violet/professors-research';
 import { AirBalloon } from '../set-sword-and-shield/air-balloon';
 import { Alomomola } from './alomomola';
@@ -81,6 +82,12 @@ export declare class ProfessorsResearchSV11 extends ProfessorsResearch {
     set: string;
 }
 export declare class EnergyRetrievalSV11 extends EnergyRetrieval {
+    regulationMark: string;
+    setNumber: string;
+    fullName: string;
+    set: string;
+}
+export declare class Pokegear30SV11 extends Pokegear30 {
     regulationMark: string;
     setNumber: string;
     fullName: string;

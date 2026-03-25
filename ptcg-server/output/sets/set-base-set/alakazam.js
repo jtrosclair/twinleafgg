@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Alakazam = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const state_utils_1 = require("../../game/store/state-utils");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const check_effects_1 = require("../../game/store/effects/check-effects");
@@ -68,7 +67,7 @@ class Alakazam extends pokemon_card_1.PokemonCard {
             const generator = useDamageSwap(() => generator.next(), store, state, effect);
             return generator.next().value;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             return store.prompt(state, [
                 new __1.CoinFlipPrompt(player.id, game_message_1.GameMessage.COIN_FLIP)

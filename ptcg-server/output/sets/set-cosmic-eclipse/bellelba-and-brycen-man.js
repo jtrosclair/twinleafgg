@@ -17,9 +17,9 @@ class BellelbaAndBrycenMan extends trainer_card_1.TrainerCard {
         this.setNumber = '186';
         this.name = 'Bellelba & Brycen-Man';
         this.fullName = 'Bellelba & Brycen-Man CEC';
-        this.text = 'Discard 3 cards from the top of each player\'s deck.' +
-            '' +
-            'When you play this card, you may discard 3 other cards from your hand. If you do, each player discards their Benched Pokémon until they have 3 Benched Pokémon. Your opponent discards first.';
+        this.text = `Discard 3 cards from the top of each player's deck.
+
+When you play this card, you may discard 3 other cards from your hand. If you do, each player discards their Benched Pokémon until they have 3 Benched Pokémon. Your opponent discards first.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
@@ -55,7 +55,6 @@ class BellelbaAndBrycenMan extends trainer_card_1.TrainerCard {
             });
             opponentDeckTop.moveTo(opponent.discard, opponentDeckTop.cards.length);
             if (cannotDiscardFromHand) {
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             }
             state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_message_1.GameMessage.WANT_TO_DISCARD_CARDS), wantToUse => {
@@ -104,12 +103,10 @@ class BellelbaAndBrycenMan extends trainer_card_1.TrainerCard {
                                 return state;
                             });
                         }
-                        player.supporter.moveCardTo(effect.trainerCard, player.discard);
                         return state;
                     });
                 }
             });
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
         }
         return state;

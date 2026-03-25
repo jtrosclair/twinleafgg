@@ -1,0 +1,33 @@
+import { TrainerCard, TrainerType, Stage, CardType, PokemonType, Power, StoreLike, State } from '../../game';
+import { Effect } from '../../game/store/effects/effect';
+export declare class RootFossil extends TrainerCard {
+    trainerType: TrainerType;
+    stage: Stage;
+    cardType: CardType;
+    cardTypez: CardType;
+    movedToActiveThisTurn: boolean;
+    pokemonType: PokemonType;
+    evolvesFrom: string;
+    cardTag: any[];
+    tools: any[];
+    evolvesTo: any[];
+    evolvesToStage: any[];
+    archetype: any[];
+    hp: number;
+    weakness: any[];
+    retreat: any[];
+    resistance: any[];
+    attacks: any[];
+    attacksThisTurn: number;
+    maxAttacksThisTurn: number;
+    allowSubsequentAttackChoice: boolean;
+    evolvesFromBase: string[];
+    maxTools: number;
+    set: string;
+    cardImage: string;
+    setNumber: string;
+    name: string;
+    fullName: string;
+    powers: Power[];
+    reduceEffect(store: StoreLike, state: State, effect: Effect): State;
+}

@@ -6,6 +6,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Ludicolo2 extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -26,7 +27,7 @@ class Ludicolo2 extends pokemon_card_1.PokemonCard {
                 cost: [C, C, C],
                 damage: 40,
                 damageCalculation: '+',
-                text: 'Flip a coin for each Water Energy attached to Ludicolo. This attack does 40 damage plus 20 more damage for each heads.'
+                text: 'Flip a coin for each [W] Energy attached to Ludicolo. This attack does 40 damage plus 20 more damage for each heads.'
             }];
         this.set = 'DX';
         this.setNumber = '19';
@@ -37,7 +38,7 @@ class Ludicolo2 extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Handle Happy Dance Poké-Power
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.HAPPY_DANCE_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
@@ -49,7 +50,7 @@ class Ludicolo2 extends pokemon_card_1.PokemonCard {
             });
         }
         // Handle Water Punch attack
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
             state = store.reduceEffect(state, checkProvidedEnergy);

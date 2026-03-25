@@ -4,7 +4,6 @@ exports.UltraNecrozmaGX = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class UltraNecrozmaGX extends pokemon_card_1.PokemonCard {
@@ -40,7 +39,7 @@ class UltraNecrozmaGX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Photon Geyser
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const psychicEnergy = player.active.cards.filter(card => card instanceof game_1.EnergyCard && card.name === 'Psychic Energy');
             const discardEnergy = new attack_effects_1.DiscardCardsEffect(effect, psychicEnergy);
@@ -49,7 +48,7 @@ class UltraNecrozmaGX extends pokemon_card_1.PokemonCard {
             effect.damage += psychicEnergy.length * 80;
         }
         // Sky Scorching Light-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (player.getPrizeLeft() + opponent.getPrizeLeft() > 6) {

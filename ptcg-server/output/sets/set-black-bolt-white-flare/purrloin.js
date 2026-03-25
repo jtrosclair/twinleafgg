@@ -1,52 +1,32 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Purrloin = void 0;
-const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
-function* useInviteEvil(next, store, state, effect) {
-    const player = effect.player;
-    const opponent = effect.opponent;
-    let cards = [];
-    yield store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, { cardType: game_1.CardType.DARK }, { min: 0, max: 3, allowCancel: true }), selected => {
-        cards = selected || [];
-        next();
-    });
-    player.deck.moveCardsTo(cards, player.hand);
-    if (cards.length > 0) {
-        yield store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
-    }
-    return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
-        player.deck.applyOrder(order);
-    });
-}
-class Purrloin extends game_1.PokemonCard {
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
+const card_types_1 = require("../../game/store/card/card-types");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
+class Purrloin extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
-        this.stage = game_1.Stage.BASIC;
+        this.stage = card_types_1.Stage.BASIC;
         this.cardType = D;
         this.hp = 60;
         this.weakness = [{ type: G }];
         this.retreat = [C];
-        this.attacks = [
-            {
+        this.attacks = [{
                 name: 'Invite Evil',
                 cost: [D],
                 damage: 0,
-                text: 'Search your deck for up to 3 {D} Pokémon, reveal them, and put them into your hand. Then, shuffle your deck.'
-            },
-        ];
-        this.regulationMark = 'I';
+                text: 'Search your deck for up to 3 [D] Pokémon, reveal them, and put them into your hand. Shuffle your deck afterward.'
+            }];
         this.set = 'WHT';
-        this.setNumber = '55';
         this.cardImage = 'assets/cardback.png';
+        this.setNumber = '55';
         this.name = 'Purrloin';
-        this.fullName = 'Purrloin SV11W';
+        this.fullName = 'Purrloin WHT';
     }
     reduceEffect(store, state, effect) {
-        // Invite Evil
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            const generator = useInviteEvil(() => generator.next(), store, state, effect);
-            return generator.next().value;
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND)(store, state, effect.player, { cardType: card_types_1.CardType.DARK }, { min: 0, max: 3 });
         }
         return state;
     }

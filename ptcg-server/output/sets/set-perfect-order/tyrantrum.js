@@ -6,7 +6,6 @@ const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-const energy_card_1 = require("../../game/store/card/energy-card");
 class Tyrantrum extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -46,7 +45,7 @@ class Tyrantrum extends pokemon_card_1.PokemonCard {
             }
             const hasSpecialEnergy = checkEnergy.energyMap.some(em => {
                 const card = em.card;
-                return card instanceof energy_card_1.EnergyCard && card.energyType === card_types_1.EnergyType.SPECIAL;
+                return card.superType === card_types_1.SuperType.ENERGY && card.energyType === card_types_1.EnergyType.SPECIAL;
             });
             if (hasSpecialEnergy) {
                 effect.hp += 150;

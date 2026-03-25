@@ -36,7 +36,6 @@ class StartlingMegaphone extends trainer_card_1.TrainerCard {
                         target.moveCardTo(tool, opponent.discard);
                     }
                 }
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
             });
         }
         return state;

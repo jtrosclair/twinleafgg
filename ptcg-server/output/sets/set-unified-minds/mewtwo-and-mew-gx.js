@@ -39,7 +39,7 @@ class MewtwoMewGX extends pokemon_card_1.PokemonCard {
         this.cardImage = 'assets/cardback.png';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const pokemonCard = player.active.getPokemonCard();
             if (pokemonCard !== this) {
@@ -58,7 +58,7 @@ class MewtwoMewGX extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // Handle GX attack marker
             (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);

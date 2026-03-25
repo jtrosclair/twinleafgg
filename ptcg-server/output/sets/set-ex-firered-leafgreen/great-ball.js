@@ -29,7 +29,6 @@ class GreatBall extends trainer_card_1.TrainerCard {
                 }
             });
             (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, player, { stage: card_types_1.Stage.BASIC }, { min: 0, max: 1, blocked });
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         return state;

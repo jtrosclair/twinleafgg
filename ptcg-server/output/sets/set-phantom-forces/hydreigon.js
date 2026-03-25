@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Hydreigon = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const costs_1 = require("../../game/store/prefabs/costs");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Hydreigon extends game_1.PokemonCard {
@@ -36,7 +35,7 @@ class Hydreigon extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.DARK_IMPULSE_MARKER, this);
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInDiscard = player.discard.cards.some(c => {
                 return c instanceof game_1.EnergyCard

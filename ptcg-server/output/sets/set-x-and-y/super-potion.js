@@ -12,7 +12,7 @@ function* playCard(next, store, state, effect) {
     const blocked = [];
     let hasPokemonWithDamage = false;
     player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        if (cardList.damage === 0 || !cardList.cards.some(c => c instanceof game_1.EnergyCard)) {
+        if (cardList.damage === 0 || !cardList.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
             blocked.push(target);
         }
         else {
@@ -45,7 +45,6 @@ function* playCard(next, store, state, effect) {
     // Heal Pokemon
     const healEffect = new game_effects_1.HealEffect(player, target, 60);
     store.reduceEffect(state, healEffect);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return state;
 }
 class SuperPotion extends trainer_card_1.TrainerCard {

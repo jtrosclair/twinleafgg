@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MegaAudinoex = void 0;
 const game_1 = require("../../game");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class MegaAudinoex extends game_1.PokemonCard {
     constructor() {
@@ -66,8 +67,11 @@ class MegaAudinoex extends game_1.PokemonCard {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            const energyCount = opponent.active.energies.cards.filter(card => card.superType === game_1.SuperType.ENERGY).length;
-            effect.damage = 20 + (80 * energyCount);
+            const opponentProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(opponent);
+            store.reduceEffect(state, opponentProvidedEnergy);
+            const opponentEnergyCount = opponentProvidedEnergy.energyMap
+                .reduce((left, p) => left + p.provides.length, 0);
+            effect.damage += opponentEnergyCount * 80;
         }
         return state;
     }

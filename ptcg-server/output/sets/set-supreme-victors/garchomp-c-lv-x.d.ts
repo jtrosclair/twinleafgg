@@ -28,7 +28,5 @@ export declare class GarchompCLVX extends PokemonCard {
     setNumber: string;
     name: string;
     fullName: string;
-    readonly DRAGON_RUSH_MARKER = "DRAGON_RUSH_MARKER";
-    readonly DRAGON_RUSH_MARKER_2 = "DRAGON_RUSH_MARKER_2";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

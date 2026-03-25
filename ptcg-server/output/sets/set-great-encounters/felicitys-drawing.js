@@ -38,7 +38,6 @@ class FelicitysDrawing extends trainer_card_1.TrainerCard {
                 player.hand.moveCardsTo(cards, player.discard);
                 (0, prefabs_1.DRAW_CARDS)(player, drawCount);
             });
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
         }
         return state;

@@ -29,15 +29,14 @@ class Scyther extends pokemon_card_1.PokemonCard {
         this.fullName = 'Scyther UD';
         this.setNumber = '65';
         this.cardImage = 'assets/cardback.png';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
-        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_2_MARKER, this);
-        (0, prefabs_1.REPLACE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_MARKER, this.ATTACK_USED_2_MARKER, this);
+        // Slashing Strike
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
-            (0, prefabs_1.BLOCK_EFFECT_IF_MARKER)(this.ATTACK_USED_2_MARKER, effect.player, this);
-            (0, prefabs_1.ADD_MARKER)(this.ATTACK_USED_MARKER, effect.player, this);
+            const player = effect.player;
+            if (!player.active.cannotUseAttacksNextTurnPending.includes('Slashing Strike')) {
+                player.active.cannotUseAttacksNextTurnPending.push('Slashing Strike');
+            }
         }
         return state;
     }

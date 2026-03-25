@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setXYPromos = void 0;
-const other_prints_1 = require("./other-prints");
 const azelf_1 = require("./azelf");
 const celebi_1 = require("./celebi");
 const greninja_1 = require("./greninja");
@@ -10,7 +9,7 @@ const karen_1 = require("./karen");
 const meloetta_1 = require("./meloetta");
 const regirock_1 = require("./regirock");
 // Other Prints
-const other_prints_2 = require("./other-prints");
+const other_prints_1 = require("./other-prints");
 exports.setXYPromos = [
     new azelf_1.Azelf(),
     new celebi_1.Celebi(),
@@ -20,7 +19,8 @@ exports.setXYPromos = [
     new meloetta_1.Meloetta(),
     new regirock_1.Regirock(),
     // Other Prints
-    new other_prints_2.BronzongXYP(),
+    new other_prints_1.PalaceBookXYP(),
+    new other_prints_1.BronzongXYP(),
     new other_prints_1.XerneasXYP(),
     new other_prints_1.YveltalXYP(),
     new other_prints_1.XerneasEXXYP(),

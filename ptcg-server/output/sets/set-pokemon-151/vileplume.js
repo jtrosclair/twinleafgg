@@ -34,39 +34,20 @@ class Vileplume extends game_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof game_effects_1.EvolveEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this))
+            // Try to reduce PowerEffect, to check if something is blocking our ability
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
-            const temp = new game_1.CardList();
-            player.deck.moveTo(temp, 8);
-            // Check if any cards drawn are basic energy
-            const energyCardsDrawn = temp.cards.filter(card => {
-                return card instanceof game_1.EnergyCard && card.energyType === game_1.EnergyType.BASIC;
+            }
+            // Legacy implementation:
+            // - Pulled top 8 cards into a temporary CardList.
+            // - Attached any Basic Energy among them to your Pokémon.
+            // - Shuffled the remaining cards back into the deck.
+            //
+            // Converted to prefab version (LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY).
+            return (0, prefabs_1.LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY)(store, state, player, 8, 8, {
+                energyFilter: { energyType: game_1.EnergyType.BASIC },
+                remainderDestination: 'shuffle'
             });
-            // If no energy cards were drawn, move all cards to deck
-            if (energyCardsDrawn.length == 0) {
-                (0, prefabs_1.SHUFFLE_CARDS_INTO_DECK)(store, state, player, temp.cards);
-            }
-            else {
-                // Prompt to attach energy if any were drawn
-                return store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_CARDS, temp, // Only show drawn energies
-                game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH, game_1.SlotType.ACTIVE], { superType: game_1.SuperType.ENERGY, energyType: game_1.EnergyType.BASIC }, { min: 0, max: energyCardsDrawn.length }), transfers => {
-                    // Attach energy based on prompt selection
-                    if (transfers) {
-                        for (const transfer of transfers) {
-                            const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                            temp.moveCardTo(transfer.card, target); // Move card to target
-                        }
-                        temp.cards.forEach(card => {
-                            temp.moveCardTo(card, player.deck); // Move card to deck
-                            return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
-                                player.deck.applyOrder(order);
-                            });
-                        });
-                    }
-                    return state;
-                });
-            }
-            return state;
         }
         return state;
     }

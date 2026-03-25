@@ -72,7 +72,7 @@ class Metagross extends game_1.PokemonCard {
             const player = effect.player;
             let totalEnergy = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
-                const energyCount = cardList.cards.filter(card => card instanceof game_1.EnergyCard).length;
+                const energyCount = cardList.cards.filter(card => card.superType === card_types_1.SuperType.ENERGY).length;
                 totalEnergy += energyCount;
             });
             return store.prompt(state, new game_1.DiscardEnergyPrompt(player.id, game_message_1.GameMessage.CHOOSE_ENERGIES_TO_DISCARD, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY }, { min: 1, max: totalEnergy, allowCancel: false }), transfers => {

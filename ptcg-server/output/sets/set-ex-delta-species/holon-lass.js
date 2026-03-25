@@ -42,7 +42,6 @@ class HolonLass extends trainer_card_1.TrainerCard {
                     temp.cards.forEach(card => {
                         temp.moveCardTo(card, player.deck);
                     });
-                    player.supporter.moveCardTo(this, player.discard);
                 }
                 else {
                     // Move chosen Energy to hand
@@ -53,7 +52,6 @@ class HolonLass extends trainer_card_1.TrainerCard {
                     if (chosenCards.length > 0) {
                         (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, chosenCards);
                     }
-                    player.supporter.moveCardTo(this, player.discard);
                     temp.moveTo(player.deck);
                 }
                 (0, prefabs_1.SHUFFLE_DECK)(store, state, player);

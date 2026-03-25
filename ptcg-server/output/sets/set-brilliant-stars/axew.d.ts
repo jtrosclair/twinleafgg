@@ -9,10 +9,10 @@ export declare class Axew extends PokemonCard {
     hp: number;
     weakness: any[];
     resistance: any[];
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: CardType.COLORLESS[];
         damage: number;
         text: string;
     }[];

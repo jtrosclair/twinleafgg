@@ -1,26 +1,37 @@
-import { BillsMaintenance } from "../set-ex-firered-leafgreen/bills-maintenance";
-import { EnergySwitchPK } from "../set-ex-power-keepers/other-prints";
-import { PokeNav } from "../set-ex-ruby-and-sapphire/pokenav";
-import { RareCandy } from "../set-ex-holon-phantoms/rare-candy";
-import { TvReporter } from "../set-ex-dragon/tv-reporter";
-import { RainbowEnergyPL } from "../set-platinum/other-prints";
-import { ArticunoGX as ArticunoGXCES31 } from "../set-celestial-storm/articuno-gx";
-import { ElectrodeGX as ElectrodeGXCES48 } from "../set-celestial-storm/electrode-gx";
-import { BanetteGX as BanetteGXCES66 } from "../set-celestial-storm/banette-gx";
-import { RayquazaGX as RayquazaGXCES109 } from "../set-celestial-storm/rayquaza-gx";
-import { ApricornMaker as ApricornMakerCES124 } from "../set-celestial-storm/apricorn-maker";
-import { BillsMaintenance as BillsMaintenanceRG87 } from "../set-ex-firered-leafgreen/bills-maintenance";
-import { Copycat as CopycatDF73 } from "../set-ex-dragon-frontiers/copycat";
-import { StevensResolve as StevensResolveCES145 } from "../set-celestial-storm/stevens-resolve";
-import { TateAndLiza as TateAndLizaCES148 } from "../set-celestial-storm/tate-and-liza";
-import { TvReporter as TvReporterDR88 } from "../set-ex-dragon/tv-reporter";
-import { HustleBelt as HustleBeltCES134 } from "../set-celestial-storm/hustle-belt";
-import { PokeNav as PokeNavRS88 } from "../set-ex-ruby-and-sapphire/pokenav";
-import { RainbowEnergyPL as RainbowEnergyPLPL121 } from "../set-platinum/other-prints";
-import { Sceptile as SceptileCES10 } from "../set-celestial-storm/sceptile";
+import { BillsMaintenance } from '../set-ex-firered-leafgreen/bills-maintenance';
+import { EnergySwitchPK } from '../set-ex-power-keepers/other-prints';
+import { PokeNav } from '../set-ex-ruby-and-sapphire/pokenav';
+import { RareCandy } from '../set-ex-holon-phantoms/rare-candy';
+import { TvReporter } from '../set-ex-dragon/tv-reporter';
+import { RainbowEnergyPL } from '../set-platinum/other-prints';
+import { ArticunoGX as ArticunoGXCES31 } from '../set-celestial-storm/articuno-gx';
+import { ElectrodeGX as ElectrodeGXCES48 } from '../set-celestial-storm/electrode-gx';
+import { BanetteGX as BanetteGXCES66 } from '../set-celestial-storm/banette-gx';
+import { RayquazaGX as RayquazaGXCES109 } from '../set-celestial-storm/rayquaza-gx';
+import { ApricornMaker as ApricornMakerCES124 } from '../set-celestial-storm/apricorn-maker';
+import { BillsMaintenance as BillsMaintenanceRG87 } from '../set-ex-firered-leafgreen/bills-maintenance';
+import { Copycat as CopycatDF73 } from '../set-ex-dragon-frontiers/copycat';
+import { StevensResolve as StevensResolveCES145 } from '../set-celestial-storm/stevens-resolve';
+import { TateAndLiza as TateAndLizaCES148 } from '../set-celestial-storm/tate-and-liza';
+import { TvReporter as TvReporterDR88 } from '../set-ex-dragon/tv-reporter';
+import { HustleBelt as HustleBeltCES134 } from '../set-celestial-storm/hustle-belt';
+import { PokeNav as PokeNavRS88 } from '../set-ex-ruby-and-sapphire/pokenav';
+import { RainbowEnergyPL as RainbowEnergyPLPL121 } from '../set-platinum/other-prints';
+import { Sceptile as SceptileCES10 } from '../set-celestial-storm/sceptile';
 import { AcroBike } from '../set-primal-clash/acro-bike';
 import { SuperScoopUp } from '../set-diamond-and-pearl/super-scoop-up';
 import { Switch } from '../set-scarlet-and-violet/switch';
+import { Combusken } from '../set-dark-explorers/combusken';
+import { FriendBall } from '../set-skyridge/friend-ball';
+import { UndergroundExpedition } from '../set-skyridge/underground-expedition';
+import { ShiftryGx } from './shiftry-gx';
+import { BlazikenGx } from './blaziken-gx';
+import { MrMimeGX } from './mr-mime-gx';
+import { ScizorGx } from './scizor-gx';
+import { StakatakaGx } from './stakataka-gx';
+import { Lisia } from './lisia';
+import { LifeHerb } from './life-herb';
+import { RainbowBrush } from './rainbow-brush';
 export declare class AcroBikeCES extends AcroBike {
     fullName: string;
     set: string;
@@ -175,4 +186,89 @@ export declare class RayquazaGX4CES extends RayquazaGXCES109 {
     setNumber: string;
     fullName: string;
     set: string;
+}
+export declare class CombuskenCES extends Combusken {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class FriendBallCES extends FriendBall {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class UndergroundExpeditionCES extends UndergroundExpedition {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class ShiftryGx2 extends ShiftryGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class BlazikenGx2 extends BlazikenGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class MrMimeGx2 extends MrMimeGX {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class ScizorGx2 extends ScizorGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class StakatakaGx2 extends StakatakaGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class Lisia2 extends Lisia {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class UndergroundExpedition2 extends UndergroundExpedition {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class ShiftryGx3 extends ShiftryGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class BlazikenGx3 extends BlazikenGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class MrMimeGx3 extends MrMimeGX {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class ScizorGx3 extends ScizorGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class StakatakaGx3 extends StakatakaGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class LifeHerb2 extends LifeHerb {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class RainbowBrush2 extends RainbowBrush {
+    set: string;
+    setNumber: string;
+    fullName: string;
 }

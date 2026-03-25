@@ -36,8 +36,7 @@ class TateAndLiza extends trainer_card_1.TrainerCard {
                     action: () => {
                         return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_message_1.GameMessage.CHOOSE_POKEMON_TO_SWITCH, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH], { allowCancel: false }), result => {
                             const cardList = result[0];
-                            player.switchPokemon(cardList);
-                            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
+                            player.switchPokemon(cardList, store, state);
                         });
                     }
                 },
@@ -51,7 +50,6 @@ class TateAndLiza extends trainer_card_1.TrainerCard {
                             player.deck.applyOrder(order);
                         });
                         (0, prefabs_1.DRAW_CARDS)(player, 5);
-                        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     }
                 }
             ];

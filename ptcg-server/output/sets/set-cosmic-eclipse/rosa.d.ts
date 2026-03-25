@@ -6,10 +6,10 @@ import { State } from '../../game/store/state/state';
 export declare class Rosa extends TrainerCard {
     trainerType: TrainerType;
     set: string;
+    setNumber: string;
     cardImage: string;
     name: string;
     fullName: string;
-    setNumber: string;
     text: string;
     readonly ROSA_MARKER = "ROSA_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;

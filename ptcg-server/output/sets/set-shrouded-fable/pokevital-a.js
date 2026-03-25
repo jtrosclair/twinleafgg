@@ -37,7 +37,6 @@ function* playCard(next, store, state, effect) {
         const healEffect = new game_effects_1.HealEffect(player, target, 150);
         store.reduceEffect(state, healEffect);
     });
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return state;
 }
 class PokeVitalA extends trainer_card_1.TrainerCard {
@@ -51,9 +50,9 @@ class PokeVitalA extends trainer_card_1.TrainerCard {
         this.setNumber = '62';
         this.name = 'Poké Vital A';
         this.fullName = 'PokéVital A SFA';
-        this.text = 'Heal 150 damage from 1 of your Pokémon.' +
-            '' +
-            'If this card is in your discard pile, it can\'t be put into your deck or hand.';
+        this.text = `Heal 150 damage from 1 of your Pokémon.
+
+If this card is in your discard pile, it can't be put into your deck or hand.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

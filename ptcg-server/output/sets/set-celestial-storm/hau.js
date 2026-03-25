@@ -28,7 +28,6 @@ class Hau extends trainer_card_1.TrainerCard {
             // We will discard this card after prompt confirmation
             effect.preventDefault = true;
             (0, prefabs_1.DRAW_CARDS)(player, 3);
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         return state;

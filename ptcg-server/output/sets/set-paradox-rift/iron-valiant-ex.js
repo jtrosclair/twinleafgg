@@ -8,32 +8,29 @@ const game_message_1 = require("../../game/game-message");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class IronValiantex extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
-        this.tags = [card_types_1.CardTag.POKEMON_ex, card_types_1.CardTag.FUTURE];
-        this.regulationMark = 'G';
         this.stage = card_types_1.Stage.BASIC;
-        this.cardType = card_types_1.CardType.PSYCHIC;
+        this.tags = [card_types_1.CardTag.POKEMON_ex, card_types_1.CardTag.FUTURE];
+        this.cardType = P;
         this.hp = 220;
-        this.weakness = [{ type: card_types_1.CardType.METAL }];
-        this.retreat = [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS];
-        this.powers = [
-            {
+        this.weakness = [{ type: M }];
+        this.retreat = [C, C];
+        this.powers = [{
                 name: 'Tachyon Bits',
                 powerType: game_1.PowerType.ABILITY,
                 exemptFromInitialize: true,
                 text: 'Once during your turn, when this Pokémon moves from your Bench to the Active Spot, you may put 2 damage counters on 1 of your opponent\'s Pokémon.'
-            }
-        ];
-        this.attacks = [
-            {
+            }];
+        this.attacks = [{
                 name: 'Laser Blade',
-                cost: [card_types_1.CardType.PSYCHIC, card_types_1.CardType.PSYCHIC, card_types_1.CardType.COLORLESS],
+                cost: [P, P, C],
                 damage: 200,
                 text: 'During your next turn, this Pokémon can\'t attack.'
-            }
-        ];
+            }];
+        this.regulationMark = 'G';
         this.set = 'PAR';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '89';
@@ -41,8 +38,6 @@ class IronValiantex extends pokemon_card_1.PokemonCard {
         this.fullName = 'Iron Valiant ex PAR';
         this.tachyonBits = 0;
         this.TACHYON_BITS_MARKER = 'TACHYON_BITS_MARKER';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
@@ -53,15 +48,6 @@ class IronValiantex extends pokemon_card_1.PokemonCard {
             this.tachyonBits = 0;
             this.movedToActiveThisTurn = false;
             console.log('movedToActiveThisTurn = false');
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
-            effect.player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-            effect.player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-            console.log('marker cleared');
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-            effect.player.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
-            console.log('second marker added');
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.TACHYON_BITS_MARKER, this)) {
             this.tachyonBits = 0;
@@ -109,14 +95,10 @@ class IronValiantex extends pokemon_card_1.PokemonCard {
                 });
             }
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            // Check marker
-            if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-                console.log('attack blocked');
-                throw new game_1.GameError(game_message_1.GameMessage.BLOCKED_BY_EFFECT);
-            }
-            effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
-            console.log('marker added');
+        // Laser Blade
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            const player = effect.player;
+            player.active.cannotAttackNextTurnPending = true;
         }
         return state;
     }

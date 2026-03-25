@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MegaCharizardXex4PFL = exports.Dawn3PFL = exports.MegaLopunnyex3PFL = exports.MegaSharpedoex3PFL = exports.Rotomex3PFL = exports.MegaCharizardXex3PFL = exports.IgnitionEnergyPFL = exports.SwitchPFL = exports.SacredCharm2PFL = exports.GrimsleysGambit2PFL = exports.Firebreather2PFL = exports.Dawn2PFL = exports.BattleColosseum2PFL = exports.MegaLopunnyex2PFL = exports.MegaSharpedoex2PFL = exports.Rotomex2PFL = exports.Oricorioex2PFL = exports.MegaCharizardXex2PFL = exports.Wigglytuff2PFL = exports.Toxtricity2PFL = exports.Zacian2PFL = exports.Ludicolo2PFL = void 0;
+exports.MegaCharizardXex4PFL = exports.Dawn3PFL = exports.MegaLopunnyex3PFL = exports.MegaSharpedoex3PFL = exports.Rotomex3PFL = exports.MegaCharizardXex3PFL = exports.IgnitionEnergyPFL = exports.SwitchPFL = exports.SacredCharm2PFL = exports.GrimsleysGambit2PFL = exports.Firebreather2PFL = exports.Dawn2PFL = exports.Blowtorch2PFL = exports.BattleColosseum2PFL = exports.MegaLopunnyex2PFL = exports.MegaSharpedoex2PFL = exports.Rotomex2PFL = exports.Oricorioex2PFL = exports.MegaCharizardXex2PFL = exports.Wigglytuff2PFL = exports.Toxtricity2PFL = exports.Zacian2PFL = exports.Ludicolo2PFL = void 0;
 const ludicolo_1 = require("../set-phantasmal-flames/ludicolo");
 const zacian_1 = require("../set-phantasmal-flames/zacian");
 const toxtricity_1 = require("../set-phantasmal-flames/toxtricity");
@@ -11,6 +11,7 @@ const rotom_ex_1 = require("../set-phantasmal-flames/rotom-ex");
 const mega_sharpedo_ex_1 = require("../set-phantasmal-flames/mega-sharpedo-ex");
 const mega_lopunny_ex_1 = require("../set-phantasmal-flames/mega-lopunny-ex");
 const battle_colosseum_1 = require("../set-phantasmal-flames/battle-colosseum");
+const blowtorch_1 = require("../set-phantasmal-flames/blowtorch");
 const dawn_1 = require("../set-phantasmal-flames/dawn");
 const firebreather_1 = require("../set-phantasmal-flames/firebreather");
 const grimsleys_gambit_1 = require("../set-phantasmal-flames/grimsleys-gambit");
@@ -107,6 +108,15 @@ class BattleColosseum2PFL extends battle_colosseum_1.BattleColosseum {
     }
 }
 exports.BattleColosseum2PFL = BattleColosseum2PFL;
+class Blowtorch2PFL extends blowtorch_1.Blowtorch {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '117';
+        this.fullName = 'Blowtorch2 PFL';
+        this.set = 'PFL';
+    }
+}
+exports.Blowtorch2PFL = Blowtorch2PFL;
 class Dawn2PFL extends dawn_1.Dawn {
     constructor() {
         super(...arguments);

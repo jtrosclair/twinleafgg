@@ -34,7 +34,7 @@ class Hariyama extends game_1.PokemonCard {
         this.regulationMark = 'I';
     }
     reduceEffect(store, state, effect) {
-        if ((0, prefabs_1.JUST_EVOLVED)(effect, this) && !(0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, effect.player, this)) {
+        if ((0, prefabs_1.JUST_EVOLVED)(effect, this) && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, effect.player, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const hasBench = opponent.bench.some(b => b.cards.length > 0);

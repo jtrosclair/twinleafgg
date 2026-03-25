@@ -3,8 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Aegislashex = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
-const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Aegislashex extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -39,16 +38,17 @@ class Aegislashex extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Peerless Edge
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             effect.damage = 70 * (6 - player.getPrizeLeft());
         }
         // Double-Edged Slash
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
-            const player = effect.player;
-            const damageEffect = new attack_effects_1.PutDamageEffect(effect, 30);
-            damageEffect.target = player.active;
-            store.reduceEffect(state, damageEffect);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            // Legacy implementation:
+            // - Created PutDamageEffect for 30 and targeted player.active directly.
+            //
+            // Converted to prefab version (THIS_POKEMON_DOES_DAMAGE_TO_ITSELF).
+            (0, prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF)(store, state, effect, 30);
         }
         return state;
     }

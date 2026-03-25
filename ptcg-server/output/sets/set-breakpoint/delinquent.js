@@ -52,7 +52,6 @@ class Delinquent extends trainer_card_1.TrainerCard {
                     (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.discard, { cards, sourceCard: this });
                 });
             }
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         }
         return state;
     }

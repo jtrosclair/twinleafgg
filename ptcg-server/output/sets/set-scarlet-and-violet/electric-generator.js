@@ -5,6 +5,7 @@ const trainer_card_1 = require("../../game/store/card/trainer-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_1 = require("../../game");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class ElectricGenerator extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -15,12 +16,27 @@ class ElectricGenerator extends trainer_card_1.TrainerCard {
         this.setNumber = '170';
         this.name = 'Electric Generator';
         this.fullName = 'Electric Generator SVI';
-        this.text = 'Look at the top 5 cards of your deck and attach up to 2 Lightning Energy cards you find there to your Benched Lightning Pokémon in any way you like. Shuffle the other cards back into your deck.';
+        this.text = 'Look at the top 5 cards of your deck and attach up to 2 [L] Energy cards you find there to your Benched [L] Pokémon in any way you like. Shuffle the other cards back into your deck.';
+    }
+    canPlay(store, state, player) {
+        if (player.deck.cards.length === 0) {
+            return false;
+        }
+        let lightningPokemonOnBench = false;
+        player.bench.forEach(benchSpot => {
+            const card = benchSpot.getPokemonCard();
+            if (card && card.cardType === card_types_1.CardType.LIGHTNING) {
+                lightningPokemonOnBench = true;
+            }
+        });
+        if (!lightningPokemonOnBench) {
+            return false;
+        }
+        return true;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;
-            const temp = new game_1.CardList();
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
@@ -34,48 +50,19 @@ class ElectricGenerator extends trainer_card_1.TrainerCard {
             if (!lightningPokemonOnBench) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            const blocked2 = [];
-            player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (list, card, target) => {
-                if (card.cardType !== card_types_1.CardType.LIGHTNING) {
-                    blocked2.push(target);
-                }
-            });
-            // We will discard this card after prompt confirmation
-            effect.preventDefault = true;
-            player.deck.moveTo(temp, 5);
-            // Check if any cards drawn are basic energy
-            const energyCardsDrawn = temp.cards.filter(card => {
-                return card instanceof game_1.EnergyCard && card.energyType === card_types_1.EnergyType.BASIC && card.name === 'Lightning Energy';
-            });
-            // If no energy cards were drawn, move all cards to deck
-            if (energyCardsDrawn.length === 0) {
-                return store.prompt(state, new game_1.ShowCardsPrompt(player.id, game_1.GameMessage.CARDS_SHOWED_BY_EFFECT, temp.cards), () => {
-                    temp.cards.forEach(card => {
-                        player.deck.cards.unshift(card);
-                    });
-                    player.supporter.moveCardTo(this, player.discard);
-                    return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
-                        player.deck.applyOrder(order);
-                        return state;
-                    });
-                });
-            }
-            // Attach energy if drawn
-            return store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_TO_ACTIVE, temp, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Lightning Energy' }, { allowCancel: false, min: 0, max: 2, blockedTo: blocked2 }), transfers => {
-                if (transfers) {
-                    for (const transfer of transfers) {
-                        const target = game_1.StateUtils.getTarget(state, player, transfer.to);
-                        temp.moveCardTo(transfer.card, target);
-                    }
-                }
-                temp.cards.forEach(card => {
-                    player.deck.cards.unshift(card);
-                });
-                player.supporter.moveCardTo(this, player.discard);
-                return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
-                    player.deck.applyOrder(order);
-                    return state;
-                });
+            /*
+             * Legacy pre-prefab implementation:
+             * - moved top 5 cards into a temporary CardList
+             * - manually filtered Lightning Energy in that temporary list
+             * - ran AttachEnergyPrompt with blocked non-Lightning bench targets
+             * - manually returned remaining cards to deck and shuffled
+             */
+            // Converted to prefab version (LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY).
+            (0, prefabs_1.LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY)(store, state, player, 5, 2, {
+                destinationSlots: [game_1.SlotType.BENCH],
+                targetFilter: (_target, pokemonCard) => pokemonCard.cardType === card_types_1.CardType.LIGHTNING,
+                energyFilter: { energyType: card_types_1.EnergyType.BASIC, name: 'Lightning Energy' },
+                remainderDestination: 'shuffle'
             });
         }
         return state;

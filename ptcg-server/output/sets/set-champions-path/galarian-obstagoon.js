@@ -13,52 +13,42 @@ class GalarianObstagoon extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.stage = card_types_1.Stage.STAGE_2;
-        this.cardType = card_types_1.CardType.DARK;
+        this.evolvesFrom = 'Galarian Linoone';
+        this.cardType = D;
         this.hp = 170;
-        this.weakness = [{ type: card_types_1.CardType.GRASS }];
-        this.retreat = [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS];
+        this.weakness = [{ type: G }];
+        this.retreat = [C, C];
         this.powers = [{
                 name: 'Wicked Ruler',
                 powerType: game_1.PowerType.ABILITY,
                 useWhenInPlay: true,
                 text: 'Once during your turn, you may have your opponent discard cards from their hand until they have 4 cards in their hand.'
             }];
-        this.attacks = [
-            {
+        this.attacks = [{
                 name: 'Knuckle Impact',
-                cost: [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS],
+                cost: [C, C, C],
                 damage: 180,
                 text: 'During your next turn, this Pokémon can\'t attack.'
-            }
-        ];
+            }];
+        this.regulationMark = 'D';
         this.set = 'CPA';
         this.name = 'Galarian Obstagoon';
         this.fullName = 'Galarian Obstagoon CPA';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '37';
-        this.evolvesFrom = 'Galarian Linoone';
         this.WICKED_RULER_MARKER = 'WICKED_RULER_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.active.marker.hasMarker(game_1.PokemonCardList.ATTACK_USED_2_MARKER, this)) {
-            effect.player.active.marker.removeMarker(game_1.PokemonCardList.ATTACK_USED_MARKER, this);
-            effect.player.active.marker.removeMarker(game_1.PokemonCardList.ATTACK_USED_2_MARKER, this);
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.active.marker.hasMarker(game_1.PokemonCardList.ATTACK_USED_MARKER, this)) {
-            effect.player.active.marker.addMarker(game_1.PokemonCardList.ATTACK_USED_2_MARKER, this);
-        }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            // Check marker
-            if (effect.player.active.marker.hasMarker(game_1.PokemonCardList.ATTACK_USED_MARKER, this)) {
-                throw new game_1.GameError(game_message_1.GameMessage.BLOCKED_BY_EFFECT);
-            }
-            effect.player.active.marker.addMarker(game_1.PokemonCardList.ATTACK_USED_MARKER, this);
+        // Knuckle Impact
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            const player = effect.player;
+            player.active.cannotAttackNextTurnPending = true;
         }
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
             player.marker.removeMarker(this.WICKED_RULER_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const handSize = opponent.hand.cards.length;

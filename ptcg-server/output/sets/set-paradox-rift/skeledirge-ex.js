@@ -41,7 +41,7 @@ class Skeledirgeex extends pokemon_card_1.PokemonCard {
         this.INCENDIARY_SONG_MARKER = 'INCENDIARY_SONG_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInHand = player.hand.cards.some(c => {
                 return c instanceof game_1.EnergyCard && c.name === 'Fire Energy';
@@ -67,7 +67,7 @@ class Skeledirgeex extends pokemon_card_1.PokemonCard {
                 effect.damage += 60;
             }
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const applyWeakness = new attack_effects_1.ApplyWeaknessEffect(effect, 160);

@@ -14,10 +14,13 @@ const dratini_1 = require("./dratini");
 const full_heal_1 = require("./full-heal");
 const gastly_1 = require("./gastly");
 const gengar_1 = require("./gengar");
+const haunter_1 = require("./haunter");
 const ivysaur_1 = require("./ivysaur");
 const multi_technical_machine_01_1 = require("./multi-technical-machine-01");
+const oddish_1 = require("./oddish");
 const pokemon_nurse_1 = require("./pokemon-nurse");
 const venusaur_1 = require("./venusaur");
+const vileplume_1 = require("./vileplume");
 // Other prints
 const other_prints_1 = require("./other-prints");
 exports.setExpedition = [
@@ -33,11 +36,15 @@ exports.setExpedition = [
     new full_heal_1.FullHeal(),
     new gastly_1.Gastly(),
     new gengar_1.Gengar(),
+    new haunter_1.Haunter(),
     new ivysaur_1.Ivysaur(),
     new multi_technical_machine_01_1.MultiTechnicalMachine01(),
+    new oddish_1.Oddish(),
     new pokemon_nurse_1.PokemonNurse(),
     new venusaur_1.Venusaur(),
+    new vileplume_1.Vileplume(),
     // Other prints
+    new other_prints_1.BillsMaintenanceEX(),
     new other_prints_1.CopycatEX(),
     new other_prints_1.DualBallEX(),
     new other_prints_1.EnergySearchEX(),
@@ -46,6 +53,7 @@ exports.setExpedition = [
     new other_prints_1.ProfessorElmsTrainingMethodEX(),
     new other_prints_1.ProfessorOaksResearchEX(),
     new other_prints_1.StrengthCharmEX(),
+    new other_prints_1.SuperScoopUpEX(),
     new other_prints_1.SwitchEX(),
     // Basic energies
     new basic_energies_1.GrassEnergy(),

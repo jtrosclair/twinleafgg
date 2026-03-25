@@ -8,9 +8,9 @@ export declare class Crabominable extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.METAL;
     }[];
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     powers: {
         name: string;
         useWhenInPlay: boolean;
@@ -19,17 +19,15 @@ export declare class Crabominable extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: (CardType.WATER | CardType.COLORLESS)[];
         damage: number;
         text: string;
     }[];
+    regulationMark: string;
     set: string;
     name: string;
     fullName: string;
     setNumber: string;
-    regulationMark: string;
     cardImage: string;
-    readonly HAYMAKER_MARKER_1 = "HAYMAKER_MARKER_1";
-    readonly HAYMAKER_MARKER_2 = "HAYMAKER_MARKER_2";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

@@ -18,7 +18,7 @@ class FightingStadium extends trainer_card_1.TrainerCard {
         this.fullName = 'Fighting Stadium FFI';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '90';
-        this.text = 'The attacks of each F Pokemon in play (both yours and your opponent\'s) ' +
+        this.text = 'The attacks of each [F] Pokémon in play (both yours and your opponent\'s) ' +
             'do 20 more damage to the Defending Pokemon-EX (before applying Weakness ' +
             'and Resistance).';
     }

@@ -36,7 +36,6 @@ function* playCard(next, store, state, effect) {
         return state;
     }
     // Discard trainer only when user selected a Pokemon
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     targets.forEach(target => {
         // Heal Pokemon
         const healEffect = new game_effects_1.HealEffect(player, target, 60);
@@ -53,9 +52,22 @@ class FightingAuLait extends trainer_card_1.TrainerCard {
         this.setNumber = '181';
         this.name = 'Fighting Au Lait';
         this.fullName = 'Fighting Au Lait PAL';
-        this.text = 'You can use this card only if you have more Prize cards remaining than your opponent.' +
-            '' +
-            'Heal 60 damage from 1 of your Pokémon.';
+        this.text = `You can use this card only if you have more Prize cards remaining than your opponent.
+
+Heal 60 damage from 1 of your Pokémon.`;
+    }
+    canPlay(store, state, player) {
+        const opponent = game_1.StateUtils.getOpponent(state, player);
+        if (player.getPrizeLeft() <= opponent.getPrizeLeft()) {
+            return false;
+        }
+        let hasPokemonWithDamage = false;
+        player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
+            if (cardList.damage > 0) {
+                hasPokemonWithDamage = true;
+            }
+        });
+        return hasPokemonWithDamage;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

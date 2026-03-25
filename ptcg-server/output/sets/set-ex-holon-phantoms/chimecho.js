@@ -57,16 +57,14 @@ class Chimecho extends pokemon_card_1.PokemonCard {
             }
             (0, prefabs_1.BLOCK_IF_HAS_SPECIAL_CONDITION)(player, this);
             const hasEnergyInDiscard = player.discard.cards.some(c => {
-                return c instanceof game_1.EnergyCard && (c.energyType === card_types_1.EnergyType.BASIC || c.name === 'Delta Rainbow Energy');
+                return c.superType === card_types_1.SuperType.ENERGY && (c.energyType === card_types_1.EnergyType.BASIC || c.name === 'Delta Rainbow Energy');
             });
             if (!hasEnergyInDiscard) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             const blocked = [];
             player.discard.cards.forEach((card, index) => {
-                if (card instanceof game_1.EnergyCard && (card.energyType === card_types_1.EnergyType.BASIC || card.name === 'Delta Rainbow Energy')) {
-                }
-                else {
+                if (!(card.superType === card_types_1.SuperType.ENERGY && (card.energyType === card_types_1.EnergyType.BASIC || card.name === 'Delta Rainbow Energy'))) {
                     blocked.push(index);
                 }
             });

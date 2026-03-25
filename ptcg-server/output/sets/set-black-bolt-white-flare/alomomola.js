@@ -5,8 +5,8 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Alomomola extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -17,7 +17,6 @@ class Alomomola extends pokemon_card_1.PokemonCard {
         this.retreat = [C];
         this.powers = [{
                 name: 'Gentle Fins',
-                useWhenInPlay: true,
                 powerType: pokemon_types_1.PowerType.ABILITY,
                 text: 'Once during your turn, if this Pokémon is in the Active Spot, you may put a Basic Pokémon with 70HP or less from your discard pile onto your bench.'
             }];
@@ -40,7 +39,7 @@ class Alomomola extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.GENTLE_FINS_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const openSlots = player.bench.filter(b => b.cards.length === 0);
             if (player.marker.hasMarker(this.GENTLE_FINS_MARKER, this)) {

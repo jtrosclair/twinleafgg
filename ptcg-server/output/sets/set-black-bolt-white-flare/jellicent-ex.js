@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Jellicentex = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const state_utils_1 = require("../../game/store/state-utils");
 const game_error_1 = require("../../game/game-error");
@@ -41,7 +40,7 @@ class Jellicentex extends pokemon_card_1.PokemonCard {
         this.fullName = 'Jellicent ex SV11W';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // Check attack cost
             const checkCost = new check_effects_1.CheckAttackCostEffect(player, this.attacks[0]);
@@ -50,7 +49,7 @@ class Jellicentex extends pokemon_card_1.PokemonCard {
             const checkEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
             state = store.reduceEffect(state, checkEnergy);
             // Count total attached energy
-            const totalEnergy = checkEnergy.energyMap.length;
+            const totalEnergy = checkEnergy.energyMap.reduce((sum, energy) => sum + energy.provides.length, 0);
             const attackCost = checkCost.cost.length;
             const extraEnergy = totalEnergy - attackCost;
             if (extraEnergy >= 2) {

@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GarchompGiratinaGX = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class GarchompGiratinaGX extends game_1.PokemonCard {
@@ -42,7 +41,7 @@ class GarchompGiratinaGX extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Linear Attack
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.BENCH, game_1.SlotType.ACTIVE], { allowCancel: false }), selected => {
                 const targets = selected || [];
@@ -50,7 +49,7 @@ class GarchompGiratinaGX extends game_1.PokemonCard {
             });
         }
         // Calamitous Slash
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (opponent.active.damage > 0) {
@@ -58,7 +57,7 @@ class GarchompGiratinaGX extends game_1.PokemonCard {
             }
         }
         // GG End-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
             const opponent = effect.opponent;
             (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);

@@ -1,7 +1,7 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, PowerType } from '../../game';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+import { Effect } from '../../game/store/effects/game-effects';
 export declare class Gengarex extends PokemonCard {
     tags: CardTag[];
     stage: Stage;
@@ -29,5 +29,5 @@ export declare class Gengarex extends PokemonCard {
     setNumber: string;
     name: string;
     fullName: string;
-    reduceEffect(store: StoreLike, state: State, effect: AttackEffect): State;
+    reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

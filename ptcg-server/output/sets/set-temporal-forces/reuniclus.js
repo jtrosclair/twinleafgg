@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Reuniclus = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -39,43 +38,21 @@ class Reuniclus extends pokemon_card_1.PokemonCard {
         this.fullName = 'Reuniclus TEF';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const openSlots = player.bench.filter(b => b.cards.length === 0);
             if (player.deck.cards.length === 0 || openSlots.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            // Count Pokemon in top 8 cards and track non-Pokemon positions
-            const blocked = [];
-            let pokemonCount = 0;
-            player.deck.cards.forEach((c, index) => {
-                if (c instanceof pokemon_card_1.PokemonCard) {
-                    pokemonCount += 1;
-                }
-                else {
-                    blocked.push(index);
-                }
-            });
-            const maxPokemons = Math.min(pokemonCount, openSlots.length);
-            const deckTop = new game_1.CardList();
-            (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, deckTop, { count: 8 });
-            return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH, deckTop, { superType: card_types_1.SuperType.POKEMON }, { min: 0, max: openSlots.length, allowCancel: false, blocked, maxPokemons }), selectedCards => {
-                const cards = selectedCards || [];
-                // Move selected cards to open bench slots
-                cards.forEach((card, index) => {
-                    const targetSlot = openSlots[index];
-                    (0, prefabs_1.MOVE_CARDS)(store, state, deckTop, targetSlot, { cards: [card] });
-                    targetSlot.pokemonPlayedTurn = state.turn;
-                });
-                // Move remaining cards back to deck
-                (0, prefabs_1.MOVE_CARDS)(store, state, deckTop, player.deck);
-                return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
-                    player.deck.applyOrder(order);
-                    return state;
-                });
-            });
+            // Legacy implementation:
+            // - Moved top 8 into a temporary CardList.
+            // - Prompted for any number of Pokémon to bench (up to open bench slots).
+            // - Shuffled remaining cards back into deck.
+            //
+            // Converted to prefab version (LOOK_AT_TOP_X_CARDS_AND_BENCH_UP_TO_Y_POKEMON).
+            return (0, prefabs_1.LOOK_AT_TOP_X_CARDS_AND_BENCH_UP_TO_Y_POKEMON)(store, state, player, 8, openSlots.length, { remainderDestination: 'shuffle' });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const specialConditionEffect = new attack_effects_1.AddSpecialConditionsEffect(effect, [card_types_1.SpecialCondition.CONFUSED]);
             store.reduceEffect(state, specialConditionEffect);
         }

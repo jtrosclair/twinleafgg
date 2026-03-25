@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MegaDragoniteex = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const costs_1 = require("../../game/store/prefabs/costs");
@@ -50,7 +49,7 @@ class MegaDragoniteex extends game_1.PokemonCard {
             player.marker.removeMarker(this.SKY_CARRY_MARKER, this);
         }
         // Sky Transport ability
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             // Check if ability is blocked
             if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {

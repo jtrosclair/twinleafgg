@@ -51,7 +51,7 @@ class Lombre extends game_1.PokemonCard {
             return state;
         }
         // Handle Double Scratch attack
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let heads = 0;
             // First coin flip

@@ -49,9 +49,9 @@ class GiratinaEX extends pokemon_card_1.PokemonCard {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            opponent.marker.addMarker(opponent.ATTACK_EFFECT_TOOL_LOCK, this);
-            opponent.marker.addMarker(opponent.ATTACK_EFFECT_SPECIAL_ENERGY_LOCK, this);
-            opponent.marker.addMarker(opponent.ATTACK_EFFECT_STADIUM_LOCK, this);
+            opponent.marker.addMarker(opponent.ATTACK_EFFECT_TOOL_LOCK, this, 'attack', 'player');
+            opponent.marker.addMarker(opponent.ATTACK_EFFECT_SPECIAL_ENERGY_LOCK, this, 'attack', 'player');
+            opponent.marker.addMarker(opponent.ATTACK_EFFECT_STADIUM_LOCK, this, 'attack', 'player');
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
             const player = effect.player;

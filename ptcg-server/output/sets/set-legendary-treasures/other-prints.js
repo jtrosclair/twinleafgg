@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MeloettaEX2LTR = exports.Emolga2LTR = exports.Reshiram3LTR = exports.ShayminEXLTR = exports.Minccino2LTR = exports.Zekrom2LTR = exports.Reshiram2LTR = exports.DoubleColorlessEnergyLTR = exports.CrushingHammerLTR = exports.BiancaLTR = exports.TornadusLTR = exports.LugiaExLTR = exports.HydreigonLTR = exports.ZweilousLTR = exports.DeinoLTR = exports.RayquazaLTR = exports.ZoruaLTR = exports.DarkraiExLTR = exports.TerrakionLTR = exports.GarbodorLTR = exports.SigilyphLTR = exports.MewtwoExLTR = exports.ZekromExLTR = exports.ZekromLTR = exports.EmolgaLTR = exports.MinunLTR = exports.KeldeoExBWPLTR = exports.KyuremLTR = exports.SeismitoadLTR = exports.PetililLTR = exports.TympoleLTR = exports.ReshiramExLTR = exports.ReshiramLTR = exports.Pignite2LTR = exports.VictiniEXLTR = exports.EnergySwitchLTR = void 0;
+exports.OshawottLTR = exports.ArticunoLTR = exports.TepigLTR = exports.MoltresLTR = exports.CharizardLTR = exports.CharmeleonLTR = exports.CharmanderLTR = exports.VirizionLTR = exports.SwadloonLTR = exports.ServineLTR = exports.SnivyLTR = exports.EeveeLTR = exports.PurrloinLTR = exports.PikachuLTR = exports.MeloettaEX2LTR = exports.Emolga2LTR = exports.Reshiram3LTR = exports.ShayminEXLTR = exports.Minccino2LTR = exports.Zekrom2LTR = exports.Reshiram2LTR = exports.DoubleColorlessEnergyLTR = exports.CrushingHammerLTR = exports.BiancaLTR = exports.TornadusLTR = exports.LugiaExLTR = exports.HydreigonLTR = exports.ZweilousLTR = exports.DeinoLTR = exports.RayquazaLTR = exports.ZoruaLTR = exports.DarkraiExLTR = exports.TerrakionLTR = exports.GarbodorLTR = exports.SigilyphLTR = exports.MewtwoExLTR = exports.ZekromExLTR = exports.ZekromLTR = exports.EmolgaLTR = exports.MinunLTR = exports.KeldeoExBWPLTR = exports.KyuremLTR = exports.SeismitoadLTR = exports.PetililLTR = exports.TympoleLTR = exports.ReshiramExLTR = exports.ReshiramLTR = exports.Pignite2LTR = exports.VictiniEXLTR = exports.EnergySwitchLTR = void 0;
+exports.VictiniLTR = exports.TorchicLTR = exports.SolosisLTR = exports.DuosionLTR = exports.SamurottLTR = exports.DewottLTR = exports.EmboarLTR = exports.PlusleLTR = exports.ThundurusLTR = exports.SewaddleLTR = exports.BouffalantLTR = exports.LucarioLTR = exports.DruddigonLTR = exports.LeavannyLTR = exports.Serperior2LTR = exports.Cinccino2 = exports.CinccinoLTR = exports.MinccinoLTR = exports.WhiteKyuremExLTR = exports.BlackKyuremExLTR = exports.GarchompLTR = exports.ZoroarkLTR = exports.LandorusLTR = exports.MeloettaLTR = exports.ReuniclusLTR = exports.ToxicroakLTR = exports.CroagunkLTR = exports.KyuremExLTR = void 0;
 const victini_ex_1 = require("../set-plasma-storm/victini-ex");
 const pignite2_1 = require("../set-black-and-white/pignite2");
 const reshiram_1 = require("../set-black-and-white/reshiram");
@@ -36,6 +37,47 @@ const shaymin_ex_1 = require("../set-next-destinies/shaymin-ex");
 const emolga_2 = require("../set-dragons-exalted/emolga");
 const meloetta_ex_1 = require("../set-legendary-treasures/meloetta-ex");
 const energy_switch_1 = require("../set-scarlet-and-violet/energy-switch");
+const pikachu_1 = require("../set-next-destinies/pikachu");
+const purrloin_1 = require("../set-boundaries-crossed/purrloin");
+const eevee_1 = require("../set-dark-explorers/eevee");
+const snivy2_1 = require("../set-black-and-white/snivy2");
+const servine2_1 = require("../set-black-and-white/servine2");
+const swadloon_1 = require("../set-noble-victories/swadloon");
+const virizion_1 = require("../set-noble-victories/virizion");
+const charmander_1 = require("../set-boundaries-crossed/charmander");
+const charmeleon_1 = require("../set-boundaries-crossed/charmeleon");
+const charizard_1 = require("../set-boundaries-crossed/charizard");
+const moltres_1 = require("../set-next-destinies/moltres");
+const tepig2_1 = require("../set-black-and-white/tepig2");
+const articuno_1 = require("../set-next-destinies/articuno");
+const oshawott2_1 = require("../set-black-and-white/oshawott2");
+const kyurem_ex_1 = require("../set-next-destinies/kyurem-ex");
+const croagunk_2_1 = require("../set-boundaries-crossed/croagunk-2");
+const toxicroak_1 = require("../set-boundaries-crossed/toxicroak");
+const reuniclus_1 = require("../set-noble-victories/reuniclus");
+const meloetta_1 = require("../set-boundaries-crossed/meloetta");
+const landorus_1 = require("../set-noble-victories/landorus");
+const zoroark_1 = require("../set-dark-explorers/zoroark");
+const garchomp_1 = require("../set-plasma-freeze/garchomp");
+const black_kyurem_ex_1 = require("../set-boundaries-crossed/black-kyurem-ex");
+const white_kyurem_ex_1 = require("../set-boundaries-crossed/white-kyurem-ex");
+const minccino_2 = require("../set-next-destinies/minccino");
+const cinccino_1 = require("../set-next-destinies/cinccino");
+const bouffalant_1 = require("../set-black-and-white/bouffalant");
+const serperior2_1 = require("../set-black-and-white/serperior2");
+const leavanny_1 = require("../set-noble-victories/leavanny");
+const druddigon_1 = require("../set-noble-victories/druddigon");
+const lucario_1 = require("../set-next-destinies/lucario");
+const sewaddle_1 = require("../set-noble-victories/sewaddle");
+const thundurus_1 = require("../set-emerging-powers/thundurus");
+const plusle_1 = require("../set-dark-explorers/plusle");
+const emboar_1 = require("../set-black-and-white/emboar");
+const dewott2_1 = require("../set-black-and-white/dewott2");
+const samurott2_1 = require("../set-black-and-white/samurott2");
+const duosion_1 = require("../set-noble-victories/duosion");
+const solosis_1 = require("../set-noble-victories/solosis");
+const torchic_2_1 = require("../set-dark-explorers/torchic-2");
+const victini_2_1 = require("../set-noble-victories/victini-2");
 class EnergySwitchLTR extends energy_switch_1.EnergySwitch {
     constructor() {
         super(...arguments);
@@ -360,3 +402,381 @@ class MeloettaEX2LTR extends meloetta_ex_1.MeloettaEX {
     }
 }
 exports.MeloettaEX2LTR = MeloettaEX2LTR;
+class PikachuLTR extends pikachu_1.Pikachu {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = 'RC7';
+        this.fullName = 'Pikachu LTR';
+    }
+}
+exports.PikachuLTR = PikachuLTR;
+class PurrloinLTR extends purrloin_1.Purrloin {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = 'RC13';
+        this.fullName = 'Purrloin LTR';
+    }
+}
+exports.PurrloinLTR = PurrloinLTR;
+class EeveeLTR extends eevee_1.Eevee {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = 'RC14';
+        this.fullName = 'Eevee LTR';
+    }
+}
+exports.EeveeLTR = EeveeLTR;
+class SnivyLTR extends snivy2_1.Snivy2 {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '6';
+        this.fullName = 'Snivy LTR';
+    }
+}
+exports.SnivyLTR = SnivyLTR;
+class ServineLTR extends servine2_1.Servine2 {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '7';
+        this.fullName = 'Servine LTR';
+    }
+}
+exports.ServineLTR = ServineLTR;
+class SwadloonLTR extends swadloon_1.Swadloon {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '11';
+        this.fullName = 'Swadloon LTR';
+    }
+}
+exports.SwadloonLTR = SwadloonLTR;
+class VirizionLTR extends virizion_1.Virizion {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '15';
+        this.fullName = 'Virizion LTR';
+    }
+}
+exports.VirizionLTR = VirizionLTR;
+class CharmanderLTR extends charmander_1.Charmander {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '17';
+        this.fullName = 'Charmander LTR';
+    }
+}
+exports.CharmanderLTR = CharmanderLTR;
+class CharmeleonLTR extends charmeleon_1.Charmeleon {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '18';
+        this.fullName = 'Charmeleon LTR';
+    }
+}
+exports.CharmeleonLTR = CharmeleonLTR;
+class CharizardLTR extends charizard_1.Charizard {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '19';
+        this.fullName = 'Charizard LTR';
+    }
+}
+exports.CharizardLTR = CharizardLTR;
+class MoltresLTR extends moltres_1.Moltres {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '22';
+        this.fullName = 'Moltres LTR';
+    }
+}
+exports.MoltresLTR = MoltresLTR;
+class TepigLTR extends tepig2_1.Tepig2 {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '25';
+        this.fullName = 'Tepig LTR';
+    }
+}
+exports.TepigLTR = TepigLTR;
+class ArticunoLTR extends articuno_1.Articuno {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '32';
+        this.fullName = 'Articuno LTR';
+    }
+}
+exports.ArticunoLTR = ArticunoLTR;
+class OshawottLTR extends oshawott2_1.Oshawott2 {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '37';
+        this.fullName = 'Oshawott LTR';
+    }
+}
+exports.OshawottLTR = OshawottLTR;
+class KyuremExLTR extends kyurem_ex_1.KyuremEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '44';
+        this.fullName = 'Kyurem-EX LTR';
+    }
+}
+exports.KyuremExLTR = KyuremExLTR;
+class CroagunkLTR extends croagunk_2_1.Croagunk2 {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '62';
+        this.fullName = 'Croagunk LTR';
+    }
+}
+exports.CroagunkLTR = CroagunkLTR;
+class ToxicroakLTR extends toxicroak_1.Toxicroak {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '63';
+        this.fullName = 'Toxicroak LTR';
+    }
+}
+exports.ToxicroakLTR = ToxicroakLTR;
+class ReuniclusLTR extends reuniclus_1.Reuniclus {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '76';
+        this.fullName = 'Reuniclus LTR';
+    }
+}
+exports.ReuniclusLTR = ReuniclusLTR;
+class MeloettaLTR extends meloetta_1.Meloetta {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '78';
+        this.fullName = 'Meloetta LTR';
+    }
+}
+exports.MeloettaLTR = MeloettaLTR;
+class LandorusLTR extends landorus_1.Landorus {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '85';
+        this.fullName = 'Landorus LTR';
+    }
+}
+exports.LandorusLTR = LandorusLTR;
+class ZoroarkLTR extends zoroark_1.Zoroark {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '90';
+        this.fullName = 'Zoroark LTR';
+    }
+}
+exports.ZoroarkLTR = ZoroarkLTR;
+class GarchompLTR extends garchomp_1.Garchomp {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '96';
+        this.fullName = 'Garchomp LTR';
+    }
+}
+exports.GarchompLTR = GarchompLTR;
+class BlackKyuremExLTR extends black_kyurem_ex_1.BlackKyuremEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '100';
+        this.fullName = 'Black Kyurem-EX LTR';
+    }
+}
+exports.BlackKyuremExLTR = BlackKyuremExLTR;
+class WhiteKyuremExLTR extends white_kyurem_ex_1.WhiteKyuremEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '101';
+        this.fullName = 'White Kyurem-EX LTR';
+    }
+}
+exports.WhiteKyuremExLTR = WhiteKyuremExLTR;
+class MinccinoLTR extends minccino_2.Minccino {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '104';
+        this.fullName = 'Minccino LTR';
+    }
+}
+exports.MinccinoLTR = MinccinoLTR;
+class CinccinoLTR extends cinccino_1.Cinccino {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = 'RC19';
+        this.fullName = 'Cinccino LTR';
+    }
+}
+exports.CinccinoLTR = CinccinoLTR;
+class Cinccino2 extends cinccino_1.Cinccino {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '105';
+        this.fullName = 'Cinccino LTR 105';
+    }
+}
+exports.Cinccino2 = Cinccino2;
+class Serperior2LTR extends serperior2_1.Serperior2 {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '8';
+        this.fullName = 'Serperior LTR 8';
+    }
+}
+exports.Serperior2LTR = Serperior2LTR;
+class LeavannyLTR extends leavanny_1.Leavanny {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '12';
+        this.fullName = 'Leavanny LTR';
+    }
+}
+exports.LeavannyLTR = LeavannyLTR;
+class DruddigonLTR extends druddigon_1.Druddigon {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '106';
+        this.fullName = 'Druddigon LTR';
+    }
+}
+exports.DruddigonLTR = DruddigonLTR;
+class LucarioLTR extends lucario_1.Lucario {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '80';
+        this.fullName = 'Lucario LTR';
+    }
+}
+exports.LucarioLTR = LucarioLTR;
+class BouffalantLTR extends bouffalant_1.Bouffalant {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '107';
+        this.fullName = 'Bouffalant LTR';
+    }
+}
+exports.BouffalantLTR = BouffalantLTR;
+class SewaddleLTR extends sewaddle_1.Sewaddle {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '9';
+        this.fullName = 'Sewaddle LTR';
+    }
+}
+exports.SewaddleLTR = SewaddleLTR;
+class ThundurusLTR extends thundurus_1.Thundurus {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '50';
+        this.fullName = 'Thundurus LTR';
+    }
+}
+exports.ThundurusLTR = ThundurusLTR;
+class PlusleLTR extends plusle_1.Plusle {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '47';
+        this.fullName = 'Plusle LTR';
+    }
+}
+exports.PlusleLTR = PlusleLTR;
+class EmboarLTR extends emboar_1.Emboar {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '27';
+        this.fullName = 'Emboar LTR';
+    }
+}
+exports.EmboarLTR = EmboarLTR;
+class DewottLTR extends dewott2_1.Dewott2 {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '38';
+        this.fullName = 'Dewott LTR';
+    }
+}
+exports.DewottLTR = DewottLTR;
+class SamurottLTR extends samurott2_1.Samurott2 {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '39';
+        this.fullName = 'Samurott LTR';
+    }
+}
+exports.SamurottLTR = SamurottLTR;
+class DuosionLTR extends duosion_1.Duosion {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '75';
+        this.fullName = 'Duosion LTR';
+    }
+}
+exports.DuosionLTR = DuosionLTR;
+class SolosisLTR extends solosis_1.Solosis {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '73';
+        this.fullName = 'Solosis LTR';
+    }
+}
+exports.SolosisLTR = SolosisLTR;
+class TorchicLTR extends torchic_2_1.Torchic2 {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = 'RC5';
+        this.fullName = 'Torchic LTR';
+    }
+}
+exports.TorchicLTR = TorchicLTR;
+class VictiniLTR extends victini_2_1.Victini2 {
+    constructor() {
+        super(...arguments);
+        this.set = 'LTR';
+        this.setNumber = '23';
+        this.fullName = 'Victini LTR';
+    }
+}
+exports.VictiniLTR = VictiniLTR;

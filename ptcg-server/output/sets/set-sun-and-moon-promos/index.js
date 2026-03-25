@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setSunAndMoonPromos = void 0;
 const other_prints_1 = require("./other-prints");
+const carracosta_gx_1 = require("./carracosta-gx");
 const firefighter_pikachu_1 = require("./firefighter-pikachu");
 const greninja_gx_1 = require("./greninja-gx");
 const jolteon_gx_1 = require("./jolteon-gx");
@@ -10,7 +11,6 @@ const lurantis_1 = require("./lurantis");
 const other_prints_2 = require("./other-prints");
 const palace_book_1 = require("./palace-book");
 const pikachu_and_zekrom_gx_1 = require("./pikachu-and-zekrom-gx");
-const rockruff_1 = require("./rockruff");
 const shining_celebi_1 = require("./shining-celebi");
 const shining_lugia_1 = require("./shining-lugia");
 const solgaleo_gx_1 = require("./solgaleo-gx");
@@ -18,6 +18,7 @@ const tapu_koko_1 = require("./tapu-koko");
 const tapu_lele_1 = require("./tapu-lele");
 const trevenant_dusknoir_gx_1 = require("./trevenant-dusknoir-gx");
 exports.setSunAndMoonPromos = [
+    new carracosta_gx_1.CarracostaGX(),
     new firefighter_pikachu_1.FirefighterPikachu(),
     new greninja_gx_1.GreninjaGX(),
     new jolteon_gx_1.JolteonGX(),
@@ -25,7 +26,6 @@ exports.setSunAndMoonPromos = [
     new lurantis_1.Lurantis(),
     new palace_book_1.PalaceBook(),
     new pikachu_and_zekrom_gx_1.PikachuZekromGX(),
-    new rockruff_1.Rockruff(),
     new shining_celebi_1.ShiningCelebi(),
     new shining_lugia_1.ShiningLugia(),
     new solgaleo_gx_1.SolgaleoGX(),
@@ -100,4 +100,5 @@ exports.setSunAndMoonPromos = [
     new other_prints_1.ReshiramCharizardGX2SMP(),
     new other_prints_1.PikachuZekromGX2SMP(),
     new other_prints_1.SolgaleoGX3SMP(),
+    new other_prints_1.CharizardGXSMP60(),
 ];

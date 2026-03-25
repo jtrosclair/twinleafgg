@@ -1,6 +1,6 @@
-import { Umbreon } from "../set-call-of-legends/umbreon";
-import { Defender } from "../set-base-set/defender";
-import { SagesTraining } from "../set-call-of-legends/sages-training";
+import { Umbreon } from '../set-call-of-legends/umbreon';
+import { Defender } from '../set-base-set/defender';
+import { SagesTraining } from '../set-call-of-legends/sages-training';
 export declare class UmbreonUD extends Umbreon {
     setNumber: string;
     fullName: string;

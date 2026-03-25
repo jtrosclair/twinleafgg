@@ -19,7 +19,7 @@ class Gardevoir extends pokemon_card_1.PokemonCard {
                 name: 'Psy Shadow',
                 useWhenInPlay: true,
                 powerType: game_1.PowerType.POKEPOWER,
-                text: 'Once during your turn (before your attack), you may search your deck for a Psychic Energy card and attach it to 1 of your Pokémon. Put 2 damage counters on that Pokémon. Shuffle your deck afterward. This power can\'t be used if Gardevoir is affected by a Special Condition.'
+                text: 'Once during your turn (before your attack), you may search your deck for a [P] Energy card and attach it to 1 of your Pokémon. Put 2 damage counters on that Pokémon. Shuffle your deck afterward. This power can\'t be used if Gardevoir is affected by a Special Condition.'
             }];
         this.attacks = [{
                 name: 'Energy Burst',

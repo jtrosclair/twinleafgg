@@ -4,9 +4,9 @@ exports.Koraidon = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const card_types_2 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Koraidon extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -53,7 +53,7 @@ class Koraidon extends pokemon_card_1.PokemonCard {
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.UNRELENTING_ONSLAUGHT_MARKER, this)) {
             effect.player.marker.addMarker(this.UNRELENTING_ONSLAUGHT_2_MARKER, this);
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const playerLastAttackInfo = (_a = state.playerLastAttack) === null || _a === void 0 ? void 0 : _a[player.id];
             const originalCard = playerLastAttackInfo ? playerLastAttackInfo.sourceCard : null;

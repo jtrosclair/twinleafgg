@@ -1,7 +1,7 @@
-import { BebesSearch } from "../set-mysterious-treasures/bebes-search";
-import { DarknessEnergySpecial } from "../set-neo-genesis/darkness-energy-special";
-import { MetalEnergyN1 } from "../set-neo-genesis/other-prints";
-import { Pikachu } from "../set-base-set/pikachu";
+import { BebesSearch } from '../set-mysterious-treasures/bebes-search';
+import { DarknessEnergySpecial } from '../set-neo-genesis/darkness-energy-special';
+import { MetalEnergyN1 } from '../set-neo-genesis/other-prints';
+import { Pikachu } from '../set-base-set/pikachu';
 export declare class BebesSearchRR extends BebesSearch {
     setNumber: string;
     fullName: string;

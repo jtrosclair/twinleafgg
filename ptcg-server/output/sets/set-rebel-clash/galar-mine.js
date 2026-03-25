@@ -24,14 +24,9 @@ class GalarMine extends trainer_card_1.TrainerCard {
         }
         if (effect instanceof check_effects_1.CheckRetreatCostEffect && game_1.StateUtils.getStadiumCard(state) === this) {
             const player = effect.player;
-            const opponent = game_1.StateUtils.getOpponent(state, player);
-            const opponentActive = opponent.active.getPokemonCard();
             const playerActive = player.active.getPokemonCard();
-            if (opponentActive) {
-                effect.cost.push(C, C);
-            }
             if (playerActive) {
-                effect.cost.push(C, C);
+                effect.cost.push(card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS);
             }
             return state;
         }

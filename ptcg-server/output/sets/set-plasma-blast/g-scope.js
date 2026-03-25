@@ -13,8 +13,8 @@ function* playCard(next, store, state, effect) {
     if (((_a = player.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.name) !== 'Genesect-EX') {
         throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_ATTACK);
     }
-    (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON)(100, effect, store, state);
-    return state;
+    // Ref: set-plasma-blast/escavalier.ts (bench-only targeting)
+    return (0, attack_effects_1.THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON)(100, effect, store, state);
 }
 class GScope extends trainer_card_1.TrainerCard {
     constructor() {
@@ -30,12 +30,12 @@ class GScope extends trainer_card_1.TrainerCard {
                 name: 'G Scope',
                 cost: [G, G, C],
                 damage: 0,
-                text: 'This attack does 100 damage to 1 of your opponent\'s Benched Pokémon. (Don\'t apply Weakness and Resistance for Benched Pokémon.'
+                text: 'This attack does 100 damage to 1 of your opponent\'s Benched Pokémon. (Don\'t apply Weakness and Resistance for Benched Pokémon.)'
             }];
         this.text = 'The Genesect-EX this card is attached to can also use the attack on this card. (You still need the necessary Energy to use this attack.)';
     }
     reduceEffect(store, state, effect) {
-        var _a;
+        var _a, _b;
         if (effect instanceof check_effects_1.CheckAttackCostEffect && effect.attack === this.attacks[0]) {
             const pokemonCard = effect.player.active.getPokemonCard();
             if ((pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.name) !== 'Genesect-EX') {
@@ -69,7 +69,9 @@ class GScope extends trainer_card_1.TrainerCard {
               }
             }*/
         }
-        if (effect instanceof check_effects_1.CheckPokemonAttacksEffect && ((_a = effect.player.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.tools.includes(this)) &&
+        if (effect instanceof check_effects_1.CheckPokemonAttacksEffect
+            && ((_a = effect.player.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.name) === 'Genesect-EX'
+            && ((_b = effect.player.active.getPokemonCard()) === null || _b === void 0 ? void 0 : _b.tools.includes(this)) &&
             !effect.attacks.includes(this.attacks[0])) {
             effect.attacks.push(this.attacks[0]);
         }

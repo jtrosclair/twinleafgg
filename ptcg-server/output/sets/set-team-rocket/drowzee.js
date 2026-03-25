@@ -1,12 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Drowzee = void 0;
-const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const card_types_1 = require("../../game/store/card/card-types");
-const game_1 = require("../../game");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
+const card_types_1 = require("../../game/store/card/card-types");
+const state_utils_1 = require("../../game/store/state-utils");
+const game_error_1 = require("../../game/game-error");
+const game_message_1 = require("../../game/game-message");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
+const game_1 = require("../../game");
 class Drowzee extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -42,9 +44,9 @@ class Drowzee extends pokemon_card_1.PokemonCard {
         }
         if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            const opponent = game_1.StateUtils.getOpponent(state, player);
+            const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             if ((0, prefabs_1.HAS_MARKER)(this.HYPNOSIS_MARKER, player, this)) {
-                throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
+                throw new game_error_1.GameError(game_message_1.GameMessage.POWER_ALREADY_USED);
             }
             (0, prefabs_1.BLOCK_IF_ASLEEP_CONFUSED_PARALYZED)(player, this);
             (0, prefabs_1.ADD_MARKER)(this.HYPNOSIS_MARKER, player, this);
@@ -58,8 +60,8 @@ class Drowzee extends pokemon_card_1.PokemonCard {
             });
             return state;
         }
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP)(store, state, effect);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         return state;
     }

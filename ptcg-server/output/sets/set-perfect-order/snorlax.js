@@ -2,8 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Snorlax = void 0;
 const game_1 = require("../../game");
-const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const energy_card_1 = require("../../game/store/card/energy-card");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Snorlax extends game_1.PokemonCard {
     constructor() {
@@ -36,50 +34,34 @@ class Snorlax extends game_1.PokemonCard {
         // Big Eater - flip coins until tails, search for Basic Energy for each heads
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            let headsCount = 0;
-            let gotTails = false;
-            const flipUntilTails = (s) => {
-                if (gotTails) {
-                    // Got tails, now search for Basic Energy
-                    if (headsCount === 0 || player.deck.cards.length === 0) {
-                        return store.prompt(s, new game_1.ShuffleDeckPrompt(player.id), order => {
-                            player.deck.applyOrder(order);
-                        });
-                    }
-                    const basicEnergyInDeck = player.deck.cards.filter(card => card instanceof energy_card_1.EnergyCard && card.energyType === game_1.EnergyType.BASIC);
-                    if (basicEnergyInDeck.length === 0) {
-                        return store.prompt(s, new game_1.ShuffleDeckPrompt(player.id), order => {
-                            player.deck.applyOrder(order);
-                        });
-                    }
-                    const maxToAttach = Math.min(headsCount, basicEnergyInDeck.length);
-                    return store.prompt(s, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.ATTACH_ENERGY_CARDS, player.deck, { superType: game_1.SuperType.ENERGY, energyType: game_1.EnergyType.BASIC }, { min: 0, max: maxToAttach, allowCancel: false }), selected => {
-                        const cards = selected || [];
-                        if (cards.length > 0) {
-                            for (const card of cards) {
-                                player.deck.moveCardTo(card, player.active);
-                            }
-                        }
-                        return store.prompt(s, new game_1.ShuffleDeckPrompt(player.id), order => {
-                            player.deck.applyOrder(order);
-                        });
+            const stateForCallback = state;
+            return (0, prefabs_1.FLIP_UNTIL_TAILS_AND_COUNT_HEADS)(store, state, player, headsCount => {
+                if (headsCount === 0 || player.deck.cards.length === 0) {
+                    store.prompt(stateForCallback, new game_1.ShuffleDeckPrompt(player.id), order => {
+                        player.deck.applyOrder(order);
                     });
+                    return;
                 }
-                const coinFlipEffect = new play_card_effects_1.CoinFlipEffect(player, (result) => {
-                    if (result === true) {
-                        // Heads - increment count and flip again
-                        headsCount++;
-                        flipUntilTails(s);
+                const basicEnergyInDeck = player.deck.cards.filter(card => card.superType === game_1.SuperType.ENERGY && card.energyType === game_1.EnergyType.BASIC);
+                if (basicEnergyInDeck.length === 0) {
+                    store.prompt(stateForCallback, new game_1.ShuffleDeckPrompt(player.id), order => {
+                        player.deck.applyOrder(order);
+                    });
+                    return;
+                }
+                const maxToAttach = Math.min(headsCount, basicEnergyInDeck.length);
+                store.prompt(stateForCallback, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.ATTACH_ENERGY_CARDS, player.deck, { superType: game_1.SuperType.ENERGY, energyType: game_1.EnergyType.BASIC }, { min: 0, max: maxToAttach, allowCancel: false }), selected => {
+                    const cards = selected || [];
+                    if (cards.length > 0) {
+                        for (const card of cards) {
+                            player.deck.moveCardTo(card, player.active);
+                        }
                     }
-                    else {
-                        // Tails - proceed to search
-                        gotTails = true;
-                        flipUntilTails(s);
-                    }
+                    store.prompt(stateForCallback, new game_1.ShuffleDeckPrompt(player.id), order => {
+                        player.deck.applyOrder(order);
+                    });
                 });
-                return store.reduceEffect(s, coinFlipEffect);
-            };
-            return flipUntilTails(state);
+            });
         }
         // Collapse - Pokemon becomes Asleep
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {

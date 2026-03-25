@@ -14,16 +14,18 @@ export declare class StarmieV extends PokemonCard {
     retreat: any[];
     attacks: ({
         name: string;
-        cost: CardType[];
+        cost: CardType.COLORLESS[];
         damage: number;
+        shredAttack: boolean;
         text: string;
         damageCalculation?: undefined;
     } | {
         name: string;
-        cost: CardType[];
+        cost: CardType.WATER[];
         damage: number;
         damageCalculation: string;
         text: string;
+        shredAttack?: undefined;
     })[];
     set: string;
     cardImage: string;

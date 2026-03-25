@@ -3,51 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Mewex = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const game_1 = require("../../game");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const attack_effects_1 = require("../../game/store/effects/attack-effects");
-function* useGenomeHacking(next, store, state, effect) {
-    const player = effect.player;
-    const opponent = game_1.StateUtils.getOpponent(state, player);
-    const pokemonCard = opponent.active.getPokemonCard();
-    if (pokemonCard === undefined || pokemonCard.attacks.length === 0) {
-        return state;
-    }
-    const attacks = pokemonCard.attacks.map(a => a.name);
-    if (attacks.includes(effect.attack.name + ' (Genome Hacking)')) {
-        return state;
-    }
-    let selected;
-    yield store.prompt(state, new game_1.ChooseAttackPrompt(player.id, game_1.GameMessage.CHOOSE_ATTACK_TO_COPY, [pokemonCard], { allowCancel: false }), result => {
-        selected = result;
-        next();
-    });
-    const attack = selected;
-    if (attack === null) {
-        return state;
-    }
-    if (attack.copycatAttack === true) {
-        return state;
-    }
-    store.log(state, game_1.GameLog.LOG_PLAYER_COPIES_ATTACK, {
-        name: player.name,
-        attack: attack.name
-    });
-    // Perform attack
-    const attackEffect = new game_effects_1.AttackEffect(player, opponent, attack);
-    store.reduceEffect(state, attackEffect);
-    if (store.hasPrompts()) {
-        yield store.waitPrompt(state, () => next());
-    }
-    if (attackEffect.damage > 0) {
-        const dealDamage = new attack_effects_1.DealDamageEffect(attackEffect, attackEffect.damage);
-        state = store.reduceEffect(state, dealDamage);
-    }
-    return state;
-}
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Mewex extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -90,7 +50,7 @@ class Mewex extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.RESTART_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.RESTART_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
@@ -118,9 +78,8 @@ class Mewex extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            const generator = useGenomeHacking(() => generator.next(), store, state, effect);
-            return generator.next().value;
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            return (0, prefabs_1.COPY_OPPONENT_ACTIVE_ATTACK)(store, state, effect);
         }
         return state;
     }

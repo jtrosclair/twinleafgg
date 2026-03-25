@@ -5,7 +5,6 @@ const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Archaludon extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -34,8 +33,6 @@ class Archaludon extends pokemon_card_1.PokemonCard {
         this.cardImage = 'assets/cardback.png';
         this.name = 'Archaludon';
         this.fullName = 'Archaludon SCR';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof check_effects_1.CheckRetreatCostEffect) {
@@ -45,15 +42,7 @@ class Archaludon extends pokemon_card_1.PokemonCard {
             if (owner !== player) {
                 return state;
             }
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             let inPlay = false;
@@ -69,15 +58,10 @@ class Archaludon extends pokemon_card_1.PokemonCard {
                 effect.cost = [];
             }
         }
-        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_2_MARKER, this);
-        (0, prefabs_1.REPLACE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_MARKER, this.ATTACK_USED_2_MARKER, this);
-        if (effect instanceof game_effects_1.AttackEffect) {
-            if ((0, prefabs_1.HAS_MARKER)(this.ATTACK_USED_MARKER, effect.player, this) || (0, prefabs_1.HAS_MARKER)(this.ATTACK_USED_2_MARKER, effect.player, this)) {
-                throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
-            }
-        }
+        // Iron Blaster
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            (0, prefabs_1.ADD_MARKER)(this.ATTACK_USED_MARKER, effect.player, this);
+            const player = effect.player;
+            player.active.cannotAttackNextTurnPending = true;
         }
         return state;
     }

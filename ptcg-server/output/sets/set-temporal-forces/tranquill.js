@@ -3,66 +3,45 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Tranquill = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Tranquill extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.stage = card_types_1.Stage.STAGE_1;
         this.evolvesFrom = 'Pidove';
-        this.cardType = card_types_1.CardType.COLORLESS;
+        this.cardType = C;
         this.hp = 80;
-        this.weakness = [{ type: card_types_1.CardType.LIGHTNING }];
-        this.resistance = [{ type: card_types_1.CardType.FIGHTING, value: -30 }];
+        this.weakness = [{ type: L }];
+        this.resistance = [{ type: F, value: -30 }];
         this.retreat = [];
-        this.attacks = [
-            {
+        this.attacks = [{
                 name: 'Speed Dive',
-                cost: [card_types_1.CardType.COLORLESS],
+                cost: [C],
                 damage: 20,
                 text: ''
             },
             {
                 name: 'Jet Wing',
-                cost: [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS],
+                cost: [C, C],
                 damage: 70,
                 text: 'During your next turn, this Pokémon can\'t attack.'
-            }
-        ];
+            }];
+        this.regulationMark = 'H';
         this.set = 'TEF';
         this.setNumber = '134';
         this.cardImage = 'assets/cardback.png';
-        this.regulationMark = 'H';
         this.name = 'Tranquill';
         this.fullName = 'Tranquill TEF';
-        // for preventing the pokemon from attacking on the next turn
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
-        // Speed Dive
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            // Check marker
-            if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-                throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
-            }
-        }
         // Jet Wing
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
-            // Check marker
-            if (effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-                throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
-            }
-            effect.player.marker.addMarker(this.ATTACK_USED_MARKER, this);
-        }
-        // removing the markers for preventing the pokemon from attacking
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_2_MARKER, this)) {
-            effect.player.marker.removeMarker(this.ATTACK_USED_MARKER, this);
-            effect.player.marker.removeMarker(this.ATTACK_USED_2_MARKER, this);
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)) {
-            effect.player.marker.addMarker(this.ATTACK_USED_2_MARKER, this);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            const player = effect.player;
+            // Legacy implementation:
+            // - Set player.active.cannotAttackNextTurnPending = true directly.
+            //
+            // Converted to prefab version (THIS_POKEMON_CANNOT_ATTACK_NEXT_TURN).
+            (0, prefabs_1.THIS_POKEMON_CANNOT_ATTACK_NEXT_TURN)(player);
         }
         return state;
     }

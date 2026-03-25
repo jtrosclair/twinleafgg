@@ -1,17 +1,22 @@
-import { SilvallyGX } from "../set-ultra-prism/silvally-gx";
-import { CounterCatcher } from "../set-paradox-rift/counter-catcher";
-import { BuzzwoleGX as BuzzwoleGXCIN57 } from "../set-crimson-invasion/buzzwole-gx";
-import { GuzzlordGX as GuzzlordGXCIN63 } from "../set-crimson-invasion/guzzlord-gx";
-import { KartanaGX as KartanaGXCIN70 } from "../set-crimson-invasion/kartana-gx";
-import { SilvallyGX as SilvallyGXUPR116 } from "../set-ultra-prism/silvally-gx";
-import { Gladion as GladionCIN95 } from "../set-crimson-invasion/gladion";
-import { Lusamine as LusamineCIN96 } from "../set-crimson-invasion/lusamine";
-import { CounterCatcher as CounterCatcherPAR160 } from "../set-paradox-rift/counter-catcher";
-import { WishfulBaton } from "../set-burning-shadows/wishful-baton";
-import { CounterEnergy as CounterEnergyCIN100 } from "../set-crimson-invasion/counter-energy";
-import { WarpEnergySF } from "../set-stormfront/other-prints";
-import { WaterEnergy } from "../set-base-set-energy/water-energy";
-import { Regigigas as RegigigasCIN84 } from "../set-crimson-invasion/regigigas";
+import { SilvallyGX } from '../set-ultra-prism/silvally-gx';
+import { CounterCatcher } from '../set-paradox-rift/counter-catcher';
+import { BuzzwoleGX as BuzzwoleGXCIN57 } from '../set-crimson-invasion/buzzwole-gx';
+import { GuzzlordGX as GuzzlordGXCIN63 } from '../set-crimson-invasion/guzzlord-gx';
+import { KartanaGX as KartanaGXCIN70 } from '../set-crimson-invasion/kartana-gx';
+import { SilvallyGX as SilvallyGXUPR116 } from '../set-ultra-prism/silvally-gx';
+import { Gladion as GladionCIN95 } from '../set-crimson-invasion/gladion';
+import { Lusamine as LusamineCIN96 } from '../set-crimson-invasion/lusamine';
+import { CounterCatcher as CounterCatcherPAR160 } from '../set-paradox-rift/counter-catcher';
+import { WishfulBaton } from '../set-burning-shadows/wishful-baton';
+import { CounterEnergy as CounterEnergyCIN100 } from '../set-crimson-invasion/counter-energy';
+import { WarpEnergySF } from '../set-stormfront/other-prints';
+import { WaterEnergy } from '../set-base-set-energy/water-energy';
+import { Regigigas as RegigigasCIN84 } from '../set-crimson-invasion/regigigas';
+import { GyaradosGx } from './gyarados-gx';
+import { AlolanGolemGx } from './alolan-golem-gx';
+import { NihilegoGx } from './nihilego-gx';
+import { AlolanExeggutorGx } from './alolan-exeggutor-gx';
+import { Olivia } from '../set-burning-shadows/olivia';
 export declare class SilvallyGXCIN extends SilvallyGX {
     setNumber: string;
     fullName: string;
@@ -106,4 +111,49 @@ export declare class Regigigas2CIN extends RegigigasCIN84 {
     setNumber: string;
     fullName: string;
     set: string;
+}
+export declare class GyaradosGx2 extends GyaradosGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class AlolanGolemGx2 extends AlolanGolemGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class NihilegoGx2 extends NihilegoGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class AlolanExeggutorGx2 extends AlolanExeggutorGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class OliviaCIN extends Olivia {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class GyaradosGx3 extends GyaradosGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class AlolanGolemGx3 extends AlolanGolemGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class NihilegoGx3 extends NihilegoGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class AlolanExeggutorGx3 extends AlolanExeggutorGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
 }

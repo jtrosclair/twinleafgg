@@ -37,7 +37,6 @@ class MarysRequest extends trainer_card_1.TrainerCard {
             if (!hasStage2) {
                 player.deck.moveTo(player.hand, Math.min(2, player.deck.cards.length));
             }
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

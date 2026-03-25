@@ -5,6 +5,7 @@ const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const game_effects_1 = require("../../game/store/effects/game-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const trainer_prefabs_1 = require("../../game/store/prefabs/trainer-prefabs");
@@ -27,7 +28,12 @@ class GoopGasAttack extends trainer_card_1.TrainerCard {
             const opponent = game_1.StateUtils.getOpponent(state, player);
             (0, prefabs_1.ADD_MARKER)(this.GOOP_GAS_MARKER, player, this);
             (0, prefabs_1.ADD_MARKER)(this.GOOP_GAS_MARKER, opponent, this);
-            (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
+        }
+        if (effect instanceof check_effects_1.CheckPokemonPowersEffect && (0, prefabs_1.HAS_MARKER)(this.GOOP_GAS_MARKER, effect.player, this)) {
+            // Filter out all Pokémon Powers, Poké Bodies, and Poké Powers
+            effect.powers = effect.powers.filter(power => power.powerType !== game_1.PowerType.POKEMON_POWER &&
+                power.powerType !== game_1.PowerType.POKEBODY &&
+                power.powerType !== game_1.PowerType.POKEPOWER);
         }
         if (effect instanceof game_effects_1.PowerEffect && (0, prefabs_1.HAS_MARKER)(this.GOOP_GAS_MARKER, effect.player, this)
             && (effect.power.powerType === game_1.PowerType.POKEMON_POWER || effect.power.powerType === game_1.PowerType.POKEBODY || effect.power.powerType === game_1.PowerType.POKEPOWER)) {

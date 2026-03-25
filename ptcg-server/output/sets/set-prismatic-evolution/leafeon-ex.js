@@ -7,7 +7,6 @@ const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const game_1 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const state_utils_1 = require("../../game/store/state-utils");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Leafeonex extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -56,7 +55,7 @@ class Leafeonex extends pokemon_card_1.PokemonCard {
             effect.damage = energies * 60;
         }
         // Moss Agate
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             player.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card) => {
                 if (cardList === player.active) {

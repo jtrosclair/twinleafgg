@@ -9,7 +9,6 @@ const game_2 = require("../../game");
 const game_3 = require("../../game");
 const game_4 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_5 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Banetteex extends pokemon_card_1.PokemonCard {
@@ -51,7 +50,7 @@ class Banetteex extends pokemon_card_1.PokemonCard {
             player.marker.removeMarker(this.SHADY_MARKER, this);
         }
         // Shady Move
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_3.StateUtils.getOpponent(state, player);
             if (player.active.getPokemonCard() !== this) {

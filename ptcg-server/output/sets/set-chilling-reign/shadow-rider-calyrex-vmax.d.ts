@@ -10,13 +10,13 @@ export declare class ShadowRiderCalyrexVMAX extends PokemonCard {
     tags: CardTag[];
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.DARK;
     }[];
     resistance: {
-        type: CardType;
+        type: CardType.FIGHTING;
         value: number;
     }[];
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     powers: {
         name: string;
         useWhenInPlay: boolean;
@@ -25,7 +25,7 @@ export declare class ShadowRiderCalyrexVMAX extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: CardType.COLORLESS[];
         damage: number;
         text: string;
     }[];

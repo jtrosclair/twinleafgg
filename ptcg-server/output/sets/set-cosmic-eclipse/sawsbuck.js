@@ -4,7 +4,6 @@ exports.Sawsbuck = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Sawsbuck extends pokemon_card_1.PokemonCard {
@@ -37,7 +36,7 @@ class Sawsbuck extends pokemon_card_1.PokemonCard {
         this.SEASONAL_BLESSINGS_MARKER = 'SEASONAL_BLESSINGS_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.marker.hasMarker(this.SEASONAL_BLESSINGS_MARKER)) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -48,7 +47,7 @@ class Sawsbuck extends pokemon_card_1.PokemonCard {
             player.deck.moveTo(player.hand, 1);
             (0, prefabs_1.ADD_MARKER)(this.SEASONAL_BLESSINGS_MARKER, player, this);
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             this.bounceMarker = true;
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.SEASONAL_BLESSINGS_MARKER)) {

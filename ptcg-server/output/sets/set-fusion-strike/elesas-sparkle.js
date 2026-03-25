@@ -57,7 +57,6 @@ class ElesasSparkle extends trainer_card_1.TrainerCard {
                         (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
                         return;
                     }
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                     for (const transfer of transfers) {
                         const target = game_1.StateUtils.getTarget(state, player, transfer.to);
                         player.deck.moveCardTo(transfer.card, target);

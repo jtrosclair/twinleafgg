@@ -28,8 +28,8 @@ class NidoranFemale extends pokemon_card_1.PokemonCard {
         this.set = 'RR';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '71';
-        this.name = 'Nidoran F';
-        this.fullName = 'Nidoran F RR';
+        this.name = 'Nidoran \u2640';
+        this.fullName = 'Nidoran \u2640 RR';
     }
     reduceEffect(store, state, effect) {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {

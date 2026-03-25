@@ -57,7 +57,6 @@ function* playCard(next, store, state, effect) {
     });
     // Canceled by user, he didn't found the card in the deck
     if (cards.length === 0) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return state;
     }
     const evolution = cards[0];
@@ -72,7 +71,6 @@ function* playCard(next, store, state, effect) {
         targets = selection || [];
         next();
     });
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     if (targets.length === 0) {
         return state; // canceled by user
     }

@@ -7,6 +7,7 @@ const dark_dragonite_1 = require("./dark-dragonite");
 const dark_gloom_1 = require("./dark-gloom");
 const dark_golduck_1 = require("./dark-golduck");
 const dark_vileplume_1 = require("./dark-vileplume");
+const digger_1 = require("./digger");
 const drowzee_1 = require("./drowzee");
 const full_heal_energy_1 = require("./full-heal-energy");
 const goop_gas_attack_1 = require("./goop-gas-attack");
@@ -31,6 +32,7 @@ exports.setTeamRocket = [
     new dark_gloom_1.DarkGloom(),
     new dark_golduck_1.DarkGolduck(),
     new dark_vileplume_1.DarkVileplume(),
+    new digger_1.Digger(),
     new drowzee_1.Drowzee(),
     new full_heal_energy_1.FullHealEnergy(),
     new goop_gas_attack_1.GoopGasAttack(),

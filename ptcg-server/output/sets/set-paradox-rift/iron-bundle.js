@@ -42,7 +42,7 @@ class IronBundle extends pokemon_card_1.PokemonCard {
         this.REFRIGERATED_STREAM_MARKER = 'REFRIGERATED_STREAM_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const cardList = game_1.StateUtils.findCardList(state, this);
@@ -87,7 +87,7 @@ class IronBundle extends pokemon_card_1.PokemonCard {
                 }
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             opponent.active.marker.addMarker(this.REFRIGERATED_STREAM_MARKER, this);

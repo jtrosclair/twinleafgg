@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SylveonVMAXBRS = exports.SylveonVBRS = exports.OranguruBRS = exports.HoundoomBRS = exports.Alcremie2BRS = exports.Dusknoir2BRS = exports.ZekromBRS = exports.OctilleryBRS = exports.MetalEnergyBRS = exports.DarknessEnergyBRS = exports.FightingEnergyBRS = exports.PsychicEnergyBRS = exports.LightningEnergyBRS = exports.WaterEnergyBRS = exports.FireEnergyBRS = exports.GrassEnergyBRS = exports.MagmaBasin2BRS = exports.ArceusVSTAR3BRS = exports.GalarianMoltresVBRS = exports.GalarianZapdosVBRS = exports.GalarianArticunoVBRS = exports.RoseannesBackup3BRS = exports.Kindler3BRS = exports.CynthiasAmbition3BRS = exports.CherensCare3BRS = exports.ArceusVSTAR2BRS = exports.WhimsicottVSTAR2BRS = exports.ShayminVSTAR2BRS = exports.RoseannesBackup2BRS = exports.MarniesPride2BRS = exports.Kindler2BRS = exports.CynthiasAmbition2BRS = exports.CherensCare2BRS = exports.ArceusV3BRS = exports.ArceusV2BRS = exports.ZamazentaV2BRS = exports.WhimsicottV2BRS = exports.RaichuV2BRS = exports.LumineonV3BRS = exports.LumineonV2BRS = exports.ShayminV2BRS = exports.UltraBallBRS = exports.ProfessorsResearchBRS = exports.ChoiceBeltBRS = exports.BossOrdersBRS = exports.ZamazentaVBRS = exports.MimikyuVBRS = exports.WhimsicottVSTARRR = exports.WhimsicottVFA = exports.UltraBallHR = void 0;
-exports.RapidStrikeUrshifuVMAX2BRS = exports.SingleStrikeUrshifuVMAX2BRS = exports.SingleStrikeStyleMustardBRS = exports.Gloria2BRS = exports.CafeMaster2BRS = exports.AcerolasPremonition2BRS = exports.UmbreonVMAXBRS = exports.UmbreonVBRS = exports.RapidStrikeUrshifuVMAXBRS = exports.RapidStrikeUrshifuVBRS = exports.SingleStrikeUrshifuVMAXBRS = exports.SingleStrikeUrshifuVBRS = exports.MimikyuV2BRS = void 0;
+exports.SingleStrikeUrshifuVBRS = exports.MimikyuV2BRS = exports.SylveonVMAXBRS = exports.SylveonVBRS = exports.OranguruBRS = exports.HoundoomBRS = exports.Alcremie2BRS = exports.Dusknoir2BRS = exports.ZekromBRS = exports.OctilleryBRS = exports.MetalEnergyBRS = exports.DarknessEnergyBRS = exports.FightingEnergyBRS = exports.PsychicEnergyBRS = exports.LightningEnergyBRS = exports.WaterEnergyBRS = exports.FireEnergyBRS = exports.GrassEnergyBRS = exports.MagmaBasin2BRS = exports.ArceusVSTAR3BRS = exports.GalarianMoltresVBRS = exports.GalarianZapdosVBRS = exports.GalarianArticunoVBRS = exports.RoseannesBackup3BRS = exports.Kindler3BRS = exports.CynthiasAmbition3BRS = exports.CherensCare3BRS = exports.ArceusVSTAR2BRS = exports.ShayminVSTAR2BRS = exports.RoseannesBackup2BRS = exports.MarniesPride2BRS = exports.Kindler2BRS = exports.CynthiasAmbition2BRS = exports.CherensCare2BRS = exports.ArceusV3BRS = exports.ArceusV2BRS = exports.ZamazentaV2BRS = exports.RaichuV2BRS = exports.LumineonV3BRS = exports.LumineonV2BRS = exports.ShayminV2BRS = exports.UltraBallBRS = exports.ProfessorsResearchBRS = exports.ChoiceBeltBRS = exports.BossOrdersBRS = exports.ZamazentaVBRS = exports.MimikyuVBRS = exports.WhimsicottVSTARRR = exports.WhimsicottVFA = exports.UltraBallHR = void 0;
+exports.CharizardVstar2 = exports.Barry2 = exports.FlygonV2 = exports.HonchkrowV3 = exports.HonchkrowV2 = exports.GranbullV2 = exports.CharizardV3 = exports.CharizardV2 = exports.FreshWaterSetBRS = exports.KarrablastBRS = exports.BurmyBRS = exports.RapidStrikeUrshifuVMAX2BRS = exports.SingleStrikeUrshifuVMAX2BRS = exports.SingleStrikeStyleMustardBRS = exports.Gloria2BRS = exports.CafeMaster2BRS = exports.AcerolasPremonition2BRS = exports.UmbreonVMAXBRS = exports.UmbreonVBRS = exports.RapidStrikeUrshifuVMAXBRS = exports.RapidStrikeUrshifuVBRS = exports.SingleStrikeUrshifuVMAXBRS = void 0;
 const mimikyu_v_1 = require("../set-battle-styles/mimikyu-v");
 const zamazenta_v_1 = require("../set-crown-zenith/zamazenta-v");
 const boss_orders_1 = require("../set-paldea-evolved/boss-orders");
@@ -10,7 +10,6 @@ const professors_research_1 = require("../set-scarlet-and-violet/professors-rese
 const shaymin_v_1 = require("../set-brilliant-stars/shaymin-v");
 const lumineon_v_1 = require("../set-brilliant-stars/lumineon-v");
 const raichu_v_1 = require("../set-brilliant-stars/raichu-v");
-const whimsicott_v_1 = require("../set-brilliant-stars/whimsicott-v");
 const zamazenta_v_2 = require("../set-crown-zenith/zamazenta-v");
 const arceus_v_1 = require("../set-brilliant-stars/arceus-v");
 const cherens_care_1 = require("../set-brilliant-stars/cherens-care");
@@ -19,7 +18,6 @@ const kindler_1 = require("../set-brilliant-stars/kindler");
 const marnies_pride_1 = require("../set-brilliant-stars/marnies-pride");
 const roseannes_backup_1 = require("../set-brilliant-stars/roseannes-backup");
 const shaymin_vstar_1 = require("../set-brilliant-stars/shaymin-vstar");
-const whimsicott_vstar_1 = require("../set-brilliant-stars/whimsicott-vstar");
 const arceus_vstar_1 = require("../set-brilliant-stars/arceus-vstar");
 const galarian_articuno_v_1 = require("../set-chilling-reign/galarian-articuno-v");
 const galarian_zapdos_v_1 = require("../set-chilling-reign/galarian-zapdos-v");
@@ -55,19 +53,28 @@ const single_strike_style_mustard_1 = require("../set-battle-styles/single-strik
 const single_strike_urshifu_vmax_2 = require("../set-battle-styles/single-strike-urshifu-vmax");
 const rapid_strike_urshifu_vmax_2 = require("../set-battle-styles/rapid-strike-urshifu-vmax");
 const ultra_ball_1 = require("../set-scarlet-and-violet/ultra-ball");
-const whimsicott_v_2 = require("./whimsicott-v");
-const whimsicott_vstar_2 = require("./whimsicott-vstar");
+const whimsicott_v_1 = require("./whimsicott-v");
+const whimsicott_vstar_1 = require("./whimsicott-vstar");
+const burmy_1 = require("../set-fates-collide/burmy");
+const karrablast_1 = require("../set-plasma-blast/karrablast");
+const fresh_water_set_1 = require("../set-primal-clash/fresh-water-set");
+const charizard_v_1 = require("./charizard-v");
+const granbull_v_1 = require("./granbull-v");
+const honchkrow_v_1 = require("./honchkrow-v");
+const flygon_v_1 = require("./flygon-v");
+const barry_1 = require("./barry");
+const charizard_vstar_1 = require("./charizard-vstar");
 class UltraBallHR extends ultra_ball_1.UltraBall {
     constructor() {
         super(...arguments);
         this.set = 'BRS';
         this.fullName = 'Ultra BallHR BRS';
         this.setNumber = '186';
-        this.regulationMark = 'G';
+        this.regulationMark = 'F';
     }
 }
 exports.UltraBallHR = UltraBallHR;
-class WhimsicottVFA extends whimsicott_v_2.WhimsicottV {
+class WhimsicottVFA extends whimsicott_v_1.WhimsicottV {
     constructor() {
         super(...arguments);
         this.fullName = 'Whimsicott V BRS FA';
@@ -75,7 +82,7 @@ class WhimsicottVFA extends whimsicott_v_2.WhimsicottV {
     }
 }
 exports.WhimsicottVFA = WhimsicottVFA;
-class WhimsicottVSTARRR extends whimsicott_vstar_2.WhimsicottVSTAR {
+class WhimsicottVSTARRR extends whimsicott_vstar_1.WhimsicottVSTAR {
     constructor() {
         super(...arguments);
         this.fullName = 'Whimsicott VSTAR BRS RR';
@@ -104,6 +111,7 @@ exports.ZamazentaVBRS = ZamazentaVBRS;
 class BossOrdersBRS extends boss_orders_1.BossOrders {
     constructor() {
         super(...arguments);
+        this.regulationMark = 'F';
         this.setNumber = '132';
         this.fullName = 'Boss\'s Orders BRS';
         this.set = 'BRS';
@@ -113,6 +121,7 @@ exports.BossOrdersBRS = BossOrdersBRS;
 class ChoiceBeltBRS extends choice_belt_1.ChoiceBelt {
     constructor() {
         super(...arguments);
+        this.regulationMark = 'F';
         this.setNumber = '135';
         this.fullName = 'Choice Belt BRS';
         this.set = 'BRS';
@@ -122,6 +131,7 @@ exports.ChoiceBeltBRS = ChoiceBeltBRS;
 class ProfessorsResearchBRS extends professors_research_1.ProfessorsResearch {
     constructor() {
         super(...arguments);
+        this.regulationMark = 'F';
         this.setNumber = '147';
         this.fullName = 'Professor\'s Research BRS';
         this.set = 'BRS';
@@ -131,6 +141,7 @@ exports.ProfessorsResearchBRS = ProfessorsResearchBRS;
 class UltraBallBRS extends ultra_ball_1.UltraBall {
     constructor() {
         super(...arguments);
+        this.regulationMark = 'F';
         this.setNumber = '150';
         this.fullName = 'Ultra Ball BRS';
         this.set = 'BRS';
@@ -173,15 +184,6 @@ class RaichuV2BRS extends raichu_v_1.RaichuV {
     }
 }
 exports.RaichuV2BRS = RaichuV2BRS;
-class WhimsicottV2BRS extends whimsicott_v_1.WhimsicottV {
-    constructor() {
-        super(...arguments);
-        this.setNumber = '160';
-        this.fullName = 'Whimsicott V2 BRS';
-        this.set = 'BRS';
-    }
-}
-exports.WhimsicottV2BRS = WhimsicottV2BRS;
 class ZamazentaV2BRS extends zamazenta_v_2.ZamazentaV {
     constructor() {
         super(...arguments);
@@ -263,15 +265,6 @@ class ShayminVSTAR2BRS extends shaymin_vstar_1.ShayminVSTAR {
     }
 }
 exports.ShayminVSTAR2BRS = ShayminVSTAR2BRS;
-class WhimsicottVSTAR2BRS extends whimsicott_vstar_1.WhimsicottVSTAR {
-    constructor() {
-        super(...arguments);
-        this.setNumber = '175';
-        this.fullName = 'Whimsicott VSTAR2 BRS';
-        this.set = 'BRS';
-    }
-}
-exports.WhimsicottVSTAR2BRS = WhimsicottVSTAR2BRS;
 class ArceusVSTAR2BRS extends arceus_vstar_1.ArceusVSTAR {
     constructor() {
         super(...arguments);
@@ -599,7 +592,7 @@ exports.Gloria2BRS = Gloria2BRS;
 class SingleStrikeStyleMustardBRS extends single_strike_style_mustard_1.SingleStrikeStyleMustard {
     constructor() {
         super(...arguments);
-        this.setNumber = 'TG27';
+        this.setNumber = 'TG28';
         this.fullName = 'Single Strike Style Mustard BRS';
         this.set = 'BRS';
     }
@@ -623,3 +616,102 @@ class RapidStrikeUrshifuVMAX2BRS extends rapid_strike_urshifu_vmax_2.RapidStrike
     }
 }
 exports.RapidStrikeUrshifuVMAX2BRS = RapidStrikeUrshifuVMAX2BRS;
+class BurmyBRS extends burmy_1.Burmy {
+    constructor() {
+        super(...arguments);
+        this.set = 'BRS';
+        this.setNumber = '9';
+        this.fullName = 'Burmy BRS 9';
+    }
+}
+exports.BurmyBRS = BurmyBRS;
+class KarrablastBRS extends karrablast_1.Karrablast {
+    constructor() {
+        super(...arguments);
+        this.set = 'BRS';
+        this.setNumber = '15';
+        this.fullName = 'Karrablast BRS 15';
+    }
+}
+exports.KarrablastBRS = KarrablastBRS;
+class FreshWaterSetBRS extends fresh_water_set_1.FreshWaterSet {
+    constructor() {
+        super(...arguments);
+        this.set = 'BRS';
+        this.setNumber = '139';
+        this.fullName = 'Fresh Water Set BRS 139';
+    }
+}
+exports.FreshWaterSetBRS = FreshWaterSetBRS;
+class CharizardV2 extends charizard_v_1.CharizardV {
+    constructor() {
+        super(...arguments);
+        this.set = 'BRS';
+        this.setNumber = '153';
+        this.fullName = 'Charizard V BRS 153';
+    }
+}
+exports.CharizardV2 = CharizardV2;
+class CharizardV3 extends charizard_v_1.CharizardV {
+    constructor() {
+        super(...arguments);
+        this.set = 'BRS';
+        this.setNumber = '154';
+        this.fullName = 'Charizard V BRS 154';
+    }
+}
+exports.CharizardV3 = CharizardV3;
+class GranbullV2 extends granbull_v_1.GranbullV {
+    constructor() {
+        super(...arguments);
+        this.set = 'BRS';
+        this.setNumber = '159';
+        this.fullName = 'Granbull V BRS 159';
+    }
+}
+exports.GranbullV2 = GranbullV2;
+class HonchkrowV2 extends honchkrow_v_1.HonchkrowV {
+    constructor() {
+        super(...arguments);
+        this.set = 'BRS';
+        this.setNumber = '161';
+        this.fullName = 'Honchkrow V BRS 161';
+    }
+}
+exports.HonchkrowV2 = HonchkrowV2;
+class HonchkrowV3 extends honchkrow_v_1.HonchkrowV {
+    constructor() {
+        super(...arguments);
+        this.set = 'BRS';
+        this.setNumber = '162';
+        this.fullName = 'Honchkrow V BRS 162';
+    }
+}
+exports.HonchkrowV3 = HonchkrowV3;
+class FlygonV2 extends flygon_v_1.FlygonV {
+    constructor() {
+        super(...arguments);
+        this.set = 'BRS';
+        this.setNumber = '164';
+        this.fullName = 'Flygon V BRS 164';
+    }
+}
+exports.FlygonV2 = FlygonV2;
+class Barry2 extends barry_1.Barry {
+    constructor() {
+        super(...arguments);
+        this.set = 'BRS';
+        this.setNumber = '167';
+        this.fullName = 'Barry BRS 167';
+    }
+}
+exports.Barry2 = Barry2;
+class CharizardVstar2 extends charizard_vstar_1.CharizardVstar {
+    constructor() {
+        super(...arguments);
+        this.set = 'BRS';
+        this.setNumber = '174';
+        this.fullName = 'Charizard VSTAR BRS 174';
+    }
+}
+exports.CharizardVstar2 = CharizardVstar2;

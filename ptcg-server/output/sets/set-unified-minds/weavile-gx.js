@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.WeavileGX = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_1 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* useShadowConnection(next, store, state, effect) {
     const player = effect.player;
     const blockedMap = [];
@@ -79,12 +79,12 @@ class WeavileGX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Shadow Connection
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const generator = useShadowConnection(() => generator.next(), store, state, effect);
             return generator.next().value;
         }
         // Nocturnal Maneuvers-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             if (player.usedGX) {
                 throw new game_1.GameError(game_1.GameMessage.LABEL_GX_USED);

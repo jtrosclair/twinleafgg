@@ -1,16 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RocketsSuicuneex = void 0;
-const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
-const attack_effects_2 = require("../../game/store/effects/attack-effects");
+const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-class RocketsSuicuneex extends game_1.PokemonCard {
+const card_types_1 = require("../../game/store/card/card-types");
+const state_utils_1 = require("../../game/store/state-utils");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
+const game_1 = require("../../game");
+class RocketsSuicuneex extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
-        this.stage = game_1.Stage.BASIC;
-        this.tags = [game_1.CardTag.POKEMON_ex, game_1.CardTag.ROCKETS];
+        this.stage = card_types_1.Stage.BASIC;
+        this.tags = [card_types_1.CardTag.POKEMON_ex, card_types_1.CardTag.ROCKETS];
         this.cardType = D;
         this.hp = 100;
         this.weakness = [{ type: L }];
@@ -41,25 +43,25 @@ class RocketsSuicuneex extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Dark and Clear
-        if (effect instanceof attack_effects_2.AddSpecialConditionsEffect && effect.target.getPokemonCard() === this) {
+        if (effect instanceof attack_effects_1.AddSpecialConditionsEffect && effect.target.getPokemonCard() === this) {
             if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, effect.player, this)) {
                 return state;
             }
             const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(effect.player, effect.target);
             store.reduceEffect(state, checkProvidedEnergyEffect);
             const energyMap = checkProvidedEnergyEffect.energyMap;
-            const hasDarkEnergy = game_1.StateUtils.checkEnoughEnergy(energyMap, [game_1.CardType.DARK]);
+            const hasDarkEnergy = state_utils_1.StateUtils.checkEnoughEnergy(energyMap, [card_types_1.CardType.DARK]);
             if (hasDarkEnergy) {
                 effect.preventDefault = true;
             }
         }
         // Icy Wind
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP)(store, state, effect);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         // Hyper Splash
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
-            if (effect.opponent.active.isStage(game_1.Stage.STAGE_2) && effect.opponent.active.getPokemons.length > 1) {
+            if (effect.opponent.active.isStage(card_types_1.Stage.STAGE_2) && effect.opponent.active.getPokemons.length > 1) {
                 effect.damage += 40;
             }
         }

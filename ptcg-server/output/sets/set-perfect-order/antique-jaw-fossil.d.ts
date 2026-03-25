@@ -21,6 +21,7 @@ export declare class AntiqueJawFossil extends TrainerCard {
     attacksThisTurn: number;
     maxAttacksThisTurn: number;
     allowSubsequentAttackChoice: boolean;
+    evolvesFromBase: string[];
     maxTools: number;
     powers: Power[];
     regulationMark: string;

@@ -3,11 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ShiningLugia = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_message_1 = require("../../game/game-message");
-const game_1 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_2 = require("../../game");
+const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const state_utils_1 = require("../../game/store/state-utils");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -38,7 +36,7 @@ class ShiningLugia extends pokemon_card_1.PokemonCard {
         this.fullName = 'Shining Lugia SMP';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             const target = opponent.active.getPokemonCard();
@@ -46,14 +44,14 @@ class ShiningLugia extends pokemon_card_1.PokemonCard {
                 if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, target))
                     effect.damage += 60;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            if (!player.active.cards.some(c => c instanceof game_1.EnergyCard)) {
+            if (!player.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                 return state;
             }
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
             state = store.reduceEffect(state, checkProvidedEnergy);
-            state = store.prompt(state, new game_2.ChooseEnergyPrompt(player.id, game_message_1.GameMessage.CHOOSE_ENERGIES_TO_DISCARD, checkProvidedEnergy.energyMap, [C], { allowCancel: false }), energy => {
+            state = store.prompt(state, new game_1.ChooseEnergyPrompt(player.id, game_message_1.GameMessage.CHOOSE_ENERGIES_TO_DISCARD, checkProvidedEnergy.energyMap, [C], { allowCancel: false }), energy => {
                 const cards = (energy || []).map(e => e.card);
                 const discardEnergy = new attack_effects_1.DiscardCardsEffect(effect, cards);
                 discardEnergy.target = player.active;

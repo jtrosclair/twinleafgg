@@ -17,7 +17,9 @@ class HolonResearcher extends trainer_card_1.TrainerCard {
         this.setNumber = '95';
         this.name = 'Holon Researcher';
         this.fullName = 'Holon Researcher DS';
-        this.text = 'Discard a card from your hand. If you can\'t discard a card from your hand, you can\'t play this card.\n\Search your deck for a [M] Energy card or a Basic Pokémon (or Evolution card) that has delta on its card, show it to your opponent, and put it into your hand. Shuffle your deck afterward.';
+        this.text = `Discard a card from your hand. If you can't discard a card from your hand, you can't play this card.
+    
+Search your deck for a [M] Energy card or a Basic Pokémon (or Evolution card) that has delta on its card, show it to your opponent, and put it into your hand. Shuffle your deck afterward.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
@@ -35,7 +37,7 @@ class HolonResearcher extends trainer_card_1.TrainerCard {
                 if (c instanceof game_1.PokemonCard && c.tags.includes(card_types_1.CardTag.DELTA_SPECIES)) {
                     return;
                 }
-                else if (c instanceof game_1.EnergyCard && c.name === 'Metal Energy') {
+                else if (c.superType === card_types_1.SuperType.ENERGY && c.name === 'Metal Energy') {
                     return;
                 }
                 else {
@@ -47,10 +49,8 @@ class HolonResearcher extends trainer_card_1.TrainerCard {
                 cards = selected || [];
                 (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
                 (0, prefabs_1.MOVE_CARDS_TO_HAND)(store, state, player, cards);
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         return state;

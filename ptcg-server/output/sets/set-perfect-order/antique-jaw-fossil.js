@@ -5,6 +5,7 @@ const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class AntiqueJawFossil extends game_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -28,6 +29,7 @@ class AntiqueJawFossil extends game_1.TrainerCard {
         this.attacksThisTurn = 0;
         this.maxAttacksThisTurn = 1;
         this.allowSubsequentAttackChoice = false;
+        this.evolvesFromBase = [];
         this.maxTools = 1;
         this.powers = [{
                 name: 'Antique Jaw Fossil',
@@ -52,7 +54,7 @@ class AntiqueJawFossil extends game_1.TrainerCard {
     }
     reduceEffect(store, state, effect) {
         // Discard from play
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             store.log(state, game_1.GameLog.LOG_PLAYER_DISCARDS_CARD, { name: player.name, card: this.name, effect: 'Antique Jaw Fossil' });
             const cardList = game_1.StateUtils.findCardList(state, this);
@@ -93,15 +95,7 @@ class AntiqueJawFossil extends game_1.TrainerCard {
                 return state;
             }
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             effect.damage = Math.max(0, effect.damage - 30);

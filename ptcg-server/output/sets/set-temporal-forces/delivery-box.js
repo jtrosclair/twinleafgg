@@ -26,7 +26,6 @@ class DeliveryBox extends trainer_card_1.TrainerCard {
             store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, { superType: card_types_1.SuperType.TRAINER, trainerType: card_types_1.TrainerType.ITEM }, { min: 1, max: 2, allowCancel: false }), selected => {
                 cards = selected || [];
                 player.deck.moveCardsTo(cards, player.hand);
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 cards.forEach((card, index) => {
                     store.log(state, game_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                 });

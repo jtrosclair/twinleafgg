@@ -1,13 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Flareon = void 0;
-const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const card_types_1 = require("../../game/store/card/card-types");
+const costs_1 = require("../../game/store/prefabs/costs");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_1 = require("../../game");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
-const costs_1 = require("../../game/store/prefabs/costs");
+const card_types_1 = require("../../game/store/card/card-types");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 class Flareon extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -55,8 +54,8 @@ class Flareon extends pokemon_card_1.PokemonCard {
                 });
             }
         }
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP)(store, state, effect);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         // Make this acutally do the right thing later
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {

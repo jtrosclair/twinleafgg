@@ -57,7 +57,6 @@ function* playCard(next, store, state, self, effect) {
         yield store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
     player.discard.moveCardsTo(cards, player.deck);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });
@@ -74,6 +73,10 @@ class SuperRod extends trainer_card_1.TrainerCard {
         this.fullName = 'Super Rod PAL';
         this.text = 'Shuffle 3 in any combination of Pokemon and basic Energy cards from ' +
             'your discard pile back into your deck.';
+    }
+    canPlay(store, state, player) {
+        const hasValidCards = player.discard.cards.some(c => c instanceof pokemon_card_1.PokemonCard || (c instanceof energy_card_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC));
+        return hasValidCards;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

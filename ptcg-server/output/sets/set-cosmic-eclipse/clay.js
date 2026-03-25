@@ -35,7 +35,6 @@ class Clay extends trainer_card_1.TrainerCard {
             store.reduceEffect(state, discardEffect);
             if (discardEffect.preventDefault) {
                 // If prevented, just discard the card and return
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return state;
             }
             // Move all cards to discard
@@ -45,7 +44,6 @@ class Clay extends trainer_card_1.TrainerCard {
             });
             // Move item cards to hand
             (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: itemCards, sourceCard: this });
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         return state;

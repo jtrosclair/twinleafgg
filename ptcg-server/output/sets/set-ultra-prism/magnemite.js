@@ -7,6 +7,7 @@ const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const state_utils_1 = require("../../game/store/state-utils");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Magnemite extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -42,15 +43,7 @@ class Magnemite extends pokemon_card_1.PokemonCard {
                 return state;
             }
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: pokemon_types_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             // Target is this Magnemite
@@ -64,7 +57,7 @@ class Magnemite extends pokemon_card_1.PokemonCard {
                     }, this);
                     store.reduceEffect(state, stub);
                 }
-                catch (_b) {
+                catch (_a) {
                     return state;
                 }
                 effect.preventDefault = true;

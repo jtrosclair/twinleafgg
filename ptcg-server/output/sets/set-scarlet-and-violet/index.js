@@ -44,6 +44,7 @@ const magnezone_ex_1 = require("./magnezone-ex");
 const mankey_1 = require("./mankey");
 const mareep_1 = require("./mareep");
 const mesagoza_1 = require("./mesagoza");
+const meowscarada_1 = require("./meowscarada");
 const miraidon_ex_1 = require("./miraidon-ex");
 const miriam_1 = require("./miriam");
 const nemona_1 = require("./nemona");
@@ -134,6 +135,7 @@ exports.setScarletAndViolet = [
     new mankey_1.Mankey(),
     new mareep_1.Mareep(),
     new mesagoza_1.Mesagoza(),
+    new meowscarada_1.Meowscarada(),
     new miraidon_ex_1.Miraidonex(),
     new miriam_1.Miriam(),
     new nemona_1.Nemona(),

@@ -10,6 +10,7 @@ const coin_flip_prompt_1 = require("../../game/store/prompts/coin-flip-prompt");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const state_utils_1 = require("../../game/store/state-utils");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Articuno extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -43,11 +44,11 @@ class Articuno extends pokemon_card_1.PokemonCard {
         this.setNumber = '17';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const specialConditionEffect = new attack_effects_1.AddSpecialConditionsEffect(effect, [card_types_1.SpecialCondition.ASLEEP]);
             store.reduceEffect(state, specialConditionEffect);
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             return store.prompt(state, [
                 new coin_flip_prompt_1.CoinFlipPrompt(player.id, game_message_1.GameMessage.COIN_FLIP),
@@ -60,9 +61,15 @@ class Articuno extends pokemon_card_1.PokemonCard {
             });
         }
         // Delta Plus
-        if (effect instanceof game_effects_1.KnockOutEffect && effect.target === effect.player.active) {
+        if (effect instanceof game_effects_1.KnockOutEffect) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
+            // Check if the knocked out Pokemon belongs to the opponent (active or bench)
+            const isOpponentPokemon = opponent.active === effect.target ||
+                opponent.bench.includes(effect.target);
+            if (!isOpponentPokemon) {
+                return state;
+            }
             // Do not activate between turns, or when it's not opponents turn.
             if (state.phase !== state_1.GamePhase.ATTACK || state.players[state.activePlayer] !== opponent) {
                 return state;

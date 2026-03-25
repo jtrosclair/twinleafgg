@@ -7,7 +7,6 @@ const game_1 = require("../../game");
 const game_2 = require("../../game");
 const game_3 = require("../../game");
 const state_utils_1 = require("../../game/store/state-utils");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 // GRI Sylveon-GX 92 (https://limitlesstcg.com/cards/GRI/92)
 class SylveonGX extends pokemon_card_1.PokemonCard {
@@ -49,7 +48,7 @@ class SylveonGX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Magical Ribbon
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let cards = [];
             return store.prompt(state, new game_2.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.deck, {}, { min: 0, max: 3, allowCancel: false }), selected => {
@@ -61,7 +60,7 @@ class SylveonGX extends pokemon_card_1.PokemonCard {
             });
         }
         // Plea-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             // Check if player has used GX attack

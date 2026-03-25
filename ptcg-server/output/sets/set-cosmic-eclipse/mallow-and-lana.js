@@ -18,9 +18,9 @@ class MallowAndLana extends trainer_card_1.TrainerCard {
         this.setNumber = '198';
         this.name = 'Mallow & Lana';
         this.fullName = 'Mallow & Lana CEC';
-        this.text = 'Switch your Active Pokémon with 1 of your Benched Pokémon.' +
-            '' +
-            'When you play this card, you may discard 2 other cards from your hand. If you do, heal 120 damage from the Pokémon you moved to your Bench.';
+        this.text = `Switch your Active Pokémon with 1 of your Benched Pokémon. 
+
+When you play this card, you may discard 2 other cards from your hand. If you do, heal 120 damage from the Pokémon you moved to your Bench.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
@@ -42,7 +42,6 @@ class MallowAndLana extends trainer_card_1.TrainerCard {
                 const previousActiveCardList = player.active;
                 player.switchPokemon(cardList);
                 if (player.hand.cards.length < 2 || !activeHasDamage) {
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     return state;
                 }
                 state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_message_1.GameMessage.WANT_TO_HEAL_POKEMON), wantToUse => {
@@ -58,7 +57,6 @@ class MallowAndLana extends trainer_card_1.TrainerCard {
                             store.log(state, game_message_1.GameLog.LOG_PLAYER_HEALS_POKEMON, { name: player.name, pokemon: previousActiveCardList.getPokemonCard().name, healingAmount: 120 });
                         });
                     }
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 });
             });
         }

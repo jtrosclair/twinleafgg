@@ -49,7 +49,6 @@ Search your deck for up to 3 Basic Team Rocket's Pokémon, reveal them, and put 
                 cards = selectedCards || [];
                 (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards: cards, sourceCard: this });
                 (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, opponent, cards);
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
             });
         }

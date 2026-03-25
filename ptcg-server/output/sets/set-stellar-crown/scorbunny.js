@@ -2,7 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Scorbunny = void 0;
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Scorbunny extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -17,7 +18,7 @@ class Scorbunny extends game_1.PokemonCard {
                 cost: [game_1.CardType.COLORLESS],
                 damage: 10,
                 damageCalculation: '+',
-                text: 'Flip a coin. If heads, this attack does 10 more damage.'
+                text: 'Flip a coin. If heads, this attack does 10 more damage.',
             }];
         this.set = 'SCR';
         this.cardImage = 'assets/cardback.png';
@@ -26,12 +27,13 @@ class Scorbunny extends game_1.PokemonCard {
         this.fullName = 'Scorbunny SCR';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
-            return store.prompt(state, new game_1.CoinFlipPrompt(effect.player.id, game_1.GameMessage.COIN_FLIP), flipResult => {
-                if (flipResult) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            const coinFlipEffect = new play_card_effects_1.CoinFlipEffect(effect.player, (result) => {
+                if (result) {
                     effect.damage += 10;
                 }
             });
+            return store.reduceEffect(state, coinFlipEffect);
         }
         return state;
     }

@@ -3,7 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LeafeonVMAX = void 0;
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class LeafeonVMAX extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -19,6 +20,7 @@ class LeafeonVMAX extends game_1.PokemonCard {
                 name: 'Grass Knot',
                 cost: [game_1.CardType.GRASS, game_1.CardType.COLORLESS],
                 damage: 60,
+                damageCalculation: 'x',
                 text: 'This attack does 60 damage for each [C] in your opponent\'s Active Pokémon\'s Retreat Cost.'
             },
             {
@@ -36,18 +38,16 @@ class LeafeonVMAX extends game_1.PokemonCard {
         this.fullName = 'Leafeon VMAX EVS';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            const opponentActiveCard = opponent.active.getPokemonCard();
-            if (opponentActiveCard) {
-                const retreatCost = opponentActiveCard.retreat.filter(c => c === game_1.CardType.COLORLESS).length;
-                effect.damage = retreatCost * 60;
-                return state;
-            }
+            const checkRetreatCostEffect = new check_effects_1.CheckRetreatCostEffect(opponent);
+            store.reduceEffect(state, checkRetreatCostEffect);
+            const retreatCost = checkRetreatCostEffect.cost.length;
+            effect.damage = retreatCost * 60;
             return state;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const healTargetEffect = new attack_effects_1.HealTargetEffect(effect, 30);
             healTargetEffect.target = player.active;

@@ -56,7 +56,6 @@ class ProfessorTurosScenario extends trainer_card_1.TrainerCard {
                     if (pokemons.length > 0) {
                         (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.hand, { cards: pokemons });
                     }
-                    (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
                 }
             });
         }

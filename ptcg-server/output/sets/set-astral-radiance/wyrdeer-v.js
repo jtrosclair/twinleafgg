@@ -6,6 +6,7 @@ const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class WyrdeerV extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -72,7 +73,7 @@ class WyrdeerV extends game_1.PokemonCard {
                         return;
                     }
                     blockedTo.push(target);
-                    if (cardList.cards.some(c => c instanceof game_1.EnergyCard)) {
+                    if (cardList.cards.some(c => c.superType === game_1.SuperType.ENERGY)) {
                         hasEnergyOnBench = true;
                     }
                 });
@@ -96,7 +97,7 @@ class WyrdeerV extends game_1.PokemonCard {
                 });
             }
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let totalDamage = 0;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {

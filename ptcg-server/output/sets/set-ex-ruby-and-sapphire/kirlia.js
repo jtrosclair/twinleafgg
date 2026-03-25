@@ -9,6 +9,7 @@ class Kirlia extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.stage = card_types_1.Stage.STAGE_1;
+        this.evolvesFrom = 'Ralts';
         this.cardType = P;
         this.hp = 70;
         this.weakness = [{ type: P }];

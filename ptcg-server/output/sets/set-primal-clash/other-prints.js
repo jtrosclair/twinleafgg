@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WeaknessPolicy2PRC = exports.SwitchPRC = exports.EnhancedHammerPRC = exports.DiveBall2PRC = exports.Teammates2PRC = exports.MaxiesHiddenBallTrick2PRC = exports.ArchiesAceInTheHole2PRC = exports.MGardevoirEx2PRC = exports.GardevoirEx2PRC = exports.PrimalGroudonEx2PRC = exports.GroudonEx2PRC = exports.WailordEx2PRC = exports.RareCandyPRC = exports.ExpSharePRC = exports.EscapeRopeBUSPRC = exports.EnergyRetrievalPRC = void 0;
+exports.ProfessorBirchsObservations2 = exports.MAggronEx2 = exports.AggronEx2 = exports.SharpedoEx2 = exports.PrimalKyogreEx2 = exports.KyogreEx2 = exports.CameruptEx2 = exports.TrevenantEx2 = exports.WeaknessPolicy2PRC = exports.SwitchPRC = exports.EnhancedHammerPRC = exports.DiveBall2PRC = exports.Teammates2PRC = exports.MaxiesHiddenBallTrick2PRC = exports.ArchiesAceInTheHole2PRC = exports.MGardevoirEx2PRC = exports.GardevoirEx2PRC = exports.PrimalGroudonEx2PRC = exports.GroudonEx2PRC = exports.WailordEx2PRC = exports.RareCandyPRC = exports.ExpSharePRC = exports.EscapeRopeBUSPRC = exports.EnergyRetrievalPRC = void 0;
 const energy_retrieval_1 = require("../set-base-set/energy-retrieval");
 const other_prints_1 = require("../set-burning-shadows/other-prints");
 const exp_share_1 = require("../set-scarlet-and-violet/exp-share");
@@ -17,6 +17,14 @@ const dive_ball_1 = require("../set-primal-clash/dive-ball");
 const enhanced_hammer_1 = require("../set-twilight-masquerade/enhanced-hammer");
 const switch_1 = require("../set-base-set/switch");
 const weakness_policy_1 = require("../set-primal-clash/weakness-policy");
+const trevenant_ex_1 = require("./trevenant-ex");
+const camerupt_ex_1 = require("./camerupt-ex");
+const kyogre_ex_1 = require("./kyogre-ex");
+const primal_kyogre_ex_1 = require("./primal-kyogre-ex");
+const sharpedo_ex_1 = require("./sharpedo-ex");
+const aggron_ex_1 = require("./aggron-ex");
+const m_aggron_ex_1 = require("./m-aggron-ex");
+const professor_birchs_observations_1 = require("./professor-birchs-observations");
 class EnergyRetrievalPRC extends energy_retrieval_1.EnergyRetrieval {
     constructor() {
         super(...arguments);
@@ -161,3 +169,75 @@ class WeaknessPolicy2PRC extends weakness_policy_1.WeaknessPolicy {
     }
 }
 exports.WeaknessPolicy2PRC = WeaknessPolicy2PRC;
+class TrevenantEx2 extends trevenant_ex_1.TrevenantEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PRC';
+        this.setNumber = '145';
+        this.fullName = 'Trevenant-EX PRC 145';
+    }
+}
+exports.TrevenantEx2 = TrevenantEx2;
+class CameruptEx2 extends camerupt_ex_1.CameruptEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PRC';
+        this.setNumber = '146';
+        this.fullName = 'Camerupt-EX PRC 146';
+    }
+}
+exports.CameruptEx2 = CameruptEx2;
+class KyogreEx2 extends kyogre_ex_1.KyogreEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PRC';
+        this.setNumber = '148';
+        this.fullName = 'Kyogre-EX PRC 148';
+    }
+}
+exports.KyogreEx2 = KyogreEx2;
+class PrimalKyogreEx2 extends primal_kyogre_ex_1.PrimalKyogreEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PRC';
+        this.setNumber = '149';
+        this.fullName = 'Primal Kyogre-EX PRC 149';
+    }
+}
+exports.PrimalKyogreEx2 = PrimalKyogreEx2;
+class SharpedoEx2 extends sharpedo_ex_1.SharpedoEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PRC';
+        this.setNumber = '152';
+        this.fullName = 'Sharpedo-EX PRC 152';
+    }
+}
+exports.SharpedoEx2 = SharpedoEx2;
+class AggronEx2 extends aggron_ex_1.AggronEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PRC';
+        this.setNumber = '153';
+        this.fullName = 'Aggron-EX PRC 153';
+    }
+}
+exports.AggronEx2 = AggronEx2;
+class MAggronEx2 extends m_aggron_ex_1.MAggronEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PRC';
+        this.setNumber = '154';
+        this.fullName = 'M Aggron-EX PRC 154';
+    }
+}
+exports.MAggronEx2 = MAggronEx2;
+class ProfessorBirchsObservations2 extends professor_birchs_observations_1.ProfessorBirchsObservations {
+    constructor() {
+        super(...arguments);
+        this.set = 'PRC';
+        this.setNumber = '159';
+        this.fullName = 'Professor Birch\'s Observations PRC 159';
+    }
+}
+exports.ProfessorBirchsObservations2 = ProfessorBirchsObservations2;

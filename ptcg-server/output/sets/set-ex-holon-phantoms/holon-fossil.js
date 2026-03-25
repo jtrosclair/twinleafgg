@@ -50,11 +50,9 @@ class HolonFossil extends trainer_card_1.TrainerCard {
             return store.prompt(state, new game_1.CoinFlipPrompt(player.id, game_message_1.GameMessage.COIN_FLIP), flipResult => {
                 if (flipResult) {
                     (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH)(store, state, player, {}, { min: 0, max: 1, blocked: blockedDeck });
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 }
                 else if (!flipResult) {
                     if (player.hand.cards.length === 0 || player.hand.cards.length === blockedHand.length) {
-                        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                         return state;
                     }
                     store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH, player.hand, { superType: card_types_1.SuperType.POKEMON }, { min: 1, max: 1, allowCancel: false, blocked: blockedHand }), selected => {
@@ -63,7 +61,6 @@ class HolonFossil extends trainer_card_1.TrainerCard {
                             player.hand.moveCardTo(card, slots[index]);
                             slots[index].pokemonPlayedTurn = state.turn;
                         });
-                        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     });
                 }
                 return state;

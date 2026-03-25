@@ -23,7 +23,7 @@ class MagmaEnergy extends energy_card_1.EnergyCard {
     }
     getExistingEnergy(source) {
         return source.cards
-            .filter((card) => card instanceof energy_card_1.EnergyCard && card !== this)
+            .filter((card) => card.superType === card_types_1.SuperType.ENERGY && card !== this)
             .map((card) => ({
             card: card,
             provides: card.provides

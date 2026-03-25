@@ -5,6 +5,7 @@ const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class RareFossil extends game_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -28,7 +29,8 @@ class RareFossil extends game_1.TrainerCard {
         this.attacksThisTurn = 0;
         this.maxAttacksThisTurn = 1;
         this.allowSubsequentAttackChoice = false;
-        this.maxTools = 0;
+        this.evolvesFromBase = [];
+        this.maxTools = 1;
         this.set = 'DAA';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '167';
@@ -54,7 +56,7 @@ This card can't be affected by any Special Conditions, and it can't retreat.`,
         if (effect instanceof attack_effects_1.AddSpecialConditionsEffect && effect.target.getPokemonCard() === this) {
             effect.preventDefault = true;
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             store.log(state, game_1.GameLog.LOG_PLAYER_DISCARDS_CARD, { name: player.name, card: this.name, effect: 'Rare Fossil' });
             const cardList = game_1.StateUtils.findCardList(state, this);

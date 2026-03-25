@@ -4,8 +4,8 @@ exports.HoOhEx = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* useRebirth(next, store, state, self, effect) {
     const player = effect.player;
     // Check if card is in the discard
@@ -88,12 +88,12 @@ class HoOhEx extends pokemon_card_1.PokemonCard {
         this.REBIRTH_MAREKER = 'REBIRTH_MAREKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let basicEnergies = 0;
             const typeMap = {};
             player.active.cards.forEach(c => {
-                if (c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC) {
+                if (c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC) {
                     const cardType = c.provides[0];
                     if (typeMap[cardType] === undefined) {
                         basicEnergies += 1;
@@ -104,7 +104,7 @@ class HoOhEx extends pokemon_card_1.PokemonCard {
             effect.damage += basicEnergies * 20;
             return state;
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const generator = useRebirth(() => generator.next(), store, state, this, effect);
             return generator.next().value;
         }

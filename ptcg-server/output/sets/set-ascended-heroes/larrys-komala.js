@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LarrysKomala = void 0;
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class LarrysKomala extends game_1.PokemonCard {
@@ -38,7 +37,7 @@ class LarrysKomala extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Lethargic Charge ability
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             // Check if this Pokemon is on Bench
             let isOnBench = false;

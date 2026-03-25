@@ -41,7 +41,6 @@ function* playCard(next, store, state, effect) {
         next();
     });
     player.deck.moveCardsTo(cards, player.hand);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
@@ -59,7 +58,7 @@ class Perrin extends trainer_card_1.TrainerCard {
         this.fullName = 'Perrin TWM';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '160';
-        this.text = 'Reveal up to 2 Pokémon from your hand and shuffle them into your deck. Then, search your deck for up to that many Pokémon, reveal them, and put them into your hand. Then shuffle your deck.';
+        this.text = 'Reveal up to 2 Pokémon from your hand and shuffle them into your deck. If you do, search your deck for up to that many Pokémon, reveal them, and put them into your hand. Then, shuffle your deck.';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

@@ -26,7 +26,7 @@ function* playCard(next, store, state, self, effect) {
     let pokemon = 0;
     const blocked = [];
     player.deck.cards.forEach((c, index) => {
-        if (c instanceof game_1.EnergyCard) {
+        if (c.superType === card_types_1.SuperType.ENERGY) {
             energy += 1;
         }
         else if (c instanceof game_1.PokemonCard && c.cardType === card_types_1.CardType.DARK) {
@@ -47,7 +47,6 @@ function* playCard(next, store, state, self, effect) {
         next();
     });
     (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: self });
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     cards.forEach((card, index) => {
         store.log(state, game_message_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
     });

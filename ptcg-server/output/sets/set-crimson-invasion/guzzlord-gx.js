@@ -64,11 +64,6 @@ class GuzzlordGX extends pokemon_card_1.PokemonCard {
             if (state.phase !== game_1.GamePhase.ATTACK || state.players[state.activePlayer] !== opponent) {
                 return state;
             }
-            // Guzzy wasn't attacking
-            const pokemonCard = opponent.active.getPokemonCard();
-            if (pokemonCard !== this) {
-                return state;
-            }
             // Check if the attack that caused the KnockOutEffect is "Red Banquet"
             if (this.usedGluttonGX === true) {
                 if (effect.prizeCount > 0) {

@@ -14,7 +14,7 @@ function* playCard(next, store, state, effect) {
         if (card.tags.includes(card_types_1.CardTag.TAG_TEAM)) {
             tagTeamPokemonCount++;
             const energyAttached = cardList.energies.cards.some(c => {
-                return c instanceof game_1.EnergyCard;
+                return c.superType === card_types_1.SuperType.ENERGY;
             });
             hasEnergy = hasEnergy || energyAttached;
         }
@@ -36,7 +36,6 @@ function* playCard(next, store, state, effect) {
         transfers = result || [];
         next();
     });
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     transfers.forEach(transfer => {
         const source = game_1.StateUtils.getTarget(state, player, transfer.from);
         const target = game_1.StateUtils.getTarget(state, player, transfer.to);

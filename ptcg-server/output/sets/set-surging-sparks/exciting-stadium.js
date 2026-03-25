@@ -18,7 +18,7 @@ class ExcitingStadium extends trainer_card_1.TrainerCard {
         this.setNumber = '180';
         this.name = 'Lively Stadium';
         this.fullName = 'Exciting Stadium SSP';
-        this.text = 'Basic Pokémon in play get +30 HP.';
+        this.text = 'Each Basic Pokémon in play (both yours and your opponent\'s) gets +30 HP.';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof check_effects_1.CheckHpEffect && state_utils_1.StateUtils.getStadiumCard(state) === this) {

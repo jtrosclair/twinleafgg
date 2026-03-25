@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Altaria = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const game_error_1 = require("../../game/game-error");
 const game_message_1 = require("../../game/game-message");
@@ -12,6 +11,7 @@ const play_card_effects_1 = require("../../game/store/effects/play-card-effects"
 const card_list_1 = require("../../game/store/state/card-list");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
 const game_1 = require("../../game");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Altaria extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -44,7 +44,7 @@ class Altaria extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.FOREWARN_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.deck.cards.length === 0) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_USE_POWER);

@@ -8,7 +8,6 @@ const game_error_1 = require("../../game/game-error");
 const game_message_1 = require("../../game/game-message");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
 const card_list_1 = require("../../game/store/state/card-list");
-const energy_card_1 = require("../../game/store/card/energy-card");
 function* playCard(next, store, state, self, effect) {
     const player = effect.player;
     let cards = [];
@@ -18,7 +17,7 @@ function* playCard(next, store, state, self, effect) {
     }
     let basicEnergies = 0;
     player.discard.cards.forEach(c => {
-        if (c instanceof energy_card_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC) {
+        if (c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC) {
             basicEnergies += 1;
         }
     });
@@ -49,7 +48,6 @@ function* playCard(next, store, state, self, effect) {
     }
     player.hand.moveCardsTo(cards, player.discard);
     player.discard.moveCardsTo(recovered, player.hand);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return state;
 }
 class SuperiorEnergyRetrieval extends trainer_card_1.TrainerCard {
@@ -62,12 +60,17 @@ class SuperiorEnergyRetrieval extends trainer_card_1.TrainerCard {
         this.setNumber = '189';
         this.name = 'Superior Energy Retrieval';
         this.fullName = 'Superior Energy Retrieval PAL';
-        this.text = 'You can use this card only if you discard 2 other cards from ' +
-            'your hand.' +
-            '' +
-            'Put up to 4 Basic Energy cards from your discard pile into ' +
-            'your hand. (You can\'t choose a card you discarded with the ' +
-            'effect of this card.)';
+        this.text = `You can use this card only if you discard 2 other cards from your hand. 
+
+Put up to 4 Basic Energy cards from your discard pile into your hand. (You can't choose a card you discarded with the effect of this card.)`;
+    }
+    canPlay(store, state, player) {
+        const otherCardsInHand = player.hand.cards.filter(c => c !== this).length;
+        if (otherCardsInHand < 2) {
+            return false;
+        }
+        const hasBasicEnergy = player.discard.cards.some(c => c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC);
+        return hasBasicEnergy;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

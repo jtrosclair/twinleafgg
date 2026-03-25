@@ -1,13 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Poipole = void 0;
-const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const card_types_1 = require("../../game/store/card/card-types");
-const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const game_effects_1 = require("../../game/store/effects/game-effects");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const card_types_1 = require("../../game/store/card/card-types");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
+const game_1 = require("../../game");
 class Poipole extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -40,8 +39,8 @@ class Poipole extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Spit Poison
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED)(store, state, effect);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         // Knockout Reviver
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {

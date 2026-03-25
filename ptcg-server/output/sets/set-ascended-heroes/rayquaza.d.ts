@@ -28,6 +28,5 @@ export declare class Rayquaza extends PokemonCard {
     setNumber: string;
     name: string;
     fullName: string;
-    movedToActiveThisTurn: boolean;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

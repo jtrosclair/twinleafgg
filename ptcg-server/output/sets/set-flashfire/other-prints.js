@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Blacksmith2FLF = exports.MKangaskhanEX2FLF = exports.MCharizardEX4FLF = exports.PokemonFanClub2FLF = exports.Lysandre2FLF = exports.KangaskhanEX2FLF = exports.ToxicroakEx2FLF = exports.UltraBallFLF = exports.PalPadFLF = exports.PokemonFanClubFLF = void 0;
+exports.MCharizardEx3 = exports.PokemonCenterLady2 = exports.MagnezoneEx2 = exports.CharizardEx3 = exports.PokemonFanClubFLF94 = exports.DruddigonFLF = exports.Blacksmith2FLF = exports.MKangaskhanEX2FLF = exports.MCharizardEX4FLF = exports.PokemonFanClub2FLF = exports.Lysandre2FLF = exports.KangaskhanEX2FLF = exports.ToxicroakEx2FLF = exports.UltraBallFLF = exports.PalPadFLF = exports.PokemonFanClubFLF = void 0;
 const pal_pad_1 = require("../set-scarlet-and-violet/pal-pad");
 const ultra_ball_1 = require("../set-scarlet-and-violet/ultra-ball");
 const toxicroak_ex_1 = require("../set-flashfire/toxicroak-ex");
@@ -11,6 +11,11 @@ const m_charizard_ex_1 = require("../set-flashfire/m-charizard-ex");
 const m_kangaskhan_ex_1 = require("../set-flashfire/m-kangaskhan-ex");
 const blacksmith_1 = require("../set-flashfire/blacksmith");
 const pokemon_fan_club_2 = require("../set-ultra-prism/pokemon-fan-club");
+const druddigon_1 = require("../set-brilliant-stars/druddigon");
+const charizard_ex_1 = require("./charizard-ex");
+const magnezone_ex_1 = require("./magnezone-ex");
+const pokemon_center_lady_1 = require("./pokemon-center-lady");
+const m_charizard_ex_2 = require("./m-charizard-ex");
 class PokemonFanClubFLF extends pokemon_fan_club_2.PokemonFanClub {
     constructor() {
         super(...arguments);
@@ -102,3 +107,57 @@ class Blacksmith2FLF extends blacksmith_1.Blacksmith {
     }
 }
 exports.Blacksmith2FLF = Blacksmith2FLF;
+class DruddigonFLF extends druddigon_1.Druddigon {
+    constructor() {
+        super(...arguments);
+        this.set = 'FLF';
+        this.setNumber = '70';
+        this.fullName = 'Druddigon FLF';
+    }
+}
+exports.DruddigonFLF = DruddigonFLF;
+class PokemonFanClubFLF94 extends pokemon_fan_club_1.PokemonFanClub {
+    constructor() {
+        super(...arguments);
+        this.set = 'FLF';
+        this.setNumber = '94a';
+        this.fullName = 'Pokémon Fan Club FLF 94a';
+    }
+}
+exports.PokemonFanClubFLF94 = PokemonFanClubFLF94;
+class CharizardEx3 extends charizard_ex_1.CharizardEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'FLF';
+        this.setNumber = '100';
+        this.fullName = 'Charizard-EX FLF 100';
+    }
+}
+exports.CharizardEx3 = CharizardEx3;
+class MagnezoneEx2 extends magnezone_ex_1.MagnezoneEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'FLF';
+        this.setNumber = '101';
+        this.fullName = 'Magnezone-EX FLF 101';
+    }
+}
+exports.MagnezoneEx2 = MagnezoneEx2;
+class PokemonCenterLady2 extends pokemon_center_lady_1.PokemonCenterLady {
+    constructor() {
+        super(...arguments);
+        this.set = 'FLF';
+        this.setNumber = '105';
+        this.fullName = 'Pokémon Center Lady FLF 105';
+    }
+}
+exports.PokemonCenterLady2 = PokemonCenterLady2;
+class MCharizardEx3 extends m_charizard_ex_2.MCharizardEX {
+    constructor() {
+        super(...arguments);
+        this.set = 'FLF';
+        this.setNumber = '107';
+        this.fullName = 'M Charizard-EX FLF 107';
+    }
+}
+exports.MCharizardEx3 = MCharizardEx3;

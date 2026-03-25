@@ -16,9 +16,9 @@ class AreaZeroUnderdepths extends trainer_card_1.TrainerCard {
         this.regulationMark = 'H';
         this.name = 'Area Zero Underdepths';
         this.fullName = 'Area Zero Underdepths SCR';
-        this.text = 'Each player who has any Tera Pokémon in play can have up to 8 Pokémon on their Bench.' +
-            '' +
-            'If a player no longer has any Tera Pokémon in play, that player discards Pokémon from their Bench until they have 5. When this card leaves play, both players discard Pokémon from their Bench until they have 5, and the player who played this card discards first.';
+        this.text = `Each player who has any Tera Pokémon in play can have up to 8 Pokémon on their Bench.
+
+If a player no longer has any Tera Pokémon in play, that player discards Pokémon from their Bench until they have 5. When this card leaves play, both players discard Pokémon from their Bench until they have 5, and the player who played this card discards first.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof check_effects_1.CheckTableStateEffect && game_1.StateUtils.getStadiumCard(state) === this) {

@@ -19,6 +19,17 @@ class TeamStarGrunt extends trainer_card_1.TrainerCard {
         this.fullName = 'Team Star Grunt SVI';
         this.text = 'Put an Energy attached to your opponent\'s Active Pokémon on top of their deck.';
     }
+    canPlay(store, state, player) {
+        const opponent = game_1.StateUtils.getOpponent(state, player);
+        const supporterTurn = player.supporterTurn;
+        if (supporterTurn > 0) {
+            return false;
+        }
+        if (!opponent.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
+            return false;
+        }
+        return true;
+    }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;
@@ -30,7 +41,7 @@ class TeamStarGrunt extends trainer_card_1.TrainerCard {
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             // We will discard this card after prompt confirmation
             effect.preventDefault = true;
-            if (!opponent.active.cards.some(c => c instanceof game_1.EnergyCard)) {
+            if (!opponent.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
             const deckTop = new game_1.CardList();
@@ -40,7 +51,6 @@ class TeamStarGrunt extends trainer_card_1.TrainerCard {
                 if (cards.length > 0) {
                     target.moveCardsTo(energy, deckTop);
                     deckTop.moveToTopOfDestination(opponent.deck);
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 }
             });
             return state;

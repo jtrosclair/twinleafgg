@@ -6,8 +6,8 @@ const play_card_effects_1 = require("../../game/store/effects/play-card-effects"
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const state_utils_1 = require("../../game/store/state-utils");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Meowstic extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -46,7 +46,7 @@ class Meowstic extends pokemon_card_1.PokemonCard {
             player.marker.removeMarker(this.BECKONING_TAIL_MARKER, this);
         }
         // Beckoning Tail
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             const hasBench = opponent.bench.some(b => b.cards.length > 0);

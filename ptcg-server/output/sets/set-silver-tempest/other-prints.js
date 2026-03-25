@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DuraludonVMAX2SIT = exports.RayquazaVMAX2SIT = exports.RaihanSIT = exports.JudgeULSIT = exports.BlisseyVSIT = exports.DuraludonVMAXSIT = exports.RayquazaVMAXSIT = exports.BlazikenVMAXSIT = exports.BlazikenVSIT = exports.SerperiorV3SIT = exports.KricketuneVSIT = exports.DruddigonSIT = exports.Gardevoir2SIT = exports.FlaaffySIT = exports.Braixen2SIT = exports.VGuardEnergy2SIT = exports.LeafyCamoPoncho2SIT = exports.GapejawBogSIT = exports.EnergySwitchPKSIT = exports.LugiaVSTAR3SIT = exports.SerperiorVSTAR3SIT = exports.Worker3SIT = exports.Serena3SIT = exports.Lance3SIT = exports.FurisodeGirl3SIT = exports.Candice3SIT = exports.LugiaVSTAR2SIT = exports.RegidragoVSTAR2SIT = exports.UnownVSTAR2SIT = exports.RegielekiVMAX2SIT = exports.AlolanVulpixVSTAR2SIT = exports.SerperiorVSTAR2SIT = exports.Worker2SIT = exports.Serena2SIT = exports.Lance2SIT = exports.FurisodeGirl2SIT = exports.Candice2SIT = exports.LugiaV3SIT = exports.LugiaV2SIT = exports.RegidragoV3SIT = exports.RegidragoV2SIT = exports.MagearnaV2SIT = exports.UnownV3SIT = exports.UnownV2SIT = exports.RegielekiV2SIT = exports.AlolanVulpixV2SIT = exports.SerperiorV2SIT = void 0;
+exports.MetangSIT = exports.MareanieSIT = exports.SandileSIT = exports.DuraludonVMAX2SIT = exports.RayquazaVMAX2SIT = exports.RaihanSIT = exports.JudgeULSIT = exports.BlisseyVSIT = exports.DuraludonVMAXSIT = exports.RayquazaVMAXSIT = exports.BlazikenVMAXSIT = exports.BlazikenVSIT = exports.SerperiorV3SIT = exports.KricketuneVSIT = exports.DruddigonSIT = exports.Gardevoir2SIT = exports.FlaaffySIT = exports.Braixen2SIT = exports.VGuardEnergy2SIT = exports.LeafyCamoPoncho2SIT = exports.GapejawBogSIT = exports.EnergySwitchPKSIT = exports.LugiaVSTAR3SIT = exports.SerperiorVSTAR3SIT = exports.Worker3SIT = exports.Serena3SIT = exports.Lance3SIT = exports.FurisodeGirl3SIT = exports.Candice3SIT = exports.LugiaVSTAR2SIT = exports.RegidragoVSTAR2SIT = exports.UnownVSTAR2SIT = exports.RegielekiVMAX2SIT = exports.AlolanVulpixVSTAR2SIT = exports.SerperiorVSTAR2SIT = exports.Worker2SIT = exports.Serena2SIT = exports.Lance2SIT = exports.FurisodeGirl2SIT = exports.Candice2SIT = exports.LugiaV3SIT = exports.LugiaV2SIT = exports.RegidragoV3SIT = exports.RegidragoV2SIT = exports.MagearnaV2SIT = exports.UnownV3SIT = exports.UnownV2SIT = exports.RegielekiV2SIT = exports.AlolanVulpixV2SIT = exports.SerperiorV2SIT = void 0;
+exports.Wallace3 = exports.Brandon3 = exports.MawileVstar2 = exports.Wallace2 = exports.GymTrainer2 = exports.Brandon2 = exports.HoOhV2 = exports.SkuntankV3 = exports.SkuntankV2 = exports.HisuianArcanineV2 = exports.MawileV2 = exports.OmastarV2 = exports.ReshiramV2 = exports.ChesnaughtV2 = exports.GymTrainerSIT = exports.FletchlingSIT = void 0;
 const serperior_v_1 = require("../set-silver-tempest/serperior-v");
 const alolan_vulpix_v_1 = require("../set-silver-tempest/alolan-vulpix-v");
 const regieleki_v_1 = require("../set-silver-tempest/regieleki-v");
@@ -37,6 +38,21 @@ const other_prints_2 = require("../set-unleashed/other-prints");
 const raihan_1 = require("../set-evolving-skies/raihan");
 const rayquaza_vmax_2 = require("../set-evolving-skies/rayquaza-vmax");
 const duraludon_vmax_2 = require("../set-evolving-skies/duraludon-vmax");
+const sandile_1 = require("../set-emerging-powers/sandile");
+const mareanie_1 = require("../set-sun-and-moon/mareanie");
+const metang_1 = require("../set-celestial-storm/metang");
+const fletchling_1 = require("../set-steam-siege/fletchling");
+const gym_trainer_1 = require("../set-shining-fates/gym-trainer");
+const chesnaught_v_1 = require("./chesnaught-v");
+const reshiram_v_1 = require("./reshiram-v");
+const omastar_v_1 = require("./omastar-v");
+const mawile_v_1 = require("./mawile-v");
+const hisuian_arcanine_v_1 = require("./hisuian-arcanine-v");
+const skuntank_v_1 = require("./skuntank-v");
+const ho_oh_v_1 = require("./ho-oh-v");
+const brandon_1 = require("./brandon");
+const wallace_1 = require("./wallace");
+const mawile_vstar_1 = require("./mawile-vstar");
 class SerperiorV2SIT extends serperior_v_1.SerperiorV {
     constructor() {
         super(...arguments);
@@ -460,3 +476,174 @@ class DuraludonVMAX2SIT extends duraludon_vmax_2.DuraludonVMAX {
     }
 }
 exports.DuraludonVMAX2SIT = DuraludonVMAX2SIT;
+class SandileSIT extends sandile_1.Sandile {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '111';
+        this.fullName = 'Sandile SIT 111';
+    }
+}
+exports.SandileSIT = SandileSIT;
+class MareanieSIT extends mareanie_1.Mareanie {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '114';
+        this.fullName = 'Mareanie SIT 114';
+    }
+}
+exports.MareanieSIT = MareanieSIT;
+class MetangSIT extends metang_1.Metang {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '118';
+        this.fullName = 'Metang SIT 118';
+    }
+}
+exports.MetangSIT = MetangSIT;
+class FletchlingSIT extends fletchling_1.Fletchling {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '150';
+        this.fullName = 'Fletchling SIT 150';
+    }
+}
+exports.FletchlingSIT = FletchlingSIT;
+class GymTrainerSIT extends gym_trainer_1.GymTrainer {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '158';
+        this.fullName = 'Gym Trainer SIT 158';
+    }
+}
+exports.GymTrainerSIT = GymTrainerSIT;
+class ChesnaughtV2 extends chesnaught_v_1.ChesnaughtV {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '171';
+        this.fullName = 'Chesnaught V SIT 171';
+    }
+}
+exports.ChesnaughtV2 = ChesnaughtV2;
+class ReshiramV2 extends reshiram_v_1.ReshiramV {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '172';
+        this.fullName = 'Reshiram V SIT 172';
+    }
+}
+exports.ReshiramV2 = ReshiramV2;
+class OmastarV2 extends omastar_v_1.OmastarV {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '174';
+        this.fullName = 'Omastar V SIT 174';
+    }
+}
+exports.OmastarV2 = OmastarV2;
+class MawileV2 extends mawile_v_1.MawileV {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '178';
+        this.fullName = 'Mawile V SIT 178';
+    }
+}
+exports.MawileV2 = MawileV2;
+class HisuianArcanineV2 extends hisuian_arcanine_v_1.HisuianArcanineV {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '179';
+        this.fullName = 'Hisuian Arcanine V SIT 179';
+    }
+}
+exports.HisuianArcanineV2 = HisuianArcanineV2;
+class SkuntankV2 extends skuntank_v_1.SkuntankV {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '180';
+        this.fullName = 'Skuntank V SIT 180';
+    }
+}
+exports.SkuntankV2 = SkuntankV2;
+class SkuntankV3 extends skuntank_v_1.SkuntankV {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '181';
+        this.fullName = 'Skuntank V SIT 181';
+    }
+}
+exports.SkuntankV3 = SkuntankV3;
+class HoOhV2 extends ho_oh_v_1.HoOhV {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '187';
+        this.fullName = 'Ho-Oh V SIT 187';
+    }
+}
+exports.HoOhV2 = HoOhV2;
+class Brandon2 extends brandon_1.Brandon {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '188';
+        this.fullName = 'Brandon SIT 188';
+    }
+}
+exports.Brandon2 = Brandon2;
+class GymTrainer2 extends gym_trainer_1.GymTrainer {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '191';
+        this.fullName = 'Gym Trainer SIT 191';
+    }
+}
+exports.GymTrainer2 = GymTrainer2;
+class Wallace2 extends wallace_1.Wallace {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '194';
+        this.fullName = 'Wallace SIT 194';
+    }
+}
+exports.Wallace2 = Wallace2;
+class MawileVstar2 extends mawile_vstar_1.MawileVstar {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '200';
+        this.fullName = 'Mawile VSTAR SIT 200';
+    }
+}
+exports.MawileVstar2 = MawileVstar2;
+class Brandon3 extends brandon_1.Brandon {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '203';
+        this.fullName = 'Brandon SIT 203';
+    }
+}
+exports.Brandon3 = Brandon3;
+class Wallace3 extends wallace_1.Wallace {
+    constructor() {
+        super(...arguments);
+        this.set = 'SIT';
+        this.setNumber = '208';
+        this.fullName = 'Wallace SIT 208';
+    }
+}
+exports.Wallace3 = Wallace3;

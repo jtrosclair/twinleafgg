@@ -18,9 +18,9 @@ class TherapeuticEnergy extends energy_card_1.EnergyCard {
         this.regulationMark = 'G';
         this.name = 'Therapeutic Energy';
         this.fullName = 'Therapeutic Energy PAL';
-        this.text = 'As long as this card is attached to a Pokémon, it provides [C] Energy.' +
-            '' +
-            'The Pokémon this card is attached to recovers from being Asleep, Confused, or Paralyzed and can\'t be affected by those Special Conditions.';
+        this.text = `As long as this card is attached to a Pokémon, it provides [C] Energy.
+
+The Pokémon this card is attached to recovers from being Asleep, Confused, or Paralyzed and can't be affected by those Special Conditions.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.AttachEnergyEffect && effect.target.cards.includes(this)) {

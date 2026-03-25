@@ -14,7 +14,7 @@ class TelepathPsychicEnergy extends energy_card_1.EnergyCard {
         this.energyType = card_types_1.EnergyType.SPECIAL;
         this.regulationMark = 'J';
         this.set = 'M3';
-        this.name = 'Telepath [P] Energy';
+        this.name = 'Telepath Psychic Energy';
         this.fullName = 'Telepath [P] Energy M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '79';

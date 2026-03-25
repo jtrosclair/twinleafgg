@@ -35,7 +35,6 @@ class HolonAdventurer extends trainer_card_1.TrainerCard {
             state = store.prompt(state, new game_1.ChooseCardsPrompt(effect.player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {}, { allowCancel: false, min: 1, max: 1 }), cards => {
                 cards = cards || [];
                 if (cards.length === 0) {
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     return;
                 }
                 let cardsToDraw = 3;
@@ -48,7 +47,6 @@ class HolonAdventurer extends trainer_card_1.TrainerCard {
                 });
                 (0, prefabs_1.DRAW_CARDS)(player, cardsToDraw);
             });
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         return state;

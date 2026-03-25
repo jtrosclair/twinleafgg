@@ -6,6 +6,7 @@ const trainer_card_1 = require("../../game/store/card/trainer-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const game_effects_1 = require("../../game/store/effects/game-effects");
 class Iono extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -19,6 +20,22 @@ class Iono extends trainer_card_1.TrainerCard {
         this.text = 'Each player shuffles their hand and puts it on the bottom of their deck. ' +
             'If either player put any cards on the bottom of their deck in this way, ' +
             'each player draws a card for each of their remaining Prize cards.';
+    }
+    canPlay(store, state, player) {
+        if (player.supporterTurn > 0) {
+            return false;
+        }
+        const opponent = state_utils_1.StateUtils.getOpponent(state, player);
+        const otherCardsInHand = player.hand.cards.filter(c => c !== this).length;
+        // Cannot play if we only hold Iono and deck is empty
+        if (otherCardsInHand === 0 && player.deck.cards.length === 0) {
+            return false;
+        }
+        // Cannot play if both hands would be empty (nothing to shuffle)
+        if (otherCardsInHand === 0 && opponent.hand.cards.length === 0) {
+            return false;
+        }
+        return true;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
@@ -44,13 +61,17 @@ class Iono extends trainer_card_1.TrainerCard {
             if (player.hand.cards.length === 0 && opponent.hand.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            player.hand.moveCardsTo(cards, deckBottom);
-            opponent.hand.moveTo(opponentDeckBottom);
+            const playerMoveEffect = new game_effects_1.MoveCardsEffect(player.hand, deckBottom, { cards, sourceCard: this });
+            state = store.reduceEffect(state, playerMoveEffect);
+            const opponentMoveEffect = new game_effects_1.MoveCardsEffect(opponent.hand, opponentDeckBottom, { sourceCard: this });
+            state = store.reduceEffect(state, opponentMoveEffect);
             deckBottom.moveTo(player.deck);
             opponentDeckBottom.moveTo(opponent.deck);
             player.deck.moveTo(player.hand, player.getPrizeLeft());
-            opponent.deck.moveTo(opponent.hand, opponent.getPrizeLeft());
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
+            // Check if moving cards from opponent's hand was prevented
+            if (!opponentMoveEffect.preventDefault) {
+                opponent.deck.moveTo(opponent.hand, opponent.getPrizeLeft());
+            }
         }
         return state;
     }

@@ -6,6 +6,7 @@ export declare class SnorlaxDoll extends TrainerCard {
     cardType: CardType;
     cardTypez: CardType;
     movedToActiveThisTurn: boolean;
+    evolvesFromBase: string[];
     pokemonType: PokemonType;
     evolvesFrom: string;
     cardTag: CardTag[];
@@ -23,7 +24,6 @@ export declare class SnorlaxDoll extends TrainerCard {
     setNumber: string;
     name: string;
     fullName: string;
-    legacyFullName: string;
     regulationMark: string;
     maxTools: number;
     powers: Power[];

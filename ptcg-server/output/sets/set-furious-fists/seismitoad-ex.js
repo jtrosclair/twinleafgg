@@ -4,10 +4,10 @@ exports.SeismitoadEx = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class SeismitoadEx extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -37,15 +37,15 @@ class SeismitoadEx extends pokemon_card_1.PokemonCard {
         this.fullName = 'Seismitoad EX FFI';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '20';
-        this.QUAKING_PUNCH_MAREKER = 'QUAKING_PUNCH_MAREKER';
+        this.QUAKING_PUNCH_MARKER = 'QUAKING_PUNCH_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            opponent.marker.addMarker(this.QUAKING_PUNCH_MAREKER, this);
+            opponent.marker.addMarker(this.QUAKING_PUNCH_MARKER, this, 'attack', 'player');
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const benched = opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
@@ -64,12 +64,12 @@ class SeismitoadEx extends pokemon_card_1.PokemonCard {
         }
         if (effect instanceof play_card_effects_1.PlayItemEffect) {
             const player = effect.player;
-            if (player.marker.hasMarker(this.QUAKING_PUNCH_MAREKER, this)) {
+            if (player.marker.hasMarker(this.QUAKING_PUNCH_MARKER, this)) {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
             }
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
-            effect.player.marker.removeMarker(this.QUAKING_PUNCH_MAREKER, this);
+            effect.player.marker.removeMarker(this.QUAKING_PUNCH_MARKER, this);
         }
         return state;
     }

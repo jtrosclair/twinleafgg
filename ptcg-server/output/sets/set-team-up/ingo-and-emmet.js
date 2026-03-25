@@ -56,7 +56,6 @@ class IngoAndEmmet extends trainer_card_1.TrainerCard {
                     player.deck.moveCardsTo(bottomCards, player.hand);
                 }
             });
-            (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
         }
         return state;
     }

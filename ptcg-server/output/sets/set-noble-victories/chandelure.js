@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Chandelure = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const state_utils_1 = require("../../game/store/state-utils");
 const play_card_action_1 = require("../../game/store/actions/play-card-action");
@@ -14,6 +13,7 @@ const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_error_1 = require("../../game/game-error");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Chandelure extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -42,20 +42,23 @@ class Chandelure extends pokemon_card_1.PokemonCard {
         this.fullName = 'Chandelure NVI';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '60';
-        this.CURSED_SHADOW_MAREKER = 'CURSED_SHADOW_MAREKER';
+        this.CURSED_SHADOW_MARKER = 'CURSED_SHADOW_MARKER';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            player.marker.removeMarker(this.CURSED_SHADOW_MAREKER, this);
+            player.marker.removeMarker(this.CURSED_SHADOW_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
+                throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_USE_POWER);
+            }
             if (!player.active.cards.includes(this)) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_USE_POWER);
             }
-            if (player.marker.hasMarker(this.CURSED_SHADOW_MAREKER, this)) {
+            if (player.marker.hasMarker(this.CURSED_SHADOW_MARKER, this)) {
                 throw new game_error_1.GameError(game_message_1.GameMessage.POWER_ALREADY_USED);
             }
             const maxAllowedDamage = [];
@@ -73,14 +76,14 @@ class Chandelure extends pokemon_card_1.PokemonCard {
                 if (results.length === 0) {
                     return;
                 }
-                player.marker.addMarker(this.CURSED_SHADOW_MAREKER, this);
+                player.marker.addMarker(this.CURSED_SHADOW_MARKER, this);
                 for (const result of results) {
                     const target = state_utils_1.StateUtils.getTarget(state, player, result.target);
                     target.damage += result.damage;
                 }
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const specialConditionEffect = new attack_effects_1.AddSpecialConditionsEffect(effect, [
                 card_types_1.SpecialCondition.BURNED,
                 card_types_1.SpecialCondition.CONFUSED
@@ -88,7 +91,7 @@ class Chandelure extends pokemon_card_1.PokemonCard {
             store.reduceEffect(state, specialConditionEffect);
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
-            effect.player.marker.removeMarker(this.CURSED_SHADOW_MAREKER, this);
+            effect.player.marker.removeMarker(this.CURSED_SHADOW_MARKER, this);
         }
         return state;
     }

@@ -14,10 +14,10 @@ class JudgeWhistle extends trainer_card_1.TrainerCard {
         this.fullName = 'Judge Whistle TEU';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '146';
-        this.text = 'Choose 1:' +
-            '' +
-            '• Draw a card.' +
-            '• Put a Judge card from your discard pile into your hand.';
+        this.text = `Choose 1:
+
+  • Draw a card.
+  • Put a Judge card from your discard pile into your hand.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
@@ -37,7 +37,6 @@ class JudgeWhistle extends trainer_card_1.TrainerCard {
             // if there's no judge, just draw
             if (!isJudgeInDiscard) {
                 player.deck.moveTo(player.hand, 1);
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
             }
             if (isJudgeInDiscard) {
                 const options = [
@@ -62,7 +61,6 @@ class JudgeWhistle extends trainer_card_1.TrainerCard {
                                     store.log(state, game_1.GameLog.LOG_PLAYER_RETURNS_CARD_TO_HAND, { name: player.name, card: card.name });
                                 });
                                 player.discard.moveCardsTo(cards, player.hand);
-                                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                                 return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                                     player.deck.applyOrder(order);
                                 });
@@ -73,7 +71,6 @@ class JudgeWhistle extends trainer_card_1.TrainerCard {
                         message: game_1.GameMessage.DRAW,
                         action: () => {
                             player.deck.moveTo(player.hand, 1);
-                            player.supporter.moveCardTo(effect.trainerCard, player.discard);
                         }
                     }
                 ];

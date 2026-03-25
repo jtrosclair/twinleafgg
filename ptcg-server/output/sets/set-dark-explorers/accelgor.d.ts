@@ -9,15 +9,20 @@ export declare class Accelgor extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.FIRE;
     }[];
     retreat: any[];
-    attacks: {
+    attacks: ({
         name: string;
-        cost: CardType[];
+        cost: CardType.GRASS[];
         damage: number;
         text: string;
-    }[];
+    } | {
+        name: string;
+        cost: CardType.COLORLESS[];
+        damage: number;
+        text: string;
+    })[];
     set: string;
     name: string;
     fullName: string;

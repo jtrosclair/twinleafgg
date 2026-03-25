@@ -1,22 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RandomReceiverPLS = exports.BlastoisePLS = exports.Colress2PLS = exports.LugiaEx2PLS = exports.VictiniEX2PLS = exports.EviolitePLS = exports.EscapeRopePLS = void 0;
+exports.CharizardPLS = exports.CobalionEx2 = exports.ArticunoEx2 = exports.RandomReceiverPLS = exports.BlastoisePLS = exports.Colress2PLS = exports.LugiaEx2PLS = exports.VictiniEX2PLS = exports.EviolitePLS = void 0;
 const eviolite_1 = require("../set-noble-victories/eviolite");
 const victini_ex_1 = require("../set-plasma-storm/victini-ex");
 const lugia_ex_1 = require("../set-plasma-storm/lugia-ex");
 const colress_1 = require("../set-plasma-storm/colress");
 const blastoise_1 = require("../set-boundaries-crossed/blastoise");
 const random_receiver_1 = require("../set-dark-explorers/random-receiver");
-const escape_rope_1 = require("../set-battle-styles/escape-rope");
-class EscapeRopePLS extends escape_rope_1.EscapeRope {
-    constructor() {
-        super(...arguments);
-        this.set = 'PLS';
-        this.setNumber = '120';
-        this.fullName = 'Escape Rope PLS';
-    }
-}
-exports.EscapeRopePLS = EscapeRopePLS;
+const articuno_ex_1 = require("./articuno-ex");
+const cobalion_ex_1 = require("./cobalion-ex");
+const charizard_1 = require("../set-boundaries-crossed/charizard");
 class EviolitePLS extends eviolite_1.Eviolite {
     constructor() {
         super(...arguments);
@@ -71,3 +64,30 @@ class RandomReceiverPLS extends random_receiver_1.RandomReceiver {
     }
 }
 exports.RandomReceiverPLS = RandomReceiverPLS;
+class ArticunoEx2 extends articuno_ex_1.ArticunoEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PLS';
+        this.setNumber = '132';
+        this.fullName = 'Articuno-EX PLS 132';
+    }
+}
+exports.ArticunoEx2 = ArticunoEx2;
+class CobalionEx2 extends cobalion_ex_1.CobalionEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'PLS';
+        this.setNumber = '133';
+        this.fullName = 'Cobalion-EX PLS 133';
+    }
+}
+exports.CobalionEx2 = CobalionEx2;
+class CharizardPLS extends charizard_1.Charizard {
+    constructor() {
+        super(...arguments);
+        this.set = 'PLS';
+        this.setNumber = '136';
+        this.fullName = 'Charizard PLS';
+    }
+}
+exports.CharizardPLS = CharizardPLS;

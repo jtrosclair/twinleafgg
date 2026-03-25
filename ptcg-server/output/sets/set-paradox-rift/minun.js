@@ -4,8 +4,8 @@ exports.Minun = void 0;
 const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Minun extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -46,15 +46,7 @@ class Minun extends pokemon_card_1.PokemonCard {
             if (!hasMinunInPlay) {
                 return state;
             }
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             const plusleIsOnBench = player.bench.some(c => c.cards.some(card => card.name === 'Plusle'));

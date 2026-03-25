@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RollerSkater = void 0;
 const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
-const energy_card_1 = require("../../game/store/card/energy-card");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -33,11 +32,10 @@ class RollerSkater extends trainer_card_1.TrainerCard {
             state = store.prompt(state, new game_1.ChooseCardsPrompt(effect.player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {}, { allowCancel: false, min: 1, max: 1 }), cards => {
                 cards = cards || [];
                 if (cards.length === 0) {
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                     return;
                 }
                 let cardsToDraw = 2;
-                if (cards[0] instanceof energy_card_1.EnergyCard) {
+                if (cards[0].superType === card_types_1.SuperType.ENERGY) {
                     cardsToDraw = 4;
                 }
                 (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: cards, sourceCard: this });
@@ -46,7 +44,6 @@ class RollerSkater extends trainer_card_1.TrainerCard {
                 });
                 (0, prefabs_1.DRAW_CARDS)(player, cardsToDraw);
             });
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         return state;

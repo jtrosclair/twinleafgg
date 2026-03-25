@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Beautifly = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const show_cards_prompt_1 = require("../../game/store/prompts/show-cards-prompt");
 const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -49,7 +48,7 @@ class Beautifly extends pokemon_card_1.PokemonCard {
             });
         }
         // Energy Straw - reveal hand and count Energy cards
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Reveal opponent's hand
@@ -57,7 +56,7 @@ class Beautifly extends pokemon_card_1.PokemonCard {
                 // Count Energy cards in opponent's hand
                 let energyCount = 0;
                 opponent.hand.cards.forEach(card => {
-                    if (card instanceof game_1.EnergyCard) {
+                    if (card.superType === game_1.SuperType.ENERGY) {
                         energyCount++;
                     }
                 });

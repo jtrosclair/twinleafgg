@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Numel = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const costs_1 = require("../../game/store/prefabs/costs");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Numel extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -32,7 +32,7 @@ class Numel extends pokemon_card_1.PokemonCard {
         this.fullName = 'Numel UNM';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             (0, costs_1.DISCARD_X_ENERGY_FROM_THIS_POKEMON)(store, state, effect, 1);
         }
         return state;

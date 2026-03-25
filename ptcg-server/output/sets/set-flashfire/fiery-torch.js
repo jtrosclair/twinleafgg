@@ -31,7 +31,6 @@ function* playCard(next, store, state, self, effect) {
     }
     player.hand.moveCardsTo(cards, player.discard);
     player.deck.moveTo(player.hand, 3);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return state;
 }
 class FieryTorch extends trainer_card_1.TrainerCard {

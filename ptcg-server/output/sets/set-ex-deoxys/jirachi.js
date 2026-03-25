@@ -6,6 +6,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const game_1 = require("../../game");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Jirachi extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -39,9 +40,13 @@ class Jirachi extends pokemon_card_1.PokemonCard {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            const target = opponent.active.getPokemonCard();
-            if (target !== undefined && target.powers.some(power => power.powerType === pokemon_types_1.PowerType.POKEBODY)) {
-                effect.damage += 30;
+            const targetPokemon = opponent.active.getPokemonCard();
+            if (targetPokemon) {
+                const powersEffect = new check_effects_1.CheckPokemonPowersEffect(opponent, targetPokemon);
+                state = store.reduceEffect(state, powersEffect);
+                if (powersEffect.powers.some(power => power.powerType === pokemon_types_1.PowerType.POKEBODY)) {
+                    effect.damage += 30;
+                }
             }
         }
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {

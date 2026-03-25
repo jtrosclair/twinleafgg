@@ -8,19 +8,26 @@ export declare class Steelix extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.FIRE;
     }[];
     resistance: {
-        type: CardType;
+        type: CardType.PSYCHIC;
         value: number;
     }[];
-    retreat: CardType[];
-    attacks: {
+    retreat: CardType.COLORLESS[];
+    attacks: ({
         name: string;
-        cost: CardType[];
+        cost: CardType.COLORLESS[];
         damage: number;
         text: string;
-    }[];
+        damageCalculation?: undefined;
+    } | {
+        name: string;
+        cost: (CardType.METAL | CardType.COLORLESS)[];
+        damage: number;
+        damageCalculation: "+";
+        text: string;
+    })[];
     set: string;
     setNumber: string;
     cardImage: string;

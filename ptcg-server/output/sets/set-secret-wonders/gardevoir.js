@@ -61,7 +61,8 @@ class Gardevoir extends pokemon_card_1.PokemonCard {
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_COPY_EFFECT, opponent.discard, { superType: card_types_1.SuperType.TRAINER, trainerType: card_types_1.TrainerType.SUPPORTER }, { allowCancel: false, min: 1, max: 1 }), cards => {
                 const trainerCard = cards[0];
                 // Validate that the copied supporter can be played
-                if (!(0, prefabs_1.CAN_PLAY_SUPPORTER_CARD)(store, state, player, trainerCard)) {
+                // Bypass supporterTurn check since Telepass allows playing supporters even after one was already played
+                if (!(0, prefabs_1.CAN_PLAY_SUPPORTER_CARD)(store, state, player, trainerCard, true)) {
                     return state;
                 }
                 return state;

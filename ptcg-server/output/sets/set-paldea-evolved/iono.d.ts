@@ -13,6 +13,7 @@ export declare class Iono extends TrainerCard {
     name: string;
     fullName: string;
     text: string;
+    canPlay(store: StoreLike, state: State, player: Player): boolean;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
     shufflePlayerHand(player: Player): void;
 }

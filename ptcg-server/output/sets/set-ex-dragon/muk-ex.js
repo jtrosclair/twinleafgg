@@ -8,6 +8,7 @@ const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
+const check_effects_2 = require("../../game/store/effects/check-effects");
 class Mukex extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -45,6 +46,20 @@ class Mukex extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Toxic Gas
+        if (effect instanceof check_effects_1.CheckPokemonPowersEffect) {
+            const player = effect.player;
+            const opponent = game_1.StateUtils.getOpponent(state, player);
+            // Muk ex is not active Pokemon
+            if (player.active.getPokemonCard() !== this
+                && opponent.active.getPokemonCard() !== this) {
+                return state;
+            }
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
+                return state;
+            }
+            // Filter out all Poké Powers and Poké Bodies except Toxic Gas
+            effect.powers = effect.powers.filter(power => (power.powerType !== game_1.PowerType.POKEPOWER && power.powerType !== game_1.PowerType.POKEBODY) || power.name === 'Toxic Gas');
+        }
         if (effect instanceof game_effects_1.PowerEffect && (effect.power.powerType === game_1.PowerType.POKEPOWER || effect.power.powerType === game_1.PowerType.POKEBODY) && effect.power.name !== 'Toxic Gas') {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
@@ -76,7 +91,7 @@ class Mukex extends pokemon_card_1.PokemonCard {
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const opponentActive = opponent.active.getPokemonCard();
             if (opponentActive) {
-                const checkRetreatCostEffect = new check_effects_1.CheckRetreatCostEffect(opponent);
+                const checkRetreatCostEffect = new check_effects_2.CheckRetreatCostEffect(opponent);
                 store.reduceEffect(state, checkRetreatCostEffect);
                 const retreatCost = checkRetreatCostEffect.cost.length;
                 effect.damage += retreatCost * 10;

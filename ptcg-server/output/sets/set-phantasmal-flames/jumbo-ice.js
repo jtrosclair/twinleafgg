@@ -18,11 +18,28 @@ class JumboIce extends trainer_card_1.TrainerCard {
         this.setNumber = '91';
         this.text = 'Heal 80 damage from your Active Pokémon that has 3 or more Energy attached.';
     }
+    canPlay(store, state, player) {
+        const activePokemon = player.active.getPokemonCard();
+        // Must have an active Pokemon
+        if (!activePokemon) {
+            return false;
+        }
+        // Must have damage on it
+        if (player.active.damage === 0) {
+            return false;
+        }
+        // Must have 3 or more Energy attached
+        const energyCount = player.active.energies.cards.length;
+        if (energyCount < 3) {
+            return false;
+        }
+        return true;
+    }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;
             const activePokemon = player.active.getPokemonCard();
-            if (activePokemon) {
+            if (activePokemon && player.active.damage > 0) {
                 // Check if the Pokemon has 3 or more Energy attached
                 const checkEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
                 store.reduceEffect(state, checkEnergy);
@@ -31,6 +48,7 @@ class JumboIce extends trainer_card_1.TrainerCard {
                     store.reduceEffect(state, healEffect);
                 }
             }
+            player.supporter.moveCardTo(this, player.discard);
         }
         return state;
     }

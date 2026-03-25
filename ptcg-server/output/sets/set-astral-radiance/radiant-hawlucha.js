@@ -36,10 +36,13 @@ class RadiantHawlucha extends pokemon_card_1.PokemonCard {
         if (effect instanceof attack_effects_1.DealDamageEffect) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, effect.player);
-            if (player.active.getPokemonCard() === this) {
+            // Hawlucha must be on the bench (not the attacker)
+            const hawluchaOnBench = player.bench.some(b => b.getPokemonCard() === this);
+            if (!hawluchaOnBench) {
                 return state;
             }
-            if (effect.target !== player.active && effect.target !== opponent.active) {
+            // Only boost damage when targeting opponent's active Pokemon
+            if (effect.target !== opponent.active) {
                 return state;
             }
             const targetCard = effect.target.getPokemonCard();

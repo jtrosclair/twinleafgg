@@ -8,12 +8,12 @@ export declare class ArceusDialgaPalkiaGX extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.FAIRY;
     }[];
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: (CardType.WATER | CardType.METAL | CardType.COLORLESS)[];
         damage: number;
         text: string;
     }[];

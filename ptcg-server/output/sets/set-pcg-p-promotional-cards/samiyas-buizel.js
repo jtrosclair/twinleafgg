@@ -18,7 +18,7 @@ class SamiyasBuizel extends pokemon_card_1.PokemonCard {
         this.powers = [{
                 name: 'Aqua Lift',
                 powerType: game_1.PowerType.POKEBODY,
-                text: 'If Samiya\'s Buizel has any Water Energy attached to it, the Retreat Cost for Samiya\'s Buizel is 0.'
+                text: 'If Samiya\'s Buizel has any [W] Energy attached to it, the Retreat Cost for Samiya\'s Buizel is 0.'
             }];
         this.attacks = [{
                 name: 'Whirlpool',
@@ -56,7 +56,7 @@ class SamiyasBuizel extends pokemon_card_1.PokemonCard {
                     const player = effect.player;
                     const opponent = effect.opponent;
                     // If defending Pokemon has no energy cards attached, return early
-                    if (!opponent.active.energies.cards.some(c => c instanceof game_1.EnergyCard)) {
+                    if (!opponent.active.energies.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                         return state;
                     }
                     let card;

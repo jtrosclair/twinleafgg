@@ -32,9 +32,6 @@ class GardeniasVigor extends trainer_card_1.TrainerCard {
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            if (player.deck.cards.length === 0) {
-                throw new game_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
-            }
             const supporterTurn = player.supporterTurn;
             if (supporterTurn > 0) {
                 throw new game_1.GameError(game_message_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
@@ -43,14 +40,6 @@ class GardeniasVigor extends trainer_card_1.TrainerCard {
             // We will discard this card after prompt confirmation
             effect.preventDefault = true;
             (0, prefabs_1.DRAW_CARDS)(player, 2);
-            // const hasEnergyInHand = player.hand.cards.some(c => {
-            //   return c instanceof EnergyCard
-            //     && c.energyType === EnergyType.BASIC
-            //     && c.provides.includes(CardType.GRASS);
-            // });
-            // if (!hasEnergyInHand) {
-            //   throw new GameError(GameMessage.CANNOT_USE_POWER);
-            // }
             return store.prompt(state, new attach_energy_prompt_1.AttachEnergyPrompt(player.id, game_message_1.GameMessage.ATTACH_ENERGY_CARDS, player.hand, play_card_action_1.PlayerType.BOTTOM_PLAYER, [play_card_action_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Grass Energy' }, { min: 0, max: 2, allowCancel: false, differentTargets: false, sameTarget: true }), transfers => {
                 transfers = transfers || [];
                 for (const transfer of transfers) {
@@ -58,8 +47,8 @@ class GardeniasVigor extends trainer_card_1.TrainerCard {
                     const energyCard = transfer.card;
                     const attachEnergyEffect = new play_card_effects_1.AttachEnergyEffect(player, energyCard, target);
                     store.reduceEffect(state, attachEnergyEffect);
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 }
+                // Clean up supporter once, after all transfers are done
             });
         }
         return state;

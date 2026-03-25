@@ -15,7 +15,7 @@ class PokemonLeagueHeadquarters extends trainer_card_1.TrainerCard {
         this.setNumber = '192';
         this.name = 'Pokémon League Headquarters';
         this.fullName = 'Pokémon League Headquarters OBF';
-        this.text = 'Attacks used by each Basic Pokémon in play (both yours and your opponent\'s) cost C more.';
+        this.text = 'Attacks used by each Basic Pokémon in play (both yours and your opponent\'s) cost [C] more.';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof check_effects_1.CheckAttackCostEffect && state_utils_1.StateUtils.getStadiumCard(state) === this) {

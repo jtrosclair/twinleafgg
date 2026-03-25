@@ -6,7 +6,6 @@ const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const state_utils_1 = require("../../game/store/state-utils");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 // CIN Lugia-GX 57 (https://limitlesstcg.com/cards/CIN/57)
@@ -36,7 +35,7 @@ class LugiaGX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Psychic
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             const opponentProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(opponent);
@@ -46,7 +45,7 @@ class LugiaGX extends pokemon_card_1.PokemonCard {
             effect.damage += opponentEnergyCount * 30;
         }
         // Pelagic Blade
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             // Check marker
             if (player.marker.hasMarker(this.PELAGIC_BLADE_MARKER, this)) {
@@ -57,7 +56,7 @@ class LugiaGX extends pokemon_card_1.PokemonCard {
             console.log('marker added');
         }
         // Lost Purge-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             // Check if player has used GX attack

@@ -24,6 +24,7 @@ export declare class ClefairyDoll extends TrainerCard {
     attacksThisTurn: number;
     maxAttacksThisTurn: number;
     allowSubsequentAttackChoice: boolean;
+    evolvesFromBase: string[];
     maxTools: number;
     weakness: any[];
     resistance: any[];

@@ -40,7 +40,6 @@ class Revitalizer extends trainer_card_1.TrainerCard {
             store.reduceEffect(state, discardEffect);
             if (discardEffect.preventDefault) {
                 // If prevented, just discard the card and return
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             }
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
@@ -53,7 +52,6 @@ class Revitalizer extends trainer_card_1.TrainerCard {
                     store.log(state, game_message_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
                 });
                 player.discard.moveCardsTo(cards, player.hand);
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             });
         }

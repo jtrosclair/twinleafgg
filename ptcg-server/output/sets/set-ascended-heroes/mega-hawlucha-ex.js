@@ -25,7 +25,7 @@ class MegaHawluchaex extends game_1.PokemonCard {
                 name: 'Somersault Dive',
                 cost: [F, F, C],
                 damage: 120,
-                damageCalculation: "+",
+                damageCalculation: '+',
                 text: 'If a Stadium is in play, this attack does 140 more damage. Then, discard that Stadium.'
             }];
         this.regulationMark = 'I';

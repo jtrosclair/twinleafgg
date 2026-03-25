@@ -12,7 +12,7 @@ function* playCard(next, store, state, effect) {
     const blocked = [];
     let hasPokemonWithDamage = false;
     player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        if (cardList.damage === 0 || !cardList.energies.cards.some(c => c instanceof game_1.EnergyCard && c.name === 'Grass Energy')) {
+        if (cardList.damage === 0 || !cardList.energies.cards.some(c => c.superType === card_types_1.SuperType.ENERGY && c.name === 'Grass Energy')) {
             blocked.push(target);
         }
         else {
@@ -43,7 +43,6 @@ function* playCard(next, store, state, effect) {
     }
     const target = targets[0];
     // Discard trainer only when user selected a Pokemon
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     // Heal Pokemon
     const healEffect = new game_effects_1.HealEffect(player, target, 80);
     store.reduceEffect(state, healEffect);

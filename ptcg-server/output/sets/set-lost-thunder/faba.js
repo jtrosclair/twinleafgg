@@ -36,7 +36,7 @@ class Faba extends trainer_card_1.TrainerCard {
             });
             let specialEnergy = 0;
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card, target) => {
-                if (cardList.energies.cards.some(c => c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.SPECIAL)) {
+                if (cardList.energies.cards.some(c => c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.SPECIAL)) {
                     specialEnergy += 1;
                 }
             });
@@ -94,7 +94,7 @@ class Faba extends trainer_card_1.TrainerCard {
             };
             const specialEnergyBlocked = [];
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card, target) => {
-                if (cardList.energies.cards.some(c => c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.SPECIAL)) {
+                if (cardList.energies.cards.some(c => c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.SPECIAL)) {
                     return;
                 }
                 else {
@@ -113,7 +113,6 @@ class Faba extends trainer_card_1.TrainerCard {
                         state = store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, target, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.SPECIAL }, { min: 1, max: 1, allowCancel: false }), selected => {
                             cards = selected || [];
                             if (cards.length > 0) {
-                                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                                 target.moveCardsTo(cards, opponent.lostzone);
                             }
                             return state;

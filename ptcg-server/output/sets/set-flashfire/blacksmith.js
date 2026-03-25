@@ -8,7 +8,6 @@ const check_effects_1 = require("../../game/store/effects/check-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_error_1 = require("../../game/game-error");
 const game_message_1 = require("../../game/game-message");
-const energy_card_1 = require("../../game/store/card/energy-card");
 const attach_energy_prompt_1 = require("../../game/store/prompts/attach-energy-prompt");
 const play_card_action_1 = require("../../game/store/actions/play-card-action");
 class Blacksmith extends trainer_card_1.TrainerCard {
@@ -25,7 +24,7 @@ class Blacksmith extends trainer_card_1.TrainerCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;
-            const fireEnergyCount = player.discard.cards.filter(c => c instanceof energy_card_1.EnergyCard
+            const fireEnergyCount = player.discard.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY
                 && c.energyType === card_types_1.EnergyType.BASIC
                 && c.provides.includes(card_types_1.CardType.FIRE)).length;
             if (fireEnergyCount === 0) {
@@ -62,7 +61,6 @@ class Blacksmith extends trainer_card_1.TrainerCard {
                     const target = state_utils_1.StateUtils.getTarget(state, player, transfer.to);
                     player.discard.moveCardTo(transfer.card, target);
                 }
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
             });
         }
         return state;

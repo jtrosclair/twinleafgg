@@ -44,8 +44,6 @@ class Sceptileex extends pokemon_card_1.PokemonCard {
         this.name = 'Sceptile ex';
         this.fullName = 'Sceptile ex MA';
         this.POISON_RING_MARKER = 'POISON_RING_MARKER';
-        this.ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
-        this.ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
     }
     reduceEffect(store, state, effect) {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
@@ -54,7 +52,7 @@ class Sceptileex extends pokemon_card_1.PokemonCard {
                 const checkProvidedEnergyEffect = new check_effects_1.CheckProvidedEnergyEffect(player, cardList);
                 store.reduceEffect(state, checkProvidedEnergyEffect);
                 const energyMap = checkProvidedEnergyEffect.energyMap;
-                const hasGrassEnergy = game_1.StateUtils.checkEnoughEnergy(energyMap, [card_types_1.CardType.GRASS]);
+                const hasGrassEnergy = game_1.StateUtils.checkEnoughEnergy(energyMap, [G]);
                 if (hasGrassEnergy) {
                     const healEffect = new game_effects_1.HealEffect(player, cardList, 40);
                     store.reduceEffect(state, healEffect);
@@ -67,12 +65,13 @@ class Sceptileex extends pokemon_card_1.PokemonCard {
         }
         (0, prefabs_1.BLOCK_RETREAT_IF_MARKER)(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
         (0, prefabs_1.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN)(effect, marker_constants_1.MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
+        // Slashing Strike
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
-            (0, prefabs_1.BLOCK_EFFECT_IF_MARKER)(this.ATTACK_USED_2_MARKER, effect.player, this);
-            (0, prefabs_1.ADD_MARKER)(this.ATTACK_USED_MARKER, effect.player, this);
+            const player = effect.player;
+            if (!player.active.cannotUseAttacksNextTurnPending.includes('Slashing Strike')) {
+                player.active.cannotUseAttacksNextTurnPending.push('Slashing Strike');
+            }
         }
-        (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_2_MARKER, this);
-        (0, prefabs_1.REPLACE_MARKER_AT_END_OF_TURN)(effect, this.ATTACK_USED_MARKER, this.ATTACK_USED_2_MARKER, this);
         return state;
     }
 }

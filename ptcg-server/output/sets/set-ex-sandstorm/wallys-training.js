@@ -55,7 +55,6 @@ function* playCard(next, store, state, effect) {
     });
     // Canceled by user, he didn't found the card in the deck
     if (cards.length === 0) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return state;
     }
     const evolution = cards[0];
@@ -63,10 +62,8 @@ function* playCard(next, store, state, effect) {
     const targetList = player.active;
     const pokemonCard = targetList.getPokemonCard();
     if (!pokemonCard || pokemonCard.name !== evolution.evolvesFrom) {
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return state; // invalid target
     }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     // Evolve Pokemon
     player.deck.moveCardTo(evolution, targetList);
     targetList.clearEffects();

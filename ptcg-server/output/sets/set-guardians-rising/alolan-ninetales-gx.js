@@ -8,7 +8,6 @@ const game_2 = require("../../game");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const state_utils_1 = require("../../game/store/state-utils");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 // GRI Alolan Ninetales-GX 22 (https://limitlesstcg.com/cards/GRI/22)
 class AlolanNinetalesGX extends pokemon_card_1.PokemonCard {
@@ -49,7 +48,7 @@ class AlolanNinetalesGX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Ice Blade
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             return store.prompt(state, new game_2.ChoosePokemonPrompt(player.id, game_2.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_2.PlayerType.TOP_PLAYER, [game_2.SlotType.ACTIVE, game_2.SlotType.BENCH], { allowCancel: false }), selected => {
                 const targets = selected || [];
@@ -57,9 +56,9 @@ class AlolanNinetalesGX extends pokemon_card_1.PokemonCard {
             });
         }
         // Blizzard Edge
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            if (!player.active.cards.some(c => c instanceof game_2.EnergyCard)) {
+            if (!player.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                 return state;
             }
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
@@ -72,7 +71,7 @@ class AlolanNinetalesGX extends pokemon_card_1.PokemonCard {
             });
         }
         // Ice Path-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[2]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 2, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             // Check if player has used GX attack

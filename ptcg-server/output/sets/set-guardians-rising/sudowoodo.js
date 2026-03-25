@@ -33,7 +33,6 @@ class Sudowoodo extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof check_effects_1.CheckTableStateEffect) {
-            const player = effect.player;
             const cardList = game_1.StateUtils.findCardList(state, this);
             const owner = game_1.StateUtils.findOwner(state, cardList);
             let isOpponentSudowoodoInPlay = false;
@@ -45,7 +44,7 @@ class Sudowoodo extends pokemon_card_1.PokemonCard {
             if (!isOpponentSudowoodoInPlay) {
                 return state;
             }
-            if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
+            if (!(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, owner, this)) {
                 effect.benchSizes = state.players.map((player, index) => {
                     if (player === owner) {
                         return effect.benchSizes[index];

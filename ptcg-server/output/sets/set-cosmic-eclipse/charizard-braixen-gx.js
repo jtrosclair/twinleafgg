@@ -4,7 +4,6 @@ exports.CharizardBraixenGX = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class CharizardBraixenGX extends pokemon_card_1.PokemonCard {
@@ -42,7 +41,7 @@ class CharizardBraixenGX extends pokemon_card_1.PokemonCard {
             (0, prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND)(store, state, effect.player, this, {}, { min: 0, max: 3 }, this.attacks[0]);
         }
         // Crimson Flame Pillar-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;

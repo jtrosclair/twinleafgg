@@ -7,7 +7,7 @@ const game_phase_effects_1 = require("../../game/store/effects/game-phase-effect
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class MimikyuV extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -28,7 +28,7 @@ class MimikyuV extends pokemon_card_1.PokemonCard {
             {
                 name: 'Jealous Eyes',
                 cost: [card_types_1.CardType.PSYCHIC],
-                damage: 30,
+                damage: 0,
                 text: 'Put 3 damage counters on your opponent\'s Active Pokémon ' +
                     'for each Prize card your opponent has taken. '
             }
@@ -47,15 +47,7 @@ class MimikyuV extends pokemon_card_1.PokemonCard {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: game_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_b) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             state = store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
@@ -78,7 +70,7 @@ class MimikyuV extends pokemon_card_1.PokemonCard {
                 (_a = cardList.marker) === null || _a === void 0 ? void 0 : _a.removeMarker(this.DUMMY_DOLL_MARKER, this);
             }
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const prizesTaken = 6 - opponent.getPrizeLeft();

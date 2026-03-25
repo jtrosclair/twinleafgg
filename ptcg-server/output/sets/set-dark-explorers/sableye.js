@@ -9,20 +9,20 @@ class Sableye extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.stage = card_types_1.Stage.BASIC;
-        this.cardType = card_types_1.CardType.DARK;
+        this.cardType = D;
         this.hp = 70;
         this.weakness = [];
-        this.retreat = [card_types_1.CardType.COLORLESS];
+        this.retreat = [C];
         this.attacks = [
             {
                 name: 'Confuse Ray',
-                cost: [card_types_1.CardType.COLORLESS],
+                cost: [C],
                 damage: 10,
-                text: 'Flip a coin. If heads, the Defending Pokemon is now Confused.'
+                text: 'Flip a coin. If heads, the Defending Pokémon is now Confused.'
             },
             {
                 name: 'Junk Hunt',
-                cost: [card_types_1.CardType.DARK],
+                cost: [D],
                 damage: 0,
                 text: 'Put 2 Item cards from your discard pile into your hand.'
             }

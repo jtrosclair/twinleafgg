@@ -1,0 +1,39 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Roselia2 = void 0;
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
+const card_types_1 = require("../../game/store/card/card-types");
+const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
+class Roselia2 extends pokemon_card_1.PokemonCard {
+    constructor() {
+        super(...arguments);
+        this.stage = card_types_1.Stage.BASIC;
+        this.cardType = G;
+        this.hp = 70;
+        this.weakness = [{ type: R }];
+        this.resistance = [{ type: W, value: -20 }];
+        this.retreat = [C];
+        this.attacks = [
+            {
+                name: 'Needling Sting',
+                cost: [G, C],
+                damage: 10,
+                damageCalculation: '+',
+                text: 'Flip a coin. If heads, this attack does 20 more damage.'
+            }
+        ];
+        this.set = 'DRX';
+        this.setNumber = '13';
+        this.cardImage = 'assets/cardback.png';
+        this.name = 'Roselia';
+        this.fullName = 'Roselia DRX 13';
+    }
+    reduceEffect(store, state, effect) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            (0, attack_effects_1.FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE)(store, state, effect, 20);
+        }
+        return state;
+    }
+}
+exports.Roselia2 = Roselia2;

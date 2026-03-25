@@ -2,7 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+import { Effect } from '../../game/store/effects/effect';
 export declare class Scyther extends PokemonCard {
     stage: Stage;
     cardType: CardType;
@@ -22,7 +22,5 @@ export declare class Scyther extends PokemonCard {
     fullName: string;
     setNumber: string;
     cardImage: string;
-    readonly ATTACK_USED_MARKER = "ATTACK_USED_MARKER";
-    readonly ATTACK_USED_2_MARKER = "ATTACK_USED_2_MARKER";
-    reduceEffect(store: StoreLike, state: State, effect: AttackEffect): State;
+    reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

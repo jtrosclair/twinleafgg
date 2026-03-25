@@ -7,7 +7,6 @@ import { PowerType } from '../../game';
 export declare class Squawkabillyex extends PokemonCard {
     stage: Stage;
     tags: CardTag[];
-    regulationMark: string;
     cardType: CardType;
     hp: number;
     weakness: {
@@ -30,6 +29,7 @@ export declare class Squawkabillyex extends PokemonCard {
         damage: number;
         text: string;
     }[];
+    regulationMark: string;
     set: string;
     cardImage: string;
     setNumber: string;

@@ -42,11 +42,9 @@ class TimeSpaceDistortion extends trainer_card_1.TrainerCard {
                 store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, player.discard, { superType: card_types_1.SuperType.POKEMON }, { min: minDiscard, max: headsCount, allowCancel: false }), selected => {
                     if (selected && selected.length > 0) {
                         // Discard trainer only when user selected a Pokemon
-                        player.supporter.moveCardTo(effect.trainerCard, player.discard);
                         // Recover discarded Pokemon
                         player.discard.moveCardsTo(selected, player.hand);
                     }
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 });
             });
         }

@@ -56,7 +56,6 @@ class Ursaring extends pokemon_card_1.PokemonCard {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
             }
         }
-        // Block Poké-Powers from basics when active
         if (effect instanceof game_effects_1.PowerEffect && effect.power.powerType === pokemon_types_1.PowerType.POKEPOWER) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);

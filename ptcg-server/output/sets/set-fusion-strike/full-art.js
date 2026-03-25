@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FireEnergySR = exports.GrassEnergySR = exports.TrainingCourtSR = exports.PowerTabletSR = exports.FlaaffySR = exports.MewVMAXAA = exports.MewVMAXHR = exports.ShaunaFA = exports.SchoolgirlFA = exports.SchoolboyFA = exports.ElesasSparkleFA = exports.GenesectVAA = exports.GenesectVFA = exports.MewVAA = exports.MewVFA = void 0;
-const flaaffy_1 = require("../set-evolving-skies/flaaffy");
+exports.FireEnergySR = exports.GrassEnergySR = exports.TrainingCourtSR = exports.PowerTabletSR = exports.MewVMAXAA = exports.MewVMAXHR = exports.ShaunaFA = exports.SchoolgirlFA = exports.SchoolboyFA = exports.ElesasSparkleFA = exports.GenesectVAA = exports.GenesectVFA = exports.MewVAA = exports.MewVFA = exports.CelebiVFA = void 0;
 const training_court_1 = require("../set-rebel-clash/training-court");
 const fire_energy_1 = require("../set-scarlet-and-violet-energy/fire-energy");
 const grass_energy_1 = require("../set-scarlet-and-violet-energy/grass-energy");
+const celebi_v_1 = require("../set-chilling-reign/celebi-v");
 const elesas_sparkle_1 = require("./elesas-sparkle");
 const genesect_v_1 = require("./genesect-v");
 const mew_v_1 = require("./mew-v");
@@ -13,10 +13,15 @@ const power_tablet_1 = require("./power-tablet");
 const schoolboy_1 = require("./schoolboy");
 const schoolgirl_1 = require("./schoolgirl");
 const shauna_1 = require("./shauna");
-// export class CelebiVFA extends CelebiV {
-//   public setNumber = '245';
-//   public fullName: string = 'CelebiVFA FST';
-// }
+class CelebiVFA extends celebi_v_1.CelebiV {
+    constructor() {
+        super(...arguments);
+        this.set = 'FST';
+        this.setNumber = '245';
+        this.fullName = 'Celebi V FST 245';
+    }
+}
+exports.CelebiVFA = CelebiVFA;
 // export class TsareenaVFA extends TsareenaV {
 //   public setNumber = '246';
 //   public fullName: string = 'TsareenaVFA FST';
@@ -55,7 +60,7 @@ exports.MewVAA = MewVAA;
 // }
 // export class HoopaVFA extends HoopaV {
 //   public setNumber = '253';
-//   public fullName: string = 'HoopaVFA FST';
+//   public fullName: string = 'Mew V FST 253';
 // }
 class GenesectVFA extends genesect_v_1.GenesectV {
     constructor() {
@@ -87,7 +92,7 @@ exports.GenesectVAA = GenesectVAA;
 // }
 // export class DancerFA extends Dancer {
 //   public setNumber = '259';
-//   public fullName: string = 'DancerFA FST';
+//   public fullName: string = 'Genesect V FST 259';
 // }
 class ElesasSparkleFA extends elesas_sparkle_1.ElesasSparkle {
     constructor() {
@@ -135,7 +140,7 @@ exports.ShaunaFA = ShaunaFA;
 // }
 // export class BoltundVMAXHR extends BoltundVMAX {
 //   public setNumber = '267';
-//   public fullName: string = 'BoltundVMAXHR FST';
+//   public fullName: string = 'Shauna FST 267';
 // }
 class MewVMAXHR extends mew_vmax_1.MewVMAX {
     constructor() {
@@ -159,21 +164,12 @@ exports.MewVMAXAA = MewVMAXAA;
 // }
 // export class GengarVMAXAA extends GengarVMAX {
 //   public setNumber = '271';
-//   public fullName: string = 'GengarVMAXAA FST';
+//   public fullName: string = 'Gengar VMAX FST 271';
 // }
 // export class GreedentVMAXHR extends GreedentVMAX {
 //   public setNumber = '272';
-//   public fullName: string = 'GreedentVMAXHR FST';
+//   public fullName: string = 'Greedent VMAX FST 272';
 // }
-class FlaaffySR extends flaaffy_1.Flaaffy {
-    constructor() {
-        super(...arguments);
-        this.set = 'FST';
-        this.setNumber = '280';
-        this.fullName = 'FlaaffySR FST';
-    }
-}
-exports.FlaaffySR = FlaaffySR;
 class PowerTabletSR extends power_tablet_1.PowerTablet {
     constructor() {
         super(...arguments);

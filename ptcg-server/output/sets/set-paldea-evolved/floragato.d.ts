@@ -21,6 +21,5 @@ export declare class Floragato extends PokemonCard {
     cardImage: string;
     setNumber: string;
     regulationMark: string;
-    magicWhip: boolean;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

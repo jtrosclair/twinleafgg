@@ -6,6 +6,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const game_effects_1 = require("../../game/store/effects/game-effects");
 class Unown extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -37,6 +38,8 @@ class Unown extends pokemon_card_1.PokemonCard {
             if ((0, prefabs_1.IS_POKEPOWER_BLOCKED)(store, state, player, this)) {
                 return state;
             }
+            const powerEffect = new game_effects_1.PowerEffect(player, this.powers[0], this);
+            store.reduceEffect(state, powerEffect);
             const conditions = player.active.specialConditions.slice();
             conditions === null || conditions === void 0 ? void 0 : conditions.forEach(condition => {
                 player.active.removeSpecialCondition(condition);

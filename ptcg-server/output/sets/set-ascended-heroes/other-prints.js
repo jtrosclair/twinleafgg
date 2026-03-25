@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MegaGengarexASC = exports.HaunterASC = exports.GastlyASC = exports.MegaLucarioexASC = exports.RioluASC = exports.CynthiasGarchompexASC = exports.CynthiasGabiteASC = exports.CynthiasGibleASC = exports.RegirockexASC = exports.SolrockASC = exports.LunatoneASC = exports.MunkidoriASC = exports.TeamRocketsMimikyuASC = exports.BanetteASC = exports.ShuppetASC = exports.MegaGardevoirexASC = exports.KirliaASC = exports.RaltsASC = exports.TogekissASC = exports.TogeticASC = exports.TogepiASC = exports.TeamRocketsMewtwoexASC = exports.LilliesClefairyexASC = exports.ClefableASC = exports.ClefairyASC = exports.IonosKilowattrelASC = exports.IonosWattrelASC = exports.IonosBelliboltexASC = exports.IonosTadbulbASC = exports.CharjabugASC = exports.EelektrikASC = exports.TynamoASC = exports.PikachuexASC = exports.WeavileASC = exports.SneaselASC = exports.GolduckASC = exports.PsyduckASC = exports.CinderaceexASC = exports.RabootASC = exports.ScorbunnyASC = exports.SalazzleASC = exports.SalanditASC = exports.NsDarmanitanASC = exports.NsDarumakaASC = exports.EthansHoOhexASC = exports.EthansMagcargoASC = exports.EthansSlugmaASC = exports.TeamRocketsSpidopsASC = exports.TeamRocketsTarountulaASC = exports.BudewASC = void 0;
-exports.Psyduck2ASC = exports.Scorbunny2ASC = exports.Salazzle2ASC = exports.Numel2ASC = exports.EthansMagcargo2ASC = exports.Budew2ASC = exports.Dustox2ASC = exports.Beautifly2ASC = exports.ErikasTangela2ASC = exports.TeamRocketsEnergyASC = exports.PrismEnergyASC = exports.UltraBallASC = exports.ToolScrapperASC = exports.TeamRocketsWatchtowerASC = exports.TeamRocketsTransceiverASC = exports.TeamRocketsProtonASC = exports.TeamRocketsPetrelASC = exports.TeamRocketsGreatBallASC = exports.TeamRocketsGiovanniASC = exports.TeamRocketsFactoryASC = exports.TeamRocketsArianaASC = exports.TeamRocketsArcherASC = exports.SurferASC = exports.PowerProteinASC = exports.NightlyStretcherASC = exports.NsPPUpASC = exports.MysteryGardenASC = exports.MegaSignalASC = exports.LilliesDeterminationASC = exports.IrisFightingSpiritASC = exports.GlassTrumpetASC = exports.LushForestASC = exports.CounterGainASC = exports.BuddyBuddyPoffinASC = exports.BossOrdersASC = exports.AirBalloonASC = exports.TerapagosexASC = exports.TerapagosASC = exports.HopsCramorantASC = exports.FanRotomASC = exports.TeamRocketsMeowthASC = exports.DragapultexASC = exports.DrakloakASC = exports.DreepyASC = exports.NsReshiramASC = exports.FezandipitiexASC = exports.NsZoroarkexASC = exports.NsZoruaASC = exports.CynthiasSpiritombASC = exports.TeamRocketsMurkrowASC = void 0;
-exports.Canari3ASC = exports.MegaDragoniteex3ASC = exports.StevensMetagrossexASC = exports.Fezandipitiex2ASC = exports.MarniesGrimmsnarlexASC = exports.NsZoroarkex2ASC = exports.MegaScraftyex3ASC = exports.MegaGengarex3ASC = exports.MegaHawluchaex3ASC = exports.MegaDiancieex2ASC = exports.TeamRocketsMewtwoex2ASC = exports.LilliesClefairyex2ASC = exports.IonosBelliboltex2ASC = exports.MegaEelektrossex3ASC = exports.Pikachuex3ASC = exports.MegaFroslassex3ASC = exports.MegaFeraligatrex2ASC = exports.MegaEmboarex2ASC = exports.MegaMeganiumex2ASC = exports.MegaDragoniteex2ASC = exports.MegaScraftyex2ASC = exports.MegaGengarex2ASC = exports.MegaHawluchaex2ASC = exports.MegaDiancieexASC = exports.MegaEelektrossex2ASC = exports.MegaFroslassex2ASC = exports.UltraBall2ASC = exports.TeamRocketsTransceiver2ASC = exports.NsPPUp2ASC = exports.JammingTowerASC = exports.GlassTrumpet2ASC = exports.CounterGain2ASC = exports.CherenASC = exports.Canari2ASC = exports.BossOrders2ASC = exports.BlackBeltsTrainingASC = exports.MegaAudinoex2ASC = exports.FanRotom2ASC = exports.LarrysStaraptor2ASC = exports.Drakloak2ASC = exports.Dreepy2ASC = exports.CynthiasSpiritomb2ASC = exports.TeamRocketsMimikyu2ASC = exports.Togekiss2ASC = exports.Banette2ASC = exports.Misdreavus2ASC = exports.Marill2ASC = exports.IonosWattrel2ASC = exports.Weavile2ASC = exports.Snorunt2ASC = void 0;
-exports.MegaDragoniteex4ASC = exports.MegaCharizardYex2ASC = exports.Surfer2ASC = exports.IrisFightingSpirit2ASC = void 0;
+exports.CynthiasGibleASC = exports.RegirockexASC = exports.SolrockASC = exports.LunatoneASC = exports.MunkidoriASC = exports.TeamRocketsMimikyuASC = exports.BanetteASC = exports.ShuppetASC = exports.MegaGardevoirexASC = exports.KirliaASC = exports.RaltsASC = exports.TogekissASC = exports.TogeticASC = exports.TogepiASC = exports.TeamRocketsMewtwoexASC = exports.LilliesClefairyexASC = exports.ClefableASC = exports.ClefairyASC = exports.IonosKilowattrelASC = exports.IonosWattrelASC = exports.IonosBelliboltexASC = exports.IonosTadbulbASC = exports.CharjabugASC = exports.EelektrikASC = exports.TynamoASC = exports.PikachuexASC = exports.WeavileASC = exports.SneaselASC = exports.GolduckASC = exports.PsyduckASC = exports.CinderaceexASC = exports.RabootASC = exports.ScorbunnyASC = exports.SalazzleASC = exports.SalanditASC = exports.NsDarmanitanASC = exports.NsDarumakaASC = exports.EthansHoOhexASC = exports.EthansMagcargoASC = exports.EthansSlugmaASC = exports.TeamRocketsSpidopsASC = exports.TeamRocketsTarountulaASC = exports.BudewASC = exports.JudgeMC = exports.PokemonCatcherMC = exports.PokeGear30MC = exports.CrushingHammerMC = exports.PotionMC = exports.EnergySearchMC = exports.SuperPotionMC = void 0;
+exports.Beautifly2ASC = exports.ErikasTangela2ASC = exports.TeamRocketsEnergyASC = exports.PrismEnergyASC = exports.UltraBallASC = exports.ToolScrapperASC = exports.TeamRocketsWatchtowerASC = exports.TeamRocketsTransceiverASC = exports.TeamRocketsProtonASC = exports.TeamRocketsPetrelASC = exports.TeamRocketsGreatBallASC = exports.TeamRocketsGiovanniASC = exports.TeamRocketsFactoryASC = exports.TeamRocketsArianaASC = exports.TeamRocketsArcherASC = exports.SurferASC = exports.PowerProteinASC = exports.NightlyStretcherASC = exports.NsPPUpASC = exports.MysteryGardenASC = exports.MegaSignalASC = exports.LilliesDeterminationASC = exports.IrisFightingSpiritASC = exports.GlassTrumpetASC = exports.LushForestASC = exports.CounterGainASC = exports.BuddyBuddyPoffinASC = exports.BossOrdersASC = exports.AirBalloonASC = exports.TerapagosexASC = exports.TerapagosASC = exports.HopsCramorantASC = exports.FanRotomASC = exports.TeamRocketsMeowthASC = exports.DragapultexASC = exports.DrakloakASC = exports.DreepyASC = exports.NsReshiramASC = exports.FezandipitiexASC = exports.NsZoroarkexASC = exports.NsZoruaASC = exports.CynthiasSpiritombASC = exports.TeamRocketsMurkrowASC = exports.MegaGengarexASC = exports.HaunterASC = exports.GastlyASC = exports.MegaLucarioexASC = exports.RioluASC = exports.CynthiasGarchompexASC = exports.CynthiasGabiteASC = void 0;
+exports.MegaGengarex3ASC = exports.MegaHawluchaex3ASC = exports.MegaDiancieex2ASC = exports.TeamRocketsMewtwoex2ASC = exports.LilliesClefairyex2ASC = exports.IonosBelliboltex2ASC = exports.MegaEelektrossex3ASC = exports.Pikachuex3ASC = exports.MegaFroslassex3ASC = exports.MegaFeraligatrex2ASC = exports.MegaEmboarex2ASC = exports.MegaMeganiumex2ASC = exports.MegaDragoniteex2ASC = exports.MegaScraftyex2ASC = exports.MegaGengarex2ASC = exports.MegaHawluchaex2ASC = exports.MegaDiancieexASC = exports.MegaEelektrossex2ASC = exports.MegaFroslassex2ASC = exports.UltraBall2ASC = exports.TeamRocketsTransceiver2ASC = exports.NsPPUp2ASC = exports.JammingTowerASC = exports.GlassTrumpet2ASC = exports.CounterGain2ASC = exports.CherenASC = exports.Canari2ASC = exports.BossOrders2ASC = exports.BlackBeltsTrainingASC = exports.MegaAudinoex2ASC = exports.FanRotom2ASC = exports.LarrysStaraptor2ASC = exports.Drakloak2ASC = exports.Dreepy2ASC = exports.CynthiasSpiritomb2ASC = exports.TeamRocketsMimikyu2ASC = exports.Togekiss2ASC = exports.Banette2ASC = exports.Misdreavus2ASC = exports.Marill2ASC = exports.IonosWattrel2ASC = exports.Weavile2ASC = exports.Snorunt2ASC = exports.Psyduck2ASC = exports.Scorbunny2ASC = exports.Salazzle2ASC = exports.Numel2ASC = exports.EthansMagcargo2ASC = exports.Budew2ASC = exports.Dustox2ASC = void 0;
+exports.MegaDragoniteex4ASC = exports.MegaCharizardYex2ASC = exports.Surfer2ASC = exports.IrisFightingSpirit2ASC = exports.Canari3ASC = exports.MegaDragoniteex3ASC = exports.StevensMetagrossexASC = exports.Fezandipitiex2ASC = exports.MarniesGrimmsnarlexASC = exports.NsZoroarkex2ASC = exports.MegaScraftyex3ASC = void 0;
 const budew_1 = require("../set-prismatic-evolution/budew");
 const team_rockets_tarountula_1 = require("../set-destined-rivals/team-rockets-tarountula");
 const team_rockets_spidops_1 = require("../set-destined-rivals/team-rockets-spidops");
@@ -94,32 +94,32 @@ const tool_scrapper_1 = require("../set-dragons-exalted/tool-scrapper");
 const ultra_ball_1 = require("../set-scarlet-and-violet/ultra-ball");
 const prism_energy_1 = require("../set-next-destinies/prism-energy");
 const team_rockets_energy_1 = require("../set-destined-rivals/team-rockets-energy");
-const erikas_tangela_1 = require("./erikas-tangela");
-const beautifly_1 = require("./beautifly");
-const dustox_1 = require("./dustox");
+const erikas_tangela_1 = require("../set-ascended-heroes/erikas-tangela");
+const beautifly_1 = require("../set-ascended-heroes/beautifly");
+const dustox_1 = require("../set-ascended-heroes/dustox");
 const budew_2 = require("../set-prismatic-evolution/budew");
 const ethans_magcargo_2 = require("../set-destined-rivals/ethans-magcargo");
-const numel_1 = require("./numel");
+const numel_1 = require("../set-ascended-heroes/numel");
 const salazzle_2 = require("../set-stellar-crown/salazzle");
 const scorbunny_2 = require("../set-stellar-crown/scorbunny");
 const psyduck_2 = require("../set-mega-evolution-promos/psyduck");
-const snorunt_1 = require("./snorunt");
+const snorunt_1 = require("../set-ascended-heroes/snorunt");
 const weavile_2 = require("../set-shrouded-fable/weavile");
 const ionos_wattrel_2 = require("../set-journey-together/ionos-wattrel");
-const marill_1 = require("./marill");
-const misdreavus_1 = require("./misdreavus");
+const marill_1 = require("../set-ascended-heroes/marill");
+const misdreavus_1 = require("../set-ascended-heroes/misdreavus");
 const banette_2 = require("../set-journey-together/banette");
 const togekiss_2 = require("../set-surging-sparks/togekiss");
 const team_rockets_mimikyu_2 = require("../set-destined-rivals/team-rockets-mimikyu");
 const cynthias_spiritomb_2 = require("../set-destined-rivals/cynthias-spiritomb");
 const dreepy_2 = require("../set-twilight-masquerade/dreepy");
 const drakloak_2 = require("../set-twilight-masquerade/drakloak");
-const larrys_staraptor_1 = require("./larrys-staraptor");
+const larrys_staraptor_1 = require("../set-ascended-heroes/larrys-staraptor");
 const fan_rotom_2 = require("../set-stellar-crown/fan-rotom");
-const mega_audino_ex_1 = require("./mega-audino-ex");
+const mega_audino_ex_1 = require("../set-ascended-heroes/mega-audino-ex");
 const black_belts_training_1 = require("../set-prismatic-evolution/black-belts-training");
 const boss_orders_1 = require("../set-paldea-evolved/boss-orders");
-const canari_1 = require("./canari");
+const canari_1 = require("../set-ascended-heroes/canari");
 const cheren_1 = require("../set-emerging-powers/cheren");
 const counter_gain_2 = require("../set-lost-thunder/counter-gain");
 const glass_trumpet_2 = require("../set-stellar-crown/glass-trumpet");
@@ -127,16 +127,16 @@ const jamming_tower_1 = require("../set-twilight-masquerade/jamming-tower");
 const ns_pp_up_2 = require("../set-journey-together/ns-pp-up");
 const team_rockets_transceiver_2 = require("../set-destined-rivals/team-rockets-transceiver");
 const ultra_ball_2 = require("../set-scarlet-and-violet/ultra-ball");
-const mega_froslass_ex_1 = require("./mega-froslass-ex");
-const mega_eelektross_ex_1 = require("./mega-eelektross-ex");
+const mega_froslass_ex_1 = require("../set-ascended-heroes/mega-froslass-ex");
+const mega_eelektross_ex_1 = require("../set-ascended-heroes/mega-eelektross-ex");
 const mega_diancie_ex_1 = require("../set-phantasmal-flames/mega-diancie-ex");
-const mega_hawlucha_ex_1 = require("./mega-hawlucha-ex");
+const mega_hawlucha_ex_1 = require("../set-ascended-heroes/mega-hawlucha-ex");
 const mega_gengar_ex_2 = require("../set-phantasmal-flames/mega-gengar-ex");
-const mega_scrafty_ex_1 = require("./mega-scrafty-ex");
-const mega_dragonite_ex_1 = require("./mega-dragonite-ex");
-const mega_meganium_ex_1 = require("./mega-meganium-ex");
-const mega_emboar_ex_1 = require("./mega-emboar-ex");
-const mega_feraligatr_ex_1 = require("./mega-feraligatr-ex");
+const mega_scrafty_ex_1 = require("../set-ascended-heroes/mega-scrafty-ex");
+const mega_dragonite_ex_1 = require("../set-ascended-heroes/mega-dragonite-ex");
+const mega_meganium_ex_1 = require("../set-ascended-heroes/mega-meganium-ex");
+const mega_emboar_ex_1 = require("../set-ascended-heroes/mega-emboar-ex");
+const mega_feraligatr_ex_1 = require("../set-ascended-heroes/mega-feraligatr-ex");
 const pikachu_ex_2 = require("../set-surging-sparks/pikachu-ex");
 const ionos_bellibolt_ex_2 = require("../set-journey-together/ionos-bellibolt-ex");
 const lillies_clefairy_ex_2 = require("../set-journey-together/lillies-clefairy-ex");
@@ -148,8 +148,86 @@ const fezandipiti_ex_2 = require("../set-shrouded-fable/fezandipiti-ex");
 const stevens_metagross_ex_1 = require("../set-destined-rivals/stevens-metagross-ex");
 const iris_fighting_spirit_2 = require("../set-journey-together/iris-fighting-spirit");
 const surfer_2 = require("../set-surging-sparks/surfer");
-const mega_charizard_y_ex_1 = require("./mega-charizard-y-ex");
+const mega_charizard_y_ex_1 = require("../set-ascended-heroes/mega-charizard-y-ex");
 const boss_orders_2 = require("../set-paldea-evolved/boss-orders");
+const judge_1 = require("../set-scarlet-and-violet/judge");
+const pokegear_30_1 = require("../set-scarlet-and-violet/pokegear-30");
+const super_potion_1 = require("../set-x-and-y/super-potion");
+const energy_search_1 = require("../set-scarlet-and-violet/energy-search");
+const crushing_hammer_1 = require("../set-scarlet-and-violet/crushing-hammer");
+const potion_1 = require("../set-scarlet-and-violet/potion");
+const pokemon_catcher_1 = require("../set-scarlet-and-violet/pokemon-catcher");
+// Start Deck 100 Reprints
+class SuperPotionMC extends super_potion_1.SuperPotion {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '634';
+        this.fullName = 'Super Potion MC';
+        this.set = 'MC';
+        this.regulationMark = 'I';
+    }
+}
+exports.SuperPotionMC = SuperPotionMC;
+class EnergySearchMC extends energy_search_1.EnergySearch {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '639';
+        this.fullName = 'Energy Search MC';
+        this.set = 'MC';
+        this.regulationMark = 'I';
+    }
+}
+exports.EnergySearchMC = EnergySearchMC;
+class PotionMC extends potion_1.Potion {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '643';
+        this.fullName = 'Potion MC';
+        this.set = 'MC';
+        this.regulationMark = 'I';
+    }
+}
+exports.PotionMC = PotionMC;
+class CrushingHammerMC extends crushing_hammer_1.CrushingHammer {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '644';
+        this.fullName = 'Crushing Hammer MC';
+        this.set = 'MC';
+        this.regulationMark = 'I';
+    }
+}
+exports.CrushingHammerMC = CrushingHammerMC;
+class PokeGear30MC extends pokegear_30_1.Pokegear30 {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '660';
+        this.fullName = 'Pokégear 3.0 MC';
+        this.set = 'MC';
+        this.regulationMark = 'I';
+    }
+}
+exports.PokeGear30MC = PokeGear30MC;
+class PokemonCatcherMC extends pokemon_catcher_1.PokemonCatcher {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '665';
+        this.fullName = 'Pokémon Catcher MC';
+        this.set = 'MC';
+        this.regulationMark = 'I';
+    }
+}
+exports.PokemonCatcherMC = PokemonCatcherMC;
+class JudgeMC extends judge_1.Judge {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '711';
+        this.fullName = 'Judge MC';
+        this.set = 'MC';
+        this.regulationMark = 'I';
+    }
+}
+exports.JudgeMC = JudgeMC;
 class BudewASC extends budew_1.Budew {
     constructor() {
         super(...arguments);
@@ -769,7 +847,6 @@ class LushForestASC extends forest_of_vitality_1.LushForest {
         this.setNumber = '188';
         this.fullName = 'Forest of Vitality ASC';
         this.set = 'ASC';
-        this.legacyFullName = 'Lush Forest ASC';
     }
 }
 exports.LushForestASC = LushForestASC;

@@ -11,14 +11,13 @@ const card_list_1 = require("../../game/store/state/card-list");
 const show_cards_prompt_1 = require("../../game/store/prompts/show-cards-prompt");
 const state_utils_1 = require("../../game/store/state-utils");
 const shuffle_prompt_1 = require("../../game/store/prompts/shuffle-prompt");
-const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* playCard(next, store, state, self, effect) {
     const player = effect.player;
     const opponent = state_utils_1.StateUtils.getOpponent(state, player);
     let cards = [];
     const hasEnergyInHand = player.hand.cards.filter(c => {
-        return c instanceof game_1.EnergyCard && c.name === 'Metal Energy';
+        return c.superType === card_types_1.SuperType.ENERGY && c.name === 'Metal Energy';
     }).length >= 2;
     if (!hasEnergyInHand) {
         throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_USE_POWER);
@@ -53,7 +52,6 @@ function* playCard(next, store, state, self, effect) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
     (0, prefabs_1.MOVE_CARDS)(store, state, player.deck, player.hand, { cards, sourceCard: self });
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
     });
@@ -68,9 +66,9 @@ class Adaman extends trainer_card_1.TrainerCard {
         this.cardImage = 'assets/cardback.png';
         this.name = 'Adaman';
         this.fullName = 'Adaman ASR';
-        this.text = 'You can use this card only if you discard 2 [M] Energy cards from your hand.' +
-            '' +
-            'Search your deck for up to 2 cards and put them into your hand. Then, shuffle your deck.';
+        this.text = `You can use this card only if you discard 2 [M] Energy cards from your hand.
+
+Search your deck for up to 2 cards and put them into your hand. Then, shuffle your deck.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

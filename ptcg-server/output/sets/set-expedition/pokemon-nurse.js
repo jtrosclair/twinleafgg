@@ -36,13 +36,12 @@ function* playCard(next, store, state, effect) {
         return state;
     }
     // Discard trainer only when user selected a Pokemon
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     targets.forEach(target => {
         // Heal Pokemon
         const healEffect = new game_effects_1.HealEffect(player, target, target.damage);
         store.reduceEffect(state, healEffect);
         // Discard its energy cards
-        const cards = target.cards.filter(c => c instanceof game_1.EnergyCard);
+        const cards = target.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY);
         target.moveCardsTo(cards, player.discard);
     });
     return state;

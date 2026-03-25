@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GutsyPickaxe = void 0;
 const game_1 = require("../../game");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class GutsyPickaxe extends game_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -26,7 +25,7 @@ class GutsyPickaxe extends game_1.TrainerCard {
             player.deck.moveTo(temp, 1);
             // Check if any cards drawn are basic energy
             const energyCardsDrawn = temp.cards.filter(card => {
-                return card instanceof game_1.EnergyCard && card.energyType === game_1.EnergyType.BASIC && card.name === 'Fighting Energy';
+                return card.superType === game_1.SuperType.ENERGY && card.energyType === game_1.EnergyType.BASIC && card.name === 'Fighting Energy';
             });
             // If no energy cards were drawn, move all cards to hand
             if (temp.cards.length > 0) {
@@ -35,7 +34,6 @@ class GutsyPickaxe extends game_1.TrainerCard {
                         return store.prompt(state, new game_1.ShowCardsPrompt(player.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, temp.cards), () => {
                             temp.cards.slice(0, 1).forEach(card => {
                                 temp.moveCardTo(card, player.hand);
-                                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                             });
                         });
                     }
@@ -48,11 +46,9 @@ class GutsyPickaxe extends game_1.TrainerCard {
                                 for (const transfer of transfers) {
                                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
                                     temp.moveCardTo(transfer.card, target); // Move card to target
-                                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                                 }
                                 temp.cards.forEach(card => {
                                     temp.moveCardTo(card, player.hand); // Move card to hand
-                                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                                 });
                                 return state;
                             }

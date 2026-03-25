@@ -50,7 +50,7 @@ class Groudonex extends game_1.PokemonCard {
         }
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            const energiesInHand = player.hand.cards.filter(card => card instanceof game_1.EnergyCard && card.superType === game_1.SuperType.ENERGY);
+            const energiesInHand = player.hand.cards.filter(card => card.superType === game_1.SuperType.ENERGY);
             // Prompt player to choose cards to discard 
             return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, { superType: game_1.SuperType.ENERGY }, { allowCancel: false, min: 0, max: energiesInHand.length }), cards => {
                 cards = cards || [];

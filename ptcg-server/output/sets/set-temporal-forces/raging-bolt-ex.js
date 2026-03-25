@@ -4,9 +4,9 @@ exports.RagingBoltex = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_message_1 = require("../../game/game-message");
-const discard_energy_prompt_1 = require("../../game/store/prompts/discard-energy-prompt");
+const costs_1 = require("../../game/store/prefabs/costs");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class RagingBoltex extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -40,7 +40,7 @@ class RagingBoltex extends pokemon_card_1.PokemonCard {
     }
     // Implement power
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
@@ -48,27 +48,16 @@ class RagingBoltex extends pokemon_card_1.PokemonCard {
             player.hand.moveTo(player.discard);
             player.deck.moveTo(player.hand, 6);
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
-            const player = effect.player;
-            let totalEnergy = 0;
-            player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
-                const basicEnergyCount = cardList.cards.filter(card => card instanceof game_1.EnergyCard && card.energyType === card_types_1.EnergyType.BASIC).length;
-                totalEnergy += basicEnergyCount;
-            });
-            return store.prompt(state, new discard_energy_prompt_1.DiscardEnergyPrompt(player.id, game_message_1.GameMessage.CHOOSE_ENERGIES_TO_DISCARD, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], // Card source is target Pokemon
-            { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { min: 1, max: totalEnergy, allowCancel: false }), transfers => {
-                if (transfers === null) {
-                    return;
-                }
-                for (const transfer of transfers) {
-                    let totalDiscarded = 0;
-                    const source = game_1.StateUtils.getTarget(state, player, transfer.from);
-                    const target = player.discard;
-                    source.moveCardTo(transfer.card, target);
-                    totalDiscarded = transfers.length;
-                    effect.damage = totalDiscarded * 70;
-                }
-                return state;
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            effect.damage = 0;
+            // Legacy implementation:
+            // - Counted Basic Energy across Active + Bench manually.
+            // - Used DiscardEnergyPrompt and moved selected cards by hand.
+            // - Set damage to discardedCount * 70.
+            //
+            // Converted to prefab version (DISCARD_UP_TO_X_ENERGY_FROM_YOUR_POKEMON).
+            return (0, costs_1.DISCARD_UP_TO_X_ENERGY_FROM_YOUR_POKEMON)(store, state, effect, Number.MAX_SAFE_INTEGER, { energyType: card_types_1.EnergyType.BASIC }, 0, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], transfers => {
+                effect.damage = transfers.length * 70;
             });
         }
         return state;

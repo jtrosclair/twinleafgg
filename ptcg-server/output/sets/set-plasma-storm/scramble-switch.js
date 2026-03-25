@@ -25,7 +25,7 @@ function* playCard(next, store, state, effect) {
         return state;
     }
     const target = targets[0];
-    const hasEnergies = player.active.cards.some(c => c instanceof game_1.EnergyCard);
+    const hasEnergies = player.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY);
     if (hasEnergies) {
         yield store.prompt(state, new game_1.ChooseCardsPrompt(player, game_message_1.GameMessage.ATTACH_ENERGY_TO_BENCH, player.active, { superType: card_types_1.SuperType.ENERGY }, { allowCancel: false, min: 0 }), selected => {
             selected = selected || [];
@@ -34,7 +34,6 @@ function* playCard(next, store, state, effect) {
         });
     }
     // Discard trainer only when user selected a Pokemon
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     player.switchPokemon(targets[0]);
     return state;
 }

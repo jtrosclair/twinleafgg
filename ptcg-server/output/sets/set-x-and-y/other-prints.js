@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.XerneasEX2XY = exports.YveltalEx2XY = exports.RainbowEnergyPLXY = exports.TeamFlareGruntXY = exports.RedCardXY = exports.MaxReviveXY = exports.GreatBallXY = exports.XerneasXY = exports.YveltalXY = exports.ProfessorSycamoreXY = void 0;
+exports.SkarmoryEx2 = exports.EmolgaEx2 = exports.BlastoiseEx2 = exports.VenusaurEx2 = exports.VenipedeXY = exports.XerneasEX2XY = exports.YveltalEx2XY = exports.RainbowEnergyPLXY = exports.TeamFlareGruntXY = exports.RedCardXY = exports.MaxReviveXY = exports.GreatBallXY = exports.XerneasXY = exports.YveltalXY = exports.ProfessorSycamoreXY = void 0;
 const yveltal_1 = require("../set-steam-siege/yveltal");
 const xerneas_1 = require("../set-steam-siege/xerneas");
 const great_ball_1 = require("../set-ex-firered-leafgreen/great-ball");
@@ -11,6 +11,11 @@ const other_prints_1 = require("../set-platinum/other-prints");
 const yveltal_ex_1 = require("../set-x-and-y/yveltal-ex");
 const xerneas_ex_1 = require("../set-x-and-y/xerneas-ex");
 const professor_juniper_1 = require("../set-black-and-white/professor-juniper");
+const venipede_1 = require("../set-black-and-white/venipede");
+const venusaur_ex_1 = require("./venusaur-ex");
+const blastoise_ex_1 = require("./blastoise-ex");
+const emolga_ex_1 = require("./emolga-ex");
+const skarmory_ex_1 = require("./skarmory-ex");
 class ProfessorSycamoreXY extends professor_juniper_1.ProfessorJuniper {
     constructor() {
         super(...arguments);
@@ -102,3 +107,48 @@ class XerneasEX2XY extends xerneas_ex_1.XerneasEX {
     }
 }
 exports.XerneasEX2XY = XerneasEX2XY;
+class VenipedeXY extends venipede_1.Venipede {
+    constructor() {
+        super(...arguments);
+        this.set = 'XY';
+        this.setNumber = '51';
+        this.fullName = 'Venipede XY';
+    }
+}
+exports.VenipedeXY = VenipedeXY;
+class VenusaurEx2 extends venusaur_ex_1.VenusaurEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'XY';
+        this.setNumber = '141';
+        this.fullName = 'Venusaur-EX XY 141';
+    }
+}
+exports.VenusaurEx2 = VenusaurEx2;
+class BlastoiseEx2 extends blastoise_ex_1.BlastoiseEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'XY';
+        this.setNumber = '142';
+        this.fullName = 'Blastoise-EX XY 142';
+    }
+}
+exports.BlastoiseEx2 = BlastoiseEx2;
+class EmolgaEx2 extends emolga_ex_1.EmolgaEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'XY';
+        this.setNumber = '143';
+        this.fullName = 'Emolga-EX XY 143';
+    }
+}
+exports.EmolgaEx2 = EmolgaEx2;
+class SkarmoryEx2 extends skarmory_ex_1.SkarmoryEx {
+    constructor() {
+        super(...arguments);
+        this.set = 'XY';
+        this.setNumber = '145';
+        this.fullName = 'Skarmory-EX XY 145';
+    }
+}
+exports.SkarmoryEx2 = SkarmoryEx2;

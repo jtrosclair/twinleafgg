@@ -33,7 +33,6 @@ function* playCard(next, store, state, self, effect) {
     const opponent = state_utils_1.StateUtils.getOpponent(state, player);
     const cardsToDraw = opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
     (0, prefabs_1.DRAW_CARDS)(player, cardsToDraw);
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return state;
 }
 class ZinniasResolve extends trainer_card_1.TrainerCard {
@@ -42,13 +41,13 @@ class ZinniasResolve extends trainer_card_1.TrainerCard {
         this.regulationMark = 'E';
         this.trainerType = card_types_1.TrainerType.SUPPORTER;
         this.set = 'EVS';
-        this.cardImage = 'assets/cardback.png';
         this.setNumber = '164';
+        this.cardImage = 'assets/cardback.png';
         this.name = 'Zinnia\'s Resolve';
         this.fullName = 'Zinnia\'s Resolve EVS';
-        this.text = 'You can play this card only if you discard 2 other cards from your hand.' +
-            '' +
-            'Draw a card for each of your opponent\'s Pokémon in play.';
+        this.text = `You can play this card only if you discard 2 other cards from your hand.
+
+Draw a card for each of your opponent's Pokémon in play.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

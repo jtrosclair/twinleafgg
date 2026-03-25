@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConkeldurrV = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class ConkeldurrV extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -39,13 +39,13 @@ class ConkeldurrV extends pokemon_card_1.PokemonCard {
         this.fullName = 'Conkeldurr V PGO';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const activeCard = effect.player.active.getPokemonCard();
             if (activeCard !== undefined && activeCard.damageTakenLastTurn !== undefined) {
                 effect.damage += activeCard.damageTakenLastTurn;
             }
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const coinFlipEffect = new play_card_effects_1.CoinFlipEffect(effect.player, (result) => {
                 if (result) {
                     effect.damage += 90;

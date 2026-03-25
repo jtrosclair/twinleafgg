@@ -5,8 +5,10 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const game_effects_1 = require("../../game/store/effects/game-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class TingLuex extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -35,10 +37,38 @@ class TingLuex extends pokemon_card_1.PokemonCard {
         this.fullName = 'Ting-Lu ex PAL';
     }
     reduceEffect(store, state, effect) {
+        if (effect instanceof check_effects_1.CheckPokemonPowersEffect) {
+            const player = effect.player;
+            const opponent = game_1.StateUtils.getOpponent(state, player);
+            // Ting-Lu ex is not active Pokemon
+            if (player.active.getPokemonCard() !== this
+                && opponent.active.getPokemonCard() !== this) {
+                return state;
+            }
+            const targetCardList = game_1.StateUtils.findCardList(state, effect.target);
+            // Only filter opponent's Pokemon
+            const targetOwner = game_1.StateUtils.findOwner(state, targetCardList);
+            if (targetOwner === player) {
+                return state;
+            }
+            const targetPokemon = effect.target;
+            if (!targetPokemon) {
+                return state;
+            }
+            // We are not blocking the Abilities from Pokémon ex
+            if (targetPokemon.tags.includes(card_types_1.CardTag.POKEMON_ex)) {
+                return state;
+            }
+            // Only filter if Pokemon has damage counters
+            if (targetCardList instanceof game_1.PokemonCardList && targetCardList.damage > 0) {
+                // Filter out all abilities except Cursed Land
+                effect.powers = effect.powers.filter(power => power.powerType !== pokemon_types_1.PowerType.ABILITY || power.name === 'Cursed Land');
+            }
+        }
         if (effect instanceof game_effects_1.PowerEffect && effect.power.powerType === pokemon_types_1.PowerType.ABILITY && effect.power.name !== 'Cursed Land') {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            // Klefki is not active Pokemon
+            // Ting-Lu ex is not active Pokemon
             if (player.active.getPokemonCard() !== this
                 && opponent.active.getPokemonCard() !== this) {
                 return state;
@@ -55,11 +85,14 @@ class TingLuex extends pokemon_card_1.PokemonCard {
             catch (_a) {
                 return state;
             }
+            if (effect.power.useFromDiscard || effect.power.useFromHand) {
+                return state;
+            }
             if (!effect.power.exemptFromAbilityLock) {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_ABILITY);
             }
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const hasBenched = opponent.bench.some(b => b.cards.length > 0);

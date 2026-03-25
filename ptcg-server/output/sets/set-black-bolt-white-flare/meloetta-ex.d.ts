@@ -6,7 +6,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { PowerType } from '../../game/store/card/pokemon-types';
 export declare class Meloettaex extends PokemonCard {
     stage: Stage;
-    cardTag: CardTag[];
+    tags: CardTag[];
     cardType: import("../../game/store/card/card-types").CardType.PSYCHIC;
     hp: number;
     weakness: {
@@ -34,7 +34,6 @@ export declare class Meloettaex extends PokemonCard {
     setNumber: string;
     name: string;
     fullName: string;
-    usedAttack: boolean;
     readonly NEXT_TURN_MORE_DAMAGE_MARKER = "NEXT_TURN_MORE_DAMAGE_MARKER";
     readonly NEXT_TURN_MORE_DAMAGE_MARKER_2 = "NEXT_TURN_MORE_DAMAGE_MARKER_2";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;

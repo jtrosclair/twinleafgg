@@ -4,8 +4,8 @@ exports.Dragonite = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Dragonite extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -36,7 +36,7 @@ class Dragonite extends pokemon_card_1.PokemonCard {
         this.STEP_IN_MARKER = 'STEP_IN_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const cardList = game_1.StateUtils.findCardList(state, this);
             if (player.active.cards[0] == this) {
@@ -58,7 +58,7 @@ class Dragonite extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.STEP_IN_MARKER, this);
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             state = store.prompt(state, [
                 new game_1.CoinFlipPrompt(player.id, game_1.GameMessage.COIN_FLIP),

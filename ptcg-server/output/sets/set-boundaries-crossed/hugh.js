@@ -52,12 +52,10 @@ class Hugh extends trainer_card_1.TrainerCard {
                     const cards = selected || [];
                     (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: this });
                 });
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             }
             else {
                 (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(player, 5);
             }
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             return state;
         }
         return state;

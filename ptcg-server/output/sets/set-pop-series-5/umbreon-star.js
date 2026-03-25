@@ -7,6 +7,7 @@ const play_card_effects_1 = require("../../game/store/effects/play-card-effects"
 const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const game_effects_1 = require("../../game/store/effects/game-effects");
 class UmbreonStar extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -44,6 +45,8 @@ class UmbreonStar extends pokemon_card_1.PokemonCard {
                 if (wantToUse) {
                     const player = effect.player;
                     const opponent = game_1.StateUtils.getOpponent(state, player);
+                    const powerEffect = new game_effects_1.PowerEffect(player, this.powers[0], this);
+                    store.reduceEffect(state, powerEffect);
                     if (opponent.hand.cards.length > 0) {
                         const randomIndex = Math.floor(Math.random() * opponent.hand.cards.length);
                         const randomCard = opponent.hand.cards[randomIndex];

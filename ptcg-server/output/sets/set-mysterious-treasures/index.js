@@ -9,6 +9,7 @@ const croconaw_1 = require("./croconaw");
 const gabite_1 = require("./gabite");
 const garchomp_1 = require("./garchomp");
 const mesprit_1 = require("./mesprit");
+const nidorina_1 = require("./nidorina");
 const unown_e_1 = require("./unown-e");
 const team_galactics_wager_1 = require("./team-galactics-wager");
 const time_space_distortion_1 = require("./time-space-distortion");
@@ -23,6 +24,7 @@ exports.setMysteriousTreasures = [
     new gabite_1.Gabite(),
     new garchomp_1.Garchomp(),
     new mesprit_1.Mesprit(),
+    new nidorina_1.Nidorina(),
     new unown_e_1.UnownE(),
     new team_galactics_wager_1.TeamGalacticsWager(),
     new time_space_distortion_1.TimeSpaceDistortion(),

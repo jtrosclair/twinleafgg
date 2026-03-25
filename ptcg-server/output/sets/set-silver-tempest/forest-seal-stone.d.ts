@@ -9,8 +9,7 @@ export declare class ForestSealStone extends TrainerCard {
     regulationMark: string;
     name: string;
     fullName: string;
-    useWhenAttached: boolean;
-    readonly VSTAR_MARKER = "VSTAR_MARKER";
+    text: string;
     powers: {
         name: string;
         powerType: PowerType;
@@ -18,5 +17,7 @@ export declare class ForestSealStone extends TrainerCard {
         exemptFromAbilityLock: boolean;
         text: string;
     }[];
+    useWhenAttached: boolean;
+    readonly VSTAR_MARKER = "VSTAR_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

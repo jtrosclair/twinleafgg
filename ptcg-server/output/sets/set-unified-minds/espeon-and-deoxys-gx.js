@@ -55,11 +55,16 @@ class EspeonDeoxysGX extends game_1.PokemonCard {
             (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;
             let counters = 10;
-            const extraEffectCost = [P, C, C, C, C, C];
-            const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
-            store.reduceEffect(state, checkProvidedEnergy);
-            const meetsExtraEffectCost = game_1.StateUtils.checkEnoughEnergy(checkProvidedEnergy.energyMap, extraEffectCost);
-            if (meetsExtraEffectCost) {
+            const checkCost = new check_effects_1.CheckAttackCostEffect(player, this.attacks[1]);
+            state = store.reduceEffect(state, checkCost);
+            // Check attached energy
+            const checkEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
+            state = store.reduceEffect(state, checkEnergy);
+            // Count total attached energy
+            const totalEnergy = checkEnergy.energyMap.length;
+            const attackCost = checkCost.cost.length;
+            const extraEnergy = totalEnergy - attackCost;
+            if (extraEnergy >= 3) {
                 counters = 20;
             }
             (0, attack_effects_1.PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE)(counters, store, state, effect);

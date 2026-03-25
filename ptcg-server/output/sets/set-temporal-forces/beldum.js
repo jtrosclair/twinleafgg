@@ -3,8 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Beldum = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Beldum extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -36,11 +35,12 @@ class Beldum extends pokemon_card_1.PokemonCard {
         this.fullName = 'Beldum TEF';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
-            const player = effect.player;
-            const dealDamage = new attack_effects_1.DealDamageEffect(effect, 10);
-            dealDamage.target = player.active;
-            return store.reduceEffect(state, dealDamage);
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            // Legacy implementation:
+            // - Created DealDamageEffect for 10 and targeted player.active directly.
+            //
+            // Converted to prefab version (THIS_POKEMON_DOES_DAMAGE_TO_ITSELF).
+            return (0, prefabs_1.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF)(store, state, effect, 10);
         }
         return state;
     }

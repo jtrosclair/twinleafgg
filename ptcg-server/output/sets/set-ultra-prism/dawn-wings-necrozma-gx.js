@@ -8,8 +8,6 @@ const play_card_effects_1 = require("../../game/store/effects/play-card-effects"
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const game_2 = require("../../game");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
-const game_effects_2 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 // UPR Dawn Wings Necrozma-GX 63 (https://limitlesstcg.com/cards/UPR/63)
 class DawnWingsNecrozmaGX extends pokemon_card_1.PokemonCard {
@@ -56,7 +54,7 @@ class DawnWingsNecrozmaGX extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.INVASION_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             let bench;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
@@ -75,12 +73,12 @@ class DawnWingsNecrozmaGX extends pokemon_card_1.PokemonCard {
             return state;
         }
         // Dark Flash
-        if (effect instanceof game_effects_2.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             effect.ignoreResistance = true;
             return state;
         }
         // Moon's Eclipse-GX
-        if (effect instanceof game_effects_2.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_2.StateUtils.getOpponent(state, player);
             if (player.getPrizeLeft() <= opponent.getPrizeLeft()) {

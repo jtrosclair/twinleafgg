@@ -31,7 +31,6 @@ function* playCard(next, store, state, effect) {
         deckBottom.applyOrder(order);
         deckBottom.moveTo(player.deck);
         player.deck.moveTo(player.hand, Math.min(4, player.deck.cards.length));
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
     });
 }
 class Kofu extends trainer_card_1.TrainerCard {

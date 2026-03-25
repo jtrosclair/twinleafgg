@@ -10,6 +10,7 @@ const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_error_1 = require("../../game/game-error");
 const game_message_1 = require("../../game/game-message");
 const game_1 = require("../../game");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function isMatchingStage2(stage1, basic, stage2) {
     for (const card of stage1) {
         if (card.name === stage2.evolvesFrom && basic.name === card.evolvesFrom) {
@@ -117,18 +118,10 @@ class Meganium extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.QUICK_RIPENING_HERB_MARKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             // Check to see if anything is blocking our Ability
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: pokemon_types_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
             if (player.marker.hasMarker(this.QUICK_RIPENING_HERB_MARKER, this)) {

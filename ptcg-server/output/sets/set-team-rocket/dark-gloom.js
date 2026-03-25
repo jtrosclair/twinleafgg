@@ -1,23 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DarkGloom = void 0;
-const game_1 = require("../../game");
-const game_2 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
-class DarkGloom extends game_1.PokemonCard {
+const card_types_1 = require("../../game/store/card/card-types");
+const game_error_1 = require("../../game/game-error");
+const game_message_1 = require("../../game/game-message");
+const state_utils_1 = require("../../game/store/state-utils");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
+const game_1 = require("../../game");
+class DarkGloom extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
-        this.stage = game_1.Stage.STAGE_1;
+        this.stage = card_types_1.Stage.STAGE_1;
         this.evolvesFrom = 'Oddish';
-        this.tags = [game_1.CardTag.DARK];
+        this.tags = [card_types_1.CardTag.DARK];
         this.cardType = G;
         this.hp = 50;
         this.weakness = [{ type: R }];
         this.retreat = [C, C];
         this.powers = [{
                 name: 'Pollen Stench',
-                powerType: game_2.PowerType.POKEMON_POWER,
+                powerType: game_1.PowerType.POKEMON_POWER,
                 useWhenInPlay: true,
                 text: 'Once during your turn (before your attack), you may flip a coin. If heads, the Defending Pokémon is now Confused; if tails, your Active Pokémon is now Confused. This power can\'t be used if Dark Gloom is Asleep, Confused, or Paralyzed.'
             }];
@@ -39,9 +42,9 @@ class DarkGloom extends game_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
-            const opponent = game_1.StateUtils.getOpponent(state, player);
+            const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             if ((0, prefabs_1.HAS_MARKER)(this.POLLEN_STENCH_MARKER, player, this)) {
-                throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
+                throw new game_error_1.GameError(game_message_1.GameMessage.POWER_ALREADY_USED);
             }
             (0, prefabs_1.BLOCK_IF_ASLEEP_CONFUSED_PARALYZED)(player, this);
             (0, prefabs_1.ADD_MARKER)(this.POLLEN_STENCH_MARKER, player, this);
@@ -56,8 +59,8 @@ class DarkGloom extends game_1.PokemonCard {
             });
         }
         (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.POLLEN_STENCH_MARKER, this);
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED)(store, state, effect);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         return state;
     }

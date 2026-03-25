@@ -7,6 +7,7 @@ const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const trainer_card_1 = require("../../game/store/card/trainer-card");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class TeamRocketsMurkrow extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -40,7 +41,7 @@ class TeamRocketsMurkrow extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Deceit attack
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (player.deck.cards.length === 0) {
@@ -70,7 +71,7 @@ class TeamRocketsMurkrow extends pokemon_card_1.PokemonCard {
             });
         }
         // Torment attack
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const pokemonCard = opponent.active.getPokemonCard();

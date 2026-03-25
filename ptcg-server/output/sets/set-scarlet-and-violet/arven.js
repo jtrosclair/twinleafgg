@@ -18,6 +18,9 @@ function* playCard(next, store, state, self, effect) {
     if (supporterTurn > 0) {
         throw new game_1.GameError(game_message_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
     }
+    if (player.deck.cards.length === 0) {
+        throw new game_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
+    }
     player.hand.moveCardTo(effect.trainerCard, player.supporter);
     // We will discard this card after prompt confirmation
     effect.preventDefault = true;
@@ -47,7 +50,6 @@ function* playCard(next, store, state, self, effect) {
         next();
     });
     player.deck.moveCardsTo(cards, player.hand);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     cards.forEach((card, index) => {
         store.log(state, game_message_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
     });
@@ -69,6 +71,17 @@ class Arven extends trainer_card_1.TrainerCard {
         this.name = 'Arven';
         this.fullName = 'Arven SVI';
         this.text = 'Search your deck for an Item card and a Pokémon Tool card, reveal them, and put them into your hand. Then, shuffle your deck.';
+    }
+    canPlay(store, state, player) {
+        // Check if supporter already played this turn
+        if (player.supporterTurn > 0) {
+            return false;
+        }
+        if (player.deck.cards.length === 0) {
+            return false;
+        }
+        // No other restrictions - card can be played
+        return true;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

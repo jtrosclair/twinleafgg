@@ -29,7 +29,6 @@ class Hop extends trainer_card_1.TrainerCard {
             }
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             (0, prefabs_1.DRAW_CARDS)(player, 3);
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

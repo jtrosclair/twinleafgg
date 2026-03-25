@@ -39,7 +39,7 @@ class PokeParksMudkip extends pokemon_card_1.PokemonCard {
                     const player = effect.player;
                     const opponent = effect.opponent;
                     // If defending Pokemon has no energy cards attached, return early
-                    if (!opponent.active.energies.cards.some(c => c instanceof game_1.EnergyCard)) {
+                    if (!opponent.active.energies.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                         return state;
                     }
                     let card;

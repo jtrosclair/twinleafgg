@@ -4,27 +4,28 @@ exports.Magneton = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Magneton extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.regulationMark = 'H';
         this.stage = card_types_1.Stage.STAGE_1;
         this.evolvesFrom = 'Magnemite';
-        this.cardType = card_types_1.CardType.LIGHTNING;
+        this.cardType = L;
         this.hp = 100;
-        this.weakness = [{ type: card_types_1.CardType.FIGHTING }];
-        this.retreat = [card_types_1.CardType.COLORLESS];
+        this.weakness = [{ type: F }];
+        this.retreat = [C];
         this.powers = [{
                 name: 'Overvolt Discharge',
                 useWhenInPlay: true,
                 powerType: game_1.PowerType.ABILITY,
-                text: 'Once during your turn, you may attach up to 3 Basic Energy cards from your discard pile to your L Pokémon in any way you like. If you use this Ability, this Pokémon is Knocked Out.'
+                knocksOutSelf: true,
+                text: 'Once during your turn, you may attach up to 3 Basic Energy cards from your discard pile to your [L] Pokémon in any way you like. If you use this Ability, this Pokémon is Knocked Out.'
             }];
         this.attacks = [
             {
                 name: 'Electric Ball',
-                cost: [card_types_1.CardType.LIGHTNING, card_types_1.CardType.COLORLESS],
+                cost: [L, C],
                 damage: 40,
                 text: ''
             }
@@ -36,10 +37,10 @@ class Magneton extends pokemon_card_1.PokemonCard {
         this.fullName = 'Magneton SSP';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasEnergyInHand = player.discard.cards.some(c => {
-                return c instanceof game_1.EnergyCard && c.energyType == card_types_1.EnergyType.BASIC;
+                return c.superType === card_types_1.SuperType.ENERGY && c.energyType == card_types_1.EnergyType.BASIC;
             });
             if (!hasEnergyInHand) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);

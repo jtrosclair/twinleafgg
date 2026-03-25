@@ -65,6 +65,9 @@ class Kingdra extends pokemon_card_1.PokemonCard {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
+            if (!opponent.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
+                return state;
+            }
             if (opponent.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                 (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, player, result => {
                     if (result) {

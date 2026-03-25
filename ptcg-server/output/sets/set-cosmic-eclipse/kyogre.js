@@ -5,7 +5,6 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const energy_card_1 = require("../../game/store/card/energy-card");
 const attach_energy_prompt_1 = require("../../game/store/prompts/attach-energy-prompt");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -41,7 +40,7 @@ class Kyogre extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             // Count Water Energy cards in discard
             const waterEnergyCards = player.discard.cards.filter(c => {
-                return c instanceof energy_card_1.EnergyCard
+                return c.superType === card_types_1.SuperType.ENERGY
                     && c.energyType === card_types_1.EnergyType.BASIC
                     && c.provides.includes(card_types_1.CardType.WATER);
             });
@@ -61,7 +60,7 @@ class Kyogre extends pokemon_card_1.PokemonCard {
                 // Filter to only Water Energy cards
                 const validTransfers = transfers.filter(transfer => {
                     const card = transfer.card;
-                    return card instanceof energy_card_1.EnergyCard
+                    return card.superType === card_types_1.SuperType.ENERGY
                         && card.energyType === card_types_1.EnergyType.BASIC
                         && card.provides.includes(card_types_1.CardType.WATER);
                 });

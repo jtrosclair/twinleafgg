@@ -4,9 +4,9 @@ exports.Oricorioex = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attach_energy_prompt_1 = require("../../game/store/prompts/attach-energy-prompt");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Oricorioex extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -19,10 +19,10 @@ class Oricorioex extends pokemon_card_1.PokemonCard {
                 name: 'Excited Turbo',
                 useWhenInPlay: true,
                 powerType: game_1.PowerType.ABILITY,
-                text: 'As often as you like during your turn, if you have any [R] Mega Evolution Pokémon ex in play, you may use this Ability. You may attach a Basic [R] Energy card from your hand to 1 of your benched [R] Pokémon.'
+                text: 'As often as you like during your turn, if you have any [R] Mega Evolution Pokémon ex in play, you may use this Ability. Attach a Basic [R] Energy card from your hand to 1 of your Benched [R] Pokémon.'
             }];
         this.attacks = [{
-                name: 'Buster Tail',
+                name: 'Fire Wing',
                 cost: [R, R, C],
                 damage: 110,
                 text: ''
@@ -35,7 +35,7 @@ class Oricorioex extends pokemon_card_1.PokemonCard {
         this.fullName = 'Oricorio ex M2';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasMegaEvolutionPokemonInPlay = player.active.cards.some(c => {
                 return c instanceof pokemon_card_1.PokemonCard
@@ -59,7 +59,7 @@ class Oricorioex extends pokemon_card_1.PokemonCard {
                 }
             });
             const hasEnergyInHand = player.hand.cards.some(c => {
-                return c instanceof game_1.EnergyCard
+                return c.superType === card_types_1.SuperType.ENERGY
                     && c.energyType === card_types_1.EnergyType.BASIC
                     && c.provides.includes(card_types_1.CardType.FIRE);
             });

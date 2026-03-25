@@ -6,8 +6,8 @@ const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const game_1 = require("../../game");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Trevenant extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -21,7 +21,7 @@ class Trevenant extends pokemon_card_1.PokemonCard {
         this.powers = [{
                 name: 'Forest\'s Curse',
                 powerType: pokemon_types_1.PowerType.ABILITY,
-                text: 'As long as this Pokémon is your Active Pokémon, your opponent can\'t play any Item cards from his or her hand.'
+                text: 'As long as this Pokémon is your Active Pokémon, your opponent can\t play any Item cards from his or her hand.'
             }];
         this.attacks = [{
                 name: 'Tree Slam',
@@ -39,29 +39,18 @@ class Trevenant extends pokemon_card_1.PokemonCard {
         if (effect instanceof play_card_effects_1.PlayItemEffect) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
-            // Check if this card is in the opponent's active slot (either as the top card or in the evolution chain)
-            const isInOpponentActive = opponent.active.cards.includes(this);
-            const isInPlayerActive = player.active.cards.includes(this);
-            if (!isInPlayerActive && !isInOpponentActive) {
+            if (player.active.getPokemonCard() !== this && opponent.active.getPokemonCard() !== this) {
                 return state;
             }
             // Checking to see if ability is being blocked
-            try {
-                const stub = new game_effects_1.PowerEffect(player, {
-                    name: 'test',
-                    powerType: pokemon_types_1.PowerType.ABILITY,
-                    text: ''
-                }, this);
-                store.reduceEffect(state, stub);
-            }
-            catch (_a) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, opponent, this)) {
                 return state;
             }
-            if (isInOpponentActive) {
+            if (opponent.active.getPokemonCard() === this) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const opponentHasBench = opponent.bench.some(b => b.cards.length > 0);

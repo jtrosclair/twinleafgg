@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RayquazaGX4CES = exports.TateAndLiza2CES = exports.Sceptile2CES = exports.RainbowEnergyPL2CES = exports.PokeNav2CES = exports.HustleBelt2CES = exports.RayquazaGX3CES = exports.BanetteGX3CES = exports.ElectrodeGX3CES = exports.ArticunoGX3CES = exports.TvReporter2CES = exports.TateAndLiza3CES = exports.StevensResolve2CES = exports.Copycat2CES = exports.BillsMaintenance2CES = exports.ApricornMaker2CES = exports.RayquazaGX2CES = exports.BanetteGX2CES = exports.ElectrodeGX2CES = exports.ArticunoGX2CES = exports.RainbowEnergyPLCES = exports.TvReporterCES = exports.RareCandyCES = exports.PokeNavCES = exports.EnergySwitchPKCES = exports.BillsMaintenanceCES = exports.SwitchCES = exports.SuperScoopUpCES = exports.AcroBikeCESSR = exports.AcroBikeCESAlt = exports.AcroBikeCES = void 0;
+exports.RainbowBrush2 = exports.LifeHerb2 = exports.StakatakaGx3 = exports.ScizorGx3 = exports.MrMimeGx3 = exports.BlazikenGx3 = exports.ShiftryGx3 = exports.UndergroundExpedition2 = exports.Lisia2 = exports.StakatakaGx2 = exports.ScizorGx2 = exports.MrMimeGx2 = exports.BlazikenGx2 = exports.ShiftryGx2 = exports.UndergroundExpeditionCES = exports.FriendBallCES = exports.CombuskenCES = exports.RayquazaGX4CES = exports.TateAndLiza2CES = exports.Sceptile2CES = exports.RainbowEnergyPL2CES = exports.PokeNav2CES = exports.HustleBelt2CES = exports.RayquazaGX3CES = exports.BanetteGX3CES = exports.ElectrodeGX3CES = exports.ArticunoGX3CES = exports.TvReporter2CES = exports.TateAndLiza3CES = exports.StevensResolve2CES = exports.Copycat2CES = exports.BillsMaintenance2CES = exports.ApricornMaker2CES = exports.RayquazaGX2CES = exports.BanetteGX2CES = exports.ElectrodeGX2CES = exports.ArticunoGX2CES = exports.RainbowEnergyPLCES = exports.TvReporterCES = exports.RareCandyCES = exports.PokeNavCES = exports.EnergySwitchPKCES = exports.BillsMaintenanceCES = exports.SwitchCES = exports.SuperScoopUpCES = exports.AcroBikeCESSR = exports.AcroBikeCESAlt = exports.AcroBikeCES = void 0;
 const bills_maintenance_1 = require("../set-ex-firered-leafgreen/bills-maintenance");
 const other_prints_1 = require("../set-ex-power-keepers/other-prints");
 const pokenav_1 = require("../set-ex-ruby-and-sapphire/pokenav");
@@ -24,6 +24,17 @@ const sceptile_1 = require("../set-celestial-storm/sceptile");
 const acro_bike_1 = require("../set-primal-clash/acro-bike");
 const super_scoop_up_1 = require("../set-diamond-and-pearl/super-scoop-up");
 const switch_1 = require("../set-scarlet-and-violet/switch");
+const combusken_1 = require("../set-dark-explorers/combusken");
+const friend_ball_1 = require("../set-skyridge/friend-ball");
+const underground_expedition_1 = require("../set-skyridge/underground-expedition");
+const shiftry_gx_1 = require("./shiftry-gx");
+const blaziken_gx_1 = require("./blaziken-gx");
+const mr_mime_gx_1 = require("./mr-mime-gx");
+const scizor_gx_1 = require("./scizor-gx");
+const stakataka_gx_1 = require("./stakataka-gx");
+const lisia_1 = require("./lisia");
+const life_herb_1 = require("./life-herb");
+const rainbow_brush_1 = require("./rainbow-brush");
 class AcroBikeCES extends acro_bike_1.AcroBike {
     constructor() {
         super(...arguments);
@@ -303,3 +314,156 @@ class RayquazaGX4CES extends rayquaza_gx_1.RayquazaGX {
     }
 }
 exports.RayquazaGX4CES = RayquazaGX4CES;
+class CombuskenCES extends combusken_1.Combusken {
+    constructor() {
+        super(...arguments);
+        this.set = 'CES';
+        this.setNumber = '27';
+        this.fullName = 'Combusken CES';
+    }
+}
+exports.CombuskenCES = CombuskenCES;
+class FriendBallCES extends friend_ball_1.FriendBall {
+    constructor() {
+        super(...arguments);
+        this.set = 'CES';
+        this.setNumber = '131';
+        this.fullName = 'Friend Ball CES';
+    }
+}
+exports.FriendBallCES = FriendBallCES;
+class UndergroundExpeditionCES extends underground_expedition_1.UndergroundExpedition {
+    constructor() {
+        super(...arguments);
+        this.set = 'CES';
+        this.setNumber = '150';
+        this.fullName = 'Underground Expedition CES';
+    }
+}
+exports.UndergroundExpeditionCES = UndergroundExpeditionCES;
+class ShiftryGx2 extends shiftry_gx_1.ShiftryGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CES';
+        this.setNumber = '152';
+        this.fullName = 'Shiftry-GX CES 152';
+    }
+}
+exports.ShiftryGx2 = ShiftryGx2;
+class BlazikenGx2 extends blaziken_gx_1.BlazikenGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CES';
+        this.setNumber = '153';
+        this.fullName = 'Blaziken-GX CES 153';
+    }
+}
+exports.BlazikenGx2 = BlazikenGx2;
+class MrMimeGx2 extends mr_mime_gx_1.MrMimeGX {
+    constructor() {
+        super(...arguments);
+        this.set = 'CES';
+        this.setNumber = '156';
+        this.fullName = 'Mr. Mime-GX CES 156';
+    }
+}
+exports.MrMimeGx2 = MrMimeGx2;
+class ScizorGx2 extends scizor_gx_1.ScizorGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CES';
+        this.setNumber = '158';
+        this.fullName = 'Scizor-GX CES 158';
+    }
+}
+exports.ScizorGx2 = ScizorGx2;
+class StakatakaGx2 extends stakataka_gx_1.StakatakaGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CES';
+        this.setNumber = '159';
+        this.fullName = 'Stakataka-GX CES 159';
+    }
+}
+exports.StakatakaGx2 = StakatakaGx2;
+class Lisia2 extends lisia_1.Lisia {
+    constructor() {
+        super(...arguments);
+        this.set = 'CES';
+        this.setNumber = '164';
+        this.fullName = 'Lisia CES 164';
+    }
+}
+exports.Lisia2 = Lisia2;
+class UndergroundExpedition2 extends underground_expedition_1.UndergroundExpedition {
+    constructor() {
+        super(...arguments);
+        this.set = 'CES';
+        this.setNumber = '168';
+        this.fullName = 'Underground Expedition CES 168';
+    }
+}
+exports.UndergroundExpedition2 = UndergroundExpedition2;
+class ShiftryGx3 extends shiftry_gx_1.ShiftryGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CES';
+        this.setNumber = '169';
+        this.fullName = 'Shiftry-GX CES 169';
+    }
+}
+exports.ShiftryGx3 = ShiftryGx3;
+class BlazikenGx3 extends blaziken_gx_1.BlazikenGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CES';
+        this.setNumber = '170';
+        this.fullName = 'Blaziken-GX CES 170';
+    }
+}
+exports.BlazikenGx3 = BlazikenGx3;
+class MrMimeGx3 extends mr_mime_gx_1.MrMimeGX {
+    constructor() {
+        super(...arguments);
+        this.set = 'CES';
+        this.setNumber = '173';
+        this.fullName = 'Mr. Mime-GX CES 173';
+    }
+}
+exports.MrMimeGx3 = MrMimeGx3;
+class ScizorGx3 extends scizor_gx_1.ScizorGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CES';
+        this.setNumber = '175';
+        this.fullName = 'Scizor-GX CES 175';
+    }
+}
+exports.ScizorGx3 = ScizorGx3;
+class StakatakaGx3 extends stakataka_gx_1.StakatakaGx {
+    constructor() {
+        super(...arguments);
+        this.set = 'CES';
+        this.setNumber = '176';
+        this.fullName = 'Stakataka-GX CES 176';
+    }
+}
+exports.StakatakaGx3 = StakatakaGx3;
+class LifeHerb2 extends life_herb_1.LifeHerb {
+    constructor() {
+        super(...arguments);
+        this.set = 'CES';
+        this.setNumber = '180';
+        this.fullName = 'Life Herb CES 180';
+    }
+}
+exports.LifeHerb2 = LifeHerb2;
+class RainbowBrush2 extends rainbow_brush_1.RainbowBrush {
+    constructor() {
+        super(...arguments);
+        this.set = 'CES';
+        this.setNumber = '182';
+        this.fullName = 'Rainbow Brush CES 182';
+    }
+}
+exports.RainbowBrush2 = RainbowBrush2;

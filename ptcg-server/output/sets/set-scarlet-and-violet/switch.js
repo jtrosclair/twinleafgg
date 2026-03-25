@@ -23,8 +23,7 @@ function* playCard(next, store, state, effect) {
     if (targets.length === 0) {
         return state;
     }
-    player.switchPokemon(targets[0]);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
+    player.switchPokemon(targets[0], store, state);
     return state;
 }
 class Switch extends trainer_card_1.TrainerCard {
@@ -38,6 +37,13 @@ class Switch extends trainer_card_1.TrainerCard {
         this.name = 'Switch';
         this.fullName = 'Switch SVI';
         this.text = 'Switch your Active Pokemon with 1 of your Benched Pokemon.';
+    }
+    canPlay(store, state, player) {
+        const hasBench = player.bench.some(b => b.cards.length > 0);
+        if (!hasBench) {
+            return false;
+        }
+        return true;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

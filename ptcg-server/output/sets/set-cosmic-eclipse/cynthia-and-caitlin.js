@@ -31,10 +31,8 @@ function* playCard(next, store, state, self, effect) {
                 (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards: discarded, sourceCard: self });
                 // Draw 3 cards
                 (0, prefabs_1.DRAW_CARDS)(player, 3);
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
             }
         });
-        (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         return state;
     }
     // Create blocked indices for Cynthia & Caitlin cards
@@ -61,7 +59,6 @@ function* playCard(next, store, state, self, effect) {
                 if (selected && selected.length > 0) {
                     store.log(state, game_message_1.GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: selected[0].name });
                     (0, prefabs_1.MOVE_CARDS)(store, state, player.discard, player.hand, { cards: selected, sourceCard: self });
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 }
             });
         }
@@ -85,14 +82,12 @@ function* playCard(next, store, state, self, effect) {
                             // Draw 3 cards
                             const drawnCards = player.deck.cards.slice(0, 3);
                             player.deck.moveCardsTo(drawnCards, player.hand);
-                            player.supporter.moveCardTo(effect.trainerCard, player.discard);
                         }
                     });
                 }
             });
         }
     });
-    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
     return state;
 }
 class CynthiaAndCaitlin extends trainer_card_1.TrainerCard {
@@ -105,9 +100,9 @@ class CynthiaAndCaitlin extends trainer_card_1.TrainerCard {
         this.setNumber = '189';
         this.name = 'Cynthia & Caitlin';
         this.fullName = 'Cynthia & Caitlin CEC';
-        this.text = 'Put a Supporter card from your discard pile into your hand. You can\'t choose Cynthia & Caitlin or a card you discarded with the effect of this card.' +
-            '' +
-            'When you play this card, you may discard another card from your hand. If you do, draw 3 cards.';
+        this.text = `Put a Supporter card from your discard pile into your hand. You can't choose Cynthia & Caitlin or a card you discarded with the effect of this card.
+
+When you play this card, you may discard another card from your hand. If you do, draw 3 cards.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
@@ -117,7 +112,6 @@ class CynthiaAndCaitlin extends trainer_card_1.TrainerCard {
             store.reduceEffect(state, discardEffect);
             if (effect.preventDefault) {
                 // If prevented, just discard the card and return
-                (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 return state;
             }
             const generator = playCard(() => generator.next(), store, state, this, effect);

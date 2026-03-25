@@ -36,7 +36,6 @@ class HolonMentor extends trainer_card_1.TrainerCard {
                 return acc;
             }, []);
             (0, prefabs_1.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND)(store, state, player, {}, { min: 0, max: 3, allowCancel: false, blocked });
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
         }
         return state;

@@ -38,7 +38,7 @@ class GreninjaBREAK extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Giant Water Shuriken
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[1]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 1, this)) {
             const player = effect.player;
             // Check marker
             if (player.marker.hasMarker(this.GIANT_WATER_SHURIKEN_MARKER, this)) {

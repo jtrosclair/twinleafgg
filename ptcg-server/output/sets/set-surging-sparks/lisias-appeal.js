@@ -3,45 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LisiasAppeal = void 0;
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const choose_pokemon_prompt_1 = require("../../game/store/prompts/choose-pokemon-prompt");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_1 = require("../../game");
-function* playCard(next, store, state, effect) {
-    const player = effect.player;
-    const opponent = game_1.StateUtils.getOpponent(state, player);
-    const hasBench = opponent.bench.some(b => b.cards.length > 0);
-    const supporterTurn = player.supporterTurn;
-    if (!hasBench) {
-        throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
-    }
-    if (supporterTurn > 0) {
-        throw new game_1.GameError(game_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
-    }
-    const blocked = [];
-    player.bench.forEach((card) => {
-        if (!card.isStage(card_types_1.Stage.BASIC)) {
-            blocked.push();
-        }
-    });
-    player.hand.moveCardTo(effect.trainerCard, player.supporter);
-    // We will discard this card after prompt confirmation
-    effect.preventDefault = true;
-    return store.prompt(state, new choose_pokemon_prompt_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_SWITCH, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.BENCH], { allowCancel: false, blocked: blocked }), result => {
-        const cardList = result[0];
-        try {
-            const supporterEffect = new play_card_effects_1.SupporterEffect(player, effect.trainerCard);
-            store.reduceEffect(state, supporterEffect);
-        }
-        catch (_a) {
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
-            return state;
-        }
-        opponent.switchPokemon(cardList);
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
-        opponent.active.addSpecialCondition(card_types_1.SpecialCondition.CONFUSED);
-        return state;
-    });
-}
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class LisiasAppeal extends trainer_card_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -56,8 +20,33 @@ class LisiasAppeal extends trainer_card_1.TrainerCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
-            const generator = playCard(() => generator.next(), store, state, effect);
-            return generator.next().value;
+            const player = effect.player;
+            const opponent = game_1.StateUtils.getOpponent(state, player);
+            const hasBench = opponent.bench.some(b => b.cards.length > 0);
+            if (!hasBench) {
+                throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
+            }
+            const blocked = [];
+            opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card, target) => {
+                if (target.slot !== game_1.SlotType.BENCH) {
+                    return;
+                }
+                if (card === undefined || card.stage !== card_types_1.Stage.BASIC) {
+                    blocked.push(target);
+                }
+            });
+            // Legacy implementation:
+            // - Used a manual ChoosePokemonPrompt with non-Basic opponent Bench blocked.
+            // - Switched opponent Active to chosen target and then added Confused.
+            //
+            // Converted to prefab version (SWITCH_IN_OPPONENT_BENCHED_POKEMON).
+            (0, prefabs_1.SWITCH_IN_OPPONENT_BENCHED_POKEMON)(store, state, player, {
+                allowCancel: false,
+                blocked,
+                onSwitched: () => {
+                    opponent.active.addSpecialCondition(card_types_1.SpecialCondition.CONFUSED);
+                }
+            });
         }
         return state;
     }

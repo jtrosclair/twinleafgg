@@ -45,7 +45,6 @@ class CynthiasAmbition extends trainer_card_1.TrainerCard {
                 const cardsToDraw = Math.max(0, 8 - cards.length);
                 player.deck.moveTo(player.hand, cardsToDraw);
             }
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         if (effect instanceof game_effects_1.KnockOutEffect) {
             const player = effect.player;

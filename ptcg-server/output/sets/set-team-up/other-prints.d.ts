@@ -1,30 +1,43 @@
-import { PikachuZekromGX } from "../set-sun-and-moon-promos/pikachu-and-zekrom-gx";
-import { ErikasHospitality } from "../set-hidden-fates/erikas-hospitality";
-import { UnidentifiedFossil } from "../set-silver-tempest/unidentified-fossil";
-import { CelebiVenusaurGX as CelebiVenusaurGXTEU1 } from "../set-team-up/celebi-and-venusaur-gx";
-import { MagikarpWailordGX as MagikarpWailordGXTEU160 } from "../set-team-up/magikarp-and-wailord-gx";
-import { PikachuZekromGX as PikachuZekromGXSMP168 } from "../set-sun-and-moon-promos/pikachu-and-zekrom-gx";
-import { GengarMimikyuGX as GengarMimikyuGXTEU53 } from "../set-team-up/gengar-and-mimikyu-gx";
-import { CobalionGX as CobalionGXTEU106 } from "../set-team-up/cobalion-gx";
-import { EeveeSnorlaxGX as EeveeSnorlaxGXTEU120 } from "../set-team-up/eevee-and-snorlax-gx";
-import { BrocksGrit as BrocksGritEVO74 } from "../set-evolutions/brocks-grit";
-import { ErikasHospitality as ErikasHospitalityHIF56 } from "../set-hidden-fates/erikas-hospitality";
-import { IngoAndEmmet as IngoAndEmmetTEU144 } from "../set-team-up/ingo-and-emmet";
-import { Jasmine as JasmineTEU145 } from "../set-team-up/jasmine";
-import { DangerousDrill as DangerousDrillTEU138 } from "../set-team-up/dangerous-drill";
-import { JudgeWhistle as JudgeWhistleTEU146 } from "../set-team-up/judge-whistle";
-import { MetalGoggles as MetalGogglesTEU148 } from "../set-team-up/metal-goggles";
-import { PokemonCommunicationHS as PokemonCommunicationHSHS98 } from "../set-heartgold-and-soulsilver/other-prints";
-import { GrassEnergy } from "../set-base-set-energy/grass-energy";
-import { FireEnergy } from "../set-base-set-energy/fire-energy";
-import { WaterEnergy } from "../set-base-set-energy/water-energy";
-import { LightningEnergy } from "../set-base-set-energy/lightning-energy";
-import { PsychicEnergy } from "../set-base-set-energy/psychic-energy";
-import { FightingEnergy } from "../set-base-set-energy/fighting-energy";
-import { DarknessEnergy } from "../set-diamond-and-pearl/basic-energies";
-import { MetalEnergy } from "../set-diamond-and-pearl/basic-energies";
-import { FairyEnergy } from "../set-x-and-y/basic-energies";
+import { PikachuZekromGX } from '../set-sun-and-moon-promos/pikachu-and-zekrom-gx';
+import { ErikasHospitality } from '../set-hidden-fates/erikas-hospitality';
+import { UnidentifiedFossil } from '../set-silver-tempest/unidentified-fossil';
+import { CelebiVenusaurGX as CelebiVenusaurGXTEU1 } from '../set-team-up/celebi-and-venusaur-gx';
+import { MagikarpWailordGX as MagikarpWailordGXTEU160 } from '../set-team-up/magikarp-and-wailord-gx';
+import { PikachuZekromGX as PikachuZekromGXSMP168 } from '../set-sun-and-moon-promos/pikachu-and-zekrom-gx';
+import { GengarMimikyuGX as GengarMimikyuGXTEU53 } from '../set-team-up/gengar-and-mimikyu-gx';
+import { CobalionGX as CobalionGXTEU106 } from '../set-team-up/cobalion-gx';
+import { EeveeSnorlaxGX as EeveeSnorlaxGXTEU120 } from '../set-team-up/eevee-and-snorlax-gx';
+import { BrocksGrit as BrocksGritEVO74 } from '../set-evolutions/brocks-grit';
+import { ErikasHospitality as ErikasHospitalityHIF56 } from '../set-hidden-fates/erikas-hospitality';
+import { IngoAndEmmet as IngoAndEmmetTEU144 } from '../set-team-up/ingo-and-emmet';
+import { Jasmine as JasmineTEU145 } from '../set-team-up/jasmine';
+import { DangerousDrill as DangerousDrillTEU138 } from '../set-team-up/dangerous-drill';
+import { JudgeWhistle as JudgeWhistleTEU146 } from '../set-team-up/judge-whistle';
+import { MetalGoggles as MetalGogglesTEU148 } from '../set-team-up/metal-goggles';
+import { PokemonCommunicationHS as PokemonCommunicationHSHS98 } from '../set-heartgold-and-soulsilver/other-prints';
+import { GrassEnergy } from '../set-base-set-energy/grass-energy';
+import { FireEnergy } from '../set-base-set-energy/fire-energy';
+import { WaterEnergy } from '../set-base-set-energy/water-energy';
+import { LightningEnergy } from '../set-base-set-energy/lightning-energy';
+import { PsychicEnergy } from '../set-base-set-energy/psychic-energy';
+import { FightingEnergy } from '../set-base-set-energy/fighting-energy';
+import { DarknessEnergy } from '../set-diamond-and-pearl/basic-energies';
+import { MetalEnergy } from '../set-diamond-and-pearl/basic-energies';
+import { FairyEnergy } from '../set-x-and-y/basic-energies';
 import { BrocksGrit } from '../set-evolutions/brocks-grit';
+import { AlolanMarowak } from '../set-forbidden-light/alolan-marowak';
+import { AlolanExeggutor } from '../set-forbidden-light/alolan-exeggutor';
+import { AmpharosGx } from './ampharos-gx';
+import { HoopaGx } from './hoopa-gx';
+import { IncineroarGx } from './incineroar-gx';
+import { LatiasAndLatiosGx } from './latias-and-latios-gx';
+import { Dana } from './dana';
+import { Evelyn } from './evelyn';
+import { Morgan } from './morgan';
+import { Nanu } from './nanu';
+import { Nita } from './nita';
+import { SabrinasSuggestion } from './sabrinas-suggestion';
+import { Electrocharger } from './electrocharger';
 export declare class BrocksGritTEU extends BrocksGrit {
     fullName: string;
     set: string;
@@ -204,4 +217,94 @@ export declare class FairyEnergyTEU extends FairyEnergy {
     setNumber: string;
     fullName: string;
     set: string;
+}
+export declare class AlolanMarowakTEU extends AlolanMarowak {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class AlolanExeggutorTEU extends AlolanExeggutor {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class AmpharosGx2 extends AmpharosGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class HoopaGx2 extends HoopaGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class IncineroarGx2 extends IncineroarGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class LatiasAndLatiosGx2 extends LatiasAndLatiosGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class LatiasAndLatiosGx3 extends LatiasAndLatiosGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class Dana2 extends Dana {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class Evelyn2 extends Evelyn {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class Morgan2 extends Morgan {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class Nanu2 extends Nanu {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class Nita2 extends Nita {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class SabrinasSuggestion2 extends SabrinasSuggestion {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class AmpharosGx3 extends AmpharosGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class HoopaGx3 extends HoopaGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class IncineroarGx3 extends IncineroarGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class LatiasAndLatiosGx4 extends LatiasAndLatiosGx {
+    set: string;
+    setNumber: string;
+    fullName: string;
+}
+export declare class Electrocharger2 extends Electrocharger {
+    set: string;
+    setNumber: string;
+    fullName: string;
 }

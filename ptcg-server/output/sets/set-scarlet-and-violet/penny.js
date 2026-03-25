@@ -21,6 +21,23 @@ class Penny extends trainer_card_1.TrainerCard {
         this.fullName = 'Penny SVI';
         this.text = 'Put 1 of your Basic Pokémon and all attached cards into your hand.';
     }
+    canPlay(store, state, player) {
+        const supporterTurn = player.supporterTurn;
+        if (supporterTurn > 0) {
+            return false;
+        }
+        let hasBasicPokemon = false;
+        player.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, (list, card, target) => {
+            if (card.stage === card_types_1.Stage.BASIC) {
+                hasBasicPokemon = true;
+                return;
+            }
+        });
+        if (!hasBasicPokemon) {
+            return false;
+        }
+        return true;
+    }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;
@@ -65,7 +82,6 @@ class Penny extends trainer_card_1.TrainerCard {
                     if (pokemons.length > 0) {
                         (0, prefabs_1.MOVE_CARDS)(store, state, cardList, player.hand, { cards: pokemons });
                     }
-                    (0, prefabs_1.MOVE_CARD_TO)(state, effect.trainerCard, player.discard);
                 }
             });
         }

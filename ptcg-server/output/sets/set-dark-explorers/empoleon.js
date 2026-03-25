@@ -4,7 +4,6 @@ exports.Empoleon = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -13,10 +12,10 @@ class Empoleon extends pokemon_card_1.PokemonCard {
         super(...arguments);
         this.stage = card_types_1.Stage.STAGE_2;
         this.evolvesFrom = 'Prinplup';
-        this.cardType = card_types_1.CardType.WATER;
+        this.cardType = W;
         this.hp = 140;
-        this.weakness = [{ type: card_types_1.CardType.LIGHTNING }];
-        this.retreat = [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS];
+        this.weakness = [{ type: L }];
+        this.retreat = [C, C];
         this.powers = [{
                 name: 'Diving Draw',
                 useWhenInPlay: true,
@@ -27,9 +26,9 @@ class Empoleon extends pokemon_card_1.PokemonCard {
         this.attacks = [
             {
                 name: 'Attack Command',
-                cost: [card_types_1.CardType.WATER],
+                cost: [W],
                 damage: 10,
-                text: 'Does 10 damage times the number of Pokemon in play (both yours ' +
+                text: 'Does 10 damage times the number of Pokémon in play (both yours ' +
                     'and your opponent\'s).'
             }
         ];
@@ -45,7 +44,7 @@ class Empoleon extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             player.marker.removeMarker(this.DIVING_DRAW_MAREKER, this);
         }
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.hand.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -64,7 +63,7 @@ class Empoleon extends pokemon_card_1.PokemonCard {
             });
             return state;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             let pokemonInPlay = 0;

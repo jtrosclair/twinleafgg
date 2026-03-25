@@ -43,7 +43,6 @@ function* playCard(next, store, state, self, effect) {
         yield store.prompt(state, new game_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
     player.discard.moveCardsTo(cards, player.hand);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
 }
 class MaxRod extends trainer_card_1.TrainerCard {
     constructor() {

@@ -15,8 +15,11 @@ const arceus_psychic_1 = require("./arceus-psychic");
 const arceus_water_1 = require("./arceus-water");
 const beginning_door_1 = require("./beginning-door");
 const expert_belt_1 = require("./expert-belt");
+const froslass_1 = require("./froslass");
 const gengar_1 = require("./gengar");
+const lucky_egg_1 = require("./lucky-egg");
 const spiritomb_1 = require("./spiritomb");
+const ultimate_zone_1 = require("./ultimate-zone");
 exports.setArceus = [
     new beginning_door_1.BeginningDoor(),
     new expert_belt_1.ExpertBelt(),
@@ -32,6 +35,9 @@ exports.setArceus = [
     new arceus_lv_x_1_1.ArceusLvX1(),
     new arceus_lv_x_2_1.ArceusLvX2(),
     new arceus_lv_x_3_1.ArceusLvX3(),
+    new froslass_1.Froslass(),
     new gengar_1.Gengar(),
-    new spiritomb_1.Spiritomb()
+    new lucky_egg_1.LuckyEgg(),
+    new spiritomb_1.Spiritomb(),
+    new ultimate_zone_1.UltimateZone()
 ];

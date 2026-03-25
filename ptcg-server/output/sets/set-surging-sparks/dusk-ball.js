@@ -15,7 +15,7 @@ class DuskBall extends trainer_card_1.TrainerCard {
         this.setNumber = '175';
         this.name = 'Dusk Ball';
         this.fullName = 'Dusk Ball SSP';
-        this.text = 'Look at the bottom 7 cards of your deck. Choose one Pokémon from those cards, reveal it, and put it into your hand. Shuffle the other cards back into your deck.';
+        this.text = 'Look at the 7 cards from the bottom of your deck. Choose 1 Pokémon you find there, show it to your opponent, and put it into your hand. Put the remaining cards back on top of your deck. Shuffle your deck afterward.';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

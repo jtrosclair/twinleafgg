@@ -27,7 +27,7 @@ class Blazikenex extends pokemon_card_1.PokemonCard {
                 name: 'Volcanic Ash',
                 cost: [R, R, C, C],
                 damage: 0,
-                text: 'Discard 2 Fire Energy attached to Blaziken ex and then choose 1 of your opponent\'s Pokémon. This attack does 100 damage to that Pokémon. (Don\'t apply Weakness and Resistance for Benched Pokémon.)'
+                text: 'Discard 2 [R] Energy attached to Blaziken ex and then choose 1 of your opponent\'s Pokémon. This attack does 100 damage to that Pokémon. (Don\'t apply Weakness and Resistance for Benched Pokémon.)'
             }];
         this.set = 'MA';
         this.cardImage = 'assets/cardback.png';

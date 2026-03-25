@@ -47,7 +47,7 @@ class NaganadelGuzzlordGX extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Violent Appetite
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
                 if (card === this) {
@@ -70,7 +70,7 @@ class NaganadelGuzzlordGX extends pokemon_card_1.PokemonCard {
             });
         }
         // Chaotic Order-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             (0, prefabs_1.BLOCK_IF_GX_ATTACK_USED)(player);
             player.usedGX = true;

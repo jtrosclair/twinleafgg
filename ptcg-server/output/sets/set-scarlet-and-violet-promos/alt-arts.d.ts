@@ -511,5 +511,6 @@ export declare class MarniesMorpekoIR extends MarniesMorpeko {
 }
 export declare class StevensBeldumIR extends StevensBeldum {
     fullName: string;
+    set: string;
     setNumber: string;
 }

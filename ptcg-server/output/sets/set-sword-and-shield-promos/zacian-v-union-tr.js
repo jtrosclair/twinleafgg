@@ -4,10 +4,10 @@ exports.ZacianVUNIONTopRight = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const zacian_v_union_tl_1 = require("./zacian-v-union-tl");
 const zacian_v_union_bl_1 = require("./zacian-v-union-bl");
 const zacian_v_union_br_1 = require("./zacian-v-union-br");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class ZacianVUNIONTopRight extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -44,7 +44,7 @@ class ZacianVUNIONTopRight extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // assemblin the v-union
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const slots = player.bench.filter(b => b.cards.length === 0);
             if (player.assembledVUNIONs.includes(this.name)) {

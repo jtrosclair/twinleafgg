@@ -1,11 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Haunter = void 0;
-const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const card_types_1 = require("../../game/store/card/card-types");
-const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
+const card_types_1 = require("../../game/store/card/card-types");
+const state_utils_1 = require("../../game/store/state-utils");
+const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
+const game_message_1 = require("../../game/game-message");
+const pokemon_card_1 = require("../../game/store/card/pokemon-card");
+const game_1 = require("../../game");
 class Haunter extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -37,17 +39,17 @@ class Haunter extends pokemon_card_1.PokemonCard {
         this.fullName = 'Haunter SF';
     }
     reduceEffect(store, state, effect) {
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED)(store, state, effect);
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
+            (0, prefabs_1.ADD_POISON_TO_PLAYER_ACTIVE)(store, state, effect.opponent, this);
         }
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
-            const opponent = game_1.StateUtils.getOpponent(state, player);
+            const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             const hasValidCard = opponent.discard.cards.some(c => {
                 return c instanceof game_1.TrainerCard &&
-                    (c.trainerType === card_types_1.TrainerType.SUPPORTER ||
-                        c.trainerType === card_types_1.TrainerType.ITEM ||
-                        c.trainerType === card_types_1.TrainerType.STADIUM);
+                    (c.trainerType === game_1.TrainerType.SUPPORTER ||
+                        c.trainerType === game_1.TrainerType.ITEM ||
+                        c.trainerType === game_1.TrainerType.STADIUM);
             });
             if (!hasValidCard) {
                 return state;
@@ -55,9 +57,9 @@ class Haunter extends pokemon_card_1.PokemonCard {
             const blocked = [];
             player.discard.cards.forEach((c, index) => {
                 if (c instanceof game_1.TrainerCard &&
-                    (c.trainerType === card_types_1.TrainerType.SUPPORTER ||
-                        c.trainerType === card_types_1.TrainerType.ITEM ||
-                        c.trainerType === card_types_1.TrainerType.STADIUM)) {
+                    (c.trainerType === game_1.TrainerType.SUPPORTER ||
+                        c.trainerType === game_1.TrainerType.ITEM ||
+                        c.trainerType === game_1.TrainerType.STADIUM)) {
                     return;
                 }
                 else {
@@ -65,7 +67,7 @@ class Haunter extends pokemon_card_1.PokemonCard {
                 }
             });
             let cards = [];
-            return store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, opponent.discard, { superType: card_types_1.SuperType.TRAINER }, { min: 0, max: 3, allowCancel: true, blocked }), selected => {
+            return store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, opponent.discard, { superType: card_types_1.SuperType.TRAINER }, { min: 0, max: 3, allowCancel: true, blocked }), selected => {
                 cards = selected || [];
                 if (cards.length > 0) {
                     cards.forEach((card, index) => {

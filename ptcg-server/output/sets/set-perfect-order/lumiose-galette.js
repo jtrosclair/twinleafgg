@@ -42,7 +42,6 @@ class LumioseGalette extends game_1.TrainerCard {
             if (player.active.specialConditions.length > 0) {
                 player.active.removeSpecialCondition(player.active.specialConditions[0]);
             }
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
         }
         return state;
     }

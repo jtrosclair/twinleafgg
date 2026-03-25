@@ -7,7 +7,6 @@ const game_1 = require("../../game");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
 const select_option_prompt_1 = require("../../game/store/prompts/select-option-prompt");
-const energy_card_1 = require("../../game/store/card/energy-card");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class EnergyRecycleSystem extends trainer_card_1.TrainerCard {
     constructor() {
@@ -27,7 +26,7 @@ class EnergyRecycleSystem extends trainer_card_1.TrainerCard {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
             const player = effect.player;
             // Find all basic Energy cards in discard
-            const basicEnergies = player.discard.cards.filter(c => c instanceof energy_card_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC);
+            const basicEnergies = player.discard.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC);
             if (basicEnergies.length === 0) {
                 // No valid targets
                 return state;

@@ -1,4 +1,5 @@
-import { PokemonCard, Stage, CardType, PowerType } from '../../game';
+import { PokemonCard, Stage, CardType, PowerType, StoreLike, State } from '../../game';
+import { Effect } from '../../game/store/effects/effect';
 export declare class Sigilyph extends PokemonCard {
     stage: Stage;
     cardType: CardType;
@@ -27,4 +28,5 @@ export declare class Sigilyph extends PokemonCard {
     cardImage: string;
     name: string;
     fullName: string;
+    reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

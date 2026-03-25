@@ -7,6 +7,7 @@ const beautifly_1 = require("./beautifly");
 const cascoon_1 = require("./cascoon");
 const camerupt_1 = require("./camerupt");
 const canari_1 = require("./canari");
+const delcatty_1 = require("./delcatty");
 const dragonair_1 = require("./dragonair");
 const dratini_1 = require("./dratini");
 const dustox_1 = require("./dustox");
@@ -17,13 +18,12 @@ const mega_eelektross_ex_1 = require("./mega-eelektross-ex");
 const mega_froslass_ex_1 = require("./mega-froslass-ex");
 const mega_hawlucha_ex_1 = require("./mega-hawlucha-ex");
 const mega_scrafty_ex_1 = require("./mega-scrafty-ex");
+const miraidon_ex_1 = require("./miraidon-ex");
 const misdreavus_1 = require("./misdreavus");
 const mismagius_1 = require("./mismagius");
 const night_mine_1 = require("./night-mine");
 const numel_1 = require("./numel");
 const ns_zekrom_1 = require("./ns-zekrom");
-const ns_vanillish_1 = require("./ns-vanillish");
-const ns_vanillite_1 = require("./ns-vanillite");
 const ns_vanilluxe_1 = require("./ns-vanilluxe");
 const light_ball_1 = require("./light-ball");
 const poke_pad_1 = require("./poke-pad");
@@ -32,6 +32,7 @@ const rotom_1 = require("./rotom");
 const scraggy_1 = require("./scraggy");
 const snom_1 = require("./snom");
 const snorunt_1 = require("./snorunt");
+const spectrier_1 = require("./spectrier");
 const tapu_koko_1 = require("./tapu-koko");
 const team_rockets_honchkrow_1 = require("./team-rockets-honchkrow");
 const wurmple_1 = require("./wurmple");
@@ -56,6 +57,7 @@ const totodile_1 = require("./totodile");
 const croconaw_1 = require("./croconaw");
 const mega_feraligatr_ex_1 = require("./mega-feraligatr-ex");
 const regice_ex_1 = require("./regice-ex");
+const skitty_1 = require("./skitty");
 const marill_1 = require("./marill");
 const azumarill_ex_1 = require("./azumarill-ex");
 const registeel_ex_1 = require("./registeel-ex");
@@ -71,12 +73,21 @@ const larrys_komala_1 = require("./larrys-komala");
 const waitress_1 = require("./waitress");
 const other_prints_2 = require("./other-prints");
 exports.setAscendedHeroes = [
+    //Start Deck 100 Reprints
+    new other_prints_1.SuperPotionMC(),
+    new other_prints_1.EnergySearchMC(),
+    new other_prints_1.CrushingHammerMC(),
+    new other_prints_1.PotionMC(),
+    new other_prints_1.PokeGear30MC(),
+    new other_prints_1.PokemonCatcherMC(),
+    new other_prints_1.JudgeMC(),
     new anthea_and_concordia_1.AntheaAndConcordia(),
     new beautifly_1.Beautifly(),
     new other_prints_2.BossOrdersASC(),
     new cascoon_1.Cascoon(),
     new camerupt_1.Camerupt(),
     new canari_1.Canari(),
+    new delcatty_1.Delcatty(),
     new dragonair_1.Dragonair(),
     new dratini_1.Dratini(),
     new dustox_1.Dustox(),
@@ -88,13 +99,12 @@ exports.setAscendedHeroes = [
     new mega_froslass_ex_1.MegaFroslassex(),
     new mega_hawlucha_ex_1.MegaHawluchaex(),
     new mega_scrafty_ex_1.MegaScraftyex(),
+    new miraidon_ex_1.Miraidonex(),
     new misdreavus_1.Misdreavus(),
     new mismagius_1.Mismagius(),
     new night_mine_1.NightMine(),
     new numel_1.Numel(),
     new ns_zekrom_1.NsZekrom(),
-    new ns_vanillish_1.NsVanillish(),
-    new ns_vanillite_1.NsVanillite(),
     new ns_vanilluxe_1.NsVanilluxe(),
     new poke_pad_1.PokePad(),
     new rayquaza_1.Rayquaza(),
@@ -103,6 +113,7 @@ exports.setAscendedHeroes = [
     new silcoon_1.Silcoon(),
     new snom_1.Snom(),
     new snorunt_1.Snorunt(),
+    new spectrier_1.Spectrier(),
     new tapu_koko_1.TapuKoko(),
     new team_rockets_honchkrow_1.TeamRocketsHonchkrow(),
     new wurmple_1.Wurmple(),
@@ -126,6 +137,7 @@ exports.setAscendedHeroes = [
     new croconaw_1.Croconaw(),
     new mega_feraligatr_ex_1.MegaFeraligatrex(),
     new regice_ex_1.Regiceex(),
+    new skitty_1.Skitty(),
     new marill_1.Marill(),
     new azumarill_ex_1.Azumarillex(),
     new registeel_ex_1.Registeelex(),

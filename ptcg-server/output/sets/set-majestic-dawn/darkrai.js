@@ -7,6 +7,7 @@ const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const game_effects_1 = require("../../game/store/effects/game-effects");
 class Darkrai extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -47,6 +48,8 @@ class Darkrai extends pokemon_card_1.PokemonCard {
             const opponent = game_1.StateUtils.getOpponent(state, player);
             (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
+                    const powerEffect = new game_effects_1.PowerEffect(player, this.powers[0], this);
+                    store.reduceEffect(state, powerEffect);
                     (0, prefabs_1.ADD_SLEEP_TO_PLAYER_ACTIVE)(store, state, opponent, this);
                 }
             });

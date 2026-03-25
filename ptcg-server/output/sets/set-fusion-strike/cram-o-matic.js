@@ -45,9 +45,7 @@ function* playCard(next, store, state, effect) {
             next();
         });
         player.deck.moveCardsTo(cards, player.hand);
-        player.supporter.moveCardTo(effect.trainerCard, player.discard);
     }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), (order) => {
         player.deck.applyOrder(order);
     });
@@ -62,9 +60,9 @@ class Creamomatic extends trainer_card_1.TrainerCard {
         this.regulationMark = 'E';
         this.name = 'Cram-o-matic';
         this.fullName = 'Cram-o-matic FST';
-        this.text = 'You can use this card only if you discard another Item card from your hand.' +
-            '' +
-            'Flip a coin. If heads, search your deck for a card and put it into your hand. Then, shuffle your deck.';
+        this.text = `You can use this card only if you discard another Item card from your hand.
+
+Flip a coin. If heads, search your deck for a card and put it into your hand. Then, shuffle your deck.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

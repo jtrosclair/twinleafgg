@@ -34,7 +34,7 @@ class Trubbish extends pokemon_card_1.PokemonCard {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             // Check for energy to discard
-            if (!opponent.active.cards.some(c => c instanceof game_1.EnergyCard)) {
+            if (!opponent.active.cards.some(c => c.superType === card_types_1.SuperType.ENERGY)) {
                 return state;
             }
             (0, prefabs_1.COIN_FLIP_PROMPT)(store, state, effect.player, (result) => {

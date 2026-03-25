@@ -3,9 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.NecrozmaV = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class NecrozmaV extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -43,10 +41,10 @@ class NecrozmaV extends pokemon_card_1.PokemonCard {
         this.fullName = 'Necrozma V BST';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             (0, prefabs_1.THIS_ATTACK_DOES_X_DAMAGE_TO_X_OF_YOUR_OPPONENTS_POKEMON)(20, effect, store, state, 2, 2);
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const pokemon = player.active;
             const checkEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, pokemon);
@@ -54,7 +52,7 @@ class NecrozmaV extends pokemon_card_1.PokemonCard {
             let hasSpecialEnergy = false;
             checkEnergy.energyMap.forEach(em => {
                 const energyCard = em.card;
-                if (energyCard instanceof game_1.EnergyCard && energyCard.energyType === card_types_1.EnergyType.SPECIAL) {
+                if (energyCard.superType === card_types_1.SuperType.ENERGY && energyCard.energyType === card_types_1.EnergyType.SPECIAL) {
                     hasSpecialEnergy = true;
                 }
             });

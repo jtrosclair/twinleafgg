@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TeamRocketsPorygon = void 0;
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
 const state_utils_1 = require("../../game/store/state-utils");
 const game_message_1 = require("../../game/game-message");
@@ -33,7 +32,7 @@ class TeamRocketsPorygon extends pokemon_card_1.PokemonCard {
         this.fullName = 'Team Rocket\'s Porygon DRI';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             // Player chooses 1 card to discard

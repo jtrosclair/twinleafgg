@@ -25,16 +25,15 @@ class SuperEnergyRemoval2 extends trainer_card_1.TrainerCard {
             (0, prefabs_1.MULTIPLE_COIN_FLIPS_PROMPT)(store, state, player, 2, result => {
                 if (result[0] && result[1]) {
                     // Both heads: Discard all Energy from Defending Pokémon
-                    const cards = opponent.active.cards.filter(c => c instanceof game_1.EnergyCard);
+                    const cards = opponent.active.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY);
                     (0, prefabs_1.MOVE_CARDS)(store, state, opponent.active, opponent.discard, { cards, sourceCard: this });
                 }
                 else if (!result[0] && !result[1]) {
                     // Both tails: Discard all Energy from Active Pokémon
-                    const cards = player.active.cards.filter(c => c instanceof game_1.EnergyCard);
+                    const cards = player.active.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY);
                     (0, prefabs_1.MOVE_CARDS)(store, state, player.active, player.discard, { cards, sourceCard: this });
                 }
             });
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
         }
         return state;
     }

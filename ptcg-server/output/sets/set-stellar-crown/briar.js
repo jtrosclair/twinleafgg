@@ -14,10 +14,10 @@ class Briar extends game_1.TrainerCard {
         this.setNumber = '132';
         this.name = 'Briar';
         this.fullName = 'Briar SCR';
+        this.text = `You can use this card only if your opponent has exactly 2 Prize cards remaining.
+
+During this turn, if your opponent's Active Pokémon is Knocked Out by damage from an attack used by your Tera Pokémon, take 1 more Prize card.`;
         this.extraPrizes = false;
-        this.text = 'You can use this card only if your opponent has exactly 2 Prize cards remaining.' +
-            '' +
-            'During this turn, if your opponent\'s Active Pokémon is Knocked Out by damage from an attack used by your Tera Pokémon, take 1 more Prize card.';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

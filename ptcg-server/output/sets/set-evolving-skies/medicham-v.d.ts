@@ -1,20 +1,21 @@
-import { PokemonCard, CardType, State, StoreLike, CardTag, Stage } from '../../game';
+import { PokemonCard, State, StoreLike, CardTag, Stage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 export declare class MedichamV extends PokemonCard {
     stage: Stage;
     tags: CardTag[];
-    cardType: CardType;
+    cardType: import("../../game").CardType.FIGHTING;
     hp: number;
     weakness: {
-        type: CardType;
+        type: import("../../game").CardType.PSYCHIC;
     }[];
-    retreat: CardType[];
+    retreat: import("../../game").CardType.COLORLESS[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: (import("../../game").CardType.FIGHTING | import("../../game").CardType.COLORLESS)[];
         damage: number;
         text: string;
     }[];
+    regulationMark: string;
     set: string;
     cardImage: string;
     setNumber: string;

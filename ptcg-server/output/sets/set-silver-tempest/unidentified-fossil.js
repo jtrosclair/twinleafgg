@@ -4,6 +4,7 @@ exports.UnidentifiedFossil = void 0;
 const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class UnidentifiedFossil extends game_1.TrainerCard {
     constructor() {
         super(...arguments);
@@ -31,6 +32,7 @@ class UnidentifiedFossil extends game_1.TrainerCard {
         this.fullName = 'Unidentified Fossil SIT';
         this.regulationMark = 'F';
         this.maxTools = 1;
+        this.evolvesFromBase = [];
         this.powers = [
             {
                 name: 'Unidentified Fossil',
@@ -49,7 +51,7 @@ This card can't retreat.`,
     //   '' +
     //   'This card can\'t retreat.';
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             store.log(state, game_1.GameLog.LOG_PLAYER_DISCARDS_CARD, { name: player.name, card: this.name, effect: 'Unidentified Fossil' });
             const cardList = game_1.StateUtils.findCardList(state, this);

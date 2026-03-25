@@ -10,7 +10,6 @@ const play_card_effects_1 = require("../../game/store/effects/play-card-effects"
 const game_2 = require("../../game");
 const state_utils_1 = require("../../game/store/state-utils");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 // LOT Magcargo-GX 44 (https://limitlesstcg.com/cards/LOT/44)
 class MagcargoGX extends pokemon_card_1.PokemonCard {
@@ -56,7 +55,7 @@ class MagcargoGX extends pokemon_card_1.PokemonCard {
             player.marker.removeMarker(this.CRUSHING_CHARGE_MARKER, this);
         }
         // Crushing Charge
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
@@ -87,7 +86,7 @@ class MagcargoGX extends pokemon_card_1.PokemonCard {
             return state;
         }
         // Lava Flow
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let cards = [];
             store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.active, { superType: card_types_1.SuperType.ENERGY }, { min: 0, allowCancel: false }), selected => {
@@ -99,7 +98,7 @@ class MagcargoGX extends pokemon_card_1.PokemonCard {
             });
         }
         // Burning Magma-GX
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = state_utils_1.StateUtils.getOpponent(state, player);
             // Check if player has used GX attack

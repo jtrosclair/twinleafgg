@@ -37,7 +37,6 @@ class PokemonFlute extends trainer_card_1.TrainerCard {
                     const slot = openSlots[0];
                     (0, prefabs_1.MOVE_CARDS)(store, state, opponent.discard, slot, { cards: [card], sourceCard: this });
                     slot.pokemonPlayedTurn = state.turn;
-                    (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
                 }
             });
         }

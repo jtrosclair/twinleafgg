@@ -35,9 +35,8 @@ class BiancasDevotion extends trainer_card_1.TrainerCard {
                 }
                 const healEffect = new game_effects_1.HealEffect(player, cardList, cardList.damage);
                 state = store.reduceEffect(state, healEffect);
-                const cards = cardList.cards.filter(c => c instanceof __1.EnergyCard);
+                const cards = cardList.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY);
                 cardList.moveCardsTo(cards, player.discard);
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
             });
             return state;
         }

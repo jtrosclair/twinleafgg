@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FestivalGroundsPRE = exports.ExplorersGuidancePRE = exports.EarthenVesselPRE = exports.CrispinPRE = exports.CyphermaniacsCodebreakingPRE = exports.CarminePRE = exports.BugCatchingSetPRE = exports.BuddyBuddyPoffinPRE = exports.BriarPRE = exports.BlackBeltsTrainingPRE4 = exports.BlackBeltsTrainingPRE3 = exports.BlackBeltsTrainingPRE2 = exports.BindingMochiPRE = exports.AreaZeroUnderdepthsPRE = exports.TerapagosexPRE = exports.FanRotomPRE = exports.DudunsparcePRE = exports.DunsparcePRE = exports.NoctowlPRE = exports.EeveePRE = exports.DragapultexPRE = exports.DrakloakPRE = exports.DreepyPRE = exports.ArchaludonPRE = exports.DuraludonPRE = exports.RoaringMoonPRE = exports.CornerstoneMaskOgerponexPRE = exports.OkidogiPRE = exports.SandyShocksexPRE = exports.GreatTuskPRE = exports.BloodmoonUrsalunaPRE = exports.GroudonPRE = exports.IronBoulderPRE = exports.FezandipitiPRE = exports.MunkidoriPRE = exports.FlutterManePRE = exports.ScreamTailPRE = exports.DusknoirPRE = exports.DusclopsPRE = exports.DuskullPRE = exports.IronThornsexPRE = exports.IronHandsexPRE = exports.JolteonPRE = exports.WellspringMaskOgerponexPRE = exports.GoldeenPRE = exports.HearthflameMaskOgerponexPRE = exports.TealMaskOgerponexPRE = exports.HydrappleexPRE = exports.DipplinPRE = exports.ApplinPRE = void 0;
-exports.ProfessorsResearchS = exports.ProfessorsResearchR = exports.ProfessorsResearchE = exports.ProfessorsResearchO = exports.TechnoRadarPRE = exports.SparklingCrystalPRE = exports.ScoopUpCyclonePRE = exports.RescueBoardPRE = exports.ProfessorTurosScenarioPRE = exports.ProfessorSadasVitalityPRE = exports.PrimeCatcherPRE = exports.MaximumBeltPRE = exports.KieranPRE = exports.JaninesSecretArt2 = exports.JaninesSecretArt = exports.GlassTrumpetPRE = void 0;
+exports.ProfessorsResearchS = exports.ProfessorsResearchR = exports.ProfessorsResearchE = exports.ProfessorsResearchO = exports.TechnoRadarPRE = exports.SparklingCrystalPRE = exports.ScoopUpCyclonePRE = exports.RescueBoardPRE = exports.ProfessorTurosScenarioPRE = exports.ProfessorSadasVitalityPRE = exports.PrimeCatcherPRE = exports.MaximumBeltPRE = exports.KieranPRE = exports.JaninesSecretArt = exports.GlassTrumpetPRE = void 0;
 const earthen_vessel_1 = require("../set-paradox-rift/earthen-vessel");
 const groudon_1 = require("../set-paradox-rift/groudon");
 const iron_hands_ex_1 = require("../set-paradox-rift/iron-hands-ex");
@@ -517,7 +517,7 @@ class GlassTrumpetPRE extends glass_trumpet_1.GlassTrumpet {
         super(...arguments);
         this.set = 'PRE';
         this.setNumber = '110';
-        this.fullName = 'Glass Trumpewt PRE';
+        this.fullName = 'Glass Trumpet PRE';
     }
 }
 exports.GlassTrumpetPRE = GlassTrumpetPRE;
@@ -530,15 +530,6 @@ class JaninesSecretArt extends janines_secret_technique_1.JaninesSecretTechnique
     }
 }
 exports.JaninesSecretArt = JaninesSecretArt;
-class JaninesSecretArt2 extends janines_secret_technique_1.JaninesSecretTechnique {
-    constructor() {
-        super(...arguments);
-        this.set = 'PRE';
-        this.setNumber = '112';
-        this.fullName = 'Janine\'s Secret Art PRE';
-    }
-}
-exports.JaninesSecretArt2 = JaninesSecretArt2;
 class KieranPRE extends kieran_1.Kieran {
     constructor() {
         super(...arguments);

@@ -6,6 +6,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* useSeekInspiration(next, store, state, effect) {
     const player = effect.player;
     const opponent = effect.opponent;
@@ -95,7 +96,7 @@ class Slowking extends pokemon_card_1.PokemonCard {
         this.cardImage = 'assets/cardback.png';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const generator = useSeekInspiration(() => generator.next(), store, state, effect);
             return generator.next().value;
         }

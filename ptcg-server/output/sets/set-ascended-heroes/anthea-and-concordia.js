@@ -16,9 +16,9 @@ class AntheaAndConcordia extends game_1.TrainerCard {
         this.name = 'Anthea & Concordia';
         this.fullName = 'Anthea & Concordia M2a';
         this.extraPrizes = false;
-        this.text = `You can use this card only if you have N\'s Darmanitan, N\'s Zoroark ex, N\'s Vanilluxe, N\'s Klinklang, N\'s Reshiram, and N\'s Zekrom in play.
+        this.text = `You can use this card only if you have N's Darmanitan, N's Zoroark ex, N's Vanilluxe, N's Klinklang, N's Reshiram, and N's Zekrom in play.
 
-During this turn, if your opponent\'s Active Pokémon is Knocked Out by damage from an attack used by your N\'s Pokémon, take 3 more Prize cards.`;
+During this turn, if your opponent's Active Pokémon is Knocked Out by damage from an attack used by your N's Pokémon, take 3 more Prize cards.`;
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

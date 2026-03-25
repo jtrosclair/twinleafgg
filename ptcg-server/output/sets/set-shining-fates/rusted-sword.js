@@ -3,8 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RustedSword = void 0;
 const trainer_card_1 = require("../../game/store/card/trainer-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const state_utils_1 = require("../../game/store/state-utils");
-const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class RustedSword extends trainer_card_1.TrainerCard {
     constructor() {
@@ -19,21 +17,11 @@ class RustedSword extends trainer_card_1.TrainerCard {
         this.text = 'The attacks of the Zacian V this card is attached to do 30 more damage to your opponent\'s Active Pokémon (before applying Weakness and Resistance).';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof attack_effects_1.DealDamageEffect && effect.source.tools.includes(this)) {
-            const player = effect.player;
-            const opponent = state_utils_1.StateUtils.getOpponent(state, player);
-            // Try to reduce ToolEffect, to check if something is blocking the tool from working
-            if ((0, prefabs_1.IS_TOOL_BLOCKED)(store, state, effect.player, this)) {
-                return state;
-            }
-            // Apply damage increase to only active Pokémon
-            if (effect.target !== opponent.active)
-                return state;
-            const sourceCard = effect.source.getPokemonCard();
-            if (sourceCard && sourceCard.name === 'Zacian V') {
-                effect.damage += 30;
-            }
-        }
+        // Refs: set-dark-explorers/dark-claw.ts (tool active-damage bonus), prefabs/prefabs.ts (TOOL_ACTIVE_DAMAGE_BONUS)
+        (0, prefabs_1.TOOL_ACTIVE_DAMAGE_BONUS)(store, state, effect, this, {
+            damageBonus: 30,
+            sourcePokemonName: 'Zacian V'
+        });
         return state;
     }
 }

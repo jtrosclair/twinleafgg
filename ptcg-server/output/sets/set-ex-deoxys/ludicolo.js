@@ -43,7 +43,7 @@ class Ludicolo extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Handle Swing Dance Poké-Power
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             if ((0, prefabs_1.HAS_MARKER)(this.SWING_DANCE_MARKER, player, this)) {
                 throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
@@ -65,7 +65,7 @@ class Ludicolo extends game_1.PokemonCard {
         }
         (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.SWING_DANCE_MARKER, this);
         // Handle Water Healing Steps attack
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const active = player.active;
             if (!active) {
@@ -88,7 +88,7 @@ class Ludicolo extends game_1.PokemonCard {
             });
         }
         // Handle Circular Steps attack
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             // Count all Pokémon in play except Ludicolo

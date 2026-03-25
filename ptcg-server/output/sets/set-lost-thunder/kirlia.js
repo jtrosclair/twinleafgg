@@ -5,7 +5,7 @@ const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const card_types_2 = require("../../game/store/card/card-types");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 // LOT Kirlia 140 (https://limitlesstcg.com/cards/LOT/140)
 class Kirlia extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -28,7 +28,7 @@ class Kirlia extends pokemon_card_1.PokemonCard {
         this.fullName = 'Kirlia LOT';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const specialCondition = new attack_effects_1.AddSpecialConditionsEffect(effect, [card_types_2.SpecialCondition.CONFUSED]);
             return store.reduceEffect(state, specialCondition);
         }

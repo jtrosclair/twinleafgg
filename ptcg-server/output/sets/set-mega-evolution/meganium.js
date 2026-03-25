@@ -49,7 +49,7 @@ class Meganium extends pokemon_card_1.PokemonCard {
                 return state;
             }
             effect.source.cards.forEach(c => {
-                if (c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC && !effect.energyMap.some(e => e.card === c)) {
+                if (c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC && !effect.energyMap.some(e => e.card === c)) {
                     const providedTypes = c.provides.filter(type => type === card_types_1.CardType.GRASS);
                     if (providedTypes.length > 0) {
                         effect.energyMap.push({ card: c, provides: [card_types_1.CardType.GRASS, card_types_1.CardType.GRASS] });

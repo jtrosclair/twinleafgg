@@ -32,7 +32,6 @@ class AcroBike extends trainer_card_1.TrainerCard {
             return store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_message_1.GameMessage.CHOOSE_CARD_TO_HAND, deckTop, {}, { min: 1, max: 1, allowCancel: false }), selected => {
                 deckTop.moveCardsTo(selected, player.hand);
                 deckTop.moveTo(player.discard);
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
             });
         }
         return state;

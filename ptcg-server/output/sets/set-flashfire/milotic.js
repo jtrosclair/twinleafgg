@@ -4,7 +4,7 @@ exports.Milotic = void 0;
 const game_1 = require("../../game");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Milotic extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -35,17 +35,17 @@ class Milotic extends pokemon_card_1.PokemonCard {
         this.setNumber = '23';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const player = effect.player;
             const energyInDiscard = player.discard.cards.filter(c => {
-                return c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC;
+                return c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC;
             }).length;
             if (energyInDiscard === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
             /*const blocked: number[] = [];
             player.discard.cards.forEach((card, index) => {
-              if (card instanceof EnergyCard && card.energyType === EnergyType.BASIC) {
+              if (card.superType === SuperType.ENERGY && card.energyType === EnergyType.BASIC) {
                 // Allow basic energy cards to be selected
               } else {
                 blocked.push(index);

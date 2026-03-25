@@ -4,7 +4,6 @@ exports.Marshadow = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_message_1 = require("../../game/game-message");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Marshadow extends pokemon_card_1.PokemonCard {
@@ -41,7 +40,7 @@ class Marshadow extends pokemon_card_1.PokemonCard {
         this.REFRIGERATED_STREAM_MARKER = 'REFRIGERATED_STREAM_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.PowerEffect && effect.power === this.powers[0]) {
+        if ((0, prefabs_1.WAS_POWER_USED)(effect, 0, this)) {
             const stadiumCard = game_1.StateUtils.getStadiumCard(state);
             const player = effect.player;
             if (stadiumCard === undefined) {

@@ -9,6 +9,7 @@ const card_types_2 = require("../../game/store/card/card-types");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class DrapionV extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -86,7 +87,7 @@ class DrapionV extends pokemon_card_1.PokemonCard {
             console.log(effect.cost);
             return state;
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             const hasBenched = player.bench.some(b => b.cards.length > 0);
             if (!hasBenched) {

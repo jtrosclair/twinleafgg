@@ -57,6 +57,8 @@ class Absolex extends pokemon_card_1.PokemonCard {
                 if (transfers === null) {
                     return;
                 }
+                const powerEffect = new game_effects_1.PowerEffect(player, this.powers[0], this);
+                store.reduceEffect(state, powerEffect);
                 for (const transfer of transfers) {
                     const source = state_utils_1.StateUtils.getTarget(state, player, transfer.from);
                     const target = state_utils_1.StateUtils.getTarget(state, player, transfer.to);

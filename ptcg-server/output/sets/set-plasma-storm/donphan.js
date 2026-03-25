@@ -4,9 +4,9 @@ exports.Donphan = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_message_1 = require("../../game/game-message");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Donphan extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -39,7 +39,7 @@ class Donphan extends pokemon_card_1.PokemonCard {
         this.hitAndRun = false;
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             this.hitAndRun = true;
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && this.hitAndRun == true) {
@@ -59,7 +59,7 @@ class Donphan extends pokemon_card_1.PokemonCard {
                 player.switchPokemon(target);
             });
         }
-        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const stadiumCard = game_1.StateUtils.getStadiumCard(state);
             if (stadiumCard !== undefined) {
                 effect.damage += 60;

@@ -6,6 +6,9 @@ const psyduck_1 = require("./psyduck");
 const sneasel_1 = require("./sneasel");
 const weavile_1 = require("./weavile");
 const golduck_1 = require("./golduck");
+const slowpoke_1 = require("./slowpoke");
+const mega_slowbro_ex_1 = require("./mega-slowbro-ex");
+const jett_1 = require("./jett");
 exports.setMegaEvolutionPromos = [
     new psyduck_1.Psyduck(),
     new sneasel_1.Sneasel(),
@@ -28,4 +31,11 @@ exports.setMegaEvolutionPromos = [
     new other_prints_1.MegaKangaskhanexMEP(),
     new other_prints_1.HaunterMEP(),
     new golduck_1.Golduck(),
+    new slowpoke_1.Slowpoke(),
+    new mega_slowbro_ex_1.MegaSlowbroex(),
+    new jett_1.Jett(),
+    new other_prints_1.SerperiorMEP(),
+    new other_prints_1.BarbaracleMEP(),
+    new other_prints_1.TyrantrumMEP(),
+    new other_prints_1.DoubladeMEP(),
 ];

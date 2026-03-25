@@ -1,19 +1,19 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { Effect } from '../../game/store/effects/effect';
 import { StoreLike, State } from '../../game';
+import { Effect } from '../../game/store/effects/effect';
 export declare class Wailord extends PokemonCard {
     stage: Stage;
     evolvesFrom: string;
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.GRASS;
     }[];
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: (CardType.WATER | CardType.COLORLESS)[];
         damage: number;
         text: string;
     }[];
@@ -22,5 +22,7 @@ export declare class Wailord extends PokemonCard {
     cardImage: string;
     name: string;
     fullName: string;
+    readonly PREVENT_ALL_MARKER = "WAILORD_GRI_PREVENT_ALL_MARKER";
+    readonly CLEAR_PREVENT_ALL_MARKER = "WAILORD_GRI_CLEAR_PREVENT_ALL_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

@@ -32,7 +32,5 @@ export declare class Archaludon extends PokemonCard {
     cardImage: string;
     name: string;
     fullName: string;
-    private readonly ATTACK_USED_MARKER;
-    private readonly ATTACK_USED_2_MARKER;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

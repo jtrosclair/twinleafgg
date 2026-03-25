@@ -31,10 +31,8 @@ class BugCatcher extends trainer_card_1.TrainerCard {
             state = store.prompt(state, new coin_flip_prompt_1.CoinFlipPrompt(player.id, game_1.GameMessage.FLIP_COIN), result => {
                 if (result) {
                     player.deck.moveTo(player.hand, 2);
-                    player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 }
             });
-            player.supporter.moveCardTo(effect.trainerCard, player.discard);
             return state;
         }
         return state;

@@ -34,7 +34,6 @@ function* playCard(next, store, state, effect) {
     if (evolution !== undefined) {
         player.deck.moveCardTo(evolution, player.hand);
     }
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
 }
 class FastBall extends trainer_card_1.TrainerCard {

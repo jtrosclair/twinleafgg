@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Kyogre = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
-const game_1 = require("../../game");
+const card_types_2 = require("../../game/store/card/card-types");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const costs_1 = require("../../game/store/prefabs/costs");
 class Kyogre extends pokemon_card_1.PokemonCard {
@@ -39,7 +39,7 @@ class Kyogre extends pokemon_card_1.PokemonCard {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             // counting the energies
-            const energiesInDiscard = player.discard.cards.filter(c => c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC && c.name === 'Water Energy');
+            const energiesInDiscard = player.discard.cards.filter(c => c.superType === card_types_2.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC && c.name === 'Water Energy');
             if (energiesInDiscard.length === 0) {
                 return state;
             }

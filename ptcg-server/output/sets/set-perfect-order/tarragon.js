@@ -24,7 +24,7 @@ function* playCard(next, store, state, self, effect) {
     let energies = 0;
     const blocked = [];
     player.discard.cards.forEach((c, index) => {
-        if (c instanceof game_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC && c.name === 'Fighting Energy') {
+        if (c.superType === card_types_1.SuperType.ENERGY && c.energyType === card_types_1.EnergyType.BASIC && c.name === 'Fighting Energy') {
             energies += 1;
         }
         else if (c instanceof game_1.PokemonCard && c.cardType === card_types_1.CardType.FIGHTING) {
@@ -42,7 +42,6 @@ function* playCard(next, store, state, self, effect) {
         next();
     });
     player.discard.moveCardsTo(cards, player.hand);
-    player.supporter.moveCardTo(effect.trainerCard, player.discard);
     if (cards.length > 0) {
         yield store.prompt(state, new show_cards_prompt_1.ShowCardsPrompt(opponent.id, game_message_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => next());
     }
@@ -67,7 +66,6 @@ class Tarragon extends trainer_card_1.TrainerCard {
             store.reduceEffect(state, discardEffect);
             if (discardEffect.preventDefault) {
                 // If prevented, just discard the card and return
-                player.supporter.moveCardTo(effect.trainerCard, player.discard);
                 return state;
             }
             const generator = playCard(() => generator.next(), store, state, this, effect);
