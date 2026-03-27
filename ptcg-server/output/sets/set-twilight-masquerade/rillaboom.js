@@ -9,7 +9,7 @@ const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Rillaboom extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
-        this.stage = game_1.Stage.BASIC;
+        this.stage = game_1.Stage.STAGE_2;
         this.evolvesFrom = 'Thwackey';
         this.cardType = game_1.CardType.GRASS;
         this.hp = 180;
