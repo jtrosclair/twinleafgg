@@ -34,6 +34,7 @@ function* playCard(next, store, state, self, effect) {
         cards = selected || [];
         next();
         player.deck.moveCardsTo(cards, player.hand);
+        player.supporter.moveCardTo(effect.trainerCard, player.discard);
         return store.prompt(state, new shuffle_prompt_1.ShuffleDeckPrompt(player.id), order => {
             player.deck.applyOrder(order);
         });
@@ -48,9 +49,9 @@ class Teammates extends trainer_card_1.TrainerCard {
         this.setNumber = '141';
         this.name = 'Teammates';
         this.fullName = 'Teammates PRC';
-        this.text = `You can play this card only if 1 of your Pokémon was Knocked Out during your opponent's last turn.
-
-Search your deck for up to 2 cards and put them into your hand. Shuffle your deck afterward.`;
+        this.text = 'You can play this card only if 1 of your Pokémon was Knocked Out during your opponent\'s last turn.' +
+            '' +
+            'Search your deck for up to 2 cards and put them into your hand. Shuffle your deck afterward.';
         this.TEAMMATES_MARKER = 'TEAMMATES_MARKER';
     }
     reduceEffect(store, state, effect) {

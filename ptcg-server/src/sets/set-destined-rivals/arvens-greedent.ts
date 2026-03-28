@@ -2,8 +2,10 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType } from '../../game/store/card/card-types';
 import { StoreLike, State, GameMessage, PowerType, ConfirmPrompt, ChooseCardsPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { IS_ABILITY_BLOCKED, MOVE_CARDS_TO_HAND } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS_TO_HAND } from '../../game/store/prefabs/prefabs';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { PowerEffect } from '../../game/store/effects/game-effects';
+
 export class ArvensGreedent extends PokemonCard {
   public regulationMark = 'I';
   public tags = [CardTag.ARVENS];
@@ -38,7 +40,14 @@ export class ArvensGreedent extends PokemonCard {
       const player = effect.player;
 
       // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
+      try {
+        const stub = new PowerEffect(player, {
+          name: 'test',
+          powerType: PowerType.ABILITY,
+          text: ''
+        }, this);
+        store.reduceEffect(state, stub);
+      } catch {
         return state;
       }
 

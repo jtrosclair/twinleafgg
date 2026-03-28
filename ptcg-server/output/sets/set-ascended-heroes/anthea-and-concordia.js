@@ -53,7 +53,7 @@ During this turn, if your opponent's Active Pokémon is Knocked Out by damage fr
             this.extraPrizes = true;
             return state;
         }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect) {
+        if (effect instanceof game_phase_effects_1.BetweenTurnsEffect) {
             this.extraPrizes = false;
         }
         if (effect instanceof game_effects_1.KnockOutEffect && effect.target === effect.player.active) {

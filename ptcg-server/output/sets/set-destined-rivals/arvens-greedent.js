@@ -6,6 +6,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const game_effects_1 = require("../../game/store/effects/game-effects");
 class ArvensGreedent extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -38,7 +39,15 @@ class ArvensGreedent extends pokemon_card_1.PokemonCard {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
+            try {
+                const stub = new game_effects_1.PowerEffect(player, {
+                    name: 'test',
+                    powerType: game_1.PowerType.ABILITY,
+                    text: ''
+                }, this);
+                store.reduceEffect(state, stub);
+            }
+            catch (_a) {
                 return state;
             }
             // if there's no sandwiches in the discard, just skip this

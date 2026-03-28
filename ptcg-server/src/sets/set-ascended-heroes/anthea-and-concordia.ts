@@ -2,7 +2,7 @@ import { TrainerCard, TrainerType, StoreLike, State, StateUtils, GamePhase, Game
 import { Effect } from '../../game/store/effects/effect';
 import { KnockOutEffect } from '../../game/store/effects/game-effects';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { BetweenTurnsEffect } from '../../game/store/effects/game-phase-effects';
 import { CardTag } from '../../game/store/card/card-types';
 
 export class AntheaAndConcordia extends TrainerCard {
@@ -60,7 +60,7 @@ During this turn, if your opponent's Active Pokémon is Knocked Out by damage fr
       return state;
     }
 
-    if (effect instanceof EndTurnEffect) {
+    if (effect instanceof BetweenTurnsEffect) {
       this.extraPrizes = false;
     }
 

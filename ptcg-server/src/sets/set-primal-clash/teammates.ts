@@ -50,7 +50,7 @@ function* playCard(next: Function, store: StoreLike, state: State,
     next();
 
     player.deck.moveCardsTo(cards, player.hand);
-
+    player.supporter.moveCardTo(effect.trainerCard, player.discard);
 
     return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
       player.deck.applyOrder(order);
@@ -61,16 +61,21 @@ function* playCard(next: Function, store: StoreLike, state: State,
 export class Teammates extends TrainerCard {
 
   public trainerType: TrainerType = TrainerType.SUPPORTER;
+
   public set: string = 'PRC';
+
   public cardImage: string = 'assets/cardback.png';
+
   public setNumber: string = '141';
+
   public name: string = 'Teammates';
+
   public fullName: string = 'Teammates PRC';
 
   public text: string =
-    `You can play this card only if 1 of your Pokémon was Knocked Out during your opponent's last turn.
-
-Search your deck for up to 2 cards and put them into your hand. Shuffle your deck afterward.`;
+    'You can play this card only if 1 of your Pokémon was Knocked Out during your opponent\'s last turn.' +
+    '' +
+    'Search your deck for up to 2 cards and put them into your hand. Shuffle your deck afterward.';
 
   public readonly TEAMMATES_MARKER = 'TEAMMATES_MARKER';
 
