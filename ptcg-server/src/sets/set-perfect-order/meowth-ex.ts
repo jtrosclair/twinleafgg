@@ -30,7 +30,7 @@ export class Meowthex extends PokemonCard {
   public regulationMark = 'J';
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
-  public setNumber: string = '62';
+  public setNumber: string = '61';
   public name: string = 'Meowth ex';
   public fullName: string = 'Meowth ex POR';
   public readonly TRUMP_CARD_MARKER = 'TRUMP_CARD_MARKER';
