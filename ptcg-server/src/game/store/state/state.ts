@@ -4,6 +4,10 @@ import { StateLog } from './state-log';
 import { Rules } from './rules';
 import { Attack, GameSettings, PokemonCard } from '../..';
 
+export interface WinConditions {
+  selfDeckOut?: boolean;
+}
+
 export enum GamePhase {
   WAITING_FOR_PLAYERS,
   SETUP,
@@ -53,4 +57,6 @@ export class State {
   public benchSizeChangeHandled: boolean = false;
 
   public gameSettings: GameSettings = new GameSettings();
+
+  public winConditions?: WinConditions;
 }

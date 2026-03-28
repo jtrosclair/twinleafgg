@@ -45,11 +45,11 @@ export class GameService {
     return this.api.post('/v1/game/validate-state', { stateData });
   }
 
-  public createGameFromState(stateData: string, opponentUsername?: string): Observable<GameState> {
+  public createGameFromState(stateData: string, opponentUsername?: string, winConditions?: { selfDeckOut?: boolean }): Observable<GameState> {
     this.boardInteractionService.endBoardSelection();
 
     return new Observable<GameState>(observer => {
-      this.socketService.emit('core:createGameFromState', { stateData, opponentUsername })
+      this.socketService.emit('core:createGameFromState', { stateData, opponentUsername, winConditions })
         .pipe(finalize(() => observer.complete()))
         .subscribe((gameState: GameState) => {
           this.appendGameState(gameState);

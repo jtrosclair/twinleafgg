@@ -242,6 +242,15 @@ export function endGame(store: StoreLike, state: State, winner: GameWinner): Sta
     }
   }
 
+  // Apply win condition overrides
+  if (state.winConditions?.selfDeckOut && winner === GameWinner.PLAYER_1) {
+    const player1 = state.players[0];
+    if (player1 && player1.deck.cards.length > 0) {
+      winner = GameWinner.PLAYER_2;
+      store.log(state, GameLog.LOG_GAME_FINISHED_WINNER, { name: state.players[1].name });
+    }
+  }
+
   state.winner = winner;
   state.phase = GamePhase.FINISHED;
   return state;

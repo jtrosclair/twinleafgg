@@ -3,6 +3,9 @@ import { Prompt } from '../prompts/prompt';
 import { StateLog } from './state-log';
 import { Rules } from './rules';
 import { Attack, GameSettings, PokemonCard } from '../..';
+export interface WinConditions {
+    selfDeckOut?: boolean;
+}
 export declare enum GamePhase {
     WAITING_FOR_PLAYERS = 0,
     SETUP = 1,
@@ -40,4 +43,5 @@ export declare class State {
     isSuddenDeath?: boolean;
     benchSizeChangeHandled: boolean;
     gameSettings: GameSettings;
+    winConditions?: WinConditions;
 }

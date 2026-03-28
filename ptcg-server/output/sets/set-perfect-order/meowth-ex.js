@@ -17,9 +17,9 @@ class Meowthex extends pokemon_card_1.PokemonCard {
         this.weakness = [{ type: F }];
         this.retreat = [C];
         this.powers = [{
-                name: 'Trump Card Catch',
+                name: 'Last-Ditch Catch',
                 powerType: game_1.PowerType.ABILITY,
-                text: 'When you play this Pokemon from your hand to your Bench during your turn, you may use this Ability. Search your deck for a Supporter card, reveal it, and put it into your hand. You can\'t use this Ability if you\'ve already used another Ability with "Trump Card" in its name this turn.',
+                text: 'When you play this Pokemon from your hand to your Bench during your turn, you may use this Ability. Search your deck for a Supporter card, reveal it, and put it into your hand. You can\'t use this Ability if you\'ve already used another Ability with "Last-Ditch" in its name this turn.',
             }];
         this.attacks = [{
                 name: 'Tuck Tail',
@@ -30,7 +30,7 @@ class Meowthex extends pokemon_card_1.PokemonCard {
         this.regulationMark = 'J';
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
-        this.setNumber = '61';
+        this.setNumber = '62';
         this.name = 'Meowth ex';
         this.fullName = 'Meowth ex POR';
         this.TRUMP_CARD_MARKER = 'TRUMP_CARD_MARKER';

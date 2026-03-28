@@ -155,6 +155,10 @@ class CoreSocket {
             // Create game settings with sandbox mode enabled
             const gameSettings = params.gameSettings || new game_1.GameSettings();
             gameSettings.sandboxMode = true;
+            // Apply win conditions to state if provided
+            if (params.winConditions) {
+                state.winConditions = params.winConditions;
+            }
             // Create the game from the state with the opponent client
             const game = this.core.createGameFromState(this.client, state, gameSettings, opponentClient);
             response('ok', CoreSocket.buildGameState(game));

@@ -164,6 +164,7 @@ function chooseActivePokemons(state) {
 //   return prompts;
 // }
 function endGame(store, state, winner) {
+    var _a;
     if (state.players.length !== 2) {
         return state;
     }
@@ -185,6 +186,14 @@ function endGame(store, state, winner) {
                 : state.players[1].name;
             store.log(state, game_message_1.GameLog.LOG_GAME_FINISHED_WINNER, { name: winnerName });
             break;
+        }
+    }
+    // Apply win condition overrides
+    if (((_a = state.winConditions) === null || _a === void 0 ? void 0 : _a.selfDeckOut) && winner === state_1.GameWinner.PLAYER_1) {
+        const player1 = state.players[0];
+        if (player1 && player1.deck.cards.length > 0) {
+            winner = state_1.GameWinner.PLAYER_2;
+            store.log(state, game_message_1.GameLog.LOG_GAME_FINISHED_WINNER, { name: state.players[1].name });
         }
     }
     state.winner = winner;
