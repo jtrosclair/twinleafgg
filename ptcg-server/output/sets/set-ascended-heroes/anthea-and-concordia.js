@@ -4,6 +4,7 @@ exports.AntheaAndConcordia = void 0;
 const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
+const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const card_types_1 = require("../../game/store/card/card-types");
 class AntheaAndConcordia extends game_1.TrainerCard {
     constructor() {
@@ -52,12 +53,15 @@ During this turn, if your opponent's Active Pokémon is Knocked Out by damage fr
             this.extraPrizes = true;
             return state;
         }
+        if (effect instanceof game_phase_effects_1.EndTurnEffect) {
+            this.extraPrizes = false;
+        }
         if (effect instanceof game_effects_1.KnockOutEffect && effect.target === effect.player.active) {
             // effect.player is the owner of the knocked out Pokémon (the opponent)
             const knockedOutPlayer = effect.player;
             const attacker = game_1.StateUtils.getOpponent(state, knockedOutPlayer);
-            // Check if this card is in the attacker's supporter pile and was played this turn
-            if (!attacker.supporter.cards.includes(this) || !this.extraPrizes) {
+            // Check if this card was played this turn (may be in supporter or discard depending on cleanup timing)
+            if (!this.extraPrizes) {
                 return state;
             }
             // Do not activate between turns, or when it's not attacker's turn.
@@ -76,7 +80,6 @@ During this turn, if your opponent's Active Pokémon is Knocked Out by damage fr
                     }
                 }
                 this.extraPrizes = false;
-                attacker.supporter.moveCardTo(this, attacker.discard);
             }
             return state;
         }

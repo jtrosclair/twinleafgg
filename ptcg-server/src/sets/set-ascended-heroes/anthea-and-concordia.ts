@@ -2,6 +2,7 @@ import { TrainerCard, TrainerType, StoreLike, State, StateUtils, GamePhase, Game
 import { Effect } from '../../game/store/effects/effect';
 import { KnockOutEffect } from '../../game/store/effects/game-effects';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { CardTag } from '../../game/store/card/card-types';
 
 export class AntheaAndConcordia extends TrainerCard {
@@ -59,13 +60,17 @@ During this turn, if your opponent's Active Pokémon is Knocked Out by damage fr
       return state;
     }
 
+    if (effect instanceof EndTurnEffect) {
+      this.extraPrizes = false;
+    }
+
     if (effect instanceof KnockOutEffect && effect.target === effect.player.active) {
       // effect.player is the owner of the knocked out Pokémon (the opponent)
       const knockedOutPlayer = effect.player;
       const attacker = StateUtils.getOpponent(state, knockedOutPlayer);
 
-      // Check if this card is in the attacker's supporter pile and was played this turn
-      if (!attacker.supporter.cards.includes(this) || !this.extraPrizes) {
+      // Check if this card was played this turn (may be in supporter or discard depending on cleanup timing)
+      if (!this.extraPrizes) {
         return state;
       }
 
@@ -88,7 +93,6 @@ During this turn, if your opponent's Active Pokémon is Knocked Out by damage fr
           }
         }
         this.extraPrizes = false;
-        attacker.supporter.moveCardTo(this, attacker.discard);
       }
       return state;
     }
