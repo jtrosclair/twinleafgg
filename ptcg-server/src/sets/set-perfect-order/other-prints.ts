@@ -28,11 +28,18 @@ import { RosasEncouragement } from "./rosas-encouragement";
 import { Jacinthe } from "./jacinthe";
 import { LushForest } from "../set-mega-evolution/forest-of-vitality";
 import { LumioiseCity } from "./lumioise-city";
+import { Judge } from "../set-fusion-strike/judge";
 
 export class SpewpaIR extends Spewpa {
   public fullName = 'SpewpaIR POR';
   public setNumber = '81';
 }
+
+export class JudgePOR extends Judge {
+  public fullName = 'Judge POR';
+  public setNumber = '76';
+}
+
 
 export class RowletIR extends Rowlet {
   public fullName = 'RowletIR POR';
@@ -145,6 +152,12 @@ export class PokePadFA extends PokePad {
   public fullName = 'Poke Pad FA POR';
   public set = 'M3';
   public setNumber = '103';
+}
+
+export class PokePadNormal extends PokePad {
+  public fullName = 'Poke Pad POR';
+  public set = 'M3';
+  public setNumber = '81';
 }
 
 export class WondrousPatchFA extends WonderPatch {

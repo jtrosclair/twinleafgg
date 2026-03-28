@@ -186,6 +186,7 @@ exports.setPerfectOrder = [
     new other_prints_1.MeowthexFA(),
     new other_prints_1.EnergyRecyclerFA(),
     new other_prints_1.SacredAshFA(),
+    new other_prints_1.PokePadNormal(),
     new other_prints_1.PokePadFA(),
     new other_prints_1.WondrousPatchFA(),
     new other_prints_1.TarragonFA(),
@@ -201,4 +202,5 @@ exports.setPerfectOrder = [
     new other_prints_1.RosasEncouragementSIR(),
     new other_prints_1.JacintheSIR(),
     new other_prints_1.MegaZygardeexHR(),
+    new other_prints_1.JudgePOR()
 ];

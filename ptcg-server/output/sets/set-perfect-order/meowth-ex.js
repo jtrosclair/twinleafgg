@@ -32,7 +32,7 @@ class Meowthex extends pokemon_card_1.PokemonCard {
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '61';
         this.name = 'Meowth ex';
-        this.fullName = 'Meowth ex M3';
+        this.fullName = 'Meowth ex POR';
         this.TRUMP_CARD_MARKER = 'TRUMP_CARD_MARKER';
     }
     reduceEffect(store, state, effect) {

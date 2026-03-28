@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MegaZygardeexHR = exports.JacintheSIR = exports.RosasEncouragementSIR = exports.MeowthexSIR = exports.MegaZygardeexSIR = exports.MegaClefableexSIR = exports.MegaStarmieexSIR = exports.LumioiseCityFA = exports.ForestOfVitalityFA = exports.JacintheFA = exports.RosasEncouragementFA = exports.NaveenFA = exports.TarragonFA = exports.WondrousPatchFA = exports.PokePadFA = exports.SacredAshFA = exports.EnergyRecyclerFA = exports.MeowthexFA = exports.MegaSkarmoryexFA = exports.YveltalexFA = exports.MegaZygardeexFA = exports.MegaClefableexFA = exports.MegaStarmieexFA = exports.SalazzleexFA = exports.DecidueyeexFA = exports.RaticateIR = exports.DoubladeIR = exports.DrapionIR = exports.TyruntIR = exports.ProbopassIR = exports.EspurrIR = exports.ClefairyIR = exports.DedenneIR = exports.AurorusIR = exports.TalonflameIR = exports.RowletIR = exports.SpewpaIR = void 0;
+exports.MegaZygardeexHR = exports.JacintheSIR = exports.RosasEncouragementSIR = exports.MeowthexSIR = exports.MegaZygardeexSIR = exports.MegaClefableexSIR = exports.MegaStarmieexSIR = exports.LumioiseCityFA = exports.ForestOfVitalityFA = exports.JacintheFA = exports.RosasEncouragementFA = exports.NaveenFA = exports.TarragonFA = exports.WondrousPatchFA = exports.PokePadNormal = exports.PokePadFA = exports.SacredAshFA = exports.EnergyRecyclerFA = exports.MeowthexFA = exports.MegaSkarmoryexFA = exports.YveltalexFA = exports.MegaZygardeexFA = exports.MegaClefableexFA = exports.MegaStarmieexFA = exports.SalazzleexFA = exports.DecidueyeexFA = exports.RaticateIR = exports.DoubladeIR = exports.DrapionIR = exports.TyruntIR = exports.ProbopassIR = exports.EspurrIR = exports.ClefairyIR = exports.DedenneIR = exports.AurorusIR = exports.TalonflameIR = exports.RowletIR = exports.JudgePOR = exports.SpewpaIR = void 0;
 const spewpa_1 = require("./spewpa");
 const rowlet_1 = require("./rowlet");
 const talonflame_1 = require("./talonflame");
@@ -31,6 +31,7 @@ const rosas_encouragement_1 = require("./rosas-encouragement");
 const jacinthe_1 = require("./jacinthe");
 const forest_of_vitality_1 = require("../set-mega-evolution/forest-of-vitality");
 const lumioise_city_1 = require("./lumioise-city");
+const judge_1 = require("../set-fusion-strike/judge");
 class SpewpaIR extends spewpa_1.Spewpa {
     constructor() {
         super(...arguments);
@@ -39,6 +40,14 @@ class SpewpaIR extends spewpa_1.Spewpa {
     }
 }
 exports.SpewpaIR = SpewpaIR;
+class JudgePOR extends judge_1.Judge {
+    constructor() {
+        super(...arguments);
+        this.fullName = 'Judge POR';
+        this.setNumber = '76';
+    }
+}
+exports.JudgePOR = JudgePOR;
 class RowletIR extends rowlet_1.Rowlet {
     constructor() {
         super(...arguments);
@@ -218,6 +227,15 @@ class PokePadFA extends poke_pad_1.PokePad {
     }
 }
 exports.PokePadFA = PokePadFA;
+class PokePadNormal extends poke_pad_1.PokePad {
+    constructor() {
+        super(...arguments);
+        this.fullName = 'Poke Pad POR';
+        this.set = 'M3';
+        this.setNumber = '81';
+    }
+}
+exports.PokePadNormal = PokePadNormal;
 class WondrousPatchFA extends wonder_patch_1.WonderPatch {
     constructor() {
         super(...arguments);

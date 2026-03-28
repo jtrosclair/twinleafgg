@@ -28,7 +28,12 @@ import { RosasEncouragement } from "./rosas-encouragement";
 import { Jacinthe } from "./jacinthe";
 import { LushForest } from "../set-mega-evolution/forest-of-vitality";
 import { LumioiseCity } from "./lumioise-city";
+import { Judge } from "../set-fusion-strike/judge";
 export declare class SpewpaIR extends Spewpa {
+    fullName: string;
+    setNumber: string;
+}
+export declare class JudgePOR extends Judge {
     fullName: string;
     setNumber: string;
 }
@@ -119,6 +124,11 @@ export declare class SacredAshFA extends SacredAsh {
     setNumber: string;
 }
 export declare class PokePadFA extends PokePad {
+    fullName: string;
+    set: string;
+    setNumber: string;
+}
+export declare class PokePadNormal extends PokePad {
     fullName: string;
     set: string;
     setNumber: string;
