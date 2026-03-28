@@ -77,7 +77,7 @@ export class Teammates extends TrainerCard {
     '' +
     'Search your deck for up to 2 cards and put them into your hand. Shuffle your deck afterward.';
 
-  public readonly TEAMMATES_MARKER = 'TEAMMATES_MARKER';
+  public readonly TEAMMATES_MARKER = 'OPPONENT_KNOCKOUT_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 

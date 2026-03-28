@@ -11,6 +11,6 @@ export declare class Teammates extends TrainerCard {
     name: string;
     fullName: string;
     text: string;
-    readonly TEAMMATES_MARKER = "TEAMMATES_MARKER";
+    readonly TEAMMATES_MARKER = "OPPONENT_KNOCKOUT_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

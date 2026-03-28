@@ -63,7 +63,7 @@ export class LetterOfEncouragement extends TrainerCard {
 
 Search your deck for up to 3 Basic Energy cards, reveal them, and put them into your hand. Then, shuffle your deck.`;
 
-  public readonly LETTER_OF_ENCOURAGEMENT_MARKER = 'LETTER_OF_ENCOURAGEMENT_MARKER';
+  public readonly LETTER_OF_ENCOURAGEMENT_MARKER = 'OPPONENT_KNOCKOUT_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 

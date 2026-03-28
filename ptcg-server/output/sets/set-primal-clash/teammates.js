@@ -52,7 +52,7 @@ class Teammates extends trainer_card_1.TrainerCard {
         this.text = 'You can play this card only if 1 of your Pokémon was Knocked Out during your opponent\'s last turn.' +
             '' +
             'Search your deck for up to 2 cards and put them into your hand. Shuffle your deck afterward.';
-        this.TEAMMATES_MARKER = 'TEAMMATES_MARKER';
+        this.TEAMMATES_MARKER = 'OPPONENT_KNOCKOUT_MARKER';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {

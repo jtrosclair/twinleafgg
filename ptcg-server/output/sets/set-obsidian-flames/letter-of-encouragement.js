@@ -47,7 +47,7 @@ class LetterOfEncouragement extends trainer_card_1.TrainerCard {
         this.text = `You can use this card only if any of your Pokémon were Knocked Out during your opponent's last turn.
 
 Search your deck for up to 3 Basic Energy cards, reveal them, and put them into your hand. Then, shuffle your deck.`;
-        this.LETTER_OF_ENCOURAGEMENT_MARKER = 'LETTER_OF_ENCOURAGEMENT_MARKER';
+        this.LETTER_OF_ENCOURAGEMENT_MARKER = 'OPPONENT_KNOCKOUT_MARKER';
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
