@@ -5,7 +5,6 @@ import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect, PowerEffect } from '../../game/store/effects/game-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Slakingex extends PokemonCard {
 
@@ -55,20 +54,21 @@ export class Slakingex extends PokemonCard {
       });
 
       // Try to reduce PowerEffect, to check if something is blocking our ability
+      let abilityBlocked = false;
       try {
         const powerEffect = new PowerEffect(player, this.powers[0], this);
         store.reduceEffect(state, powerEffect);
       } catch {
-        return state;
+        abilityBlocked = true;
       }
 
-      // If we don't have a ex or V in play, block the attack.
-      if (!hasSpecialPokemon) { throw new GameError(GameMessage.BLOCKED_BY_ABILITY); }
+      // If ability is active and opponent has no ex/V, block the attack.
+      if (!abilityBlocked && !hasSpecialPokemon) { throw new GameError(GameMessage.BLOCKED_BY_ABILITY); }
     }
 
 
     // Great Swing
-    if (WAS_ATTACK_USED(effect, 0, this)) {
+    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
       const player = effect.player;
       const cardList = StateUtils.findCardList(state, this) as PokemonCardList;
 

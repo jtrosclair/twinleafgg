@@ -7,7 +7,6 @@ const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Slakingex extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -52,20 +51,21 @@ class Slakingex extends pokemon_card_1.PokemonCard {
                 }
             });
             // Try to reduce PowerEffect, to check if something is blocking our ability
+            let abilityBlocked = false;
             try {
                 const powerEffect = new game_effects_1.PowerEffect(player, this.powers[0], this);
                 store.reduceEffect(state, powerEffect);
             }
             catch (_a) {
-                return state;
+                abilityBlocked = true;
             }
-            // If we don't have a ex or V in play, block the attack.
-            if (!hasSpecialPokemon) {
+            // If ability is active and opponent has no ex/V, block the attack.
+            if (!abilityBlocked && !hasSpecialPokemon) {
                 throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_ABILITY);
             }
         }
         // Great Swing
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
             const player = effect.player;
             const cardList = game_1.StateUtils.findCardList(state, this);
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, cardList);
