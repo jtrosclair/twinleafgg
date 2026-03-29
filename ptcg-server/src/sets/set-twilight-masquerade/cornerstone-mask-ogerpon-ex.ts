@@ -2,9 +2,8 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { GamePhase, PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect } from '../../game/store/effects/game-effects';
+import { AttackEffect, PowerEffect } from '../../game/store/effects/game-effects';
 import { AfterDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class CornerstoneMaskOgerponex extends PokemonCard {
 
@@ -50,7 +49,7 @@ export class CornerstoneMaskOgerponex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (WAS_ATTACK_USED(effect, 0, this)) {
+    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
@@ -85,8 +84,10 @@ export class CornerstoneMaskOgerponex extends PokemonCard {
         return state;
       }
 
-      if (sourceCard.powers.length > 0) {
+      // Check if the attacking Pokémon has any abilities
+      const sourceAbilities = sourceCard.powers.filter(p => p.powerType === PowerType.ABILITY);
 
+      if (sourceAbilities.length > 0) {
         // Try to reduce PowerEffect, to check if something is blocking our ability
         try {
           const stub = new PowerEffect(player, {
@@ -99,7 +100,24 @@ export class CornerstoneMaskOgerponex extends PokemonCard {
           return state;
         }
 
-        effect.preventDefault = true;
+        // Check if the attacker's abilities are blocked by external effects (like Team Rocket's Watchtower)
+        const sourcePlayer = StateUtils.findOwner(state, effect.source);
+        let abilitiesBlockedExternally = false;
+        try {
+          const attackerStub = new PowerEffect(sourcePlayer, {
+            name: 'test',
+            powerType: PowerType.ABILITY,
+            text: ''
+          }, sourceCard);
+          store.reduceEffect(state, attackerStub);
+        } catch {
+          abilitiesBlockedExternally = true;
+        }
+
+        // Only prevent damage if the attacker's abilities are not blocked by external effects
+        if (!abilitiesBlockedExternally) {
+          effect.preventDefault = true;
+        }
       }
     }
 
