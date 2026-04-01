@@ -54,11 +54,15 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
   // Blocking pokemon cards, that cannot be valid evolutions
   const blocked: number[] = [];
   player.deck.cards.forEach((card, index) => {
-    if (card instanceof PokemonCard && !evolutionNames.includes(card.name)) {
-      const powersEffect = new CheckPokemonPowersEffect(player, card);
-      state = store.reduceEffect(state, powersEffect);
-      if (powersEffect.powers.some(power => power.powerType === PowerType.ABILITY)) {
+    if (card instanceof PokemonCard) {
+      if (!evolutionNames.includes(card.name)) {
         blocked.push(index);
+      } else {
+        const powersEffect = new CheckPokemonPowersEffect(player, card);
+        state = store.reduceEffect(state, powersEffect);
+        if (powersEffect.powers.some(power => power.powerType === PowerType.ABILITY)) {
+          blocked.push(index);
+        }
       }
     }
   });
