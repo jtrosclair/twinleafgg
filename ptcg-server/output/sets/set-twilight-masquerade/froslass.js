@@ -34,74 +34,42 @@ class Froslass extends game_1.PokemonCard {
         this.setNumber = '53';
         this.name = 'Froslass';
         this.fullName = 'Froslass TWM';
-        this.CHILLING_CURTAIN_MARKER = 'CHILLING_CURTAIN_MARKER';
     }
     reduceEffect(store, state, effect) {
-        if (effect instanceof game_phase_effects_1.BetweenTurnsEffect && effect.player.marker.hasMarker(this.CHILLING_CURTAIN_MARKER, this)) {
-            if (state.phase === state_1.GamePhase.BETWEEN_TURNS) {
-                const player = effect.player;
-                if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
-                    return state;
-                }
-                const opponent = game_1.StateUtils.getOpponent(state, player);
-                let numberOfFroslass = 0;
-                player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-                    const pokemon = cardList.getPokemonCard();
-                    if (!!pokemon && pokemon.name === 'Froslass' && pokemon.powers.map(p => p.name).includes(this.powers[0].name)) {
-                        numberOfFroslass += 1;
-                    }
-                });
-                player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-                    if (card.name !== 'Froslass') {
-                        const powersEffect = new check_effects_1.CheckPokemonPowersEffect(player, card);
-                        state = store.reduceEffect(state, powersEffect);
-                        if (powersEffect.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
-                            const placeCountersEffect = new game_effects_1.PlaceDamageCountersEffect(player, cardList, 10 * numberOfFroslass, this);
-                            state = store.reduceEffect(state, placeCountersEffect);
-                        }
-                    }
-                });
-                opponent.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-                    if (card.name !== 'Froslass') {
-                        const powersEffect = new check_effects_1.CheckPokemonPowersEffect(opponent, card);
-                        state = store.reduceEffect(state, powersEffect);
-                        if (powersEffect.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
-                            const placeCountersEffect = new game_effects_1.PlaceDamageCountersEffect(player, cardList, 10 * numberOfFroslass, this);
-                            state = store.reduceEffect(state, placeCountersEffect);
-                        }
-                    }
-                });
-                player.marker.removeMarker(this.CHILLING_CURTAIN_MARKER, this);
-                return state;
-            }
-            return state;
-        }
-        if (effect instanceof game_phase_effects_1.EndTurnEffect) {
-            // Find which player owns this Froslass instance
-            const thisSlot = game_1.StateUtils.findPokemonSlot(state, this);
-            if (!thisSlot) {
-                return state;
-            }
-            let thisOwner;
-            try {
-                thisOwner = game_1.StateUtils.findOwner(state, thisSlot);
-            }
-            catch (_a) {
-                return state;
-            }
-            // Only add the marker for this Froslass's owner
-            // This ensures the marker source matches the owner, so Battle Cage
-            // and similar effects can correctly identify the source's owner
-            let numberOfFroslass = 0;
-            thisOwner.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-                const pokemon = cardList.getPokemonCard();
-                if (!!pokemon && pokemon.name === 'Froslass' && pokemon.powers.map(p => p.name).includes(this.powers[0].name)) {
-                    numberOfFroslass += 1;
+        if (effect instanceof game_phase_effects_1.BetweenTurnsEffect && state.phase === state_1.GamePhase.BETWEEN_TURNS) {
+            const player = effect.player;
+            // Check if this Froslass is in play on effect.player's side
+            let thisIsInPlay = false;
+            player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
+                if (card === this) {
+                    thisIsInPlay = true;
                 }
             });
-            if (numberOfFroslass > 0 && !thisOwner.marker.hasMarker(this.CHILLING_CURTAIN_MARKER)) {
-                thisOwner.marker.addMarker(this.CHILLING_CURTAIN_MARKER, this);
+            if (!thisIsInPlay) {
+                return state;
             }
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
+                return state;
+            }
+            const opponent = game_1.StateUtils.getOpponent(state, player);
+            player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
+                if (card.name !== 'Froslass') {
+                    const powersEffect = new check_effects_1.CheckPokemonPowersEffect(player, card);
+                    state = store.reduceEffect(state, powersEffect);
+                    if (powersEffect.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
+                        state = store.reduceEffect(state, new game_effects_1.PlaceDamageCountersEffect(player, cardList, 10, this));
+                    }
+                }
+            });
+            opponent.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
+                if (card.name !== 'Froslass') {
+                    const powersEffect = new check_effects_1.CheckPokemonPowersEffect(opponent, card);
+                    state = store.reduceEffect(state, powersEffect);
+                    if (powersEffect.powers.some(power => power.powerType === game_1.PowerType.ABILITY)) {
+                        state = store.reduceEffect(state, new game_effects_1.PlaceDamageCountersEffect(player, cardList, 10, this));
+                    }
+                }
+            });
         }
         return state;
     }
