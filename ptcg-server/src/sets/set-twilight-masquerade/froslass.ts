@@ -7,6 +7,7 @@ import { BetweenTurnsEffect, EndTurnEffect } from '../../game/store/effects/game
 import { GamePhase, State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { Player } from '../../game/store/state/player';
 
 export class Froslass extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -100,32 +101,31 @@ export class Froslass extends PokemonCard {
 
     if (effect instanceof EndTurnEffect) {
 
-      let numberOfFroslass = 0;
-      const player = effect.player;
-
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        const pokemon = cardList.getPokemonCard();
-        if (!!pokemon && pokemon.name === 'Froslass' && pokemon.powers.map(p => p.name).includes(this.powers[0].name)) {
-          numberOfFroslass += 1;
-        }
-      });
-
-      if (numberOfFroslass > 0 && !player.marker.hasMarker(this.CHILLING_CURTAIN_MARKER)) {
-        player.marker.addMarker(this.CHILLING_CURTAIN_MARKER, this);
+      // Find which player owns this Froslass instance
+      const thisSlot = StateUtils.findPokemonSlot(state, this);
+      if (!thisSlot) {
+        return state;
+      }
+      let thisOwner: Player;
+      try {
+        thisOwner = StateUtils.findOwner(state, thisSlot);
+      } catch {
+        return state;
       }
 
-      numberOfFroslass = 0;
-
-      const opponent = StateUtils.getOpponent(state, effect.player);
-      opponent.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
+      // Only add the marker for this Froslass's owner
+      // This ensures the marker source matches the owner, so Battle Cage
+      // and similar effects can correctly identify the source's owner
+      let numberOfFroslass = 0;
+      thisOwner.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
         const pokemon = cardList.getPokemonCard();
         if (!!pokemon && pokemon.name === 'Froslass' && pokemon.powers.map(p => p.name).includes(this.powers[0].name)) {
           numberOfFroslass += 1;
         }
       });
 
-      if (numberOfFroslass > 0 && !opponent.marker.hasMarker(this.CHILLING_CURTAIN_MARKER)) {
-        opponent.marker.addMarker(this.CHILLING_CURTAIN_MARKER, this);
+      if (numberOfFroslass > 0 && !thisOwner.marker.hasMarker(this.CHILLING_CURTAIN_MARKER)) {
+        thisOwner.marker.addMarker(this.CHILLING_CURTAIN_MARKER, this);
       }
     }
 

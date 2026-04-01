@@ -77,27 +77,30 @@ class Froslass extends game_1.PokemonCard {
             return state;
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect) {
-            let numberOfFroslass = 0;
-            const player = effect.player;
-            player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-                const pokemon = cardList.getPokemonCard();
-                if (!!pokemon && pokemon.name === 'Froslass' && pokemon.powers.map(p => p.name).includes(this.powers[0].name)) {
-                    numberOfFroslass += 1;
-                }
-            });
-            if (numberOfFroslass > 0 && !player.marker.hasMarker(this.CHILLING_CURTAIN_MARKER)) {
-                player.marker.addMarker(this.CHILLING_CURTAIN_MARKER, this);
+            // Find which player owns this Froslass instance
+            const thisSlot = game_1.StateUtils.findPokemonSlot(state, this);
+            if (!thisSlot) {
+                return state;
             }
-            numberOfFroslass = 0;
-            const opponent = game_1.StateUtils.getOpponent(state, effect.player);
-            opponent.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
+            let thisOwner;
+            try {
+                thisOwner = game_1.StateUtils.findOwner(state, thisSlot);
+            }
+            catch (_a) {
+                return state;
+            }
+            // Only add the marker for this Froslass's owner
+            // This ensures the marker source matches the owner, so Battle Cage
+            // and similar effects can correctly identify the source's owner
+            let numberOfFroslass = 0;
+            thisOwner.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card) => {
                 const pokemon = cardList.getPokemonCard();
                 if (!!pokemon && pokemon.name === 'Froslass' && pokemon.powers.map(p => p.name).includes(this.powers[0].name)) {
                     numberOfFroslass += 1;
                 }
             });
-            if (numberOfFroslass > 0 && !opponent.marker.hasMarker(this.CHILLING_CURTAIN_MARKER)) {
-                opponent.marker.addMarker(this.CHILLING_CURTAIN_MARKER, this);
+            if (numberOfFroslass > 0 && !thisOwner.marker.hasMarker(this.CHILLING_CURTAIN_MARKER)) {
+                thisOwner.marker.addMarker(this.CHILLING_CURTAIN_MARKER, this);
             }
         }
         return state;
