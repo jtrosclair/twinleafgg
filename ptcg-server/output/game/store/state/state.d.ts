@@ -5,6 +5,7 @@ import { Rules } from './rules';
 import { Attack, GameSettings, PokemonCard } from '../..';
 export interface WinConditions {
     selfDeckOut?: boolean;
+    mustLose?: boolean;
 }
 export declare enum GamePhase {
     WAITING_FOR_PLAYERS = 0,

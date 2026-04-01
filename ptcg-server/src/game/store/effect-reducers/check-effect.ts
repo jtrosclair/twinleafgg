@@ -251,6 +251,18 @@ export function endGame(store: StoreLike, state: State, winner: GameWinner): Sta
     }
   }
 
+  if (state.winConditions?.mustLose) {
+    if (winner === GameWinner.PLAYER_2) {
+      // Player1 lost as required — report player1 as the "winner"
+      winner = GameWinner.PLAYER_1;
+      store.log(state, GameLog.LOG_GAME_FINISHED_WINNER, { name: state.players[0].name });
+    } else {
+      // Player1 didn't lose — report player2 as the "winner"
+      winner = GameWinner.PLAYER_2;
+      store.log(state, GameLog.LOG_GAME_FINISHED_WINNER, { name: state.players[1].name });
+    }
+  }
+
   state.winner = winner;
   state.phase = GamePhase.FINISHED;
   return state;

@@ -6,6 +6,7 @@ import { Attack, GameSettings, PokemonCard } from '../..';
 
 export interface WinConditions {
   selfDeckOut?: boolean;
+  mustLose?: boolean;
 }
 
 export enum GamePhase {

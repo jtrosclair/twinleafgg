@@ -45,7 +45,7 @@ export class GameService {
     return this.api.post('/v1/game/validate-state', { stateData });
   }
 
-  public createGameFromState(stateData: string, opponentUsername?: string, winConditions?: { selfDeckOut?: boolean }): Observable<GameState> {
+  public createGameFromState(stateData: string, opponentUsername?: string, winConditions?: { selfDeckOut?: boolean; mustLose?: boolean }): Observable<GameState> {
     this.boardInteractionService.endBoardSelection();
 
     return new Observable<GameState>(observer => {
