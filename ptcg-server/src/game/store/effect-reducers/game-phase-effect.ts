@@ -75,6 +75,11 @@ export function initNextTurn(store: StoreLike, state: State): State {
     return state;
   }
 
+  // opponenent wins
+  const winner = GameWinner.NONE;
+  state = endGame(store, state, winner);
+  return state;
+
   // Signal beginning of turn (for cards like Slumbering Forest, Oran Berry, etc.)
   const beginTurn = new BeginTurnEffect(player);
   store.reduceEffect(state, beginTurn);

@@ -93,6 +93,7 @@ export class WebViewBridgeService {
    * it will post a window message with type "iframeEvent" instead
    */
   public postMessage(message: WebViewMessage): void {
+    console.log({ message })
     try {
       if ((window as any).ReactNativeWebView) {
         (window as any).ReactNativeWebView.postMessage(JSON.stringify(message));
