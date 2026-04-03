@@ -168,6 +168,7 @@ const rawCardReplacements = [
 
   //SVI
   { from: 'Pokégear 3.0 SVI 186', to: 'Pokegear SVI 186' },
+  { from: 'Poké Pad POR 81', to: 'Poké Pad POR 81' },
   { from: 'Pokémon Catcher SVI 187', to: 'Pokemon Catcher SVI 187' },
   { from: 'Riolu SVI 113', to: 'Riolu2 SVI 113' },
 

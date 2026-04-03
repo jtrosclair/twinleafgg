@@ -36,6 +36,7 @@ export class SpewpaIR extends Spewpa {
 }
 
 export class JudgePOR extends Judge {
+  public set = 'POR';
   public fullName = 'Judge POR';
   public setNumber = '76';
 }

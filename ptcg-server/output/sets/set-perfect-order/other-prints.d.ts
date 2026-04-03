@@ -34,6 +34,7 @@ export declare class SpewpaIR extends Spewpa {
     setNumber: string;
 }
 export declare class JudgePOR extends Judge {
+    set: string;
     fullName: string;
     setNumber: string;
 }

@@ -43,6 +43,7 @@ exports.SpewpaIR = SpewpaIR;
 class JudgePOR extends judge_1.Judge {
     constructor() {
         super(...arguments);
+        this.set = 'POR';
         this.fullName = 'Judge POR';
         this.setNumber = '76';
     }

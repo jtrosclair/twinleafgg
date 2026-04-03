@@ -13,7 +13,7 @@ class Toxtricity extends pokemon_card_1.PokemonCard {
         this.stage = card_types_1.Stage.STAGE_1;
         this.evolvesFrom = 'Toxel';
         this.cardType = D;
-        this.hp = 130;
+        this.hp = 140;
         this.weakness = [{ type: F }];
         this.retreat = [C, C];
         this.powers = [{
