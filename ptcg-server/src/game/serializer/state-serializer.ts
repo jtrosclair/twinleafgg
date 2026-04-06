@@ -78,6 +78,11 @@ export class StateSerializer {
       cardWithoutSetId = 'Vigoroth SSP';
     }
 
+    if (cardWithoutSetId == 'Glass Trumpewt PRE') {
+      cardWithoutSetId = 'Glass Trumpet PRE';
+    }
+
+
     if (cardWithoutSetId.endsWith(' SV6')) {
       cardWithoutSetId = cardWithoutSetId.replace('SV6', 'TWM');
     }
