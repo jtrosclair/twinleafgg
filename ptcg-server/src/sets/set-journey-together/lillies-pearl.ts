@@ -4,6 +4,8 @@ import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { KnockOutEffect } from '../../game/store/effects/game-effects';
 import { IS_TOOL_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { GamePhase } from '../../game/store/state/state';
+import { StateUtils } from '../../game/store/state-utils';
 
 
 export class LilliesPearl extends TrainerCard {
@@ -28,9 +30,16 @@ export class LilliesPearl extends TrainerCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof KnockOutEffect && effect.target.tools.includes(this) && effect.player.marker.hasMarker(effect.player.DAMAGE_DEALT_MARKER)) {
+    if (effect instanceof KnockOutEffect && effect.target.tools.includes(this)) {
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
 
-      if (IS_TOOL_BLOCKED(store, state, effect.player, this)) { return state; }
+      // Pearl only works if knocked out by attack damage, not by other effects like damage counters
+      if (state.phase !== GamePhase.ATTACK || state.players[state.activePlayer] !== opponent) {
+        return state;
+      }
+
+      if (IS_TOOL_BLOCKED(store, state, player, this)) { return state; }
 
       if (effect.target.isLillies()) {
         effect.prizeCount -= 1;
