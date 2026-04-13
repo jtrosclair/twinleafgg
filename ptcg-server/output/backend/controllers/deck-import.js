@@ -1010,7 +1010,7 @@ class DeckImport extends controller_1.Controller {
                 fullName: card ? card.fullName : fullName,
                 known: !!card,
                 cardData: card || undefined,
-                cardImage: this.getCardImage(setCode, card ? card.setNumber : parsed.setNumber),
+                cardImage: this.getCardImage(card ? card.set : setCode, card ? card.setNumber : parsed.setNumber),
                 superType: card ? this.getSuperTypeString(card.superType) : undefined,
                 subType: card ? this.getSubTypeString(card) : undefined,
                 markers: card ? this.getCardMarkers(card) : undefined
