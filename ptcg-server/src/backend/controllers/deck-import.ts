@@ -837,6 +837,19 @@ export const setCodeReplacements = [
   { from: 'PR-SV', to: 'SVP' },
 ];
 
+// When a card is not found under its resolved set code, these aliases are tried in order.
+// Both directions must be listed if the alias should work both ways.
+export const SET_CODE_ALIASES: { [key: string]: string[] } = {
+  'POR': ['M3'],
+  'M3': ['POR'],
+  'M4': ['CRI'],
+  'CRI': ['M4'],
+  'M2a': ['ASC'],
+  'ASC': ['M2a'],
+  'M2': ['PFL'],
+  'PFL': ['M2']
+};
+
 interface ParsedCard {
   quantity: number;
   name: string;
@@ -1115,6 +1128,20 @@ export class DeckImport extends Controller {
       // Fifth try: just by fullName without number matching
       if (!card) {
         card = cardManager.getCardByName(fullName);
+      }
+
+      // Sixth try: repeat all lookups using set code aliases
+      if (!card) {
+        const aliases = SET_CODE_ALIASES[setCode] || SET_CODE_ALIASES[processedSetCode] || [];
+        for (const aliasCode of aliases) {
+          const aliasFullName = `${parsed.name} ${aliasCode}`;
+          card = cardsByFullName.get(aliasFullName.toLowerCase())
+            || cardsByFullName.get(normalizeName(aliasFullName))
+            || cardsByNameSetNumber.get(`${normalizeName(parsed.name)}|${aliasCode.toLowerCase()}|${parsed.setNumber}`)
+            || cardsByNameSet.get(`${normalizeName(parsed.name)}|${aliasCode.toLowerCase()}`)
+            || cardManager.getCardByName(aliasFullName);
+          if (card) { break; }
+        }
       }
 
       const cardResult: CardResult = {

@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DeckImport = exports.setCodeReplacements = void 0;
+exports.DeckImport = exports.SET_CODE_ALIASES = exports.setCodeReplacements = void 0;
 const fs_1 = require("fs");
 const path_1 = require("path");
 const https = require("https");
@@ -796,6 +796,18 @@ exports.setCodeReplacements = [
     { from: 'PR-SW', to: 'SWSH' },
     { from: 'PR-SV', to: 'SVP' },
 ];
+// When a card is not found under its resolved set code, these aliases are tried in order.
+// Both directions must be listed if the alias should work both ways.
+exports.SET_CODE_ALIASES = {
+    'POR': ['M3'],
+    'M3': ['POR'],
+    'M4': ['CRI'],
+    'CRI': ['M4'],
+    'M2a': ['ASC'],
+    'ASC': ['M2a'],
+    'M2': ['PFL'],
+    'PFL': ['M2']
+};
 class DeckImport extends controller_1.Controller {
     constructor() {
         super(...arguments);
@@ -974,6 +986,21 @@ class DeckImport extends controller_1.Controller {
             // Fifth try: just by fullName without number matching
             if (!card) {
                 card = cardManager.getCardByName(fullName);
+            }
+            // Sixth try: repeat all lookups using set code aliases
+            if (!card) {
+                const aliases = exports.SET_CODE_ALIASES[setCode] || exports.SET_CODE_ALIASES[processedSetCode] || [];
+                for (const aliasCode of aliases) {
+                    const aliasFullName = `${parsed.name} ${aliasCode}`;
+                    card = cardsByFullName.get(aliasFullName.toLowerCase())
+                        || cardsByFullName.get(normalizeName(aliasFullName))
+                        || cardsByNameSetNumber.get(`${normalizeName(parsed.name)}|${aliasCode.toLowerCase()}|${parsed.setNumber}`)
+                        || cardsByNameSet.get(`${normalizeName(parsed.name)}|${aliasCode.toLowerCase()}`)
+                        || cardManager.getCardByName(aliasFullName);
+                    if (card) {
+                        break;
+                    }
+                }
             }
             const cardResult = {
                 quantity: parsed.quantity,

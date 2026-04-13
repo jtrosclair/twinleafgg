@@ -4,6 +4,9 @@ export declare const setCodeReplacements: {
     from: string;
     to: string;
 }[];
+export declare const SET_CODE_ALIASES: {
+    [key: string]: string[];
+};
 export declare class DeckImport extends Controller {
     private imageCache;
     onParse(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
