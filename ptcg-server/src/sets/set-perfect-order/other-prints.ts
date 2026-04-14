@@ -158,7 +158,7 @@ export class PokePadFA extends PokePad {
 export class PokePadNormal extends PokePad {
   public fullName = 'Poke Pad POR';
   public set = 'M3';
-  public setNumber = '81';
+  public setNumber = '70';
 }
 
 export class WondrousPatchFA extends WonderPatch {

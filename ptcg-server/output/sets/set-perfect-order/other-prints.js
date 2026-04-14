@@ -233,7 +233,7 @@ class PokePadNormal extends poke_pad_1.PokePad {
         super(...arguments);
         this.fullName = 'Poke Pad POR';
         this.set = 'M3';
-        this.setNumber = '81';
+        this.setNumber = '70';
     }
 }
 exports.PokePadNormal = PokePadNormal;
