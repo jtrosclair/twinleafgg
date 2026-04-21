@@ -40,6 +40,7 @@ class Crustle extends pokemon_card_1.PokemonCard {
         this.fullName = 'Crustle DRI';
     }
     reduceEffect(store, state, effect) {
+        var _a;
         // Mysterious Stone House
         if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.cards.includes(this)) {
             const pokemonCard = effect.target.getPokemonCard();
@@ -58,13 +59,13 @@ class Crustle extends pokemon_card_1.PokemonCard {
             if (state.phase !== state_1.GamePhase.ATTACK) {
                 return state;
             }
-            if (sourceCard.tags.includes(card_types_1.CardTag.POKEMON_ex)) {
+            if (sourceCard.tags.includes(card_types_1.CardTag.POKEMON_ex) && !((_a = effect.attack) === null || _a === void 0 ? void 0 : _a.shredAttack)) {
                 // Try to reduce PowerEffect, to check if something is blocking our ability
                 try {
                     const powerEffect = new game_effects_1.PowerEffect(player, this.powers[0], this);
                     store.reduceEffect(state, powerEffect);
                 }
-                catch (_a) {
+                catch (_b) {
                     return state;
                 }
                 effect.preventDefault = true;

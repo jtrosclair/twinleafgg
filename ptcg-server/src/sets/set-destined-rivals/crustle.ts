@@ -63,7 +63,7 @@ export class Crustle extends PokemonCard {
         return state;
       }
 
-      if (sourceCard.tags.includes(CardTag.POKEMON_ex)) {
+      if (sourceCard.tags.includes(CardTag.POKEMON_ex) && !effect.attack?.shredAttack) {
 
         // Try to reduce PowerEffect, to check if something is blocking our ability
         try {
