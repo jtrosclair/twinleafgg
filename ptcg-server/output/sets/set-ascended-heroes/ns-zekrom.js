@@ -38,16 +38,14 @@ class NsZekrom extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         // Shred
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            const opponent = effect.opponent;
             effect.ignoreResistance = true;
             const applyWeakness = new attack_effects_1.ApplyWeaknessEffect(effect, 70);
             store.reduceEffect(state, applyWeakness);
             const damage = applyWeakness.damage;
             effect.damage = 0;
             if (damage > 0) {
-                opponent.active.damage += damage;
-                const afterDamage = new attack_effects_1.AfterDamageEffect(effect, damage);
-                state = store.reduceEffect(state, afterDamage);
+                const dealDamage = new attack_effects_1.DealDamageEffect(effect, damage);
+                state = store.reduceEffect(state, dealDamage);
             }
         }
         // Rampage Thunder
