@@ -39,6 +39,7 @@ function* useNightJoker(next, store, state, effect) {
     }
     if (attackEffect.damage > 0) {
         const dealDamage = new attack_effects_1.DealDamageEffect(attackEffect, attackEffect.damage);
+        dealDamage.source = player.active;
         state = store.reduceEffect(state, dealDamage);
     }
     return state;

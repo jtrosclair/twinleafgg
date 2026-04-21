@@ -43,10 +43,10 @@ function* playCard(next: Function, store: StoreLike, state: State,
   let min: number;
   let max: number;
   if (eligibleIndices.length <= 3) {
-    min = eligibleIndices.length;
+    min = 1;
     max = eligibleIndices.length;
   } else {
-    min = 3;
+    min = 1;
     max = 3;
   }
 
