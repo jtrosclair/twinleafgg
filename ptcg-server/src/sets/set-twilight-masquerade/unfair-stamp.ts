@@ -63,7 +63,7 @@ export class UnfairStamp extends TrainerCard {
 
 Each player shuffles their hand into their deck. Then, you draw 5 cards, and your opponent draws 2 cards.`;
 
-  public readonly UNFAIR_STAMP_MARKER = 'UNFAIR_STAMP_MARKER';
+  public readonly UNFAIR_STAMP_MARKER = 'OPPONENT_KNOCKOUT_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 

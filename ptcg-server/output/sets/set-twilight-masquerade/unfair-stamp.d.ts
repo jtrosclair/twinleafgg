@@ -13,6 +13,6 @@ export declare class UnfairStamp extends TrainerCard {
     name: string;
     fullName: string;
     text: string;
-    readonly UNFAIR_STAMP_MARKER = "UNFAIR_STAMP_MARKER";
+    readonly UNFAIR_STAMP_MARKER = "OPPONENT_KNOCKOUT_MARKER";
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }
