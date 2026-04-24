@@ -46,6 +46,11 @@ class Fezandipitiex extends pokemon_card_1.PokemonCard {
             if (player.usedTableTurner == true) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
+            player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
+                if (cardList.getPokemonCard() === this && cardList.boardEffect.includes(card_types_1.BoardEffect.ABILITY_USED)) {
+                    throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
+                }
+            });
             if (player.deck.cards.length === 0) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }

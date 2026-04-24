@@ -63,6 +63,12 @@ export class Fezandipitiex extends PokemonCard {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
+        if (cardList.getPokemonCard() === this && cardList.boardEffect.includes(BoardEffect.ABILITY_USED)) {
+          throw new GameError(GameMessage.CANNOT_USE_POWER);
+        }
+      });
+
       if (player.deck.cards.length === 0) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
