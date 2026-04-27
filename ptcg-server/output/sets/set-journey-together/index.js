@@ -77,6 +77,7 @@ const shelmet_1 = require("./shelmet");
 const shuppet_1 = require("./shuppet");
 const spiky_energy_1 = require("./spiky-energy");
 const sprigatito_1 = require("./sprigatito");
+const super_potion_1 = require("./super-potion");
 const swinub_1 = require("./swinub");
 const tapu_koko_ex_1 = require("./tapu-koko-ex");
 const toedscool_1 = require("./toedscool");
@@ -173,6 +174,7 @@ exports.setJourneyTogether = [
     new ns_klink_1.NsKlink(),
     new ns_klang_1.NsKlang(),
     new ns_klinklang_1.NsKlinklang(),
+    new super_potion_1.SuperPotion(),
     // Other prints
     new other_prints_1.MaractusIR(),
     new other_prints_1.WailordIR(),

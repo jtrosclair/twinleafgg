@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.setMegaEvolution = void 0;
 const other_prints_1 = require("./other-prints");
 const abra_1 = require("./abra");
+const acerolas_mischief_1 = require("./acerolas-mischief");
 const alakazam_1 = require("./alakazam");
 const bayleef_1 = require("./bayleef");
 const bulbasaur_1 = require("./bulbasaur");
@@ -54,6 +55,7 @@ const nincada_1 = require("./nincada");
 const ninjask_1 = require("./ninjask");
 const numel_1 = require("./numel");
 const onix_1 = require("./onix");
+const pokemon_center_lady_1 = require("./pokemon-center-lady");
 const power_protein_1 = require("./power-protein");
 const raboot_1 = require("./raboot");
 const ralts_1 = require("./ralts");
@@ -73,6 +75,7 @@ const yveltal_1 = require("./yveltal");
 const iron_defender_1 = require("./iron-defender");
 exports.setMegaEvolution = [
     new abra_1.Abra(),
+    new acerolas_mischief_1.AcerolasMischief(),
     new alakazam_1.Alakazam(),
     new bayleef_1.Bayleef(),
     new bulbasaur_1.Bulbasaur(),
@@ -125,6 +128,7 @@ exports.setMegaEvolution = [
     new ninjask_1.Ninjask(),
     new numel_1.Numel(),
     new onix_1.Onix(),
+    new pokemon_center_lady_1.PokemonCenterLady(),
     new power_protein_1.PowerProtein(),
     new raboot_1.Raboot(),
     new ralts_1.Ralts(),

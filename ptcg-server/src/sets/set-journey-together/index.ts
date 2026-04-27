@@ -75,6 +75,7 @@ import { Shelmet } from './shelmet';
 import { Shuppet } from './shuppet';
 import { SpikyEnergy } from './spiky-energy';
 import { Sprigatito } from './sprigatito';
+import { SuperPotion } from './super-potion';
 import { Swinub } from './swinub';
 import { TapuKokoex } from './tapu-koko-ex';
 import { Toedscool } from './toedscool';
@@ -176,6 +177,8 @@ export const setJourneyTogether: Card[] = [
   new NsKlink(),
   new NsKlang(),
   new NsKlinklang(),
+
+  new SuperPotion(),
 
   // Other prints
   new MaractusIR(),
