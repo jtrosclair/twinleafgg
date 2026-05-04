@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Noctowl = void 0;
 const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
-const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 class Noctowl extends game_1.PokemonCard {
     constructor() {
@@ -34,21 +33,14 @@ class Noctowl extends game_1.PokemonCard {
         this.setNumber = '115';
         this.name = 'Noctowl';
         this.fullName = 'Noctowl SCR';
-        this.JEWEL_HUNT_MARKER = 'JEWEL_HUNT_MARKER';
     }
     reduceEffect(store, state, effect) {
         var _a, _b;
-        if (effect instanceof game_phase_effects_1.EndTurnEffect) {
-            effect.player.marker.removeMarker(this.JEWEL_HUNT_MARKER, this);
-        }
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             if (player.deck.cards.length === 0) {
                 return state;
-            }
-            if (player.marker.hasMarker(this.JEWEL_HUNT_MARKER, this)) {
-                throw new game_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
             let teraPokemonCount = 0;
             if ((_b = (_a = player.active) === null || _a === void 0 ? void 0 : _a.getPokemonCard()) === null || _b === void 0 ? void 0 : _b.tags.includes(game_1.CardTag.POKEMON_TERA)) {
@@ -82,7 +74,6 @@ class Noctowl extends game_1.PokemonCard {
                             const cards = selected || [];
                             store.prompt(state, [new game_1.ShowCardsPrompt(opponent.id, game_1.GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards)], () => {
                                 player.deck.moveCardsTo(cards, player.hand);
-                                player.marker.addMarker(this.JEWEL_HUNT_MARKER, this);
                             });
                             return store.prompt(state, new game_1.ShuffleDeckPrompt(player.id), order => {
                                 player.deck.applyOrder(order);

@@ -164,7 +164,7 @@ function chooseActivePokemons(state) {
 //   return prompts;
 // }
 function endGame(store, state, winner) {
-    var _a, _b;
+    var _a, _b, _c;
     if (state.players.length !== 2) {
         return state;
     }
@@ -196,7 +196,14 @@ function endGame(store, state, winner) {
             store.log(state, game_message_1.GameLog.LOG_GAME_FINISHED_WINNER, { name: state.players[1].name });
         }
     }
-    if ((_b = state.winConditions) === null || _b === void 0 ? void 0 : _b.mustLose) {
+    if (((_b = state.winConditions) === null || _b === void 0 ? void 0 : _b.cardsInDeck) !== undefined && winner === state_1.GameWinner.PLAYER_1) {
+        const player1 = state.players[0];
+        if (player1 && player1.deck.cards.length !== state.winConditions.cardsInDeck) {
+            winner = state_1.GameWinner.PLAYER_2;
+            store.log(state, game_message_1.GameLog.LOG_GAME_FINISHED_WINNER, { name: state.players[1].name });
+        }
+    }
+    if ((_c = state.winConditions) === null || _c === void 0 ? void 0 : _c.mustLose) {
         if (winner === state_1.GameWinner.PLAYER_2) {
             // Player1 lost as required — report player1 as the "winner"
             winner = state_1.GameWinner.PLAYER_1;

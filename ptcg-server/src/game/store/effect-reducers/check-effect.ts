@@ -251,6 +251,14 @@ export function endGame(store: StoreLike, state: State, winner: GameWinner): Sta
     }
   }
 
+  if (state.winConditions?.cardsInDeck !== undefined && winner === GameWinner.PLAYER_1) {
+    const player1 = state.players[0];
+    if (player1 && player1.deck.cards.length !== state.winConditions.cardsInDeck) {
+      winner = GameWinner.PLAYER_2;
+      store.log(state, GameLog.LOG_GAME_FINISHED_WINNER, { name: state.players[1].name });
+    }
+  }
+
   if (state.winConditions?.mustLose) {
     if (winner === GameWinner.PLAYER_2) {
       // Player1 lost as required — report player1 as the "winner"
