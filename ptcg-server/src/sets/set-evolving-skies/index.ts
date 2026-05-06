@@ -47,7 +47,7 @@ import { GalarianZapdos } from './galarian_zapdos';
 import { GalarianArticuno } from './galarian-articuno';
 import { GalarianMoltres } from './galarian-moltres';
 import { GarbodorV } from './garbodor-v';
-import { GarbodorVmax } from './garbodor-vmax';
+import { GarbodorVMAX } from './garbodor-vmax';
 import { Gigalith } from './gigalith';
 import { GlaceonV } from './glaceon-v';
 import { GlaceonVmax } from './glaceon-vmax';
@@ -218,7 +218,7 @@ import {
   LycanrocVmax2,
   UmbreonVmax2,
   UmbreonVmax3,
-  GarbodorVmax2,
+  GarbodorVMAX2,
   RayquazaVmax2,
   RayquazaVmax3,
   DuraludonVmax2,
@@ -287,7 +287,7 @@ export const setEvolvingSkies: Card[] = [
   new GalarianArticuno(),
   new GalarianMoltres(),
   new GarbodorV(),
-  new GarbodorVmax(),
+  new GarbodorVMAX(),
   new Gigalith(),
   new GlaceonV(),
   new GlaceonVmax(),
@@ -462,7 +462,7 @@ export const setEvolvingSkies: Card[] = [
   new LycanrocVmax2(),
   new UmbreonVmax2(),
   new UmbreonVmax3(),
-  new GarbodorVmax2(),
+  new GarbodorVMAX2(),
   new RayquazaVmax2(),
   new RayquazaVmax3(),
   new DuraludonVmax2(),

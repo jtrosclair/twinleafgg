@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Muk = void 0;
 const game_1 = require("../../game");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
-const game_effects_1 = require("../../game/store/effects/game-effects");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Muk extends pokemon_card_1.PokemonCard {
     constructor() {
@@ -34,7 +34,7 @@ class Muk extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         // Poison Sacs - prevent poison from being removed on evolution
-        if (effect instanceof game_effects_1.EvolveEffect && effect.target.specialConditions.includes(game_1.SpecialCondition.POISONED)) {
+        if (effect instanceof check_effects_1.CheckSpecialConditionRemovalEffect && effect.target.specialConditions.includes(game_1.SpecialCondition.POISONED)) {
             const cardList = game_1.StateUtils.findCardList(state, this);
             const mukOwner = game_1.StateUtils.findOwner(state, cardList);
             const opponent = game_1.StateUtils.getOpponent(state, mukOwner);
@@ -47,7 +47,9 @@ class Muk extends pokemon_card_1.PokemonCard {
                     }
                 });
                 if (mukInPlay && !(0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, mukOwner, this)) {
-                    effect.keepPoison = true;
+                    if (!effect.preservedConditions.includes(game_1.SpecialCondition.POISONED)) {
+                        effect.preservedConditions.push(game_1.SpecialCondition.POISONED);
+                    }
                 }
             }
         }

@@ -9,8 +9,8 @@ import {
   StoreLike
 } from '../../game';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { CheckSpecialConditionRemovalEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
 import { ADD_POISON_TO_PLAYER_ACTIVE, IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Muk extends PokemonCard {
@@ -43,7 +43,7 @@ export class Muk extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Poison Sacs - prevent poison from being removed on evolution
-    if (effect instanceof EvolveEffect && effect.target.specialConditions.includes(SpecialCondition.POISONED)) {
+    if (effect instanceof CheckSpecialConditionRemovalEffect && effect.target.specialConditions.includes(SpecialCondition.POISONED)) {
       const cardList = StateUtils.findCardList(state, this);
       const mukOwner = StateUtils.findOwner(state, cardList);
       const opponent = StateUtils.getOpponent(state, mukOwner);
@@ -58,7 +58,9 @@ export class Muk extends PokemonCard {
         });
 
         if (mukInPlay && !IS_ABILITY_BLOCKED(store, state, mukOwner, this)) {
-          effect.keepPoison = true;
+          if (!effect.preservedConditions.includes(SpecialCondition.POISONED)) {
+            effect.preservedConditions.push(SpecialCondition.POISONED);
+          }
         }
       }
     }

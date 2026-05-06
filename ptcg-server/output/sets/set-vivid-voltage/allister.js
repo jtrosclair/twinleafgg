@@ -35,7 +35,7 @@ class Allister extends trainer_card_1.TrainerCard {
             if (cardsDrawn > 0) {
                 (0, trainer_prefabs_1.DISCARD_X_CARDS_FROM_YOUR_HAND)(effect, store, state, 1, 3);
             }
-            (0, prefabs_1.CLEAN_UP_SUPPORTER)(effect, player);
+            (0, prefabs_1.CLEAN_UP_SUPPORTER)(store, effect, player);
         }
         return state;
     }

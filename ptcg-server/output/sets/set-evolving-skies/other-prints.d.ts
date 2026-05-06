@@ -31,7 +31,7 @@ import { DracozoltVmax } from './dracozolt-vmax';
 import { SylveonVMAX } from './sylveon-vmax';
 import { LycanrocVmax } from './lycanroc-vmax';
 import { UmbreonVMAX } from './umbreon-vmax';
-import { GarbodorVmax } from './garbodor-vmax';
+import { GarbodorVMAX } from './garbodor-vmax';
 import { RayquazaVMAX } from './rayquaza-vmax';
 import { DuraludonVMAX } from './duraludon-vmax';
 import { Cresselia } from '../set-chilling-reign/cresselia';
@@ -271,7 +271,7 @@ export declare class UmbreonVmax3 extends UmbreonVMAX {
     setNumber: string;
     fullName: string;
 }
-export declare class GarbodorVmax2 extends GarbodorVmax {
+export declare class GarbodorVMAX2 extends GarbodorVMAX {
     set: string;
     setNumber: string;
     fullName: string;

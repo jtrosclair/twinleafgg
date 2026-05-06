@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DuraludonVmax2 = exports.RayquazaVmax3 = exports.RayquazaVmax2 = exports.GarbodorVmax2 = exports.UmbreonVmax3 = exports.UmbreonVmax2 = exports.LycanrocVmax2 = exports.SylveonVmax3 = exports.SylveonVmax2 = exports.DracozoltVmax2 = exports.GlaceonVmax3 = exports.GlaceonVmax2 = exports.GyaradosVmax2 = exports.TrevenantVmax2 = exports.LeafeonVmax3 = exports.LeafeonVmax2 = exports.ZinniasResolve2 = exports.Raihan2 = exports.Gordie2 = exports.Copycat2 = exports.AromaLady2 = exports.DuraludonV3 = exports.DuraludonV2 = exports.NoivernV3 = exports.NoivernV2 = exports.RayquazaV2 = exports.DragoniteV2 = exports.GarbodorV2 = exports.UmbreonV3 = exports.UmbreonV2 = exports.LycanrocV2 = exports.MedichamV3 = exports.MedichamV2 = exports.SylveonV3 = exports.SylveonV2 = exports.GolurkV3 = exports.GolurkV2 = exports.EspeonV3 = exports.EspeonV2 = exports.DracozoltV2 = exports.ArctovishV2 = exports.GlaceonV3 = exports.GlaceonV2 = exports.SuicuneV2 = exports.GyaradosV2 = exports.VolcaronaV2 = exports.TrevenantV2 = exports.LeafeonV3 = exports.LeafeonV2 = exports.SlakothEVS = void 0;
+exports.DuraludonVmax2 = exports.RayquazaVmax3 = exports.RayquazaVmax2 = exports.GarbodorVMAX2 = exports.UmbreonVmax3 = exports.UmbreonVmax2 = exports.LycanrocVmax2 = exports.SylveonVmax3 = exports.SylveonVmax2 = exports.DracozoltVmax2 = exports.GlaceonVmax3 = exports.GlaceonVmax2 = exports.GyaradosVmax2 = exports.TrevenantVmax2 = exports.LeafeonVmax3 = exports.LeafeonVmax2 = exports.ZinniasResolve2 = exports.Raihan2 = exports.Gordie2 = exports.Copycat2 = exports.AromaLady2 = exports.DuraludonV3 = exports.DuraludonV2 = exports.NoivernV3 = exports.NoivernV2 = exports.RayquazaV2 = exports.DragoniteV2 = exports.GarbodorV2 = exports.UmbreonV3 = exports.UmbreonV2 = exports.LycanrocV2 = exports.MedichamV3 = exports.MedichamV2 = exports.SylveonV3 = exports.SylveonV2 = exports.GolurkV3 = exports.GolurkV2 = exports.EspeonV3 = exports.EspeonV2 = exports.DracozoltV2 = exports.ArctovishV2 = exports.GlaceonV3 = exports.GlaceonV2 = exports.SuicuneV2 = exports.GyaradosV2 = exports.VolcaronaV2 = exports.TrevenantV2 = exports.LeafeonV3 = exports.LeafeonV2 = exports.SlakothEVS = void 0;
 exports.TurffieldStadiumEVS = exports.ToyCatcher2 = exports.StormyMountains2 = exports.FullFaceGuard2 = exports.CrystalCave2 = exports.BoostShake2 = exports.CresseliaEVS = exports.ZinniasResolve3 = exports.Raihan3 = exports.Gordie3 = exports.Copycat3 = exports.AromaLady3 = exports.DuraludonVmax3 = void 0;
 const slakoth_1 = require("../set-dragons-exalted/slakoth");
 const leafeon_v_1 = require("./leafeon-v");
@@ -459,7 +459,7 @@ class UmbreonVmax3 extends umbreon_vmax_1.UmbreonVMAX {
     }
 }
 exports.UmbreonVmax3 = UmbreonVmax3;
-class GarbodorVmax2 extends garbodor_vmax_1.GarbodorVmax {
+class GarbodorVMAX2 extends garbodor_vmax_1.GarbodorVMAX {
     constructor() {
         super(...arguments);
         this.set = 'EVS';
@@ -467,7 +467,7 @@ class GarbodorVmax2 extends garbodor_vmax_1.GarbodorVmax {
         this.fullName = 'Garbodor VMAX (EVS 216)';
     }
 }
-exports.GarbodorVmax2 = GarbodorVmax2;
+exports.GarbodorVMAX2 = GarbodorVMAX2;
 class RayquazaVmax2 extends rayquaza_vmax_1.RayquazaVMAX {
     constructor() {
         super(...arguments);
