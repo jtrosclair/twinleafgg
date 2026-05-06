@@ -39,7 +39,7 @@ class MukAlolanMukGX extends game_1.PokemonCard {
         this.setNumber = '61';
         this.cardImage = 'assets/cardback.png';
         this.name = 'Muk & Alolan Muk-GX';
-        this.fullName = 'Muk & Alolan Muk-GX UNB';
+        this.fullName = 'Umbreon & Darkrai-GX UNB';
     }
     reduceEffect(store, state, effect) {
         // Severe Poison

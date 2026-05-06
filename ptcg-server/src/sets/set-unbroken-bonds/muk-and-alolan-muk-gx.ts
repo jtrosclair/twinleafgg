@@ -39,7 +39,7 @@ export class MukAlolanMukGX extends PokemonCard {
   public setNumber = '61';
   public cardImage = 'assets/cardback.png';
   public name = 'Muk & Alolan Muk-GX';
-  public fullName = 'Muk & Alolan Muk-GX UNB';
+  public fullName = 'Umbreon & Darkrai-GX UNB';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Severe Poison

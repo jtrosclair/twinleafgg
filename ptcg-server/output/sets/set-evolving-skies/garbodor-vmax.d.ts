@@ -1,18 +1,18 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State } from '../../game';
+import { PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerType } from '../../game/store/card/pokemon-types';
-export declare class GarbodorVMAX extends PokemonCard {
+export declare class GarbodorVmax extends PokemonCard {
     tags: CardTag[];
     stage: Stage;
     evolvesFrom: string;
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.FIGHTING;
     }[];
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
+    maxTools: number;
     powers: {
         name: string;
         powerType: PowerType;
@@ -20,7 +20,7 @@ export declare class GarbodorVMAX extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: (CardType.DARK | CardType.COLORLESS)[];
         damage: number;
         text: string;
     }[];
@@ -30,6 +30,5 @@ export declare class GarbodorVMAX extends PokemonCard {
     cardImage: string;
     name: string;
     fullName: string;
-    maxTools: number;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }
