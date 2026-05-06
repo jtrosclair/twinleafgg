@@ -1,6 +1,5 @@
+import { CardType, PowerType, Stage, State, StoreLike } from '../../game';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { CardType, Stage } from '../../game/store/card/card-types';
-import { State, StoreLike, PowerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 export declare class Muk extends PokemonCard {
     stage: Stage;
@@ -8,9 +7,10 @@ export declare class Muk extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType.PSYCHIC;
+        type: CardType;
     }[];
-    retreat: CardType.COLORLESS[];
+    resistance: never[];
+    retreat: CardType[];
     powers: {
         name: string;
         powerType: PowerType;
@@ -18,7 +18,7 @@ export declare class Muk extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: CardType.PSYCHIC[];
+        cost: CardType[];
         damage: number;
         text: string;
     }[];
