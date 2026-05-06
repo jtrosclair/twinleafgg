@@ -1,14 +1,13 @@
-import { TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
+import { TrainerType } from '../../game/store/card/card-types';
+import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { State } from '../../game/store/state/state';
-import { StoreLike } from '../../game/store/store-like';
 export declare class Allister extends TrainerCard {
     trainerType: TrainerType;
-    set: string;
-    cardImage: string;
-    setNumber: string;
     regulationMark: string;
+    set: string;
+    setNumber: string;
+    cardImage: string;
     name: string;
     fullName: string;
     text: string;
