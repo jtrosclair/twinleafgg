@@ -75,7 +75,10 @@ class PikachuZekromGX extends pokemon_card_1.PokemonCard {
             checkProvidedEnergyEffect.energyMap.forEach(em => {
                 energyCount += em.provides.filter(cardType => cardType === card_types_1.CardType.LIGHTNING || cardType === card_types_1.CardType.ANY).length;
             });
-            const extraLightningEnergy = energyCount - effect.attack.cost.length;
+            const checkAttackCost = new check_effects_1.CheckAttackCostEffect(player, effect.attack);
+            store.reduceEffect(state, checkAttackCost);
+            const lightningCostCount = checkAttackCost.cost.filter(cardType => cardType === card_types_1.CardType.LIGHTNING).length;
+            const extraLightningEnergy = energyCount - lightningCostCount;
             if (extraLightningEnergy < 3) {
                 return state;
             }
