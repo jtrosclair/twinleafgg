@@ -29,7 +29,7 @@ export class Larvitar2 extends PokemonCard {
   public setNumber: string = '115';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Larvitar';
-  public fullName: string = 'Larvitar LOT 115';
+  public fullName: string = 'Larvitar2 LOT';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Attack 1: Second Strike

@@ -29,7 +29,7 @@ class Larvitar2 extends pokemon_card_1.PokemonCard {
         this.setNumber = '115';
         this.cardImage = 'assets/cardback.png';
         this.name = 'Larvitar';
-        this.fullName = 'Larvitar LOT 115';
+        this.fullName = 'Larvitar2 LOT';
     }
     reduceEffect(store, state, effect) {
         // Attack 1: Second Strike
