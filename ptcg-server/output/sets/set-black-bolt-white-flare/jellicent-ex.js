@@ -19,6 +19,7 @@ class Jellicentex extends pokemon_card_1.PokemonCard {
         this.cardType = P;
         this.hp = 270;
         this.weakness = [{ type: D }];
+        this.resistance = [{ type: F, value: -30 }];
         this.retreat = [C, C, C];
         this.powers = [{
                 name: 'Oceanic Curse',

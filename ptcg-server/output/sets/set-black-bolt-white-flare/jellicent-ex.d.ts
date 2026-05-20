@@ -13,6 +13,10 @@ export declare class Jellicentex extends PokemonCard {
     weakness: {
         type: CardType.DARK;
     }[];
+    resistance: {
+        type: CardType.FIGHTING;
+        value: number;
+    }[];
     retreat: CardType.COLORLESS[];
     powers: {
         name: string;
