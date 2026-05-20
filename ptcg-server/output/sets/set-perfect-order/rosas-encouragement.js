@@ -63,21 +63,24 @@ Attach up to 2 Basic Energy cards from your discard pile to 1 of your Stage 2 Po
             if (basicEnergyInDiscard.length === 0) {
                 throw new game_error_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            // Check for Stage 2 Pokemon
-            const stage2Pokemon = [];
-            player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, cardList => {
-                const pokemonCard = cardList.getPokemonCard();
-                if (pokemonCard && pokemonCard.stage === card_types_1.Stage.STAGE_2) {
-                    stage2Pokemon.push(cardList);
+            // Block all non-Stage-2 Pokemon as attach targets
+            const blockedTo = [];
+            let stage2Count = 0;
+            player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (_cardList, card, target) => {
+                if (card.stage === card_types_1.Stage.STAGE_2) {
+                    stage2Count++;
+                }
+                else {
+                    blockedTo.push(target);
                 }
             });
-            if (stage2Pokemon.length === 0) {
+            if (stage2Count === 0) {
                 throw new game_error_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             effect.preventDefault = true;
             const maxToAttach = Math.min(2, basicEnergyInDiscard.length);
-            return store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_CARDS, player.discard, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, stage: card_types_1.Stage.STAGE_2 }, { allowCancel: false, min: 0, max: maxToAttach, sameTarget: true }), transfers => {
+            return store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_CARDS, player.discard, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC }, { allowCancel: false, min: 1, max: maxToAttach, sameTarget: true, blockedTo }), transfers => {
                 transfers = transfers || [];
                 for (const transfer of transfers) {
                     const target = game_1.StateUtils.getTarget(state, player, transfer.to);
