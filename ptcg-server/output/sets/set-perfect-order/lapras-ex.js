@@ -30,6 +30,7 @@ class Laprasex extends game_1.PokemonCard {
         this.set = 'POR';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '22';
+        this.usSetNumber = 'POR 22';
         this.name = 'Lapras ex';
         this.fullName = 'Lapras ex POR';
     }

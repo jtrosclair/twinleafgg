@@ -22,6 +22,7 @@ export declare class Klefki extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     MEMORY_LOCKED_ATTACK: Attack | undefined;

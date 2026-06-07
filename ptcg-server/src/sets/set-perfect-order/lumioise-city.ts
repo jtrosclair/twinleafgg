@@ -50,6 +50,7 @@ export class LumioiseCity extends TrainerCard {
   public regulationMark = 'J';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '77';
+  public usSetNumber = 'POR 77';
   public trainerType = TrainerType.STADIUM;
   public set = 'M3';
   public name = 'Lumioise City';

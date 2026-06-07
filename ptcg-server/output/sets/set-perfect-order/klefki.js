@@ -25,6 +25,7 @@ class Klefki extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '58';
+        this.usSetNumber = 'POR 59';
         this.name = 'Klefki';
         this.fullName = 'Klefki M3';
     }

@@ -30,6 +30,7 @@ class Hippopotas extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '38';
+        this.usSetNumber = 'POR 39';
         this.name = 'Hippopotas';
         this.fullName = 'Hippopotas M3';
     }

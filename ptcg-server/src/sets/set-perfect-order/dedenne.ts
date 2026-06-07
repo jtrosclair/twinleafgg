@@ -29,6 +29,7 @@ export class Dedenne extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '28';
+  public usSetNumber = 'POR 29';
   public name: string = 'Dedenne';
   public fullName: string = 'Dedenne M3';
 

@@ -16,6 +16,7 @@ class GrowGrassEnergy extends energy_card_1.EnergyCard {
         this.fullName = 'Grow [G] Energy M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '78';
+        this.usSetNumber = 'POR 86';
         this.text = 'This card provides [G] Energy while this card is attached to a Pokemon.\n\nThe [G] Pokemon this card is attached to gets +20 HP.';
     }
     reduceEffect(store, state, effect) {

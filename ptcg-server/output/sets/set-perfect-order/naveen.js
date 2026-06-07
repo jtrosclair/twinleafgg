@@ -17,6 +17,7 @@ class Naveen extends trainer_card_1.TrainerCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '74';
+        this.usSetNumber = 'POR 79';
         this.name = 'Naveen';
         this.fullName = 'Naveen M3';
         this.text = 'Discard any number of cards from your hand. Then, draw cards until you have 5 cards in your hand.';

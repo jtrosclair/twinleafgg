@@ -24,6 +24,7 @@ class Shinx extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '25';
+        this.usSetNumber = 'POR 26';
         this.name = 'Shinx';
         this.fullName = 'Shinx M3';
     }

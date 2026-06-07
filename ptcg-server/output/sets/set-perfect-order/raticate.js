@@ -29,6 +29,7 @@ class Raticate extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '60';
+        this.usSetNumber = 'POR 61';
         this.name = 'Raticate';
         this.fullName = 'Raticate M3';
     }

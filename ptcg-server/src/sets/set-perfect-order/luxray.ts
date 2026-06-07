@@ -29,6 +29,7 @@ export class Luxray extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '27';
+  public usSetNumber = 'POR 28';
   public name: string = 'Luxray';
   public fullName: string = 'Luxray M3';
 

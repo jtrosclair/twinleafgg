@@ -27,6 +27,7 @@ export class ChienPao extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '53';
+  public usSetNumber = 'POR 54';
   public name: string = 'Chien-Pao';
   public fullName: string = 'Chien-Pao M3';
 

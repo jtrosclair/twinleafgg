@@ -14,6 +14,7 @@ class EnergySwatter extends trainer_card_1.TrainerCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '67';
+        this.usSetNumber = 'POR 73';
         this.name = 'Energy Swatter';
         this.fullName = 'Energy Swatter M3';
         this.text = 'Your opponent reveals their hand. Choose an Energy card you find there and put it on the bottom of your opponent\'s deck.';

@@ -25,6 +25,7 @@ class Ariados extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '2';
+        this.usSetNumber = 'POR 2';
         this.name = 'Ariados';
         this.fullName = 'Ariados M3';
     }

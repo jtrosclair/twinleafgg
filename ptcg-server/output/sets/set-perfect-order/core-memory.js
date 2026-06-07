@@ -29,6 +29,7 @@ class CoreMemory extends trainer_card_1.TrainerCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '72';
+        this.usSetNumber = 'POR 70';
         this.name = 'Core Memory';
         this.fullName = 'Core Memory M3';
         this.attacks = [{

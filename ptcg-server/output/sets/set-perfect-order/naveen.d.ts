@@ -9,6 +9,7 @@ export declare class Naveen extends TrainerCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     text: string;

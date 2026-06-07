@@ -28,6 +28,7 @@ class Drapion extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '51';
+        this.usSetNumber = 'POR 52';
         this.name = 'Drapion';
         this.fullName = 'Drapion M3';
     }

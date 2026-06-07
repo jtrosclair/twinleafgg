@@ -27,6 +27,7 @@ class Furfrou extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '66';
+        this.usSetNumber = 'POR 67';
         this.name = 'Furfrou';
         this.fullName = 'Furfrou M3';
     }

@@ -27,6 +27,7 @@ class Snorlax extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '62';
+        this.usSetNumber = 'POR 63';
         this.name = 'Snorlax';
         this.fullName = 'Snorlax M3';
     }

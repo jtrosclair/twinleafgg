@@ -25,6 +25,7 @@ export class Spewpa extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '8';
+  public usSetNumber = 'POR 8';
   public name: string = 'Spewpa';
   public fullName: string = 'Spewpa M3';
 

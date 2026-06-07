@@ -23,6 +23,7 @@ class MegaSkarmoryex extends game_1.PokemonCard {
         this.regulationMark = 'J';
         this.set = 'M3';
         this.setNumber = '54';
+        this.usSetNumber = 'POR 55';
         this.cardImage = 'assets/cardback.png';
         this.name = 'Mega Skarmory ex';
         this.fullName = 'Mega Skarmory ex M3';

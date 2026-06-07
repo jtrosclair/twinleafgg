@@ -27,6 +27,7 @@ export declare class Vivillon extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     readonly BIG_WINGS_MARKER = "BIG_WINGS_MARKER";

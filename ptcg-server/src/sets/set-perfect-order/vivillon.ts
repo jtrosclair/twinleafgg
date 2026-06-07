@@ -31,6 +31,7 @@ export class Vivillon extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '9';
+  public usSetNumber = 'POR 9';
   public name: string = 'Vivillon';
   public fullName: string = 'Vivillon M3';
 

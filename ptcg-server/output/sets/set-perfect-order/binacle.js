@@ -28,6 +28,7 @@ class Binacle extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '41';
+        this.usSetNumber = 'POR 42';
         this.name = 'Binacle';
         this.fullName = 'Binacle M3';
     }

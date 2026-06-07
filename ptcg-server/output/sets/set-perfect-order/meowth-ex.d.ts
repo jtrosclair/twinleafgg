@@ -26,6 +26,7 @@ export declare class Meowthex extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     readonly TRUMP_CARD_MARKER = "TRUMP_CARD_MARKER";

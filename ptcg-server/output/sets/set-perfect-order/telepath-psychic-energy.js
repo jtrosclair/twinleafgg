@@ -18,6 +18,7 @@ class TelepathPsychicEnergy extends energy_card_1.EnergyCard {
         this.fullName = 'Telepath [P] Energy M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '79';
+        this.usSetNumber = 'POR 88';
         this.text = 'This card provides [P] Energy while this card is attached to a Pokemon.\n\nWhen you attach this card from your hand to 1 of your [P] Pokemon, you may search your deck for 2 Basic [P] Pokemon and put them onto your Bench. Then, shuffle your deck.';
     }
     reduceEffect(store, state, effect) {

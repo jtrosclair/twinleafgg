@@ -28,6 +28,7 @@ export class MegaZygardeex extends PokemonCard {
   public regulationMark: string = 'J';
   public set: string = 'M3';
   public setNumber: string = '46';
+  public usSetNumber = 'POR 47';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Mega Zygarde ex';
   public fullName: string = 'Mega Zygarde ex M3';

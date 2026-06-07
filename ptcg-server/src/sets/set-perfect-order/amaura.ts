@@ -22,6 +22,7 @@ export class Amaura extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '22';
+  public usSetNumber = 'POR 23';
   public name: string = 'Amaura';
   public fullName: string = 'Amaura M3';
 

@@ -25,6 +25,7 @@ export declare class Aromatisse extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     readonly FRAGRANCE_COLLECTION_MARKER = "FRAGRANCE_COLLECTION_MARKER";

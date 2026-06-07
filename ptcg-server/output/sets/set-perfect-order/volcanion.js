@@ -29,6 +29,7 @@ class Volcanion extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '24';
+        this.usSetNumber = 'POR 25';
         this.name = 'Volcanion';
         this.fullName = 'Volcanion M3';
     }

@@ -20,6 +20,7 @@ export class Honedge extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '55';
+  public usSetNumber = 'POR 56';
   public name: string = 'Honedge';
   public fullName: string = 'Honedge M3';
 }

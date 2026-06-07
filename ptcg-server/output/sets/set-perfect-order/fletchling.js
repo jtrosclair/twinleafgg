@@ -29,6 +29,7 @@ class Fletchling extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '65';
+        this.usSetNumber = 'POR 66';
         this.name = 'Fletchling';
         this.fullName = 'Fletchling M3';
     }

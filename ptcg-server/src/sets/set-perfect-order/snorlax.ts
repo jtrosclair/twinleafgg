@@ -26,6 +26,7 @@ export class Snorlax extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '62';
+  public usSetNumber = 'POR 63';
   public name: string = 'Snorlax';
   public fullName: string = 'Snorlax M3';
 

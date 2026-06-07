@@ -23,6 +23,7 @@ class Doublade extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '56';
+        this.usSetNumber = 'POR 57';
         this.name = 'Doublade';
         this.fullName = 'Doublade M3';
     }

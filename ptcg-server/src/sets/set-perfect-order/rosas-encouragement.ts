@@ -11,6 +11,7 @@ export class RosasEncouragement extends TrainerCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '75';
+  public usSetNumber = 'POR 84';
   public name: string = 'Rosa\'s Encouragement';
   public fullName: string = 'Rosa\'s Encouragement M3';
   public text: string = `You can use this card only if you have more Prize cards remaining than your opponent.

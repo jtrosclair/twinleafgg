@@ -37,6 +37,7 @@ class SpewpaIR extends spewpa_1.Spewpa {
         super(...arguments);
         this.fullName = 'SpewpaIR POR';
         this.setNumber = '81';
+        this.usSetNumber = 'POR 89';
     }
 }
 exports.SpewpaIR = SpewpaIR;
@@ -46,6 +47,7 @@ class JudgePOR extends judge_1.Judge {
         this.set = 'POR';
         this.fullName = 'Judge POR';
         this.setNumber = '76';
+        this.usSetNumber = 'POR 76';
     }
 }
 exports.JudgePOR = JudgePOR;
@@ -54,6 +56,7 @@ class RowletIR extends rowlet_1.Rowlet {
         super(...arguments);
         this.fullName = 'RowletIR POR';
         this.setNumber = '82';
+        this.usSetNumber = 'POR 90';
     }
 }
 exports.RowletIR = RowletIR;
@@ -62,6 +65,7 @@ class TalonflameIR extends talonflame_1.Talonflame {
         super(...arguments);
         this.fullName = 'TalonflameIR POR';
         this.setNumber = '83';
+        this.usSetNumber = 'POR 91';
     }
 }
 exports.TalonflameIR = TalonflameIR;
@@ -70,6 +74,7 @@ class AurorusIR extends aurorus_1.Aurorus {
         super(...arguments);
         this.fullName = 'AurorusIR POR';
         this.setNumber = '84';
+        this.usSetNumber = 'POR 92';
     }
 }
 exports.AurorusIR = AurorusIR;
@@ -78,6 +83,7 @@ class DedenneIR extends dedenne_1.Dedenne {
         super(...arguments);
         this.fullName = 'DedenneIR POR';
         this.setNumber = '85';
+        this.usSetNumber = 'POR 93';
     }
 }
 exports.DedenneIR = DedenneIR;
@@ -86,6 +92,7 @@ class ClefairyIR extends clefairy_1.Clefairy {
         super(...arguments);
         this.fullName = 'ClefairyIR POR';
         this.setNumber = '86';
+        this.usSetNumber = 'POR 94';
     }
 }
 exports.ClefairyIR = ClefairyIR;
@@ -94,6 +101,7 @@ class EspurrIR extends espurr_1.Espurr {
         super(...arguments);
         this.fullName = 'EspurrIR POR';
         this.setNumber = '87';
+        this.usSetNumber = 'POR 95';
     }
 }
 exports.EspurrIR = EspurrIR;
@@ -102,6 +110,7 @@ class ProbopassIR extends probopass_1.Probopass {
         super(...arguments);
         this.fullName = 'ProbopassIR POR';
         this.setNumber = '88';
+        this.usSetNumber = 'POR 96';
     }
 }
 exports.ProbopassIR = ProbopassIR;
@@ -110,6 +119,7 @@ class TyruntIR extends tyrunt_1.Tyrunt {
         super(...arguments);
         this.fullName = 'TyruntIR POR';
         this.setNumber = '89';
+        this.usSetNumber = 'MEP 70';
     }
 }
 exports.TyruntIR = TyruntIR;
@@ -118,6 +128,7 @@ class DrapionIR extends drapion_1.Drapion {
         super(...arguments);
         this.fullName = 'DrapionIR POR';
         this.setNumber = '90';
+        this.usSetNumber = 'POR 97';
     }
 }
 exports.DrapionIR = DrapionIR;
@@ -126,6 +137,7 @@ class DoubladeIR extends doublade_1.Doublade {
         super(...arguments);
         this.fullName = 'DoubladeIR POR';
         this.setNumber = '91';
+        this.usSetNumber = 'POR 98';
     }
 }
 exports.DoubladeIR = DoubladeIR;
@@ -134,6 +146,7 @@ class RaticateIR extends raticate_1.Raticate {
         super(...arguments);
         this.fullName = 'RaticateIR POR';
         this.setNumber = '92';
+        this.usSetNumber = 'POR 99';
     }
 }
 exports.RaticateIR = RaticateIR;
@@ -142,6 +155,7 @@ class DecidueyeexFA extends decidueye_ex_1.Decidueyeex {
         super(...arguments);
         this.fullName = 'Decidueye ex FA POR';
         this.setNumber = '93';
+        this.usSetNumber = 'POR 100';
     }
 }
 exports.DecidueyeexFA = DecidueyeexFA;
@@ -150,6 +164,7 @@ class SalazzleexFA extends salazzle_ex_1.Salazzleex {
         super(...arguments);
         this.fullName = 'Salazzle ex FA POR';
         this.setNumber = '94';
+        this.usSetNumber = 'POR 101';
     }
 }
 exports.SalazzleexFA = SalazzleexFA;
@@ -158,6 +173,7 @@ class MegaStarmieexFA extends mega_starmie_ex_1.MegaStarmieex {
         super(...arguments);
         this.fullName = 'Mega Starmie ex FA POR';
         this.setNumber = '95';
+        this.usSetNumber = 'POR 102';
     }
 }
 exports.MegaStarmieexFA = MegaStarmieexFA;
@@ -166,6 +182,7 @@ class MegaClefableexFA extends mega_clefable_ex_1.MegaClefableex {
         super(...arguments);
         this.fullName = 'Mega Clefable ex FA POR';
         this.setNumber = '96';
+        this.usSetNumber = 'POR 103';
     }
 }
 exports.MegaClefableexFA = MegaClefableexFA;
@@ -174,6 +191,7 @@ class MegaZygardeexFA extends mega_zygarde_ex_1.MegaZygardeex {
         super(...arguments);
         this.fullName = 'Mega Zygarde ex FA POR';
         this.setNumber = '97';
+        this.usSetNumber = 'POR 104';
     }
 }
 exports.MegaZygardeexFA = MegaZygardeexFA;
@@ -182,6 +200,7 @@ class YveltalexFA extends yveltal_ex_1.Yveltalex {
         super(...arguments);
         this.fullName = 'Yveltal ex FA POR';
         this.setNumber = '98';
+        this.usSetNumber = 'POR 105';
     }
 }
 exports.YveltalexFA = YveltalexFA;
@@ -190,6 +209,7 @@ class MegaSkarmoryexFA extends mega_skarmory_ex_1.MegaSkarmoryex {
         super(...arguments);
         this.fullName = 'Mega Skarmory ex FA POR';
         this.setNumber = '99';
+        this.usSetNumber = 'POR 106';
     }
 }
 exports.MegaSkarmoryexFA = MegaSkarmoryexFA;
@@ -198,6 +218,7 @@ class MeowthexFA extends meowth_ex_1.Meowthex {
         super(...arguments);
         this.fullName = 'Meowth ex FA POR';
         this.setNumber = '100';
+        this.usSetNumber = 'POR 107';
     }
 }
 exports.MeowthexFA = MeowthexFA;
@@ -207,6 +228,7 @@ class EnergyRecyclerFA extends energy_recycler_1.EnergyRecycler {
         this.fullName = 'Energy Recycler FA POR';
         this.set = 'M3';
         this.setNumber = '101';
+        this.usSetNumber = 'POR 108';
     }
 }
 exports.EnergyRecyclerFA = EnergyRecyclerFA;
@@ -216,6 +238,7 @@ class SacredAshFA extends sacred_ash_1.SacredAsh {
         this.fullName = 'Sacred Ash FA POR';
         this.set = 'M3';
         this.setNumber = '102';
+        this.usSetNumber = 'POR 115';
     }
 }
 exports.SacredAshFA = SacredAshFA;
@@ -225,6 +248,7 @@ class PokePadFA extends poke_pad_1.PokePad {
         this.fullName = 'Poke Pad FA POR';
         this.set = 'M3';
         this.setNumber = '103';
+        this.usSetNumber = 'POR 113';
     }
 }
 exports.PokePadFA = PokePadFA;
@@ -234,6 +258,7 @@ class PokePadNormal extends poke_pad_1.PokePad {
         this.fullName = 'Poke Pad POR';
         this.set = 'M3';
         this.setNumber = '70';
+        this.usSetNumber = 'POR 81';
     }
 }
 exports.PokePadNormal = PokePadNormal;
@@ -243,6 +268,7 @@ class WondrousPatchFA extends wonder_patch_1.WonderPatch {
         this.fullName = 'Wondrous Patch FA POR';
         this.set = 'M3';
         this.setNumber = '104';
+        this.usSetNumber = 'POR 117';
     }
 }
 exports.WondrousPatchFA = WondrousPatchFA;
@@ -251,6 +277,7 @@ class TarragonFA extends tarragon_1.Tarragon {
         super(...arguments);
         this.fullName = 'Tarragon FA POR';
         this.setNumber = '105';
+        this.usSetNumber = 'POR 116';
     }
 }
 exports.TarragonFA = TarragonFA;
@@ -259,6 +286,7 @@ class NaveenFA extends naveen_1.Naveen {
         super(...arguments);
         this.fullName = 'Naveen FA POR';
         this.setNumber = '106';
+        this.usSetNumber = 'POR 112';
     }
 }
 exports.NaveenFA = NaveenFA;
@@ -267,6 +295,7 @@ class RosasEncouragementFA extends rosas_encouragement_1.RosasEncouragement {
         super(...arguments);
         this.fullName = 'Rosa\'s Encouragement FA POR';
         this.setNumber = '107';
+        this.usSetNumber = 'POR 114';
     }
 }
 exports.RosasEncouragementFA = RosasEncouragementFA;
@@ -275,6 +304,7 @@ class JacintheFA extends jacinthe_1.Jacinthe {
         super(...arguments);
         this.fullName = 'Jacinthe FA POR';
         this.setNumber = '108';
+        this.usSetNumber = 'POR 110';
     }
 }
 exports.JacintheFA = JacintheFA;
@@ -283,6 +313,7 @@ class ForestOfVitalityFA extends forest_of_vitality_1.LushForest {
         super(...arguments);
         this.fullName = 'Forest of Vitality FA POR';
         this.setNumber = '109';
+        this.usSetNumber = 'POR 109';
     }
 }
 exports.ForestOfVitalityFA = ForestOfVitalityFA;
@@ -291,6 +322,7 @@ class LumioiseCityFA extends lumioise_city_1.LumioiseCity {
         super(...arguments);
         this.fullName = 'Lumioise City FA POR';
         this.setNumber = '110';
+        this.usSetNumber = 'POR 111';
     }
 }
 exports.LumioiseCityFA = LumioiseCityFA;
@@ -299,6 +331,7 @@ class MegaStarmieexSIR extends mega_starmie_ex_1.MegaStarmieex {
         super(...arguments);
         this.fullName = 'Mega Starmie ex SIR POR';
         this.setNumber = '111';
+        this.usSetNumber = 'POR 118';
     }
 }
 exports.MegaStarmieexSIR = MegaStarmieexSIR;
@@ -307,6 +340,7 @@ class MegaClefableexSIR extends mega_clefable_ex_1.MegaClefableex {
         super(...arguments);
         this.fullName = 'Mega Clefable ex SIR POR';
         this.setNumber = '112';
+        this.usSetNumber = 'POR 119';
     }
 }
 exports.MegaClefableexSIR = MegaClefableexSIR;
@@ -315,6 +349,7 @@ class MegaZygardeexSIR extends mega_zygarde_ex_1.MegaZygardeex {
         super(...arguments);
         this.fullName = 'Mega Zygarde ex SIR POR';
         this.setNumber = '113';
+        this.usSetNumber = 'POR 120';
     }
 }
 exports.MegaZygardeexSIR = MegaZygardeexSIR;
@@ -323,6 +358,7 @@ class MeowthexSIR extends meowth_ex_1.Meowthex {
         super(...arguments);
         this.fullName = 'Meowth ex SIR POR';
         this.setNumber = '114';
+        this.usSetNumber = 'POR 121';
     }
 }
 exports.MeowthexSIR = MeowthexSIR;
@@ -331,6 +367,7 @@ class RosasEncouragementSIR extends rosas_encouragement_1.RosasEncouragement {
         super(...arguments);
         this.fullName = 'Rosa\'s Encouragement ex SIR POR';
         this.setNumber = '115';
+        this.usSetNumber = 'POR 123';
     }
 }
 exports.RosasEncouragementSIR = RosasEncouragementSIR;
@@ -339,6 +376,7 @@ class JacintheSIR extends jacinthe_1.Jacinthe {
         super(...arguments);
         this.fullName = 'Jacinthe ex SIR POR';
         this.setNumber = '116';
+        this.usSetNumber = 'POR 122';
     }
 }
 exports.JacintheSIR = JacintheSIR;
@@ -347,6 +385,7 @@ class MegaZygardeexHR extends mega_zygarde_ex_1.MegaZygardeex {
         super(...arguments);
         this.fullName = 'Mega Zygarde ex HR POR';
         this.setNumber = '117';
+        this.usSetNumber = 'POR 124';
     }
 }
 exports.MegaZygardeexHR = MegaZygardeexHR;

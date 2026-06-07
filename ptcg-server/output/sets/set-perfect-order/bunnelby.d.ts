@@ -18,6 +18,7 @@ export declare class Bunnelby extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
 }

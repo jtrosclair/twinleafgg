@@ -25,6 +25,7 @@ export declare class Aurorus extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     readonly TUNDRA_WALL_MARKER = "TUNDRA_WALL_MARKER";

@@ -28,6 +28,7 @@ class Spritzee extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '34';
+        this.usSetNumber = 'POR 35';
         this.name = 'Spritzee';
         this.fullName = 'Spritzee M3';
     }

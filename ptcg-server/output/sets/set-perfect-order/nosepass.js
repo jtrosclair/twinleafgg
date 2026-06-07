@@ -21,6 +21,7 @@ class Nosepass extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '36';
+        this.usSetNumber = 'POR 37';
         this.name = 'Nosepass';
         this.fullName = 'Nosepass M3';
     }

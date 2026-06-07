@@ -53,6 +53,7 @@ class Tarragon extends trainer_card_1.TrainerCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '73';
+        this.usSetNumber = 'POR 85';
         this.regulationMark = 'J';
         this.name = 'Tarragon';
         this.fullName = 'Tarragon M3';

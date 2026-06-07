@@ -7,6 +7,7 @@ export declare class LumioiseCity extends TrainerCard {
     regulationMark: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     trainerType: TrainerType;
     set: string;
     name: string;

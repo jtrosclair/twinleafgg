@@ -13,6 +13,7 @@ class Jacinthe extends game_1.TrainerCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '76';
+        this.usSetNumber = 'POR 75';
         this.name = 'Jacinthe';
         this.fullName = 'Jacinthe M3';
         this.text = 'Heal 150 damage from 1 of your [P] Pokemon.';

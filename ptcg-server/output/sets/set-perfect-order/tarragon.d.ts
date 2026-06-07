@@ -8,6 +8,7 @@ export declare class Tarragon extends TrainerCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     regulationMark: string;
     name: string;
     fullName: string;

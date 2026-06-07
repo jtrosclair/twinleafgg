@@ -15,6 +15,7 @@ export declare class DeckImport extends Controller {
     private getCardMarkers;
     private parseDeckList;
     private loadImageCache;
+    private getCardImageForCard;
     private getCardImage;
     private getSuperTypeString;
     private getSubTypeString;

@@ -22,6 +22,7 @@ export class Haunter extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '48';
+  public usSetNumber = 'POR 49';
   public name: string = 'Haunter';
   public fullName: string = 'Haunter M3';
 

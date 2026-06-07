@@ -28,6 +28,7 @@ class Luxio extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '26';
+        this.usSetNumber = 'POR 27';
         this.name = 'Luxio';
         this.fullName = 'Luxio M3';
     }

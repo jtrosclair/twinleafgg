@@ -30,6 +30,7 @@ class Turtonator extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '17';
+        this.usSetNumber = 'POR 17';
         this.name = 'Turtonator';
         this.fullName = 'Turtonator M3';
     }

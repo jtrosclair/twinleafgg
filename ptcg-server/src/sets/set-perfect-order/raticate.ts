@@ -28,6 +28,7 @@ export class Raticate extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '60';
+  public usSetNumber = 'POR 61';
   public name: string = 'Raticate';
   public fullName: string = 'Raticate M3';
 

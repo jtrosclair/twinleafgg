@@ -27,6 +27,7 @@ class Shaymin extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '3';
+        this.usSetNumber = 'POR 3';
         this.name = 'Shaymin';
         this.fullName = 'Shaymin M3';
     }

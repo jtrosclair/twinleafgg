@@ -33,6 +33,7 @@ export class CoreMemory extends TrainerCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '72';
+  public usSetNumber = 'POR 70';
   public name: string = 'Core Memory';
   public fullName: string = 'Core Memory M3';
 

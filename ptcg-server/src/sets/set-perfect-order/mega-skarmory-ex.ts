@@ -23,6 +23,7 @@ export class MegaSkarmoryex extends PokemonCard {
   public regulationMark: string = 'J';
   public set: string = 'M3';
   public setNumber: string = '54';
+  public usSetNumber = 'POR 55';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Mega Skarmory ex';
   public fullName: string = 'Mega Skarmory ex M3';

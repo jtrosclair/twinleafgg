@@ -22,6 +22,7 @@ class Rattata extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '59';
+        this.usSetNumber = 'POR 60';
         this.name = 'Rattata';
         this.fullName = 'Rattata M3';
     }

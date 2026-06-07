@@ -49,6 +49,7 @@ class AntiqueJawFossil extends game_1.TrainerCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '68';
+        this.usSetNumber = 'POR 68';
         this.name = 'Antique Jaw Fossil';
         this.fullName = 'Antique Jaw Fossil M3';
     }

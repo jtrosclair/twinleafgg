@@ -27,6 +27,7 @@ class Seel extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '18';
+        this.usSetNumber = 'POR 18';
         this.name = 'Seel';
         this.fullName = 'Seel M3';
     }

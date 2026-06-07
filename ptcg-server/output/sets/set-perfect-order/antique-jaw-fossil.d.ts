@@ -28,6 +28,7 @@ export declare class AntiqueJawFossil extends TrainerCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
