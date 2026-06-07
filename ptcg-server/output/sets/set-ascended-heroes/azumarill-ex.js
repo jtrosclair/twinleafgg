@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Azumarillex = void 0;
 const game_1 = require("../../game");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Azumarillex extends game_1.PokemonCard {
     constructor() {
@@ -57,13 +58,11 @@ class Azumarillex extends game_1.PokemonCard {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
             let psychicEnergyCount = 0;
-            player.active.energies.cards.forEach(card => {
-                var _a;
-                if (card.superType === game_1.SuperType.ENERGY) {
-                    const energyCard = card;
-                    if (energyCard.energyType === 'P' || ((_a = energyCard.provides) === null || _a === void 0 ? void 0 : _a.includes('P'))) {
-                        psychicEnergyCount++;
-                    }
+            const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, player.active);
+            store.reduceEffect(state, checkProvidedEnergy);
+            checkProvidedEnergy.energyMap.forEach(energy => {
+                if (energy.provides.includes(game_1.CardType.PSYCHIC)) {
+                    psychicEnergyCount++;
                 }
             });
             effect.damage += (40 * psychicEnergyCount);

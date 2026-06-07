@@ -1,5 +1,6 @@
 import { PokemonCard, Stage, CardTag, CardType, PowerType, StoreLike, State, MoveEnergyPrompt, GameMessage, PlayerType, SlotType, SuperType, StateUtils, GameError } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { WAS_POWER_USED, ABILITY_USED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Azumarillex extends PokemonCard {
@@ -67,12 +68,11 @@ export class Azumarillex extends PokemonCard {
       const player = effect.player;
       let psychicEnergyCount = 0;
 
-      player.active.energies.cards.forEach(card => {
-        if (card.superType === SuperType.ENERGY) {
-          const energyCard = card as any;
-          if (energyCard.energyType === 'P' || energyCard.provides?.includes('P')) {
-            psychicEnergyCount++;
-          }
+      const checkProvidedEnergy = new CheckProvidedEnergyEffect(player, player.active);
+      store.reduceEffect(state, checkProvidedEnergy);
+      checkProvidedEnergy.energyMap.forEach(energy => {
+        if (energy.provides.includes(CardType.PSYCHIC)) {
+          psychicEnergyCount++;
         }
       });
 
