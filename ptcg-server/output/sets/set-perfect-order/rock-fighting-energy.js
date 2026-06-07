@@ -18,6 +18,7 @@ class RockFightingEnergy extends energy_card_1.EnergyCard {
         this.fullName = 'Rock Fighting Energy M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '80';
+        this.usSetNumber = 'POR 87';
         this.text = `This card provides [F] Energy while this card is attached to a Pokémon.
   
   Prevent all effects of attacks used by your opponent's Pokémon done to the [F] Pokémon this card is attached to. (Existing effects are not removed. Damage is not an effect.)`;

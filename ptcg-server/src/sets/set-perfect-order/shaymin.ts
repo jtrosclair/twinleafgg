@@ -26,6 +26,7 @@ export class Shaymin extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '3';
+  public usSetNumber = 'POR 3';
   public name: string = 'Shaymin';
   public fullName: string = 'Shaymin M3';
 

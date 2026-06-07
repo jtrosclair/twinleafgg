@@ -28,6 +28,7 @@ class Landorus extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '40';
+        this.usSetNumber = 'POR 41';
         this.name = 'Landorus';
         this.fullName = 'Landorus M3';
     }

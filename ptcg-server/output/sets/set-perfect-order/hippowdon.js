@@ -28,6 +28,7 @@ class Hippowdon extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '39';
+        this.usSetNumber = 'POR 40';
         this.name = 'Hippowdon';
         this.fullName = 'Hippowdon M3';
     }

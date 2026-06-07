@@ -31,6 +31,7 @@ class Tyrantrum extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '44';
+        this.usSetNumber = 'POR 45';
         this.name = 'Tyrantrum';
         this.fullName = 'Tyrantrum M3';
     }

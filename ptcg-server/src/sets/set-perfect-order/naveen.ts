@@ -16,6 +16,7 @@ export class Naveen extends TrainerCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '74';
+  public usSetNumber = 'POR 79';
   public name: string = 'Naveen';
   public fullName: string = 'Naveen M3';
   public text: string = 'Discard any number of cards from your hand. Then, draw cards until you have 5 cards in your hand.';

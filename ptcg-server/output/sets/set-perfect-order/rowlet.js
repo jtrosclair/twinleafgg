@@ -28,6 +28,7 @@ class Rowlet extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '10';
+        this.usSetNumber = 'POR 10';
         this.name = 'Rowlet';
         this.fullName = 'Rowlet M3';
     }

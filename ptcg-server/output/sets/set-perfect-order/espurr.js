@@ -29,6 +29,7 @@ class Espurr extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '32';
+        this.usSetNumber = 'POR 33';
         this.name = 'Espurr';
         this.fullName = 'Espurr M3';
     }

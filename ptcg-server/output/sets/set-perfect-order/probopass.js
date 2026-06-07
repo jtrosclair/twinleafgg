@@ -29,6 +29,7 @@ class Probopass extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '37';
+        this.usSetNumber = 'POR 38';
         this.name = 'Probopass';
         this.fullName = 'Probopass M3';
     }

@@ -28,6 +28,7 @@ export class Rowlet extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '10';
+  public usSetNumber = 'POR 10';
   public name: string = 'Rowlet';
   public fullName: string = 'Rowlet M3';
 

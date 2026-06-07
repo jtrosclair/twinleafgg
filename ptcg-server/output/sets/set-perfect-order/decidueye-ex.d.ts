@@ -28,6 +28,7 @@ export declare class Decidueyeex extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     readonly SNIPER_EYE_MARKER = "SNIPER_EYE_MARKER";

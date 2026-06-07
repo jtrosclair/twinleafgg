@@ -21,6 +21,7 @@ class Salandit extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '15';
+        this.usSetNumber = 'POR 15';
         this.name = 'Salandit';
         this.fullName = 'Salandit M3';
     }

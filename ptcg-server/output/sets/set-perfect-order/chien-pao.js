@@ -28,6 +28,7 @@ class ChienPao extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '53';
+        this.usSetNumber = 'POR 54';
         this.name = 'Chien-Pao';
         this.fullName = 'Chien-Pao M3';
     }

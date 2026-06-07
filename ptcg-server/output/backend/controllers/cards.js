@@ -53,9 +53,11 @@ class Cards extends controller_1.Controller {
     buildCardsInfo() {
         const cardManager = game_1.CardManager.getInstance();
         const cards = cardManager.getAllCards();
-        // Update card images from the image map
+        // Update card images from the image map.
+        // Some Japanese-origin cards intentionally keep their original set/setNumber
+        // for puzzle integrity, but can point image loading at a released US print.
         for (const card of cards) {
-            const key = `${card.set} ${card.setNumber}`;
+            const key = card.usSetNumber || `${card.set} ${card.setNumber}`;
             if (this.imageMap[key]) {
                 card.cardImage = this.imageMap[key];
             }

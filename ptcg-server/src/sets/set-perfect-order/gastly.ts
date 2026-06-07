@@ -22,6 +22,7 @@ export class Gastly extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '47';
+  public usSetNumber = 'POR 48';
   public name: string = 'Gastly';
   public fullName: string = 'Gastly M3';
 

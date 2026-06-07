@@ -21,6 +21,7 @@ class Scatterbug extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '7';
+        this.usSetNumber = 'POR 7';
         this.name = 'Scatterbug';
         this.fullName = 'Scatterbug M3';
     }

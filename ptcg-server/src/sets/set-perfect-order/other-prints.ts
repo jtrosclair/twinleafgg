@@ -33,201 +33,240 @@ import { Judge } from "../set-fusion-strike/judge";
 export class SpewpaIR extends Spewpa {
   public fullName = 'SpewpaIR POR';
   public setNumber = '81';
+  public usSetNumber = 'POR 89';
 }
 
 export class JudgePOR extends Judge {
   public set = 'POR';
   public fullName = 'Judge POR';
   public setNumber = '76';
+  public usSetNumber = 'POR 76';
 }
 
 
 export class RowletIR extends Rowlet {
   public fullName = 'RowletIR POR';
   public setNumber = '82';
+  public usSetNumber = 'POR 90';
 }
 
 export class TalonflameIR extends Talonflame {
   public fullName = 'TalonflameIR POR';
   public setNumber = '83';
+  public usSetNumber = 'POR 91';
 }
 
 export class AurorusIR extends Aurorus {
   public fullName = 'AurorusIR POR';
   public setNumber = '84';
+  public usSetNumber = 'POR 92';
 }
 
 export class DedenneIR extends Dedenne {
   public fullName = 'DedenneIR POR';
   public setNumber = '85';
+  public usSetNumber = 'POR 93';
 }
 
 export class ClefairyIR extends Clefairy {
   public fullName = 'ClefairyIR POR';
   public setNumber = '86';
+  public usSetNumber = 'POR 94';
 }
 
 export class EspurrIR extends Espurr {
   public fullName = 'EspurrIR POR';
   public setNumber = '87';
+  public usSetNumber = 'POR 95';
 }
 
 export class ProbopassIR extends Probopass {
   public fullName = 'ProbopassIR POR';
   public setNumber = '88';
+  public usSetNumber = 'POR 96';
 }
 
 export class TyruntIR extends Tyrunt {
   public fullName = 'TyruntIR POR';
   public setNumber = '89';
+  public usSetNumber = 'MEP 70';
 }
 
 export class DrapionIR extends Drapion {
   public fullName = 'DrapionIR POR';
   public setNumber = '90';
+  public usSetNumber = 'POR 97';
 }
 
 export class DoubladeIR extends Doublade {
   public fullName = 'DoubladeIR POR';
   public setNumber = '91';
+  public usSetNumber = 'POR 98';
 }
 
 export class RaticateIR extends Raticate {
   public fullName = 'RaticateIR POR';
   public setNumber = '92';
+  public usSetNumber = 'POR 99';
 }
 
 export class DecidueyeexFA extends Decidueyeex {
   public fullName = 'Decidueye ex FA POR';
   public setNumber = '93';
+  public usSetNumber = 'POR 100';
 }
 
 export class SalazzleexFA extends Salazzleex {
   public fullName = 'Salazzle ex FA POR';
   public setNumber = '94';
+  public usSetNumber = 'POR 101';
 }
 
 export class MegaStarmieexFA extends MegaStarmieex {
   public fullName = 'Mega Starmie ex FA POR';
   public setNumber = '95';
+  public usSetNumber = 'POR 102';
 }
 
 export class MegaClefableexFA extends MegaClefableex {
   public fullName = 'Mega Clefable ex FA POR';
   public setNumber = '96';
+  public usSetNumber = 'POR 103';
 }
 
 export class MegaZygardeexFA extends MegaZygardeex {
   public fullName = 'Mega Zygarde ex FA POR';
   public setNumber = '97';
+  public usSetNumber = 'POR 104';
 }
 
 export class YveltalexFA extends Yveltalex {
   public fullName = 'Yveltal ex FA POR';
   public setNumber = '98';
+  public usSetNumber = 'POR 105';
 }
 
 export class MegaSkarmoryexFA extends MegaSkarmoryex {
   public fullName = 'Mega Skarmory ex FA POR';
   public setNumber = '99';
+  public usSetNumber = 'POR 106';
 }
 
 export class MeowthexFA extends Meowthex {
   public fullName = 'Meowth ex FA POR';
   public setNumber = '100';
+  public usSetNumber = 'POR 107';
 }
 
 export class EnergyRecyclerFA extends EnergyRecycler {
   public fullName = 'Energy Recycler FA POR';
   public set = 'M3';
   public setNumber = '101';
+  public usSetNumber = 'POR 108';
 }
 
 export class SacredAshFA extends SacredAsh {
   public fullName = 'Sacred Ash FA POR';
   public set = 'M3';
   public setNumber = '102';
+  public usSetNumber = 'POR 115';
 }
 
 export class PokePadFA extends PokePad {
   public fullName = 'Poke Pad FA POR';
   public set = 'M3';
   public setNumber = '103';
+  public usSetNumber = 'POR 113';
 }
 
 export class PokePadNormal extends PokePad {
   public fullName = 'Poke Pad POR';
   public set = 'M3';
   public setNumber = '70';
+  public usSetNumber = 'POR 81';
 }
 
 export class WondrousPatchFA extends WonderPatch {
   public fullName = 'Wondrous Patch FA POR';
   public set = 'M3';
   public setNumber = '104';
+  public usSetNumber = 'POR 117';
 }
 
 export class TarragonFA extends Tarragon {
   public fullName = 'Tarragon FA POR';
   public setNumber = '105';
+  public usSetNumber = 'POR 116';
 }
 
 export class NaveenFA extends Naveen {
   public fullName = 'Naveen FA POR';
   public setNumber = '106';
+  public usSetNumber = 'POR 112';
 }
 
 export class RosasEncouragementFA extends RosasEncouragement {
   public fullName = 'Rosa\'s Encouragement FA POR';
   public setNumber = '107';
+  public usSetNumber = 'POR 114';
 }
 
 export class JacintheFA extends Jacinthe {
   public fullName = 'Jacinthe FA POR';
   public setNumber = '108';
+  public usSetNumber = 'POR 110';
 }
 
 export class ForestOfVitalityFA extends LushForest {
   public fullName = 'Forest of Vitality FA POR';
   public setNumber = '109';
+  public usSetNumber = 'POR 109';
 }
 
 export class LumioiseCityFA extends LumioiseCity {
   public fullName = 'Lumioise City FA POR';
   public setNumber = '110';
+  public usSetNumber = 'POR 111';
 }
 
 export class MegaStarmieexSIR extends MegaStarmieex {
   public fullName = 'Mega Starmie ex SIR POR';
   public setNumber = '111';
+  public usSetNumber = 'POR 118';
 }
 
 export class MegaClefableexSIR extends MegaClefableex {
   public fullName = 'Mega Clefable ex SIR POR';
   public setNumber = '112';
+  public usSetNumber = 'POR 119';
 }
 
 export class MegaZygardeexSIR extends MegaZygardeex {
   public fullName = 'Mega Zygarde ex SIR POR';
   public setNumber = '113';
+  public usSetNumber = 'POR 120';
 }
 
 export class MeowthexSIR extends Meowthex {
   public fullName = 'Meowth ex SIR POR';
   public setNumber = '114';
+  public usSetNumber = 'POR 121';
 }
 
 export class RosasEncouragementSIR extends RosasEncouragement {
   public fullName = 'Rosa\'s Encouragement ex SIR POR';
   public setNumber = '115';
+  public usSetNumber = 'POR 123';
 }
 
 export class JacintheSIR extends Jacinthe {
   public fullName = 'Jacinthe ex SIR POR';
   public setNumber = '116';
+  public usSetNumber = 'POR 122';
 }
 
 export class MegaZygardeexHR extends MegaZygardeex {
   public fullName = 'Mega Zygarde ex HR POR';
   public setNumber = '117';
+  public usSetNumber = 'POR 124';
 }

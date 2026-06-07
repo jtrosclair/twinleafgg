@@ -32,6 +32,7 @@ class Barbaracle extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '42';
+        this.usSetNumber = 'POR 43';
         this.name = 'Barbaracle';
         this.fullName = 'Barbaracle M3';
         this.STONE_ARMS_MARKER = 'STONE_ARMS_MARKER';

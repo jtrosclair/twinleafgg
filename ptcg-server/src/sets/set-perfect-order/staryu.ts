@@ -19,6 +19,7 @@ export class Staryu extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '20';
+  public usSetNumber = 'POR 20';
   public name: string = 'Staryu';
   public fullName: string = 'Staryu M3';
 }

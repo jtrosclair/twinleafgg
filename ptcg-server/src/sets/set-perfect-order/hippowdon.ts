@@ -27,6 +27,7 @@ export class Hippowdon extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '39';
+  public usSetNumber = 'POR 40';
   public name: string = 'Hippowdon';
   public fullName: string = 'Hippowdon M3';
 

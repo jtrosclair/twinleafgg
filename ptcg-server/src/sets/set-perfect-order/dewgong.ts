@@ -32,6 +32,7 @@ export class Dewgong extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '19';
+  public usSetNumber = 'POR 19';
   public name: string = 'Dewgong';
   public fullName: string = 'Dewgong M3';
 

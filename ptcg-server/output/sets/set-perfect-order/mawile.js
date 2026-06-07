@@ -23,6 +23,7 @@ class Mawile extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '31';
+        this.usSetNumber = 'POR 32';
         this.name = 'Mawile';
         this.fullName = 'Mawile M3';
     }

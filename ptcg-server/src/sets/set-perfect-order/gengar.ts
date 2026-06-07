@@ -33,6 +33,7 @@ export class Gengar extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '49';
+  public usSetNumber = 'POR 50';
   public name: string = 'Gengar';
   public fullName: string = 'Gengar M3';
 

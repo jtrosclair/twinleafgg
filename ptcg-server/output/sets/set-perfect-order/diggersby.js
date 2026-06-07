@@ -29,6 +29,7 @@ class Diggersby extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '64';
+        this.usSetNumber = 'POR 65';
         this.name = 'Diggersby';
         this.fullName = 'Diggersby M3';
     }

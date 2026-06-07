@@ -17,6 +17,7 @@ export class TelepathPsychicEnergy extends EnergyCard {
   public fullName = 'Telepath [P] Energy M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '79';
+  public usSetNumber = 'POR 88';
   public text = 'This card provides [P] Energy while this card is attached to a Pokemon.\n\nWhen you attach this card from your hand to 1 of your [P] Pokemon, you may search your deck for 2 Basic [P] Pokemon and put them onto your Bench. Then, shuffle your deck.';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {

@@ -30,6 +30,7 @@ export class Aegislash extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '57';
+  public usSetNumber = 'POR 58';
   public name: string = 'Aegislash';
   public fullName: string = 'Aegislash M3';
 

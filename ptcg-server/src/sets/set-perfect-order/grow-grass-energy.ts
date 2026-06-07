@@ -14,6 +14,7 @@ export class GrowGrassEnergy extends EnergyCard {
   public fullName = 'Grow [G] Energy M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '78';
+  public usSetNumber = 'POR 86';
   public text = 'This card provides [G] Energy while this card is attached to a Pokemon.\n\nThe [G] Pokemon this card is attached to gets +20 HP.';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {

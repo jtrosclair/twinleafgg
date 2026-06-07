@@ -30,6 +30,7 @@ class Talonflame extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '14';
+        this.usSetNumber = 'POR 14';
         this.name = 'Talonflame';
         this.fullName = 'Talonflame M3';
         this.SKY_HUNT_MARKER = 'SKY_HUNT_MARKER';

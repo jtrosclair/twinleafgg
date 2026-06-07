@@ -30,6 +30,7 @@ export class Turtonator extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '17';
+  public usSetNumber = 'POR 17';
   public name: string = 'Turtonator';
   public fullName: string = 'Turtonator M3';
 

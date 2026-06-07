@@ -11,6 +11,7 @@ export class EnergySwatter extends TrainerCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '67';
+  public usSetNumber = 'POR 73';
   public name: string = 'Energy Swatter';
   public fullName: string = 'Energy Swatter M3';
   public text: string = 'Your opponent reveals their hand. Choose an Energy card you find there and put it on the bottom of your opponent\'s deck.';

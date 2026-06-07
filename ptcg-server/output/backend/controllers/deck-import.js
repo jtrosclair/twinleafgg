@@ -874,7 +874,7 @@ class DeckImport extends controller_1.Controller {
                     setNumber: card.setNumber,
                     fullName: card.fullName,
                     cardData: card,
-                    cardImage: this.getCardImage(card.set, card.setNumber),
+                    cardImage: this.getCardImageForCard(card),
                     superType: this.getSuperTypeString(card.superType),
                     subType: this.getSubTypeString(card),
                     markers: this.getCardMarkers(card)
@@ -914,14 +914,26 @@ class DeckImport extends controller_1.Controller {
         const cardsByFullName = new Map();
         const cardsByNameSetNumber = new Map();
         const cardsByNameSet = new Map();
+        const addNameSetNumberLookup = (card, setCode, setNumber) => {
+            const normalizedName = normalizeName(card.name);
+            const key = `${normalizedName}|${setCode.toLowerCase()}|${setNumber}`;
+            cardsByNameSetNumber.set(key, card);
+        };
         for (const card of allCards) {
             cardsByFullName.set(card.fullName.toLowerCase(), card);
             cardsByFullName.set(normalizeName(card.fullName), card);
             // Create keys by name + set + setNumber
             const normalizedName = normalizeName(card.name);
             const setLower = card.set.toLowerCase();
-            const key = `${normalizedName}|${setLower}|${card.setNumber}`;
-            cardsByNameSetNumber.set(key, card);
+            addNameSetNumberLookup(card, card.set, card.setNumber);
+            // Also allow deck lists to match against the English US image set number.
+            if (card.usSetNumber) {
+                const [usSetCode, ...usSetNumberParts] = card.usSetNumber.split(' ');
+                const usSetNumber = usSetNumberParts.join(' ');
+                if (usSetCode && usSetNumber) {
+                    addNameSetNumberLookup(card, usSetCode, usSetNumber);
+                }
+            }
             // Create key by name + set only (fallback ignoring number)
             const nameSetKey = `${normalizedName}|${setLower}`;
             cardsByNameSet.set(nameSetKey, card);
@@ -1010,7 +1022,7 @@ class DeckImport extends controller_1.Controller {
                 fullName: card ? card.fullName : fullName,
                 known: !!card,
                 cardData: card || undefined,
-                cardImage: this.getCardImage(card ? card.set : setCode, card ? card.setNumber : parsed.setNumber),
+                cardImage: card ? this.getCardImageForCard(card) : this.getCardImage(setCode, parsed.setNumber),
                 superType: card ? this.getSuperTypeString(card.superType) : undefined,
                 subType: card ? this.getSubTypeString(card) : undefined,
                 markers: card ? this.getCardMarkers(card) : undefined
@@ -1078,6 +1090,17 @@ class DeckImport extends controller_1.Controller {
                 resolve();
             });
         });
+    }
+    getCardImageForCard(card) {
+        if (card.usSetNumber) {
+            const [usSetCode, ...usSetNumberParts] = card.usSetNumber.split(' ');
+            const usSetNumber = usSetNumberParts.join(' ');
+            const usImage = usSetCode && usSetNumber ? this.getCardImage(usSetCode, usSetNumber) : undefined;
+            if (usImage) {
+                return usImage;
+            }
+        }
+        return this.getCardImage(card.set, card.setNumber);
     }
     getCardImage(setCode, setNumber) {
         if (!this.imageCache) {

@@ -22,6 +22,7 @@ class Honedge extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '55';
+        this.usSetNumber = 'POR 56';
         this.name = 'Honedge';
         this.fullName = 'Honedge M3';
     }

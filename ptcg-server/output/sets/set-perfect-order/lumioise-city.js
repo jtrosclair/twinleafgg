@@ -39,6 +39,7 @@ class LumioiseCity extends trainer_card_1.TrainerCard {
         this.regulationMark = 'J';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '77';
+        this.usSetNumber = 'POR 77';
         this.trainerType = card_types_1.TrainerType.STADIUM;
         this.set = 'M3';
         this.name = 'Lumioise City';

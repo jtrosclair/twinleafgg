@@ -33,6 +33,7 @@ class MegaStarmieex extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '21';
+        this.usSetNumber = 'POR 21';
         this.name = 'Mega Starmie ex';
         this.fullName = 'Mega Starmie ex M3';
     }

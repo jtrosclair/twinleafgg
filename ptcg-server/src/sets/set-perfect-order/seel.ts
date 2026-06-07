@@ -25,6 +25,7 @@ export class Seel extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '18';
+  public usSetNumber = 'POR 18';
   public name: string = 'Seel';
   public fullName: string = 'Seel M3';
 }

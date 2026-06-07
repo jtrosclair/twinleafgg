@@ -24,6 +24,7 @@ class Tyrunt extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '43';
+        this.usSetNumber = 'POR 44';
         this.name = 'Tyrunt';
         this.fullName = 'Tyrunt M3';
     }

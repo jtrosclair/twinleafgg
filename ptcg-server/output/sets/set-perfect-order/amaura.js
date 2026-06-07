@@ -23,6 +23,7 @@ class Amaura extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '22';
+        this.usSetNumber = 'POR 23';
         this.name = 'Amaura';
         this.fullName = 'Amaura M3';
     }

@@ -30,6 +30,7 @@ export class Salazzleex extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '16';
+  public usSetNumber = 'POR 16';
   public name: string = 'Salazzle ex';
   public fullName: string = 'Salazzle ex M3';
 

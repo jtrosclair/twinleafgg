@@ -27,6 +27,7 @@ class Clefairy extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '29';
+        this.usSetNumber = 'POR 30';
         this.name = 'Clefairy';
         this.fullName = 'Clefairy M3';
     }

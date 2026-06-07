@@ -23,6 +23,7 @@ class Haunter extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '48';
+        this.usSetNumber = 'POR 49';
         this.name = 'Haunter';
         this.fullName = 'Haunter M3';
     }

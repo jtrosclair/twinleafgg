@@ -29,6 +29,7 @@ export declare class Talonflame extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     readonly SKY_HUNT_MARKER = "SKY_HUNT_MARKER";

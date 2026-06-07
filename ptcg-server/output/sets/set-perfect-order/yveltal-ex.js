@@ -31,6 +31,7 @@ class Yveltalex extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '52';
+        this.usSetNumber = 'POR 53';
         this.name = 'Yveltal ex';
         this.fullName = 'Yveltal ex M3';
     }

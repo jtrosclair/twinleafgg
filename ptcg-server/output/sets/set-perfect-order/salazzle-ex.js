@@ -31,6 +31,7 @@ class Salazzleex extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '16';
+        this.usSetNumber = 'POR 16';
         this.name = 'Salazzle ex';
         this.fullName = 'Salazzle ex M3';
     }

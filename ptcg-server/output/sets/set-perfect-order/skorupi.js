@@ -21,6 +21,7 @@ class Skorupi extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '50';
+        this.usSetNumber = 'POR 51';
         this.name = 'Skorupi';
         this.fullName = 'Skorupi M3';
     }

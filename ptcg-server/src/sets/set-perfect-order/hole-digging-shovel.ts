@@ -9,6 +9,7 @@ export class HoleDiggingShovel extends TrainerCard {
   public set: string = 'POR';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '74';
+  public usSetNumber = 'POR 74';
   public name: string = 'Hole-Digging Shovel';
   public fullName: string = 'Hole-Digging Shovel POR';
   public text: string = 'Discard the top 2 cards of your deck.';

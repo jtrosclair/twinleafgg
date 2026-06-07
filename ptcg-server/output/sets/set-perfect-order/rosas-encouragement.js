@@ -14,6 +14,7 @@ class RosasEncouragement extends trainer_card_1.TrainerCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '75';
+        this.usSetNumber = 'POR 84';
         this.name = 'Rosa\'s Encouragement';
         this.fullName = 'Rosa\'s Encouragement M3';
         this.text = `You can use this card only if you have more Prize cards remaining than your opponent.

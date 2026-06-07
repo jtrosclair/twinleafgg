@@ -22,6 +22,7 @@ class Snivy extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '4';
+        this.usSetNumber = 'POR 4';
         this.name = 'Snivy';
         this.fullName = 'Snivy M3';
     }

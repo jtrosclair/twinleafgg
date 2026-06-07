@@ -21,6 +21,7 @@ class Staryu extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '20';
+        this.usSetNumber = 'POR 20';
         this.name = 'Staryu';
         this.fullName = 'Staryu M3';
     }

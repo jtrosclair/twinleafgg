@@ -33,6 +33,7 @@ class Gengar extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '49';
+        this.usSetNumber = 'POR 50';
         this.name = 'Gengar';
         this.fullName = 'Gengar M3';
         this.INFINITE_SHADOW_MARKER = 'INFINITE_SHADOW_MARKER';

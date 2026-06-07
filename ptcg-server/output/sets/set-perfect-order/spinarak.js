@@ -23,6 +23,7 @@ class Spinarak extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '1';
+        this.usSetNumber = 'POR 1';
         this.name = 'Spinarak';
         this.fullName = 'Spinarak M3';
     }

@@ -33,6 +33,7 @@ export class Decidueyeex extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '12';
+  public usSetNumber = 'POR 12';
   public name: string = 'Decidueye ex';
   public fullName: string = 'Decidueye ex M3';
 

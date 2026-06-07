@@ -10,6 +10,7 @@ export class Jacinthe extends TrainerCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '76';
+  public usSetNumber = 'POR 75';
   public name: string = 'Jacinthe';
   public fullName: string = 'Jacinthe M3';
   public text: string = 'Heal 150 damage from 1 of your [P] Pokemon.';

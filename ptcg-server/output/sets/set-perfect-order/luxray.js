@@ -30,6 +30,7 @@ class Luxray extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '27';
+        this.usSetNumber = 'POR 28';
         this.name = 'Luxray';
         this.fullName = 'Luxray M3';
     }

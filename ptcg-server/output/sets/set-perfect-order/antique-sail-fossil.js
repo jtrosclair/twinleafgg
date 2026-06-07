@@ -49,6 +49,7 @@ class AntiqueSailFossil extends game_1.TrainerCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '69';
+        this.usSetNumber = 'POR 69';
         this.name = 'Antique Sail Fossil';
         this.fullName = 'Antique Sail Fossil M3';
     }

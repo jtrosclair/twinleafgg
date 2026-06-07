@@ -22,6 +22,7 @@ class Servine extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '5';
+        this.usSetNumber = 'POR 5';
         this.name = 'Servine';
         this.fullName = 'Servine M3';
     }

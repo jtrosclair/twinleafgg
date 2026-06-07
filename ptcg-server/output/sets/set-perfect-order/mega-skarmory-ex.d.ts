@@ -22,6 +22,7 @@ export declare class MegaSkarmoryex extends PokemonCard {
     regulationMark: string;
     set: string;
     setNumber: string;
+    usSetNumber: string;
     cardImage: string;
     name: string;
     fullName: string;

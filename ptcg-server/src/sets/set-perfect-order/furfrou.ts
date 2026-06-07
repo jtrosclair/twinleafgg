@@ -26,6 +26,7 @@ export class Furfrou extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '66';
+  public usSetNumber = 'POR 67';
   public name: string = 'Furfrou';
   public fullName: string = 'Furfrou M3';
 

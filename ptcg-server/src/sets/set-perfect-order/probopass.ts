@@ -28,6 +28,7 @@ export class Probopass extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '37';
+  public usSetNumber = 'POR 38';
   public name: string = 'Probopass';
   public fullName: string = 'Probopass M3';
 

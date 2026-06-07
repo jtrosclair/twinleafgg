@@ -218,7 +218,8 @@ export class CardsBaseService implements OnDestroy {
 
   public getScanUrl(card: Card): string {
     const fullCardIdentifier = `${card.set} ${card.setNumber}`;
-    const customUrl = this.customImages[fullCardIdentifier];
+    const usCardIdentifier = card.usSetNumber;
+    const customUrl = (usCardIdentifier && this.customImages[usCardIdentifier]) || this.customImages[fullCardIdentifier];
 
     let url: string;
     if (customUrl) {

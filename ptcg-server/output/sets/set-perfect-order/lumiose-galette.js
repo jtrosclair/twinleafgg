@@ -12,6 +12,7 @@ class LumioseGalette extends game_1.TrainerCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '71';
+        this.usSetNumber = 'POR 78';
         this.name = 'Lumiose Galette';
         this.fullName = 'Lumiose Galette M3';
         this.text = 'Heal 20 damage and 1 Special Condition from your Active Pokemon.';

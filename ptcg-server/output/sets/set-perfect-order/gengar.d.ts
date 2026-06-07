@@ -26,6 +26,7 @@ export declare class Gengar extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     readonly INFINITE_SHADOW_MARKER = "INFINITE_SHADOW_MARKER";

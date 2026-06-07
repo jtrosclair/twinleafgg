@@ -31,6 +31,7 @@ class Aurorus extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '23';
+        this.usSetNumber = 'POR 24';
         this.name = 'Aurorus';
         this.fullName = 'Aurorus M3';
         this.TUNDRA_WALL_MARKER = 'TUNDRA_WALL_MARKER';

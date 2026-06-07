@@ -10,6 +10,7 @@ export declare class CoreMemory extends TrainerCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     attacks: Attack[];

@@ -31,6 +31,7 @@ export class Serperior extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '7';
+  public usSetNumber = 'POR 6';
   public name: string = 'Serperior';
   public fullName: string = 'Serperior M3';
 

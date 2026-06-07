@@ -29,6 +29,7 @@ class MegaZygardeex extends game_1.PokemonCard {
         this.regulationMark = 'J';
         this.set = 'M3';
         this.setNumber = '46';
+        this.usSetNumber = 'POR 47';
         this.cardImage = 'assets/cardback.png';
         this.name = 'Mega Zygarde ex';
         this.fullName = 'Mega Zygarde ex M3';

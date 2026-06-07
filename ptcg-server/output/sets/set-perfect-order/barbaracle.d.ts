@@ -27,6 +27,7 @@ export declare class Barbaracle extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     readonly STONE_ARMS_MARKER = "STONE_ARMS_MARKER";

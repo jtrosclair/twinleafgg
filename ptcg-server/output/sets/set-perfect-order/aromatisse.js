@@ -29,6 +29,7 @@ class Aromatisse extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '35';
+        this.usSetNumber = 'POR 36';
         this.name = 'Aromatisse';
         this.fullName = 'Aromatisse M3';
         this.FRAGRANCE_COLLECTION_MARKER = 'FRAGRANCE_COLLECTION_MARKER';

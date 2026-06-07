@@ -32,6 +32,7 @@ export class MegaStarmieex extends PokemonCard {
   public set: string = 'M3';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '21';
+  public usSetNumber = 'POR 21';
   public name: string = 'Mega Starmie ex';
   public fullName: string = 'Mega Starmie ex M3';
 

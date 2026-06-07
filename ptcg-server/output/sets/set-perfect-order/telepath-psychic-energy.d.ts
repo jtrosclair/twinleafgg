@@ -12,6 +12,7 @@ export declare class TelepathPsychicEnergy extends EnergyCard {
     fullName: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     text: string;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

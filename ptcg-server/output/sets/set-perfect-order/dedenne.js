@@ -30,6 +30,7 @@ class Dedenne extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '28';
+        this.usSetNumber = 'POR 29';
         this.name = 'Dedenne';
         this.fullName = 'Dedenne M3';
     }

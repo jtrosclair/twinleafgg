@@ -17,6 +17,7 @@ export declare abstract class Card {
     regulationMark: string;
     tags: string[];
     setNumber: string;
+    usSetNumber?: string;
     cardImage: string;
     retreat: CardType[];
     attacks: Attack[];

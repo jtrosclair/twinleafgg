@@ -33,6 +33,7 @@ class Decidueyeex extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '12';
+        this.usSetNumber = 'POR 12';
         this.name = 'Decidueye ex';
         this.fullName = 'Decidueye ex M3';
         this.SNIPER_EYE_MARKER = 'SNIPER_EYE_MARKER';

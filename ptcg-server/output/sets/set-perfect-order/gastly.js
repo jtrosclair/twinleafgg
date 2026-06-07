@@ -23,6 +23,7 @@ class Gastly extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '47';
+        this.usSetNumber = 'POR 48';
         this.name = 'Gastly';
         this.fullName = 'Gastly M3';
     }

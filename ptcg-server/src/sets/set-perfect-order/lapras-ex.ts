@@ -30,6 +30,7 @@ export class Laprasex extends PokemonCard {
   public set: string = 'POR';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '22';
+  public usSetNumber = 'POR 22';
   public name: string = 'Lapras ex';
   public fullName: string = 'Lapras ex POR';
 

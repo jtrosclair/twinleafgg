@@ -30,6 +30,7 @@ class Aegislash extends pokemon_card_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '57';
+        this.usSetNumber = 'POR 58';
         this.name = 'Aegislash';
         this.fullName = 'Aegislash M3';
     }

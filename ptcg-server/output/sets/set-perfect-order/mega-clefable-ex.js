@@ -30,6 +30,7 @@ class MegaClefableex extends game_1.PokemonCard {
         this.set = 'M3';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '30';
+        this.usSetNumber = 'POR 31';
         this.name = 'Mega Clefable ex';
         this.fullName = 'Mega Clefable ex M3';
     }
