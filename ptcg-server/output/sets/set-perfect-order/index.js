@@ -81,6 +81,7 @@ const skorupi_1 = require("./skorupi");
 const drapion_1 = require("./drapion");
 const chien_pao_1 = require("./chien-pao");
 const lapras_ex_1 = require("./lapras-ex");
+const hole_digging_shovel_1 = require("./hole-digging-shovel");
 const other_prints_1 = require("./other-prints");
 exports.setPerfectOrder = [
     new barbaracle_1.Barbaracle(),
@@ -163,6 +164,7 @@ exports.setPerfectOrder = [
     new drapion_1.Drapion(),
     new chien_pao_1.ChienPao(),
     new lapras_ex_1.Laprasex(),
+    new hole_digging_shovel_1.HoleDiggingShovel(),
     // IRs, FAs, SIRs, HR
     new other_prints_1.SpewpaIR(),
     new other_prints_1.RowletIR(),

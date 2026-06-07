@@ -3,7 +3,7 @@ import { Stage, CardTag, EnergyType, SuperType } from '../../game/store/card/car
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyPrompt, GameError, GameMessage, PlayerType, PowerType, SlotType, StateUtils } from '../../game';
+import { AttachEnergyPrompt, CardTarget, GameError, GameMessage, PlayerType, PowerType, SlotType, StateUtils } from '../../game';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
@@ -78,14 +78,23 @@ export class SandyShocksex extends PokemonCard {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
+      // Energy can only be attached to this Pokemon (whether Active or on the Bench).
+      // Block every other Pokemon target so this card is the only valid destination.
+      const blockedTo: CardTarget[] = [];
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
+        if (card !== this) {
+          blockedTo.push(target);
+        }
+      });
+
       state = store.prompt(state, new AttachEnergyPrompt(
         player.id,
-        GameMessage.ATTACH_ENERGY_TO_BENCH,
+        GameMessage.ATTACH_ENERGY_CARDS,
         player.discard,
         PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH],
+        [SlotType.ACTIVE, SlotType.BENCH],
         { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Fighting Energy' },
-        { allowCancel: false, min: 1, max: 1 },
+        { allowCancel: false, min: 1, max: 1, blockedTo },
       ), transfers => {
         transfers = transfers || [];
         // cancelled by user

@@ -66,7 +66,15 @@ class SandyShocksex extends pokemon_card_1.PokemonCard {
             if (!hasEnergyInDiscard) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            state = store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_TO_BENCH, player.discard, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Fighting Energy' }, { allowCancel: false, min: 1, max: 1 }), transfers => {
+            // Energy can only be attached to this Pokemon (whether Active or on the Bench).
+            // Block every other Pokemon target so this card is the only valid destination.
+            const blockedTo = [];
+            player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
+                if (card !== this) {
+                    blockedTo.push(target);
+                }
+            });
+            state = store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_CARDS, player.discard, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Fighting Energy' }, { allowCancel: false, min: 1, max: 1, blockedTo }), transfers => {
                 transfers = transfers || [];
                 // cancelled by user
                 if (transfers.length === 0) {
