@@ -9,11 +9,11 @@ class HoleDiggingShovel extends game_1.TrainerCard {
         super(...arguments);
         this.trainerType = game_1.TrainerType.ITEM;
         this.regulationMark = 'I';
-        this.set = 'M3';
+        this.set = 'POR';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '74';
         this.name = 'Hole-Digging Shovel';
-        this.fullName = 'Hole-Digging Shovel M3';
+        this.fullName = 'Hole-Digging Shovel POR';
         this.text = 'Discard the top 2 cards of your deck.';
     }
     canPlay(store, state, player) {
