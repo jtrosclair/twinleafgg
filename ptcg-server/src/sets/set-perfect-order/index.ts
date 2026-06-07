@@ -79,6 +79,7 @@ import { Skorupi } from './skorupi';
 import { Drapion } from './drapion';
 import { ChienPao } from './chien-pao';
 import { Laprasex } from './lapras-ex';
+import { HoleDiggingShovel } from './hole-digging-shovel';
 import { SpewpaIR, RowletIR, TalonflameIR, AurorusIR, DedenneIR, ClefairyIR, EspurrIR, ProbopassIR, TyruntIR, DrapionIR, DoubladeIR, RaticateIR, DecidueyeexFA, SalazzleexFA, MegaStarmieexFA, MegaClefableexFA, MegaZygardeexFA, YveltalexFA, MegaSkarmoryexFA, MeowthexFA, EnergyRecyclerFA, SacredAshFA, PokePadFA, PokePadNormal, WondrousPatchFA, TarragonFA, NaveenFA, RosasEncouragementFA, JacintheFA, ForestOfVitalityFA, LumioiseCityFA, JacintheSIR, MegaClefableexSIR, MegaStarmieexSIR, MegaZygardeexHR, MegaZygardeexSIR, MeowthexSIR, RosasEncouragementSIR, JudgePOR } from './other-prints';
 
 export const setPerfectOrder: Card[] = [
@@ -162,6 +163,7 @@ export const setPerfectOrder: Card[] = [
   new Drapion(),
   new ChienPao(),
   new Laprasex(),
+  new HoleDiggingShovel(),
 
   // IRs, FAs, SIRs, HR
   new SpewpaIR(),
