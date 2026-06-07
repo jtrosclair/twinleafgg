@@ -125,15 +125,30 @@ export function playerTurnReducer(store: StoreLike, state: State, action: Action
         }
         case SlotType.DISCARD: {
           const discardCard = player.discard.cards[action.target.index];
-          if (discardCard instanceof PokemonCard) {
+          if (discardCard instanceof PokemonCard
+            && discardCard.powers.some(p => p.name === action.name && p.useFromDiscard)) {
             pokemonCard = discardCard;
+          } else {
+            // The index may be stale (e.g. an identical copy already left the discard
+            // earlier this turn), so fall back to any copy in the discard that exposes
+            // the requested useFromDiscard power. Identical copies are interchangeable.
+            pokemonCard = player.discard.cards.find((c): c is PokemonCard =>
+              c instanceof PokemonCard
+              && c.powers.some(p => p.name === action.name && p.useFromDiscard)
+            );
           }
           break;
         }
         case SlotType.HAND: {
           const handCard = player.hand.cards[action.target.index];
-          if (handCard instanceof PokemonCard) {
+          if (handCard instanceof PokemonCard
+            && handCard.powers.some(p => p.name === action.name && p.useFromHand)) {
             pokemonCard = handCard;
+          } else {
+            pokemonCard = player.hand.cards.find((c): c is PokemonCard =>
+              c instanceof PokemonCard
+              && c.powers.some(p => p.name === action.name && p.useFromHand)
+            );
           }
           break;
         }
@@ -192,28 +207,35 @@ export function playerTurnReducer(store: StoreLike, state: State, action: Action
       let trainerCard: TrainerCard | undefined;
 
       const discardCard = player.discard.cards[action.target.index];
-      if (discardCard instanceof TrainerCard) {
+      if (discardCard instanceof TrainerCard
+        && discardCard.powers.some(p => p.name === action.name && p.useFromDiscard)) {
         trainerCard = discardCard;
+      } else {
+        // The index may be stale if an identical copy already left the discard this turn.
+        trainerCard = player.discard.cards.find((c): c is TrainerCard =>
+          c instanceof TrainerCard
+          && c.powers.some(p => p.name === action.name && p.useFromDiscard)
+        );
+      }
 
-        if (trainerCard !== undefined) {
-          let power;
-          if (action.target.slot === SlotType.DISCARD) {
-            power = trainerCard.powers.find(a => a.name === action.name);
-          }
-
-          if (power === undefined) {
-            throw new GameError(GameMessage.UNKNOWN_POWER);
-          }
-
-          const slot = action.target.slot;
-
-          if (slot === SlotType.DISCARD && !power.useFromDiscard) {
-            throw new GameError(GameMessage.CANNOT_USE_POWER);
-          }
-
-          state = store.reduceEffect(state, new UseTrainerPowerEffect(player, power, trainerCard, action.target));
-          return state;
+      if (trainerCard !== undefined) {
+        let power;
+        if (action.target.slot === SlotType.DISCARD) {
+          power = trainerCard.powers.find(a => a.name === action.name);
         }
+
+        if (power === undefined) {
+          throw new GameError(GameMessage.UNKNOWN_POWER);
+        }
+
+        const slot = action.target.slot;
+
+        if (slot === SlotType.DISCARD && !power.useFromDiscard) {
+          throw new GameError(GameMessage.CANNOT_USE_POWER);
+        }
+
+        state = store.reduceEffect(state, new UseTrainerPowerEffect(player, power, trainerCard, action.target));
+        return state;
       }
     }
 
@@ -227,28 +249,35 @@ export function playerTurnReducer(store: StoreLike, state: State, action: Action
       let energyCard: EnergyCard | undefined;
 
       const discardCard = player.discard.cards[action.target.index];
-      if (discardCard instanceof EnergyCard) {
+      if (discardCard instanceof EnergyCard
+        && discardCard.powers.some(p => p.name === action.name && p.useFromDiscard)) {
         energyCard = discardCard;
+      } else {
+        // The index may be stale if an identical copy already left the discard this turn.
+        energyCard = player.discard.cards.find((c): c is EnergyCard =>
+          c instanceof EnergyCard
+          && c.powers.some(p => p.name === action.name && p.useFromDiscard)
+        );
+      }
 
-        if (energyCard !== undefined) {
-          let power;
-          if (action.target.slot === SlotType.DISCARD) {
-            power = energyCard.powers.find(a => a.name === action.name);
-          }
-
-          if (power === undefined) {
-            throw new GameError(GameMessage.UNKNOWN_POWER);
-          }
-
-          const slot = action.target.slot;
-
-          if (slot === SlotType.DISCARD && !power.useFromDiscard) {
-            throw new GameError(GameMessage.CANNOT_USE_POWER);
-          }
-
-          state = store.reduceEffect(state, new UseEnergyPowerEffect(player, power, energyCard, action.target));
-          return state;
+      if (energyCard !== undefined) {
+        let power;
+        if (action.target.slot === SlotType.DISCARD) {
+          power = energyCard.powers.find(a => a.name === action.name);
         }
+
+        if (power === undefined) {
+          throw new GameError(GameMessage.UNKNOWN_POWER);
+        }
+
+        const slot = action.target.slot;
+
+        if (slot === SlotType.DISCARD && !power.useFromDiscard) {
+          throw new GameError(GameMessage.CANNOT_USE_POWER);
+        }
+
+        state = store.reduceEffect(state, new UseEnergyPowerEffect(player, power, energyCard, action.target));
+        return state;
       }
     }
 
