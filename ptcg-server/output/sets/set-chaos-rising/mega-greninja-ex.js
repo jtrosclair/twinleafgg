@@ -37,7 +37,7 @@ class MegaGreninjaex extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '22';
-        this.usSetNumber = 'POR 22';
+        this.usSetNumber = 'CRI 22';
         this.name = 'Mega Greninja ex';
         this.fullName = 'Mega Greninja ex M4';
         this.MORTAL_SHURIKEN_MARKER = 'MORTAL_SHURIKEN_MARKER';

@@ -27,7 +27,7 @@ export class Deoxys2 extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '32';
-  public usSetNumber = 'POR 32';
+  public usSetNumber = 'CRI 32';
   public name: string = 'Deoxys';
   public fullName: string = 'Deoxys M4 32';
 

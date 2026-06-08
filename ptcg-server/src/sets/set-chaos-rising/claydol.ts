@@ -22,7 +22,7 @@ export class Claydol extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '47';
-  public usSetNumber = 'POR 47';
+  public usSetNumber = 'CRI 47';
   public name: string = 'Claydol';
   public fullName: string = 'Claydol M4';
 

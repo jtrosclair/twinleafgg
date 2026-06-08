@@ -28,7 +28,7 @@ export class Emolga extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '30';
-  public usSetNumber = 'POR 30';
+  public usSetNumber = 'CRI 30';
   public name: string = 'Emolga';
   public fullName: string = 'Emolga M4';
 

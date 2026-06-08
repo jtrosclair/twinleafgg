@@ -21,7 +21,7 @@ export class Mareep extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '27';
-  public usSetNumber = 'POR 27';
+  public usSetNumber = 'CRI 27';
   public name: string = 'Mareep';
   public fullName: string = 'Mareep M4';
 

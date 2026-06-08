@@ -25,7 +25,7 @@ export class Patrat extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '68';
-  public usSetNumber = 'POR 68';
+  public usSetNumber = 'CRI 68';
   public name: string = 'Patrat';
   public fullName: string = 'Patrat M4';
 

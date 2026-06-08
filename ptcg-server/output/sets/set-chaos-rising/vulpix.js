@@ -22,7 +22,7 @@ class Vulpix extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '8';
-        this.usSetNumber = 'POR 8';
+        this.usSetNumber = 'CRI 8';
         this.name = 'Vulpix';
         this.fullName = 'Vulpix M4';
     }

@@ -21,7 +21,7 @@ class Stunky extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '52';
-        this.usSetNumber = 'POR 52';
+        this.usSetNumber = 'CRI 52';
         this.name = 'Stunky';
         this.fullName = 'Stunky M4';
     }

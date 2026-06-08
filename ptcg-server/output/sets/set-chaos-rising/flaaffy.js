@@ -26,7 +26,7 @@ class Flaaffy extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '28';
-        this.usSetNumber = 'POR 28';
+        this.usSetNumber = 'CRI 28';
         this.name = 'Flaaffy';
         this.fullName = 'Flaaffy M4';
         this.DISCONNECT_MARKER = 'FLAAFFY_M4_DISCONNECT_MARKER';

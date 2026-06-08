@@ -28,7 +28,7 @@ class Froakie extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '20';
-        this.usSetNumber = 'POR 20';
+        this.usSetNumber = 'CRI 20';
         this.name = 'Froakie';
         this.fullName = 'Froakie M4';
     }

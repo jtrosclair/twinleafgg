@@ -29,7 +29,7 @@ class Sudowoodo extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '43';
-        this.usSetNumber = 'POR 43';
+        this.usSetNumber = 'CRI 43';
         this.name = 'Sudowoodo';
         this.fullName = 'Sudowoodo M4';
     }

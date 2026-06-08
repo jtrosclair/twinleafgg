@@ -35,7 +35,7 @@ class Chesnaught extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '7';
-        this.usSetNumber = 'POR 7';
+        this.usSetNumber = 'CRI 7';
         this.name = 'Chesnaught';
         this.fullName = 'Chesnaught M4';
     }

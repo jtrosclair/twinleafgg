@@ -29,7 +29,7 @@ export class Ampharos extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '29';
-  public usSetNumber = 'POR 29';
+  public usSetNumber = 'CRI 29';
   public name: string = 'Ampharos';
   public fullName: string = 'Ampharos M4';
 

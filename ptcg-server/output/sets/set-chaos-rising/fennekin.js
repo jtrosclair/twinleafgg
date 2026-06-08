@@ -51,7 +51,7 @@ class Fennekin extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '11';
-        this.usSetNumber = 'POR 11';
+        this.usSetNumber = 'CRI 11';
         this.name = 'Fennekin';
         this.fullName = 'Fennekin M4';
     }

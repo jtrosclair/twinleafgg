@@ -28,7 +28,7 @@ export class Ninetales extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '9';
-  public usSetNumber = 'POR 9';
+  public usSetNumber = 'CRI 9';
   public name: string = 'Ninetales';
   public fullName: string = 'Ninetales M4';
 

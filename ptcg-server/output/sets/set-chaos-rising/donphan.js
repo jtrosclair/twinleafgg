@@ -31,7 +31,7 @@ class Donphan extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '45';
-        this.usSetNumber = 'POR 45';
+        this.usSetNumber = 'CRI 45';
         this.name = 'Donphan';
         this.fullName = 'Donphan M4';
         this.NO_REPRIEVE_MARKER = 'DONPHAN_M4_NO_REPRIEVE_MARKER';

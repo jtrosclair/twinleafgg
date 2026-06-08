@@ -30,7 +30,7 @@ export class Kakuna extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '2';
-  public usSetNumber = 'POR 2';
+  public usSetNumber = 'CRI 2';
   public name: string = 'Kakuna';
   public fullName: string = 'Kakuna M4';
 

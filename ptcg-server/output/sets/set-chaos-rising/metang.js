@@ -30,7 +30,7 @@ class Metang extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '58';
-        this.usSetNumber = 'POR 58';
+        this.usSetNumber = 'CRI 58';
         this.name = 'Metang';
         this.fullName = 'Metang M4';
     }

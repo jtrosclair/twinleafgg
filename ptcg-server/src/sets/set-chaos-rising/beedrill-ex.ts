@@ -25,7 +25,7 @@ export class Beedrillex extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '3';
-  public usSetNumber = 'POR 3';
+  public usSetNumber = 'CRI 3';
   public name: string = 'Beedrill ex';
   public fullName: string = 'Beedrill ex M4';
 

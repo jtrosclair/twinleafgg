@@ -28,7 +28,7 @@ class Deoxys2 extends pokemon_card_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '32';
-        this.usSetNumber = 'POR 32';
+        this.usSetNumber = 'CRI 32';
         this.name = 'Deoxys';
         this.fullName = 'Deoxys M4 32';
     }

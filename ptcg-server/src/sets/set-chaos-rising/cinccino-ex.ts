@@ -31,7 +31,7 @@ export class Cinccinoex extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '71';
-  public usSetNumber = 'POR 71';
+  public usSetNumber = 'CRI 71';
   public name: string = 'Cinccino ex';
   public fullName: string = 'Cinccino ex M4';
 

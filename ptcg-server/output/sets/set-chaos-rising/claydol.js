@@ -23,7 +23,7 @@ class Claydol extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '47';
-        this.usSetNumber = 'POR 47';
+        this.usSetNumber = 'CRI 47';
         this.name = 'Claydol';
         this.fullName = 'Claydol M4';
     }

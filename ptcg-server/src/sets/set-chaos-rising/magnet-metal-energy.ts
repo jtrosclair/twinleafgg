@@ -14,7 +14,7 @@ export class MagnetMetalEnergy extends EnergyCard {
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '83';
-  public usSetNumber = 'POR 83';
+  public usSetNumber = 'CRI 83';
   public name: string = 'Magnet Metal Energy';
   public fullName: string = 'Magnet Metal Energy M4';
   public text: string = 'As long as this card is attached to a Pokemon, it provides [M] Energy. As long as this card is attached to a [M] Pokémon, that Pokemon has no Retreat Cost.';

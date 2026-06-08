@@ -14,7 +14,7 @@ class PrismTower extends trainer_card_1.TrainerCard {
         this.trainerType = card_types_1.TrainerType.STADIUM;
         this.set = 'M4';
         this.setNumber = '80';
-        this.usSetNumber = 'POR 80';
+        this.usSetNumber = 'CRI 80';
         this.name = 'Prism Tower';
         this.fullName = 'Prism Tower M4';
         this.cardImage = 'assets/cardback.png';

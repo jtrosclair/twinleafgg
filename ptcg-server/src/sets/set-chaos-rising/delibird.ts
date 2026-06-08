@@ -27,7 +27,7 @@ export class Delibird extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '18';
-  public usSetNumber = 'POR 18';
+  public usSetNumber = 'CRI 18';
   public name: string = 'Delibird';
   public fullName: string = 'Delibird M4';
 

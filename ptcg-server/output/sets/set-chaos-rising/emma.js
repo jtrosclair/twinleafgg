@@ -16,7 +16,7 @@ class Emma extends trainer_card_1.TrainerCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '78';
-        this.usSetNumber = 'POR 78';
+        this.usSetNumber = 'CRI 78';
         this.name = 'Emma';
         this.fullName = 'Emma M4';
         this.text = 'Your opponent reveals their hand. Draw a card for each Pokemon you find there.';

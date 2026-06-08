@@ -35,7 +35,7 @@ export class Trevenant extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '39';
-  public usSetNumber = 'POR 39';
+  public usSetNumber = 'CRI 39';
   public name: string = 'Trevenant';
   public fullName: string = 'Trevenant M4';
 

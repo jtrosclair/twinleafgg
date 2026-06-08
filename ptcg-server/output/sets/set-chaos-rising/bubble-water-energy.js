@@ -17,7 +17,7 @@ class BubbleWaterEnergy extends energy_card_1.EnergyCard {
         this.regulationMark = 'J';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '82';
-        this.usSetNumber = 'POR 82';
+        this.usSetNumber = 'CRI 82';
         this.name = 'Bubble Water Energy';
         this.fullName = 'Bubble Water Energy M4';
         this.text = 'This card can only be attached to [W] Pokémon. The [W] Pokémon this card is attached to cannot have any Special Conditions. Remove all Special Conditions from that Pokémon.';

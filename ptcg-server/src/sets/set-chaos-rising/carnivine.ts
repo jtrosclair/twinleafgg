@@ -22,7 +22,7 @@ export class Carnivine extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '4';
-  public usSetNumber = 'POR 4';
+  public usSetNumber = 'CRI 4';
   public name: string = 'Carnivine';
   public fullName: string = 'Carnivine M4';
 

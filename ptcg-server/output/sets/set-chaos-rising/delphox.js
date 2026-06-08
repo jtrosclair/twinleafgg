@@ -36,7 +36,7 @@ class Delphox extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '13';
-        this.usSetNumber = 'POR 13';
+        this.usSetNumber = 'CRI 13';
         this.name = 'Delphox';
         this.fullName = 'Delphox M4';
     }

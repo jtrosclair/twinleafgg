@@ -19,7 +19,7 @@ class RoxiesPerformance extends trainer_card_1.TrainerCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '77';
-        this.usSetNumber = 'POR 77';
+        this.usSetNumber = 'CRI 77';
         this.name = 'Roxie\'s Performance';
         this.fullName = 'Roxie\'s Performance M4';
         this.text = 'During your opponent\'s next turn, their Poisoned Pokemon can\'t retreat.';

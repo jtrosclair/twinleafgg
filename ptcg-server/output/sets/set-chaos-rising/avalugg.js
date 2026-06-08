@@ -31,7 +31,7 @@ class Avalugg extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '24';
-        this.usSetNumber = 'POR 24';
+        this.usSetNumber = 'CRI 24';
         this.name = 'Avalugg';
         this.fullName = 'Avalugg M4';
     }

@@ -27,7 +27,7 @@ class Golbat extends pokemon_card_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '49';
-        this.usSetNumber = 'POR 49';
+        this.usSetNumber = 'CRI 49';
         this.name = 'Golbat';
         this.fullName = 'Golbat M4';
         this.PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER = 'PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER';

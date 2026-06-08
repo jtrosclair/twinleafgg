@@ -30,7 +30,7 @@ class Quilladin extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '6';
-        this.usSetNumber = 'POR 6';
+        this.usSetNumber = 'CRI 6';
         this.name = 'Quilladin';
         this.fullName = 'Quilladin M4';
     }

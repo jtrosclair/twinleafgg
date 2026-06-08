@@ -22,7 +22,7 @@ export class Goomy extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '64';
-  public usSetNumber = 'POR 64';
+  public usSetNumber = 'CRI 64';
   public name: string = 'Goomy';
   public fullName: string = 'Goomy M4';
 

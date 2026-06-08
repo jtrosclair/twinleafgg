@@ -26,7 +26,7 @@ class Beedrillex extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '3';
-        this.usSetNumber = 'POR 3';
+        this.usSetNumber = 'CRI 3';
         this.name = 'Beedrill ex';
         this.fullName = 'Beedrill ex M4';
     }

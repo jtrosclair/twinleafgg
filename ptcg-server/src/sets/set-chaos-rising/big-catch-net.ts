@@ -61,7 +61,7 @@ export class BigCatchNet extends TrainerCard {
   public fullName: string = 'Big Catch Net M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '73';
-  public usSetNumber = 'POR 73';
+  public usSetNumber = 'CRI 73';
   public text: string = 'Shuffle up to 3 [W] Pokemon and up to 3 Basic [W] Energy from your discard pile into your deck.';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {

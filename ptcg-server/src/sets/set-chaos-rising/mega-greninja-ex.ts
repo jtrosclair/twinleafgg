@@ -37,7 +37,7 @@ export class MegaGreninjaex extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '22';
-  public usSetNumber = 'POR 22';
+  public usSetNumber = 'CRI 22';
   public name: string = 'Mega Greninja ex';
   public fullName: string = 'Mega Greninja ex M4';
 

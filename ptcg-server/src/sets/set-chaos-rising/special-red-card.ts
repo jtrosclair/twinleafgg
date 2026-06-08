@@ -13,7 +13,7 @@ export class SpecialRedCard extends TrainerCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '72';
-  public usSetNumber = 'POR 72';
+  public usSetNumber = 'CRI 72';
   public name: string = 'Special Red Card';
   public fullName: string = 'Special Red Card M4';
   public text: string = 'Play this card only if your opponent has 3 or fewer Prize cards remaining. Your opponent shuffles their hand and puts it on the bottom of their deck. If they put any cards on the bottom of their deck in this way, they draw 3 cards.';

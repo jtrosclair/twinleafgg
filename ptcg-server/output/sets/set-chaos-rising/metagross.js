@@ -34,7 +34,7 @@ class Metagross extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '59';
-        this.usSetNumber = 'POR 59';
+        this.usSetNumber = 'CRI 59';
         this.name = 'Metagross';
         this.fullName = 'Metagross M4';
     }

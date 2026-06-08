@@ -29,7 +29,7 @@ class Ampharos extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '29';
-        this.usSetNumber = 'POR 29';
+        this.usSetNumber = 'CRI 29';
         this.name = 'Ampharos';
         this.fullName = 'Ampharos M4';
     }

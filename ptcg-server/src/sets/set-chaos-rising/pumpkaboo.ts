@@ -20,7 +20,7 @@ export class Pumpkaboo extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '40';
-  public usSetNumber = 'POR 40';
+  public usSetNumber = 'CRI 40';
   public name: string = 'Pumpkaboo';
   public fullName: string = 'Pumpkaboo M4';
 }

@@ -23,7 +23,7 @@ class Sliggoo extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '65';
-        this.usSetNumber = 'POR 65';
+        this.usSetNumber = 'CRI 65';
         this.name = 'Sliggoo';
         this.fullName = 'Sliggoo M4';
     }

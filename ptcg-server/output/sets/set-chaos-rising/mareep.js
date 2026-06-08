@@ -22,7 +22,7 @@ class Mareep extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '27';
-        this.usSetNumber = 'POR 27';
+        this.usSetNumber = 'CRI 27';
         this.name = 'Mareep';
         this.fullName = 'Mareep M4';
     }

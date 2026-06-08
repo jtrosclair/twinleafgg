@@ -30,7 +30,7 @@ class Kakuna extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '2';
-        this.usSetNumber = 'POR 2';
+        this.usSetNumber = 'CRI 2';
         this.name = 'Kakuna';
         this.fullName = 'Kakuna M4';
     }

@@ -28,7 +28,7 @@ export class MegaFloetteex extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '35';
-  public usSetNumber = 'POR 35';
+  public usSetNumber = 'CRI 35';
   public name: string = 'Mega Floette ex';
   public fullName: string = 'Mega Floette ex M4';
 

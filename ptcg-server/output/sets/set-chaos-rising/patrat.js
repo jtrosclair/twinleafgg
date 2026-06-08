@@ -28,7 +28,7 @@ class Patrat extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '68';
-        this.usSetNumber = 'POR 68';
+        this.usSetNumber = 'CRI 68';
         this.name = 'Patrat';
         this.fullName = 'Patrat M4';
     }

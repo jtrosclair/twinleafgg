@@ -29,7 +29,7 @@ export class Garbodor extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '55';
-  public usSetNumber = 'POR 55';
+  public usSetNumber = 'CRI 55';
   public name: string = 'Garbodor';
   public fullName: string = 'Garbodor M4';
 
