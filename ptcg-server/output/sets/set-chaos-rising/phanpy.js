@@ -27,6 +27,7 @@ class Phanpy extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '44';
+        this.usSetNumber = 'POR 44';
         this.name = 'Phanpy';
         this.fullName = 'Phanpy M4';
     }

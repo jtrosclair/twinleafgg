@@ -35,6 +35,7 @@ class Phantump extends pokemon_card_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '38';
+        this.usSetNumber = 'POR 38';
         this.name = 'Phantump';
         this.fullName = 'Phantump M4';
         this.ENVIOUS_EVOLUTION_MARKER = 'ENVIOUS_EVOLUTION_MARKER';

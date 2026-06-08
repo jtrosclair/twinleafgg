@@ -30,6 +30,7 @@ export class MegaPyroarex extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '15';
+  public usSetNumber = 'POR 15';
   public name: string = 'Mega Pyroar ex';
   public fullName: string = 'Mega Pyroar ex M4';
 

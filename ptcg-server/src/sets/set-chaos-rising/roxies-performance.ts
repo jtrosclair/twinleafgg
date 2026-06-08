@@ -17,6 +17,7 @@ export class RoxiesPerformance extends TrainerCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '77';
+  public usSetNumber = 'POR 77';
   public name: string = 'Roxie\'s Performance';
   public fullName: string = 'Roxie\'s Performance M4';
   public text: string = 'During your opponent\'s next turn, their Poisoned Pokemon can\'t retreat.';

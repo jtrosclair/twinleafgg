@@ -15,6 +15,7 @@ class HyperrogueAngeFloette extends trainer_card_1.TrainerCard {
         this.trainerType = card_types_1.TrainerType.STADIUM;
         this.set = 'M4';
         this.setNumber = '79';
+        this.usSetNumber = 'POR 79';
         this.name = 'Hyperrogue Ange Floette';
         this.fullName = 'Hyperrogue Ange Floette M4';
         this.cardImage = 'assets/cardback.png';

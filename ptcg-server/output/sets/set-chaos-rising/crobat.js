@@ -35,6 +35,7 @@ class Crobat extends pokemon_card_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '50';
+        this.usSetNumber = 'POR 50';
         this.name = 'Crobat';
         this.fullName = 'Crobat M4';
         this.NIGHTTIME_MANEUVERS_MARKER = 'NIGHTTIME_MANEUVERS_MARKER';

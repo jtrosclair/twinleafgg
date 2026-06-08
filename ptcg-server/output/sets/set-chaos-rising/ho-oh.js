@@ -29,6 +29,7 @@ class HoOh extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '10';
+        this.usSetNumber = 'POR 10';
         this.name = 'Ho-Oh';
         this.fullName = 'Ho-Oh M4';
     }

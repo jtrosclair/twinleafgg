@@ -30,6 +30,7 @@ class Cobalionex extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '62';
+        this.usSetNumber = 'POR 62';
         this.name = 'Cobalion ex';
         this.fullName = 'Cobalion ex M4';
         this.METAL_ROAD_MARKER = 'METAL_ROAD_MARKER';

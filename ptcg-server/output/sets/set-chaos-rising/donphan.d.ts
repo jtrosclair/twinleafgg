@@ -20,6 +20,7 @@ export declare class Donphan extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     readonly NO_REPRIEVE_MARKER = "DONPHAN_M4_NO_REPRIEVE_MARKER";

@@ -22,6 +22,7 @@ export declare class Ferroseed extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
 }

@@ -45,6 +45,7 @@ class Frogadier extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '21';
+        this.usSetNumber = 'POR 21';
         this.name = 'Frogadier';
         this.fullName = 'Frogadier M4';
     }

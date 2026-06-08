@@ -9,6 +9,7 @@ export declare class NitroFireEnergy extends EnergyCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     text: string;

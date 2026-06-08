@@ -22,6 +22,7 @@ class Weedle extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '1';
+        this.usSetNumber = 'POR 1';
         this.name = 'Weedle';
         this.fullName = 'Weedle M4';
     }

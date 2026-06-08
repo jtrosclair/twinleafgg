@@ -33,6 +33,7 @@ class Ferrothorn extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '61';
+        this.usSetNumber = 'POR 61';
         this.name = 'Ferrothorn';
         this.fullName = 'Ferrothorn M4';
     }

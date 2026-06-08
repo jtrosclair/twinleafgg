@@ -20,6 +20,7 @@ export declare class Octillery extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     readonly CORNER_STOP_MARKER = "OCTILLERY_M4_CORNER_STOP_MARKER";

@@ -28,6 +28,7 @@ export class Sudowoodo extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '43';
+  public usSetNumber = 'POR 43';
   public name: string = 'Sudowoodo';
   public fullName: string = 'Sudowoodo M4';
 

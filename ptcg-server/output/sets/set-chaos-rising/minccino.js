@@ -22,6 +22,7 @@ class Minccino extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '70';
+        this.usSetNumber = 'POR 70';
         this.name = 'Minccino';
         this.fullName = 'Minccino M4';
     }

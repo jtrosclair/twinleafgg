@@ -25,6 +25,7 @@ export declare class Golisopod extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     readonly INVULN_MARKER = "GOLISOPOD_M4_INVULN_MARKER";

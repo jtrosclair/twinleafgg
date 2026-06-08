@@ -20,6 +20,7 @@ export declare class Flaaffy extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     readonly DISCONNECT_MARKER = "FLAAFFY_M4_DISCONNECT_MARKER";

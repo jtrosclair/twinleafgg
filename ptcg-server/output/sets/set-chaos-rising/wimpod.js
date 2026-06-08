@@ -27,6 +27,7 @@ class Wimpod extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '25';
+        this.usSetNumber = 'POR 25';
         this.name = 'Wimpod';
         this.fullName = 'Wimpod M4';
     }

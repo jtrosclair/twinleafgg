@@ -7,6 +7,7 @@ export declare class HyperrogueAngeFloette extends TrainerCard {
     trainerType: TrainerType;
     set: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     cardImage: string;

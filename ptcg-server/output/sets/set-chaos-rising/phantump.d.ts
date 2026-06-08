@@ -31,6 +31,7 @@ export declare class Phantump extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     readonly ENVIOUS_EVOLUTION_MARKER = "ENVIOUS_EVOLUTION_MARKER";

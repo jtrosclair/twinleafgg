@@ -11,6 +11,7 @@ export class BookOfTransformation extends TrainerCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '74';
+  public usSetNumber = 'POR 74';
   public name: string = 'Book of Transformation';
   public fullName: string = 'Book of Transformation M4';
   public text: string = 'You must play 2 Book of Transformation cards at once. Switch 1 of your Basic Pokemon in play with 1 of your Basic Pokemon in your discard pile. (Any attached cards, damage counters, and effects remain on the new Pokemon.)';

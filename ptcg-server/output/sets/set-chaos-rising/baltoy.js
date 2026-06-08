@@ -23,6 +23,7 @@ class Baltoy extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '46';
+        this.usSetNumber = 'POR 46';
         this.name = 'Baltoy';
         this.fullName = 'Baltoy M4';
     }

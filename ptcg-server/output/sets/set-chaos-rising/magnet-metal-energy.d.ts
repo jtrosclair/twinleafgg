@@ -10,6 +10,7 @@ export declare class MagnetMetalEnergy extends EnergyCard {
     regulationMark: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     text: string;

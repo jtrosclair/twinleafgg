@@ -32,6 +32,7 @@ export declare class Trevenant extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     readonly CURSED_ROOTS_MARKER = "CURSED_ROOTS_MARKER";

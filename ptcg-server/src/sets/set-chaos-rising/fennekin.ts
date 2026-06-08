@@ -58,6 +58,7 @@ export class Fennekin extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '11';
+  public usSetNumber = 'POR 11';
   public name: string = 'Fennekin';
   public fullName: string = 'Fennekin M4';
 

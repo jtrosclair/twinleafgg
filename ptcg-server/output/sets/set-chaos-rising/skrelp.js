@@ -21,6 +21,7 @@ class Skrelp extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '56';
+        this.usSetNumber = 'POR 56';
         this.name = 'Skrelp';
         this.fullName = 'Skrelp M4';
     }

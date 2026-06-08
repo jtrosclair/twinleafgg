@@ -25,6 +25,7 @@ class Xerneas extends pokemon_card_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '42';
+        this.usSetNumber = 'POR 42';
         this.name = 'Xerneas';
         this.fullName = 'Xerneas M4';
     }

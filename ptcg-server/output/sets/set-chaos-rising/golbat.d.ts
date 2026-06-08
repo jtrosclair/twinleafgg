@@ -25,6 +25,7 @@ export declare class Golbat extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     readonly PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER = "PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER";

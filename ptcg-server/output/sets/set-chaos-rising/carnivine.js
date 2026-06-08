@@ -23,6 +23,7 @@ class Carnivine extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '4';
+        this.usSetNumber = 'POR 4';
         this.name = 'Carnivine';
         this.fullName = 'Carnivine M4';
     }

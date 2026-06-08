@@ -28,6 +28,7 @@ export declare class MegaGreninjaex extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     readonly MORTAL_SHURIKEN_MARKER = "MORTAL_SHURIKEN_MARKER";

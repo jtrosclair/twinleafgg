@@ -30,6 +30,7 @@ class Keldeo extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '19';
+        this.usSetNumber = 'POR 19';
         this.name = 'Keldeo';
         this.fullName = 'Keldeo M4';
     }

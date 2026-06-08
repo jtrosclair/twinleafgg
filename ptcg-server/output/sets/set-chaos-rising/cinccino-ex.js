@@ -34,6 +34,7 @@ class Cinccinoex extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '71';
+        this.usSetNumber = 'POR 71';
         this.name = 'Cinccino ex';
         this.fullName = 'Cinccino ex M4';
     }

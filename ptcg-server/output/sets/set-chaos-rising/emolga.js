@@ -29,6 +29,7 @@ class Emolga extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '30';
+        this.usSetNumber = 'POR 30';
         this.name = 'Emolga';
         this.fullName = 'Emolga M4';
     }

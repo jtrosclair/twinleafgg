@@ -29,6 +29,7 @@ class Ninetales extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '9';
+        this.usSetNumber = 'POR 9';
         this.name = 'Ninetales';
         this.fullName = 'Ninetales M4';
     }

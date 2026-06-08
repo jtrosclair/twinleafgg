@@ -27,6 +27,7 @@ class Bergmite extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '23';
+        this.usSetNumber = 'POR 23';
         this.name = 'Bergmite';
         this.fullName = 'Bergmite M4';
     }

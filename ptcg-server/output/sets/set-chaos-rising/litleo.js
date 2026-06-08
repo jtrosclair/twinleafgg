@@ -21,6 +21,7 @@ class Litleo extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '14';
+        this.usSetNumber = 'POR 14';
         this.name = 'Litleo';
         this.fullName = 'Litleo M4';
     }

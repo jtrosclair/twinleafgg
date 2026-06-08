@@ -33,6 +33,7 @@ class Octillery extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '17';
+        this.usSetNumber = 'POR 17';
         this.name = 'Octillery';
         this.fullName = 'Octillery M4';
         this.CORNER_STOP_MARKER = 'OCTILLERY_M4_CORNER_STOP_MARKER';

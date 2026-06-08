@@ -29,6 +29,7 @@ export declare class Cobalionex extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     readonly METAL_ROAD_MARKER = "METAL_ROAD_MARKER";

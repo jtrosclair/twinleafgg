@@ -28,6 +28,7 @@ export class Meowstic extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '37';
+  public usSetNumber = 'POR 37';
   public name: string = 'Meowstic';
   public fullName: string = 'Meowstic M4';
 

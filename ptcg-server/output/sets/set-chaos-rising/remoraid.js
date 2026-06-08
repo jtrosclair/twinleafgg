@@ -21,6 +21,7 @@ class Remoraid extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '16';
+        this.usSetNumber = 'POR 16';
         this.name = 'Remoraid';
         this.fullName = 'Remoraid M4';
     }

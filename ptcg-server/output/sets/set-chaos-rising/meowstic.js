@@ -29,6 +29,7 @@ class Meowstic extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '37';
+        this.usSetNumber = 'POR 37';
         this.name = 'Meowstic';
         this.fullName = 'Meowstic M4';
     }

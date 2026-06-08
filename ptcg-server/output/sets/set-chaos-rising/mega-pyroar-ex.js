@@ -31,6 +31,7 @@ class MegaPyroarex extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '15';
+        this.usSetNumber = 'POR 15';
         this.name = 'Mega Pyroar ex';
         this.fullName = 'Mega Pyroar ex M4';
     }

@@ -22,6 +22,7 @@ export class Baltoy extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '46';
+  public usSetNumber = 'POR 46';
   public name: string = 'Baltoy';
   public fullName: string = 'Baltoy M4';
 

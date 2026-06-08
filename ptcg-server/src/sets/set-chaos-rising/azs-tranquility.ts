@@ -18,6 +18,7 @@ export class AzsTranquility extends TrainerCard {
   public fullName: string = 'AZ\'s Tranquility M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '75';
+  public usSetNumber = 'POR 75';
   public text: string = 'Switch your Active Pokemon with 1 of your Benched Pokemon. If you moved a Pokemon to your Bench in this way, heal 80 damage from that Pokemon.';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {

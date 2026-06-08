@@ -8,6 +8,7 @@ export declare class Philippe extends TrainerCard {
     regulationMark: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     text: string;

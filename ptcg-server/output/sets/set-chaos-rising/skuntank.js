@@ -29,6 +29,7 @@ class Skuntank extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '53';
+        this.usSetNumber = 'POR 53';
         this.name = 'Skuntank';
         this.fullName = 'Skuntank M4';
     }

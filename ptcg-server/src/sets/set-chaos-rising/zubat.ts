@@ -24,6 +24,7 @@ export class Zubat extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '48';
+  public usSetNumber = 'POR 48';
   public name: string = 'Zubat';
   public fullName: string = 'Zubat M4';
 

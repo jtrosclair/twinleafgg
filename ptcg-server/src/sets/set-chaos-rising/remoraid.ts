@@ -19,6 +19,7 @@ export class Remoraid extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '16';
+  public usSetNumber = 'POR 16';
   public name: string = 'Remoraid';
   public fullName: string = 'Remoraid M4';
 }

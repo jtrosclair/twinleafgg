@@ -35,6 +35,7 @@ export class Chesnaught extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '7';
+  public usSetNumber = 'POR 7';
   public name: string = 'Chesnaught';
   public fullName: string = 'Chesnaught M4';
 

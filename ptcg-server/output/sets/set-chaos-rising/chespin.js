@@ -27,6 +27,7 @@ class Chespin extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '5';
+        this.usSetNumber = 'POR 5';
         this.name = 'Chespin';
         this.fullName = 'Chespin M4';
     }

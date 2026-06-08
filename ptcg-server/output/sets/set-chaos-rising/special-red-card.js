@@ -16,6 +16,7 @@ class SpecialRedCard extends trainer_card_1.TrainerCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '72';
+        this.usSetNumber = 'POR 72';
         this.name = 'Special Red Card';
         this.fullName = 'Special Red Card M4';
         this.text = 'Play this card only if your opponent has 3 or fewer Prize cards remaining. Your opponent shuffles their hand and puts it on the bottom of their deck. If they put any cards on the bottom of their deck in this way, they draw 3 cards.';

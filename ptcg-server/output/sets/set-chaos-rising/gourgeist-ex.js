@@ -33,6 +33,7 @@ class Gourgeistex extends pokemon_card_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '41';
+        this.usSetNumber = 'POR 41';
         this.name = 'Gourgeist ex';
         this.fullName = 'Gourgeist ex M4';
     }

@@ -28,6 +28,7 @@ class Delibird extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '18';
+        this.usSetNumber = 'POR 18';
         this.name = 'Delibird';
         this.fullName = 'Delibird M4';
     }

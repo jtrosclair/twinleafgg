@@ -25,6 +25,7 @@ export class Chespin extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '5';
+  public usSetNumber = 'POR 5';
   public name: string = 'Chespin';
   public fullName: string = 'Chespin M4';
 }

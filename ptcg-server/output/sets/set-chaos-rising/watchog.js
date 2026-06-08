@@ -24,6 +24,7 @@ class Watchog extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '69';
+        this.usSetNumber = 'POR 69';
         this.name = 'Watchog';
         this.fullName = 'Watchog M4';
     }

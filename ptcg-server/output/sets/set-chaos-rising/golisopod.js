@@ -33,6 +33,7 @@ class Golisopod extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '26';
+        this.usSetNumber = 'POR 26';
         this.name = 'Golisopod';
         this.fullName = 'Golisopod M4';
         this.INVULN_MARKER = 'GOLISOPOD_M4_INVULN_MARKER';

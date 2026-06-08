@@ -26,6 +26,7 @@ export class Wimpod extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '25';
+  public usSetNumber = 'POR 25';
   public name: string = 'Wimpod';
   public fullName: string = 'Wimpod M4';
 

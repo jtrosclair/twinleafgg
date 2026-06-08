@@ -36,6 +36,7 @@ export class Phantump extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '38';
+  public usSetNumber = 'POR 38';
   public name: string = 'Phantump';
   public fullName: string = 'Phantump M4';
 

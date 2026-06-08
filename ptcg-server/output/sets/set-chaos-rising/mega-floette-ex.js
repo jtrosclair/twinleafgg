@@ -29,6 +29,7 @@ class MegaFloetteex extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '35';
+        this.usSetNumber = 'POR 35';
         this.name = 'Mega Floette ex';
         this.fullName = 'Mega Floette ex M4';
     }

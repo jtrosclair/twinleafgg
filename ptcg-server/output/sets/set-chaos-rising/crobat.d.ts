@@ -32,6 +32,7 @@ export declare class Crobat extends PokemonCard {
     set: string;
     cardImage: string;
     setNumber: string;
+    usSetNumber: string;
     name: string;
     fullName: string;
     readonly NIGHTTIME_MANEUVERS_MARKER = "NIGHTTIME_MANEUVERS_MARKER";

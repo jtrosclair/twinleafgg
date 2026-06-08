@@ -21,6 +21,7 @@ export class Sliggoo extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '65';
+  public usSetNumber = 'POR 65';
   public name: string = 'Sliggoo';
   public fullName: string = 'Sliggoo M4';
 }

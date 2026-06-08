@@ -24,6 +24,7 @@ class Braixen extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '12';
+        this.usSetNumber = 'POR 12';
         this.name = 'Braixen';
         this.fullName = 'Braixen M4';
     }

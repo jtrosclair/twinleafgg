@@ -36,6 +36,7 @@ class Trevenant extends pokemon_card_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '39';
+        this.usSetNumber = 'POR 39';
         this.name = 'Trevenant';
         this.fullName = 'Trevenant M4';
         this.CURSED_ROOTS_MARKER = 'CURSED_ROOTS_MARKER';

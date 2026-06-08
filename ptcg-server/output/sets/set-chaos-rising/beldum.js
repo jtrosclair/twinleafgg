@@ -28,6 +28,7 @@ class Beldum extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '57';
+        this.usSetNumber = 'POR 57';
         this.name = 'Beldum';
         this.fullName = 'Beldum M4';
     }

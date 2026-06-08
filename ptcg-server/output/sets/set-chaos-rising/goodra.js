@@ -33,6 +33,7 @@ class Goodra extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '66';
+        this.usSetNumber = 'POR 66';
         this.name = 'Goodra';
         this.fullName = 'Goodra M4';
     }

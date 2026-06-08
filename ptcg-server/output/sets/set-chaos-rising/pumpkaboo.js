@@ -22,6 +22,7 @@ class Pumpkaboo extends pokemon_card_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '40';
+        this.usSetNumber = 'POR 40';
         this.name = 'Pumpkaboo';
         this.fullName = 'Pumpkaboo M4';
     }
