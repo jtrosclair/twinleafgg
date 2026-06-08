@@ -22,7 +22,7 @@ export class Trubbish extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '54';
-  public usSetNumber = 'CRI 54';
+  public usSetNumber = 'CRI 56';
   public name: string = 'Trubbish';
   public fullName: string = 'Trubbish M4';
 

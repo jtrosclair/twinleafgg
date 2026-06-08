@@ -55,7 +55,7 @@ class BigCatchNet extends trainer_card_1.TrainerCard {
         this.fullName = 'Big Catch Net M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '73';
-        this.usSetNumber = 'CRI 73';
+        this.usSetNumber = 'CRI 78';
         this.text = 'Shuffle up to 3 [W] Pokemon and up to 3 Basic [W] Energy from your discard pile into your deck.';
     }
     reduceEffect(store, state, effect) {

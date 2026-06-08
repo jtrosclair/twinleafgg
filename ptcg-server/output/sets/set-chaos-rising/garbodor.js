@@ -30,7 +30,7 @@ class Garbodor extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '55';
-        this.usSetNumber = 'CRI 55';
+        this.usSetNumber = 'CRI 57';
         this.name = 'Garbodor';
         this.fullName = 'Garbodor M4';
     }

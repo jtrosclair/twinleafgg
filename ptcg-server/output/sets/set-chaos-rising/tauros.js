@@ -23,7 +23,7 @@ class Tauros extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '67';
-        this.usSetNumber = 'CRI 67';
+        this.usSetNumber = 'CRI 69';
         this.name = 'Tauros';
         this.fullName = 'Tauros M4';
     }

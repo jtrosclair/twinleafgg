@@ -15,7 +15,7 @@ class MagnetMetalEnergy extends energy_card_1.EnergyCard {
         this.regulationMark = 'J';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '83';
-        this.usSetNumber = 'CRI 83';
+        this.usSetNumber = 'CRI 85';
         this.name = 'Magnet Metal Energy';
         this.fullName = 'Magnet Metal Energy M4';
         this.text = 'As long as this card is attached to a Pokemon, it provides [M] Energy. As long as this card is attached to a [M] Pokémon, that Pokemon has no Retreat Cost.';

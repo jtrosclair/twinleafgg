@@ -17,7 +17,7 @@ export class Stunky extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '52';
-  public usSetNumber = 'CRI 52';
+  public usSetNumber = 'CRI 53';
   public name: string = 'Stunky';
   public fullName: string = 'Stunky M4';
 }

@@ -14,7 +14,7 @@ class BookOfTransformation extends trainer_card_1.TrainerCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '74';
-        this.usSetNumber = 'CRI 74';
+        this.usSetNumber = 'CRI 83';
         this.name = 'Book of Transformation';
         this.fullName = 'Book of Transformation M4';
         this.text = 'You must play 2 Book of Transformation cards at once. Switch 1 of your Basic Pokemon in play with 1 of your Basic Pokemon in your discard pile. (Any attached cards, damage counters, and effects remain on the new Pokemon.)';

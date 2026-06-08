@@ -19,7 +19,7 @@ class Philippe extends trainer_card_1.TrainerCard {
         this.regulationMark = 'J';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '76';
-        this.usSetNumber = 'CRI 76';
+        this.usSetNumber = 'CRI 79';
         this.name = 'Philippe';
         this.fullName = 'Philippe M4';
         this.text = 'Attach up to 2 Basic [M] Energy from your discard pile to 1 of your [M] Pokemon.';

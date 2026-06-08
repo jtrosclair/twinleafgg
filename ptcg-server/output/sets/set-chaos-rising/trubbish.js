@@ -23,7 +23,7 @@ class Trubbish extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '54';
-        this.usSetNumber = 'CRI 54';
+        this.usSetNumber = 'CRI 56';
         this.name = 'Trubbish';
         this.fullName = 'Trubbish M4';
     }

@@ -24,7 +24,7 @@ class Zubat extends pokemon_card_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '48';
-        this.usSetNumber = 'CRI 48';
+        this.usSetNumber = 'CRI 49';
         this.name = 'Zubat';
         this.fullName = 'Zubat M4';
     }

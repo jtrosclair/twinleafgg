@@ -33,7 +33,7 @@ class MegaDragalgeex extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '63';
-        this.usSetNumber = 'CRI 63';
+        this.usSetNumber = 'CRI 65';
         this.name = 'Mega Dragalge ex';
         this.fullName = 'Mega Dragalge ex M4';
     }

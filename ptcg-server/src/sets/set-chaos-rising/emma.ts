@@ -14,7 +14,7 @@ export class Emma extends TrainerCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '78';
-  public usSetNumber = 'CRI 78';
+  public usSetNumber = 'CRI 77';
   public name: string = 'Emma';
   public fullName: string = 'Emma M4';
   public text: string = 'Your opponent reveals their hand. Draw a card for each Pokemon you find there.';

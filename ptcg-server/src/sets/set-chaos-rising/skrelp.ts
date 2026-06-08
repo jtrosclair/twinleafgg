@@ -19,7 +19,7 @@ export class Skrelp extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '56';
-  public usSetNumber = 'CRI 56';
+  public usSetNumber = 'CRI 58';
   public name: string = 'Skrelp';
   public fullName: string = 'Skrelp M4';
 }

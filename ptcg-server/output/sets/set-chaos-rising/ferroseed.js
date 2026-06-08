@@ -22,7 +22,7 @@ class Ferroseed extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '60';
-        this.usSetNumber = 'CRI 60';
+        this.usSetNumber = 'CRI 62';
         this.name = 'Ferroseed';
         this.fullName = 'Ferroseed M4';
     }

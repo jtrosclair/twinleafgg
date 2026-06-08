@@ -31,7 +31,7 @@ class Qwilfish extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '51';
-        this.usSetNumber = 'CRI 51';
+        this.usSetNumber = 'CRI 52';
         this.name = 'Qwilfish';
         this.fullName = 'Qwilfish M4';
     }

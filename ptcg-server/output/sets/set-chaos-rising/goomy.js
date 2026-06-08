@@ -23,7 +23,7 @@ class Goomy extends game_1.PokemonCard {
         this.set = 'M4';
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '64';
-        this.usSetNumber = 'CRI 64';
+        this.usSetNumber = 'CRI 66';
         this.name = 'Goomy';
         this.fullName = 'Goomy M4';
     }
