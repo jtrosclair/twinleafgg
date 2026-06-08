@@ -14,6 +14,7 @@ export class PrismTower extends TrainerCard {
   public trainerType: TrainerType = TrainerType.STADIUM;
   public set: string = 'M4';
   public setNumber: string = '80';
+  public usSetNumber = 'POR 80';
   public name: string = 'Prism Tower';
   public fullName: string = 'Prism Tower M4';
   public cardImage: string = 'assets/cardback.png';
