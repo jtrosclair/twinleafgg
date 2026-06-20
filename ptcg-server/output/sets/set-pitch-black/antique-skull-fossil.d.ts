@@ -1,0 +1,32 @@
+import { Stage, CardType, PokemonType, TrainerType } from '../../game/store/card/card-types';
+import { Power, State, StoreLike, TrainerCard } from '../../game';
+import { Effect } from '../../game/store/effects/effect';
+export declare class AntiqueSkullFossil extends TrainerCard {
+    trainerType: TrainerType;
+    stage: Stage;
+    cardType: CardType;
+    cardTypez: CardType;
+    movedToActiveThisTurn: boolean;
+    pokemonType: PokemonType;
+    evolvesFrom: string;
+    cardTag: never[];
+    tools: never[];
+    evolvesTo: string[];
+    evolvesToStage: never[];
+    archetype: never[];
+    hp: number;
+    weakness: never[];
+    retreat: never[];
+    resistance: never[];
+    attacks: never[];
+    maxTools: number;
+    evolvesFromBase: string[];
+    powers: Power[];
+    set: string;
+    setNumber: string;
+    regulationMark: string;
+    cardImage: string;
+    name: string;
+    fullName: string;
+    reduceEffect(store: StoreLike, state: State, effect: Effect): State;
+}

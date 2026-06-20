@@ -181,6 +181,7 @@ __exportStar(require("./set-phantasmal-flames"), exports);
 __exportStar(require("./set-ascended-heroes"), exports);
 __exportStar(require("./set-perfect-order"), exports);
 __exportStar(require("./set-chaos-rising"), exports);
+__exportStar(require("./set-pitch-black"), exports);
 //TEST
 __exportStar(require("./set-test"), exports);
 //Sort Later
