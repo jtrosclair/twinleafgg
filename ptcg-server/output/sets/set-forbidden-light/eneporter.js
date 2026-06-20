@@ -18,7 +18,7 @@ class Eneporter extends trainer_card_1.TrainerCard {
         this.cardImage = 'assets/cardback.png';
         this.name = 'Eneporter';
         this.fullName = 'Eneporter FLI';
-        this.text = 'Move a Special Energy from 1 of your opponent\'s Pokémon to another of their Pokémon.';
+        this.text = "Move a Special Energy from 1 of your opponent's Pokémon to another of their Pokémon.";
     }
     // Ref: set-ultra-prism/roserade.ts (Flower Tornado - MoveEnergyPrompt pattern)
     reduceEffect(store, state, effect) {
@@ -30,27 +30,14 @@ class Eneporter extends trainer_card_1.TrainerCard {
             let hasSpecialEnergy = false;
             opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList) => {
                 totalPokemon++;
-                if (cardList.cards.some(c => c instanceof energy_card_1.EnergyCard && c.energyType === card_types_1.EnergyType.SPECIAL)) {
+                if (cardList.cards.some((c) => c instanceof energy_card_1.EnergyCard && c.energyType === card_types_1.EnergyType.SPECIAL)) {
                     hasSpecialEnergy = true;
                 }
             });
             if (totalPokemon < 2 || !hasSpecialEnergy) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            // Build blocked map: block all non-special-energy cards
-            const blockedMap = [];
-            opponent.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList, card, target) => {
-                const blocked = [];
-                cardList.cards.forEach((c, index) => {
-                    if (!(c instanceof energy_card_1.EnergyCard && c.energyType === card_types_1.EnergyType.SPECIAL)) {
-                        blocked.push(index);
-                    }
-                });
-                if (blocked.length > 0) {
-                    blockedMap.push({ source: target, blocked });
-                }
-            });
-            store.prompt(state, new game_1.MoveEnergyPrompt(player.id, game_1.GameMessage.MOVE_ENERGY_CARDS, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY }, { allowCancel: false, min: 1, max: 1, blockedMap }), transfers => {
+            store.prompt(state, new game_1.MoveEnergyPrompt(player.id, game_1.GameMessage.MOVE_ENERGY_CARDS, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.SPECIAL }, { allowCancel: false, min: 1, max: 1 }), (transfers) => {
                 if (transfers === null) {
                     return;
                 }

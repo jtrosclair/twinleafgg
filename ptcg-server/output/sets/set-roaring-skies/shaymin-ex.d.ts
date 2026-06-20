@@ -8,13 +8,13 @@ export declare class ShayminEx extends PokemonCard {
     cardType: CardType;
     hp: number;
     weakness: {
-        type: CardType;
+        type: CardType.LIGHTNING;
     }[];
     resistance: {
-        type: CardType;
+        type: CardType.FIGHTING;
         value: number;
     }[];
-    retreat: CardType[];
+    retreat: CardType.COLORLESS[];
     powers: {
         name: string;
         powerType: PowerType;
@@ -22,7 +22,7 @@ export declare class ShayminEx extends PokemonCard {
     }[];
     attacks: {
         name: string;
-        cost: CardType[];
+        cost: CardType.COLORLESS[];
         damage: number;
         text: string;
     }[];

@@ -174,7 +174,6 @@ exports.setPerfectOrder = [
     new other_prints_1.ClefairyIR(),
     new other_prints_1.EspurrIR(),
     new other_prints_1.ProbopassIR(),
-    new other_prints_1.TyruntIR(),
     new other_prints_1.DrapionIR(),
     new other_prints_1.DoubladeIR(),
     new other_prints_1.RaticateIR(),

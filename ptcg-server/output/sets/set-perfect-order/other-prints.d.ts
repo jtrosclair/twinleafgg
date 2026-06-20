@@ -6,7 +6,6 @@ import { Dedenne } from "./dedenne";
 import { Clefairy } from "./clefairy";
 import { Espurr } from "./espurr";
 import { Probopass } from "./probopass";
-import { Tyrunt } from "./tyrunt";
 import { Drapion } from "./drapion";
 import { Doublade } from "./doublade";
 import { Raticate } from "./raticate";
@@ -71,11 +70,6 @@ export declare class EspurrIR extends Espurr {
     usSetNumber: string;
 }
 export declare class ProbopassIR extends Probopass {
-    fullName: string;
-    setNumber: string;
-    usSetNumber: string;
-}
-export declare class TyruntIR extends Tyrunt {
     fullName: string;
     setNumber: string;
     usSetNumber: string;

@@ -7,8 +7,8 @@ const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
+const game_effects_1 = require("../../game/store/effects/game-effects");
 const game_phase_effects_1 = require("../../game/store/effects/game-phase-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Jirachi extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -21,7 +21,7 @@ class Jirachi extends pokemon_card_1.PokemonCard {
         this.attacks = [{
                 name: 'Stardust',
                 cost: [card_types_1.CardType.COLORLESS],
-                damage: 0,
+                damage: 10,
                 text: 'Discard a Special Energy attached to your opponent\'s Active Pokémon.If you do, prevent all effects of attacks, including damage, done to this Pokémon during your opponent\'s next turn.'
             }, {
                 name: 'Dream Dance',
@@ -36,7 +36,7 @@ class Jirachi extends pokemon_card_1.PokemonCard {
         this.fullName = 'Jirachi XYP';
     }
     reduceEffect(store, state, effect) {
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[0]) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(opponent);
@@ -65,7 +65,7 @@ class Jirachi extends pokemon_card_1.PokemonCard {
                 opponent.marker.addMarker(game_1.PokemonCardList.PREVENT_ALL_DAMAGE_AND_EFFECTS_DURING_OPPONENTS_NEXT_TURN, this);
             });
         }
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+        if (effect instanceof game_effects_1.AttackEffect && effect.attack === this.attacks[1]) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const active = opponent.active;

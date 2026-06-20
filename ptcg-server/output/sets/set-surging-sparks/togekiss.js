@@ -35,29 +35,29 @@ class Togekiss extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof game_effects_1.KnockOutEffect && effect.target === effect.player.active) {
-            const player = effect.player;
-            const opponent = game_1.StateUtils.getOpponent(state, player);
+            const knockedOutOwner = effect.player;
+            const attacker = game_1.StateUtils.getOpponent(state, knockedOutOwner);
             // Check if this card is in play (active or bench)
-            const isInPlay = opponent.active.cards.includes(this) || opponent.bench.some(b => b.cards.includes(this));
+            const isInPlay = attacker.active.cards.includes(this) || attacker.bench.some(b => b.cards.includes(this));
             if (!isInPlay) {
                 return state;
             }
             // Do not activate between turns, or when it's not opponents turn.
-            if (state.players[state.activePlayer] !== opponent) {
+            if (state.phase !== game_1.GamePhase.ATTACK || state.players[state.activePlayer] !== attacker) {
                 return state;
             }
             // Try to reduce PowerEffect, to check if something is blocking our ability
-            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, attacker, this)) {
                 return state;
             }
             // Check if ability has already been activated for this knockout
-            if (player.marker.hasMarker('TOGEKISS_KNOCKOUT_FLIP')) {
+            if (knockedOutOwner.marker.hasMarker('TOGEKISS_KNOCKOUT_FLIP')) {
                 return state;
             }
             // Mark ability as used for this knockout
-            player.marker.addMarkerToState('TOGEKISS_KNOCKOUT_FLIP');
+            knockedOutOwner.marker.addMarkerToState('TOGEKISS_KNOCKOUT_FLIP');
             return store.prompt(state, [
-                new game_1.CoinFlipPrompt(opponent.id, game_1.GameMessage.COIN_FLIP)
+                new game_1.CoinFlipPrompt(attacker.id, game_1.GameMessage.COIN_FLIP)
             ], result => {
                 if (result === true) {
                     //If Heads, take 1 more Prize card for that Knock Out
@@ -66,7 +66,7 @@ class Togekiss extends game_1.PokemonCard {
                     }
                 }
                 // Remove the marker after the coin flip
-                player.marker.removeMarker('TOGEKISS_KNOCKOUT_FLIP');
+                knockedOutOwner.marker.removeMarker('TOGEKISS_KNOCKOUT_FLIP');
             });
         }
         return state;

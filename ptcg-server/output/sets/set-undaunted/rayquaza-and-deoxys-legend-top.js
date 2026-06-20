@@ -77,18 +77,17 @@ class RayquazaAndDeoxysLegendTop extends pokemon_card_1.PokemonCard {
         }
         // Space Virus
         if (effect instanceof game_effects_1.KnockOutEffect && effect.target === effect.player.active) {
-            const player = effect.player;
-            const opponent = game_1.StateUtils.getOpponent(state, player);
+            const knockedOutOwner = effect.player;
+            const attacker = game_1.StateUtils.getOpponent(state, knockedOutOwner);
             // Do not activate between turns, or when it's not opponents turn.
-            if (state.phase !== game_1.GamePhase.ATTACK || state.players[state.activePlayer] !== opponent) {
+            if (state.phase !== game_1.GamePhase.ATTACK || state.players[state.activePlayer] !== attacker) {
                 return state;
             }
-            // Lugia wasn't attacking
-            const pokemonCard = opponent.active.getPokemonCard();
+            const pokemonCard = attacker.active.getPokemonCard();
             if (pokemonCard !== this) {
                 return state;
             }
-            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, player, this)) {
+            if ((0, prefabs_1.IS_POKEBODY_BLOCKED)(store, state, attacker, this)) {
                 return state;
             }
             if (effect.prizeCount > 0) {

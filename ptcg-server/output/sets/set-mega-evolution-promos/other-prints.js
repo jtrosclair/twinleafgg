@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DoubladeMEP = exports.TyrantrumMEP = exports.BarbaracleMEP = exports.SerperiorMEP = exports.HaunterMEP = exports.MegaKangaskhanexMEP = exports.OricorioexMEP = exports.MegaCharizardXexMEP = exports.CharcadetMEP = exports.ToxtricityMEP = exports.ZacianMEP = exports.CeruledgeMEP = exports.MegaVenusaurExMEP = exports.MegaLucarioexMEP = exports.MegaLatiasexMEP = exports.RioluMEP = exports.Alakazam2MEP = exports.LunatoneMEP = exports.AlakazamMEP = exports.InteleonMEP = exports.MeganiumMEP = void 0;
+exports.TyruntIRMEP = exports.DoubladeMEP = exports.TyrantrumMEP = exports.BarbaracleMEP = exports.SerperiorMEP = exports.HaunterMEP = exports.MegaKangaskhanexMEP = exports.OricorioexMEP = exports.MegaCharizardXexMEP = exports.CharcadetMEP = exports.ToxtricityMEP = exports.ZacianMEP = exports.CeruledgeMEP = exports.MegaVenusaurExMEP = exports.MegaLucarioexMEP = exports.MegaLatiasexMEP = exports.RioluMEP = exports.Alakazam2MEP = exports.LunatoneMEP = exports.AlakazamMEP = exports.InteleonMEP = exports.MeganiumMEP = void 0;
 const meganium_1 = require("../set-mega-evolution/meganium");
 const inteleon_1 = require("../set-mega-evolution/inteleon");
 const alakazam_1 = require("../set-mega-evolution/alakazam");
@@ -22,6 +22,7 @@ const serperior_1 = require("../set-perfect-order/serperior");
 const barbaracle_1 = require("../set-perfect-order/barbaracle");
 const tyrantrum_1 = require("../set-perfect-order/tyrantrum");
 const doublade_1 = require("../set-perfect-order/doublade");
+const tyrunt_1 = require("../set-perfect-order/tyrunt");
 class MeganiumMEP extends meganium_1.Meganium {
     constructor() {
         super(...arguments);
@@ -211,3 +212,12 @@ class DoubladeMEP extends doublade_1.Doublade {
     }
 }
 exports.DoubladeMEP = DoubladeMEP;
+class TyruntIRMEP extends tyrunt_1.Tyrunt {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '70';
+        this.fullName = 'TyruntIR MEP';
+        this.set = 'MEP';
+    }
+}
+exports.TyruntIRMEP = TyruntIRMEP;

@@ -49,7 +49,7 @@ class MegaGreninjaex extends game_1.PokemonCard {
             if (player.active.getPokemonCard() !== this) {
                 throw new game_error_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
-            const basicWInHand = player.hand.cards.find(c => c instanceof energy_card_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC && c.provides.includes(W));
+            const basicWInHand = player.hand.cards.find(c => c instanceof energy_card_1.EnergyCard && c.energyType === card_types_1.EnergyType.BASIC && c.provides.includes(card_types_1.CardType.WATER));
             if (!basicWInHand) {
                 throw new game_error_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
@@ -60,7 +60,7 @@ class MegaGreninjaex extends game_1.PokemonCard {
             if (player.marker.hasMarker(this.MORTAL_SHURIKEN_MARKER, this)) {
                 throw new game_error_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            state = store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, { superType: card_types_1.SuperType.ENERGY }, { allowCancel: true, min: 1, max: 1 }), cards => {
+            state = store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, provides: [card_types_1.CardType.WATER] }, { allowCancel: true, min: 1, max: 1 }), cards => {
                 cards = cards || [];
                 if (cards.length === 0) {
                     player.marker.addMarker(this.MORTAL_SHURIKEN_MARKER, this);
@@ -85,23 +85,12 @@ class MegaGreninjaex extends game_1.PokemonCard {
         }
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
             const player = effect.player;
-            const wEnergies = player.active.cards.filter(c => c instanceof energy_card_1.EnergyCard && c.provides.includes(W));
-            if (wEnergies.length === 0) {
-                return state;
-            }
-            const blocked = [];
-            player.active.cards.forEach((c, i) => {
-                if (!(c instanceof energy_card_1.EnergyCard) || !c.provides.includes(W)) {
-                    blocked.push(i);
-                }
-            });
-            return store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_HAND, player.active, {}, { min: 0, max: 1, allowCancel: true, blocked }), selected => {
-                const cards = selected || [];
-                if (cards.length > 0) {
-                    player.active.moveCardTo(cards[0], player.hand);
+            (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
+                if (result) {
+                    (0, prefabs_1.PUT_SPECIFIC_ENERGY_FROM_THIS_POKEMON_INTO_HAND)(store, state, effect, [card_types_1.CardType.WATER]);
                     effect.damage += 80;
                 }
-            });
+            }, game_1.GameMessage.WANT_TO_USE_EFFECT_OF_ATTACK);
         }
         return state;
     }

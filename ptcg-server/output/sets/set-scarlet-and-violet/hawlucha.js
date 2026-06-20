@@ -7,6 +7,7 @@ const card_types_1 = require("../../game/store/card/card-types");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const game_message_1 = require("../../game/game-message");
 const game_effects_1 = require("../../game/store/effects/game-effects");
+const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class Hawlucha extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -21,7 +22,7 @@ class Hawlucha extends pokemon_card_1.PokemonCard {
                 powerType: game_1.PowerType.ABILITY,
                 text: 'When you play this Pokémon from your hand onto your ' +
                     'Bench during your turn, you may choose 2 of your ' +
-                    'opponent\'s Benched Pokémon and put 1 damage counter' +
+                    'opponent\'s Benched Pokémon and put 1 damage counter ' +
                     'on each of them.'
             }];
         this.attacks = [
@@ -61,17 +62,15 @@ class Hawlucha extends pokemon_card_1.PokemonCard {
                         return state;
                     }
                     return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_message_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, game_1.PlayerType.TOP_PLAYER, [game_1.SlotType.BENCH], { min: 1, max: 2, allowCancel: false }), selected => {
+                        (0, prefabs_1.ABILITY_USED)(player, this);
                         const targets = selected || [];
+                        // Ref: set-chilling-reign/inteleon.ts (Quick Shooting) — PlaceDamageCountersEffect per target
                         targets.forEach(target => {
-                            const effectOfAbility = new game_effects_1.EffectOfAbilityEffect(player, this.powers[0], this, target);
-                            store.reduceEffect(state, effectOfAbility);
-                            if (effectOfAbility.target) {
-                                target.damage += 10;
-                            }
+                            state = store.reduceEffect(state, new game_effects_1.PlaceDamageCountersEffect(player, target, 10, this));
                         });
+                        return state;
                     });
                 }
-                return state;
             });
         }
         return state;

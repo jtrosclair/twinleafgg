@@ -36,38 +36,38 @@ class StoutlandV extends pokemon_card_1.PokemonCard {
         this.setNumber = '117';
         this.name = 'Stoutland V';
         this.fullName = 'Stoutland V BST';
+        this.usedDoubleDipFangs = false;
     }
     reduceEffect(store, state, effect) {
-        var _a;
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+            this.usedDoubleDipFangs = true;
+        }
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            this.usedDoubleDipFangs = false;
+            const player = effect.player;
+            const dealDamage = new attack_effects_1.DealDamageEffect(effect, 30);
+            dealDamage.target = player.active;
+            return store.reduceEffect(state, dealDamage);
+        }
         if (effect instanceof game_effects_1.KnockOutEffect && effect.target === effect.player.active) {
-            const attack = (_a = effect.player.active.getPokemonCard()) === null || _a === void 0 ? void 0 : _a.attacks[0];
-            if (attack) {
-                const player = effect.player;
-                const opponent = game_1.StateUtils.getOpponent(state, player);
-                // Do not activate between turns, or when it's not opponents turn.
-                if (state.phase !== game_1.GamePhase.ATTACK || state.players[state.activePlayer] !== opponent) {
-                    return state;
-                }
-                // Iron Hands wasn't attacking
-                const pokemonCard = opponent.active.getPokemonCard();
-                if (pokemonCard !== this) {
-                    return state;
-                }
-                const activePokemon = opponent.active.getPokemonCard();
-                if (activePokemon && activePokemon.stage === card_types_1.Stage.BASIC) {
-                    if (effect.prizeCount > 0) {
-                        effect.prizeCount += 1;
-                        return state;
-                    }
-                }
+            const knockedOutOwner = effect.player;
+            const attacker = game_1.StateUtils.getOpponent(state, knockedOutOwner);
+            if (!this.usedDoubleDipFangs) {
                 return state;
             }
-            if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
-                const player = effect.player;
-                const dealDamage = new attack_effects_1.DealDamageEffect(effect, 30);
-                dealDamage.target = player.active;
-                return store.reduceEffect(state, dealDamage);
+            // Do not activate between turns, or when it's not attacker's turn.
+            if (state.phase !== game_1.GamePhase.ATTACK || state.players[state.activePlayer] !== attacker) {
+                return state;
             }
+            // Stoutland V wasn't attacking.
+            if (attacker.active.getPokemonCard() !== this) {
+                return state;
+            }
+            const knockedOutPokemon = knockedOutOwner.active.getPokemonCard();
+            if ((knockedOutPokemon === null || knockedOutPokemon === void 0 ? void 0 : knockedOutPokemon.stage) === card_types_1.Stage.BASIC && effect.prizeCount > 0) {
+                effect.prizeCount += 1;
+            }
+            this.usedDoubleDipFangs = false;
             return state;
         }
         return state;

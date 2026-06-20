@@ -165,6 +165,7 @@ export declare function DISCARD_X_ENERGY_FROM_YOUR_HAND(effect: PowerEffect, sto
  * @param energyMap The Energies that must be discarded.
  */
 export declare function DISCARD_SPECIFIC_ENERGY_FROM_THIS_POKEMON(store: StoreLike, state: State, effect: AttackEffect, energyMap: CardType[]): void;
+export declare function PUT_SPECIFIC_ENERGY_FROM_THIS_POKEMON_INTO_HAND(store: StoreLike, state: State, effect: AttackEffect, energyMap: CardType[]): void;
 export declare function DISCARD_ALL_ENERGY_FROM_POKEMON(store: StoreLike, state: State, effect: AttackEffect, card: Card): void;
 export interface AsOftenAsYouLikeAttachBasicTypeEnergyFromHandOptions {
     destinationSlots?: SlotType[];

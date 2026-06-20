@@ -28,7 +28,8 @@ class RibbonBadge extends trainer_card_1.TrainerCard {
                 return state;
             }
             const pokemonCard = effect.target.getPokemonCard();
-            if ((pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.name.includes('Sylveon')) && (pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.tags.includes(card_types_1.CardTag.POKEMON_V)) || (pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.tags.includes(card_types_1.CardTag.POKEMON_VMAX)) || (pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.tags.includes(card_types_1.CardTag.POKEMON_VSTAR))) {
+            if ((pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.name.includes('Sylveon')) &&
+                ((pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.tags.includes(card_types_1.CardTag.POKEMON_V)) || (pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.tags.includes(card_types_1.CardTag.POKEMON_VMAX)) || (pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.tags.includes(card_types_1.CardTag.POKEMON_VSTAR)))) {
                 effect.prizeCount -= 1;
             }
             return state;

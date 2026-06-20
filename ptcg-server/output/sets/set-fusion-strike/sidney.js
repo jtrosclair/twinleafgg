@@ -31,24 +31,21 @@ class Sidney extends trainer_card_1.TrainerCard {
                 return state;
             }
             // Filter: only Tool cards, Special Energy cards, and Stadium cards are eligible
-            const eligibleIndices = [];
+            var eligibleCount = 0;
             const blocked = [];
             opponent.hand.cards.forEach((card, index) => {
                 const isTool = card instanceof trainer_card_1.TrainerCard && card.trainerType === card_types_1.TrainerType.TOOL;
                 const isSpecialEnergy = card instanceof energy_card_1.EnergyCard && card.energyType === card_types_1.EnergyType.SPECIAL;
                 const isStadium = card instanceof trainer_card_1.TrainerCard && card.trainerType === card_types_1.TrainerType.STADIUM;
                 if (isTool || isSpecialEnergy || isStadium) {
-                    eligibleIndices.push(index);
+                    eligibleCount++;
                 }
                 else {
                     blocked.push(index);
                 }
             });
-            if (eligibleIndices.length === 0) {
-                return state;
-            }
-            const max = Math.min(2, eligibleIndices.length);
-            store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, opponent.hand, { superType: card_types_1.SuperType.ANY }, { min: 0, max, allowCancel: false, blocked }), selected => {
+            const max = Math.min(2, eligibleCount);
+            store.prompt(state, new game_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, opponent.hand, {}, { min: 0, max, allowCancel: false, blocked }), (selected) => {
                 const cards = selected || [];
                 opponent.hand.moveCardsTo(cards, opponent.discard);
             });

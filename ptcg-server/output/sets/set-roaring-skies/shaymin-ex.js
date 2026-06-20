@@ -12,24 +12,26 @@ class ShayminEx extends pokemon_card_1.PokemonCard {
         super(...arguments);
         this.tags = [card_types_1.CardTag.POKEMON_EX];
         this.stage = card_types_1.Stage.BASIC;
-        this.cardType = card_types_1.CardType.COLORLESS;
+        this.cardType = C;
         this.hp = 110;
-        this.weakness = [{ type: card_types_1.CardType.LIGHTNING }];
-        this.resistance = [{ type: card_types_1.CardType.FIGHTING, value: -20 }];
-        this.retreat = [card_types_1.CardType.COLORLESS];
-        this.powers = [{
+        this.weakness = [{ type: L }];
+        this.resistance = [{ type: F, value: -20 }];
+        this.retreat = [C];
+        this.powers = [
+            {
                 name: 'Set Up',
                 powerType: game_1.PowerType.ABILITY,
                 text: 'When you put this Pokemon from your hand onto your Bench, ' +
-                    'you may draw cards until you have 6 cards in your hand.'
-            }];
+                    'you may draw cards until you have 6 cards in your hand.',
+            },
+        ];
         this.attacks = [
             {
                 name: 'Sky Return',
-                cost: [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS],
+                cost: [C, C],
                 damage: 30,
-                text: 'Return this Pokemon and all cards attached to it to your hand.'
-            }
+                text: 'Return this Pokemon and all cards attached to it to your hand.',
+            },
         ];
         this.set = 'ROS';
         this.name = 'Shaymin-EX';
@@ -40,7 +42,7 @@ class ShayminEx extends pokemon_card_1.PokemonCard {
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
             const player = effect.player;
-            const cards = player.hand.cards.filter(c => c !== this);
+            const cards = player.hand.cards.filter((c) => c !== this);
             const cardsToDraw = Math.max(0, 6 - cards.length);
             if (cardsToDraw === 0) {
                 return state;
@@ -49,14 +51,14 @@ class ShayminEx extends pokemon_card_1.PokemonCard {
             if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
                 return state;
             }
-            return store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
+            return store.prompt(state, new game_1.ConfirmPrompt(effect.player.id, game_1.GameMessage.WANT_TO_USE_ABILITY), (wantToUse) => {
                 if (wantToUse) {
                     (0, prefabs_1.ABILITY_USED)(player, this);
                     player.deck.moveTo(player.hand, cardsToDraw);
                 }
             });
         }
-        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
+        if ((0, prefabs_1.AFTER_ATTACK)(effect, 0, this)) {
             (0, attack_effects_1.PUT_THIS_POKEMON_AND_ALL_ATTACHED_CARDS_INTO_YOUR_HAND)(store, state, effect);
             return state;
         }

@@ -8,8 +8,7 @@ const play_card_effects_1 = require("../../game/store/effects/play-card-effects"
 const game_1 = require("../../game");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const check_effects_1 = require("../../game/store/effects/check-effects");
-const prefabs_1 = require("../../game/store/prefabs/prefabs");
-function* playCard(next, store, state, effect, self) {
+function* playCard(next, store, state, effect) {
     const player = effect.player;
     const blocked = [];
     let hasPokemonWithDamage = false;
@@ -36,21 +35,20 @@ function* playCard(next, store, state, effect, self) {
     if (targets.length === 0) {
         return state;
     }
-    targets.forEach(target => {
-        // Heal Pokemon
-        const healEffect = new game_effects_1.HealEffect(player, target, 120);
-        store.reduceEffect(state, healEffect);
-        const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, target);
-        state = store.reduceEffect(state, checkProvidedEnergy);
-        const energyList = [];
-        for (let i = 0; i < 2; i++) {
-            energyList.push(card_types_1.CardType.COLORLESS);
-        }
-        state = store.prompt(state, new game_1.ChooseEnergyPrompt(player.id, game_1.GameMessage.CHOOSE_ENERGIES_TO_DISCARD, checkProvidedEnergy.energyMap, energyList, { allowCancel: false }), energy => {
-            const cards = (energy || []).map(e => e.card);
-            (0, prefabs_1.MOVE_CARDS)(store, state, target, player.discard, { cards: cards, sourceCard: self });
-        });
+    const target = targets[0];
+    const healEffect = new game_effects_1.HealEffect(player, target, 120);
+    store.reduceEffect(state, healEffect);
+    const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, target);
+    state = store.reduceEffect(state, checkProvidedEnergy);
+    const energyList = [card_types_1.CardType.COLORLESS, card_types_1.CardType.COLORLESS];
+    let cards = [];
+    yield store.prompt(state, new game_1.ChooseEnergyPrompt(player.id, game_1.GameMessage.CHOOSE_ENERGIES_TO_DISCARD, checkProvidedEnergy.energyMap, energyList, { allowCancel: false }), energy => {
+        cards = (energy || []).map(e => e.card);
+        next();
     });
+    if (cards.length > 0) {
+        target.moveCardsTo(cards, player.discard);
+    }
     return state;
 }
 class HyperPotion extends trainer_card_1.TrainerCard {
@@ -81,7 +79,7 @@ class HyperPotion extends trainer_card_1.TrainerCard {
     }
     reduceEffect(store, state, effect) {
         if (effect instanceof play_card_effects_1.TrainerEffect && effect.trainerCard === this) {
-            const generator = playCard(() => generator.next(), store, state, effect, this);
+            const generator = playCard(() => generator.next(), store, state, effect);
             return generator.next().value;
         }
         return state;

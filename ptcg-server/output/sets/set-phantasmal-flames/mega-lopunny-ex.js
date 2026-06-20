@@ -4,6 +4,8 @@ exports.MegaLopunnyex = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
+const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const game_1 = require("../../game");
 class MegaLopunnyex extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -23,6 +25,7 @@ class MegaLopunnyex extends pokemon_card_1.PokemonCard {
                 name: 'Spiky Hopper',
                 cost: [C, C],
                 damage: 160,
+                shredAttack: true,
                 text: 'This attack\'s damage isn\'t affected by any effects on your opponent\'s Active Pokemon.'
             }];
         this.regulationMark = 'I';
@@ -39,9 +42,17 @@ class MegaLopunnyex extends pokemon_card_1.PokemonCard {
             }
         }
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
-            // Spike Hopper ignores effects on opponent's Active Pokemon
-            // This is handled by the damage calculation system automatically
-            // No special implementation needed as the text is descriptive
+            const player = effect.player;
+            const opponent = game_1.StateUtils.getOpponent(state, player);
+            const applyWeakness = new attack_effects_1.ApplyWeaknessEffect(effect, 160);
+            store.reduceEffect(state, applyWeakness);
+            const damage = applyWeakness.damage;
+            effect.damage = 0;
+            if (damage > 0) {
+                opponent.active.damage += damage;
+                const afterDamage = new attack_effects_1.AfterDamageEffect(effect, damage);
+                state = store.reduceEffect(state, afterDamage);
+            }
         }
         return state;
     }

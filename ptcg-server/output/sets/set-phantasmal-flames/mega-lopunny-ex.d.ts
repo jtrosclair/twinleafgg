@@ -13,12 +13,19 @@ export declare class MegaLopunnyex extends PokemonCard {
         type: CardType.FIGHTING;
     }[];
     retreat: CardType.COLORLESS[];
-    attacks: {
+    attacks: ({
         name: string;
         cost: CardType.COLORLESS[];
         damage: number;
         text: string;
-    }[];
+        shredAttack?: undefined;
+    } | {
+        name: string;
+        cost: CardType.COLORLESS[];
+        damage: number;
+        shredAttack: boolean;
+        text: string;
+    })[];
     regulationMark: string;
     set: string;
     cardImage: string;

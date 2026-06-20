@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MegaZygardeexHR = exports.JacintheSIR = exports.RosasEncouragementSIR = exports.MeowthexSIR = exports.MegaZygardeexSIR = exports.MegaClefableexSIR = exports.MegaStarmieexSIR = exports.LumioiseCityFA = exports.ForestOfVitalityFA = exports.JacintheFA = exports.RosasEncouragementFA = exports.NaveenFA = exports.TarragonFA = exports.WondrousPatchFA = exports.PokePadNormal = exports.PokePadFA = exports.SacredAshFA = exports.EnergyRecyclerFA = exports.MeowthexFA = exports.MegaSkarmoryexFA = exports.YveltalexFA = exports.MegaZygardeexFA = exports.MegaClefableexFA = exports.MegaStarmieexFA = exports.SalazzleexFA = exports.DecidueyeexFA = exports.RaticateIR = exports.DoubladeIR = exports.DrapionIR = exports.TyruntIR = exports.ProbopassIR = exports.EspurrIR = exports.ClefairyIR = exports.DedenneIR = exports.AurorusIR = exports.TalonflameIR = exports.RowletIR = exports.JudgePOR = exports.SpewpaIR = void 0;
+exports.MegaZygardeexHR = exports.JacintheSIR = exports.RosasEncouragementSIR = exports.MeowthexSIR = exports.MegaZygardeexSIR = exports.MegaClefableexSIR = exports.MegaStarmieexSIR = exports.LumioiseCityFA = exports.ForestOfVitalityFA = exports.JacintheFA = exports.RosasEncouragementFA = exports.NaveenFA = exports.TarragonFA = exports.WondrousPatchFA = exports.PokePadNormal = exports.PokePadFA = exports.SacredAshFA = exports.EnergyRecyclerFA = exports.MeowthexFA = exports.MegaSkarmoryexFA = exports.YveltalexFA = exports.MegaZygardeexFA = exports.MegaClefableexFA = exports.MegaStarmieexFA = exports.SalazzleexFA = exports.DecidueyeexFA = exports.RaticateIR = exports.DoubladeIR = exports.DrapionIR = exports.ProbopassIR = exports.EspurrIR = exports.ClefairyIR = exports.DedenneIR = exports.AurorusIR = exports.TalonflameIR = exports.RowletIR = exports.JudgePOR = exports.SpewpaIR = void 0;
 const spewpa_1 = require("./spewpa");
 const rowlet_1 = require("./rowlet");
 const talonflame_1 = require("./talonflame");
@@ -9,7 +9,6 @@ const dedenne_1 = require("./dedenne");
 const clefairy_1 = require("./clefairy");
 const espurr_1 = require("./espurr");
 const probopass_1 = require("./probopass");
-const tyrunt_1 = require("./tyrunt");
 const drapion_1 = require("./drapion");
 const doublade_1 = require("./doublade");
 const raticate_1 = require("./raticate");
@@ -114,15 +113,6 @@ class ProbopassIR extends probopass_1.Probopass {
     }
 }
 exports.ProbopassIR = ProbopassIR;
-class TyruntIR extends tyrunt_1.Tyrunt {
-    constructor() {
-        super(...arguments);
-        this.fullName = 'TyruntIR POR';
-        this.setNumber = '89';
-        this.usSetNumber = 'MEP 70';
-    }
-}
-exports.TyruntIR = TyruntIR;
 class DrapionIR extends drapion_1.Drapion {
     constructor() {
         super(...arguments);

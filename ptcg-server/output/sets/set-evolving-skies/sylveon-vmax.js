@@ -61,24 +61,21 @@ class SylveonVMAX extends pokemon_card_1.PokemonCard {
                     store.reduceEffect(state, healEffect);
                 }
             });
-            if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
-                const player = effect.player;
-                const playerBench = player.bench;
-                const uniqueTypes = new Set();
-                playerBench.forEach(c => {
-                    if (c.getPokemonCard() instanceof pokemon_card_1.PokemonCard) {
-                        const card = c.getPokemonCard();
-                        const checkEffect = new check_effects_1.CheckPokemonTypeEffect(c);
-                        store.reduceEffect(state, checkEffect);
-                        console.log('Card Types:', checkEffect.cardTypes);
-                        console.log('Additional Types:', card === null || card === void 0 ? void 0 : card.additionalCardTypes);
-                        checkEffect.cardTypes.forEach(type => uniqueTypes.add(type));
-                    }
-                });
-                // Set the damage based on the count of unique Pokémon types
-                effect.damage += 30 * uniqueTypes.size;
-                return state;
-            }
+            return state;
+        }
+        if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
+            const player = effect.player;
+            const playerBench = player.bench;
+            const uniqueTypes = new Set();
+            playerBench.forEach(c => {
+                if (c.getPokemonCard() instanceof pokemon_card_1.PokemonCard) {
+                    const checkEffect = new check_effects_1.CheckPokemonTypeEffect(c);
+                    store.reduceEffect(state, checkEffect);
+                    checkEffect.cardTypes.forEach(type => uniqueTypes.add(type));
+                }
+            });
+            // Set the damage based on the count of unique Pokémon types
+            effect.damage += 30 * uniqueTypes.size;
             return state;
         }
         return state;

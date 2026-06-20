@@ -23,5 +23,6 @@ export declare class StoutlandV extends PokemonCard {
     setNumber: string;
     name: string;
     fullName: string;
+    private usedDoubleDipFangs;
     reduceEffect(store: StoreLike, state: State, effect: Effect): State;
 }

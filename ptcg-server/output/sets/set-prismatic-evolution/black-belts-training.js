@@ -31,7 +31,7 @@ class BlackBeltsTraining extends trainer_card_1.TrainerCard {
             player.hand.moveCardTo(effect.trainerCard, player.supporter);
             (0, prefabs_1.ADD_MARKER)(this.BLACK_BELTS_TRAINING_MARKER, player, this);
         }
-        if ((0, prefabs_1.PUT_DAMAGE)(effect) && (0, prefabs_1.HAS_MARKER)(this.BLACK_BELTS_TRAINING_MARKER, effect.player, this) && effect.damage > 0) {
+        if ((0, prefabs_1.DEAL_DAMAGE)(effect) && (0, prefabs_1.HAS_MARKER)(this.BLACK_BELTS_TRAINING_MARKER, effect.player, this) && effect.damage > 0) {
             const player = effect.player;
             const opponent = game_1.StateUtils.getOpponent(state, player);
             const oppActiveCard = effect.target.getPokemonCard();

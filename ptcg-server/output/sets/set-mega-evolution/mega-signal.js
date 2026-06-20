@@ -11,7 +11,7 @@ function* playCard(next, store, state, effect) {
     let cards = [];
     const blocked = [];
     player.deck.cards.forEach((card, index) => {
-        if (card instanceof game_1.PokemonCard && !card.tags.includes(card_types_1.CardTag.POKEMON_ex) && !card.tags.includes(card_types_1.CardTag.MEGA)) {
+        if (!(card instanceof game_1.PokemonCard) || !card.tags.includes(card_types_1.CardTag.POKEMON_ex) || !card.tags.includes(card_types_1.CardTag.POKEMON_SV_MEGA)) {
             blocked.push(index);
         }
     });

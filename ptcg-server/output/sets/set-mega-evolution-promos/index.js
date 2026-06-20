@@ -38,4 +38,5 @@ exports.setMegaEvolutionPromos = [
     new other_prints_1.BarbaracleMEP(),
     new other_prints_1.TyrantrumMEP(),
     new other_prints_1.DoubladeMEP(),
+    new other_prints_1.TyruntIRMEP(),
 ];

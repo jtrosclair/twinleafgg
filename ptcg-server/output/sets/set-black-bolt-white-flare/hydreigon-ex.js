@@ -58,13 +58,13 @@ class Hydreigonex extends pokemon_card_1.PokemonCard {
             });
         }
         if (effect instanceof game_effects_1.KnockOutEffect && effect.target.isStage(card_types_1.Stage.BASIC)) {
-            const player = effect.player;
-            const opponent = game_1.StateUtils.getOpponent(state, player);
+            const knockedOutOwner = effect.player;
+            const attacker = game_1.StateUtils.getOpponent(state, knockedOutOwner);
             // Only during attack phase, and only if Hydreigon ex is attacking
-            if (state.phase !== game_1.GamePhase.ATTACK || opponent.active.getPokemonCard() !== this) {
+            if (state.phase !== game_1.GamePhase.ATTACK || attacker.active.getPokemonCard() !== this) {
                 return state;
             }
-            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, player, this)) {
+            if ((0, prefabs_1.IS_ABILITY_BLOCKED)(store, state, attacker, this)) {
                 return state;
             }
             if (effect.prizeCount > 0) {
