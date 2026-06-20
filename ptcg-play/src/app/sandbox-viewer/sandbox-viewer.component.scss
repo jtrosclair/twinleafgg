@@ -176,3 +176,58 @@
   text-align: center;
   max-width: 300px;
 }
+
+.card-data-download {
+  width: min(360px, 100%);
+  margin-top: 4px;
+  padding: 14px 16px;
+  background: rgba(99, 80, 172, 0.18);
+  border: 1px solid rgba(154, 128, 255, 0.35);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.86);
+
+  mat-progress-bar {
+    height: 6px;
+    margin: 10px 0 8px;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+}
+
+.card-data-download-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.card-data-download-meta {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.card-data-download-helper {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.card-data-status {
+  align-items: flex-start;
+}
+
+.card-data-status-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+
+  mat-progress-bar {
+    height: 5px;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+}

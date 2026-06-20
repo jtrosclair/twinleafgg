@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
@@ -60,6 +60,29 @@ export class ApiService {
     const options = this.buildHeaderOptions();
 
     return this.http.get<T>(url, options).pipe(share());
+  }
+
+  public getWithProgress<T>(uri: string, params?: { [key: string]: any }): Observable<HttpEvent<T>> {
+    let url = this.buildUrl(uri);
+
+    // Build query string from params if provided
+    if (params) {
+      const queryString = Object.keys(params)
+        .filter(key => params[key] !== undefined && params[key] !== null)
+        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+        .join('&');
+      if (queryString) {
+        url += (url.includes('?') ? '&' : '?') + queryString;
+      }
+    }
+
+    const options = this.buildHeaderOptions();
+
+    return this.http.get<T>(url, {
+      ...options,
+      observe: 'events',
+      reportProgress: true
+    }).pipe(share());
   }
 
   public post<T>(uri: string, body: any): Observable<T> {

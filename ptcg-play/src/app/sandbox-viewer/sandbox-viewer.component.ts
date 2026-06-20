@@ -2,12 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StateSerializer } from 'ptcg-server';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { AlertService } from '../shared/alert/alert.service';
 import { SessionService } from '../shared/session/session.service';
-import { CardsService } from '../api/services/cards.service';
+import { CardsDownloadProgress, CardsService } from '../api/services/cards.service';
 import { CardsBaseService } from '../shared/cards/cards-base.service';
 import { GameService } from '../api/services/game.service';
 import { SocketService } from '../api/socket.service';
@@ -26,6 +26,7 @@ export class SandboxViewerComponent implements OnInit, OnDestroy {
   public error = '';
   public cardsLoaded = false;
   public isReady = false;
+  public cardDataProgress$: Observable<CardsDownloadProgress>;
 
   private destroy$ = new Subject<void>();
   public autoStartState: string | null = null;
@@ -43,7 +44,9 @@ export class SandboxViewerComponent implements OnInit, OnDestroy {
     private gameService: GameService,
     private socketService: SocketService,
     private loginService: LoginService
-  ) { }
+  ) {
+    this.cardDataProgress$ = this.cardsService.cardsDownloadProgress$;
+  }
 
   ngOnInit(): void {
     // Check for state in URL hash (e.g., /sandbox-viewer#BASE64STATE)

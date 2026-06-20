@@ -13,6 +13,27 @@
           <div class="loading-spinner">
             <mat-spinner diameter="40"></mat-spinner>
           </div>
+          <ng-container *ngIf="cardDataProgress$ | async as cardProgress">
+            <div class="card-data-download" *ngIf="cardProgress.active || cardProgress.phase === 'error'">
+              <div class="card-data-download-title">{{ cardProgress.message }}</div>
+              <mat-progress-bar
+                *ngIf="cardProgress.phase !== 'error'"
+                [mode]="cardProgress.progress === null ? 'indeterminate' : 'determinate'"
+                [value]="cardProgress.progress || 0">
+              </mat-progress-bar>
+              <div class="card-data-download-meta" *ngIf="cardProgress.phase === 'downloading'">
+                <span *ngIf="cardProgress.progress !== null">{{ cardProgress.progress }}%</span>
+                <span *ngIf="cardProgress.totalBytes">
+                  {{ cardProgress.loadedBytes / 1048576 | number:'1.1-1' }} MB /
+                  {{ cardProgress.totalBytes / 1048576 | number:'1.1-1' }} MB
+                </span>
+                <span *ngIf="!cardProgress.totalBytes">Downloading card database…</span>
+              </div>
+              <div class="card-data-download-helper" *ngIf="cardProgress.phase === 'downloading'">
+                PrizeMap is updating the simulator card database. This can take a moment after new cards are added.
+              </div>
+            </div>
+          </ng-container>
           <p class="delayed-message" *ngIf="delayedMessage">{{ delayedMessage }}</p>
         </div>
         <div class="sandbox-viewer-error" *ngIf="error">
@@ -32,6 +53,21 @@
           <mat-spinner diameter="20"></mat-spinner>
           <span>{{ 'SANDBOX_VIEWER_CONNECTING' | translate }}</span>
         </div>
+
+        <ng-container *ngIf="cardDataProgress$ | async as cardProgress">
+          <div class="sandbox-viewer-status card-data-status" *ngIf="cardProgress.active || cardProgress.phase === 'error'">
+            <mat-icon *ngIf="cardProgress.phase === 'error'">error</mat-icon>
+            <mat-spinner *ngIf="cardProgress.phase !== 'error'" diameter="20"></mat-spinner>
+            <div class="card-data-status-body">
+              <span>{{ cardProgress.message }}</span>
+              <mat-progress-bar
+                *ngIf="cardProgress.phase !== 'error'"
+                [mode]="cardProgress.progress === null ? 'indeterminate' : 'determinate'"
+                [value]="cardProgress.progress || 0">
+              </mat-progress-bar>
+            </div>
+          </div>
+        </ng-container>
 
         <div class="sandbox-viewer-status success" *ngIf="isReady && !initializingSession">
           <mat-icon>check_circle</mat-icon>
