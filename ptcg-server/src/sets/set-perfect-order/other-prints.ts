@@ -6,7 +6,6 @@ import { Dedenne } from "./dedenne";
 import { Clefairy } from "./clefairy";
 import { Espurr } from "./espurr";
 import { Probopass } from "./probopass";
-import { Tyrunt } from "./tyrunt";
 import { Drapion } from "./drapion";
 import { Doublade } from "./doublade";
 import { Raticate } from "./raticate";
@@ -84,12 +83,6 @@ export class ProbopassIR extends Probopass {
   public fullName = 'ProbopassIR POR';
   public setNumber = '88';
   public usSetNumber = 'POR 96';
-}
-
-export class TyruntIR extends Tyrunt {
-  public fullName = 'TyruntIR POR';
-  public setNumber = '89';
-  public usSetNumber = 'MEP 70';
 }
 
 export class DrapionIR extends Drapion {

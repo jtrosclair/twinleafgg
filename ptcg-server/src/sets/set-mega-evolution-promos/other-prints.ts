@@ -19,6 +19,7 @@ import { Serperior } from '../set-perfect-order/serperior';
 import { Barbaracle } from '../set-perfect-order/barbaracle';
 import { Tyrantrum } from '../set-perfect-order/tyrantrum';
 import { Doublade } from '../set-perfect-order/doublade';
+import { Tyrunt } from '../set-perfect-order/tyrunt';
 
 export class MeganiumMEP extends Meganium {
   public setNumber = '1';
@@ -143,5 +144,11 @@ export class TyrantrumMEP extends Tyrantrum {
 export class DoubladeMEP extends Doublade {
   public setNumber = '67';
   public fullName: string = 'Doublade MEP';
+  public set = 'MEP';
+}
+
+export class TyruntIRMEP extends Tyrunt {
+  public setNumber = '70';
+  public fullName: string = 'TyruntIR MEP';
   public set = 'MEP';
 }

@@ -14,7 +14,7 @@ export class BookOfTransformation extends TrainerCard {
   public usSetNumber = 'CRI 83';
   public name: string = 'Book of Transformation';
   public fullName: string = 'Book of Transformation M4';
-  public text: string = 'You must play 2 Book of Transformation cards at once. Switch 1 of your Basic Pokemon in play with 1 of your Basic Pokemon in your discard pile. (Any attached cards, damage counters, and effects remain on the new Pokemon.)';
+  public text: string = 'You must play 2 Transformation Tome cards at once. Switch 1 of your Basic Pokemon in play with 1 of your Basic Pokemon in your discard pile. (Any attached cards, damage counters, and effects remain on the new Pokemon.)';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof TrainerEffect && effect.trainerCard === this) {
