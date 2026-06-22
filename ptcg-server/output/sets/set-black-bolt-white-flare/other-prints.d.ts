@@ -17,6 +17,7 @@ import { Deino } from './deino';
 import { Dewott } from './dewott';
 import { Drillbur } from './drillbur';
 import { Eelektrik } from './eelektrik';
+import { Elgyem } from './elgyem';
 import { Emboar } from './emboar';
 import { Emolga } from './emolga';
 import { Excadrillex } from './excadrill-ex';
@@ -165,6 +166,11 @@ export declare class TynamoAR extends Tynamo {
     fullName: string;
 }
 export declare class EelektrikAR extends Eelektrik {
+    setNumber: string;
+    set: string;
+    fullName: string;
+}
+export declare class ElgyemAR extends Elgyem {
     setNumber: string;
     set: string;
     fullName: string;

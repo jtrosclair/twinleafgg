@@ -17,6 +17,7 @@ import { Deino } from './deino';
 import { Dewott } from './dewott';
 import { Drillbur } from './drillbur';
 import { Eelektrik } from './eelektrik';
+import { Elgyem } from './elgyem';
 import { Emboar } from './emboar';
 import { Emolga } from './emolga';
 import { Excadrillex } from './excadrill-ex';
@@ -203,6 +204,12 @@ export class EelektrikAR extends Eelektrik {
   public setNumber = '114';
   public set = 'BLK';
   public fullName: string = 'EelektrikAR SV11B';
+}
+
+export class ElgyemAR extends Elgyem {
+  public setNumber = '120';
+  public set = 'BLK';
+  public fullName: string = 'Elgyem BLK 120';
 }
 
 export class DrillburAR extends Drillbur {

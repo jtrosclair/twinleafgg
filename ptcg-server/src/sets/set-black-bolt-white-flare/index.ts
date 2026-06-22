@@ -16,6 +16,7 @@ import { Ducklett } from './ducklett';
 import { Duosion } from './duosion';
 import { Durant } from './durant';
 import { Eelektrik } from './eelektrik';
+import { Elgyem } from './elgyem';
 import { Emboar } from './emboar';
 import { Emolga } from './emolga';
 import { EnergyCoin } from './energy-coin';
@@ -40,7 +41,7 @@ import { Larvesta } from './larvesta';
 import { Meloettaex } from './meloetta-ex';
 import { NsPlan } from './ns-plan';
 import { Oshawott } from './oshawott';
-import { AirBalloonSV11, CarracostaAR, AlomomolaAR, CherenSV11, EnergyRetrievalSV11, LarvestaAR, PrismEnergySV11, ProfessorsResearchSV11, SeismitoadAR, TirtougaAR, ServineAR, SnivyAR, TympoleAR, VictiniAR, VolcaronaAR, HaxorusAR, FraxureAR, AxewAR, CobalionAR, DrillburAR, EelektrikAR, CottoneeAR, EmolgaAR, PalpitoadAR, TynamoAR, ExcadrillexFA, FennelFA, GenesectexFA, KyuremexFA, MeloettaexFA, SerperiorexFA, ZekromexFA, ExcadrillexSIR, GenesectexSIR, KyuremexSIR, MeloettaexSIR, SerperiorexSIR, ZekromexSIR, ZekromexBR, JoltikAR, GalvantulaAR, DewottAR, EmboarAR, FrillishAR, OshawottAR, PigniteAR, SamurottAR, TepigAR, VirizionAR, ArchenAR, ArcheopsAR, DeinoAR, TerrakionAR, ZoroarkAR, ZoruaAR, ZweilousAR, ReshiramexFA, KeldeoexFA, WhimsicottexFA, HydreigonexFA, JellicentexFA, BouffalantexFA, HildaFA, HildaSIR, BouffalantexSIR, HydreigonexSIR, JellicentexSIR, KeldeoexSIR, ReshiramexSIR, WhimsicottexSIR, ReshiramexWR, ToolScrapperSV11, NsPlanFA, NsPlanSIR, VictiniRRB, VictiniRRW, Pokegear30SV11 } from './other-prints';
+import { AirBalloonSV11, CarracostaAR, AlomomolaAR, CherenSV11, EnergyRetrievalSV11, LarvestaAR, PrismEnergySV11, ProfessorsResearchSV11, SeismitoadAR, TirtougaAR, ServineAR, SnivyAR, TympoleAR, VictiniAR, VolcaronaAR, HaxorusAR, FraxureAR, AxewAR, CobalionAR, DrillburAR, EelektrikAR, ElgyemAR, CottoneeAR, EmolgaAR, PalpitoadAR, TynamoAR, ExcadrillexFA, FennelFA, GenesectexFA, KyuremexFA, MeloettaexFA, SerperiorexFA, ZekromexFA, ExcadrillexSIR, GenesectexSIR, KyuremexSIR, MeloettaexSIR, SerperiorexSIR, ZekromexSIR, ZekromexBR, JoltikAR, GalvantulaAR, DewottAR, EmboarAR, FrillishAR, OshawottAR, PigniteAR, SamurottAR, TepigAR, VirizionAR, ArchenAR, ArcheopsAR, DeinoAR, TerrakionAR, ZoroarkAR, ZoruaAR, ZweilousAR, ReshiramexFA, KeldeoexFA, WhimsicottexFA, HydreigonexFA, JellicentexFA, BouffalantexFA, HildaFA, HildaSIR, BouffalantexSIR, HydreigonexSIR, JellicentexSIR, KeldeoexSIR, ReshiramexSIR, WhimsicottexSIR, ReshiramexWR, ToolScrapperSV11, NsPlanFA, NsPlanSIR, VictiniRRB, VictiniRRW, Pokegear30SV11 } from './other-prints';
 import { Palpitoad } from './palpitoad';
 import { Pignite } from './pignite';
 import { Purrloin } from './purrloin';
@@ -98,6 +99,7 @@ export const setSV11: Card[] = [
   new Swadloon(),
   new Duosion(),
   new Reuniclus(),
+  new Elgyem(),
   new Shelmet(),
   new Karrablast(),
   new AntiquePlumeFossil(),
@@ -163,6 +165,7 @@ export const setSV11: Card[] = [
   new EmolgaAR(),
   new TynamoAR(),
   new EelektrikAR(),
+  new ElgyemAR(),
   new DrillburAR(),
   new CobalionAR(),
   new AxewAR(),

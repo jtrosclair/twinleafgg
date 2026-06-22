@@ -18,6 +18,7 @@ const ducklett_1 = require("./ducklett");
 const duosion_1 = require("./duosion");
 const durant_1 = require("./durant");
 const eelektrik_1 = require("./eelektrik");
+const elgyem_1 = require("./elgyem");
 const emboar_1 = require("./emboar");
 const emolga_1 = require("./emolga");
 const energy_coin_1 = require("./energy-coin");
@@ -99,6 +100,7 @@ exports.setSV11 = [
     new swadloon_1.Swadloon(),
     new duosion_1.Duosion(),
     new reuniclus_1.Reuniclus(),
+    new elgyem_1.Elgyem(),
     new shelmet_1.Shelmet(),
     new karrablast_1.Karrablast(),
     new antique_plume_fossil_1.AntiquePlumeFossil(),
@@ -159,6 +161,7 @@ exports.setSV11 = [
     new other_prints_1.EmolgaAR(),
     new other_prints_1.TynamoAR(),
     new other_prints_1.EelektrikAR(),
+    new other_prints_1.ElgyemAR(),
     new other_prints_1.DrillburAR(),
     new other_prints_1.CobalionAR(),
     new other_prints_1.AxewAR(),

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DewottAR = exports.OshawottAR = exports.EmboarAR = exports.PigniteAR = exports.TepigAR = exports.VirizionAR = exports.CottoneeAR = exports.ZekromexBR = exports.VictiniRRB = exports.NsPlanSIR = exports.GenesectexSIR = exports.ExcadrillexSIR = exports.MeloettaexSIR = exports.ZekromexSIR = exports.KyuremexSIR = exports.SerperiorexSIR = exports.NsPlanFA = exports.FennelFA = exports.GenesectexFA = exports.ExcadrillexFA = exports.MeloettaexFA = exports.ZekromexFA = exports.KyuremexFA = exports.SerperiorexFA = exports.HaxorusAR = exports.FraxureAR = exports.AxewAR = exports.CobalionAR = exports.DrillburAR = exports.EelektrikAR = exports.TynamoAR = exports.EmolgaAR = exports.AlomomolaAR = exports.CarracostaAR = exports.TirtougaAR = exports.SeismitoadAR = exports.PalpitoadAR = exports.TympoleAR = exports.VolcaronaAR = exports.LarvestaAR = exports.VictiniAR = exports.ServineAR = exports.SnivyAR = exports.ToolScrapperSV11 = exports.Pokegear30SV11 = exports.EnergyRetrievalSV11 = exports.ProfessorsResearchSV11 = exports.CherenSV11 = exports.PrismEnergySV11 = exports.AirBalloonSV11 = void 0;
-exports.ReshiramexWR = exports.VictiniRRW = exports.HildaSIR = exports.BouffalantexSIR = exports.HydreigonexSIR = exports.JellicentexSIR = exports.KeldeoexSIR = exports.ReshiramexSIR = exports.WhimsicottexSIR = exports.HildaFA = exports.BouffalantexFA = exports.HydreigonexFA = exports.JellicentexFA = exports.KeldeoexFA = exports.ReshiramexFA = exports.WhimsicottexFA = exports.ZweilousAR = exports.DeinoAR = exports.ZoroarkAR = exports.ZoruaAR = exports.TerrakionAR = exports.ArcheopsAR = exports.ArchenAR = exports.FrillishAR = exports.GalvantulaAR = exports.JoltikAR = exports.SamurottAR = void 0;
+exports.OshawottAR = exports.EmboarAR = exports.PigniteAR = exports.TepigAR = exports.VirizionAR = exports.CottoneeAR = exports.ZekromexBR = exports.VictiniRRB = exports.NsPlanSIR = exports.GenesectexSIR = exports.ExcadrillexSIR = exports.MeloettaexSIR = exports.ZekromexSIR = exports.KyuremexSIR = exports.SerperiorexSIR = exports.NsPlanFA = exports.FennelFA = exports.GenesectexFA = exports.ExcadrillexFA = exports.MeloettaexFA = exports.ZekromexFA = exports.KyuremexFA = exports.SerperiorexFA = exports.HaxorusAR = exports.FraxureAR = exports.AxewAR = exports.CobalionAR = exports.DrillburAR = exports.ElgyemAR = exports.EelektrikAR = exports.TynamoAR = exports.EmolgaAR = exports.AlomomolaAR = exports.CarracostaAR = exports.TirtougaAR = exports.SeismitoadAR = exports.PalpitoadAR = exports.TympoleAR = exports.VolcaronaAR = exports.LarvestaAR = exports.VictiniAR = exports.ServineAR = exports.SnivyAR = exports.ToolScrapperSV11 = exports.Pokegear30SV11 = exports.EnergyRetrievalSV11 = exports.ProfessorsResearchSV11 = exports.CherenSV11 = exports.PrismEnergySV11 = exports.AirBalloonSV11 = void 0;
+exports.ReshiramexWR = exports.VictiniRRW = exports.HildaSIR = exports.BouffalantexSIR = exports.HydreigonexSIR = exports.JellicentexSIR = exports.KeldeoexSIR = exports.ReshiramexSIR = exports.WhimsicottexSIR = exports.HildaFA = exports.BouffalantexFA = exports.HydreigonexFA = exports.JellicentexFA = exports.KeldeoexFA = exports.ReshiramexFA = exports.WhimsicottexFA = exports.ZweilousAR = exports.DeinoAR = exports.ZoroarkAR = exports.ZoruaAR = exports.TerrakionAR = exports.ArcheopsAR = exports.ArchenAR = exports.FrillishAR = exports.GalvantulaAR = exports.JoltikAR = exports.SamurottAR = exports.DewottAR = void 0;
 const tool_scrapper_1 = require("../set-dragons-exalted/tool-scrapper");
 const cheren_1 = require("../set-emerging-powers/cheren");
 const prism_energy_1 = require("../set-next-destinies/prism-energy");
@@ -21,6 +21,7 @@ const deino_1 = require("./deino");
 const dewott_1 = require("./dewott");
 const drillbur_1 = require("./drillbur");
 const eelektrik_1 = require("./eelektrik");
+const elgyem_1 = require("./elgyem");
 const emboar_1 = require("./emboar");
 const emolga_1 = require("./emolga");
 const excadrill_ex_1 = require("./excadrill-ex");
@@ -268,6 +269,15 @@ class EelektrikAR extends eelektrik_1.Eelektrik {
     }
 }
 exports.EelektrikAR = EelektrikAR;
+class ElgyemAR extends elgyem_1.Elgyem {
+    constructor() {
+        super(...arguments);
+        this.setNumber = '120';
+        this.set = 'BLK';
+        this.fullName = 'Elgyem BLK 120';
+    }
+}
+exports.ElgyemAR = ElgyemAR;
 class DrillburAR extends drillbur_1.Drillbur {
     constructor() {
         super(...arguments);
