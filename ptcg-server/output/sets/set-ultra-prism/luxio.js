@@ -13,7 +13,7 @@ class Luxio extends pokemon_card_1.PokemonCard {
         this.stage = card_types_1.Stage.STAGE_1;
         this.evolvesFrom = 'Shinx';
         this.cardType = L;
-        this.hp = 90;
+        this.hp = 80;
         this.weakness = [{ type: F }];
         this.resistance = [{ type: M, value: -20 }];
         this.retreat = [C];

@@ -13,7 +13,7 @@ class Ditto extends game_1.PokemonCard {
         this.weakness = [{ type: F }];
         this.retreat = [C];
         this.powers = [{
-                name: 'Transform',
+                name: 'Form Variation',
                 powerType: game_1.PowerType.POKEPOWER,
                 useWhenInPlay: true,
                 text: 'Once during your turn (before your attack), you may search your discard pile for a Basic Pokémon (excluding Pokémon-ex and Ditto) and switch it with Ditto. (Any  cards attached to Ditto, damage counters, Special Conditions, and effects on it are now on the new Pokémon.) Place Ditto in the discard pile.'
