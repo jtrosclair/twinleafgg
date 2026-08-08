@@ -69,7 +69,7 @@ export class MegaGreninjaex extends PokemonCard {
         player,
         GameMessage.CHOOSE_CARD_TO_DISCARD,
         player.hand,
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, provides: [CardType.WATER] },
+        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Water Energy' },
         { allowCancel: true, min: 1, max: 1 }
       ), cards => {
         cards = cards || [];

@@ -60,7 +60,7 @@ class MegaGreninjaex extends game_1.PokemonCard {
             if (player.marker.hasMarker(this.MORTAL_SHURIKEN_MARKER, this)) {
                 throw new game_error_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            state = store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, provides: [card_types_1.CardType.WATER] }, { allowCancel: true, min: 1, max: 1 }), cards => {
+            state = store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Water Energy' }, { allowCancel: true, min: 1, max: 1 }), cards => {
                 cards = cards || [];
                 if (cards.length === 0) {
                     player.marker.addMarker(this.MORTAL_SHURIKEN_MARKER, this);
