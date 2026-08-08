@@ -10,6 +10,7 @@ import { Azelf } from './azelf';
 import { Azumarill } from './azulmarill';
 import { BlackKyuremex } from './black-kyurem-ex';
 import { Blitzle } from './blitzle';
+import { Bouffalant } from './bouffalant';
 import { Capsakid } from './capsakid.';
 import { CounterGainSSP, ScrambleSwitchSSP } from './other-prints';
 import { CelebrationFanfare } from './celebration-fanfare';
@@ -235,6 +236,7 @@ export const setSurgingSparks: Card[] = [
   new Spheal(),
   new Walrein(),
   new Blitzle(),
+  new Bouffalant(),
   new TapuKoko(),
   new Quaxly(),
   new Quaquaval(),
