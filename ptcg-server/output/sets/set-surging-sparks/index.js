@@ -12,6 +12,7 @@ const azelf_1 = require("./azelf");
 const azulmarill_1 = require("./azulmarill");
 const black_kyurem_ex_1 = require("./black-kyurem-ex");
 const blitzle_1 = require("./blitzle");
+const bouffalant_1 = require("./bouffalant");
 const capsakid_1 = require("./capsakid.");
 const other_prints_1 = require("./other-prints");
 const celebration_fanfare_1 = require("./celebration-fanfare");
@@ -236,6 +237,7 @@ exports.setSurgingSparks = [
     new spheal_1.Spheal(),
     new walrein_1.Walrein(),
     new blitzle_1.Blitzle(),
+    new bouffalant_1.Bouffalant(),
     new tapu_koko_1.TapuKoko(),
     new quaxly_1.Quaxly(),
     new quaquaval_1.Quaquaval(),
