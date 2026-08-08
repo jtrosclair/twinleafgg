@@ -724,6 +724,11 @@ const cardReplacements = [
   //Mega Evolution (me01 -> MEG)
   { from: 'Energy Switch me01 115', to: 'Energy Switch MEG 115' },
   { from: 'Mystery Garden me01 122', to: 'Mystery Garden MEG 122' },
+
+  //Perfect Order (me03 -> POR/M3) - card is implemented under its Japanese-print spelling
+  { from: 'Lumiose City POR 77', to: 'Lumioise City POR 77' },
+  { from: 'Lumiose City M3 77', to: 'Lumioise City M3 77' },
+  { from: 'Lumiose City me03 77', to: 'Lumioise City POR 77' },
 ];
 
 // Mapping of common import format set codes to internal set codes
