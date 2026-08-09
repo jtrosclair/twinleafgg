@@ -84,6 +84,7 @@ const weedle_1 = require("./weedle");
 const wimpod_1 = require("./wimpod");
 const xerneas_1 = require("./xerneas");
 const zubat_1 = require("./zubat");
+const other_prints_1 = require("./other-prints");
 exports.setChaosRising = [
     new weedle_1.Weedle(),
     new kakuna_1.Kakuna(),
@@ -167,5 +168,7 @@ exports.setChaosRising = [
     new prism_tower_1.PrismTower(),
     new nitro_fire_energy_1.NitroFireEnergy(),
     new magnet_metal_energy_1.MagnetMetalEnergy(),
-    new bubble_water_energy_1.BubbleWaterEnergy(), // 99
+    new bubble_water_energy_1.BubbleWaterEnergy(),
+    // Other prints
+    new other_prints_1.TransformationTomeCRI(), // CRI 83
 ];

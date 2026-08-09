@@ -50,7 +50,7 @@ class Sawsbuck extends game_1.PokemonCard {
                     blocked.push(index);
                 }
             });
-            (0, prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND)(store, state, player, this, { superType: game_1.SuperType.TRAINER }, { min: 0, max: 1, allowCancel: false }, this.powers[0]);
+            (0, prefabs_1.SEARCH_DECK_FOR_CARDS_TO_HAND)(store, state, player, this, { superType: game_1.SuperType.TRAINER }, { min: 0, max: 1, allowCancel: false, blocked }, this.powers[0]);
         }
         (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.CHANGING_SEASONS_MARKER, this);
         return state;

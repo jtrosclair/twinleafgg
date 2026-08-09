@@ -19,8 +19,8 @@ export class BookOfTransformation extends TrainerCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof TrainerEffect && effect.trainerCard === this) {
       const player = effect.player;
-      const name = effect.trainerCard.name;
-      const second = player.hand.cards.find(c => c.name === name && c !== effect.trainerCard);
+      // Any print of this card counts (e.g. Transformation Tome CRI 83)
+      const second = player.hand.cards.find(c => c instanceof BookOfTransformation && c !== effect.trainerCard);
       if (second === undefined) {
         throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }

@@ -83,6 +83,8 @@ import { Wimpod } from './wimpod';
 import { Xerneas } from './xerneas';
 import { Zubat } from './zubat';
 
+import { TransformationTomeCRI } from './other-prints';
+
 export const setChaosRising: Card[] = [
   new Weedle(),      // 1
   new Kakuna(),      // 2
@@ -167,4 +169,7 @@ export const setChaosRising: Card[] = [
   new NitroFireEnergy(),// 81
   new MagnetMetalEnergy(),// 83
   new BubbleWaterEnergy(),// 99
+
+  // Other prints
+  new TransformationTomeCRI(),// CRI 83
 ];
