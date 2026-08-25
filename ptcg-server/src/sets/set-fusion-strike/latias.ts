@@ -58,7 +58,9 @@ export class Latias extends PokemonCard {
 
       // Check that we have a Psychic energy in hand
       const hasPsychicInHand = player.hand.cards.some(
-        c => c instanceof EnergyCard && c.provides.includes(CardType.PSYCHIC)
+        c => c instanceof EnergyCard
+          && c.energyType === EnergyType.BASIC
+          && c.name === 'Psychic Energy'
       );
       if (!hasPsychicInHand) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
@@ -89,7 +91,7 @@ export class Latias extends PokemonCard {
         player.hand,
         PlayerType.BOTTOM_PLAYER,
         [SlotType.BENCH, SlotType.ACTIVE],
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, provides: [CardType.PSYCHIC] },
+        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Psychic Energy' },
         { allowCancel: true, min: 1, max: 1, blockedTo }
       ), transfers => {
         transfers = transfers || [];

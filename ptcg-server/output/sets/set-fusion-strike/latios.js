@@ -49,7 +49,9 @@ class Latios extends pokemon_card_1.PokemonCard {
             }
             (0, prefabs_1.USE_ABILITY_ONCE_PER_TURN)(player, this.BLUE_ASSIST_MARKER, this);
             // Check that we have a Psychic energy in hand
-            const hasPsychicInHand = player.hand.cards.some(c => c instanceof game_1.EnergyCard && c.provides.includes(card_types_1.CardType.PSYCHIC));
+            const hasPsychicInHand = player.hand.cards.some(c => c instanceof game_1.EnergyCard
+                && c.energyType === card_types_1.EnergyType.BASIC
+                && c.name === 'Psychic Energy');
             if (!hasPsychicInHand) {
                 throw new game_1.GameError(game_1.GameMessage.CANNOT_USE_POWER);
             }
@@ -71,7 +73,7 @@ class Latios extends pokemon_card_1.PokemonCard {
                     blockedTo.push(target);
                 }
             });
-            state = store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_CARDS, player.hand, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH, game_1.SlotType.ACTIVE], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, provides: [card_types_1.CardType.PSYCHIC] }, { allowCancel: true, min: 1, max: 1, blockedTo }), transfers => {
+            state = store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_CARDS, player.hand, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.BENCH, game_1.SlotType.ACTIVE], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Psychic Energy' }, { allowCancel: true, min: 1, max: 1, blockedTo }), transfers => {
                 transfers = transfers || [];
                 if (transfers.length === 0) {
                     return;
