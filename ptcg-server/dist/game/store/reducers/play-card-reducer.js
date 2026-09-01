@@ -69,7 +69,7 @@ function playCardReducer(store, state, action) {
                         if (state.turn === 1 && handCard.firstTurn !== true) {
                             throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_PLAY_THIS_CARD);
                         }
-                        if (player.supporter.cards.length > 0) {
+                        if (player.supporterTurn > 0) {
                             throw new game_error_1.GameError(game_message_1.GameMessage.SUPPORTER_ALREADY_PLAYED);
                         }
                         effect = new play_card_effects_1.PlaySupporterEffect(player, handCard, target);

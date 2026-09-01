@@ -86,7 +86,7 @@ export function playCardReducer(store: StoreLike, state: State, action: Action):
             if (state.turn === 1 && handCard.firstTurn !== true) {
               throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            if (player.supporter.cards.length > 0) {
+            if (player.supporterTurn > 0) {
               throw new GameError(GameMessage.SUPPORTER_ALREADY_PLAYED);
             }
             effect = new PlaySupporterEffect(player, handCard, target);
