@@ -39,36 +39,18 @@ class StrangeTimepiece extends game_1.TrainerCard {
             // Choose Pokemon to Devolve
             return store.prompt(state, new game_1.ChoosePokemonPrompt(effect.player.id, game_1.GameMessage.CHOOSE_POKEMON, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { allowCancel: false, min: 1, max: 1, blocked }), (results) => {
                 if (results && results.length > 0 && results[0].getPokemons().length > 0) {
-                    // Choose how far to devolve
-                    store.prompt(state, new game_1.ChooseCardsPrompt(effect.player, game_1.GameMessage.CHOOSE_POKEMON_TO_PICK_UP, results[0], { superType: card_types_1.SuperType.POKEMON }, {
-                        min: 1,
-                        max: results[0].getPokemons().length - 1,
-                        allowCancel: false,
-                        maxBasics: 0
-                    }), selected => {
-                        if (selected && selected.length > 0) {
-                            const pokemons = results[0].getPokemons();
-                            const selectedIds = new Set(selected.map(card => card.id));
-                            let devolvesNeeded = 0;
-                            // Keep removing cards from the top while they were selected.
-                            for (let i = pokemons.length - 1; i >= 0; i--) {
-                                if (selectedIds.has(pokemons[i].id)) {
-                                    devolvesNeeded += 1;
-                                }
-                                else {
-                                    break;
-                                }
-                            }
-                            if (devolvesNeeded === 0) {
-                                throw new game_1.GameError(game_1.GameMessage.INVALID_PROMPT_RESULT);
-                            }
-                            for (let i = 0; i < devolvesNeeded; i++) {
-                                (0, prefabs_1.DEVOLVE_POKEMON)(store, state, results[0], effect.player.hand);
-                            }
-                            // Keep this Pokémon from evolving again this turn.
-                            results[0].pokemonPlayedTurn = state.turn;
-                            return state;
+                    // Choose how many evolutions to pick up
+                    const pokemons = results[0].getPokemons();
+                    const maxCount = pokemons.length - 1;
+                    const options = [...Array(maxCount).keys()].map(i => String(i + 1));
+                    store.prompt(state, new game_1.SelectPrompt(effect.player.id, game_1.GameMessage.CHOOSE_OPTION, options, { allowCancel: false }), choice => {
+                        const devolvesNeeded = choice + 1;
+                        for (let i = 0; i < devolvesNeeded; i++) {
+                            (0, prefabs_1.DEVOLVE_POKEMON)(store, state, results[0], effect.player.hand);
                         }
+                        // Keep this Pokémon from evolving again this turn.
+                        results[0].pokemonPlayedTurn = state.turn;
+                        return state;
                     });
                 }
                 return state;
