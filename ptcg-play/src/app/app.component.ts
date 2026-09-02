@@ -17,6 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ReconnectionDialogService } from './shared/services/reconnection-dialog.service';
 import { WebViewBridgeService } from './shared/services/webview-bridge.service';
+import { ThemeService } from './shared/services/theme.service';
 
 @UntilDestroy()
 @Component({
@@ -46,8 +47,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private snackBar: MatSnackBar,
     private reconnectionDialogService: ReconnectionDialogService,
-    private webViewBridgeService: WebViewBridgeService
+    private webViewBridgeService: WebViewBridgeService,
+    private themeService: ThemeService
   ) {
+    this.themeService.initialize();
     this.authToken$ = this.sessionService.get(session => session.authToken);
     setTimeout(() => this.onResize());
     this.router.events.subscribe(event => {

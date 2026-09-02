@@ -22,7 +22,7 @@ $board-min-height: calc(6 * var(--card-size) * #{$card-aspect-ratio} + 2 * #{map
   align-items: flex-start;
   width: calc(100vw - var(--sidebar-width));
   height: 100%;
-  background-color: rgba(9, 22, 36, 0.7); // Translucent purple/dark blue (70% opacity)
+  background-color: var(--ptcg-board-surface);
 }
 
 .perspective-wrapper {

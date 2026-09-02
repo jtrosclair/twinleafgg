@@ -1,0 +1,340 @@
+/*
+ * The legacy UI has several bespoke dark surfaces in component style sheets.
+ * Angular's light Material theme covers its controls; this layer supplies the
+ * matching surfaces and foregrounds for the high-traffic Twinleaf screens.
+ * The root selector intentionally outranks Angular's emulated component CSS.
+ */
+html[data-theme='light'] {
+  .mat-app-background,
+  .mat-drawer-container,
+  .mat-sidenav-container,
+  .mat-drawer-content,
+  .mat-sidenav-content {
+    background-color: var(--ptcg-app-surface);
+    color: var(--ptcg-text);
+  }
+
+  .mat-drawer,
+  .mat-sidenav,
+  .mat-card,
+  .mat-table,
+  .mat-paginator {
+    background-color: var(--ptcg-surface);
+    color: var(--ptcg-text);
+  }
+
+  .cdk-overlay-backdrop {
+    background: var(--ptcg-overlay);
+  }
+
+  .mat-dialog-container,
+  .cdk-overlay-container .mat-dialog-container {
+    background: var(--ptcg-surface);
+    border-color: var(--ptcg-border);
+    color: var(--ptcg-text);
+  }
+
+  .mat-menu-panel,
+  .mat-select-panel {
+    background: var(--ptcg-surface);
+    border-color: var(--ptcg-border);
+    color: var(--ptcg-text);
+  }
+
+  .mat-menu-item,
+  .mat-option,
+  .mat-select-value,
+  .mat-select-arrow,
+  .mat-form-field-label,
+  .mat-input-element {
+    color: var(--ptcg-text-secondary);
+  }
+
+  .mat-menu-item:hover:not([disabled]),
+  .mat-option:hover:not(.mat-option-disabled),
+  .mat-option:focus:not(.mat-option-disabled) {
+    background: var(--ptcg-surface-muted);
+    color: var(--ptcg-text);
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-outline,
+  .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+    color: var(--ptcg-border-strong);
+  }
+
+  .gaming-toolbar {
+    background: linear-gradient(to top, #edf2f7 0%, #ffffff 100%);
+    border-bottom-color: rgba(31, 111, 57, 0.35);
+  }
+
+  .gaming-toolbar::after {
+    background-image:
+      radial-gradient(circle at 25% 25%, #c8d3e0 1.5px, transparent 1.5px),
+      radial-gradient(circle at 75% 75%, #c8d3e0 1.5px, transparent 1.5px);
+  }
+
+  .gaming-toolbar .nav-item,
+  .gaming-toolbar .toolbar-center .main-navigation button[mat-button].nav-item {
+    color: var(--ptcg-text-secondary);
+  }
+
+  .gaming-toolbar .nav-item:hover,
+  .gaming-toolbar .nav-item.active,
+  .gaming-toolbar .toolbar-center .main-navigation button[mat-button].nav-item:hover {
+    color: var(--ptcg-accent);
+  }
+
+  .gaming-toolbar .nav-item.active::after {
+    background: var(--ptcg-accent);
+  }
+
+  .gaming-toolbar .toolbar-right .ptcg-toolbar-user-info button {
+    background: var(--ptcg-accent);
+    color: var(--ptcg-accent-contrast);
+  }
+
+  .mat-menu-panel {
+    box-shadow: 0 16px 32px rgba(31, 41, 55, 0.16);
+  }
+
+  .mat-menu-panel .mat-menu-item {
+    color: var(--ptcg-text-secondary);
+  }
+
+  .login-container,
+  .register-container {
+    background-color: var(--ptcg-page);
+    color: var(--ptcg-text);
+  }
+
+  .login-container .form-field label,
+  .register-container .register-note {
+    color: var(--ptcg-text-muted);
+  }
+
+  .login-container .form-field input,
+  .register-container input {
+    background-color: var(--ptcg-input);
+    border: 1px solid var(--ptcg-border);
+    color: var(--ptcg-text);
+  }
+
+  .login-container .form-field input:focus,
+  .register-container input:focus {
+    box-shadow: 0 0 0 2px var(--ptcg-accent);
+  }
+
+  .login-container .form-field input:focus + label,
+  .login-container .form-field input:not(:placeholder-shown) + label {
+    background: var(--ptcg-page);
+    color: var(--ptcg-accent);
+  }
+
+  .login-container .checkmark,
+  .register-container .back-button {
+    background-color: var(--ptcg-surface-muted);
+    border: 1px solid var(--ptcg-border);
+  }
+
+  .login-container .checkbox-container input:checked ~ .checkmark,
+  .login-container .login-button:hover,
+  .register-container .back-button:hover {
+    background-color: var(--ptcg-accent);
+    color: var(--ptcg-accent-contrast);
+  }
+
+  .login-container .login-button {
+    background-color: var(--ptcg-surface-muted);
+    color: var(--ptcg-accent);
+    border: 1px solid var(--ptcg-border);
+  }
+
+  .login-container .links a,
+  .login-container .server-change button,
+  .register-container .links a {
+    color: var(--ptcg-text-secondary);
+  }
+
+  .login-container .links a:hover,
+  .register-container .links a:hover {
+    color: var(--ptcg-accent);
+  }
+
+  .ptcg-deck-edit-toolbar,
+  .ptcg-deck-edit-toolbar .mat-toolbar-row,
+  .filters-section,
+  .filters-content,
+  .deck-card,
+  .deck-stats-container,
+  .ptcg-deck-edit-pane,
+  .ptcg-deck-edit-pane-secondary,
+  .deck-pane-container {
+    background-color: var(--ptcg-surface);
+    border-color: var(--ptcg-border);
+    color: var(--ptcg-text);
+  }
+
+  .ptcg-deck-edit-toolbar .search-container,
+  .ptcg-deck-edit-toolbar .filters-toggle-button,
+  .filters-content .filter-group,
+  .deck-card .deck-name,
+  .deck-stats-container .stat-card,
+  .deck-stats-container .matchup-card {
+    background-color: var(--ptcg-surface-raised);
+    border-color: var(--ptcg-border);
+    color: var(--ptcg-text);
+  }
+
+  .deck-card,
+  .deck-stats-container,
+  .deck-stats-container .stat-label,
+  .deck-stats-container .matchup-name,
+  .deck-stats-container .replays-hint {
+    color: var(--ptcg-text-secondary);
+  }
+
+  .ptcg-board,
+  ptcg-board {
+    background-color: var(--ptcg-board-surface);
+  }
+
+  .sandbox-sidebar,
+  .sandbox-control-panel {
+    background: var(--ptcg-surface);
+    border-color: var(--ptcg-border);
+    color: var(--ptcg-text);
+  }
+
+  .sandbox-sidebar .sandbox-toggle,
+  .sandbox-control-panel .panel-header,
+  .sandbox-control-panel .tab-content,
+  .sandbox-control-panel .card-checkbox-list,
+  .sandbox-control-panel input[type='text'] {
+    background: var(--ptcg-surface-raised);
+    border-color: var(--ptcg-border-strong);
+    color: var(--ptcg-text);
+  }
+
+  .sandbox-sidebar .sandbox-toggle mat-icon,
+  .sandbox-control-panel label,
+  .sandbox-control-panel .mat-checkbox-label,
+  .sandbox-control-panel .mat-select-value {
+    color: var(--ptcg-text-secondary);
+  }
+
+  .ptcg-prompt-container,
+  .fullscreen-container,
+  .ptcg-prompt-choose-cards,
+  .invite-game-container,
+  .invite-header,
+  .invite-actions {
+    background: var(--ptcg-surface);
+    border-color: var(--ptcg-border);
+    color: var(--ptcg-text);
+  }
+
+  .ptcg-prompt-title,
+  .ptcg-prompt-actions,
+  .fullscreen-container .ptcg-prompt-title,
+  .fullscreen-container .ptcg-prompt-actions {
+    background: var(--ptcg-surface-raised);
+    color: var(--ptcg-text);
+    text-shadow: none;
+  }
+
+  .ptcg-cards-container,
+  .ptcg-choose-pokemons-pane,
+  .cards-container,
+  .options .option,
+  .invite-game-container .message-content,
+  .invite-game-container .deck-card {
+    background: var(--ptcg-surface-raised);
+    border-color: var(--ptcg-border);
+    color: var(--ptcg-text);
+    box-shadow: 0 8px 20px rgba(31, 41, 55, 0.1);
+  }
+
+  .options .option.selected,
+  .options .option:hover {
+    background: var(--ptcg-surface-muted);
+    border-color: var(--ptcg-accent);
+  }
+
+  .options .option .option-text,
+  .ptcg-prompt-content p,
+  .invite-game-container .invite-title,
+  .invite-game-container .selection-title,
+  .invite-game-container .deck-name,
+  .invite-game-container .message-content p,
+  .invite-game-container .loading-text,
+  .invite-game-container .deck-count {
+    color: var(--ptcg-text);
+    text-shadow: none;
+  }
+
+  .fullscreen-overlay {
+    background-color: var(--ptcg-overlay);
+  }
+
+  .ptcg-game-over-overlay {
+    background: var(--ptcg-page);
+    color: var(--ptcg-text);
+  }
+
+  .ptcg-game-over-top {
+    background: linear-gradient(135deg, #e1eaf5, #f8fafc, #e1eaf5);
+  }
+
+  .ptcg-game-over-top .ptcg-diagonal-divider {
+    background: var(--ptcg-page);
+  }
+
+  .ptcg-game-over-overlay .ptcg-game-over-title,
+  .ptcg-game-over-overlay .ptcg-battle-log-button {
+    color: var(--ptcg-text);
+    text-shadow: none;
+  }
+
+  .ptcg-game-over-overlay .ptcg-battle-log-button {
+    background: var(--ptcg-surface);
+    border-color: var(--ptcg-border);
+  }
+
+  .sandbox-viewer-card {
+    background: var(--ptcg-surface);
+    border: 1px solid var(--ptcg-border);
+    box-shadow: 0 8px 24px rgba(31, 41, 55, 0.14);
+  }
+
+  .sandbox-viewer-title,
+  .loading-title,
+  .card-data-download-title {
+    color: var(--ptcg-text);
+  }
+
+  .sandbox-viewer-description,
+  .sandbox-viewer-status,
+  .loading-subtitle,
+  .delayed-message,
+  .card-data-download,
+  .card-data-download-meta,
+  .card-data-download-helper {
+    color: var(--ptcg-text-secondary);
+  }
+
+  .sandbox-viewer-status {
+    background: var(--ptcg-surface-muted);
+  }
+
+  .sandbox-viewer-input .mat-input-element {
+    color: var(--ptcg-text);
+  }
+
+  .spectate-container,
+  .online-players-container,
+  .ranking-container,
+  .friends-container {
+    background: var(--ptcg-page);
+    color: var(--ptcg-text);
+  }
+}

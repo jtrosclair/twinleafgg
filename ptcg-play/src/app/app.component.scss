@@ -9,7 +9,7 @@
   >mat-sidenav-container {
     flex: 1 1;
     z-index: unset;
-    background-color: #1A202C;
+    background-color: var(--ptcg-app-surface);
   }
 
   >mat-sidenav-container>mat-sidenav-content {
@@ -18,24 +18,25 @@
 }
 
 ::ng-deep .mat-dialog-container {
-  background: #1b202b;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--ptcg-surface);
+  border: 1px solid var(--ptcg-border);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
   font-family: 'Urbanist', sans-serif;
 
   .mat-dialog-actions {
-    color: white;
-    caret-color: white;
+    color: var(--ptcg-text);
+    caret-color: var(--ptcg-text);
   }
 
   .mat-raised-button {
-    background-color: #449058;
+    background-color: var(--ptcg-accent);
+    color: var(--ptcg-accent-contrast);
     border-radius: 16px;
   }
 
   .ptcg-card-list-pane {
-    background: rgb(22, 26, 36);
+    background: var(--ptcg-surface-raised);
   }
 }
 
@@ -54,24 +55,24 @@
 
 // Style the dropdown panel
 ::ng-deep .mat-select-panel {
-  background: #1a1f29;
+  background: var(--ptcg-surface);
   border-radius: 16px;
   margin-top: 40px;
 
   .mat-option {
-    color: white;
+    color: var(--ptcg-text);
     font-size: 12px;
     height: 32px;
     line-height: 32px;
 
     &:hover:not(.mat-option-disabled),
     &:focus:not(.mat-option-disabled) {
-      background: rgba(255, 255, 255, 0.1);
+      background: var(--ptcg-surface-muted);
     }
 
     &.mat-selected:not(.mat-option-disabled) {
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
+      background: var(--ptcg-surface-muted);
+      color: var(--ptcg-text);
     }
   }
 }
@@ -81,13 +82,13 @@
 // Custom styles for the mat-select trigger
 ::ng-deep .mat-select-trigger {
   // Text color of the selected value
-  color: #ccc;
+  color: var(--ptcg-text-secondary);
 }
 
 // Custom styles for the mat-select arrow icon
 ::ng-deep .mat-select-arrow {
   // Color of the arrow icon
-  color: #999;
+  color: var(--ptcg-text-muted);
 }
 
 ::ng-deep .no-ripple .mat-ripple-element {
@@ -97,9 +98,9 @@
 ::ng-deep {
   .mat-snack-bar-container {
     border-radius: 32px !important;
-    background: #101219 !important;
-    border: 2px solid #459058 !important;
-    color: white !important;
+    background: var(--ptcg-surface) !important;
+    border: 2px solid var(--ptcg-accent) !important;
+    color: var(--ptcg-text) !important;
     transform: scale(0.75);
     display: inline-block !important;
     min-width: unset !important;
@@ -108,8 +109,8 @@
   }
 
   .error-snackbar {
-    background: #101219;
-    color: white;
+    background: var(--ptcg-surface);
+    color: var(--ptcg-text);
     min-width: unset !important;
     width: auto !important;
     height: 40px !important;

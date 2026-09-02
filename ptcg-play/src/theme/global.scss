@@ -1,3 +1,49 @@
+/* Theme tokens shared by the custom Twinleaf surfaces and Angular Material. */
+:root,
+html[data-theme='dark'] {
+    color-scheme: dark;
+    --ptcg-page: #10131e;
+    --ptcg-app-surface: #1a202c;
+    --ptcg-surface: #1b202b;
+    --ptcg-surface-raised: #222a38;
+    --ptcg-surface-muted: #283142;
+    --ptcg-input: #2d333b;
+    --ptcg-text: #f7fafc;
+    --ptcg-text-secondary: #e2e8f0;
+    --ptcg-text-muted: #a0aec0;
+    --ptcg-border: rgba(255, 255, 255, 0.16);
+    --ptcg-border-strong: #3b4a60;
+    --ptcg-accent: #277a42;
+    --ptcg-accent-hover: #1f6636;
+    --ptcg-accent-contrast: #ffffff;
+    --ptcg-danger: #c23838;
+    --ptcg-overlay: rgba(0, 0, 0, 0.62);
+    --ptcg-board-surface: rgba(9, 22, 36, 0.7);
+    --ptcg-hand-surface: #1c0033;
+}
+
+html[data-theme='light'] {
+    color-scheme: light;
+    --ptcg-page: #eef3f8;
+    --ptcg-app-surface: #f7f9fc;
+    --ptcg-surface: #ffffff;
+    --ptcg-surface-raised: #f4f7fb;
+    --ptcg-surface-muted: #e6edf5;
+    --ptcg-input: #ffffff;
+    --ptcg-text: #172033;
+    --ptcg-text-secondary: #314158;
+    --ptcg-text-muted: #53637a;
+    --ptcg-border: #c8d3e0;
+    --ptcg-border-strong: #98a9bc;
+    --ptcg-accent: #1f6f39;
+    --ptcg-accent-hover: #185b2f;
+    --ptcg-accent-contrast: #ffffff;
+    --ptcg-danger: #b42318;
+    --ptcg-overlay: rgba(15, 23, 42, 0.38);
+    --ptcg-board-surface: #e7eef7;
+    --ptcg-hand-surface: #e6edf5;
+}
+
 /* Ensure app-wide uppercase variant when desired */
 .uppercase-all {
     text-transform: uppercase !important;
@@ -20,8 +66,8 @@ body {
 }
 
 body {
-    background-color: #fff;
-    color: #FFFFFF;
+    background-color: var(--ptcg-page);
+    color: var(--ptcg-text);
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 1.42857;
@@ -137,9 +183,9 @@ table {
 
 /* Some material overrides, and fixes */
 mat-dialog-container {
-    background: rgba(26, 32, 44);
+    background: var(--ptcg-surface);
     border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--ptcg-border);
     position: relative;
 }
 

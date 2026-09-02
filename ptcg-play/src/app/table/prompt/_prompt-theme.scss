@@ -17,22 +17,23 @@
     }
 
     .mat-raised-button {
-      background-color: #449058;
+      background-color: var(--ptcg-accent);
+      color: var(--ptcg-accent-contrast);
       border-radius: 16px;
       margin-bottom: 6px;
       margin-top: 4px;
     }
 
     .ptcg-prompt-container {
-      background: rgba(26, 32, 44);
+      background: var(--ptcg-surface);
       border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--ptcg-border);
     }
 
     .mat-dialog-container {
-      background: linear-gradient(45deg, rgba(10, 10, 20, 0.9) 0%, rgba(5, 10, 25, 0.9) 100%);
+      background: var(--ptcg-surface);
       border-radius: 12px;
-      border: none;
+      border: 1px solid var(--ptcg-border);
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(10px);
       font-family: 'Urbanist', sans-serif;
@@ -42,9 +43,9 @@
 
   ptcg-cards-container .ptcg-cards-container,
   ptcg-choose-pokemons-pane .ptcg-choose-pokemons-pane {
-    background: rgb(22, 26, 36);
+    background: var(--ptcg-surface-raised);
     border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--ptcg-border);
   }
 }
 

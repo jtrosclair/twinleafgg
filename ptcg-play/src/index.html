@@ -6,6 +6,25 @@
   <title>twinleaf.gg</title>
   <base href="/">
 
+  <script>
+    // Apply the embedded-app preference before Angular and its styles load.
+    // The shared contract is intentionally simple: dark is the default and
+    // only an explicit localStorage value can select light.
+    (function () {
+      var theme = 'dark';
+      try {
+        var savedTheme = window.localStorage.getItem('prizemap:theme');
+        if (savedTheme === 'light' || savedTheme === 'dark') {
+          theme = savedTheme;
+        }
+      } catch (error) {
+        // Storage can be unavailable in private or restricted WebViews.
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.style.colorScheme = theme;
+    })();
+  </script>
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="assets/iconfont/material-icons.css" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="favicon.ico">

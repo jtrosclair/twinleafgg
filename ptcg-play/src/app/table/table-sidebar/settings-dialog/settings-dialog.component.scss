@@ -1,7 +1,7 @@
 h2 {
   margin: 0 0 16px 0;
   font-size: 20px;
-  color: #fff;
+  color: var(--ptcg-text);
   font-weight: 500;
 }
 
@@ -16,7 +16,7 @@ h2 {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #fff;
+    color: var(--ptcg-text);
 
     input[type="checkbox"] {
       width: 18px;
@@ -32,20 +32,20 @@ h2 {
   button {
     padding: 8px 16px;
     border-radius: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    color: #fff;
+    background: var(--ptcg-surface-muted);
+    border: 1px solid var(--ptcg-border);
+    color: var(--ptcg-text);
     cursor: pointer;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.2);
+      background: var(--ptcg-border);
     }
   }
 }
 
 .slider-container {
   margin-top: 16px;
-  color: #fff;
+  color: var(--ptcg-text);
 
   label {
     display: block;
@@ -66,7 +66,7 @@ h2 {
 
 .hidden-formats-container {
   margin-top: 16px;
-  color: #fff;
+  color: var(--ptcg-text);
 
   .section-label {
     display: block;
@@ -82,19 +82,19 @@ h2 {
     max-height: 300px;
     overflow-y: auto;
     padding: 8px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--ptcg-surface-muted);
     border-radius: 4px;
 
     label {
       display: flex;
       align-items: center;
       gap: 8px;
-      color: #fff;
+      color: var(--ptcg-text);
       font-size: 14px;
       cursor: pointer;
 
       &:hover {
-        color: rgba(255, 255, 255, 0.9);
+        color: var(--ptcg-text-secondary);
       }
 
       input[type="checkbox"] {
