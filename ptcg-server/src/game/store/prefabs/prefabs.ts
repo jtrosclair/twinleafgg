@@ -746,7 +746,12 @@ export function DEVOLVE_POKEMON(store: StoreLike, state: State, target: PokemonC
 
   // Handle normal devolutions
   if (pokemons.length > 1 && !pokemonCard?.tags.includes(CardTag.POKEMON_VUNION) && !pokemonCard?.tags.includes(CardTag.LEGEND)) {
-    MOVE_CARD_TO(state, pokemonCard as Card, destination);
+    // Highest stage, not last-in-array — stack order can be scrambled.
+    const top = pokemons.reduce((a, b) => a.stage >= b.stage ? a : b);
+    MOVE_CARD_TO(state, top, destination);
+    const remaining = target.getPokemons().slice().sort((a, b) => a.stage - b.stage);
+    const rest = target.cards.filter(c => !remaining.includes(c as PokemonCard));
+    target.cards = [...remaining, ...rest];
     target.clearEffects();
     target.pokemonPlayedTurn = state.turn;
   }

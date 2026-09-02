@@ -558,7 +558,12 @@ function DEVOLVE_POKEMON(store, state, target, destination) {
     }
     // Handle normal devolutions
     if (pokemons.length > 1 && !(pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.tags.includes(card_types_1.CardTag.POKEMON_VUNION)) && !(pokemonCard === null || pokemonCard === void 0 ? void 0 : pokemonCard.tags.includes(card_types_1.CardTag.LEGEND))) {
-        MOVE_CARD_TO(state, pokemonCard, destination);
+        // Highest stage, not last-in-array — stack order can be scrambled.
+        const top = pokemons.reduce((a, b) => a.stage >= b.stage ? a : b);
+        MOVE_CARD_TO(state, top, destination);
+        const remaining = target.getPokemons().slice().sort((a, b) => a.stage - b.stage);
+        const rest = target.cards.filter(c => !remaining.includes(c));
+        target.cards = [...remaining, ...rest];
         target.clearEffects();
         target.pokemonPlayedTurn = state.turn;
     }
