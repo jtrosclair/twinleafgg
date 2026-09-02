@@ -40,22 +40,29 @@ class StrangeTimepiece extends game_1.TrainerCard {
             return store.prompt(state, new game_1.ChoosePokemonPrompt(effect.player.id, game_1.GameMessage.CHOOSE_POKEMON, game_1.PlayerType.BOTTOM_PLAYER, [game_1.SlotType.ACTIVE, game_1.SlotType.BENCH], { allowCancel: false, min: 1, max: 1, blocked }), (results) => {
                 if (results && results.length > 0 && results[0].getPokemons().length > 0) {
                     // Choose how far to devolve
-                    store.prompt(state, new game_1.ChooseCardsPrompt(effect.player, game_1.GameMessage.CHOOSE_POKEMON_TO_PICK_UP, results[0], { superType: card_types_1.SuperType.POKEMON }, { min: 1, max: 1, allowCancel: false }), selected => {
+                    store.prompt(state, new game_1.ChooseCardsPrompt(effect.player, game_1.GameMessage.CHOOSE_POKEMON_TO_PICK_UP, results[0], { superType: card_types_1.SuperType.POKEMON }, {
+                        min: 1,
+                        max: results[0].getPokemons().length - 1,
+                        allowCancel: false,
+                        maxBasics: 0
+                    }), selected => {
                         if (selected && selected.length > 0) {
                             const pokemons = results[0].getPokemons();
-                            const selectedPokemon = selected[0];
-                            const selectedIndex = pokemons.findIndex(p => p === selectedPokemon);
-                            if (selectedIndex === 0) {
+                            const selectedIndices = selected
+                                .map(pokemon => pokemons.findIndex(card => card === pokemon))
+                                .filter(index => index > 0);
+                            if (selectedIndices.length === 0) {
                                 throw new game_1.GameError(game_1.GameMessage.INVALID_PROMPT_RESULT);
                             }
-                            if (selectedIndex >= 0) {
-                                // Devolve until the selected Pokemon and everything above it is in hand
-                                // We need to devolve (pokemons.length - selectedIndex) times
-                                const devolvesNeeded = pokemons.length - selectedIndex;
-                                for (let i = 0; i < devolvesNeeded; i++) {
-                                    (0, prefabs_1.DEVOLVE_POKEMON)(store, state, results[0], effect.player.hand);
-                                }
+                            const lowestSelectedIndex = Math.min(...selectedIndices);
+                            // Devolve until the lowest selected Pokemon and everything above it is in hand.
+                            // We need to devolve (pokemons.length - lowestSelectedIndex) times.
+                            const devolvesNeeded = pokemons.length - lowestSelectedIndex;
+                            for (let i = 0; i < devolvesNeeded; i++) {
+                                (0, prefabs_1.DEVOLVE_POKEMON)(store, state, results[0], effect.player.hand);
                             }
+                            // Keep this Pokémon from evolving again this turn.
+                            results[0].pokemonPlayedTurn = state.turn;
                             return state;
                         }
                     });
