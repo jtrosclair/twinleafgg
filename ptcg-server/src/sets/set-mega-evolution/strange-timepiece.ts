@@ -58,7 +58,7 @@ export class StrangeTimepiece extends TrainerCard {
 
             store.prompt(state, new SelectPrompt(
               effect.player.id,
-              GameMessage.CHOOSE_OPTION,
+              GameMessage.CHOOSE_DEVOLVE_COUNT,
               options,
               { allowCancel: false }
             ), choice => {

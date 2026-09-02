@@ -555,6 +555,7 @@
     "CHOOSE_ENERGY_FROM_DECK": "Choose energies from deck",
     "CHOOSE_ENERGY_FROM_DISCARD": "Choose energies from discard",
     "CHOOSE_CARD_TO_PUT_ON_BOTTOM": "Choose the card to put on the bottom of the deck.",
+    "CHOOSE_DEVOLVE_COUNT": "How many evolution(s) to remove?",
     "CHOOSE_POKEMON_WITH_DAMAGE": "Choose Pokémon with damage.",
     "CHOOSE_POKEMON_TO_MOVE_DAMAGE_TO": "Choose Pokémon to move damage to."
   },

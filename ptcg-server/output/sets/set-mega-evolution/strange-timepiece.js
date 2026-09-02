@@ -43,7 +43,7 @@ class StrangeTimepiece extends game_1.TrainerCard {
                     const pokemons = results[0].getPokemons();
                     const maxCount = pokemons.length - 1;
                     const options = [...Array(maxCount).keys()].map(i => String(i + 1));
-                    store.prompt(state, new game_1.SelectPrompt(effect.player.id, game_1.GameMessage.CHOOSE_OPTION, options, { allowCancel: false }), choice => {
+                    store.prompt(state, new game_1.SelectPrompt(effect.player.id, game_1.GameMessage.CHOOSE_DEVOLVE_COUNT, options, { allowCancel: false }), choice => {
                         const devolvesNeeded = choice + 1;
                         for (let i = 0; i < devolvesNeeded; i++) {
                             (0, prefabs_1.DEVOLVE_POKEMON)(store, state, results[0], effect.player.hand);
