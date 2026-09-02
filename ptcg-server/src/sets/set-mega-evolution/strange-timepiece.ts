@@ -67,18 +67,22 @@ export class StrangeTimepiece extends TrainerCard {
             ), selected => {
               if (selected && selected.length > 0) {
                 const pokemons = results[0].getPokemons();
-                const selectedIndices = selected
-                  .map(pokemon => pokemons.findIndex(card => card === pokemon as PokemonCard))
-                  .filter(index => index > 0);
+                const selectedIds = new Set<number>(selected.map(card => (card as PokemonCard).id));
+                let devolvesNeeded = 0;
 
-                if (selectedIndices.length === 0) {
+                // Keep removing cards from the top while they were selected.
+                for (let i = pokemons.length - 1; i >= 0; i--) {
+                  if (selectedIds.has(pokemons[i].id)) {
+                    devolvesNeeded += 1;
+                  } else {
+                    break;
+                  }
+                }
+
+                if (devolvesNeeded === 0) {
                   throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
                 }
 
-                const lowestSelectedIndex = Math.min(...selectedIndices);
-                // Devolve until the lowest selected Pokemon and everything above it is in hand.
-                // We need to devolve (pokemons.length - lowestSelectedIndex) times.
-                const devolvesNeeded = pokemons.length - lowestSelectedIndex;
                 for (let i = 0; i < devolvesNeeded; i++) {
                   DEVOLVE_POKEMON(store, state, results[0], effect.player.hand);
                 }
