@@ -1,13 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Xerneas = void 0;
-const game_1 = require("../../game");
 const play_card_action_1 = require("../../game/store/actions/play-card-action");
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const costs_1 = require("../../game/store/prefabs/costs");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
-const state_utils_1 = require("../../game/store/state-utils");
 class Xerneas extends pokemon_card_1.PokemonCard {
     constructor() {
         super(...arguments);
@@ -36,27 +34,13 @@ class Xerneas extends pokemon_card_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            const player = effect.player;
-            const cardList = state_utils_1.StateUtils.findCardList(state, this);
-            const benchIndex = player.bench.indexOf(cardList);
-            if (benchIndex === -1) {
-                return state;
-            }
-            const benchSpots = player.bench.filter(b => b.cards.length > 0).length;
-            const min = Math.min(2, benchSpots);
-            const max = Math.min(2, benchSpots);
-            state = store.prompt(state, new game_1.AttachEnergyPrompt(player.id, game_1.GameMessage.ATTACH_ENERGY_TO_BENCH, player.deck, play_card_action_1.PlayerType.BOTTOM_PLAYER, [play_card_action_1.SlotType.BENCH], { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Fairy Energy' }, { allowCancel: false, min, max, differentTargets: true }), transfers => {
-                transfers = transfers || [];
-                if (transfers.length === 0) {
-                    (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
-                    return;
-                }
-                for (const transfer of transfers) {
-                    const target = state_utils_1.StateUtils.getTarget(state, player, transfer.to);
-                    player.deck.moveCardTo(transfer.card, target);
-                }
-                (0, prefabs_1.SHUFFLE_DECK)(store, state, player);
-                return state;
+            return (0, prefabs_1.ATTACH_UP_TO_X_ENERGY_FROM_DECK_TO_Y_OF_YOUR_POKEMON)(store, state, effect.player, 2, 2, {
+                destinationSlots: [play_card_action_1.SlotType.BENCH],
+                energyFilter: { energyType: card_types_1.EnergyType.BASIC },
+                allowCancel: false,
+                min: 0,
+                differentTargets: true,
+                validCardTypes: [card_types_1.CardType.FAIRY]
             });
         }
         // Rainbow Spear
