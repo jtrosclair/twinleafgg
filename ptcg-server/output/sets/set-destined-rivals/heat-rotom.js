@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HeatRotom = void 0;
 const game_1 = require("../../game");
-const attack_effects_1 = require("../../game/store/effects/attack-effects");
+const attack_effects_1 = require("../../game/store/prefabs/attack-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 class HeatRotom extends game_1.PokemonCard {
     constructor() {
@@ -21,6 +21,7 @@ class HeatRotom extends game_1.PokemonCard {
                 name: 'Gadget Show',
                 cost: [C, C],
                 damage: 30,
+                damageCalculation: 'x',
                 text: 'This attack does 30 damage for each Pokémon Tool attached to all of your Pokémon.',
             }];
         this.regulationMark = 'I';
@@ -32,21 +33,13 @@ class HeatRotom extends game_1.PokemonCard {
     }
     reduceEffect(store, state, effect) {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            const player = effect.player;
-            player.forEachPokemon(game_1.PlayerType.TOP_PLAYER, (cardList) => {
-                const specialConditionEffect = new attack_effects_1.AddSpecialConditionsEffect(effect, [game_1.SpecialCondition.BURNED]);
-                state = store.reduceEffect(state, specialConditionEffect);
-            });
+            (0, attack_effects_1.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_BURNED)(store, state, effect);
         }
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             let toolCount = 0;
-            [player.active, ...player.bench].forEach(list => {
-                list.cards.forEach(card => {
-                    if (card instanceof game_1.PokemonCard && card.tools.length > 0) {
-                        toolCount += card.tools.length;
-                    }
-                });
+            player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
+                toolCount += cardList.tools.length;
             });
             effect.damage = 30 * toolCount;
         }

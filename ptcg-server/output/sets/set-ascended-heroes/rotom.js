@@ -4,7 +4,6 @@ exports.Rotom = void 0;
 const pokemon_card_1 = require("../../game/store/card/pokemon-card");
 const card_types_1 = require("../../game/store/card/card-types");
 const game_1 = require("../../game");
-const trainer_card_1 = require("../../game/store/card/trainer-card");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 function* useRotocall(next, store, state, effect) {
@@ -94,11 +93,7 @@ class Rotom extends pokemon_card_1.PokemonCard {
             let toolCount = 0;
             // Count tools on all player's Pokemon
             player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
-                cardList.tools.forEach(card => {
-                    if (card instanceof trainer_card_1.TrainerCard && card.trainerType === card_types_1.TrainerType.TOOL) {
-                        toolCount++;
-                    }
-                });
+                toolCount += cardList.tools.length;
             });
             effect.damage = 30 * toolCount;
         }

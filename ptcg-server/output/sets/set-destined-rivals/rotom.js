@@ -20,6 +20,7 @@ class Rotom extends game_1.PokemonCard {
                 name: 'Gadget Show',
                 cost: [C, C],
                 damage: 30,
+                damageCalculation: 'x',
                 text: 'This attack does 30 damage for each Pokémon Tool attached to all of your Pokemon.',
             }];
         this.regulationMark = 'I';
@@ -39,6 +40,7 @@ class Rotom extends game_1.PokemonCard {
             if (opponent.hand.cards.length > 0) {
                 const randomIndex = Math.floor(Math.random() * opponent.hand.cards.length);
                 const randomCard = opponent.hand.cards[randomIndex];
+                (0, prefabs_1.SHOW_CARDS_TO_PLAYER)(store, state, player, [randomCard]);
                 (0, prefabs_1.MOVE_CARDS)(store, state, opponent.hand, opponent.deck, { cards: [randomCard], sourceCard: this, sourceEffect: this.attacks[0] });
                 (0, prefabs_1.SHUFFLE_DECK)(store, state, opponent);
             }
@@ -46,12 +48,8 @@ class Rotom extends game_1.PokemonCard {
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 1, this)) {
             const player = effect.player;
             let toolCount = 0;
-            [player.active, ...player.bench].forEach(list => {
-                list.cards.forEach(card => {
-                    if (card instanceof game_1.PokemonCard && card.tools.length > 0) {
-                        toolCount += card.tools.length;
-                    }
-                });
+            player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (cardList) => {
+                toolCount += cardList.tools.length;
             });
             effect.damage = 30 * toolCount;
         }

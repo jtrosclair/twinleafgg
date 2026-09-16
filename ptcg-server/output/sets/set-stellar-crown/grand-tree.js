@@ -40,6 +40,12 @@ function* useStadium(next, store, state, effect) {
     player.forEachPokemon(game_1.PlayerType.BOTTOM_PLAYER, (list, card, target) => {
         if (card.stage !== card_types_1.Stage.BASIC) {
             blocked2.push(target);
+            return;
+        }
+        const playedTurnEffect = new check_effects_1.CheckPokemonPlayedTurnEffect(player, list);
+        store.reduceEffect(state, playedTurnEffect);
+        if (playedTurnEffect.pokemonPlayedTurn === state.turn) {
+            blocked2.push(target);
         }
     });
     let targets = [];
@@ -55,6 +61,11 @@ function* useStadium(next, store, state, effect) {
     const pokemonCard = target.getPokemonCard();
     if (pokemonCard === undefined) {
         return state; // invalid target?
+    }
+    const targetPlayedTurnEffect = new check_effects_1.CheckPokemonPlayedTurnEffect(player, target);
+    store.reduceEffect(state, targetPlayedTurnEffect);
+    if (pokemonCard.stage !== card_types_1.Stage.BASIC || targetPlayedTurnEffect.pokemonPlayedTurn === state.turn) {
+        return state;
     }
     // Blocking pokemon cards, that cannot be valid evolutions
     const blocked = [];

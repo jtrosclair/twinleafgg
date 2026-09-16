@@ -48,16 +48,16 @@ class Whismur extends pokemon_card_1.PokemonCard {
                 const opponent = game_1.StateUtils.getOpponent(state, player);
                 opponent.marker.addMarker(this.SUDDEN_SHRIEK_MARKER, this);
             }
-            if (effect instanceof play_card_effects_1.PlayItemEffect || effect instanceof play_card_effects_1.PlaySupporterEffect) {
-                const player = effect.player;
-                const opponent = game_1.StateUtils.getOpponent(state, player);
-                if (opponent.marker.hasMarker(this.SUDDEN_SHRIEK_MARKER, this)) {
-                    throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
-                }
+        }
+        if (effect instanceof play_card_effects_1.PlayItemEffect || effect instanceof play_card_effects_1.PlaySupporterEffect || effect instanceof play_card_effects_1.PlayStadiumEffect || effect instanceof play_card_effects_1.AttachPokemonToolEffect) {
+            const player = effect.player;
+            const opponent = game_1.StateUtils.getOpponent(state, player);
+            if (opponent.marker.hasMarker(this.SUDDEN_SHRIEK_MARKER, this)) {
+                throw new game_1.GameError(game_1.GameMessage.BLOCKED_BY_EFFECT);
             }
-            if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.SUDDEN_SHRIEK_MARKER, this)) {
-                effect.player.marker.removeMarker(this.SUDDEN_SHRIEK_MARKER, this);
-            }
+        }
+        if (effect instanceof game_phase_effects_1.EndTurnEffect && effect.player.marker.hasMarker(this.SUDDEN_SHRIEK_MARKER, this)) {
+            effect.player.marker.removeMarker(this.SUDDEN_SHRIEK_MARKER, this);
         }
         return state;
     }
