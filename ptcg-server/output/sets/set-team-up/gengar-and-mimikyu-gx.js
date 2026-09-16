@@ -54,9 +54,7 @@ class GengarMimikyuGX extends game_1.PokemonCard {
             const extraEnergy = player.active.cards.filter(card => card.superType === game_1.SuperType.ENERGY && card.provides.includes(game_1.CardType.PSYCHIC)).length > 1;
             if (extraEnergy) {
                 [player, opponent].forEach(p => {
-                    while (p.hand.cards.length < 7) {
-                        p.deck.moveTo(p.hand);
-                    }
+                    (0, prefabs_1.DRAW_CARDS_UNTIL_CARDS_IN_HAND)(p, 7);
                 });
             }
         }

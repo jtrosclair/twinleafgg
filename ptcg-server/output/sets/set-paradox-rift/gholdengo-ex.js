@@ -87,9 +87,7 @@ class Gholdengoex extends pokemon_card_1.PokemonCard {
                 store.reduceEffect(state, discardEnergy);
                 player.hand.moveCardsTo(cards, player.discard);
                 // Calculate damage
-                const damage = cards.length * 50;
-                effect.damage = damage;
-                return state;
+                effect.damage = cards.length * 50;
             });
         }
         return state;

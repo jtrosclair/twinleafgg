@@ -7,7 +7,7 @@ class Pumpkaboo extends game_1.PokemonCard {
     constructor() {
         super(...arguments);
         this.stage = game_1.Stage.BASIC;
-        this.cardType = G;
+        this.cardType = P;
         this.hp = 60;
         this.weakness = [{ type: D }];
         this.resistance = [{ type: F, value: -20 }];

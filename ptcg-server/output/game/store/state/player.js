@@ -208,6 +208,7 @@ class Player {
             this.marker.removePokemonScopedMarkers();
             // Remove attack effects from the Pokemon leaving active
             this.active.removeAttackEffects();
+            this.active.clearEffects();
             // remove all special conditions
             this.active.specialConditions = [];
             this.active = this.bench[benchIndex];

@@ -28,8 +28,8 @@ At the end of this turn, if you have 3 or more cards in your hand, shuffle cards
         }
         if (effect instanceof game_phase_effects_1.EndTurnEffect && (0, prefabs_1.HAS_MARKER)(this.LILLIES_FORCE_MARKER, effect.player, this)) {
             if (effect.player.hand.cards.length >= 3) {
-                const discardAmount = effect.player.hand.cards.length - 3;
-                return store.prompt(state, new game_1.ChooseCardsPrompt(effect.player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, effect.player.hand, {}, { min: discardAmount, max: discardAmount, allowCancel: false }), selected => {
+                const shuffleAmount = effect.player.hand.cards.length - 2;
+                state = store.prompt(state, new game_1.ChooseCardsPrompt(effect.player, game_1.GameMessage.CHOOSE_CARD_TO_SHUFFLE, effect.player.hand, {}, { min: shuffleAmount, max: shuffleAmount, allowCancel: false }), selected => {
                     const cards = selected || [];
                     (0, prefabs_1.MOVE_CARDS)(store, state, effect.player.hand, effect.player.deck, { cards, sourceCard: this });
                     (0, prefabs_1.SHUFFLE_DECK)(store, state, effect.player);

@@ -102,6 +102,7 @@ export declare class UseAttackEffect implements Effect {
     player: Player;
     attack: Attack;
     source: PokemonCardList;
+    ignoreStatusConditions: boolean;
     constructor(player: Player, attack: Attack);
 }
 export declare class UseStadiumEffect implements Effect {

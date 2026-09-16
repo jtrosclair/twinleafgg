@@ -17,6 +17,7 @@ class Raichu extends pokemon_card_1.PokemonCard {
         this.cardImage = 'assets/cardback.png';
         this.setNumber = '14';
         this.stage = card_types_1.Stage.STAGE_1;
+        this.evolvesFrom = 'Pikachu';
         this.cardType = card_types_1.CardType.LIGHTNING;
         this.hp = 80;
         this.weakness = [{ type: card_types_1.CardType.FIGHTING }];

@@ -108,6 +108,7 @@ class UseAttackEffect {
     constructor(player, attack) {
         this.type = GameEffects.USE_ATTACK_EFFECT;
         this.preventDefault = false;
+        this.ignoreStatusConditions = false;
         this.player = player;
         this.attack = attack;
         this.source = player.active;

@@ -51,7 +51,8 @@ function* useAttack(next, store, state, effect) {
         throw new game_error_1.GameError(game_message_1.GameMessage.CANNOT_ATTACK_ON_FIRST_TURN);
     }
     const sp = player.active.specialConditions;
-    if (sp.includes(card_types_1.SpecialCondition.PARALYZED) || sp.includes(card_types_1.SpecialCondition.ASLEEP)) {
+    const ignoreStatusConditions = effect instanceof game_effects_1.UseAttackEffect && effect.ignoreStatusConditions;
+    if ((sp.includes(card_types_1.SpecialCondition.PARALYZED) || sp.includes(card_types_1.SpecialCondition.ASLEEP)) && !ignoreStatusConditions) {
         throw new game_error_1.GameError(game_message_1.GameMessage.BLOCKED_BY_SPECIAL_CONDITION);
     }
     const attack = effect.attack;

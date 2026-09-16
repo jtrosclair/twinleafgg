@@ -49,8 +49,8 @@ class Chandelure extends pokemon_card_1.PokemonCard {
             // Add damage for each Pokemon discarded
             effect.damage += 60 * discardedPokemon.length;
             // Find Fire Pokemon among the discarded
-            const firePokemon = discardedPokemon.filter(p => p.cardType === card_types_1.CardType.FIRE && p.stage === card_types_1.Stage.BASIC);
-            // Put any number of Fire Basic Pokemon onto bench
+            const firePokemon = discardedPokemon.filter(p => p.cardType === card_types_1.CardType.FIRE);
+            // Put any number of Fire Pokemon onto bench
             if (firePokemon.length > 0) {
                 const availableBenchSlots = player.bench.filter(b => b.cards.length === 0).length;
                 if (availableBenchSlots > 0) {
