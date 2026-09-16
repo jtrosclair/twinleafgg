@@ -54,10 +54,10 @@ export class Chandelure extends PokemonCard {
 
       // Find Fire Pokemon among the discarded
       const firePokemon = discardedPokemon.filter(p =>
-        p.cardType === CardType.FIRE && p.stage === Stage.BASIC
+        p.cardType === CardType.FIRE
       );
 
-      // Put any number of Fire Basic Pokemon onto bench
+      // Put any number of Fire Pokemon onto bench
       if (firePokemon.length > 0) {
         const availableBenchSlots = player.bench.filter(b => b.cards.length === 0).length;
         if (availableBenchSlots > 0) {
