@@ -20,6 +20,7 @@ import { GameStatsTracker } from '../game-stats-tracker';
 interface PokemonItem {
   playerNum: number;
   cardList: PokemonCardList;
+  destination?: 'lostzone';
 }
 
 interface PrizeGroup {
@@ -36,8 +37,15 @@ function findKoPokemons(store: StoreLike, state: State): PokemonItem[] {
       const checkHpEffect = new CheckHpEffect(player, cardList);
       store.reduceEffect(state, checkHpEffect);
 
+      const ko = cardList.attackDamageKnockOut;
+      const destination = ko && ko.turn === state.turn && state.phase === GamePhase.ATTACK
+        && ko.playerId === state.players[state.activePlayer].id
+        && ko.playerId !== player.id && ko.targetCard === card ? ko.destination : undefined;
+      // Consume the opt-in at the next state check, even if healed/saved.
+      // Never carry a Lost Crisis destination into another attack or checkup.
+      if (ko) { delete ko.destination; delete ko.targetCard; }
       if (cardList.damage >= checkHpEffect.hp) {
-        pokemons.push({ playerNum: i, cardList });
+        pokemons.push({ playerNum: i, cardList, destination });
       }
     });
   }
@@ -370,6 +378,7 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
   for (const pokemonToDiscard of pokemonsToDiscard) {
     const owner = state.players[pokemonToDiscard.playerNum];
     const knockOutEffect = new KnockOutEffect(owner, pokemonToDiscard.cardList);
+    knockOutEffect.knockOutDestination = pokemonToDiscard.destination;
     state = store.reduceEffect(state, knockOutEffect);
 
     if (store.hasPrompts()) {

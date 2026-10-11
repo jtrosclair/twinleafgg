@@ -9,6 +9,9 @@ import { Marker } from './card-marker';
 import { PokemonCardList } from './pokemon-card-list';
 import { GameStats } from './game-stats-interfaces';
 export class Player {
+  public coinFlipCancelTrainerPlayTurnsRemaining = 0;
+  public pokemonKnockedOutDuringOpponentsLastTurn = false;
+  public pokemonKnockedOutByAttackDuringOpponentsLastTurn = false;
 
   id: number = 0;
 

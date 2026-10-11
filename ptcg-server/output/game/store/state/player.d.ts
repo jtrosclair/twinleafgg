@@ -5,6 +5,9 @@ import { Marker } from './card-marker';
 import { PokemonCardList } from './pokemon-card-list';
 import { GameStats } from './game-stats-interfaces';
 export declare class Player {
+    coinFlipCancelTrainerPlayTurnsRemaining: number;
+    pokemonKnockedOutDuringOpponentsLastTurn: boolean;
+    pokemonKnockedOutByAttackDuringOpponentsLastTurn: boolean;
     id: number;
     name: string;
     deckId?: number;

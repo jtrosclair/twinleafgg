@@ -1,3 +1,4 @@
+import { AttackEffect } from './game-effects';
 import { Effect } from './effect';
 import { Player } from '../state/player';
 import { Card } from '../card/card';
@@ -12,7 +13,9 @@ export enum GamePhaseEffects {
   CHOOSE_STARTING_POKEMON_EFFECT = 'CHOOSE_STARTING_POKEMON_EFFECT',
   DREW_TOPDECK_EFFECT = 'DREW_TOPDECK_EFFECT',
   CHOOSE_PRIZE_EFFECT = 'CHOOSE_PRIZE_EFFECT',
-  AFTER_ATTACK_EFFECT = 'AFTER_ATTACK_EFFECT'
+  AFTER_ATTACK_EFFECT = 'AFTER_ATTACK_EFFECT',
+  BEFORE_DOING_DAMAGE_EFFECT = 'BEFORE_DOING_DAMAGE_EFFECT',
+  AFTER_BETWEEN_TURNS_EFFECT = 'AFTER_BETWEEN_TURNS_EFFECT'
 }
 
 export class BeginTurnEffect implements Effect {
@@ -57,6 +60,21 @@ export class ChooseStartingPokemonEffect implements Effect {
   }
 }
 
+export class BeforeDoingDamageEffect implements Effect {
+  readonly type: string = GamePhaseEffects.BEFORE_DOING_DAMAGE_EFFECT;
+  public preventDefault = false;
+  public player: Player;
+  public opponent: Player;
+  public attack: Attack;
+  public attackEffect: AttackEffect;
+  constructor(attackEffect: AttackEffect) {
+    this.attackEffect = attackEffect;
+    this.player = attackEffect.player;
+    this.opponent = attackEffect.opponent;
+    this.attack = attackEffect.attack;
+  }
+}
+
 export class AfterAttackEffect implements Effect {
   readonly type: string = GamePhaseEffects.AFTER_ATTACK_EFFECT;
   public preventDefault = false;
@@ -97,6 +115,13 @@ export class WhoBeginsEffect implements Effect {
   public player: Player | undefined;
 
   constructor() { }
+}
+
+/** Per-player Checkup has resolved all condition callbacks; runs before KO checks. */
+export class AfterBetweenTurnsEffect implements Effect {
+  readonly type: string = GamePhaseEffects.AFTER_BETWEEN_TURNS_EFFECT;
+  public preventDefault = false;
+  constructor(public player: Player) {}
 }
 
 export class BetweenTurnsEffect implements Effect {

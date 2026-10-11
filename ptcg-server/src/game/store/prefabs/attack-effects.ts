@@ -1,6 +1,7 @@
 import { Card, ChooseCardsPrompt, ChooseEnergyPrompt, ChoosePokemonPrompt, ConfirmPrompt, DamageMap, GameMessage, PlayerType, PutDamagePrompt, ShuffleDeckPrompt, SlotType, State, StateUtils, StoreLike } from '../..';
 import { CardType, SpecialCondition, SuperType, TrainerType } from '../card/card-types';
 import { PokemonCard } from '../card/pokemon-card';
+import { EnergyCard } from '../card/energy-card';
 import { AddSpecialConditionsEffect, AfterDamageEffect, ApplyWeaknessEffect, CardsToHandEffect, DealDamageEffect, DiscardCardsEffect, HealTargetEffect, KnockOutOpponentEffect, PutCountersEffect, PutDamageEffect } from '../effects/attack-effects';
 import { CheckProvidedEnergyEffect } from '../effects/check-effects';
 import { AttackEffect } from '../effects/game-effects';
@@ -446,22 +447,40 @@ export function YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED(
 export function DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON(
   store: StoreLike,
   state: State,
-  effect: AttackEffect
+  effect: AttackEffect,
+  allowedEnergyTypes?: CardType[],
+  count = 1,
 ) {
   const player = effect.player;
   const opponent = StateUtils.getOpponent(state, player);
 
-  const energyCards = opponent.active.cards.filter(c => c.superType === SuperType.ENERGY);
+  if (count <= 0) {
+    return state;
+  }
+
+  const blocked: number[] = [];
+  const energyCards = opponent.active.cards.filter((card, index) => {
+    if (card.superType !== SuperType.ENERGY) {
+      if (allowedEnergyTypes) blocked.push(index);
+      return false;
+    }
+    if (!allowedEnergyTypes) return true;
+    const energy = card as EnergyCard;
+    const allowed = allowedEnergyTypes.some(type => energy.provides.includes(type));
+    if (!allowed) blocked.push(index);
+    return allowed;
+  });
   if (energyCards.length === 0) {
     return state;
   }
 
+  const cardsToDiscard = Math.min(count, energyCards.length);
   return store.prompt(state, new ChooseCardsPrompt(
     player,
     GameMessage.CHOOSE_CARD_TO_DISCARD,
     opponent.active,
     { superType: SuperType.ENERGY },
-    { min: 1, max: 1, allowCancel: false }
+    { min: cardsToDiscard, max: cardsToDiscard, allowCancel: false, blocked }
   ), selected => {
     const cards = selected || [];
     if (cards.length > 0) {
@@ -471,7 +490,6 @@ export function DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON(
     }
   });
 }
-
 /**
  * You may put up to X Energy attached to your opponent's Active Pokémon into their hand.
  * Uses CardsToHandEffect (AbstractAttackEffect) so abilities like Charmeleon's Flare Veil can block it.

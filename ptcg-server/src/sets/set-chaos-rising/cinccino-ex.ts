@@ -2,7 +2,7 @@ import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { Effect } from '../../game/store/effects/effect';
 import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { EnergyCard } from '../../game/store/card/energy-card';
+import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { GamePhase } from '../../game/store/state/state';
 import { PokemonCard, StateUtils, StoreLike, State } from '../../game';
 import { COIN_FLIP_PROMPT, IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
@@ -51,8 +51,11 @@ export class Cinccinoex extends PokemonCard {
       });
     }
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const energyCount = effect.source?.cards.filter((c: any) => c instanceof EnergyCard).length ?? 0;
-      effect.damage = 40 * energyCount;
+      const checkProvidedEnergy = new CheckProvidedEnergyEffect(effect.player, effect.source);
+      store.reduceEffect(state, checkProvidedEnergy);
+      const energyProvided = checkProvidedEnergy.energyMap
+        .reduce((sum, energy) => sum + energy.provides.length, 0);
+      effect.damage = 40 * energyProvided;
     }
     return state;
   }

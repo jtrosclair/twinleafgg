@@ -23,8 +23,18 @@ function findKoPokemons(store, state) {
         player.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
             const checkHpEffect = new check_effects_1.CheckHpEffect(player, cardList);
             store.reduceEffect(state, checkHpEffect);
+            const ko = cardList.attackDamageKnockOut;
+            const destination = ko && ko.turn === state.turn && state.phase === state_1.GamePhase.ATTACK
+                && ko.playerId === state.players[state.activePlayer].id
+                && ko.playerId !== player.id && ko.targetCard === card ? ko.destination : undefined;
+            // Consume the opt-in at the next state check, even if healed/saved.
+            // Never carry a Lost Crisis destination into another attack or checkup.
+            if (ko) {
+                delete ko.destination;
+                delete ko.targetCard;
+            }
             if (cardList.damage >= checkHpEffect.hp) {
-                pokemons.push({ playerNum: i, cardList });
+                pokemons.push({ playerNum: i, cardList, destination });
             }
         });
     }
@@ -297,6 +307,7 @@ function* executeCheckState(next, store, state, onComplete) {
     for (const pokemonToDiscard of pokemonsToDiscard) {
         const owner = state.players[pokemonToDiscard.playerNum];
         const knockOutEffect = new game_effects_1.KnockOutEffect(owner, pokemonToDiscard.cardList);
+        knockOutEffect.knockOutDestination = pokemonToDiscard.destination;
         state = store.reduceEffect(state, knockOutEffect);
         if (store.hasPrompts()) {
             yield store.waitPrompt(state, () => next());

@@ -1,0 +1,140 @@
+[
+  {
+    "number": "CC1",
+    "constructor": "Pikachu",
+    "file": "set-base-set/pikachu",
+    "source": "https://limitlesstcg.com/cards/30C/CC1"
+  },
+  {
+    "number": "CC2",
+    "constructor": "Charizard",
+    "file": "set-celebrations/charizard",
+    "source": "https://limitlesstcg.com/cards/30C/CC2"
+  },
+  {
+    "number": "CC5",
+    "constructor": "Sneasel",
+    "file": "set-neo-genesis/sneasel",
+    "source": "https://limitlesstcg.com/cards/30C/CC5"
+  },
+  {
+    "number": "CC7",
+    "constructor": "Lugia",
+    "file": "set-aquapolis/lugia",
+    "source": "https://limitlesstcg.com/cards/30C/CC7"
+  },
+  {
+    "number": "CC8",
+    "constructor": "Delcatty",
+    "file": "set-ex-ruby-and-sapphire/delcatty",
+    "source": "https://limitlesstcg.com/cards/30C/CC8"
+  },
+  {
+    "number": "CC9",
+    "constructor": "DarkTyranitar2",
+    "file": "set-ex-team-rocket-returns/dark-tyrantiar-2",
+    "source": "https://limitlesstcg.com/cards/30C/CC9"
+  },
+  {
+    "number": "CC10",
+    "constructor": "Scizorex",
+    "file": "set-ex-unseen-forces/scizor-ex",
+    "source": "https://limitlesstcg.com/cards/30C/CC10"
+  },
+  {
+    "number": "CC11",
+    "constructor": "Metagross",
+    "file": "set-ex-delta-species/metagross",
+    "source": "https://limitlesstcg.com/cards/30C/CC11"
+  },
+  {
+    "number": "CC13",
+    "constructor": "Uxie",
+    "file": "set-legends-awakened/uxie",
+    "source": "https://limitlesstcg.com/cards/30C/CC13"
+  },
+  {
+    "number": "CC14",
+    "constructor": "CrobatG",
+    "file": "set-platinum/crobat-g",
+    "source": "https://limitlesstcg.com/cards/30C/CC14"
+  },
+  {
+    "number": "CC15",
+    "constructor": "Gengar",
+    "file": "set-triumphant/gengar-prime",
+    "source": "https://limitlesstcg.com/cards/30C/CC15"
+  },
+  {
+    "number": "CC18",
+    "constructor": "N",
+    "file": "set-fates-collide/n",
+    "source": "https://limitlesstcg.com/cards/30C/CC18"
+  },
+  {
+    "number": "CC19",
+    "constructor": "RayquazaEx",
+    "file": "set-dragons-exalted/rayquaza-ex",
+    "source": "https://limitlesstcg.com/cards/30C/CC19"
+  },
+  {
+    "number": "CC20",
+    "constructor": "GenesectEX",
+    "file": "set-plasma-blast/genesect-ex",
+    "source": "https://limitlesstcg.com/cards/30C/CC20"
+  },
+  {
+    "number": "CC21",
+    "constructor": "MGardevoirEx",
+    "file": "set-primal-clash/m-gardevoir-ex",
+    "source": "https://limitlesstcg.com/cards/30C/CC21"
+  },
+  {
+    "number": "CC22",
+    "constructor": "GreninjaBREAK",
+    "file": "set-breakpoint/greninja-break",
+    "source": "https://limitlesstcg.com/cards/30C/CC22"
+  },
+  {
+    "number": "CC23",
+    "constructor": "SolgaleoGx",
+    "file": "set-sun-and-moon/solgaleo-gx",
+    "source": "https://limitlesstcg.com/cards/30C/CC23"
+  },
+  {
+    "number": "CC24",
+    "constructor": "BuzzwoleGX",
+    "file": "set-crimson-invasion/buzzwole-gx",
+    "source": "https://limitlesstcg.com/cards/30C/CC24"
+  },
+  {
+    "number": "CC25",
+    "constructor": "PikachuZekromGX",
+    "file": "set-sun-and-moon-promos/pikachu-and-zekrom-gx",
+    "source": "https://limitlesstcg.com/cards/30C/CC25"
+  },
+  {
+    "number": "CC26",
+    "constructor": "ZacianV",
+    "file": "set-sword-and-shield/zacian-v",
+    "source": "https://limitlesstcg.com/cards/30C/CC26"
+  },
+  {
+    "number": "CC27",
+    "constructor": "Raikou",
+    "file": "set-vivid-voltage/raikou",
+    "source": "https://limitlesstcg.com/cards/30C/CC27"
+  },
+  {
+    "number": "CC28",
+    "constructor": "MewVMAX",
+    "file": "set-fusion-strike/mew-vmax",
+    "source": "https://limitlesstcg.com/cards/30C/CC28"
+  },
+  {
+    "number": "CC29",
+    "constructor": "ArceusVSTAR",
+    "file": "set-brilliant-stars/arceus-vstar",
+    "source": "https://limitlesstcg.com/cards/30C/CC29"
+  }
+]

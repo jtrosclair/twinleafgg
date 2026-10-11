@@ -8,6 +8,8 @@ const play_card_action_1 = require("../../game/store/actions/play-card-action");
 const game_effects_1 = require("../../game/store/effects/game-effects");
 const energy_card_1 = require("../../game/store/card/energy-card");
 const choose_cards_prompt_1 = require("../../game/store/prompts/choose-cards-prompt");
+const choose_energy_prompt_1 = require("../../game/store/prompts/choose-energy-prompt");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
 const game_error_1 = require("../../game/game-error");
 const play_card_effects_1 = require("../../game/store/effects/play-card-effects");
@@ -60,24 +62,22 @@ class MegaGreninjaex extends game_1.PokemonCard {
             if (player.marker.hasMarker(this.MORTAL_SHURIKEN_MARKER, this)) {
                 throw new game_error_1.GameError(game_1.GameMessage.POWER_ALREADY_USED);
             }
-            state = store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Water Energy' }, { allowCancel: true, min: 1, max: 1 }), cards => {
+            return store.prompt(state, new choose_cards_prompt_1.ChooseCardsPrompt(player, game_1.GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, { superType: card_types_1.SuperType.ENERGY, energyType: card_types_1.EnergyType.BASIC, name: 'Water Energy' }, { allowCancel: true, min: 1, max: 1 }), cards => {
                 cards = cards || [];
                 if (cards.length === 0) {
-                    player.marker.addMarker(this.MORTAL_SHURIKEN_MARKER, this);
                     return state;
                 }
-                player.marker.addMarker(this.MORTAL_SHURIKEN_MARKER, this);
                 (0, prefabs_1.MOVE_CARDS)(store, state, player.hand, player.discard, { cards, sourceCard: this, sourceEffect: this.powers[0] });
+                return store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, play_card_action_1.PlayerType.TOP_PLAYER, [play_card_action_1.SlotType.ACTIVE, play_card_action_1.SlotType.BENCH], { min: 1, max: 1, allowCancel: false }), selected => {
+                    const targets = selected || [];
+                    if (targets.length > 0) {
+                        const placeCounters = new game_effects_1.PlaceDamageCountersEffect(player, targets[0], 60, this);
+                        store.reduceEffect(state, placeCounters);
+                    }
+                    player.marker.addMarker(this.MORTAL_SHURIKEN_MARKER, this);
+                    (0, prefabs_1.ABILITY_USED)(player, this);
+                });
             });
-            state = store.prompt(state, new game_1.ChoosePokemonPrompt(player.id, game_1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, play_card_action_1.PlayerType.TOP_PLAYER, [play_card_action_1.SlotType.ACTIVE, play_card_action_1.SlotType.BENCH], { min: 1, max: 1, allowCancel: false }), selected => {
-                const targets = selected || [];
-                if (targets.length > 0) {
-                    const placeCounters = new game_effects_1.PlaceDamageCountersEffect(player, targets[0], 60, this);
-                    store.reduceEffect(state, placeCounters);
-                }
-                (0, prefabs_1.ABILITY_USED)(player, this);
-            });
-            return state;
         }
         (0, prefabs_1.REMOVE_MARKER_AT_END_OF_TURN)(effect, this.MORTAL_SHURIKEN_MARKER, this);
         if (effect instanceof play_card_effects_1.PlayPokemonEffect && effect.pokemonCard === this) {
@@ -87,8 +87,18 @@ class MegaGreninjaex extends game_1.PokemonCard {
             const player = effect.player;
             (0, prefabs_1.CONFIRMATION_PROMPT)(store, state, player, result => {
                 if (result) {
-                    (0, prefabs_1.PUT_SPECIFIC_ENERGY_FROM_THIS_POKEMON_INTO_HAND)(store, state, effect, [card_types_1.CardType.WATER]);
-                    effect.damage += 80;
+                    const source = effect.source || player.active;
+                    const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, source);
+                    store.reduceEffect(state, checkProvidedEnergy);
+                    store.prompt(state, new choose_energy_prompt_1.ChooseEnergyPrompt(player.id, game_1.GameMessage.CHOOSE_CARD_TO_HAND, checkProvidedEnergy.energyMap, [card_types_1.CardType.WATER], { allowCancel: false }), energy => {
+                        const cards = (energy || []).map(e => e.card);
+                        if (cards.length === 0)
+                            return;
+                        (0, prefabs_1.MOVE_CARDS)(store, state, source, player.hand, { cards });
+                        if (cards.every(card => player.hand.cards.includes(card))) {
+                            effect.damage += 80;
+                        }
+                    });
                 }
             }, game_1.GameMessage.WANT_TO_USE_EFFECT_OF_ATTACK);
         }

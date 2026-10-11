@@ -1,3 +1,4 @@
+import { GustOpponentBenchEffect } from '../effects/attack-effects';
 import { AttachEnergyOptions, AttachEnergyPrompt, Card, CardList, CardTarget, ChooseCardsOptions, ChooseCardsPrompt, ChoosePokemonPrompt, ChoosePrizePrompt, ChooseEnergyPrompt, ConfirmPrompt, DamageMap, EnergyCard, GameError, GameLog, GameMessage, MoveDamagePrompt, Player, PlayerType, PokemonCardList, PowerType, SelectPrompt, ShowCardsPrompt, ShuffleDeckPrompt, SlotType, State, StateUtils, StoreLike, TrainerCard } from '../..';
 import { TrainerEffect, AttachEnergyEffect, ToolEffect, CoinFlipEffect, CoinFlipSequenceEffect, PlayPokemonFromDeckEffect } from '../effects/play-card-effects';
 import { BoardEffect, CardTag, CardType, EnergyType, Format, SpecialCondition, Stage, SuperType, TrainerType } from '../card/card-types';
@@ -712,6 +713,30 @@ export function TAKE_X_PRIZES(
     if (callback) callback(result);
   });
 
+  return state;
+}
+
+/** Upstream KO predicate; attack-damage mode excludes counters, poison and effects. */
+export function WAS_POKEMON_KNOCKED_OUT_DURING_OPPONENTS_LAST_TURN(
+  player: Player, filter?: { byAttackDamage?: boolean }
+): boolean {
+  return filter?.byAttackDamage
+    ? player.pokemonKnockedOutByAttackDuringOpponentsLastTurn
+    : player.pokemonKnockedOutDuringOpponentsLastTurn;
+}
+
+/** Scoped upstream extra-prize predicate with per-target lethal damage provenance. */
+export function IF_OPPONENTS_POKEMON_KO_BY_ATTACK_DAMAGE_TAKE_MORE_PRIZES(
+  store: StoreLike, state: State, effect: Effect, source: PokemonCard,
+  options: { attackName?: string; extraPrizes?: number } = {}
+): State {
+  if (!(effect instanceof KnockOutEffect)) return state;
+  const attacker = StateUtils.getOpponent(state, effect.player);
+  const ko = effect.target.attackDamageKnockOut;
+  if (state.phase !== GamePhase.ATTACK || state.players[state.activePlayer] !== attacker
+    || !ko || ko.turn !== state.turn || ko.playerId !== attacker.id || ko.sourceCard !== source
+    || (options.attackName !== undefined && ko.attack.name !== options.attackName)) return state;
+  if (effect.prizeCount > 0) effect.prizeCount += options.extraPrizes ?? 1;
   return state;
 }
 
@@ -1674,6 +1699,7 @@ export function SWITCH_ACTIVE_WITH_BENCHED(store: StoreLike, state: State, playe
 }
 
 export interface SwitchInOpponentBenchedPokemonOptions {
+  sourceEffect?: AttackEffect | AfterAttackEffect;
   allowCancel?: boolean;
   blocked?: CardTarget[];
   onSwitched?: (target: PokemonCardList) => void;
@@ -1689,7 +1715,7 @@ export function SWITCH_IN_OPPONENT_BENCHED_POKEMON(
   player: Player,
   options: SwitchInOpponentBenchedPokemonOptions = {}
 ): State {
-  const { allowCancel = false, blocked = [], onSwitched } = options;
+  const { allowCancel = false, blocked = [], onSwitched, sourceEffect } = options;
   const opponent = StateUtils.getOpponent(state, player);
   const hasBenchedPokemon = opponent.bench.some(bench => bench.cards.length > 0);
   if (!hasBenchedPokemon) {
@@ -1706,9 +1732,13 @@ export function SWITCH_IN_OPPONENT_BENCHED_POKEMON(
     if (!selected || selected.length === 0) {
       return;
     }
-    opponent.switchPokemon(selected[0], store, state);
-    if (onSwitched !== undefined) {
-      onSwitched(selected[0]);
+    if (sourceEffect) {
+      const gustEffect = new GustOpponentBenchEffect(sourceEffect, selected[0]);
+      store.reduceEffect(state, gustEffect);
+      if (!gustEffect.preventDefault && onSwitched !== undefined) onSwitched(selected[0]);
+    } else {
+      opponent.switchPokemon(selected[0], store, state);
+      if (onSwitched !== undefined) onSwitched(selected[0]);
     }
   });
 }

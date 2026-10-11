@@ -1,3 +1,6 @@
+import { AbstractAttackEffect, ApplyWeaknessEffect, DealDamageEffect, PutDamageEffect } from './effects/attack-effects';
+import { StateUtils } from './state-utils';
+import { resolveCopyAttackSessions } from './prefabs/copy-attack-delegation';
 import { Action } from './actions/action';
 import { AbortGameAction } from './actions/abort-game-action';
 import { AppendLogAction } from './actions/append-log-action';
@@ -115,8 +118,24 @@ export class Store implements StoreLike {
   }
 
   public reduceEffect(state: State, effect: Effect): State {
+    // Upstream attack prevention runs before fan-out so blocked effects never trigger cards.
+    if (effect instanceof AbstractAttackEffect && effect.target && effect.source
+      && (effect.target.preventDamageNextTurn || effect.target.preventEffectsOfAttacksNextTurn)) {
+      const targetOwner = StateUtils.findOwner(state, effect.target);
+      const sourceOwner = StateUtils.findOwner(state, effect.source);
+      if (targetOwner !== sourceOwner) {
+        const damage = effect instanceof PutDamageEffect || effect instanceof DealDamageEffect;
+        const nonDamage = !damage && !(effect instanceof ApplyWeaknessEffect);
+        if ((damage && effect.target.preventDamageNextTurn)
+          || (nonDamage && effect.target.preventEffectsOfAttacksNextTurn)) {
+          effect.preventDefault = true;
+          return state;
+        }
+      }
+    }
 
     state = this.propagateEffect(state, effect);
+    state = resolveCopyAttackSessions(this, state, effect);
 
     if (effect.preventDefault === true) {
       return state;

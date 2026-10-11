@@ -100,7 +100,7 @@ export function playCardReducer(store: StoreLike, state: State, action: Action):
             if (stadium && stadium.name === handCard.name) {
               throw new GameError(GameMessage.SAME_STADIUM_ALREADY_IN_PLAY);
             }
-            player.stadiumPlayedTurn = state.turn;
+            // Commit the allowance only after Trainer cancellation has allowed the play.
             effect = new PlayStadiumEffect(player, handCard);
             break;
           }

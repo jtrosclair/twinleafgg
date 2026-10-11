@@ -1,0 +1,992 @@
+{
+  "sources": [
+    "https://api.tcgdex.net/v2/en/sets/30th",
+    "https://limitlesstcg.com/cards/30C"
+  ],
+  "note": "Classic uses verified English Limitless CC order; TCGdex 30th-c order is different and must not be used as English image number.",
+  "numbered": [
+    {
+      "number": "1",
+      "name": "Exeggcute",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-001"
+    },
+    {
+      "number": "2",
+      "name": "Alolan Exeggutor",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-002"
+    },
+    {
+      "number": "3",
+      "name": "Volbeat",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-003"
+    },
+    {
+      "number": "4",
+      "name": "Illumise",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-004"
+    },
+    {
+      "number": "5",
+      "name": "Tropius",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-005"
+    },
+    {
+      "number": "6",
+      "name": "Cherubi",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-006"
+    },
+    {
+      "number": "7",
+      "name": "Cherrim",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-007"
+    },
+    {
+      "number": "8",
+      "name": "Vivillon",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-008"
+    },
+    {
+      "number": "9",
+      "name": "Vulpix",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-009"
+    },
+    {
+      "number": "10",
+      "name": "Ninetales",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-010"
+    },
+    {
+      "number": "11",
+      "name": "Moltres",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-011"
+    },
+    {
+      "number": "12",
+      "name": "Ho-Oh",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-012"
+    },
+    {
+      "number": "13",
+      "name": "Victini",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-013"
+    },
+    {
+      "number": "14",
+      "name": "Reshiram",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-014"
+    },
+    {
+      "number": "15",
+      "name": "Fuecoco ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-015"
+    },
+    {
+      "number": "16",
+      "name": "Slowpoke",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-016"
+    },
+    {
+      "number": "17",
+      "name": "Lapras",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-017"
+    },
+    {
+      "number": "18",
+      "name": "Articuno",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-018"
+    },
+    {
+      "number": "19",
+      "name": "Kyogre",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-019"
+    },
+    {
+      "number": "20",
+      "name": "Palkia",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-020"
+    },
+    {
+      "number": "21",
+      "name": "Greninja ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-021"
+    },
+    {
+      "number": "22",
+      "name": "Wishiwashi",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-022"
+    },
+    {
+      "number": "23",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-023"
+    },
+    {
+      "number": "24",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-024"
+    },
+    {
+      "number": "25",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-025"
+    },
+    {
+      "number": "26",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-026"
+    },
+    {
+      "number": "27",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-027"
+    },
+    {
+      "number": "28",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-028"
+    },
+    {
+      "number": "29",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-029"
+    },
+    {
+      "number": "30",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-030"
+    },
+    {
+      "number": "31",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-031"
+    },
+    {
+      "number": "32",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-032"
+    },
+    {
+      "number": "33",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-033"
+    },
+    {
+      "number": "34",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-034"
+    },
+    {
+      "number": "35",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-035"
+    },
+    {
+      "number": "36",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-036"
+    },
+    {
+      "number": "37",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-037"
+    },
+    {
+      "number": "38",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-038"
+    },
+    {
+      "number": "39",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-039"
+    },
+    {
+      "number": "40",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-040"
+    },
+    {
+      "number": "41",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-041"
+    },
+    {
+      "number": "42",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-042"
+    },
+    {
+      "number": "43",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-043"
+    },
+    {
+      "number": "44",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-044"
+    },
+    {
+      "number": "45",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-045"
+    },
+    {
+      "number": "46",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-046"
+    },
+    {
+      "number": "47",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-047"
+    },
+    {
+      "number": "48",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-048"
+    },
+    {
+      "number": "49",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-049"
+    },
+    {
+      "number": "50",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-050"
+    },
+    {
+      "number": "51",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-051"
+    },
+    {
+      "number": "52",
+      "name": "Pikachu",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-052"
+    },
+    {
+      "number": "53",
+      "name": "Pikachu ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-053"
+    },
+    {
+      "number": "54",
+      "name": "Pikachu ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-054"
+    },
+    {
+      "number": "55",
+      "name": "Zapdos",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-055"
+    },
+    {
+      "number": "56",
+      "name": "Zekrom",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-056"
+    },
+    {
+      "number": "57",
+      "name": "Zeraora",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-057"
+    },
+    {
+      "number": "58",
+      "name": "Toxel",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-058"
+    },
+    {
+      "number": "59",
+      "name": "Toxtricity",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-059"
+    },
+    {
+      "number": "60",
+      "name": "Toxtricity",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-060"
+    },
+    {
+      "number": "61",
+      "name": "Morpeko",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-061"
+    },
+    {
+      "number": "62",
+      "name": "Miraidon",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-062"
+    },
+    {
+      "number": "63",
+      "name": "Mewtwo",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-063"
+    },
+    {
+      "number": "64",
+      "name": "Mewtwo ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-064"
+    },
+    {
+      "number": "65",
+      "name": "Mew",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-065"
+    },
+    {
+      "number": "66",
+      "name": "Mew ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-066"
+    },
+    {
+      "number": "67",
+      "name": "Marill",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-067"
+    },
+    {
+      "number": "68",
+      "name": "Azumarill",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-068"
+    },
+    {
+      "number": "69",
+      "name": "Espeon",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-069"
+    },
+    {
+      "number": "70",
+      "name": "Espeon ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-070"
+    },
+    {
+      "number": "71",
+      "name": "Sylveon ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-071"
+    },
+    {
+      "number": "72",
+      "name": "Unown",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-072"
+    },
+    {
+      "number": "73",
+      "name": "Drifloon",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-073"
+    },
+    {
+      "number": "74",
+      "name": "Cresselia",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-074"
+    },
+    {
+      "number": "75",
+      "name": "Chandelure",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-075"
+    },
+    {
+      "number": "76",
+      "name": "Xerneas",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-076"
+    },
+    {
+      "number": "77",
+      "name": "Comfey",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-077"
+    },
+    {
+      "number": "78",
+      "name": "Cosmog",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-078"
+    },
+    {
+      "number": "79",
+      "name": "Cosmoem",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-079"
+    },
+    {
+      "number": "80",
+      "name": "Lunala",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-080"
+    },
+    {
+      "number": "81",
+      "name": "Gimmighoul",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-081"
+    },
+    {
+      "number": "82",
+      "name": "Groudon",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-082"
+    },
+    {
+      "number": "83",
+      "name": "Lucario",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-083"
+    },
+    {
+      "number": "84",
+      "name": "Seismitoad",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-084"
+    },
+    {
+      "number": "85",
+      "name": "Lycanroc",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-085"
+    },
+    {
+      "number": "86",
+      "name": "Koraidon",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-086"
+    },
+    {
+      "number": "87",
+      "name": "Nidoran♀",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-087"
+    },
+    {
+      "number": "88",
+      "name": "Nidorina",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-088"
+    },
+    {
+      "number": "89",
+      "name": "Alolan Meowth",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-089"
+    },
+    {
+      "number": "90",
+      "name": "Gengar ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-090"
+    },
+    {
+      "number": "91",
+      "name": "Umbreon",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-091"
+    },
+    {
+      "number": "92",
+      "name": "Umbreon ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-092"
+    },
+    {
+      "number": "93",
+      "name": "Murkrow",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-093"
+    },
+    {
+      "number": "94",
+      "name": "Scraggy",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-094"
+    },
+    {
+      "number": "95",
+      "name": "Zorua",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-095"
+    },
+    {
+      "number": "96",
+      "name": "Zoroark",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-096"
+    },
+    {
+      "number": "97",
+      "name": "Deino",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-097"
+    },
+    {
+      "number": "98",
+      "name": "Zweilous",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-098"
+    },
+    {
+      "number": "99",
+      "name": "Hydreigon",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-099"
+    },
+    {
+      "number": "100",
+      "name": "Yveltal",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-100"
+    },
+    {
+      "number": "101",
+      "name": "Galarian Meowth",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-101"
+    },
+    {
+      "number": "102",
+      "name": "Jirachi ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-102"
+    },
+    {
+      "number": "103",
+      "name": "Dialga",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-103"
+    },
+    {
+      "number": "104",
+      "name": "Ferrothorn",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-104"
+    },
+    {
+      "number": "105",
+      "name": "Solgaleo",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-105"
+    },
+    {
+      "number": "106",
+      "name": "Zacian",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-106"
+    },
+    {
+      "number": "107",
+      "name": "Zamazenta",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-107"
+    },
+    {
+      "number": "108",
+      "name": "Gholdengo",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-108"
+    },
+    {
+      "number": "109",
+      "name": "Salamence ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-109"
+    },
+    {
+      "number": "110",
+      "name": "Jangmo-o",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-110"
+    },
+    {
+      "number": "111",
+      "name": "Hakamo-o",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-111"
+    },
+    {
+      "number": "112",
+      "name": "Kommo-o",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-112"
+    },
+    {
+      "number": "113",
+      "name": "Meowth",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-113"
+    },
+    {
+      "number": "114",
+      "name": "Kangaskhan",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-114"
+    },
+    {
+      "number": "115",
+      "name": "Ditto",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-115"
+    },
+    {
+      "number": "116",
+      "name": "Eevee",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-116"
+    },
+    {
+      "number": "117",
+      "name": "Eevee",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-117"
+    },
+    {
+      "number": "118",
+      "name": "Eevee",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-118"
+    },
+    {
+      "number": "119",
+      "name": "Snorlax",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-119"
+    },
+    {
+      "number": "120",
+      "name": "Igglybuff",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-120"
+    },
+    {
+      "number": "121",
+      "name": "Lugia",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-121"
+    },
+    {
+      "number": "122",
+      "name": "Hisuian Zorua",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-122"
+    },
+    {
+      "number": "123",
+      "name": "Hisuian Zoroark",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-123"
+    },
+    {
+      "number": "124",
+      "name": "Minior",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-124"
+    },
+    {
+      "number": "125",
+      "name": "Maushold",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-125"
+    },
+    {
+      "number": "126",
+      "name": "Poké Pad",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-126"
+    },
+    {
+      "number": "127",
+      "name": "Switch",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-127"
+    },
+    {
+      "number": "128",
+      "name": "Ultra Ball",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-128"
+    },
+    {
+      "number": "129",
+      "name": "Alolan Exeggutor",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-129"
+    },
+    {
+      "number": "130",
+      "name": "Moltres",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-130"
+    },
+    {
+      "number": "131",
+      "name": "Lapras",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-131"
+    },
+    {
+      "number": "132",
+      "name": "Articuno",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-132"
+    },
+    {
+      "number": "133",
+      "name": "Zapdos",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-133"
+    },
+    {
+      "number": "134",
+      "name": "Toxtricity",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-134"
+    },
+    {
+      "number": "135",
+      "name": "Morpeko",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-135"
+    },
+    {
+      "number": "136",
+      "name": "Drifloon",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-136"
+    },
+    {
+      "number": "137",
+      "name": "Chandelure",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-137"
+    },
+    {
+      "number": "138",
+      "name": "Lycanroc",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-138"
+    },
+    {
+      "number": "139",
+      "name": "Alolan Meowth",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-139"
+    },
+    {
+      "number": "140",
+      "name": "Scraggy",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-140"
+    },
+    {
+      "number": "141",
+      "name": "Galarian Meowth",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-141"
+    },
+    {
+      "number": "142",
+      "name": "Gholdengo",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-142"
+    },
+    {
+      "number": "143",
+      "name": "Kommo-o",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-143"
+    },
+    {
+      "number": "144",
+      "name": "Meowth",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-144"
+    },
+    {
+      "number": "145",
+      "name": "Hisuian Zorua",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-145"
+    },
+    {
+      "number": "146",
+      "name": "Maushold",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-146"
+    },
+    {
+      "number": "147",
+      "name": "Fuecoco ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-147"
+    },
+    {
+      "number": "148",
+      "name": "Greninja ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-148"
+    },
+    {
+      "number": "149",
+      "name": "Pikachu ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-149"
+    },
+    {
+      "number": "150",
+      "name": "Pikachu ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-150"
+    },
+    {
+      "number": "151",
+      "name": "Mewtwo ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-151"
+    },
+    {
+      "number": "152",
+      "name": "Mew ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-152"
+    },
+    {
+      "number": "153",
+      "name": "Sylveon ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-153"
+    },
+    {
+      "number": "154",
+      "name": "Gengar ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-154"
+    },
+    {
+      "number": "155",
+      "name": "Jirachi ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-155"
+    },
+    {
+      "number": "156",
+      "name": "Salamence ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-156"
+    },
+    {
+      "number": "157",
+      "name": "Mewtwo ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-157"
+    },
+    {
+      "number": "158",
+      "name": "Mew ex",
+      "source": "https://api.tcgdex.net/v2/en/cards/30th-158"
+    }
+  ],
+  "classic": [
+    {
+      "number": "CC1",
+      "name": "Pikachu",
+      "source": "https://limitlesstcg.com/cards/30C/CC1"
+    },
+    {
+      "number": "CC2",
+      "name": "Charizard",
+      "source": "https://limitlesstcg.com/cards/30C/CC2"
+    },
+    {
+      "number": "CC3",
+      "name": "Misty",
+      "source": "https://limitlesstcg.com/cards/30C/CC3"
+    },
+    {
+      "number": "CC4",
+      "name": "Erika's Jigglypuff",
+      "source": "https://limitlesstcg.com/cards/30C/CC4"
+    },
+    {
+      "number": "CC5",
+      "name": "Sneasel",
+      "source": "https://limitlesstcg.com/cards/30C/CC5"
+    },
+    {
+      "number": "CC6",
+      "name": "Shining Celebi",
+      "source": "https://limitlesstcg.com/cards/30C/CC6"
+    },
+    {
+      "number": "CC7",
+      "name": "Lugia",
+      "source": "https://limitlesstcg.com/cards/30C/CC7"
+    },
+    {
+      "number": "CC8",
+      "name": "Delcatty",
+      "source": "https://limitlesstcg.com/cards/30C/CC8"
+    },
+    {
+      "number": "CC9",
+      "name": "Dark Tyranitar",
+      "source": "https://limitlesstcg.com/cards/30C/CC9"
+    },
+    {
+      "number": "CC10",
+      "name": "Scizor ex",
+      "source": "https://limitlesstcg.com/cards/30C/CC10"
+    },
+    {
+      "number": "CC11",
+      "name": "Metagross",
+      "source": "https://limitlesstcg.com/cards/30C/CC11"
+    },
+    {
+      "number": "CC12",
+      "name": "Palkia LV.X",
+      "source": "https://limitlesstcg.com/cards/30C/CC12"
+    },
+    {
+      "number": "CC13",
+      "name": "Uxie",
+      "source": "https://limitlesstcg.com/cards/30C/CC13"
+    },
+    {
+      "number": "CC14",
+      "name": "Crobat G",
+      "source": "https://limitlesstcg.com/cards/30C/CC14"
+    },
+    {
+      "number": "CC15",
+      "name": "Gengar",
+      "source": "https://limitlesstcg.com/cards/30C/CC15"
+    },
+    {
+      "number": "CC16",
+      "name": "Darkrai & Cresselia LEGEND",
+      "source": "https://limitlesstcg.com/cards/30C/CC16"
+    },
+    {
+      "number": "CC17",
+      "name": "Darkrai & Cresselia LEGEND",
+      "source": "https://limitlesstcg.com/cards/30C/CC17"
+    },
+    {
+      "number": "CC18",
+      "name": "N",
+      "source": "https://limitlesstcg.com/cards/30C/CC18"
+    },
+    {
+      "number": "CC19",
+      "name": "Rayquaza-EX",
+      "source": "https://limitlesstcg.com/cards/30C/CC19"
+    },
+    {
+      "number": "CC20",
+      "name": "Genesect-EX",
+      "source": "https://limitlesstcg.com/cards/30C/CC20"
+    },
+    {
+      "number": "CC21",
+      "name": "M Gardevoir-EX",
+      "source": "https://limitlesstcg.com/cards/30C/CC21"
+    },
+    {
+      "number": "CC22",
+      "name": "Greninja BREAK",
+      "source": "https://limitlesstcg.com/cards/30C/CC22"
+    },
+    {
+      "number": "CC23",
+      "name": "Solgaleo-GX",
+      "source": "https://limitlesstcg.com/cards/30C/CC23"
+    },
+    {
+      "number": "CC24",
+      "name": "Buzzwole-GX",
+      "source": "https://limitlesstcg.com/cards/30C/CC24"
+    },
+    {
+      "number": "CC25",
+      "name": "Pikachu & Zekrom-GX",
+      "source": "https://limitlesstcg.com/cards/30C/CC25"
+    },
+    {
+      "number": "CC26",
+      "name": "Zacian V",
+      "source": "https://limitlesstcg.com/cards/30C/CC26"
+    },
+    {
+      "number": "CC27",
+      "name": "Raikou",
+      "source": "https://limitlesstcg.com/cards/30C/CC27"
+    },
+    {
+      "number": "CC28",
+      "name": "Mew VMAX",
+      "source": "https://limitlesstcg.com/cards/30C/CC28"
+    },
+    {
+      "number": "CC29",
+      "name": "Arceus VSTAR",
+      "source": "https://limitlesstcg.com/cards/30C/CC29"
+    },
+    {
+      "number": "CC30",
+      "name": "Magikarp",
+      "source": "https://limitlesstcg.com/cards/30C/CC30"
+    }
+  ],
+  "rgb": [
+    {
+      "number": "R",
+      "name": "Mew",
+      "source": "https://limitlesstcg.com/cards/30C/R"
+    },
+    {
+      "number": "G",
+      "name": "Mew",
+      "source": "https://limitlesstcg.com/cards/30C/G"
+    },
+    {
+      "number": "B",
+      "name": "Mew",
+      "source": "https://limitlesstcg.com/cards/30C/B"
+    }
+  ],
+  "legendPair": {
+    "numbers": [
+      "CC16",
+      "CC17"
+    ],
+    "implementation": "darkrai-cresselia-legend.ts",
+    "stage": "LEGEND",
+    "hp": 150,
+    "types": [
+      "Darkness",
+      "Psychic"
+    ],
+    "weakness": [
+      "Fighting",
+      "Psychic"
+    ],
+    "retreat": 2,
+    "prizes": 2,
+    "artworkSources": [
+      "https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/30C/30C_CC16_R_EN.png",
+      "https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/30C/30C_CC17_R_EN.png"
+    ],
+    "note": "The bottom artwork prints BOTH weaknesses; the provider page text lists only Fighting. Exact attack effects remain frozen in english-source-text.json."
+  }
+}

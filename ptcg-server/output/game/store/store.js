@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Store = void 0;
+const attack_effects_1 = require("./effects/attack-effects");
+const state_utils_1 = require("./state-utils");
+const copy_attack_delegation_1 = require("./prefabs/copy-attack-delegation");
 const abort_game_action_1 = require("./actions/abort-game-action");
 const append_log_action_1 = require("./actions/append-log-action");
 const concede_action_1 = require("./actions/concede-action");
@@ -95,7 +98,23 @@ class Store {
         return state;
     }
     reduceEffect(state, effect) {
+        // Upstream attack prevention runs before fan-out so blocked effects never trigger cards.
+        if (effect instanceof attack_effects_1.AbstractAttackEffect && effect.target && effect.source
+            && (effect.target.preventDamageNextTurn || effect.target.preventEffectsOfAttacksNextTurn)) {
+            const targetOwner = state_utils_1.StateUtils.findOwner(state, effect.target);
+            const sourceOwner = state_utils_1.StateUtils.findOwner(state, effect.source);
+            if (targetOwner !== sourceOwner) {
+                const damage = effect instanceof attack_effects_1.PutDamageEffect || effect instanceof attack_effects_1.DealDamageEffect;
+                const nonDamage = !damage && !(effect instanceof attack_effects_1.ApplyWeaknessEffect);
+                if ((damage && effect.target.preventDamageNextTurn)
+                    || (nonDamage && effect.target.preventEffectsOfAttacksNextTurn)) {
+                    effect.preventDefault = true;
+                    return state;
+                }
+            }
+        }
         state = this.propagateEffect(state, effect);
+        state = (0, copy_attack_delegation_1.resolveCopyAttackSessions)(this, state, effect);
         if (effect.preventDefault === true) {
             return state;
         }

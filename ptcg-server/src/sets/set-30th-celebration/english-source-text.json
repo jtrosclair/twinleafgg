@@ -1,0 +1,610 @@
+[
+  {
+    "number": "20",
+    "name": "Palkia",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-020",
+    "effects": [
+      "Switch this Pok\u00e9mon with 1 of your Benched Pok\u00e9mon. If you do, switch out your opponent's Active Pok\u00e9mon to the Bench. (Your opponent chooses the new Active Pok\u00e9mon.)"
+    ]
+  },
+  {
+    "number": "53",
+    "name": "Pikachu ex",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-053",
+    "effects": [
+      "Search your deck for any number of Basic Pok\u00e9mon and put them onto your Bench. Then, shuffle your deck.",
+      "Discard all Energy from this Pok\u00e9mon."
+    ]
+  },
+  {
+    "number": "54",
+    "name": "Pikachu ex",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-054",
+    "effects": [
+      "You may attach any number of Basic Energy cards from your hand to your Pok\u00e9mon in any way you like.",
+      "This Pok\u00e9mon also does 30 damage to itself."
+    ]
+  },
+  {
+    "number": "63",
+    "name": "Mewtwo",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-063",
+    "effects": [
+      "Attach up to 2 Basic Energy cards from your discard pile to 1 of your Pok\u00e9mon.",
+      "Discard an Energy from this Pok\u00e9mon."
+    ]
+  },
+  {
+    "number": "64",
+    "name": "Mewtwo ex",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-064",
+    "effects": [
+      "This attack does 50 damage to each of your opponent's Pok\u00e9mon ex . (Don't apply Weakness and Resistance for Benched Pok\u00e9mon.)",
+      "During your next turn, this Pok\u00e9mon can't use attacks."
+    ]
+  },
+  {
+    "number": "66",
+    "name": "Mew ex",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-066",
+    "effects": [
+      "This Pok\u00e9mon can use the attacks of any of your Benched Pok\u00e9mon. (You still need the necessary Energy to use each attack.)",
+      "You may switch this Pok\u00e9mon with 1 of your Benched Pok\u00e9mon."
+    ]
+  },
+  {
+    "number": "129",
+    "name": "Alolan Exeggutor",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-129",
+    "effects": [
+      "If this Pok\u00e9mon has 6 or more Grass Energy attached, it gets +250 HP.",
+      "Heal 50 damage from this Pok\u00e9mon."
+    ]
+  },
+  {
+    "number": "130",
+    "name": "Moltres",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-130",
+    "effects": [
+      "Once during your turn, if you have Articuno and Zapdos in play, you may use this Ability. Attach a Basic Fire Energy card from your hand to this Pok\u00e9mon.",
+      "Discard 2 Energy from this Pok\u00e9mon."
+    ]
+  },
+  {
+    "number": "131",
+    "name": "Lapras",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-131",
+    "effects": [
+      "Search your deck for a Supporter card, reveal it, and put it into your hand. Then, shuffle your deck.",
+      "Flip a coin. If heads, your opponent's Active Pok\u00e9mon is now Paralyzed."
+    ]
+  },
+  {
+    "number": "132",
+    "name": "Articuno",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-132",
+    "effects": [
+      "Once during your turn, if you have Moltres and Zapdos in play, you may use this Ability. Attach a Basic Water Energy card from your hand to this Pok\u00e9mon.",
+      "This attack does 30 damage to each of your opponent's Pok\u00e9mon. (Don't apply Weakness and Resistance for Benched Pok\u00e9mon.)"
+    ]
+  },
+  {
+    "number": "133",
+    "name": "Zapdos",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-133",
+    "effects": [
+      "Once during your turn, if you have Moltres and Articuno in play, you may use this Ability. Attach a Basic Lightning Energy card from your hand to this Pok\u00e9mon.",
+      "This Pok\u00e9mon also does 60 damage to itself."
+    ]
+  },
+  {
+    "number": "134",
+    "name": "Toxtricity",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-134",
+    "effects": [
+      "",
+      "During your next turn, this Pok\u00e9mon can't use attacks."
+    ]
+  },
+  {
+    "number": "135",
+    "name": "Morpeko",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-135",
+    "effects": [
+      "Discard the top 3 cards of your deck and put 1 of them into your hand.",
+      ""
+    ]
+  },
+  {
+    "number": "136",
+    "name": "Drifloon",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-136",
+    "effects": [
+      "You may shuffle this Pok\u00e9mon and all attached cards into your deck."
+    ]
+  },
+  {
+    "number": "137",
+    "name": "Chandelure",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-137",
+    "effects": [
+      "Your opponent's Active Pok\u00e9mon is now Burned and Confused."
+    ]
+  },
+  {
+    "number": "138",
+    "name": "Lycanroc",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-138",
+    "effects": [
+      "If this Pok\u00e9mon was damaged by an attack during your opponent's last turn, this attack does that much more damage.",
+      ""
+    ]
+  },
+  {
+    "number": "139",
+    "name": "Alolan Meowth",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-139",
+    "effects": [
+      "Draw a card."
+    ]
+  },
+  {
+    "number": "140",
+    "name": "Scraggy",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-140",
+    "effects": [
+      "Your opponent shuffles their hand into their deck and draws 4 cards.",
+      ""
+    ]
+  },
+  {
+    "number": "141",
+    "name": "Galarian Meowth",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-141",
+    "effects": [
+      "Draw a card.",
+      "This attack does 10 damage for each card in your hand."
+    ]
+  },
+  {
+    "number": "142",
+    "name": "Gholdengo",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-142",
+    "effects": [
+      "If you have exactly 30 cards in your hand, take 2 Prize cards. If you do, shuffle your hand into your deck.",
+      "Flip 3 coins. This attack does 50 damage for each heads."
+    ]
+  },
+  {
+    "number": "143",
+    "name": "Kommo-o",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-143",
+    "effects": [
+      ""
+    ]
+  },
+  {
+    "number": "144",
+    "name": "Meowth",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-144",
+    "effects": [
+      "Draw a card."
+    ]
+  },
+  {
+    "number": "145",
+    "name": "Hisuian Zorua",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-145",
+    "effects": [
+      ""
+    ]
+  },
+  {
+    "number": "146",
+    "name": "Maushold",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-146",
+    "effects": [
+      "Flip a coin for each Maushold you have in play. For each heads, discard the top 2 cards of your opponent's deck.",
+      ""
+    ]
+  },
+  {
+    "number": "147",
+    "name": "Fuecoco ex",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-147",
+    "effects": [
+      "Your opponent's Active Pok\u00e9mon is now Burned.",
+      "This attack does 70 damage for each Prize card you have taken."
+    ]
+  },
+  {
+    "number": "148",
+    "name": "Greninja ex",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-148",
+    "effects": [
+      "This attack does 30 damage to 1 of your opponent's Pok\u00e9mon for each damage counter on that Pok\u00e9mon. (Don't apply Weakness and Resistance for Benched Pok\u00e9mon.)",
+      ""
+    ]
+  },
+  {
+    "number": "149",
+    "name": "Pikachu ex",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-149",
+    "effects": [
+      "Search your deck for any number of Basic Pok\u00e9mon and put them onto your Bench. Then, shuffle your deck.",
+      "Discard all Energy from this Pok\u00e9mon."
+    ]
+  },
+  {
+    "number": "150",
+    "name": "Pikachu ex",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-150",
+    "effects": [
+      "You may attach any number of Basic Energy cards from your hand to your Pok\u00e9mon in any way you like.",
+      "This Pok\u00e9mon also does 30 damage to itself."
+    ]
+  },
+  {
+    "number": "151",
+    "name": "Mewtwo ex",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-151",
+    "effects": [
+      "This attack does 50 damage to each of your opponent's Pok\u00e9mon ex . (Don't apply Weakness and Resistance for Benched Pok\u00e9mon.)",
+      "During your next turn, this Pok\u00e9mon can't use attacks."
+    ]
+  },
+  {
+    "number": "152",
+    "name": "Mew ex",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-152",
+    "effects": [
+      "This Pok\u00e9mon can use the attacks of any of your Benched Pok\u00e9mon. (You still need the necessary Energy to use each attack.)",
+      "You may switch this Pok\u00e9mon with 1 of your Benched Pok\u00e9mon."
+    ]
+  },
+  {
+    "number": "153",
+    "name": "Sylveon ex",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-153",
+    "effects": [
+      "This attack does 50 damage for each type of Basic Energy attached to all of your Pok\u00e9mon."
+    ]
+  },
+  {
+    "number": "154",
+    "name": "Gengar ex",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-154",
+    "effects": [
+      "If this Pok\u00e9mon is Knocked Out by damage from an attack from your opponent's Pok\u00e9mon, flip a coin. If heads, the Attacking Pok\u00e9mon is Knocked Out.",
+      "Place 13 damage counters on 1 of your opponent's Pok\u00e9mon."
+    ]
+  },
+  {
+    "number": "155",
+    "name": "Jirachi ex",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-155",
+    "effects": [
+      "Draw cards until you have 7 cards in your hand.",
+      "This attack's damage isn't affected by Weakness or Resistance, or by any effects on your opponent's Active Pok\u00e9mon."
+    ]
+  },
+  {
+    "number": "156",
+    "name": "Salamence ex",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-156",
+    "effects": [
+      "Put up to 3 Dragon Pok\u00e9mon from your discard pile onto your Bench.",
+      "Discard the top 2 cards of your deck."
+    ]
+  },
+  {
+    "number": "157",
+    "name": "Mewtwo ex",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-157",
+    "effects": [
+      "This attack does 50 damage to each of your opponent's Pok\u00e9mon ex . (Don't apply Weakness and Resistance for Benched Pok\u00e9mon.)",
+      "During your next turn, this Pok\u00e9mon can't use attacks."
+    ]
+  },
+  {
+    "number": "158",
+    "name": "Mew ex",
+    "source": "https://api.tcgdex.net/v2/en/cards/30th-158",
+    "effects": [
+      "This Pok\u00e9mon can use the attacks of any of your Benched Pok\u00e9mon. (You still need the necessary Energy to use each attack.)",
+      "You may switch this Pok\u00e9mon with 1 of your Benched Pok\u00e9mon."
+    ]
+  },
+  {
+    "number": "CC1",
+    "name": "Pikachu",
+    "source": "https://limitlesstcg.com/cards/30C/CC1",
+    "effects": [
+      "",
+      "Flip a coin. If tails, Pikachu does 10 damage to itself."
+    ]
+  },
+  {
+    "number": "CC2",
+    "name": "Charizard",
+    "source": "https://limitlesstcg.com/cards/30C/CC2",
+    "effects": [
+      "As often as you like during your turn (before your attack) , you may turn all Energy attached to Charizard into [ R ] Energy for the rest of the turn. This power can't be used if Charizard is Asleep, Confused, or Paralyzed.",
+      "Discard 2 Energy cards attached to Charizard in order to use this attack."
+    ]
+  },
+  {
+    "number": "CC3",
+    "name": "Misty",
+    "source": "https://limitlesstcg.com/cards/30C/CC3",
+    "effects": [
+      "Discard 2 of the other cards in your hand in order to play this card. If this turn's attack does damage to the Defending Pok\u00e9mon (after applying Weakness and Resistance) , and if the attacking Pok\u00e9mon has Misty in its name, the attack does 20 more damage to the Defending Pok\u00e9mon."
+    ]
+  },
+  {
+    "number": "CC4",
+    "name": "Erika's Jigglypuff",
+    "source": "https://limitlesstcg.com/cards/30C/CC4",
+    "effects": [
+      "You and your opponent remove 1 damage counter from each of your Pok\u00e9mon with damage counters on them.",
+      "If the Defending Pok\u00e9mon has no damage counters on it, this attack does 40 damage. If it has any damage counters on it, this attack does 10 damage."
+    ]
+  },
+  {
+    "number": "CC5",
+    "name": "Sneasel",
+    "source": "https://limitlesstcg.com/cards/30C/CC5",
+    "effects": [
+      "Flip 3 coins. This attack does 10 damage times the number of heads.",
+      "Flip a coin for each of your Pok\u00e9mon in play (including this one) . This attack does 20 damage times the number of heads."
+    ]
+  },
+  {
+    "number": "CC6",
+    "name": "Shining Celebi",
+    "source": "https://limitlesstcg.com/cards/30C/CC6",
+    "effects": [
+      "Remove a number of damage counters from 1 of your Benched Pok\u00e9mon equal to the number of [ W ] Energy cards attached to Shining Celebi. If the Pok\u00e9mon has fewer damage counters than that, remove all of them.",
+      "Flip a number of coins equal to the number of Energy attached to the Defending Pok\u00e9mon. If you get 1 or more heads, the Defending Pok\u00e9mon is now Asleep, Confused, or Poisoned (your choice) ."
+    ]
+  },
+  {
+    "number": "CC7",
+    "name": "Lugia",
+    "source": "https://limitlesstcg.com/cards/30C/CC7",
+    "effects": [
+      "Whenever you attach a [ R ] , [ W ] , or [ P ] basic Energy card from your hand to Lugia, Lugia's type (color) becomes the same as that Energy card type until the end of the turn.",
+      "This attack does 10 damage times the number of Energy cards attached to the Defending Pok\u00e9mon.",
+      "Discard an Energy card attached to Lugia."
+    ]
+  },
+  {
+    "number": "CC8",
+    "name": "Delcatty",
+    "source": "https://limitlesstcg.com/cards/30C/CC8",
+    "effects": [
+      "Once during your turn (before your attack) , you may discard 1 Energy card from your hand. Then draw up to 3 cards from your deck. This power can't be used if Delcatty is affected by a Special Condition.",
+      "Does 10 damage times the amount of Energy attached to all of your Active Pok\u00e9mon."
+    ]
+  },
+  {
+    "number": "CC9",
+    "name": "Dark Tyranitar",
+    "source": "https://limitlesstcg.com/cards/30C/CC9",
+    "effects": [
+      "Does 10 damage plus 10 more damage for each Energy attached to Dark Tyranitar.",
+      "Does 20 damage to each of your opponent's Pok\u00e9mon. (Don't apply Weakness and Resistance for Benched Pok\u00e9mon.)",
+      "If the Defending Pok\u00e9mon is Pok\u00e9mon-ex, this attack does 70 damage plus 50 more damage."
+    ]
+  },
+  {
+    "number": "CC10",
+    "name": "Scizor ex",
+    "source": "https://limitlesstcg.com/cards/30C/CC10",
+    "effects": [
+      "As long as Scizor ex's remaining HP is 60 or less, Scizor ex does 40 more damage to the Defending Pok\u00e9mon (before applying Weakness and Resistance) .",
+      "During your opponent's next turn, any damage done to Scizor ex by attacks is reduced by 20 (after applying Weakness and Resistance) .",
+      "If the Defending Pok\u00e9mon is an Evolved Pok\u00e9mon, this attack does 50 damage plus 30 more damage."
+    ]
+  },
+  {
+    "number": "CC11",
+    "name": "Metagross",
+    "source": "https://limitlesstcg.com/cards/30C/CC11",
+    "effects": [
+      "Once during your turn (before your attack) , you may look at the top 4 cards of your deck, choose 1 of them, and put it into your hand. Put the 3 other cards on the bottom of your deck in any order. This power can't be used if Metagross is affected by a Special Condition.",
+      "You may discard as many Energy cards as you like attached to your Pok\u00e9mon in play. If you do, this attack does 30 damage plus 20 more damage for each Energy card you discarded."
+    ]
+  },
+  {
+    "number": "CC12",
+    "name": "Palkia LV.X",
+    "source": "https://limitlesstcg.com/cards/30C/CC12",
+    "effects": [
+      "Once during your turn (before your attack) , you may have your opponent switch 1 of your Active Pok\u00e9mon with 1 of your Benched Pok\u00e9mon. Then, you switch 1 of the Defending Pok\u00e9mon with 1 of your opponent's Benched Pok\u00e9mon. This power can't be used if Palkia is affected by a Special Condition.",
+      "You may move all Energy cards attached to Palkia to your Benched Pok\u00e9mon in any way you like. (Ignore this effect if you don't have any Benched Pok\u00e9mon.)"
+    ]
+  },
+  {
+    "number": "CC13",
+    "name": "Uxie",
+    "source": "https://limitlesstcg.com/cards/30C/CC13",
+    "effects": [
+      "Once during your turn, when you put Uxie from your hand onto your Bench, you may draw cards until you have 7 cards in your hand.",
+      "You may put Uxie and all cards attached to it on the bottom of your deck in any order."
+    ]
+  },
+  {
+    "number": "CC14",
+    "name": "Crobat G",
+    "source": "https://limitlesstcg.com/cards/30C/CC14",
+    "effects": [
+      "Once during your turn, when you put Crobat G from your hand onto your Bench, you may put 1 damage counter on 1 of your opponent's Pok\u00e9mon.",
+      "The Defending Pok\u00e9mon is now Poisoned. Put 2 damage counters instead of 1 on the Defending Pok\u00e9mon between turns."
+    ]
+  },
+  {
+    "number": "CC15",
+    "name": "Gengar",
+    "source": "https://limitlesstcg.com/cards/30C/CC15",
+    "effects": [
+      "As long as Gengar is your Active Pok\u00e9mon, if any of your opponent's Pok\u00e9mon would be Knocked Out, put that Pok\u00e9mon in the Lost Zone instead of discarding it. (Discard all cards attached to that Pok\u00e9mon.)",
+      "Look at your opponent's hand and choose a number of Pok\u00e9mon you find there up to the number of [ P ] Energy attached to Gengar. Put the Pok\u00e9mon you chose in the Lost Zone.",
+      "Put 4 damage counters on your opponent's Pok\u00e9mon in any way you like."
+    ]
+  },
+  {
+    "number": "CC16",
+    "name": "Darkrai & Cresselia LEGEND",
+    "source": "https://limitlesstcg.com/cards/30C/CC16",
+    "effects": [
+      "Choose 2 Energy attached to Darkrai & Cresselia LEGEND and put them in the Lost Zone. If any of your opponent's Pok\u00e9mon would be Knocked Out by damage from this attack, put that Pok\u00e9mon and all cards attached to it in the Lost Zone instead of discarding it.",
+      "Move as many damage counters on your opponent's Pok\u00e9mon as you like to any of your opponent's other Pok\u00e9mon in any way you like."
+    ]
+  },
+  {
+    "number": "CC17",
+    "name": "Darkrai & Cresselia LEGEND",
+    "source": "https://limitlesstcg.com/cards/30C/CC17",
+    "effects": [
+      "Choose 2 Energy attached to Darkrai & Cresselia LEGEND and put them in the Lost Zone. If any of your opponent's Pok\u00e9mon would be Knocked Out by damage from this attack, put that Pok\u00e9mon and all cards attached to it in the Lost Zone instead of discarding it.",
+      "Move as many damage counters on your opponent's Pok\u00e9mon as you like to any of your opponent's other Pok\u00e9mon in any way you like."
+    ]
+  },
+  {
+    "number": "CC18",
+    "name": "N",
+    "source": "https://limitlesstcg.com/cards/30C/CC18",
+    "effects": []
+  },
+  {
+    "number": "CC19",
+    "name": "Rayquaza-EX",
+    "source": "https://limitlesstcg.com/cards/30C/CC19",
+    "effects": [
+      "Discard the top 3 cards of your deck. If any of those cards are Energy cards, attach them to this Pok\u00e9mon.",
+      "Discard all basic [ R ] Energy or all basic [ L ] Energy attached to this Pok\u00e9mon. This attack does 60 damage times the number of Energy cards you discarded."
+    ]
+  },
+  {
+    "number": "CC20",
+    "name": "Genesect-EX",
+    "source": "https://limitlesstcg.com/cards/30C/CC20",
+    "effects": [
+      "When you attach a Plasma Energy from your hand to this Pok\u00e9mon, you may switch 1 of your opponent's Benched Pok\u00e9mon with his or her Active Pok\u00e9mon.",
+      "Does 20 damage to 1 of your opponent's Benched Pok\u00e9mon. (Don't apply Weakness and Resistance for Benched Pok\u00e9mon.)"
+    ]
+  },
+  {
+    "number": "CC21",
+    "name": "M Gardevoir-EX",
+    "source": "https://limitlesstcg.com/cards/30C/CC21",
+    "effects": [
+      "This attack does 30 damage times the amount of [ Y ] Energy attached to all of your Pok\u00e9mon."
+    ]
+  },
+  {
+    "number": "CC22",
+    "name": "Greninja BREAK",
+    "source": "https://limitlesstcg.com/cards/30C/CC22",
+    "effects": [
+      "Once during your turn (before your attack) , if this Pok\u00e9mon is your Active Pok\u00e9mon, you may discard a [ W ] Energy card from your hand. If you do, put 6 damage counters on 1 of your opponent's Pok\u00e9mon."
+    ]
+  },
+  {
+    "number": "CC23",
+    "name": "Solgaleo-GX",
+    "source": "https://limitlesstcg.com/cards/30C/CC23",
+    "effects": [
+      "Once during your turn (before your attack) , you may switch your Active Pok\u00e9mon with 1 of your Benched Pok\u00e9mon.",
+      "Discard all Energy from this Pok\u00e9mon.",
+      "Search your deck for up to 5 Energy cards and attach them to your Pok\u00e9mon in any way you like. Then, shuffle your deck. (You can't use more than 1 GX attack in a game.)"
+    ]
+  },
+  {
+    "number": "CC24",
+    "name": "Buzzwole-GX",
+    "source": "https://limitlesstcg.com/cards/30C/CC24",
+    "effects": [
+      "This attack does 30 damage to 1 of your opponent's Benched Pok\u00e9mon. (Don't apply Weakness and Resistance for Benched Pok\u00e9mon.)",
+      "This Pok\u00e9mon can't attack during your next turn.",
+      "This attack does 40 damage for each of your remaining Prize cards. (You can't use more than 1 GX attack in a game.)"
+    ]
+  },
+  {
+    "number": "CC25",
+    "name": "Pikachu & Zekrom-GX",
+    "source": "https://limitlesstcg.com/cards/30C/CC25",
+    "effects": [
+      "Search your deck for up to 3 [ L ] Energy cards and attach them to 1 of your Pok\u00e9mon. Then, shuffle your deck.",
+      "If this Pok\u00e9mon has at least 3 extra [ L ] Energy attached to it (in addition to this attack's cost) , this attack does 170 damage to 1 of your opponent's Benched Pok\u00e9mon. (Don't apply Weakness and Resistance for Benched Pok\u00e9mon.) (You can't use more than 1 GX attack in a game.)"
+    ]
+  },
+  {
+    "number": "CC26",
+    "name": "Zacian V",
+    "source": "https://limitlesstcg.com/cards/30C/CC26",
+    "effects": [
+      "Once during your turn, you may look at the top 3 cards of your deck and attach any number of [ M ] Energy cards you find there to this Pok\u00e9mon. Put the other cards into your hand. If you use this Ability, your turn ends.",
+      "During your next turn, this Pok\u00e9mon can't attack."
+    ]
+  },
+  {
+    "number": "CC27",
+    "name": "Raikou",
+    "source": "https://limitlesstcg.com/cards/30C/CC27",
+    "effects": [
+      "This attack also does 120 damage to 1 of your opponent's Benched Pok\u00e9mon. (Don't apply Weakness and Resistance for Benched Pok\u00e9mon.)"
+    ]
+  },
+  {
+    "number": "CC28",
+    "name": "Mew VMAX",
+    "source": "https://limitlesstcg.com/cards/30C/CC28",
+    "effects": [
+      "Choose 1 of your Benched Fusion Strike Pok\u00e9mon's attacks and use it as this attack.",
+      "This attack's damage isn't affected by any effects on your opponent's Active Pok\u00e9mon."
+    ]
+  },
+  {
+    "number": "CC29",
+    "name": "Arceus VSTAR",
+    "source": "https://limitlesstcg.com/cards/30C/CC29",
+    "effects": [
+      "During your turn, you may search your deck for up to 2 cards and put them into your hand. Then, shuffle your deck. (You can't use more than 1 VSTAR Power in a game.)",
+      "Search your deck for up to 3 basic Energy cards and attach them to your Pok\u00e9mon V in any way you like. Then, shuffle your deck."
+    ]
+  },
+  {
+    "number": "CC30",
+    "name": "Magikarp",
+    "source": "https://limitlesstcg.com/cards/30C/CC30",
+    "effects": [
+      "Flip 2 coins. If both of them are heads, this attack does 20 more damage."
+    ]
+  },
+  {
+    "number": "R",
+    "name": "Mew",
+    "source": "https://limitlesstcg.com/cards/30C/R",
+    "effects": [
+      "This attack does 40 more damage for each Energy attached to your opponent's Active Pok\u00e9mon."
+    ]
+  },
+  {
+    "number": "G",
+    "name": "Mew",
+    "source": "https://limitlesstcg.com/cards/30C/G",
+    "effects": [
+      "This attack does 40 more damage for each Energy attached to your opponent's Active Pok\u00e9mon."
+    ]
+  },
+  {
+    "number": "B",
+    "name": "Mew",
+    "source": "https://limitlesstcg.com/cards/30C/B",
+    "effects": [
+      "This attack does 40 more damage for each Energy attached to your opponent's Active Pok\u00e9mon."
+    ]
+  }
+]

@@ -1,5 +1,8 @@
 import { Card } from '../../game/store/card/card';
 import { Ampharos } from './ampharos';
+import { AdversityPolicy } from './adversity-policy';
+import { KrookodileEx } from './krookodile-ex';
+import { MegaGalladeex } from './mega-gallade-ex';
 import { Avalugg } from './avalugg';
 import { AzsTranquility } from './azs-tranquility';
 import { Baltoy } from './baltoy';
@@ -83,7 +86,45 @@ import { Wimpod } from './wimpod';
 import { Xerneas } from './xerneas';
 import { Zubat } from './zubat';
 
-import { TransformationTomeCRI } from './other-prints';
+import {
+  TransformationTomeCRI,
+  ChespinIR,
+  FroakieIR,
+  FrogadierIR,
+  AmpharosIR,
+  XerneasIR,
+  ClaydolIR,
+  CrobatIR,
+  MetangIR,
+  SliggooIR,
+  TaurosIR,
+  WatchogIR,
+  BeedrillexFA,
+  MegaPyroarexFA,
+  MegaGreninjaexFA,
+  MegaFloetteexFA,
+  GourgeistexFA,
+  CobalionexFA,
+  MegaDragalgeexFA,
+  CinccinoexFA,
+  AzsTranquilityFA,
+  EmmaFA,
+  EnergyRetrievalFACRI,
+  JumboIceCreamFACRI,
+  PhilippeFA,
+  PrismTowerFA,
+  RoxiesPerformanceFA,
+  SpecialRedCardFA,
+  SurfingBeachFACRI,
+  ToolScrapperFACRI,
+  MegaGreninjaexSIR,
+  MegaFloetteexSIR,
+  MegaDragalgeexSIR,
+  CinccinoexSIR,
+  AzsTranquilitySIR,
+  RoxiesPerformanceSIR,
+  MegaGreninjaexHR
+} from './other-prints';
 
 export const setChaosRising: Card[] = [
   new Weedle(),      // 1
@@ -170,6 +211,46 @@ export const setChaosRising: Card[] = [
   new MagnetMetalEnergy(),// 83
   new BubbleWaterEnergy(),// 99
 
+  new AdversityPolicy(),
+  new KrookodileEx(),
+  new MegaGalladeex(),
+
   // Other prints
   new TransformationTomeCRI(),// CRI 83
+  new ChespinIR(),
+  new FroakieIR(),
+  new FrogadierIR(),
+  new AmpharosIR(),
+  new XerneasIR(),
+  new ClaydolIR(),
+  new CrobatIR(),
+  new MetangIR(),
+  new SliggooIR(),
+  new TaurosIR(),
+  new WatchogIR(),
+  new BeedrillexFA(),
+  new MegaPyroarexFA(),
+  new MegaGreninjaexFA(),
+  new MegaFloetteexFA(),
+  new GourgeistexFA(),
+  new CobalionexFA(),
+  new MegaDragalgeexFA(),
+  new CinccinoexFA(),
+  new AzsTranquilityFA(),
+  new EmmaFA(),
+  new EnergyRetrievalFACRI(),
+  new JumboIceCreamFACRI(),
+  new PhilippeFA(),
+  new PrismTowerFA(),
+  new RoxiesPerformanceFA(),
+  new SpecialRedCardFA(),
+  new SurfingBeachFACRI(),
+  new ToolScrapperFACRI(),
+  new MegaGreninjaexSIR(),
+  new MegaFloetteexSIR(),
+  new MegaDragalgeexSIR(),
+  new CinccinoexSIR(),
+  new AzsTranquilitySIR(),
+  new RoxiesPerformanceSIR(),
+  new MegaGreninjaexHR(),
 ];

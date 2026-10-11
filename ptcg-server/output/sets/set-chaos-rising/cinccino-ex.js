@@ -4,7 +4,7 @@ exports.Cinccinoex = void 0;
 const card_types_1 = require("../../game/store/card/card-types");
 const pokemon_types_1 = require("../../game/store/card/pokemon-types");
 const attack_effects_1 = require("../../game/store/effects/attack-effects");
-const energy_card_1 = require("../../game/store/card/energy-card");
+const check_effects_1 = require("../../game/store/effects/check-effects");
 const state_1 = require("../../game/store/state/state");
 const game_1 = require("../../game");
 const prefabs_1 = require("../../game/store/prefabs/prefabs");
@@ -39,7 +39,6 @@ class Cinccinoex extends game_1.PokemonCard {
         this.fullName = 'Cinccino ex M4';
     }
     reduceEffect(store, state, effect) {
-        var _a, _b;
         if ((effect instanceof attack_effects_1.PutDamageEffect || effect instanceof attack_effects_1.DealDamageEffect) && effect.target.cards.includes(this)) {
             const player = game_1.StateUtils.findOwner(state, effect.target);
             if (state.phase !== state_1.GamePhase.ATTACK)
@@ -58,8 +57,11 @@ class Cinccinoex extends game_1.PokemonCard {
             });
         }
         if ((0, prefabs_1.WAS_ATTACK_USED)(effect, 0, this)) {
-            const energyCount = (_b = (_a = effect.source) === null || _a === void 0 ? void 0 : _a.cards.filter((c) => c instanceof energy_card_1.EnergyCard).length) !== null && _b !== void 0 ? _b : 0;
-            effect.damage = 40 * energyCount;
+            const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(effect.player, effect.source);
+            store.reduceEffect(state, checkProvidedEnergy);
+            const energyProvided = checkProvidedEnergy.energyMap
+                .reduce((sum, energy) => sum + energy.provides.length, 0);
+            effect.damage = 40 * energyProvided;
         }
         return state;
     }

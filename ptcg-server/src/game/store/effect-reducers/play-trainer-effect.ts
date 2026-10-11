@@ -11,6 +11,7 @@ import { StateUtils } from '../state-utils';
 import { CardTag, TrainerType } from '../card/card-types';
 import { Player } from '../state/player';
 import { TrainerCard } from '../card/trainer-card';
+import { CoinFlipEffect } from '../effects/play-card-effects';
 
 function getTrainerCleanupTarget(player: Player, trainerCard: TrainerCard) {
   return trainerCard.tags.includes(CardTag.PRISM_STAR) ? player.lostzone : player.discard;
@@ -56,7 +57,25 @@ function finalizeTrainerCleanup(
 }
 
 
+// Upstream coin-flip gate: run before any play-zone changes, attachment or replacement.
 export function playTrainerReducer(store: StoreLike, state: State, effect: Effect): State {
+  if ((effect instanceof PlayItemEffect || effect instanceof PlaySupporterEffect
+    || effect instanceof PlayStadiumEffect || effect instanceof AttachPokemonToolEffect)
+    && effect.player.coinFlipCancelTrainerPlayTurnsRemaining > 0
+    && effect.player.hand.cards.includes(effect.trainerCard)) {
+    const player = effect.player;
+    return store.reduceEffect(state, new CoinFlipEffect(player, result => {
+      if (!result) {
+        player.hand.moveCardTo(effect.trainerCard, getTrainerCleanupTarget(player, effect.trainerCard));
+        return;
+      }
+      playTrainerWithoutCoinFlip(store, state, effect);
+    }));
+  }
+  return playTrainerWithoutCoinFlip(store, state, effect);
+}
+
+function playTrainerWithoutCoinFlip(store: StoreLike, state: State, effect: Effect): State {
 
   /* Play supporter card */
   if (effect instanceof PlaySupporterEffect) {
@@ -96,6 +115,8 @@ export function playTrainerReducer(store: StoreLike, state: State, effect: Effec
       throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
 
+    // Successful play: commit the turn allowance before replacing the old Stadium.
+    player.stadiumPlayedTurn = state.turn;
     // Handle player's existing stadium
     if (player.stadium.cards.length > 0) {
       if (stadiumCard && stadiumCard.tags.includes(CardTag.PRISM_STAR)) {

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HealTargetEffect = exports.RemoveSpecialConditionsEffect = exports.AddSpecialConditionsEffect = exports.AddMarkerEffect = exports.CardsToHandEffect = exports.LostZoneCardsEffect = exports.DiscardCardsEffect = exports.KnockOutOpponentEffect = exports.GustOpponentBenchEffect = exports.KOEffect = exports.PutCountersEffect = exports.AfterDamageEffect = exports.AfterWeaknessAndResistanceEffect = exports.PutDamageEffect = exports.DealDamageEffect = exports.ApplyWeaknessEffect = exports.AbstractAttackEffect = exports.AttackEffects = void 0;
 const card_types_1 = require("../card/card-types");
+const game_effects_1 = require("./game-effects");
 var AttackEffects;
 (function (AttackEffects) {
     AttackEffects["APPLY_WEAKNESS_EFFECT"] = "APPLY_WEAKNESS_EFFECT";
@@ -117,7 +118,7 @@ class KOEffect extends AbstractAttackEffect {
 exports.KOEffect = KOEffect;
 class GustOpponentBenchEffect extends AbstractAttackEffect {
     constructor(base, target) {
-        super(base);
+        super(base instanceof game_effects_1.AttackEffect ? base : new game_effects_1.AttackEffect(base.player, base.opponent, base.attack));
         this.type = AttackEffects.GUST_OPPONENT_BENCH_EFFECT;
         this.preventDefault = false;
         this.target = target;

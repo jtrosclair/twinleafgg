@@ -1,4 +1,5 @@
 import { Card, SlotType, State, StoreLike } from '../..';
+import { CardType } from '../card/card-types';
 import { PokemonCard } from '../card/pokemon-card';
 import { AttackEffect } from '../effects/game-effects';
 import { AfterAttackEffect } from '../effects/game-phase-effects';
@@ -27,7 +28,7 @@ export declare function YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_BURNED(store: Stor
 export declare function YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED(store: StoreLike, state: State, effect: AttackEffect): void;
 export declare function YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED(store: StoreLike, state: State, effect: AttackEffect): void;
 export declare function YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED(store: StoreLike, state: State, effect: AttackEffect): void;
-export declare function DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON(store: StoreLike, state: State, effect: AttackEffect): State;
+export declare function DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON(store: StoreLike, state: State, effect: AttackEffect, allowedEnergyTypes?: CardType[], count?: number): State;
 /**
  * You may put up to X Energy attached to your opponent's Active Pokémon into their hand.
  * Uses CardsToHandEffect (AbstractAttackEffect) so abilities like Charmeleon's Flare Veil can block it.

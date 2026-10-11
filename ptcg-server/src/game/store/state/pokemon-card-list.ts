@@ -1,5 +1,5 @@
 import { Card } from '../card/card';
-import { BoardEffect, CardTag, SpecialCondition, Stage, SuperType } from '../card/card-types';
+import { BoardEffect, CardTag, CardType, SpecialCondition, Stage, SuperType } from '../card/card-types';
 import { PokemonCard } from '../card/pokemon-card';
 import { Power, Attack } from '../card/pokemon-types';
 import { CardList } from './card-list';
@@ -9,6 +9,7 @@ import { StateUtils } from '../state-utils';
 
 export class PokemonCardList extends CardList {
 
+  public attackDamageKnockOut?: { attack: Attack; sourceCard?: PokemonCard; playerId: number; turn: number; destination?: 'lostzone'; targetCard?: PokemonCard };
   public damage: number = 0;
   public hp: number = 0;
   public specialConditions: SpecialCondition[] = [];
@@ -30,6 +31,18 @@ export class PokemonCardList extends CardList {
   public showBasicAnimation: boolean = false;
   public triggerAttackAnimation: boolean = false;
   public damageReductionNextTurn: number = 0;
+  public attackDamageReductionNextTurn = 0;
+  public preventDamageNextTurnPending = false;
+  public preventDamageNextTurn = false;
+  public preventEffectsOfAttacksNextTurnPending = false;
+  public preventEffectsOfAttacksNextTurn = false;
+  public weaknessOverrideType?: CardType;
+  public weaknessOverrideAttackerId?: number;
+  public weaknessOverrideClearArmed = false;
+  public defendingPokemonExtraDamageNextTurn = 0;
+  public defendingPokemonExtraDamageAttackerId?: number;
+  public defendingPokemonExtraDamagePending = false;
+  public defendingPokemonExtraDamageRearmAfterAttack = false;
   public cannotAttackNextTurn: boolean = false;
   public cannotAttackNextTurnPending: boolean = false;
   public cannotUseAttacksNextTurn: string[] = [];
@@ -146,15 +159,29 @@ export class PokemonCardList extends CardList {
    * and other non-attack state.
    */
   removeAttackEffects(): void {
+    this.attackDamageKnockOut = undefined;
     this.marker.removeAttackEffects();
     this.cannotAttackNextTurn = false;
     this.cannotAttackNextTurnPending = false;
     this.cannotUseAttacksNextTurn = [];
     this.cannotUseAttacksNextTurnPending = [];
     this.damageReductionNextTurn = 0;
+    this.attackDamageReductionNextTurn = 0;
+    this.preventDamageNextTurnPending = false;
+    this.preventDamageNextTurn = false;
+    this.preventEffectsOfAttacksNextTurnPending = false;
+    this.preventEffectsOfAttacksNextTurn = false;
+    this.weaknessOverrideType = undefined;
+    this.weaknessOverrideAttackerId = undefined;
+    this.weaknessOverrideClearArmed = false;
+    this.defendingPokemonExtraDamageNextTurn = 0;
+    this.defendingPokemonExtraDamageAttackerId = undefined;
+    this.defendingPokemonExtraDamagePending = false;
+    this.defendingPokemonExtraDamageRearmAfterAttack = false;
   }
 
   clearEffects(): void {
+    this.attackDamageKnockOut = undefined;
     // Nuclear option: wipe all markers (used by evolution/KO)
     this.marker.markers = [];
 
@@ -182,6 +209,18 @@ export class PokemonCardList extends CardList {
     this.burnDamage = 20;
     this.confusionDamage = 30;
     this.damageReductionNextTurn = 0;
+    this.attackDamageReductionNextTurn = 0;
+    this.preventDamageNextTurnPending = false;
+    this.preventDamageNextTurn = false;
+    this.preventEffectsOfAttacksNextTurnPending = false;
+    this.preventEffectsOfAttacksNextTurn = false;
+    this.weaknessOverrideType = undefined;
+    this.weaknessOverrideAttackerId = undefined;
+    this.weaknessOverrideClearArmed = false;
+    this.defendingPokemonExtraDamageNextTurn = 0;
+    this.defendingPokemonExtraDamageAttackerId = undefined;
+    this.defendingPokemonExtraDamagePending = false;
+    this.defendingPokemonExtraDamageRearmAfterAttack = false;
     this.cannotAttackNextTurn = false;
     this.cannotAttackNextTurnPending = false;
     this.cannotUseAttacksNextTurn = [];

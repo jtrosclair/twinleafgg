@@ -131,6 +131,8 @@ class AttackEffect {
         this.ignoreWeakness = false;
         this.ignoreResistance = false;
         this.invisibleTentacles = false;
+        // Opt-in: only actual lethal attack damage may route a KO and all attachments.
+        this.damageKnockOutsToLostZone = false;
         this.player = player;
         this.opponent = opponent;
         this.attack = attack;

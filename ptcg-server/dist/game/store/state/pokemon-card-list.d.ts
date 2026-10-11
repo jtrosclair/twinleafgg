@@ -1,11 +1,19 @@
 import { Card } from '../card/card';
-import { BoardEffect, SpecialCondition, Stage } from '../card/card-types';
+import { BoardEffect, CardType, SpecialCondition, Stage } from '../card/card-types';
 import { PokemonCard } from '../card/pokemon-card';
 import { Power, Attack } from '../card/pokemon-types';
 import { CardList } from './card-list';
 import { Marker } from './card-marker';
 import { State } from './state';
 export declare class PokemonCardList extends CardList {
+    attackDamageKnockOut?: {
+        attack: Attack;
+        sourceCard?: PokemonCard;
+        playerId: number;
+        turn: number;
+        destination?: 'lostzone';
+        targetCard?: PokemonCard;
+    };
     damage: number;
     hp: number;
     specialConditions: SpecialCondition[];
@@ -27,6 +35,18 @@ export declare class PokemonCardList extends CardList {
     showBasicAnimation: boolean;
     triggerAttackAnimation: boolean;
     damageReductionNextTurn: number;
+    attackDamageReductionNextTurn: number;
+    preventDamageNextTurnPending: boolean;
+    preventDamageNextTurn: boolean;
+    preventEffectsOfAttacksNextTurnPending: boolean;
+    preventEffectsOfAttacksNextTurn: boolean;
+    weaknessOverrideType?: CardType;
+    weaknessOverrideAttackerId?: number;
+    weaknessOverrideClearArmed: boolean;
+    defendingPokemonExtraDamageNextTurn: number;
+    defendingPokemonExtraDamageAttackerId?: number;
+    defendingPokemonExtraDamagePending: boolean;
+    defendingPokemonExtraDamageRearmAfterAttack: boolean;
     cannotAttackNextTurn: boolean;
     cannotAttackNextTurnPending: boolean;
     cannotUseAttacksNextTurn: string[];

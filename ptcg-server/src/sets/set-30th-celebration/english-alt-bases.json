@@ -1,0 +1,182 @@
+[
+  {
+    "number": "129",
+    "constructor": "AlolanExeggutor",
+    "file": "alolan-exeggutor",
+    "baseNumber": "2"
+  },
+  {
+    "number": "130",
+    "constructor": "Moltres",
+    "file": "moltres",
+    "baseNumber": "11"
+  },
+  {
+    "number": "131",
+    "constructor": "Lapras",
+    "file": "lapras",
+    "baseNumber": "17"
+  },
+  {
+    "number": "132",
+    "constructor": "Articuno",
+    "file": "articuno",
+    "baseNumber": "18"
+  },
+  {
+    "number": "133",
+    "constructor": "Zapdos",
+    "file": "zapdos",
+    "baseNumber": "55"
+  },
+  {
+    "number": "134",
+    "constructor": "Toxtricity2",
+    "file": "toxtricity-2",
+    "baseNumber": "60"
+  },
+  {
+    "number": "135",
+    "constructor": "Morpeko",
+    "file": "morpeko",
+    "baseNumber": "61"
+  },
+  {
+    "number": "136",
+    "constructor": "Drifloon",
+    "file": "drifloon",
+    "baseNumber": "73"
+  },
+  {
+    "number": "137",
+    "constructor": "Chandelure",
+    "file": "chandelure",
+    "baseNumber": "75"
+  },
+  {
+    "number": "138",
+    "constructor": "Lycanroc",
+    "file": "lycanroc",
+    "baseNumber": "85"
+  },
+  {
+    "number": "139",
+    "constructor": "AlolanMeowth",
+    "file": "alolan-meowth",
+    "baseNumber": "89"
+  },
+  {
+    "number": "140",
+    "constructor": "Scraggy",
+    "file": "scraggy",
+    "baseNumber": "94"
+  },
+  {
+    "number": "141",
+    "constructor": "GalarianMeowth",
+    "file": "galarian-meowth",
+    "baseNumber": "101"
+  },
+  {
+    "number": "142",
+    "constructor": "Gholdengo",
+    "file": "gholdengo",
+    "baseNumber": "108"
+  },
+  {
+    "number": "143",
+    "constructor": "KommoO",
+    "file": "kommo-o",
+    "baseNumber": "112"
+  },
+  {
+    "number": "144",
+    "constructor": "Meowth",
+    "file": "meowth",
+    "baseNumber": "113"
+  },
+  {
+    "number": "145",
+    "constructor": "HisuianZorua",
+    "file": "hisuian-zorua",
+    "baseNumber": "122"
+  },
+  {
+    "number": "146",
+    "constructor": "Maushold",
+    "file": "maushold",
+    "baseNumber": "125"
+  },
+  {
+    "number": "147",
+    "constructor": "Fuecocoex",
+    "file": "fuecoco-ex",
+    "baseNumber": "15"
+  },
+  {
+    "number": "148",
+    "constructor": "Greninjaex",
+    "file": "greninja-ex",
+    "baseNumber": "21"
+  },
+  {
+    "number": "149",
+    "constructor": "EnglishPikachuEx53",
+    "file": "english-pikachu-ex-53",
+    "baseNumber": "53"
+  },
+  {
+    "number": "150",
+    "constructor": "EnglishPikachuEx54",
+    "file": "english-pikachu-ex-54",
+    "baseNumber": "54"
+  },
+  {
+    "number": "151",
+    "constructor": "Mewtwoex",
+    "file": "mewtwo-ex",
+    "baseNumber": "64"
+  },
+  {
+    "number": "152",
+    "constructor": "Mewex",
+    "file": "mew-ex",
+    "baseNumber": "66"
+  },
+  {
+    "number": "153",
+    "constructor": "Sylveonex",
+    "file": "sylveon-ex",
+    "baseNumber": "71"
+  },
+  {
+    "number": "154",
+    "constructor": "Gengarex",
+    "file": "gengar-ex",
+    "baseNumber": "90"
+  },
+  {
+    "number": "155",
+    "constructor": "Jirachiex",
+    "file": "jirachi-ex",
+    "baseNumber": "102"
+  },
+  {
+    "number": "156",
+    "constructor": "Salamenceex",
+    "file": "salamence-ex",
+    "baseNumber": "109"
+  },
+  {
+    "number": "157",
+    "constructor": "Mewtwoex",
+    "file": "mewtwo-ex",
+    "baseNumber": "64"
+  },
+  {
+    "number": "158",
+    "constructor": "Mewex",
+    "file": "mew-ex",
+    "baseNumber": "66"
+  }
+]

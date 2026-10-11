@@ -103,6 +103,7 @@ export declare class UseAttackEffect implements Effect {
     attack: Attack;
     source: PokemonCardList;
     ignoreStatusConditions: boolean;
+    delegateFrom?: PokemonCard;
     constructor(player: Player, attack: Attack);
 }
 export declare class UseStadiumEffect implements Effect {
@@ -123,6 +124,7 @@ export declare class AttackEffect implements Effect {
     ignoreResistance: boolean;
     source: PokemonCardList;
     invisibleTentacles?: boolean;
+    damageKnockOutsToLostZone: boolean;
     target: any;
     constructor(player: Player, opponent: Player, attack: Attack);
 }
@@ -134,6 +136,7 @@ export declare class KnockOutEffect implements Effect {
     prizeCount: number;
     prizeDestination?: CardList;
     isLostCity: boolean;
+    knockOutDestination?: 'lostzone';
     prizeIncreased: boolean;
     constructor(player: Player, target: PokemonCardList);
 }

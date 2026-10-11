@@ -153,6 +153,7 @@ export class UseAttackEffect implements Effect {
   public attack: Attack;
   public source: PokemonCardList;
   public ignoreStatusConditions = false;
+  public delegateFrom?: PokemonCard;
   constructor(player: Player, attack: Attack) {
     this.player = player;
     this.attack = attack;
@@ -183,6 +184,8 @@ export class AttackEffect implements Effect {
   public ignoreResistance = false;
   public source: PokemonCardList;
   public invisibleTentacles?: boolean = false;
+  // Opt-in: only actual lethal attack damage may route a KO and all attachments.
+  public damageKnockOutsToLostZone = false;
   target: any;
 
   constructor(player: Player, opponent: Player, attack: Attack) {
@@ -203,6 +206,7 @@ export class KnockOutEffect implements Effect {
   public prizeCount: number;
   public prizeDestination?: CardList;
   public isLostCity: boolean = false;
+  public knockOutDestination?: 'lostzone';
   public prizeIncreased: boolean = false;
 
   constructor(player: Player, target: PokemonCardList) {

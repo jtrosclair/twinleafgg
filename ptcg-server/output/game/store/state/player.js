@@ -11,6 +11,9 @@ const card_marker_1 = require("./card-marker");
 const pokemon_card_list_1 = require("./pokemon-card-list");
 class Player {
     constructor() {
+        this.coinFlipCancelTrainerPlayTurnsRemaining = 0;
+        this.pokemonKnockedOutDuringOpponentsLastTurn = false;
+        this.pokemonKnockedOutByAttackDuringOpponentsLastTurn = false;
         this.id = 0;
         this.name = '';
         this.deck = new card_list_1.CardList();

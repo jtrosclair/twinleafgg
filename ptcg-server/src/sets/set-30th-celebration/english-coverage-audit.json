@@ -1,0 +1,1568 @@
+{
+  "scope": "Local English 30C source registry and authorized damage-only LEGEND KO hook; no compiled output, commit, publishing or deployment by this implementer",
+  "registryTotal": 202,
+  "uniqueFullNames": 202,
+  "frozenUpstreamIdentityCount": 133,
+  "sourceTextRecords": 69,
+  "sections": {
+    "numbered": {
+      "expected": 158,
+      "covered": 158,
+      "missing": [],
+      "checks": [
+        {
+          "number": "1",
+          "name": "Exeggcute",
+          "matches": [
+            "Exeggcute 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "2",
+          "name": "Alolan Exeggutor",
+          "matches": [
+            "Alolan Exeggutor 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "3",
+          "name": "Volbeat",
+          "matches": [
+            "Volbeat 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "4",
+          "name": "Illumise",
+          "matches": [
+            "Illumise 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "5",
+          "name": "Tropius",
+          "matches": [
+            "Tropius 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "6",
+          "name": "Cherubi",
+          "matches": [
+            "Cherubi 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "7",
+          "name": "Cherrim",
+          "matches": [
+            "Cherrim 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "8",
+          "name": "Vivillon",
+          "matches": [
+            "Vivillon 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "9",
+          "name": "Vulpix",
+          "matches": [
+            "Vulpix 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "10",
+          "name": "Ninetales",
+          "matches": [
+            "Ninetales 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "11",
+          "name": "Moltres",
+          "matches": [
+            "Moltres 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "12",
+          "name": "Ho-Oh",
+          "matches": [
+            "Ho-Oh 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "13",
+          "name": "Victini",
+          "matches": [
+            "Victini 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "14",
+          "name": "Reshiram",
+          "matches": [
+            "Reshiram 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "15",
+          "name": "Fuecoco ex",
+          "matches": [
+            "Fuecoco ex 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "16",
+          "name": "Slowpoke",
+          "matches": [
+            "Slowpoke 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "17",
+          "name": "Lapras",
+          "matches": [
+            "Lapras 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "18",
+          "name": "Articuno",
+          "matches": [
+            "Articuno 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "19",
+          "name": "Kyogre",
+          "matches": [
+            "Kyogre 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "20",
+          "name": "Palkia",
+          "matches": [
+            "Palkia 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "21",
+          "name": "Greninja ex",
+          "matches": [
+            "Greninja ex 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "22",
+          "name": "Wishiwashi",
+          "matches": [
+            "Wishiwashi 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "23",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 23"
+          ],
+          "covered": true
+        },
+        {
+          "number": "24",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 24"
+          ],
+          "covered": true
+        },
+        {
+          "number": "25",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 25"
+          ],
+          "covered": true
+        },
+        {
+          "number": "26",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 26"
+          ],
+          "covered": true
+        },
+        {
+          "number": "27",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 27"
+          ],
+          "covered": true
+        },
+        {
+          "number": "28",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 28"
+          ],
+          "covered": true
+        },
+        {
+          "number": "29",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 29"
+          ],
+          "covered": true
+        },
+        {
+          "number": "30",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 30"
+          ],
+          "covered": true
+        },
+        {
+          "number": "31",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 31"
+          ],
+          "covered": true
+        },
+        {
+          "number": "32",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 32"
+          ],
+          "covered": true
+        },
+        {
+          "number": "33",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 33"
+          ],
+          "covered": true
+        },
+        {
+          "number": "34",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 34"
+          ],
+          "covered": true
+        },
+        {
+          "number": "35",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 35"
+          ],
+          "covered": true
+        },
+        {
+          "number": "36",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 36"
+          ],
+          "covered": true
+        },
+        {
+          "number": "37",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 37"
+          ],
+          "covered": true
+        },
+        {
+          "number": "38",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 38"
+          ],
+          "covered": true
+        },
+        {
+          "number": "39",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 39"
+          ],
+          "covered": true
+        },
+        {
+          "number": "40",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 40"
+          ],
+          "covered": true
+        },
+        {
+          "number": "41",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 41"
+          ],
+          "covered": true
+        },
+        {
+          "number": "42",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 42"
+          ],
+          "covered": true
+        },
+        {
+          "number": "43",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 43"
+          ],
+          "covered": true
+        },
+        {
+          "number": "44",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 44"
+          ],
+          "covered": true
+        },
+        {
+          "number": "45",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 45"
+          ],
+          "covered": true
+        },
+        {
+          "number": "46",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 46"
+          ],
+          "covered": true
+        },
+        {
+          "number": "47",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 47"
+          ],
+          "covered": true
+        },
+        {
+          "number": "48",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 48"
+          ],
+          "covered": true
+        },
+        {
+          "number": "49",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 49"
+          ],
+          "covered": true
+        },
+        {
+          "number": "50",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 50"
+          ],
+          "covered": true
+        },
+        {
+          "number": "51",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 51"
+          ],
+          "covered": true
+        },
+        {
+          "number": "52",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C 52"
+          ],
+          "covered": true
+        },
+        {
+          "number": "53",
+          "name": "Pikachu ex",
+          "matches": [
+            "Pikachu ex 30C 53"
+          ],
+          "covered": true
+        },
+        {
+          "number": "54",
+          "name": "Pikachu ex",
+          "matches": [
+            "Pikachu ex 30C 54"
+          ],
+          "covered": true
+        },
+        {
+          "number": "55",
+          "name": "Zapdos",
+          "matches": [
+            "Zapdos 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "56",
+          "name": "Zekrom",
+          "matches": [
+            "Zekrom 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "57",
+          "name": "Zeraora",
+          "matches": [
+            "Zeraora 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "58",
+          "name": "Toxel",
+          "matches": [
+            "Toxel 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "59",
+          "name": "Toxtricity",
+          "matches": [
+            "Toxtricity 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "60",
+          "name": "Toxtricity",
+          "matches": [
+            "Toxtricity 30C 60"
+          ],
+          "covered": true
+        },
+        {
+          "number": "61",
+          "name": "Morpeko",
+          "matches": [
+            "Morpeko 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "62",
+          "name": "Miraidon",
+          "matches": [
+            "Miraidon 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "63",
+          "name": "Mewtwo",
+          "matches": [
+            "Mewtwo 30C 63"
+          ],
+          "covered": true
+        },
+        {
+          "number": "64",
+          "name": "Mewtwo ex",
+          "matches": [
+            "Mewtwo ex 30C 64"
+          ],
+          "covered": true
+        },
+        {
+          "number": "65",
+          "name": "Mew",
+          "matches": [
+            "Mew 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "66",
+          "name": "Mew ex",
+          "matches": [
+            "Mew ex 30C 66"
+          ],
+          "covered": true
+        },
+        {
+          "number": "67",
+          "name": "Marill",
+          "matches": [
+            "Marill 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "68",
+          "name": "Azumarill",
+          "matches": [
+            "Azumarill 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "69",
+          "name": "Espeon",
+          "matches": [
+            "Espeon 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "70",
+          "name": "Espeon ex",
+          "matches": [
+            "Espeon ex 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "71",
+          "name": "Sylveon ex",
+          "matches": [
+            "Sylveon ex 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "72",
+          "name": "Unown",
+          "matches": [
+            "Unown 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "73",
+          "name": "Drifloon",
+          "matches": [
+            "Drifloon 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "74",
+          "name": "Cresselia",
+          "matches": [
+            "Cresselia 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "75",
+          "name": "Chandelure",
+          "matches": [
+            "Chandelure 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "76",
+          "name": "Xerneas",
+          "matches": [
+            "Xerneas 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "77",
+          "name": "Comfey",
+          "matches": [
+            "Comfey 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "78",
+          "name": "Cosmog",
+          "matches": [
+            "Cosmog 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "79",
+          "name": "Cosmoem",
+          "matches": [
+            "Cosmoem 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "80",
+          "name": "Lunala",
+          "matches": [
+            "Lunala 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "81",
+          "name": "Gimmighoul",
+          "matches": [
+            "Gimmighoul 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "82",
+          "name": "Groudon",
+          "matches": [
+            "Groudon 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "83",
+          "name": "Lucario",
+          "matches": [
+            "Lucario 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "84",
+          "name": "Seismitoad",
+          "matches": [
+            "Seismitoad 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "85",
+          "name": "Lycanroc",
+          "matches": [
+            "Lycanroc 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "86",
+          "name": "Koraidon",
+          "matches": [
+            "Koraidon 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "87",
+          "name": "Nidoran♀",
+          "matches": [
+            "Nidoran ♀ 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "88",
+          "name": "Nidorina",
+          "matches": [
+            "Nidorina 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "89",
+          "name": "Alolan Meowth",
+          "matches": [
+            "Alolan Meowth 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "90",
+          "name": "Gengar ex",
+          "matches": [
+            "Gengar ex 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "91",
+          "name": "Umbreon",
+          "matches": [
+            "Umbreon 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "92",
+          "name": "Umbreon ex",
+          "matches": [
+            "Umbreon ex 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "93",
+          "name": "Murkrow",
+          "matches": [
+            "Murkrow 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "94",
+          "name": "Scraggy",
+          "matches": [
+            "Scraggy 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "95",
+          "name": "Zorua",
+          "matches": [
+            "Zorua 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "96",
+          "name": "Zoroark",
+          "matches": [
+            "Zoroark 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "97",
+          "name": "Deino",
+          "matches": [
+            "Deino 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "98",
+          "name": "Zweilous",
+          "matches": [
+            "Zweilous 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "99",
+          "name": "Hydreigon",
+          "matches": [
+            "Hydreigon 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "100",
+          "name": "Yveltal",
+          "matches": [
+            "Yveltal 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "101",
+          "name": "Galarian Meowth",
+          "matches": [
+            "Galarian Meowth 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "102",
+          "name": "Jirachi ex",
+          "matches": [
+            "Jirachi ex 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "103",
+          "name": "Dialga",
+          "matches": [
+            "Dialga 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "104",
+          "name": "Ferrothorn",
+          "matches": [
+            "Ferrothorn 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "105",
+          "name": "Solgaleo",
+          "matches": [
+            "Solgaleo 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "106",
+          "name": "Zacian",
+          "matches": [
+            "Zacian 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "107",
+          "name": "Zamazenta",
+          "matches": [
+            "Zamazenta 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "108",
+          "name": "Gholdengo",
+          "matches": [
+            "Gholdengo 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "109",
+          "name": "Salamence ex",
+          "matches": [
+            "Salamence ex 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "110",
+          "name": "Jangmo-o",
+          "matches": [
+            "Jangmo-o 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "111",
+          "name": "Hakamo-o",
+          "matches": [
+            "Hakamo-o 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "112",
+          "name": "Kommo-o",
+          "matches": [
+            "Kommo-o 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "113",
+          "name": "Meowth",
+          "matches": [
+            "Meowth 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "114",
+          "name": "Kangaskhan",
+          "matches": [
+            "Kangaskhan 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "115",
+          "name": "Ditto",
+          "matches": [
+            "Ditto 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "116",
+          "name": "Eevee",
+          "matches": [
+            "Eevee 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "117",
+          "name": "Eevee",
+          "matches": [
+            "Eevee2 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "118",
+          "name": "Eevee",
+          "matches": [
+            "Eevee 30C 2"
+          ],
+          "covered": true
+        },
+        {
+          "number": "119",
+          "name": "Snorlax",
+          "matches": [
+            "Snorlax 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "120",
+          "name": "Igglybuff",
+          "matches": [
+            "Igglybuff 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "121",
+          "name": "Lugia",
+          "matches": [
+            "Lugia 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "122",
+          "name": "Hisuian Zorua",
+          "matches": [
+            "Hisuian Zorua 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "123",
+          "name": "Hisuian Zoroark",
+          "matches": [
+            "Hisuian Zoroark 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "124",
+          "name": "Minior",
+          "matches": [
+            "Minior 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "125",
+          "name": "Maushold",
+          "matches": [
+            "Maushold 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "126",
+          "name": "Poké Pad",
+          "matches": [
+            "Poké Pad 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "127",
+          "name": "Switch",
+          "matches": [
+            "Switch 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "128",
+          "name": "Ultra Ball",
+          "matches": [
+            "Ultra Ball 30C"
+          ],
+          "covered": true
+        },
+        {
+          "number": "129",
+          "name": "Alolan Exeggutor",
+          "matches": [
+            "Alolan Exeggutor 30C 129"
+          ],
+          "covered": true
+        },
+        {
+          "number": "130",
+          "name": "Moltres",
+          "matches": [
+            "Moltres 30C 130"
+          ],
+          "covered": true
+        },
+        {
+          "number": "131",
+          "name": "Lapras",
+          "matches": [
+            "Lapras 30C 131"
+          ],
+          "covered": true
+        },
+        {
+          "number": "132",
+          "name": "Articuno",
+          "matches": [
+            "Articuno 30C 132"
+          ],
+          "covered": true
+        },
+        {
+          "number": "133",
+          "name": "Zapdos",
+          "matches": [
+            "Zapdos 30C 133"
+          ],
+          "covered": true
+        },
+        {
+          "number": "134",
+          "name": "Toxtricity",
+          "matches": [
+            "Toxtricity 30C 134"
+          ],
+          "covered": true
+        },
+        {
+          "number": "135",
+          "name": "Morpeko",
+          "matches": [
+            "Morpeko 30C 135"
+          ],
+          "covered": true
+        },
+        {
+          "number": "136",
+          "name": "Drifloon",
+          "matches": [
+            "Drifloon 30C 136"
+          ],
+          "covered": true
+        },
+        {
+          "number": "137",
+          "name": "Chandelure",
+          "matches": [
+            "Chandelure 30C 137"
+          ],
+          "covered": true
+        },
+        {
+          "number": "138",
+          "name": "Lycanroc",
+          "matches": [
+            "Lycanroc 30C 138"
+          ],
+          "covered": true
+        },
+        {
+          "number": "139",
+          "name": "Alolan Meowth",
+          "matches": [
+            "Alolan Meowth 30C 139"
+          ],
+          "covered": true
+        },
+        {
+          "number": "140",
+          "name": "Scraggy",
+          "matches": [
+            "Scraggy 30C 140"
+          ],
+          "covered": true
+        },
+        {
+          "number": "141",
+          "name": "Galarian Meowth",
+          "matches": [
+            "Galarian Meowth 30C 141"
+          ],
+          "covered": true
+        },
+        {
+          "number": "142",
+          "name": "Gholdengo",
+          "matches": [
+            "Gholdengo 30C 142"
+          ],
+          "covered": true
+        },
+        {
+          "number": "143",
+          "name": "Kommo-o",
+          "matches": [
+            "Kommo-o 30C 143"
+          ],
+          "covered": true
+        },
+        {
+          "number": "144",
+          "name": "Meowth",
+          "matches": [
+            "Meowth 30C 144"
+          ],
+          "covered": true
+        },
+        {
+          "number": "145",
+          "name": "Hisuian Zorua",
+          "matches": [
+            "Hisuian Zorua 30C 145"
+          ],
+          "covered": true
+        },
+        {
+          "number": "146",
+          "name": "Maushold",
+          "matches": [
+            "Maushold 30C 146"
+          ],
+          "covered": true
+        },
+        {
+          "number": "147",
+          "name": "Fuecoco ex",
+          "matches": [
+            "Fuecoco ex 30C 147"
+          ],
+          "covered": true
+        },
+        {
+          "number": "148",
+          "name": "Greninja ex",
+          "matches": [
+            "Greninja ex 30C 148"
+          ],
+          "covered": true
+        },
+        {
+          "number": "149",
+          "name": "Pikachu ex",
+          "matches": [
+            "Pikachu ex 30C 149"
+          ],
+          "covered": true
+        },
+        {
+          "number": "150",
+          "name": "Pikachu ex",
+          "matches": [
+            "Pikachu ex 30C 150"
+          ],
+          "covered": true
+        },
+        {
+          "number": "151",
+          "name": "Mewtwo ex",
+          "matches": [
+            "Mewtwo ex 30C 151"
+          ],
+          "covered": true
+        },
+        {
+          "number": "152",
+          "name": "Mew ex",
+          "matches": [
+            "Mew ex 30C 152"
+          ],
+          "covered": true
+        },
+        {
+          "number": "153",
+          "name": "Sylveon ex",
+          "matches": [
+            "Sylveon ex 30C 153"
+          ],
+          "covered": true
+        },
+        {
+          "number": "154",
+          "name": "Gengar ex",
+          "matches": [
+            "Gengar ex 30C 154"
+          ],
+          "covered": true
+        },
+        {
+          "number": "155",
+          "name": "Jirachi ex",
+          "matches": [
+            "Jirachi ex 30C 155"
+          ],
+          "covered": true
+        },
+        {
+          "number": "156",
+          "name": "Salamence ex",
+          "matches": [
+            "Salamence ex 30C 156"
+          ],
+          "covered": true
+        },
+        {
+          "number": "157",
+          "name": "Mewtwo ex",
+          "matches": [
+            "Mewtwo ex 30C 157"
+          ],
+          "covered": true
+        },
+        {
+          "number": "158",
+          "name": "Mew ex",
+          "matches": [
+            "Mew ex 30C 158"
+          ],
+          "covered": true
+        }
+      ]
+    },
+    "classic": {
+      "expected": 30,
+      "covered": 30,
+      "missing": [],
+      "checks": [
+        {
+          "number": "CC1",
+          "name": "Pikachu",
+          "matches": [
+            "Pikachu 30C CC1"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC2",
+          "name": "Charizard",
+          "matches": [
+            "Charizard 30C CC2"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC3",
+          "name": "Misty",
+          "matches": [
+            "Misty 30C CC3"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC4",
+          "name": "Erika's Jigglypuff",
+          "matches": [
+            "Erika's Jigglypuff 30C CC4"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC5",
+          "name": "Sneasel",
+          "matches": [
+            "Sneasel 30C CC5"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC6",
+          "name": "Shining Celebi",
+          "matches": [
+            "Shining Celebi 30C CC6"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC7",
+          "name": "Lugia",
+          "matches": [
+            "Lugia 30C CC7"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC8",
+          "name": "Delcatty",
+          "matches": [
+            "Delcatty 30C CC8"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC9",
+          "name": "Dark Tyranitar",
+          "matches": [
+            "Dark Tyranitar 30C CC9"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC10",
+          "name": "Scizor ex",
+          "matches": [
+            "Scizor ex 30C CC10"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC11",
+          "name": "Metagross",
+          "matches": [
+            "Metagross 30C CC11"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC12",
+          "name": "Palkia LV.X",
+          "matches": [
+            "Palkia LV.X 30C CC12"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC13",
+          "name": "Uxie",
+          "matches": [
+            "Uxie 30C CC13"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC14",
+          "name": "Crobat G",
+          "matches": [
+            "Crobat G 30C CC14"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC15",
+          "name": "Gengar",
+          "matches": [
+            "Gengar 30C CC15"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC16",
+          "name": "Darkrai & Cresselia LEGEND",
+          "matches": [
+            "Darkrai & Cresselia LEGEND (Top) 30C CC16"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC17",
+          "name": "Darkrai & Cresselia LEGEND",
+          "matches": [
+            "Darkrai & Cresselia LEGEND (Bottom) 30C CC17"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC18",
+          "name": "N",
+          "matches": [
+            "N 30C CC18"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC19",
+          "name": "Rayquaza-EX",
+          "matches": [
+            "Rayquaza-EX 30C CC19"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC20",
+          "name": "Genesect-EX",
+          "matches": [
+            "Genesect-EX 30C CC20"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC21",
+          "name": "M Gardevoir-EX",
+          "matches": [
+            "M Gardevoir-EX 30C CC21"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC22",
+          "name": "Greninja BREAK",
+          "matches": [
+            "Greninja BREAK 30C CC22"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC23",
+          "name": "Solgaleo-GX",
+          "matches": [
+            "Solgaleo-GX 30C CC23"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC24",
+          "name": "Buzzwole-GX",
+          "matches": [
+            "Buzzwole-GX 30C CC24"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC25",
+          "name": "Pikachu & Zekrom-GX",
+          "matches": [
+            "Pikachu & Zekrom-GX 30C CC25"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC26",
+          "name": "Zacian V",
+          "matches": [
+            "Zacian V 30C CC26"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC27",
+          "name": "Raikou",
+          "matches": [
+            "Raikou 30C CC27"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC28",
+          "name": "Mew VMAX",
+          "matches": [
+            "Mew VMAX 30C CC28"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC29",
+          "name": "Arceus VSTAR",
+          "matches": [
+            "Arceus VSTAR 30C CC29"
+          ],
+          "covered": true
+        },
+        {
+          "number": "CC30",
+          "name": "Magikarp",
+          "matches": [
+            "Magikarp 30C CC30"
+          ],
+          "covered": true
+        }
+      ]
+    },
+    "rgb": {
+      "expected": 3,
+      "covered": 3,
+      "missing": [],
+      "checks": [
+        {
+          "number": "R",
+          "name": "Mew",
+          "matches": [
+            "Mew 30C R"
+          ],
+          "covered": true
+        },
+        {
+          "number": "G",
+          "name": "Mew",
+          "matches": [
+            "Mew 30C G"
+          ],
+          "covered": true
+        },
+        {
+          "number": "B",
+          "name": "Mew",
+          "matches": [
+            "Mew 30C B"
+          ],
+          "covered": true
+        }
+      ]
+    }
+  },
+  "fixtureSha256": "8c406f88d0a725d36e371cd5d790239d143b00197bacca770462a85071f6769f",
+  "verification": {
+    "scopedCommand": "./node_modules/.bin/jasmine-ts 'src/sets/set-30th-celebration/*.spec.ts' 'src/sets/tests/thirty-celebration*.spec.ts' --random=false",
+    "scopedResult": "86 specs, 0 failures",
+    "typecheckCommand": "./node_modules/.bin/tsc --noEmit --pretty false",
+    "typecheckExitCode": 0,
+    "legendCommand": "./node_modules/.bin/jasmine-ts src/sets/set-30th-celebration/darkrai-cresselia-legend.spec.ts --random=false",
+    "legendResult": "13 specs, 0 failures (included in scoped run)"
+  },
+  "blockers": []
+}

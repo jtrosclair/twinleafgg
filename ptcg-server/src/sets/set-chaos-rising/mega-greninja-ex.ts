@@ -6,7 +6,9 @@ import { PlayerType, SlotType } from '../../game/store/actions/play-card-action'
 import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
-import { WAS_POWER_USED, WAS_ATTACK_USED, ABILITY_USED, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN, CONFIRMATION_PROMPT, PUT_SPECIFIC_ENERGY_FROM_THIS_POKEMON_INTO_HAND } from '../../game/store/prefabs/prefabs';
+import { ChooseEnergyPrompt } from '../../game/store/prompts/choose-energy-prompt';
+import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
+import { WAS_POWER_USED, WAS_ATTACK_USED, ABILITY_USED, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN, CONFIRMATION_PROMPT } from '../../game/store/prefabs/prefabs';
 import { GameError } from '../../game/game-error';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 
@@ -65,7 +67,7 @@ export class MegaGreninjaex extends PokemonCard {
         throw new GameError(GameMessage.POWER_ALREADY_USED);
       }
 
-      state = store.prompt(state, new ChooseCardsPrompt(
+      return store.prompt(state, new ChooseCardsPrompt(
         player,
         GameMessage.CHOOSE_CARD_TO_DISCARD,
         player.hand,
@@ -74,28 +76,26 @@ export class MegaGreninjaex extends PokemonCard {
       ), cards => {
         cards = cards || [];
         if (cards.length === 0) {
-          player.marker.addMarker(this.MORTAL_SHURIKEN_MARKER, this);
           return state;
         }
-        player.marker.addMarker(this.MORTAL_SHURIKEN_MARKER, this);
         MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: this, sourceEffect: this.powers[0] });
-      });
 
-      state = store.prompt(state, new ChoosePokemonPrompt(
-        player.id,
-        GameMessage.CHOOSE_POKEMON_TO_DAMAGE,
-        PlayerType.TOP_PLAYER,
-        [SlotType.ACTIVE, SlotType.BENCH],
-        { min: 1, max: 1, allowCancel: false }
-      ), selected => {
-        const targets = selected || [];
-        if (targets.length > 0) {
-          const placeCounters = new PlaceDamageCountersEffect(player, targets[0], 60, this);
-          store.reduceEffect(state, placeCounters);
-        }
-        ABILITY_USED(player, this);
+        return store.prompt(state, new ChoosePokemonPrompt(
+          player.id,
+          GameMessage.CHOOSE_POKEMON_TO_DAMAGE,
+          PlayerType.TOP_PLAYER,
+          [SlotType.ACTIVE, SlotType.BENCH],
+          { min: 1, max: 1, allowCancel: false }
+        ), selected => {
+          const targets = selected || [];
+          if (targets.length > 0) {
+            const placeCounters = new PlaceDamageCountersEffect(player, targets[0], 60, this);
+            store.reduceEffect(state, placeCounters);
+          }
+          player.marker.addMarker(this.MORTAL_SHURIKEN_MARKER, this);
+          ABILITY_USED(player, this);
+        });
       });
-      return state;
     }
 
     REMOVE_MARKER_AT_END_OF_TURN(effect, this.MORTAL_SHURIKEN_MARKER, this);
@@ -107,8 +107,23 @@ export class MegaGreninjaex extends PokemonCard {
       const player = effect.player;
       CONFIRMATION_PROMPT(store, state, player, result => {
         if (result) {
-          PUT_SPECIFIC_ENERGY_FROM_THIS_POKEMON_INTO_HAND(store, state, effect, [CardType.WATER]);
-          effect.damage += 80;
+          const source = effect.source || player.active;
+          const checkProvidedEnergy = new CheckProvidedEnergyEffect(player, source);
+          store.reduceEffect(state, checkProvidedEnergy);
+          store.prompt(state, new ChooseEnergyPrompt(
+            player.id,
+            GameMessage.CHOOSE_CARD_TO_HAND,
+            checkProvidedEnergy.energyMap,
+            [CardType.WATER],
+            { allowCancel: false }
+          ), energy => {
+            const cards = (energy || []).map(e => e.card);
+            if (cards.length === 0) return;
+            MOVE_CARDS(store, state, source, player.hand, { cards });
+            if (cards.every(card => player.hand.cards.includes(card))) {
+              effect.damage += 80;
+            }
+          });
         }
       }, GameMessage.WANT_TO_USE_EFFECT_OF_ATTACK);
     }

@@ -1,5 +1,5 @@
 import { Effect } from '../effects/effect';
-import { EndTurnEffect, BetweenTurnsEffect, BeginTurnEffect, DrawCardForTurnEffect, DrewTopdeckEffect } from '../effects/game-phase-effects';
+import { EndTurnEffect, BetweenTurnsEffect, AfterBetweenTurnsEffect, BeginTurnEffect, DrawCardForTurnEffect, DrewTopdeckEffect } from '../effects/game-phase-effects';
 import { GameError } from '../../game-error';
 import { GameMessage, GameLog } from '../../game-message';
 import { Player } from '../state/player';
@@ -124,6 +124,19 @@ function startNextTurn(store: StoreLike, state: State): State {
 
 function handleSpecialConditions(store: StoreLike, state: State, effect: BetweenTurnsEffect) {
   const player = effect.player;
+  // Emit inline from the last real condition callback, never via waitPrompt:
+  // waitItems are LIFO and the later checkState continuation must not overtake this hook.
+  let pendingConditions = 0;
+  let schedulingConditions = true;
+  const emitAfterCheckup = () => {
+    if (!schedulingConditions && pendingConditions === 0) {
+      store.reduceEffect(state, new AfterBetweenTurnsEffect(player));
+    }
+  };
+  const conditionResolved = () => {
+    pendingConditions--;
+    emitAfterCheckup();
+  };
   for (const sp of player.active.specialConditions) {
     const flipsForSleep: CoinFlipPrompt[] = [];
 
@@ -141,6 +154,7 @@ function handleSpecialConditions(store: StoreLike, state: State, effect: Between
           player.active.damage += effect.burnDamage;
           break;
         }
+        pendingConditions++;
         store.prompt(state, new CoinFlipPrompt(
           player.id,
           GameMessage.FLIP_BURNED
@@ -148,6 +162,7 @@ function handleSpecialConditions(store: StoreLike, state: State, effect: Between
           if (result === true) {
             player.active.removeSpecialCondition(SpecialCondition.BURNED);
           }
+          conditionResolved();
         });
         break;
       case SpecialCondition.ASLEEP:
@@ -168,12 +183,14 @@ function handleSpecialConditions(store: StoreLike, state: State, effect: Between
         }
 
         if (flipsForSleep.length > 0) {
+          pendingConditions++;
           store.prompt(state, flipsForSleep, results => {
             const wakesUp = Array.isArray(results) ? results.every(r => r) : results;
 
             if (wakesUp) {
               player.active.removeSpecialCondition(SpecialCondition.ASLEEP);
             }
+            conditionResolved();
           });
         } else {
           player.active.removeSpecialCondition(SpecialCondition.ASLEEP);
@@ -181,6 +198,8 @@ function handleSpecialConditions(store: StoreLike, state: State, effect: Between
         break;
     }
   }
+  schedulingConditions = false;
+  emitAfterCheckup();
 }
 
 export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect): State {
@@ -189,6 +208,7 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
     const player = state.players[state.activePlayer];
 
     player.canEvolve = false;
+    if (effect.player.coinFlipCancelTrainerPlayTurnsRemaining > 0) effect.player.coinFlipCancelTrainerPlayTurnsRemaining--;
 
     player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
       cardList.removeSpecialCondition(SpecialCondition.ABILITY_USED);
@@ -198,11 +218,40 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
       }
     });
 
+    state.players.forEach(p => p.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => {
+      if (slot.defendingPokemonExtraDamagePending && slot.defendingPokemonExtraDamageAttackerId !== effect.player.id) {
+        slot.defendingPokemonExtraDamagePending = false;
+      } else if (!slot.defendingPokemonExtraDamagePending && slot.defendingPokemonExtraDamageAttackerId === effect.player.id) {
+        slot.defendingPokemonExtraDamageNextTurn = 0;
+        slot.defendingPokemonExtraDamageAttackerId = undefined;
+      }
+      if (slot.weaknessOverrideAttackerId !== effect.player.id || slot.weaknessOverrideType === undefined) return;
+      if (slot.weaknessOverrideClearArmed) {
+        slot.weaknessOverrideType = undefined;
+        slot.weaknessOverrideAttackerId = undefined;
+        slot.weaknessOverrideClearArmed = false;
+      } else slot.weaknessOverrideClearArmed = true;
+    }));
+    effect.player.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => { slot.attackDamageReductionNextTurn = 0; });
     effect.player.marker.removeMarker(effect.player.DAMAGE_DEALT_MARKER);
     effect.player.marker.removeMarker(MarkerConstants.REVENGE_MARKER);
+    if (!effect.player.usedTurnSkip) {
+      effect.player.pokemonKnockedOutDuringOpponentsLastTurn = false;
+      effect.player.pokemonKnockedOutByAttackDuringOpponentsLastTurn = false;
+    }
 
     // Clear damage reduction effects on opponent's Pokémon when their turn ends
     const opponent = StateUtils.getOpponent(state, player);
+    opponent.forEachPokemon(PlayerType.TOP_PLAYER, slot => {
+      slot.preventDamageNextTurn = false;
+      slot.preventEffectsOfAttacksNextTurn = false;
+    });
+    player.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => {
+      slot.preventDamageNextTurn = slot.preventDamageNextTurnPending;
+      slot.preventDamageNextTurnPending = false;
+      slot.preventEffectsOfAttacksNextTurn = slot.preventEffectsOfAttacksNextTurnPending;
+      slot.preventEffectsOfAttacksNextTurnPending = false;
+    });
     opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList) => {
       cardList.damageReductionNextTurn = 0;
     });

@@ -1,3 +1,4 @@
+import { AttackEffect } from './game-effects';
 import { Effect } from './effect';
 import { Player } from '../state/player';
 import { Card } from '../card/card';
@@ -11,7 +12,9 @@ export declare enum GamePhaseEffects {
     CHOOSE_STARTING_POKEMON_EFFECT = "CHOOSE_STARTING_POKEMON_EFFECT",
     DREW_TOPDECK_EFFECT = "DREW_TOPDECK_EFFECT",
     CHOOSE_PRIZE_EFFECT = "CHOOSE_PRIZE_EFFECT",
-    AFTER_ATTACK_EFFECT = "AFTER_ATTACK_EFFECT"
+    AFTER_ATTACK_EFFECT = "AFTER_ATTACK_EFFECT",
+    BEFORE_DOING_DAMAGE_EFFECT = "BEFORE_DOING_DAMAGE_EFFECT",
+    AFTER_BETWEEN_TURNS_EFFECT = "AFTER_BETWEEN_TURNS_EFFECT"
 }
 export declare class BeginTurnEffect implements Effect {
     readonly type: string;
@@ -38,6 +41,15 @@ export declare class ChooseStartingPokemonEffect implements Effect {
     player: Player;
     constructor(player: Player);
 }
+export declare class BeforeDoingDamageEffect implements Effect {
+    readonly type: string;
+    preventDefault: boolean;
+    player: Player;
+    opponent: Player;
+    attack: Attack;
+    attackEffect: AttackEffect;
+    constructor(attackEffect: AttackEffect);
+}
 export declare class AfterAttackEffect implements Effect {
     readonly type: string;
     preventDefault: boolean;
@@ -63,6 +75,13 @@ export declare class WhoBeginsEffect implements Effect {
     preventDefault: boolean;
     player: Player | undefined;
     constructor();
+}
+/** Per-player Checkup has resolved all condition callbacks; runs before KO checks. */
+export declare class AfterBetweenTurnsEffect implements Effect {
+    player: Player;
+    readonly type: string;
+    preventDefault: boolean;
+    constructor(player: Player);
 }
 export declare class BetweenTurnsEffect implements Effect {
     readonly type: string;

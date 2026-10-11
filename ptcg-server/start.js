@@ -189,6 +189,7 @@ cardManager.defineSet(sets.setPhantasmalFlames);
 cardManager.defineSet(sets.setAscendedHeroes);
 cardManager.defineSet(sets.setPerfectOrder);
 cardManager.defineSet(sets.setChaosRising);
+cardManager.defineSet(sets.set30thCelebration);
 cardManager.defineSet(sets.setPitchBlack);
 
 cardManager.defineSet(sets.setLegendsAwakened);

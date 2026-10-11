@@ -11,15 +11,16 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OPPONENT_HAS_USED_VSTAR_POWER = exports.PLAYER_HAS_USED_VSTAR_POWER = exports.BLOCK_IF_VSTAR_POWER_USED = exports.THIS_POKEMON_HAS_ANY_ENERGY_ATTACHED = exports.COUNT_MATCHING_CARDS_IN_ZONE = exports.DISCARD_TOP_X_CARDS_FROM_YOUR_DECK = exports.ATTACH_UP_TO_X_ENERGY_FROM_DECK_TO_Y_OF_YOUR_POKEMON = exports.ATTACH_X_TYPE_ENERGY_FROM_DISCARD_TO_1_OF_YOUR_POKEMON = exports.AS_OFTEN_AS_YOU_LIKE_ATTACH_BASIC_TYPE_ENERGY_FROM_HAND = exports.DISCARD_ALL_ENERGY_FROM_POKEMON = exports.PUT_SPECIFIC_ENERGY_FROM_THIS_POKEMON_INTO_HAND = exports.DISCARD_SPECIFIC_ENERGY_FROM_THIS_POKEMON = exports.DISCARD_X_ENERGY_FROM_YOUR_HAND = exports.ATTACH_ENERGY_PROMPT = exports.DAMAGE_OPPONENT_POKEMON = exports.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF = exports.THIS_ATTACK_DOES_X_DAMAGE_TO_EACH_OF_YOUR_OPPONENTS_POKEMON = exports.THIS_ATTACK_DOES_X_DAMAGE_TO_X_OF_YOUR_OPPONENTS_POKEMON = exports.DEVOLVE_DEFENDING_AFTER_ATTACK = exports.DEVOLVE_POKEMON = exports.PLAY_POKEMON_FROM_HAND_TO_BENCH = exports.TAKE_X_MORE_PRIZE_CARDS = exports.TAKE_X_PRIZES = exports.TAKE_SPECIFIC_PRIZES = exports.YOUR_OPPONENTS_POKEMON_IS_KNOCKED_OUT_BY_DAMAGE_FROM_THIS_ATTACK = exports.THIS_POKEMON_HAS_ANY_DAMAGE_COUNTERS_ON_IT = exports.HEAL_X_DAMAGE_FROM_THIS_POKEMON = exports.DEAL_MORE_DAMAGE_FOR_EACH_PRIZE_CARD_TAKEN = exports.DEAL_MORE_DAMAGE_IF_OPPONENT_ACTIVE_HAS_CARD_TAG = exports.GET_TOTAL_ENERGY_ATTACHED_TO_PLAYERS_POKEMON = exports.TOOL_SET_HP_IF = exports.TOOL_ACTIVE_DAMAGE_BONUS = exports.COPY_OPPONENTS_LAST_ATTACK = exports.COPY_OPPONENT_ACTIVE_ATTACK = exports.COPY_BENCH_ATTACK = exports.NEXT_TURN_ATTACK_BASE_DAMAGE = exports.NEXT_TURN_ATTACK_BONUS = exports.THIS_ATTACK_DOES_X_MORE_DAMAGE = exports.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND = exports.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH = exports.DISCARD_A_STADIUM_CARD_IN_PLAY = exports.PASSIVE_ABILITY_ACTIVATED = exports.ABILITY_USED = exports.MOVED_TO_ACTIVE_THIS_TURN = exports.JUST_EVOLVED = exports.AFTER_ATTACK = exports.WAS_POWER_USED = exports.PUT_DAMAGE = exports.DEAL_DAMAGE = exports.WAS_ATTACK_USED = void 0;
-exports.THIS_POKEMON_CANNOT_ATTACK_NEXT_TURN = exports.THIS_POKEMON_CANNOT_USE_THIS_ATTACK_NEXT_TURN = exports.BLOCK_IF_GX_ATTACK_USED = exports.BLOCK_IF_DISCARD_EMPTY = exports.BLOCK_IF_DECK_EMPTY = exports.BLOCK_IF_NO_SLOTS = exports.GET_PLAYER_BENCH_SLOTS = exports.GET_FIRST_PLAYER_BENCH_SLOT = exports.SIMULATE_COIN_FLIP = exports.FLIP_UNTIL_TAILS_AND_COUNT_HEADS = exports.MULTIPLE_COIN_FLIPS_PROMPT = exports.COIN_FLIP_PROMPT = exports.CONFIRMATION_PROMPT = exports.SELECT_PROMPT_WITH_OPTIONS = exports.SELECT_PROMPT = exports.SHOW_CARDS_TO_PLAYER = exports.MOVE_CARDS_TO_HAND = exports.LOOK_AT_TOPDECK_AND_DISCARD_OR_RETURN = exports.LOOK_AT_TOP_X_CARDS_AND_BENCH_UP_TO_Y_POKEMON = exports.LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY = exports.LOOK_AT_TOP_X_CARDS_AND_PUT_UP_TO_Y_MATCHING_CARDS_INTO_HAND = exports.LOOK_AT_TOP_X_CARDS_AND_DO_WITH_MATCHING = exports.MOVE_DAMAGE_COUNTERS = exports.GUST_OPPONENT_BENCHED_POKEMON = exports.OPPONENT_SWITCHES_THEIR_ACTIVE_POKEMON = exports.SWITCH_OUT_OPPONENT_ACTIVE_POKEMON = exports.SWITCH_IN_OPPONENT_BENCHED_POKEMON = exports.SWITCH_ACTIVE_WITH_BENCHED = exports.MOVE_CARD_TO = exports.CAN_EVOLVE_ON_FIRST_TURN_GOING_SECOND = exports.IS_SPECIAL_ENERGY_BLOCKED = exports.IS_TOOL_BLOCKED = exports.IS_POKEMON_POWER_BLOCKED = exports.IS_POKEPOWER_BLOCKED = exports.IS_POKEBODY_BLOCKED = exports.IS_ABILITY_BLOCKED = exports.GET_CARDS_ON_BOTTOM_OF_DECK = exports.SEARCH_DISCARD_PILE_FOR_CARDS_TO_HAND = exports.CLEAN_UP_SUPPORTER = exports.SEARCH_DECK_FOR_CARDS_TO_HAND = exports.DRAW_CARDS_AS_FACE_DOWN_PRIZES = exports.DRAW_CARDS_UNTIL_CARDS_IN_HAND = exports.DRAW_UP_TO_X_CARDS = exports.DRAW_CARDS = exports.SHUFFLE_PRIZES_INTO_DECK = exports.SHUFFLE_CARDS_INTO_DECK = exports.SHUFFLE_DECK = exports.GET_PRIZES_AS_CARD_ARRAY = exports.GET_PLAYER_PRIZES = exports.DISCARD_TOP_X_OF_OPPONENTS_DECK = void 0;
-exports.TERA_RULE = exports.SURVIVE_ON_TEN_IF_FULL_HP = exports.PREVENT_EFFECTS_TO_YOUR_BENCHED_POKEMON_FROM_OPPONENT_ATTACKS = exports.PREVENT_DAMAGE_TO_YOUR_BENCHED_POKEMON_FROM_OPPONENT_ATTACKS = exports.ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT = exports.DAMAGED_FROM_FULL_HP = exports.PREVENT_DAMAGE = exports.BLOCK_RETREAT = exports.CAN_PLAY_CARD = exports.CAN_PLAY_POKEMON_CARD = exports.CAN_PLAY_ENERGY_CARD = exports.CAN_PLAY_TRAINER_CARD = exports.CAN_PLAY_SUPPORTER_CARD = exports.MOVE_CARDS = exports.BLOCK_RETREAT_IF_MARKER = exports.CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN = exports.REPLACE_MARKER_AT_END_OF_TURN = exports.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN = exports.REMOVE_MARKER_AT_END_OF_TURN = exports.HAS_TAG = exports.PREVENT_DAMAGE_IF_SOURCE_HAS_TAG = exports.PREVENT_DAMAGE_IF_TARGET_HAS_MARKER = exports.BLOCK_EFFECT_IF_MARKER = exports.USE_ABILITY_ONCE_PER_TURN = exports.HAS_MARKER = exports.REMOVE_MARKER = exports.ADD_MARKER = exports.PREVENT_AND_CLEAR_SPECIAL_CONDITIONS = exports.ADD_CONFUSION_TO_PLAYER_ACTIVE = exports.ADD_PARALYZED_TO_PLAYER_ACTIVE = exports.ADD_BURN_TO_PLAYER_ACTIVE = exports.ADD_POISON_TO_PLAYER_ACTIVE = exports.ADD_SLEEP_TO_PLAYER_ACTIVE = exports.ADD_SPECIAL_CONDITIONS_TO_PLAYER_ACTIVE = exports.BLOCK_IF_ASLEEP_CONFUSED_PARALYZED = exports.BLOCK_IF_HAS_SPECIAL_CONDITION = void 0;
+exports.BLOCK_IF_VSTAR_POWER_USED = exports.THIS_POKEMON_HAS_ANY_ENERGY_ATTACHED = exports.COUNT_MATCHING_CARDS_IN_ZONE = exports.DISCARD_TOP_X_CARDS_FROM_YOUR_DECK = exports.ATTACH_UP_TO_X_ENERGY_FROM_DECK_TO_Y_OF_YOUR_POKEMON = exports.ATTACH_X_TYPE_ENERGY_FROM_DISCARD_TO_1_OF_YOUR_POKEMON = exports.AS_OFTEN_AS_YOU_LIKE_ATTACH_BASIC_TYPE_ENERGY_FROM_HAND = exports.DISCARD_ALL_ENERGY_FROM_POKEMON = exports.PUT_SPECIFIC_ENERGY_FROM_THIS_POKEMON_INTO_HAND = exports.DISCARD_SPECIFIC_ENERGY_FROM_THIS_POKEMON = exports.DISCARD_X_ENERGY_FROM_YOUR_HAND = exports.ATTACH_ENERGY_PROMPT = exports.DAMAGE_OPPONENT_POKEMON = exports.THIS_POKEMON_DOES_DAMAGE_TO_ITSELF = exports.THIS_ATTACK_DOES_X_DAMAGE_TO_EACH_OF_YOUR_OPPONENTS_POKEMON = exports.THIS_ATTACK_DOES_X_DAMAGE_TO_X_OF_YOUR_OPPONENTS_POKEMON = exports.DEVOLVE_DEFENDING_AFTER_ATTACK = exports.DEVOLVE_POKEMON = exports.PLAY_POKEMON_FROM_HAND_TO_BENCH = exports.TAKE_X_MORE_PRIZE_CARDS = exports.IF_OPPONENTS_POKEMON_KO_BY_ATTACK_DAMAGE_TAKE_MORE_PRIZES = exports.WAS_POKEMON_KNOCKED_OUT_DURING_OPPONENTS_LAST_TURN = exports.TAKE_X_PRIZES = exports.TAKE_SPECIFIC_PRIZES = exports.YOUR_OPPONENTS_POKEMON_IS_KNOCKED_OUT_BY_DAMAGE_FROM_THIS_ATTACK = exports.THIS_POKEMON_HAS_ANY_DAMAGE_COUNTERS_ON_IT = exports.HEAL_X_DAMAGE_FROM_THIS_POKEMON = exports.DEAL_MORE_DAMAGE_FOR_EACH_PRIZE_CARD_TAKEN = exports.DEAL_MORE_DAMAGE_IF_OPPONENT_ACTIVE_HAS_CARD_TAG = exports.GET_TOTAL_ENERGY_ATTACHED_TO_PLAYERS_POKEMON = exports.TOOL_SET_HP_IF = exports.TOOL_ACTIVE_DAMAGE_BONUS = exports.COPY_OPPONENTS_LAST_ATTACK = exports.COPY_OPPONENT_ACTIVE_ATTACK = exports.COPY_BENCH_ATTACK = exports.NEXT_TURN_ATTACK_BASE_DAMAGE = exports.NEXT_TURN_ATTACK_BONUS = exports.THIS_ATTACK_DOES_X_MORE_DAMAGE = exports.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_INTO_HAND = exports.SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH = exports.DISCARD_A_STADIUM_CARD_IN_PLAY = exports.PASSIVE_ABILITY_ACTIVATED = exports.ABILITY_USED = exports.MOVED_TO_ACTIVE_THIS_TURN = exports.JUST_EVOLVED = exports.AFTER_ATTACK = exports.WAS_POWER_USED = exports.PUT_DAMAGE = exports.DEAL_DAMAGE = exports.WAS_ATTACK_USED = void 0;
+exports.BLOCK_IF_GX_ATTACK_USED = exports.BLOCK_IF_DISCARD_EMPTY = exports.BLOCK_IF_DECK_EMPTY = exports.BLOCK_IF_NO_SLOTS = exports.GET_PLAYER_BENCH_SLOTS = exports.GET_FIRST_PLAYER_BENCH_SLOT = exports.SIMULATE_COIN_FLIP = exports.FLIP_UNTIL_TAILS_AND_COUNT_HEADS = exports.MULTIPLE_COIN_FLIPS_PROMPT = exports.COIN_FLIP_PROMPT = exports.CONFIRMATION_PROMPT = exports.SELECT_PROMPT_WITH_OPTIONS = exports.SELECT_PROMPT = exports.SHOW_CARDS_TO_PLAYER = exports.MOVE_CARDS_TO_HAND = exports.LOOK_AT_TOPDECK_AND_DISCARD_OR_RETURN = exports.LOOK_AT_TOP_X_CARDS_AND_BENCH_UP_TO_Y_POKEMON = exports.LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY = exports.LOOK_AT_TOP_X_CARDS_AND_PUT_UP_TO_Y_MATCHING_CARDS_INTO_HAND = exports.LOOK_AT_TOP_X_CARDS_AND_DO_WITH_MATCHING = exports.MOVE_DAMAGE_COUNTERS = exports.GUST_OPPONENT_BENCHED_POKEMON = exports.OPPONENT_SWITCHES_THEIR_ACTIVE_POKEMON = exports.SWITCH_OUT_OPPONENT_ACTIVE_POKEMON = exports.SWITCH_IN_OPPONENT_BENCHED_POKEMON = exports.SWITCH_ACTIVE_WITH_BENCHED = exports.MOVE_CARD_TO = exports.CAN_EVOLVE_ON_FIRST_TURN_GOING_SECOND = exports.IS_SPECIAL_ENERGY_BLOCKED = exports.IS_TOOL_BLOCKED = exports.IS_POKEMON_POWER_BLOCKED = exports.IS_POKEPOWER_BLOCKED = exports.IS_POKEBODY_BLOCKED = exports.IS_ABILITY_BLOCKED = exports.GET_CARDS_ON_BOTTOM_OF_DECK = exports.SEARCH_DISCARD_PILE_FOR_CARDS_TO_HAND = exports.CLEAN_UP_SUPPORTER = exports.SEARCH_DECK_FOR_CARDS_TO_HAND = exports.DRAW_CARDS_AS_FACE_DOWN_PRIZES = exports.DRAW_CARDS_UNTIL_CARDS_IN_HAND = exports.DRAW_UP_TO_X_CARDS = exports.DRAW_CARDS = exports.SHUFFLE_PRIZES_INTO_DECK = exports.SHUFFLE_CARDS_INTO_DECK = exports.SHUFFLE_DECK = exports.GET_PRIZES_AS_CARD_ARRAY = exports.GET_PLAYER_PRIZES = exports.DISCARD_TOP_X_OF_OPPONENTS_DECK = exports.OPPONENT_HAS_USED_VSTAR_POWER = exports.PLAYER_HAS_USED_VSTAR_POWER = void 0;
+exports.TERA_RULE = exports.SURVIVE_ON_TEN_IF_FULL_HP = exports.PREVENT_EFFECTS_TO_YOUR_BENCHED_POKEMON_FROM_OPPONENT_ATTACKS = exports.PREVENT_DAMAGE_TO_YOUR_BENCHED_POKEMON_FROM_OPPONENT_ATTACKS = exports.ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT = exports.DAMAGED_FROM_FULL_HP = exports.PREVENT_DAMAGE = exports.BLOCK_RETREAT = exports.CAN_PLAY_CARD = exports.CAN_PLAY_POKEMON_CARD = exports.CAN_PLAY_ENERGY_CARD = exports.CAN_PLAY_TRAINER_CARD = exports.CAN_PLAY_SUPPORTER_CARD = exports.MOVE_CARDS = exports.BLOCK_RETREAT_IF_MARKER = exports.CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN = exports.REPLACE_MARKER_AT_END_OF_TURN = exports.REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN = exports.REMOVE_MARKER_AT_END_OF_TURN = exports.HAS_TAG = exports.PREVENT_DAMAGE_IF_SOURCE_HAS_TAG = exports.PREVENT_DAMAGE_IF_TARGET_HAS_MARKER = exports.BLOCK_EFFECT_IF_MARKER = exports.USE_ABILITY_ONCE_PER_TURN = exports.HAS_MARKER = exports.REMOVE_MARKER = exports.ADD_MARKER = exports.PREVENT_AND_CLEAR_SPECIAL_CONDITIONS = exports.ADD_CONFUSION_TO_PLAYER_ACTIVE = exports.ADD_PARALYZED_TO_PLAYER_ACTIVE = exports.ADD_BURN_TO_PLAYER_ACTIVE = exports.ADD_POISON_TO_PLAYER_ACTIVE = exports.ADD_SLEEP_TO_PLAYER_ACTIVE = exports.ADD_SPECIAL_CONDITIONS_TO_PLAYER_ACTIVE = exports.BLOCK_IF_ASLEEP_CONFUSED_PARALYZED = exports.BLOCK_IF_HAS_SPECIAL_CONDITION = exports.THIS_POKEMON_CANNOT_ATTACK_NEXT_TURN = exports.THIS_POKEMON_CANNOT_USE_THIS_ATTACK_NEXT_TURN = void 0;
+const attack_effects_1 = require("../effects/attack-effects");
 const __1 = require("../..");
 const play_card_effects_1 = require("../effects/play-card-effects");
 const card_types_1 = require("../card/card-types");
 const state_1 = require("../state/state");
 const pokemon_card_1 = require("../card/pokemon-card");
-const attack_effects_1 = require("../effects/attack-effects");
+const attack_effects_2 = require("../effects/attack-effects");
 const check_effects_1 = require("../effects/check-effects");
 const game_effects_1 = require("../effects/game-effects");
 const game_phase_effects_1 = require("../effects/game-phase-effects");
@@ -36,11 +37,11 @@ function WAS_ATTACK_USED(effect, index, user) {
 }
 exports.WAS_ATTACK_USED = WAS_ATTACK_USED;
 function DEAL_DAMAGE(effect) {
-    return effect instanceof attack_effects_1.DealDamageEffect;
+    return effect instanceof attack_effects_2.DealDamageEffect;
 }
 exports.DEAL_DAMAGE = DEAL_DAMAGE;
 function PUT_DAMAGE(effect) {
-    return effect instanceof attack_effects_1.PutDamageEffect;
+    return effect instanceof attack_effects_2.PutDamageEffect;
 }
 exports.PUT_DAMAGE = PUT_DAMAGE;
 /**
@@ -256,7 +257,7 @@ function* copyBenchAttackGenerator(next, store, state, effect, options) {
         yield store.waitPrompt(state, () => next());
     }
     if (attackEffect.damage > 0) {
-        const dealDamage = new attack_effects_1.DealDamageEffect(attackEffect, attackEffect.damage);
+        const dealDamage = new attack_effects_2.DealDamageEffect(attackEffect, attackEffect.damage);
         state = store.reduceEffect(state, dealDamage);
     }
     return state;
@@ -302,7 +303,7 @@ function* copyOpponentActiveAttackGenerator(next, store, state, effect) {
         yield store.waitPrompt(state, () => next());
     }
     if (attackEffect.damage > 0) {
-        const dealDamage = new attack_effects_1.DealDamageEffect(attackEffect, attackEffect.damage);
+        const dealDamage = new attack_effects_2.DealDamageEffect(attackEffect, attackEffect.damage);
         state = store.reduceEffect(state, dealDamage);
     }
     return state;
@@ -340,7 +341,7 @@ function* copyOpponentsLastAttackGenerator(next, store, state, effect) {
         yield store.waitPrompt(state, () => next());
     }
     if (copiedAttackEffect.damage > 0) {
-        const dealDamage = new attack_effects_1.DealDamageEffect(copiedAttackEffect, copiedAttackEffect.damage);
+        const dealDamage = new attack_effects_2.DealDamageEffect(copiedAttackEffect, copiedAttackEffect.damage);
         state = store.reduceEffect(state, dealDamage);
     }
     const afterAttackEffect = new game_phase_effects_1.AfterAttackEffect(player, opponent, lastAttack);
@@ -361,7 +362,7 @@ exports.COPY_OPPONENTS_LAST_ATTACK = COPY_OPPONENTS_LAST_ATTACK;
  * to the Active Pokemon (before applying Weakness and Resistance)."
  */
 function TOOL_ACTIVE_DAMAGE_BONUS(store, state, effect, tool, options) {
-    if (!(effect instanceof attack_effects_1.DealDamageEffect) || !effect.source.tools.includes(tool)) {
+    if (!(effect instanceof attack_effects_2.DealDamageEffect) || !effect.source.tools.includes(tool)) {
         return;
     }
     if (IS_TOOL_BLOCKED(store, state, effect.player, tool)) {
@@ -456,7 +457,7 @@ function DEAL_MORE_DAMAGE_FOR_EACH_PRIZE_CARD_TAKEN(effect, state, damage) {
 exports.DEAL_MORE_DAMAGE_FOR_EACH_PRIZE_CARD_TAKEN = DEAL_MORE_DAMAGE_FOR_EACH_PRIZE_CARD_TAKEN;
 function HEAL_X_DAMAGE_FROM_THIS_POKEMON(effect, store, state, damage) {
     const player = effect.player;
-    const healTargetEffect = new attack_effects_1.HealTargetEffect(effect, damage);
+    const healTargetEffect = new attack_effects_2.HealTargetEffect(effect, damage);
     healTargetEffect.target = player.active;
     state = store.reduceEffect(state, healTargetEffect);
     return state;
@@ -528,6 +529,29 @@ function TAKE_X_PRIZES(store, state, player, count, options = {}, callback) {
     return state;
 }
 exports.TAKE_X_PRIZES = TAKE_X_PRIZES;
+/** Upstream KO predicate; attack-damage mode excludes counters, poison and effects. */
+function WAS_POKEMON_KNOCKED_OUT_DURING_OPPONENTS_LAST_TURN(player, filter) {
+    return (filter === null || filter === void 0 ? void 0 : filter.byAttackDamage)
+        ? player.pokemonKnockedOutByAttackDuringOpponentsLastTurn
+        : player.pokemonKnockedOutDuringOpponentsLastTurn;
+}
+exports.WAS_POKEMON_KNOCKED_OUT_DURING_OPPONENTS_LAST_TURN = WAS_POKEMON_KNOCKED_OUT_DURING_OPPONENTS_LAST_TURN;
+/** Scoped upstream extra-prize predicate with per-target lethal damage provenance. */
+function IF_OPPONENTS_POKEMON_KO_BY_ATTACK_DAMAGE_TAKE_MORE_PRIZES(store, state, effect, source, options = {}) {
+    var _a;
+    if (!(effect instanceof game_effects_1.KnockOutEffect))
+        return state;
+    const attacker = __1.StateUtils.getOpponent(state, effect.player);
+    const ko = effect.target.attackDamageKnockOut;
+    if (state.phase !== state_1.GamePhase.ATTACK || state.players[state.activePlayer] !== attacker
+        || !ko || ko.turn !== state.turn || ko.playerId !== attacker.id || ko.sourceCard !== source
+        || (options.attackName !== undefined && ko.attack.name !== options.attackName))
+        return state;
+    if (effect.prizeCount > 0)
+        effect.prizeCount += (_a = options.extraPrizes) !== null && _a !== void 0 ? _a : 1;
+    return state;
+}
+exports.IF_OPPONENTS_POKEMON_KO_BY_ATTACK_DAMAGE_TAKE_MORE_PRIZES = IF_OPPONENTS_POKEMON_KO_BY_ATTACK_DAMAGE_TAKE_MORE_PRIZES;
 function TAKE_X_MORE_PRIZE_CARDS(effect, state) {
     effect.prizeCount += 1;
     return state;
@@ -603,14 +627,14 @@ function THIS_ATTACK_DOES_X_DAMAGE_TO_X_OF_YOUR_OPPONENTS_POKEMON(damage, effect
     return store.prompt(state, new __1.ChoosePokemonPrompt(player.id, __1.GameMessage.CHOOSE_POKEMON_TO_DAMAGE, __1.PlayerType.TOP_PLAYER, slots !== null && slots !== void 0 ? slots : [__1.SlotType.BENCH], { min: min, max: max, allowCancel: false }), selected => {
         selected.forEach(target => {
             if (effect.target === effect.opponent.active) {
-                const damageEffect = new attack_effects_1.DealDamageEffect(effect, damage);
+                const damageEffect = new attack_effects_2.DealDamageEffect(effect, damage);
                 damageEffect.target = target;
                 return store.reduceEffect(state, damageEffect);
             }
-            const damageEffect = new attack_effects_1.PutDamageEffect(effect, damage);
+            const damageEffect = new attack_effects_2.PutDamageEffect(effect, damage);
             damageEffect.target = target;
             if (applyWeaknessAndResistance && damage > 0) {
-                const applyWeakness = new attack_effects_1.ApplyWeaknessEffect(effect, damage);
+                const applyWeakness = new attack_effects_2.ApplyWeaknessEffect(effect, damage);
                 applyWeakness.target = target; // Fix: should be the current target, not effect.target
                 state = store.reduceEffect(state, applyWeakness);
                 damageEffect.damage = applyWeakness.damage; // Fix: update the damage for this damageEffect, not effect.damage
@@ -625,18 +649,18 @@ function THIS_ATTACK_DOES_X_DAMAGE_TO_EACH_OF_YOUR_OPPONENTS_POKEMON(damage, eff
     const opponent = __1.StateUtils.getOpponent(state, player);
     opponent.forEachPokemon(__1.PlayerType.TOP_PLAYER, (cardList, card) => {
         if (effect.target === effect.opponent.active && !benchOnly) {
-            const damageEffect = new attack_effects_1.DealDamageEffect(effect, damage);
+            const damageEffect = new attack_effects_2.DealDamageEffect(effect, damage);
             damageEffect.target = cardList;
             return store.reduceEffect(state, damageEffect);
         }
-        const damageEffect = new attack_effects_1.PutDamageEffect(effect, damage);
+        const damageEffect = new attack_effects_2.PutDamageEffect(effect, damage);
         damageEffect.target = cardList;
         store.reduceEffect(state, damageEffect);
     });
 }
 exports.THIS_ATTACK_DOES_X_DAMAGE_TO_EACH_OF_YOUR_OPPONENTS_POKEMON = THIS_ATTACK_DOES_X_DAMAGE_TO_EACH_OF_YOUR_OPPONENTS_POKEMON;
 function THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, amount) {
-    const dealDamage = new attack_effects_1.DealDamageEffect(effect, amount);
+    const dealDamage = new attack_effects_2.DealDamageEffect(effect, amount);
     dealDamage.target = effect.source;
     return store.reduceEffect(state, dealDamage);
 }
@@ -647,13 +671,13 @@ function DAMAGE_OPPONENT_POKEMON(store, state, effect, damage, targets) {
     targets.forEach(target => {
         // Use DealDamageEffect if target is opponent's active Pokémon (applies Weakness/Resistance)
         if (target === opponent.active) {
-            const damageEffect = new attack_effects_1.DealDamageEffect(effect, damage);
+            const damageEffect = new attack_effects_2.DealDamageEffect(effect, damage);
             damageEffect.target = target;
             store.reduceEffect(state, damageEffect);
         }
         else {
             // Use PutDamageEffect for benched Pokémon (doesn't apply Weakness/Resistance)
-            const damageEffect = new attack_effects_1.PutDamageEffect(effect, damage);
+            const damageEffect = new attack_effects_2.PutDamageEffect(effect, damage);
             damageEffect.target = target;
             store.reduceEffect(state, damageEffect);
         }
@@ -704,7 +728,7 @@ function DISCARD_SPECIFIC_ENERGY_FROM_THIS_POKEMON(store, state, effect, energyM
     state = store.reduceEffect(state, checkProvidedEnergy);
     state = store.prompt(state, new __1.ChooseEnergyPrompt(player.id, __1.GameMessage.CHOOSE_ENERGIES_TO_DISCARD, checkProvidedEnergy.energyMap, energyMap, { allowCancel: false }), energy => {
         const cards = (energy || []).map(e => e.card);
-        const discardEnergy = new attack_effects_1.DiscardCardsEffect(effect, cards);
+        const discardEnergy = new attack_effects_2.DiscardCardsEffect(effect, cards);
         discardEnergy.target = player.active;
         store.reduceEffect(state, discardEnergy);
     });
@@ -728,7 +752,7 @@ function DISCARD_ALL_ENERGY_FROM_POKEMON(store, state, effect, card) {
     const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player);
     state = store.reduceEffect(state, checkProvidedEnergy);
     const cards = checkProvidedEnergy.energyMap.map(e => e.card);
-    const discardEnergy = new attack_effects_1.DiscardCardsEffect(effect, cards);
+    const discardEnergy = new attack_effects_2.DiscardCardsEffect(effect, cards);
     discardEnergy.target = cardList;
     store.reduceEffect(state, discardEnergy);
 }
@@ -1280,7 +1304,7 @@ exports.SWITCH_ACTIVE_WITH_BENCHED = SWITCH_ACTIVE_WITH_BENCHED;
  * "Switch 1 of your opponent's Benched Pokémon with their Active Pokémon."
  */
 function SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, player, options = {}) {
-    const { allowCancel = false, blocked = [], onSwitched } = options;
+    const { allowCancel = false, blocked = [], onSwitched, sourceEffect } = options;
     const opponent = __1.StateUtils.getOpponent(state, player);
     const hasBenchedPokemon = opponent.bench.some(bench => bench.cards.length > 0);
     if (!hasBenchedPokemon) {
@@ -1290,9 +1314,16 @@ function SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, player, options = {}) 
         if (!selected || selected.length === 0) {
             return;
         }
-        opponent.switchPokemon(selected[0], store, state);
-        if (onSwitched !== undefined) {
-            onSwitched(selected[0]);
+        if (sourceEffect) {
+            const gustEffect = new attack_effects_1.GustOpponentBenchEffect(sourceEffect, selected[0]);
+            store.reduceEffect(state, gustEffect);
+            if (!gustEffect.preventDefault && onSwitched !== undefined)
+                onSwitched(selected[0]);
+        }
+        else {
+            opponent.switchPokemon(selected[0], store, state);
+            if (onSwitched !== undefined)
+                onSwitched(selected[0]);
         }
     });
 }
@@ -1735,7 +1766,7 @@ exports.ADD_CONFUSION_TO_PLAYER_ACTIVE = ADD_CONFUSION_TO_PLAYER_ACTIVE;
  */
 function PREVENT_AND_CLEAR_SPECIAL_CONDITIONS(state, effect, options) {
     const { shouldApply, clearDuringCheckTableState = true } = options;
-    if (effect instanceof attack_effects_1.AddSpecialConditionsEffect || effect instanceof check_effects_1.AddSpecialConditionsPowerEffect) {
+    if (effect instanceof attack_effects_2.AddSpecialConditionsEffect || effect instanceof check_effects_1.AddSpecialConditionsPowerEffect) {
         const owner = __1.StateUtils.findOwner(state, effect.target);
         if (shouldApply(effect.target, owner)) {
             effect.preventDefault = true;
@@ -1785,12 +1816,12 @@ function BLOCK_EFFECT_IF_MARKER(marker, owner, source) {
 }
 exports.BLOCK_EFFECT_IF_MARKER = BLOCK_EFFECT_IF_MARKER;
 function PREVENT_DAMAGE_IF_TARGET_HAS_MARKER(effect, marker, source) {
-    if (effect instanceof attack_effects_1.PutDamageEffect && HAS_MARKER(marker, effect.target, source))
+    if (effect instanceof attack_effects_2.PutDamageEffect && HAS_MARKER(marker, effect.target, source))
         effect.preventDefault = true;
 }
 exports.PREVENT_DAMAGE_IF_TARGET_HAS_MARKER = PREVENT_DAMAGE_IF_TARGET_HAS_MARKER;
 function PREVENT_DAMAGE_IF_SOURCE_HAS_TAG(effect, tag, source) {
-    if (effect instanceof attack_effects_1.PutDamageEffect && HAS_TAG(tag, source))
+    if (effect instanceof attack_effects_2.PutDamageEffect && HAS_TAG(tag, source))
         effect.preventDefault = true;
 }
 exports.PREVENT_DAMAGE_IF_SOURCE_HAS_TAG = PREVENT_DAMAGE_IF_SOURCE_HAS_TAG;
@@ -2286,7 +2317,7 @@ exports.DAMAGED_FROM_FULL_HP = DAMAGED_FROM_FULL_HP;
  * (even if this Pokémon is Knocked Out)..."
  */
 function ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT(state, effect, options) {
-    if (!(effect instanceof attack_effects_1.AfterDamageEffect)) {
+    if (!(effect instanceof attack_effects_2.AfterDamageEffect)) {
         return false;
     }
     const { source, requireActiveSpot = true, requireAttackPhase = true } = options;
@@ -2368,7 +2399,7 @@ function isProtectedBenchedTarget(state, effect, options) {
  * "Prevent all damage done to your other Benched Pokémon by attacks from your opponent's Pokémon."
  */
 function PREVENT_DAMAGE_TO_YOUR_BENCHED_POKEMON_FROM_OPPONENT_ATTACKS(store, state, effect, options) {
-    if (!(effect instanceof attack_effects_1.PutDamageEffect) && !(effect instanceof attack_effects_1.PutCountersEffect)) {
+    if (!(effect instanceof attack_effects_2.PutDamageEffect) && !(effect instanceof attack_effects_2.PutCountersEffect)) {
         return;
     }
     if (!isProtectionSourceInPlay(state, options.owner, options.source)) {
@@ -2389,14 +2420,14 @@ exports.PREVENT_DAMAGE_TO_YOUR_BENCHED_POKEMON_FROM_OPPONENT_ATTACKS = PREVENT_D
  * by attacks from your opponent's Pokémon. (Damage is not an effect.)"
  */
 function PREVENT_EFFECTS_TO_YOUR_BENCHED_POKEMON_FROM_OPPONENT_ATTACKS(store, state, effect, options) {
-    if (!(effect instanceof attack_effects_1.AbstractAttackEffect)) {
+    if (!(effect instanceof attack_effects_2.AbstractAttackEffect)) {
         return;
     }
-    if (effect instanceof attack_effects_1.DealDamageEffect
-        || effect instanceof attack_effects_1.PutDamageEffect
-        || effect instanceof attack_effects_1.PutCountersEffect
-        || effect instanceof attack_effects_1.ApplyWeaknessEffect
-        || effect instanceof attack_effects_1.AfterDamageEffect) {
+    if (effect instanceof attack_effects_2.DealDamageEffect
+        || effect instanceof attack_effects_2.PutDamageEffect
+        || effect instanceof attack_effects_2.PutCountersEffect
+        || effect instanceof attack_effects_2.ApplyWeaknessEffect
+        || effect instanceof attack_effects_2.AfterDamageEffect) {
         return;
     }
     if (!isProtectionSourceInPlay(state, options.owner, options.source)) {
@@ -2417,7 +2448,7 @@ exports.PREVENT_EFFECTS_TO_YOUR_BENCHED_POKEMON_FROM_OPPONENT_ATTACKS = PREVENT_
  * this Pokemon is not Knocked Out and its remaining HP becomes 10 instead."
  */
 function SURVIVE_ON_TEN_IF_FULL_HP(store, state, effect, options) {
-    if (!(effect instanceof attack_effects_1.PutDamageEffect)) {
+    if (!(effect instanceof attack_effects_2.PutDamageEffect)) {
         return;
     }
     const { reason, source, checkBlocked = true } = options;
@@ -2454,7 +2485,7 @@ exports.SURVIVE_ON_TEN_IF_FULL_HP = SURVIVE_ON_TEN_IF_FULL_HP;
  * @param source The source card that created this effect
  */
 function TERA_RULE(effect, state, source) {
-    if (effect instanceof attack_effects_1.PutDamageEffect && effect.target.cards.includes(source) && effect.target.getPokemonCard() === source) {
+    if (effect instanceof attack_effects_2.PutDamageEffect && effect.target.cards.includes(source) && effect.target.getPokemonCard() === source) {
         const player = effect.player;
         const opponent = __1.StateUtils.getOpponent(state, player);
         // Target is not Active

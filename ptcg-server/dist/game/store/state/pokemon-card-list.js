@@ -28,6 +28,15 @@ class PokemonCardList extends card_list_1.CardList {
         this.showBasicAnimation = false;
         this.triggerAttackAnimation = false;
         this.damageReductionNextTurn = 0;
+        this.attackDamageReductionNextTurn = 0;
+        this.preventDamageNextTurnPending = false;
+        this.preventDamageNextTurn = false;
+        this.preventEffectsOfAttacksNextTurnPending = false;
+        this.preventEffectsOfAttacksNextTurn = false;
+        this.weaknessOverrideClearArmed = false;
+        this.defendingPokemonExtraDamageNextTurn = 0;
+        this.defendingPokemonExtraDamagePending = false;
+        this.defendingPokemonExtraDamageRearmAfterAttack = false;
         this.cannotAttackNextTurn = false;
         this.cannotAttackNextTurnPending = false;
         this.cannotUseAttacksNextTurn = [];
@@ -113,14 +122,28 @@ class PokemonCardList extends card_list_1.CardList {
      * and other non-attack state.
      */
     removeAttackEffects() {
+        this.attackDamageKnockOut = undefined;
         this.marker.removeAttackEffects();
         this.cannotAttackNextTurn = false;
         this.cannotAttackNextTurnPending = false;
         this.cannotUseAttacksNextTurn = [];
         this.cannotUseAttacksNextTurnPending = [];
         this.damageReductionNextTurn = 0;
+        this.attackDamageReductionNextTurn = 0;
+        this.preventDamageNextTurnPending = false;
+        this.preventDamageNextTurn = false;
+        this.preventEffectsOfAttacksNextTurnPending = false;
+        this.preventEffectsOfAttacksNextTurn = false;
+        this.weaknessOverrideType = undefined;
+        this.weaknessOverrideAttackerId = undefined;
+        this.weaknessOverrideClearArmed = false;
+        this.defendingPokemonExtraDamageNextTurn = 0;
+        this.defendingPokemonExtraDamageAttackerId = undefined;
+        this.defendingPokemonExtraDamagePending = false;
+        this.defendingPokemonExtraDamageRearmAfterAttack = false;
     }
     clearEffects() {
+        this.attackDamageKnockOut = undefined;
         // Nuclear option: wipe all markers (used by evolution/KO)
         this.marker.markers = [];
         this.triggerEvolutionAnimation = false;
@@ -143,6 +166,18 @@ class PokemonCardList extends card_list_1.CardList {
         this.burnDamage = 20;
         this.confusionDamage = 30;
         this.damageReductionNextTurn = 0;
+        this.attackDamageReductionNextTurn = 0;
+        this.preventDamageNextTurnPending = false;
+        this.preventDamageNextTurn = false;
+        this.preventEffectsOfAttacksNextTurnPending = false;
+        this.preventEffectsOfAttacksNextTurn = false;
+        this.weaknessOverrideType = undefined;
+        this.weaknessOverrideAttackerId = undefined;
+        this.weaknessOverrideClearArmed = false;
+        this.defendingPokemonExtraDamageNextTurn = 0;
+        this.defendingPokemonExtraDamageAttackerId = undefined;
+        this.defendingPokemonExtraDamagePending = false;
+        this.defendingPokemonExtraDamageRearmAfterAttack = false;
         this.cannotAttackNextTurn = false;
         this.cannotAttackNextTurnPending = false;
         this.cannotUseAttacksNextTurn = [];

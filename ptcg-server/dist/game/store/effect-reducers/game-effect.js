@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.gameReducer = void 0;
+const play_card_action_1 = require("../actions/play-card-action");
+const copy_attack_delegation_1 = require("../prefabs/copy-attack-delegation");
 const game_error_1 = require("../../game-error");
 const game_message_1 = require("../../game-message");
 const card_types_1 = require("../card/card-types");
@@ -56,14 +58,17 @@ function* useAttack(next, store, state, effect) {
         throw new game_error_1.GameError(game_message_1.GameMessage.BLOCKED_BY_SPECIAL_CONDITION);
     }
     const attack = effect.attack;
-    let attackingPokemon = player.active;
-    // Check for attacks that can be used from bench
-    player.bench.forEach(benchSlot => {
-        const benchPokemon = benchSlot.getPokemonCard();
-        if (benchPokemon && benchPokemon.attacks.some(a => a.name === attack.name && a.useOnBench)) {
-            attackingPokemon = benchSlot;
-        }
-    });
+    const delegateFrom = effect instanceof game_effects_1.UseAttackEffect ? effect.delegateFrom : undefined;
+    let attackingPokemon = delegateFrom && effect instanceof game_effects_1.UseAttackEffect ? effect.source : player.active;
+    // Legacy bench selection applies only to normal attacks, not an explicitly delegated copycat.
+    if (!delegateFrom) {
+        player.bench.forEach(benchSlot => {
+            const benchPokemon = benchSlot.getPokemonCard();
+            if (benchPokemon && benchPokemon.attacks.some(a => a.name === attack.name && a.useOnBench)) {
+                attackingPokemon = benchSlot;
+            }
+        });
+    }
     // Check if Pokemon cannot attack next turn
     if (attackingPokemon.cannotAttackNextTurn) {
         throw new game_error_1.GameError(game_message_1.GameMessage.BLOCKED_BY_EFFECT);
@@ -79,8 +84,16 @@ function* useAttack(next, store, state, effect) {
     if (attackingPokemonCard) {
         hasBarragePower = attackingPokemonCard.powers.some(power => power.barrage);
     }
-    const checkAttackCost = new check_effects_1.CheckAttackCostEffect(player, attack);
-    state = store.reduceEffect(state, checkAttackCost);
+    let checkAttackCost;
+    if (effect instanceof game_effects_1.UseAttackEffect && effect.delegateFrom) {
+        const checked = (0, copy_attack_delegation_1.checkCopiedAttackCost)(store, state, player, effect.delegateFrom, attack, attackingPokemonCard);
+        state = checked.state;
+        checkAttackCost = checked.effect;
+    }
+    else {
+        checkAttackCost = new check_effects_1.CheckAttackCostEffect(player, attack);
+        state = store.reduceEffect(state, checkAttackCost);
+    }
     const checkProvidedEnergy = new check_effects_1.CheckProvidedEnergyEffect(player, attackingPokemon);
     state = store.reduceEffect(state, checkProvidedEnergy);
     if (state_utils_1.StateUtils.checkEnoughEnergy(checkProvidedEnergy.energyMap, checkAttackCost.cost) === false) {
@@ -106,9 +119,17 @@ function* useAttack(next, store, state, effect) {
     //  (attackingPokemon as any).pendingAttackTargets = [];
     const attackEffect = (effect instanceof game_effects_1.AttackEffect) ? effect : new game_effects_1.AttackEffect(player, opponent, attack);
     attackEffect.source = attackingPokemon;
-    state = store.reduceEffect(state, attackEffect);
-    if (store.hasPrompts()) {
-        yield store.waitPrompt(state, () => next());
+    const copycatCard = attackingPokemon.getPokemonCard();
+    if (delegateFrom && copycatCard) {
+        state = yield* (0, copy_attack_delegation_1.runDelegatedCopiedAttackGenerator)(next, {
+            store, state, player, opponent, copycatCard, sourceCard: delegateFrom,
+            selectedAttack: attack, sourceSlot: attackingPokemon, skipLog: true,
+        });
+    }
+    else {
+        state = store.reduceEffect(state, attackEffect);
+        if (store.hasPrompts())
+            yield store.waitPrompt(state, () => next());
     }
     // --- Attack Animation Trigger ---
     // Set triggerAttackAnimation on the attacking Pokemon
@@ -150,14 +171,16 @@ function* useAttack(next, store, state, effect) {
         next();
     });
     // --- End Attack Animation Trigger ---
-    if (attackEffect.damage > 0) {
-        const dealDamage = new attack_effects_1.DealDamageEffect(attackEffect, attackEffect.damage);
-        state = store.reduceEffect(state, dealDamage);
-    }
-    const afterAttackEffect = new game_phase_effects_1.AfterAttackEffect(effect.player, opponent, attack);
-    state = store.reduceEffect(state, afterAttackEffect);
-    if (store.hasPrompts()) {
-        yield store.waitPrompt(state, () => next());
+    if (!delegateFrom) {
+        if (attackEffect.damage > 0) {
+            const dealDamage = new attack_effects_1.DealDamageEffect(attackEffect, attackEffect.damage);
+            state = store.reduceEffect(state, dealDamage);
+        }
+        const afterAttackEffect = new game_phase_effects_1.AfterAttackEffect(effect.player, opponent, attack);
+        state = store.reduceEffect(state, afterAttackEffect);
+        if (store.hasPrompts()) {
+            yield store.waitPrompt(state, () => next());
+        }
     }
     if ((attack.barrage || hasBarragePower) && !effect._barrageUsed) {
         state = (0, check_effect_1.checkState)(store, state);
@@ -212,6 +235,14 @@ function* useAttack(next, store, state, effect) {
     return store.reduceEffect(state, new game_phase_effects_1.EndTurnEffect(player));
 }
 function gameReducer(store, state, effect) {
+    if (effect instanceof game_phase_effects_1.AfterAttackEffect) {
+        state.players.forEach(player => player.forEachPokemon(play_card_action_1.PlayerType.BOTTOM_PLAYER, slot => {
+            if (slot.defendingPokemonExtraDamageRearmAfterAttack) {
+                slot.defendingPokemonExtraDamageRearmAfterAttack = false;
+                slot.defendingPokemonExtraDamagePending = true;
+            }
+        }));
+    }
     if (effect instanceof game_effects_1.KnockOutEffect) {
         const card = effect.target.getPokemonCard();
         if (card !== undefined) {
@@ -237,8 +268,39 @@ function gameReducer(store, state, effect) {
                 knockedOutOwner.marker.hasMarker(knockedOutOwner.DAMAGE_DEALT_MARKER)) {
                 knockedOutOwner.marker.addMarkerToState(marker_constants_1.MarkerConstants.REVENGE_MARKER);
             }
-            // Handle Lost City marker or PRISM_STAR cards
-            if (effect.target.marker.hasMarker('LOST_CITY_MARKER') || card.tags.includes(card_types_1.CardTag.PRISM_STAR)) {
+            const duringOpponentsTurn = [state_1.GamePhase.PLAYER_TURN, state_1.GamePhase.ATTACK].includes(state.phase)
+                && state.players[state.activePlayer] === attacker;
+            if (duringOpponentsTurn) {
+                knockedOutOwner.pokemonKnockedOutDuringOpponentsLastTurn = true;
+                const ko = effect.target.attackDamageKnockOut;
+                if (state.phase === state_1.GamePhase.ATTACK && ko && ko.turn === state.turn && ko.playerId === attacker.id) {
+                    knockedOutOwner.pokemonKnockedOutByAttackDuringOpponentsLastTurn = true;
+                }
+            }
+            // A damage-provenance opt-in differs from Lost City: ALL attachments go too.
+            if (effect.knockOutDestination === 'lostzone') {
+                const allCards = new card_list_1.CardList();
+                const seen = new Set();
+                const collect = (attached) => {
+                    if (seen.has(attached)) {
+                        return;
+                    }
+                    seen.add(attached);
+                    allCards.cards.push(attached);
+                    if (attached.cards) {
+                        const nested = attached.cards.cards.splice(0);
+                        nested.forEach(collect);
+                    }
+                };
+                [...effect.target.cards, ...effect.target.tools, ...effect.target.energies.cards].forEach(collect);
+                effect.target.cards = [];
+                effect.target.tools = [];
+                effect.target.energies.cards = [];
+                effect.target.damage = 0;
+                effect.target.clearEffects();
+                state = (0, prefabs_1.MOVE_CARDS)(store, state, allCards, effect.player.lostzone);
+            }
+            else if (effect.target.marker.hasMarker('LOST_CITY_MARKER') || card.tags.includes(card_types_1.CardTag.PRISM_STAR)) {
                 const lostZoned = new card_list_1.CardList();
                 const attachedCards = new card_list_1.CardList();
                 // Clear damage and effects before splitting cards
@@ -290,10 +352,14 @@ function gameReducer(store, state, effect) {
         }
     }
     if (effect instanceof attack_effects_1.ApplyWeaknessEffect) {
+        effect.damage = Math.max(0, effect.damage - effect.source.attackDamageReductionNextTurn);
         const checkPokemonType = new check_effects_1.CheckPokemonTypeEffect(effect.source);
         state = store.reduceEffect(state, checkPokemonType);
         const checkPokemonStats = new check_effects_1.CheckPokemonStatsEffect(effect.target);
         state = store.reduceEffect(state, checkPokemonStats);
+        if (effect.target.weaknessOverrideType !== undefined) {
+            checkPokemonStats.weakness = [{ type: effect.target.weaknessOverrideType }];
+        }
         const cardType = checkPokemonType.cardTypes;
         const additionalCardTypes = checkPokemonType.cardTypes;
         const weakness = effect.ignoreWeakness ? [] : checkPokemonStats.weakness;

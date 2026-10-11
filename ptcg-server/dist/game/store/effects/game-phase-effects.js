@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BetweenTurnsEffect = exports.WhoBeginsEffect = exports.EndTurnEffect = exports.ChoosePrizeEffect = exports.AfterAttackEffect = exports.ChooseStartingPokemonEffect = exports.DrewTopdeckEffect = exports.DrawCardForTurnEffect = exports.BeginTurnEffect = exports.GamePhaseEffects = void 0;
+exports.BetweenTurnsEffect = exports.AfterBetweenTurnsEffect = exports.WhoBeginsEffect = exports.EndTurnEffect = exports.ChoosePrizeEffect = exports.AfterAttackEffect = exports.BeforeDoingDamageEffect = exports.ChooseStartingPokemonEffect = exports.DrewTopdeckEffect = exports.DrawCardForTurnEffect = exports.BeginTurnEffect = exports.GamePhaseEffects = void 0;
 var GamePhaseEffects;
 (function (GamePhaseEffects) {
     GamePhaseEffects["BEGIN_TURN_EFFECT"] = "BEGIN_TURN_EFFECT";
@@ -12,6 +12,8 @@ var GamePhaseEffects;
     GamePhaseEffects["DREW_TOPDECK_EFFECT"] = "DREW_TOPDECK_EFFECT";
     GamePhaseEffects["CHOOSE_PRIZE_EFFECT"] = "CHOOSE_PRIZE_EFFECT";
     GamePhaseEffects["AFTER_ATTACK_EFFECT"] = "AFTER_ATTACK_EFFECT";
+    GamePhaseEffects["BEFORE_DOING_DAMAGE_EFFECT"] = "BEFORE_DOING_DAMAGE_EFFECT";
+    GamePhaseEffects["AFTER_BETWEEN_TURNS_EFFECT"] = "AFTER_BETWEEN_TURNS_EFFECT";
 })(GamePhaseEffects = exports.GamePhaseEffects || (exports.GamePhaseEffects = {}));
 class BeginTurnEffect {
     constructor(player) {
@@ -46,6 +48,17 @@ class ChooseStartingPokemonEffect {
     }
 }
 exports.ChooseStartingPokemonEffect = ChooseStartingPokemonEffect;
+class BeforeDoingDamageEffect {
+    constructor(attackEffect) {
+        this.type = GamePhaseEffects.BEFORE_DOING_DAMAGE_EFFECT;
+        this.preventDefault = false;
+        this.attackEffect = attackEffect;
+        this.player = attackEffect.player;
+        this.opponent = attackEffect.opponent;
+        this.attack = attackEffect.attack;
+    }
+}
+exports.BeforeDoingDamageEffect = BeforeDoingDamageEffect;
 class AfterAttackEffect {
     constructor(player, opponent, attack) {
         this.type = GamePhaseEffects.AFTER_ATTACK_EFFECT;
@@ -79,6 +92,15 @@ class WhoBeginsEffect {
     }
 }
 exports.WhoBeginsEffect = WhoBeginsEffect;
+/** Per-player Checkup has resolved all condition callbacks; runs before KO checks. */
+class AfterBetweenTurnsEffect {
+    constructor(player) {
+        this.player = player;
+        this.type = GamePhaseEffects.AFTER_BETWEEN_TURNS_EFFECT;
+        this.preventDefault = false;
+    }
+}
+exports.AfterBetweenTurnsEffect = AfterBetweenTurnsEffect;
 class BetweenTurnsEffect {
     constructor(player) {
         this.type = GamePhaseEffects.BETWEEN_TURNS_EFFECT;

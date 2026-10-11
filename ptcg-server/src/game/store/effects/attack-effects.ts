@@ -5,6 +5,7 @@ import { Player } from '../state/player';
 import { PokemonCardList } from '../state/pokemon-card-list';
 import { Effect } from './effect';
 import { AttackEffect } from './game-effects';
+import { AfterAttackEffect } from './game-phase-effects';
 
 export enum AttackEffects {
   APPLY_WEAKNESS_EFFECT = 'APPLY_WEAKNESS_EFFECT',
@@ -146,8 +147,8 @@ export class GustOpponentBenchEffect extends AbstractAttackEffect implements Eff
   public preventDefault = false;
   public target: PokemonCardList;
 
-  constructor(base: AttackEffect, target: PokemonCardList) {
-    super(base);
+  constructor(base: AttackEffect | AfterAttackEffect, target: PokemonCardList) {
+    super(base instanceof AttackEffect ? base : new AttackEffect(base.player, base.opponent, base.attack));
     this.target = target;
   }
 }

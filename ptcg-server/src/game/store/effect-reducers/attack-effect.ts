@@ -1,3 +1,4 @@
+import { GustOpponentBenchEffect } from '../effects/attack-effects';
 import { GameError } from '../../game-error';
 import { GameLog, GameMessage } from '../../game-message';
 import { Effect } from '../effects/effect';
@@ -21,6 +22,10 @@ import { GameStatsTracker } from '../game-stats-tracker';
 import { CheckHpEffect } from '../effects/check-effects';
 
 export function attackReducer(store: StoreLike, state: State, effect: Effect): State {
+  if (effect instanceof GustOpponentBenchEffect) {
+    effect.opponent.switchPokemon(effect.target, store, state);
+    return state;
+  }
 
   if (effect instanceof PutDamageEffect) {
     const target = effect.target;
@@ -32,6 +37,9 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
     }
 
     const opponent = StateUtils.getOpponent(state, effect.player);
+    if (target !== opponent.active && !effect.weaknessApplied) {
+      effect.damage = Math.max(0, effect.damage - effect.source.attackDamageReductionNextTurn);
+    }
 
     if (effect.attackEffect && target === opponent.active && !effect.weaknessApplied) {
       // Apply weakness
@@ -52,8 +60,20 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
       effect.damage = Math.max(0, effect.damage - target.damageReductionNextTurn);
     }
 
+    if (target.defendingPokemonExtraDamageNextTurn > 0 && !target.defendingPokemonExtraDamagePending
+      && target.defendingPokemonExtraDamageAttackerId === effect.player.id) {
+      effect.damage += target.defendingPokemonExtraDamageNextTurn;
+    }
     const damage = Math.max(0, effect.damage);
+    const damageBefore = target.damage;
     target.damage += damage;
+    if (damage > 0 && effect.attackEffect) {
+      const hp = new CheckHpEffect(StateUtils.findOwner(state, target), target);
+      store.reduceEffect(state, hp);
+      if (target.damage >= hp.hp) {
+        target.attackDamageKnockOut = { attack: effect.attack, sourceCard: effect.source.getPokemonCard(), playerId: effect.player.id, turn: state.turn };
+      }
+    }
 
     if (damage > 0) {
       store.log(state, GameLog.LOG_PLAYER_DEALS_DAMAGE, {
@@ -84,6 +104,16 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
             reason: effect.surviveOnTenHPReason,
           });
           target.damage = checkHpEffect.hp - 10;
+        }
+      }
+
+      if (effect.attackEffect.damageKnockOutsToLostZone && target.attackDamageKnockOut
+        && StateUtils.findOwner(state, target) === effect.opponent) {
+        const hp = new CheckHpEffect(effect.opponent, target);
+        store.reduceEffect(state, hp);
+        if (damageBefore < hp.hp && target.damage >= hp.hp) {
+          target.attackDamageKnockOut.destination = 'lostzone';
+          target.attackDamageKnockOut.targetCard = targetCard;
         }
       }
 
@@ -190,6 +220,7 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
 
   if (effect instanceof PutCountersEffect) {
     const target = effect.target;
+    target.attackDamageKnockOut = undefined;
     const sourceOwner = StateUtils.findOwner(state, effect.source);
     const targetCard = target.getPokemonCard();
     if (targetCard === undefined) {

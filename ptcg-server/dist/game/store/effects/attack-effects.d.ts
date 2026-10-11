@@ -5,6 +5,7 @@ import { Player } from '../state/player';
 import { PokemonCardList } from '../state/pokemon-card-list';
 import { Effect } from './effect';
 import { AttackEffect } from './game-effects';
+import { AfterAttackEffect } from './game-phase-effects';
 export declare enum AttackEffects {
     APPLY_WEAKNESS_EFFECT = "APPLY_WEAKNESS_EFFECT",
     DEAL_DAMAGE_EFFECT = "DEAL_DAMAGE_EFFECT",
@@ -88,7 +89,7 @@ export declare class GustOpponentBenchEffect extends AbstractAttackEffect implem
     readonly type: string;
     preventDefault: boolean;
     target: PokemonCardList;
-    constructor(base: AttackEffect, target: PokemonCardList);
+    constructor(base: AttackEffect | AfterAttackEffect, target: PokemonCardList);
 }
 export declare class KnockOutOpponentEffect extends AbstractAttackEffect implements Effect {
     readonly type: string;

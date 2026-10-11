@@ -2,6 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setChaosRising = void 0;
 const ampharos_1 = require("./ampharos");
+const adversity_policy_1 = require("./adversity-policy");
+const krookodile_ex_1 = require("./krookodile-ex");
+const mega_gallade_ex_1 = require("./mega-gallade-ex");
 const avalugg_1 = require("./avalugg");
 const azs_tranquility_1 = require("./azs-tranquility");
 const baltoy_1 = require("./baltoy");
@@ -169,6 +172,45 @@ exports.setChaosRising = [
     new nitro_fire_energy_1.NitroFireEnergy(),
     new magnet_metal_energy_1.MagnetMetalEnergy(),
     new bubble_water_energy_1.BubbleWaterEnergy(),
+    new adversity_policy_1.AdversityPolicy(),
+    new krookodile_ex_1.KrookodileEx(),
+    new mega_gallade_ex_1.MegaGalladeex(),
     // Other prints
-    new other_prints_1.TransformationTomeCRI(), // CRI 83
+    new other_prints_1.TransformationTomeCRI(),
+    new other_prints_1.ChespinIR(),
+    new other_prints_1.FroakieIR(),
+    new other_prints_1.FrogadierIR(),
+    new other_prints_1.AmpharosIR(),
+    new other_prints_1.XerneasIR(),
+    new other_prints_1.ClaydolIR(),
+    new other_prints_1.CrobatIR(),
+    new other_prints_1.MetangIR(),
+    new other_prints_1.SliggooIR(),
+    new other_prints_1.TaurosIR(),
+    new other_prints_1.WatchogIR(),
+    new other_prints_1.BeedrillexFA(),
+    new other_prints_1.MegaPyroarexFA(),
+    new other_prints_1.MegaGreninjaexFA(),
+    new other_prints_1.MegaFloetteexFA(),
+    new other_prints_1.GourgeistexFA(),
+    new other_prints_1.CobalionexFA(),
+    new other_prints_1.MegaDragalgeexFA(),
+    new other_prints_1.CinccinoexFA(),
+    new other_prints_1.AzsTranquilityFA(),
+    new other_prints_1.EmmaFA(),
+    new other_prints_1.EnergyRetrievalFACRI(),
+    new other_prints_1.JumboIceCreamFACRI(),
+    new other_prints_1.PhilippeFA(),
+    new other_prints_1.PrismTowerFA(),
+    new other_prints_1.RoxiesPerformanceFA(),
+    new other_prints_1.SpecialRedCardFA(),
+    new other_prints_1.SurfingBeachFACRI(),
+    new other_prints_1.ToolScrapperFACRI(),
+    new other_prints_1.MegaGreninjaexSIR(),
+    new other_prints_1.MegaFloetteexSIR(),
+    new other_prints_1.MegaDragalgeexSIR(),
+    new other_prints_1.CinccinoexSIR(),
+    new other_prints_1.AzsTranquilitySIR(),
+    new other_prints_1.RoxiesPerformanceSIR(),
+    new other_prints_1.MegaGreninjaexHR(),
 ];

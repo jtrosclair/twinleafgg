@@ -6,6 +6,7 @@ const game_error_1 = require("../../game-error");
 const game_message_1 = require("../../game-message");
 const state_utils_1 = require("../state-utils");
 const card_types_1 = require("../card/card-types");
+const play_card_effects_2 = require("../effects/play-card-effects");
 function getTrainerCleanupTarget(player, trainerCard) {
     return trainerCard.tags.includes(card_types_1.CardTag.PRISM_STAR) ? player.lostzone : player.discard;
 }
@@ -36,7 +37,25 @@ function finalizeTrainerCleanup(store, state, player, trainerCard, keepSupporter
     cleanup();
     return state;
 }
+// Upstream coin-flip gate: run before any play-zone changes, attachment or replacement.
 function playTrainerReducer(store, state, effect) {
+    if ((effect instanceof play_card_effects_1.PlayItemEffect || effect instanceof play_card_effects_1.PlaySupporterEffect
+        || effect instanceof play_card_effects_1.PlayStadiumEffect || effect instanceof play_card_effects_1.AttachPokemonToolEffect)
+        && effect.player.coinFlipCancelTrainerPlayTurnsRemaining > 0
+        && effect.player.hand.cards.includes(effect.trainerCard)) {
+        const player = effect.player;
+        return store.reduceEffect(state, new play_card_effects_2.CoinFlipEffect(player, result => {
+            if (!result) {
+                player.hand.moveCardTo(effect.trainerCard, getTrainerCleanupTarget(player, effect.trainerCard));
+                return;
+            }
+            playTrainerWithoutCoinFlip(store, state, effect);
+        }));
+    }
+    return playTrainerWithoutCoinFlip(store, state, effect);
+}
+exports.playTrainerReducer = playTrainerReducer;
+function playTrainerWithoutCoinFlip(store, state, effect) {
     /* Play supporter card */
     if (effect instanceof play_card_effects_1.PlaySupporterEffect) {
         const player = effect.player;
@@ -62,6 +81,8 @@ function playTrainerReducer(store, state, effect) {
         if (player.marker.hasMarker(player.ATTACK_EFFECT_STADIUM_LOCK)) {
             throw new game_error_1.GameError(game_message_1.GameMessage.BLOCKED_BY_EFFECT);
         }
+        // Successful play: commit the turn allowance before replacing the old Stadium.
+        player.stadiumPlayedTurn = state.turn;
         // Handle player's existing stadium
         if (player.stadium.cards.length > 0) {
             if (stadiumCard && stadiumCard.tags.includes(card_types_1.CardTag.PRISM_STAR)) {
@@ -148,4 +169,3 @@ function playTrainerReducer(store, state, effect) {
     }
     return state;
 }
-exports.playTrainerReducer = playTrainerReducer;

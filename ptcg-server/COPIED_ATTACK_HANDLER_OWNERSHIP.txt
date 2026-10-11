@@ -1,0 +1,106 @@
+# Copied attack handler ownership — bounded architectural escalation
+
+## Outcome
+
+**BLOCKED; no genuine GREEN and no production change.** The current copied-handler
+boundary cannot separate arbitrary legacy attack and passive branches. The requested
+universal fix does not fit copy-prefab/new-30C-only ownership without a reviewed
+migration of legacy source handlers. Do not treat the already-green copy suites as
+proof of F3 isolation.
+
+## Executable evidence
+
+`src/sets/tests/copied-handler-ownership.spec.ts` has 12 acceptance/control tests.
+Three remain RED:
+
+1. Actual Drednaw SCR Hard Crunch copies correctly for 80 damage, but Mew then
+   takes **0 instead of 200** from an incoming attack: Impervious Shell leaked.
+2. An explicitly labeled adversarial legacy fixture combines actual Onix EVO
+   Harden with an unguarded passive. A legitimate attack-created marker exists,
+   but incoming 200 is still **0 instead of 200**. Marker presence cannot assign
+   ownership to arbitrary branches in the shared handler.
+3. Another labeled legacy fixture has attack-owned +10 and Ability-owned +40
+   branches on the same initial `AttackEffect`. Copying does **90 instead of 50**.
+   Initial-attack event/reference matching is not an ownership boundary either.
+
+Nine controls pass: actual Drednaw defense, conditional Hard Crunch bonus,
+sub-threshold incoming damage, copied Harden defense, Harden cleanup, Harden on
+a mixed source, copied Unown extra prizes without a marker, copied Frosty
+Typhoon next-turn restriction, and unchanged printed identities/attack references.
+The fixtures demonstrate interface ambiguity; they are not newly registered cards.
+
+## Actual failed experiments (scratch only, never installed)
+
+- Existing source-only `PowerEffect` permission facade: Drednaw still leaks, since
+  its direct effect mutation never requests Ability permission.
+- Skip copied session processing for `DealDamageEffect`: Drednaw passes, but
+  legitimate copied Harden stops preventing damage. Running acceptance + original
+  engine-review tests gives **24 specs, 4 failures**, including existing Harden.
+- Allow incoming damage delegation only when a source-associated marker exists:
+  Drednaw and Harden pass separately, but the mixed marker/passive fixture still
+  leaks, as does the initial AttackEffect fixture: **24 specs, 2 failures**.
+
+No card-specific patch, source-text classifier, blanket attack disabling, or
+experimental production fallback was accepted. Two new policy experiments are
+bounded and rejected; no fourth policy refinement is being presented as a fix.
+
+## Precise missing boundary
+
+`PokemonCard` exposes `attacks`, `powers`, and one inherited `reduceEffect`; it
+has no independently callable attack-owned handler/continuation contract.
+`delegateToSource` calls that monolithic function with `this = copycat` after
+normal Store fan-out. Both passive and legitimate attack-induced defense consume
+`DealDamageEffect` with the same target identity. Both can mutate `Effect` or
+`State` directly without calling Store. Restricting Store methods cannot intercept
+those mutations or determine their semantic owner. Filtering event classes,
+checking marker existence, or removing `powers` metadata does not split code.
+
+Reviewed general sources include Drednaw SCR (unguarded defense), Onix EVO
+(attack-created defensive listener/cleanup), Unown 30C (KO bonus with provenance,
+no attack marker), Castform CRE (attack restriction versus Ability cost modifier),
+Furfrou XY (permission-checked defense), and Sandaconda SSH, Crustle UNM,
+Samurott BLW, Mr. Mime JU, Palossand SUM, Tyrantrum FLI, Mamoswine BKT, Whiscash
+RCL (other mixed attack/passive patterns). These reads are design investigation,
+not executable coverage claims for every reviewed card.
+
+## Safe architecture, requiring expanded migration scope
+
+Introduce explicit per-attack handlers separate from passive/Ability reducers.
+Each handler owns its initial reducer and all deferred listeners/cleanup, with
+an explicit attacker context rather than rebinding arbitrary source methods to
+an unrelated card. Normal card dispatch composes its own passive and attack
+handlers; copied dispatch captures only the selected attack handler, never the
+source passive reducer. A copied lifecycle must keep that same ownership through
+prompt callbacks, payment, damage, KO prizes, turn events and cleanup; retain
+normal global Store fan-out for the real copycat, Tools, Stadiums, and opponents.
+
+For example, a selected attack handler should expose a lifecycle reducer using
+`{ attackerCard, attackerSlot, attack, player, sourceCard, store }`. Its deferred
+reducers/closures are explicitly registered by that attack, not inferred by
+function text or unrelated marker names. Onix Harden's incoming damage listener
+and cleanup belong to Harden. Unown's KO listener belongs to Mysterious Signal.
+Drednaw Impervious Shell belongs only to its passive reducer; Hard Crunch owns
+only its conditional damage bonus. Source private-helper calls must stay valid
+without implicitly inheriting source physical-card identity or Abilities.
+
+The migration cannot stop with 30C: Mew copies arbitrary Benched Pokémon. If an
+unmigrated source falls back to the monolith, F3 persists. If it gets no handler
+or only initial `AttackEffect`, allowed effects/attacks are silently lost. A
+reviewed inventory/migration of all supported copyable legacy handlers is the
+necessary scope decision; merely adding an optional new API is not completion.
+
+## Verification / preservation
+
+- Original engine-review: 12/12; engine compatibility: 20/20; Snorlax: 6/6;
+  review fixes: 16/16; legacy: 18/18; LEGEND: 13/13.
+- New architectural acceptance: 12 specs, 3 failures (9 controls pass).
+- Source runtime loader rejects source JS siblings and output/dist module graphs.
+- Typed verification uses `tsc --noEmit --incremental false`.
+- LEGEND attack-damage-only Lost Zone KO/all-attachments route, all production
+  card identities, copy APIs, Store hooks and parent-owned changes remain untouched.
+- No emitted build, commit, push, deployment, or full-suite run here.
+
+Machine-readable evidence and individual logs are in the active profile scratch:
+`/Users/jerrytrosclair/.hermes/profiles/sgremspec/cache/scratch/copy-ownership-architecture-evidence.json`.
+The newly added failing spec will add three known failures to a parent's broad
+run; they are deliberate F3 acceptance failures, not repaired coverage.

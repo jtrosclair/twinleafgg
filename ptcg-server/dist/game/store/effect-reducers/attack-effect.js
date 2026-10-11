@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.attackReducer = void 0;
+const attack_effects_1 = require("../effects/attack-effects");
 const game_error_1 = require("../../game-error");
 const game_message_1 = require("../../game-message");
-const attack_effects_1 = require("../effects/attack-effects");
+const attack_effects_2 = require("../effects/attack-effects");
 const game_effects_1 = require("../effects/game-effects");
 const state_utils_1 = require("../state-utils");
 const simple_tactics_1 = require("../../../simple-bot/simple-tactics/simple-tactics");
@@ -11,7 +12,11 @@ const effect_of_attack_effects_1 = require("../effects/effect-of-attack-effects"
 const game_stats_tracker_1 = require("../game-stats-tracker");
 const check_effects_1 = require("../effects/check-effects");
 function attackReducer(store, state, effect) {
-    if (effect instanceof attack_effects_1.PutDamageEffect) {
+    if (effect instanceof attack_effects_1.GustOpponentBenchEffect) {
+        effect.opponent.switchPokemon(effect.target, store, state);
+        return state;
+    }
+    if (effect instanceof attack_effects_2.PutDamageEffect) {
         const target = effect.target;
         const sourceOwner = state_utils_1.StateUtils.findOwner(state, effect.source);
         const targetCard = target.getPokemonCard();
@@ -19,9 +24,12 @@ function attackReducer(store, state, effect) {
             throw new game_error_1.GameError(game_message_1.GameMessage.ILLEGAL_ACTION);
         }
         const opponent = state_utils_1.StateUtils.getOpponent(state, effect.player);
+        if (target !== opponent.active && !effect.weaknessApplied) {
+            effect.damage = Math.max(0, effect.damage - effect.source.attackDamageReductionNextTurn);
+        }
         if (effect.attackEffect && target === opponent.active && !effect.weaknessApplied) {
             // Apply weakness
-            const applyWeakness = new attack_effects_1.ApplyWeaknessEffect(effect.attackEffect, effect.damage);
+            const applyWeakness = new attack_effects_2.ApplyWeaknessEffect(effect.attackEffect, effect.damage);
             applyWeakness.target = effect.target;
             applyWeakness.ignoreWeakness = effect.attackEffect.ignoreWeakness;
             applyWeakness.ignoreResistance = effect.attackEffect.ignoreResistance;
@@ -34,8 +42,20 @@ function attackReducer(store, state, effect) {
         if (target.damageReductionNextTurn > 0) {
             effect.damage = Math.max(0, effect.damage - target.damageReductionNextTurn);
         }
+        if (target.defendingPokemonExtraDamageNextTurn > 0 && !target.defendingPokemonExtraDamagePending
+            && target.defendingPokemonExtraDamageAttackerId === effect.player.id) {
+            effect.damage += target.defendingPokemonExtraDamageNextTurn;
+        }
         const damage = Math.max(0, effect.damage);
+        const damageBefore = target.damage;
         target.damage += damage;
+        if (damage > 0 && effect.attackEffect) {
+            const hp = new check_effects_1.CheckHpEffect(state_utils_1.StateUtils.findOwner(state, target), target);
+            store.reduceEffect(state, hp);
+            if (target.damage >= hp.hp) {
+                target.attackDamageKnockOut = { attack: effect.attack, sourceCard: effect.source.getPokemonCard(), playerId: effect.player.id, turn: state.turn };
+            }
+        }
         if (damage > 0) {
             store.log(state, game_message_1.GameLog.LOG_PLAYER_DEALS_DAMAGE, {
                 name: sourceOwner.name,
@@ -63,7 +83,16 @@ function attackReducer(store, state, effect) {
                     target.damage = checkHpEffect.hp - 10;
                 }
             }
-            const afterDamageEffect = new attack_effects_1.AfterDamageEffect(effect.attackEffect, damage);
+            if (effect.attackEffect.damageKnockOutsToLostZone && target.attackDamageKnockOut
+                && state_utils_1.StateUtils.findOwner(state, target) === effect.opponent) {
+                const hp = new check_effects_1.CheckHpEffect(effect.opponent, target);
+                store.reduceEffect(state, hp);
+                if (damageBefore < hp.hp && target.damage >= hp.hp) {
+                    target.attackDamageKnockOut.destination = 'lostzone';
+                    target.attackDamageKnockOut.targetCard = targetCard;
+                }
+            }
+            const afterDamageEffect = new attack_effects_2.AfterDamageEffect(effect.attackEffect, damage);
             afterDamageEffect.target = effect.target;
             store.reduceEffect(state, afterDamageEffect);
         }
@@ -80,7 +109,7 @@ function attackReducer(store, state, effect) {
         }
         // --- End tracking ---
     }
-    if (effect instanceof attack_effects_1.AfterWeaknessAndResistanceEffect) {
+    if (effect instanceof attack_effects_2.AfterWeaknessAndResistanceEffect) {
         const target = effect.target;
         const damage = Math.max(0, effect.damage);
         target.damage += damage;
@@ -89,20 +118,20 @@ function attackReducer(store, state, effect) {
             game_stats_tracker_1.GameStatsTracker.trackDamageDealt(effect.player, effect.source, damage);
         }
     }
-    if (effect instanceof attack_effects_1.DealDamageEffect) {
+    if (effect instanceof attack_effects_2.DealDamageEffect) {
         const base = effect.attackEffect;
-        const applyWeakness = new attack_effects_1.ApplyWeaknessEffect(base, effect.damage);
+        const applyWeakness = new attack_effects_2.ApplyWeaknessEffect(base, effect.damage);
         applyWeakness.target = effect.target;
         applyWeakness.ignoreWeakness = base.ignoreWeakness;
         applyWeakness.ignoreResistance = base.ignoreResistance;
         state = store.reduceEffect(state, applyWeakness);
-        const dealDamage = new attack_effects_1.PutDamageEffect(base, applyWeakness.damage);
+        const dealDamage = new attack_effects_2.PutDamageEffect(base, applyWeakness.damage);
         dealDamage.target = effect.target;
         dealDamage.weaknessApplied = true;
         state = store.reduceEffect(state, dealDamage);
         return state;
     }
-    if (effect instanceof attack_effects_1.KOEffect) {
+    if (effect instanceof attack_effects_2.KOEffect) {
         const target = effect.target;
         const pokemonCard = target.getPokemonCard();
         if (pokemonCard === undefined) {
@@ -112,7 +141,7 @@ function attackReducer(store, state, effect) {
         const opponent = state_utils_1.StateUtils.getOpponent(state, effect.player);
         if (effect.attackEffect && target === opponent.active) {
             // Apply weakness
-            const applyWeakness = new attack_effects_1.ApplyWeaknessEffect(effect.attackEffect, effect.damage);
+            const applyWeakness = new attack_effects_2.ApplyWeaknessEffect(effect.attackEffect, effect.damage);
             applyWeakness.target = effect.target;
             applyWeakness.ignoreWeakness = effect.attackEffect.ignoreWeakness;
             applyWeakness.ignoreResistance = effect.attackEffect.ignoreResistance;
@@ -128,12 +157,12 @@ function attackReducer(store, state, effect) {
             if (effect.attackEffect && effect.source) {
                 game_stats_tracker_1.GameStatsTracker.trackDamageDealt(effect.player, effect.source, damage);
             }
-            const afterDamageEffect = new attack_effects_1.AfterDamageEffect(effect.attackEffect, damage);
+            const afterDamageEffect = new attack_effects_2.AfterDamageEffect(effect.attackEffect, damage);
             afterDamageEffect.target = effect.target;
             store.reduceEffect(state, afterDamageEffect);
         }
     }
-    if (effect instanceof attack_effects_1.KnockOutOpponentEffect) {
+    if (effect instanceof attack_effects_2.KnockOutOpponentEffect) {
         const target = effect.target;
         const pokemonCard = target.getPokemonCard();
         if (pokemonCard === undefined) {
@@ -146,8 +175,9 @@ function attackReducer(store, state, effect) {
             game_stats_tracker_1.GameStatsTracker.trackDamageDealt(effect.player, effect.source, damage);
         }
     }
-    if (effect instanceof attack_effects_1.PutCountersEffect) {
+    if (effect instanceof attack_effects_2.PutCountersEffect) {
         const target = effect.target;
+        target.attackDamageKnockOut = undefined;
         const sourceOwner = state_utils_1.StateUtils.findOwner(state, effect.source);
         const targetCard = target.getPokemonCard();
         if (targetCard === undefined) {
@@ -168,44 +198,44 @@ function attackReducer(store, state, effect) {
             }
         }
     }
-    if (effect instanceof attack_effects_1.AfterDamageEffect) {
+    if (effect instanceof attack_effects_2.AfterDamageEffect) {
         const targetOwner = state_utils_1.StateUtils.findOwner(state, effect.target);
         targetOwner.marker.addMarkerToState(effect.player.DAMAGE_DEALT_MARKER);
     }
-    if (effect instanceof attack_effects_1.DiscardCardsEffect) {
+    if (effect instanceof attack_effects_2.DiscardCardsEffect) {
         const target = effect.target;
         const cards = effect.cards;
         const owner = state_utils_1.StateUtils.findOwner(state, target);
         target.moveCardsTo(cards, owner.discard);
         return state;
     }
-    if (effect instanceof attack_effects_1.LostZoneCardsEffect) {
+    if (effect instanceof attack_effects_2.LostZoneCardsEffect) {
         const target = effect.target;
         const cards = effect.cards;
         const owner = state_utils_1.StateUtils.findOwner(state, target);
         target.moveCardsTo(cards, owner.lostzone);
         return state;
     }
-    if (effect instanceof attack_effects_1.CardsToHandEffect) {
+    if (effect instanceof attack_effects_2.CardsToHandEffect) {
         const target = effect.target;
         const cards = effect.cards;
         const owner = state_utils_1.StateUtils.findOwner(state, target);
         target.moveCardsTo(cards, owner.hand);
         return state;
     }
-    if (effect instanceof attack_effects_1.AddMarkerEffect) {
+    if (effect instanceof attack_effects_2.AddMarkerEffect) {
         const target = effect.target;
         target.marker.addMarker(effect.markerName, effect.markerSource);
         return state;
     }
-    if (effect instanceof attack_effects_1.HealTargetEffect) {
+    if (effect instanceof attack_effects_2.HealTargetEffect) {
         const target = effect.target;
         const owner = state_utils_1.StateUtils.findOwner(state, target);
         const healEffect = new game_effects_1.HealEffect(owner, target, effect.damage);
         state = store.reduceEffect(state, healEffect);
         return state;
     }
-    if (effect instanceof attack_effects_1.AddSpecialConditionsEffect) {
+    if (effect instanceof attack_effects_2.AddSpecialConditionsEffect) {
         const target = effect.target;
         effect.specialConditions.forEach(sp => {
             target.addSpecialCondition(sp);
@@ -221,7 +251,7 @@ function attackReducer(store, state, effect) {
         }
         return state;
     }
-    if (effect instanceof attack_effects_1.RemoveSpecialConditionsEffect) {
+    if (effect instanceof attack_effects_2.RemoveSpecialConditionsEffect) {
         const target = effect.target;
         effect.specialConditions.forEach(sp => {
             target.removeSpecialCondition(sp);

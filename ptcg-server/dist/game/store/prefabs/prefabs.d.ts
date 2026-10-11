@@ -145,6 +145,15 @@ export interface TakeXPrizesOptions extends TakeSpecificPrizesOptions {
 }
 export declare function TAKE_SPECIFIC_PRIZES(store: StoreLike, state: State, player: Player, prizes: CardList[], options?: TakeSpecificPrizesOptions): void;
 export declare function TAKE_X_PRIZES(store: StoreLike, state: State, player: Player, count: number, options?: TakeXPrizesOptions, callback?: (chosenPrizes: CardList[]) => void): State;
+/** Upstream KO predicate; attack-damage mode excludes counters, poison and effects. */
+export declare function WAS_POKEMON_KNOCKED_OUT_DURING_OPPONENTS_LAST_TURN(player: Player, filter?: {
+    byAttackDamage?: boolean;
+}): boolean;
+/** Scoped upstream extra-prize predicate with per-target lethal damage provenance. */
+export declare function IF_OPPONENTS_POKEMON_KO_BY_ATTACK_DAMAGE_TAKE_MORE_PRIZES(store: StoreLike, state: State, effect: Effect, source: PokemonCard, options?: {
+    attackName?: string;
+    extraPrizes?: number;
+}): State;
 export declare function TAKE_X_MORE_PRIZE_CARDS(effect: KnockOutEffect, state: State): State;
 export declare function PLAY_POKEMON_FROM_HAND_TO_BENCH(state: State, player: Player, card: Card): void;
 export declare function DEVOLVE_POKEMON(store: StoreLike, state: State, target: PokemonCardList, destination: CardList): State;
@@ -343,6 +352,7 @@ export declare function CAN_EVOLVE_ON_FIRST_TURN_GOING_SECOND(state: State, play
 export declare function MOVE_CARD_TO(state: State, card: Card, destination: CardList): void;
 export declare function SWITCH_ACTIVE_WITH_BENCHED(store: StoreLike, state: State, player: Player): State;
 export interface SwitchInOpponentBenchedPokemonOptions {
+    sourceEffect?: AttackEffect | AfterAttackEffect;
     allowCancel?: boolean;
     blocked?: CardTarget[];
     onSwitched?: (target: PokemonCardList) => void;

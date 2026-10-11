@@ -266,14 +266,32 @@ function YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED(store, state, effect) {
     store.reduceEffect(state, specialConditionEffect);
 }
 exports.YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED = YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED;
-function DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON(store, state, effect) {
+function DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON(store, state, effect, allowedEnergyTypes, count = 1) {
     const player = effect.player;
     const opponent = __1.StateUtils.getOpponent(state, player);
-    const energyCards = opponent.active.cards.filter(c => c.superType === card_types_1.SuperType.ENERGY);
+    if (count <= 0) {
+        return state;
+    }
+    const blocked = [];
+    const energyCards = opponent.active.cards.filter((card, index) => {
+        if (card.superType !== card_types_1.SuperType.ENERGY) {
+            if (allowedEnergyTypes)
+                blocked.push(index);
+            return false;
+        }
+        if (!allowedEnergyTypes)
+            return true;
+        const energy = card;
+        const allowed = allowedEnergyTypes.some(type => energy.provides.includes(type));
+        if (!allowed)
+            blocked.push(index);
+        return allowed;
+    });
     if (energyCards.length === 0) {
         return state;
     }
-    return store.prompt(state, new __1.ChooseCardsPrompt(player, __1.GameMessage.CHOOSE_CARD_TO_DISCARD, opponent.active, { superType: card_types_1.SuperType.ENERGY }, { min: 1, max: 1, allowCancel: false }), selected => {
+    const cardsToDiscard = Math.min(count, energyCards.length);
+    return store.prompt(state, new __1.ChooseCardsPrompt(player, __1.GameMessage.CHOOSE_CARD_TO_DISCARD, opponent.active, { superType: card_types_1.SuperType.ENERGY }, { min: cardsToDiscard, max: cardsToDiscard, allowCancel: false, blocked }), selected => {
         const cards = selected || [];
         if (cards.length > 0) {
             const discardEnergy = new attack_effects_1.DiscardCardsEffect(effect, cards);
