@@ -5,15 +5,8 @@
 
     img,
     .holo-overlay {
-      display: none;
-    }
-
-    .custom-artwork-overlay {
-      display: none;
-    }
-
-    .base-image {
-      display: none;
+      // Native drags retain their original image target until the gesture ends.
+      opacity: 0;
     }
   }
 
@@ -44,7 +37,7 @@
   }
 
   .card-container {
-    background-image: url(~src/assets/cardback.png);
+    background-image: url(~src/assets/cardback.svg);
     background-repeat: no-repeat;
     background-size: 100% 100%;
   }
@@ -54,7 +47,7 @@
   }
 
   .ptcg-card:after {
-    background-image: url(~src/assets/cardback.png);
+    background-image: url(~src/assets/cardback.svg);
     background-repeat: no-repeat;
     background-size: 100% 100%;
   }
@@ -155,8 +148,8 @@ $holo-types: (
 @each $type, $mask in $holo-types {
   .#{$type} .holo-overlay {
     @include holo-base;
-    -webkit-mask-image: url('/assets/#{$mask}.png');
-    mask-image: url('/assets/#{$mask}.png');
+    -webkit-mask-image: url('/assets/#{$mask}.webp');
+    mask-image: url('/assets/#{$mask}.webp');
 
     @if $type =='radiant-holo' or $type =='ace-spec-holo' {
       opacity: 4;

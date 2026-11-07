@@ -1,7 +1,8 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, HostBinding, OnInit, OnDestroy } from '@angular/core';
 import { Card, CardTag } from 'ptcg-server';
+import { SimulatorAssetsService } from '../../services/simulator-assets.service';
 import { CardsBaseService } from '../cards-base.service';
-import { SettingsService } from 'src/app/table/table-sidebar/settings-dialog/settings.service';
+import { SettingsService } from '../../services/settings.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
@@ -18,8 +19,8 @@ export class CardComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>();
 
   @Input() showCardName: boolean = true;
-  @Input() cardback = false;
-  @Input() placeholder = false;
+  @Input() @HostBinding('class.cardback') cardback = false;
+  @Input() @HostBinding('class.placeholder') placeholder = false;
   @Input() customImageUrl: string;
   // Optional overlay image URL (e.g., selected artwork) applied on top of base image
   @Input() customArtworkUrl?: string;
@@ -179,14 +180,15 @@ export class CardComponent implements OnInit, OnDestroy {
   }
 
   constructor(private cardsBaseService: CardsBaseService,
-    private settingsService: SettingsService) {
+    private settingsService: SettingsService,
+    public simulatorAssets: SimulatorAssetsService) {
     settingsService.holoEnabled$.subscribe(enabled => this.holoEnabled = enabled);
     settingsService.showCardName$.subscribe(enabled => this.showCardName = enabled);
   }
 
   private resolveScanUrl(): string {
     if (this.customImageUrl) {
-      return this.customImageUrl;
+      return this.simulatorAssets.resolve(this.customImageUrl);
     }
     return this.cardsBaseService.getScanUrl(this.data);
   }
@@ -194,15 +196,15 @@ export class CardComponent implements OnInit, OnDestroy {
   // Resolve overlay artwork URL from artworksContext when not explicitly provided
   get overlayUrl(): string | undefined {
     if (this.customArtworkUrl) {
-      return this.customArtworkUrl;
+      return this.simulatorAssets.resolve(this.customArtworkUrl);
     }
     const artworksMap = (this.cardList as any)?.artworksMap as { [code: string]: { imageUrl: string } } | undefined;
     if (artworksMap && this.data && artworksMap[this.data.fullName]?.imageUrl) {
-      return artworksMap[this.data.fullName].imageUrl;
+      return this.simulatorAssets.resolve(artworksMap[this.data.fullName].imageUrl);
     }
     const map = (this.cardList as any);
     if (map && this.data && map[this.data.fullName]?.imageUrl) {
-      return map[this.data.fullName].imageUrl;
+      return this.simulatorAssets.resolve(map[this.data.fullName].imageUrl);
     }
     // Fallback: if a broader state object is provided, try players' artworksMap
     // const players = (this.cardList as any)?.players as any[] | undefined;

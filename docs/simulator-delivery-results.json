@@ -1,0 +1,231 @@
+{
+  "ok": true,
+  "checkedAt": "2026-11-07T15:47:16.500Z",
+  "origin": "https://sim-static.prizemap.app",
+  "packageHash": "c0058c35aae0e94f8cd67e263433e710ff9e5dcc37932dbe988204408846d4f1",
+  "buildId": "7b1f3345-44a9-4001-b0dd-d68d9db2f535",
+  "manifest": {
+    "cold": "downloadManifestAssets",
+    "warm": "reuseCachedPackage",
+    "conditionalStatus": 304,
+    "inventoryValidated": true,
+    "status": 200,
+    "bytes": 2564,
+    "sha256": "ce93f3d9db92eb178478088abf4081807f52de5d258f8a0ef05d3496c990360b",
+    "etag": "\"b407a90cbfba8c9ab6a7995019671cb1\"",
+    "noCache": true,
+    "cors": true,
+    "exposesEtag": true,
+    "conditionalBodyBytes": 0,
+    "headStatus": 200,
+    "headBodyBytes": 0,
+    "headContentLength": null
+  },
+  "assets": [
+    {
+      "path": "3rdpartylicenses.txt",
+      "bytes": 25618,
+      "integrity": true,
+      "immutable": true,
+      "cors": true
+    },
+    {
+      "path": "assets/iconfont/material-icons.css",
+      "bytes": 59818,
+      "integrity": true,
+      "immutable": true,
+      "cors": true
+    },
+    {
+      "path": "favicon.ico",
+      "bytes": 107769,
+      "integrity": true,
+      "immutable": true,
+      "cors": true
+    },
+    {
+      "path": "index.html",
+      "bytes": 2069,
+      "integrity": true,
+      "immutable": true,
+      "cors": true
+    },
+    {
+      "path": "main.acac4c81f49214378ff0.js",
+      "bytes": 11426628,
+      "integrity": true,
+      "immutable": true,
+      "cors": true
+    },
+    {
+      "path": "polyfills.98ed7ea3f24455c0a30b.js",
+      "bytes": 37091,
+      "integrity": true,
+      "immutable": true,
+      "cors": true
+    },
+    {
+      "path": "runtime.287366b023aefc3235db.js",
+      "bytes": 1216,
+      "integrity": true,
+      "immutable": true,
+      "cors": true
+    },
+    {
+      "path": "simulator-static.840a691871f38a1f7822.js",
+      "bytes": 726441,
+      "integrity": true,
+      "immutable": true,
+      "cors": true
+    },
+    {
+      "path": "styles.430c005315f9e077ad7a.css",
+      "bytes": 70663,
+      "integrity": true,
+      "immutable": true,
+      "cors": true
+    }
+  ],
+  "archive": {
+    "path": "simulator-package.c0058c35aae0e94f8cd67e263433e710ff9e5dcc37932dbe988204408846d4f1.zip",
+    "bytes": 2215294,
+    "integrity": true,
+    "immutable": true,
+    "cors": true
+  },
+  "routes": [
+    {
+      "path": "/",
+      "status": 200,
+      "stableUrl": true,
+      "noRedirect": true,
+      "noStore": true,
+      "internalAssetsPinned": true
+    },
+    {
+      "path": "/index.html",
+      "status": 200,
+      "stableUrl": true,
+      "noRedirect": true,
+      "noStore": true,
+      "internalAssetsPinned": true
+    },
+    {
+      "path": "/sandbox-viewer",
+      "status": 200,
+      "stableUrl": true,
+      "noRedirect": true,
+      "noStore": true,
+      "internalAssetsPinned": true
+    },
+    {
+      "path": "/table/12",
+      "status": 200,
+      "stableUrl": true,
+      "noRedirect": true,
+      "noStore": true,
+      "internalAssetsPinned": true
+    },
+    {
+      "path": "/releases/<packageHash>/sandbox-viewer",
+      "status": 200,
+      "exactIndexBytes": true
+    },
+    {
+      "path": "/releases/<packageHash>/table/12",
+      "status": 200,
+      "exactIndexBytes": true
+    },
+    {
+      "path": "/releases/ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff/sandbox-viewer",
+      "status": 404,
+      "noFallback": true
+    },
+    {
+      "path": "/releases/<packageHash>/__missing__.js",
+      "status": 404,
+      "noFallback": true
+    },
+    {
+      "path": "/releases/<packageHash>/table/__missing__.js",
+      "status": 404,
+      "noFallback": true
+    }
+  ],
+  "imageProxy": {
+    "source": "https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/SVI/SVI_001_R_EN.png",
+    "status": 200,
+    "bytes": 1074221,
+    "type": "image/png",
+    "cors": true,
+    "cacheTtlSeconds": 86400,
+    "versionedConditionalStatus": 304,
+    "rejectedHostStatus": 400
+  },
+  "supportedSnapshotFormats": [
+    "base64",
+    "gz1",
+    "gz2"
+  ],
+  "capabilityPublication": {
+    "checkedAt": "2026-11-07T15:47:16.535Z",
+    "workerVersion": "20d90560-62fb-4d11-98bf-c3a9f0f92ed2",
+    "packageHash": "c0058c35aae0e94f8cd67e263433e710ff9e5dcc37932dbe988204408846d4f1",
+    "formats": [
+      "base64",
+      "gz1",
+      "gz2"
+    ],
+    "manifestLocations": {
+      "stable": true,
+      "versioned": true,
+      "embeddedZip": true
+    },
+    "previousDescriptorDecision": "packageHashChanged",
+    "previousDescriptorAction": "downloadManifestAssets",
+    "newDescriptorDecision": "notModified",
+    "newDescriptorAction": "reuseCachedPackage",
+    "old6ffPackageHash": "6ff0b913aece399611bd2182af6b21202189bdd12e3eaea7a356da9cfffecfb1",
+    "old6ffRetained": [
+      {
+        "path": "index.html",
+        "bytes": 1995,
+        "sha256": "edd0daedb88419cff59d412988dc567fde841d20eeae8ecbea5c30590d884d2b",
+        "unchanged": true
+      },
+      {
+        "path": "package-manifest.json",
+        "bytes": 2399,
+        "sha256": "2f417547d6c8d5eb38c66d9284cbfeef0804491378d352b3bd17e5fac0853c09",
+        "unchanged": true
+      },
+      {
+        "path": "simulator-package.6ff0b913aece399611bd2182af6b21202189bdd12e3eaea7a356da9cfffecfb1.zip",
+        "bytes": 2215212,
+        "sha256": "a2c0c3fb7bf4a5b82703bb958e6c5dfc89fca218fc675faceb4b3d34c78ddadc",
+        "unchanged": true
+      }
+    ],
+    "old6ffPinnedViewerUnchanged": true,
+    "archive": {
+      "bytes": 2215294,
+      "sha256": "951f22013d8235dde15db6b6a029fee6fe1b06d7c741b1be92d1f73b8fd7333f"
+    },
+    "runtimeChanges": [
+      {
+        "path": "index.html",
+        "beforeBytes": 1995,
+        "afterBytes": 2069
+      }
+    ],
+    "otherEightRuntimeFilesUnchanged": true,
+    "old6ffAllLocalReleaseBytesUnchanged": true,
+    "nativePolicyAcceptsArchive": true,
+    "buildAttestationPassed": true,
+    "fullTestSuite": {
+      "passed": 307,
+      "failed": 0,
+      "standaloneFinalizerAndAssetGuardPassed": true
+    }
+  }
+}

@@ -1382,7 +1382,7 @@ export const Energy = {
 } as const;
 
 Object.entries(Energy).forEach(([key, value]) => {
-  (global as any)[key] = value;
+  (globalThis as any)[key] = value;
 });
 
 declare global {

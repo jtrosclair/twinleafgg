@@ -1,7 +1,27 @@
+// Inline icons inherit the surrounding control's color and keep its icon sizing.
+.ptcg-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    fill: currentColor;
+    vertical-align: middle;
+    overflow: hidden;
+}
+
 /* Theme tokens shared by the custom Twinleaf surfaces and Angular Material. */
+:root {
+    /* Replace the artwork with an SVG or raster image; use cover/no-repeat for a full playmat. */
+    --ptcg-board-background-size: 80px auto;
+    --ptcg-board-background-repeat: repeat;
+    --ptcg-board-background-position: center;
+}
+
 :root,
 html[data-theme='dark'] {
     color-scheme: dark;
+    --ptcg-board-surface: #0c0c10;
+    --ptcg-board-background-image: url(~src/assets/board-background.svg);
     --ptcg-page: #10131e;
     --ptcg-app-surface: #1a202c;
     --ptcg-surface: #1b202b;
@@ -18,12 +38,31 @@ html[data-theme='dark'] {
     --ptcg-accent-contrast: #ffffff;
     --ptcg-danger: #c23838;
     --ptcg-overlay: rgba(0, 0, 0, 0.62);
-    --ptcg-board-surface: rgba(9, 22, 36, 0.7);
     --ptcg-hand-surface: #1c0033;
+
+    /* PrizeMap native palette for the card selectors. */
+    --prizemap-surface: #1a1a2e;
+    --prizemap-surface-muted: #12121f;
+    --prizemap-surface-raised: #252542;
+    --prizemap-border: #343454;
+    --prizemap-border-strong: #4a4a70;
+    --prizemap-text: #ffffff;
+    --prizemap-text-muted: #9797ab;
+    --prizemap-accent: #5b21b6;
+    --prizemap-accent-hover: #7e22ce;
+    --prizemap-accent-light: #8b5cf6;
+    --prizemap-accent-text: #c4b5fd;
+    --prizemap-on-accent: #ffffff;
+    --prizemap-selectable: #6ee7a8;
+    --prizemap-disabled: #45455e;
+    --prizemap-disabled-text: #c7c7d8;
+    --prizemap-overlay: rgba(0, 0, 0, 0.68);
 }
 
 html[data-theme='light'] {
     color-scheme: light;
+    --ptcg-board-surface: #f1eff5;
+    --ptcg-board-background-image: url(~src/assets/board-background-light.svg);
     --ptcg-page: #eef3f8;
     --ptcg-app-surface: #f7f9fc;
     --ptcg-surface: #ffffff;
@@ -40,8 +79,24 @@ html[data-theme='light'] {
     --ptcg-accent-contrast: #ffffff;
     --ptcg-danger: #b42318;
     --ptcg-overlay: rgba(15, 23, 42, 0.38);
-    --ptcg-board-surface: #e7eef7;
     --ptcg-hand-surface: #e6edf5;
+
+    --prizemap-surface: #ffffff;
+    --prizemap-surface-muted: #eeedf5;
+    --prizemap-surface-raised: #f0eef6;
+    --prizemap-border: #d2cedd;
+    --prizemap-border-strong: #b9b3c7;
+    --prizemap-text: #1c1728;
+    --prizemap-text-muted: #70677b;
+    --prizemap-accent: #5b21b6;
+    --prizemap-accent-hover: #6d28d9;
+    --prizemap-accent-light: #6d28d9;
+    --prizemap-accent-text: #5b21b6;
+    --prizemap-on-accent: #ffffff;
+    --prizemap-selectable: #087a3e;
+    --prizemap-disabled: #d8d4e1;
+    --prizemap-disabled-text: #514a60;
+    --prizemap-overlay: rgba(25, 20, 38, 0.56);
 }
 
 /* Ensure app-wide uppercase variant when desired */

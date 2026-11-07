@@ -2730,7 +2730,8 @@ export function CAN_PLAY_SUPPORTER_CARD(store: StoreLike, state: State, player: 
  * @param trainerCard The trainer card to validate
  * @returns true if the card can be played, false otherwise
  */
-export function CAN_PLAY_TRAINER_CARD(store: StoreLike, state: State, player: Player, trainerCard: TrainerCard): boolean {
+export function CAN_PLAY_TRAINER_CARD(store: StoreLike, state: State, player: Player, trainerCard: TrainerCard,
+  checkPlay?: () => boolean): boolean {
   try {
     // Only check during player's turn
     if (state.phase !== GamePhase.PLAYER_TURN || state.players[state.activePlayer].id !== player.id) {
@@ -2836,9 +2837,9 @@ export function CAN_PLAY_TRAINER_CARD(store: StoreLike, state: State, player: Pl
     if (trainerCard.trainerType === TrainerType.STADIUM) {
       return true; // Stadiums are playable unless already played one this turn (checked above)
     }
-    // For other trainer types, err on the side of caution
-    // We can't validate card-specific requirements without canPlay
-    return false;
+    // The owning Store can validate legacy cards against an isolated copy of
+    // the game. Never execute their effects against the live state for hints.
+    return checkPlay ? checkPlay() : false;
   } catch (error) {
     return false;
   }
@@ -2962,10 +2963,11 @@ export function CAN_PLAY_POKEMON_CARD(store: StoreLike, state: State, player: Pl
  * @param card The card to validate
  * @returns true if the card can be played, false otherwise
  */
-export function CAN_PLAY_CARD(store: StoreLike, state: State, player: Player, card: Card): boolean {
+export function CAN_PLAY_CARD(store: StoreLike, state: State, player: Player, card: Card,
+  checkTrainerPlay?: () => boolean): boolean {
   try {
     if (card instanceof TrainerCard) {
-      return CAN_PLAY_TRAINER_CARD(store, state, player, card);
+      return CAN_PLAY_TRAINER_CARD(store, state, player, card, checkTrainerPlay);
     } else if (card instanceof EnergyCard) {
       return CAN_PLAY_ENERGY_CARD(store, state, player, card);
     } else if (card instanceof PokemonCard) {

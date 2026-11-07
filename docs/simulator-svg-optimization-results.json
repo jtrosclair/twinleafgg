@@ -1,0 +1,996 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-11-07T04:47:12.078Z",
+  "status": "verified-and-deployed",
+  "description": "Conservative minification of official Pokemon TCG energy SVG geometry plus percent-encoded UTF-8 SVG packaging. Existing glyph contours, curve topology, palette, intrinsic dimensions and UI display sizes are retained; selected coordinate/color decimals are rounded at six or seven places.",
+  "scope": {
+    "sourceSvgFiles": 23,
+    "minifiedEnergyFiles": 20,
+    "unchangedSvgFiles": [
+      "assets/tl-open-beta.svg",
+      "assets/cardback.svg",
+      "assets/energy/fire.svg"
+    ],
+    "precisionCounts": {
+      "6": 11,
+      "7": 9
+    },
+    "curveSimplification": false,
+    "originNormalization": false,
+    "colorSpaceConversion": false,
+    "dependenciesAdded": false,
+    "renderingOrPhoneSpeedClaim": false,
+    "remoteCardArtwork": "Unchanged URLs, dimensions, lazy loading, async decoding and browser HTTP caching."
+  },
+  "releases": {
+    "before": {
+      "packageHash": "59166694d2fc5e5c2dcaeb9129a95c743ef82eb4b46ae339d25165f8add9661d",
+      "buildId": "37c7e5d9-a982-4e51-9737-7f4d7bc57085",
+      "builtAt": "2026-11-07T04:18:40.977Z"
+    },
+    "after": {
+      "packageHash": "3a9b5bff1a33c45712fcb97173d143fefa345068124a902e9380405a50999630",
+      "buildId": "ffa5adc2-db33-4945-8711-ce8679ce3244",
+      "builtAt": "2026-11-07T04:44:45.582Z",
+      "origin": "https://sim-static.prizemap.app",
+      "workerVersion": "24045294-23dd-4d9a-8c02-47d32b7cc236"
+    }
+  },
+  "measurements": {
+    "compression": {
+      "gzipLevel": 6,
+      "brotliQuality": 6,
+      "byteUnits": "Bytes; percentages use exact byte totals.",
+      "runtimeScope": "Every file in simulator-manifest.json assets; archive is separate.",
+      "aggregation": "Sum of separately compressed files, without HTTP headers.",
+      "exclusions": "Remote card artwork and network/protocol overhead are excluded. Sizes do not measure device loading or play performance."
+    },
+    "runtime": {
+      "filesBefore": 9,
+      "filesAfter": 9,
+      "raw": {
+        "before": 12571009,
+        "after": 12498045,
+        "saved": 72964,
+        "percentSmaller": 0.5804
+      },
+      "gzip6": {
+        "before": 2286252,
+        "after": 2260569,
+        "saved": 25683,
+        "percentSmaller": 1.1234
+      },
+      "brotli6": {
+        "before": 1548449,
+        "after": 1537917,
+        "saved": 10532,
+        "percentSmaller": 0.6802
+      }
+    },
+    "zipArchive": {
+      "before": 2257095,
+      "after": 2231049,
+      "saved": 26046,
+      "percentSmaller": 1.154,
+      "beforePath": "simulator-package.59166694d2fc5e5c2dcaeb9129a95c743ef82eb4b46ae339d25165f8add9661d.zip",
+      "afterPath": "simulator-package.3a9b5bff1a33c45712fcb97173d143fefa345068124a902e9380405a50999630.zip",
+      "beforeSha256": "4f37ce9e9ae6336eb09d8d493c7e758e6fc269dd63c2f1ab7eebbbc23aaf3f84",
+      "afterSha256": "3029229fcf015d526594c7eb76cf50c9918677d6b336f8b630b68eae4e5285a6"
+    },
+    "runtimeGroups": {
+      "bootstrap": {
+        "filesBefore": 1,
+        "filesAfter": 1,
+        "raw": {
+          "before": 840211,
+          "after": 767247,
+          "saved": 72964,
+          "percentSmaller": 8.684
+        },
+        "gzip6": {
+          "before": 259948,
+          "after": 234263,
+          "saved": 25685,
+          "percentSmaller": 9.8808
+        },
+        "brotli6": {
+          "before": 221234,
+          "after": 210701,
+          "saved": 10533,
+          "percentSmaller": 4.761
+        }
+      },
+      "main": {
+        "filesBefore": 1,
+        "filesAfter": 1,
+        "raw": {
+          "before": 11426628,
+          "after": 11426628,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "gzip6": {
+          "before": 1938815,
+          "after": 1938815,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "brotli6": {
+          "before": 1242333,
+          "after": 1242333,
+          "saved": 0,
+          "percentSmaller": 0
+        }
+      },
+      "other": {
+        "filesBefore": 4,
+        "filesAfter": 4,
+        "raw": {
+          "before": 195200,
+          "after": 195200,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "gzip6": {
+          "before": 64855,
+          "after": 64857,
+          "saved": -2,
+          "percentSmaller": -0.0031
+        },
+        "brotli6": {
+          "before": 63217,
+          "after": 63218,
+          "saved": -1,
+          "percentSmaller": -0.0016
+        }
+      },
+      "polyfills": {
+        "filesBefore": 1,
+        "filesAfter": 1,
+        "raw": {
+          "before": 37091,
+          "after": 37091,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "gzip6": {
+          "before": 13013,
+          "after": 13013,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "brotli6": {
+          "before": 12611,
+          "after": 12611,
+          "saved": 0,
+          "percentSmaller": 0
+        }
+      },
+      "runtime": {
+        "filesBefore": 1,
+        "filesAfter": 1,
+        "raw": {
+          "before": 1216,
+          "after": 1216,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "gzip6": {
+          "before": 696,
+          "after": 696,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "brotli6": {
+          "before": 660,
+          "after": 660,
+          "saved": 0,
+          "percentSmaller": 0
+        }
+      },
+      "styles": {
+        "filesBefore": 1,
+        "filesAfter": 1,
+        "raw": {
+          "before": 70663,
+          "after": 70663,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "gzip6": {
+          "before": 8925,
+          "after": 8925,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "brotli6": {
+          "before": 8394,
+          "after": 8394,
+          "saved": 0,
+          "percentSmaller": 0
+        }
+      }
+    },
+    "sourceArtwork": {
+      "scope": "All50 unique committed UI images; source gzip/Brotli are sums of independently compressed source image files, not package/bootstrap transfer bytes.",
+      "groups": {
+        "statusMarkers": {
+          "files": 6,
+          "changedFiles": 0,
+          "before": {
+            "raw": 62236,
+            "gzip6": 62379,
+            "brotli6": 62260
+          },
+          "after": {
+            "raw": 62236,
+            "gzip6": 62379,
+            "brotli6": 62260
+          },
+          "savings": {
+            "raw": {
+              "before": 62236,
+              "after": 62236,
+              "saved": 0,
+              "percentSmaller": 0
+            },
+            "gzip6": {
+              "before": 62379,
+              "after": 62379,
+              "saved": 0,
+              "percentSmaller": 0
+            },
+            "brotli6": {
+              "before": 62260,
+              "after": 62260,
+              "saved": 0,
+              "percentSmaller": 0
+            }
+          }
+        },
+        "foilMasks": {
+          "files": 5,
+          "changedFiles": 0,
+          "before": {
+            "raw": 43678,
+            "gzip6": 43061,
+            "brotli6": 43174
+          },
+          "after": {
+            "raw": 43678,
+            "gzip6": 43061,
+            "brotli6": 43174
+          },
+          "savings": {
+            "raw": {
+              "before": 43678,
+              "after": 43678,
+              "saved": 0,
+              "percentSmaller": 0
+            },
+            "gzip6": {
+              "before": 43061,
+              "after": 43061,
+              "saved": 0,
+              "percentSmaller": 0
+            },
+            "brotli6": {
+              "before": 43174,
+              "after": 43174,
+              "saved": 0,
+              "percentSmaller": 0
+            }
+          }
+        },
+        "cardBack": {
+          "files": 1,
+          "changedFiles": 0,
+          "before": {
+            "raw": 1200,
+            "gzip6": 659,
+            "brotli6": 639
+          },
+          "after": {
+            "raw": 1200,
+            "gzip6": 659,
+            "brotli6": 639
+          },
+          "savings": {
+            "raw": {
+              "before": 1200,
+              "after": 1200,
+              "saved": 0,
+              "percentSmaller": 0
+            },
+            "gzip6": {
+              "before": 659,
+              "after": 659,
+              "saved": 0,
+              "percentSmaller": 0
+            },
+            "brotli6": {
+              "before": 639,
+              "after": 639,
+              "saved": 0,
+              "percentSmaller": 0
+            }
+          }
+        },
+        "energySymbols": {
+          "files": 12,
+          "changedFiles": 12,
+          "before": {
+            "raw": 50564,
+            "gzip6": 16806,
+            "brotli6": 16385
+          },
+          "after": {
+            "raw": 24758,
+            "gzip6": 10716,
+            "brotli6": 10332
+          },
+          "savings": {
+            "raw": {
+              "before": 50564,
+              "after": 24758,
+              "saved": 25806,
+              "percentSmaller": 51.0363
+            },
+            "gzip6": {
+              "before": 16806,
+              "after": 10716,
+              "saved": 6090,
+              "percentSmaller": 36.2371
+            },
+            "brotli6": {
+              "before": 16385,
+              "after": 10332,
+              "saved": 6053,
+              "percentSmaller": 36.9423
+            }
+          }
+        },
+        "basicEnergyAttachments": {
+          "files": 9,
+          "changedFiles": 8,
+          "before": {
+            "raw": 44483,
+            "gzip6": 14447,
+            "brotli6": 14113
+          },
+          "after": {
+            "raw": 23721,
+            "gzip6": 9558,
+            "brotli6": 9264
+          },
+          "savings": {
+            "raw": {
+              "before": 44483,
+              "after": 23721,
+              "saved": 20762,
+              "percentSmaller": 46.674
+            },
+            "gzip6": {
+              "before": 14447,
+              "after": 9558,
+              "saved": 4889,
+              "percentSmaller": 33.8409
+            },
+            "brotli6": {
+              "before": 14113,
+              "after": 9264,
+              "saved": 4849,
+              "percentSmaller": 34.3584
+            }
+          }
+        },
+        "specialEnergyArtwork": {
+          "files": 12,
+          "changedFiles": 0,
+          "before": {
+            "raw": 50036,
+            "gzip6": 50312,
+            "brotli6": 50084
+          },
+          "after": {
+            "raw": 50036,
+            "gzip6": 50312,
+            "brotli6": 50084
+          },
+          "savings": {
+            "raw": {
+              "before": 50036,
+              "after": 50036,
+              "saved": 0,
+              "percentSmaller": 0
+            },
+            "gzip6": {
+              "before": 50312,
+              "after": 50312,
+              "saved": 0,
+              "percentSmaller": 0
+            },
+            "brotli6": {
+              "before": 50084,
+              "after": 50084,
+              "saved": 0,
+              "percentSmaller": 0
+            }
+          }
+        },
+        "prizeMapLogo": {
+          "files": 1,
+          "changedFiles": 0,
+          "before": {
+            "raw": 6656,
+            "gzip6": 6679,
+            "brotli6": 6660
+          },
+          "after": {
+            "raw": 6656,
+            "gzip6": 6679,
+            "brotli6": 6660
+          },
+          "savings": {
+            "raw": {
+              "before": 6656,
+              "after": 6656,
+              "saved": 0,
+              "percentSmaller": 0
+            },
+            "gzip6": {
+              "before": 6679,
+              "after": 6679,
+              "saved": 0,
+              "percentSmaller": 0
+            },
+            "brotli6": {
+              "before": 6660,
+              "after": 6660,
+              "saved": 0,
+              "percentSmaller": 0
+            }
+          }
+        },
+        "twinleafWordmark": {
+          "files": 1,
+          "changedFiles": 0,
+          "before": {
+            "raw": 10946,
+            "gzip6": 4859,
+            "brotli6": 4820
+          },
+          "after": {
+            "raw": 10946,
+            "gzip6": 4859,
+            "brotli6": 4820
+          },
+          "savings": {
+            "raw": {
+              "before": 10946,
+              "after": 10946,
+              "saved": 0,
+              "percentSmaller": 0
+            },
+            "gzip6": {
+              "before": 4859,
+              "after": 4859,
+              "saved": 0,
+              "percentSmaller": 0
+            },
+            "brotli6": {
+              "before": 4820,
+              "after": 4820,
+              "saved": 0,
+              "percentSmaller": 0
+            }
+          }
+        },
+        "attachedToolArtwork": {
+          "files": 2,
+          "changedFiles": 0,
+          "before": {
+            "raw": 4474,
+            "gzip6": 4520,
+            "brotli6": 4482
+          },
+          "after": {
+            "raw": 4474,
+            "gzip6": 4520,
+            "brotli6": 4482
+          },
+          "savings": {
+            "raw": {
+              "before": 4474,
+              "after": 4474,
+              "saved": 0,
+              "percentSmaller": 0
+            },
+            "gzip6": {
+              "before": 4520,
+              "after": 4520,
+              "saved": 0,
+              "percentSmaller": 0
+            },
+            "brotli6": {
+              "before": 4482,
+              "after": 4482,
+              "saved": 0,
+              "percentSmaller": 0
+            }
+          }
+        },
+        "trainerTypeSprite": {
+          "files": 1,
+          "changedFiles": 0,
+          "before": {
+            "raw": 3320,
+            "gzip6": 3343,
+            "brotli6": 3324
+          },
+          "after": {
+            "raw": 3320,
+            "gzip6": 3343,
+            "brotli6": 3324
+          },
+          "savings": {
+            "raw": {
+              "before": 3320,
+              "after": 3320,
+              "saved": 0,
+              "percentSmaller": 0
+            },
+            "gzip6": {
+              "before": 3343,
+              "after": 3343,
+              "saved": 0,
+              "percentSmaller": 0
+            },
+            "brotli6": {
+              "before": 3324,
+              "after": 3324,
+              "saved": 0,
+              "percentSmaller": 0
+            }
+          }
+        }
+      },
+      "totals": {
+        "files": 50,
+        "changedFiles": 20,
+        "before": {
+          "raw": 277593,
+          "gzip6": 207065,
+          "brotli6": 205941
+        },
+        "after": {
+          "raw": 231025,
+          "gzip6": 196086,
+          "brotli6": 195039
+        },
+        "savings": {
+          "raw": {
+            "before": 277593,
+            "after": 231025,
+            "saved": 46568,
+            "percentSmaller": 16.7756
+          },
+          "gzip6": {
+            "before": 207065,
+            "after": 196086,
+            "saved": 10979,
+            "percentSmaller": 5.3022
+          },
+          "brotli6": {
+            "before": 205941,
+            "after": 195039,
+            "saved": 10902,
+            "percentSmaller": 5.2937
+          }
+        }
+      }
+    },
+    "svgSource": {
+      "files": 23,
+      "changedFiles": 20,
+      "before": 107193,
+      "after": 60625,
+      "saved": 46568,
+      "percentSmaller": 43.4431
+    },
+    "minificationOnlyExperiment": {
+      "scope": "Same baseline presentation bootstrap with percent-encoded SVG in both arms; excludes the separate base64-to-UTF8 encoding gain. Counterfactual recompression, not the final build inventory.",
+      "before": {
+        "raw": 820583,
+        "gzip6": 243701,
+        "brotli6": 211803
+      },
+      "after": {
+        "raw": 767247,
+        "gzip6": 234263,
+        "brotli6": 210701
+      },
+      "savings": {
+        "raw": {
+          "before": 820583,
+          "after": 767247,
+          "saved": 53336,
+          "percentSmaller": 6.4998
+        },
+        "gzip6": {
+          "before": 243701,
+          "after": 234263,
+          "saved": 9438,
+          "percentSmaller": 3.8728
+        },
+        "brotli6": {
+          "before": 211803,
+          "after": 210701,
+          "saved": 1102,
+          "percentSmaller": 0.5203
+        }
+      }
+    },
+    "attribution": "Actual release deltas combine SVG syntax/numeric minification and SVG data-URL encoding. The minification-only counterfactual is listed separately; its values can differ slightly from a finalized rebuilt inventory."
+  },
+  "verification": {
+    "artwork": {
+      "status": "passed",
+      "primaryRenderComparisons": 143,
+      "primaryExactRgba": 143,
+      "primaryActualSizeComparisons": 65,
+      "primaryExactActualSize": 65,
+      "originalAttachmentCanvasComparisons": 9,
+      "independentRenderComparisons": 82,
+      "independentPixels": 30798475,
+      "totalRenderComparisons": 225,
+      "independentMaxCompositedChannelError": 0,
+      "independentMaxAlphaError": 0,
+      "independentHiddenRgbDifferentPixels": 0,
+      "paths": 60,
+      "closedSubpaths": 74,
+      "curves": 1069,
+      "canonicalTopologyUnchanged": true,
+      "intrinsicDimensionsUnchanged": true,
+      "primaryMaxCoordinateError": 8.945311833485903e-7,
+      "independentMaxCoordinateError": 4.999999987376214e-7,
+      "independentMaxNumericAttributeError": 4.81857298950672e-7
+    },
+    "packageBudget": {
+      "passed": true,
+      "budgets": [
+        {
+          "name": "gzipRuntimeBytes",
+          "actual": 2260569,
+          "maximum": 4194304,
+          "passed": true
+        },
+        {
+          "name": "archiveBytes",
+          "actual": 2231049,
+          "maximum": 5242880,
+          "passed": true
+        },
+        {
+          "name": "individualFileBytes",
+          "actual": 11426628,
+          "maximum": 20971520,
+          "passed": true
+        }
+      ]
+    },
+    "automatedSuite": {
+      "status": "targeted-checks-passed",
+      "frontendServiceSpecs": 111,
+      "assetAuditAndStaticResourceTests": 22,
+      "assetGuard": "passed, including minification evidence mutation tests",
+      "packageTests": 9,
+      "finalizer": "passed",
+      "productionBuild": "passed",
+      "fullNpmTestRerun": false,
+      "gameplayValidation": "No gameplay code changed: independent audit confirmed the baseline fingerprint of all 10295 engine TypeScript files, executable catalogue and all 13483 image references."
+    },
+    "browser": {
+      "status": "passed",
+      "localPuzzles": [
+        {
+          "name": "Trapped in the Phantom Maze",
+          "boardPainted": true,
+          "svgImages": 5,
+          "loadedSvgImages": 5,
+          "unsafeImages": 0,
+          "loadedScanDimensions": [
+            "736x1024"
+          ],
+          "allScansLazyAsync": true
+        },
+        {
+          "name": "Explosive Hand",
+          "boardPainted": true,
+          "svgImages": 3,
+          "loadedSvgImages": 3,
+          "unsafeImages": 0,
+          "loadedScanDimensions": [
+            "736x1024"
+          ],
+          "allScansLazyAsync": true
+        },
+        {
+          "name": "Breaking Through the Wall",
+          "boardPainted": true,
+          "svgImages": 8,
+          "loadedSvgImages": 8,
+          "unsafeImages": 0,
+          "loadedScanDimensions": [
+            "736x1024"
+          ],
+          "allScansLazyAsync": true
+        },
+        {
+          "name": "Something's Fishy",
+          "boardPainted": true,
+          "svgImages": 1,
+          "loadedSvgImages": 1,
+          "unsafeImages": 0,
+          "loadedScanDimensions": [
+            "736x1024"
+          ],
+          "allScansLazyAsync": true
+        },
+        {
+          "name": "Deck out with Dengo",
+          "boardPainted": true,
+          "svgImages": 4,
+          "loadedSvgImages": 4,
+          "unsafeImages": 0,
+          "loadedScanDimensions": [
+            "736x1024"
+          ],
+          "allScansLazyAsync": true
+        }
+      ],
+      "inlineSvg": [
+        {
+          "display": [
+            18,
+            18
+          ],
+          "loaded": true,
+          "natural": [
+            100,
+            100
+          ],
+          "svgUtf8": true
+        }
+      ],
+      "loadingLogo": [
+        {
+          "display": [
+            93.015625,
+            16
+          ],
+          "loaded": true,
+          "natural": [
+            4738,
+            815
+          ],
+          "svgUtf8": true
+        }
+      ],
+      "live": {
+        "check": {
+          "base": "https://sim-static.prizemap.app/releases/3a9b5bff1a33c45712fcb97173d143fefa345068124a902e9380405a50999630/",
+          "bootstrap": [
+            "https://sim-static.prizemap.app/releases/3a9b5bff1a33c45712fcb97173d143fefa345068124a902e9380405a50999630/simulator-static.28618afbc4a3433de5c4.js"
+          ],
+          "hashPrefix": "#gz2.",
+          "path": "/sandbox-viewer",
+          "scanDimensions": [
+            "736x1024"
+          ],
+          "svgImages": [
+            {
+              "decoding": "async",
+              "loaded": true,
+              "loading": "lazy",
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "decoding": "async",
+              "loaded": true,
+              "loading": "lazy",
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "decoding": "async",
+              "loaded": true,
+              "loading": "lazy",
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "decoding": "async",
+              "loaded": true,
+              "loading": "lazy",
+              "natural": [
+                138,
+                192
+              ]
+            }
+          ],
+          "unsafeImages": 0
+        },
+        "logs": []
+      },
+      "physicalMobileWebViewTested": false
+    },
+    "delivery": {
+      "status": "passed",
+      "checkedAt": "2026-11-07T04:46:38.450Z",
+      "origin": "https://sim-static.prizemap.app",
+      "manifest": {
+        "cold": "downloadManifestAssets",
+        "warm": "reuseCachedPackage",
+        "conditionalStatus": 304,
+        "inventoryValidated": true
+      },
+      "verifiedAssets": 9,
+      "archive": {
+        "path": "simulator-package.3a9b5bff1a33c45712fcb97173d143fefa345068124a902e9380405a50999630.zip",
+        "bytes": 2231049,
+        "integrity": true,
+        "immutable": true,
+        "cors": true
+      },
+      "routes": [
+        {
+          "path": "/",
+          "status": 200,
+          "stableUrl": true,
+          "noRedirect": true,
+          "noStore": true,
+          "internalAssetsPinned": true
+        },
+        {
+          "path": "/index.html",
+          "status": 200,
+          "stableUrl": true,
+          "noRedirect": true,
+          "noStore": true,
+          "internalAssetsPinned": true
+        },
+        {
+          "path": "/sandbox-viewer",
+          "status": 200,
+          "stableUrl": true,
+          "noRedirect": true,
+          "noStore": true,
+          "internalAssetsPinned": true
+        },
+        {
+          "path": "/table/12",
+          "status": 200,
+          "stableUrl": true,
+          "noRedirect": true,
+          "noStore": true,
+          "internalAssetsPinned": true
+        },
+        {
+          "path": "/releases/<packageHash>/sandbox-viewer",
+          "status": 200,
+          "exactIndexBytes": true
+        },
+        {
+          "path": "/releases/<packageHash>/table/12",
+          "status": 200,
+          "exactIndexBytes": true
+        },
+        {
+          "path": "/releases/ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff/sandbox-viewer",
+          "status": 404,
+          "noFallback": true
+        },
+        {
+          "path": "/releases/<packageHash>/__missing__.js",
+          "status": 404,
+          "noFallback": true
+        },
+        {
+          "path": "/releases/<packageHash>/table/__missing__.js",
+          "status": 404,
+          "noFallback": true
+        }
+      ],
+      "previousRelease": {
+        "packageHash": "59166694d2fc5e5c2dcaeb9129a95c743ef82eb4b46ae339d25165f8add9661d",
+        "verifiedAssets": 9,
+        "archiveVerified": true,
+        "immutableFilesUnchanged": true
+      },
+      "sourceAttestationHash": "2d54c51dade8e1022d4dc55e9cecbcb1630efbd9c63cd4da9cebf8a7ed92d642"
+    },
+    "artifact": {
+      "ok": true,
+      "packageHash": "3a9b5bff1a33c45712fcb97173d143fefa345068124a902e9380405a50999630",
+      "verifiedManifestAssets": 9,
+      "embeddedImageLookups": 105,
+      "legacyAliases": 53,
+      "verifiedSvgAssets": 23,
+      "verifiedSvgPaths": [
+        "assets/cardback.svg",
+        "assets/tl-open-beta.svg",
+        "assets/energy-icons/darkness.svg",
+        "assets/energy-icons/fairy.svg",
+        "assets/energy-icons/fighting.svg",
+        "assets/energy-icons/fire.svg",
+        "assets/energy-icons/grass.svg",
+        "assets/energy-icons/lightning.svg",
+        "assets/energy-icons/metal.svg",
+        "assets/energy-icons/psychic.svg",
+        "assets/energy-icons/colorless.svg",
+        "assets/energy-icons/water.svg",
+        "assets/energy-icons/dragon.svg",
+        "assets/energy-icons/energyless.svg",
+        "assets/energy/dark.svg",
+        "assets/energy/fairy.svg",
+        "assets/energy/fighting.svg",
+        "assets/energy/fire.svg",
+        "assets/energy/grass.svg",
+        "assets/energy/lightning.svg",
+        "assets/energy/metal.svg",
+        "assets/energy/psychic.svg",
+        "assets/energy/water.svg"
+      ],
+      "gameplaySourceFilesUnchanged": 10295,
+      "cardLibraryHashUnchanged": "f975f8dce2e2c768a42d7b7df6b61b9bbe6149521e6da274762d184a70c0166b",
+      "catalogueHashUnchanged": "3007151948194fa669da6771cdd269de8c7c1b61644bfdf407cf370ebd26b25c",
+      "exactImageReferencesUnchanged": 13483,
+      "zipBytes": 2231049,
+      "zipSha256": "3029229fcf015d526594c7eb76cf50c9918677d6b336f8b630b68eae4e5285a6",
+      "verifiedArchiveAssets": 9,
+      "zipEntries": 10,
+      "svgEncoding": "strict-percent-encoded-UTF8",
+      "uniqueSvgValues": 23,
+      "allOtherImagesRemainBase64": true,
+      "svgRenderEvidence": {
+        "baselinePackageHash": "59166694d2fc5e5c2dcaeb9129a95c743ef82eb4b46ae339d25165f8add9661d",
+        "assets": 23,
+        "renderPairs": 82,
+        "pixels": 30798475,
+        "maxCompositedChannelError": 0,
+        "maxAlphaError": 0,
+        "allEvidenceSourceHashesMatch": true
+      },
+      "svgGeometryEvidence": {
+        "paths": 60,
+        "closedSubpaths": 74,
+        "curves": 1069,
+        "maxAbsoluteCoordinateError": 4.999999987376214e-7,
+        "maxNumericAttributeError": 4.81857298950672e-7
+      }
+    }
+  },
+  "evidence": {
+    "artworkMinification": "docs/simulator-svg-minification-results.json",
+    "independentRenders": "docs/simulator-svg-minification-renders.json",
+    "independentGeometry": "docs/simulator-svg-minification-geometry.json",
+    "beforePackageReport": "/tmp/twinleaf-svg-minify-before/simulator-bundle-results.json",
+    "afterPackageReport": "docs/simulator-bundle-results.json",
+    "assetGuard": "ptcg-play/scripts/optimize-ui-assets.cjs",
+    "assetReferenceAudit": "ptcg-play/scripts/audit-simulator-assets.cjs",
+    "sourceBackup": "/tmp/twinleaf-svg-minify-before",
+    "perFileInputAndOutputSha256": "docs/simulator-svg-minification-results.json#files",
+    "finalArtifactVerification": "docs/simulator-svg-minification-artifact-verification.json",
+    "energyContribution": "docs/simulator-svg-energy-contribution.json",
+    "delivery": "docs/simulator-delivery-results.json",
+    "browser": "docs/simulator-svg-minification-browser.json"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "ok": true,
+  "verifiedAt": "2026-11-06T14:33:16.404Z",
+  "origin": "https://sim-static.prizemap.app",
+  "packageHash": "acdf50430073702fa00ba7dc3acf0deb6e7a801bee5ffb5b12b430c28dd37105",
+  "transport": "iframeEvent host bridge",
+  "win": {
+    "message": "GameOver",
+    "winner": "player1",
+    "background": "rgba(9, 22, 36, 0.7)",
+    "boardOpacity": "0",
+    "complete": true,
+    "inert": true,
+    "modalCount": 0,
+    "release": "/releases/acdf50430073702fa00ba7dc3acf0deb6e7a801bee5ffb5b12b430c28dd37105/",
+    "transition": "0.5s"
+  },
+  "loss": {
+    "message": "GameOver",
+    "winner": "player2",
+    "payloadOverride": {
+      "mustLose": true
+    },
+    "background": "rgba(9, 22, 36, 0.7)",
+    "boardOpacity": "0",
+    "complete": true,
+    "inert": true,
+    "modalCount": 0
+  },
+  "turnEnd": {
+    "message": "TurnEnd",
+    "background": "rgba(9, 22, 36, 0.7)",
+    "boardOpacity": "0",
+    "complete": true,
+    "inert": true,
+    "modalCount": 0
+  },
+  "hostUndo": {
+    "message": "UndoDetected",
+    "boardOpacity": "1",
+    "complete": false,
+    "inert": false,
+    "modalCount": 0
+  },
+  "serviceSpecsPassed": 68
+}

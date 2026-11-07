@@ -12,7 +12,7 @@
         [dndSortableRender]="context"
         #render="dndSortableRender"
         [dragSource]="render.source" [noHTML5Preview]="true"
-        [ptcgCardPlaceholder]="render.isDragging$"
+        [placeholder]="render.isDragging$ | async"
         [card]="context.data.card"
         (click)="showCardPopup(context)">
       </ptcg-card>
@@ -35,7 +35,7 @@
         [dndSortableRender]="context"
         #render="dndSortableRender"
         [dragSource]="render.source" [noHTML5Preview]="true"
-        [ptcgCardPlaceholder]="render.isDragging$"
+        [placeholder]="render.isDragging$ | async"
         [card]="context.data.card"
         (click)="showCardPopup(context)">
       </ptcg-card>
@@ -52,12 +52,11 @@
   <ptcg-cards-container [keepInitialSize]="false">
     <dnd-sortable-list [spec]="topSortable.spec" [children]="topSortable.tempList" [listId]="topListId">
       <ng-template dndSortableTemplate let-context>
-        <ptcg-card [ngClass]="{
+        <ptcg-card [cardback]="topCardbackMap[context.data.index]" [ngClass]="{
     'unavailable': !filterMap[context.data.card.fullName],
-    'cardback': topCardbackMap[context.data.index],
     'selected': isCardSelected(context.data.card)
   }" [dndSortableRender]="context" #render="dndSortableRender" [dragSource]="render.source" [noHTML5Preview]="true"
-          [ptcgCardPlaceholder]="render.isDragging$" [card]="context.data.card" [showDetailButtons]="true"
+          [placeholder]="render.isDragging$ | async" [card]="context.data.card" [showDetailButtons]="true"
           (click)="toggleCardSelection(context.data.card)" (mouseenter)="context.data.showButtons = true"
           (mouseleave)="context.data.showButtons = false">
           <button mat-mini-fab color="primary" *ngIf="context.data.showButtons && 
@@ -66,7 +65,7 @@
          !topCardbackMap[context.data.index] && 
          !(promptValue?.options?.isSecret)" class="inspect-button"
             (click)="showCardInfo(context); $event.stopPropagation()">
-            <mat-icon>info_outline</mat-icon>
+            <svg class="ptcg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11 17h2v-6h-2zm1-15a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zM11 9h2V7h-2z"></path></svg>
           </button>
         </ptcg-card>
 
@@ -81,7 +80,7 @@
 <div *ngIf="!noBottomPane" class="selected-cards" [ngClass]="{'setup-game': isSetupGame, 'compact': !isSetupGame}">
   <div class="card-slot" *ngFor="let i of getSlotArray()">
     <ptcg-card *ngIf="selectedCards[i]" class="card-slot" [card]="selectedCards[i]"
-      [ngClass]="{'cardback': bottomCardbackMap[selectedCards[i].originalIndex]}"
+      [cardback]="bottomCardbackMap[selectedCards[i].originalIndex]"
       [isSecret]="promptValue?.options?.isSecret" (click)="toggleCardSelection(selectedCards[i])">
     </ptcg-card>
   </div>

@@ -9,7 +9,6 @@ import { CardType } from 'ptcg-server';
 export class EnergyComponent {
 
   public typeClass = 'energyless';
-  public archetypeClass = 'energyless';
 
   @Input() set type(value: CardType) {
     switch (value) {
@@ -48,7 +47,6 @@ export class EnergyComponent {
         break;
       default:
         this.typeClass = 'energyless';
-        this.archetypeClass = 'energyless';
     }
   }
 

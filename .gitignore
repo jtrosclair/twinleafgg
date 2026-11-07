@@ -35,6 +35,23 @@ Thumbs.db
 .vscode
 
 *.md
+!docs/client-simulator-integration.md
+!docs/simulator-cache-contract.md
+!docs/simulator-cloudflare.md
+
+# Regenerated from the executable library before every client build.
+ptcg-play/src/assets/simulator/
+ptcg-play/src/app/client-library-version.ts
+ptcg-play/src/simulator-static.js
+ptcg-play/dist/
+ptcg-play/cloudflare-public/
+ptcg-play/.simulator-build.json
+cloudflare/.wrangler/
+ptcg-server/browser/
+ptcg-server/browser-esm/
+ptcg-server/.client-test/
+ptcg-server/.client-card-regression/
+tools/.local-prizemap-puzzle.json
 
 # Python
 /__pycache__
@@ -67,3 +84,10 @@ ptcg-server/generate-implemented-card-ids-json.js
 venv/
 __pycache__/
 *.pyc
+
+# Downloaded public puzzle fixtures and playthrough evidence.
+tools/.puzzle-playthrough/
+
+# Retained public regression fixture (not included in the simulator package).
+!tools/fixtures/deck-out-with-dengo.snapshot.json.gz
+!tools/fixtures/phantom-maze.snapshot.json.gz

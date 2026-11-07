@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-11-06T18:09:37.857124+00:00",
+  "origin": "https://sim-static.prizemap.app",
+  "packageHash": "5ef1a233e326b34f5f1489a9f6259b3765787d64854152f26a4bb147d1a4ae8e",
+  "buildId": "1d6f29a4-e6a2-45b8-818d-05bee195abe5",
+  "contract": {
+    "hostMessage": {
+      "type": "ResetGame",
+      "data": {}
+    },
+    "directFunction": "window.PrizeMapSimulator.reset()",
+    "baseline": "Canonical state emitted by the first StateUpdate after successful puzzle load; retained across moves, undo and host state pushes. Replaced only by another successfully loaded puzzle.",
+    "notifications": [
+      "UndoDetected",
+      "StateUpdate"
+    ],
+    "visibleResetButton": false,
+    "reloadsPage": false,
+    "preservesUrl": true,
+    "resetScope": "Restores initial card order, IDs, damage, markers, turn and win conditions. Clears simulator history, pending prompt continuations, selection, minimized prompt state and open card dialogs. Re-enables board after a completed attempt. Host owns its own undo history."
+  },
+  "localProductionBrowser": {
+    "method": "CUA through a temporary local test-only host overlay exposing message, document-message and direct-function controls; these controls are not part of the production app. Played Scratch to win twice, with reset between attempts.",
+    "message": {
+      "events": [
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate"
+      ],
+      "matchesInitial": "true",
+      "stateUpdates": "3"
+    },
+    "dialog": {
+      "events": [
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate"
+      ],
+      "matchesInitial": "true",
+      "modalCount": 0
+    },
+    "finished": {
+      "complete": true,
+      "events": [
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate",
+        "StateUpdate",
+        "GameOver"
+      ],
+      "inert": true,
+      "matchesInitial": "false"
+    },
+    "afterWin": {
+      "boardOpacity": "1",
+      "complete": false,
+      "events": [
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate",
+        "StateUpdate",
+        "GameOver",
+        "UndoDetected",
+        "StateUpdate"
+      ],
+      "inert": false,
+      "matchesInitial": "true"
+    },
+    "document": {
+      "events": [
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate",
+        "StateUpdate",
+        "GameOver",
+        "UndoDetected",
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate"
+      ],
+      "matchesInitial": "true",
+      "stateUpdates": "7"
+    },
+    "replayed": {
+      "events": [
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate",
+        "StateUpdate",
+        "GameOver",
+        "UndoDetected",
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate",
+        "StateUpdate",
+        "GameOver"
+      ],
+      "gameOverCount": 2
+    },
+    "urlUnchanged": true
+  },
+  "publicBrowser": {
+    "method": "CUA through an external iframe host against the deployed production simulator. Push a modified snapshot then send ResetGame; compare emitted state string with original first StateUpdate.",
+    "initial": {
+      "preloads": 0,
+      "release": "/releases/5ef1a233e326b34f5f1489a9f6259b3765787d64854152f26a4bb147d1a4ae8e/",
+      "resetButtons": 0
+    },
+    "result": {
+      "events": [
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate",
+        "UndoDetected",
+        "StateUpdate"
+      ],
+      "matchesInitial": "true",
+      "stateUpdates": "3"
+    }
+  },
+  "verification": {
+    "runtimeSpecs": 15,
+    "cardRegressionSpecs": 44,
+    "frontendSpecs": 81,
+    "nodePackagingAndCacheSpecs": 80,
+    "allTestsPassed": true,
+    "standaloneFinalizerPassed": true,
+    "angularTemplateTypecheckPassed": true,
+    "productionBuildPassed": true,
+    "deliveryPassed": true,
+    "deliveryReport": "simulator-delivery-results.json"
+  }
+}

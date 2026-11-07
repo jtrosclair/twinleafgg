@@ -1,44 +1,18 @@
 import { Component, HostBinding, Input, OnChanges } from '@angular/core';
-import { Player, Card, CardList, CardTarget, PlayerType, SlotType } from 'ptcg-server';
-import { SortableSpec, DraggedItem } from '@ng-dnd/sortable';
+import { Player, Card, CardList, CardTarget, GamePhase, PlayerType, SlotType } from 'ptcg-server';
+import { SortableSpec } from '@ng-dnd/sortable';
 
 import { CardsBaseService } from '../../shared/cards/cards-base.service';
 import { HandItem, HandCardType } from './hand-item.interface';
 import { LocalGameState } from '../../shared/session/session.interface';
 import { GameService } from '../../api/services/game.service';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import { buildHandStacks, HandStack } from './hand-layout';
 
 @Component({
   selector: 'ptcg-hand',
   templateUrl: './hand.component.html',
   styleUrls: ['./hand.component.scss'],
-  template: `
-    <div class="ptcg-hand" [class.opponent]="isOpponent">
-      <div class="ptcg-hand-container">
-        <dnd-sortable-list>
-          <ptcg-card 
-            *ngFor="let card of cards"
-            [card]="card"
-            [class.dragging]="isDragging(card)"
-            (dragstart)="onDragStart(card)"
-            (dragend)="onDragEnd(card)">
-          </ptcg-card>
-        </dnd-sortable-list>
-      </div>
-    </div>
-  `,
-  animations: [
-    trigger('cardDrag', [
-      state('dragging', style({
-        position: 'fixed',
-        zIndex: 1000,
-        pointerEvents: 'none',
-        transform: 'rotate(5deg) scale(1.05)'
-      })),
-      transition('* => dragging', animate('100ms ease-out')),
-      transition('dragging => *', animate('150ms ease-in'))
-    ])
-  ]
+
 })
 export class HandComponent implements OnChanges {
 
@@ -48,17 +22,18 @@ export class HandComponent implements OnChanges {
   @Input() gameState: LocalGameState;
   @Input() clientId: number;
   @Input() isOpponent: boolean = false;
-  @Input() isAdmin: boolean = false;
-  @Input() isTO: boolean = false;
 
   public cards: Card[] = [];
   public isFaceDown: boolean;
   public isDeleted: boolean;
   public handSpec: SortableSpec<HandItem>;
   public list: HandItem[] = [];
-  public tempList: HandItem[] = [];
-  private draggingCard: Card | null = null;
+  public stacks: HandStack[] = [];
   private isOwner: boolean;
+  private dragging = false;
+  private suppressClickUntil = 0;
+  private touchStart?: { x: number; y: number };
+  private touchMode?: 'scroll' | 'drag';
 
   constructor(
     private cardsBaseService: CardsBaseService,
@@ -66,46 +41,25 @@ export class HandComponent implements OnChanges {
   ) {
     this.handSpec = {
       type: HandCardType,
-      trackBy: item => item.index,
-      hover: item => {
-        this.tempList = this.move(item);
-      },
-      drop: item => {
-        this.tempList = this.move(item);
-        this.list = this.tempList;
-        this.dispatchAction(this.list);
-      },
+      trackBy: item => (item as HandStack).key || item.index,
+      // The hand is automatically sorted. Dragging is only for playing cards.
+      hover: () => {},
+      drop: () => {},
+      canDrop: () => false,
       canDrag: () => {
         const isMinimized = this.gameState && this.gameState.promptMinimized;
-        return this.isOwner && !this.isDeleted && !isMinimized;
+        return this.isOwner && !this.isFaceDown && !this.isDeleted && !isMinimized
+          && !this.gameState?.turnComplete;
       },
+      beginDrag: () => { this.dragging = true; },
       endDrag: () => {
-        this.tempList = this.list;
+        this.dragging = false;
+        this.suppressClickUntil = Date.now() + 350;
       }
     };
   }
 
-  isDragging(card: Card): boolean {
-    return this.draggingCard === card;
-  }
-
-  onDragStart(card: Card): void {
-    this.draggingCard = card;
-  }
-
-  onDragEnd(card: Card): void {
-    this.draggingCard = null;
-  }
-
-  @HostBinding('style.--card-margin')
-  get cardmargin(): string {
-    return this.calculateContainerMargin();
-  }
-
-  @HostBinding('class.small-hand')
-  get isSmallHand(): boolean {
-    return this.cards.length <= 7;
-  }
+  @HostBinding('class.opponent') get opponent(): boolean { return this.isOpponent; }
 
   ngOnChanges() {
     if (this.gameState) {
@@ -117,78 +71,87 @@ export class HandComponent implements OnChanges {
       this.isOwner = this.player.id === this.clientId;
       this.cards = hand.cards;
       this.list = this.buildHandList(hand);
-      this.tempList = this.list;
-
-      // Show hands for admins only when they are observers
-      const isPlaying = this.gameState.state.players.some(p => p.id === this.clientId);
-      const isObserver = !isPlaying;
-      this.isFaceDown = hand.isSecret || (!hand.isPublic && !this.isOwner && (!isObserver || !this.isAdmin || !this.isTO));
+      this.isFaceDown = hand.isSecret || (!hand.isPublic && !this.isOwner);
+      const state = this.gameState?.state;
+      const canPlay = this.isOwner && !this.isDeleted && !this.isFaceDown
+        && !this.gameState?.turnComplete && !this.gameState?.promptMinimized
+        && state?.phase === GamePhase.PLAYER_TURN
+        && state.players[state.activePlayer]?.id === this.clientId
+        && !state.prompts.some(prompt => prompt.result === undefined);
+      this.stacks = buildHandStacks(this.list, canPlay ? this.player.playableCardIds || [] : [], this.isFaceDown);
     } else {
       this.cards = [];
       this.list = [];
-      this.tempList = [];
+      this.stacks = [];
+      this.isOwner = false;
+      this.isFaceDown = true;
     }
   }
 
   public showCardInfo(card: Card) {
     const facedown = this.isFaceDown;
-    const allowReveal = facedown && !!this.gameState.replay;
-    this.cardsBaseService.showCardInfo({ card, allowReveal, facedown });
+    this.cardsBaseService.showCardInfo({ card, facedown, cardList: this.player?.hand });
   }
 
   public onCardClick(card: Card, index: number) {
+    if (this.dragging || Date.now() < this.suppressClickUntil) { return; }
     if (!this.isOwner || this.isDeleted) {
       return this.showCardInfo(card);
     }
 
-    const player = PlayerType.BOTTOM_PLAYER;
-    const slot = SlotType.HAND;
-    const target: CardTarget = { player, slot, index };
-
+    const gameId = this.gameState.gameId;
     const options = { enableAbility: { useFromHand: true }, enableAttack: false };
-    this.cardsBaseService.showCardInfo({ card, options })
+    this.cardsBaseService.showCardInfo({ card, options, facedown: this.isFaceDown, cardList: this.player.hand })
       .then(result => {
-        if (!result) {
+        if (!result || this.gameState.gameId !== gameId) {
           return;
         }
-        const gameId = this.gameState.gameId;
-
         if (result.ability) {
+          const selected = result.card || card;
+          const currentIndex = this.player.hand.cards.findIndex(item => item.id === selected.id);
+          if (currentIndex === -1) { return; }
+          const target: CardTarget = { player: PlayerType.BOTTOM_PLAYER, slot: SlotType.HAND, index: currentIndex };
           this.gameService.ability(gameId, result.ability, target);
         }
       });
   }
 
-  private dispatchAction(list: HandItem[]) {
-    if (!this.gameState) {
-      return;
-    }
-    const order = list.map(i => i.index);
-    this.gameService.reorderHandAction(this.gameState.gameId, order);
+  public onTouchStart(event: TouchEvent): void {
+    const touch = event.touches.length === 1 ? event.touches[0] : undefined;
+    this.touchStart = touch && { x: touch.clientX, y: touch.clientY };
+    this.touchMode = undefined;
   }
 
-  private move(item: DraggedItem<HandItem>) {
-    const temp = this.list.slice();
-    temp.splice(item.index, 1);
-    temp.splice(item.hover.index, 0, item.data);
-    return temp;
+  public onTouchMove(event: TouchEvent): void {
+    if (!this.touchStart || event.touches.length !== 1 || this.dragging) { return; }
+    const dx = Math.abs(event.touches[0].clientX - this.touchStart.x);
+    const dy = Math.abs(event.touches[0].clientY - this.touchStart.y);
+    if (!this.touchMode && Math.max(dx, dy) >= 8) {
+      this.touchMode = dx > dy ? 'scroll' : 'drag';
+    }
+    if (this.touchMode) { this.suppressClickUntil = Date.now() + 350; }
+    // Leave horizontal gestures to native scrolling, before they reach the
+    // document's touch drag backend. Vertical drags still reach board targets.
+    if (this.touchMode !== 'drag') { event.stopPropagation(); }
   }
 
-  private cardWidth = 88; // Adjust this value based on your card width
-  private containerWidth = 1000; // Total width to fill
+  public onTouchEnd(): void {
+    if (this.touchMode) { this.suppressClickUntil = Date.now() + 350; }
+    this.touchStart = undefined;
+    this.touchMode = undefined;
+  }
 
-  calculateContainerMargin(): string {
-    const totalCards = this.cards.length;
-    const availableWidth = this.containerWidth - this.cardWidth; // Space for n-1 gaps
+  public onWheel(event: WheelEvent): void {
+    const viewport = event.currentTarget as HTMLElement;
+    if (viewport.scrollWidth <= viewport.clientWidth || Math.abs(event.deltaX) >= Math.abs(event.deltaY)) { return; }
+    const distance = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? viewport.clientWidth : 1);
+    viewport.scrollLeft += distance;
+    event.preventDefault();
+  }
 
-    if (totalCards <= 10) {
-      return '3px';
-    }
-
-    const totalGapWidth = availableWidth - (totalCards - 1) * this.cardWidth;
-    const margin = totalGapWidth / (totalCards - 1) / 2; // Divide by 2 for left and right margins
-
-    return `${margin}px`;
+  public cardLabel(stack: HandStack): string {
+    if (this.isFaceDown) { return 'Face-down card'; }
+    return `${stack.card.name}${stack.copies.length > 1 ? `, ${stack.copies.length} copies` : ''}${stack.playable ? ', playable' : ''}`;
   }
 
   private buildHandList(cards: CardList): HandItem[] {

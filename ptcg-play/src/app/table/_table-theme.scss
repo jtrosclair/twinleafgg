@@ -126,7 +126,7 @@
   }
 
   ptcg-game-logs {
-    .ptcg-game-logs-header mat-icon {
+    .ptcg-game-logs-header .ptcg-icon {
       font-size: mat.font-size($config, input);
     }
 
@@ -142,7 +142,7 @@
   }
 
   ptcg-replay-controls {
-    .ptcg-replay-controls-header mat-icon {
+    .ptcg-replay-controls-header .ptcg-icon {
       font-size: mat.font-size($config, input);
     }
   }

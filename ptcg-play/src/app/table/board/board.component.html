@@ -88,8 +88,8 @@
         <!-- Top Deck -->
         <div class="ptcg-board-row ptcg-board-deck" [class.zone-disabled]="isDeckEmpty(topPlayer)">
           <div class="deck-container" style="position: relative;">
-            <ng-container *ngFor="let card of topPlayer?.deck?.cards; let idx = index">
-              <ptcg-board-card [cardList]="{ cards: [card] }" [owner]="topPlayer" class="deck-card"
+            <ng-container *ngFor="let idx of pileLayerIndices(topPlayer?.deck?.cards?.length || 0)">
+              <ptcg-board-card [cardList]="{ cards: [topPlayer.deck.cards[idx]] }" [owner]="topPlayer" class="deck-card"
                 [style.transform]="'translate(' + (idx * 0.25) + 'px, ' + (idx * 0.25) + 'px)'" [isFaceDown]="true">
               </ptcg-board-card>
             </ng-container>
@@ -103,7 +103,7 @@
         <!-- Top Discard -->
         <div class="ptcg-board-row ptcg-board-discard" [class.zone-disabled]="isDiscardEmpty(topPlayer)">
           <div class="discard-container">
-            <ng-container *ngFor="let i of createRange(topPlayer?.discard?.cards?.length || 0); let idx = index">
+            <ng-container *ngFor="let idx of pileLayerIndices(topPlayer?.discard?.cards?.length || 0)">
               <ptcg-board-card (click)="onDiscardClick($event, topPlayer?.discard)" [cardList]="topPlayer?.discard"
                 [owner]="topPlayer" class="discard-card"
                 [style.transform]="'translate(' + (idx * 0.25) + 'px, ' + (idx * 0.25) + 'px)'">
@@ -119,21 +119,6 @@
       </div>
     </div>
 
-    <!-- <div class="background-image-container">
-      <div class="marker-container top-markers">
-        <div class="gx-marker" [class.used]="topPlayer?.usedGX"></div>
-        <div class="vstar-marker" [class.used]="topPlayer?.usedVSTAR"></div>
-      </div>
-      <img src="assets/twinleaf-board-center.png" alt="Twinleaf Logo">
-      <div class="coin-flip-container">
-         <ptcg-coin-flip [prompt]="activeCoinFlipPrompt">
-        </ptcg-coin-flip>
-      </div>
-      <div class="marker-container bottom-markers">
-        <div class="vstar-marker" [class.used]="bottomPlayer?.usedVSTAR"></div>
-        <div class="gx-marker" [class.used]="bottomPlayer?.usedGX"></div>
-      </div>
-    </div> -->
 
 
     <div class="ptcg-board-player">
@@ -220,8 +205,8 @@
         <!-- Bottom Deck -->
         <div class="ptcg-board-row ptcg-board-deck" [class.zone-disabled]="isDeckEmpty(bottomPlayer)">
           <div class="deck-container" style="position: relative;">
-            <ng-container *ngFor="let card of bottomPlayer?.deck?.cards; let idx = index">
-              <ptcg-board-card [cardList]="{ cards: [card] }" [owner]="bottomPlayer" class="deck-card"
+            <ng-container *ngFor="let idx of pileLayerIndices(bottomPlayer?.deck?.cards?.length || 0)">
+              <ptcg-board-card [cardList]="{ cards: [bottomPlayer.deck.cards[idx]] }" [owner]="bottomPlayer" class="deck-card"
                 [style.transform]="'translate(' + (idx * 0.25) + 'px, ' + (-idx * 0.25) + 'px)'" [isFaceDown]="true">
               </ptcg-board-card>
             </ng-container>
@@ -235,7 +220,7 @@
         <!-- Bottom Discard -->
         <div class="ptcg-board-row ptcg-board-discard" [class.zone-disabled]="isDiscardEmpty(bottomPlayer)">
           <div class="discard-container">
-            <ng-container *ngFor="let i of createRange(bottomPlayer?.discard?.cards?.length || 0); let idx = index">
+            <ng-container *ngFor="let idx of pileLayerIndices(bottomPlayer?.discard?.cards?.length || 0)">
               <ptcg-board-card (click)="onDiscardClick($event, bottomPlayer?.discard)"
                 [cardList]="bottomPlayer?.discard" [owner]="bottomPlayer" class="discard-card"
                 [style.transform]="'translate(' + (idx * 0.25) + 'px, ' + (-idx * 0.25) + 'px)'">

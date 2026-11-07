@@ -1,52 +1,24 @@
-import {
-  GameInfo, GameState, ClientInfo, UserInfo, StateLog, ServerConfig,
-  Replay, State, ConversationInfo, Card
-} from 'ptcg-server';
+import { State, StateLog } from 'ptcg-server';
 import { Observable } from 'rxjs';
 
+/** Ephemeral UI state for one puzzle. */
 export class Session {
-  authToken: string;
-  config: ServerConfig;
-  loggedUserId: number;
-  clientId: number;
-  games: GameInfo[] = [];
-  clients: ClientInfo[] = [];
-  users: UserInfoMap = {};
-  lastGameId: number;
+  clientId = 0;
+  lastGameId = 0;
   gameStates: LocalGameState[] = [];
-  conversations: ConversationInfo[] = [];
 }
 
-export interface PlayerGameStats {
-  prizesTakenCount: number;
-  totalDamageDealt: number;
-  topPokemon: {
-    card: Card;
-    totalDamage: number;
-  } | null;
-}
-
-export interface EnhancedPokemonStats {
-  card: Card;
-  totalDamage: number;
-  evolutionLevel: number;
-}
-
-export interface LocalGameState extends GameState {
+export interface LocalGameState {
+  gameId: number;
   localId: number;
+  clientSide: true;
+  stateData: string;
+  state: State;
   deleted: boolean;
   gameOver: boolean;
-  switchSide: boolean;
   promptMinimized: boolean;
-  state: State;
+  turnComplete: boolean;
   logs: StateLog[];
-  replayPosition: number;
-  replay?: Replay;
-  enhancedPlayerStats?: PlayerGameStats[];
-}
-
-export interface UserInfoMap {
-  [userId: number]: UserInfo;
 }
 
 export interface SessionGetters {

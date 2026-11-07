@@ -1,0 +1,13 @@
+// Shared by the hand and card selectors.
+@mixin selectable-arrow($color) {
+  position: absolute;
+  z-index: 4;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 12px;
+  background: $color;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  pointer-events: none;
+}

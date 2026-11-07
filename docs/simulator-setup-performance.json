@@ -1,0 +1,367 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-11-06T11:18:02.088Z",
+  "packageHash": "807153cafc873b2278ef5f3eb2bd4fbf940b9e967b72021c8dcbd6df8b383297",
+  "buildId": "75daae41-4106-4eb4-9bdf-e0dbf6411e24",
+  "origin": "https://prizemap-simulator-assets.jtrosclair.workers.dev",
+  "environment": {
+    "runtime": "v24.22.1",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "browser": "Chromium in Codex in-app browser; desktop measurements, not a phone benchmark"
+  },
+  "browser": {
+    "puzzle": "Trapped in the Phantom Maze",
+    "method": "Same browser/origin; full navigation through the current-release redirect to a visible End your turn button. Includes browser-control overhead. Before uses warm HTTP caching; after also uses persistent artwork caching. Three warm samples each; no cache clearing or network throttling.",
+    "before": {
+      "packageHash": "21a619fa298121529eabbeda987984015085fbeb5d16396a9609de8d398b5c2a",
+      "milliseconds": [
+        2123,
+        1718,
+        1581
+      ],
+      "medianMs": 1718
+    },
+    "after": {
+      "milliseconds": [
+        739,
+        705,
+        620
+      ],
+      "medianMs": 705,
+      "samples": [
+        {
+          "milliseconds": 739,
+          "diagnostics": {
+            "stages": {
+              "metadataReady": 28,
+              "artworkStart": 28,
+              "artworkReady": 124.2,
+              "engineReady": 151.5,
+              "boardMounted": 152.9,
+              "boardPainted": 334
+            },
+            "startedAtNavigationMs": 400.10000014305115,
+            "navigationMs": 734.1,
+            "artwork": {
+              "uniqueScans": 50,
+              "memoryHits": 0,
+              "persistentHits": 50,
+              "networkRequests": 0,
+              "failedScans": 0,
+              "elapsedMs": 96.10000014305115
+            }
+          }
+        },
+        {
+          "milliseconds": 705,
+          "diagnostics": {
+            "stages": {
+              "metadataReady": 24.7,
+              "artworkStart": 24.7,
+              "artworkReady": 69.1,
+              "engineReady": 95.6,
+              "boardMounted": 96.8,
+              "boardPainted": 279.7
+            },
+            "startedAtNavigationMs": 419.60000014305115,
+            "navigationMs": 699.3,
+            "artwork": {
+              "uniqueScans": 50,
+              "memoryHits": 0,
+              "persistentHits": 50,
+              "networkRequests": 0,
+              "failedScans": 0,
+              "elapsedMs": 44.299999952316284
+            }
+          }
+        },
+        {
+          "milliseconds": 620,
+          "diagnostics": {
+            "stages": {
+              "metadataReady": 24.1,
+              "artworkStart": 24.1,
+              "artworkReady": 67,
+              "engineReady": 91.6,
+              "boardMounted": 92.9,
+              "boardPainted": 271.6
+            },
+            "startedAtNavigationMs": 345.2000000476837,
+            "navigationMs": 616.8,
+            "artwork": {
+              "uniqueScans": 50,
+              "memoryHits": 0,
+              "persistentHits": 50,
+              "networkRequests": 0,
+              "failedScans": 0,
+              "elapsedMs": 42.89999985694885
+            }
+          }
+        }
+      ],
+      "firstNavigationWithNewPackageAndCachedArtwork": {
+        "milliseconds": 1172,
+        "diagnostics": {
+          "stages": {
+            "metadataReady": 26.8,
+            "artworkStart": 26.8,
+            "artworkReady": 112.9,
+            "engineReady": 144.4,
+            "boardMounted": 146.4,
+            "boardPainted": 338.4
+          },
+          "startedAtNavigationMs": 819.0999999046326,
+          "navigationMs": 1157.5,
+          "artwork": {
+            "uniqueScans": 50,
+            "memoryHits": 0,
+            "persistentHits": 50,
+            "networkRequests": 0,
+            "failedScans": 0,
+            "elapsedMs": 85.90000009536743
+          }
+        }
+      }
+    },
+    "medianReductionPercent": 59,
+    "localSetupBoundary": "Stage durations begin after Angular constructs the viewer. boardMounted is router completion, before paint; boardPainted is a two-requestAnimationFrame observation. navigationMs is measured from the browser document time origin.",
+    "rendering": {
+      "before": {
+        "boardCards": 97,
+        "deckLayers": 30,
+        "discardLayers": 38,
+        "images": 100
+      },
+      "after": {
+        "boardCards": 41,
+        "deckLayers": 6,
+        "discardLayers": 6,
+        "images": {
+          "loaded": 44,
+          "local": 44,
+          "total": 44
+        },
+        "path": "/releases/807153cafc873b2278ef5f3eb2bd4fbf940b9e967b72021c8dcbd6df8b383297/table/1"
+      }
+    },
+    "gameplay": {
+      "meowthPlayed": true,
+      "optionalAbilityDeclined": true,
+      "undoRestoredHandCount": 9,
+      "screenshot": "/tmp/twinleaf-fast-setup-verified.png"
+    }
+  },
+  "engine": {
+    "method": "Desktop Node and a minified ESM VM. Warm fixture medians from matching profiler variants; these are not total browser setup times or mobile measurements. Import timings were excluded from speedup claims.",
+    "cardCatalog": 13483,
+    "fixtures": [
+      {
+        "puzzle": "phantom-maze",
+        "physicalCards": 116,
+        "playerIds": [
+          2,
+          3
+        ],
+        "cjsBeforeLoadMedianMs": 148.175,
+        "cjsAfterLoadMedianMs": 19.541,
+        "esmVMBeforeLoadMedianMs": 187.994,
+        "esmVMAfterLoadMedianMs": 48.119
+      },
+      {
+        "puzzle": "explosive-hand",
+        "physicalCards": 120,
+        "playerIds": [
+          2,
+          3
+        ],
+        "cjsBeforeLoadMedianMs": 237.149,
+        "cjsAfterLoadMedianMs": 12.154,
+        "esmVMBeforeLoadMedianMs": 214.922,
+        "esmVMAfterLoadMedianMs": 47.991
+      },
+      {
+        "puzzle": "breaking-through-wall",
+        "physicalCards": 120,
+        "playerIds": [
+          2,
+          3
+        ],
+        "cjsBeforeLoadMedianMs": 295.506,
+        "cjsAfterLoadMedianMs": 18.838,
+        "esmVMBeforeLoadMedianMs": 197.124,
+        "esmVMAfterLoadMedianMs": 52.396
+      },
+      {
+        "puzzle": "somethings-fishy",
+        "physicalCards": 120,
+        "playerIds": [
+          2,
+          3
+        ],
+        "cjsBeforeLoadMedianMs": 224.901,
+        "cjsAfterLoadMedianMs": 17.916,
+        "esmVMBeforeLoadMedianMs": 207.18,
+        "esmVMAfterLoadMedianMs": 43.281
+      }
+    ],
+    "repeatCommand": "node tools/profile-puzzle-setup.cjs --runs 20 --warmup 3"
+  },
+  "artwork": {
+    "cpuObservations": [
+      {
+        "puzzle": "Breaking Through the Wall",
+        "physicalCardNames": 120,
+        "uniqueScans": 42,
+        "beforeNameLookupMs": 1360.76,
+        "afterPreparationWithMockNetworkMs": 16.01,
+        "afterWarmMemoryMs": 16.86,
+        "warmNetworkRequests": 0
+      },
+      {
+        "puzzle": "Explosive Hand",
+        "physicalCardNames": 120,
+        "uniqueScans": 41,
+        "beforeNameLookupMs": 1287.59,
+        "afterPreparationWithMockNetworkMs": 6.32,
+        "afterWarmMemoryMs": 6.1,
+        "warmNetworkRequests": 0
+      },
+      {
+        "puzzle": "Trapped in the Phantom Maze",
+        "physicalCardNames": 116,
+        "uniqueScans": 50,
+        "beforeNameLookupMs": 1260.98,
+        "afterPreparationWithMockNetworkMs": 14.69,
+        "afterWarmMemoryMs": 15.65,
+        "warmNetworkRequests": 0
+      },
+      {
+        "puzzle": "Something's Fishy",
+        "physicalCardNames": 120,
+        "uniqueScans": 50,
+        "beforeNameLookupMs": 1389.54,
+        "afterPreparationWithMockNetworkMs": 15.99,
+        "afterWarmMemoryMs": 15.13,
+        "warmNetworkRequests": 0
+      }
+    ],
+    "cpuMethod": "Before is the original name lookup loop; after includes optimized preparation with instant mock image responses. Actual browser disk-cache evidence is recorded separately above.",
+    "uncachedNetworkObservation": {
+      "elapsedMs": 1242.0031669999998,
+      "uniqueScans": 50,
+      "memoryHits": 0,
+      "persistentHits": 0,
+      "networkRequests": 50,
+      "failedScans": 0,
+      "bytes": 30565676
+    },
+    "networkMethod": "Desktop Node client first request through real Worker; upstream/edge cache state unknown. WarmStoredMemoryStandIn uses an in-memory fake persistent store, not disk IndexedDB; actual browser verification is separate.",
+    "cache": {
+      "memoryBudgetBytes": 67108864,
+      "indexedDBBudgetBytes": 67108864,
+      "key": "Original complete artwork URL, including language/size/custom overrides",
+      "persistence": "Deferred until after paint; not awaited by setup; optional storage failures fall back to HTTP/in-memory preparation"
+    },
+    "japaneseProxy": {
+      "mapPrefixes": [
+        {
+          "path": "/tpc/M5/M5_75_R_JP.png",
+          "origin": "https://prizemap-simulator-assets.jtrosclair.workers.dev",
+          "status": 200,
+          "type": "image/png",
+          "bytes": 989891,
+          "allowOrigin": null,
+          "browserCorsAllowed": false
+        },
+        {
+          "path": "/tpc/M5/M5_75_R_JP.png",
+          "origin": "https://sim-mobile.prizemap.app",
+          "status": 200,
+          "type": "image/png",
+          "bytes": 989891,
+          "allowOrigin": null,
+          "browserCorsAllowed": false
+        },
+        {
+          "path": "/tpc/M5/M5_75_R_JP.png",
+          "origin": "http://localhost:4200",
+          "status": 200,
+          "type": "image/png",
+          "bytes": 989891,
+          "allowOrigin": "http://localhost:4200",
+          "browserCorsAllowed": true
+        },
+        {
+          "path": "/tpci/SVI/SVI_001_R_EN.png",
+          "origin": "https://prizemap-simulator-assets.jtrosclair.workers.dev",
+          "status": 200,
+          "type": "image/png",
+          "bytes": 1074221,
+          "allowOrigin": null,
+          "browserCorsAllowed": false
+        },
+        {
+          "path": "/tpci/SVI/SVI_001_R_EN.png",
+          "origin": "https://sim-mobile.prizemap.app",
+          "status": 200,
+          "type": "image/png",
+          "bytes": 1074221,
+          "allowOrigin": null,
+          "browserCorsAllowed": false
+        },
+        {
+          "path": "/tpci/SVI/SVI_001_R_EN.png",
+          "origin": "http://localhost:4200",
+          "status": 200,
+          "type": "image/png",
+          "bytes": 1074221,
+          "allowOrigin": "http://localhost:4200",
+          "browserCorsAllowed": true
+        }
+      ],
+      "liveCheck": {
+        "source": "https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/M5/M5_75_R_JP.png",
+        "status": 200,
+        "bytes": 989891,
+        "type": "image/png",
+        "cors": true,
+        "conditionalStatus": 304,
+        "sha256": "d4838526ad979fb917315f09a03d25e243b518cb44b340464d08532a3a1b2ca9"
+      }
+    }
+  },
+  "changes": [
+    "Exact-name indexes and per-input alias memoization replace repeated full-library searches",
+    "Pinned card metadata is embedded once and validated synchronously, removing normal-path card-data HTTP and IndexedDB",
+    "Successful artwork URLs are reused from memory or optional bounded IndexedDB; concurrent downloads are shared",
+    "Font readiness overlaps image preparation; image work runs outside Angular change detection",
+    "Initial publication reuses its serialized/decoded snapshot pair",
+    "Decorative deck/discard piles render at most three representative layers without changing full card lists, counts or action indices",
+    "Loading logo is local (300px PNG, 17403 bytes), eliminating its extra remote request",
+    "Known iframe fallback echoes no longer trigger another Angular update, and full-state debug logging is removed",
+    "Both English tpci and Japanese tpc scans use the existing allowlisted same-origin proxy"
+  ],
+  "verification": {
+    "focusedChecks": 180,
+    "focusedFailures": 0,
+    "runtimeSpecs": 13,
+    "cardSpecs": 44,
+    "serviceSpecs": 63,
+    "nodeTests": 60,
+    "finalizer": "passed",
+    "metadataBuilder": "passed",
+    "angularTemplates": "passed",
+    "publishedPuzzleWins": {
+      "commonJS": 40,
+      "minifiedESM": 40
+    },
+    "liveDelivery": "passed",
+    "warmArtwork": {
+      "persistentHits": 50,
+      "networkRequests": 0,
+      "failedScans": 0
+    }
+  },
+  "limitation": "A brand-new puzzle still needs its artwork downloaded once (this sample fetched 30,565,676 image bytes). Browser storage may be unavailable or evicted. Native filesystem package installation and background prefetch in the separate mobile host are not implemented here."
+}

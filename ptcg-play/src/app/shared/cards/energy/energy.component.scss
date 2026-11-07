@@ -7,51 +7,20 @@
   transform: scale(0.75);
   transform-origin: top left;
 
-  &[type="grass"] {
-    background: transparent url(/assets/type-icons-small.png) -155px -6px no-repeat;
-  }
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 
-  &[type="fighting"] {
-    background: transparent url(/assets/type-icons-small.png) -8px -46px no-repeat;
-  }
-
-  &[type="psychic"] {
-    background: transparent url(/assets/type-icons-small.png) -155px -46px no-repeat;
-  }
-
-  &[type="water"] {
-    background: transparent url(/assets/type-icons-small.png) -118px -6px no-repeat;
-  }
-
-  &[type="lightning"] {
-    background: transparent url(/assets/type-icons-small.png) -8px -6px no-repeat;
-  }
-
-  &[type="metal"] {
-    background: transparent url(/assets/type-icons-small.png) -81px -46px no-repeat;
-  }
-
-  &[type="darkness"] {
-    background: transparent url(/assets/type-icons-small.png) -44px -46px no-repeat;
-  }
-
-  &[type="fire"] {
-    background: transparent url(/assets/type-icons-small.png) -81px -6px no-repeat;
-  }
-
-  &[type="dragon"] {
-    background: transparent url(/assets/type-icons-small.png) -118px -46px no-repeat;
-  }
-
-  &[type="fairy"] {
-    background: transparent url(/assets/type-icons-small.png) -81px -87px no-repeat;
-  }
-
-  &[type="colorless"] {
-    background: transparent url(/assets/type-icons-small.png) -44px -6px no-repeat;
-  }
-
-  &[type="energyless"] {
-    background: transparent url(/assets/type-icons-small.png) -45px -87px no-repeat;
-  }
+  &[type="grass"] { background-image: url('/assets/energy-icons/grass.svg'); }
+  &[type="fighting"] { background-image: url('/assets/energy-icons/fighting.svg'); }
+  &[type="psychic"] { background-image: url('/assets/energy-icons/psychic.svg'); }
+  &[type="water"] { background-image: url('/assets/energy-icons/water.svg'); }
+  &[type="lightning"] { background-image: url('/assets/energy-icons/lightning.svg'); }
+  &[type="metal"] { background-image: url('/assets/energy-icons/metal.svg'); }
+  &[type="darkness"] { background-image: url('/assets/energy-icons/darkness.svg'); }
+  &[type="fire"] { background-image: url('/assets/energy-icons/fire.svg'); }
+  &[type="dragon"] { background-image: url('/assets/energy-icons/dragon.svg'); }
+  &[type="fairy"] { background-image: url('/assets/energy-icons/fairy.svg'); }
+  &[type="colorless"] { background-image: url('/assets/energy-icons/colorless.svg'); }
+  &[type="energyless"] { background-image: url('/assets/energy-icons/energyless.svg'); }
 }

@@ -1,0 +1,545 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-11-07T03:26:15.496Z",
+  "scope": "Additional simulator package reduction versus the immediately preceding short-field-code release. Remote on-demand card artwork and protocol overhead excluded.",
+  "previousPackageHash": "d9fa0f7054eafecd3c984302ea915a363aaeba0b3c832855689d7d6c10c37d5c",
+  "packageHash": "291dcdbf50de5f5ee6405bab717c7c9718bb80b5e7d3a7cba0b00737430cdf08",
+  "buildId": "8a360135-c75d-4258-a97f-507593fcfd2e",
+  "workerVersion": "9da299c6-5135-4a93-9719-d592637162db",
+  "comparison": {
+    "runtimeRaw": {
+      "beforeBytes": 16811207,
+      "afterBytes": 14043590,
+      "savedBytes": 2767617,
+      "savedPercent": 16.46
+    },
+    "runtimeGzip6": {
+      "beforeBytes": 4342383,
+      "afterBytes": 3457377,
+      "savedBytes": 885006,
+      "savedPercent": 20.38
+    },
+    "runtimeBrotli6": {
+      "beforeBytes": 3575154,
+      "afterBytes": 2723443,
+      "savedBytes": 851711,
+      "savedPercent": 23.82
+    },
+    "archive": {
+      "beforeBytes": 4310957,
+      "afterBytes": 3428046,
+      "savedBytes": 882911,
+      "savedPercent": 20.48
+    }
+  },
+  "before": {
+    "runtime": {
+      "files": 9,
+      "bytes": 16811207,
+      "gzipBytes": 4342383,
+      "brotliBytes": 3575154
+    },
+    "archive": {
+      "path": "simulator-package.d9fa0f7054eafecd3c984302ea915a363aaeba0b3c832855689d7d6c10c37d5c.zip",
+      "sha256": "05eb2bac098532b7026fb967369ab519db03a44c28c1984ef0c76db47ae091cc",
+      "bytes": 4310957
+    },
+    "groups": {
+      "bootstrap": {
+        "files": 1,
+        "bytes": 4565925,
+        "gzipBytes": 2286884,
+        "brotliBytes": 2233450
+      },
+      "main": {
+        "files": 1,
+        "bytes": 11941112,
+        "gzipBytes": 1968009,
+        "brotliBytes": 1256821
+      },
+      "other": {
+        "files": 4,
+        "bytes": 195200,
+        "gzipBytes": 64856,
+        "brotliBytes": 63218
+      },
+      "polyfills": {
+        "files": 1,
+        "bytes": 37091,
+        "gzipBytes": 13013,
+        "brotliBytes": 12611
+      },
+      "runtime": {
+        "files": 1,
+        "bytes": 1216,
+        "gzipBytes": 696,
+        "brotliBytes": 660
+      },
+      "styles": {
+        "files": 1,
+        "bytes": 70663,
+        "gzipBytes": 8925,
+        "brotliBytes": 8394
+      }
+    }
+  },
+  "after": {
+    "runtime": {
+      "files": 9,
+      "bytes": 14043590,
+      "gzipBytes": 3457377,
+      "brotliBytes": 2723443
+    },
+    "archive": {
+      "path": "simulator-package.291dcdbf50de5f5ee6405bab717c7c9718bb80b5e7d3a7cba0b00737430cdf08.zip",
+      "sha256": "1a901187e9e0e01cf400620e0b931d6578b7040278e154f29bd098fbbbc47523",
+      "bytes": 3428046
+    },
+    "groups": {
+      "bootstrap": {
+        "files": 1,
+        "bytes": 2314247,
+        "gzipBytes": 1431710,
+        "brotliBytes": 1396777
+      },
+      "main": {
+        "files": 1,
+        "bytes": 11425173,
+        "gzipBytes": 1938178,
+        "brotliBytes": 1241785
+      },
+      "other": {
+        "files": 4,
+        "bytes": 195200,
+        "gzipBytes": 64855,
+        "brotliBytes": 63216
+      },
+      "polyfills": {
+        "files": 1,
+        "bytes": 37091,
+        "gzipBytes": 13013,
+        "brotliBytes": 12611
+      },
+      "runtime": {
+        "files": 1,
+        "bytes": 1216,
+        "gzipBytes": 696,
+        "brotliBytes": 660
+      },
+      "styles": {
+        "files": 1,
+        "bytes": 70663,
+        "gzipBytes": 8925,
+        "brotliBytes": 8394
+      }
+    }
+  },
+  "changes": [
+    {
+      "change": "Exact lossless PNG to WebP conversion",
+      "files": 32,
+      "sourceBytesBefore": 1809230,
+      "sourceBytesAfter": 1029986,
+      "allDimensionsAndRGBAUnchanged": true,
+      "oldPngPathsRemainAliases": true,
+      "independentlyComparedWithPreviousBuild": true
+    },
+    {
+      "change": "Ordered image metadata with shared Limitless origin",
+      "schema": 3,
+      "cards": 13483,
+      "catalogueHash": "3007151948194fa669da6771cdd269de8c7c1b61644bfdf407cf370ebd26b25c",
+      "allExpandedUrlsAndExecutableCardIdentitiesPreserved": true,
+      "crossFormatRegistrationOrderExplicit": true,
+      "oldMetadataBytes": 1605595,
+      "newMetadataBytes": 406012
+    },
+    {
+      "change": "Share repeated bootstrap image URL expressions",
+      "lookupKeysPreserved": true,
+      "aliasNamesAvoidBindingsAcrossScripts": true,
+      "directivesPreserved": true
+    },
+    {
+      "change": "Remove embedded demo, obsolete HTTP/IndexedDB metadata paths, progress UI and unused translations",
+      "removedDemoCharacters": 27968,
+      "removedTranslationKeysPerLocale": 145,
+      "locales": 3
+    },
+    {
+      "change": "Remove seven orphan source/test files and unused Sharp development dependency",
+      "orphanDeckAndPlaceholderWereAlreadyTreeShaken": true
+    }
+  ],
+  "verification": {
+    "automatedTests": 295,
+    "failures": 0,
+    "finalizerAndAssetGuardsPassed": true,
+    "metadataExactUrlCount": 13483,
+    "assetAudit": {
+      "sourceFiles": 200,
+      "assets": 56,
+      "bytes": 1593696,
+      "referenced": 56,
+      "unused": 0,
+      "missing": 0,
+      "unresolvedDynamic": 0
+    },
+    "payloadRoundTrips": 600,
+    "winningReplays": 40,
+    "dengoTuroNestCases": 5,
+    "fixtureNames": [
+      "Trapped in the Phantom Maze",
+      "Explosive Hand",
+      "Breaking Through the Wall",
+      "Something's Fishy",
+      "Deck out with Dengo"
+    ],
+    "browser": {
+      "local": [
+        {
+          "name": "Trapped in the Phantom Maze",
+          "phase": "local",
+          "board": true,
+          "deckInspection": true,
+          "cardDetails": true,
+          "errors": []
+        },
+        {
+          "name": "Explosive Hand",
+          "phase": "local",
+          "board": true,
+          "imageCount": 25,
+          "lazyImages": true,
+          "setup": {
+            "navigationMs": 451.9,
+            "stages": {
+              "boardMounted": 42.8,
+              "boardPainted": 150.5,
+              "engineReady": 40,
+              "metadataReady": 30.2
+            },
+            "startedAtNavigationMs": 301.39999985694885
+          }
+        },
+        {
+          "name": "Breaking Through the Wall",
+          "phase": "local",
+          "board": true,
+          "imageCount": 32,
+          "lazyImages": true,
+          "setup": {
+            "navigationMs": 252.5,
+            "stages": {
+              "boardMounted": 33,
+              "boardPainted": 70.5,
+              "engineReady": 30.6,
+              "metadataReady": 24.5
+            },
+            "startedAtNavigationMs": 182
+          }
+        },
+        {
+          "name": "Something's Fishy",
+          "phase": "local",
+          "board": true,
+          "imageCount": 17,
+          "lazyImages": true,
+          "setup": {
+            "navigationMs": 250.4,
+            "stages": {
+              "boardMounted": 39.3,
+              "boardPainted": 72.5,
+              "engineReady": 37,
+              "metadataReady": 28.4
+            },
+            "startedAtNavigationMs": 177.90000009536743
+          }
+        },
+        {
+          "name": "Deck out with Dengo",
+          "phase": "local",
+          "board": true,
+          "imageCount": 23,
+          "lazyImages": true,
+          "setup": {
+            "navigationMs": 243.3,
+            "stages": {
+              "boardMounted": 32.4,
+              "boardPainted": 68.1,
+              "engineReady": 30,
+              "metadataReady": 24.2
+            },
+            "startedAtNavigationMs": 175.20000004768372
+          }
+        }
+      ],
+      "live": {
+        "name": "Deck out with Dengo",
+        "base": "/releases/291dcdbf50de5f5ee6405bab717c7c9718bb80b5e7d3a7cba0b00737430cdf08/",
+        "board": true,
+        "images": [
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          },
+          {
+            "async": true,
+            "height": 192,
+            "lazy": true,
+            "loaded": true,
+            "local": true,
+            "width": 138
+          },
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          },
+          {
+            "async": true,
+            "height": 192,
+            "lazy": true,
+            "loaded": true,
+            "local": true,
+            "width": 138
+          },
+          {
+            "async": true,
+            "height": 192,
+            "lazy": true,
+            "loaded": true,
+            "local": true,
+            "width": 138
+          },
+          {
+            "async": true,
+            "height": 192,
+            "lazy": true,
+            "loaded": true,
+            "local": true,
+            "width": 138
+          },
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          },
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          },
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          },
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          },
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          },
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          },
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          },
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          },
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          },
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          },
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          },
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          },
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          },
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          },
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          },
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          },
+          {
+            "async": true,
+            "height": 1024,
+            "lazy": true,
+            "loaded": true,
+            "local": false,
+            "width": 736
+          }
+        ],
+        "scripts": [
+          "simulator-static.05bd3ada4bbe5594da5d.js",
+          "runtime.287366b023aefc3235db.js",
+          "polyfills.98ed7ea3f24455c0a30b.js",
+          "main.842c4e870d1a95451a32.js"
+        ],
+        "setup": {
+          "navigationMs": 801.1,
+          "stages": {
+            "boardMounted": 43.7,
+            "boardPainted": 90.2,
+            "engineReady": 39.7,
+            "metadataReady": 30
+          },
+          "startedAtNavigationMs": 710.8999998569489
+        },
+        "visibleButtons": [
+          "",
+          ""
+        ],
+        "urlUnchanged": true,
+        "errors": []
+      },
+      "manualEntry": {
+        "emptyByDefault": true,
+        "disabledUntilInput": true,
+        "loadedPublishedGz2Puzzle": true,
+        "url": "https://sim-static.prizemap.app/sandbox-viewer",
+        "errors": []
+      },
+      "screenshot": "/tmp/twinleaf-smaller-package-live.png",
+      "physicalMobileWebViewTested": false
+    },
+    "delivery": {
+      "ok": true,
+      "manifest": {
+        "cold": "downloadManifestAssets",
+        "warm": "reuseCachedPackage",
+        "conditionalStatus": 304,
+        "inventoryValidated": true
+      },
+      "allRuntimeAssetsVerified": true,
+      "archive": {
+        "path": "simulator-package.291dcdbf50de5f5ee6405bab717c7c9718bb80b5e7d3a7cba0b00737430cdf08.zip",
+        "bytes": 3428046,
+        "integrity": true,
+        "immutable": true,
+        "cors": true
+      }
+    },
+    "previousReleaseLive": {
+      "packageHash": "d9fa0f7054eafecd3c984302ea915a363aaeba0b3c832855689d7d6c10c37d5c",
+      "manifestStatus": 200,
+      "mainStatus": 200,
+      "immutable": true
+    }
+  },
+  "budgets": [
+    {
+      "name": "gzipRuntimeBytes",
+      "actual": 3457377,
+      "maximum": 4194304,
+      "passed": true
+    },
+    {
+      "name": "archiveBytes",
+      "actual": 3428046,
+      "maximum": 5242880,
+      "passed": true
+    },
+    {
+      "name": "individualFileBytes",
+      "actual": 11425173,
+      "maximum": 20971520,
+      "passed": true
+    }
+  ],
+  "limitations": "Browser checks used desktop Chromium; no physical mobile WebView timing claim. Compression figures use gzip level6/Brotli quality6 per finalized runtime file."
+}

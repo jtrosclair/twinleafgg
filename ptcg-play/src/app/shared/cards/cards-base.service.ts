@@ -1,97 +1,62 @@
+import { ensureClientCards, applyClientCardMetadata, CardLibraryMetadata } from 'ptcg-server/client';
 import { Injectable, OnDestroy } from '@angular/core';
-import { Card, StateSerializer, SuperType, PokemonCard, EnergyCard, CardType, TrainerCard, CardsInfo, CardManager } from 'ptcg-server';
-
-import { ApiService } from '../../api/api.service';
+import { Card, StateSerializer, SuperType, PokemonCard, EnergyCard, CardType, TrainerCard } from 'ptcg-server';
+import { MatDialog } from '@angular/material/dialog';
+import { Subject } from 'rxjs';
 import { CardInfoPopupData, CardInfoPopupComponent } from './card-info-popup/card-info-popup.component';
 import { CardInfoListPopupComponent } from './card-info-list-popup/card-info-list-popup.component';
 import { CardInfoPaneAction } from './card-info-pane/card-info-pane.component';
-import { MatDialog } from '@angular/material/dialog';
-import { SessionService } from '../session/session.service';
-import { Observable, Subject, Subscription, of } from 'rxjs';
-import { map, catchError, switchMap } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
-import { FavoritesService } from '../../api/services/favorites.service';
-import { ProfileService } from '../../api/services/profile.service';
+import { SimulatorAssetsService } from '../services/simulator-assets.service';
+import { CLIENT_CARD_TOTAL, CLIENT_CATALOGUE_HASH, CLIENT_LIBRARY_HASH } from '../../client-library-version';
 
-@Injectable({
-  providedIn: 'root'
-})
+/** Executable card library, local image preferences, and card inspection dialogs. */
+@Injectable({ providedIn: 'root' })
 export class CardsBaseService implements OnDestroy {
-
   private cards: Card[] = [];
-  private names: string[] = [];
-  private cardManager: CardManager;
+  private names: string[] | undefined;
+  private cardsByName: Map<string, Card> | undefined;
   private customImages: { [key: string]: string } = {};
-  private favoriteCards: { [cardName: string]: string } = {};
-
   private overridesChangedSubject = new Subject<string>();
   public overridesChanged$ = this.overridesChangedSubject.asObservable();
-  private globalArtworksMap: { [code: string]: string } = {};
-  private favoritesSubscription: Subscription | null = null;
-  private cardImagesSubscription: Subscription | null = null;
 
-  constructor(
-    private apiService: ApiService,
-    private dialog: MatDialog,
-    private sessionService: SessionService,
-    private http: HttpClient,
-    private favoritesService: FavoritesService,
-    private profileService: ProfileService
-  ) {
-    this.cardManager = CardManager.getInstance();
-    this.loadCustomImages();
-    this.loadFavoriteCards();
-    this.setupFavoritesSubscription();
-    this.setupCardImagesSubscription();
+  constructor(private dialog: MatDialog, private simulatorAssets: SimulatorAssetsService) {
+    try {
+      const images = JSON.parse(localStorage.getItem('customCardImages') || '{}');
+      if (images && typeof images === 'object' && !Array.isArray(images)) {
+        Object.keys(images).forEach(key => {
+          if (typeof images[key] === 'string') { this.customImages[key] = images[key]; }
+        });
+      }
+    } catch { /* Image preferences are optional in storage-restricted WebViews. */ }
   }
 
-  public loadCardsInfo(cardsInfo: CardsInfo) {
-    this.cardManager.loadCardsInfo(cardsInfo);
-    this.cards = this.cardManager.getAllCards().slice();
-    this.names = this.cards.map(c => c.fullName);
-    this.cards.sort(this.compareCards);
+  public loadCardsInfo(cardsInfo: CardLibraryMetadata): void {
+    applyClientCardMetadata(cardsInfo, {
+      hash: CLIENT_LIBRARY_HASH, catalogueHash: CLIENT_CATALOGUE_HASH, cardsTotal: CLIENT_CARD_TOTAL
+    });
+    this.cards = this.sortCards(ensureClientCards());
+    this.names = undefined;
+    this.cardsByName = undefined;
     StateSerializer.setKnownCards(this.cards);
   }
 
-  public setCards(cards: Card[]) {
-    this.cards = cards;
-    this.names = this.cards.map(c => c.fullName);
-    this.cards.sort(this.compareCards);
-    StateSerializer.setKnownCards(this.cards);
-  }
-
-  private compareCards(c1: Card, c2: Card) {
-    if (c1.superType !== c2.superType) {
-      return c1.superType - c2.superType;
-    }
-    switch (c1.superType) {
-      case SuperType.POKEMON:
-        const p1 = c1 as PokemonCard;
-        const p2 = c2 as PokemonCard;
-        if (p2.cardType !== p1.cardType) {
-          return p1.cardType - p2.cardType;
-        }
-        break;
-      case SuperType.ENERGY:
-        const e1 = c1 as EnergyCard;
-        const e2 = c2 as EnergyCard;
-        if (e1.energyType !== e2.energyType) {
-          return e1.energyType - e2.energyType;
-        }
-        const type1 = e1.provides.length > 0 ? e1.provides[0] : CardType.NONE;
-        const type2 = e2.provides.length > 0 ? e2.provides[0] : CardType.NONE;
-        if (type1 !== type2) {
-          return type1 - type2;
-        }
-        break;
-      case SuperType.TRAINER:
-        const t1 = c1 as TrainerCard;
-        const t2 = c2 as TrainerCard;
-        if (t1.trainerType !== t2.trainerType) {
-          return t1.trainerType - t2.trainerType;
-        }
-    }
-    return c1.fullName < c2.fullName ? -1 : 1;
+  private sortCards(cards: Card[]): Card[] {
+    // Read each of the thousands of distinct card classes once. Sorting the
+    // plain scalar records preserves the catalog order used by legacy aliases.
+    return cards.map(card => {
+      const type = card.superType;
+      const energy = card as EnergyCard;
+      return {
+        card, type, name: card.fullName,
+        primary: type === SuperType.POKEMON ? (card as PokemonCard).cardType
+          : type === SuperType.ENERGY ? energy.energyType
+          : type === SuperType.TRAINER ? (card as TrainerCard).trainerType : 0,
+        secondary: type === SuperType.ENERGY && energy.provides.length > 0 ? energy.provides[0] : CardType.NONE
+      };
+    }).sort((a, b) => a.type !== b.type ? a.type - b.type
+      : a.primary !== b.primary ? a.primary - b.primary
+      : a.secondary !== b.secondary ? a.secondary - b.secondary
+      : a.name < b.name ? -1 : 1).map(entry => entry.card);
   }
 
   public getCards(): Card[] {
@@ -99,214 +64,49 @@ export class CardsBaseService implements OnDestroy {
   }
 
   public getCardNames(): string[] {
-    return this.names;
+    return this.names ?? (this.names = this.cards.map(card => card.fullName));
   }
 
-  private loadCustomImages(): void {
-    if (this.isAuthenticated()) {
-      this.loadCustomImagesFromAPI();
-    } else {
-      const storedImages = localStorage.getItem('customCardImages');
-      if (storedImages) {
-        this.customImages = JSON.parse(storedImages);
-      }
-    }
+  private preference(key: string, fallback: string): string {
+    try { return localStorage.getItem(key) || fallback; } catch { return fallback; }
   }
 
-  private loadCustomImagesFromAPI(): void {
-    const response = this.profileService.getCardImagesUrl();
-    const jsonUrl = response.jsonUrl;
-
-    if (jsonUrl && jsonUrl.trim()) {
-      // Fetch and parse the JSON from the URL
-      this.http.get(jsonUrl).pipe(
-        map((json: any) => {
-          this.customImages = json;
-          // Also save to localStorage as backup
-          localStorage.setItem('customCardImages', JSON.stringify(this.customImages));
-          return json;
-        }),
-        catchError(() => {
-          // If fetching JSON fails, try localStorage
-          const storedImages = localStorage.getItem('customCardImages');
-          if (storedImages) {
-            this.customImages = JSON.parse(storedImages);
-          }
-          return of({});
-        })
-      ).subscribe();
-    } else {
-      // No URL saved, try localStorage
-      const storedImages = localStorage.getItem('customCardImages');
-      if (storedImages) {
-        this.customImages = JSON.parse(storedImages);
-      }
-    }
-  }
-
-  private loadFavoriteCards(): void {
-    if (this.isAuthenticated()) {
-      this.loadFavoritesFromAPI();
-    } else {
-      const storedFavorites = localStorage.getItem('favoriteCards');
-      if (storedFavorites) {
-        this.favoriteCards = JSON.parse(storedFavorites);
-      }
-    }
-  }
-
-  private isAuthenticated(): boolean {
-    const session = this.sessionService.session;
-    return !!(session.authToken && session.loggedUserId);
-  }
-
-  private setupFavoritesSubscription(): void {
-    // Subscribe to session changes to reload favorites when user logs in
-    this.favoritesSubscription = this.sessionService.get(s => s.loggedUserId).subscribe(userId => {
-      if (userId && this.isAuthenticated()) {
-        this.loadFavoritesFromAPI();
-      } else {
-        // User logged out, clear API favorites and use localStorage
-        this.favoriteCards = {};
-        const storedFavorites = localStorage.getItem('favoriteCards');
-        if (storedFavorites) {
-          this.favoriteCards = JSON.parse(storedFavorites);
-        }
-      }
-    });
-  }
-
-  private setupCardImagesSubscription(): void {
-    // Subscribe to session changes to reload card images when user logs in
-    this.cardImagesSubscription = this.sessionService.get(s => s.loggedUserId).subscribe(userId => {
-      if (userId && this.isAuthenticated()) {
-        this.loadCustomImagesFromAPI();
-      } else {
-        // User logged out, clear API images and use localStorage
-        this.customImages = {};
-        const storedImages = localStorage.getItem('customCardImages');
-        if (storedImages) {
-          this.customImages = JSON.parse(storedImages);
-        }
-      }
-    });
-  }
-
-  private loadFavoritesFromAPI(): void {
-    this.favoriteCards = {};
+  private saveImages(): void {
+    try { localStorage.setItem('customCardImages', JSON.stringify(this.customImages)); } catch { }
   }
 
   public setCustomImageForCard(card: Card, imageUrl: string): void {
-    const fullCardIdentifier = `${card.set} ${card.setNumber}`;
-    if (!imageUrl) {
-      delete this.customImages[fullCardIdentifier];
-    } else {
-      this.customImages[fullCardIdentifier] = imageUrl;
-    }
-    localStorage.setItem('customCardImages', JSON.stringify(this.customImages));
-    this.overridesChangedSubject.next(fullCardIdentifier);
+    const key = `${card.set} ${card.setNumber}`;
+    if (imageUrl) { this.customImages[key] = imageUrl; } else { delete this.customImages[key]; }
+    this.saveImages();
+    this.overridesChangedSubject.next(key);
   }
 
-  public clearCustomImageForCard(card: Card): void {
-    const fullCardIdentifier = `${card.set} ${card.setNumber}`;
-    if (this.customImages[fullCardIdentifier]) {
-      delete this.customImages[fullCardIdentifier];
-      localStorage.setItem('customCardImages', JSON.stringify(this.customImages));
-    }
-    this.overridesChangedSubject.next(fullCardIdentifier);
-  }
+  public clearCustomImageForCard(card: Card): void { this.setCustomImageForCard(card, ''); }
 
   public getScanUrl(card: Card): string {
-    const fullCardIdentifier = `${card.set} ${card.setNumber}`;
-    const usCardIdentifier = card.usSetNumber;
-    const customUrl = (usCardIdentifier && this.customImages[usCardIdentifier]) || this.customImages[fullCardIdentifier];
+    return this.simulatorAssets.resolve(this.getRawScanUrl(card));
+  }
 
-    let url: string;
-    if (customUrl) {
-      url = customUrl;
-    } else {
-      const config = this.sessionService.session.config;
-      const scansUrl = config && config.scansUrl || '';
-      url = scansUrl
-        .replace('{cardImage}', card.cardImage)
-        .replace('{setNumber}', card.setNumber)
-        .replace('{name}', card.fullName);
+  /** Stable artwork identity for prefetch/cache lookup, before local resolution. */
+  public getRawScanUrl(card: Card): string {
+    const key = `${card.set} ${card.setNumber}`;
+    let url = (card.usSetNumber && this.customImages[card.usSetNumber]) || this.customImages[key] || card.cardImage;
+    const language = this.preference('cardLanguage', 'EN');
+    if (['ES', 'IT', 'FR'].includes(language) && url.includes('_EN_')) {
+      url = url.replace('_EN_', `_${language}_`);
     }
-
-    const cardLanguage = localStorage.getItem('cardLanguage') || 'EN';
-    const validLanguages = ['EN', 'ES', 'IT', 'FR'];
-    if (validLanguages.includes(cardLanguage) && cardLanguage !== 'EN' && url.includes('_EN_')) {
-      url = url.replace('_EN_', `_${cardLanguage}_`);
-    }
-
-    const preferredCardSize = localStorage.getItem('preferredCardSize') || 'SM';
-    const validSizes = ['XS', 'SM', 'MD', 'LG'];
-    const size = validSizes.includes(preferredCardSize) ? preferredCardSize : 'SM';
-    if (size !== 'XS' && url.includes('_XS.png')) {
-      url = url.replace('_XS.png', `_${size}.png`);
-    }
-
+    const preferredSize = this.preference('preferredCardSize', 'SM');
+    const size = ['XS', 'SM', 'MD', 'LG'].includes(preferredSize) ? preferredSize : 'SM';
+    if (size !== 'XS') { url = url.replace('_XS.png', `_${size}.png`); }
     return url;
   }
 
-  public setGlobalArtworksMap(map: { [code: string]: string } | undefined): void {
-    this.globalArtworksMap = map || {};
-  }
-
-  public getGlobalArtworkUrl(fullName: string): string | undefined {
-    return this.globalArtworksMap ? this.globalArtworksMap[fullName] : undefined;
-  }
-
-  public getScanUrlWithArt(card: Card, artworksSelection?: { code: string; artworkId?: number }[], unlocked?: { id: number, imageUrl: string }[]): string {
-    // If player selected an alternate art for this card, find it among unlocked and return its image
-    if (artworksSelection && unlocked) {
-      const code = card.fullName;
-      const selected = artworksSelection.find(a => a.code === code && a.artworkId);
-      if (selected) {
-        const art = unlocked.find(u => u.id === selected.artworkId);
-        if (art && art.imageUrl) return art.imageUrl;
-      }
-    }
-    return this.getScanUrl(card);
-  }
-
-  public setScanUrl(jsonUrl: string): Observable<void> {
-    // First save the URL to API if authenticated, then fetch and parse the JSON
-    if (this.isAuthenticated()) {
-      return this.profileService.setCardImagesUrl(jsonUrl).pipe(
-        catchError(() => {
-          // If API fails, continue anyway and save to localStorage
-          return of({ ok: false });
-        }),
-        switchMap(() => {
-          // Fetch and parse the JSON from the URL
-          return this.http.get(jsonUrl).pipe(
-            map((json: any) => {
-              this.customImages = json;
-              // Also save to localStorage as backup
-              localStorage.setItem('customCardImages', JSON.stringify(this.customImages));
-            }),
-            catchError((error) => {
-              // If fetching JSON fails, throw the error
-              throw error;
-            })
-          );
-        })
-      );
-    } else {
-      // Not authenticated, use localStorage
-      return this.http.get(jsonUrl).pipe(
-        map((json: any) => {
-          this.customImages = json;
-          localStorage.setItem('customCardImages', JSON.stringify(this.customImages));
-        }),
-      );
-    }
-  }
-
-
   public getCardByName(cardName: string): Card | undefined {
-    return this.cards.find(c => c.fullName === cardName);
+    if (!this.cardsByName) {
+      this.cardsByName = new Map(this.cards.map(card => [card.fullName, card]));
+    }
+    return this.cardsByName.get(cardName);
   }
 
   public getCardByNameSetNumber(name: string, set: string, setNumber: string): Card | undefined {
@@ -354,65 +154,10 @@ export class CardsBaseService implements OnDestroy {
 
   public getArtworkUrl(card: Card, artwork?: { imageUrl: string }): string {
     if (artwork && artwork.imageUrl) {
-      return artwork.imageUrl;
+      return this.simulatorAssets.resolve(artwork.imageUrl);
     }
     return this.getScanUrl(card);
   }
 
-  public setFavoriteCard(cardName: string, fullName: string): void {
-    this.favoriteCards[cardName] = fullName;
-
-    if (this.isAuthenticated()) {
-      // Save to database via API
-      this.favoritesService.setFavorite(cardName, fullName).pipe(
-        catchError(() => {
-          // If API fails, fall back to localStorage
-          localStorage.setItem('favoriteCards', JSON.stringify(this.favoriteCards));
-          return of({ ok: false });
-        })
-      ).subscribe();
-    } else {
-      // Save to localStorage for unauthenticated users
-      localStorage.setItem('favoriteCards', JSON.stringify(this.favoriteCards));
-    }
-  }
-
-  public getFavoriteCard(cardName: string): string | undefined {
-    return this.favoriteCards[cardName];
-  }
-
-  public clearFavoriteCard(cardName: string): void {
-    if (this.favoriteCards[cardName]) {
-      delete this.favoriteCards[cardName];
-
-      if (this.isAuthenticated()) {
-        // Clear from database via API
-        this.favoritesService.clearFavorite(cardName).pipe(
-          catchError(() => {
-            // If API fails, fall back to localStorage
-            localStorage.setItem('favoriteCards', JSON.stringify(this.favoriteCards));
-            return of({ ok: false });
-          })
-        ).subscribe();
-      } else {
-        // Clear from localStorage for unauthenticated users
-        localStorage.setItem('favoriteCards', JSON.stringify(this.favoriteCards));
-      }
-    }
-  }
-
-  public isFavoriteCard(card: Card): boolean {
-    const favoriteFullName = this.favoriteCards[card.name];
-    return favoriteFullName === card.fullName;
-  }
-
-  ngOnDestroy(): void {
-    if (this.favoritesSubscription) {
-      this.favoritesSubscription.unsubscribe();
-    }
-    if (this.cardImagesSubscription) {
-      this.cardImagesSubscription.unsubscribe();
-    }
-  }
-
+  ngOnDestroy(): void { this.overridesChangedSubject.complete(); }
 }

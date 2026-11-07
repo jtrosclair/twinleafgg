@@ -13,6 +13,7 @@
   'poisoned': specialConditions.includes(SpecialCondition.POISONED)
   }">
 
+  <ng-container *ngIf="!isEmpty && !isFaceDown">
   <div class="ptcg-energy-cards">
     <ptcg-card [card]="energyCard" [customImageUrl]="getCustomEnergyIcon(energyCard, true)"
       [attr.data-name]="energyCard.name" *ngFor="let energyCard of energyCards"
@@ -112,6 +113,8 @@
       {{ 'LABEL_ABILITY_USED' | translate }}
     </ptcg-badge>
   </div>
+
+  </ng-container>
 
   <div class="ptcg-card-counts" *ngIf="showCardCount && cardCount > 0">
     <ptcg-badge>

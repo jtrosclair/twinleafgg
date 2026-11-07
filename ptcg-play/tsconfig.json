@@ -2,6 +2,10 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "paths": {
+      "ptcg-server": ["../ptcg-server/browser-esm/browser"],
+      "ptcg-server/client": ["../ptcg-server/browser-esm/client/index"]
+    },
     "downlevelIteration": true,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,

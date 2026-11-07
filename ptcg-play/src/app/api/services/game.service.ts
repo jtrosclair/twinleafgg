@@ -1,469 +1,218 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone, Optional } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import {
-  ClientInfo, GameState, State, CardTarget, StateLog, Replay,
-  Base64, StateSerializer, PlayerStats, GamePhase
+  Action, AttackAction, Base64, CardTarget, GamePhase, GameWinner, PassTurnAction,
+  PlayCardAction, ReorderBenchAction, ReorderHandAction, RetreatAction, State,
+  StateSerializer, UseAbilityAction, UseEnergyAbilityAction, UseStadiumAction,
+  UseTrainerAbilityAction, WinConditions
 } from 'ptcg-server';
-import { Observable } from 'rxjs';
+import { ClientSimulator } from 'ptcg-server/client';
+import { defer, Observable, of } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { finalize } from 'rxjs/operators';
-
 import { AlertService } from '../../shared/alert/alert.service';
-import { ApiError } from '../api.error';
-import { ApiService } from '../api.service';
-import { LocalGameState, PlayerGameStats } from '../../shared/session/session.interface';
-import { isValidPlayerGameStats, sanitizePlayerGameStats } from '../../shared/session/game-stats.utils';
-import { PlayerStatsResponse } from '../interfaces/game.interface';
-import { SocketService } from '../socket.service';
+import { LocalGameState } from '../../shared/session/session.interface';
 import { SessionService } from '../../shared/session/session.service';
 import { BoardInteractionService } from '../../shared/services/board-interaction.service';
 import { WebViewBridgeService } from '../../shared/services/webview-bridge.service';
+import { decodePuzzlePayload } from '../../shared/services/puzzle-payload';
 
-export interface GameUserInfo {
-  gameId: number;
-  userInfo: ClientInfo;
-}
-
-@Injectable()
+/** Owns the single in-memory simulator and its presentation snapshot. */
+@Injectable({ providedIn: 'root' })
 export class GameService {
+  private simulator: ClientSimulator | undefined;
+  private simulatorGameId = 0;
+  private loadingSnapshot = false;
+  private terminalMessageSent = false;
+  private initialSnapshot: string | undefined;
 
   constructor(
-    private api: ApiService,
     private alertService: AlertService,
     private sessionService: SessionService,
-    public socketService: SocketService,
     private translate: TranslateService,
     private boardInteractionService: BoardInteractionService,
     private ngZone: NgZone,
-    private webViewBridgeService: WebViewBridgeService
+    private webViewBridgeService: WebViewBridgeService,
+    @Optional() private dialog?: MatDialog
   ) { }
 
-  public getPlayerStats(gameId: number) {
-    return this.api.get<PlayerStatsResponse>('/v1/game/' + gameId + '/playerStats');
-  }
-
-  public validateGameState(stateData: string): Observable<{ ok: boolean; valid: boolean; info?: any; error?: string; message?: string }> {
-    return this.api.post('/v1/game/validate-state', { stateData });
-  }
-
-  public createGameFromState(stateData: string, opponentUsername?: string, winConditions?: { selfDeckOut?: boolean }): Observable<GameState> {
-    this.boardInteractionService.endBoardSelection();
-
-    return new Observable<GameState>(observer => {
-      this.socketService.emit('core:createGameFromState', { stateData, opponentUsername, winConditions })
-        .pipe(finalize(() => observer.complete()))
-        .subscribe((gameState: GameState) => {
-          this.appendGameState(gameState);
-          // Set the game ID for reconnection tracking
-          this.socketService.setGameId(gameState.gameId);
-          observer.next(gameState);
-        }, (error: any) => {
-          observer.error(error);
-        });
+  public validateGameState(stateData: string): Observable<{ ok: boolean; valid: boolean; message?: string }> {
+    return defer(() => {
+      try {
+        new ClientSimulator().validateSnapshot(decodePuzzlePayload(stateData));
+        return of({ ok: true, valid: true });
+      } catch (error) {
+        return of({ ok: false, valid: false, message: error.message });
+      }
     });
   }
 
-  public join(gameId: number): Observable<GameState> {
-    this.boardInteractionService.endBoardSelection();
-
-    return new Observable<GameState>(observer => {
-      this.socketService.emit('game:join', gameId)
-        .pipe(finalize(() => observer.complete()))
-        .subscribe((gameState: GameState) => {
-          this.appendGameState(gameState);
-
-          // Only set game ID for reconnection tracking if the user is actually a player
-          // Check if the user's client ID is in the game's clientIds array
-          // and verify they are in the players array (not just a spectator)
-          const localGameState = this.sessionService.session.gameStates.find(
-            g => g.gameId === gameId && g.deleted === false
-          );
-          if (localGameState) {
-            const clientId = this.sessionService.session.clientId;
-            const isPlayer = localGameState.state.players.some(p => p.id === clientId);
-            if (isPlayer) {
-              // User is a player, set game ID for reconnection tracking
-              this.socketService.setGameId(gameId);
-            }
-          }
-
-          observer.next(gameState);
-        }, (error: any) => {
-          observer.error(error);
-        });
-    });
-  }
-
-  public appendGameState(gameState: GameState, replay?: Replay): LocalGameState | undefined {
-    const gameId = gameState.gameId;
-    const games = this.sessionService.session.gameStates;
-    const index = games.findIndex(g => g.gameId === gameId && g.deleted === false);
-    if (index === -1) {
-      const logs: StateLog[] = [];
-      let lastGameId = this.sessionService.session.lastGameId || 0;
-      lastGameId++;
-      const state = this.decodeStateData(gameState.stateData);
-      const enhancedPlayerStats = this.extractPlayerGameStats(state);
-
-      const localGameState: LocalGameState = {
-        ...gameState,
-        localId: lastGameId,
-        gameOver: replay ? true : false,
-        deleted: replay ? true : false,
-        switchSide: false,
-        promptMinimized: false,
-        state,
-        logs,
-        replayPosition: 1,
-        replay,
-        enhancedPlayerStats: enhancedPlayerStats,
+  public createGameFromState(stateData: string, winConditions?: WinConditions): Observable<LocalGameState> {
+    return defer(() => {
+      const snapshot = decodePuzzlePayload(stateData);
+      const simulator = new ClientSimulator(() => {
+        if (!this.loadingSnapshot && this.simulator === simulator) {
+          this.ngZone.run(() => this.publishState());
+        }
+      });
+      this.loadingSnapshot = true;
+      let serialized: string, state: State;
+      try {
+        simulator.loadSnapshot({ stateData: snapshot, winConditions: winConditions && { ...winConditions } });
+        serialized = simulator.getStateData();
+        state = this.decodeState(serialized);
+      } catch (error) {
+        simulator.cleanup();
+        throw error;
+      } finally {
+        this.loadingSnapshot = false;
+      }
+      this.boardInteractionService.endBoardSelection();
+      this.simulator?.cleanup();
+      this.simulator = simulator;
+      this.simulatorGameId = Math.max(this.simulatorGameId, this.sessionService.session.lastGameId) + 1;
+      const localId = this.sessionService.session.lastGameId + 1;
+      this.terminalMessageSent = false;
+      this.initialSnapshot = serialized;
+      const game: LocalGameState = {
+        gameId: this.simulatorGameId, localId, clientSide: true, stateData: serialized, state,
+        deleted: false, gameOver: false, promptMinimized: false,
+        turnComplete: simulator.complete, logs: state.logs
       };
-      const gameStates = [...games, localGameState];
-      this.startListening(gameState.gameId);
-      this.sessionService.set({ gameStates, lastGameId });
-      return localGameState;
+      this.sessionService.set({ clientId: simulator.humanPlayerId, gameStates: [game], lastGameId: localId });
+      this.publishState({ stateData: serialized, state });
+      return of(game);
+    });
+  }
+
+  public setPromptMinimized(localId: number, minimized: boolean): void {
+    const game = this.sessionService.session.gameStates[0];
+    if (game?.localId === localId) {
+      this.sessionService.set({ gameStates: [{ ...game, promptMinimized: minimized }] });
     }
   }
 
-  public markAsDeleted(gameId: number) {
-    const games = this.sessionService.session.gameStates;
-    const index = games.findIndex(g => g.gameId === gameId && g.deleted === false);
-    if (index !== -1) {
-      const gameStates = this.sessionService.session.gameStates.slice();
-      gameStates[index] = { ...gameStates[index], deleted: true };
-      this.stopListening(gameId);
-      this.sessionService.set({ gameStates });
+  public removeGameState(gameId: number): void {
+    if (gameId === this.simulatorGameId) {
+      this.simulator?.cleanup();
+      this.simulator = undefined;
+      this.initialSnapshot = undefined;
+      this.boardInteractionService.endBoardSelection();
+      this.sessionService.set({ gameStates: [] });
     }
   }
 
-  public setPromptMinimized(gameId: number, minimized: boolean) {
-    const games = this.sessionService.session.gameStates;
-    const index = games.findIndex(g => g.localId === gameId);
-    if (index !== -1) {
-      const gameStates = this.sessionService.session.gameStates.slice();
-      gameStates[index] = { ...gameStates[index], promptMinimized: minimized };
-      this.sessionService.set({ gameStates });
-    }
+  public ability(gameId: number, name: string, target: CardTarget): void {
+    this.action(gameId, sim => new UseAbilityAction(sim.humanPlayerId, name, target));
   }
-
-  public removeGameState(gameId: number) {
-    const games = this.sessionService.session.gameStates;
-    const index = games.findIndex(g => g.gameId === gameId && g.deleted === false);
-    if (index !== -1) {
-      const gameStates = games.filter(g => g.gameId !== gameId || g.deleted !== false);
-      this.stopListening(gameId);
-      this.sessionService.set({ gameStates });
-    }
+  public trainerAbility(gameId: number, name: string, target: CardTarget): void {
+    this.action(gameId, sim => new UseTrainerAbilityAction(sim.humanPlayerId, name, target));
   }
-
-  public removeLocalGameState(localGameId: number) {
-    const games = this.sessionService.session.gameStates;
-    const index = games.findIndex(g => g.localId === localGameId);
-    if (index !== -1) {
-      const gameStates = games.filter(table => table.localId !== localGameId);
-      this.sessionService.set({ gameStates });
-    }
+  public energyAbility(gameId: number, name: string, target: CardTarget): void {
+    this.action(gameId, sim => new UseEnergyAbilityAction(sim.humanPlayerId, name, target));
   }
-
-  public leave(gameId: number) {
-    // Clear the game ID for reconnection tracking
-    this.socketService.clearGameId();
-
-    const games = this.sessionService.session.gameStates;
-    const index = games.findIndex(g => g.gameId === gameId && g.deleted === false);
-    if (index !== -1) {
-      // Use concede instead of leave to properly forfeit the game
-      this.socketService.emit('game:concede', { gameId })
-        .subscribe(() => {
-          // Don't immediately remove the game state - let the server send the FINISHED state first
-          // The game will be removed when the user confirms the game over dialog
-        }, (error: ApiError) => this.handleError(error));
-    }
+  public attack(gameId: number, name: string): void {
+    this.action(gameId, sim => new AttackAction(sim.humanPlayerId, name));
   }
-
-  public ability(gameId: number, ability: string, target: CardTarget) {
-    this.socketService.emit('game:action:ability', { gameId, ability, target })
-      .subscribe(() => { }, (error: ApiError) => this.handleError(error));
+  public stadium(gameId: number): void {
+    this.action(gameId, sim => new UseStadiumAction(sim.humanPlayerId));
   }
-
-  public trainerAbility(gameId: number, ability: string, target: CardTarget) {
-    this.socketService.emit('game:action:trainerAbility', { gameId, ability, target })
-      .subscribe(() => { }, (error: ApiError) => this.handleError(error));
+  public playCardAction(gameId: number, handIndex: number, target: CardTarget): void {
+    this.action(gameId, sim => new PlayCardAction(sim.humanPlayerId, handIndex, target));
   }
-
-  public energyAbility(gameId: number, ability: string, target: CardTarget) {
-    this.socketService.emit('game:action:energyAbility', { gameId, ability, target })
-      .subscribe(() => { }, (error: ApiError) => this.handleError(error));
+  public reorderBenchAction(gameId: number, from: number, to: number): void {
+    this.action(gameId, sim => new ReorderBenchAction(sim.humanPlayerId, from, to));
   }
-
-  public attack(gameId: number, attack: string) {
-    this.socketService.emit('game:action:attack', { gameId, attack })
-      .subscribe(() => { }, (error: ApiError) => this.handleError(error));
+  public reorderHandAction(gameId: number, order: number[]): void {
+    this.action(gameId, sim => new ReorderHandAction(sim.humanPlayerId, order));
   }
-
-  public stadium(gameId: number) {
-    this.socketService.emit('game:action:stadium', { gameId })
-      .subscribe(() => { }, (error: ApiError) => this.handleError(error));
+  public retreatAction(gameId: number, to: number): void {
+    this.action(gameId, sim => new RetreatAction(sim.humanPlayerId, to));
   }
-
-  public play(gameId: number, deck: string[]) {
-    this.socketService.emit('game:action:play', { gameId, deck })
-      .subscribe(() => { }, (error: ApiError) => this.handleError(error));
+  public passTurnAction(gameId: number): void {
+    this.action(gameId, sim => new PassTurnAction(sim.humanPlayerId));
   }
-
-  public resolvePrompt(gameId: number, promptId: number, result: any) {
-    this.socketService.emit('game:action:resolvePrompt', { gameId, id: promptId, result })
-      .subscribe(() => { }, (error: ApiError) => this.handleError(error));
-  }
-
-  public playCardAction(gameId: number, handIndex: number, target: CardTarget) {
-    this.socketService.emit('game:action:playCard', { gameId, handIndex, target })
-      .subscribe(() => { }, (error: ApiError) => this.handleError(error));
-  }
-
-  public reorderBenchAction(gameId: number, from: number, to: number) {
-    this.socketService.emit('game:action:reorderBench', { gameId, from, to })
-      .subscribe(() => { }, (error: ApiError) => this.handleError(error));
-  }
-
-  public reorderHandAction(gameId: number, order: number[]) {
-    this.socketService.emit('game:action:reorderHand', { gameId, order })
-      .subscribe(() => { }, (error: ApiError) => this.handleError(error));
-  }
-
-  public retreatAction(gameId: number, to: number) {
-    this.socketService.emit('game:action:retreat', { gameId, to })
-      .subscribe(() => { }, (error: ApiError) => this.handleError(error));
-  }
-
-  public passTurnAction(gameId: number) {
-    this.socketService.emit('game:action:passTurn', { gameId })
-      .subscribe(() => { }, (error: ApiError) => this.handleError(error));
-  }
-
-  public appendLogAction(gameId: number, message: string) {
-    this.socketService.emit('game:action:appendLog', { gameId, message })
-      .subscribe(() => { }, (error: ApiError) => this.handleError(error));
-  }
-
-  public changeAvatarAction(gameId: number, avatarName: string) {
-    this.socketService.emit('game:action:changeAvatar', { gameId, avatarName })
-      .subscribe(() => { }, (error: ApiError) => this.handleError(error));
-  }
-
-  public undo(gameId: number) {
-    this.socketService.emit('game:action:undo', { gameId })
-      .subscribe(() => { }, (error: ApiError) => this.handleError(error));
+  public resolvePrompt(gameId: number, promptId: number, result: any): void {
+    this.run(gameId, sim => sim.resolvePrompt(promptId, result));
   }
 
   public canUndo(gameId: number): Observable<boolean> {
-    return new Observable<boolean>(observer => {
-      this.socketService.emit('game:canUndo', { gameId })
-        .subscribe((result: { canUndo: boolean }) => {
-          observer.next(result.canUndo);
-          observer.complete();
-        }, (error: ApiError) => {
-          observer.next(false);
-          observer.complete();
-        });
+    return defer(() => of(this.requireSimulator(gameId).canUndo()));
+  }
+
+  public undo(gameId: number): void {
+    this.run(gameId, sim => {
+      if (sim.canUndo()) { this.restore(() => sim.undo()); }
     });
   }
 
-  public pushStateChange(gameId: number, stateData: string) {
-    this.socketService.emit('game:action:pushStateChange', { gameId, stateData })
-      .subscribe(() => { }, (error: ApiError) => this.handleError(error));
+  public pushStateChange(gameId: number, stateData: string): void {
+    this.run(gameId, sim => this.restore(() => sim.pushState(stateData)));
   }
 
-  public forceDisconnect() {
-    // Force disconnect from the socket to simulate network issues
-    this.socketService.forceDisconnect();
-
-    // Show a toast message to inform the user
-    this.alertService.toast(this.translate.instant('FORCE_DISCONNECT_MESSAGE'));
-  }
-
-  private startListening(id: number) {
-    this.socketService.on(`game[${id}]:join`, (clientId: number) => {
-      this.ngZone.run(() => this.onJoin(id, clientId));
-    });
-    this.socketService.on(`game[${id}]:leave`, (clientId: number) => {
-      this.ngZone.run(() => this.onLeave(id, clientId));
-    });
-    this.socketService.on(`game[${id}]:stateChange`, (data: { stateData: string, playerStats: PlayerStats[] }) => {
-      this.ngZone.run(() => this.onStateChange(id, data.stateData, data.playerStats));
-    });
-
-    // Animation event handlers
-    this.socketService.on(`game[${id}]:playBasicAnimation`, (data: { playerId: number, cardId: number | string, slot: string, index?: number }) => {
-      this.ngZone.run(() => this.boardInteractionService.triggerBasicAnimation(data));
-    });
-    this.socketService.on(`game[${id}]:evolution`, (data: { playerId: number, cardId: number | string, slot: string, index?: number }) => {
-      this.ngZone.run(() => this.boardInteractionService.triggerEvolutionAnimation(data));
-    });
-    this.socketService.on(`game[${id}]:attack`, (data: { playerId: number, cardId: number | string, slot: string, index?: number }) => {
-      this.ngZone.run(() => this.boardInteractionService.triggerAttackAnimation(data));
+  public resetGame(gameId: number): void {
+    this.run(gameId, sim => {
+      const initialSnapshot = this.initialSnapshot;
+      if (initialSnapshot === undefined) { throw new Error('GAME_INVALID_ID'); }
+      this.restore(() => sim.pushState(initialSnapshot), { resetPresentation: true });
     });
   }
 
-  private stopListening(id: number) {
-    this.socketService.off(`game[${id}]:join`);
-    this.socketService.off(`game[${id}]:leave`);
-    this.socketService.off(`game[${id}]:stateChange`);
-
-    // Clean up animation event handlers
-    this.socketService.off(`game[${id}]:playBasicAnimation`);
-    this.socketService.off(`game[${id}]:evolution`);
-    this.socketService.off(`game[${id}]:attack`);
+  private restore(operation: () => unknown, options: { resetPresentation?: boolean } = {}): void {
+    this.loadingSnapshot = true;
+    try { operation(); } finally { this.loadingSnapshot = false; }
+    this.terminalMessageSent = false;
+    this.boardInteractionService.endBoardSelection();
+    if (options.resetPresentation) { this.dialog?.closeAll(); }
+    this.webViewBridgeService.postMessage({ type: 'UndoDetected', data: {} });
+    this.publishState(undefined, options.resetPresentation);
   }
 
-  private onStateChange(gameId: number, stateData: string, playerStats: PlayerStats[]) {
-    this.webViewBridgeService.postMessage({ type: "StateUpdate", data: { stateData } });
-    const state = this.decodeStateData(stateData);
-    const games = this.sessionService.session.gameStates;
-    const index = games.findIndex(g => g.gameId === gameId && g.deleted === false);
-    if (index !== -1) {
-      const gameStates = this.sessionService.session.gameStates.slice();
-      const previousState = gameStates[index].state;
-      const logs = [...gameStates[index].logs, ...state.logs];
+  private action(gameId: number, build: (simulator: ClientSimulator) => Action): void {
+    this.run(gameId, simulator => simulator.dispatch(build(simulator)));
+  }
 
-      // Extract enhanced player statistics if available from the state
-      const enhancedPlayerStats = this.extractPlayerGameStats(state);
-
-      gameStates[index] = {
-        ...gameStates[index],
-        state,
-        logs,
-        enhancedPlayerStats: enhancedPlayerStats,
-        playerStats
-      };
-      this.sessionService.set({ gameStates });
-      this.boardInteractionService.updateGameLogs(logs)
-
-      // Clear game ID for reconnection tracking if game has finished
-      if (state.phase === GamePhase.FINISHED) {
-        this.socketService.clearGameId();
-      } else {
-        // Notify React Native WebView on turn change
-        if (previousState && state.turn !== previousState.turn) {
-          if (state.activePlayer === 1) {
-            this.webViewBridgeService.postMessage({
-              type: "GameOver",
-              data: { winner: "player2" }
-            });
-          }
-        }
-      }
+  private run(gameId: number, operation: (simulator: ClientSimulator) => unknown): void {
+    try { operation(this.requireSimulator(gameId)); } catch (error) {
+      const message = String(error.message || error);
+      const translations = this.translate.translations[this.translate.currentLang]
+        || this.translate.translations[this.translate.defaultLang];
+      const key = translations?.GAME_MESSAGES?.[message] ? 'GAME_MESSAGES.' + message : 'ERROR_UNKNOWN';
+      this.alertService.toast(this.translate.instant(key));
     }
   }
 
-
-
-  private extractPlayerGameStats(state: State): PlayerGameStats[] | undefined {
-    // For now, return undefined as the server-side statistics tracking is not yet implemented
-    // This method will be updated when the server-side GameStatsTracker is implemented
-    // The method provides type safety and proper structure for when the data becomes available
-
-    if (!state || !state.players) {
-      return undefined;
+  private requireSimulator(gameId: number): ClientSimulator {
+    const game = this.sessionService.session.gameStates[0];
+    if (!this.simulator || gameId !== this.simulatorGameId || !game || game.gameId !== gameId || game.deleted) {
+      throw new Error('GAME_INVALID_ID');
     }
+    return this.simulator;
+  }
 
-    try {
-      // Check if enhanced game statistics are available in the state
-      // This will be populated by the server-side GameStatsTracker in future tasks
-      const playerStats: PlayerGameStats[] = state.players.map((player, index) => {
-        // Extract game statistics if available, otherwise use defaults
-        const gameStats = (player as any).gameStats;
-
-        if (gameStats && isValidPlayerGameStats(gameStats)) {
-          return {
-            prizesTakenCount: gameStats.prizesTakenCount,
-            totalDamageDealt: gameStats.totalDamageDealt,
-            topPokemon: gameStats.topPokemon
-          };
-        }
-
-        // Fallback to default values when server-side tracking is not available
-        return {
-          prizesTakenCount: 0,
-          totalDamageDealt: 0,
-          topPokemon: null
-        };
-      });
-
-      return playerStats;
-    } catch (error) {
-      return undefined;
+  private publishState(prepared?: { stateData: string; state: State }, resetPresentation = false): void {
+    const simulator = this.simulator;
+    const previous = this.sessionService.session.gameStates[0];
+    if (!simulator || !previous || previous.gameId !== this.simulatorGameId) { return; }
+    const stateData = prepared?.stateData ?? simulator.getStateData();
+    const state = prepared?.state ?? this.decodeState(stateData);
+    const pendingPrompt = state.prompts.find(prompt => prompt.playerId === simulator.humanPlayerId && prompt.result === undefined);
+    const previousPrompt = previous.state.prompts.find(prompt => prompt.playerId === simulator.humanPlayerId && prompt.result === undefined);
+    // Minimization belongs to one pending human prompt, never to the next action.
+    const promptMinimized = !resetPresentation && previous.promptMinimized && pendingPrompt !== undefined
+      && pendingPrompt.id === previousPrompt?.id && pendingPrompt.type === previousPrompt?.type;
+    this.sessionService.set({ gameStates: [{ ...previous, stateData, state, logs: state.logs, turnComplete: simulator.complete,
+      promptMinimized, ...(resetPresentation ? { gameOver: false } : {}) }] });
+    this.boardInteractionService.updateGameLogs(state.logs);
+    this.webViewBridgeService.postMessage({ type: 'StateUpdate', data: { stateData } });
+    if (simulator.complete && !this.terminalMessageSent) {
+      this.terminalMessageSent = true;
+      this.webViewBridgeService.postMessage(state.phase === GamePhase.FINISHED
+        ? { type: 'GameOver', data: { winner: state.winner === GameWinner.PLAYER_1 ? 'player1' : 'player2' } }
+        : { type: 'TurnEnd', data: {} });
     }
   }
 
-  private onJoin(gameId: number, clientId: number) {
-    const games = this.sessionService.session.gameStates;
-    const index = games.findIndex(g => g.gameId === gameId && g.deleted === false);
-    if (index === -1) {
-      return;
-    }
-    const game = this.sessionService.session.gameStates[index];
-    const clientIndex = game.clientIds.indexOf(clientId);
-    if (clientIndex === -1) {
-      const clientIds = [...game.clientIds, clientId];
-      const gameStates = this.sessionService.session.gameStates.slice();
-      gameStates[index] = { ...gameStates[index], clientIds };
-      this.sessionService.set({ gameStates });
-    }
+  private decodeState(stateData: string): State {
+    return new StateSerializer().deserialize(new Base64().decode(stateData));
   }
-
-  private onLeave(gameId: number, clientId: number) {
-    const games = this.sessionService.session.gameStates;
-    const index = games.findIndex(g => g.gameId === gameId && g.deleted === false);
-    if (index === -1) {
-      return;
-    }
-    const game = this.sessionService.session.gameStates[index];
-    const clientIndex = game.clientIds.indexOf(clientId);
-    if (clientIndex !== -1) {
-      const clientIds = game.clientIds.filter(id => id !== clientId);
-      const gameStates = this.sessionService.session.gameStates.slice();
-      gameStates[index] = { ...gameStates[index], clientIds };
-      this.sessionService.set({ gameStates });
-    }
-  }
-
-  private onTimerUpdate(gameId: number, playerStats: PlayerStats[]) {
-    const games = this.sessionService.session.gameStates;
-    const index = games.findIndex(g => g.gameId === gameId && g.deleted === false);
-    if (index !== -1) {
-      const gameStates = this.sessionService.session.gameStates.slice();
-      gameStates[index] = { ...gameStates[index], playerStats };
-      this.sessionService.set({ gameStates });
-    }
-  }
-
-  private decodeStateData(stateData: string): State {
-    const base64 = new Base64();
-    const serializedState = base64.decode(stateData);
-    const serializer = new StateSerializer();
-    return serializer.deserialize(serializedState);
-  }
-
-  private handleError(error: ApiError): void {
-    const message = String(error.message);
-    const translations = this.translate.translations[this.translate.currentLang]
-      || this.translate.translations[this.translate.defaultLang];
-
-    const key = translations && translations.GAME_MESSAGES[message]
-      ? 'GAME_MESSAGES.' + message
-      : 'ERROR_UNKNOWN';
-
-    if (key == "ERROR_UNKNOWN" || key == "NOT_YOUR_TURN") {
-      if ((window as any).ReactNativeWebView) {
-        //(window as any).ReactNativeWebView?.postMessage(JSON.stringify({ type: "GameOver", data: { winner: "player2", isError: true } }));
-      }
-    }
-
-    this.alertService.toast(this.translate.instant(key));
-  }
-
-  private postMessageToWebView(message: { type: string; data: any }): void {
-    this.webViewBridgeService.postMessage(message);
-  }
-
 }

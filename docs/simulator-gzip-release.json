@@ -1,0 +1,76 @@
+{
+  "verifiedAt": "2026-11-07T01:16:22.733Z",
+  "packageHash": "f503132b3ee11273fa7f4a063b080f1b03af411d35172e331ed0ff479bbe7cc6",
+  "buildId": "bc7a2edf-68ca-4d48-9c1d-3a9f269f81ba",
+  "workerVersion": "9ff5b19d-56f8-4487-9909-82b54e2346f0",
+  "browser": "Desktop Chromium via in-app browser",
+  "physicalMobileWebViewTest": false,
+  "compressedPuzzleSmokeTests": [
+    {
+      "name": "Trapped in the Phantom Maze",
+      "urlUnchanged": true,
+      "boardCards": 41,
+      "boardVisible": true,
+      "base": "/releases/f503132b3ee11273fa7f4a063b080f1b03af411d35172e331ed0ff479bbe7cc6/"
+    },
+    {
+      "name": "Explosive Hand",
+      "urlUnchanged": true,
+      "boardCards": 38,
+      "boardVisible": true,
+      "base": "/releases/f503132b3ee11273fa7f4a063b080f1b03af411d35172e331ed0ff479bbe7cc6/"
+    },
+    {
+      "name": "Breaking Through the Wall",
+      "urlUnchanged": true,
+      "boardCards": 41,
+      "boardVisible": true,
+      "base": "/releases/f503132b3ee11273fa7f4a063b080f1b03af411d35172e331ed0ff479bbe7cc6/"
+    },
+    {
+      "name": "Something's Fishy",
+      "urlUnchanged": true,
+      "boardCards": 35,
+      "boardVisible": true,
+      "base": "/releases/f503132b3ee11273fa7f4a063b080f1b03af411d35172e331ed0ff479bbe7cc6/"
+    },
+    {
+      "name": "Deck out with Dengo",
+      "urlUnchanged": true,
+      "boardCards": 41,
+      "boardVisible": true,
+      "base": "https://sim-static.prizemap.app/releases/f503132b3ee11273fa7f4a063b080f1b03af411d35172e331ed0ff479bbe7cc6/"
+    }
+  ],
+  "legacyPlainDengoPassed": true,
+  "consoleErrors": 0,
+  "imageLoading": "lazy",
+  "screenshot": "/tmp/twinleaf-gzip-live.png",
+  "mainBundleGzipBytes": {
+    "before": 1960516,
+    "after": 1967076,
+    "added": 6560
+  },
+  "automatedTests": 277,
+  "winningReplays": 40,
+  "dengoTuroNestCases": 5,
+  "deliveryReport": "simulator-delivery-results.json",
+  "webMigration": {
+    "verified": true,
+    "productionCommit": "3d3b85e1b7458d949fcfe6203e28ddef5efaeda2",
+    "records": 528,
+    "puzzles": 295,
+    "draftEditorRecords": 233,
+    "fields": 600,
+    "remainingEligiblePlainUrls": 0,
+    "payloadCharactersBefore": 5959808,
+    "payloadCharactersAfter": 1253687,
+    "savedPercent": 78.96430556152144,
+    "fullStateComparisons": 600,
+    "metadataAndSourceUrlsPreserved": true,
+    "backupDirectory": "/Users/jerrytrosclair/.local/share/prizemap/backups/simulator-gzip-2026-11-06",
+    "backupSha256": "c3eaf8f481d04b39103ac17ea8fa71147a5712eed46ddc8a644eccd25e2dc450",
+    "livePublicApiVerified": true,
+    "liveMigratedDengoBoardRendered": true
+  }
+}

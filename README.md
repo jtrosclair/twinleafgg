@@ -1,154 +1,204 @@
-# twinleaf.gg
-# Pokemon Trading Card Game Simulator
+# PrizeMap local simulator
 
-The project is created to allow players of the Pokemon Trading Card Game to experience current and past formats that are not otherwise accesible in an online, web-based client.
+A browser-only Pokémon TCG puzzle simulator. The complete executable card
+library runs in one in-memory game, with a human turn, a dummy opponent that
+resolves prompts, local undo, and PrizeMap snapshot/host-bridge compatibility.
+There is no game server, login, multiplayer, account, or chat service.
 
-There are two projects:
+Open the live simulator at **[sim-static.prizemap.app/sandbox-viewer](https://sim-static.prizemap.app/sandbox-viewer)**.
+This stable URL serves fresh, `no-store, no-transform` HTML in place. Its asset base selects
+one immutable release for the loaded page. A new opening or reload selects the
+latest deployed release; an active puzzle keeps its existing code and artwork choices.
+The visible URL stays `/sandbox-viewer` during internal table navigation.
+The frame hides Undo and End turn controls; PrizeMap controls history restoration
+through the existing host bridge.
+The host can restart the active puzzle in place with `ResetGame` or
+`window.PrizeMapSimulator.reset()`; the [bridge contract](docs/client-simulator-integration.md#reset-the-active-puzzle)
+describes resetting host undo history and receiving the fresh initial state.
+Completed attempts fade to the board background without a result modal. PrizeMap
+receives the outcome and displays win/loss; restoring history reveals the board again.
 
-* **ptcg-server** is the game server. It is responsible for calculating the game state and propagating it to the connected clients by websockets.
+## Run locally
 
-* **ptcg-play** is a web application written in Angular. It displays the game state and allows interaction with the server.
+Use Node 24 (`nvm use`). Development dependencies stay out of the delivered
+simulator package.
 
-### Server launch
-
-Server is a simple node.js application written in TypeScript. It uses express with websockets and [typeorm](https://typeorm.io/#/) for database access.
-
-Prerequisites:
-* Node.js 8 LTS or higher
-* mysql-5 or sqlite-3
-
-`config.js` contains all available options and its default values are defined in the `src/config.ts`
-
-1. Install all required dependencies.
-
-```
-npm install
-```
-
-2. Add a file named ".env" in the main ptcg-server directory. Paste these contents.
-
-```
-STORAGE_TYPE='sqlite'
-STORAGE_DATABASE='database.sq3'
-SERVER_PASSWORD=''
-SERVER_SECRET='!secret!'
-```
-
-3. Build the project and start it.
-
-```
+```sh
+npm --prefix ptcg-server ci
+npm --prefix ptcg-play ci
+npm --prefix tools ci
 npm run build
 npm start
 ```
 
-The service should now listen on the specified address and port. It will be http://localhost:8080 by default. This can be changed by editing `config.js` as previously mentioned. This server uses Sqlite-3.
+Open **http://localhost:4200/puzzle** for the selected local PrizeMap puzzle, or
+**http://localhost:4200/sandbox-viewer** to paste another serialized state.
+A selected published puzzle lives in the ignored
+`tools/.local-prizemap-puzzle.json`; otherwise `/puzzle` opens the empty puzzle input.
+The client loads its embedded UI and initializes the game without waiting for
+card artwork. Card images use native lazy loading and asynchronous decoding;
+hidden faces are not requested until revealed or opened in a pile. Faces appear
+as their images arrive. Card moves, prompts, randomness, undo and results run
+locally while artwork may still be downloading.
 
-### Client launch
+The package bootstrap supplies card image metadata and its hash before Angular
+starts. Normal setup validates it synchronously, with no card-metadata HTTP or
+IndexedDB work. Missing or mismatched metadata requires a reload; the complete
+package supplies its own matching executable catalogue and ordered image table.
+Artwork uses ordinary image URLs and the
+browser's HTTP cache, without a simulator Blob or IndexedDB scan cache. A new
+puzzle can require image downloads after the board is playable; network access
+and cache retention determine when those faces appear. Existing image sizes and
+original artwork URLs in snapshots stay unchanged. Embedded static UI images
+continue to use data URLs.
 
-The client is an Angular application.
-https://angular.io/. 
-The source code of the client is located in the `ptcg-play` directory.
+Energy symbols, basic-energy attachment icons, the Twinleaf card back and loading
+wordmark use small, self-contained SVGs. Other UI artwork uses WebP quality 75
+with lossless alpha; the five foil-effect masks remain lossless. Display sizes
+and remote card scans are unchanged. Legacy PNG and WebP image paths remain
+aliases to their replacements, without storing duplicate image bytes.
+The 11 energy types derive from the original vectors and colors extracted
+from page 4 of the official Pokémon rulebook.
+[Source and extraction provenance](docs/simulator-official-energy-provenance.json)
+records the PDF digest and individual source paths. The empty-cost indicator
+uses the same colorless disk without a glyph.
+Energy SVG coordinates and curves are simplified within a measured visual
+tolerance. Isolated glyph silhouettes, canvas alpha and foreground/background
+colors must each meet a 95% fidelity floor at 24, 108 and 512 pixels wide;
+empty background cannot hide a damaged glyph. The committed hashes bind these
+checks to the reviewed artwork. These metrics allow small visual differences
+and do not claim pixel identity. Twinleaf branding retains its reviewed bytes.
+The bootstrap uses percent-encoded SVG text so download compression can reuse
+repeated markup and path commands. Raster images still use Base64.
+The committed asset manifest records dimensions, hashes and each conversion's
+actual provenance. `npm --prefix ptcg-play run assets:check` checks these without
+a native image dependency; `assets:optimize` also verifies the committed files
+without reencoding them. Only packaged SVGs are accepted by the image bindings.
 
-The server package is a dependency required by the client. First you must build the server, then the client.
+Builds produce the local `ptcg-play/dist/ptcg-play` and deployable
+`ptcg-play/cloudflare-public`. The latter contains a SHA-256 release directory,
+a verified downloadable ZIP, and a small `simulator-manifest.json` for clients
+to check before opening a puzzle. Byte-identical builds reuse the content hash;
+every build still gets a distinct build ID. Deployment restores and verifies
+the currently published release before uploading the next one, including from
+a clean CI checkout. Existing local release directories are also retained.
 
-1. When the server is running, you can go now to the `ptcg-play` directory and install dependencies.
+Cloudflare serves the package, card metadata and presentation resources as
+immutable static assets. Its small Worker handles stable public HTML, the
+mutable manifest, pinned release routes and an allowlisted card-scan cache. Both Limitless
+`/tpci/` and `/tpc/` artwork paths use a stable same-origin `/card-images` proxy,
+shared across releases. Gameplay runs
+entirely in the client. Deploy with `npm run deploy:cloudflare` after installing
+`cloudflare` development dependencies and authenticating Wrangler. The guarded
+deployment checks that production compilation, finalization and size budgets
+succeeded, source inputs are unchanged, and every packaged file and ZIP still
+matches its digest. Worker/domain-only updates can deploy the same verified
+frontend with `npm --prefix cloudflare run deploy`.
 
-```
-npm install
-```
+## Board background
 
-2. Start the aplication.
+The playmat follows the website theme: near-black with a purple hexagon grid in
+dark mode, and light gray with a softer purple grid in light mode. Both use an
+80px repeating tile for a tighter grid. The artwork is
+[`board-background.svg`](ptcg-play/src/assets/board-background.svg) and
+[`board-background-light.svg`](ptcg-play/src/assets/board-background-light.svg).
+Edit those SVGs to change either grid. The background switches with the existing
+`prizemap-theme-change` event and stays in place behind cards, hand and prompts,
+including when a completed puzzle fades out.
 
-```
-npm start
-```
+The `--ptcg-board-*` properties in the shared and theme-specific blocks of
+[`ptcg-play/src/theme/global.scss`](ptcg-play/src/theme/global.scss) control its
+artwork, surface color, size, repeat and position. They also accept ordinary
+image URLs. For example, the host can apply an SVG, PNG, JPEG or WebP playmat
+without rebuilding or reloading the puzzle:
 
-The command above will start the application in the debug mode at http://localhost:4200
-
-### Credits:
-
-Foundation: Keeshii + TheEPSD
-Based on: https://github.com/keeshii/ryuu-play
-
-### License
-MIT
-
--------
-
-# **PR Rules for Contributing to twinleaf.gg**
-*All instructions for setting up your dev environment can be found in the main branch readme.*
-**Current formats we're looking to expand (in order of importance):**
-1. Standard
-2. Expanded
-3. RSPK
-4. Retro
-5. GLC
-
-When submitting PRs for **twinleaf**, cards *must* be tested by you before submitting. To ensure that we know they were tested, submit a screenshot.
-
-Please stick to meta-relevant cards for the format you are submitting the card for. If you are submitting a card for RSPK for example, submitting a PR for a random evolution line that never saw play is not particularly useful as they won't be used. 
-
-If you are submitting an evolution line, submit the entire evolution line in one PR. 
-
-Submit 1 commit per-PR. The PR should include all new card files, as well as the updated index. 
-
-Where possible, use prefabs first. If you do not know what this means or where to find it, go through the codebase more before submitting anything - as it means you may not be ready to contribute.
-
-*All* PRs will be reviewed by me in a dev environment before being pushed to production. Any changes required will be done by the dev who originally submitted the PR.
-
-When submitting a Pokémon, it must be formatted as followed:
-```
-stage
-evolvesFrom [if applicable]
-cardTag [if applicable]
-cardType
-hp
-weakness
-resistance [if applicable]
-retreat
-
-powers
-
-attacks
-
-*the order from this point on is optional but should include*
-regulationMark [if applicable]
-set
-setNumber
-cardImage (must always be set as `assets/cardback.png`)
-name
-fullName
-```
-
-*Always* use an energy type's short form, but *only* in the cards info section.
-ex.
-```public cardType: CardType = L;```
-Use CardType.LIGHTNING in the reduceEffect.
-
-When making an attack or ability where it states an energy type, it should be placed in square brackets. 
-ex.
-```text: 'Attach up to 2 [P] Energy cards from your discard pile to 1 of your Pokemon.'```
-
-
-When submiting a Trainer card, it must be formatted as followed:
-```
-trainerType
-cardTag [if applicable]
-regulationMark
-set
-setNumber
-cardImage (must always be set as `assets/cardback.png`)
-name
-fullName
-text
+```js
+const style = document.documentElement.style;
+style.setProperty('--ptcg-board-background-image', 'url("https://example.com/playmat.webp")');
+style.setProperty('--ptcg-board-background-size', 'cover');
+style.setProperty('--ptcg-board-background-repeat', 'no-repeat');
 ```
 
-When making a Trainer card where it states an energy type, it should be placed in square brackets. 
-ex.
-```'Attach a basic [D] Energy card from your discard pile to 1 of your Benched [D] Pokemon.';```
+Remove these inline properties to restore the grid for the current theme. A
+custom inline image override stays in place across theme changes. Local artwork is
+embedded in the standalone package; after editing or replacing an asset, update
+its dimensions and SHA-256 entry in `ptcg-play/scripts/ui-assets-manifest.json`
+and run `npm --prefix ptcg-play run assets:check` before building. Newly drawn SVGs
+use the `authored-svg` conversion kind. Remote replacements need a connection.
 
-*Always* copy any text directly from a source that is formatted the same as the actual card.
+## Verify
 
-*Do **NOT*** submit reprints of cards as their own isolated card file. Please see `other-prints` or `full-arts` for that. 
+```sh
+npm test
+npm --prefix ptcg-server run test:cards
+node ptcg-play/scripts/finalize-client-build.spec.cjs
+npm --prefix tools run test:client-simulator
+```
 
-**NEVER** change the fullName property of an existing card. This property is stored throughout the database.
+The broad `test:cards` command reports existing card/legacy-test failures rather
+than hiding them. Browser checks need a Playwright Chromium installation.
+
+[PrizeMap snapshot and bridge contract](docs/client-simulator-integration.md)
+
+[Reset function verification](docs/simulator-reset-results.json)
+
+[Mobile drag regression verification](docs/simulator-touch-drag-results.json)
+reproduces the previous stuck gesture with the real Angular template and touch
+backend in a Node DOM test, then checks first and repeated drops with the fix.
+This is included in `npm test`; physical WebView gestures are a separate check.
+
+[Dengo Turo → Nest Ball regression verification](docs/simulator-dengo-prompt-results.json)
+uses the exact public puzzle to verify that returning Active Gholdengo and
+promoting any of the five benched Pokémon releases the hand-dragging lock.
+The first Nest Ball touch drag is covered by the Angular/touch backend tests.
+
+[Client package cache contract](docs/simulator-cache-contract.md)
+
+[Latest SVG simplification and verification](docs/simulator-svg-simplification-results.json)
+records the smaller energy artwork, defined visual fidelity checks and measured
+package savings. Intrinsic dimensions and card image URLs remain unchanged.
+The [previous conservative SVG optimization](docs/simulator-svg-optimization-results.json)
+records the earlier pixel-identical minification and SVG packaging changes.
+
+[Previous SVG/WebP package reduction and verification](docs/simulator-svg-webp-results.json)
+records a 34.16% smaller ZIP (3,428,046 → 2,257,095 bytes), official energy vector
+paths, Twinleaf SVG branding, WebP75 artwork, unchanged URLs for all 13,483 cards,
+301 automated tests and 40 winning puzzle replays. The live URL and immutable
+package caching remain unchanged. The
+[previous package reduction](docs/simulator-package-reduction-results.json)
+records the earlier lossless-image and metadata cleanup.
+
+[Puzzle startup benchmarks and next improvements](docs/simulator-startup-investigation.md)
+includes paired production-release measurements, compatible loader fixes, and
+payload compression/preloading experiments across five public puzzles.
+
+[Compatible puzzle payload trimming](docs/simulator-payload-trimming.md)
+documents default omission in the existing schema, measured savings and a
+local tool for converting existing puzzle URLs or JSON fixtures.
+
+[Cloudflare build, delivery and verification](docs/simulator-cloudflare.md)
+
+[Current lazy artwork verification](docs/simulator-lazy-artwork-results.json)
+confirms zero image preloads, no image nodes for hidden faces, and working
+initial state/host undo while a visible image is pending. Scans retain their
+736×1024 dimensions. Opening Phantom Maze's deck adds 16 images, including nine
+source URLs absent from the initial board. The small desktop sample did not
+show a full-page speedup.
+
+[Historical background artwork verification](docs/simulator-background-artwork-results.json)
+records the previous preload release, including a playable board and host undo while an
+image response was held for 16 seconds, late image arrival and failed-image
+fallback before the switch to on-demand lazy loading. Original image sizes were
+preserved. Warm board mounting was faster;
+the small desktop sample did not show a full-page paint speedup.
+
+The earlier [Blob-cache comparison](docs/simulator-initialization-results.json)
+recorded a desktop median warm navigation to
+board paint of 396 ms versus 541 ms; those measurements predate background image
+loading and do not describe current lazy-loading performance.
+
+[Historical puzzle setup measurements](docs/simulator-setup-performance.json)
+record the earlier data-URL implementation and distinguish desktop warm-cache
+timings from local application marks. They are not current lazy-loading, phone or
+cold-download benchmarks. Native filesystem package installation still requires
+integration in the separate mobile host; that host has not been modified here.

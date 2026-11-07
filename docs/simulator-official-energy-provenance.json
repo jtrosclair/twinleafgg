@@ -1,0 +1,392 @@
+{
+  "sourceUrl": "https://assets.pokemon.com/assets/cms2/pdf/trading-card-game/rulebook/par_rulebook_en.pdf",
+  "sourceSha256": "cd526f74614ecfc8aa09c641b03abc53aad2f261f028efaa5b402811fdb86b23",
+  "processor": "PyMuPDF 2.1",
+  "page": 4,
+  "assets": [
+    {
+      "path": "assets/energy-icons/grass.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        34,
+        35
+      ],
+      "sourceBox": [
+        123.1343002319336,
+        238.39999389648438,
+        140.80430603027344,
+        256.07000732421875
+      ],
+      "sha256": "fbb74943b09ac3e96fc14cf042b6d10b946706bf3d11091845672cd94e3cf389",
+      "bytes": 6435,
+      "geometry": "Original PDF cubic and line commands; no tracing, simplification or coordinate rounding.",
+      "blankDefault": false
+    },
+    {
+      "path": "assets/energy/grass.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        34,
+        35
+      ],
+      "sourceBox": [
+        123.1343002319336,
+        238.39999389648438,
+        140.80430603027344,
+        256.07000732421875
+      ],
+      "sha256": "eaed4cea5878c9e1494f1238824ad08b06617a18fc4a5eeed22d658213509528",
+      "bytes": 6507,
+      "geometry": "Same original PDF paths; nested viewport preserves existing attachment canvas and circle position."
+    },
+    {
+      "path": "assets/energy-icons/fire.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        44,
+        45
+      ],
+      "sourceBox": [
+        282.1050109863281,
+        238.39999389648438,
+        299.7749938964844,
+        256.07000732421875
+      ],
+      "sha256": "328535607ac6570378607ee0444e712f0d07c4a3344f37305c6de30f3a6f90e1",
+      "bytes": 5342,
+      "geometry": "Original PDF cubic and line commands; no tracing, simplification or coordinate rounding.",
+      "blankDefault": false
+    },
+    {
+      "path": "assets/energy/fire.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        44,
+        45
+      ],
+      "sourceBox": [
+        282.1050109863281,
+        238.39999389648438,
+        299.7749938964844,
+        256.07000732421875
+      ],
+      "sha256": "76d0d9c11550989b0978933ce3ef58e4fb6318c36098df2620a6693eaf01921b",
+      "bytes": 5414,
+      "geometry": "Same original PDF paths; nested viewport preserves existing attachment canvas and circle position."
+    },
+    {
+      "path": "assets/energy-icons/water.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        39,
+        40
+      ],
+      "sourceBox": [
+        440.8741149902344,
+        238.4005126953125,
+        458.5440979003906,
+        256.0705261230469
+      ],
+      "sha256": "40a11647a16faa93be497a8322c1bed3c17d18a337927023d5ad663765fa9822",
+      "bytes": 2207,
+      "geometry": "Original PDF cubic and line commands; no tracing, simplification or coordinate rounding.",
+      "blankDefault": false
+    },
+    {
+      "path": "assets/energy/water.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        39,
+        40
+      ],
+      "sourceBox": [
+        440.8741149902344,
+        238.4005126953125,
+        458.5440979003906,
+        256.0705261230469
+      ],
+      "sha256": "adb10a2eae17627c385750157ce3ddb3bae1fdaa375d9ea956a7b15b9e8a535c",
+      "bytes": 2279,
+      "geometry": "Same original PDF paths; nested viewport preserves existing attachment canvas and circle position."
+    },
+    {
+      "path": "assets/energy-icons/lightning.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        54,
+        55
+      ],
+      "sourceBox": [
+        123.32970428466797,
+        337.7200012207031,
+        140.9997100830078,
+        355.3900146484375
+      ],
+      "sha256": "1aff1b81eac4a5cafcecb7e9a408f336ff83cc12781e3ede582328a644aa5563",
+      "bytes": 1743,
+      "geometry": "Original PDF cubic and line commands; no tracing, simplification or coordinate rounding.",
+      "blankDefault": false
+    },
+    {
+      "path": "assets/energy/lightning.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        54,
+        55
+      ],
+      "sourceBox": [
+        123.32970428466797,
+        337.7200012207031,
+        140.9997100830078,
+        355.3900146484375
+      ],
+      "sha256": "8b3bfee3198cbb9f08e352ef4d048776599f709b9ec25c8458956cca713e58d8",
+      "bytes": 1815,
+      "geometry": "Same original PDF paths; nested viewport preserves existing attachment canvas and circle position."
+    },
+    {
+      "path": "assets/energy-icons/psychic.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        49,
+        50
+      ],
+      "sourceBox": [
+        282.1050109863281,
+        337.71978759765625,
+        299.7749938964844,
+        355.3898010253906
+      ],
+      "sha256": "64adb42ca232fd77d0383c123a46a2659d7be4334d67f8d677203012ed26869a",
+      "bytes": 4273,
+      "geometry": "Original PDF cubic and line commands; no tracing, simplification or coordinate rounding.",
+      "blankDefault": false
+    },
+    {
+      "path": "assets/energy/psychic.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        49,
+        50
+      ],
+      "sourceBox": [
+        282.1050109863281,
+        337.71978759765625,
+        299.7749938964844,
+        355.3898010253906
+      ],
+      "sha256": "c30577f513d527d655be6f9edbc569941432db97f87ca3ee10d6befea78bfc6f",
+      "bytes": 4345,
+      "geometry": "Same original PDF paths; nested viewport preserves existing attachment canvas and circle position."
+    },
+    {
+      "path": "assets/energy-icons/fighting.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70
+      ],
+      "sourceBox": [
+        440.8741149902344,
+        337.1383972167969,
+        458.5440979003906,
+        354.80841064453125
+      ],
+      "sha256": "f62d70f9a148948bca33184502eab7d29fcfe112f35fca975906e9a515228d9e",
+      "bytes": 8144,
+      "geometry": "Original PDF cubic and line commands; no tracing, simplification or coordinate rounding.",
+      "blankDefault": false
+    },
+    {
+      "path": "assets/energy/fighting.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70
+      ],
+      "sourceBox": [
+        440.8741149902344,
+        337.1383972167969,
+        458.5440979003906,
+        354.80841064453125
+      ],
+      "sha256": "ea1958093a5b74c0c74ced18c6f900bc9e7d16c20cc012b5631ec98260a6c70d",
+      "bytes": 8216,
+      "geometry": "Same original PDF paths; nested viewport preserves existing attachment canvas and circle position."
+    },
+    {
+      "path": "assets/energy-icons/darkness.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        92,
+        93
+      ],
+      "sourceBox": [
+        123.3301010131836,
+        437.03961181640625,
+        141.00010681152344,
+        454.7096252441406
+      ],
+      "sha256": "8bdba6a0424d5b1e6d19991d5f3a6dfe9ef3f2acade74d30c824e8984b0913e0",
+      "bytes": 2005,
+      "geometry": "Original PDF cubic and line commands; no tracing, simplification or coordinate rounding.",
+      "blankDefault": false
+    },
+    {
+      "path": "assets/energy/dark.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        92,
+        93
+      ],
+      "sourceBox": [
+        123.3301010131836,
+        437.03961181640625,
+        141.00010681152344,
+        454.7096252441406
+      ],
+      "sha256": "56c82507648f84a79d952d256069aebf23d1d755336a8eb37e063e2f9fbc5675",
+      "bytes": 2077,
+      "geometry": "Same original PDF paths; nested viewport preserves existing attachment canvas and circle position."
+    },
+    {
+      "path": "assets/energy-icons/metal.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        79,
+        80,
+        81,
+        82,
+        83
+      ],
+      "sourceBox": [
+        282.10479736328125,
+        437.0401916503906,
+        299.7747802734375,
+        454.710205078125
+      ],
+      "sha256": "e3c78129eb74686a8287cedd97076ae0f8864de4687b0a60cfccb862d82538c0",
+      "bytes": 5231,
+      "geometry": "Original PDF cubic and line commands; no tracing, simplification or coordinate rounding.",
+      "blankDefault": false
+    },
+    {
+      "path": "assets/energy/metal.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        79,
+        80,
+        81,
+        82,
+        83
+      ],
+      "sourceBox": [
+        282.10479736328125,
+        437.0401916503906,
+        299.7747802734375,
+        454.710205078125
+      ],
+      "sha256": "3545c475a9521b8f1d45de7724e35b504aa3b25064bc9f42283e99ee1a308a93",
+      "bytes": 5303,
+      "geometry": "Same original PDF paths; nested viewport preserves existing attachment canvas and circle position."
+    },
+    {
+      "path": "assets/energy-icons/fairy.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        59,
+        60
+      ],
+      "sourceBox": [
+        440.8744812011719,
+        435.87640380859375,
+        458.54449462890625,
+        453.54638671875
+      ],
+      "sha256": "6da48380d21ca203630f058a9319d54c29440eeb6ec2a5ca9ce86331f39985a3",
+      "bytes": 8455,
+      "geometry": "Original PDF cubic and line commands; no tracing, simplification or coordinate rounding.",
+      "blankDefault": false
+    },
+    {
+      "path": "assets/energy/fairy.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        59,
+        60
+      ],
+      "sourceBox": [
+        440.8744812011719,
+        435.87640380859375,
+        458.54449462890625,
+        453.54638671875
+      ],
+      "sha256": "8f3e3807c5bdbf65b083f1a26adcc3d1e702fb5c70e4f460f0dfae2f09104ea1",
+      "bytes": 8527,
+      "geometry": "Same original PDF paths; nested viewport preserves existing attachment canvas and circle position."
+    },
+    {
+      "path": "assets/energy-icons/dragon.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        87,
+        88
+      ],
+      "sourceBox": [
+        123.33000183105469,
+        536.360595703125,
+        141.0,
+        554.0306396484375
+      ],
+      "sha256": "6b85007a554a3f4bd26d442f25262e86241f7d7859f6d5a3de8423ce75987106",
+      "bytes": 3168,
+      "geometry": "Original PDF cubic and line commands; no tracing, simplification or coordinate rounding.",
+      "blankDefault": false
+    },
+    {
+      "path": "assets/energy-icons/colorless.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        74,
+        75
+      ],
+      "sourceBox": [
+        282.1050109863281,
+        536.3599853515625,
+        299.7749938964844,
+        554.0299682617188
+      ],
+      "sha256": "a8be12bda9a3d9c8912104880065c6d9e1be643482326350a1fde3ec7e83fbe4",
+      "bytes": 2825,
+      "geometry": "Original PDF cubic and line commands; no tracing, simplification or coordinate rounding.",
+      "blankDefault": false
+    },
+    {
+      "path": "assets/energy-icons/energyless.svg",
+      "sourcePage": 4,
+      "drawingIndexes": [
+        74
+      ],
+      "sourceBox": [
+        282.1050109863281,
+        536.3599853515625,
+        299.7749938964844,
+        554.0299682617188
+      ],
+      "sha256": "581c453af5629878ec25e2065e89c39004ae032e994e6e37919a4d5453a1f123",
+      "bytes": 736,
+      "geometry": "Original PDF cubic and line commands; no tracing, simplification or coordinate rounding.",
+      "blankDefault": true
+    }
+  ]
+}

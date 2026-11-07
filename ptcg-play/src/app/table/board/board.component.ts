@@ -11,13 +11,18 @@ import { CardsBaseService } from '../../shared/cards/cards-base.service';
 import { GameService } from '../../api/services/game.service';
 import { LocalGameState } from 'src/app/shared/session/session.interface';
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
-import { SettingsService } from '../table-sidebar/settings-dialog/settings.service';
+import { SettingsService } from '../../shared/services/settings.service';
 import { BoardInteractionService } from '../../shared/services/board-interaction.service';
-import { GameWinner } from 'ptcg-server';
-import { WebViewBridgeService } from '../../shared/services/webview-bridge.service';
 
 const MAX_BENCH_SIZE = 8;
 const DEFAULT_BENCH_SIZE = 5;
+
+/** Visual offsets only: retain the full pile depth with at most three layers. */
+export function pileLayerIndices(count: number): number[] {
+  if (!count) { return []; }
+  if (count <= 3) { return Array.from({ length: count }, (_, index) => index); }
+  return [0, Math.floor((count - 1) / 2), count - 1];
+}
 
 type DropTargetType = DropTarget<DraggedItem<HandItem> | BoardCardItem, any>;
 
@@ -104,8 +109,7 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
     private dnd: DndService,
     private gameService: GameService,
     private settingsService: SettingsService,
-    private boardInteractionService: BoardInteractionService,
-    private webViewBridgeService: WebViewBridgeService
+    private boardInteractionService: BoardInteractionService
   ) {
 
     this.settingsService.cardSize$.subscribe(size => {
@@ -136,7 +140,6 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
   // Add property to track deck size
   public deckSize: number = 0;
   public discardSize: number = 0;
-  private previousOpponentDeckSize: number = 0;
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.player) {
@@ -154,37 +157,8 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
       this.discardSize = 0;
     }
 
-    // Watch opponent's deck for empty state (puzzle completion condition)
-    this.checkOpponentDeckEmpty();
-
     // Update bench gap based on bench capacity
     this.updateBenchGap();
-  }
-
-  private checkOpponentDeckEmpty(): void {
-    // Determine opponent based on whether this is top or bottom player
-    const opponent = this.topPlayer?.id === this.clientId ? this.bottomPlayer : this.topPlayer;
-    if (!opponent) {
-      return;
-    }
-
-    const currentDeckSize = opponent?.deck?.cards?.length || 0;
-
-    // Detect when opponent deck becomes empty
-    if (this.previousOpponentDeckSize > 0 && currentDeckSize === 0) {
-      // Opponent ran out of cards - they lose, current player wins
-      this.postGameOverMessage(GameWinner.PLAYER_1);
-    }
-
-    this.previousOpponentDeckSize = currentDeckSize;
-  }
-
-  private postGameOverMessage(winner: GameWinner): void {
-    const winnerValue = winner === 0 ? 'player1' : 'player2';
-    this.webViewBridgeService.postMessage({
-      type: "GameOver",
-      data: { winner: winnerValue }
-    });
   }
 
   private updateBenchGap(): void {
@@ -197,34 +171,7 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
     document.documentElement.style.setProperty('--bench-gap', benchGap);
   }
 
-  // private lastCoinFlipPrompt: CoinFlipPrompt | null = null;
-  // private lastProcessedId: number = -1;
-
-  // get activeCoinFlipPrompt(): CoinFlipPrompt | undefined {
-  //   const currentPrompt = this.gameState?.state?.prompts?.find(prompt => {
-  //     return prompt.type === 'Coin flip' &&
-  //       (prompt as CoinFlipPrompt).message === 'COIN_FLIP';
-  //   }) as CoinFlipPrompt;
-
-  //   if (currentPrompt) {
-  //     this.lastCoinFlipPrompt = currentPrompt;
-  //     return currentPrompt;
-  //   }
-
-  //   if (!this.gameState?.state?.prompts?.length) {
-  //     this.lastCoinFlipPrompt = null;
-  //   }
-
-  //   return undefined;
-  // }
-
-
-  // handleCoinFlipComplete(result: boolean) {
-  // }
-
-  createRange(length: number): number[] {
-    return Array.from({ length }, (_, i) => i);
-  }
+  public pileLayerIndices = pileLayerIndices;
 
   private initDropTarget(
     player: PlayerType,
@@ -476,8 +423,7 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
     }
     const card = prize.cards[0];
     const facedown = prize.isSecret || (!prize.isPublic && !owner);
-    const allowReveal = facedown && !!this.gameState.replay;
-    this.cardsBaseService.showCardInfo({ card, allowReveal, facedown });
+    this.cardsBaseService.showCardInfo({ card, facedown });
   }
 
   public onDeckClick(card: Card, cardList: CardList) {

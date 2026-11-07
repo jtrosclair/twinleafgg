@@ -1,0 +1,2458 @@
+{
+  "schemaVersion": 1,
+  "baselinePackageHash": "59166694d2fc5e5c2dcaeb9129a95c743ef82eb4b46ae339d25165f8add9661d",
+  "method": "Per-file smallest non-origin-shifting SVGO6/7/8 candidate with byte-identical RGBA renders at every tested size; keep source if no smaller candidate. Curves/subpaths/command topology preserved; no curve simplification, makeArcs, transform baking, path merging or color-space conversion. Decimal coordinates/colors rounded only at chosen precision.",
+  "tools": {
+    "svgo": "4.1.0",
+    "sharp": "0.35.5"
+  },
+  "sourceBackup": "/tmp/twinleaf-svg-minify-before",
+  "configuration": {
+    "originNormalization": false,
+    "curveSimplification": false,
+    "curveShorthandConversion": false,
+    "lineShorthandConversion": false,
+    "makeArcs": false,
+    "colorConversion": false,
+    "pathMerging": false,
+    "transformBaking": false,
+    "floatPrecisionChoices": [
+      6,
+      7,
+      8
+    ]
+  },
+  "candidateDirectory": "/tmp/twinleaf-svg-minify-candidates/final-exact",
+  "files": [
+    {
+      "path": "assets/tl-open-beta.svg",
+      "inputBytes": 10946,
+      "outputBytes": 10946,
+      "inputSha256": "790aa180b2e91d142652eaee6c6f5efd42f9739619d82ad6b52b0eadd5432bb1",
+      "outputSha256": "790aa180b2e91d142652eaee6c6f5efd42f9739619d82ad6b52b0eadd5432bb1",
+      "keptOriginal": true,
+      "pathCount": 2,
+      "subpaths": 46,
+      "curves": 340,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 0,
+      "variant": "syntax6",
+      "floatPrecision": 6,
+      "dimensions": {
+        "width": "4738",
+        "height": "815"
+      },
+      "fillValuesBefore": [
+        "#439159",
+        "#fff"
+      ],
+      "fillValuesAfter": [
+        "#439159",
+        "#fff"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/cardback.svg",
+      "inputBytes": 1200,
+      "outputBytes": 1200,
+      "inputSha256": "735773517201757e5432c0957a13fee795987fd2079fb2c8a7dbc577c7ceedd8",
+      "outputSha256": "735773517201757e5432c0957a13fee795987fd2079fb2c8a7dbc577c7ceedd8",
+      "keptOriginal": true,
+      "pathCount": 1,
+      "subpaths": 2,
+      "curves": 33,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 0,
+      "variant": "syntax6",
+      "floatPrecision": 6,
+      "dimensions": {
+        "width": "745",
+        "height": "1040"
+      },
+      "fillValuesBefore": [
+        "#2e2e2e",
+        "#0d2117",
+        "#459058"
+      ],
+      "fillValuesAfter": [
+        "#2e2e2e",
+        "#0d2117",
+        "#459058"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy/lightning.svg",
+      "inputBytes": 1815,
+      "outputBytes": 945,
+      "inputSha256": "8b3bfee3198cbb9f08e352ef4d048776599f709b9ec25c8458956cca713e58d8",
+      "outputSha256": "9723d242aea786327def824b74008372771680cc7c8c2f5c9baa27e75847f6b3",
+      "keptOriginal": false,
+      "pathCount": 2,
+      "subpaths": 2,
+      "curves": 10,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 7.553710332786068e-7,
+      "variant": "syntax6",
+      "floatPrecision": 6,
+      "dimensions": {
+        "width": "138",
+        "height": "192"
+      },
+      "fillValuesBefore": [
+        "rgb(100%,83.19981694221497%,0%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(100%,83.199817%,0%)",
+        "rgb(13.699549%,12.298772%,12.599374%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy/fairy.svg",
+      "inputBytes": 8527,
+      "outputBytes": 4117,
+      "inputSha256": "8f3e3807c5bdbf65b083f1a26adcc3d1e702fb5c70e4f460f0dfae2f09104ea1",
+      "outputSha256": "e0744858c083e2fdeea925717cf9ed3ed39e5cc6ce06bfce802ed9d88c978c8f",
+      "keptOriginal": false,
+      "pathCount": 2,
+      "subpaths": 4,
+      "curves": 72,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 5.7031229516724125e-8,
+      "variant": "syntax7",
+      "floatPrecision": 7,
+      "dimensions": {
+        "width": "138",
+        "height": "192"
+      },
+      "fillValuesBefore": [
+        "rgb(89.89852666854858%,29.99923825263977%,54.699015617370605%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(89.8985267%,29.9992383%,54.6990156%)",
+        "rgb(13.6995494%,12.2987717%,12.5993744%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy/fire.svg",
+      "inputBytes": 5414,
+      "outputBytes": 5414,
+      "inputSha256": "76d0d9c11550989b0978933ce3ef58e4fb6318c36098df2620a6693eaf01921b",
+      "outputSha256": "76d0d9c11550989b0978933ce3ef58e4fb6318c36098df2620a6693eaf01921b",
+      "keptOriginal": true,
+      "pathCount": 2,
+      "subpaths": 3,
+      "curves": 44,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 0,
+      "variant": "original",
+      "floatPrecision": null,
+      "dimensions": {
+        "width": "138",
+        "height": "192"
+      },
+      "fillValuesBefore": [
+        "rgb(93.0998682975769%,10.199130326509476%,22.999924421310425%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(93.0998682975769%,10.199130326509476%,22.999924421310425%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "shaVerified": false
+    },
+    {
+      "path": "assets/energy/metal.svg",
+      "inputBytes": 5303,
+      "outputBytes": 2469,
+      "inputSha256": "3545c475a9521b8f1d45de7724e35b504aa3b25064bc9f42283e99ee1a308a93",
+      "outputSha256": "d8878af9d2616d782cdba7203230a01281e2b600ed07d461d534aa258a5dffbe",
+      "keptOriginal": false,
+      "pathCount": 5,
+      "subpaths": 5,
+      "curves": 31,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 8.222655765166564e-7,
+      "variant": "syntax6",
+      "floatPrecision": 6,
+      "dimensions": {
+        "width": "138",
+        "height": "192"
+      },
+      "fillValuesBefore": [
+        "rgb(71.49919867515564%,72.9991614818573%,65.3986394405365%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(71.499199%,72.999161%,65.398639%)",
+        "rgb(13.699549%,12.298772%,12.599374%)",
+        "rgb(13.699549%,12.298772%,12.599374%)",
+        "rgb(13.699549%,12.298772%,12.599374%)",
+        "rgb(13.699549%,12.298772%,12.599374%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy/dark.svg",
+      "inputBytes": 2077,
+      "outputBytes": 1053,
+      "inputSha256": "56c82507648f84a79d952d256069aebf23d1d755336a8eb37e063e2f9fbc5675",
+      "outputSha256": "6478ced1d18a9f117fcb9d7f5371fc5d41bd4e06e3d0fcb83f926122d42d31d8",
+      "keptOriginal": false,
+      "pathCount": 2,
+      "subpaths": 2,
+      "curves": 14,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 6.777343628527888e-7,
+      "variant": "syntax6",
+      "floatPrecision": 6,
+      "dimensions": {
+        "width": "138",
+        "height": "192"
+      },
+      "fillValuesBefore": [
+        "rgb(18.399327993392944%,47.89959490299225%,52.89997458457947%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(18.399328%,47.899595%,52.899975%)",
+        "rgb(13.699549%,12.298772%,12.599374%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy/fighting.svg",
+      "inputBytes": 8216,
+      "outputBytes": 3495,
+      "inputSha256": "ea1958093a5b74c0c74ced18c6f900bc9e7d16c20cc012b5631ec98260a6c70d",
+      "outputSha256": "d3e5c0490e39efacae3405684ba4214e45fdfa01ed6c26f31935dafa9c3e7d11",
+      "keptOriginal": false,
+      "pathCount": 7,
+      "subpaths": 7,
+      "curves": 49,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 7.089843165886123e-7,
+      "variant": "syntax6",
+      "floatPrecision": 6,
+      "dimensions": {
+        "width": "138",
+        "height": "192"
+      },
+      "fillValuesBefore": [
+        "rgb(76.4995813369751%,41.29854142665863%,18.399327993392944%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(76.499581%,41.298541%,18.399328%)",
+        "rgb(13.699549%,12.298772%,12.599374%)",
+        "rgb(13.699549%,12.298772%,12.599374%)",
+        "rgb(13.699549%,12.298772%,12.599374%)",
+        "rgb(13.699549%,12.298772%,12.599374%)",
+        "rgb(13.699549%,12.298772%,12.599374%)",
+        "rgb(13.699549%,12.298772%,12.599374%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy/psychic.svg",
+      "inputBytes": 4345,
+      "outputBytes": 2209,
+      "inputSha256": "c30577f513d527d655be6f9edbc569941432db97f87ca3ee10d6befea78bfc6f",
+      "outputSha256": "d26fdc0a361650770fb039a1b9ef3ee4974f7ec6d5e1af217e36fb4b5c679bc8",
+      "keptOriginal": false,
+      "pathCount": 2,
+      "subpaths": 4,
+      "curves": 34,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 6.289064913289621e-8,
+      "variant": "syntax7",
+      "floatPrecision": 7,
+      "dimensions": {
+        "width": "138",
+        "height": "192"
+      },
+      "fillValuesBefore": [
+        "rgb(61.499959230422974%,52.29877233505249%,74.49912428855896%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(61.4999592%,52.2987723%,74.4991243%)",
+        "rgb(13.6995494%,12.2987717%,12.5993744%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy/water.svg",
+      "inputBytes": 2279,
+      "outputBytes": 1182,
+      "inputSha256": "adb10a2eae17627c385750157ce3ddb3bae1fdaa375d9ea956a7b15b9e8a535c",
+      "outputSha256": "4c6d73852f6e301a1235a4b56cad4893389a7125b6e3872a3c03a765e2c648ce",
+      "keptOriginal": false,
+      "pathCount": 2,
+      "subpaths": 3,
+      "curves": 16,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 7.695312831401679e-7,
+      "variant": "syntax6",
+      "floatPrecision": 6,
+      "dimensions": {
+        "width": "138",
+        "height": "192"
+      },
+      "fillValuesBefore": [
+        "rgb(0%,69.4987416267395%,92.09887981414795%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(0%,69.498742%,92.09888%)",
+        "rgb(13.699549%,12.298772%,12.599374%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy/grass.svg",
+      "inputBytes": 6507,
+      "outputBytes": 2837,
+      "inputSha256": "eaed4cea5878c9e1494f1238824ad08b06617a18fc4a5eeed22d658213509528",
+      "outputSha256": "a44f6e244dce4734166dc7cfc87ca0e99b5b672232dbcf1c9e5b806ca44f1ff9",
+      "keptOriginal": false,
+      "pathCount": 2,
+      "subpaths": 3,
+      "curves": 52,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 7.19238272495204e-7,
+      "variant": "syntax6",
+      "floatPrecision": 6,
+      "dimensions": {
+        "width": "138",
+        "height": "192"
+      },
+      "fillValuesBefore": [
+        "rgb(5.198748782277107%,69.4987416267395%,29.599452018737793%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(5.198749%,69.498742%,29.599452%)",
+        "rgb(13.699549%,12.298772%,12.599374%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy-icons/lightning.svg",
+      "inputBytes": 1743,
+      "outputBytes": 873,
+      "inputSha256": "1aff1b81eac4a5cafcecb7e9a408f336ff83cc12781e3ede582328a644aa5563",
+      "outputSha256": "931e66cd7d8543e3b385cbda5bbb484a9053aa03fce4601e14386b00a505ef07",
+      "keptOriginal": false,
+      "pathCount": 2,
+      "subpaths": 2,
+      "curves": 10,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 7.553710332786068e-7,
+      "variant": "syntax6",
+      "floatPrecision": 6,
+      "dimensions": {
+        "width": "100",
+        "height": "100"
+      },
+      "fillValuesBefore": [
+        "rgb(100%,83.19981694221497%,0%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(100%,83.199817%,0%)",
+        "rgb(13.699549%,12.298772%,12.599374%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy-icons/energyless.svg",
+      "inputBytes": 736,
+      "outputBytes": 412,
+      "inputSha256": "581c453af5629878ec25e2065e89c39004ae032e994e6e37919a4d5453a1f123",
+      "outputSha256": "c859a7dc994e11a919b68e5554534b263a96e84741cc7271b259d123fc700db1",
+      "keptOriginal": false,
+      "pathCount": 1,
+      "subpaths": 1,
+      "curves": 4,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 4.5507812274081516e-7,
+      "variant": "syntax6",
+      "floatPrecision": 6,
+      "dimensions": {
+        "width": "100",
+        "height": "100"
+      },
+      "fillValuesBefore": [
+        "rgb(83.89868140220642%,83.59960317611694%,84.89966988563538%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(83.898681%,83.599603%,84.89967%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy-icons/darkness.svg",
+      "inputBytes": 2005,
+      "outputBytes": 981,
+      "inputSha256": "8bdba6a0424d5b1e6d19991d5f3a6dfe9ef3f2acade74d30c824e8984b0913e0",
+      "outputSha256": "d9d754f8bd734cd4758fc543621ba581b53c49288c9aa873d3e1b21ea4a1e013",
+      "keptOriginal": false,
+      "pathCount": 2,
+      "subpaths": 2,
+      "curves": 14,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 6.777343628527888e-7,
+      "variant": "syntax6",
+      "floatPrecision": 6,
+      "dimensions": {
+        "width": "100",
+        "height": "100"
+      },
+      "fillValuesBefore": [
+        "rgb(18.399327993392944%,47.89959490299225%,52.89997458457947%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(18.399328%,47.899595%,52.899975%)",
+        "rgb(13.699549%,12.298772%,12.599374%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy-icons/fairy.svg",
+      "inputBytes": 8455,
+      "outputBytes": 4045,
+      "inputSha256": "6da48380d21ca203630f058a9319d54c29440eeb6ec2a5ca9ce86331f39985a3",
+      "outputSha256": "0a4eb2a51d9766b0a202565468283aa8c0f07ae5845b3d19b2056ec9ba5789f8",
+      "keptOriginal": false,
+      "pathCount": 2,
+      "subpaths": 4,
+      "curves": 72,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 5.7031229516724125e-8,
+      "variant": "syntax7",
+      "floatPrecision": 7,
+      "dimensions": {
+        "width": "100",
+        "height": "100"
+      },
+      "fillValuesBefore": [
+        "rgb(89.89852666854858%,29.99923825263977%,54.699015617370605%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(89.8985267%,29.9992383%,54.6990156%)",
+        "rgb(13.6995494%,12.2987717%,12.5993744%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy-icons/dragon.svg",
+      "inputBytes": 3168,
+      "outputBytes": 1685,
+      "inputSha256": "6b85007a554a3f4bd26d442f25262e86241f7d7859f6d5a3de8423ce75987106",
+      "outputSha256": "074b30a68cdfd1c474ed6688298df40e3ab1b0d99e2e052a07fe20509fcbe4a7",
+      "keptOriginal": false,
+      "pathCount": 2,
+      "subpaths": 3,
+      "curves": 23,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 7.929689616048563e-8,
+      "variant": "syntax7",
+      "floatPrecision": 7,
+      "dimensions": {
+        "width": "100",
+        "height": "100"
+      },
+      "fillValuesBefore": [
+        "rgb(60.59967875480652%,58.49851369857788%,17.49904602766037%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(60.5996788%,58.4985137%,17.499046%)",
+        "rgb(13.6995494%,12.2987717%,12.5993744%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy-icons/colorless.svg",
+      "inputBytes": 2825,
+      "outputBytes": 1490,
+      "inputSha256": "a8be12bda9a3d9c8912104880065c6d9e1be643482326350a1fde3ec7e83fbe4",
+      "outputSha256": "ef0f5efa45e49ffab34bb3ccde86bc41fe79e7b327b97ecefaf714c97bb7e75b",
+      "keptOriginal": false,
+      "pathCount": 2,
+      "subpaths": 2,
+      "curves": 22,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 9.765631148184184e-8,
+      "variant": "syntax7",
+      "floatPrecision": 7,
+      "dimensions": {
+        "width": "100",
+        "height": "100"
+      },
+      "fillValuesBefore": [
+        "rgb(83.89868140220642%,83.59960317611694%,84.89966988563538%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(83.8986814%,83.5996032%,84.8996699%)",
+        "rgb(13.6995494%,12.2987717%,12.5993744%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy-icons/fire.svg",
+      "inputBytes": 5342,
+      "outputBytes": 2676,
+      "inputSha256": "328535607ac6570378607ee0444e712f0d07c4a3344f37305c6de30f3a6f90e1",
+      "outputSha256": "0c97cb6332d3db3cdeeb25d2b58afddb7e5fe6865266ba3cc918b80c88e9ee62",
+      "keptOriginal": false,
+      "pathCount": 2,
+      "subpaths": 3,
+      "curves": 44,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 6.328127710730769e-8,
+      "variant": "syntax7",
+      "floatPrecision": 7,
+      "dimensions": {
+        "width": "100",
+        "height": "100"
+      },
+      "fillValuesBefore": [
+        "rgb(93.0998682975769%,10.199130326509476%,22.999924421310425%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(93.0998683%,10.1991303%,22.9999244%)",
+        "rgb(13.6995494%,12.2987717%,12.5993744%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy-icons/metal.svg",
+      "inputBytes": 5231,
+      "outputBytes": 2660,
+      "inputSha256": "e3c78129eb74686a8287cedd97076ae0f8864de4687b0a60cfccb862d82538c0",
+      "outputSha256": "e5a51c1c38c7d4fc766a3498183b3e61894dcabdd09097c7a3672a41346b9308",
+      "keptOriginal": false,
+      "pathCount": 5,
+      "subpaths": 5,
+      "curves": 31,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 9.765625463842298e-8,
+      "variant": "syntax7",
+      "floatPrecision": 7,
+      "dimensions": {
+        "width": "100",
+        "height": "100"
+      },
+      "fillValuesBefore": [
+        "rgb(71.49919867515564%,72.9991614818573%,65.3986394405365%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(71.4991987%,72.9991615%,65.3986394%)",
+        "rgb(13.6995494%,12.2987717%,12.5993744%)",
+        "rgb(13.6995494%,12.2987717%,12.5993744%)",
+        "rgb(13.6995494%,12.2987717%,12.5993744%)",
+        "rgb(13.6995494%,12.2987717%,12.5993744%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy-icons/fighting.svg",
+      "inputBytes": 8144,
+      "outputBytes": 3769,
+      "inputSha256": "f62d70f9a148948bca33184502eab7d29fcfe112f35fca975906e9a515228d9e",
+      "outputSha256": "447071f6e192c8d88ab5b566f60752e235052f63c234e8bb1498ba736dea175b",
+      "keptOriginal": false,
+      "pathCount": 7,
+      "subpaths": 7,
+      "curves": 49,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 6.640624405918061e-8,
+      "variant": "syntax7",
+      "floatPrecision": 7,
+      "dimensions": {
+        "width": "100",
+        "height": "100"
+      },
+      "fillValuesBefore": [
+        "rgb(76.4995813369751%,41.29854142665863%,18.399327993392944%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(76.4995813%,41.2985414%,18.399328%)",
+        "rgb(13.6995494%,12.2987717%,12.5993744%)",
+        "rgb(13.6995494%,12.2987717%,12.5993744%)",
+        "rgb(13.6995494%,12.2987717%,12.5993744%)",
+        "rgb(13.6995494%,12.2987717%,12.5993744%)",
+        "rgb(13.6995494%,12.2987717%,12.5993744%)",
+        "rgb(13.6995494%,12.2987717%,12.5993744%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy-icons/psychic.svg",
+      "inputBytes": 4273,
+      "outputBytes": 1925,
+      "inputSha256": "64adb42ca232fd77d0383c123a46a2659d7be4334d67f8d677203012ed26869a",
+      "outputSha256": "dc5bf8bf8fc88c1e3842b342644a269301eae92078941070a6b299edf5051c39",
+      "keptOriginal": false,
+      "pathCount": 2,
+      "subpaths": 4,
+      "curves": 34,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 8.945311833485903e-7,
+      "variant": "syntax6",
+      "floatPrecision": 6,
+      "dimensions": {
+        "width": "100",
+        "height": "100"
+      },
+      "fillValuesBefore": [
+        "rgb(61.499959230422974%,52.29877233505249%,74.49912428855896%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(61.499959%,52.298772%,74.499124%)",
+        "rgb(13.699549%,12.298772%,12.599374%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy-icons/water.svg",
+      "inputBytes": 2207,
+      "outputBytes": 1110,
+      "inputSha256": "40a11647a16faa93be497a8322c1bed3c17d18a337927023d5ad663765fa9822",
+      "outputSha256": "d67dfb48dfa94265985bcf3992d801b1018c34ef9086e400c68ace182ef60904",
+      "keptOriginal": false,
+      "pathCount": 2,
+      "subpaths": 3,
+      "curves": 16,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 7.695312831401679e-7,
+      "variant": "syntax6",
+      "floatPrecision": 6,
+      "dimensions": {
+        "width": "100",
+        "height": "100"
+      },
+      "fillValuesBefore": [
+        "rgb(0%,69.4987416267395%,92.09887981414795%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(0%,69.498742%,92.09888%)",
+        "rgb(13.699549%,12.298772%,12.599374%)"
+      ],
+      "shaVerified": true
+    },
+    {
+      "path": "assets/energy-icons/grass.svg",
+      "inputBytes": 6435,
+      "outputBytes": 3132,
+      "inputSha256": "fbb74943b09ac3e96fc14cf042b6d10b946706bf3d11091845672cd94e3cf389",
+      "outputSha256": "b60e6335823488eae9da6239bf491b4465c102f64b5a5ba5859de8c18366898a",
+      "keptOriginal": false,
+      "pathCount": 2,
+      "subpaths": 3,
+      "curves": 52,
+      "sameCanonicalCommandTopology": true,
+      "maxLocalCoordinateError": 8.193360656605364e-8,
+      "variant": "syntax7",
+      "floatPrecision": 7,
+      "dimensions": {
+        "width": "100",
+        "height": "100"
+      },
+      "fillValuesBefore": [
+        "rgb(5.198748782277107%,69.4987416267395%,29.599452018737793%)",
+        "rgb(13.699549436569214%,12.298771739006042%,12.59937435388565%)"
+      ],
+      "fillValuesAfter": [
+        "rgb(5.1987488%,69.4987416%,29.599452%)",
+        "rgb(13.6995494%,12.2987717%,12.5993744%)"
+      ],
+      "shaVerified": true
+    }
+  ],
+  "checks": [
+    {
+      "path": "assets/tl-open-beta.svg",
+      "width": 93,
+      "height": 16,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/tl-open-beta.svg",
+      "width": 256,
+      "height": 44,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/tl-open-beta.svg",
+      "width": 512,
+      "height": 88,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/tl-open-beta.svg",
+      "width": 4738,
+      "height": 815,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/cardback.svg",
+      "width": 100,
+      "height": 140,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/cardback.svg",
+      "width": 256,
+      "height": 357,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/cardback.svg",
+      "width": 512,
+      "height": 715,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/cardback.svg",
+      "width": 745,
+      "height": 1040,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/lightning.svg",
+      "width": 18,
+      "height": 25,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/lightning.svg",
+      "width": 24,
+      "height": 33,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/lightning.svg",
+      "width": 32,
+      "height": 45,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/lightning.svg",
+      "width": 108,
+      "height": 150,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/lightning.svg",
+      "width": 138,
+      "height": 192,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/lightning.svg",
+      "width": 256,
+      "height": 356,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/lightning.svg",
+      "width": 512,
+      "height": 712,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fairy.svg",
+      "width": 18,
+      "height": 25,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fairy.svg",
+      "width": 24,
+      "height": 33,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fairy.svg",
+      "width": 32,
+      "height": 45,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fairy.svg",
+      "width": 108,
+      "height": 150,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fairy.svg",
+      "width": 138,
+      "height": 192,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fairy.svg",
+      "width": 256,
+      "height": 356,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fairy.svg",
+      "width": 512,
+      "height": 712,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fire.svg",
+      "width": 18,
+      "height": 25,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fire.svg",
+      "width": 24,
+      "height": 33,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fire.svg",
+      "width": 32,
+      "height": 45,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fire.svg",
+      "width": 108,
+      "height": 150,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fire.svg",
+      "width": 138,
+      "height": 192,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fire.svg",
+      "width": 256,
+      "height": 356,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fire.svg",
+      "width": 512,
+      "height": 712,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/metal.svg",
+      "width": 18,
+      "height": 25,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/metal.svg",
+      "width": 24,
+      "height": 33,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/metal.svg",
+      "width": 32,
+      "height": 45,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/metal.svg",
+      "width": 108,
+      "height": 150,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/metal.svg",
+      "width": 138,
+      "height": 192,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/metal.svg",
+      "width": 256,
+      "height": 356,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/metal.svg",
+      "width": 512,
+      "height": 712,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/dark.svg",
+      "width": 18,
+      "height": 25,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/dark.svg",
+      "width": 24,
+      "height": 33,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/dark.svg",
+      "width": 32,
+      "height": 45,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/dark.svg",
+      "width": 108,
+      "height": 150,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/dark.svg",
+      "width": 138,
+      "height": 192,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/dark.svg",
+      "width": 256,
+      "height": 356,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/dark.svg",
+      "width": 512,
+      "height": 712,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fighting.svg",
+      "width": 18,
+      "height": 25,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fighting.svg",
+      "width": 24,
+      "height": 33,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fighting.svg",
+      "width": 32,
+      "height": 45,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fighting.svg",
+      "width": 108,
+      "height": 150,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fighting.svg",
+      "width": 138,
+      "height": 192,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fighting.svg",
+      "width": 256,
+      "height": 356,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/fighting.svg",
+      "width": 512,
+      "height": 712,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/psychic.svg",
+      "width": 18,
+      "height": 25,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/psychic.svg",
+      "width": 24,
+      "height": 33,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/psychic.svg",
+      "width": 32,
+      "height": 45,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/psychic.svg",
+      "width": 108,
+      "height": 150,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/psychic.svg",
+      "width": 138,
+      "height": 192,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/psychic.svg",
+      "width": 256,
+      "height": 356,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/psychic.svg",
+      "width": 512,
+      "height": 712,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/water.svg",
+      "width": 18,
+      "height": 25,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/water.svg",
+      "width": 24,
+      "height": 33,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/water.svg",
+      "width": 32,
+      "height": 45,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/water.svg",
+      "width": 108,
+      "height": 150,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/water.svg",
+      "width": 138,
+      "height": 192,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/water.svg",
+      "width": 256,
+      "height": 356,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/water.svg",
+      "width": 512,
+      "height": 712,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/grass.svg",
+      "width": 18,
+      "height": 25,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/grass.svg",
+      "width": 24,
+      "height": 33,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/grass.svg",
+      "width": 32,
+      "height": 45,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/grass.svg",
+      "width": 108,
+      "height": 150,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/grass.svg",
+      "width": 138,
+      "height": 192,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/grass.svg",
+      "width": 256,
+      "height": 356,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy/grass.svg",
+      "width": 512,
+      "height": 712,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/lightning.svg",
+      "width": 18,
+      "height": 18,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/lightning.svg",
+      "width": 24,
+      "height": 24,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/lightning.svg",
+      "width": 32,
+      "height": 32,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/lightning.svg",
+      "width": 108,
+      "height": 108,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/lightning.svg",
+      "width": 256,
+      "height": 256,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/lightning.svg",
+      "width": 512,
+      "height": 512,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/energyless.svg",
+      "width": 18,
+      "height": 18,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/energyless.svg",
+      "width": 24,
+      "height": 24,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/energyless.svg",
+      "width": 32,
+      "height": 32,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/energyless.svg",
+      "width": 108,
+      "height": 108,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/energyless.svg",
+      "width": 256,
+      "height": 256,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/energyless.svg",
+      "width": 512,
+      "height": 512,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/darkness.svg",
+      "width": 18,
+      "height": 18,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/darkness.svg",
+      "width": 24,
+      "height": 24,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/darkness.svg",
+      "width": 32,
+      "height": 32,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/darkness.svg",
+      "width": 108,
+      "height": 108,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/darkness.svg",
+      "width": 256,
+      "height": 256,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/darkness.svg",
+      "width": 512,
+      "height": 512,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/fairy.svg",
+      "width": 18,
+      "height": 18,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/fairy.svg",
+      "width": 24,
+      "height": 24,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/fairy.svg",
+      "width": 32,
+      "height": 32,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/fairy.svg",
+      "width": 108,
+      "height": 108,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/fairy.svg",
+      "width": 256,
+      "height": 256,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/fairy.svg",
+      "width": 512,
+      "height": 512,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/dragon.svg",
+      "width": 18,
+      "height": 18,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/dragon.svg",
+      "width": 24,
+      "height": 24,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/dragon.svg",
+      "width": 32,
+      "height": 32,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/dragon.svg",
+      "width": 108,
+      "height": 108,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/dragon.svg",
+      "width": 256,
+      "height": 256,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/dragon.svg",
+      "width": 512,
+      "height": 512,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/colorless.svg",
+      "width": 18,
+      "height": 18,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/colorless.svg",
+      "width": 24,
+      "height": 24,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/colorless.svg",
+      "width": 32,
+      "height": 32,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/colorless.svg",
+      "width": 108,
+      "height": 108,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/colorless.svg",
+      "width": 256,
+      "height": 256,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/colorless.svg",
+      "width": 512,
+      "height": 512,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/fire.svg",
+      "width": 18,
+      "height": 18,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/fire.svg",
+      "width": 24,
+      "height": 24,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/fire.svg",
+      "width": 32,
+      "height": 32,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/fire.svg",
+      "width": 108,
+      "height": 108,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/fire.svg",
+      "width": 256,
+      "height": 256,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/fire.svg",
+      "width": 512,
+      "height": 512,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/metal.svg",
+      "width": 18,
+      "height": 18,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/metal.svg",
+      "width": 24,
+      "height": 24,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/metal.svg",
+      "width": 32,
+      "height": 32,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/metal.svg",
+      "width": 108,
+      "height": 108,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/metal.svg",
+      "width": 256,
+      "height": 256,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/metal.svg",
+      "width": 512,
+      "height": 512,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/fighting.svg",
+      "width": 18,
+      "height": 18,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/fighting.svg",
+      "width": 24,
+      "height": 24,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/fighting.svg",
+      "width": 32,
+      "height": 32,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/fighting.svg",
+      "width": 108,
+      "height": 108,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/fighting.svg",
+      "width": 256,
+      "height": 256,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/fighting.svg",
+      "width": 512,
+      "height": 512,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/psychic.svg",
+      "width": 18,
+      "height": 18,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/psychic.svg",
+      "width": 24,
+      "height": 24,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/psychic.svg",
+      "width": 32,
+      "height": 32,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/psychic.svg",
+      "width": 108,
+      "height": 108,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/psychic.svg",
+      "width": 256,
+      "height": 256,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/psychic.svg",
+      "width": 512,
+      "height": 512,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/water.svg",
+      "width": 18,
+      "height": 18,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/water.svg",
+      "width": 24,
+      "height": 24,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/water.svg",
+      "width": 32,
+      "height": 32,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/water.svg",
+      "width": 108,
+      "height": 108,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/water.svg",
+      "width": 256,
+      "height": 256,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/water.svg",
+      "width": 512,
+      "height": 512,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/grass.svg",
+      "width": 18,
+      "height": 18,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/grass.svg",
+      "width": 24,
+      "height": 24,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/grass.svg",
+      "width": 32,
+      "height": 32,
+      "actualDisplay": true,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/grass.svg",
+      "width": 108,
+      "height": 108,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/grass.svg",
+      "width": 256,
+      "height": 256,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    },
+    {
+      "path": "assets/energy-icons/grass.svg",
+      "width": 512,
+      "height": 512,
+      "actualDisplay": false,
+      "exactBytes": true,
+      "changedVisiblePixels": 0,
+      "maxAlphaDifference": 0,
+      "maxPremultipliedRgbDifference": 0,
+      "maxBlackOrWhiteCompositeDifference": 0,
+      "premultipliedRgbRmse": 0
+    }
+  ],
+  "configurationSource": "/tmp/twinleaf-svg-minify-experiment.cjs",
+  "summary": {
+    "files": 23,
+    "changedFiles": 20,
+    "originalBytes": 107193,
+    "outputBytes": 60625,
+    "checks": 143,
+    "exactRgbaRenders": 143,
+    "actualSizeRenders": 65,
+    "exactActualSizeRenders": 65,
+    "nativeAttachmentCanvasChecks": 9,
+    "maxAlphaDifference": 0,
+    "maxPremultipliedRgbDifference": 0,
+    "maxCoordinateError": 8.945311833485903e-7,
+    "sameTopology": true
+  },
+  "bootstrapWithPercentEncodedSvg": {
+    "before": {
+      "raw": 820583,
+      "gzip6": 243701,
+      "brotli6": 211803
+    },
+    "syntax6": {
+      "raw": 761244,
+      "gzip6": 231289,
+      "brotli6": 205664
+    },
+    "chosen": {
+      "raw": 767247,
+      "gzip6": 234263,
+      "brotli6": 210701
+    }
+  },
+  "appliedToSource": true,
+  "appliedAt": "2026-11-07T04:37:56.676Z",
+  "sourceInventorySha256": "15c58157e840c8a89b858c7a74b2550838e111d55ac619c308fcfe46e4dbc15e"
+}

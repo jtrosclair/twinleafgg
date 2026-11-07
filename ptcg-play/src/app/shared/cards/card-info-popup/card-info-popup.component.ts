@@ -8,7 +8,6 @@ export interface CardInfoPopupData {
   card?: Card;
   cardList?: CardList;
   options?: CardInfoPaneOptions;
-  allowReveal?: boolean;
   facedown?: boolean;
 }
 
@@ -22,7 +21,6 @@ export class CardInfoPopupComponent {
   public card: Card;
   public cardList: CardList;
   public facedown: boolean;
-  public allowReveal: boolean;
   public options: CardInfoPaneOptions;
   private data: CardInfoPopupData;
 
@@ -35,7 +33,6 @@ export class CardInfoPopupComponent {
     this.card = data.card;
     this.cardList = data.cardList;
     this.facedown = data.facedown;
-    this.allowReveal = data.allowReveal;
     this.options = data.options || {};
   }
 
@@ -60,22 +57,6 @@ export class CardInfoPopupComponent {
 
   public close(result?: CardInfoPaneAction) {
     this.dialogRef.close(result);
-  }
-
-  public onCardSwap(event: { originalCard: Card, replacementCard: Card }) {
-    // Update the card reference to show the swapped card
-    this.card = event.replacementCard;
-
-    // If there's a cardList, we might need to update it too
-    if (this.cardList && this.cardList.cards) {
-      const index = this.cardList.cards.findIndex(c => c.fullName === event.originalCard.fullName);
-      if (index !== -1) {
-        this.cardList.cards[index] = event.replacementCard;
-      }
-    }
-
-    // Emit the swap event to parent (e.g., deck editor) so it can update the deck
-    this.dialogRef.close({ cardSwap: event });
   }
 
 }

@@ -1,0 +1,292 @@
+{
+  "packageHash": "6ff0b913aece399611bd2182af6b21202189bdd12e3eaea7a356da9cfffecfb1",
+  "scope": "Desktop browser presentation verification; no new physical WebView gesture or winning-game replay tests were run for this SVG asset change.",
+  "localPuzzles": [
+    {
+      "name": "Trapped in the Phantom Maze",
+      "allScansLazyAsync": true,
+      "boardPainted": true,
+      "bootstrap": [
+        "http://localhost:4200/simulator-static.840a691871f38a1f7822.js?local=1794027605079.5671"
+      ],
+      "scanSizes": [
+        "736x1024"
+      ],
+      "svg": [
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        }
+      ],
+      "unsafeImages": 0
+    },
+    {
+      "name": "Explosive Hand",
+      "allScansLazyAsync": true,
+      "boardPainted": true,
+      "bootstrap": [
+        "http://localhost:4200/simulator-static.840a691871f38a1f7822.js?local=1794027605079.5671"
+      ],
+      "scanSizes": [
+        "736x1024"
+      ],
+      "svg": [
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        }
+      ],
+      "unsafeImages": 0
+    },
+    {
+      "name": "Breaking Through the Wall",
+      "allScansLazyAsync": true,
+      "boardPainted": true,
+      "bootstrap": [
+        "http://localhost:4200/simulator-static.840a691871f38a1f7822.js?local=1794027605079.5671"
+      ],
+      "scanSizes": [
+        "736x1024"
+      ],
+      "svg": [
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        }
+      ],
+      "unsafeImages": 0
+    },
+    {
+      "name": "Something's Fishy",
+      "allScansLazyAsync": true,
+      "boardPainted": true,
+      "bootstrap": [
+        "http://localhost:4200/simulator-static.840a691871f38a1f7822.js?local=1794027605079.5671"
+      ],
+      "scanSizes": [
+        "736x1024"
+      ],
+      "svg": [
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        }
+      ],
+      "unsafeImages": 0
+    },
+    {
+      "name": "Deck out with Dengo",
+      "allScansLazyAsync": true,
+      "boardPainted": true,
+      "bootstrap": [
+        "http://localhost:4200/simulator-static.840a691871f38a1f7822.js?local=1794027605079.5671"
+      ],
+      "scanSizes": [
+        "736x1024"
+      ],
+      "svg": [
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        }
+      ],
+      "unsafeImages": 0
+    }
+  ],
+  "inline": {
+    "check": {
+      "cssSvgBackgrounds": 6,
+      "inline": [
+        {
+          "display": [
+            18,
+            18
+          ],
+          "loaded": true,
+          "natural": [
+            100,
+            100
+          ],
+          "svg": true
+        }
+      ]
+    },
+    "logs": []
+  },
+  "live": {
+    "check": {
+      "base": "https://sim-static.prizemap.app/releases/6ff0b913aece399611bd2182af6b21202189bdd12e3eaea7a356da9cfffecfb1/",
+      "bootstrap": [
+        "https://sim-static.prizemap.app/releases/6ff0b913aece399611bd2182af6b21202189bdd12e3eaea7a356da9cfffecfb1/simulator-static.840a691871f38a1f7822.js"
+      ],
+      "hashPrefix": "#gz2.",
+      "path": "/sandbox-viewer",
+      "scanSizes": [
+        "736x1024"
+      ],
+      "svg": [
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "loaded": true,
+          "natural": [
+            138,
+            192
+          ]
+        }
+      ],
+      "unsafeImages": 0
+    },
+    "logs": []
+  },
+  "screenshots": {
+    "comparison": "/Users/jerrytrosclair/.codex/visualizations/2026/11/06/01a1af35-a82d-7891-8651-53d54b357e07/webp-comparison/svg-simplified-comparison.png",
+    "liveBoard": "/Users/jerrytrosclair/.codex/visualizations/2026/11/06/01a1af35-a82d-7891-8651-53d54b357e07/webp-comparison/svg-simplified-live-board.png"
+  }
+}

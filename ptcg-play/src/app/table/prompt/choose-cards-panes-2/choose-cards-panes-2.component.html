@@ -3,9 +3,8 @@
     [listId]="topListId">
 
     <ng-template dndSortableTemplate let-context>
-      <ptcg-card [ngClass]="{unavailable: !filterMap[context.data.card.fullName],
-          cardback: cardbackMap[context.data.index]}" [dndSortableRender]="context" #render="dndSortableRender"
-        [dragSource]="render.source" [noHTML5Preview]="true" [ptcgCardPlaceholder]="render.isDragging$"
+      <ptcg-card [class.unavailable]="!filterMap[context.data.card.fullName]" [cardback]="cardbackMap[context.data.index]" [dndSortableRender]="context" #render="dndSortableRender"
+        [dragSource]="render.source" [noHTML5Preview]="true" [placeholder]="render.isDragging$ | async"
         [card]="context.data.card" (click)="showCardPopup(context)">
       </ptcg-card>
     </ng-template>
@@ -18,9 +17,9 @@
     [listId]="bottomListId">
 
     <ng-template dndSortableTemplate let-context>
-      <ptcg-card showCardCount="true" [ngClass]="{cardback: cardbackMap[context.data.index]}"
+      <ptcg-card showCardCount="true" [cardback]="cardbackMap[context.data.index]"
         [dndSortableRender]="context" #render="dndSortableRender" [dragSource]="render.source" [noHTML5Preview]="true"
-        [ptcgCardPlaceholder]="render.isDragging$" [card]="context.data.card" (click)="showCardPopup(context)">
+        [placeholder]="render.isDragging$ | async" [card]="context.data.card" (click)="showCardPopup(context)">
       </ptcg-card>
     </ng-template>
 

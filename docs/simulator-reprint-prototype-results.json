@@ -1,0 +1,303 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-11-07T12:30:31.817Z",
+  "status": "completed",
+  "deployed": false,
+  "productionApplicationSourceChanged": false,
+  "conclusion": "The tested print-variant factory reduces uncompressed JavaScript but increases gzip, Brotli, and ZIP package size. Keep the existing implementation for download-size goals.",
+  "experiment": {
+    "workspace": "/tmp/twinleaf-reprint-prototype",
+    "transformedRegisteredPrintings": 3593,
+    "transformedSourceClasses": 3670,
+    "changedFiles": 153,
+    "helperFiles": 1,
+    "representation": "Compact scalar printing metadata passed to a shared subclass factory. Every printing retains a distinct constructor and original inheritance. Version 2 adds pure-call annotations to allow unused wrappers to be removed.",
+    "outOfScope": "No card removals, gameplay edits, default-field removal, frontend changes, or deployment."
+  },
+  "method": {
+    "control": "Fresh baseline production build using source inputs identical to the current application.",
+    "toolchain": "Node 24.22.1; same production build, finalizer, package scripts and dependency versions in isolated copies.",
+    "compression": {
+      "gzipLevel": 6,
+      "brotliQuality": 6,
+      "zipDeflateLevel": 9
+    },
+    "runtimeAggregation": "Sum of independently compressed files listed in the runtime manifest. Excludes remote card scans and protocol overhead.",
+    "baselineVsPreviousReleaseVariance": "Fresh baseline main differs from the existing release by -2 raw bytes, 0 gzip bytes, and +122 Brotli bytes; ZIP differs by +936 bytes. All comparisons use the fresh control.",
+    "performance": "This experiment measures size and functional parity, not mobile startup speed."
+  },
+  "builds": {
+    "baseline": {
+      "packageHash": "d10ba061a31539d31f98c3b8b9c1508011c3781176adbc1b35867faaceed8576",
+      "buildId": "01acab44-05c3-4111-add7-180553e6cc38",
+      "runtime": {
+        "files": 9,
+        "bytes": 12457237,
+        "gzipBytes": 2244612,
+        "brotliBytes": 1526527
+      },
+      "main": {
+        "path": "main.3c19312031c9b9d36cb3.js",
+        "category": "main",
+        "bytes": 11426626,
+        "gzipBytes": 1938815,
+        "brotliBytes": 1242455,
+        "sha256": "4459d1254ac04270ad3743d6e3b33c4a03c747141415a9377789bf1b92947539"
+      },
+      "archive": {
+        "bytes": 2216148,
+        "sha256": "9942245ca0030d5cc0509b6948bc79c566324d6e009c0f36e15b9e1c35672e9a"
+      }
+    },
+    "factoryV1": {
+      "packageHash": "e330a8d79a93d6a70036469cf489e5e17fbcbeace59442bafc494b9d2053b503",
+      "buildId": "87dca870-cc39-4692-b82d-424e567ab5a1",
+      "runtime": {
+        "files": 9,
+        "bytes": 12274281,
+        "gzipBytes": 2250968,
+        "brotliBytes": 1540339
+      },
+      "main": {
+        "path": "main.9a1b9757ef7f5fe7c39f.js",
+        "category": "main",
+        "bytes": 11243670,
+        "gzipBytes": 1945174,
+        "brotliBytes": 1256273,
+        "sha256": "dd11228aac4f4d7a7d712b97faa8513ca075fba1e990031cfc273e14bbda6060"
+      },
+      "archive": {
+        "bytes": 2223749,
+        "sha256": "280583c241df10b8c169a0b9f90418da9a1b46394940c8280e7ac83ac1cfa6e4"
+      }
+    },
+    "factoryWithPureAnnotationsV2": {
+      "packageHash": "625050b1fcc067fdf87ff090ae3ea0b7dccf76cda4952870fe24818a2277b902",
+      "buildId": "e8187c02-f871-429c-b9ba-e2cb5b1e4ec4",
+      "runtime": {
+        "files": 9,
+        "bytes": 12272156,
+        "gzipBytes": 2250607,
+        "brotliBytes": 1539965
+      },
+      "main": {
+        "path": "main.0c3014e7b538dcac8185.js",
+        "category": "main",
+        "bytes": 11241545,
+        "gzipBytes": 1944810,
+        "brotliBytes": 1255894,
+        "sha256": "180565b9ff47521ad08973b4cdb5374d0b62392d37e5dfe330fec0092f21125a"
+      },
+      "archive": {
+        "bytes": 2223385,
+        "sha256": "250ba54564fda0b2fafb033a1b003443285cf9e5b56a6678c29d48f19e9f71db"
+      }
+    }
+  },
+  "finalSavings": {
+    "main": {
+      "bytes": {
+        "before": 11426626,
+        "after": 11241545,
+        "saved": 185081,
+        "savedPercent": 1.619734
+      },
+      "gzipBytes": {
+        "before": 1938815,
+        "after": 1944810,
+        "saved": -5995,
+        "savedPercent": -0.309209
+      },
+      "brotliBytes": {
+        "before": 1242455,
+        "after": 1255894,
+        "saved": -13439,
+        "savedPercent": -1.081649
+      }
+    },
+    "runtime": {
+      "bytes": {
+        "before": 12457237,
+        "after": 12272156,
+        "saved": 185081,
+        "savedPercent": 1.485731
+      },
+      "gzipBytes": {
+        "before": 2244612,
+        "after": 2250607,
+        "saved": -5995,
+        "savedPercent": -0.267084
+      },
+      "brotliBytes": {
+        "before": 1526527,
+        "after": 1539965,
+        "saved": -13438,
+        "savedPercent": -0.880299
+      }
+    },
+    "archive": {
+      "bytes": {
+        "before": 2216148,
+        "after": 2223385,
+        "saved": -7237,
+        "savedPercent": -0.326558
+      },
+      "gzipBytes": {
+        "before": 2216196,
+        "after": 2223608,
+        "saved": -7412,
+        "savedPercent": -0.334447
+      },
+      "brotliBytes": {
+        "before": 2216157,
+        "after": 2223393,
+        "saved": -7236,
+        "savedPercent": -0.326511
+      }
+    }
+  },
+  "metadataParity": {
+    "sameCatalogueCount": true,
+    "sameCatalogueHash": true,
+    "orderedImageArraysIdentical": true,
+    "imageReferencesChecked": 13483
+  },
+  "validation": {
+    "ok": true,
+    "catalogue": {
+      "cards": 13483,
+      "constructorGroups": 13483,
+      "clonesPerEngine": 13483,
+      "allDataTextArtAliasesPrototypeInstanceofAndOrderEqual": true,
+      "constructorNameDiagnosticChanges": 3593
+    },
+    "regressions": {
+      "client": 38,
+      "cards": 44,
+      "failures": 0
+    },
+    "stateParity": {
+      "orderedWinningTraces": [
+        {
+          "name": "phantom-maze",
+          "orderedSteps": 21,
+          "terminalSha256": "291362140840d3f0768730c3f0523001f30cabbb63c9876e418b4ee6265c5b04",
+          "rngCalls": 12
+        },
+        {
+          "name": "explosive-hand",
+          "orderedSteps": 20,
+          "terminalSha256": "bbc915d8f2ce5390d91a1abfc0936d5ba24969764dbc81252a5b0cd465f6f1f8",
+          "rngCalls": 5
+        },
+        {
+          "name": "breaking-through-wall",
+          "orderedSteps": 29,
+          "terminalSha256": "4b85188ab2754fc4069e9eb588e40ab6e5ba48e68b512976e8ec617bc0009c75",
+          "rngCalls": 22
+        },
+        {
+          "name": "somethings-fishy",
+          "orderedSteps": 19,
+          "terminalSha256": "d0f81342ca3d51caa0076d0348908286b76616d66018681c352c95f317946296",
+          "rngCalls": 201
+        }
+      ],
+      "fullAndCompactBytesEqualAtEveryStep": true,
+      "clock": "Date.now fixed and logging timestamp fixed; identical seeded Math.random per paired trace. No serialized field normalization.",
+      "initialMismatchResolution": "Date.now appears in generated game-stat __uniqueId keys and Ref paths. A controlled test clock resolved the six Phantom terminal differences; final comparisons include all fields unchanged."
+    },
+    "zoroark": {
+      "printingVariants": [
+        "N's Zoroark ex ASC",
+        "N's Zoroark ex2 ASC",
+        "N's Zoroark ex JTG",
+        "N's Zoroark exFA JTG",
+        "N's Zoroark exSIR JTG",
+        "N's Zoroark exUR JTG"
+      ],
+      "controlledTradeCases": 7,
+      "perCopyPhysicalIds": [
+        52,
+        58,
+        59
+      ],
+      "expectedRepeatedUseRejections": 7,
+      "undoResetAndCompactRoundtrips": 7,
+      "printingSubstitutedNightJokerWinningTraces": 6,
+      "allFocusedFullAndCompactHashesEqual": true,
+      "exactPuzzleVsControlled": "The exact original 21-step Phantom win is unchanged. Separate Trade scenarios clear only pre-existing TRADE_MARKER entries for cards58/59. Per-print scenarios substitute only four Zoroark printing labels."
+    },
+    "normalRngWins": {
+      "fourPublishedPuzzlesPerEngine": 40,
+      "zoroarkPrintingSubstitutionsPerEngine": 18,
+      "totalPerEngine": 58,
+      "totalAcrossTwoEngines": 116
+    },
+    "browser": {
+      "scripts": [
+        "simulator-static.700d858e281b5bc4f5cc.js?local=1794054418889.659",
+        "runtime.287366b023aefc3235db.js?local=1794054418889.659",
+        "polyfills.98ed7ea3f24455c0a30b.js?local=1794054418889.659",
+        "main.0c3014e7b538dcac8185.js?local=1794054418889.659"
+      ],
+      "setup": "{\"stages\":{\"metadataReady\":22.6,\"engineReady\":32.1,\"boardMounted\":34.6,\"boardPainted\":110.9},\"startedAtNavigationMs\":163.29999995231628,\"navigationMs\":274.2}",
+      "zoroarks": [
+        {
+          "height": 1024,
+          "loaded": true,
+          "loading": "lazy",
+          "src": "https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/JTG/JTG_175_R_EN.png",
+          "width": 736
+        },
+        {
+          "height": 1024,
+          "loaded": true,
+          "loading": "lazy",
+          "src": "https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/JTG/JTG_098_R_EN.png",
+          "width": 736
+        },
+        {
+          "height": 1024,
+          "loaded": true,
+          "loading": "lazy",
+          "src": "https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/JTG/JTG_098_R_EN.png",
+          "width": 736
+        },
+        {
+          "height": 1024,
+          "loaded": true,
+          "loading": "lazy",
+          "src": "https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/JTG/JTG_098_R_EN.png",
+          "width": 736
+        }
+      ],
+      "ok": true,
+      "packageHash": "625050b1fcc067fdf87ff090ae3ea0b7dccf76cda4952870fe24818a2277b902",
+      "snapshot": "Trapped in the Phantom Maze, compressed short-field fixture",
+      "benchmark": false,
+      "screenshot": "/Users/jerrytrosclair/.codex/visualizations/2026/11/06/01a1af35-a82d-7891-8651-53d54b357e07/reprint-prototype/phantom-maze.png"
+    }
+  },
+  "limitations": [
+    "The experiment covers this factory representation, not every possible compact-library design.",
+    "All registered card data and constructor relationships were compared, alongside existing regressions and recorded gameplay; this is not an exhaustive independent mechanics test for every card.",
+    "Source constructor.name changes for 3,593 registered printing classes. Constructor identity and instanceof relationships are preserved.",
+    "Differential gameplay tests fix the clock and RNG seed; separate winning replays use normal Math.random."
+  ],
+  "productionIntegrity": {
+    "checkedAt": "2026-11-07T12:28:20.517Z",
+    "productionVerificationUnchanged": true,
+    "workingDiffUnchanged": true,
+    "sourceInputHash": "423f826e7af6c9fae8ef7d009dd9bca7a82dc0489a7e0298c56b6b8d02bd02aa",
+    "productionPackageHash": "6ff0b913aece399611bd2182af6b21202189bdd12e3eaea7a356da9cfffecfb1",
+    "workingDiffSha256": "b7a8f4884012c1175cc1c816dd1c3c3973917a4a33c7f4523f99ae6e6f85a079"
+  },
+  "evidence": {
+    "transform": "/tmp/twinleaf-reprint-prototype/transform.cjs",
+    "staticAudit": "/tmp/twinleaf-reprint-prototype/static-safety-review.json",
+    "sizes": "/tmp/twinleaf-reprint-prototype/comparison-v2-size-results.json",
+    "tests": "/tmp/twinleaf-reprint-prototype/verification-results.json",
+    "browser": "/tmp/twinleaf-reprint-prototype/browser-results.json"
+  }
+}

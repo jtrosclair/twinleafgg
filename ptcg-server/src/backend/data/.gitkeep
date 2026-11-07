@@ -1,3 +1,0 @@
-# This directory stores generated data files for card importing
-# - unknown-cards.json: Cards that need to be implemented
-# - tcgdex-cache.json: Cached TCGdex API responses

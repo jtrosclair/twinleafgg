@@ -12,11 +12,12 @@ import { Marker } from '../store/state/card-marker';
 import { StateLogSerializer } from './state-log.serializer';
 import { PromptSerializer } from './prompt.serializer';
 import { PathBuilder } from './path-builder';
-import { deepIterate, deepClone } from '../../utils';
+import { deepClone } from '../../utils/utils';
 import { JsonPatch } from './json-patch';
 import { JsonDiff } from './json-patch.interface';
 import { GameSettings } from '../core/game-settings';
 import { cardReplacementMap, stripNumericSuffix } from './card-replacements';
+import { restoreCompactDefaults } from './compact-state';
 
 export class StateSerializer {
 
@@ -154,8 +155,12 @@ export class StateSerializer {
   public deserialize(serializedState: SerializedState): State {
     const serializers = this.serializers;
     const context = this.restoreContext(serializedState);
+    const refs: { holder: any, key: string, path: string, node: Object }[] = [];
+    const restored = new Map<Object, Object>();
+    const parents = new Map<Object, { holder: any, key: string }>();
 
     const reviver: any = function (this: any, key: string, value: any) {
+      if (value instanceof Object) { parents.set(value, { holder: this, key }); }
       if (value instanceof Array) {
         return value;
       }
@@ -163,11 +168,15 @@ export class StateSerializer {
         const name = (value as Serialized)._type;
         if (typeof name === 'string') {
           if (name === 'Ref') {
+            refs.push({ holder: this, key, path: value.path, node: value });
             return value;
           }
           const serializer = serializers.find(s => s.types.includes(name));
           if (serializer !== undefined) {
-            return serializer.deserialize(value, context);
+            restoreCompactDefaults(value, name);
+            const instance = serializer.deserialize(value, context);
+            restored.set(value, instance);
+            return instance;
           }
           throw new GameError(GameCoreError.ERROR_SERIALIZER, `Unknown deserializer for '${name}'.`);
         }
@@ -177,17 +186,26 @@ export class StateSerializer {
 
     const parsed = JSON.parse(serializedState, reviver);
 
-    // Restore Refs
+    // The reviver records only references, avoiding a second walk through every
+    // hydrated card. Typed serializers replace their raw holders with instances.
     const pathBuilder = new PathBuilder();
-    deepIterate(parsed, (holder, key, value) => {
-      if (value instanceof Object && value._type === 'Ref') {
-        const reference = pathBuilder.getValue(parsed, value.path);
-        if (reference === undefined) {
-          throw new GameError(GameCoreError.ERROR_SERIALIZER, `Unknown reference '${value.path}'.`);
-        }
-        holder[key] = reference;
+    const survives = (node: Object): boolean => {
+      const parent = parents.get(node);
+      if (!parent) { return true; }
+      const holder = restored.get(parent.holder) || parent.holder;
+      const child = restored.get(node) || node;
+      return holder[parent.key] === child && survives(parent.holder);
+    };
+    for (const ref of refs) {
+      // Card hydration discards extra fields and their entire nested subtrees.
+      if (!survives(ref.node)) { continue; }
+      const reference = pathBuilder.getValue(parsed, ref.path);
+      if (reference === undefined) {
+        throw new GameError(GameCoreError.ERROR_SERIALIZER, `Unknown reference '${ref.path}'.`);
       }
-    });
+      const holder = restored.get(ref.holder) || ref.holder;
+      holder[ref.key] = reference;
+    }
 
     const state = parsed[1];
     return state;
@@ -240,6 +258,10 @@ export class StateSerializer {
     StateSerializer.knownCards = cards;
     StateSerializer.knownCardsByFullName = new Map(cards.map(card => [card.fullName, card]));
     console.log("cards set")
+  }
+
+  public static hasKnownCard(fullName: string): boolean {
+    return StateSerializer.knownCardsByFullName.has(fullName);
   }
 
   private restoreContext(serializedState: SerializedState): SerializerContext {

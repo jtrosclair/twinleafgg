@@ -4,40 +4,19 @@
     <div class="sandbox-viewer-container" *ngIf="autoStartState">
       <div class="sandbox-viewer-card loading-card">
         <div class="loading-content">
-          <img src="https://pm-cdn.trosclair.dev/logo-v2.png" alt="PrizeMap Logo" class="loading-logo">
+          <img src="assets/prizemap-logo.webp" alt="PrizeMap Logo" class="loading-logo">
           <h1 class="loading-title">PrizeMap</h1>
           <div class="loading-subtitle">
             <span>powered by</span>
-            <img src="https://play.twinleaf.gg/assets/tl-open-beta-sm.webp" alt="Twinleaf" class="twinleaf-logo">
+            <img src="assets/tl-open-beta.svg" alt="Twinleaf" class="twinleaf-logo">
           </div>
           <div class="loading-spinner">
             <mat-spinner diameter="40"></mat-spinner>
           </div>
-          <ng-container *ngIf="cardDataProgress$ | async as cardProgress">
-            <div class="card-data-download" *ngIf="cardProgress.active || cardProgress.phase === 'error'">
-              <div class="card-data-download-title">{{ cardProgress.message }}</div>
-              <mat-progress-bar
-                *ngIf="cardProgress.phase !== 'error'"
-                [mode]="cardProgress.progress === null ? 'indeterminate' : 'determinate'"
-                [value]="cardProgress.progress || 0">
-              </mat-progress-bar>
-              <div class="card-data-download-meta" *ngIf="cardProgress.phase === 'downloading'">
-                <span *ngIf="cardProgress.progress !== null">{{ cardProgress.progress }}%</span>
-                <span *ngIf="cardProgress.totalBytes">
-                  {{ cardProgress.loadedBytes / 1048576 | number:'1.1-1' }} MB /
-                  {{ cardProgress.totalBytes / 1048576 | number:'1.1-1' }} MB
-                </span>
-                <span *ngIf="!cardProgress.totalBytes">Downloading card database…</span>
-              </div>
-              <div class="card-data-download-helper" *ngIf="cardProgress.phase === 'downloading'">
-                PrizeMap is updating the simulator card database. This can take a moment after new cards are added.
-              </div>
-            </div>
-          </ng-container>
           <p class="delayed-message" *ngIf="delayedMessage">{{ delayedMessage }}</p>
         </div>
         <div class="sandbox-viewer-error" *ngIf="error">
-          <mat-icon>error</mat-icon>
+          <svg class="ptcg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-2h2zm0-4h-2V7h2z"></path></svg>
           <span>{{ error }}</span>
         </div>
       </div>
@@ -54,23 +33,8 @@
           <span>{{ 'SANDBOX_VIEWER_CONNECTING' | translate }}</span>
         </div>
 
-        <ng-container *ngIf="cardDataProgress$ | async as cardProgress">
-          <div class="sandbox-viewer-status card-data-status" *ngIf="cardProgress.active || cardProgress.phase === 'error'">
-            <mat-icon *ngIf="cardProgress.phase === 'error'">error</mat-icon>
-            <mat-spinner *ngIf="cardProgress.phase !== 'error'" diameter="20"></mat-spinner>
-            <div class="card-data-status-body">
-              <span>{{ cardProgress.message }}</span>
-              <mat-progress-bar
-                *ngIf="cardProgress.phase !== 'error'"
-                [mode]="cardProgress.progress === null ? 'indeterminate' : 'determinate'"
-                [value]="cardProgress.progress || 0">
-              </mat-progress-bar>
-            </div>
-          </div>
-        </ng-container>
-
         <div class="sandbox-viewer-status success" *ngIf="isReady && !initializingSession">
-          <mat-icon>check_circle</mat-icon>
+          <svg class="ptcg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"></path></svg>
           <span>{{ 'SANDBOX_VIEWER_READY' | translate }}</span>
         </div>
 
@@ -83,22 +47,22 @@
         </mat-form-field>
 
         <div class="sandbox-viewer-error" *ngIf="error">
-          <mat-icon>error</mat-icon>
+          <svg class="ptcg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-2h2zm0-4h-2V7h2z"></path></svg>
           <span>{{ error }}</span>
         </div>
 
         <div class="sandbox-viewer-actions">
           <button mat-raised-button color="primary" (click)="loadGameState()"
             [disabled]="loading || initializingSession || !isReady || !stateDataInput.trim()">
-            <mat-icon>play_arrow</mat-icon>
+            <svg class="ptcg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"></path></svg>
             {{ 'SANDBOX_VIEWER_LOAD_BUTTON' | translate }}
           </button>
           <button mat-button (click)="clearInput()" [disabled]="loading || initializingSession">
-            <mat-icon>clear</mat-icon>
+            <svg class="ptcg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
             {{ 'SANDBOX_VIEWER_CLEAR_BUTTON' | translate }}
           </button>
           <button mat-button color="warn" (click)="retryConnection()" *ngIf="error && !initializingSession">
-            <mat-icon>refresh</mat-icon>
+            <svg class="ptcg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.65 6.35A7.95 7.95 0 0 0 12 4a8 8 0 1 0 7.93 9h-2.02A6 6 0 1 1 12 6c1.66 0 3.14.69 4.22 1.78L13 11h9V2z"></path></svg>
             {{ 'SANDBOX_VIEWER_RETRY_BUTTON' | translate }}
           </button>
         </div>

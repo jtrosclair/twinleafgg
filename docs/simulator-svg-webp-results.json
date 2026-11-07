@@ -1,0 +1,520 @@
+{
+  "createdAt": "2026-11-07T04:18:59.124Z",
+  "description": "Official Pokémon rulebook vector energy symbols and Twinleaf SVG branding; WebP quality75 UI art with exact alpha; unchanged lossless foil masks.",
+  "before": {
+    "packageHash": "291dcdbf50de5f5ee6405bab717c7c9718bb80b5e7d3a7cba0b00737430cdf08",
+    "buildId": "8a360135-c75d-4258-a97f-507593fcfd2e"
+  },
+  "after": {
+    "packageHash": "59166694d2fc5e5c2dcaeb9129a95c743ef82eb4b46ae339d25165f8add9661d",
+    "buildId": "37c7e5d9-a982-4e51-9737-7f4d7bc57085"
+  },
+  "sizes": {
+    "uiImages": {
+      "before": 1384702,
+      "after": 277593,
+      "saved": 1107109,
+      "percentSmaller": 79.95
+    },
+    "runtimeRaw": {
+      "before": 14043590,
+      "after": 12571009,
+      "saved": 1472581,
+      "percentSmaller": 10.49
+    },
+    "runtimeGzip6": {
+      "before": 3457377,
+      "after": 2286252,
+      "saved": 1171125,
+      "percentSmaller": 33.87
+    },
+    "runtimeBrotli6": {
+      "before": 2723443,
+      "after": 1548449,
+      "saved": 1174994,
+      "percentSmaller": 43.14
+    },
+    "packageZip": {
+      "before": 3428046,
+      "after": 2257095,
+      "saved": 1170951,
+      "percentSmaller": 34.16
+    }
+  },
+  "imageGroups": {
+    "lossy-webp": {
+      "count": 22,
+      "bytes": 126722
+    },
+    "preserved-lossless": {
+      "count": 5,
+      "bytes": 43678
+    },
+    "svg-replacement": {
+      "count": 23,
+      "bytes": 107193
+    }
+  },
+  "examples": [
+    {
+      "path": "assets/cardback.svg",
+      "size": {
+        "before": 623970,
+        "after": 1200,
+        "saved": 622770,
+        "percentSmaller": 99.81
+      },
+      "gzip6Bytes": 659
+    },
+    {
+      "path": "assets/tl-open-beta.svg",
+      "size": {
+        "before": 113588,
+        "after": 10946,
+        "saved": 102642,
+        "percentSmaller": 90.36
+      },
+      "gzip6Bytes": 4859
+    }
+  ],
+  "scope": {
+    "remoteCardArtwork": "Original URLs, sizes, lazy loading, asynchronous decoding, and browser HTTP caching unchanged.",
+    "dimensions": "Existing CSS display sizes retained; SVG symbols are resolution independent.",
+    "masks": "All five foil-mask WebPs retain exact file bytes.",
+    "favicon": "Standalone favicon.ico unchanged.",
+    "dependencies": "No new runtime or build image dependency; temporary tracing tools used outside the repository.",
+    "energyVectorSource": {
+      "url": "https://assets.pokemon.com/assets/cms2/pdf/trading-card-game/rulebook/par_rulebook_en.pdf",
+      "page": 4,
+      "sha256": "cd526f74614ecfc8aa09c641b03abc53aad2f261f028efaa5b402811fdb86b23",
+      "geometry": "Original cubic/line commands and colors; no tracing, redrawing, simplification or coordinate rounding.",
+      "energyless": "Official colorless disk without the glyph."
+    },
+    "timings": "Byte savings are measured; no claim of measured mobile rendering or game-initialization speedup."
+  },
+  "verification": {
+    "automatedSpecs": {
+      "total": 301,
+      "engine": 38,
+      "cards": 44,
+      "frontend": 111,
+      "touchAndGzip": 21,
+      "assetPackageAndCache": 87,
+      "failures": 0,
+      "note": "Full root suite plus final refreshed111-spec frontend suite; standalone optimizer/finalizer guards also passed."
+    },
+    "payloadRoundTrips": 600,
+    "winningPuzzleReplays": 40,
+    "dengoTuroNestCases": 5,
+    "sourceAssetAudit": {
+      "passed": true,
+      "sourceFiles": 201,
+      "assets": 56,
+      "bytes": 486587,
+      "referenced": 56,
+      "unused": 0,
+      "missing": 0,
+      "unresolvedDynamic": 0
+    },
+    "officialVectors": {
+      "ok": true,
+      "sourcePdfSha256": "cd526f74614ecfc8aa09c641b03abc53aad2f261f028efaa5b402811fdb86b23",
+      "officialPage": 4,
+      "verifiedAssets": 21,
+      "exactPathSegments": 869,
+      "typesVerifiedAgainstNearbyPdfLabels": 11,
+      "energyless": "Only original Colorless background disk; glyph drawing omitted.",
+      "attachedCanvas": "138x192, nested108x108 at15,42; original PDF viewBox preserved.",
+      "assets": [
+        {
+          "path": "assets/energy-icons/grass.svg",
+          "pdfDrawingIndexes": [
+            34,
+            35
+          ],
+          "exactSegments": 55,
+          "paths": 2,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy/grass.svg",
+          "pdfDrawingIndexes": [
+            34,
+            35
+          ],
+          "exactSegments": 55,
+          "paths": 2,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy-icons/fire.svg",
+          "pdfDrawingIndexes": [
+            44,
+            45
+          ],
+          "exactSegments": 44,
+          "paths": 2,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy/fire.svg",
+          "pdfDrawingIndexes": [
+            44,
+            45
+          ],
+          "exactSegments": 44,
+          "paths": 2,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy-icons/water.svg",
+          "pdfDrawingIndexes": [
+            39,
+            40
+          ],
+          "exactSegments": 16,
+          "paths": 2,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy/water.svg",
+          "pdfDrawingIndexes": [
+            39,
+            40
+          ],
+          "exactSegments": 16,
+          "paths": 2,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy-icons/lightning.svg",
+          "pdfDrawingIndexes": [
+            54,
+            55
+          ],
+          "exactSegments": 16,
+          "paths": 2,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy/lightning.svg",
+          "pdfDrawingIndexes": [
+            54,
+            55
+          ],
+          "exactSegments": 16,
+          "paths": 2,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy-icons/psychic.svg",
+          "pdfDrawingIndexes": [
+            49,
+            50
+          ],
+          "exactSegments": 35,
+          "paths": 2,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy/psychic.svg",
+          "pdfDrawingIndexes": [
+            49,
+            50
+          ],
+          "exactSegments": 35,
+          "paths": 2,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy-icons/fighting.svg",
+          "pdfDrawingIndexes": [
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70
+          ],
+          "exactSegments": 94,
+          "paths": 7,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy/fighting.svg",
+          "pdfDrawingIndexes": [
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70
+          ],
+          "exactSegments": 94,
+          "paths": 7,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy-icons/darkness.svg",
+          "pdfDrawingIndexes": [
+            92,
+            93
+          ],
+          "exactSegments": 14,
+          "paths": 2,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy/dark.svg",
+          "pdfDrawingIndexes": [
+            92,
+            93
+          ],
+          "exactSegments": 14,
+          "paths": 2,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy-icons/metal.svg",
+          "pdfDrawingIndexes": [
+            79,
+            80,
+            81,
+            82,
+            83
+          ],
+          "exactSegments": 58,
+          "paths": 5,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy/metal.svg",
+          "pdfDrawingIndexes": [
+            79,
+            80,
+            81,
+            82,
+            83
+          ],
+          "exactSegments": 58,
+          "paths": 5,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy-icons/fairy.svg",
+          "pdfDrawingIndexes": [
+            59,
+            60
+          ],
+          "exactSegments": 75,
+          "paths": 2,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy/fairy.svg",
+          "pdfDrawingIndexes": [
+            59,
+            60
+          ],
+          "exactSegments": 75,
+          "paths": 2,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy-icons/dragon.svg",
+          "pdfDrawingIndexes": [
+            87,
+            88
+          ],
+          "exactSegments": 29,
+          "paths": 2,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy-icons/colorless.svg",
+          "pdfDrawingIndexes": [
+            74,
+            75
+          ],
+          "exactSegments": 22,
+          "paths": 2,
+          "colorsAndViewBoxExact": true
+        },
+        {
+          "path": "assets/energy-icons/energyless.svg",
+          "pdfDrawingIndexes": [
+            74
+          ],
+          "exactSegments": 4,
+          "paths": 1,
+          "colorsAndViewBoxExact": true
+        }
+      ]
+    },
+    "artifact": {
+      "ok": true,
+      "packageHash": "59166694d2fc5e5c2dcaeb9129a95c743ef82eb4b46ae339d25165f8add9661d",
+      "verifiedManifestAssets": 9,
+      "embeddedImageLookups": 105,
+      "legacyAliases": 53,
+      "verifiedSvgAssets": 23,
+      "verifiedSvgPaths": [
+        "assets/cardback.svg",
+        "assets/tl-open-beta.svg",
+        "assets/energy-icons/darkness.svg",
+        "assets/energy-icons/fairy.svg",
+        "assets/energy-icons/fighting.svg",
+        "assets/energy-icons/fire.svg",
+        "assets/energy-icons/grass.svg",
+        "assets/energy-icons/lightning.svg",
+        "assets/energy-icons/metal.svg",
+        "assets/energy-icons/psychic.svg",
+        "assets/energy-icons/colorless.svg",
+        "assets/energy-icons/water.svg",
+        "assets/energy-icons/dragon.svg",
+        "assets/energy-icons/energyless.svg",
+        "assets/energy/dark.svg",
+        "assets/energy/fairy.svg",
+        "assets/energy/fighting.svg",
+        "assets/energy/fire.svg",
+        "assets/energy/grass.svg",
+        "assets/energy/lightning.svg",
+        "assets/energy/metal.svg",
+        "assets/energy/psychic.svg",
+        "assets/energy/water.svg"
+      ],
+      "gameplaySourceFilesUnchanged": 10295,
+      "cardLibraryHashUnchanged": "f975f8dce2e2c768a42d7b7df6b61b9bbe6149521e6da274762d184a70c0166b",
+      "catalogueHashUnchanged": "3007151948194fa669da6771cdd269de8c7c1b61644bfdf407cf370ebd26b25c",
+      "exactImageReferencesUnchanged": 13483,
+      "zipBytes": 2257095,
+      "zipSha256": "4f37ce9e9ae6336eb09d8d493c7e758e6fc269dd63c2f1ab7eebbbc23aaf3f84",
+      "verifiedArchiveAssets": 9,
+      "zipEntries": 10
+    },
+    "localBrowser": {
+      "localPuzzles": [
+        {
+          "name": "Trapped in the Phantom Maze",
+          "lazy": true,
+          "painted": true,
+          "scanSizes": [
+            "736x1024"
+          ],
+          "svgImages": 5,
+          "unsafeImages": 0
+        },
+        {
+          "name": "Explosive Hand",
+          "lazy": true,
+          "painted": true,
+          "scanSizes": [
+            "736x1024"
+          ],
+          "svgImages": 3,
+          "unsafeImages": 0
+        },
+        {
+          "name": "Breaking Through the Wall",
+          "lazy": true,
+          "painted": true,
+          "scanSizes": [
+            "736x1024"
+          ],
+          "svgImages": 8,
+          "unsafeImages": 0
+        },
+        {
+          "name": "Something's Fishy",
+          "lazy": true,
+          "painted": true,
+          "scanSizes": [
+            "736x1024"
+          ],
+          "svgImages": 1,
+          "unsafeImages": 0
+        },
+        {
+          "name": "Deck out with Dengo",
+          "lazy": true,
+          "painted": true,
+          "scanSizes": [
+            "736x1024"
+          ],
+          "svgImages": 4,
+          "unsafeImages": 0
+        }
+      ],
+      "inline": {
+        "align": "top",
+        "height": 18,
+        "loaded": true,
+        "svg": true,
+        "transform": "",
+        "width": 18
+      },
+      "loadingLogo": {
+        "displayHeight": 16,
+        "displayWidth": 93.015625,
+        "loaded": true,
+        "naturalHeight": 815,
+        "naturalWidth": 4738,
+        "svg": true
+      }
+    },
+    "liveBrowser": {
+      "base": "https://sim-static.prizemap.app/releases/59166694d2fc5e5c2dcaeb9129a95c743ef82eb4b46ae339d25165f8add9661d/",
+      "boardPainted": true,
+      "cardFaces": [
+        "736x1024"
+      ],
+      "lazy": true,
+      "path": "/sandbox-viewer",
+      "svgImages": [
+        {
+          "height": 192,
+          "loaded": true,
+          "width": 138
+        },
+        {
+          "height": 192,
+          "loaded": true,
+          "width": 138
+        },
+        {
+          "height": 192,
+          "loaded": true,
+          "width": 138
+        },
+        {
+          "height": 192,
+          "loaded": true,
+          "width": 138
+        }
+      ],
+      "unsafeImages": 0,
+      "urlUnchanged": true,
+      "errors": []
+    },
+    "delivery": {
+      "passed": true,
+      "checkedAt": "2026-11-07T04:20:09.736Z",
+      "packageHash": "59166694d2fc5e5c2dcaeb9129a95c743ef82eb4b46ae339d25165f8add9661d",
+      "manifest": {
+        "cold": "downloadManifestAssets",
+        "warm": "reuseCachedPackage",
+        "conditionalStatus": 304,
+        "inventoryValidated": true
+      }
+    },
+    "deployment": {
+      "origin": "https://sim-static.prizemap.app",
+      "workerVersion": "18e7d940-b971-40d5-b5ff-664162c6d02f",
+      "sourceAttestationVerified": true,
+      "rejectedApproximationBuildPublished": false
+    },
+    "physicalMobileWebViewTested": false
+  }
+}

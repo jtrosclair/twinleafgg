@@ -2,19 +2,9 @@
 
 
 :host {
-  display: flex;
-  flex-direction: column;
+  display: block;
   height: 100%;
-
-  >mat-sidenav-container {
-    flex: 1 1;
-    z-index: unset;
-    background-color: var(--ptcg-app-surface);
-  }
-
-  >mat-sidenav-container>mat-sidenav-content {
-    z-index: unset;
-  }
+  background-color: var(--ptcg-app-surface);
 }
 
 ::ng-deep .mat-dialog-container {
@@ -38,19 +28,6 @@
   .ptcg-card-list-pane {
     background: var(--ptcg-surface-raised);
   }
-}
-
-.ptcg-app-sidenav {
-  width: map-get($ptcg-size, nav-menu);
-}
-
-@font-face {
-  font-family: 'PTCG';
-  src: url('/assets/fonts/ptcg-font.ttf') format('truetype');
-}
-
-.energy-symbol {
-  font-family: 'PTCG', sans-serif;
 }
 
 // Style the dropdown panel
@@ -129,22 +106,5 @@
   .mat-menu-item {
     height: 36px;
     line-height: 36px;
-  }
-}
-
-// Hide header and sidenav on mobile when on table page
-@media (max-width: 768px) {
-  .hide-on-mobile-table {
-    display: none !important;
-  }
-
-  .hide-sidenav-on-mobile-table {
-    ptcg-sidenav {
-      display: none !important;
-    }
-
-    mat-sidenav-content {
-      margin-left: 0 !important;
-    }
   }
 }

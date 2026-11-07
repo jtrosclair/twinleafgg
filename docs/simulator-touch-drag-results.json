@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-11-06T18:21:49.730115+00:00",
+  "origin": "https://sim-static.prizemap.app",
+  "packageHash": "b8cbe4774257332abf5566d12ded8d44fde75d96e3696e0f7f1ac2ca3703cc53",
+  "buildId": "efaded3a-1a1b-418b-a20f-3b9605264481",
+  "reportedEnvironment": "Mobile app WebView",
+  "problem": "The lazy-loading placeholder gate removed the original touched image when dragging began. Later touch events targeting that detached node could no longer reach document/body listeners, leaving the touch backend in a dragging state.",
+  "fix": {
+    "retainedTouchTarget": "Face-up card image elements stay mounted with the same src while the drag placeholder is active.",
+    "placeholderStyle": "Opacity zero hides the original face without removing its DOM node or layout.",
+    "faceDownImages": "Still structurally omitted until revealed.",
+    "imageSizesChanged": false,
+    "lazyLoadingChanged": false,
+    "newRuntimeDependencies": false
+  },
+  "regression": {
+    "path": "tools/test-touch-drag.cjs",
+    "command": "node --test tools/test-touch-drag.cjs",
+    "method": "Node/jsdom simulation with the actual Angular card template, image directive and installed TouchBackend. Synthetic touch events retain the original touched IMG; hit testing is controlled. No browser automation or physical device gesture is represented by this test.",
+    "checks": {
+      "sameImageAndSrcRetainedAcrossPlaceholder": true,
+      "customOverlayRetained": true,
+      "faceDownHasNoImagesOrHolo": true,
+      "firstGestureDropsOnceAndEnds": true,
+      "secondGestureDropsOnceAndEnds": true,
+      "oldTemplateNegativeControlStaysDraggingWithNoDrop": true
+    },
+    "passed": 3,
+    "failed": 0,
+    "includedInNpmTest": true
+  },
+  "publicBrowser": {
+    "method": "CUA normal desktop page-load/DOM/screenshot smoke check only; no drag gesture performed.",
+    "allLazy": true,
+    "boardVisible": true,
+    "hiddenFaceImages": 0,
+    "imageDimensions": [
+      "736x1024"
+    ],
+    "preloads": 0,
+    "release": "/releases/b8cbe4774257332abf5566d12ded8d44fde75d96e3696e0f7f1ac2ca3703cc53/"
+  },
+  "verification": {
+    "projectChecksPassed": true,
+    "runtimeSpecs": 15,
+    "cardRegressionSpecs": 44,
+    "frontendSpecs": 81,
+    "touchDomSpecs": 3,
+    "nodePackagingAndCacheSpecs": 80,
+    "standaloneFinalizerPassed": true,
+    "angularTemplateTypecheckPassed": true,
+    "productionBuildPassed": true,
+    "deliveryPassed": true,
+    "deliveryReport": "simulator-delivery-results.json",
+    "physicalWebViewGestureVerified": false,
+    "execution": "Runtime, card and frontend phases passed in the npm test run. A test-only Angular UMD/Ivy bootstrap issue in the new DOM harness was fixed; touch, finalizer and packaging/cache phases were then rerun successfully."
+  }
+}

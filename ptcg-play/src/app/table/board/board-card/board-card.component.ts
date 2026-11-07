@@ -31,7 +31,6 @@ export class BoardCardComponent implements OnInit, OnDestroy {
     this.cardCount = cards.length;
     this.isSecret = value.isSecret;
     this.isPublic = value.isPublic;
-    this.isFaceDown = value.isSecret || (!value.isPublic && !this.isOwner);
 
     if (value instanceof PokemonCardList) {
       this.initPokemonCardList(value);
@@ -47,8 +46,6 @@ export class BoardCardComponent implements OnInit, OnDestroy {
 
   @Input() set owner(value: boolean) {
     this.isOwner = value;
-    const isFaceDown = this.isSecret || (!this.isPublic && !this.isOwner);
-    this.isFaceDown = !this.isEmpty && isFaceDown;
   }
 
   @Input() set card(value: Card) {
@@ -57,7 +54,11 @@ export class BoardCardComponent implements OnInit, OnDestroy {
     this.isEmpty = !value;
   }
 
-  @Input() isFaceDown = false;
+  private faceDownOverride: boolean | undefined;
+  @Input() set isFaceDown(value: boolean) { this.faceDownOverride = value; }
+  get isFaceDown(): boolean {
+    return !this.isEmpty && (this.faceDownOverride ?? (this.isSecret || (!this.isPublic && !this.isOwner)));
+  }
 
   // ==================== PUBLIC PROPERTIES ====================
   public isEmpty = true;
@@ -440,7 +441,8 @@ export class BoardCardComponent implements OnInit, OnDestroy {
     this.cardCount = 0;
     this.damage = 0;
     this.specialConditions = [];
-    this.isFaceDown = false;
+    this.isSecret = false;
+    this.isPublic = true;
     this.boardEffect = [];
     this.isUpsideDown = this._cardList?.stadiumDirection === StadiumDirection.DOWN;
     this.showEvolutionAnimation = false;
@@ -553,27 +555,27 @@ export class BoardCardComponent implements OnInit, OnDestroy {
   // ==================== CUSTOM IMAGE HELPERS ====================
   getCustomEnergyIcon(card: Card, isAttachedAsEnergy: boolean = false): string {
     const customEnergyIcon = {
-      'Grass Energy': 'assets/energy/grass.png',
-      'Fire Energy': 'assets/energy/fire.png',
-      'Water Energy': 'assets/energy/water.png',
-      'Lightning Energy': 'assets/energy/lightning.png',
-      'Psychic Energy': 'assets/energy/psychic.png',
-      'Fighting Energy': 'assets/energy/fighting.png',
-      'Darkness Energy': 'assets/energy/dark.png',
-      'Metal Energy': 'assets/energy/metal.png',
-      'Fairy Energy': 'assets/energy/fairy.png',
-      'Double Turbo Energy': 'assets/energy/double-turbo.png',
-      'Jet Energy': 'assets/energy/jet.png',
-      'Gift Energy': 'assets/energy/gift.png',
-      'Mist Energy': 'assets/energy/mist.png',
-      'Legacy Energy': 'assets/energy/legacy.png',
-      'Neo Upper Energy': 'assets/energy/neo-upper.png',
-      'Electrode': 'assets/energy/electrode.png',
-      'Holon\'s Castform': 'assets/energy/holons-castform.png',
-      'Holon\'s Magnemite': 'assets/energy/holons-magnemite.png',
-      'Holon\'s Magneton': 'assets/energy/holons-magneton.png',
-      'Holon\'s Voltorb': 'assets/energy/holons-voltorb.png',
-      'Holon\'s Electrode': 'assets/energy/holons-electrode.png',
+      'Grass Energy': 'assets/energy/grass.svg',
+      'Fire Energy': 'assets/energy/fire.svg',
+      'Water Energy': 'assets/energy/water.svg',
+      'Lightning Energy': 'assets/energy/lightning.svg',
+      'Psychic Energy': 'assets/energy/psychic.svg',
+      'Fighting Energy': 'assets/energy/fighting.svg',
+      'Darkness Energy': 'assets/energy/dark.svg',
+      'Metal Energy': 'assets/energy/metal.svg',
+      'Fairy Energy': 'assets/energy/fairy.svg',
+      'Double Turbo Energy': 'assets/energy/double-turbo.webp',
+      'Jet Energy': 'assets/energy/jet.webp',
+      'Gift Energy': 'assets/energy/gift.webp',
+      'Mist Energy': 'assets/energy/mist.webp',
+      'Legacy Energy': 'assets/energy/legacy.webp',
+      'Neo Upper Energy': 'assets/energy/neo-upper.webp',
+      'Electrode': 'assets/energy/electrode.webp',
+      'Holon\'s Castform': 'assets/energy/holons-castform.webp',
+      'Holon\'s Magnemite': 'assets/energy/holons-magnemite.webp',
+      'Holon\'s Magneton': 'assets/energy/holons-magneton.webp',
+      'Holon\'s Voltorb': 'assets/energy/holons-voltorb.webp',
+      'Holon\'s Electrode': 'assets/energy/holons-electrode.webp',
     };
 
     if ((card.superType === SuperType.ENERGY || isAttachedAsEnergy) && customEnergyIcon[card.name]) {
@@ -584,8 +586,8 @@ export class BoardCardComponent implements OnInit, OnDestroy {
 
   getCustomToolIcon(card: Card): string {
     const customToolIcon = {
-      'Vitality Band': 'assets/tools/vitality-band.png',
-      'Bravery Charm': 'assets/tools/bravery-charm.png',
+      'Vitality Band': 'assets/tools/vitality-band.webp',
+      'Bravery Charm': 'assets/tools/bravery-charm.webp',
     };
 
     if (

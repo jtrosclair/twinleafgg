@@ -1,15 +1,18 @@
 // Exercise the compiled production registry; source contains legacy JS siblings.
 const sets = require('../../../output/sets');
 import { Card } from '../../game/store/card/card';
+import { ensureClientCards } from '../../client/cards';
 const { CardManager } = require('../../../output/game/cards/card-manager');
 
 describe('Chaos Rising and 30C production registration', () => {
-  it('registers both target sets in the actual production startup', () => {
-    const fs = require('fs');
-    const path = require('path');
-    const startup = fs.readFileSync(path.resolve(process.cwd(), 'start.js'), 'utf8');
-    expect(startup).toMatch(/cardManager\.defineSet\(sets\.setChaosRising\)/);
-    expect(startup).toMatch(/cardManager\.defineSet\(sets\.set30thCelebration\)/);
+  it('registers both target sets in the executable browser library', () => {
+    const cards = ensureClientCards();
+    for (const set of [sets.setChaosRising, sets.set30thCelebration]) {
+      expect(set.length).toBeGreaterThan(0);
+      for (const card of set) {
+        expect(cards.some(loaded => loaded.fullName === card.fullName)).toBe(true);
+      }
+    }
   });
   it('exports 30C through the production set registry', () => {
     const registry = sets as unknown as { [key: string]: Card[] };

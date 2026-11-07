@@ -3,6 +3,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { CardInfoPaneComponent } from './card-info-pane.component';
+import { EnergyTextDirective } from '../energy/energy-text.directive';
 
 describe('CardInfoPaneComponent', () => {
   let component: CardInfoPaneComponent;
@@ -10,7 +11,7 @@ describe('CardInfoPaneComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CardInfoPaneComponent ],
+      declarations: [ CardInfoPaneComponent, EnergyTextDirective ],
       providers: [
         { provide: MatDialog, useValue: {} }
       ],

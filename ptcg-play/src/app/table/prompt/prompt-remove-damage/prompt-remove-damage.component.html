@@ -2,7 +2,7 @@
   <h2 translate>PROMPT_MOVE_DAMAGE_TITLE</h2>
   <div class="ptcg-u-spacer"></div>
   <button mat-button mat-icon-button (click)="minimize()">
-    <mat-icon>keyboard_arrow_down</mat-icon>
+    <svg class="ptcg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"></path></svg>
   </button>
 </div>
 
@@ -14,11 +14,11 @@
 
   <div class="ptcg-damage-pane">
     <button mat-mini-fab color="accent" [disabled]="isRemoveDisabled" (click)="removeDamage()">
-      <mat-icon>remove</mat-icon>
+      <svg class="ptcg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 13H5v-2h14z"></path></svg>
     </button>
     <ptcg-badge color="warn" class="ptcg-damage-value">{{ damage }}</ptcg-badge>
     <button mat-mini-fab color="accent" [disabled]="isAddDisabled" (click)="addDamage()">
-      <mat-icon>add</mat-icon>
+      <svg class="ptcg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"></path></svg>
     </button>
   </div>
 

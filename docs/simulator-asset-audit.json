@@ -1,0 +1,955 @@
+{
+  "schemaVersion": 1,
+  "passed": true,
+  "method": {
+    "scope": "Source asset closure from production TS/HTML/SCSS/CSS and index; referenced asset CSS is traversed",
+    "exclusions": "Specs, tests, declarations, compiled JavaScript, comments, .gitkeep, and generated assets/simulator",
+    "dynamicReferences": "Finite source energyImageMap values, production environment language keys, and literal Sass @each maps; no source evaluation or directory wildcards"
+  },
+  "summary": {
+    "sourceFiles": 201,
+    "assets": 56,
+    "bytes": 401181,
+    "referenced": 56,
+    "unused": 0,
+    "missing": 0,
+    "unresolvedDynamic": 0
+  },
+  "assets": [
+    {
+      "path": "assets/asleep-marker.webp",
+      "bytes": 6850,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.scss",
+          "line": 386,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/burned-marker.webp",
+      "bytes": 12810,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.scss",
+          "line": 407,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/card-mask-ace-spec.webp",
+      "bytes": 32158,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/card/card.component.scss",
+          "line": 151,
+          "kind": "dynamic-sass-map",
+          "definition": {
+            "file": "src/app/shared/cards/card/card.component.scss",
+            "line": 145,
+            "kind": "sass-map-value",
+            "value": "card-mask-ace-spec"
+          }
+        },
+        {
+          "file": "src/app/shared/cards/card/card.component.scss",
+          "line": 152,
+          "kind": "dynamic-sass-map",
+          "definition": {
+            "file": "src/app/shared/cards/card/card.component.scss",
+            "line": 145,
+            "kind": "sass-map-value",
+            "value": "card-mask-ace-spec"
+          }
+        }
+      ]
+    },
+    {
+      "path": "assets/card-mask-radiant.webp",
+      "bytes": 8728,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/card/card.component.scss",
+          "line": 151,
+          "kind": "dynamic-sass-map",
+          "definition": {
+            "file": "src/app/shared/cards/card/card.component.scss",
+            "line": 144,
+            "kind": "sass-map-value",
+            "value": "card-mask-radiant"
+          }
+        },
+        {
+          "file": "src/app/shared/cards/card/card.component.scss",
+          "line": 152,
+          "kind": "dynamic-sass-map",
+          "definition": {
+            "file": "src/app/shared/cards/card/card.component.scss",
+            "line": 144,
+            "kind": "sass-map-value",
+            "value": "card-mask-radiant"
+          }
+        },
+        {
+          "file": "src/app/table/board/board-card/board-card.component.scss",
+          "line": 627,
+          "kind": "css-url"
+        },
+        {
+          "file": "src/app/table/board/board-card/board-card.component.scss",
+          "line": 628,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/card-mask-trainer.webp",
+      "bytes": 962,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/card/card.component.scss",
+          "line": 151,
+          "kind": "dynamic-sass-map",
+          "definition": {
+            "file": "src/app/shared/cards/card/card.component.scss",
+            "line": 142,
+            "kind": "sass-map-value",
+            "value": "card-mask-trainer"
+          }
+        },
+        {
+          "file": "src/app/shared/cards/card/card.component.scss",
+          "line": 152,
+          "kind": "dynamic-sass-map",
+          "definition": {
+            "file": "src/app/shared/cards/card/card.component.scss",
+            "line": 142,
+            "kind": "sass-map-value",
+            "value": "card-mask-trainer"
+          }
+        }
+      ]
+    },
+    {
+      "path": "assets/card-mask.webp",
+      "bytes": 964,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/card/card.component.scss",
+          "line": 151,
+          "kind": "dynamic-sass-map",
+          "definition": {
+            "file": "src/app/shared/cards/card/card.component.scss",
+            "line": 141,
+            "kind": "sass-map-value",
+            "value": "card-mask"
+          }
+        },
+        {
+          "file": "src/app/shared/cards/card/card.component.scss",
+          "line": 152,
+          "kind": "dynamic-sass-map",
+          "definition": {
+            "file": "src/app/shared/cards/card/card.component.scss",
+            "line": 141,
+            "kind": "sass-map-value",
+            "value": "card-mask"
+          }
+        },
+        {
+          "file": "src/app/table/board/board-card/board-card.component.scss",
+          "line": 549,
+          "kind": "css-url"
+        },
+        {
+          "file": "src/app/table/board/board-card/board-card.component.scss",
+          "line": 550,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/cardback.svg",
+      "bytes": 1200,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/card/card.component.scss",
+          "line": 40,
+          "kind": "css-url"
+        },
+        {
+          "file": "src/app/shared/cards/card/card.component.scss",
+          "line": 50,
+          "kind": "css-url"
+        },
+        {
+          "file": "src/app/shared/services/simulator-assets.service.ts",
+          "line": 79,
+          "kind": "literal",
+          "legacyAlias": "assets/cardback.png"
+        },
+        {
+          "file": "src/app/table/board/board-card/board-card.component.scss",
+          "line": 51,
+          "kind": "css-url"
+        },
+        {
+          "file": "src/app/table/prompt/choose-cards-panes/choose-cards-panes.component.ts",
+          "line": 73,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/confused-marker.webp",
+      "bytes": 7202,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.scss",
+          "line": 365,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy-icons/colorless.svg",
+      "bytes": 391,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/energy/energy-text.directive.ts",
+          "line": 14,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/shared/cards/energy/energy.component.scss",
+          "line": 24,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy-icons/darkness.svg",
+      "bytes": 285,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/energy/energy-text.directive.ts",
+          "line": 6,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/shared/cards/energy/energy.component.scss",
+          "line": 20,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy-icons/dragon.svg",
+      "bytes": 352,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/energy/energy-text.directive.ts",
+          "line": 16,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/shared/cards/energy/energy.component.scss",
+          "line": 22,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy-icons/energyless.svg",
+      "bytes": 161,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/energy/energy.component.scss",
+          "line": 25,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy-icons/fairy.svg",
+      "bytes": 549,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/energy/energy-text.directive.ts",
+          "line": 7,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/shared/cards/energy/energy.component.scss",
+          "line": 23,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy-icons/fighting.svg",
+      "bytes": 562,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/energy/energy-text.directive.ts",
+          "line": 8,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/shared/cards/energy/energy.component.scss",
+          "line": 15,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy-icons/fire.svg",
+      "bytes": 661,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/energy/energy-text.directive.ts",
+          "line": 9,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/shared/cards/energy/energy.component.scss",
+          "line": 21,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy-icons/grass.svg",
+      "bytes": 502,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/energy/energy-text.directive.ts",
+          "line": 10,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/shared/cards/energy/energy.component.scss",
+          "line": 14,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy-icons/lightning.svg",
+      "bytes": 233,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/energy/energy-text.directive.ts",
+          "line": 11,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/shared/cards/energy/energy.component.scss",
+          "line": 18,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy-icons/metal.svg",
+      "bytes": 432,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/energy/energy-text.directive.ts",
+          "line": 12,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/shared/cards/energy/energy.component.scss",
+          "line": 19,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy-icons/psychic.svg",
+      "bytes": 492,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/energy/energy-text.directive.ts",
+          "line": 13,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/shared/cards/energy/energy.component.scss",
+          "line": 16,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy-icons/water.svg",
+      "bytes": 333,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/energy/energy-text.directive.ts",
+          "line": 15,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/shared/cards/energy/energy.component.scss",
+          "line": 17,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/dark.svg",
+      "bytes": 356,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 564,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 492,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/double-turbo.webp",
+      "bytes": 3380,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 567,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 469,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/electrode.webp",
+      "bytes": 4052,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 573,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 495,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/fairy.svg",
+      "bytes": 620,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 566,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 494,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/fighting.svg",
+      "bytes": 633,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 563,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 491,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/fire.svg",
+      "bytes": 732,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 559,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 487,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/gift.webp",
+      "bytes": 3908,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 569,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 471,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/grass.svg",
+      "bytes": 573,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 558,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 486,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/holons-castform.webp",
+      "bytes": 3246,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 574,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 496,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/holons-electrode.webp",
+      "bytes": 4450,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 578,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 500,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/holons-magnemite.webp",
+      "bytes": 4378,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 575,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 497,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/holons-magneton.webp",
+      "bytes": 4256,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 576,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 498,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/holons-voltorb.webp",
+      "bytes": 4222,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 577,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 499,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/jet.webp",
+      "bytes": 5308,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 568,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 470,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/legacy.webp",
+      "bytes": 4526,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 571,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 473,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/lightning.svg",
+      "bytes": 304,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 561,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 489,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/metal.svg",
+      "bytes": 503,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 565,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 493,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/mist.webp",
+      "bytes": 3682,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 570,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 472,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/neo-upper.webp",
+      "bytes": 4628,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 572,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 474,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 475,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/psychic.svg",
+      "bytes": 563,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 562,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 490,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/energy/water.svg",
+      "bytes": 404,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 560,
+          "kind": "literal"
+        },
+        {
+          "file": "src/app/table/prompt/prompt-discard-energy/prompt-discard-energy.component.ts",
+          "line": 488,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/fa-card-mask.webp",
+      "bytes": 866,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/card/card.component.scss",
+          "line": 151,
+          "kind": "dynamic-sass-map",
+          "definition": {
+            "file": "src/app/shared/cards/card/card.component.scss",
+            "line": 143,
+            "kind": "sass-map-value",
+            "value": "fa-card-mask"
+          }
+        },
+        {
+          "file": "src/app/shared/cards/card/card.component.scss",
+          "line": 152,
+          "kind": "dynamic-sass-map",
+          "definition": {
+            "file": "src/app/shared/cards/card/card.component.scss",
+            "line": 143,
+            "kind": "sass-map-value",
+            "value": "fa-card-mask"
+          }
+        },
+        {
+          "file": "src/app/table/board/board-card/board-card.component.scss",
+          "line": 589,
+          "kind": "css-url"
+        },
+        {
+          "file": "src/app/table/board/board-card/board-card.component.scss",
+          "line": 590,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/i18n/en.json",
+      "bytes": 20771,
+      "evidence": [
+        {
+          "file": "src/app/shared/services/static-translate.loader.ts",
+          "line": 8,
+          "kind": "dynamic-language-map",
+          "definition": {
+            "file": "src/environments/environment.prod.ts",
+            "line": 4,
+            "kind": "language-definition"
+          }
+        }
+      ]
+    },
+    {
+      "path": "assets/i18n/fr.json",
+      "bytes": 20064,
+      "evidence": [
+        {
+          "file": "src/app/shared/services/static-translate.loader.ts",
+          "line": 8,
+          "kind": "dynamic-language-map",
+          "definition": {
+            "file": "src/environments/environment.prod.ts",
+            "line": 4,
+            "kind": "language-definition"
+          }
+        }
+      ]
+    },
+    {
+      "path": "assets/i18n/jp.json",
+      "bytes": 15336,
+      "evidence": [
+        {
+          "file": "src/app/shared/services/static-translate.loader.ts",
+          "line": 8,
+          "kind": "dynamic-language-map",
+          "definition": {
+            "file": "src/environments/environment.prod.ts",
+            "line": 4,
+            "kind": "language-definition"
+          }
+        }
+      ]
+    },
+    {
+      "path": "assets/iconfont/MaterialIcons-Regular.woff2",
+      "bytes": 44300,
+      "evidence": [
+        {
+          "file": "src/assets/iconfont/material-icons.css",
+          "line": 6,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/iconfont/material-icons.css",
+      "bytes": 754,
+      "evidence": [
+        {
+          "file": "src/index.html",
+          "line": 45,
+          "kind": "html-attribute"
+        }
+      ]
+    },
+    {
+      "path": "assets/imprison-marker.webp",
+      "bytes": 18968,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.scss",
+          "line": 428,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/paralyzed-marker.webp",
+      "bytes": 8840,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.scss",
+          "line": 344,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/poison-marker.webp",
+      "bytes": 7566,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.scss",
+          "line": 323,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "assets/prizemap-logo.webp",
+      "bytes": 6656,
+      "evidence": [
+        {
+          "file": "src/app/sandbox-viewer/sandbox-viewer.component.html",
+          "line": 7,
+          "kind": "html-attribute"
+        }
+      ]
+    },
+    {
+      "path": "assets/tl-open-beta.svg",
+      "bytes": 10946,
+      "evidence": [
+        {
+          "file": "src/app/sandbox-viewer/sandbox-viewer.component.html",
+          "line": 11,
+          "kind": "html-attribute"
+        }
+      ]
+    },
+    {
+      "path": "assets/tools/bravery-charm.webp",
+      "bytes": 2204,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 590,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/tools/vitality-band.webp",
+      "bytes": 2270,
+      "evidence": [
+        {
+          "file": "src/app/table/board/board-card/board-card.component.ts",
+          "line": 589,
+          "kind": "literal"
+        }
+      ]
+    },
+    {
+      "path": "assets/trainer-types.webp",
+      "bytes": 3320,
+      "evidence": [
+        {
+          "file": "src/app/shared/cards/trainer-type/trainer-type.component.scss",
+          "line": 2,
+          "kind": "css-url"
+        }
+      ]
+    },
+    {
+      "path": "favicon.ico",
+      "bytes": 107769,
+      "evidence": [
+        {
+          "file": "src/index.html",
+          "line": 46,
+          "kind": "html-attribute"
+        }
+      ]
+    }
+  ],
+  "unused": [],
+  "missing": [],
+  "unresolvedDynamic": []
+}

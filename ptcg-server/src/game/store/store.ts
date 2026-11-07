@@ -6,6 +6,7 @@ import { AbortGameAction } from './actions/abort-game-action';
 import { AppendLogAction } from './actions/append-log-action';
 import { ConcedeAction } from './actions/concede-action';
 import { Card } from './card/card';
+import { CardTarget, PlayCardAction, PlayerType, SlotType } from './actions/play-card-action';
 import { ChangeAvatarAction } from './actions/change-avatar-action';
 import { Effect } from './effects/effect';
 import { GameError } from '../game-error';
@@ -56,6 +57,14 @@ export class Store implements StoreLike {
   private calculatingPlayability: boolean = false;
 
   constructor(private handler: StoreHandler) { }
+
+  /** Restore a stable snapshot without retaining callbacks from the previous game. */
+  public restoreState(state: State): void {
+    this.promptItems = [];
+    this.waitItems = [];
+    this.logId = state.logs.reduce((max, log) => Math.max(max, log.id || 0), 0);
+    this.state = this.calculatePlayability(state);
+  }
 
   public dispatch(action: Action, clientRoleId?: number): State {
     let state = this.state;
@@ -341,14 +350,15 @@ export class Store implements StoreLike {
         }
 
         // Check each card in hand
-        for (const card of player.hand.cards) {
+        for (const [handIndex, card] of player.hand.cards.entries()) {
           try {
             // Skip cards without valid IDs (shouldn't happen, but safety check)
             if (card.id === undefined || card.id === -1) {
               continue;
             }
 
-            if (CAN_PLAY_CARD(this, state, player, card)) {
+            if (CAN_PLAY_CARD(this, state, player, card,
+              () => this.checkTrainerPlay(state, player.id, handIndex))) {
               player.playableCardIds.push(card.id);
             }
           } catch (error) {
@@ -376,6 +386,32 @@ export class Store implements StoreLike {
     }
 
     return state;
+  }
+
+  private checkTrainerPlay(state: State, playerId: number, handIndex: number): boolean {
+    const player = state.players.find(item => item.id === playerId);
+    if (!player) { return false; }
+    const targets: CardTarget[] = [{ player: PlayerType.BOTTOM_PLAYER, slot: SlotType.BOARD, index: 0 }];
+    player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (_list, _card, target) => targets.push(target));
+
+    for (const target of targets) {
+      // Clone cards too: Trainers can move cards, set markers, or open prompts
+      // before returning. All of those changes belong only to this probe.
+      const copy: State = deepClone(state);
+      const handler = { gameSettings: copy.gameSettings, onStateChange: () => {} };
+      const probe = new Store(handler);
+      probe.state = copy;
+      probe.calculatingPlayability = true;
+      try {
+        playCardReducer(probe, copy, new PlayCardAction(playerId, handIndex, target));
+        return true;
+      } catch {
+        // Some Trainers require a specific Pokemon target rather than the board.
+      } finally {
+        probe.cleanup();
+      }
+    }
+    return false;
   }
 
   private propagateEffect(state: State, effect: Effect): State {
