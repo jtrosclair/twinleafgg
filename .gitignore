@@ -91,3 +91,4 @@ tools/.puzzle-playthrough/
 # Retained public regression fixture (not included in the simulator package).
 !tools/fixtures/deck-out-with-dengo.snapshot.json.gz
 !tools/fixtures/phantom-maze.snapshot.json.gz
+!tools/fixtures/legacy-prizemap.snapshot.json.gz
