@@ -194,6 +194,24 @@ export class BoardComponent implements AfterViewInit, OnDestroy, OnChanges, OnIn
     return this.isCompact ? Math.ceil(this.benchSize(player) / this.benchColumns(player)) : 1;
   }
 
+  public benchSlotArea(player: Player, index: number): string {
+    const bench = player?.bench || [];
+    const occupied = !!bench[index]?.cards.length;
+    let position = 0;
+    for (let i = 0; i < bench.length; i++) {
+      const otherOccupied = !!bench[i].cards.length;
+      if (otherOccupied === occupied ? i < index : otherOccupied) { position++; }
+    }
+    const columns = this.benchColumns(player);
+    const row = Math.floor(position / columns);
+    const column = position % columns;
+    // Only move the rendered cells; drag/drop and selection retain their engine indices.
+    // The opponent's field is rotated, so reverse its grid coordinates for visual row order.
+    return player === this.topPlayer
+      ? `${this.benchRows(player) - row} / ${columns - column}`
+      : `${row + 1} / ${column + 1}`;
+  }
+
   private updateLayout(): void {
     const host = this.elementRef.nativeElement;
     const { width, height } = host.getBoundingClientRect();

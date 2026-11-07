@@ -146,7 +146,7 @@ ptcg-board-zone-button.opponent-discard, ptcg-board-zone-button.player-discard {
     grid-template-rows: calc(var(--active-card-size) * #{$card-aspect-ratio}) auto;
   }
 
-  // Empty slots retain their place so filling a hole never shifts a Pokemon.
+  // Capacity reserves the bench area while occupied cards fill the first visual row.
   .ptcg-board-player.upside-down {
     grid-template-areas: 'stadium active .' 'bench bench bench';
   }

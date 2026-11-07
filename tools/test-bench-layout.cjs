@@ -26,7 +26,7 @@ const { Charizardex } = source('sets/set-obsidian-flames/charizard-ex');
 const { AreaZeroUnderdepths } = source('sets/set-stellar-crown/area-zero-underdepths');
 const { FireEnergy } = source('sets/set-base-set-energy/fire-energy');
 
-function fixture({ expanded = true, full = true, bothExpanded = false, opponentCount, varied = false, prizeCount = 3, opponentDiscardCount = 3, playerDiscardCount = 3, deckCount = 6, playerLostCount = 2, opponentLostCount = 3 } = {}) {
+function fixture({ expanded = true, full = true, bothExpanded = false, opponentCount, benchIndices, varied = false, prizeCount = 3, opponentDiscardCount = 3, playerDiscardCount = 3, deckCount = 6, playerLostCount = 2, opponentLostCount = 3 } = {}) {
   const variety = varied ? [source('sets/set-destined-rivals/torchic').Torchic,
     source('sets/set-twilight-masquerade/drakloak').Drakloak,
     source('sets/set-twilight-masquerade/munkidori').Munkidori,
@@ -41,8 +41,9 @@ function fixture({ expanded = true, full = true, bothExpanded = false, opponentC
   for (const [player, capacity] of [[human, expanded ? 8 : 5], [opponent, bothExpanded ? 8 : 5]]) {
     player.bench = Array.from({ length: capacity }, (_, i) => {
       const list = new PokemonCardList(); list.isPublic = true;
-      const occupied = player === opponent ? i < (opponentCount === undefined ? capacity : opponentCount) : full || i === 0 || i === 2;
-      if (occupied) list.cards = [add(varied ? (player === opponent ? Charmander : variety[i % variety.length]) : i === 0 ? Charmander : Squirtle)];
+      const indices = player === opponent ? benchIndices?.opponent : benchIndices?.player;
+      const occupied = indices ? indices.includes(i) : player === opponent ? i < (opponentCount === undefined ? capacity : opponentCount) : full || i === 0 || i === 2;
+      if (occupied) list.cards = [add(varied ? (player === opponent ? Charmander : variety[i % variety.length]) : i === (indices?.[0] ?? 0) ? Charmander : Squirtle)];
       return list;
     });
     player.active.isPublic = true;
@@ -273,7 +274,7 @@ async function verifyInteractions(browser, origin, touch, viewport) {
     const page = await context.newPage();
     await context.addInitScript(() => { window.__benchMessages = []; window.ReactNativeWebView = { postMessage: text => window.__benchMessages.push(JSON.parse(text)) }; });
     process.stderr.write(`Checking ${touch ? 'touch' : 'mouse'} bench drops\n`);
-    const frame = await load(page, origin, fixture({ full: false }));
+    const frame = await load(page, origin, fixture({ expanded: false, full: false, benchIndices: { player: [1,3] } }));
     assert.equal(await frame.locator('.board-hand-count-bottom .board-hand-total').textContent(), '4');
     const bench = frame.locator('.ptcg-board-bench').last();
     const initial = await latest(frame);
@@ -288,25 +289,25 @@ async function verifyInteractions(browser, origin, touch, viewport) {
     }
     await frame.waitForFunction(before => window.__benchMessages.filter(m => m.type === 'StateUpdate').at(-1).data.stateData !== before, initial);
     let afterBasic = await latest(frame); const basicState = playerState(afterBasic);
-    assert(pokemonName(basicState.bench[1]).includes('Bulbasaur BS'), 'padding drop should fill the first empty slot');
-    assert.equal(basicState.bench[2].cards.length, 1, 'occupied slot must remain unchanged');
-    // Repeat the gesture onto an occupied Pokemon: it should fill slot 3.
-    const occupied = bench.locator('.ptcg-board-drop-target').nth(2);
+    assert(pokemonName(basicState.bench[0]).includes('Bulbasaur BS'), 'padding drop should fill the first empty engine slot');
+    assert.equal(basicState.bench[3].cards.length, 1, 'occupied slot must remain unchanged');
+    // Repeat onto a Pokemon whose visual position differs from its engine slot.
+    const occupied = bench.locator('.ptcg-board-drop-target').nth(3);
     if (touch) await touchDrag(page, frame, basic, async () => { const r = await occupied.boundingBox(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 }; });
     else await basic.dragTo(occupied);
     await frame.waitForFunction(before => window.__benchMessages.filter(m => m.type === 'StateUpdate').at(-1).data.stateData !== before, afterBasic);
     afterBasic = await latest(frame);
-    assert(pokemonName(playerState(afterBasic).bench[3]).includes('Bulbasaur BS'), 'occupied-card drop should fill the next open slot');
+    assert(pokemonName(playerState(afterBasic).bench[2]).includes('Bulbasaur BS'), 'occupied-card drop should fill the next open slot');
     const evolution = frame.locator('.hand-card[aria-label^="Charmeleon,"]');
-    const target = bench.locator('.ptcg-board-drop-target').first();
+    const target = bench.locator('.ptcg-board-drop-target').nth(1);
     if (touch) await touchDrag(page, frame, evolution, async () => { const r = await target.boundingBox(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 }; });
     else await evolution.dragTo(target);
     await frame.waitForFunction(before => window.__benchMessages.filter(m => m.type === 'StateUpdate').at(-1).data.stateData !== before, afterBasic);
     const evolved = playerState(await latest(frame));
     assert.equal(await frame.locator('.board-hand-count-bottom .board-hand-total').textContent(), '1', 'hand count must update after playing cards');
-    assert(pokemonName(evolved.bench[0]).includes('Charmeleon BS'), 'evolution must stay on its chosen Pokemon');
-    assert(pokemonName(evolved.bench[1]).includes('Bulbasaur BS'));
-    assert(pokemonName(evolved.bench[3]).includes('Bulbasaur BS'));
+    assert(pokemonName(evolved.bench[1]).includes('Charmeleon BS'), 'evolution must stay on its chosen engine slot after display packing');
+    assert(pokemonName(evolved.bench[0]).includes('Bulbasaur BS'));
+    assert(pokemonName(evolved.bench[2]).includes('Bulbasaur BS'));
     assert.equal(evolved.bench[4].cards.length, 0);
     // Host undo/restoration can change the stadium and both bench capacities.
     await frame.evaluate(stateData => window.dispatchEvent(new MessageEvent('message', {
@@ -324,7 +325,49 @@ async function verifyInteractions(browser, origin, touch, viewport) {
   } finally { await context.close(); }
 }
 
-module.exports = { fixture, load, geometry, assertVisible, verifyInteractions, verifyPileActions, verifyEndTurn };
+module.exports = { fixture, load, geometry, assertVisible, verifyInteractions, verifyPileActions, verifyEndTurn, verifyBenchPacking };
+
+async function verifyBenchPacking(browser, origin) {
+  const results = [];
+  for (const [width, height] of [[375,537], [402,743], [430,828], [1280,800]]) {
+    const context = await browser.newContext({ viewport: { width, height }, isMobile: width < 990, hasTouch: width < 990 });
+    try {
+      const page = await context.newPage();
+      const frame = await load(page, origin, fixture({ expanded: false,
+        benchIndices: { player: [1,2,3,4], opponent: [1,3] }, varied: true }));
+      for (const expanded of [false, true]) {
+        if (expanded) {
+          await frame.evaluate(stateData => window.dispatchEvent(new MessageEvent('message', {
+            data: JSON.stringify({ type: 'PushStateChange', data: { stateData } })
+          })), fixture({ bothExpanded: true, benchIndices: { player: [1,2,4,5,7], opponent: [1,3,5,6,7] }, varied: true }));
+          await frame.waitForFunction(() => document.querySelector('.ptcg-board-bench').children.length === 8);
+        }
+        const benches = await frame.locator('.ptcg-board-bench').evaluateAll(elements => elements.map(bench => {
+          const bounds = bench.getBoundingClientRect();
+          return { top: bounds.top + 6, left: bounds.left + 6, columns: Number(bench.style.getPropertyValue('--bench-columns')),
+            cards: [...bench.children].map((card, index) => {
+              const r = card.getBoundingClientRect();
+              return { index, occupied: !card.classList.contains('bench-slot-empty'), x: r.x, y: r.y, w: r.width, h: r.height };
+            }).filter(card => card.occupied) };
+        }));
+        for (const bench of benches) {
+          for (const [rank, card] of bench.cards.entries()) {
+            const expectedRow = Math.floor(rank / bench.columns), expectedColumn = rank % bench.columns;
+            assert(Math.abs(card.y - (bench.top + expectedRow * (card.h + (bench === benches[0] && width < 990 ? 4 : 6)))) < 1,
+              'occupied cards must fill the top row before using the next row');
+            assert(Math.abs(card.x - (bench.left + expectedColumn * (card.w + (bench === benches[0] && width < 990 ? 4 : 6)))) < 1,
+              'occupied cards must fill each visual row from left to right');
+          }
+        }
+        const g = await geometry(frame);
+        assert(g.boardHeight <= g.boardClientHeight, 'packing must not introduce board scrolling');
+        results.push({ width, height, capacity: expanded ? 8 : 5,
+          ownTopRow: benches[1].cards.filter(card => Math.abs(card.y - benches[1].top) < 1).length });
+      }
+    } finally { await context.close(); }
+  }
+  return { benchPacking: true, results };
+}
 
 async function verifyStablePositions(browser, origin) {
   const context = await browser.newContext({ viewport: { width: 402, height: 743 }, isMobile: true, hasTouch: true });
@@ -361,10 +404,10 @@ async function verifyStablePositions(browser, origin) {
     const sparse = await restore(fixture({ full: false, opponentCount: 2 }), 5);
     sparse.activeCards.forEach((card, index) => assert(Math.abs(card.y - initial.activeCards[index].y) < 1,
       'removing bench Pokemon must not move the Active cards'));
-    for (const index of [0, 2]) for (const axis of ['x', 'y', 'w', 'h']) {
-      assert(Math.abs(sparse.benches[1].slots[index][axis] - initial.benches[1].slots[index][axis]) < 1,
-        'a hole must retain its slot instead of packing other Pokemon');
-    }
+    assert(Math.abs(sparse.benches[1].slots[2].y - sparse.benches[1].slots[0].y) < 1,
+      'occupied Pokemon must pack into the top row when there are empty engine slots');
+    assert(Math.abs(sparse.benches[1].slots[2].x - initial.benches[1].slots[1].x) < 1,
+      'the second occupied Pokemon must use the second visual spot');
     return { stablePositions: true, capacityChange: '5 vs 8 -> 8 vs 8', activeShift: 0, ourBenchShift: 0, dividerRatio: divider / usableHeight };
   } finally { await context.close(); }
 }
@@ -520,6 +563,7 @@ if (require.main === module) (async () => {
     results.push(await verifyEndTurn(browser, origin));
     results.push(await verifyPileActions(browser, origin));
     results.push(await verifyStablePositions(browser, origin));
+    results.push(await verifyBenchPacking(browser, origin));
     results.push(await verifyInteractions(browser, origin, true));
     results.push(await verifyInteractions(browser, origin, false));
     console.log(JSON.stringify({ ok: true, results }, null, 2));

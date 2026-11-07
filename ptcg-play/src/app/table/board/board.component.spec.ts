@@ -111,6 +111,18 @@ describe('responsive bench and drops', () => {
     expect(styles['--card-size']).toBe('60px');
   });
 
+  it('fills three top-row spots before the second row without changing engine slots', () => {
+    const bench = board.bottomPlayer.bench;
+    for (const index of [1, 2, 3, 4]) { bench[index].cards = [new Basic()]; }
+    board.ngOnChanges({});
+    expect([1, 2, 3, 4].map(index => board.benchSlotArea(board.bottomPlayer, index)))
+      .toEqual(['1 / 1', '1 / 2', '1 / 3', '2 / 1']);
+    expect(board.benchSlotArea(board.bottomPlayer, 0)).toBe('2 / 2');
+    expect(board.bottomPlayer.bench).toBe(bench);
+    expect(bench[0].cards.length).toBe(0);
+    for (const index of [1, 2, 3, 4]) { expect(bench[index].cards.length).toBe(1); }
+  });
+
   it('uses extra height for larger opponent cards without shrinking Active cards', () => {
     board.bottomPlayer.bench.forEach(slot => slot.cards = [new Basic()]);
     board.topPlayer.bench.forEach(slot => slot.cards = [new Basic()]);
