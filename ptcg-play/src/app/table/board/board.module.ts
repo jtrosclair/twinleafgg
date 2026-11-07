@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BoardComponent } from './board.component';
-import { BoardPrizesComponent } from './board-prizes/board-prizes.component';
+import { BoardZoneButtonComponent } from './board-zone-button/board-zone-button.component';
 import { BoardCardComponent } from './board-card/board-card.component';
 import { SharedModule } from '../../shared/shared.module';
 import { CardsModule } from 'src/app/shared/cards/cards.module';
@@ -17,7 +17,7 @@ import { BoardSelectionOverlayComponent } from './board-selection-overlay/board-
   ],
   declarations: [
     BoardComponent,
-    BoardPrizesComponent,
+    BoardZoneButtonComponent,
     BoardCardComponent,
     BoardSelectionOverlayComponent
   ],

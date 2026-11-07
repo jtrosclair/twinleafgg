@@ -56,7 +56,7 @@ describe('visual board pile layers', () => {
     });
     const originalCards = pile.cards.slice(), capturedCard = pile.cards[27];
     board.clientId = 43;
-    board.bottomPlayer = { id: 43 };
+    board.bottomPlayer = { id: 43, deck: pile, discard: pile };
     board.topPlayer = { id: 42 };
     board.gameState = { deleted: false, gameId: 911 };
     board.cardsBaseService = jasmine.createSpyObj('cards', ['showCardInfoList']);
@@ -146,10 +146,13 @@ describe('client-side snapshot GameService', () => {
 
   function createTable(): TableComponent {
     const localId = session.session.gameStates[0].localId;
+    const dialog = jasmine.createSpyObj('dialog', ['open']);
+    dialog.open.and.returnValue({ afterClosed: () => of(true) });
     const table = new TableComponent(service,
       { paramMap: of({ get: () => String(localId) }) } as any,
       jasmine.createSpyObj('router', ['navigate']), session,
-      jasmine.createSpyObj('board', ['endBoardSelection']));
+      jasmine.createSpyObj('board', ['endBoardSelection']), dialog);
+    table.endTurnConfirmation = {} as any;
     table.ngOnInit();
     return table;
   }
@@ -647,7 +650,7 @@ describe('client-side snapshot GameService', () => {
     expectNoTransport();
   });
 
-  it('ends a turn and supports repeated toolbar undo using the runtime game ID', () => {
+  it('ends a confirmed turn and supports repeated toolbar undo using the runtime game ID', async () => {
     load();
     session.clear();
     const gameId = load();
@@ -657,7 +660,7 @@ describe('client-side snapshot GameService', () => {
     expect(table.canUndoBackend).toBe(false);
     service.reorderHandAction(gameId, [1, 0]);
     expect(table.canUndoBackend).toBe(true);
-    table.endTurn();
+    await table.endTurn();
     expect(table.gameState.turnComplete).toBe(true);
     expect(table.canEndTurn()).toBe(false);
     expect(table.canUndoBackend).toBe(true);

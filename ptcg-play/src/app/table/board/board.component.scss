@@ -1,663 +1,288 @@
-@use 'sass:math';
 @import '../../../theme/variables.scss';
 
-:root {
-  --card-scale: 1;
-  --sidebar-width: 400px;
-  --card-size: calc(8vmin * var(--card-scale));
-  --padding-small: 1vmin;
-  --padding-normal: 2vmin;
-  --bench-gap: clamp(2px, 10vw, 30px);
-}
-
-$board-min-width: calc((4 + #{$ptcg-bench-slots}) * (var(--card-size) + #{map-get($padding, small)}));
-$board-min-height: calc(6 * var(--card-size) * #{$card-aspect-ratio} + 2 * #{map-get($padding, medium)});
-
 :host {
-  transform: translateY(0%);
-  display: flex;
-  overflow: auto;
-  z-index: 0;
-  justify-content: center;
-  align-items: flex-start;
-  width: calc(100vw - var(--sidebar-width));
-  height: 100%;
-}
-
-.perspective-wrapper {
+  --card-size: 60px;
+  --active-card-size: 87px;
+  --bench-card-size: 69px;
+  --hand-space: 153px;
+  --padding-small: 4px;
+  display: block;
+  position: relative;
   width: 100%;
   height: 100%;
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .ptcg-board-outer-container {
   width: 100%;
-  height: auto;
-  perspective: 55em;
-  -webkit-perspective: 55em;
-  -moz-perspective: 55em;
-  min-width: 990px;
-  padding-top: 1vh;
-
-  &.prompt-active {
-    pointer-events: none;
-    opacity: 0.5;
-  }
-}
-
-.responsive-board {
-  min-width: 990px;
-}
-
-@media (max-width: 990px) {
-  .responsive-board {
-    transform-origin: top left;
-    transform: scale(calc(round(100vw / 990)));
-    height: calc(100vh * (990 / 100vw));
-
-    .perspective-wrapper {
-      transform-style: preserve-3d;
-    }
-  }
+  min-height: 100%;
+  padding: 32px 12px var(--hand-space);
 }
 
 .ptcg-board-container {
+  position: relative;
   display: grid;
-  grid-template-rows: auto auto;
-  gap: 2vh;
+  gap: var(--board-gap, 8px);
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
-  width: 75%;
-  height: auto;
-  transform-origin: center top;
-  transform-style: preserve-3d;
-  will-change: transform;
-  backface-visibility: hidden;
-  transition: transform 0.5s ease;
-
-  @media (min-aspect-ratio: 4/3) {
-    transform: rotateX(15deg) translate3d(0, 0, 0);
-  }
-
-  & * {
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    -moz-backface-visibility: hidden;
-  }
 }
 
-.upside-down {
-  transform: scale3d(-1, -1, 1) !important;
-}
+.upside-down { transform: rotate(180deg); }
 
 .ptcg-board-player {
+  --bench-color: #3689e6;
+  --bench-height: var(--bottom-bench-height);
+  --bench-shift: var(--bottom-bench-shift);
+  --zone-rail-height: min(156px, var(--bench-height));
   display: grid;
-  grid-template-columns: 2fr repeat(3, #{math.div($ptcg-bench-slots, 3)}fr) 2fr;
-  grid-template-rows: auto auto;
-  row-gap: 0.5vh;
+  position: relative;
+  grid-template-columns: calc(var(--card-size) * 2 + 12px) 1fr var(--active-card-size) 1fr calc(var(--card-size) * 2 + 12px);
   grid-template-areas:
-    "prizes stadium active supporter deck"
-    "prizes bench bench bench discard";
+    '. stadium active supporter .'
+    'prizes bench bench bench discard';
+  gap: var(--player-gap, 8px) 6px;
+  align-items: center;
+  min-width: 0;
 
   &.upside-down {
-    transform: scale3d(-1, -1, 1);
+    --bench-color: #dc545b;
+    --bench-card-size: var(--opponent-bench-card-size);
+    --bench-height: var(--top-bench-height);
+    --bench-shift: var(--top-bench-shift);
+    grid-template-areas:
+      '. stadium active supporter .'
+      'discard bench bench bench .';
 
-    // Counter-flip all card elements so they display right-side up
-    ptcg-board-card,
-    .ptcg-board-drop-target,
-    .zone-item,
-    .stadium-card {
-      transform: scale3d(-1, -1, 1);
+    ptcg-board-card, ptcg-board-zone-button { transform: rotate(180deg); }
+
+    ptcg-board-zone-button.opponent-discard {
+      // Match the card area inside the bench's 6px border/padding inset.
+      // Reserve the full 16px count tab below that area instead of shortening it.
+      --zone-rail-height: calc(var(--bench-height) - 12px + 16px);
+      position: absolute;
+      transform: rotate(180deg) translateY(8px);
     }
   }
 }
 
-.ptcg-board-container {
-  position: relative;
-  overflow: hidden;
-}
-
-.ptcg-board-player {
-  position: relative;
-  z-index: 1;
-}
-
-#bottom_div,
-#top_div {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-#bottom_div:after {
-  content: '';
-  position: absolute;
-  border-image: linear-gradient(90deg, #0052ff, #00a2ff, #0052ff) 1;
-  opacity: var(--bottom-opacity, 0.2);
-  top: 60%;
-  left: -55%;
-  right: -55%;
-  height: 100%;
-  background: rgba(0, 90, 207, 0.225);
-  background-size: 56%;
-  background-position: center, top;
-  margin-top: -50px;
-  z-index: -1;
-}
-
-#top_div:after {
-  content: '';
-  position: absolute;
-  border-image: linear-gradient(90deg, #ff0000, #ff6b6b, #ff0000) 1;
-  opacity: var(--top-opacity, 0.2);
-  top: -20vh;
-  left: -40%;
-  right: -40%;
-  height: 50vh;
-  background: rgba(255, 0, 0, 0.225);
-  background-size: 56%;
-  background-position: center;
-  transform: scaleY(-1);
-  z-index: -1;
-}
-
-#bottom_div:after,
-#top_div:after {
-  border: 8px solid var(--border-color);
-  transition: all 0.3s ease, border-color 0.3s ease;
-  border-top-left-radius: 50% 100%;
-  border-top-right-radius: 50% 100%;
-  border-image-slice: 1;
-}
-
-#top_div:after {
-  --border-color: rgba(255, 0, 0, 0.225);
-}
-
-#bottom_div:after {
-  --border-color: rgba(0, 90, 207, 0.225);
-}
-
-#top_div.active:after {
-  --top-opacity: 1;
-  border-color: var(--border-color);
-}
-
-#bottom_div.active:after {
-  --bottom-opacity: 1;
-  border-color: var(--border-color);
-}
-
-@keyframes glowRed {
-  0% {
-    --border-color: rgb(145, 48, 48, 1);
-  }
-
-  100% {
-    --border-color: rgb(145, 48, 48, 1);
-  }
-}
-
-@keyframes glowBlue {
-  0% {
-    --border-color: rgb(34, 67, 112, 1);
-  }
-
-  100% {
-    --border-color: rgb(34, 67, 112, 1);
-  }
-}
-
-@keyframes spin {
-  0% {
-    --rotate: 0deg;
-  }
-
-  100% {
-    --rotate: 360deg;
-  }
-}
-
-@keyframes borderRotate {
-  from {
-    background-position: 0% center;
-  }
-
-  to {
-    background-position: 200% center;
-  }
-}
+#top_div, #bottom_div { display: none; }
 
 .ptcg-board-row {
-  align-items: center;
   display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  max-width: 100%;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
 
-  >ptcg-board-card,
-  >.ptcg-board-drop-target {
-    width: calc(var(--card-size) * var(--card-scale));
-    height: calc(var(--card-size) * #{$card-aspect-ratio} * var(--card-scale));
-    max-width: 100%;
-    flex-shrink: 1;
+  > ptcg-board-card, > .ptcg-board-drop-target {
+    display: block;
+    flex: 0 0 auto;
+    width: calc(var(--card-size) * 1.15);
+    height: calc(var(--card-size) * 1.15 * #{$card-aspect-ratio});
   }
-}
-
-.ptcg-board-active {
-
-  >ptcg-board-card,
-  >.ptcg-board-drop-target {
-    width: calc(var(--card-size) * 1.45 * var(--card-scale));
-    height: calc(var(--card-size) * 1.45 * #{$card-aspect-ratio} * var(--card-scale));
-    max-width: 100%;
-  }
-}
-
-.ptcg-board-bench {
-
-  >ptcg-board-card,
-  >.ptcg-board-drop-target {
-    // Mobile-first: flexible sizing that adapts to bench capacity
-    flex: 0 1 auto;
-    width: calc(var(--card-size) * 1.15 * var(--card-scale));
-    height: calc(var(--card-size) * 1.15 * #{$card-aspect-ratio} * var(--card-scale));
-    min-width: 0;
-
-    @media (max-width: 989px) {
-      // On mobile, calculate max-width to fit 8 cards with gaps and padding
-      // Formula: (viewport - padding - max gaps) / 8
-      // Padding: 16px (8px × 2), Max gaps: 210px (7 gaps × 30px max)
-      max-width: calc((100vw - 226px) / 8);
-
-      // Allow cards to shrink proportionally when flexbox needs to fit content
-      flex-shrink: 1;
-    }
-
-    @media (min-width: 990px) {
-      // Desktop: use standard size without max-width restriction
-      max-width: none;
-      flex-shrink: 0;
-    }
-  }
-}
-
-.ptcg-board-supporter,
-.ptcg-board-stadium,
-.ptcg-board-deck,
-.ptcg-board-prizes,
-.ptcg-board-discard,
-.lost-zone {
-
-  >ptcg-board-card,
-  >.ptcg-board-drop-target {
-    width: calc(var(--card-size) * 1.15 * var(--card-scale));
-    height: calc(var(--card-size) * 1.15 * #{$card-aspect-ratio} * var(--card-scale));
-    max-width: 100%;
-  }
-}
-
-.ptcg-board-drop-target>ptcg-board-card {
-  display: block;
-  width: calc(100% * var(--card-scale));
-}
-
-ptcg-board-card.draggable {
-  touch-action: none;
-}
-
-ptcg-board-prizes {
-  grid-area: prizes;
 }
 
 .ptcg-board-active {
   grid-area: active;
-  transform-origin: center bottom;
-}
 
-.deck-container {
-  grid-area: deck;
-  align-self: start;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  .deck-card {
-    position: absolute;
-    top: 0;
-    left: 0;
+  > ptcg-board-card, > .ptcg-board-drop-target {
+    width: var(--active-card-size);
+    height: calc(var(--active-card-size) * #{$card-aspect-ratio});
   }
-}
-
-.discard-container {
-  grid-area: discard;
-  align-self: start;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  .discard-card {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-
-  border: 1px solid rgba(255, 255, 255, 0.125);
-  padding: 4px;
-}
-
-.ptcg-board-supporter {
-  grid-area: supporter;
-  align-self: start;
-}
-
-.ptcg-board-deck {
-  grid-area: deck;
-  align-self: center;
-
-  .deck-container {
-    grid-area: deck;
-    align-self: center;
-    width: calc(var(--card-size) * 1.15 * var(--card-scale));
-    height: calc(var(--card-size) * 1.15 * #{$card-aspect-ratio} * var(--card-scale));
-
-    .deck-card {
-      grid-area: deck;
-      align-self: center;
-      width: calc(var(--card-size) * 1.15 * var(--card-scale));
-      height: calc(var(--card-size) * 1.15 * #{$card-aspect-ratio} * var(--card-scale));
-    }
-  }
-}
-
-.card-count {
-  position: absolute;
-  bottom: -22px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: white;
-  padding: 4px 8px;
-  font-size: 8px;
-  font-weight: 500;
-  letter-spacing: 0.3px;
-  z-index: 1;
-  white-space: nowrap;
-  background: rgba(26, 32, 44);
-  border-radius: 6px;
 }
 
 .ptcg-board-bench {
   grid-area: bench;
-  max-width: 100%;
-  overflow: visible;
-  display: flex;
-  gap: var(--bench-gap);
-  justify-content: center;
-  align-items: center;
-  padding: 10px 8px;
+  display: grid;
+  grid-template-columns: repeat(var(--bench-columns, 5), var(--bench-card-size));
+  grid-template-rows: repeat(var(--bench-rows, 1), calc(var(--bench-card-size) * #{$card-aspect-ratio}));
+  gap: 6px;
   justify-self: center;
+  width: max-content;
+  padding: 4px;
+  border: 2px solid var(--bench-color);
+  border-radius: 0;
+  background: rgba(54, 137, 230, 0.04);
+
+  > ptcg-board-card, > .ptcg-board-drop-target {
+    width: var(--bench-card-size);
+    height: calc(var(--bench-card-size) * #{$card-aspect-ratio});
+  }
+
+  .upside-down & { background: rgba(220, 84, 91, 0.04); }
+
+  &.ptcg-drop-highlight-visible {
+    box-shadow: inset 0 0 12px var(--bench-color);
+  }
+}
+
+.ptcg-board-drop-target > ptcg-board-card {
+  display: block;
   width: 100%;
-
-  // Shift bottom player's bench 25px to the left
-  .ptcg-board-player:not(.upside-down) & {
-    transform: translateX(-25px);
-  }
-
-  // Shift top player's bench 25px to the right
-  .ptcg-board-player.upside-down & {
-    transform: translateX(25px);
-  }
 }
 
-.ptcg-board-discard {
-  grid-area: discard;
-  align-self: center;
-
-  .discard-container {
-    grid-area: discard;
-    align-self: center;
-    width: calc(var(--card-size) * 1.15 * var(--card-scale));
-    height: calc(var(--card-size) * 1.15 * #{$card-aspect-ratio} * var(--card-scale));
-
-    .discard-card {
-      grid-area: discard;
-      align-self: center;
-      width: calc(var(--card-size) * 1.15 * var(--card-scale));
-      height: calc(var(--card-size) * 1.15 * #{$card-aspect-ratio} * var(--card-scale));
-    }
-  }
-}
-
-.ptcg-board-stadium {
-  grid-area: stadium;
-}
-
-.lost-zone {
-  grid-area: stadium;
-  // align-self: start;
-  transform: rotate(-90deg);
-}
-
-.stadium-card {
-  align-self: flex-start;
-  margin-top: -80px;
-  width: calc(var(--card-size) * 1.15 * var(--card-scale));
-  height: calc(var(--card-size) * 1.15 * #{$card-aspect-ratio} * var(--card-scale));
-
-  &.stadium-card-down {
-    transform: rotate(180deg);
-  }
-}
+ptcg-board-card.draggable { touch-action: none; }
+ptcg-board-zone-button { grid-area: prizes; align-self: center; justify-self: center; }
+ptcg-board-zone-button.opponent-discard, ptcg-board-zone-button.player-discard { grid-area: discard; }
 
 .ptcg-card-preview {
-  border-radius: $card-border-radius;
   position: absolute;
   width: 91.2px;
+  border-radius: $card-border-radius;
   transform: translate(15%, -55%);
   pointer-events: none;
 }
 
-.deck-card,
-.discard-card {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
 
-ptcg-board-card.highlighted-pokemon {
-  transition: all 0.3s ease;
-  transform: scale(1.05);
-  z-index: 5;
-}
+:host(.compact-board) {
+  .ptcg-board-outer-container { padding: 4px 8px var(--hand-space); }
 
-// Mobile Zone Grid - 2x2 compact display
-.mobile-zone-grid {
-  display: none; // Hidden by default (desktop)
-}
-
-// Desktop zones container
-.desktop-zones {
-  display: contents; // Show by default (desktop)
-}
-
-// Mobile breakpoint - show compact grid, hide desktop zones
-@media (max-width: 990px) {
   .ptcg-board-player {
-    position: relative; // Ensure positioning context
+    grid-template-columns: minmax(0, 1fr) var(--active-card-size) minmax(0, 1fr);
+    grid-template-areas:
+      'stadium active .'
+      'bench bench bench';
+    grid-template-rows: calc(var(--active-card-size) * #{$card-aspect-ratio}) auto;
   }
 
-  // Stadium always visible - mobile positioning
-  .stadium-always-visible {
-    grid-area: stadium;
-    justify-self: center;
-    align-self: flex-start;
-
-    .stadium-card {
-      margin-top: -140px;
-      margin-left: 70px;
-      width: calc(var(--card-size) * 1.2 * var(--card-scale));
-      height: calc(var(--card-size) * 1.2 * #{$card-aspect-ratio} * var(--card-scale));
-    }
+  // Empty slots retain their place so filling a hole never shifts a Pokemon.
+  .ptcg-board-player.upside-down {
+    grid-template-areas: 'stadium active .' 'bench bench bench';
   }
 
-  .mobile-zone-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr 1fr;
-    gap: 8px;
-    padding: 8px;
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 8px;
+  ptcg-board-zone-button {
     position: absolute;
-    z-index: 100;
-    width: 110px;
-    height: auto;
-
-    // Position bottom player's zone grid (in the stadium area)
-    grid-column: 2;
-    grid-row: 1;
-    justify-self: start;
-    align-self: flex-start;
-    margin-left: 70px;
-    margin-top: 0px;
-    transform: translate(0px, -15px);
-
-
-    &.mobile-zone-grid-top {
-      // Position top player's zone grid
-      grid-column: 2;
-      grid-row: 2;
-      justify-self: start;
-      align-self: center;
-      margin-bottom: 0px;
-      transform: translate(0px, -145px);
-    }
-
-    .zone-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: rgba(26, 32, 44, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 6px;
-      padding: 3px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-
-      &:hover {
-        background: rgba(26, 32, 44, 1);
-        border-color: rgba(255, 255, 255, 0.4);
-        transform: scale(1.05);
-      }
-
-      &:active {
-        transform: scale(0.98);
-      }
-
-      .zone-label {
-        font-size: 7px;
-        font-weight: 600;
-        color: rgba(255, 255, 255, 0.7);
-        text-transform: uppercase;
-        letter-spacing: 0.3px;
-        margin-bottom: 2px;
-        white-space: nowrap;
-      }
-
-      .zone-count {
-        font-size: 12px;
-        font-weight: 700;
-        color: #ffffff;
-      }
-
-      &.zone-disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        pointer-events: none;
-
-        &:hover {
-          background: rgba(26, 32, 44, 0.9);
-          border-color: rgba(255, 255, 255, 0.2);
-          transform: none;
-        }
-
-        &:active {
-          transform: none;
-        }
-      }
-
-      &.zone-info {
-        grid-column: 1 / -1;
-        cursor: default;
-        flex-direction: row;
-        gap: 6px;
-        padding: 4px 8px;
-
-        &:hover {
-          transform: none;
-          background: rgba(26, 32, 44, 0.9);
-          border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        &:active {
-          transform: none;
-        }
-
-        .zone-label {
-          margin-bottom: 0;
-        }
-
-        &.zone-clickable {
-          cursor: pointer;
-
-          &:hover {
-            background: rgba(26, 32, 44, 1);
-            border-color: rgba(255, 255, 255, 0.4);
-          }
-
-          &:active {
-            transform: scale(0.98);
-          }
-        }
-
-        &.zone-active {
-          background: rgba(59, 130, 246, 0.3);
-          border-color: rgba(59, 130, 246, 0.6);
-
-          &:hover {
-            background: rgba(59, 130, 246, 0.4);
-            border-color: rgba(59, 130, 246, 0.8);
-          }
-        }
-
-        &.zone-no-interact {
-          pointer-events: none;
-          cursor: default;
-          user-select: none;
-          -webkit-user-select: none;
-          -webkit-tap-highlight-color: transparent;
-        }
-      }
-    }
+    grid-area: auto;
+    left: 0;
+    top: calc(var(--active-card-size) * #{$card-aspect-ratio} + var(--player-gap) + (var(--bench-height) - var(--zone-rail-height)) / 2);
   }
 
-  .desktop-zones {
-    display: none !important;
+  ptcg-board-zone-button.opponent-discard { grid-area: auto; left: 0; right: auto; }
+  .upside-down .ptcg-board-bench { transform: translateX(var(--bench-shift)); }
+  ptcg-board-zone-button.player-discard { grid-area: auto; left: auto; right: 0; }
+
+  .ptcg-board-bench > .bench-slot-empty { visibility: hidden; }
+  .upside-down .ptcg-board-bench { gap: 4px; }
+
+}
+
+:host(.compact-board:not(.landscape-board)) {
+  .ptcg-board-outer-container { height: 100%; }
+
+  .ptcg-board-container {
+    height: 100%;
+    grid-template-rows: var(--top-field-height) minmax(0, 1fr);
+  }
+
+  .ptcg-board-player {
+    grid-template-rows: calc(var(--active-card-size) * #{$card-aspect-ratio}) minmax(0, 1fr);
+  }
+
+  .ptcg-board-bench { align-self: start; }
+}
+
+:host(.landscape-board) {
+  .ptcg-board-container { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  ptcg-board-zone-button, ptcg-board-zone-button.opponent-discard, ptcg-board-zone-button.player-discard { grid-area: bench; top: auto; align-self: center; }
+}
+
+.field-zone-button {
+  --zone-color: #3689e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 76px;
+  height: 32px;
+  padding: 3px 6px;
+  border: 2px solid var(--zone-color);
+  border-radius: 0;
+  background: var(--ptcg-surface);
+  color: var(--ptcg-text);
+  font: inherit;
+  cursor: pointer;
+
+  .field-zone-label { font-size: 10px; font-weight: 700; text-transform: uppercase; }
+  .field-zone-total { font-size: 14px; font-weight: 800; }
+  &:focus-visible { outline: 2px solid var(--zone-color); outline-offset: 2px; }
+  &:hover:not(:disabled) { box-shadow: inset 0 0 12px var(--zone-color); }
+  &:disabled { opacity: 0.5; cursor: default; }
+}
+
+.player-deck-count, .player-end-turn {
+  position: absolute;
+  right: calc((100% - var(--active-card-size)) / 4 - var(--board-side-space) / 2);
+  transform: translateX(50%);
+  height: 38px;
+}
+.player-deck-count { top: var(--deck-top, 0px); }
+.player-end-turn {
+  top: calc(var(--deck-top, 0px) - 50px);
+  background: #fff;
+  color: #1a202c;
+  &:hover:not(:disabled) { box-shadow: 0 0 0 1px var(--zone-color); }
+}
+
+.board-shared-zones {
+  --stadium-size: calc(var(--card-size) * 1.15);
+  position: absolute;
+  left: calc((100% - var(--active-card-size) - 12px) / 4);
+  top: var(--shared-zone-y);
+  width: 76px;
+  height: calc(var(--stadium-size) * #{$card-aspect-ratio});
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.shared-stadium {
+  display: block;
+  width: var(--stadium-size);
+  height: 100%;
+  margin: 0 auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ptcg-text);
+  cursor: pointer;
+
+  ptcg-board-card { display: block; width: 100%; height: 100%; pointer-events: none; }
+  &:focus-visible { outline: 2px solid #3689e6; outline-offset: 2px; }
+  &.stadium-empty {
+    border: 1px dashed currentColor;
+    border-radius: 4px;
+    opacity: 0.45;
+    font-size: 9px;
+    text-transform: uppercase;
+    cursor: default;
   }
 }
 
-// Disabled zone styling for desktop
-.zone-disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
+.lost-zone-button {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.opponent-lost { --zone-color: #dc545b; bottom: calc(100% + 6px); }
+.player-lost { top: calc(100% + 6px); }
 
-  &:hover {
-    opacity: 0.5;
+:host(.landscape-board) {
+  --deck-top: 50px;
+
+  .board-shared-zones {
+    --stadium-size: 60px;
+    left: 22px;
+    top: calc(100% - var(--stadium-size) * #{$card-aspect-ratio} / 2 - 34px);
+    width: 60px;
+  }
+  .lost-zone-button {
+    left: 0;
+    transform: none;
+    width: 44px;
+    height: 28px;
+    padding: 2px;
+    gap: 3px;
+    .field-zone-label { font-size: 8px; }
+    .field-zone-total { font-size: 12px; }
   }
 }

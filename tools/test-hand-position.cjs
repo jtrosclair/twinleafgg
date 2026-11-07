@@ -45,6 +45,7 @@ async function position(frame) {
 }
 
 async function verify(browser, origin, mode) {
+  process.stderr.write(`Checking ${mode} hand gestures\n`);
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   try {
     const page = await context.newPage();
@@ -55,7 +56,9 @@ async function verify(browser, origin, mode) {
     const url = origin + '/sandbox-viewer#' + snapshot.stateData;
     let frame;
     if (mode === 'iframe') {
-      await page.setContent('<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>html,body{margin:0;height:100%;overflow:hidden}header{height:104px}iframe{display:block;width:100%;height:calc(100% - 104px);border:0}</style><header>PrizeMap host frame</header><iframe></iframe>');
+      // A real host origin matches PrizeMap without mounting Angular in the parent.
+      await page.route(origin + '/__hand-host', route => route.fulfill({ contentType: 'text/html', body: '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>html,body{margin:0;height:100%;overflow:hidden}header{height:104px}iframe{display:block;width:100%;height:calc(100% - 104px);border:0}</style><header>PrizeMap host frame</header><iframe></iframe>' }));
+      await page.goto(origin + '/__hand-host', { waitUntil: 'domcontentloaded' });
       await page.locator('iframe').evaluate((element, url) => element.src = url, url);
       frame = await (await page.locator('iframe').elementHandle()).contentFrame();
     } else {
@@ -78,8 +81,9 @@ async function verify(browser, origin, mode) {
 
     await frame.locator('.hand-card').first().tap();
     await frame.waitForSelector('mat-dialog-container');
-    await frame.getByRole('button', { name: 'Close', exact: true }).click();
+    await frame.getByRole('button', { name: 'Close', exact: true }).tap();
     await frame.waitForSelector('mat-dialog-container', { state: 'detached' });
+    await frame.waitForSelector('.cdk-overlay-backdrop', { state: 'detached' });
     await frame.locator('.hand-card').first().focus();
     const focused = await position(frame);
     assert.equal(focused.tableScrollTop, 0, mode + ': focus restoration must not scroll the board');
@@ -87,14 +91,18 @@ async function verify(browser, origin, mode) {
     assert.equal(focused.boardTop, initial.boardTop);
 
     const card = await frame.locator('.hand-card').first().boundingBox();
+    assert(await frame.evaluate(() => {
+      const top = document.querySelector('.hand-card').getBoundingClientRect().top;
+      return !!document.elementFromPoint(300, top + 40)?.closest('.hand-viewport');
+    }),
+      mode + ': the swipe must start on the hand after the inspector backdrop closes');
     const touch = (type, x, y) => cdp.send('Input.dispatchTouchEvent', {
       type, touchPoints: type === 'touchEnd' ? [] : [{ x, y, radiusX: 4, radiusY: 4, force: 1 }]
     });
-    await touch('touchStart', 300, card.y + 40);
-    for (const x of [270, 230, 180, 130, 80]) {
-      await touch('touchMove', x, card.y + 42); await page.waitForTimeout(20);
-    }
-    await touch('touchEnd');
+    await cdp.send('Input.synthesizeScrollGesture', {
+      x: 300, y: card.y + 40, xDistance: -220, yDistance: 0,
+      speed: 600, preventFling: true, gestureSourceType: 'touch'
+    });
     await frame.waitForFunction(() => document.querySelector('.hand-viewport').scrollLeft > 50);
     await frame.waitForFunction(() => {
       const left = document.querySelector('.hand-viewport').scrollLeft;
@@ -113,7 +121,7 @@ async function verify(browser, origin, mode) {
 
     // A lowered, clipped card must still start its real play action on touch.
     const source = await frame.locator('.hand-card[aria-label^="N\'s PP Up,"]').boundingBox();
-    const target = await frame.locator('.ptcg-board-bench').nth(1).locator('.ptcg-board-drop-target').first().boundingBox();
+    const target = await frame.locator('.ptcg-board-bench').nth(1).locator('.ptcg-board-drop-target:visible').first().boundingBox();
     const start = { x: source.x + source.width / 2, y: source.y + 35 };
     const end = { x: target.x + target.width / 2, y: target.y + target.height / 2 };
     await touch('touchStart', start.x, start.y);
@@ -126,7 +134,8 @@ async function verify(browser, origin, mode) {
     await frame.waitForSelector('ptcg-prompt-attach-energy');
     assert.deepEqual(errors, []);
     return { mode, initial, focused, scrolled, nativeSwipe: true, nativePlay: true, screenshot, errors };
-  } finally { await context.close(); }
+  } catch (error) { error.message = mode + ': ' + error.message; throw error; }
+  finally { await context.close(); }
 }
 
 (async () => {
@@ -134,7 +143,8 @@ async function verify(browser, origin, mode) {
   const origin = process.env.CLIENT_SIMULATOR_URL || server.origin;
   let browser;
   try {
-    browser = await chromium.launch({ headless: true, ...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE
+    // Chromium needs a native window large enough to synthesize touches over the phone's bottom hand rail.
+    browser = await chromium.launch({ headless: true, args: ['--window-size=1000,1000'], ...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE
       ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE } : {}) });
     const results = [];
     for (const mode of ['native', 'iframe']) results.push(await verify(browser, origin, mode));

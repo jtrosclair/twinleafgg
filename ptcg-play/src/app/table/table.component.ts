@@ -1,5 +1,6 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Player, GamePhase } from 'ptcg-server';
 import { combineLatest } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -18,13 +19,37 @@ export class TableComponent implements OnInit, OnDestroy {
   public waiting = false;
   public canUndoBackend = false;
   public isHandHidden = false;
+  public isEndTurnConfirmationOpen = false;
+  @ViewChild('endTurnConfirmation') public endTurnConfirmation: TemplateRef<unknown>;
+  private endTurnDialog?: MatDialogRef<unknown, boolean>;
+
+  public get topHandCount(): number {
+    return this.opponentPlayer?.hand?.cards?.length || 0;
+  }
+
+  public get topDeckCount(): number {
+    return this.opponentPlayer?.deck?.cards?.length || 0;
+  }
+
+  public get topPrizeCount(): number {
+    return this.opponentPlayer?.prizes?.filter(prize => prize.cards.length > 0).length || 0;
+  }
+
+  private get opponentPlayer(): Player {
+    return this.topPlayer?.id === this.clientId ? this.bottomPlayer : this.topPlayer;
+  }
+
+  public get bottomHandCount(): number {
+    return (this.topPlayer?.id === this.clientId ? this.topPlayer : this.bottomPlayer)?.hand?.cards?.length || 0;
+  }
 
   constructor(
     private gameService: GameService,
     private route: ActivatedRoute,
     private router: Router,
     private sessionService: SessionService,
-    private boardInteractionService: BoardInteractionService
+    private boardInteractionService: BoardInteractionService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -40,7 +65,10 @@ export class TableComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void { this.boardInteractionService.endBoardSelection(); }
+  ngOnDestroy(): void {
+    this.endTurnDialog?.close(false);
+    this.boardInteractionService.endBoardSelection();
+  }
 
   private updatePlayers(game: LocalGameState, clientId: number): void {
     this.clientId = clientId;
@@ -64,11 +92,30 @@ export class TableComponent implements OnInit, OnDestroy {
 
   public canEndTurn(): boolean {
     const game = this.gameState;
-    return !!game && !game.deleted && !game.turnComplete && game.state.phase === GamePhase.PLAYER_TURN
+    return !!game && !game.deleted && !game.turnComplete && !game.promptMinimized && game.state.phase === GamePhase.PLAYER_TURN
       && game.state.players[game.state.activePlayer]?.id === this.clientId && !this.hasActivePrompt();
   }
 
-  public endTurn(): void { if (this.canEndTurn()) { this.gameService.passTurnAction(this.gameState.gameId); } }
+  public async endTurn(): Promise<void> {
+    if (!this.canEndTurn() || this.isEndTurnConfirmationOpen || !this.endTurnConfirmation) { return; }
+    const { gameId, localId } = this.gameState;
+    const turn = this.gameState.state.turn;
+    this.isEndTurnConfirmationOpen = true;
+    try {
+      this.endTurnDialog = this.dialog.open(this.endTurnConfirmation, {
+        width: '340px', maxWidth: 'calc(100vw - 32px)',
+        ariaLabelledBy: 'end-turn-confirm-title'
+      });
+      const confirmed = await this.endTurnDialog.afterClosed().toPromise();
+      if (confirmed === true && this.canEndTurn() && this.gameState.gameId === gameId
+        && this.gameState.localId === localId && this.gameState.state.turn === turn) {
+        this.gameService.passTurnAction(gameId);
+      }
+    } finally {
+      this.endTurnDialog = undefined;
+      this.isEndTurnConfirmationOpen = false;
+    }
+  }
 
   public undo(): void {
     if (!this.gameState || !this.canUndoBackend || this.hasActivePrompt()) { return; }

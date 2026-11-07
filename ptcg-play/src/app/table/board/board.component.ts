@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnDestroy, Output, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostBinding, Input, NgZone, OnDestroy, Output, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { DraggedItem } from '@ng-dnd/sortable';
 import { DropTarget, DndService } from '@ng-dnd/core';
-import { Observable } from 'rxjs';
-import { Player, SlotType, PlayerType, CardTarget, Card, CardList, PokemonCardList, StateUtils, SuperType } from 'ptcg-server';
+import { Observable, Subscription } from 'rxjs';
+import { Player, SlotType, PlayerType, CardTarget, Card, CardList, PokemonCard, PokemonCardList, Stage, StateUtils, SuperType } from 'ptcg-server';
 import { map } from 'rxjs/operators';
 
 import { HandItem, HandCardType } from '../hand/hand-item.interface';
@@ -10,9 +10,9 @@ import { BoardCardItem, BoardCardType } from './board-item.interface';
 import { CardsBaseService } from '../../shared/cards/cards-base.service';
 import { GameService } from '../../api/services/game.service';
 import { LocalGameState } from 'src/app/shared/session/session.interface';
-import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
 import { SettingsService } from '../../shared/services/settings.service';
 import { BoardInteractionService } from '../../shared/services/board-interaction.service';
+import { activeCardSize, portraitBenchLayout } from './portrait-bench-layout';
 
 const MAX_BENCH_SIZE = 8;
 const DEFAULT_BENCH_SIZE = 5;
@@ -31,7 +31,7 @@ type DropTargetType = DropTarget<DraggedItem<HandItem> | BoardCardItem, any>;
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss'],
 })
-export class BoardComponent implements OnDestroy, OnChanges, OnInit {
+export class BoardComponent implements AfterViewInit, OnDestroy, OnChanges, OnInit {
 
   @Input() gameState: LocalGameState;
   @Input() topPlayer: Player;
@@ -39,9 +39,11 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
   @Input() player: Player;
   @Input() clientId: number;
   @Input() isHandHidden: boolean = false;
+  @Input() canEndTurn = false;
   @Output() deckClick = new EventEmitter<Card>();
   @Output() discardClick = new EventEmitter<Card>();
   @Output() toggleHand = new EventEmitter<void>();
+  @Output() endTurn = new EventEmitter<void>();
 
   public deck: CardList;
   public discard: CardList;
@@ -57,8 +59,17 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
   public bottomActiveHighlight$: Observable<boolean>;
   public bottomBenchTarget: DropTargetType[];
   public bottomBenchHighlight$: Observable<boolean>[];
+  public benchTarget: DropTargetType;
+  public benchHighlight$: Observable<boolean>;
   public isUpsideDown: boolean = false;
   public stateUtils = StateUtils;
+  @HostBinding('class.compact-board') public isCompact = false;
+  @HostBinding('class.landscape-board') public isLandscape = false;
+  private topBenchColumns = DEFAULT_BENCH_SIZE;
+  private bottomBenchColumns = 3;
+  private resizeObserver?: ResizeObserver;
+  private settingsSubscription: Subscription;
+  private cardScale = 1;
 
   // Add these for use in the template
   public PlayerType = PlayerType;
@@ -109,11 +120,14 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
     private dnd: DndService,
     private gameService: GameService,
     private settingsService: SettingsService,
-    private boardInteractionService: BoardInteractionService
+    private boardInteractionService: BoardInteractionService,
+    private elementRef: ElementRef<HTMLElement>,
+    private zone: NgZone
   ) {
 
-    this.settingsService.cardSize$.subscribe(size => {
-      document.documentElement.style.setProperty('--card-scale', (size / 100).toString());
+    this.settingsSubscription = this.settingsService.cardSize$.subscribe(size => {
+      this.cardScale = size / 100;
+      this.updateLayout();
     });
 
     // Bottom Player
@@ -135,6 +149,7 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
 
     // Dropping
     [this.boardTarget, this.boardHighlight$] = this.initDropTarget(PlayerType.ANY, SlotType.BOARD);
+    [this.benchTarget, this.benchHighlight$] = this.initBenchDropTarget();
   }
 
   // Add property to track deck size
@@ -157,21 +172,180 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
       this.discardSize = 0;
     }
 
-    // Update bench gap based on bench capacity
-    this.updateBenchGap();
+    this.updateLayout();
   }
 
-  private updateBenchGap(): void {
-    const topBenchSize = this.topPlayer?.bench?.length || 0;
-    const bottomBenchSize = this.bottomPlayer?.bench?.length || 0;
-    const maxBenchSize = Math.max(topBenchSize, bottomBenchSize);
+  ngAfterViewInit(): void {
+    this.resizeObserver = new ResizeObserver(() => this.zone.run(() => this.updateLayout()));
+    this.resizeObserver.observe(this.elementRef.nativeElement);
+  }
 
-    // If bench size is 5 or less, use larger gap; otherwise use standard gap
-    const benchGap = maxBenchSize <= 5 ? 'clamp(8px, 15vw, 50px)' : 'clamp(2px, 10vw, 30px)';
-    document.documentElement.style.setProperty('--bench-gap', benchGap);
+  public benchSize(player: Player): number {
+    return player?.bench?.length || DEFAULT_BENCH_SIZE;
+  }
+
+  public benchColumns(player: Player): number {
+    const capacity = this.benchSize(player);
+    if (!this.isCompact) { return capacity; }
+    return player === this.topPlayer ? this.topBenchColumns : this.bottomBenchColumns;
+  }
+
+  public benchRows(player: Player): number {
+    return this.isCompact ? Math.ceil(this.benchSize(player) / this.benchColumns(player)) : 1;
+  }
+
+  private updateLayout(): void {
+    const host = this.elementRef.nativeElement;
+    const { width, height } = host.getBoundingClientRect();
+    if (!width || !height) { return; }
+    this.isCompact = width < 990;
+    this.isLandscape = this.isCompact && width >= 700 && height < 500;
+    const capacities = [this.benchSize(this.topPlayer), this.benchSize(this.bottomPlayer)];
+    const handWidth = height <= 500 ? 88 : Math.min(132, Math.max(94, width * 0.29));
+    const handHeight = handWidth * 1.37;
+    let handSpace = !this.isHandHidden ? handHeight - 2 : 12;
+    const cardSize = 60 * this.cardScale;
+    const activeSize = activeCardSize(width, height, this.cardScale);
+    const activeHeight = activeSize * 1.37;
+    let playerGap = this.isLandscape ? 14.3 : 8;
+    let boardGap = 8;
+    let topSize: number;
+    let bottomSize: number;
+    let topFieldHeight = 0;
+    this.topBenchColumns = capacities[0];
+    this.bottomBenchColumns = Math.ceil(capacities[1] / 2);
+
+    if (this.isCompact && !this.isLandscape) {
+      const layout = portraitBenchLayout(width, height, this.cardScale, capacities, handSpace);
+      this.topBenchColumns = layout.topColumns;
+      this.bottomBenchColumns = layout.bottomColumns;
+      topSize = layout.topSize;
+      bottomSize = layout.bottomSize;
+      handSpace = layout.handSpace;
+      playerGap = layout.playerGap;
+      boardGap = layout.boardGap;
+      topFieldHeight = layout.topFieldHeight;
+      host.style.setProperty('--top-field-height', `${topFieldHeight}px`);
+    } else if (this.isCompact) {
+      const rows = (index: number, columns: number) => Math.ceil(capacities[index] / columns);
+      const widthLimit = (columns: number, gap: number, own = false) => {
+        const fieldWidth = this.isLandscape ? (width - 16 - boardGap) / 2 : width - 16;
+        return (fieldWidth - (own ? 100 : 56) - (columns - 1) * gap) / columns;
+      };
+      let bottomColumns = this.bottomBenchColumns;
+      let bottomRows = rows(1, bottomColumns);
+      let bottomLimit = Math.min(69 * this.cardScale, widthLimit(bottomColumns, 6, true));
+      const topLimit = Math.min(82 * this.cardScale, widthLimit(capacities[0], 4));
+      const benchOverhead = (count: number, gap: number) => 12 + (count - 1) * gap;
+      const available = () => height - handSpace - 4 - (this.isLandscape ? activeHeight + playerGap
+        : 2 * activeHeight + 2 * playerGap + boardGap);
+      const ownHeightLimit = () => (available() - benchOverhead(bottomRows, 6)
+        - (this.isLandscape ? 0 : 12 + Math.min(54 * this.cardScale, topLimit) * 1.37)) / (bottomRows * 1.37);
+
+      // Tight frames first give up spacing, then expose a shorter hand rail.
+      // Neither Active Pokemon nor the edge controls participate in scaling.
+      if (ownHeightLimit() < 60 * this.cardScale) {
+        playerGap = this.isLandscape ? 14.3 : 4;
+        boardGap = 2;
+      }
+      const minimumHandSpace = this.isLandscape ? 70 : 74;
+      if (ownHeightLimit() < 60 * this.cardScale && handSpace > minimumHandSpace) {
+        const needed = (60 * this.cardScale - ownHeightLimit()) * bottomRows * 1.37;
+        handSpace = Math.max(minimumHandSpace, handSpace - needed);
+      }
+      // An exceptionally short embedded phone frame cannot hold two full
+      // bench rows below the original Active cards. Keep every card visible
+      // in one row there, rather than clipping or scrolling the board.
+      const minimumOwnHeight = 60 * this.cardScale * bottomRows * 1.37 + benchOverhead(bottomRows, 6);
+      const minimumOpponentHeight = this.isLandscape ? 0 : 12 + Math.min(33 * this.cardScale, topLimit) * 1.37;
+      if (available() < minimumOwnHeight + minimumOpponentHeight - 0.01) {
+        this.bottomBenchColumns = bottomColumns = capacities[1];
+        bottomRows = 1;
+        bottomLimit = Math.min(69 * this.cardScale, widthLimit(bottomColumns, 6, true));
+      }
+      bottomSize = Math.min(bottomLimit, Math.max(60 * this.cardScale, ownHeightLimit()));
+      const topHeightLimit = (columns: number, ownSize: number) => {
+        const topRows = rows(0, columns);
+        const ownHeight = ownSize * bottomRows * 1.37 + benchOverhead(bottomRows, 6);
+        return (available() - benchOverhead(topRows, 4) - (this.isLandscape ? 0 : ownHeight)) / (topRows * 1.37);
+      };
+      topSize = Math.min(topLimit, topHeightLimit(capacities[0], bottomSize));
+
+      // Start with option 2's single opponent row. When it makes their cards
+      // meaningfully bigger, use a second opponent row. Our modest 69px cards
+      // leave that extra room; empty rows never consume the height budget.
+      const alternateColumns = Math.ceil(capacities[0] / 2);
+      const alternateSize = Math.min(82 * this.cardScale, widthLimit(alternateColumns, 4),
+        topHeightLimit(alternateColumns, bottomSize));
+      if (alternateSize >= topSize + 4 * this.cardScale) {
+        this.topBenchColumns = alternateColumns;
+        topSize = alternateSize;
+      }
+    } else {
+      const columns = Math.max(...capacities);
+      const widthLimit = (Math.min(width - 24, 1200) - 60 - 4 * cardSize - (columns - 1) * 6) / columns;
+      const heightLimit = (height - handSpace - 92 - 2 * activeHeight) / (2 * 1.37);
+      topSize = bottomSize = Math.min(82 * this.cardScale, widthLimit, heightLimit);
+    }
+    if (this.topPlayer?.id === this.clientId) {
+      bottomSize = Math.min(bottomSize, topSize);
+    }
+    topSize = Math.min(topSize, bottomSize);
+    const fieldWidth = this.isLandscape ? (width - 16 - boardGap) / 2 : width - 16;
+    let topBenchHeight = 0;
+    [topSize, bottomSize].forEach((size, index) => {
+      const columns = this.isCompact ? [this.topBenchColumns, this.bottomBenchColumns][index] : capacities[index];
+      const rows = Math.ceil(capacities[index] / columns);
+      const gap = index === 0 && this.isCompact ? 4 : 6;
+      const benchHeight = rows * size * 1.37 + (rows - 1) * gap + 12;
+      if (index === 0) { topBenchHeight = benchHeight; }
+      const benchWidth = columns * size + (columns - 1) * gap + 12;
+      const side = index === 0 ? 'top' : 'bottom';
+      host.style.setProperty(`--${side}-bench-height`, `${benchHeight}px`);
+      host.style.setProperty(`--${side}-bench-shift`, `${Math.max(0, 44 - (fieldWidth - benchWidth) / 2)}px`);
+    });
+    host.style.setProperty('--shared-zone-y', `${(this.isCompact ? topFieldHeight : activeHeight + playerGap + topBenchHeight) + boardGap / 2}px`);
+    host.style.setProperty('--board-side-space', `${this.isCompact ? 8 : (width - Math.min(width - 24, 1200)) / 2}px`);
+    host.style.setProperty('--active-card-size', `${activeSize}px`);
+    host.style.setProperty('--card-size', `${cardSize}px`);
+    host.style.setProperty('--bench-card-size', `${bottomSize}px`);
+    host.style.setProperty('--opponent-bench-card-size', `${topSize}px`);
+    host.style.setProperty('--hand-space', `${handSpace}px`);
+    host.style.setProperty('--player-gap', `${playerGap}px`);
+    host.style.setProperty('--board-gap', `${boardGap}px`);
+    host.style.setProperty('--max-bench-size', `${Math.max(...capacities)}`);
+    host.parentElement?.style.setProperty('--hand-bottom', `${handSpace - handHeight - 38}px`);
   }
 
   public pileLayerIndices = pileLayerIndices;
+
+  private firstAvailableBenchIndex(item: HandItem): number {
+    const player = this.bottomPlayer;
+    if (!this.gameState || this.gameState.deleted || this.gameState.turnComplete
+      || this.gameState.promptMinimized || this.hasActivePrompt()
+      || player?.id !== this.clientId
+      || this.gameState.state.players[this.gameState.state.activePlayer]?.id !== this.clientId
+      || !(item.card instanceof PokemonCard) || item.card.stage !== Stage.BASIC
+      || !player.playableCardIds?.includes(item.card.id)) {
+      return -1;
+    }
+    return player.bench.findIndex(slot => slot.cards.length === 0);
+  }
+
+  private initBenchDropTarget(): [DropTargetType, Observable<boolean>] {
+    const target = this.dnd.dropTarget<DraggedItem<HandItem>>([HandCardType], {
+      canDrop: monitor => this.firstAvailableBenchIndex(monitor.getItem().data) !== -1,
+      drop: monitor => {
+        if (monitor.didDrop()) { return; }
+        const item = monitor.getItem().data;
+        const index = this.firstAvailableBenchIndex(item);
+        if (index !== -1) {
+          this.handlePlayFromHand(item, { player: PlayerType.BOTTOM_PLAYER, slot: SlotType.BENCH, index });
+        }
+      }
+    });
+    return [target, target.listen(monitor => monitor.canDrop() && monitor.isOver())];
+  }
 
   private initDropTarget(
     player: PlayerType,
@@ -193,6 +367,12 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
         if (slot === SlotType.BOARD) {
           return isFromHand;
         }
+        if (isFromHand && player === PlayerType.BOTTOM_PLAYER && slot === SlotType.BENCH) {
+          const handItem = (item as DraggedItem<HandItem>).data;
+          if (handItem.card instanceof PokemonCard && handItem.card.stage === Stage.BASIC) {
+            return this.firstAvailableBenchIndex(handItem) !== -1;
+          }
+        }
         const boardCard = item as BoardCardItem;
         // Do not drop to the same target
         if (player === boardCard.player
@@ -211,6 +391,14 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
         const item = monitor.getItem();
         if ((item as DraggedItem<HandItem>).type === HandCardType) {
           const handItem = (item as DraggedItem<HandItem>).data;
+          if (player === PlayerType.BOTTOM_PLAYER && slot === SlotType.BENCH
+            && handItem.card instanceof PokemonCard && handItem.card.stage === Stage.BASIC) {
+            const benchIndex = this.firstAvailableBenchIndex(handItem);
+            if (benchIndex !== -1) {
+              this.handlePlayFromHand(handItem, { player, slot, index: benchIndex });
+            }
+            return;
+          }
           this.handlePlayFromHand(handItem, target);
           return;
         }
@@ -278,6 +466,10 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
 
 
   ngOnDestroy() {
+    this.resizeObserver?.disconnect();
+    this.settingsSubscription.unsubscribe();
+    this.boardTarget.unsubscribe();
+    this.benchTarget.unsubscribe();
     this.bottomActive.source.unsubscribe();
     this.bottomActiveTarget.unsubscribe();
 
@@ -417,6 +609,7 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
   }
 
   public onPrizeClick(player: Player, prize: CardList) {
+    if (player?.id !== this.clientId) { return; }
     const owner = player.id === this.clientId;
     if (prize.cards.length === 0) {
       return;
@@ -427,7 +620,8 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
   }
 
   public onDeckClick(card: Card, cardList: CardList) {
-    if (this.isZoneEmpty(cardList)) {
+    const owner = [this.topPlayer, this.bottomPlayer].find(player => player?.id === this.clientId);
+    if (cardList !== owner?.deck || this.isZoneEmpty(cardList)) {
       return;
     }
     const facedown = false;
@@ -439,7 +633,7 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
       return;
     }
 
-    const isBottomOwner = this.bottomPlayer && this.bottomPlayer.id === this.clientId;
+    const isBottomOwner = this.bottomPlayer?.id === this.clientId && cardList === this.bottomPlayer.discard;
     const isDeleted = this.gameState.deleted;
 
     if (!isBottomOwner || isDeleted) {
@@ -620,28 +814,7 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
       return;
     }
 
-    const isBottomOwner = this.bottomPlayer && this.bottomPlayer.id === this.clientId;
-    const isDeleted = this.gameState.deleted;
-
-    if (isDeleted) {
-      return this.onCardListClick(card, cardList);
-    }
-
-    const player = PlayerType.BOTTOM_PLAYER;
-    const slot = SlotType.LOSTZONE;
-
-    const options = { enableAbility: { useFromDiscard: false }, enableAttack: false };
-    this.cardsBaseService.showCardInfoList({ card, cardList, options })
-      .then(result => {
-        if (!result) {
-          return;
-        }
-        const gameId = this.gameState.gameId;
-
-        const index = cardList.cards.indexOf(result.card);
-        const target: CardTarget = { player, slot, index };
-      });
-
+    return this.onCardListClick(card, cardList);
   }
 
   /**
@@ -700,7 +873,7 @@ export class BoardComponent implements OnDestroy, OnChanges, OnInit {
   }
 
   public onPrizesModalClick(player: Player) {
-    if (!player || !player.prizes || player.prizes.length === 0 || this.isPrizesEmpty(player)) {
+    if (player?.id !== this.clientId || !player?.prizes || player.prizes.length === 0 || this.isPrizesEmpty(player)) {
       return;
     }
 

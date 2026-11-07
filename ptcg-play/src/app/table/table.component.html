@@ -2,9 +2,43 @@
   <div class="ptcg-table" *ngIf="gameState" [class.is-complete]="gameState.turnComplete"
     [attr.inert]="gameState.turnComplete ? '' : null" [attr.aria-hidden]="gameState.turnComplete ? 'true' : null">
     <ptcg-board [clientId]="clientId" [gameState]="gameState" [topPlayer]="topPlayer" [bottomPlayer]="bottomPlayer"
-      [isHandHidden]="isHandHidden" (toggleHand)="toggleHandVisibility()"></ptcg-board>
+      [isHandHidden]="isHandHidden" (toggleHand)="toggleHandVisibility()"
+      [canEndTurn]="canEndTurn()" (endTurn)="endTurn()"></ptcg-board>
     <ptcg-hand *ngIf="!hasActivePrompt() && !isHandHidden" [clientId]="clientId" [gameState]="gameState"
       [player]="bottomPlayer"></ptcg-hand>
+    <div class="opponent-counts" role="group" aria-label="Opponent card counts">
+      <div class="board-hand-count board-hand-count-top" role="status"
+        [attr.aria-label]="'Opponent hand: ' + topHandCount">
+        <span class="board-hand-label">Hand</span>
+        <span class="board-hand-total">{{topHandCount}}</span>
+      </div>
+      <div class="board-pile-count" role="status" [attr.aria-label]="'Opponent deck: ' + topDeckCount">
+        <span class="board-hand-label">Deck</span>
+        <span class="board-hand-total">{{topDeckCount}}</span>
+      </div>
+      <div class="board-pile-count" role="status" [attr.aria-label]="'Opponent prizes: ' + topPrizeCount">
+        <span class="board-hand-label">Prizes</span>
+        <span class="board-hand-total">{{topPrizeCount}}</span>
+      </div>
+    </div>
+    <div class="player-counts" role="group" aria-label="Your card counts">
+      <div class="board-hand-count board-hand-count-bottom" role="status"
+        [attr.aria-label]="'Your hand: ' + bottomHandCount">
+        <span class="board-hand-label">Hand</span>
+        <span class="board-hand-total">{{bottomHandCount}}</span>
+      </div>
+    </div>
     <ptcg-prompt [gameState]="gameState" [clientId]="clientId"></ptcg-prompt>
   </div>
 </ptcg-content>
+
+<ng-template #endTurnConfirmation>
+  <div class="end-turn-confirmation">
+    <h2 mat-dialog-title id="end-turn-confirm-title">End turn without attacking?</h2>
+    <mat-dialog-content>You won’t attack this turn.</mat-dialog-content>
+    <mat-dialog-actions>
+      <button mat-button [mat-dialog-close]="false" cdkFocusInitial>Keep playing</button>
+      <button mat-raised-button class="confirm-end-turn" [mat-dialog-close]="true">End turn</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

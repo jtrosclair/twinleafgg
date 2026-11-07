@@ -6,7 +6,7 @@
   --hand-blue: #{$hand-selectable-blue};
   position: absolute;
   inset-inline: 0;
-  bottom: -40px;
+  bottom: var(--hand-bottom, -40px);
   z-index: 10;
   display: block;
   pointer-events: none;

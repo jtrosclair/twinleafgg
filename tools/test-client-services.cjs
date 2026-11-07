@@ -46,7 +46,9 @@ runner.loadConfig({
     'ptcg-play/src/app/shared/services/board-interaction.service.spec.ts',
     'ptcg-play/src/app/table/prompt/prompt.lifecycle.spec.ts',
     'ptcg-play/src/app/table/prompt/prompt-choose-cards/prompt-choose-cards.component.spec.ts',
-    'ptcg-play/src/app/table/hand/hand.component.spec.ts'
+    'ptcg-play/src/app/table/hand/hand.component.spec.ts',
+    'ptcg-play/src/app/table/table.component.spec.ts',
+    'ptcg-play/src/app/table/board/board.component.spec.ts'
   ],
   random: false
 });

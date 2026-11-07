@@ -7,7 +7,8 @@ $ptcg-energy-card-offset: 13%;
 // ==================== MAIN COMPONENT STYLES ====================
 .ptcg-board-card {
   max-width: map-get($ptcg-size, card);
-  min-width: map-get($ptcg-size, board-card);
+  min-width: 0;
+  width: 100%;
   position: relative;
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 
