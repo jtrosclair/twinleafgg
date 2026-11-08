@@ -268,6 +268,13 @@ function playerState(data) {
 }
 function pokemonName(slot) { return slot.names; }
 
+async function visualBench(bench) {
+  return bench.evaluate(element => [...element.children].map((slot, index) => {
+    const bounds = slot.getBoundingClientRect();
+    return { index, occupied: !slot.classList.contains('bench-slot-empty'), x: bounds.x, y: bounds.y };
+  }).filter(slot => slot.occupied).sort((a, b) => Math.round(a.y - b.y) || a.x - b.x));
+}
+
 async function verifyInteractions(browser, origin, touch, viewport) {
   const context = await browser.newContext({ viewport: viewport || { width: touch ? 390 : 1280, height: 844 }, isMobile: touch, hasTouch: touch });
   try {
@@ -291,6 +298,7 @@ async function verifyInteractions(browser, origin, touch, viewport) {
     let afterBasic = await latest(frame); const basicState = playerState(afterBasic);
     assert(pokemonName(basicState.bench[0]).includes('Bulbasaur BS'), 'padding drop should fill the first empty engine slot');
     assert.equal(basicState.bench[3].cards.length, 1, 'occupied slot must remain unchanged');
+    assert.deepEqual((await visualBench(bench)).map(slot => slot.index), [1,3,0], 'the third Pokemon must append visually');
     // Repeat onto a Pokemon whose visual position differs from its engine slot.
     const occupied = bench.locator('.ptcg-board-drop-target').nth(3);
     if (touch) await touchDrag(page, frame, basic, async () => { const r = await occupied.boundingBox(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 }; });
@@ -298,6 +306,7 @@ async function verifyInteractions(browser, origin, touch, viewport) {
     await frame.waitForFunction(before => window.__benchMessages.filter(m => m.type === 'StateUpdate').at(-1).data.stateData !== before, afterBasic);
     afterBasic = await latest(frame);
     assert(pokemonName(playerState(afterBasic).bench[2]).includes('Bulbasaur BS'), 'occupied-card drop should fill the next open slot');
+    assert.deepEqual((await visualBench(bench)).map(slot => slot.index), [1,3,0,2], 'the fourth Pokemon must append visually');
     const evolution = frame.locator('.hand-card[aria-label^="Charmeleon,"]');
     const target = bench.locator('.ptcg-board-drop-target').nth(1);
     if (touch) await touchDrag(page, frame, evolution, async () => { const r = await target.boundingBox(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 }; });
@@ -325,7 +334,48 @@ async function verifyInteractions(browser, origin, touch, viewport) {
   } finally { await context.close(); }
 }
 
-module.exports = { fixture, load, geometry, assertVisible, verifyInteractions, verifyPileActions, verifyEndTurn, verifyBenchPacking };
+module.exports = { fixture, load, geometry, assertVisible, verifyInteractions, verifyPileActions, verifyEndTurn, verifyBenchPacking, verifyBenchAppend };
+
+async function verifyBenchAppend(browser, origin, touch) {
+  const results = [];
+  for (const capacity of [5,8]) {
+    const context = await browser.newContext({ viewport: touch ? { width:375,height:537 } : { width:1280,height:800 }, isMobile:touch, hasTouch:touch });
+    try {
+      await context.addInitScript(() => { window.__benchMessages=[]; window.ReactNativeWebView={ postMessage:text=>window.__benchMessages.push(JSON.parse(text)) }; });
+      const page=await context.newPage();
+      const frame=await load(page, origin, fixture({ expanded:capacity===8, benchIndices:{ player:[1,2,3,4] } }));
+      const bench=frame.locator('.ptcg-board-bench').last();
+      const initial=await latest(frame), before=await visualBench(bench);
+      assert.deepEqual(before.map(slot=>slot.index), [1,2,3,4]);
+      const basic=frame.locator('.hand-card[aria-label^="Bulbasaur,"]');
+      if(touch) await touchDrag(page,frame,basic,async()=>{const r=await bench.boundingBox();return{x:r.x+3,y:r.y+r.height/2};});
+      else await basic.dragTo(bench.locator('.ptcg-board-drop-target').nth(1));
+      await frame.waitForFunction(before=>window.__benchMessages.filter(m=>m.type==='StateUpdate').at(-1).data.stateData!==before,initial);
+      const played=await latest(frame), after=await visualBench(bench);
+      assert(pokemonName(playerState(played).bench[0]).includes('Bulbasaur BS'));
+      assert.deepEqual(after.map(slot=>slot.index), [1,2,3,4,0], 'a new fifth Pokemon must use the fifth visual spot');
+      for(const slot of before){const current=after.find(item=>item.index===slot.index);assert(Math.abs(current.x-slot.x)<1&&Math.abs(current.y-slot.y)<1,'existing Pokemon must stay in their spots');}
+      const evolution=frame.locator('.hand-card[aria-label^="Charmeleon,"]');
+      const target=bench.locator('.ptcg-board-drop-target').nth(1);
+      if(touch) await touchDrag(page,frame,evolution,async()=>{const r=await target.boundingBox();return{x:r.x+r.width/2,y:r.y+r.height/2};});
+      else await evolution.dragTo(target);
+      await frame.waitForFunction(before=>window.__benchMessages.filter(m=>m.type==='StateUpdate').at(-1).data.stateData!==before,played);
+      assert(pokemonName(playerState(await latest(frame)).bench[1]).includes('Charmeleon BS'));
+      assert.deepEqual((await visualBench(bench)).map(slot=>slot.index),[1,2,3,4,0],'evolving must preserve visual order');
+      for(const [stateData,expected] of [[played,[1,2,3,4,0]],[initial,[1,2,3,4]],[played,[1,2,3,4,0]]]){
+        await frame.evaluate(stateData=>window.dispatchEvent(new MessageEvent('message',{data:JSON.stringify({type:'PushStateChange',data:{stateData}})})),stateData);
+        await frame.waitForFunction(expected=>[...document.querySelectorAll('.ptcg-board-bench')].at(-1).querySelectorAll(':scope > :not(.bench-slot-empty)').length===expected,expected.length);
+        assert.deepEqual((await visualBench(bench)).map(slot=>slot.index),expected,'Undo/redo must restore the visual bench order');
+      }
+      if(touch&&capacity===5){
+        await frame.waitForFunction(()=>[...document.images].filter(image=>{const r=image.getBoundingClientRect();return r.width>0&&r.top<innerHeight&&r.bottom>0;}).every(image=>image.complete));
+        await page.screenshot({path:'/tmp/prizemap-fifth-bench-pokemon.png'});
+      }
+      results.push({capacity,fifthVisualSpot:true,existingPokemonStationary:true,evolution:true,undoRedo:true});
+    } finally { await context.close(); }
+  }
+  return {benchAppend:touch?'touch':'mouse',results};
+}
 
 async function verifyBenchPacking(browser, origin) {
   const results = [];
@@ -564,6 +614,8 @@ if (require.main === module) (async () => {
     results.push(await verifyPileActions(browser, origin));
     results.push(await verifyStablePositions(browser, origin));
     results.push(await verifyBenchPacking(browser, origin));
+    results.push(await verifyBenchAppend(browser, origin, true));
+    results.push(await verifyBenchAppend(browser, origin, false));
     results.push(await verifyInteractions(browser, origin, true));
     results.push(await verifyInteractions(browser, origin, false));
     console.log(JSON.stringify({ ok: true, results }, null, 2));

@@ -123,6 +123,43 @@ describe('responsive bench and drops', () => {
     for (const index of [1, 2, 3, 4]) { expect(bench[index].cards.length).toBe(1); }
   });
 
+  it('appends a fifth Pokemon even when the engine reuses the first empty slot', () => {
+    const bench = board.bottomPlayer.bench;
+    for (const index of [1, 2, 3, 4]) { bench[index].cards = [new Basic()]; }
+    board.ngOnChanges({});
+    const before = [1, 2, 3, 4].map(index => board.benchSlotArea(board.bottomPlayer, index));
+    bench[0].cards = [new Basic()];
+    board.ngOnChanges({});
+    expect(board.benchSlotArea(board.bottomPlayer, 0)).toBe('2 / 2');
+    expect([1, 2, 3, 4].map(index => board.benchSlotArea(board.bottomPlayer, index))).toEqual(before);
+    bench[1].cards.push(new Evolution());
+    board.ngOnChanges({});
+    expect(board.benchSlotArea(board.bottomPlayer, 1)).toBe('1 / 1');
+  });
+
+  it('restores the exact visual order on Undo and Reset and clears it for a new puzzle', () => {
+    const bench = board.bottomPlayer.bench;
+    for (const index of [1, 2, 3, 4]) { bench[index].cards = [new Basic()]; }
+    board.gameState.stateData = 'initial'; board.ngOnChanges({});
+    bench[0].cards = [new Basic()];
+    board.gameState.stateData = 'fifth'; board.ngOnChanges({});
+    const beforeRemoval = bench[2].cards;
+    bench[2].cards = [];
+    board.gameState.stateData = 'removed'; board.ngOnChanges({});
+    expect(board.benchSlotArea(board.bottomPlayer, 0)).toBe('2 / 1');
+    bench[2].cards = beforeRemoval;
+    board.gameState.stateData = 'fifth'; board.ngOnChanges({});
+    expect(board.benchSlotArea(board.bottomPlayer, 0)).toBe('2 / 2');
+    expect(board.benchSlotArea(board.bottomPlayer, 2)).toBe('1 / 2');
+    bench[0].cards = [];
+    board.gameState.stateData = 'initial'; board.ngOnChanges({});
+    expect(board.benchSlotArea(board.bottomPlayer, 4)).toBe('2 / 1');
+    bench[0].cards = [new Basic()];
+    board.gameState.gameId++;
+    board.gameState.stateData = 'new puzzle'; board.ngOnChanges({});
+    expect(board.benchSlotArea(board.bottomPlayer, 0)).toBe('1 / 1');
+  });
+
   it('uses extra height for larger opponent cards without shrinking Active cards', () => {
     board.bottomPlayer.bench.forEach(slot => slot.cards = [new Basic()]);
     board.topPlayer.bench.forEach(slot => slot.cards = [new Basic()]);

@@ -70,6 +70,10 @@ export class BoardComponent implements AfterViewInit, OnDestroy, OnChanges, OnIn
   private resizeObserver?: ResizeObserver;
   private settingsSubscription: Subscription;
   private cardScale = 1;
+  private benchOrderGameId?: number;
+  private benchOrders = new Map<number, number[]>();
+  private benchOrderSnapshots = new Map<string, Map<number, number[]>>();
+  private initialBenchSnapshot?: string;
 
   // Add these for use in the template
   public PlayerType = PlayerType;
@@ -172,6 +176,7 @@ export class BoardComponent implements AfterViewInit, OnDestroy, OnChanges, OnIn
       this.discardSize = 0;
     }
 
+    this.updateBenchOrder();
     this.updateLayout();
   }
 
@@ -194,14 +199,43 @@ export class BoardComponent implements AfterViewInit, OnDestroy, OnChanges, OnIn
     return this.isCompact ? Math.ceil(this.benchSize(player) / this.benchColumns(player)) : 1;
   }
 
+  private updateBenchOrder(): void {
+    if (this.benchOrderGameId !== this.gameState?.gameId) {
+      this.benchOrderGameId = this.gameState?.gameId;
+      this.benchOrders.clear();
+      this.benchOrderSnapshots.clear();
+      this.initialBenchSnapshot = undefined;
+    }
+    const snapshot = this.gameState?.stateData;
+    const restored = snapshot && this.benchOrderSnapshots.get(snapshot);
+    if (restored) {
+      this.benchOrders = new Map(restored);
+      return;
+    }
+    for (const player of [this.topPlayer, this.bottomPlayer]) {
+      if (!player) { continue; }
+      const occupied = player.bench.map((slot, index) => index).filter(index => player.bench[index].cards.length > 0);
+      const previous = this.benchOrders.get(player.id) || [];
+      this.benchOrders.set(player.id, previous.filter(index => occupied.includes(index))
+        .concat(occupied.filter(index => !previous.includes(index))));
+    }
+    if (snapshot) {
+      // Keep the initial order for Reset and recent orders for the engine's 30-action Undo history.
+      this.initialBenchSnapshot = this.initialBenchSnapshot || snapshot;
+      this.benchOrderSnapshots.set(snapshot, new Map(this.benchOrders));
+      if (this.benchOrderSnapshots.size > 100) {
+        const oldest = Array.from(this.benchOrderSnapshots.keys()).find(key => key !== this.initialBenchSnapshot);
+        this.benchOrderSnapshots.delete(oldest);
+      }
+    }
+  }
+
   public benchSlotArea(player: Player, index: number): string {
     const bench = player?.bench || [];
     const occupied = !!bench[index]?.cards.length;
-    let position = 0;
-    for (let i = 0; i < bench.length; i++) {
-      const otherOccupied = !!bench[i].cards.length;
-      if (otherOccupied === occupied ? i < index : otherOccupied) { position++; }
-    }
+    const order = this.benchOrders.get(player?.id) || [];
+    const position = occupied ? order.indexOf(index)
+      : order.length + bench.slice(0, index).filter(slot => !slot.cards.length).length;
     const columns = this.benchColumns(player);
     const row = Math.floor(position / columns);
     const column = position % columns;
