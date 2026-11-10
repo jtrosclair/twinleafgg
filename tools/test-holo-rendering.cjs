@@ -14,6 +14,11 @@ const { chromium } = require('playwright');
 const root = path.resolve(__dirname, '..');
 const snapshot = JSON.parse(zlib.gunzipSync(fs.readFileSync(
   path.join(__dirname, 'fixtures/phantom-maze.snapshot.json.gz'))));
+// Preserve the real puzzle and explicitly mark its Active Pokémon's Ability
+// as used, so the production component renders the actual badge.
+const abilityUsedState = JSON.parse(Buffer.from(snapshot.stateData, 'base64').toString('utf8'));
+abilityUsedState[0][0].active.boardEffect = [0]; // BoardEffect.ABILITY_USED
+const stateData = Buffer.from(JSON.stringify(abilityUsedState)).toString('base64');
 
 async function serveBuild() {
   const build = path.join(root, 'ptcg-play/dist/ptcg-play');
@@ -52,8 +57,9 @@ async function inspect(browser, origin, scenario) {
         else localStorage.setItem('holoEnabled', JSON.stringify(preference));
       } catch { /* The assertion below reports unavailable preferences. */ }
     }, scenario);
-    await page.goto(origin + '/sandbox-viewer#' + snapshot.stateData, { waitUntil: 'domcontentloaded' });
+    await page.goto(origin + '/sandbox-viewer#' + stateData, { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('.hand-card .card-container');
+    await page.waitForSelector('.ptcg-board-player:not(.upside-down) .ptcg-board-active .ptcg-ability-used');
     // Require real CDN artwork to finish, rather than accepting a placeholder.
     await page.waitForFunction(() => {
       const img = document.querySelector('.hand-card img.base-image');
@@ -75,6 +81,21 @@ async function inspect(browser, origin, scenario) {
       const border = playableCard && getComputedStyle(playableCard, '::after');
       const arrow = playable?.querySelector('.playable-arrow');
       const overlays = [...document.querySelectorAll('.holo-overlay')];
+      const ability = document.querySelector('.ptcg-board-player:not(.upside-down) .ptcg-board-active .ptcg-ability-used');
+      const badge = ability.querySelector('.ptcg-badge');
+      const abilityStyle = getComputedStyle(ability);
+      const abilityRect = badge.getBoundingClientRect();
+      const hitX = abilityRect.left + abilityRect.width / 2;
+      const hitY = abilityRect.top + abilityRect.height / 2;
+      const priorPointerEvents = ability.style.pointerEvents;
+      const pointerEvents = abilityStyle.pointerEvents;
+      // The real indicator deliberately ignores pointer events. Enable them
+      // only for hit-testing: elementFromPoint then checks actual paint order
+      // at the badge's centre rather than merely comparing z-index numbers.
+      ability.style.pointerEvents = 'auto';
+      const top = document.elementFromPoint(hitX, hitY);
+      const abilityOnTop = !!top && ability.contains(top);
+      ability.style.pointerEvents = priorPointerEvents;
       return {
         preference: localStorage.getItem('holoEnabled'),
         lowGraphics: card.classList.contains('low-graphics'),
@@ -91,10 +112,18 @@ async function inspect(browser, origin, scenario) {
         transform: getComputedStyle(container).transform,
         holoClasses: document.querySelectorAll('.card-container.holo,.card-container.trainer-holo,.card-container.fullart-holo,.card-container.radiant-holo,.card-container.ace-spec-holo').length,
         visibleHolo: overlays.filter(item => getComputedStyle(item).display !== 'none').length,
+        ability: { text: badge.textContent.trim(), pointerEvents, onTop: abilityOnTop,
+          zIndex: abilityStyle.zIndex, width: abilityRect.width, height: abilityRect.height,
+          x: hitX, y: hitY, topTag: top?.tagName, topClass: top?.className },
         urls: [...document.querySelectorAll('.hand-card img.base-image')].map(img => img.getAttribute('src'))
       };
     });
     assert.equal(result.lowGraphics, scenario.low, `${scenario.name}: low-graphics class`);
+    assert(result.ability.text.length > 0 && result.ability.width > 0 && result.ability.height > 0,
+      `${scenario.name}: the actual Ability-used badge is visible and sized`);
+    assert.equal(result.ability.pointerEvents, 'none', `${scenario.name}: badge must not block drag or click`);
+    assert.equal(result.ability.onTop, true,
+      `${scenario.name}: badge must be above card artwork (hit ${result.ability.topTag}.${result.ability.topClass})`);
     assert.equal(result.preference, scenario.preference === null ? null : JSON.stringify(scenario.preference),
       `${scenario.name}: automatic preference must not be persisted`);
     assert(result.card.width > 30 && result.card.height > 40, `${scenario.name}: hand card has dimensions`);
