@@ -12,6 +12,8 @@
 
 .ptcg-table {
   position: relative;
+  // Keep board and prompt layers below application-level dialogs.
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   height: 100%;

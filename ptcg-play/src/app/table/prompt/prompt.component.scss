@@ -26,7 +26,8 @@
   position: absolute;
   right: 0;
   top: 0;
-  z-index: 2;
+  // Above board badges and animated cards, within the table stacking context.
+  z-index: 2000;
 }
 
 .ptcg-prompt-container {
@@ -93,5 +94,5 @@
   bottom: map-get($padding, large);
   left: map-get($padding, large);
   position: absolute;
-  z-index: 2;
+  z-index: 2000;
 }
