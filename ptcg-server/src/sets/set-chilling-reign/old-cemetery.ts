@@ -29,7 +29,7 @@ export class OldCemetery extends TrainerCard {
       throw new GameError(GameMessage.CANNOT_USE_STADIUM);
     }
 
-    if (effect instanceof AttachEnergyEffect && StateUtils.getStadiumCard(state) === this) {
+    if (effect instanceof AttachEnergyEffect && effect.sourceZone === undefined && StateUtils.getStadiumCard(state) === this) {
 
       const checkPokemonTypeEffect = new CheckPokemonTypeEffect(effect.target);
       store.reduceEffect(state, checkPokemonTypeEffect);

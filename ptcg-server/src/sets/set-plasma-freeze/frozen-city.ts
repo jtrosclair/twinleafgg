@@ -22,7 +22,7 @@ export class FrozenCity extends TrainerCard {
 
   reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && StateUtils.getStadiumCard(state) === this) {
+    if (effect instanceof AttachEnergyEffect && effect.sourceZone === undefined && StateUtils.getStadiumCard(state) === this) {
       const owner = StateUtils.findOwner(state, effect.target);
 
       store.log(state, GameLog.LOG_PLAYER_PLACES_DAMAGE_COUNTERS, { name: owner.name, damage: 20, target: effect.target.getPokemonCard()!.name, effect: this.name });

@@ -1015,9 +1015,14 @@ though Buddy Boost specifies Basic Fire Energy. Gengar & Mimikyu-GX and Alolan
 Golem-GX, which restrict plays from hand rather than this Ability attachment,
 correctly allow it. Addressing both cases requires distinguishing attachment
 from an Ability from a card played from hand and preserving notification order.
-Frozen City PLF and Old Cemetery CRE also need source checks: their current
-attachment reactions do not distinguish deck/discard effects from hand
-attachments. This predates the targeted source annotation and remains open.
+Frozen City PLF and Old Cemetery CRE now skip their hand-attachment reactions
+for explicitly marked deck/discard attachments, including Azurill. Manual hand
+attachments retain their existing behavior; unannotated effect-driven calls
+retain legacy behavior and still require review. The candidate passed 123
+focused checks, 532 matching saved states and 3,466 matching initial actions.
+Island Cave HL and Calamitous
+Snowy Mountain PAL need separate source-aware review; Frozen City has a
+separate Team Plasma exception issue.
 
 Test infrastructure: Mega Evolution's mixed M1S/M1L module exposed a helper
 assumption that one module has exactly one set code, and partial pre-registration
