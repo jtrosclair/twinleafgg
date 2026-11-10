@@ -1,9 +1,10 @@
 import { PokemonCard, Stage, CardTag, CardType, PowerType, StoreLike, State, GameError, GameMessage } from "../../game";
 import { Effect } from "../../game/store/effects/effect";
+import type { CopiedAttackOwnershipContract } from "../../game/store/prefabs/copy-attack-delegation";
 import { AttackEffect } from "../../game/store/effects/game-effects";
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF } from "../../game/store/prefabs/prefabs";
 
-export class MegaGolurkex extends PokemonCard {
+export class MegaGolurkex extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom: string = 'Golett';
   public tags = [CardTag.POKEMON_SV_MEGA, CardTag.POKEMON_ex];
@@ -38,20 +39,20 @@ export class MegaGolurkex extends PokemonCard {
     if (effect instanceof AttackEffect && effect.player.active.getPokemonCard() === this) {
       const player = effect.player;
 
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      if (player.hand.cards.length < 10) {
+      if (!IS_ABILITY_BLOCKED(store, state, player, this) && player.hand.cards.length < 10) {
         throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
       }
     }
 
-    // Goliath Punch
+    return MegaGolurkex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  /** Goliath's Punch is attack-owned; Restricted Activation is not copied. */
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    // Ref: set-ascended-heroes/zangoose-ex.ts (attack self-damage).
     if (WAS_ATTACK_USED(effect, 0, this)) {
       THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 30);
     }
-
     return state;
   }
 }

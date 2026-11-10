@@ -912,3 +912,12 @@ Historical batch 25 and the generic copied-handler work were paused for this
 pivot; the prior upstream watermark remains unchanged. See the per-commit
 ledger for partial ports and deferred portions; do not treat the DLR pivot as
 a full merge of the latest upstream commits.
+
+
+Post-DLR correction: Mega Golurk ex's Goliath's Punch keeps its 30 recoil
+when copied and when Restricted Activation is suppressed. The direct Ability
+still blocks attacks with fewer than 10 cards in hand when active. All three
+DLR prints inherit the corrected implementation. The isolated candidate passed
+33 focused cases, 530 matching saved states, and 3,457 matching initial actions.
+The two unannotated copied-handler ownership acceptance failures remain open;
+the fix uses the existing explicit attack-ownership contract.
