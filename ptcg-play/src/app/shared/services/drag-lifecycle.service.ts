@@ -5,14 +5,23 @@ import { DRAG_DROP_MANAGER } from '@ng-dnd/core';
 interface DragLifecycleManager {
   getMonitor(): { isDragging(): boolean };
   getActions(): { endDrag(): void };
-  getBackend(): { teardown(): void; setup(): void };
+  getBackend(): { teardown(): void; setup(): void; previewEnabled?(): boolean };
 }
 
 @Injectable({ providedIn: 'root' })
 export class DragLifecycleService implements OnDestroy {
   private readonly removeListeners: Array<() => void> = [];
 
-  private readonly cancelDrag = (): void => {
+  private readonly cancelDrag = (event: Event): void => {
+    if (event.type === 'pointercancel') {
+      const pointerType = (event as PointerEvent).pointerType;
+      // Native HTML5 drag takes over the pointer and normally cancels mouse
+      // (and pen) pointer events. That is not a cancelled drag operation.
+      if (pointerType === 'mouse'
+        || (pointerType === 'pen' && this.manager.getBackend().previewEnabled?.() !== true)) {
+        return;
+      }
+    }
     if (this.manager.getMonitor().isDragging()) {
       // An interrupted gesture is never a drop. Ending it also clears the
       // preview, source placeholder and the hand's local dragging flag.

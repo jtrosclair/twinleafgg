@@ -430,3 +430,62 @@ test(`exact Dengo active Turo and promotion ${promotionIndex} (${promotedName}) 
   }
 });
 }
+
+for (const pointerType of ['mouse', 'pen']) test(`HTML5Backend completes a ${pointerType} drag after the native pointercancel handoff`, async () => {
+  const { HTML5Backend } = require(path.join(backendRoot, 'react-dnd-html5-backend'));
+  const view = renderCard();
+  const manager = createDragDropManager(HTML5Backend, window);
+  const backend = manager.getBackend(), registry = manager.getRegistry(), monitor = manager.getMonitor();
+  const drops = [], ends = [];
+  const target = document.createElement('div'); document.body.appendChild(target);
+  const sourceId = registry.addSource('HAND_CARD', {
+    canDrag: () => true, beginDrag: () => ({ id: 73 }),
+    isDragging: current => current.getSourceId() === sourceId,
+    endDrag: current => ends.push(current.didDrop())
+  });
+  const targetId = registry.addTarget('HAND_CARD', {
+    canDrop: () => true, hover() {}, drop: current => { drops.push(current.getItem().id); return {}; }
+  });
+  const disconnectSource = backend.connectDragSource(sourceId, view.host);
+  const disconnectTarget = backend.connectDropTarget(targetId, target);
+  const lifecycle = new DragLifecycleService(manager, document, { run: fn => fn() });
+  const dataTransfer = { types: [], setData() {}, getData() { return ''; }, dropEffect: 'move', effectAllowed: 'all' };
+  const sendDrag = (node, type) => {
+    const event = new window.MouseEvent(type, { bubbles: true, cancelable: true, clientX: 20, clientY: 20 });
+    Object.defineProperty(event, 'dataTransfer', { value: dataTransfer }); node.dispatchEvent(event);
+  };
+  try {
+    sendDrag(view.host, 'dragstart');
+    assert.equal(monitor.isDragging(), true, 'HTML5 backend started drag');
+    const cancel = new window.Event('pointercancel', { bubbles: true });
+    Object.defineProperty(cancel, 'pointerType', { value: pointerType });
+    view.host.dispatchEvent(cancel);
+    assert.equal(monitor.isDragging(), true, `native ${pointerType} pointercancel must not cancel HTML5 drag`);
+    await new Promise(resolve => setTimeout(resolve, 5));
+    sendDrag(target, 'dragenter'); sendDrag(target, 'dragover'); sendDrag(target, 'drop');
+    assert.equal(monitor.isDragging(), false);
+    assert.deepEqual(drops, [73]); assert.deepEqual(ends, [true]);
+  } finally {
+    lifecycle.ngOnDestroy(); if (monitor.isDragging()) manager.getActions().endDrag();
+    disconnectSource(); disconnectTarget(); registry.removeTarget(targetId); registry.removeSource(sourceId);
+    backend.teardown(); target.remove(); view.destroy();
+  }
+});
+
+for (const pointerType of ['touch', 'pen']) test(`touch backend cancels an interrupted ${pointerType} pointer drag`, () => {
+  const view = renderCard(); const image = view.host.querySelector('img');
+  const drag = connectTouchDrag(view);
+  // MultiBackend enables the custom preview while the TouchBackend is active.
+  drag.manager.getBackend().previewEnabled = () => true;
+  const lifecycle = new DragLifecycleService(drag.manager, document, { run: fn => fn() });
+  try {
+    dispatchTouch(image, 'touchstart', 10, 10); dispatchTouch(image, 'touchmove', 150, 150);
+    assert.equal(drag.monitor.isDragging(), true);
+    const event = new window.Event('pointercancel', { bubbles: true });
+    Object.defineProperty(event, 'pointerType', { value: pointerType }); image.dispatchEvent(event);
+    assert.equal(drag.monitor.isDragging(), false); assert.deepEqual(drag.drops, []); assert.deepEqual(drag.ends, [false]);
+    dispatchTouch(image, 'touchstart', 10, 10); dispatchTouch(image, 'touchmove', 150, 150);
+    dispatchTouch(image, 'touchmove', 160, 160); dispatchTouch(image, 'touchend', 160, 160);
+    assert.deepEqual(drag.drops, [73]); assert.deepEqual(drag.ends, [false, true]);
+  } finally { lifecycle.ngOnDestroy(); drag.destroy(); view.destroy(); }
+});
