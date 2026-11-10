@@ -41,7 +41,7 @@ export class Moltres extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && effect.target.cards.includes(this)) {
+    if (effect instanceof AttachEnergyEffect && effect.sourceZone === undefined && effect.target.cards.includes(this)) {
       if (IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
         return state;
       }

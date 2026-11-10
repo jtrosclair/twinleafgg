@@ -8,6 +8,7 @@ import { CheckPokemonPowersEffect } from '../../game/store/effects/check-effects
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { StateUtils } from '../../game/store/state-utils';
 import { PlayerType } from '../../game/store/actions/play-card-action';
+import { Player } from '../../game/store/state/player';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { PokemonCardList } from '../../game';
@@ -57,21 +58,29 @@ export class Garbodor extends PokemonCard {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
-      let isGarbodorWithToolInPlay = false;
+      let garbodorOwner: Player | undefined;
 
       player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
         if (card === this && cardList.tools.length > 0) {
-          isGarbodorWithToolInPlay = true;
+          garbodorOwner = player;
         }
       });
 
       opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card) => {
         if (card === this && cardList.tools.length > 0) {
-          isGarbodorWithToolInPlay = true;
+          // Prefer a friendly copy if a duplicated reference exists on both
+          // sides: its own Garbotoxin is not stopped by opposing-only Hood.
+          garbodorOwner = garbodorOwner ?? opponent;
         }
       });
 
-      if (isGarbodorWithToolInPlay) {
+      if (garbodorOwner) {
+        const target = StateUtils.findPokemonSlot(state, effect.target);
+        if (target && target.getPokemonCard() === effect.target) {
+          const canApply = new EffectOfAbilityEffect(garbodorOwner, this.powers[0], this, target);
+          store.reduceEffect(state, canApply);
+          if (canApply.preventDefault || !canApply.target) return state;
+        }
         // Filter out all abilities except Garbotoxin
         effect.powers = effect.powers.filter(power =>
           power.powerType !== PowerType.ABILITY || power.name === 'Garbotoxin'
@@ -85,27 +94,29 @@ export class Garbodor extends PokemonCard {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
-      let isGarbodorWithToolInPlay = false;
+      let garbodorOwner: Player | undefined;
 
       player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
         if (card === this && cardList.tools.length > 0) {
-          isGarbodorWithToolInPlay = true;
+          garbodorOwner = player;
         }
       });
 
       opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card) => {
         if (card === this && cardList.tools.length > 0) {
-          isGarbodorWithToolInPlay = true;
+          // Prefer a friendly copy if a duplicated reference exists on both
+          // sides: its own Garbotoxin is not stopped by opposing-only Hood.
+          garbodorOwner = garbodorOwner ?? opponent;
         }
       });
 
-      if (!isGarbodorWithToolInPlay) {
+      if (!garbodorOwner) {
         return state;
       }
 
       // Try reducing ability for each player  
       try {
-        const powerEffect = new PowerEffect(player, this.powers[0], this);
+        const powerEffect = new PowerEffect(garbodorOwner, this.powers[0], this);
         store.reduceEffect(state, powerEffect);
       } catch {
         return state;
@@ -115,10 +126,10 @@ export class Garbodor extends PokemonCard {
       const cardList = StateUtils.findCardList(state, effect.card);
       if (cardList instanceof PokemonCardList) {
         const canApplyAbility = new EffectOfAbilityEffect(
-          isGarbodorWithToolInPlay ? player : opponent, this.powers[0], this, cardList);
+          garbodorOwner, this.powers[0], this, cardList);
         canApplyAbility.target = cardList;
         store.reduceEffect(state, canApplyAbility);
-        if (!canApplyAbility.target) {
+        if (canApplyAbility.preventDefault || !canApplyAbility.target) {
           return state;
         }
       }

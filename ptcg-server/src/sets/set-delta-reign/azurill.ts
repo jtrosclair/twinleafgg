@@ -57,7 +57,7 @@ export class Azurill extends PokemonCard {
         return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
           player.deck.applyOrder(order);
           for (const entry of attached) {
-            if (entry.target.cards.includes(entry.card)) store.reduceEffect(state, new AttachEnergyEffect(player, entry.card, entry.target));
+            if (entry.target.cards.includes(entry.card)) store.reduceEffect(state, new AttachEnergyEffect(player, entry.card, entry.target, 'deck'));
           }
         });
       });

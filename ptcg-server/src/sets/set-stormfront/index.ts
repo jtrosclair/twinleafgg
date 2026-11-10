@@ -1,3 +1,13 @@
+import { Grovyle } from './grovyle';
+import { Duskull3 } from './duskull3';
+import { Cherubi } from './cherubi';
+import { Shelgon } from './shelgon';
+import { Stunky } from './stunky';
+import { Treecko } from './treecko';
+import { Voltorb2 } from './voltorb2';
+import { Swinub } from './swinub';
+import { Bidoof } from './bidoof';
+import { Skorupi } from './skorupi';
 import { EnergySwitchPKSF, GreatBallSF, PotionSF, SwitchSF, CharmanderSF, CharmeleonSF, CharizardSF } from './other-prints';
 import { Card } from '../../game/store/card/card';
 import { Combee } from './combee';
@@ -58,4 +68,14 @@ export const setStormfront: Card[] = [
   new CharmanderSF(),
   new CharmeleonSF(),
   new CharizardSF(),
+  new Grovyle(),
+  new Duskull3(),
+  new Cherubi(),
+  new Shelgon(),
+  new Stunky(),
+  new Treecko(),
+  new Voltorb2(),
+  new Swinub(),
+  new Bidoof(),
+  new Skorupi(),
 ];

@@ -69,6 +69,7 @@ const SET_CODE_REGEX = /^[A-Z0-9-]{2,8}$/;
 
 let setCodeToModules: Map<string, string[]> | undefined;
 const loadedSetModules = new Set<string>();
+const additionallyScannedCodes = new Set<string>();
 
 function getExportedSetModulePaths(): string[] {
   const indexContent: string = fs.readFileSync(path.join(setsDir, 'index.ts'), 'utf8');
@@ -152,9 +153,42 @@ function getSetCodeToModules(): Map<string, string[]> {
   return map;
 }
 
+// Some exported modules contain cards whose printed fullName uses another set
+// code (and a module can contain multiple codes). Search those declarations
+// lazily so normal tests retain the inexpensive initial module index.
+function discoverAdditionalSetModules(setCode: string): string[] {
+  const map = getSetCodeToModules();
+  if (additionallyScannedCodes.has(setCode)) return map.get(setCode) ?? [];
+  additionallyScannedCodes.add(setCode);
+  const modules = map.get(setCode) ?? [];
+  for (const moduleName of getExportedSetModulePaths()) {
+    if (modules.includes(moduleName)) continue;
+    const moduleDir = path.join(setsDir, moduleName);
+    if (!fs.existsSync(moduleDir) || !fs.statSync(moduleDir).isDirectory()) continue;
+    const files: string[] = fs.readdirSync(moduleDir).filter((file: string) => file.endsWith('.ts') && file !== 'index.ts');
+    for (const file of files) {
+      const source: string = fs.readFileSync(path.join(moduleDir, file), 'utf8');
+      const declarations = /public\s+(set|fullName)(?:\s*:\s*string)?\s*=\s*(['"])((?:\\.|(?!\2)[^\\])*)\2/g;
+      let declaration: RegExpExecArray | null;
+      let found = false;
+      while ((declaration = declarations.exec(source)) !== null) {
+        const value = declaration[3];
+        const printedCode = declaration[1] === 'set' ? value.toUpperCase()
+          : /\s([A-Z0-9-]{2,8})(?:\s+\d+)?$/i.exec(value)?.[1].toUpperCase();
+        if (printedCode === setCode) { found = true; break; }
+      }
+      if (found) { modules.push(moduleName); break; }
+    }
+  }
+  if (modules.length) map.set(setCode, modules);
+  return modules;
+}
+
 function extractSetCodeFromFullName(fullName: string): string {
   const tokens = fullName.trim().split(/\s+/);
-  const lastToken = tokens[tokens.length - 1]?.toUpperCase();
+  const suffix = tokens[tokens.length - 1]?.toUpperCase();
+  const lastToken = /^\d+$/.test(suffix || '') && tokens.length > 2
+    ? tokens[tokens.length - 2].toUpperCase() : suffix;
   if (!lastToken || !SET_CODE_REGEX.test(lastToken)) {
     throw new Error(`[test-helpers] Could not infer set code from card fullName "${fullName}"`);
   }
@@ -173,30 +207,26 @@ function loadSetModule(moduleName: string): void {
     if (!Array.isArray(value) || value.length === 0 || !(value[0] instanceof Card)) {
       continue;
     }
-    try {
-      cardManager.defineSet(value);
-    } catch (error: any) {
-      if (!error.message?.startsWith('Multiple cards with the same name')) {
-        throw error;
-      }
-    }
+    const missing = value.filter((card: Card) => !cardManager.isCardDefined(card.fullName));
+    if (missing.length) cardManager.defineSet(missing);
   }
   loadedSetModules.add(moduleName);
 }
 
-function ensureSetCodeLoaded(setCode: string): void {
-  const modulePaths = getSetCodeToModules().get(setCode);
-  if (!modulePaths || modulePaths.length === 0) {
-    throw new Error(`[test-helpers] No set module found for set code "${setCode}"`);
-  }
-
+function ensureSetCodeLoaded(setCode: string, fullName: string): void {
+  let modulePaths = getSetCodeToModules().get(setCode) ?? [];
   for (const moduleName of modulePaths) {
-    try {
-      loadSetModule(moduleName);
-    } catch (error: any) {
-      throw new Error(`[test-helpers] Failed to load set module "${moduleName}" (${setCode}): ${error.message}`);
+    try { loadSetModule(moduleName); }
+    catch (error: any) { throw new Error(`[test-helpers] Failed to load set module "${moduleName}" (${setCode}): ${error.message}`); }
+  }
+  if (!CardManager.getInstance().isCardDefined(fullName)) {
+    modulePaths = discoverAdditionalSetModules(setCode);
+    for (const moduleName of modulePaths) {
+      try { loadSetModule(moduleName); }
+      catch (error: any) { throw new Error(`[test-helpers] Failed to load set module "${moduleName}" (${setCode}): ${error.message}`); }
     }
   }
+  if (!modulePaths.length) throw new Error(`[test-helpers] No set module found for set code "${setCode}"`);
 }
 
 export function ensureCardsRegistered(cardNames: string[] = []): void {
@@ -208,7 +238,7 @@ export function ensureCardsRegistered(cardNames: string[] = []): void {
       continue;
     }
     const setCode = extractSetCodeFromFullName(fullName);
-    ensureSetCodeLoaded(setCode);
+    ensureSetCodeLoaded(setCode, fullName);
   }
 }
 

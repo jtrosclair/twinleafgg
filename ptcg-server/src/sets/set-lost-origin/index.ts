@@ -1,3 +1,4 @@
+import { InkayLOR77 } from './inkay77';
 import { Card } from '../../game/store/card/card';
 import { Abomasnow } from './abomasnow';
 import { AerodactylV } from './aerodactyl-v';
@@ -471,4 +472,5 @@ export const setLostOrigin: Card[] = [
   new AerodactylVstar2(),
   new Fantina3(),
   new Iscan3(),
+  new InkayLOR77(),
 ];

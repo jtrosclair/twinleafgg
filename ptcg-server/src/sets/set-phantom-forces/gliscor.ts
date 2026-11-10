@@ -55,7 +55,7 @@ export class Gliscor extends PokemonCard {
     }
 
     // Block energy attachment to marked Pokemon
-    if (effect instanceof AttachEnergyEffect) {
+    if (effect instanceof AttachEnergyEffect && effect.sourceZone === undefined) {
       if (effect.target.marker.hasMarker(this.BLOCK_ATTACH_MARKER, this)) {
         throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
       }

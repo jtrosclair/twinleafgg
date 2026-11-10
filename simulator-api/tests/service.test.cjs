@@ -254,3 +254,75 @@ test('malformed inputs, invalid snapshots and unavailable or stateful routes ret
   for (const [request,status] of cases) assert.equal((await handle(request)).status, status, request.url);
   assert.equal((await handle(new Request('https://api.example.test/v1/game/validate-state', { method:'OPTIONS' }))).status, 204);
 });
+
+test('Unleashed Larvitar numbers select exact prints across both import endpoints', async () => {
+  const engine = await mod;
+  const request = '1 Larvitar UL 050\n2 Larvitar UL 051\n1 Aipom MD 51\n1 Pupitar UL 39\n1 Onix UL 57';
+  const result = await engine.handle(post('/v1/deck-import/parse', { deckList: request }));
+  assert.equal(result.status, 200);
+  const body = await result.json();
+  assert.deepEqual(body.unknownCards, []);
+  assert.deepEqual(body.knownCards.map(c => [c.fullName, c.quantity]), [
+    ['Larvitar UL', 1], ['Larvitar UL2', 2], ['Aipom MD2', 1], ['Pupitar UL2', 1], ['Onix UL2', 1]
+  ]);
+  const lookup = await engine.handle(post('/v1/deck-import/get-cards', { cards: [
+    'Larvitar UL 050', 'Larvitar UL 051', 'Larvitar UL', 'Larvitar UL2'
+  ] }));
+  const cards = await lookup.json();
+  assert.deepEqual(cards.cards.map(c => c.fullName), ['Larvitar UL', 'Larvitar UL2', 'Larvitar UL', 'Larvitar UL2']);
+});
+
+test('an unavailable numbered Larvitar is not substituted with its other print', async () => {
+  const engine = await mod;
+  engine.ensureClientCards();
+  const manager = engine.CardManager.getInstance();
+  const original = manager.getAllCards;
+  try {
+    const all = original.call(manager);
+    for (const missing of ['50', '51']) {
+      manager.getAllCards = () => all.filter(card => !(card.set === 'UL' && card.name === 'Larvitar' && card.setNumber === missing));
+      const parser = new engine.DeckImportParser();
+      for (const prefix of ['', '0']) {
+        const result = parser.parseDeckList(`1 Larvitar UL ${prefix}50\n1 Larvitar UL ${prefix}51`);
+        assert.deepEqual(result.knownCards.map(card => card.setNumber), [missing === '50' ? '51' : '50']);
+        assert.equal(result.unknownCards.length, 1);
+        assert.deepEqual(parser.getCards([`Larvitar UL ${prefix}50`, `Larvitar UL ${prefix}51`]).cards.map(card => card.setNumber), [missing === '50' ? '51' : '50']);
+      }
+    }
+  } finally {
+    manager.getAllCards = original;
+  }
+});
+
+test('round-26 numbered card names select their exact registered prints', async () => {
+  const engine = await mod; const fixtures = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/round26-printed-names.json')));
+  const result = await engine.handle(post('/v1/deck-import/parse', { deckList: fixtures.map(c => `1 ${c.name} ${c.set} ${c.number}`).join('\n') }));
+  const body = await result.json();
+  assert.equal(result.status, 200); assert.deepEqual(body.unknownCards, []);
+  assert.deepEqual(body.knownCards.map(c => c.fullName), fixtures.map(c => c.fullName));
+  const lookup = await engine.handle(post('/v1/deck-import/get-cards', { cards: ['Inkay LOR 77', 'Duskull SF 60', 'Crobat UL 14'] }));
+  assert.deepEqual((await lookup.json()).cards.map(c => c.fullName), ['Inkay LOR 77', 'Duskull SF3', 'Crobat UL2']);
+});
+
+test('round-26 padded and unpadded missing prints never fall back to older cards', async () => {
+  const engine = await mod; engine.ensureClientCards(); const manager = engine.CardManager.getInstance(); const original = manager.getAllCards;
+  try {
+    const all = original.call(manager);
+    for (const [name, set, number, expected] of [['Inkay','LOR','77','Inkay LOR 77'], ['Duskull','SF','60','Duskull SF3'], ['Crobat','UL','14','Crobat UL2']]) {
+      const parser = new engine.DeckImportParser();
+      for (const prefix of ['', '0']) {
+        const input = `${name} ${set} ${prefix}${number}`;
+        assert.equal(parser.parseDeckList(`1 ${input}`).knownCards[0]?.fullName, expected);
+        assert.equal(parser.getCards([input]).cards[0]?.fullName, expected);
+      }
+      manager.getAllCards = () => all.filter(c => !(c.name === name && c.set === set && c.setNumber === number));
+      const absent = new engine.DeckImportParser();
+      for (const prefix of ['', '0']) {
+        const input = `${name} ${set} ${prefix}${number}`;
+        assert.equal(absent.parseDeckList(`1 ${input}`).unknownCards.length, 1);
+        assert.equal(absent.getCards([input]).cards.length, 0);
+      }
+      manager.getAllCards = original;
+    }
+  } finally { manager.getAllCards = original; }
+});

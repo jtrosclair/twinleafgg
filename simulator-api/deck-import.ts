@@ -947,8 +947,13 @@ export class DeckImportParser {
       // Preserve canonical full names; also accept the numbered external DLR
       // names used in puzzle payloads and exported deck lists.
       const externalDlr = cardIdentifier.trim().match(/^(.*?)\s+DLR\s+(\d+)$/i);
+      const unleashedLarvitar = cardIdentifier.trim().match(/^Larvitar\s+UL\s+0*(50|51)$/i);
+      const reviewedPrint = cardIdentifier.trim().match(/^(Inkay)\s+(LOR)\s+0*(77)$|^(Duskull)\s+(SF)\s+0*(60)$|^(Crobat)\s+(UL)\s+0*(14)$/i);
+      const reviewedKey = reviewedPrint && `${(reviewedPrint[1] || reviewedPrint[4] || reviewedPrint[7]).toLowerCase()}|${(reviewedPrint[2] || reviewedPrint[5] || reviewedPrint[8]).toLowerCase()}|${reviewedPrint[3] || reviewedPrint[6] || reviewedPrint[9]}`;
       const card = externalDlr
         ? findDlrPrint(dlrPrints, externalDlr[1], externalDlr[2])
+        : unleashedLarvitar ? cardsByNameSetNumber.get(`larvitar|ul|${unleashedLarvitar[1]}`)
+        : reviewedKey ? cardsByNameSetNumber.get(reviewedKey)
         : cardsByFullName.get(cardIdentifier.toLowerCase());
 
       if (card) {
@@ -1088,11 +1093,17 @@ export class DeckImportParser {
       const fullName = `${parsed.name} ${setCode}`;
       // DLR uses distinct executable identities for each numbered print and
       // paired Stadium half. Do not fall through to an unnumbered name match.
+      const unleashedLarvitar = setCode === 'UL' && normalizeName(parsed.name) === 'larvitar'
+        ? parsed.setNumber.match(/^0*(50|51)$/) : null;
+      const reviewedKey = `${normalizeName(parsed.name)}|${setCode.toLowerCase()}|${parsed.setNumber.replace(/^0+(?=\d)/, '')}`;
+      const reviewedPrint = ['inkay|lor|77', 'duskull|sf|60', 'crobat|ul|14'].includes(reviewedKey);
       let card = setCode === 'DLR'
         ? findDlrPrint(dlrPrints, parsed.name, parsed.setNumber)
+        : unleashedLarvitar ? cardsByNameSetNumber.get(`larvitar|ul|${unleashedLarvitar[1]}`)
+        : reviewedPrint ? cardsByNameSetNumber.get(reviewedKey)
         : cardsByFullName.get(fullName.toLowerCase());
 
-      if (setCode !== 'DLR') {
+      if (setCode !== 'DLR' && !unleashedLarvitar && !reviewedPrint) {
         // Second try: normalized fullName match
         if (!card) {
           card = cardsByFullName.get(normalizeName(fullName));

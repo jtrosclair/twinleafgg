@@ -81,7 +81,7 @@ export class Spiritomb extends PokemonCard {
     }
 
 
-    if (effect instanceof AttachEnergyEffect && effect.energyCard.tags.includes(CardTag.ACE_SPEC)) {
+    if (effect instanceof AttachEnergyEffect && effect.sourceZone === undefined && effect.energyCard.tags.includes(CardTag.ACE_SPEC)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

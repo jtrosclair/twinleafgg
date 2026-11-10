@@ -88,7 +88,7 @@ export class ShadowRiderCalyrexV extends PokemonCard {
       });
     }
 
-    if (effect instanceof AttachEnergyEffect && effect.energyCard.energyType === EnergyType.SPECIAL) {
+    if (effect instanceof AttachEnergyEffect && effect.sourceZone === undefined && effect.energyCard.energyType === EnergyType.SPECIAL) {
       const player = effect.player;
 
       if (player.marker.hasMarker(this.SHADOW_MIST_MARKER, this)) {

@@ -1,3 +1,4 @@
+import { Tandemaus } from './tandemaus';
 import { Card } from '../../game/store/card/card';
 import { Annihilape } from '../set-surging-sparks/annihilape';
 import { AlolanDiglett } from './alolan-diglett';
@@ -275,4 +276,5 @@ export const setSurgingSparks: Card[] = [
   new CounterGainUR(),
   new NightStretcherUR(),
   new JetEnergyUR(),
+  new Tandemaus(),
 ];

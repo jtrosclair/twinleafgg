@@ -48,7 +48,7 @@ export class HonchkrowGX extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ruler of the Night
-    if ((effect instanceof AttachEnergyEffect && effect.energyCard.energyType === EnergyType.SPECIAL) || effect instanceof PlayStadiumEffect || effect instanceof AttachPokemonToolEffect) {
+    if ((effect instanceof AttachEnergyEffect && effect.sourceZone === undefined && effect.energyCard.energyType === EnergyType.SPECIAL) || effect instanceof PlayStadiumEffect || effect instanceof AttachPokemonToolEffect) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

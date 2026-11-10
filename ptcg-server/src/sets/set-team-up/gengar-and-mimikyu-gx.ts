@@ -78,7 +78,7 @@ export class GengarMimikyuGX extends PokemonCard {
       throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
 
-    if (effect instanceof AttachEnergyEffect && effect.player.marker.hasMarker(this.CANNOT_PLAY_CARDS_FROM_HAND_MARKER)) {
+    if (effect instanceof AttachEnergyEffect && effect.sourceZone === undefined && effect.player.marker.hasMarker(this.CANNOT_PLAY_CARDS_FROM_HAND_MARKER)) {
       throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
 

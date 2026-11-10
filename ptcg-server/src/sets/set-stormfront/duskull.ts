@@ -57,7 +57,7 @@ export class Duskull extends PokemonCard {
       });
     }
 
-    if (effect instanceof AttachEnergyEffect && effect.target === effect.player.active && HAS_MARKER(this.NIGHT_BIND_MARKER, effect.player, this)) {
+    if (effect instanceof AttachEnergyEffect && effect.sourceZone === undefined && effect.target === effect.player.active && HAS_MARKER(this.NIGHT_BIND_MARKER, effect.player, this)) {
       throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
 

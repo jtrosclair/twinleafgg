@@ -45,7 +45,7 @@ export class AttachEnergyEffect implements Effect {
   public energyCard: EnergyCard;
   public target: PokemonCardList;
 
-  constructor(player: Player, energyCard: EnergyCard, target: PokemonCardList) {
+  constructor(player: Player, energyCard: EnergyCard, target: PokemonCardList, public readonly sourceZone?: 'deck' | 'discard') {
     this.player = player;
     this.energyCard = energyCard;
     this.target = target;

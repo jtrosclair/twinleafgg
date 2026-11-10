@@ -1,9 +1,10 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { CardType, PokemonCard, PowerType, Stage, State, StateUtils, StoreLike } from '../../game';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Steelix extends PokemonCard {
+export class Steelix extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom: string = 'Onix';
   public cardType: CardType = F;
@@ -42,6 +43,10 @@ export class Steelix extends PokemonCard {
       }
     }
 
+    return Steelix.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Hard Swing
     if (WAS_ATTACK_USED(effect, 0, this)) {
       effect.ignoreResistance = true;

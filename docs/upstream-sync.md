@@ -921,3 +921,110 @@ DLR prints inherit the corrected implementation. The isolated candidate passed
 33 focused cases, 530 matching saved states, and 3,457 matching initial actions.
 The two unannotated copied-handler ownership acceptance failures remain open;
 the fix uses the existing explicit attack-ownership contract.
+
+
+Round-25 combined batch: 30 Supreme Victors, 13 Majestic Dawn and 19
+Unleashed printed identities are integrated. The SV additions are Altaria C,
+Arcanine, Articuno, Bibarel, Buneary, Camerupt G, Chatot, Cherrim, Drifblim,
+Feebas, Floatzel, Goldeen, Hippopotas, Lopunny, Loudred, Lucario C, Medicham,
+Moltres, Mudkip, Pachirisu, Paras, Rhyhorn, Roselia, Roserade, Skorupi,
+Staravia, Togekiss C, Whismur, Zapdos and Zubat. The MD additions are Aipom 51,
+Chimchar, Hippopotas, Monferno, Pikachu, Piplup, Plusle, Spearow, Staravia,
+Starly, Stunky, Sudowoodo and Turtwig. The UL additions are Beedrill, Cherubi,
+Dunsparce, Fearow, Grotle, Larvitar 50 and 51, Magmar, Mankey, Natu, Onix 57,
+Plusle, Poliwhirl, Pupitar 39, Riolu, Squirtle, Stantler, Teddiursa and Ursaring.
+Exact numbered Larvitar UL 50/51 inputs, including 050/051, resolve separately
+in both simulator and deck-import APIs, without changing other historical name
+fallbacks.
+
+The batch also fixes Garbotoxin ownership when Stealthy Hood protects a Pokémon
+from an opposing Garbodor, while retaining own-Garbotoxin locks. The integrated
+candidate passed 636 focused tests, 13 API tests, 530 identical saved states,
+3,457 identical sampled first actions and four complete recorded puzzle wins.
+The full card catalogue gained exactly 62 names, with no newly displaced or
+duplicate registered identities. Simulator browser builds passed. Unreviewed
+upstream cards and the two unannotated copied-handler failures remain open;
+the upstream ledger remains partial rather than advancing the watermark.
+
+Round-25 ownership follow-up migrates Steelix and Sandslash DLR, Zygarde FLI,
+Slaking DRX, Zebstrika BKP and Tinkaton PAL to explicit attack-only copied
+handlers. Tinkaton SVP/PAF reprints retain their inherited behavior. The batch
+passed 49 focused cases and, after overlaying the 62-card batch, 468 combined
+cases, 530 identical saved states and 3,457 identical sampled first actions.
+The two generic unannotated ownership acceptance failures remain open; their
+fixture branches do not identify which effects belong to attacks versus Abilities.
+
+Final round-25 overlay check (including six ownership migrations and padded
+Larvitar inputs): 531 supported saved states matched exactly and all 3,462
+sampled first actions matched; 136 unsupported, missing or invalid records were
+skipped. The current integrated browser build passed 199 client-service
+specifications, 67 core client specifications, 50 client-card specifications,
+13 API tests and all four recorded puzzle replays. These checks do not prove
+every possible later action.
+
+Final round-25 full-card run: 3,993 tests passed and the same two intentionally
+unannotated copied-handler ownership acceptance tests failed. No new full-suite
+failures appeared. Their identical predicates cannot distinguish attack-owned
+from Ability-owned behavior without an explicit ownership contract; the
+real-card migrations retain both acceptance cases unchanged for future work.
+
+Arboliva DLR 17 follow-up: Slippery Oil now lets the opponent choose its
+replacement and respects protection against opposing Abilities. Direct and
+copied Mega Drain retain their healing. Two real baseline failures were
+reproduced; the rebased candidate passed 63 focused checks, 531 identical saved
+states and 3,462 matching sampled first actions.
+
+Round-26 adds 32 further printed identities: Inkay LOR 77, Tandemaus PAL 166,
+Floragato SVI 14, Sprigatito SVI 13, Tandemaus SSP 157, Houndour LA 103,
+Poochyena LA 116, Nincada LA 108, Drapion E4 RR 17, Spheal RR 82,
+Hippopotas RR 64, Surfing Pikachu RR 114, Bastiodon GL RR 2, Houndoom E4 RR 65,
+Grovyle SF 39, Duskull SF 60, Cherubi SF 56, Shelgon SF 50, Stunky SF 76,
+Crobat UL 14, Stufful MEG 111, Tinkatink MEG 96, Misdreavus LA 107,
+Spoink LA 121, Treecko SF 79, Voltorb SF 81, Swinub SF 77, Bidoof SF 54,
+Skorupi SF 73, Koffing RR 68, Gliscor E4 RR 62 and Eevee RR 59.
+Numbered Inkay LOR 77/121, Duskull SF 60/SH2, and Crobat UL 14/84
+resolve to their exact prints, including padded numeric forms, while legacy
+unnumbered fallbacks are preserved. The 13,950-name catalogue gained exactly
+32 identities without displaced or newly duplicate full names.
+
+The combined 62-card and 32-card candidate passed 849 focused checks, 15 API
+checks, 531 identical saved states, 3,462 matching first actions and four
+recorded puzzle solutions. An independent review checked the new print
+identities and attack effects; these tests do not prove every possible card
+interaction. The upstream ledger is still partial, not a new upstream watermark.
+
+Azurill DLR now marks Energy attached by its attack as coming from the deck,
+so tested Basic and Special Energy restrictions that apply only to cards played
+from hand do not incorrectly block it. The legacy behavior of unannotated
+attachment callers is preserved. Its Basic and Special overlays passed focused
+regressions and independently matched 531 saved states and 3,462 first actions.
+This targeted source annotation does not resolve general attachment observer
+ordering or rollback; other effect-driven attachment callers require review.
+
+DLR Energy follow-up: Kommo-o and Mega Rayquaza ex now identify Energy as
+coming from the deck. Pawmot and Darkrai now move the selected Energy from its
+actual source before attachment notifications; their fixes are local to those
+cards. Thirteen baseline cases failed and the overlay passed 96 focused cases,
+532 identical saved states and 3,466 matching first actions. Generic attachment
+transaction and rollback behavior remains to be audited. A separate real-game
+reproduction shows Magmortar's Ability bypasses six tested hand-attachment
+locks and Frozen City's reaction; a safe provenance and timing fix remains
+unresolved and is not claimed by this batch.
+The Magmortar audit also reproduced an invalid Special Energy selection even
+though Buddy Boost specifies Basic Fire Energy. Gengar & Mimikyu-GX and Alolan
+Golem-GX, which restrict plays from hand rather than this Ability attachment,
+correctly allow it. Addressing both cases requires distinguishing attachment
+from an Ability from a card played from hand and preserving notification order.
+Frozen City PLF and Old Cemetery CRE also need source checks: their current
+attachment reactions do not distinguish deck/discard effects from hand
+attachments. This predates the targeted source annotation and remains open.
+
+Test infrastructure: Mega Evolution's mixed M1S/M1L module exposed a helper
+assumption that one module has exactly one set code, and partial pre-registration
+could skip its other cards. The helper now registers missing cards and discovers
+additional printed set codes; 113 focused tests passed with assertions preserved.
+
+Release verification after the DLR and harness overlays: 4,319 card checks
+passed; the same two generic unannotated copied-handler ownership tests remain
+failing. Fifteen API tests, the Cloudflare tests and four recorded puzzle wins
+passed. The release package build passed its mobile size budgets.

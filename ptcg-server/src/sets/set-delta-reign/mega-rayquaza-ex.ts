@@ -61,7 +61,7 @@ export class MegaRayquazaex extends PokemonCard {
             // Attachment triggers wait until the entire Ability, including
             // the required subset shuffle, is finished (2026 sequencing).
             SHUFFLE_CARDS_TO_BOTTOM(store, state, player, top, this, this.powers[0], () => {
-              if (energy && effect.target.cards.includes(energy)) store.reduceEffect(state, new AttachEnergyEffect(player, energy, effect.target));
+              if (energy && effect.target.cards.includes(energy)) store.reduceEffect(state, new AttachEnergyEffect(player, energy, effect.target, 'deck'));
             });
           });
         });

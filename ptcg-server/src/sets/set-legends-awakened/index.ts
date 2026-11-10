@@ -1,3 +1,8 @@
+import { Houndour } from './houndour';
+import { Poochyena } from './poochyena';
+import { Nincada } from './nincada';
+import { Misdreavus } from './misdreavus';
+import { Spoink } from './spoink';
 import { Oddish2 } from './oddish2';
 import { Chinchou2 } from './chinchou2';
 import { Nosepass } from './nosepass';
@@ -73,4 +78,9 @@ export const setLegendsAwakened: Card[] = [
   new Uxie(),
   new UxieLVX(),
   new ClawFossilLA(),
+  new Houndour(),
+  new Poochyena(),
+  new Nincada(),
+  new Misdreavus(),
+  new Spoink(),
 ];

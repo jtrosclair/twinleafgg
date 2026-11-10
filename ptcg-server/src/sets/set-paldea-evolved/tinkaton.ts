@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, EnergyType, BoardEffect } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
@@ -8,7 +9,7 @@ import { AttackEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
-export class Tinkaton extends PokemonCard {
+export class Tinkaton extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.STAGE_2;
   public cardType: CardType = CardType.PSYCHIC;
   public hp: number = 140;
@@ -80,6 +81,14 @@ export class Tinkaton extends PokemonCard {
       return state;
     }
 
+    if (effect instanceof EndTurnEffect) {
+      effect.player.marker.removeMarker(this.GATHER_MATERIALS_MARKER, this);
+    }
+
+    return Tinkaton.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(_store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (effect instanceof AttackEffect && effect.attack == this.attacks[0]) {
       const player = effect.player;
       const pokemon = player.active;
@@ -99,10 +108,6 @@ export class Tinkaton extends PokemonCard {
 
       return state;
     }
-    if (effect instanceof EndTurnEffect) {
-      effect.player.marker.removeMarker(this.GATHER_MATERIALS_MARKER, this);
-    }
-
     return state;
   }
 

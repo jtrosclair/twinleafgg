@@ -84,7 +84,7 @@ export class AlolanGolemGx extends PokemonCard {
     if (effect instanceof AttachPokemonToolEffect && effect.player.marker.hasMarker(this.BLOCK_CARDS_MARKER, this)) {
       throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
-    if (effect instanceof AttachEnergyEffect && effect.player.marker.hasMarker(this.BLOCK_CARDS_MARKER, this)) {
+    if (effect instanceof AttachEnergyEffect && effect.sourceZone === undefined && effect.player.marker.hasMarker(this.BLOCK_CARDS_MARKER, this)) {
       throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
     if (((effect instanceof CheckEvolveEffect || (effect instanceof EvolveEffect && !effect.preflightComplete)) && effect.playedFromHand) && effect.player.marker.hasMarker(this.BLOCK_CARDS_MARKER, this)) {

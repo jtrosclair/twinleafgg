@@ -191,21 +191,21 @@
       "date": "2026-10-16",
       "subject": "add(cards): Majestic Dawn",
       "status": "partial",
-      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-23 adds Leafeon, Fearow, Lickitung and Kangaskhan MD. The 24-card candidate passed 168 focused tests, both browser builds, 530 saved states, 3,457 initial actions and four candidate-browser puzzle solutions; other additions need review."
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-23 adds Leafeon, Fearow, Lickitung and Kangaskhan MD. The 24-card candidate passed 168 focused tests, both browser builds, 530 saved states, 3,457 initial actions and four candidate-browser puzzle solutions; other additions need review. Round-25 adds 13 reviewed Majestic Dawn identities; focused and combined puzzle checks passed. Chimchar 57, Turtwig 78 and Dialga 4 remain deferred because their Berry/Orb rules need support."
     },
     {
       "sha": "ae90dafbf41073153fb6abb81e968b0026cb10fd",
       "date": "2026-10-16",
       "subject": "add(cards): Legends Awakened",
       "status": "partial",
-      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-23 adds two Gligar prints, Riolu, Nosepass, Metang, Numel, Poliwhirl, two Chinchou prints, Cubone, Oddish, Meowth, Beldum, Drifloon, Dratini, Ledyba, Dragonair, Poliwag, Weepinbell and Gliscor LA. The 24-card candidate passed 168 focused tests, both browser builds, 530 saved states, 3,457 initial actions and four candidate-browser puzzle solutions; other additions need review."
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-23 adds two Gligar prints, Riolu, Nosepass, Metang, Numel, Poliwhirl, two Chinchou prints, Cubone, Oddish, Meowth, Beldum, Drifloon, Dratini, Ledyba, Dragonair, Poliwag, Weepinbell and Gliscor LA. The 24-card candidate passed 168 focused tests, both browser builds, 530 saved states, 3,457 initial actions and four candidate-browser puzzle solutions; other additions need review. Round-26 adds Houndour, Poochyena, Nincada, Misdreavus and Spoink; remaining cards require review."
     },
     {
       "sha": "22a8f0a47416049d6ed4cbf1df8672915ce1fceb",
       "date": "2026-10-16",
       "subject": "add(cards): Stormfront",
-      "status": "deferred",
-      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied."
+      "status": "partial",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-26 adds Grovyle, Cherubi, Shelgon, Stunky, Treecko, Swinub, Bidoof and Skorupi; remaining cards require review."
     },
     {
       "sha": "27d7646cde7fa6203a13d655568ceabe97c4fea5",
@@ -351,22 +351,22 @@
       "sha": "702953a83cfe3f82635236fdc3d29cccc1770e7f",
       "date": "2026-10-24",
       "subject": "add(cards): Rising Rivals",
-      "status": "deferred",
-      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied."
+      "status": "partial",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-26 adds Drapion E4, Spheal, Hippopotas, Surfing Pikachu, Bastiodon GL, Houndoom E4, Koffing, Gliscor E4 and Eevee; remaining cards require review."
     },
     {
       "sha": "963be5b53027ed1d65adf39c9496cf859d4e036b",
       "date": "2026-10-24",
       "subject": "add(cards): Supreme Victors",
-      "status": "deferred",
-      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied."
+      "status": "partial",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-25 adds part of a 30-card Supreme Victors batch from the two upstream SV commits. Printed identities, direct/copied effects and combined compatibility checks passed; remaining cards need review."
     },
     {
       "sha": "2c6c5f87aad4e4fbc6c94118c31741eb563b32c6",
       "date": "2026-10-25",
       "subject": "add(cards): Supreme Victors Pt 2",
       "status": "partial",
-      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-22 ports 24 reviewed Supreme Victors cards: Bidoof, Buizel, Chimchar, Combee, Corphish, Croagunk, Doduo, Drifloon, Geodude, Kricketot, Magikarp, Magnemite, Mankey, Meditite, Meowth, Pikachu, Piplup, Sandshrew, Seel, Shinx, Shroomish, Starly, Surskit and Turtwig. Candidate passed 127 focused and 153 prior tests, both browser builds, 530 saved states, 3,457 initial actions and four recorded puzzle replays. Other upstream additions remain to review."
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-22 ports 24 reviewed Supreme Victors cards: Bidoof, Buizel, Chimchar, Combee, Corphish, Croagunk, Doduo, Drifloon, Geodude, Kricketot, Magikarp, Magnemite, Mankey, Meditite, Meowth, Pikachu, Piplup, Sandshrew, Seel, Shinx, Shroomish, Starly, Surskit and Turtwig. Candidate passed 127 focused and 153 prior tests, both browser builds, 530 saved states, 3,457 initial actions and four recorded puzzle replays. Other upstream additions remain to review. Round-25 adds a further 30 Supreme Victors identities across the two SV commits; see the sync notes for exact names and test counts. Remaining cards need review."
     },
     {
       "sha": "47e01fed3e9af76c9c6c6c17e07684387514e3a9",
@@ -393,8 +393,8 @@
       "sha": "eeecf2d072256fd04a40f1499bfc8a6134b39107",
       "date": "2026-10-25",
       "subject": "add(cards): Unleashed",
-      "status": "deferred",
-      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied."
+      "status": "partial",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-25 adds 19 reviewed Unleashed identities, including distinct Larvitar UL 50 and 51. Exact numbered inputs now resolve to their intended print; other additions remain under review. Round-26 adds Crobat 14 with exact numbered print resolution; remaining cards require review."
     },
     {
       "sha": "e92c50aea203174c1eb5fbbf527777e1215aba46",
@@ -428,8 +428,8 @@
       "sha": "4ab7d77926415e04e2d504e45c679d4b2a9554f4",
       "date": "2026-10-25",
       "subject": "add(cards): Remaining DPP Cards",
-      "status": "deferred",
-      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied."
+      "status": "partial",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-26 ports Duskull SF 60 and Voltorb SF 81. Other changes remain to review."
     },
     {
       "sha": "aee41bac3a20a232f12afca63c3368d726b1ff15",

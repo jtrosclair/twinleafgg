@@ -1,3 +1,4 @@
+import { Tandemaus } from './tandemaus';
 import { Oricorio } from './oricorio';
 import { Card } from '../../game/store/card/card';
 import { Arctibax } from './arctibax';
@@ -223,4 +224,5 @@ export const setPaldeaEvolved: Card[] = [
 
   new Oricorio(),
   new Slowpoke(),
+  new Tandemaus(),
 ];

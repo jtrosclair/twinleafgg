@@ -1,3 +1,12 @@
+import { DrapionE4 } from './drapion-e4';
+import { Spheal } from './spheal';
+import { Hippopotas } from './hippopotas';
+import { SurfingPikachu } from './surfing-pikachu';
+import { BastiodonGL } from './bastiodon-gl';
+import { HoundoomE4 } from './houndoom-e4';
+import { Koffing } from './koffing';
+import { GliscorE4 } from './gliscor-e4';
+import { Eevee } from './eevee';
 import { BebesSearchRR, DarknessEnergySpecialRR, MetalEnergyN1RR, PikachuRR } from './other-prints';
 import { Card } from '../../game/store/card/card';
 import { AaronsCollection } from './aarons-collection';
@@ -36,4 +45,13 @@ export const setRisingRivals: Card[] = [
   new MetalEnergyN1RR(),
   new PikachuRR(),
   new TeamGalacticsInventionG109SPRadar(),
+  new DrapionE4(),
+  new Spheal(),
+  new Hippopotas(),
+  new SurfingPikachu(),
+  new BastiodonGL(),
+  new HoundoomE4(),
+  new Koffing(),
+  new GliscorE4(),
+  new Eevee(),
 ];

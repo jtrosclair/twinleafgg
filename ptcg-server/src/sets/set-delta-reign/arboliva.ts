@@ -2,9 +2,11 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { GameError, GameMessage, PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { EffectOfAbilityEffect } from '../../game/store/effects/game-effects';
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import {
   ABILITY_USED,
-  GUST_OPPONENT_BENCHED_POKEMON,
+  SWITCH_OUT_OPPONENT_ACTIVE_POKEMON,
   HEAL_X_DAMAGE_FROM_THIS_POKEMON,
   IS_ABILITY_BLOCKED,
   REMOVE_MARKER_AT_END_OF_TURN,
@@ -13,7 +15,7 @@ import {
   WAS_POWER_USED,
 } from '../../game/store/prefabs/prefabs';
 
-export class Arboliva extends PokemonCard {
+export class Arboliva extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.STAGE_2;
   public evolvesFrom: string = 'Dolliv';
   public cardType: CardType = G;
@@ -61,12 +63,20 @@ export class Arboliva extends PokemonCard {
       USE_ABILITY_ONCE_PER_TURN(player, this.OIL_SLIP_MARKER, this);
       ABILITY_USED(player, this);
 
-      GUST_OPPONENT_BENCHED_POKEMON(store, state, player);
+      const abilityEffect = new EffectOfAbilityEffect(player, this.powers[0], this, opponent.active);
+      store.reduceEffect(state, abilityEffect);
+      if (!abilityEffect.preventDefault && abilityEffect.target) {
+        SWITCH_OUT_OPPONENT_ACTIVE_POKEMON(store, state, player);
+      }
     }
 
     REMOVE_MARKER_AT_END_OF_TURN(effect, this.OIL_SLIP_MARKER, this);
 
-    // Mega Drain
+    return Arboliva.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  /** Mega Drain is attack-owned; Slippery Oil is not copied. */
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       HEAL_X_DAMAGE_FROM_THIS_POKEMON(effect, store, state, 30);
     }

@@ -1,0 +1,43 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
+import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { CardType, Stage, SpecialCondition } from '../../game/store/card/card-types';
+import { State, StoreLike } from '../../game';
+import { Effect } from '../../game/store/effects/effect';
+import { WAS_ATTACK_USED, COIN_FLIP_PROMPT, MULTIPLE_COIN_FLIPS_PROMPT, DRAW_CARDS, DISCARD_TOP_X_OF_OPPONENTS_DECK } from '../../game/store/prefabs/prefabs';
+import { conditionAfterDamage, coinConditionAfterDamage, healAttackerAfterDamage } from '../set-great-encounters/ge-attack-effects';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { recoilAfterAttack } from '../../game/store/prefabs/recoil-after-attack';
+import { selfSwitchAfterAttack } from '../../game/store/prefabs/self-switch-after-attack';
+import { opponentSwitchAfterAttack } from '../../game/store/prefabs/opponent-switch-after-attack';
+import { searchBasicsToBench } from '../../game/store/prefabs/search-basic-to-bench';
+
+export class Onix2 extends PokemonCard implements CopiedAttackOwnershipContract {
+  public stage: Stage = Stage.BASIC;
+  public hp: number = 90;
+  public cardType: CardType = F;
+  public weakness = [{ type: G }];
+  public retreat = [C, C, C];
+
+  public attacks = [{
+    name: 'Swing Around',
+    cost: [C, C, C],
+    damage: 20,
+    damageCalculation: '+' as '+',
+    text: 'Flip 2 coins. This attack does 20 damage plus 20 more damage for each heads.'
+  }];
+
+  public set: string = 'UL';
+  public cardImage: string = 'assets/cardback.png';
+  public setNumber: string = '57';
+  public name: string = 'Onix';
+  public fullName: string = 'Onix UL2';
+
+  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    return Onix2.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (WAS_ATTACK_USED(effect, 0, this)) return MULTIPLE_COIN_FLIPS_PROMPT(store, state, effect.player, 2, results => { effect.damage += 20 * results.filter(Boolean).length; });
+    return state;
+  }
+}

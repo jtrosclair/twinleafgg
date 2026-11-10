@@ -40,6 +40,24 @@ export class StateSerializer {
   }
 
   public static normalizeCardName(name: string): string {
+    // These two Unleashed cards share a printed name but have different attacks.
+    // Never resolve an unavailable print to its same-named counterpart.
+    const unleashedLarvitar = name.match(/^Larvitar\s+UL\s+0*(50|51)$/i);
+    if (unleashedLarvitar) {
+      const card = StateSerializer.knownCards.find(candidate => candidate.set === 'UL'
+        && candidate.name === 'Larvitar' && candidate.setNumber === unleashedLarvitar[1]);
+      return card?.fullName || '';
+    }
+    // Preserve existing canonical identities while resolving these distinct new prints.
+    const reviewedPrint = name.match(/^(Inkay)\s+(LOR)\s+0*(77)$|^(Duskull)\s+(SF)\s+0*(60)$|^(Crobat)\s+(UL)\s+0*(14)$/i);
+    if (reviewedPrint) {
+      const cardName = (reviewedPrint[1] || reviewedPrint[4] || reviewedPrint[7]).toLowerCase();
+      const set = (reviewedPrint[2] || reviewedPrint[5] || reviewedPrint[8]).toUpperCase();
+      const number = reviewedPrint[3] || reviewedPrint[6] || reviewedPrint[9];
+      const card = StateSerializer.knownCards.find(candidate => candidate.name.toLowerCase() === cardName
+        && candidate.set === set && candidate.setNumber === number);
+      return card?.fullName || '';
+    }
     // Delta Reign contains pairs of distinct Stadium cards with the same name.
     // Resolve numbered prints before generic normalization discards the number.
     const deltaReign = name.match(/^(.*?)\s+DLR\s+(\d+)$/i);

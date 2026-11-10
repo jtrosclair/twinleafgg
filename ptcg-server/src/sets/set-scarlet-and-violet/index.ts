@@ -1,3 +1,5 @@
+import { Floragato } from './floragato';
+import { Sprigatito } from './sprigatito';
 import { Card } from '../../game/store/card/card';
 import { Blissey } from './blissey';
 import { Annihilape } from './annihilape';
@@ -218,4 +220,6 @@ export const setScarletAndViolet: Card[] = [
   new Wiglett(),
   new Wugtrio(),
   new Blissey(),
+  new Floragato(),
+  new Sprigatito(),
 ];

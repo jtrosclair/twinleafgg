@@ -54,7 +54,7 @@ export class WhimsicottVSTAR extends PokemonCard {
       }
     }
 
-    if (effect instanceof AttachEnergyEffect && effect.energyCard.energyType === EnergyType.SPECIAL) {
+    if (effect instanceof AttachEnergyEffect && effect.sourceZone === undefined && effect.energyCard.energyType === EnergyType.SPECIAL) {
       const player = effect.player;
       if (player.marker.hasMarker(this.DOMINATING_ECHO_MARKER, this)) {
         throw new GameError(GameMessage.BLOCKED_BY_EFFECT);

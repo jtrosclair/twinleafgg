@@ -1,3 +1,16 @@
+import { Aipom2 } from './aipom2';
+import { Chimchar } from './chimchar';
+import { Hippopotas } from './hippopotas';
+import { Pikachu } from './pikachu';
+import { Piplup } from './piplup';
+import { Spearow } from './spearow';
+import { Starly } from './starly';
+import { Stunky } from './stunky';
+import { Turtwig } from './turtwig';
+import { Staravia } from './staravia';
+import { Sudowoodo } from './sudowoodo';
+import { Monferno } from './monferno';
+import { Plusle } from './plusle';
 import { Lickitung } from './lickitung';
 import { Kangaskhan } from './kangaskhan';
 import { Fearow } from './fearow';
@@ -25,6 +38,20 @@ import { UnownQ } from './unown-q';
 import { WarpPointMD } from './other-prints';
 
 export const setMajesticDawn: Card[] = [
+  new Aipom2(),
+  new Chimchar(),
+  new Hippopotas(),
+  new Pikachu(),
+  new Piplup(),
+  new Spearow(),
+  new Starly(),
+  new Stunky(),
+  new Turtwig(),
+  new Staravia(),
+  new Sudowoodo(),
+  new Monferno(),
+  new Plusle(),
+
   new Lickitung(),
   new Kangaskhan(),
   new Fearow(),

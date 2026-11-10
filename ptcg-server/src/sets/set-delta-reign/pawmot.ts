@@ -1,6 +1,7 @@
-import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, GameError, GameMessage, SuperType, EnergyCard, EnergyType, SlotType } from "../../game";
+import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, GameError, GameMessage, SuperType, EnergyCard, EnergyType, SlotType, AttachEnergyPrompt, PlayerType, StateUtils } from "../../game";
 import { Effect } from "../../game/store/effects/effect";
-import { WAS_POWER_USED, IS_ABILITY_BLOCKED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, ATTACH_X_TYPE_ENERGY_FROM_DISCARD_TO_1_OF_YOUR_POKEMON, REMOVE_MARKER_AT_END_OF_TURN } from "../../game/store/prefabs/prefabs";
+import { AttachEnergyEffect } from "../../game/store/effects/play-card-effects";
+import { WAS_POWER_USED, IS_ABILITY_BLOCKED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN } from "../../game/store/prefabs/prefabs";
 
 export class Pawmot extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -54,19 +55,21 @@ export class Pawmot extends PokemonCard {
       USE_ABILITY_ONCE_PER_TURN(player, this.POWER_PLANT_TOUCH_MARKER, this);
       ABILITY_USED(player, this);
 
-      return ATTACH_X_TYPE_ENERGY_FROM_DISCARD_TO_1_OF_YOUR_POKEMON(
-        store,
-        state,
-        player,
-        1,
-        CardType.LIGHTNING,
-        {
-          destinationSlots: [SlotType.ACTIVE, SlotType.BENCH],
-          energyFilter: { energyType: EnergyType.BASIC },
-          min: 1,
-          allowCancel: true,
+      return store.prompt(state, new AttachEnergyPrompt(
+        player.id, GameMessage.ATTACH_ENERGY_CARDS, player.discard, PlayerType.BOTTOM_PLAYER,
+        [SlotType.ACTIVE, SlotType.BENCH],
+        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
+        { min: 1, max: 1, allowCancel: true, sameTarget: true, validCardTypes: [CardType.LIGHTNING] },
+      ), transfers => {
+        for (const transfer of transfers || []) {
+          const target = StateUtils.getTarget(state, player, transfer.to);
+          const energy = transfer.card as EnergyCard;
+          MOVE_CARDS(store, state, player.discard, target, { cards: [energy], sourceCard: this, sourceEffect: this.powers[0] });
+          if (target.cards.includes(energy)) {
+            store.reduceEffect(state, new AttachEnergyEffect(player, energy, target, 'discard'));
+          }
         }
-      );
+      });
     }
 
     REMOVE_MARKER_AT_END_OF_TURN(effect, this.POWER_PLANT_TOUCH_MARKER, this);
