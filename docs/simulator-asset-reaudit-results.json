@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "scope": "Additional savings from the second asset audit, after the first mobile bundle optimization",
+  "previousPackageHash": "46a8e0bdb077d851997aa4f3ac6718d57fd19017d24e0f9eca8f1d45613fc4ae",
+  "packageHash": "21a619fa298121529eabbeda987984015085fbeb5d16396a9609de8d398b5c2a",
+  "comparison": {
+    "runtimeRaw": {
+      "beforeBytes": 17236908,
+      "afterBytes": 16757454,
+      "savedBytes": 479454,
+      "savedPercent": 2.78
+    },
+    "runtimeGzip6": {
+      "beforeBytes": 4449316,
+      "afterBytes": 4313046,
+      "savedBytes": 136270,
+      "savedPercent": 3.06
+    },
+    "runtimeBrotli6": {
+      "beforeBytes": 3683199,
+      "afterBytes": 3550159,
+      "savedBytes": 133040,
+      "savedPercent": 3.61
+    },
+    "archive": {
+      "beforeBytes": 4417449,
+      "afterBytes": 4282167,
+      "savedBytes": 135282,
+      "savedPercent": 3.06
+    }
+  },
+  "changes": [
+    "Removed unused PTCG font and font-face styling",
+    "Removed dead energy-types sprite and unreachable CardInfoPane styles",
+    "Excluded CSS-embedded fonts and the standalone favicon from the game image bootstrap",
+    "Removed five unused generic alert dialogs, orphan components, their validators and unused reactive forms import",
+    "Pruned 500 obsolete feature translation keys while preserving gameplay dictionaries",
+    "Fixed the missing Holon’s Castform icon path"
+  ],
+  "assetAudit": {
+    "sourceFiles": 205,
+    "assets": 55,
+    "bytes": 2373787,
+    "referenced": 55,
+    "unused": 0,
+    "missing": 0,
+    "unresolvedDynamic": 0
+  },
+  "verification": {
+    "productionBuild": "passed",
+    "focusedChecks": 152,
+    "focusedFailures": 0,
+    "finalizerRegression": "passed",
+    "sourceAudit": {
+      "sourceFiles": 205,
+      "assets": 55,
+      "bytes": 2373787,
+      "referenced": 55,
+      "unused": 0,
+      "missing": 0,
+      "unresolvedDynamic": 0
+    },
+    "cardCatalog": 13483,
+    "nodeChecks": 58,
+    "browser": {
+      "origin": "https://prizemap-simulator-assets.jtrosclair.workers.dev",
+      "route": "/releases/21a619fa298121529eabbeda987984015085fbeb5d16396a9609de8d398b5c2a/table/1",
+      "publishedPuzzle": "Phantom Maze",
+      "images": {
+        "total": 100,
+        "loaded": 100,
+        "localDataUrls": 100
+      },
+      "cardDetails": {
+        "card": "N’s Darmanitan JTG 27",
+        "energySprites": 10,
+        "allEmbedded": true
+      },
+      "screenshot": "/tmp/twinleaf-asset-reaudit-card-details.png"
+    },
+    "liveDelivery": "passed"
+  },
+  "method": "Runtime inventory and ZIP from the final-byte package manifest; gzip6/Brotli6 sum files independently. Remote puzzle artwork and network overhead excluded."
+}

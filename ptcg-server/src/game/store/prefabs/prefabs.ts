@@ -6,13 +6,15 @@ import { Attack } from '../card/pokemon-types';
 import { GamePhase } from '../state/state';
 import { PokemonCard } from '../card/pokemon-card';
 import { AbstractAttackEffect, AddSpecialConditionsEffect, AfterDamageEffect, ApplyWeaknessEffect, DealDamageEffect, DiscardCardsEffect, HealTargetEffect, PutCountersEffect, PutDamageEffect } from '../effects/attack-effects';
-import { AddSpecialConditionsPowerEffect, CheckHpEffect, CheckPokemonTypeEffect, CheckPrizesDestinationEffect, CheckProvidedEnergyEffect, CheckTableStateEffect } from '../effects/check-effects';
+import { AddSpecialConditionsPowerEffect, CheckHpEffect, CheckPokemonPlayedTurnEffect, CheckPokemonTypeEffect, CheckPrizesDestinationEffect, CheckProvidedEnergyEffect, CheckTableStateEffect } from '../effects/check-effects';
 import { Effect } from '../effects/effect';
+import { resolveAfterAttackDamage } from './attack-after-damage';
 import { AttackEffect, DrawPrizesEffect, EvolveEffect, KnockOutEffect, MoveCardsEffect, MoveDamageCountersEffect, PowerEffect, RetreatEffect, SpecialEnergyEffect } from '../effects/game-effects';
 import { AfterAttackEffect, EndTurnEffect } from '../effects/game-phase-effects';
 import { ChooseAttackPrompt } from '../prompts/choose-attack-prompt';
 import { preventRetreatEffect, preventDamageEffect } from '../effects/effect-of-attack-effects';
 import { GameStatsTracker } from '../game-stats-tracker';
+export { IS_STADIUM_EFFECT_BLOCKED } from './stadium-effect';
 
 /**
  * 
@@ -312,6 +314,8 @@ function* copyBenchAttackGenerator(
     state = store.reduceEffect(state, dealDamage);
   }
 
+  state = yield* resolveAfterAttackDamage(() => next(), store, state, attackEffect);
+
   return state;
 }
 
@@ -383,6 +387,8 @@ function* copyOpponentActiveAttackGenerator(
     state = store.reduceEffect(state, dealDamage);
   }
 
+  state = yield* resolveAfterAttackDamage(() => next(), store, state, attackEffect);
+
   return state;
 }
 
@@ -436,12 +442,15 @@ function* copyOpponentsLastAttackGenerator(
     yield store.waitPrompt(state, () => next());
   }
 
+  const originalDefender = opponent.active;
   if (copiedAttackEffect.damage > 0) {
     const dealDamage = new DealDamageEffect(copiedAttackEffect, copiedAttackEffect.damage);
     state = store.reduceEffect(state, dealDamage);
   }
 
-  const afterAttackEffect = new AfterAttackEffect(player, opponent, lastAttack);
+  state = yield* resolveAfterAttackDamage(() => next(), store, state, copiedAttackEffect);
+
+  const afterAttackEffect = new AfterAttackEffect(player, opponent, lastAttack, originalDefender);
   state = store.reduceEffect(state, afterAttackEffect);
 
   if (store.hasPrompts()) {
@@ -2730,7 +2739,8 @@ export function CAN_PLAY_SUPPORTER_CARD(store: StoreLike, state: State, player: 
  * @param trainerCard The trainer card to validate
  * @returns true if the card can be played, false otherwise
  */
-export function CAN_PLAY_TRAINER_CARD(store: StoreLike, state: State, player: Player, trainerCard: TrainerCard): boolean {
+export function CAN_PLAY_TRAINER_CARD(store: StoreLike, state: State, player: Player, trainerCard: TrainerCard,
+  checkPlay?: () => boolean): boolean {
   try {
     // Only check during player's turn
     if (state.phase !== GamePhase.PLAYER_TURN || state.players[state.activePlayer].id !== player.id) {
@@ -2754,11 +2764,11 @@ export function CAN_PLAY_TRAINER_CARD(store: StoreLike, state: State, player: Pl
         const stadium = StateUtils.getStadiumCard(state);
         const isHyperrogueOverPrismTower = trainerCard.name === 'Hyperrogue Ange Floette' && stadium?.name === 'Prism Tower';
         // Can't play stadium if one already played this turn (unless Hyperrogue Ange Floette over Prism Tower)
-        if (player.stadiumPlayedTurn === state.turn && !isHyperrogueOverPrismTower) {
+        if (state.rules.oneStadiumPerTurn !== false && player.stadiumPlayedTurn === state.turn && !isHyperrogueOverPrismTower) {
           return false;
         }
         // Can't play same stadium already in play
-        if (stadium && stadium.name === trainerCard.name) {
+        if (state.rules.allowSameNameStadium !== true && stadium && stadium.name === trainerCard.name) {
           return false;
         }
         break;
@@ -2836,9 +2846,9 @@ export function CAN_PLAY_TRAINER_CARD(store: StoreLike, state: State, player: Pl
     if (trainerCard.trainerType === TrainerType.STADIUM) {
       return true; // Stadiums are playable unless already played one this turn (checked above)
     }
-    // For other trainer types, err on the side of caution
-    // We can't validate card-specific requirements without canPlay
-    return false;
+    // The owning Store can validate legacy cards against an isolated copy of
+    // the game. Never execute their effects against the live state for hints.
+    return checkPlay ? checkPlay() : false;
   } catch (error) {
     return false;
   }
@@ -2899,9 +2909,8 @@ export function CAN_PLAY_POKEMON_CARD(store: StoreLike, state: State, player: Pl
       return false;
     }
 
-    // Check if there's space on bench (max 5 bench Pokemon)
-    const benchCount = player.bench.filter(b => b.cards.length > 0).length;
-    if (benchCount >= 5 && pokemonCard.stage === Stage.BASIC) {
+    // Bench slots already reflect Stadiums and other bench-size effects.
+    if (pokemonCard.stage === Stage.BASIC && !player.bench.some(bench => bench.cards.length === 0)) {
       return false;
     }
 
@@ -2917,7 +2926,9 @@ export function CAN_PLAY_POKEMON_CARD(store: StoreLike, state: State, player: Pl
           (Array.isArray(activePokemon.evolvesFromBase) && activePokemon.evolvesFromBase.length > 0 && activePokemon.evolvesFromBase.includes(pokemonCard.evolvesFrom));
         if (matchesEvolution) {
           // Check if Pokemon was played this turn (can't evolve if played this turn)
-          if (player.active.pokemonPlayedTurn < state.turn) {
+          const playedTurn = new CheckPokemonPlayedTurnEffect(player, player.active, pokemonCard);
+          store.reduceEffect(state, playedTurn);
+          if (playedTurn.pokemonPlayedTurn < state.turn) {
             canEvolveActive = true;
           }
         }
@@ -2934,7 +2945,9 @@ export function CAN_PLAY_POKEMON_CARD(store: StoreLike, state: State, player: Pl
             (Array.isArray(benchPokemon.evolvesFromBase) && benchPokemon.evolvesFromBase.length > 0 && benchPokemon.evolvesFromBase.includes(pokemonCard.evolvesFrom));
           if (matchesEvolution) {
             // Check if Pokemon was played this turn (can't evolve if played this turn)
-            if (bench.pokemonPlayedTurn < state.turn) {
+            const playedTurn = new CheckPokemonPlayedTurnEffect(player, bench, pokemonCard);
+            store.reduceEffect(state, playedTurn);
+            if (playedTurn.pokemonPlayedTurn < state.turn) {
               canEvolveBench = true;
               break;
             }
@@ -2962,10 +2975,11 @@ export function CAN_PLAY_POKEMON_CARD(store: StoreLike, state: State, player: Pl
  * @param card The card to validate
  * @returns true if the card can be played, false otherwise
  */
-export function CAN_PLAY_CARD(store: StoreLike, state: State, player: Player, card: Card): boolean {
+export function CAN_PLAY_CARD(store: StoreLike, state: State, player: Player, card: Card,
+  checkTrainerPlay?: () => boolean): boolean {
   try {
     if (card instanceof TrainerCard) {
-      return CAN_PLAY_TRAINER_CARD(store, state, player, card);
+      return CAN_PLAY_TRAINER_CARD(store, state, player, card, checkTrainerPlay);
     } else if (card instanceof EnergyCard) {
       return CAN_PLAY_ENERGY_CARD(store, state, player, card);
     } else if (card instanceof PokemonCard) {

@@ -4,6 +4,7 @@ import { Attack } from '../card/pokemon-types';
 import { PokemonCard } from '../card/pokemon-card';
 import { AfterDamageEffect, DealDamageEffect, PutCountersEffect, PutDamageEffect } from '../effects/attack-effects';
 import { Effect } from '../effects/effect';
+import { beginAttackDamageScope, cancelAttackDamageScope, finishAttackDamageScope, resolveAfterAttackDamage } from './attack-after-damage';
 import { CheckAttackCostEffect } from '../effects/check-effects';
 import { AttackEffect, KnockOutEffect, PowerEffect } from '../effects/game-effects';
 import {
@@ -107,10 +108,54 @@ function withSourceMarkerConstants<T>(
   }
 }
 
+/**
+ * A class may opt in only when this method implements ALL effects of its
+ * attacks, including delayed reactions and cleanup, and no Ability effects.
+ * Subclasses overriding reduceEffect must opt in again, because the inherited
+ * contract cannot describe their changes. Reprints which inherit that reducer
+ * also inherit the contract, including printed attack metadata changes; the
+ * subclass is responsible for overriding both methods if its attack behavior
+ * changes. In-flight prompt callbacks are not restored by Store.restoreState.
+ * Both method lookup and the implementation come from the card prototype, not
+ * from a serialized snapshot.
+ */
+export interface CopiedAttackOwnershipContract {
+  reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, attackIndex: number, sourceCard?: PokemonCard): State;
+}
+type OwnedCopiedAttackReducer = CopiedAttackOwnershipContract['reduceCopiedAttackEffect'];
+
+function ownedCopiedAttackReducer(sourceCard: PokemonCard): OwnedCopiedAttackReducer | undefined {
+  // An instance-level override can change attack behavior; do not silently
+  // replace it with an inherited implementation. Executable ownership is
+  // accepted only from a card class prototype, not data in a snapshot.
+  if (Object.prototype.hasOwnProperty.call(sourceCard, 'reduceEffect') ||
+      Object.prototype.hasOwnProperty.call(sourceCard, 'reduceCopiedAttackEffect')) return undefined;
+  let prototype = Object.getPrototypeOf(sourceCard);
+  let depth = 0;
+  let effectDepth: number | undefined;
+  let reducerDepth: number | undefined;
+  let reducer: OwnedCopiedAttackReducer | undefined;
+  while (prototype && prototype !== Object.prototype) {
+    if (effectDepth === undefined && Object.prototype.hasOwnProperty.call(prototype, 'reduceEffect')) {
+      effectDepth = depth;
+    }
+    if (reducerDepth === undefined && Object.prototype.hasOwnProperty.call(prototype, 'reduceCopiedAttackEffect')) {
+      const descriptor = Object.getOwnPropertyDescriptor(prototype, 'reduceCopiedAttackEffect');
+      if (typeof descriptor?.value !== 'function') return undefined;
+      reducerDepth = depth;
+      reducer = descriptor.value;
+    }
+    prototype = Object.getPrototypeOf(prototype);
+    depth++;
+  }
+  return reducerDepth !== undefined && effectDepth !== undefined && reducerDepth <= effectDepth ? reducer : undefined;
+}
+
 function delegateToSource(
   copycatCard: PokemonCard,
   sourceCard: PokemonCard,
   clonedAttacks: Attack[],
+  attackIndex: number,
   store: StoreLike,
   state: State,
   effect: Effect,
@@ -135,11 +180,14 @@ function delegateToSource(
       return typeof value === 'function' ? value.bind(target) : value;
     },
   });
+  const ownedReducer = ownedCopiedAttackReducer(sourceCard);
   return withTemporaryDelegatedAttacks(
     copycatCard,
     sourceCard,
     () => withSourceMarkerConstants(copycatCard, sourceCard, () =>
-      sourceCard.reduceEffect.call(copycatCard, attackOnlyStore, state, effect)
+      ownedReducer
+        ? ownedReducer.call(copycatCard, attackOnlyStore, state, effect, attackIndex, sourceCard)
+        : sourceCard.reduceEffect.call(copycatCard, attackOnlyStore, state, effect)
     ),
     clonedAttacks,
   );
@@ -154,6 +202,7 @@ interface CopyAttackSession {
   sourceCard: PokemonCard;
   clonedAttacks: Attack[];
   playerId: number;
+  attackIndex: number;
   /** Safety cap across either player's EndTurns (turn-skip + Harden linger). */
   endTurnsRemaining: number;
 }
@@ -162,6 +211,55 @@ interface CopyAttackSession {
 let copyAttackSessions = new WeakMap<State, CopyAttackSession[]>();
 
 const DEFAULT_END_TURN_BUDGET = 4;
+
+/** Serialize only the information needed to rebuild live handler sessions. */
+function persistCopyAttackSessions(state: State, sessions: CopyAttackSession[]): void {
+  if (!sessions.length) {
+    delete state.copiedAttackCheckpoints;
+    return;
+  }
+  state.copiedAttackCheckpoints = sessions.map(session => ({
+    copycatCard: session.copycatCard,
+    sourceCard: session.sourceCard,
+    playerId: session.playerId,
+    attackIndex: session.attackIndex,
+    selectedAttack: session.clonedAttacks[session.attackIndex],
+    endTurnsRemaining: session.endTurnsRemaining,
+  }));
+}
+
+function sessionsForState(state: State): CopyAttackSession[] {
+  const existing = copyAttackSessions.get(state);
+  if (existing) return existing;
+  const sessions: CopyAttackSession[] = [];
+  const checkpoints = Array.isArray(state.copiedAttackCheckpoints) ? state.copiedAttackCheckpoints : [];
+  for (const checkpoint of checkpoints) {
+    if (!checkpoint || !(checkpoint.copycatCard instanceof PokemonCard) || !(checkpoint.sourceCard instanceof PokemonCard)
+      || !Number.isInteger(checkpoint.attackIndex) || checkpoint.attackIndex < 0
+      || checkpoint.attackIndex >= checkpoint.sourceCard.attacks.length
+      || !Number.isInteger(checkpoint.endTurnsRemaining) || checkpoint.endTurnsRemaining <= 0
+      || checkpoint.endTurnsRemaining > DEFAULT_END_TURN_BUDGET
+      || !state.players.some(player => player.id === checkpoint.playerId)) continue;
+    const clonedAttacks = cloneAttacks(checkpoint.sourceCard.attacks);
+    const attack = checkpoint.selectedAttack;
+    if (attack && attack.name === clonedAttacks[checkpoint.attackIndex].name) {
+      // The checkpoint retains this exact object, including any reference
+      // shared with playerLastAttack. Names alone are not unique identities.
+      const effect = checkpoint.sourceCard.attacks[checkpoint.attackIndex].effect;
+      // Executable behavior always comes from the trusted card definition,
+      // never from the serialized snapshot.
+      if (typeof effect === 'function') attack.effect = effect;
+      else delete attack.effect;
+      const reactive = checkpoint.sourceCard.attacks[checkpoint.attackIndex].copiedReactiveAfterDamage;
+      if (typeof reactive === 'function') attack.copiedReactiveAfterDamage = reactive;
+      else delete attack.copiedReactiveAfterDamage;
+      clonedAttacks[checkpoint.attackIndex] = attack;
+    }
+    sessions.push({ ...checkpoint, clonedAttacks });
+  }
+  copyAttackSessions.set(state, sessions);
+  return sessions;
+}
 
 function isCopycatInPlay(state: State, copycatCard: PokemonCard): boolean {
   for (const player of state.players) {
@@ -240,11 +338,7 @@ export function openCopyAttackSession(
   clonedAttacks: Attack[],
   selectedClonedAttack: Attack,
 ): void {
-  let sessions = copyAttackSessions.get(state);
-  if (!sessions) {
-    sessions = [];
-    copyAttackSessions.set(state, sessions);
-  }
+  const sessions = sessionsForState(state);
   for (let i = sessions.length - 1; i >= 0; i--) {
     if (sessions[i].copycatCard === copycatCard) {
       sessions.splice(i, 1);
@@ -256,6 +350,7 @@ export function openCopyAttackSession(
     sourceCard,
     clonedAttacks,
     playerId: player.id,
+    attackIndex: clonedAttacks.indexOf(selectedClonedAttack),
     endTurnsRemaining: DEFAULT_END_TURN_BUDGET,
   });
 
@@ -266,6 +361,7 @@ export function openCopyAttackSession(
     attack: selectedClonedAttack,
     sourceCard: copycatCard,
   };
+  persistCopyAttackSessions(state, sessions);
 }
 
 /**
@@ -277,13 +373,26 @@ export function resolveCopyAttackSessions(
   state: State,
   effect: Effect,
 ): State {
-  const sessions = copyAttackSessions.get(state) || [];
+  const sessions = sessionsForState(state);
+  let changed = false;
   for (let i = sessions.length - 1; i >= 0; i--) {
     const session = sessions[i];
 
     if (!isCopycatInPlay(state, session.copycatCard)) {
       sessions.splice(i, 1);
+      changed = true;
       continue;
+    }
+
+    // An explicit attack-owned callback can react to damage received during a
+    // later turn without executing the source card's unrelated Abilities.
+    if (effect instanceof AfterDamageEffect && !effect.preventDefault &&
+        targetIncludesCopycat(effect, session.copycatCard) && !isClonedAttack(session, effect.attack)) {
+      const reaction = session.clonedAttacks[session.attackIndex]?.copiedReactiveAfterDamage;
+      if (typeof reaction === 'function') {
+        state = reaction(store, state, effect, session.copycatCard);
+        continue;
+      }
     }
 
     if (!shouldDelegateCopyAttackSession(session, state, effect)) {
@@ -294,6 +403,7 @@ export function resolveCopyAttackSessions(
       session.copycatCard,
       session.sourceCard,
       session.clonedAttacks,
+      session.attackIndex,
       store,
       state,
       effect,
@@ -301,11 +411,14 @@ export function resolveCopyAttackSessions(
 
     if (effect instanceof EndTurnEffect) {
       session.endTurnsRemaining -= 1;
+      changed = true;
       if (session.endTurnsRemaining <= 0) {
         sessions.splice(i, 1);
       }
     }
   }
+
+  if (changed) persistCopyAttackSessions(state, sessions);
 
   return state;
 }
@@ -371,36 +484,45 @@ export function* runDelegatedCopiedAttackGenerator(
 
   const attackEffect = new AttackEffect(player, opponent, clonedAttack);
   attackEffect.source = sourceSlot ?? player.active;
-
-  state = store.reduceEffect(state, attackEffect);
-
-  if (store.hasPrompts()) {
-    yield store.waitPrompt(state, () => next());
-  }
-
-  const beforeDoingDamageEffect = new BeforeDoingDamageEffect(attackEffect);
-  state = store.reduceEffect(state, beforeDoingDamageEffect);
-
-  if (store.hasPrompts()) {
-    yield store.waitPrompt(state, () => next());
-  }
-
-  if (attackEffect.damage > 0) {
-    const dealDamage = new DealDamageEffect(attackEffect, attackEffect.damage);
-    state = store.reduceEffect(state, dealDamage);
+  const attackDamageScope = beginAttackDamageScope(state);
+  try {
+    state = store.reduceEffect(state, attackEffect);
 
     if (store.hasPrompts()) {
       yield store.waitPrompt(state, () => next());
     }
-  }
 
-  if (!skipAfterAttack) {
-    const afterAttackEffect = new AfterAttackEffect(player, opponent, clonedAttack);
-    state = store.reduceEffect(state, afterAttackEffect);
+    const beforeDoingDamageEffect = new BeforeDoingDamageEffect(attackEffect);
+    state = store.reduceEffect(state, beforeDoingDamageEffect);
 
     if (store.hasPrompts()) {
       yield store.waitPrompt(state, () => next());
     }
+
+    const originalDefender = opponent.active;
+    if (attackEffect.damage > 0) {
+      const dealDamage = new DealDamageEffect(attackEffect, attackEffect.damage);
+      state = store.reduceEffect(state, dealDamage);
+
+      if (store.hasPrompts()) {
+        yield store.waitPrompt(state, () => next());
+      }
+    }
+
+    state = yield* resolveAfterAttackDamage(() => next(), store, state, attackEffect);
+    state = yield* finishAttackDamageScope(() => next(), store, state, attackDamageScope);
+
+    if (!skipAfterAttack) {
+      const afterAttackEffect = new AfterAttackEffect(player, opponent, clonedAttack, originalDefender);
+      state = store.reduceEffect(state, afterAttackEffect);
+
+      if (store.hasPrompts()) {
+        yield store.waitPrompt(state, () => next());
+      }
+    }
+
+  } finally {
+    cancelAttackDamageScope(attackDamageScope);
   }
 
   return state;

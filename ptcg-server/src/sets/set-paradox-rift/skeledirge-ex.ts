@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType, EnergyType } from '../../game/store/card/card-types';
 import { StoreLike, State, GameError, GameMessage, PowerType, EnergyCard, StateUtils } from '../../game';
@@ -7,7 +8,7 @@ import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt'
 import { AfterDamageEffect, ApplyWeaknessEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { ABILITY_USED, HAS_MARKER, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
-export class Skeledirgeex extends PokemonCard {
+export class Skeledirgeex extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.STAGE_2;
   public evolvesFrom = 'Crocalor';
   public tags = [CardTag.POKEMON_ex, CardTag.POKEMON_TERA];
@@ -81,6 +82,26 @@ export class Skeledirgeex extends PokemonCard {
       }
     }
 
+    state = Skeledirgeex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+
+    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+
+      // Target is not Active
+      if (effect.target === player.active || effect.target === opponent.active) {
+        return state;
+      }
+
+      effect.preventDefault = true;
+    }
+
+    REMOVE_MARKER_AT_END_OF_TURN(effect, this.INCENDIARY_SONG_MARKER, this);
+
+    return state;
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
@@ -97,21 +118,6 @@ export class Skeledirgeex extends PokemonCard {
         state = store.reduceEffect(state, afterDamage);
       }
     }
-
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Target is not Active
-      if (effect.target === player.active || effect.target === opponent.active) {
-        return state;
-      }
-
-      effect.preventDefault = true;
-    }
-
-    REMOVE_MARKER_AT_END_OF_TURN(effect, this.INCENDIARY_SONG_MARKER, this);
-
     return state;
   }
 }

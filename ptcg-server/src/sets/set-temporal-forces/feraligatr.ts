@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
@@ -7,7 +8,7 @@ import { AttackEffect } from '../../game/store/effects/game-effects';
 import { ABILITY_USED, ADD_MARKER, BLOCK_EFFECT_IF_MARKER, HAS_MARKER, REMOVE_MARKER_AT_END_OF_TURN, THIS_POKEMON_CANNOT_USE_THIS_ATTACK_NEXT_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 
-export class Feraligatr extends PokemonCard {
+export class Feraligatr extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.STAGE_2;
   public evolvesFrom = 'Croconaw';
   public cardType: CardType = W;
@@ -45,16 +46,6 @@ export class Feraligatr extends PokemonCard {
       effect.damage += 120;
     }
 
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      // Legacy implementation:
-      // - Pushed "Giant Wave" into cannotUseAttacksNextTurnPending if missing.
-      //
-      // Converted to prefab version (THIS_POKEMON_CANNOT_USE_THIS_ATTACK_NEXT_TURN).
-      THIS_POKEMON_CANNOT_USE_THIS_ATTACK_NEXT_TURN(player, this.attacks[0]);
-    }
-
     if (WAS_POWER_USED(effect, 0, this)) {
       BLOCK_EFFECT_IF_MARKER(this.TORRENTIAL_HEART_MARKER, effect.player, this);
 
@@ -65,6 +56,20 @@ export class Feraligatr extends PokemonCard {
         ABILITY_USED(effect.player, this);
       }
     }
+    return Feraligatr.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      const player = effect.player;
+
+      // Legacy implementation:
+      // - Pushed "Giant Wave" into cannotUseAttacksNextTurnPending if missing.
+      //
+      // Converted to prefab version (THIS_POKEMON_CANNOT_USE_THIS_ATTACK_NEXT_TURN).
+      THIS_POKEMON_CANNOT_USE_THIS_ATTACK_NEXT_TURN(player, this.attacks[0]);
+    }
+
     return state;
   }
 }

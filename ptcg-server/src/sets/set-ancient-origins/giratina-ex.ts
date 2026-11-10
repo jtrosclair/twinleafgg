@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
@@ -6,7 +7,7 @@ import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { AbstractAttackEffect, ApplyWeaknessEffect } from '../../game/store/effects/attack-effects';
 
-export class GiratinaEX extends PokemonCard {
+export class GiratinaEX extends PokemonCard implements CopiedAttackOwnershipContract {
 
   public tags = [CardTag.POKEMON_EX];
   public stage: Stage = Stage.BASIC;
@@ -49,6 +50,10 @@ export class GiratinaEX extends PokemonCard {
       }
     }
 
+    return GiratinaEX.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Chaos Wheel
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;

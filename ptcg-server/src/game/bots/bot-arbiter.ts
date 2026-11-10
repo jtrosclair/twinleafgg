@@ -45,15 +45,15 @@ export class BotArbiter {
       let result: number[] = [];
       switch (this.options.shuffleMode) {
         case BotShuffleMode.RANDOM:
-          result = this.shuffle(player.deck);
+          result = prompt.count === undefined ? this.shuffle(player.deck) : this.shuffleCount(prompt.count);
           return new ResolvePromptAction(prompt.id, result);
         case BotShuffleMode.REVERSE:
-          for (let i = player.deck.cards.length - 1; i >= 0; i--) {
+          for (let i = (prompt.count ?? player.deck.cards.length) - 1; i >= 0; i--) {
             result.push(i);
           }
           return new ResolvePromptAction(prompt.id, result);
         default:
-          for (let i = 0; i < player.deck.cards.length; i++) {
+          for (let i = 0; i < (prompt.count ?? player.deck.cards.length); i++) {
             result.push(i);
           }
           return new ResolvePromptAction(prompt.id, result);
@@ -76,6 +76,15 @@ export class BotArbiter {
           return new ResolvePromptAction(prompt.id, result);
       }
     }
+  }
+
+  private shuffleCount(count: number): number[] {
+    const order = Array.from({ length: count }, (_, i) => i);
+    for (let i = count - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    return order;
   }
 
   private shuffle(cards: CardList): number[] {

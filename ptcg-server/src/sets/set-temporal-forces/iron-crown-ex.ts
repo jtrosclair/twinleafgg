@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, PowerType, ChoosePokemonPrompt, GameMessage, PlayerType, SlotType, StateUtils, GamePhase } from '../../game';
@@ -6,7 +7,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { AfterDamageEffect, ApplyWeaknessEffect, DealDamageEffect } from '../../game/store/effects/attack-effects';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class IronCrownex extends PokemonCard {
+export class IronCrownex extends PokemonCard implements CopiedAttackOwnershipContract {
 
   public tags = [CardTag.POKEMON_ex, CardTag.FUTURE];
 
@@ -52,6 +53,22 @@ export class IronCrownex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    if (effect instanceof DealDamageEffect && StateUtils.isPokemonInPlay(effect.player, this)) {
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, effect.player);
+      const source = effect.source.getPokemonCard() as PokemonCard;
+
+      if (state.phase === GamePhase.ATTACK &&
+        source.tags.includes(CardTag.FUTURE) && source.name !== 'Iron Crown ex' &&
+        effect.target === opponent.active && effect.damage > 0 && !IS_ABILITY_BLOCKED(store, state, player, this)
+      ) {
+        effect.damage += 20;
+      }
+    }
+    return IronCrownex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
 
@@ -87,18 +104,6 @@ export class IronCrownex extends PokemonCard {
       });
     }
 
-    if (effect instanceof DealDamageEffect && StateUtils.isPokemonInPlay(effect.player, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, effect.player);
-      const source = effect.source.getPokemonCard() as PokemonCard;
-
-      if (state.phase === GamePhase.ATTACK &&
-        source.tags.includes(CardTag.FUTURE) && source.name !== 'Iron Crown ex' &&
-        effect.target === opponent.active && effect.damage > 0 && !IS_ABILITY_BLOCKED(store, state, player, this)
-      ) {
-        effect.damage += 20;
-      }
-    }
     return state;
   }
 }

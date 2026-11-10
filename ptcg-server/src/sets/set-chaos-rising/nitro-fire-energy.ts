@@ -29,7 +29,16 @@ export class NitroFireEnergy extends EnergyCard {
         store.reduceEffect(state, checkType);
         if (checkType.cardTypes.includes(CardType.FIRE)) {
           effect.cards = effect.cards.filter(c => c !== this);
-          pokemon.energies.moveCardTo(this, owner.hand);
+          // Move the physical attachment so its Energy mirror is cleared too.
+          // Older snapshots can already contain the same card in the hand.
+          if (owner.hand.cards.includes(this)) {
+            pokemon.cards = pokemon.cards.filter(card => card !== this);
+            pokemon.energies.cards = pokemon.energies.cards.filter(card => card !== this);
+          } else if (pokemon.cards.includes(this)) {
+            pokemon.moveCardTo(this, owner.hand);
+          } else {
+            pokemon.energies.moveCardTo(this, owner.hand);
+          }
         }
       } catch {
         return state;

@@ -10,6 +10,7 @@ import {
   CheckAttackCostEffect,
   CheckPokemonStatsEffect,
   CheckPokemonTypeEffect,
+  CheckSpecialConditionRemovalEffect,
   CheckProvidedEnergyEffect
 } from '../effects/check-effects';
 import { Effect } from '../effects/effect';
@@ -44,6 +45,7 @@ import { Card } from '../card/card';
 import { Attack } from '../card/pokemon-types';
 import { WaitPrompt } from '../prompts/wait-prompt';
 import { CoinFlipEffect, CoinFlipSequenceEffect } from '../effects/play-card-effects';
+import { beginAttackDamageScope, cancelAttackDamageScope, finishAttackDamageScope, resolveAfterAttackDamage } from '../prefabs/attack-after-damage';
 
 
 function applyWeaknessAndResistance(
@@ -171,72 +173,82 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
 
   const attackEffect = (effect instanceof AttackEffect) ? effect : new AttackEffect(player, opponent, attack);
   attackEffect.source = attackingPokemon;
-  const copycatCard = attackingPokemon.getPokemonCard();
-  if (delegateFrom && copycatCard) {
-    state = yield* runDelegatedCopiedAttackGenerator(next, {
-      store, state, player, opponent, copycatCard, sourceCard: delegateFrom,
-      selectedAttack: attack, sourceSlot: attackingPokemon, skipLog: true,
+  const attackDamageScope = beginAttackDamageScope(state);
+  try {
+    const copycatCard = attackingPokemon.getPokemonCard();
+    if (delegateFrom && copycatCard) {
+      state = yield* runDelegatedCopiedAttackGenerator(next, {
+        store, state, player, opponent, copycatCard, sourceCard: delegateFrom,
+        selectedAttack: attack, sourceSlot: attackingPokemon, skipLog: true,
+      });
+    } else {
+      state = store.reduceEffect(state, attackEffect);
+      if (store.hasPrompts()) yield store.waitPrompt(state, () => next());
+    }
+
+    // --- Attack Animation Trigger ---
+    // Set triggerAttackAnimation on the attacking Pokemon
+    attackingPokemon.triggerAttackAnimation = true;
+
+    // Find slot and index for the attackingPokemon
+    let slot: string | undefined = undefined;
+    let index: number | undefined = undefined;
+    if (player.active === attackingPokemon) {
+      slot = 'active';
+      index = 0;
+    } else {
+      slot = 'bench';
+      index = player.bench.indexOf(attackingPokemon);
+    }
+    const card = attackingPokemon.getPokemonCard();
+    const cardId = card ? card.id : undefined;
+    const cardType = card ? card.cardType : undefined;
+
+    // Emit attack animation event
+    const game = (store as any).handler;
+    if (game && game.core && typeof game.core.emit === 'function') {
+      game.core.emit((c: any) => {
+        if (typeof c.socket !== 'undefined') {
+          c.socket.emit(`game[${game.id}]:attack`, {
+            playerId: player.id,
+            cardId,
+            slot,
+            index,
+            cardType,
+            opponentId: opponent.id
+          });
+        }
+      });
+    }
+
+    // Yield a wait prompt for the animation (1 second)
+    yield store.prompt(state, new WaitPrompt(player.id, 1000, 'Attack animation'), () => {
+      // After wait, clear the animation flag
+      attackingPokemon.triggerAttackAnimation = false;
+      next();
     });
-  } else {
-    state = store.reduceEffect(state, attackEffect);
-    if (store.hasPrompts()) yield store.waitPrompt(state, () => next());
-  }
+    // --- End Attack Animation Trigger ---
 
-  // --- Attack Animation Trigger ---
-  // Set triggerAttackAnimation on the attacking Pokemon
-  attackingPokemon.triggerAttackAnimation = true;
-
-  // Find slot and index for the attackingPokemon
-  let slot: string | undefined = undefined;
-  let index: number | undefined = undefined;
-  if (player.active === attackingPokemon) {
-    slot = 'active';
-    index = 0;
-  } else {
-    slot = 'bench';
-    index = player.bench.indexOf(attackingPokemon);
-  }
-  const card = attackingPokemon.getPokemonCard();
-  const cardId = card ? card.id : undefined;
-  const cardType = card ? card.cardType : undefined;
-
-  // Emit attack animation event
-  const game = (store as any).handler;
-  if (game && game.core && typeof game.core.emit === 'function') {
-    game.core.emit((c: any) => {
-      if (typeof c.socket !== 'undefined') {
-        c.socket.emit(`game[${game.id}]:attack`, {
-          playerId: player.id,
-          cardId,
-          slot,
-          index,
-          cardType,
-          opponentId: opponent.id
-        });
+    if (!delegateFrom) {
+      const originalDefender = opponent.active;
+      if (attackEffect.damage > 0) {
+        const dealDamage = new DealDamageEffect(attackEffect, attackEffect.damage);
+        state = store.reduceEffect(state, dealDamage);
       }
-    });
-  }
 
-  // Yield a wait prompt for the animation (1 second)
-  yield store.prompt(state, new WaitPrompt(player.id, 1000, 'Attack animation'), () => {
-    // After wait, clear the animation flag
-    attackingPokemon.triggerAttackAnimation = false;
-    next();
-  });
-  // --- End Attack Animation Trigger ---
+      state = yield* resolveAfterAttackDamage(() => next(), store, state, attackEffect);
+      state = yield* finishAttackDamageScope(() => next(), store, state, attackDamageScope);
 
-  if (!delegateFrom) {
-    if (attackEffect.damage > 0) {
-      const dealDamage = new DealDamageEffect(attackEffect, attackEffect.damage);
-      state = store.reduceEffect(state, dealDamage);
+      const afterAttackEffect = new AfterAttackEffect(effect.player, opponent, attack, originalDefender);
+      state = store.reduceEffect(state, afterAttackEffect);
+
+      if (store.hasPrompts()) {
+        yield store.waitPrompt(state, () => next());
+      }
     }
 
-    const afterAttackEffect = new AfterAttackEffect(effect.player, opponent, attack);
-    state = store.reduceEffect(state, afterAttackEffect);
-
-    if (store.hasPrompts()) {
-      yield store.waitPrompt(state, () => next());
-    }
+  } finally {
+    cancelAttackDamageScope(attackDamageScope);
   }
 
   if ((attack.barrage || hasBarragePower) && !(effect as any)._barrageUsed) {
@@ -374,6 +386,9 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
       } else if (effect.target.marker.hasMarker('LOST_CITY_MARKER') || card.tags.includes(CardTag.PRISM_STAR)) {
         const lostZoned = new CardList();
         const attachedCards = new CardList();
+        // Fossils played as Pokémon remain Trainer cards. Remember their
+        // in-play role before clearing the slot, including an evolution stack.
+        const pokemonCards = new Set<Card>(effect.target.getPokemons());
 
         // Clear damage and effects before splitting cards
         effect.target.damage = 0;
@@ -395,7 +410,7 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
           }
 
           // Handle the main card
-          if (removedCard.superType === SuperType.POKEMON || removedCard.tags.includes(CardTag.PRISM_STAR)) {
+          if (pokemonCards.has(removedCard) || removedCard.superType === SuperType.POKEMON || removedCard.tags.includes(CardTag.PRISM_STAR)) {
             lostZoned.cards.push(removedCard);
           } else {
             attachedCards.cards.push(removedCard);
@@ -457,7 +472,7 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
     const card = effect.card;
 
     store.log(state, GameLog.LOG_PLAYER_USES_ABILITY, { name: player.name, ability: power.name });
-    state = store.reduceEffect(state, new PowerEffect(player, power, card));
+    state = store.reduceEffect(state, new PowerEffect(player, power, card, effect.destination));
     return state;
   }
 
@@ -585,9 +600,19 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
       pokemon: pokemonCard.name,
       card: effect.pokemonCard.name
     });
-    effect.player.hand.moveCardTo(effect.pokemonCard, effect.target);
+    effect.source.moveCardTo(effect.pokemonCard, effect.target);
     effect.target.pokemonPlayedTurn = state.turn;
     effect.target.marker.markers = [];
+
+    // All successful evolution paths clear Pokémon effects, while Stadiums
+    // and other rules may preserve selected Special Conditions.
+    const removal = new CheckSpecialConditionRemovalEffect(effect.player, effect.target);
+    store.reduceEffect(state, removal);
+    effect.target._preservedConditionsDuringEvolution = removal.preservedConditions;
+    if (effect.clearPlayerMarkers) effect.player.removePokemonEffects(effect.target);
+    else effect.target.clearEffects();
+    effect.target._preservedConditionsDuringEvolution = undefined;
+    effect.target.triggerEvolutionAnimation = true;
   }
 
   if (effect instanceof MoveCardsEffect) {

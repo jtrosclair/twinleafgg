@@ -1,7 +1,7 @@
 import { AttachEnergyPrompt, CardTag, CardTarget, CardType, ChoosePokemonPrompt, ConfirmPrompt, EnergyType, GameMessage, PlayerType, PokemonCard, PowerType, ShuffleDeckPrompt, SlotType, Stage, State, StateUtils, StoreLike, SuperType } from '../../game';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
 import { IS_ABILITY_BLOCKED, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class MarniesGrimmsnarlex extends PokemonCard {
@@ -36,7 +36,7 @@ export class MarniesGrimmsnarlex extends PokemonCard {
   public fullName: string = 'Marnie\'s Grimmsnarl ex DRI';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if ((effect instanceof EvolveEffect) && effect.pokemonCard === this) {
+    if ((effect instanceof AfterEvolveEffect) && effect.pokemonCard === this && effect.playedFromHand && state.players[state.activePlayer] === effect.player) {
       const player = effect.player;
 
       if (player.deck.cards.length === 0) {

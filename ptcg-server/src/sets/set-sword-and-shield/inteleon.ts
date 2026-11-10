@@ -1,6 +1,6 @@
 import { PokemonCard, CardTag, Stage, CardType, PowerType, ChooseCardsPrompt, ConfirmPrompt, GameMessage, ShowCardsPrompt, State, StateUtils, StoreLike, SuperType, ShuffleDeckPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
 import { THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON } from '../../game/store/prefabs/attack-effects';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
@@ -49,7 +49,7 @@ export class Inteleon extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof EvolveEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this && effect.playedFromHand && state.players[state.activePlayer] === effect.player) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

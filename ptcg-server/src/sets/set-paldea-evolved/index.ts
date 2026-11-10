@@ -1,3 +1,4 @@
+import { Oricorio } from './oricorio';
 import { Card } from '../../game/store/card/card';
 import { Arctibax } from './arctibax';
 import { Artazon } from './artazon';
@@ -88,6 +89,8 @@ import { Gothitelle } from './gothitelle';
 import { Larvitar } from './larvitar';
 import { Pupitar } from './pupitar';
 import { Tyranitar } from './tyranitar';
+
+import { Slowpoke } from './slowpoke';
 
 export const setPaldeaEvolved: Card[] = [
 
@@ -218,4 +221,6 @@ export const setPaldeaEvolved: Card[] = [
   new TingLuexHR(),
 
 
+  new Oricorio(),
+  new Slowpoke(),
 ];

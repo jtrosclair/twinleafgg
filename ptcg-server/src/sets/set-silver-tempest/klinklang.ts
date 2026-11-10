@@ -3,7 +3,7 @@ import { Stage, CardType, SuperType, EnergyType } from '../../game/store/card/ca
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { StoreLike, State, ConfirmPrompt, GameMessage, AttachEnergyPrompt, PlayerType, SlotType, StateUtils, ShuffleDeckPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
 import { IS_ABILITY_BLOCKED, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
 
 export class Klinklang extends PokemonCard {
@@ -37,7 +37,7 @@ export class Klinklang extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if ((effect instanceof EvolveEffect) && effect.pokemonCard === this) {
+    if ((effect instanceof AfterEvolveEffect) && effect.pokemonCard === this && effect.playedFromHand && state.players[state.activePlayer] === effect.player) {
       const player = effect.player;
 
       if (player.deck.cards.length === 0) {

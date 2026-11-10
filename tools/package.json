@@ -1,6 +1,14 @@
 {
+  "scripts": {
+    "serve:client-simulator": "node serve-client-simulator.cjs",
+    "test:client-simulator": "node test-client-simulator.cjs",
+    "test:bench-layout": "node test-bench-layout.cjs",
+    "test:hand-position": "node test-hand-position.cjs",
+    "test:card-selector": "node test-card-selector.cjs"
+  },
   "devDependencies": {
     "jsdom": "^26.0.0",
+    "playwright": "1.55.1",
     "typescript": "~4.3.5"
   }
 }

@@ -2,7 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SpecialCondition } from '../../game/store/card/card-types';
 import { GameError, GameMessage, PlayerType, PokemonCardList, PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect, PowerEffect } from '../../game/store/effects/game-effects';
+import { CheckEvolveEffect, EvolveEffect, PowerEffect } from '../../game/store/effects/game-effects';
 
 export class Aerodactyl extends PokemonCard {
 
@@ -49,7 +49,7 @@ export class Aerodactyl extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof EvolveEffect) {
+    if (((effect instanceof CheckEvolveEffect || (effect instanceof EvolveEffect && !effect.preflightComplete)) && effect.playedFromHand)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

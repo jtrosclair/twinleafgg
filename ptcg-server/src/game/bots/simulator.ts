@@ -6,7 +6,7 @@ import { StoreHandler } from '../store/store-handler';
 import { GameError } from '../game-error';
 import { GameCoreError } from '../game-message';
 import { ResolvePromptAction } from '../store/actions/resolve-prompt-action';
-import { deepClone } from '../../utils';
+import { deepClone } from '../../utils/utils';
 import { Card } from '../store/card/card';
 
 

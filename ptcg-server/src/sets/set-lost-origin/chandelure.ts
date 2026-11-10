@@ -6,7 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, BoardEffect } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils, GameMessage, ConfirmPrompt, PlayerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
 import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class Chandelure extends PokemonCard {
@@ -43,7 +43,7 @@ export class Chandelure extends PokemonCard {
     // Ability: Mountain Roasting - on-evolve, may discard top 3 cards of opponent's deck
     // Ref: set-astral-radiance/togekiss.ts (Shine of Happiness - EvolveEffect on-evolve ability pattern)
     // Ref: set-lost-origin/stonjourner.ts (opponent.deck.moveTo pattern)
-    if (effect instanceof EvolveEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this && effect.playedFromHand && state.players[state.activePlayer] === effect.player) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {

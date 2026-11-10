@@ -1,0 +1,156 @@
+{
+  "packageHash": "3a9b5bff1a33c45712fcb97173d143fefa345068124a902e9380405a50999630",
+  "scope": "Desktop browser rendering only; no new physical mobile WebView gesture checks or gameplay replays were run for this SVG-only change.",
+  "localPuzzles": [
+    {
+      "name": "Trapped in the Phantom Maze",
+      "boardPainted": true,
+      "svgImages": 5,
+      "loadedSvgImages": 5,
+      "unsafeImages": 0,
+      "loadedScanDimensions": [
+        "736x1024"
+      ],
+      "allScansLazyAsync": true
+    },
+    {
+      "name": "Explosive Hand",
+      "boardPainted": true,
+      "svgImages": 3,
+      "loadedSvgImages": 3,
+      "unsafeImages": 0,
+      "loadedScanDimensions": [
+        "736x1024"
+      ],
+      "allScansLazyAsync": true
+    },
+    {
+      "name": "Breaking Through the Wall",
+      "boardPainted": true,
+      "svgImages": 8,
+      "loadedSvgImages": 8,
+      "unsafeImages": 0,
+      "loadedScanDimensions": [
+        "736x1024"
+      ],
+      "allScansLazyAsync": true
+    },
+    {
+      "name": "Something's Fishy",
+      "boardPainted": true,
+      "svgImages": 1,
+      "loadedSvgImages": 1,
+      "unsafeImages": 0,
+      "loadedScanDimensions": [
+        "736x1024"
+      ],
+      "allScansLazyAsync": true
+    },
+    {
+      "name": "Deck out with Dengo",
+      "boardPainted": true,
+      "svgImages": 4,
+      "loadedSvgImages": 4,
+      "unsafeImages": 0,
+      "loadedScanDimensions": [
+        "736x1024"
+      ],
+      "allScansLazyAsync": true
+    }
+  ],
+  "inlineEnergy": {
+    "inline": {
+      "bootstrap": [
+        "http://localhost:4200/simulator-static.28618afbc4a3433de5c4.js?local=1794026685580.629"
+      ],
+      "cssSvgBackgrounds": 6,
+      "inline": [
+        {
+          "display": [
+            18,
+            18
+          ],
+          "loaded": true,
+          "natural": [
+            100,
+            100
+          ],
+          "svgUtf8": true
+        }
+      ]
+    },
+    "logs": []
+  },
+  "loadingLogo": [
+    {
+      "display": [
+        93.015625,
+        16
+      ],
+      "loaded": true,
+      "natural": [
+        4738,
+        815
+      ],
+      "svgUtf8": true
+    }
+  ],
+  "live": {
+    "check": {
+      "base": "https://sim-static.prizemap.app/releases/3a9b5bff1a33c45712fcb97173d143fefa345068124a902e9380405a50999630/",
+      "bootstrap": [
+        "https://sim-static.prizemap.app/releases/3a9b5bff1a33c45712fcb97173d143fefa345068124a902e9380405a50999630/simulator-static.28618afbc4a3433de5c4.js"
+      ],
+      "hashPrefix": "#gz2.",
+      "path": "/sandbox-viewer",
+      "scanDimensions": [
+        "736x1024"
+      ],
+      "svgImages": [
+        {
+          "decoding": "async",
+          "loaded": true,
+          "loading": "lazy",
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "decoding": "async",
+          "loaded": true,
+          "loading": "lazy",
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "decoding": "async",
+          "loaded": true,
+          "loading": "lazy",
+          "natural": [
+            138,
+            192
+          ]
+        },
+        {
+          "decoding": "async",
+          "loaded": true,
+          "loading": "lazy",
+          "natural": [
+            138,
+            192
+          ]
+        }
+      ],
+      "unsafeImages": 0
+    },
+    "logs": []
+  },
+  "presentationComparison": "225 pixel-identical render pairs are recorded in simulator-svg-minification-results.json and simulator-svg-minification-renders.json",
+  "screenshots": {
+    "comparison": "/Users/jerrytrosclair/.codex/visualizations/2026/11/06/01a1af35-a82d-7891-8651-53d54b357e07/webp-comparison/svg-minified-comparison.png",
+    "liveBoard": "/Users/jerrytrosclair/.codex/visualizations/2026/11/06/01a1af35-a82d-7891-8651-53d54b357e07/webp-comparison/svg-optimized-live-board.png"
+  }
+}

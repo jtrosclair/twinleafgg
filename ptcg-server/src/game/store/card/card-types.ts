@@ -52,6 +52,7 @@ export enum CardTag {
   ARVENS = 'Arven\'s',
   AURAS = 'Aura\'s',
   POKEMON_SV_MEGA = 'Mega ex',
+  DUAL_STADIUM = 'Dual Stadium',
   HOLONS = 'Holon\'s',
   ROCKETS = 'Rocket\'s', // For old cards
   TEAM_ROCKET = 'Team Rocket\'s', // For new cards
@@ -1382,7 +1383,7 @@ export const Energy = {
 } as const;
 
 Object.entries(Energy).forEach(([key, value]) => {
-  (global as any)[key] = value;
+  (globalThis as any)[key] = value;
 });
 
 declare global {

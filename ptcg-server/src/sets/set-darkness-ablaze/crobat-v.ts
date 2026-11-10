@@ -53,14 +53,9 @@ export class CrobatV extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.DARK_ASSET_MARKER, this)) {
-      const player = effect.player;
-      player.marker.removeMarker(this.DARK_ASSET_MARKER, this);
-    }
-
     if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
       const player = effect.player;
-      if (player.marker.hasMarker(this.DARK_ASSET_MARKER, this)) {
+      if (player.marker.hasMarker(this.DARK_ASSET_MARKER)) {
         return state;
       }
 
@@ -98,4 +93,14 @@ export class CrobatV extends PokemonCard {
 
     return state;
   }
+  // A used Ability belongs to the player for the turn even if its source
+  // leaves play or enters the Lost Zone. Store dispatches this after an
+  // accepted end turn using the marker's retained source reference.
+  public reducePlayerMarkerEffect(_store: StoreLike, state: State, effect: Effect, owner: import('../../game/store/state/player').Player, marker: import('../../game/store/state/card-marker').MarkerItem): State {
+    if (effect instanceof EndTurnEffect && effect.player === owner && marker.name === this.DARK_ASSET_MARKER) {
+      owner.marker.removeMarker(this.DARK_ASSET_MARKER, this);
+    }
+    return state;
+  }
+
 }

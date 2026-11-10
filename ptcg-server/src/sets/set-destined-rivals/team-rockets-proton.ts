@@ -6,8 +6,9 @@ import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { CardTag, Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
-import { Card, ChooseCardsPrompt, StateUtils } from '../../game';
-import { MOVE_CARDS, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
+import { Card, ChooseCardsPrompt, PokemonCard, StateUtils } from '../../game';
+import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
+import { MOVE_CARDS, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 
 export class TeamRocketsProton extends TrainerCard {
@@ -51,7 +52,6 @@ Search your deck for up to 3 Basic Team Rocket's Pokémon, reveal them, and put 
       // We will discard this card after prompt confirmation
       effect.preventDefault = true;
 
-      let cards: Card[] = [];
       return store.prompt(state, new ChooseCardsPrompt(
         player,
         GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
@@ -59,11 +59,21 @@ Search your deck for up to 3 Basic Team Rocket's Pokémon, reveal them, and put 
         { superType: SuperType.POKEMON, stage: Stage.BASIC },
         { min: 0, max: 3, allowCancel: false, blocked: blocked }
       ), selectedCards => {
-        cards = selectedCards || [];
-
-        MOVE_CARDS(store, state, player.deck, player.hand, { cards: cards, sourceCard: this });
-        SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-        SHUFFLE_DECK(store, state, player);
+        if (!Array.isArray(selectedCards) || selectedCards.length > 3 ||
+          new Set(selectedCards).size !== selectedCards.length || selectedCards.some((card: Card) =>
+            !(card instanceof PokemonCard) || card.stage !== Stage.BASIC ||
+            !card.tags.includes(CardTag.TEAM_ROCKET) || !player.deck.cards.includes(card))) {
+          throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+        }
+        if (selectedCards.length === 0) {
+          SHUFFLE_DECK(store, state, player);
+          return;
+        }
+        // Preserve the printed reveal → move → shuffle order across prompts.
+        store.prompt(state, new ShowCardsPrompt(opponent.id, GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, selectedCards), () => {
+          MOVE_CARDS(store, state, player.deck, player.hand, { cards: selectedCards, sourceCard: this, sourceEffect: effect });
+          SHUFFLE_DECK(store, state, player);
+        });
       });
     }
 

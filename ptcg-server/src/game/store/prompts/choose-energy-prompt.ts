@@ -10,7 +10,7 @@ export interface ChooseEnergyOptions {
   allowCancel: boolean;
 }
 
-export type EnergyMap = { card: Card, provides: CardType[] }
+export type EnergyMap = { card: Card, provides: CardType[], disableBlend?: boolean }
 
 export class ChooseEnergyPrompt extends Prompt<EnergyMap[]> {
 

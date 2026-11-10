@@ -20,7 +20,7 @@ export class Arbiter {
     }
 
     if (prompt instanceof ShuffleDeckPrompt) {
-      const result = this.shuffle(player.deck);
+      const result = this.shuffle(prompt.count ?? player.deck.cards.length);
       return new ResolvePromptAction(prompt.id, result);
     }
 
@@ -34,8 +34,7 @@ export class Arbiter {
     }
   }
 
-  private shuffle(cards: CardList): number[] {
-    const len = cards.cards.length;
+  private shuffle(len: number): number[] {
     const order: number[] = [];
     // Initialize the order array with indices 0 to len - 1
     for (let i = 0; i < len; i++) {

@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { CardTag, CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
@@ -7,7 +8,7 @@ import { ApplyWeaknessEffect, AfterDamageEffect, PutDamageEffect } from '../../g
 
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Tatsugiriex extends PokemonCard {
+export class Tatsugiriex extends PokemonCard implements CopiedAttackOwnershipContract {
 
   public stage: Stage = Stage.BASIC;
 
@@ -52,6 +53,21 @@ export class Tatsugiriex extends PokemonCard {
   public fullName: string = 'Tatsugiri ex SSP';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+
+      // Target is not Active
+      if (effect.target === player.active || effect.target === opponent.active) {
+        return state;
+      }
+
+      effect.preventDefault = true;
+    }
+    return Tatsugiriex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
@@ -113,17 +129,7 @@ export class Tatsugiriex extends PokemonCard {
       });
     }
 
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
 
-      // Target is not Active
-      if (effect.target === player.active || effect.target === opponent.active) {
-        return state;
-      }
-
-      effect.preventDefault = true;
-    }
     return state;
   }
 }

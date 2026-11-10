@@ -6,6 +6,18 @@ import { Effect } from '../../game/store/effects/effect';
 
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
+// A copied attack runs as its user, which need not have Weavile's methods.
+function hasActuallyUsableAbility(store: StoreLike, state: State, player: any, pokemon: PokemonCard): boolean {
+  for (const power of pokemon.powers) {
+    if (power.powerType === PowerType.ABILITY) {
+      if (!IS_ABILITY_BLOCKED(store, state, player, pokemon) || power.exemptFromAbilityLock || power.exemptFromInitialize || power.abilityLock) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 export class Weavile extends PokemonCard {
 
   public stage: Stage = Stage.STAGE_1;
@@ -60,7 +72,7 @@ export class Weavile extends PokemonCard {
       const opponentActive = opponent.active.getPokemonCard();
       if (opponentActive && opponentActive.powers.length > 0) {
         // Check if the ability is actually usable
-        if (this.hasActuallyUsableAbility(store, state, opponent, opponentActive)) {
+        if (hasActuallyUsableAbility(store, state, opponent, opponentActive)) {
           pokemonWithUsableAbilities++;
         }
       }
@@ -71,7 +83,7 @@ export class Weavile extends PokemonCard {
           const benchPokemon = benchSlot.getPokemonCard();
           if (benchPokemon && benchPokemon.powers.length > 0) {
             // Check if the ability is actually usable
-            if (this.hasActuallyUsableAbility(store, state, opponent, benchPokemon)) {
+            if (hasActuallyUsableAbility(store, state, opponent, benchPokemon)) {
               pokemonWithUsableAbilities++;
             }
           }
@@ -90,14 +102,4 @@ export class Weavile extends PokemonCard {
     return state;
   }
 
-  private hasActuallyUsableAbility(store: StoreLike, state: State, player: any, pokemon: PokemonCard): boolean {
-    for (const power of pokemon.powers) {
-      if (power.powerType === PowerType.ABILITY) {
-        if (!IS_ABILITY_BLOCKED(store, state, player, pokemon) || power.exemptFromAbilityLock || power.exemptFromInitialize || power.abilityLock) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
 }

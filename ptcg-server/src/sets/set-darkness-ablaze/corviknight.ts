@@ -6,7 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { ConfirmPrompt, GameMessage, PlayerType, PowerType, SlotType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
 import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
 import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
@@ -45,7 +45,7 @@ export class Corviknight extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Flying Taxi
     // Ref: set-sword-and-shield/drizzile.ts (EvolveEffect + ConfirmPrompt ability pattern)
-    if (effect instanceof EvolveEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this && effect.playedFromHand && state.players[state.activePlayer] === effect.player) {
       const player = effect.player;
 
       // Check if ability is blocked

@@ -49,7 +49,9 @@ export class GiratinaLVX extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Invisible Tentacles
-    if (effect instanceof AttackEffect){
+    // An attack by this Pokemon must continue to Darkness Lost below.
+    // Ref: set-ex-unseen-forces/ursaring.ts (opposing-attacker Poké-Body)
+    if (effect instanceof AttackEffect && !effect.source.cards.includes(this)){
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
       const cardList = StateUtils.findCardList(state, this);
@@ -81,8 +83,11 @@ export class GiratinaLVX extends PokemonCard {
     }
 
     // Darkness Lost
+    // Ref: set-30th-celebration/darkrai-cresselia-legend.ts (damage KO to Lost Zone)
     if (WAS_ATTACK_USED(effect, 0, this)){
       const opponent = effect.opponent;
+      effect.damage += 30;
+      effect.damageKnockOutsToLostZone = true;
       
       opponent.forEachPokemon(PlayerType.BOTTOM_PLAYER, card => {
         if (card !== opponent.active){
@@ -90,13 +95,13 @@ export class GiratinaLVX extends PokemonCard {
           damage.target = card;
           store.reduceEffect(state, damage);
 
-          card.marker.addMarker(this.DARKNESS_LOST_MARKER, this);
         }
       });
     }
 
+    // Preserve pending markers from snapshots saved before damage provenance.
+    // New Darkness Lost attacks rely on damageKnockOutsToLostZone above.
     if (effect instanceof KnockOutEffect && effect.target.marker.hasMarker(this.DARKNESS_LOST_MARKER, this)){
-      // just using the already existing code for lost city because i can't be bothered to do an engine change
       effect.target.marker.addMarker('LOST_CITY_MARKER', this);
     }
 

@@ -1,10 +1,11 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, StateUtils } from '../../game';
 import { DealDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Drednaw extends PokemonCard {
+export class Drednaw extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.STAGE_1;
   public cardType: CardType = CardType.WATER;
   public hp: number = 140;
@@ -36,9 +37,17 @@ export class Drednaw extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (effect instanceof DealDamageEffect && effect.target.cards.includes(this) && effect.damage >= 200) {
-      effect.damage = 0;
+      // Ref: set-stellar-crown/bouffalant.ts (passive ability permission).
+      const owner = StateUtils.findOwner(state, effect.target);
+      if (!IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        effect.damage = 0;
+      }
     }
 
+    return Drednaw.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);

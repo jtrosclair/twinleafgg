@@ -5,7 +5,7 @@
     </div>
     <div class="ptcg-prompt-controls">
       <button mat-icon-button (click)="minimize()">
-        <mat-icon class="minimize-icon">keyboard_arrow_down</mat-icon>
+        <svg class="ptcg-icon minimize-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"></path></svg>
       </button>
     </div>
   </div>
@@ -25,16 +25,16 @@
               {{ pokemon.cardList.getPokemonCard()?.name }}
             </div>
             <img *ngIf="getCardScanUrl(pokemon.cardList.getPokemonCard())"
-              [src]="getCardScanUrl(pokemon.cardList.getPokemonCard())" alt="Pokemon">
+              [ptcgImageCache]="getCardScanUrl(pokemon.cardList.getPokemonCard())" alt="Pokemon">
 
             <!-- Energy icons display -->
             <div class="energy-icons-container">
               <div class="energy-icons">
                 <ng-container *ngFor="let energy of getVisibleEnergyCards(pokemon).slice().reverse()">
                   <div class="energy-icon">
-                    <img *ngIf="getCustomEnergyImageUrl(energy)" [src]="getCustomEnergyImageUrl(energy)"
+                    <img *ngIf="getCustomEnergyImageUrl(energy)" [ptcgImageCache]="getCustomEnergyImageUrl(energy)"
                       [alt]="energy.name">
-                    <img *ngIf="!getCustomEnergyImageUrl(energy)" [src]="getCardScanUrl(energy)" [alt]="energy.name"
+                    <img *ngIf="!getCustomEnergyImageUrl(energy)" [ptcgImageCache]="getCardScanUrl(energy)" [alt]="energy.name"
                       class="card-image">
                   </div>
                 </ng-container>
@@ -60,16 +60,16 @@
               {{ pokemon.cardList.getPokemonCard()?.name }}
             </div>
             <img *ngIf="getCardScanUrl(pokemon.cardList.getPokemonCard())"
-              [src]="getCardScanUrl(pokemon.cardList.getPokemonCard())" alt="Pokemon">
+              [ptcgImageCache]="getCardScanUrl(pokemon.cardList.getPokemonCard())" alt="Pokemon">
 
             <!-- Energy icons display -->
             <div class="energy-icons-container">
               <div class="energy-icons">
                 <ng-container *ngFor="let energy of getVisibleEnergyCards(pokemon).slice().reverse()">
                   <div class="energy-icon">
-                    <img *ngIf="getCustomEnergyImageUrl(energy)" [src]="getCustomEnergyImageUrl(energy)"
+                    <img *ngIf="getCustomEnergyImageUrl(energy)" [ptcgImageCache]="getCustomEnergyImageUrl(energy)"
                       [alt]="energy.name">
-                    <img *ngIf="!getCustomEnergyImageUrl(energy)" [src]="getCardScanUrl(energy)" [alt]="energy.name"
+                    <img *ngIf="!getCustomEnergyImageUrl(energy)" [ptcgImageCache]="getCardScanUrl(energy)" [alt]="energy.name"
                       class="card-image">
                   </div>
                 </ng-container>
@@ -93,7 +93,7 @@
           <div class="card-fallback" *ngIf="!getCardScanUrl(energy)">
             {{ energy.name }}
           </div>
-          <img *ngIf="getCardScanUrl(energy)" [src]="getCardScanUrl(energy)" alt="Energy">
+          <img *ngIf="getCardScanUrl(energy)" [ptcgImageCache]="getCardScanUrl(energy)" alt="Energy">
         </div>
       </div>
       <!-- Empty state message for available energies -->
@@ -121,9 +121,9 @@
           <div class="card-fallback" *ngIf="!selection.scanUrl">
             {{ selection.card.name }}
           </div>
-          <img *ngIf="selection.scanUrl" [src]="selection.scanUrl" alt="Energy">
+          <img *ngIf="selection.scanUrl" [ptcgImageCache]="selection.scanUrl" alt="Energy">
           <div class="energy-card-overlay">
-            <mat-icon>close</mat-icon>
+            <svg class="ptcg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
           </div>
         </div>
       </div>

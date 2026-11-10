@@ -3,6 +3,7 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, PlayerType, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { DealDamageEffect } from '../../game/store/effects/attack-effects';
+import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class Kingambit extends PokemonCard {
 
@@ -62,12 +63,19 @@ export class Kingambit extends PokemonCard {
         return state;
       }
 
+      // Ref: set-scarlet-and-violet/arboliva.ts (Ability permission).
+      // Leadership applies only to damage to the opponent's Active Pokémon.
+      if (effect.target !== opponent.active) {
+        return state;
+      }
+
       // making this only affect our pokemon's damage if it's a basic 
       // (wow this is actually garbage in standard why does it only affect basics and not every stage of pokemon)
       const oppActive = opponent.active.getPokemonCard();
       const damageSource = effect.source.getPokemonCard();
 
-      if (damageSource && damageSource.stage === Stage.BASIC && damageSource !== oppActive) {
+      if (damageSource && damageSource.stage === Stage.BASIC && damageSource !== oppActive &&
+        !IS_ABILITY_BLOCKED(store, state, player, this)) {
         effect.damage += 30;
         return state;
       }

@@ -1,7 +1,7 @@
 import { PokemonCard, CardTag, Stage, CardType, PowerType, StoreLike, State, ConfirmPrompt, GameMessage, SuperType, PlayerType, AttachEnergyPrompt, SlotType, StateUtils, EnergyCard, CardTarget, EnergyType } from '../../game';
 import { CheckPokemonStatsEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
@@ -40,7 +40,7 @@ export class Archaludonex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof EvolveEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this && effect.playedFromHand && state.players[state.activePlayer] === effect.player) {
       const player = effect.player;
 
       const hasMetalEnergyInDiscard = player.discard.cards.some(c => {

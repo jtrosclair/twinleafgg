@@ -31,6 +31,7 @@ export class BubbleWaterEnergy extends EnergyCard {
       }
       const checkPokemonType = new CheckPokemonTypeEffect(effect.target);
       store.reduceEffect(state, checkPokemonType);
+      if (!checkPokemonType.cardTypes.includes(CardType.WATER)) return state;
       effect.target.removeSpecialCondition(SpecialCondition.ASLEEP);
       effect.target.removeSpecialCondition(SpecialCondition.PARALYZED);
       effect.target.removeSpecialCondition(SpecialCondition.CONFUSED);
@@ -38,7 +39,12 @@ export class BubbleWaterEnergy extends EnergyCard {
       effect.target.removeSpecialCondition(SpecialCondition.BURNED);
     }
     PREVENT_AND_CLEAR_SPECIAL_CONDITIONS(state, effect, {
-      shouldApply: (target, owner) => !!owner && target.cards.includes(this) && !IS_SPECIAL_ENERGY_BLOCKED(store, state, owner, this, target),
+      shouldApply: (target, owner) => {
+        if (!owner || !target.cards.includes(this) || IS_SPECIAL_ENERGY_BLOCKED(store, state, owner, this, target)) return false;
+        const checkPokemonType = new CheckPokemonTypeEffect(target);
+        store.reduceEffect(state, checkPokemonType);
+        return checkPokemonType.cardTypes.includes(CardType.WATER);
+      },
     });
     return state;
   }

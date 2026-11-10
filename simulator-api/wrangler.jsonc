@@ -1,0 +1,7 @@
+{
+  "name": "prizemap-simulator-api",
+  "main": "service.ts",
+  "compatibility_date": "2026-01-01",
+  "workers_dev": false,
+  "minify": true
+}

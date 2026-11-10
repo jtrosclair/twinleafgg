@@ -72,6 +72,8 @@ import { Yungoos } from './yungoos';
 import { Yveltal } from './yveltal';
 import { IronDefender } from './iron-defender';
 
+import { Tyrogue } from './tyrogue';
+
 export const setMegaEvolution: Card[] = [
   new Abra(),
   new AcerolasMischief(),
@@ -200,4 +202,5 @@ export const setMegaEvolution: Card[] = [
   new WallysCompassion3MEG(),
   new MegaGardevoirex4MEG(),
   new MegaLucarioex4MEG(),
+  new Tyrogue(),
 ];

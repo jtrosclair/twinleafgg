@@ -171,7 +171,13 @@ export class Mew extends PokemonCard {
         { allowCancel: false, blocked }
       ), attack => {
         if (attack !== null) {
+          const sourceCard = pokemonCards.find(card => card.attacks.includes(attack));
+          if (!sourceCard) throw new GameError(GameMessage.INVALID_TARGET);
           const useAttackEffect = new UseAttackEffect(player, attack);
+          // Lost Zone cards do not receive ordinary reducer fan-out. Delegate
+          // explicitly, as with other attacks used by a different Pokémon.
+          useAttackEffect.delegateFrom = sourceCard;
+          useAttackEffect.source = player.active;
           store.reduceEffect(state, useAttackEffect);
         }
       });
@@ -189,11 +195,12 @@ export class Mew extends PokemonCard {
 
     const pokemonCards: PokemonCard[] = [];
     const blocked: { index: number, attack: string }[] = [];
-    player.lostzone.cards.forEach(card => {
+    const opponent = StateUtils.getOpponent(state, player);
+    [player, opponent].forEach(owner => owner.lostzone.cards.forEach(card => {
       if (card instanceof PokemonCard) {
         this.checkAttack(state, store, player, card, energyMap, pokemonCards, blocked);
       }
-    });
+    }));
 
     return { pokemonCards, blocked };
   }

@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SpecialCondition } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
@@ -11,7 +12,7 @@ import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effe
 import { StateUtils } from '../../game/store/state-utils';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Articuno extends PokemonCard {
+export class Articuno extends PokemonCard implements CopiedAttackOwnershipContract {
 
   public stage: Stage = Stage.BASIC;
 
@@ -55,26 +56,7 @@ export class Articuno extends PokemonCard {
   public setNumber: string = '17';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-      const specialConditionEffect = new AddSpecialConditionsEffect(effect, [SpecialCondition.ASLEEP]);
-      store.reduceEffect(state, specialConditionEffect);
-    }
-
-    if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-      return store.prompt(state, [
-        new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP),
-        new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP),
-        new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
-      ], results => {
-        let heads: number = 0;
-        results.forEach(r => { heads += r ? 1 : 0; });
-        effect.damage += 40 * heads;
-      });
-    }
-
-    // Delta Plus
+    // Delta Plus belongs to the card, not to a copied attack.
     if (effect instanceof KnockOutEffect) {
       // KnockOutEffect.player is the owner of the KO'd Pokemon (defender), not the attacker.
       const knockedOutOwner = effect.player;
@@ -102,6 +84,28 @@ export class Articuno extends PokemonCard {
         effect.prizeCount += 1;
         return state;
       }
+    }
+
+    return Articuno.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      const specialConditionEffect = new AddSpecialConditionsEffect(effect, [SpecialCondition.ASLEEP]);
+      store.reduceEffect(state, specialConditionEffect);
+    }
+
+    if (WAS_ATTACK_USED(effect, 1, this)) {
+      const player = effect.player;
+      return store.prompt(state, [
+        new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP),
+        new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP),
+        new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
+      ], results => {
+        let heads: number = 0;
+        results.forEach(r => { heads += r ? 1 : 0; });
+        effect.damage += 40 * heads;
+      });
     }
 
     return state;

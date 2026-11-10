@@ -13,6 +13,15 @@ export class Rules {
 
   public alternativeSetup = false;
 
+  // Optional to preserve the wire shape of existing puzzle snapshots.
+  declare oldBurnRule?: boolean;
+
+  // Omitted fields retain the modern one-per-turn and Stadium replacement rules.
+  // Upstream retro snapshots may explicitly set these without rewriting older states.
+  declare oneRetreatPerTurn?: boolean;
+  declare oneStadiumPerTurn?: boolean;
+  declare allowSameNameStadium?: boolean;
+
   constructor(init: Partial<Rules> = {}) {
     Object.assign(this, init);
   }

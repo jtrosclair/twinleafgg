@@ -20,6 +20,7 @@ import { getCardTarget } from '../../../simple-bot/simple-tactics/simple-tactics
 import { EffectOfAttackEffect } from '../effects/effect-of-attack-effects';
 import { GameStatsTracker } from '../game-stats-tracker';
 import { CheckHpEffect } from '../effects/check-effects';
+import { CardTag } from '../card/card-types';
 
 export function attackReducer(store: StoreLike, state: State, effect: Effect): State {
   if (effect instanceof GustOpponentBenchEffect) {
@@ -54,6 +55,8 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
       const targetOwner = StateUtils.findOwner(state, target);
       targetOwner.marker.addMarkerToState(targetOwner.DAMAGE_DEALT_MARKER);
     }
+
+    effect.applyPostWeaknessReductions();
 
     // Apply damage reduction for "during opponent's next turn" effects
     if (target.damageReductionNextTurn > 0) {
@@ -254,7 +257,12 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
     const target = effect.target;
     const cards = effect.cards;
     const owner = StateUtils.findOwner(state, target);
-    target.moveCardsTo(cards, owner.discard);
+    // Preserve DiscardCardsEffect interception, then apply the Prism Star
+    // replacement to the cards still being discarded.
+    const prismStars = cards.filter(card => card.tags.includes(CardTag.PRISM_STAR));
+    const normal = cards.filter(card => !card.tags.includes(CardTag.PRISM_STAR));
+    target.moveCardsTo(prismStars, owner.lostzone);
+    target.moveCardsTo(normal, owner.discard);
     return state;
   }
 

@@ -1,0 +1,99 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
+import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
+import { StoreLike, State, PowerType, PlayerType, StateUtils } from '../../game';
+import { Effect } from '../../game/store/effects/effect';
+import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
+import {DealDamageEffect, PutDamageEffect} from '../../game/store/effects/attack-effects';
+import {EndTurnEffect} from '../../game/store/effects/game-phase-effects';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { MarkerConstants } from '../../game/store/markers/marker-constants';
+
+export class RegirockEx extends PokemonCard implements CopiedAttackOwnershipContract {
+  public tags = [ CardTag.POKEMON_EX ];
+  public stage: Stage = Stage.BASIC;
+  public cardType: CardType = F;
+  public hp: number = 180;
+  public weakness = [{ type: G }];
+  public retreat = [ C, C, C ];
+
+  public powers = [{
+    name: 'Regi Power',
+    powerType: PowerType.ABILITY,
+    text: 'The attacks of your [F] Pokémon (excluding Regirock-EX) do 10 more damage to your opponent\'s Active Pokémon (before applying Weakness and Resistance).'
+  }];
+
+  public attacks = [
+    {
+      name: 'Bedrock Press',
+      cost: [ F, F, F ],
+      damage: 100,
+      text: 'During your opponent\'s next turn, any damage done to this Pokémon by attacks is reduced by 20 (after applying Weakness and Resistance).'
+    }
+  ];
+
+  public set: string = 'FCO';
+  public name: string = 'Regirock-EX';
+  public fullName: string = 'Regirock EX FCO';
+  public cardImage: string = 'assets/cardback.png';
+  public setNumber: string = '43';
+
+  public readonly BEDROCK_PRESS_MARKER = 'BEDROCK_PRESS_MARKER';
+
+  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    // Ref: set-fates-collide/diancie-ex.ts (Ability damage before Weakness).
+    // DealDamageEffect is later converted to PutDamageEffect with Weakness
+    // already applied; direct PutDamageEffect may still need the bonus.
+    if ((effect instanceof DealDamageEffect || (effect instanceof PutDamageEffect && !effect.weaknessApplied))
+      && effect.damage > 0 && effect.target === effect.opponent.active) {
+      const source = effect.source.getPokemonCard();
+      const owner = state.players.find(player => player.active.getPokemonCard() === this || player.bench.some(slot => slot.getPokemonCard() === this));
+      if (source && source.name !== this.name && owner === effect.player && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        const type = new CheckPokemonTypeEffect(effect.source);
+        state = store.reduceEffect(state, type);
+        if (type.cardTypes.includes(CardType.FIGHTING)) effect.damage += 10;
+      }
+    }
+
+    return RegirockEx.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    // Ref: game/store/prefabs/attack-after-damage.ts (protect the actual attacker after damage).
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      const target = effect.source;
+      const attacker = target.getPokemonCard();
+      const marker = MarkerConstants.REGIROCK_EX_BEDROCK_PRESS_REDUCTION;
+      const markerSource = this;
+      afterAttackDamage(state, effect, (_store, next) => {
+        const owner = next.players.find(player => player.active === target || player.bench.includes(target));
+        if (!owner || !attacker || target.getPokemonCard() !== attacker) return next;
+        target.marker.addMarker(marker, markerSource, 'attack', 'pokemon');
+        return next;
+      });
+    }
+
+    // Preserve the original behavior of legacy snapshots that already contain
+    // a target-slot marker, including its original pre-Weakness timing.
+    if (effect instanceof DealDamageEffect && effect.target.marker.hasMarker(this.BEDROCK_PRESS_MARKER, this)) {
+      effect.damage -= 20;
+    }
+
+    if (effect instanceof PutDamageEffect && effect.target.marker.hasMarker(MarkerConstants.REGIROCK_EX_BEDROCK_PRESS_REDUCTION, this)) {
+      const owner = StateUtils.findOwner(state, effect.target);
+      if (owner !== effect.player && state.players[state.activePlayer] === effect.player) {
+        effect.reduceDamageAfterWeakness(20, `${this.fullName}:${this.id}:Bedrock Press`);
+      }
+    }
+
+    if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.BEDROCK_PRESS_MARKER, this)) {
+      effect.player.marker.removeMarker(this.BEDROCK_PRESS_MARKER, this);
+      const owner = StateUtils.getOpponent(state, effect.player);
+      owner.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => slot.marker.removeMarker(this.BEDROCK_PRESS_MARKER, this));
+    }
+
+    return state;
+  }
+
+}

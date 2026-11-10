@@ -1,10 +1,11 @@
-import { CardTarget, ChoosePokemonPrompt, GameError, GameMessage, GameStoreMessage, PlayerType, SelectPrompt, SlotType, TrainerCard } from '../../game';
+import { CardTarget, ChoosePokemonPrompt, GameError, GameMessage, GameStoreMessage, Player, PlayerType, SelectPrompt, SlotType, TrainerCard } from '../../game';
 import { CardType, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { DEVOLVE_POKEMON } from '../../game/store/prefabs/prefabs';
 import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
 import { State } from '../../game/store/state/state';
+import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
 import { StoreLike } from '../../game/store/store-like';
 
 export class StrangeTimepiece extends TrainerCard {
@@ -19,6 +20,22 @@ export class StrangeTimepiece extends TrainerCard {
 
   public text = 'Devolve 1 of your evolved [P] Pokémon by putting any number of Evolution cards on it into your hand. (That Pokémon can\'t evolve this turn.)';
 
+  private isDevolvable(store: StoreLike, state: State, list: PokemonCardList): boolean {
+    const check = new CheckPokemonTypeEffect(list);
+    store.reduceEffect(state, check);
+    return list.isEvolved() && check.cardTypes.includes(CardType.PSYCHIC);
+  }
+
+  public canPlay(store: StoreLike, state: State, player: Player): boolean {
+    let canDevolve = false;
+    player.forEachPokemon(PlayerType.BOTTOM_PLAYER, list => {
+      if (this.isDevolvable(store, state, list)) {
+        canDevolve = true;
+      }
+    });
+    return canDevolve;
+  }
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_TRAINER_USED(effect, this)) {
@@ -26,9 +43,7 @@ export class StrangeTimepiece extends TrainerCard {
 
       const blocked: CardTarget[] = [];
       effect.player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (list, card, target) => {
-        const checkTypeEffect = new CheckPokemonTypeEffect(list);
-        store.reduceEffect(state, checkTypeEffect);
-        if (list.isEvolved() && checkTypeEffect.cardTypes.includes(CardType.PSYCHIC)) {
+        if (this.isDevolvable(store, state, list)) {
           canDevolve = true;
         } else {
           blocked.push(target);

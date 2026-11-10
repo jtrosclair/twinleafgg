@@ -1,0 +1,210 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-11-06T18:44:38.168Z",
+  "origin": "https://sim-static.prizemap.app",
+  "packageHash": "755b4fe32e12423db340d53addb252572e49c92d9355d6e7411d07f59f484dbb",
+  "buildId": "03f4ec96-f9de-4980-aa40-5c364f919913",
+  "workerVersion": "f76f614d-17ee-4c2f-a6b5-34b17e7c36dc",
+  "reportedEnvironment": "Mobile app WebView",
+  "puzzle": {
+    "name": "Deck out with Dengo",
+    "id": "aaab568c-ab61-4a06-b33b-e0a60c53a2cd",
+    "sourceUrl": "https://www.prizemap.app/api/puzzles/details/aaab568c-ab61-4a06-b33b-e0a60c53a2cd",
+    "stateDataSha256": "ed88e8c342043570a3315bdbe06d6463faa5e1d4054c21b5fa2be5a1450a2b62",
+    "fixturePath": "tools/fixtures/deck-out-with-dengo.snapshot.json.gz",
+    "fixtureIncludedInRuntimeBundle": false
+  },
+  "problem": "After returning Active Gholdengo with Professor Turo’s Scenario and choosing a replacement Active, the engine had no unresolved prompt, but the client retained promptMinimized=true. HandComponent therefore rejected the next drag of Nest Ball.",
+  "beforeFixAdapterEvidence": {
+    "stages": [
+      {
+        "stage": "initial",
+        "promptMinimized": false,
+        "handCanDrag": true,
+        "pending": [],
+        "turn": 5,
+        "errors": []
+      },
+      {
+        "stage": "Turo opened",
+        "promptMinimized": false,
+        "handCanDrag": true,
+        "pending": [
+          {
+            "id": 1,
+            "type": "Choose pokemon",
+            "message": "CHOOSE_POKEMON_TO_PICK_UP"
+          }
+        ],
+        "turn": 5,
+        "errors": []
+      },
+      {
+        "stage": "Gholdengo returned, promotion pending",
+        "promptMinimized": true,
+        "handCanDrag": false,
+        "pending": [
+          {
+            "id": 2,
+            "type": "Choose pokemon",
+            "message": "CHOOSE_NEW_ACTIVE_POKEMON"
+          }
+        ],
+        "turn": 5,
+        "errors": []
+      },
+      {
+        "stage": "Genesect promoted, no unresolved prompts",
+        "promptMinimized": true,
+        "handCanDrag": false,
+        "pending": [],
+        "turn": 5,
+        "errors": []
+      },
+      {
+        "stage": "Nest Ball direct play accepted",
+        "promptMinimized": true,
+        "handCanDrag": false,
+        "pending": [
+          {
+            "id": 1,
+            "type": "Choose cards",
+            "message": "CHOOSE_CARD_TO_PUT_ONTO_BENCH"
+          }
+        ],
+        "turn": 5,
+        "errors": []
+      }
+    ],
+    "bridgeTypes": [
+      "StateUpdate",
+      "StateUpdate",
+      "StateUpdate",
+      "StateUpdate",
+      "StateUpdate"
+    ]
+  },
+  "fix": {
+    "promptMinimization": "Retain minimization only while the same human prompt ID and type remain pending. Clear it when that prompt resolves or changes.",
+    "boardSelection": "Clear the old selection and callback before invoking its continuation, preserving a synchronously created promotion selection.",
+    "promptView": "Refresh when the prompt type changes even if the engine reuses its numeric ID.",
+    "engineRulesChanged": false,
+    "imageSizesChanged": false,
+    "lazyLoadingChanged": false,
+    "newRuntimeDependencies": false
+  },
+  "regression": {
+    "flow": [
+      "Load exact public puzzle",
+      "Play Professor Turo’s Scenario",
+      "Return Active Gholdengo",
+      "Promote a benched Pokémon",
+      "Drag Nest Ball once",
+      "Observe the Choose cards prompt",
+      "Choose Fezandipiti ex in the service regression"
+    ],
+    "frontendSpec": "ptcg-play/src/app/api/services/game.local.spec.ts",
+    "selectionSpec": "ptcg-play/src/app/shared/services/board-interaction.service.spec.ts",
+    "promptLifecycleSpec": "ptcg-play/src/app/table/prompt/prompt.lifecycle.spec.ts",
+    "touchSpec": "tools/test-touch-drag.cjs",
+    "touchMethod": "Node/jsdom simulation using the actual Angular CardComponent template, GameService, HandComponent canDrag, and installed TouchBackend. Synthetic touch events and controlled hit testing verify the first Nest Ball drag for each of the five promotion choices. This is not a physical WebView gesture test.",
+    "promotionChoicesPassed": 5,
+    "engineLegalityBranches": [
+      {
+        "kind": "bench",
+        "index": 0,
+        "benchPokemon": "Genesect ex SV11B",
+        "result": "PASS"
+      },
+      {
+        "kind": "bench",
+        "index": 1,
+        "benchPokemon": "Gimmighoul SSP",
+        "result": "PASS"
+      },
+      {
+        "kind": "bench",
+        "index": 2,
+        "benchPokemon": "Solrock M1L",
+        "result": "PASS"
+      },
+      {
+        "kind": "bench",
+        "index": 3,
+        "benchPokemon": "Gimmighoul SSP",
+        "result": "PASS"
+      },
+      {
+        "kind": "bench",
+        "index": 4,
+        "benchPokemon": "Gimmighoul SSP",
+        "result": "PASS"
+      },
+      {
+        "kind": "active",
+        "index": 0,
+        "benchPokemon": "Genesect ex SV11B",
+        "result": "PASS"
+      },
+      {
+        "kind": "active",
+        "index": 1,
+        "benchPokemon": "Gimmighoul SSP",
+        "result": "PASS"
+      },
+      {
+        "kind": "active",
+        "index": 2,
+        "benchPokemon": "Solrock M1L",
+        "result": "PASS"
+      },
+      {
+        "kind": "active",
+        "index": 3,
+        "benchPokemon": "Gimmighoul SSP",
+        "result": "PASS"
+      },
+      {
+        "kind": "active",
+        "index": 4,
+        "benchPokemon": "Gimmighoul SSP",
+        "result": "PASS"
+      }
+    ],
+    "repeatedActivePromotionReplaysPassed": 10,
+    "includedInNpmTest": true
+  },
+  "publicBrowser": {
+    "method": "CUA desktop page-load, DOM and screenshot smoke check against the deployed exact puzzle; no drag gesture performed.",
+    "allLazy": true,
+    "boardVisible": true,
+    "hiddenFaceImages": 0,
+    "preloads": 0,
+    "release": "/releases/755b4fe32e12423db340d53addb252572e49c92d9355d6e7411d07f59f484dbb/",
+    "scanDimensions": [
+      "736x1024"
+    ],
+    "screenshot": "/tmp/twinleaf-dengo-live.png"
+  },
+  "verification": {
+    "fullNpmTestPassed": true,
+    "runtimeSpecs": 15,
+    "cardRegressionSpecs": 44,
+    "frontendSpecs": 89,
+    "touchDomSpecs": 8,
+    "nodePackagingAndCacheSpecs": 80,
+    "countedTests": 236,
+    "standaloneFinalizerPassed": true,
+    "angularTemplateTypecheckPassed": true,
+    "productionBuildPassed": true,
+    "buildSourceAttestationPassed": true,
+    "assetAudit": {
+      "referenced": 56,
+      "unused": 0,
+      "missing": 0
+    },
+    "deliveryPassed": true,
+    "deliveryReport": "simulator-delivery-results.json",
+    "physicalWebViewGestureVerified": false
+  }
+}

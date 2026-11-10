@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, CardTag, GameError, GameMessage, SuperType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect } from '../../game/store/effects/game-effects';
@@ -5,7 +6,7 @@ import { AfterAttackEffect } from '../../game/store/effects/game-phase-effects';
 import { THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON } from '../../game/store/prefabs/attack-effects';
 import { CONFIRMATION_PROMPT, MOVE_CARDS, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Kyogreex extends PokemonCard {
+export class Kyogreex extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.BASIC;
   public tags = [CardTag.POKEMON_ex];
   public cardType: CardType = W;
@@ -49,6 +50,10 @@ export class Kyogreex extends PokemonCard {
       }
     }
 
+    return Kyogreex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(20, effect, store, state);
     }

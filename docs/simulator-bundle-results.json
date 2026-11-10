@@ -1,0 +1,272 @@
+{
+  "schemaVersion": 1,
+  "packageHash": "6ff0b913aece399611bd2182af6b21202189bdd12e3eaea7a356da9cfffecfb1",
+  "buildId": "1a6f56aa-8a8e-4298-b042-32bda3a60b5b",
+  "builtAt": "2026-11-07T05:00:05.085Z",
+  "method": {
+    "runtimeScope": "Every file in simulator-manifest.json assets; archive is separate.",
+    "compression": {
+      "gzipLevel": 6,
+      "brotliQuality": 6,
+      "aggregation": "Sum of separately compressed files, without HTTP headers."
+    },
+    "exclusions": "Remote card artwork and network/protocol overhead are excluded. Sizes do not measure device loading or play performance."
+  },
+  "runtime": {
+    "files": 9,
+    "bytes": 12457239,
+    "gzipBytes": 2244610,
+    "brotliBytes": 1526404
+  },
+  "groups": {
+    "bootstrap": {
+      "files": 1,
+      "bytes": 726441,
+      "gzipBytes": 218304,
+      "brotliBytes": 199188
+    },
+    "main": {
+      "files": 1,
+      "bytes": 11426628,
+      "gzipBytes": 1938815,
+      "brotliBytes": 1242333
+    },
+    "other": {
+      "files": 4,
+      "bytes": 195200,
+      "gzipBytes": 64857,
+      "brotliBytes": 63218
+    },
+    "polyfills": {
+      "files": 1,
+      "bytes": 37091,
+      "gzipBytes": 13013,
+      "brotliBytes": 12611
+    },
+    "runtime": {
+      "files": 1,
+      "bytes": 1216,
+      "gzipBytes": 696,
+      "brotliBytes": 660
+    },
+    "styles": {
+      "files": 1,
+      "bytes": 70663,
+      "gzipBytes": 8925,
+      "brotliBytes": 8394
+    }
+  },
+  "archive": {
+    "path": "simulator-package.6ff0b913aece399611bd2182af6b21202189bdd12e3eaea7a356da9cfffecfb1.zip",
+    "sha256": "a2c0c3fb7bf4a5b82703bb958e6c5dfc89fca218fc675faceb4b3d34c78ddadc",
+    "bytes": 2215212
+  },
+  "files": [
+    {
+      "path": "3rdpartylicenses.txt",
+      "category": "other",
+      "bytes": 25618,
+      "gzipBytes": 5000,
+      "brotliBytes": 4615
+    },
+    {
+      "path": "assets/iconfont/material-icons.css",
+      "category": "other",
+      "bytes": 59818,
+      "gzipBytes": 45021,
+      "brotliBytes": 44868
+    },
+    {
+      "path": "favicon.ico",
+      "category": "other",
+      "bytes": 107769,
+      "gzipBytes": 13854,
+      "brotliBytes": 12878
+    },
+    {
+      "path": "index.html",
+      "category": "other",
+      "bytes": 1995,
+      "gzipBytes": 982,
+      "brotliBytes": 857
+    },
+    {
+      "path": "main.acac4c81f49214378ff0.js",
+      "category": "main",
+      "bytes": 11426628,
+      "gzipBytes": 1938815,
+      "brotliBytes": 1242333
+    },
+    {
+      "path": "polyfills.98ed7ea3f24455c0a30b.js",
+      "category": "polyfills",
+      "bytes": 37091,
+      "gzipBytes": 13013,
+      "brotliBytes": 12611
+    },
+    {
+      "path": "runtime.287366b023aefc3235db.js",
+      "category": "runtime",
+      "bytes": 1216,
+      "gzipBytes": 696,
+      "brotliBytes": 660
+    },
+    {
+      "path": "simulator-static.840a691871f38a1f7822.js",
+      "category": "bootstrap",
+      "bytes": 726441,
+      "gzipBytes": 218304,
+      "brotliBytes": 199188
+    },
+    {
+      "path": "styles.430c005315f9e077ad7a.css",
+      "category": "styles",
+      "bytes": 70663,
+      "gzipBytes": 8925,
+      "brotliBytes": 8394
+    }
+  ],
+  "comparison": {
+    "scope": "Recorded main/polyfills/runtime/bootstrap/styles/card-library cohort; excludes HTML, license, font CSS, favicon, manifest overhead and ZIP. Only recorded raw/gzip baseline values are compared.",
+    "before": {
+      "files": 6,
+      "bytes": 44195154,
+      "gzipBytes": 15473151
+    },
+    "beforeGroups": {
+      "bootstrap": {
+        "files": 1,
+        "bytes": 16584287,
+        "gzipBytes": 11576641
+      },
+      "main": {
+        "files": 1,
+        "bytes": 15159680,
+        "gzipBytes": 2794999
+      },
+      "metadata": {
+        "files": 1,
+        "bytes": 12247408,
+        "gzipBytes": 1069153
+      },
+      "polyfills": {
+        "files": 1,
+        "bytes": 37095,
+        "gzipBytes": 13015
+      },
+      "runtime": {
+        "files": 1,
+        "bytes": 1231,
+        "gzipBytes": 702
+      },
+      "styles": {
+        "files": 1,
+        "bytes": 165453,
+        "gzipBytes": 18641
+      }
+    },
+    "beforeFiles": [
+      {
+        "path": "main.e99d0471964e72f2ab0b.js",
+        "category": "main",
+        "bytes": 15159680,
+        "gzipBytes": 2794999
+      },
+      {
+        "path": "polyfills.4148ac9ed97b1192d36d.js",
+        "category": "polyfills",
+        "bytes": 37095,
+        "gzipBytes": 13015
+      },
+      {
+        "path": "runtime.34678324f00febc68935.js",
+        "category": "runtime",
+        "bytes": 1231,
+        "gzipBytes": 702
+      },
+      {
+        "path": "simulator-static.21f38deabf7995865a7a.js",
+        "category": "bootstrap",
+        "bytes": 16584287,
+        "gzipBytes": 11576641
+      },
+      {
+        "path": "styles.bfff3d0d1421f1af6a33.css",
+        "category": "styles",
+        "bytes": 165453,
+        "gzipBytes": 18641
+      },
+      {
+        "path": "cards.5d3542beee3b0dbd568bb4967417f1a182e7c7ac5b047eed746320908efb8c21.json",
+        "category": "metadata",
+        "bytes": 12247408,
+        "gzipBytes": 1069153
+      }
+    ],
+    "after": {
+      "files": 5,
+      "bytes": 12262039,
+      "gzipBytes": 2179753,
+      "brotliBytes": 1463186
+    },
+    "afterGroups": {
+      "bootstrap": {
+        "files": 1,
+        "bytes": 726441,
+        "gzipBytes": 218304,
+        "brotliBytes": 199188
+      },
+      "main": {
+        "files": 1,
+        "bytes": 11426628,
+        "gzipBytes": 1938815,
+        "brotliBytes": 1242333
+      },
+      "polyfills": {
+        "files": 1,
+        "bytes": 37091,
+        "gzipBytes": 13013,
+        "brotliBytes": 12611
+      },
+      "runtime": {
+        "files": 1,
+        "bytes": 1216,
+        "gzipBytes": 696,
+        "brotliBytes": 660
+      },
+      "styles": {
+        "files": 1,
+        "bytes": 70663,
+        "gzipBytes": 8925,
+        "brotliBytes": 8394
+      }
+    },
+    "saved": {
+      "bytes": 31933115,
+      "gzipBytes": 13293398,
+      "rawPercent": 72.25,
+      "gzipPercent": 85.91
+    }
+  },
+  "budgets": [
+    {
+      "name": "gzipRuntimeBytes",
+      "actual": 2244610,
+      "maximum": 4194304,
+      "passed": true
+    },
+    {
+      "name": "archiveBytes",
+      "actual": 2215212,
+      "maximum": 5242880,
+      "passed": true
+    },
+    {
+      "name": "individualFileBytes",
+      "actual": 11426628,
+      "maximum": 20971520,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

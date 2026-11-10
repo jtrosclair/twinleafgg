@@ -1,3 +1,4 @@
+import { Stakataka } from '../set-unbroken-bonds/stakataka';
 import { Passimian } from '../set-sun-and-moon/passimian';
 import { Oranguru } from '../set-sun-and-moon/oranguru';
 import { Oricorio2 } from '../set-guardians-rising/oricorio-2';
@@ -473,4 +474,16 @@ export class CharizardGXSMP60 extends CharizardGX {
   public setNumber = '60';
   public fullName: string = 'Charizard-GX SMP 60';
   public set = 'SMP';
+}
+
+export class StakatakaSMP extends Stakataka {
+  public set = 'SMP';
+  public setNumber = '180';
+  public fullName = 'Stakataka SMP';
+}
+
+export class Stakataka2SMP extends Stakataka {
+  public set = 'SMP';
+  public setNumber = '209';
+  public fullName = 'Stakataka2 SMP';
 }

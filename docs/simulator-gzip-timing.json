@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "measuredAt": "2026-11-07T01:13:45.339Z",
+  "node": "v24.22.1",
+  "platform": "darwin/arm64",
+  "warmupsPerFixture": 100,
+  "measuredSamplesPerFixture": 500,
+  "method": "Desktop Node only; actual production synchronous decodePuzzlePayload loaded with ts-node. Each sample returns ordinary UTF-8 Base64 from gz1 or passes existing Base64 through. No JSON parse, engine hydration, browser rendering, network, or native DecompressionStream. Samples alternate call order; legacy near-zero values include timer overhead. A production build may be running concurrently.",
+  "decoderSource": "ptcg-play/src/app/shared/services/puzzle-payload.ts",
+  "decoderSourceSha256": "6561e839e934c3a075219c61b1661732fce4fb6c6d015a9eaaf6758cc9f067ed",
+  "fixtures": [
+    {
+      "name": "Trapped in the Phantom Maze",
+      "gzipTransportCharacters": 2238,
+      "legacyBase64Characters": 30924,
+      "expandedBase64Characters": 10184,
+      "gzipToPlainBase64": {
+        "medianMs": 0.148146,
+        "p95Ms": 0.194791,
+        "minMs": 0.131208,
+        "maxMs": 0.382042
+      },
+      "legacyPassThrough": {
+        "medianMs": 0.000083,
+        "p95Ms": 0.000208,
+        "minMs": 0.000041,
+        "maxMs": 0.005333
+      }
+    },
+    {
+      "name": "Explosive Hand",
+      "gzipTransportCharacters": 1942,
+      "legacyBase64Characters": 30352,
+      "expandedBase64Characters": 9480,
+      "gzipToPlainBase64": {
+        "medianMs": 0.136563,
+        "p95Ms": 0.179416,
+        "minMs": 0.117709,
+        "maxMs": 0.227708
+      },
+      "legacyPassThrough": {
+        "medianMs": 0.000083,
+        "p95Ms": 0.000167,
+        "minMs": 0.000041,
+        "maxMs": 0.001541
+      }
+    },
+    {
+      "name": "Breaking Through the Wall",
+      "gzipTransportCharacters": 2068,
+      "legacyBase64Characters": 30772,
+      "expandedBase64Characters": 9952,
+      "gzipToPlainBase64": {
+        "medianMs": 0.140792,
+        "p95Ms": 0.180417,
+        "minMs": 0.12375,
+        "maxMs": 0.329125
+      },
+      "legacyPassThrough": {
+        "medianMs": 0.000083,
+        "p95Ms": 0.000125,
+        "minMs": 0.000041,
+        "maxMs": 0.001792
+      }
+    },
+    {
+      "name": "Something's Fishy",
+      "gzipTransportCharacters": 2090,
+      "legacyBase64Characters": 30532,
+      "expandedBase64Characters": 9664,
+      "gzipToPlainBase64": {
+        "medianMs": 0.139208,
+        "p95Ms": 0.176333,
+        "minMs": 0.120708,
+        "maxMs": 0.222292
+      },
+      "legacyPassThrough": {
+        "medianMs": 0.000083,
+        "p95Ms": 0.000125,
+        "minMs": 0.000041,
+        "maxMs": 0.000625
+      }
+    },
+    {
+      "name": "Deck out with Dengo",
+      "gzipTransportCharacters": 2194,
+      "legacyBase64Characters": 30788,
+      "expandedBase64Characters": 10000,
+      "gzipToPlainBase64": {
+        "medianMs": 0.143937,
+        "p95Ms": 0.182,
+        "minMs": 0.126292,
+        "maxMs": 0.314792
+      },
+      "legacyPassThrough": {
+        "medianMs": 0.000083,
+        "p95Ms": 0.000125,
+        "minMs": 0.000041,
+        "maxMs": 0.001417
+      }
+    }
+  ]
+}

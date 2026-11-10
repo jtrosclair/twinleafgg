@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
@@ -8,7 +9,7 @@ import { PowerType, StateUtils, SlotType } from '../../game';
 import { DealDamageEffect } from '../../game/store/effects/attack-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Passimian extends PokemonCard {
+export class Passimian extends PokemonCard implements CopiedAttackOwnershipContract {
 
   public stage: Stage = Stage.BASIC;
 
@@ -59,6 +60,10 @@ export class Passimian extends PokemonCard {
       }
     }
 
+    return Passimian.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       effect.ignoreResistance = true;
     }

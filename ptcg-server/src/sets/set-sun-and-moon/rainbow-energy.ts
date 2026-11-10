@@ -29,6 +29,12 @@ export class RainbowEnergy extends EnergyCard {
     'this card from your hand to 1 of your Pokemon, put 1 damage counter ' +
     'on that Pokemon.';
 
+  /** Explicit opt-in for unambiguous mirror-only legacy puzzle attachments. */
+  public reduceMirrorOnlyEnergyEffect(_store: StoreLike, state: State, effect: CheckProvidedEnergyEffect): State {
+    effect.energyMap.push({ card: this, provides: [CardType.ANY] });
+    return state;
+  }
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof CheckProvidedEnergyEffect && effect.source.cards.includes(this)) {
       effect.energyMap.push({ card: this, provides: [CardType.ANY] });

@@ -1,0 +1,88 @@
+{
+  "reviewedAt": "2026-11-08T13:21:44.535Z",
+  "puzzle": {
+    "id": "b20679d1-3576-4853-8518-efab81f9457d",
+    "name": "Comeback Time!",
+    "sourceUrl": "https://www.prizemap.app/api/puzzles/details/b20679d1-3576-4853-8518-efab81f9457d",
+    "publishedAt": "2026-01-05T20:09:55.493Z",
+    "snapshotSha256": "98e8a1594eb271fbb90e017dbdf1f4515bff291d8459399ffa605b9ef60d39f9"
+  },
+  "method": "Freshly compiled local engine; exact public snapshot; real actions and normal RNG. No production writes, attempt submissions, or gameplay source edits.",
+  "browser": {
+    "verified": false,
+    "reason": "Local browser use is disabled in Work settings."
+  },
+  "solve": {
+    "confirmedLegalWin": false,
+    "provenUnsolvable": false,
+    "bestVerifiedPrizesTaken": 5,
+    "freshReplays": 10,
+    "allReplaysMatched": true,
+    "orderedSteps": 23,
+    "line": "Recon Directive finds Ultra Ball then Dusknoir. Hilda finds Dragapult and Fire Energy. Gust Mega Diancie, use Dusknoir on it, recover Dusclops and knock out Scream Tail. Move 30 damage onto the opposing Munkidori, then Phantom Dive knocks out Mega Diancie and Munkidori. One prize remains.",
+    "artifact": "tools/.puzzle-playthrough/comeback-time.attempt.json"
+  },
+  "findings": [
+    {
+      "severity": "P2",
+      "title": "Recon Directive exposes a Cancel button that throws instead of canceling",
+      "source": "ptcg-server/src/sets/set-twilight-masquerade/drakloak.ts:85",
+      "repro": "Use either Drakloak's Recon Directive, then Cancel. The actual UI sends null to the same resolvePrompt entry point.",
+      "actual": "Cannot read properties of null (reading 'length')",
+      "impact": "Unknown-error toast, selection remains open, ability-used marker is committed. Choosing a card afterward recovers; this is not a permanent card-loss reproduction.",
+      "uiSource": "ptcg-play/src/app/table/prompt/prompt-choose-cards/prompt-choose-cards.component.ts:280",
+      "recommendation": "Remove cancellation after revealing the top two cards, or implement a null branch that restores the temporary card lists and allowance coherently."
+    },
+    {
+      "severity": "P2",
+      "title": "Adrena-Brain accepts damage counters from multiple source Pokemon",
+      "source": "ptcg-server/src/game/store/prompts/remove-damage-prompt.ts:83",
+      "cardSource": "ptcg-server/src/sets/set-twilight-masquerade/munkidori.ts:146",
+      "repro": "Move one counter from each damaged Drakloak onto Mega Diancie in a single Adrena-Brain use.",
+      "actual": {
+        "drakloakDamageBefore": [
+          30,
+          30
+        ],
+        "drakloakDamageAfter": [
+          20,
+          20
+        ],
+        "diancieDamage": 20
+      },
+      "impact": "The card permits counters from only one of your Pokemon. The UI also has no source lock, so this changes which Pokemon can be healed.",
+      "uiSource": "ptcg-play/src/app/table/prompt/prompt-remove-damage/prompt-remove-damage.component.ts:57",
+      "recommendation": "Require one source for this ability in both prompt validation and the damage-selection UI."
+    },
+    {
+      "severity": "P2",
+      "title": "Pokemon prompt validation accepts duplicate, wrong-slot and wrong-player targets",
+      "source": "ptcg-server/src/game/store/prompts/choose-pokemon-prompt.ts:57",
+      "repro": "Resolve Hawlucha's Flying Entry through ClientSimulator.resolvePrompt with Mega Diancie twice, the opposing Active, or one of your own Drakloak.",
+      "actual": {
+        "duplicates": {
+          "diancieDamage": 20
+        },
+        "activeTarget": {
+          "screamTailDamage": 110
+        },
+        "ownTarget": {
+          "ownDrakloakDamage": 40
+        }
+      },
+      "impact": "Flying Entry can place two counters on one Pokemon or damage an ineligible Pokemon. Reproduced through the engine API; normal board controls filter these choices, so direct UI reachability was not established.",
+      "recommendation": "Reject duplicate references and enforce the configured owner and allowed slots before invoking the card callback."
+    }
+  ],
+  "checks": {
+    "stableUndoRestoresInitialState": true,
+    "pendingSnapshotRejectedWithoutDestroyingPlayableState": true
+  },
+  "sourceSha256": {
+    "ptcg-server/src/client/simulator.ts": "94df8502971fbfe3df4ee8d9a36c36b5118797c2350aaba145f4e5525c6e95a9",
+    "ptcg-server/src/sets/set-twilight-masquerade/drakloak.ts": "2f856231571aa5098bf02945ad681d6fd3357e4984509cbd35c4f92b2ec482e4",
+    "ptcg-server/src/sets/set-twilight-masquerade/munkidori.ts": "fb6cb02f5645e2203fefa87c347e043c1fcbc4da8c412f7e22b9e73c276277aa",
+    "ptcg-server/src/game/store/prompts/remove-damage-prompt.ts": "8a120526a74cc152de59bbb4c7006f70a9d67c735ca439a84e5c033303d7a772",
+    "ptcg-server/src/game/store/prompts/choose-pokemon-prompt.ts": "66461b6937b968048823c30fa36bbfa5e5ecac493eb39b4a433e70674fcc1aa4"
+  }
+}

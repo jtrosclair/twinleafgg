@@ -1,6 +1,7 @@
-import { Card, GameError, GameMessage, State, StoreLike, TrainerCard, TrainerType } from '../../game';
+import { Card, GameError, GameMessage, Player, State, StoreLike, TrainerCard, TrainerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 export class RedeemableTicket extends TrainerCard {
 
@@ -21,6 +22,10 @@ export class RedeemableTicket extends TrainerCard {
   public text: string =
     'Count your Prize cards and shuffle them face down, then put them at the bottom of your deck. If you do, add that many cards from the top of your deck to your Prize cards.';
 
+  public canPlay(store: StoreLike, state: State, player: Player): boolean {
+    return player.getPrizeLeft() > 0;
+  }
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof TrainerEffect && effect.trainerCard === this) {
       const player = effect.player;
@@ -31,9 +36,6 @@ export class RedeemableTicket extends TrainerCard {
         throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }
 
-      // Move the trainer card to discard
-      player.hand.moveCardTo(effect.trainerCard, player.discard);
-
       // Collect all prize cards
       const allPrizeCards: Card[] = [];
       prizes.forEach(p => allPrizeCards.push(...p.cards));
@@ -41,30 +43,28 @@ export class RedeemableTicket extends TrainerCard {
       // Shuffle the prize cards
       this.shuffleArray(allPrizeCards);
 
-      // Move prize cards to the bottom of the deck
-      allPrizeCards.forEach(card => {
-        player.deck.cards.unshift(card);
+      // The first deck element is the top. Put the shuffled prizes underneath.
+      prizes.forEach(p => {
+        p.cards = [];
+        p.isSecret = true;
+        p.isPublic = false;
+        p.faceUpPrize = false;
+        p.markedAsNotSecret = false;
       });
-
-      // Clear the prize cards
-      prizes.forEach(p => p.cards = []);
+      player.deck.cards.push(...allPrizeCards);
 
       // Draw cards from the top of the deck to the prize cards
       for (let i = 0; i < prizeCount; i++) {
-        const card = player.deck.cards.pop();
-        if (card) {
-          const prize = player.prizes.find(p => p.cards.length === 0);
-          if (prize) {
-            prize.cards.push(card);
-          } else {
-            player.deck.cards.push(card);
-          }
+        const prize = player.prizes.find(p => p.cards.length === 0);
+        if (!prize || player.deck.cards.length === 0) {
+          break;
         }
+        state = MOVE_CARDS(store, state, player.deck, prize, { count: 1, sourceCard: this });
+        prize.isSecret = true;
+        prize.isPublic = false;
+        prize.faceUpPrize = false;
+        prize.markedAsNotSecret = false;
       }
-
-      // Set the new prize cards to be face down
-      player.prizes.forEach(p => p.isSecret = true);
-      player.supporter.moveCardTo(this, player.discard);
       return state;
     }
 

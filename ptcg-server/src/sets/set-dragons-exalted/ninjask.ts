@@ -2,7 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, GameMessage, ConfirmPrompt, ChooseCardsPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
 import { AfterAttackEffect, EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { GET_PLAYER_BENCH_SLOTS, IS_ABILITY_BLOCKED, SHUFFLE_DECK, SWITCH_ACTIVE_WITH_BENCHED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
@@ -41,7 +41,7 @@ export class Ninjask extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Cast-off Shell - When evolving, search for Shedinja
-    if (effect instanceof EvolveEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this && effect.playedFromHand) {
       const player = effect.player;
 
       if (player.deck.cards.length === 0) {

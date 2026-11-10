@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, EnergyType } from '../../game/store/card/card-types';
 import { StoreLike, State, SlotType, StateUtils } from '../../game';
@@ -7,7 +8,7 @@ import { THIS_POKEMON_CANNOT_ATTACK_NEXT_TURN, WAS_ATTACK_USED } from '../../gam
 import { DISCARD_UP_TO_X_ENERGY_FROM_YOUR_POKEMON } from '../../game/store/prefabs/costs';
 
 
-export class Jolteonex extends PokemonCard {
+export class Jolteonex extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom = 'Eevee';
   public tags = [CardTag.POKEMON_ex, CardTag.POKEMON_TERA];
@@ -38,6 +39,21 @@ export class Jolteonex extends PokemonCard {
   public fullName: string = 'Jolteon ex PRE';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+
+      // Target is not Active
+      if (effect.target === player.active || effect.target === opponent.active) {
+        return state;
+      }
+
+      effect.preventDefault = true;
+    }
+    return Jolteonex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
       effect.damage = 60;
@@ -70,17 +86,7 @@ export class Jolteonex extends PokemonCard {
       THIS_POKEMON_CANNOT_ATTACK_NEXT_TURN(player);
     }
 
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Target is not Active
-      if (effect.target === player.active || effect.target === opponent.active) {
-        return state;
-      }
-
-      effect.preventDefault = true;
-    }
+    
     return state;
   }
 }

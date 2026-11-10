@@ -57,6 +57,7 @@ import { Granbull } from './granbull';
 import { Grovyle } from './grovyle';
 import { Heatran } from './heatran';
 import { Heracross } from './heracross';
+import { HeracrossLOT } from './heracross-lot';
 import { Hitmontop } from './hitmontop';
 import { HoOh } from './ho-oh';
 import { Hoppip } from './hoppip';
@@ -309,6 +310,7 @@ export const setLostThunder: Card[] = [
   new Grovyle(),
   new Heatran(),
   new Heracross(),
+  new HeracrossLOT(),
   new Hitmontop(),
   new HoOh(),
   new Hoppip(),

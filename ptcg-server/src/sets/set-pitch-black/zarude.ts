@@ -6,6 +6,12 @@ import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { ShadowDarknessEnergy } from './shadow-darkness-energy';
 
+// Attack effects may execute with a different Pokémon as `this` when copied.
+function benchHasShadowDarknessEnergy(player: Player): boolean {
+  return player.bench.some(bench => bench.cards.length > 0
+    && bench.cards.some(c => c instanceof ShadowDarknessEnergy));
+}
+
 export class Zarude extends PokemonCard {
   public stage: Stage = Stage.BASIC;
   public cardType: CardType = D;
@@ -33,11 +39,6 @@ export class Zarude extends PokemonCard {
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Zarude';
   public fullName: string = 'Zarude M5';
-
-  private benchHasShadowDarknessEnergy(player: Player): boolean {
-    return player.bench.some(bench => bench.cards.length > 0
-      && bench.cards.some(c => c instanceof ShadowDarknessEnergy));
-  }
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Overhead Throw
@@ -68,7 +69,7 @@ export class Zarude extends PokemonCard {
     // Ref: set-pitch-black/mega-darkrai-ex.ts (Night Raid - bench scan)
     if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
-      if (this.benchHasShadowDarknessEnergy(player)) {
+      if (benchHasShadowDarknessEnergy(player)) {
         effect.damage += 70;
       }
     }

@@ -11,8 +11,13 @@ import { CheckPokemonPowersEffect } from '../../game/store/effects/check-effects
 import { CardTag } from '../../game/store/card/card-types';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE } from '../../game/store/prefabs/attack-effects';
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 
-export class Wobbuffet extends PokemonCard {
+function isOnBench(state: State, card: PokemonCard): boolean {
+  return state.players.some(player => player.bench.some(slot => slot.getPokemonCard() === card));
+}
+
+export class Wobbuffet extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.BASIC;
   public cardType: CardType = P;
   public hp: number = 110;
@@ -41,23 +46,11 @@ export class Wobbuffet extends PokemonCard {
   public name: string = 'Wobbuffet';
   public fullName: string = 'Wobbuffet LOT';
 
-  private isOnBench(state: State): boolean {
-    let onBench = false;
-    state.players.forEach(p => {
-      p.bench.forEach(b => {
-        if (b.getPokemonCard() === this) {
-          onBench = true;
-        }
-      });
-    });
-    return onBench;
-  }
-
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Shady Tail - block Prism Star abilities
     // Ref: set-ultra-prism/glaceon-gx.ts (Freezing Gaze - block abilities by tag)
     if (effect instanceof CheckPokemonPowersEffect) {
-      if (!this.isOnBench(state)) {
+      if (!isOnBench(state, this)) {
         return state;
       }
 
@@ -78,7 +71,7 @@ export class Wobbuffet extends PokemonCard {
     }
 
     if (effect instanceof PowerEffect && effect.power.powerType === PowerType.ABILITY && effect.power.name !== 'Shady Tail') {
-      if (!this.isOnBench(state)) {
+      if (!isOnBench(state, this)) {
         return state;
       }
 
@@ -100,11 +93,7 @@ export class Wobbuffet extends PokemonCard {
     }
 
     // Ability: Shady Tail - block Prism Star attacks
-    if (effect instanceof AttackEffect) {
-      if (!this.isOnBench(state)) {
-        return state;
-      }
-
+    if (effect instanceof AttackEffect && isOnBench(state, this)) {
       const attacker = effect.player.active.getPokemonCard();
       if (attacker && attacker.tags.includes(CardTag.PRISM_STAR)) {
         try {
@@ -119,6 +108,11 @@ export class Wobbuffet extends PokemonCard {
       }
     }
 
+    return Wobbuffet.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  /** Knock Away's attack effects; Shady Tail remains on the original Pokémon. */
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Attack 1: Knock Away
     // Ref: set-evolutions/staryu.ts (Quick Blow - coin flip more damage)
     if (WAS_ATTACK_USED(effect, 0, this)) {

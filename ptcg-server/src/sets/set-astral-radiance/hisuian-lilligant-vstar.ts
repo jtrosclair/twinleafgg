@@ -65,7 +65,8 @@ export class HisuianLilligantVstar extends PokemonCard {
       // Build blocked list: block cards that are not Grass Pokemon or [G] basic Energy
       const blocked: number[] = [];
       player.deck.cards.forEach((c, index) => {
-        const isGrassPokemon = c instanceof PokemonCard && c.cardType === CardType.GRASS;
+        const isGrassPokemon = c instanceof PokemonCard && c.superType === SuperType.POKEMON
+          && (c.cardType === CardType.GRASS || c.additionalCardTypes?.includes(CardType.GRASS));
         const isGrassEnergy = c.superType === SuperType.ENERGY
           && c.energyType === EnergyType.BASIC
           && c.name === 'Grass Energy';
@@ -85,8 +86,8 @@ export class HisuianLilligantVstar extends PokemonCard {
         cards = selected || [];
 
         if (cards.length > 0) {
-          SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
           MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: this });
+          SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
         }
         SHUFFLE_DECK(store, state, player);
       });

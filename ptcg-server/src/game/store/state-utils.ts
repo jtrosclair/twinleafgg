@@ -58,7 +58,7 @@ export class StateUtils {
     // Collect blend/unit energies and their possible provides using card properties
     energy.forEach((energyMap) => {
       const card = energyMap.card as EnergyCard;
-      if (card.blendedEnergies && card.blendedEnergies.length > 0) {
+      if (!energyMap.disableBlend && card.blendedEnergies && card.blendedEnergies.length > 0) {
         const count = card.blendedEnergyCount || 1;
         for (let i = 0; i < count; i++) {
           blendProvides.push([...card.blendedEnergies]);

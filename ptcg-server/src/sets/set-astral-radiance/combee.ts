@@ -4,11 +4,10 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, TrainerType } from '../../game/store/card/card-types';
-import { StoreLike, State, GameMessage, StateUtils } from '../../game';
-import { Card } from '../../game/store/card/card';
+import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
-import { WAS_ATTACK_USED, MOVE_CARDS, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { SEARCH_DECK_REVEAL_AND_MOVE } from '../../game/store/prefabs/search-reveal-attack';
 
 export class Combee extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -43,31 +42,7 @@ export class Combee extends PokemonCard {
     // Attack 1: Honey Courier
     // Ref: set-destined-rivals/team-rockets-mareep.ts (Provision - search deck for Item card)
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      if (player.deck.cards.length === 0) {
-        return state;
-      }
-
-      let cards: Card[] = [];
-      return store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_HAND,
-        player.deck,
-        { superType: SuperType.TRAINER, trainerType: TrainerType.ITEM },
-        { min: 0, max: 1, allowCancel: false }
-      ), selected => {
-        cards = selected || [];
-
-        if (cards.length === 0) {
-          SHUFFLE_DECK(store, state, player);
-          return;
-        }
-
-        MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: this });
-        SHOW_CARDS_TO_PLAYER(store, state, StateUtils.getOpponent(state, player), cards);
-        SHUFFLE_DECK(store, state, player);
-      });
+      return SEARCH_DECK_REVEAL_AND_MOVE(store, state, effect, this, { superType: SuperType.TRAINER, trainerType: TrainerType.ITEM }, 1);
     }
 
     return state;

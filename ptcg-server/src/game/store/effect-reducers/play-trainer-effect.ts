@@ -57,15 +57,65 @@ function finalizeTrainerCleanup(
 }
 
 
+/**
+ * A Legendary Stadium is attempted as one card, so resolve the Trainer
+ * cancellation coin before in-play Stadiums observe the attempted play.
+ * Returns undefined when this is not the guarded case.
+ */
+export function preflightDualStadiumCancellation(store: StoreLike, state: State, effect: Effect): State | undefined {
+  if (!(effect instanceof PlayStadiumEffect) || effect.dualCancellationChecked
+    || !effect.trainerCard.tags.includes(CardTag.DUAL_STADIUM)
+    || effect.player.coinFlipCancelTrainerPlayTurnsRemaining <= 0
+    || !effect.player.hand.cards.includes(effect.trainerCard)) return undefined;
+
+  const player = effect.player;
+  const partner = player.hand.cards.find(card => card !== effect.trainerCard
+    && card.name === effect.trainerCard.name && card.set === effect.trainerCard.set
+    && card.tags.includes(CardTag.DUAL_STADIUM) && card.setNumber !== effect.trainerCard.setNumber);
+  if (!partner) throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
+  if (player.marker.hasMarker(player.ATTACK_EFFECT_STADIUM_LOCK)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+
+  effect.dualCancellationChecked = true;
+  return store.reduceEffect(state, new CoinFlipEffect(player, result => {
+    if (!result) {
+      const destination = getTrainerCleanupTarget(player, effect.trainerCard);
+      player.hand.moveCardTo(partner, destination);
+      player.hand.moveCardTo(effect.trainerCard, destination);
+    } else {
+      // Re-enter the normal pipeline only after heads so an in-play Stadium
+      // can observe the successful play, without a second cancellation coin.
+      store.reduceEffect(state, effect);
+    }
+  }));
+}
+
 // Upstream coin-flip gate: run before any play-zone changes, attachment or replacement.
 export function playTrainerReducer(store: StoreLike, state: State, effect: Effect): State {
+  // A dual Stadium is legal only when both different halves are present.
+  // Check before the coin-flip gate or any other play-zone mutation.
+  if (effect instanceof PlayStadiumEffect && effect.trainerCard.tags.includes(CardTag.DUAL_STADIUM)
+    && effect.player.hand.cards.includes(effect.trainerCard)) {
+    const halves = effect.player.hand.cards.filter(card => card.name === effect.trainerCard.name
+      && card.tags.includes(CardTag.DUAL_STADIUM) && card.set === effect.trainerCard.set);
+    if (!effect.player.hand.cards.includes(effect.trainerCard)
+      || !halves.some(card => card.setNumber !== effect.trainerCard.setNumber)) {
+      throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
+    }
+  }
   if ((effect instanceof PlayItemEffect || effect instanceof PlaySupporterEffect
     || effect instanceof PlayStadiumEffect || effect instanceof AttachPokemonToolEffect)
     && effect.player.coinFlipCancelTrainerPlayTurnsRemaining > 0
+    && !(effect instanceof PlayStadiumEffect && effect.dualCancellationChecked)
     && effect.player.hand.cards.includes(effect.trainerCard)) {
     const player = effect.player;
     return store.reduceEffect(state, new CoinFlipEffect(player, result => {
       if (!result) {
+        if (effect instanceof PlayStadiumEffect && effect.trainerCard.tags.includes(CardTag.DUAL_STADIUM)) {
+          const partner = player.hand.cards.find(card => card !== effect.trainerCard
+            && card.name === effect.trainerCard.name && card.set === effect.trainerCard.set
+            && card.tags.includes(CardTag.DUAL_STADIUM) && card.setNumber !== effect.trainerCard.setNumber);
+          if (partner) player.hand.moveCardTo(partner, getTrainerCleanupTarget(player, effect.trainerCard));
+        }
         player.hand.moveCardTo(effect.trainerCard, getTrainerCleanupTarget(player, effect.trainerCard));
         return;
       }
@@ -140,7 +190,16 @@ function playTrainerWithoutCoinFlip(store: StoreLike, state: State, effect: Effe
       card: effect.trainerCard.name
     });
     player.stadiumUsedTurn = 0;
-    player.hand.moveCardTo(effect.trainerCard, player.stadium);
+    if (effect.trainerCard.tags.includes(CardTag.DUAL_STADIUM) && player.hand.cards.includes(effect.trainerCard)) {
+      const half = effect.player.hand.cards.find(card => card !== effect.trainerCard
+        && card.name === effect.trainerCard.name && card.set === effect.trainerCard.set
+        && card.tags.includes(CardTag.DUAL_STADIUM) && card.setNumber !== effect.trainerCard.setNumber)!;
+      // Left half first, so the standard Stadium lookup works regardless of which was played.
+      const pair = [effect.trainerCard, half].sort((a, b) => Number(a.setNumber) - Number(b.setNumber));
+      pair.forEach(card => player.hand.moveCardTo(card, player.stadium));
+    } else {
+      player.hand.moveCardTo(effect.trainerCard, player.stadium);
+    }
     return state;
   }
 

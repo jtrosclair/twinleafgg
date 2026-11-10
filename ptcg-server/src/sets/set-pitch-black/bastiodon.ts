@@ -63,6 +63,9 @@ export class Bastiodon extends PokemonCard {
   }
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    // Hammer In has no attack effect. This reducer contains only Ancient
+    // Bulwark, which is not acquired when another Pokemon copies the attack.
+    if (!(this instanceof Bastiodon)) return state;
     if (effect instanceof DealDamageEffect && state.phase === GamePhase.ATTACK) {
       const defenderOwner = StateUtils.findOwner(state, effect.target);
       const attackerOwner = StateUtils.findOwner(state, effect.source);

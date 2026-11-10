@@ -6,10 +6,9 @@ import { Effect } from '../../game/store/effects/effect';
 
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { StateUtils } from '../../game/store/state-utils';
-import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { EnergyCard } from '../../game';
 import { AfterDamageEffect, ApplyWeaknessEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class DuraludonVMAX extends PokemonCard {
 
@@ -77,24 +76,16 @@ export class DuraludonVMAX extends PokemonCard {
     }
 
     if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)) {
-      const opponent = StateUtils.getOpponent(state, effect.player);
-      const opponentPokemon = opponent.active;
-
-      const checkEnergy = new CheckProvidedEnergyEffect(opponent, opponentPokemon);
-      store.reduceEffect(state, checkEnergy);
-
-      checkEnergy.energyMap.forEach(em => {
-        const energyCard = em.card;
-        if (energyCard instanceof EnergyCard &&
-          energyCard.energyType === EnergyType.SPECIAL) {
-
-          if (effect instanceof PutDamageEffect
-            && opponent.active.cards.includes(energyCard)) {
-            effect.preventDefault = true;
-            return state;
-          }
+      const owner = StateUtils.findOwner(state, effect.target);
+      if (owner !== effect.player && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        // Ref: set-stellar-crown/drednaw.ts (passive Ability permission).
+        // Skyscraper checks Special Energy attached to the attacking Pokémon,
+        // not the defending Pokémon's Energy or the Energy's provided effects.
+        const cards = [...effect.source.cards, ...effect.source.energies.cards];
+        if (cards.some(card => card instanceof EnergyCard && card.energyType === EnergyType.SPECIAL)) {
+          effect.preventDefault = true;
         }
-      });
+      }
     }
     return state;
   }

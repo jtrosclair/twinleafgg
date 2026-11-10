@@ -2,6 +2,8 @@ import { CardType } from './card-types';
 import { StoreLike } from '../store-like';
 import { State } from '../state/state';
 import { AttackEffect, PowerEffect } from '../effects/game-effects';
+import type { AfterDamageEffect } from '../effects/attack-effects';
+import type { PokemonCard } from './pokemon-card';
 
 export interface Weakness {
   type: CardType;
@@ -26,6 +28,8 @@ export interface Attack {
   text: string;
   barrage?: boolean;
   effect?: (store: StoreLike, state: State, effect: AttackEffect) => void;
+  /** Attack-owned delayed reaction when a copied attack's user is damaged. */
+  copiedReactiveAfterDamage?: (store: StoreLike, state: State, effect: AfterDamageEffect, copycat: PokemonCard) => State;
 }
 
 export enum PowerType {
@@ -54,6 +58,8 @@ export interface Power {
   effect?: (store: StoreLike, state: State, effect: PowerEffect) => State;
   useWhenInPlay?: boolean;
   useFromHand?: boolean;
+  /** This hand Ability can be activated by dropping the card on an empty Bench slot. */
+  useFromHandToBench?: boolean;
   useFromDiscard?: boolean;
   exemptFromAbilityLock?: boolean;
   exemptFromInitialize?: boolean;

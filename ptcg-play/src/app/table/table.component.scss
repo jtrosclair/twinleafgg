@@ -10,34 +10,61 @@
   user-select: none;
 }
 
-.connection-status-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
-  pointer-events: auto;
-}
-
 .ptcg-table {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  overflow: clip;
+  background-color: var(--ptcg-board-surface);
+  background-image: var(--ptcg-board-background-image);
+  background-size: var(--ptcg-board-background-size);
+  background-repeat: var(--ptcg-board-background-repeat);
+  background-position: var(--ptcg-board-background-position);
+  transition: background-color 500ms ease-out;
+
+  > ptcg-board,
+  > ptcg-hand,
+  > ptcg-prompt,
+  > .player-counts,
+  > .opponent-counts {
+    transition: opacity 500ms ease-out;
+  }
+
+  &.is-complete {
+    pointer-events: none;
+
+    > ptcg-board,
+    > ptcg-hand,
+    > ptcg-prompt,
+    > .player-counts,
+    > .opponent-counts {
+      opacity: 0;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ptcg-table,
+  .ptcg-table > ptcg-board,
+  .ptcg-table > ptcg-hand,
+  .ptcg-table > ptcg-prompt,
+  .ptcg-table > .player-counts,
+  .ptcg-table > .opponent-counts {
+    transition: none;
+  }
 }
 
 ptcg-board {
   flex: 1 1 auto;
-  overflow: hidden;
+  min-height: 0;
   //margin-top: -2%;
   //margin-bottom: -2%;
 }
 
 ptcg-hand {
   flex: 0 0 auto;
-  overflow: visible;
-  background: transparent;
-  position: relative;
-  z-index: 10;
 }
 
 .opp-hand {
@@ -45,87 +72,71 @@ ptcg-hand {
   visibility: hidden;
 }
 
-.sandbox-sidebar-container {
-  position: absolute;
-  right: map-get($ptcg-size, sidebar);
-  top: 0;
-  height: 100%;
-  z-index: 1;
-}
-
-.sandbox-sidebar {
-  position: relative;
-  width: 400px;
-  height: 100%;
-  overflow-y: auto;
-  background: var(--ptcg-surface);
-  border-left: 1px solid var(--ptcg-border);
-  transition: transform 0.3s ease-in-out;
-
-  &.collapsed {
-    transform: translateX(calc(100% - 40px));
-
-    .sandbox-toggle {
-      border-radius: 4px 0 0 4px;
-    }
-  }
-
-  .sandbox-toggle {
-    position: absolute;
-    left: -40px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 40px;
-    height: 80px;
-    background: var(--ptcg-surface-raised);
-    border: 1px solid var(--ptcg-border-strong);
-    border-right: none;
-    border-radius: 4px 0 0 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    transition: background 0.2s;
-
-    &:hover {
-      background: var(--ptcg-surface-muted);
-    }
-
-    mat-icon {
-      color: var(--ptcg-text-secondary);
-      font-size: 24px;
-      width: 24px;
-      height: 24px;
-    }
-  }
-}
-
 // Mobile adjustments for table layout
 @media (max-width: 768px) {
-  .ptcg-table {
-    overflow-x: hidden;
-    overflow-y: visible;
-  }
-
   ptcg-board {
     z-index: 1;
     pointer-events: auto;
   }
 
-  ptcg-hand {
-    overflow: visible;
-    position: absolute;
-    z-index: 1000 !important;
-    // background-color: purple;
-    background-color: var(--ptcg-hand-surface);
-    // Create a dedicated scrollable container for the hand
-    display: block;
-    width: 100%;
-  }
-
   .opp-hand {
     position: relative;
     z-index: 1000;
+  }
+}
+
+.board-hand-count, .board-pile-count {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 22px;
+  padding: 3px 8px;
+  border: 1px solid #3689e6;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #1a202c;
+  line-height: 14px;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+
+  .board-hand-label { font-size: 9px; text-transform: uppercase; opacity: 0.75; }
+  .board-hand-total { font-size: 12px; font-weight: 700; }
+}
+
+.opponent-counts, .player-counts {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 11;
+  display: flex;
+  gap: 6px;
+  pointer-events: none;
+}
+.opponent-counts {
+  top: 4px;
+  .board-hand-count, .board-pile-count { border-color: #dc545b; }
+}
+
+.player-counts { bottom: max(8px, env(safe-area-inset-bottom, 0px)); }
+
+.end-turn-confirmation {
+  color: var(--ptcg-text);
+
+  h2 { font-size: 18px; line-height: 1.4; }
+  mat-dialog-content { color: var(--ptcg-text-secondary); }
+  mat-dialog-actions { justify-content: flex-end; gap: 8px; }
+  .confirm-end-turn { background: #3689e6; color: #fff; }
+}
+
+// In short landscape frames the player fields sit side by side. Use their
+// center gutter so the count badges cannot cover either expanded bench.
+@media (min-width: 700px) and (max-width: 989px) and (max-height: 499px) {
+  .opponent-counts {
+    left: calc(50% + 8px);
+    transform: none;
+    flex-direction: column;
+    gap: 4px;
   }
 }

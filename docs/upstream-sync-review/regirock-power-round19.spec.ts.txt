@@ -1,0 +1,29 @@
+import { setupGame,padDeck,getCardByName } from './test-helpers';
+import { CardType } from '../../game/store/card/card-types';
+import { AttackEffect } from '../../game/store/effects/game-effects';
+import { DealDamageEffect,PutDamageEffect } from '../../game/store/effects/attack-effects';
+
+describe('Regirock EX FCO Regi Power',()=>{
+ function game(attacker='Mew ex 30C', owner=true){
+  const g=setupGame({turn:3,player1:{active:{card:attacker},bench:owner?[{card:'Regirock EX FCO'}]:[],deck:padDeck(10)},player2:{active:{card:'Charmander BS'},bench:owner?[]:[{card:'Regirock EX FCO'}],deck:padDeck(10)}});
+  g.player1.active.getPokemonCard()!.cardType=CardType.FIGHTING;g.player2.active.getPokemonCard()!.hp=1000;g.player2.active.getPokemonCard()!.weakness=[{type:CardType.FIGHTING}];return g;
+ }
+ function hit(g:ReturnType<typeof game>,direct=false){const e=new AttackEffect(g.player1,g.player2,{name:'Hit',cost:[],damage:30,text:''});return g.store.reduceEffect(g.state,direct?new PutDamageEffect(e,30):new DealDamageEffect(e,30));}
+ it('adds damage before Weakness to the opposing Active',()=>{const g=game();hit(g);expect(g.player2.active.damage).toBe(80);});
+ it('does not boost Regirock EX itself',()=>{const g=game('Regirock EX FCO');hit(g);expect(g.player2.active.damage).toBe(60);});
+ it('does not use an opponent Regirock Ability',()=>{const g=game('Mew ex 30C',false);hit(g);expect(g.player2.active.damage).toBe(60);});
+ it('also applies before Weakness to direct PutDamageEffect',()=>{const g=game();hit(g,true);expect(g.player2.active.damage).toBe(80);});
+ it('stacks separate in-play Regi Power sources',()=>{const g=game();g.player1.bench[1].cards.push(getCardByName('Regirock EX FCO'));hit(g);expect(g.player2.active.damage).toBe(100);});
+ it('does not activate from hand',()=>{const g=game();g.player1.bench[0].moveTo(g.player1.hand);hit(g);expect(g.player2.active.damage).toBe(60);});
+ it('does not activate under Path to the Peak',()=>{const g=game();g.player1.stadium.cards.push(getCardByName('Path to the Peak CRE'));hit(g);expect(g.player2.active.damage).toBe(60);});
+ it('recognizes a dual-type Fighting attacker',()=>{const g=game();const card=g.player1.active.getPokemonCard()!;card.cardType=CardType.WATER;card.additionalCardTypes=[CardType.FIGHTING];hit(g);expect(g.player2.active.damage).toBe(80);});
+ it('does not boost Bench damage',()=>{const g=game();g.player2.bench[0].cards.push(getCardByName('Squirtle BS'));const a=new AttackEffect(g.player1,g.player2,{name:'Hit',cost:[],damage:30,text:''});const e=new PutDamageEffect(a,30);e.target=g.player2.bench[0];g.store.reduceEffect(g.state,e);expect(g.player2.bench[0].damage).toBe(30);});
+ for (const attackerSeat of [0,1]) it(`applies Regi Power before Kakuna reduction with attacker seat ${attackerSeat}`,()=>{
+  const attackConfig={active:{card:'Mew ex 30C'},bench:[{card:'Regirock EX FCO'}],deck:padDeck(10)};
+  const defendConfig={active:{card:'Kakuna EVO'},deck:padDeck(10)};
+  const g=setupGame({turn:3,player1:attackerSeat===0?attackConfig:defendConfig,player2:attackerSeat===0?defendConfig:attackConfig});
+  const attacker=g.state.players[attackerSeat], defender=g.state.players[1-attackerSeat];attacker.active.getPokemonCard()!.cardType=CardType.FIGHTING;
+  const kakuna=defender.active.getPokemonCard()!;defender.active.marker.addMarker('KAKUNA_EVO_REDUCE_DAMAGE',kakuna);g.state.activePlayer=attackerSeat;
+  const a=new AttackEffect(attacker,defender,{name:'Hit',cost:[],damage:30,text:''});g.store.reduceEffect(g.state,new DealDamageEffect(a,30));expect(defender.active.damage).toBe(0);
+ });
+});

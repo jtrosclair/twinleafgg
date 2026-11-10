@@ -1,0 +1,99 @@
+{
+  "verifiedAt": "2026-11-07T02:50:53.547Z",
+  "packageHash": "d9fa0f7054eafecd3c984302ea915a363aaeba0b3c832855689d7d6c10c37d5c",
+  "buildId": "3b102002-e35e-465a-8437-33797867ffd2",
+  "workerVersion": "a4859908-20a9-42f8-a1d3-1df97df6cbf3",
+  "format": "gz2.",
+  "dictionarySha256": "87ca901740ddbee18996226aa35f759651512e782eee1555bd0dbd55493c6861",
+  "browser": "Desktop Chromium via in-app browser",
+  "physicalMobileWebViewTest": false,
+  "checks": [
+    {
+      "name": "Trapped in the Phantom Maze",
+      "urlPreserved": true,
+      "boardVisible": true,
+      "boardCards": 41,
+      "base": "/releases/d9fa0f7054eafecd3c984302ea915a363aaeba0b3c832855689d7d6c10c37d5c/"
+    },
+    {
+      "name": "Explosive Hand",
+      "urlPreserved": true,
+      "boardVisible": true,
+      "boardCards": 38,
+      "base": "/releases/d9fa0f7054eafecd3c984302ea915a363aaeba0b3c832855689d7d6c10c37d5c/"
+    },
+    {
+      "name": "Breaking Through the Wall",
+      "urlPreserved": true,
+      "boardVisible": true,
+      "boardCards": 41,
+      "base": "/releases/d9fa0f7054eafecd3c984302ea915a363aaeba0b3c832855689d7d6c10c37d5c/"
+    },
+    {
+      "name": "Something's Fishy",
+      "urlPreserved": true,
+      "boardVisible": true,
+      "boardCards": 35,
+      "base": "/releases/d9fa0f7054eafecd3c984302ea915a363aaeba0b3c832855689d7d6c10c37d5c/"
+    },
+    {
+      "format": "gz1",
+      "urlPreserved": true,
+      "boardVisible": true
+    },
+    {
+      "format": "plain",
+      "urlPreserved": true,
+      "boardVisible": true
+    },
+    {
+      "name": "Deck out with Dengo",
+      "urlPreserved": true,
+      "boardVisible": true,
+      "base": "https://sim-static.prizemap.app/releases/d9fa0f7054eafecd3c984302ea915a363aaeba0b3c832855689d7d6c10c37d5c/",
+      "cards": 41,
+      "imagesLazy": true,
+      "imagesLoaded": true,
+      "setup": "{\"stages\":{\"metadataReady\":25,\"engineReady\":35.4,\"boardMounted\":40.9,\"boardPainted\":107},\"startedAtNavigationMs\":763.0999999046326,\"navigationMs\":870.1}"
+    }
+  ],
+  "consoleErrors": 0,
+  "automatedTests": 294,
+  "winningReplays": 40,
+  "dengoTuroNestCases": 5,
+  "corpusExactJsonAndFullStateComparisons": 600,
+  "mainBundleGzipBytes": {
+    "before": 1967076,
+    "after": 1968009,
+    "added": 933
+  },
+  "deliveryReport": "simulator-delivery-results.json",
+  "screenshot": "/tmp/twinleaf-field-codes-live.png",
+  "webMigration": {
+    "verified": true,
+    "records": 530,
+    "puzzles": 296,
+    "draftEditorRecords": 234,
+    "fields": 602,
+    "canonicalComparisons": 602,
+    "exactValueComparisons": 602,
+    "metadataAndSourceUrlsPreserved": true,
+    "concurrentCounterChanges": 1,
+    "counts": {
+      "already-gz2": 602,
+      "non-simulator": 360,
+      "empty": 5
+    },
+    "beforeChars": 1257621,
+    "afterChars": 1049866,
+    "savedChars": 207755,
+    "savedPercent": 16.519682797917657,
+    "backupSha256": "839f42863c906f6e238680f71ff7bb59642c3056400dfb2beee951fa5f1f345b",
+    "commit": "5593562d7de605fb0d7f269b1bc9f109d3b42994",
+    "productionDeployment": "https://prizemap-giibwi47i-jtrosclairs-projects.vercel.app",
+    "backupDirectory": "/Users/jerrytrosclair/.local/share/prizemap/backups/simulator-field-codes-2026-11-06",
+    "livePublicApiVerified": true,
+    "exactPreviousDengoGzipJsonPreserved": true,
+    "liveMigratedDengoBoardRendered": true
+  }
+}

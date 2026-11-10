@@ -50,9 +50,6 @@ export class BoardInteractionService {
   // Callback when selection is confirmed
   private selectionCallback: (targets: CardTarget[]) => void;
 
-  // Track if we're in replay mode
-  private isReplayModeActive = false;
-
   private evolutionAnimationSubject = new Subject<BasicEntranceAnimationEvent>();
   public evolutionAnimation$ = this.evolutionAnimationSubject.asObservable();
 
@@ -75,11 +72,6 @@ export class BoardInteractionService {
    * Start board selection mode for a Pokémon selection prompt
    */
   public startBoardSelection(prompt: ChoosePokemonPrompt, onComplete: (targets: CardTarget[]) => void): void {
-    // Don't start board selection if we're in replay mode
-    if (this.isReplayModeActive) {
-      return;
-    }
-
     this.promptSubject.next(prompt);
     this.selectionModeSubject.next(true);
     this.selectedTargetsSubject.next([]);
@@ -95,24 +87,15 @@ export class BoardInteractionService {
    * End board selection mode
    */
   public endBoardSelection(): void {
+    // Observers run synchronously; invalidate the old continuation before any
+    // notification can try to confirm or cancel it again.
+    this.selectionCallback = null;
     this.selectionModeSubject.next(false);
     this.promptSubject.next(null);
     this.selectedTargetsSubject.next([]);
     this.blockedTargetsSubject.next([]);
     this.eligiblePlayerTypeSubject.next(null);
     this.eligibleSlotsSubject.next([]);
-    this.selectionCallback = null;
-  }
-
-  /**
-   * Set replay mode status
-   */
-  public setReplayMode(isReplayMode: boolean): void {
-    this.isReplayModeActive = isReplayMode;
-    if (isReplayMode) {
-      // If entering replay mode, end any active board selection
-      this.endBoardSelection();
-    }
   }
 
   /**
@@ -190,21 +173,23 @@ export class BoardInteractionService {
    * Confirm the current selection
    */
   public confirmSelection(): void {
-    if (this.selectionCallback) {
-      const currentTargets = this.selectedTargetsSubject.value;
-      this.selectionCallback(currentTargets);
-      this.endBoardSelection();
-    }
+    const callback = this.selectionCallback;
+    if (!callback) { return; }
+    const targets = this.selectedTargetsSubject.value.map(target => ({ ...target }));
+    this.endBoardSelection();
+    // Resolving a prompt can synchronously start its continuation's selection.
+    // The old selection must be fully cleared before that happens.
+    callback(targets);
   }
 
   /**
    * Cancel the current selection
    */
   public cancelSelection(): void {
-    if (this.selectionCallback) {
-      this.selectionCallback(null);
-      this.endBoardSelection();
-    }
+    const callback = this.selectionCallback;
+    if (!callback) { return; }
+    this.endBoardSelection();
+    callback(null);
   }
 
   /**
@@ -236,4 +221,4 @@ export class BoardInteractionService {
   public triggerAttackAnimation(event: BasicEntranceAnimationEvent) {
     this.attackAnimationSubject.next(event);
   }
-} 
+}

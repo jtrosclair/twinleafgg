@@ -1,22 +1,7 @@
-import { Response } from './response.interface';
-import { Card, CardsInfo } from 'ptcg-server';
+import { CardLibraryMetadata } from 'ptcg-server/client';
 
-export interface CardsResponse extends Response {
-  cards: Card[];
-  cardsInfo: CardsInfo;
-}
-
-export interface CardsHashResponse extends Response {
-  cardsTotal: number;
-  hash: string;
-}
-
-export interface CardArtwork {
-  id: number;
-  name: string;
-  cardName: string;
-  setCode: string;
-  code: string;
-  imageUrl: string;
-  holoType: string;
+export type CardsInfo = CardLibraryMetadata;
+export interface CardsResponse { ok: boolean; cardsInfo: CardLibraryMetadata; }
+export interface CardsHashResponse {
+  ok: boolean; schemaVersion: number; cardsTotal: number; hash: string; catalogueHash: string;
 }

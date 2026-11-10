@@ -1,0 +1,47 @@
+{
+  "verifiedAt": "2026-11-06T14:10:28.125Z",
+  "puzzle": "Phantom Maze",
+  "frameControlsHidden": {
+    "undo": true,
+    "endTurn": true
+  },
+  "prizemapRestoreServiceSpecs": {
+    "command": "node tools/test-client-services.cjs",
+    "passed": 68
+  },
+  "buttons": [
+    "",
+    ""
+  ],
+  "fragmentLength": 30925,
+  "frameActionsPresent": false,
+  "origin": "https://sim-static.prizemap.app",
+  "path": "/sandbox-viewer",
+  "sameURL": true,
+  "scriptPaths": [
+    "/releases/56abc708c60e634f5b42cbbee4d2a859c70f056735366b60f42d438d7eebf2ff/simulator-static.a7d9d045f2721d6544a0.js",
+    "/releases/56abc708c60e634f5b42cbbee4d2a859c70f056735366b60f42d438d7eebf2ff/runtime.287366b023aefc3235db.js",
+    "/releases/56abc708c60e634f5b42cbbee4d2a859c70f056735366b60f42d438d7eebf2ff/polyfills.98ed7ea3f24455c0a30b.js",
+    "/releases/56abc708c60e634f5b42cbbee4d2a859c70f056735366b60f42d438d7eebf2ff/main.a6667f1e395c1adf763a.js"
+  ],
+  "setup": {
+    "artwork": {
+      "elapsedMs": 100.10000014305116,
+      "failedScans": 0,
+      "memoryHits": 0,
+      "networkRequests": 0,
+      "persistentHits": 50,
+      "uniqueScans": 50
+    },
+    "navigationMs": 1541.2,
+    "stages": {
+      "artworkReady": 131.4,
+      "artworkStart": 31,
+      "boardMounted": 164.2,
+      "boardPainted": 359,
+      "engineReady": 162.3,
+      "metadataReady": 30.9
+    },
+    "startedAtNavigationMs": 1182.1999998092651
+  }
+}

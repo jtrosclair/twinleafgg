@@ -1,0 +1,89 @@
+diff --git a/Users/jerrytrosclair/Documents/GitHub/twinleafgg/ptcg-server/src/sets/set-fates-collide/regirock-ex.ts b/private/tmp/prizemap-regirock19.xY2z47/ptcg-server/src/sets/set-fates-collide/regirock-ex.ts
+index eb5e99fd0..fa92fa7db 100644
+--- a/Users/jerrytrosclair/Documents/GitHub/twinleafgg/ptcg-server/src/sets/set-fates-collide/regirock-ex.ts
++++ b/private/tmp/prizemap-regirock19.xY2z47/ptcg-server/src/sets/set-fates-collide/regirock-ex.ts
+@@ -6,6 +6,8 @@ import { Effect } from '../../game/store/effects/effect';
+ import {WAS_ATTACK_USED} from '../../game/store/prefabs/prefabs';
+ import {DealDamageEffect, PutDamageEffect} from '../../game/store/effects/attack-effects';
+ import {EndTurnEffect} from '../../game/store/effects/game-phase-effects';
++import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
++import { MarkerConstants } from '../../game/store/markers/marker-constants';
+ 
+ export class RegirockEx extends PokemonCard implements CopiedAttackOwnershipContract {
+   public tags = [ CardTag.POKEMON_EX ];
+@@ -58,25 +60,37 @@ export class RegirockEx extends PokemonCard implements CopiedAttackOwnershipCont
+   }
+ 
+   public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+-    // Bedrock Press
+-    if (WAS_ATTACK_USED(effect, 0, this)){
+-      const opponent = effect.opponent;
+-
+-      this.marker.addMarker(this.BEDROCK_PRESS_MARKER, this);
+-      opponent.marker.addMarker(this.BEDROCK_PRESS_MARKER, this);
++    // Ref: game/store/prefabs/attack-after-damage.ts (protect the actual attacker after damage).
++    if (WAS_ATTACK_USED(effect, 0, this)) {
++      const target = effect.source;
++      const attacker = target.getPokemonCard();
++      const marker = MarkerConstants.REGIROCK_EX_BEDROCK_PRESS_REDUCTION;
++      const markerSource = this;
++      afterAttackDamage(state, effect, (_store, next) => {
++        const owner = next.players.find(player => player.active === target || player.bench.includes(target));
++        if (!owner || !attacker || target.getPokemonCard() !== attacker) return next;
++        target.marker.addMarker(marker, markerSource, 'attack', 'pokemon');
++        return next;
++      });
+     }
+ 
+-    if (effect instanceof DealDamageEffect && effect.target.marker.hasMarker(this.BEDROCK_PRESS_MARKER, this)){
++    // Preserve the original behavior of legacy snapshots that already contain
++    // a target-slot marker, including its original pre-Weakness timing.
++    if (effect instanceof DealDamageEffect && effect.target.marker.hasMarker(this.BEDROCK_PRESS_MARKER, this)) {
+       effect.damage -= 20;
+     }
+ 
+-    if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.BEDROCK_PRESS_MARKER, this)){
+-      const opponent = StateUtils.getOpponent(state, effect.player);
++    if (effect instanceof PutDamageEffect && effect.target.marker.hasMarker(MarkerConstants.REGIROCK_EX_BEDROCK_PRESS_REDUCTION, this)) {
++      const owner = StateUtils.findOwner(state, effect.target);
++      if (owner !== effect.player && state.players[state.activePlayer] === effect.player) {
++        effect.reduceDamageAfterWeakness(20, `${this.fullName}:${this.id}:Bedrock Press`);
++      }
++    }
+ 
++    if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.BEDROCK_PRESS_MARKER, this)) {
+       effect.player.marker.removeMarker(this.BEDROCK_PRESS_MARKER, this);
+-      opponent.forEachPokemon(PlayerType.BOTTOM_PLAYER, card => {
+-        if (card.getPokemonCard() === this){ card.marker.removeMarker(this.BEDROCK_PRESS_MARKER, this); }
+-      });
++      const owner = StateUtils.getOpponent(state, effect.player);
++      owner.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => slot.marker.removeMarker(this.BEDROCK_PRESS_MARKER, this));
+     }
+ 
+     return state;
+diff --git a/Users/jerrytrosclair/Documents/GitHub/twinleafgg/ptcg-server/src/game/store/effect-reducers/game-phase-effect.ts b/private/tmp/prizemap-regirock19.xY2z47/ptcg-server/src/game/store/effect-reducers/game-phase-effect.ts
+index c07c5d982..710a4e11d 100644
+--- a/Users/jerrytrosclair/Documents/GitHub/twinleafgg/ptcg-server/src/game/store/effect-reducers/game-phase-effect.ts
++++ b/private/tmp/prizemap-regirock19.xY2z47/ptcg-server/src/game/store/effect-reducers/game-phase-effect.ts
+@@ -261,6 +261,9 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
+ 
+     // Clear damage reduction effects on opponent's Pokémon when their turn ends
+     const opponent = StateUtils.getOpponent(state, player);
++    opponent.forEachPokemon(PlayerType.TOP_PLAYER, slot => {
++      slot.marker.removeMarker(MarkerConstants.REGIROCK_EX_BEDROCK_PRESS_REDUCTION);
++    });
+     opponent.forEachPokemon(PlayerType.TOP_PLAYER, slot => {
+       slot.preventDamageNextTurn = false;
+       slot.preventEffectsOfAttacksNextTurn = false;
+diff --git a/Users/jerrytrosclair/Documents/GitHub/twinleafgg/ptcg-server/src/game/store/markers/marker-constants.ts b/private/tmp/prizemap-regirock19.xY2z47/ptcg-server/src/game/store/markers/marker-constants.ts
+index 2a57daa27..6cf661cac 100644
+--- a/Users/jerrytrosclair/Documents/GitHub/twinleafgg/ptcg-server/src/game/store/markers/marker-constants.ts
++++ b/private/tmp/prizemap-regirock19.xY2z47/ptcg-server/src/game/store/markers/marker-constants.ts
+@@ -4,6 +4,7 @@
+  */
+ 
+ export class MarkerConstants {
++  public static readonly REGIROCK_EX_BEDROCK_PRESS_REDUCTION = 'REGIROCK_EX_BEDROCK_PRESS_REDUCTION';
+   // Latios-GX Clear Vision is a player-scoped effect for the rest of the game.
+   public static readonly CLEAR_VISION_GX_LOCK = 'LATIOS_GX_UNM_CLEAR_VISION_MARKER';
+   // ===== COMMON MARKERS (used across multiple cards) =====

@@ -8,7 +8,7 @@ import { StoreLike, State, StateUtils, GameError, GameMessage } from '../../game
 import { Effect } from '../../game/store/effects/effect';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { PlayItemEffect, PlaySupporterEffect, PlayPokemonEffect, PlayStadiumEffect, AttachPokemonToolEffect, AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { CheckEvolveEffect, EvolveEffect } from '../../game/store/effects/game-effects';
 import { WAS_ATTACK_USED, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, BLOCK_IF_GX_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class AlolanGolemGx extends PokemonCard {
@@ -87,7 +87,7 @@ export class AlolanGolemGx extends PokemonCard {
     if (effect instanceof AttachEnergyEffect && effect.player.marker.hasMarker(this.BLOCK_CARDS_MARKER, this)) {
       throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
-    if (effect instanceof EvolveEffect && effect.player.marker.hasMarker(this.BLOCK_CARDS_MARKER, this)) {
+    if (((effect instanceof CheckEvolveEffect || (effect instanceof EvolveEffect && !effect.preflightComplete)) && effect.playedFromHand) && effect.player.marker.hasMarker(this.BLOCK_CARDS_MARKER, this)) {
       throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
 

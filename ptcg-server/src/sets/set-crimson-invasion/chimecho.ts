@@ -3,7 +3,7 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { CheckEvolveEffect, EvolveEffect } from '../../game/store/effects/game-effects';
 import { StateUtils } from '../../game/store/state-utils';
 import { GameMessage } from '../../game/game-message';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
@@ -61,7 +61,7 @@ export class Chimecho extends PokemonCard {
       }
     }
 
-    if (effect instanceof EvolveEffect) {
+    if (((effect instanceof CheckEvolveEffect || (effect instanceof EvolveEffect && !effect.preflightComplete)) && effect.playedFromHand)) {
       const player = effect.player;
       const powersEffect = new CheckPokemonPowersEffect(player, effect.pokemonCard);
       state = store.reduceEffect(state, powersEffect);

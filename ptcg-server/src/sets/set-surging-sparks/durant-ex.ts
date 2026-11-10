@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, GameMessage, StateUtils, ConfirmPrompt } from '../../game';
@@ -5,7 +6,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { DEAL_MORE_DAMAGE_FOR_EACH_PRIZE_CARD_TAKEN, IS_ABILITY_BLOCKED, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Durantex extends PokemonCard {
+export class Durantex extends PokemonCard implements CopiedAttackOwnershipContract {
 
   public tags = [CardTag.POKEMON_ex];
 
@@ -69,6 +70,10 @@ export class Durantex extends PokemonCard {
     }
 
     // Revenge Crush
+    return Durantex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       DEAL_MORE_DAMAGE_FOR_EACH_PRIZE_CARD_TAKEN(effect, state, 30);
     }

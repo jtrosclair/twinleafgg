@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils } from '../../game';
@@ -6,7 +7,7 @@ import { MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 
-export class Toxtricityex extends PokemonCard {
+export class Toxtricityex extends PokemonCard implements CopiedAttackOwnershipContract {
   public tags = [CardTag.POKEMON_ex, CardTag.POKEMON_TERA];
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom = 'Toxel';
@@ -38,16 +39,6 @@ export class Toxtricityex extends PokemonCard {
   public fullName: string = 'Toxtricity ex PAR';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Knocking Hammer
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-      MOVE_CARDS(store, state, effect.opponent.deck, effect.opponent.discard, { count: 1, sourceCard: this, sourceEffect: this.attacks[0] });
-    }
-
-    // Gaia Punk
-    if (WAS_ATTACK_USED(effect, 1, this)) {
-      DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 3, L);
-    }
-
     if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
@@ -59,6 +50,21 @@ export class Toxtricityex extends PokemonCard {
 
       effect.preventDefault = true;
     }
+    return Toxtricityex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    // Knocking Hammer
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      MOVE_CARDS(store, state, effect.opponent.deck, effect.opponent.discard, { count: 1, sourceCard: this, sourceEffect: this.attacks[0] });
+    }
+
+    // Gaia Punk
+    if (WAS_ATTACK_USED(effect, 1, this)) {
+      DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 3, L);
+    }
+
+    
     return state;
   }
 }

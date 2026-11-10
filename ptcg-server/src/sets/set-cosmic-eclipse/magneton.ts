@@ -5,8 +5,10 @@ import {
   GameError
 } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ABILITY_USED, MOVE_CARDS, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
-import { Card } from '../../game';
+import { ABILITY_USED, MOVE_CARDS, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { Card, TrainerCard } from '../../game';
+import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
+import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
 
 export class Magneton extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -50,44 +52,35 @@ export class Magneton extends PokemonCard {
 
       ABILITY_USED(player, this);
 
-      let cards: Card[] = [];
-      return store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_HAND,
-        player.deck,
-        { superType: SuperType.TRAINER, trainerType: TrainerType.SUPPORTER },
-        { min: 0, max: 3, allowCancel: true }
-      ), selectedCards => {
-        cards = selectedCards || [];
-
-        // Operation canceled by the user
-        if (cards.length === 0) {
-          SHUFFLE_DECK(store, state, player);
-          player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-            if (cardList.getPokemonCard() === this) {
-              cardList.damage += 999;
-            }
-          });
-          return state;
-        }
-
-        cards.forEach((card, index) => {
-          MOVE_CARDS(store, state, player.deck, player.hand, { cards: [card], sourceCard: this, sourceEffect: this.powers[0] });
-        });
-
-        cards.forEach((card, index) => {
-          store.log(state, GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
-        });
-
-        SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-        SHUFFLE_DECK(store, state, player);
-
+      const source = player.deck;
+      const isSupporter = (card: Card) => card instanceof TrainerCard && card.trainerType === TrainerType.SUPPORTER;
+      const finishSearch = () => store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
+        player.deck.applyOrder(order);
         player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (cardList.getPokemonCard() === this) {
-            cardList.damage += 999;
-          }
+          if (cardList.getPokemonCard() === this) cardList.damage += 999;
         });
       });
+      return store.prompt(state, new ChooseCardsPrompt(
+        player, GameMessage.CHOOSE_CARD_TO_HAND, source,
+        { superType: SuperType.TRAINER, trainerType: TrainerType.SUPPORTER },
+        { min: 0, max: 3, allowCancel: false }
+      ), selected => {
+        if (!Array.isArray(selected)) throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+        const cards = selected;
+        if (cards.length > 3 || new Set(cards).size !== cards.length ||
+          cards.some(card => !card || !source.cards.includes(card) || !isSupporter(card))) {
+          throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+        }
+        if (cards.length === 0) { finishSearch(); return; }
+        store.prompt(state, new ShowCardsPrompt(opponent.id, GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => {
+          MOVE_CARDS(store, state, source, player.hand, { cards, sourceCard: this, sourceEffect: this.powers[0] });
+          cards.filter(card => player.hand.cards.includes(card)).forEach(card => {
+            store.log(state, GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
+          });
+          finishSearch();
+        });
+      });
+
     }
     return state;
   }

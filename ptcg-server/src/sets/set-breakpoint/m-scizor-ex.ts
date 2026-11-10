@@ -10,6 +10,24 @@ import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED, CONFIRMATION_PROMPT, DISCARD_A_STADIUM_CARD_IN_PLAY } from '../../game/store/prefabs/prefabs';
 
+// This helper must not depend on the copycat Pokémon having Scizor's methods.
+function discardSpecialEnergy(store: StoreLike, state: State, effect: any, player: any, opponent: any): void {
+  store.prompt(state, new ChooseCardsPrompt(
+    player,
+    GameMessage.CHOOSE_CARD_TO_DISCARD,
+    opponent.active,
+    { superType: SuperType.ENERGY, energyType: EnergyType.SPECIAL },
+    { min: 1, max: 1, allowCancel: false }
+  ), selected => {
+    const cards: Card[] = selected || [];
+    if (cards.length > 0) {
+      const discardEnergy = new DiscardCardsEffect(effect, cards);
+      discardEnergy.target = opponent.active;
+      store.reduceEffect(state, discardEnergy);
+    }
+  });
+}
+
 export class MScizorEx extends PokemonCard {
   public tags = [CardTag.MEGA, CardTag.POKEMON_EX];
   public stage: Stage = Stage.MEGA;
@@ -61,13 +79,13 @@ export class MScizorEx extends PokemonCard {
         if (hasSpecialEnergy && hasStadium) {
           CONFIRMATION_PROMPT(store, state, player, chooseEnergy => {
             if (chooseEnergy) {
-              this.discardSpecialEnergy(store, state, effect, player, opponent);
+              discardSpecialEnergy(store, state, effect, player, opponent);
             } else {
               DISCARD_A_STADIUM_CARD_IN_PLAY(state);
             }
           }, GameMessage.WANT_TO_USE_ABILITY);
         } else if (hasSpecialEnergy) {
-          this.discardSpecialEnergy(store, state, effect, player, opponent);
+          discardSpecialEnergy(store, state, effect, player, opponent);
         } else {
           DISCARD_A_STADIUM_CARD_IN_PLAY(state);
         }
@@ -77,20 +95,4 @@ export class MScizorEx extends PokemonCard {
     return state;
   }
 
-  private discardSpecialEnergy(store: StoreLike, state: State, effect: any, player: any, opponent: any): void {
-    store.prompt(state, new ChooseCardsPrompt(
-      player,
-      GameMessage.CHOOSE_CARD_TO_DISCARD,
-      opponent.active,
-      { superType: SuperType.ENERGY, energyType: EnergyType.SPECIAL },
-      { min: 1, max: 1, allowCancel: false }
-    ), selected => {
-      const cards: Card[] = selected || [];
-      if (cards.length > 0) {
-        const discardEnergy = new DiscardCardsEffect(effect, cards);
-        discardEnergy.target = opponent.active;
-        store.reduceEffect(state, discardEnergy);
-      }
-    });
-  }
 }

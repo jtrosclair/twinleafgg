@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, PowerType } from '../../game';
@@ -7,7 +8,7 @@ import { PowerEffect } from '../../game/store/effects/game-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Armarougeex extends PokemonCard {
+export class Armarougeex extends PokemonCard implements CopiedAttackOwnershipContract {
 
   public tags = [CardTag.POKEMON_ex];
 
@@ -71,6 +72,10 @@ export class Armarougeex extends PokemonCard {
     }
 
     // Scorching Bazooka
+    return Armarougeex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
 

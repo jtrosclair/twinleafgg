@@ -1,0 +1,4 @@
+**
+!simulator-api-node/
+!simulator-api-node/dist/
+!simulator-api-node/dist/**

@@ -3,6 +3,7 @@ import { Effect } from './effect';
 import { Player } from '../state/player';
 import { Card } from '../card/card';
 import { Attack } from '../card/pokemon-types';
+import { PokemonCardList } from '../state/pokemon-card-list';
 
 export enum GamePhaseEffects {
   BEGIN_TURN_EFFECT = 'BEGIN_TURN_EFFECT',
@@ -82,10 +83,13 @@ export class AfterAttackEffect implements Effect {
   public opponent: Player;
   public attack: Attack;
 
-  constructor(player: Player, opponent: Player, attack: Attack) {
+  public originalDefender?: PokemonCardList;
+
+  constructor(player: Player, opponent: Player, attack: Attack, originalDefender: PokemonCardList = opponent.active) {
     this.player = player;
     this.opponent = opponent;
     this.attack = attack;
+    this.originalDefender = originalDefender;
   }
 }
 

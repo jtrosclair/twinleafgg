@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard, Stage, CardType, State, StoreLike, CardTag, Card, ChooseEnergyPrompt, GameMessage, StateUtils } from '../../game';
 import { DiscardCardsEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
@@ -5,7 +6,7 @@ import { Effect } from '../../game/store/effects/effect';
 
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Arcanineex extends PokemonCard {
+export class Arcanineex extends PokemonCard implements CopiedAttackOwnershipContract {
 
   public stage: Stage = Stage.STAGE_1;
 
@@ -50,6 +51,21 @@ export class Arcanineex extends PokemonCard {
   public fullName: string = 'Arcanine ex SVI';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+
+      // Target is not Active
+      if (effect.target === player.active || effect.target === opponent.active) {
+        return state;
+      }
+
+      effect.preventDefault = true;
+    }
+    return Arcanineex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
       effect.damage += effect.player.active.damage * 10;
@@ -76,17 +92,7 @@ export class Arcanineex extends PokemonCard {
       });
     }
 
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Target is not Active
-      if (effect.target === player.active || effect.target === opponent.active) {
-        return state;
-      }
-
-      effect.preventDefault = true;
-    }
+    
     return state;
   }
 }

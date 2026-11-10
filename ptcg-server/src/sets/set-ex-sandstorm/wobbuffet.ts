@@ -1,10 +1,12 @@
+import { recoilAfterAttack } from '../../game/store/prefabs/recoil-after-attack';
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, StateUtils, GamePhase, CardTag } from '../../game';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Wobbuffet extends PokemonCard {
+export class Wobbuffet extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.BASIC;
   public cardType: CardType = P;
   public hp: number = 80;
@@ -58,16 +60,14 @@ export class Wobbuffet extends PokemonCard {
       }
     }
 
-    // Handle Flip Over self-damage
+    return Wobbuffet.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    // Flip Over's recoil follows outgoing damage and stays with the attacker
+    // even when a damage reaction switches it to the Bench.
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const target = player.active;
-      if (target.cards.includes(this)) {
-        const damageEffect = new PutDamageEffect(effect, 10);
-        damageEffect.attackEffect.ignoreResistance = true;
-        damageEffect.attackEffect.ignoreWeakness = true;
-        store.reduceEffect(state, damageEffect);
-      }
+      recoilAfterAttack(state, effect, 10);
     }
 
     return state;

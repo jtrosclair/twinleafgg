@@ -193,11 +193,6 @@ html[data-theme='light'] {
     color: var(--ptcg-text-secondary);
   }
 
-  .ptcg-board,
-  ptcg-board {
-    background-color: var(--ptcg-board-surface);
-  }
-
   .sandbox-sidebar,
   .sandbox-control-panel {
     background: var(--ptcg-surface);
@@ -215,7 +210,7 @@ html[data-theme='light'] {
     color: var(--ptcg-text);
   }
 
-  .sandbox-sidebar .sandbox-toggle mat-icon,
+  .sandbox-sidebar .sandbox-toggle .ptcg-icon,
   .sandbox-control-panel label,
   .sandbox-control-panel .mat-checkbox-label,
   .sandbox-control-panel .mat-select-value {

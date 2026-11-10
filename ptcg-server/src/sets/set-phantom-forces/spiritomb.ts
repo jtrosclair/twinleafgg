@@ -2,7 +2,7 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { CheckEvolveEffect, EvolveEffect } from '../../game/store/effects/game-effects';
 import { ADD_CONFUSION_TO_PLAYER_ACTIVE, AFTER_ATTACK, COIN_FLIP_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { StateUtils } from '../../game/store/state-utils';
@@ -53,7 +53,7 @@ export class Spiritomb extends PokemonCard {
     }
 
     // Block evolution on marked Pokemon
-    if (effect instanceof EvolveEffect) {
+    if (((effect instanceof CheckEvolveEffect || (effect instanceof EvolveEffect && !effect.preflightComplete)) && effect.playedFromHand)) {
       if (effect.target.marker.hasMarker(this.BLOCK_EVOLVE_MARKER, this)) {
         throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
       }

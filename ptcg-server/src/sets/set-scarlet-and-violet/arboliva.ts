@@ -2,7 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, BoardEffect } from '../../game/store/card/card-types';
 import { StoreLike, State, CardTarget, ChoosePokemonPrompt, ConfirmPrompt, GameMessage, PlayerType, PokemonCardList, PowerType, SlotType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect, HealEffect } from '../../game/store/effects/game-effects';
+import { AfterEvolveEffect, HealEffect } from '../../game/store/effects/game-effects';
 import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class Arboliva extends PokemonCard {
@@ -37,12 +37,8 @@ export class Arboliva extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof EvolveEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this && effect.playedFromHand && state.players[state.activePlayer] === effect.player) {
       const player = effect.player;
-
-      if (player.deck.cards.length === 0) {
-        return state;
-      }
 
       // Try to reduce PowerEffect, to check if something is blocking our ability
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {

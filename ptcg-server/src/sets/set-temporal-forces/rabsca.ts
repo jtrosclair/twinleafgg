@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
@@ -9,7 +10,7 @@ import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effect
 
 import { PREVENT_DAMAGE_TO_YOUR_BENCHED_POKEMON_FROM_OPPONENT_ATTACKS, PREVENT_EFFECTS_TO_YOUR_BENCHED_POKEMON_FROM_OPPONENT_ATTACKS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Rabsca extends PokemonCard {
+export class Rabsca extends PokemonCard implements CopiedAttackOwnershipContract {
 
   public stage: Stage = Stage.STAGE_1;
 
@@ -51,18 +52,7 @@ export class Rabsca extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      const checkProvidedEnergyEffect = new CheckProvidedEnergyEffect(opponent);
-      store.reduceEffect(state, checkProvidedEnergyEffect);
-      const energyCount = checkProvidedEnergyEffect.energyMap
-        .reduce((left, p) => left + p.provides.length, 0);
-
-      effect.damage += energyCount * 30;
-    }
+    state = Rabsca.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
 
     /*
      * Legacy pre-prefab implementation:
@@ -86,6 +76,23 @@ export class Rabsca extends PokemonCard {
         includeSourcePokemon: true
       });
     });
+    return state;
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+
+      const checkProvidedEnergyEffect = new CheckProvidedEnergyEffect(opponent);
+      store.reduceEffect(state, checkProvidedEnergyEffect);
+      const energyCount = checkProvidedEnergyEffect.energyMap
+        .reduce((left, p) => left + p.provides.length, 0);
+
+      effect.damage += energyCount * 30;
+    }
+
     return state;
   }
 }

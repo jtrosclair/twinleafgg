@@ -1,0 +1,59 @@
+{
+  "packageHash": "3a9b5bff1a33c45712fcb97173d143fefa345068124a902e9380405a50999630",
+  "beforeFile": "/tmp/twinleaf-svg-minify-before/simulator-static.1514be0623a8f2f128db.js",
+  "afterFile": "/Users/jerrytrosclair/Documents/GitHub/twinleafgg/ptcg-play/cloudflare-public/releases/3a9b5bff1a33c45712fcb97173d143fefa345068124a902e9380405a50999630/simulator-static.28618afbc4a3433de5c4.js",
+  "method": "Exact finalized before/after bootstrap bytes verified. Energy contribution is an independent gzip/Brotli subtraction of all21energySVGvalues and every alias/CSSkey for those values; remaining bootstrap unchanged. It includes compression context and is not an additive file-size total.",
+  "before": {
+    "uniqueSvgFiles": 21,
+    "full": {
+      "bytes": 840211,
+      "gzip6Bytes": 259948,
+      "brotli6Bytes": 221234
+    },
+    "withoutEnergySvgResources": {
+      "bytes": 707961,
+      "gzip6Bytes": 214786,
+      "brotli6Bytes": 197676
+    },
+    "incremental": {
+      "bytes": 132250,
+      "gzip6Bytes": 45162,
+      "brotli6Bytes": 23558
+    }
+  },
+  "after": {
+    "uniqueSvgFiles": 21,
+    "full": {
+      "bytes": 767247,
+      "gzip6Bytes": 234263,
+      "brotli6Bytes": 210701
+    },
+    "withoutEnergySvgResources": {
+      "bytes": 706583,
+      "gzip6Bytes": 213609,
+      "brotli6Bytes": 196165
+    },
+    "incremental": {
+      "bytes": 60664,
+      "gzip6Bytes": 20654,
+      "brotli6Bytes": 14536
+    }
+  },
+  "incrementalSavings": {
+    "bytes": 71586,
+    "gzip6Bytes": 24508,
+    "brotli6Bytes": 9022
+  },
+  "encodingCounterfactuals": {
+    "beforeFullPrecisionWithUtf8": {
+      "bytes": 820583,
+      "gzip6Bytes": 243701,
+      "brotli6Bytes": 211803
+    },
+    "afterMinifiedWithBase64": {
+      "bytes": 778111,
+      "gzip6Bytes": 241036,
+      "brotli6Bytes": 218948
+    }
+  }
+}

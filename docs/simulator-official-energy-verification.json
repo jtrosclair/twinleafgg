@@ -1,0 +1,237 @@
+{
+  "ok": true,
+  "sourcePdfSha256": "cd526f74614ecfc8aa09c641b03abc53aad2f261f028efaa5b402811fdb86b23",
+  "officialPage": 4,
+  "verifiedAssets": 21,
+  "exactPathSegments": 869,
+  "typesVerifiedAgainstNearbyPdfLabels": 11,
+  "energyless": "Only original Colorless background disk; glyph drawing omitted.",
+  "attachedCanvas": "138x192, nested108x108 at15,42; original PDF viewBox preserved.",
+  "assets": [
+    {
+      "path": "assets/energy-icons/grass.svg",
+      "pdfDrawingIndexes": [
+        34,
+        35
+      ],
+      "exactSegments": 55,
+      "paths": 2,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy/grass.svg",
+      "pdfDrawingIndexes": [
+        34,
+        35
+      ],
+      "exactSegments": 55,
+      "paths": 2,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy-icons/fire.svg",
+      "pdfDrawingIndexes": [
+        44,
+        45
+      ],
+      "exactSegments": 44,
+      "paths": 2,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy/fire.svg",
+      "pdfDrawingIndexes": [
+        44,
+        45
+      ],
+      "exactSegments": 44,
+      "paths": 2,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy-icons/water.svg",
+      "pdfDrawingIndexes": [
+        39,
+        40
+      ],
+      "exactSegments": 16,
+      "paths": 2,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy/water.svg",
+      "pdfDrawingIndexes": [
+        39,
+        40
+      ],
+      "exactSegments": 16,
+      "paths": 2,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy-icons/lightning.svg",
+      "pdfDrawingIndexes": [
+        54,
+        55
+      ],
+      "exactSegments": 16,
+      "paths": 2,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy/lightning.svg",
+      "pdfDrawingIndexes": [
+        54,
+        55
+      ],
+      "exactSegments": 16,
+      "paths": 2,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy-icons/psychic.svg",
+      "pdfDrawingIndexes": [
+        49,
+        50
+      ],
+      "exactSegments": 35,
+      "paths": 2,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy/psychic.svg",
+      "pdfDrawingIndexes": [
+        49,
+        50
+      ],
+      "exactSegments": 35,
+      "paths": 2,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy-icons/fighting.svg",
+      "pdfDrawingIndexes": [
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70
+      ],
+      "exactSegments": 94,
+      "paths": 7,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy/fighting.svg",
+      "pdfDrawingIndexes": [
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70
+      ],
+      "exactSegments": 94,
+      "paths": 7,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy-icons/darkness.svg",
+      "pdfDrawingIndexes": [
+        92,
+        93
+      ],
+      "exactSegments": 14,
+      "paths": 2,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy/dark.svg",
+      "pdfDrawingIndexes": [
+        92,
+        93
+      ],
+      "exactSegments": 14,
+      "paths": 2,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy-icons/metal.svg",
+      "pdfDrawingIndexes": [
+        79,
+        80,
+        81,
+        82,
+        83
+      ],
+      "exactSegments": 58,
+      "paths": 5,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy/metal.svg",
+      "pdfDrawingIndexes": [
+        79,
+        80,
+        81,
+        82,
+        83
+      ],
+      "exactSegments": 58,
+      "paths": 5,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy-icons/fairy.svg",
+      "pdfDrawingIndexes": [
+        59,
+        60
+      ],
+      "exactSegments": 75,
+      "paths": 2,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy/fairy.svg",
+      "pdfDrawingIndexes": [
+        59,
+        60
+      ],
+      "exactSegments": 75,
+      "paths": 2,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy-icons/dragon.svg",
+      "pdfDrawingIndexes": [
+        87,
+        88
+      ],
+      "exactSegments": 29,
+      "paths": 2,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy-icons/colorless.svg",
+      "pdfDrawingIndexes": [
+        74,
+        75
+      ],
+      "exactSegments": 22,
+      "paths": 2,
+      "colorsAndViewBoxExact": true
+    },
+    {
+      "path": "assets/energy-icons/energyless.svg",
+      "pdfDrawingIndexes": [
+        74
+      ],
+      "exactSegments": 4,
+      "paths": 1,
+      "colorsAndViewBoxExact": true
+    }
+  ]
+}

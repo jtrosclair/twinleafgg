@@ -1,16 +1,9 @@
 <div class="ptcg-card-info-pane">
   <div class="ptcg-card-info-image">
-    <ptcg-card [card]="card" [artworksContext]="cardList || null" [class.cardback]="facedown"
+    <ptcg-card [card]="card" [artworksContext]="cardList || null" [cardback]="facedown"
       (click)="showCardImage(card, facedown)"></ptcg-card>
 
-    <!-- Swap Button - Only show when not in game and not facedown -->
-    <div class="swap-button-container" *ngIf="!isInGame() && !facedown">
-      <button mat-icon-button class="swap-button" (click)="openCardSwapDialog()"
-        [disabled]="getCardsWithSameName().length === 0"
-        [matTooltip]="getCardsWithSameName().length > 0 ? 'Swap with alternative printing' : 'No alternative printings available'">
-        <mat-icon>swap_horiz</mat-icon>
-      </button>
-    </div>
+
   </div>
 
   <div class="ptcg-card-info-text" *ngIf="!facedown && card.superType === SuperType.POKEMON">
@@ -67,7 +60,7 @@
 
     <!-- View Card Image Button -->
     <button class="view-card-btn" (click)="showCardImage(card, facedown)">
-      <mat-icon>image</mat-icon>
+      <svg class="ptcg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM5 17l3.5-4.5 2.5 3.01 3.5-4.51L19 17z"></path></svg>
       {{ 'CARDS_VIEW_CARD_IMAGE' | translate }}
     </button>
 
@@ -88,7 +81,7 @@
             {{ power.name }}
           </div>
         </div>
-        <div class="card-text" [innerHTML]="transformEnergyText(power.text)"></div>
+        <div class="card-text" [ptcgEnergyText]="power.text"></div>
       </div>
     </ptcg-hover-highlight>
 
@@ -108,7 +101,7 @@
             {{ attack.damage }}{{attack.damageCalculation ? ' ' + attack.damageCalculation : ''}}
           </div>
         </div>
-        <div class="card-text" [innerHTML]="transformEnergyText(attack.text)"></div>
+        <div class="card-text" [ptcgEnergyText]="attack.text"></div>
       </div>
     </ptcg-hover-highlight>
 
@@ -159,7 +152,7 @@
           {{ card.name }}
         </div>
       </div>
-      <div class="card-text" [innerHTML]="transformEnergyText(card.text)"></div>
+      <div class="card-text" [ptcgEnergyText]="card.text"></div>
     </div>
 
   </div>
@@ -167,10 +160,6 @@
   <div class="ptcg-card-info-text" *ngIf="!facedown && card.superType === SuperType.ENERGY">
     <div class="title">
       <span>{{card.name}}</span> <span class="subtitle-set-code">{{card.set}} {{card.setNumber}}</span>
-      <button mat-icon-button class="favorite-button" *ngIf="!isInGame() && card.superType === SuperType.ENERGY"
-        (click)="toggleFavorite()" [matTooltip]="isFavoriteCard() ? 'Remove from favorites' : 'Add to favorites'">
-        <mat-icon>{{isFavoriteCard() ? 'favorite' : 'favorite_border'}}</mat-icon>
-      </button>
     </div>
     <div class="subtitle">
       <div class="subtitle-stage" [ngSwitch]="card.energyType">
@@ -185,7 +174,7 @@
 
     <!-- View Card Image Button -->
     <button class="view-card-btn" (click)="showCardImage(card, facedown)">
-      <mat-icon>image</mat-icon>
+      <svg class="ptcg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM5 17l3.5-4.5 2.5 3.01 3.5-4.51L19 17z"></path></svg>
       {{ 'CARDS_VIEW_CARD_IMAGE' | translate }}
     </button>
 
@@ -195,7 +184,7 @@
           {{ card.name }}
         </div>
       </div>
-      <div class="card-text" [innerHTML]="transformEnergyText(card.text)"></div>
+      <div class="card-text" [ptcgEnergyText]="card.text"></div>
     </div>
 
     <ptcg-hover-highlight *ngFor="let power of getDisplayPowers()"
@@ -211,7 +200,7 @@
             {{ power.name }}
           </div>
         </div>
-        <div class="card-text" [innerHTML]="transformEnergyText(power.text)"></div>
+        <div class="card-text" [ptcgEnergyText]="power.text"></div>
       </div>
     </ptcg-hover-highlight>
 
@@ -220,10 +209,6 @@
   <div class="ptcg-card-info-text" *ngIf="!facedown && card.superType === SuperType.TRAINER">
     <div class="title">
       <span>{{card.name}}</span> <span class="subtitle-set-code">{{card.set}} {{card.setNumber}}</span>
-      <button mat-icon-button class="favorite-button" *ngIf="!isInGame() && card.superType === SuperType.TRAINER"
-        (click)="toggleFavorite()" [matTooltip]="isFavoriteCard() ? 'Remove from favorites' : 'Add to favorites'">
-        <mat-icon>{{isFavoriteCard() ? 'favorite' : 'favorite_border'}}</mat-icon>
-      </button>
     </div>
     <div class="subtitle">
       <div class="subtitle-stage" [ngSwitch]="card.trainerType">
@@ -240,7 +225,7 @@
 
     <!-- View Card Image Button -->
     <button class="view-card-btn" (click)="showCardImage(card, facedown)">
-      <mat-icon>image</mat-icon>
+      <svg class="ptcg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM5 17l3.5-4.5 2.5 3.01 3.5-4.51L19 17z"></path></svg>
       {{ 'CARDS_VIEW_CARD_IMAGE' | translate }}
     </button>
 
@@ -257,7 +242,7 @@
             {{ power.name }}
           </div>
         </div>
-        <div class="card-text" [innerHTML]="transformEnergyText(power.text)"></div>
+        <div class="card-text" [ptcgEnergyText]="power.text"></div>
       </div>
     </ptcg-hover-highlight>
 
@@ -277,7 +262,7 @@
             {{ attack.damage }}
           </div>
         </div>
-        <div class="card-text" [innerHTML]="transformEnergyText(attack.text)"></div>
+        <div class="card-text" [ptcgEnergyText]="attack.text"></div>
       </div>
     </ptcg-hover-highlight>
 
@@ -289,7 +274,7 @@
             {{ card.name }}
           </div>
         </div>
-        <div class="card-text" [innerHTML]="transformEnergyText(card.text)"></div>
+        <div class="card-text" [ptcgEnergyText]="card.text"></div>
       </div>
     </ptcg-hover-highlight>
 
@@ -302,7 +287,7 @@
 
     <!-- View Card Image Button -->
     <button class="view-card-btn" (click)="showCardImage(card, facedown)">
-      <mat-icon>image</mat-icon>
+      <svg class="ptcg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM5 17l3.5-4.5 2.5 3.01 3.5-4.51L19 17z"></path></svg>
       {{ 'CARDS_VIEW_CARD_IMAGE' | translate }}
     </button>
   </div>

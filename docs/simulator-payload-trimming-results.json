@@ -1,0 +1,1172 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-11-06T22:20:26.698Z",
+  "method": "Current production compactSerializedState; complete untrimmed hydrated-state oracle; exact existing snapshots and legal actions, normal RNG, no server or browser.",
+  "outputDirectory": "/tmp/twinleaf-trimmed-puzzles",
+  "preChangeBaseline": {
+    "file": "/tmp/twinleaf-trim-canonical-before.json",
+    "sha256": "0bfdc1b9c4070c705d4ca4340ef676a59e48d18e07ad57a7f5ceacc31c0e5993",
+    "fixtures": 5
+  },
+  "productionHelperSourceSha256": "743509476ca49a93444591bf39e83c59c6af953758d060ba8e3f0298fc601b94",
+  "compiledHelperSha256": "0cfdb6af8a359ae4d0c2d3bdcd42504539e0667ca95812244973e4dbb77342cf",
+  "fixtures": [
+    {
+      "name": "Trapped in the Phantom Maze",
+      "file": "tools/.puzzle-playthrough/phantom-maze.solution.json",
+      "trimmedFile": "/tmp/twinleaf-trimmed-puzzles/phantom-maze.solution.json",
+      "format": "json-fixture",
+      "snapshots": [
+        {
+          "location": "fixture.stateData",
+          "before": {
+            "jsonUtf8Bytes": 23197,
+            "base64Chars": 30924,
+            "gzip6JsonBytes": 2585,
+            "gzip6JsonBase64Chars": 3448
+          },
+          "after": {
+            "jsonUtf8Bytes": 7637,
+            "base64Chars": 10184,
+            "gzip6JsonBytes": 1675,
+            "gzip6JsonBase64Chars": 2236
+          },
+          "saved": {
+            "jsonUtf8Bytes": 15560,
+            "base64Chars": 20740,
+            "gzip6JsonBytes": 910,
+            "gzip6JsonBase64Chars": 1212
+          },
+          "verification": {
+            "fullHydratedStateIdentical": true,
+            "sharedReferenceGraphIdentical": true,
+            "winConditionsPreserved": true,
+            "canonicalFullStateSha256": "1a5637928442180efab311aa26c8a46184345e73e5068fe177ebb8b3b2508354",
+            "normalizedEmissionIdempotent": true,
+            "normalizedEmissionSha256": "50e61aa6683bed95fb332606a5ea6440f15c1ccc536e99dc350aa7786130886e"
+          },
+          "inputStateDataSha256": "915099f17baefe165612be2265db5eea91eba6144caa54cfedb5eeef2c26ec99",
+          "outputStateDataSha256": "e9c23a99ba29e61330efa6d157dcfe07b09be8f016d82c2edb1a0591cd7b0046"
+        }
+      ],
+      "viewerUrl": {
+        "prefix": "https://sim-static.prizemap.app/sandbox-viewer#",
+        "originalCharacters": 30971,
+        "compactCharacters": 10231
+      },
+      "compactOutgoing": {
+        "jsonUtf8Bytes": 7734,
+        "base64Chars": 10312,
+        "gzip6JsonBytes": 1712,
+        "gzip6JsonBase64Chars": 2284
+      },
+      "previousFullOutgoing": {
+        "jsonUtf8Bytes": 28259,
+        "base64Chars": 37680,
+        "gzip6JsonBytes": 2841,
+        "gzip6JsonBase64Chars": 3788
+      },
+      "preChangeVerification": {
+        "oldInputAccepted": true,
+        "oldFullOutgoingAccepted": true,
+        "trimmedInputAccepted": true,
+        "fullStateIdentical": true,
+        "fullStateSha256": "0280d0964002e4b1a8947887cd1017f3a43aaab462756cf2f09c776840a5002d"
+      },
+      "winningReplays": 10
+    },
+    {
+      "name": "Explosive Hand",
+      "file": "tools/.puzzle-playthrough/explosive-hand.solution.json",
+      "trimmedFile": "/tmp/twinleaf-trimmed-puzzles/explosive-hand.solution.json",
+      "format": "json-fixture",
+      "snapshots": [
+        {
+          "location": "fixture.stateData",
+          "before": {
+            "jsonUtf8Bytes": 22764,
+            "base64Chars": 30352,
+            "gzip6JsonBytes": 2418,
+            "gzip6JsonBase64Chars": 3224
+          },
+          "after": {
+            "jsonUtf8Bytes": 7109,
+            "base64Chars": 9480,
+            "gzip6JsonBytes": 1453,
+            "gzip6JsonBase64Chars": 1940
+          },
+          "saved": {
+            "jsonUtf8Bytes": 15655,
+            "base64Chars": 20872,
+            "gzip6JsonBytes": 965,
+            "gzip6JsonBase64Chars": 1284
+          },
+          "verification": {
+            "fullHydratedStateIdentical": true,
+            "sharedReferenceGraphIdentical": true,
+            "winConditionsPreserved": true,
+            "canonicalFullStateSha256": "4b232c51994c30e6070a994eff5032756f2c84b1a3722535b0bd9a6b3fdcfb94",
+            "normalizedEmissionIdempotent": true,
+            "normalizedEmissionSha256": "7913c41d7d9974d60a4ac65d7cfcdb54deb4ca54163523677c6d8f9f501b8236"
+          },
+          "inputStateDataSha256": "1d6daf349636d9fa2d79787c7c74245cb13359a2ebf3b75711860de7cccb8701",
+          "outputStateDataSha256": "bc51ad4c7cb0bc7c68936944d2ea62ad28b0fdc3cb6cb69247a9facfea6ead8b"
+        }
+      ],
+      "viewerUrl": {
+        "prefix": "https://sim-static.prizemap.app/sandbox-viewer#",
+        "originalCharacters": 30399,
+        "compactCharacters": 9527
+      },
+      "compactOutgoing": {
+        "jsonUtf8Bytes": 7182,
+        "base64Chars": 9576,
+        "gzip6JsonBytes": 1478,
+        "gzip6JsonBase64Chars": 1972
+      },
+      "previousFullOutgoing": {
+        "jsonUtf8Bytes": 27823,
+        "base64Chars": 37100,
+        "gzip6JsonBytes": 2650,
+        "gzip6JsonBase64Chars": 3536
+      },
+      "preChangeVerification": {
+        "oldInputAccepted": true,
+        "oldFullOutgoingAccepted": true,
+        "trimmedInputAccepted": true,
+        "fullStateIdentical": true,
+        "fullStateSha256": "1a84761bc187daa3e59bafb03ee5e93d356bdf152af3360296165505c7cd8b6f"
+      },
+      "winningReplays": 10
+    },
+    {
+      "name": "Breaking Through the Wall",
+      "file": "tools/.puzzle-playthrough/breaking-through-wall.solution.json",
+      "trimmedFile": "/tmp/twinleaf-trimmed-puzzles/breaking-through-wall.solution.json",
+      "format": "json-fixture",
+      "snapshots": [
+        {
+          "location": "fixture.stateData",
+          "before": {
+            "jsonUtf8Bytes": 23093,
+            "base64Chars": 30772,
+            "gzip6JsonBytes": 2469,
+            "gzip6JsonBase64Chars": 3292
+          },
+          "after": {
+            "jsonUtf8Bytes": 7464,
+            "base64Chars": 9952,
+            "gzip6JsonBytes": 1548,
+            "gzip6JsonBase64Chars": 2064
+          },
+          "saved": {
+            "jsonUtf8Bytes": 15629,
+            "base64Chars": 20820,
+            "gzip6JsonBytes": 921,
+            "gzip6JsonBase64Chars": 1228
+          },
+          "verification": {
+            "fullHydratedStateIdentical": true,
+            "sharedReferenceGraphIdentical": true,
+            "winConditionsPreserved": true,
+            "canonicalFullStateSha256": "66309dda5e8cd12c5b4c7925e71556a311f971c142a93a7d7cb119de6b300546",
+            "normalizedEmissionIdempotent": true,
+            "normalizedEmissionSha256": "bb2332d3077f832f8110b62e0ff167c011378007a02bd89a9e52bdb874d0240f"
+          },
+          "inputStateDataSha256": "e9cbced8fd573a9df69bc8edbc5af21f9847e028ae0205524193b60bb952234e",
+          "outputStateDataSha256": "ee3cb688a7968965cc47c4e6e63d7f0d37c93a367f39c0b58ead55121d2a68c2"
+        }
+      ],
+      "viewerUrl": {
+        "prefix": "https://sim-static.prizemap.app/sandbox-viewer#",
+        "originalCharacters": 30819,
+        "compactCharacters": 9999
+      },
+      "compactOutgoing": {
+        "jsonUtf8Bytes": 7578,
+        "base64Chars": 10104,
+        "gzip6JsonBytes": 1591,
+        "gzip6JsonBase64Chars": 2124
+      },
+      "previousFullOutgoing": {
+        "jsonUtf8Bytes": 28172,
+        "base64Chars": 37564,
+        "gzip6JsonBytes": 2734,
+        "gzip6JsonBase64Chars": 3648
+      },
+      "preChangeVerification": {
+        "oldInputAccepted": true,
+        "oldFullOutgoingAccepted": true,
+        "trimmedInputAccepted": true,
+        "fullStateIdentical": true,
+        "fullStateSha256": "3f93c3425feca549fab9a2152d78a04099026c793c7d0624a0128212460966df"
+      },
+      "winningReplays": 10
+    },
+    {
+      "name": "Something's Fishy",
+      "file": "tools/.puzzle-playthrough/somethings-fishy.solution.json",
+      "trimmedFile": "/tmp/twinleaf-trimmed-puzzles/somethings-fishy.solution.json",
+      "format": "json-fixture",
+      "snapshots": [
+        {
+          "location": "fixture.stateData",
+          "before": {
+            "jsonUtf8Bytes": 22900,
+            "base64Chars": 30532,
+            "gzip6JsonBytes": 2514,
+            "gzip6JsonBase64Chars": 3352
+          },
+          "after": {
+            "jsonUtf8Bytes": 7247,
+            "base64Chars": 9664,
+            "gzip6JsonBytes": 1564,
+            "gzip6JsonBase64Chars": 2088
+          },
+          "saved": {
+            "jsonUtf8Bytes": 15653,
+            "base64Chars": 20868,
+            "gzip6JsonBytes": 950,
+            "gzip6JsonBase64Chars": 1264
+          },
+          "verification": {
+            "fullHydratedStateIdentical": true,
+            "sharedReferenceGraphIdentical": true,
+            "winConditionsPreserved": true,
+            "canonicalFullStateSha256": "7af34a24f19b0469e3887acb37624106487ffabebcd394c76d33b1a383121b40",
+            "normalizedEmissionIdempotent": true,
+            "normalizedEmissionSha256": "34600641aca6a3f7c6a5dc1fc9a5875771b2a64fd0a9350af312d6a44e908a05"
+          },
+          "inputStateDataSha256": "dca0f218fada83a53a1407609db33b31031b357e3a2e83034ffe5ff253405524",
+          "outputStateDataSha256": "0aff84e561058bd114bbd39fd49dc1e35096d843fda309694a5819407fb9f816"
+        }
+      ],
+      "viewerUrl": {
+        "prefix": "https://sim-static.prizemap.app/sandbox-viewer#",
+        "originalCharacters": 30579,
+        "compactCharacters": 9711
+      },
+      "compactOutgoing": {
+        "jsonUtf8Bytes": 7365,
+        "base64Chars": 9820,
+        "gzip6JsonBytes": 1611,
+        "gzip6JsonBase64Chars": 2148
+      },
+      "previousFullOutgoing": {
+        "jsonUtf8Bytes": 27983,
+        "base64Chars": 37312,
+        "gzip6JsonBytes": 2768,
+        "gzip6JsonBase64Chars": 3692
+      },
+      "preChangeVerification": {
+        "oldInputAccepted": true,
+        "oldFullOutgoingAccepted": true,
+        "trimmedInputAccepted": true,
+        "fullStateIdentical": true,
+        "fullStateSha256": "8af1e228fefbaee5d4a84da115733a4a9e5668777b6073c1695b9a173f269574"
+      },
+      "winningReplays": 10
+    },
+    {
+      "name": "Deck out with Dengo",
+      "file": "tools/fixtures/deck-out-with-dengo.snapshot.json.gz",
+      "trimmedFile": "/tmp/twinleaf-trimmed-puzzles/deck-out-with-dengo.snapshot.json.gz",
+      "format": "gzip-json-fixture",
+      "snapshots": [
+        {
+          "location": "fixture.stateData",
+          "before": {
+            "jsonUtf8Bytes": 23089,
+            "base64Chars": 30788,
+            "gzip6JsonBytes": 2561,
+            "gzip6JsonBase64Chars": 3416
+          },
+          "after": {
+            "jsonUtf8Bytes": 7500,
+            "base64Chars": 10000,
+            "gzip6JsonBytes": 1642,
+            "gzip6JsonBase64Chars": 2192
+          },
+          "saved": {
+            "jsonUtf8Bytes": 15589,
+            "base64Chars": 20788,
+            "gzip6JsonBytes": 919,
+            "gzip6JsonBase64Chars": 1224
+          },
+          "verification": {
+            "fullHydratedStateIdentical": true,
+            "sharedReferenceGraphIdentical": true,
+            "winConditionsPreserved": true,
+            "canonicalFullStateSha256": "4b76a80b13f8a7c144199b9c29f0445bbcb6263989fbeaf47bcf7f5b39fafa9e",
+            "normalizedEmissionIdempotent": true,
+            "normalizedEmissionSha256": "3fa88146ca4ff873be6149fb2695f9427386041337e18ac97cffc58413e7ba42"
+          },
+          "inputStateDataSha256": "ed88e8c342043570a3315bdbe06d6463faa5e1d4054c21b5fa2be5a1450a2b62",
+          "outputStateDataSha256": "4d955544f15e32170a63d419f737e6a030079723f16dc289aebe3b2a05c425c4"
+        }
+      ],
+      "viewerUrl": {
+        "prefix": "https://sim-static.prizemap.app/sandbox-viewer#",
+        "originalCharacters": 30835,
+        "compactCharacters": 10047
+      },
+      "compactOutgoing": {
+        "jsonUtf8Bytes": 7599,
+        "base64Chars": 10132,
+        "gzip6JsonBytes": 1682,
+        "gzip6JsonBase64Chars": 2244
+      },
+      "previousFullOutgoing": {
+        "jsonUtf8Bytes": 28153,
+        "base64Chars": 37540,
+        "gzip6JsonBytes": 2803,
+        "gzip6JsonBase64Chars": 3740
+      },
+      "preChangeVerification": {
+        "oldInputAccepted": true,
+        "oldFullOutgoingAccepted": true,
+        "trimmedInputAccepted": true,
+        "fullStateIdentical": true,
+        "fullStateSha256": "94484d29699a433fcd03c9370aae74a9430c28fafb9c8580cd1d2c27a421575a"
+      }
+    }
+  ],
+  "winningReplays": 40,
+  "dengoTuroNestCases": [
+    {
+      "promotion": 0,
+      "promoted": "Genesect ex SV11B",
+      "chosen": "Fezandipiti ex SFA",
+      "complete": true
+    },
+    {
+      "promotion": 1,
+      "promoted": "Gimmighoul SSP",
+      "chosen": "Fezandipiti ex SFA",
+      "complete": true
+    },
+    {
+      "promotion": 2,
+      "promoted": "Solrock M1L",
+      "chosen": "Fezandipiti ex SFA",
+      "complete": true
+    },
+    {
+      "promotion": 3,
+      "promoted": "Gimmighoul SSP",
+      "chosen": "Fezandipiti ex SFA",
+      "complete": true
+    },
+    {
+      "promotion": 4,
+      "promoted": "Gimmighoul SSP",
+      "chosen": "Fezandipiti ex SFA",
+      "complete": true
+    }
+  ],
+  "inputForms": [
+    {
+      "format": "base64",
+      "verified": true
+    },
+    {
+      "format": "serialized-json",
+      "verified": true
+    },
+    {
+      "format": "url",
+      "verified": true
+    },
+    {
+      "format": "json-fixture",
+      "verified": true
+    }
+  ],
+  "regressions": {
+    "runtimeAndCodec": 33,
+    "cards": 44,
+    "frontendServices": 90,
+    "touchDrag": 8,
+    "nodeInfrastructure": 80,
+    "total": 255,
+    "finalizer": true,
+    "cliEntrypoint": true
+  },
+  "setupBenchmark": {
+    "method": "Same desktop Node 24 CJS engine; 80 warm runs per puzzle after 10 warmups, with stage instrumentation. Before: previous code/full input. After full: new code/full input. After compact: new code/trimmed input. Sequential processes; excludes browser, network, artwork and full-page timing.",
+    "node": "v24.22.1",
+    "platform": "darwin/arm64",
+    "runs": 80,
+    "warmup": 10,
+    "previousPackageHash": "81876d5d34208915bc1a7c35f3a4ba757984c695353f312ae80bedec9606b01f",
+    "packageHash": "43d18e93e54c5914f37a79c3c85bf7294165f1de856dc5b46ed2e521e13159a0",
+    "fixtures": [
+      {
+        "name": "Trapped in the Phantom Maze",
+        "before": {
+          "constructor": {
+            "medianMs": 0.013,
+            "p95Ms": 0.023,
+            "minMs": 0.005
+          },
+          "loadSnapshot": {
+            "medianMs": 1.439,
+            "p95Ms": 1.676,
+            "minMs": 1.228
+          },
+          "getStateData": {
+            "medianMs": 0.773,
+            "p95Ms": 1.21,
+            "minMs": 0.662
+          },
+          "presentationClone": {
+            "medianMs": 0.716,
+            "p95Ms": 0.86,
+            "minMs": 0.621
+          },
+          "totalEngineSetup": {
+            "medianMs": 2.964,
+            "p95Ms": 3.508,
+            "minMs": 2.534
+          },
+          "base64Decode": {
+            "medianMs": 0.032,
+            "p95Ms": 0.037,
+            "minMs": 0.024
+          },
+          "jsonParse": {
+            "medianMs": 0.04,
+            "p95Ms": 0.051,
+            "minMs": 0.032
+          },
+          "jsonStringify": {
+            "medianMs": 0.034,
+            "p95Ms": 0.041,
+            "minMs": 0.026
+          },
+          "base64Encode": {
+            "medianMs": 0.334,
+            "p95Ms": 0.372,
+            "minMs": 0.297
+          }
+        },
+        "afterFullInput": {
+          "constructor": {
+            "medianMs": 0.008,
+            "p95Ms": 0.019,
+            "minMs": 0.005
+          },
+          "loadSnapshot": {
+            "medianMs": 1.415,
+            "p95Ms": 1.61,
+            "minMs": 1.319
+          },
+          "getStateData": {
+            "medianMs": 0.654,
+            "p95Ms": 0.895,
+            "minMs": 0.579
+          },
+          "presentationClone": {
+            "medianMs": 0.509,
+            "p95Ms": 0.585,
+            "minMs": 0.459
+          },
+          "totalEngineSetup": {
+            "medianMs": 2.615,
+            "p95Ms": 3.133,
+            "minMs": 2.427
+          },
+          "base64Decode": {
+            "medianMs": 0.029,
+            "p95Ms": 0.041,
+            "minMs": 0.024
+          },
+          "jsonParse": {
+            "medianMs": 0.037,
+            "p95Ms": 0.047,
+            "minMs": 0.032
+          },
+          "jsonStringify": {
+            "medianMs": 0.032,
+            "p95Ms": 0.039,
+            "minMs": 0.028
+          },
+          "base64Encode": {
+            "medianMs": 0.338,
+            "p95Ms": 0.368,
+            "minMs": 0.307
+          }
+        },
+        "afterCompactInput": {
+          "constructor": {
+            "medianMs": 0.007,
+            "p95Ms": 0.016,
+            "minMs": 0.005
+          },
+          "loadSnapshot": {
+            "medianMs": 1.226,
+            "p95Ms": 1.422,
+            "minMs": 1.086
+          },
+          "getStateData": {
+            "medianMs": 0.629,
+            "p95Ms": 0.887,
+            "minMs": 0.583
+          },
+          "presentationClone": {
+            "medianMs": 0.494,
+            "p95Ms": 0.564,
+            "minMs": 0.467
+          },
+          "totalEngineSetup": {
+            "medianMs": 2.36,
+            "p95Ms": 2.762,
+            "minMs": 2.155
+          },
+          "base64Decode": {
+            "medianMs": 0.011,
+            "p95Ms": 0.015,
+            "minMs": 0.008
+          },
+          "jsonParse": {
+            "medianMs": 0.019,
+            "p95Ms": 0.028,
+            "minMs": 0.016
+          },
+          "jsonStringify": {
+            "medianMs": 0.012,
+            "p95Ms": 0.018,
+            "minMs": 0.011
+          },
+          "base64Encode": {
+            "medianMs": 0.113,
+            "p95Ms": 0.131,
+            "minMs": 0.102
+          }
+        }
+      },
+      {
+        "name": "Explosive Hand",
+        "before": {
+          "constructor": {
+            "medianMs": 0.008,
+            "p95Ms": 0.02,
+            "minMs": 0.005
+          },
+          "loadSnapshot": {
+            "medianMs": 1.266,
+            "p95Ms": 1.525,
+            "minMs": 1.151
+          },
+          "getStateData": {
+            "medianMs": 0.675,
+            "p95Ms": 1.023,
+            "minMs": 0.624
+          },
+          "presentationClone": {
+            "medianMs": 0.649,
+            "p95Ms": 0.834,
+            "minMs": 0.599
+          },
+          "totalEngineSetup": {
+            "medianMs": 2.61,
+            "p95Ms": 3.219,
+            "minMs": 2.379
+          },
+          "base64Decode": {
+            "medianMs": 0.026,
+            "p95Ms": 0.034,
+            "minMs": 0.02
+          },
+          "jsonParse": {
+            "medianMs": 0.03,
+            "p95Ms": 0.039,
+            "minMs": 0.027
+          },
+          "jsonStringify": {
+            "medianMs": 0.021,
+            "p95Ms": 0.031,
+            "minMs": 0.017
+          },
+          "base64Encode": {
+            "medianMs": 0.286,
+            "p95Ms": 0.63,
+            "minMs": 0.268
+          }
+        },
+        "afterFullInput": {
+          "constructor": {
+            "medianMs": 0.007,
+            "p95Ms": 0.015,
+            "minMs": 0.005
+          },
+          "loadSnapshot": {
+            "medianMs": 1.348,
+            "p95Ms": 1.477,
+            "minMs": 1.22
+          },
+          "getStateData": {
+            "medianMs": 0.606,
+            "p95Ms": 0.681,
+            "minMs": 0.553
+          },
+          "presentationClone": {
+            "medianMs": 0.478,
+            "p95Ms": 0.576,
+            "minMs": 0.452
+          },
+          "totalEngineSetup": {
+            "medianMs": 2.457,
+            "p95Ms": 2.68,
+            "minMs": 2.24
+          },
+          "base64Decode": {
+            "medianMs": 0.023,
+            "p95Ms": 0.027,
+            "minMs": 0.02
+          },
+          "jsonParse": {
+            "medianMs": 0.031,
+            "p95Ms": 0.037,
+            "minMs": 0.028
+          },
+          "jsonStringify": {
+            "medianMs": 0.021,
+            "p95Ms": 0.026,
+            "minMs": 0.018
+          },
+          "base64Encode": {
+            "medianMs": 0.314,
+            "p95Ms": 0.78,
+            "minMs": 0.276
+          }
+        },
+        "afterCompactInput": {
+          "constructor": {
+            "medianMs": 0.006,
+            "p95Ms": 0.008,
+            "minMs": 0.005
+          },
+          "loadSnapshot": {
+            "medianMs": 1.15,
+            "p95Ms": 1.26,
+            "minMs": 1.067
+          },
+          "getStateData": {
+            "medianMs": 0.592,
+            "p95Ms": 0.98,
+            "minMs": 0.543
+          },
+          "presentationClone": {
+            "medianMs": 0.472,
+            "p95Ms": 0.531,
+            "minMs": 0.434
+          },
+          "totalEngineSetup": {
+            "medianMs": 2.232,
+            "p95Ms": 2.691,
+            "minMs": 2.099
+          },
+          "base64Decode": {
+            "medianMs": 0.01,
+            "p95Ms": 0.013,
+            "minMs": 0.007
+          },
+          "jsonParse": {
+            "medianMs": 0.016,
+            "p95Ms": 0.018,
+            "minMs": 0.014
+          },
+          "jsonStringify": {
+            "medianMs": 0.008,
+            "p95Ms": 0.011,
+            "minMs": 0.007
+          },
+          "base64Encode": {
+            "medianMs": 0.098,
+            "p95Ms": 0.104,
+            "minMs": 0.086
+          }
+        }
+      },
+      {
+        "name": "Breaking Through the Wall",
+        "before": {
+          "constructor": {
+            "medianMs": 0.006,
+            "p95Ms": 0.012,
+            "minMs": 0.004
+          },
+          "loadSnapshot": {
+            "medianMs": 1.193,
+            "p95Ms": 1.316,
+            "minMs": 1.124
+          },
+          "getStateData": {
+            "medianMs": 0.677,
+            "p95Ms": 1.053,
+            "minMs": 0.64
+          },
+          "presentationClone": {
+            "medianMs": 0.653,
+            "p95Ms": 0.712,
+            "minMs": 0.612
+          },
+          "totalEngineSetup": {
+            "medianMs": 2.541,
+            "p95Ms": 2.972,
+            "minMs": 2.424
+          },
+          "base64Decode": {
+            "medianMs": 0.026,
+            "p95Ms": 0.034,
+            "minMs": 0.023
+          },
+          "jsonParse": {
+            "medianMs": 0.035,
+            "p95Ms": 0.044,
+            "minMs": 0.031
+          },
+          "jsonStringify": {
+            "medianMs": 0.029,
+            "p95Ms": 0.038,
+            "minMs": 0.026
+          },
+          "base64Encode": {
+            "medianMs": 0.306,
+            "p95Ms": 0.368,
+            "minMs": 0.292
+          }
+        },
+        "afterFullInput": {
+          "constructor": {
+            "medianMs": 0.007,
+            "p95Ms": 0.016,
+            "minMs": 0.005
+          },
+          "loadSnapshot": {
+            "medianMs": 1.315,
+            "p95Ms": 1.506,
+            "minMs": 1.172
+          },
+          "getStateData": {
+            "medianMs": 0.627,
+            "p95Ms": 0.755,
+            "minMs": 0.567
+          },
+          "presentationClone": {
+            "medianMs": 0.509,
+            "p95Ms": 0.583,
+            "minMs": 0.491
+          },
+          "totalEngineSetup": {
+            "medianMs": 2.483,
+            "p95Ms": 2.977,
+            "minMs": 2.278
+          },
+          "base64Decode": {
+            "medianMs": 0.026,
+            "p95Ms": 0.035,
+            "minMs": 0.023
+          },
+          "jsonParse": {
+            "medianMs": 0.037,
+            "p95Ms": 0.047,
+            "minMs": 0.032
+          },
+          "jsonStringify": {
+            "medianMs": 0.031,
+            "p95Ms": 0.037,
+            "minMs": 0.027
+          },
+          "base64Encode": {
+            "medianMs": 0.334,
+            "p95Ms": 0.371,
+            "minMs": 0.296
+          }
+        },
+        "afterCompactInput": {
+          "constructor": {
+            "medianMs": 0.006,
+            "p95Ms": 0.014,
+            "minMs": 0.004
+          },
+          "loadSnapshot": {
+            "medianMs": 1.113,
+            "p95Ms": 1.264,
+            "minMs": 1.025
+          },
+          "getStateData": {
+            "medianMs": 0.624,
+            "p95Ms": 0.753,
+            "minMs": 0.587
+          },
+          "presentationClone": {
+            "medianMs": 0.505,
+            "p95Ms": 0.631,
+            "minMs": 0.473
+          },
+          "totalEngineSetup": {
+            "medianMs": 2.254,
+            "p95Ms": 2.804,
+            "minMs": 2.093
+          },
+          "base64Decode": {
+            "medianMs": 0.01,
+            "p95Ms": 0.013,
+            "minMs": 0.008
+          },
+          "jsonParse": {
+            "medianMs": 0.019,
+            "p95Ms": 0.025,
+            "minMs": 0.016
+          },
+          "jsonStringify": {
+            "medianMs": 0.012,
+            "p95Ms": 0.015,
+            "minMs": 0.01
+          },
+          "base64Encode": {
+            "medianMs": 0.109,
+            "p95Ms": 0.119,
+            "minMs": 0.097
+          }
+        }
+      },
+      {
+        "name": "Something's Fishy",
+        "before": {
+          "constructor": {
+            "medianMs": 0.005,
+            "p95Ms": 0.009,
+            "minMs": 0.004
+          },
+          "loadSnapshot": {
+            "medianMs": 0.812,
+            "p95Ms": 0.945,
+            "minMs": 0.76
+          },
+          "getStateData": {
+            "medianMs": 0.672,
+            "p95Ms": 1.042,
+            "minMs": 0.629
+          },
+          "presentationClone": {
+            "medianMs": 0.62,
+            "p95Ms": 0.7,
+            "minMs": 0.579
+          },
+          "totalEngineSetup": {
+            "medianMs": 2.121,
+            "p95Ms": 2.505,
+            "minMs": 2.014
+          },
+          "base64Decode": {
+            "medianMs": 0.027,
+            "p95Ms": 0.036,
+            "minMs": 0.022
+          },
+          "jsonParse": {
+            "medianMs": 0.033,
+            "p95Ms": 0.04,
+            "minMs": 0.03
+          },
+          "jsonStringify": {
+            "medianMs": 0.027,
+            "p95Ms": 0.033,
+            "minMs": 0.025
+          },
+          "base64Encode": {
+            "medianMs": 0.303,
+            "p95Ms": 0.334,
+            "minMs": 0.291
+          }
+        },
+        "afterFullInput": {
+          "constructor": {
+            "medianMs": 0.006,
+            "p95Ms": 0.009,
+            "minMs": 0.004
+          },
+          "loadSnapshot": {
+            "medianMs": 0.915,
+            "p95Ms": 0.991,
+            "minMs": 0.864
+          },
+          "getStateData": {
+            "medianMs": 0.598,
+            "p95Ms": 1.006,
+            "minMs": 0.561
+          },
+          "presentationClone": {
+            "medianMs": 0.47,
+            "p95Ms": 0.534,
+            "minMs": 0.448
+          },
+          "totalEngineSetup": {
+            "medianMs": 1.998,
+            "p95Ms": 2.398,
+            "minMs": 1.916
+          },
+          "base64Decode": {
+            "medianMs": 0.025,
+            "p95Ms": 0.031,
+            "minMs": 0.022
+          },
+          "jsonParse": {
+            "medianMs": 0.035,
+            "p95Ms": 0.043,
+            "minMs": 0.031
+          },
+          "jsonStringify": {
+            "medianMs": 0.03,
+            "p95Ms": 0.036,
+            "minMs": 0.026
+          },
+          "base64Encode": {
+            "medianMs": 0.326,
+            "p95Ms": 0.355,
+            "minMs": 0.291
+          }
+        },
+        "afterCompactInput": {
+          "constructor": {
+            "medianMs": 0.005,
+            "p95Ms": 0.008,
+            "minMs": 0.004
+          },
+          "loadSnapshot": {
+            "medianMs": 0.698,
+            "p95Ms": 0.791,
+            "minMs": 0.655
+          },
+          "getStateData": {
+            "medianMs": 0.585,
+            "p95Ms": 0.645,
+            "minMs": 0.536
+          },
+          "presentationClone": {
+            "medianMs": 0.461,
+            "p95Ms": 0.506,
+            "minMs": 0.423
+          },
+          "totalEngineSetup": {
+            "medianMs": 1.754,
+            "p95Ms": 2.085,
+            "minMs": 1.688
+          },
+          "base64Decode": {
+            "medianMs": 0.009,
+            "p95Ms": 0.011,
+            "minMs": 0.008
+          },
+          "jsonParse": {
+            "medianMs": 0.017,
+            "p95Ms": 0.02,
+            "minMs": 0.015
+          },
+          "jsonStringify": {
+            "medianMs": 0.011,
+            "p95Ms": 0.014,
+            "minMs": 0.01
+          },
+          "base64Encode": {
+            "medianMs": 0.107,
+            "p95Ms": 0.114,
+            "minMs": 0.093
+          }
+        }
+      },
+      {
+        "name": "Deck out with Dengo",
+        "before": {
+          "constructor": {
+            "medianMs": 0.006,
+            "p95Ms": 0.014,
+            "minMs": 0.004
+          },
+          "loadSnapshot": {
+            "medianMs": 1.201,
+            "p95Ms": 1.395,
+            "minMs": 1.133
+          },
+          "getStateData": {
+            "medianMs": 0.665,
+            "p95Ms": 0.919,
+            "minMs": 0.632
+          },
+          "presentationClone": {
+            "medianMs": 0.633,
+            "p95Ms": 0.759,
+            "minMs": 0.585
+          },
+          "totalEngineSetup": {
+            "medianMs": 2.533,
+            "p95Ms": 2.912,
+            "minMs": 2.369
+          },
+          "base64Decode": {
+            "medianMs": 0.022,
+            "p95Ms": 0.03,
+            "minMs": 0.02
+          },
+          "jsonParse": {
+            "medianMs": 0.029,
+            "p95Ms": 0.037,
+            "minMs": 0.027
+          },
+          "jsonStringify": {
+            "medianMs": 0.019,
+            "p95Ms": 0.025,
+            "minMs": 0.017
+          },
+          "base64Encode": {
+            "medianMs": 0.289,
+            "p95Ms": 0.581,
+            "minMs": 0.271
+          }
+        },
+        "afterFullInput": {
+          "constructor": {
+            "medianMs": 0.006,
+            "p95Ms": 0.012,
+            "minMs": 0.004
+          },
+          "loadSnapshot": {
+            "medianMs": 1.299,
+            "p95Ms": 1.44,
+            "minMs": 1.213
+          },
+          "getStateData": {
+            "medianMs": 0.603,
+            "p95Ms": 0.69,
+            "minMs": 0.564
+          },
+          "presentationClone": {
+            "medianMs": 0.486,
+            "p95Ms": 0.56,
+            "minMs": 0.46
+          },
+          "totalEngineSetup": {
+            "medianMs": 2.407,
+            "p95Ms": 2.673,
+            "minMs": 2.308
+          },
+          "base64Decode": {
+            "medianMs": 0.023,
+            "p95Ms": 0.026,
+            "minMs": 0.02
+          },
+          "jsonParse": {
+            "medianMs": 0.031,
+            "p95Ms": 0.035,
+            "minMs": 0.027
+          },
+          "jsonStringify": {
+            "medianMs": 0.021,
+            "p95Ms": 0.025,
+            "minMs": 0.019
+          },
+          "base64Encode": {
+            "medianMs": 0.313,
+            "p95Ms": 0.805,
+            "minMs": 0.274
+          }
+        },
+        "afterCompactInput": {
+          "constructor": {
+            "medianMs": 0.006,
+            "p95Ms": 0.011,
+            "minMs": 0.004
+          },
+          "loadSnapshot": {
+            "medianMs": 1.11,
+            "p95Ms": 1.198,
+            "minMs": 1.018
+          },
+          "getStateData": {
+            "medianMs": 0.601,
+            "p95Ms": 0.734,
+            "minMs": 0.571
+          },
+          "presentationClone": {
+            "medianMs": 0.479,
+            "p95Ms": 0.532,
+            "minMs": 0.457
+          },
+          "totalEngineSetup": {
+            "medianMs": 2.206,
+            "p95Ms": 2.529,
+            "minMs": 2.053
+          },
+          "base64Decode": {
+            "medianMs": 0.009,
+            "p95Ms": 0.011,
+            "minMs": 0.008
+          },
+          "jsonParse": {
+            "medianMs": 0.016,
+            "p95Ms": 0.019,
+            "minMs": 0.014
+          },
+          "jsonStringify": {
+            "medianMs": 0.009,
+            "p95Ms": 0.012,
+            "minMs": 0.008
+          },
+          "base64Encode": {
+            "medianMs": 0.102,
+            "p95Ms": 0.115,
+            "minMs": 0.09
+          }
+        }
+      }
+    ]
+  },
+  "deployment": {
+    "origin": "https://sim-static.prizemap.app",
+    "packageHash": "43d18e93e54c5914f37a79c3c85bf7294165f1de856dc5b46ed2e521e13159a0",
+    "buildId": "7aa185b1-f79e-4178-83cb-c3b5daefea2f",
+    "workerVersion": "7fce557b-a8d2-4f24-9a46-c4a54951c644",
+    "deliveryChecksPassed": true,
+    "buildAttestationPassed": true,
+    "browserChecks": [
+      {
+        "name": "Deck out with Dengo",
+        "base64Characters": 10000,
+        "boardCards": 41,
+        "liveRelease": "43d18e93e54c5914f37a79c3c85bf7294165f1de856dc5b46ed2e521e13159a0"
+      },
+      {
+        "name": "Trapped in the Phantom Maze",
+        "base64Characters": 10184,
+        "base": "/releases/43d18e93e54c5914f37a79c3c85bf7294165f1de856dc5b46ed2e521e13159a0/",
+        "boardCards": 41,
+        "path": "/sandbox-viewer"
+      },
+      {
+        "name": "Explosive Hand",
+        "base64Characters": 9480,
+        "base": "/releases/43d18e93e54c5914f37a79c3c85bf7294165f1de856dc5b46ed2e521e13159a0/",
+        "boardCards": 38,
+        "path": "/sandbox-viewer"
+      },
+      {
+        "name": "Breaking Through the Wall",
+        "base64Characters": 9952,
+        "base": "/releases/43d18e93e54c5914f37a79c3c85bf7294165f1de856dc5b46ed2e521e13159a0/",
+        "boardCards": 41,
+        "path": "/sandbox-viewer"
+      },
+      {
+        "name": "Something's Fishy",
+        "base64Characters": 9664,
+        "base": "/releases/43d18e93e54c5914f37a79c3c85bf7294165f1de856dc5b46ed2e521e13159a0/",
+        "boardCards": 35,
+        "path": "/sandbox-viewer"
+      }
+    ],
+    "dengoConsoleErrors": 0,
+    "screenshot": "/tmp/twinleaf-trim-live.png"
+  }
+}

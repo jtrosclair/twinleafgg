@@ -3,8 +3,25 @@
 
 <head>
   <meta charset="utf-8">
+  <meta name="prizemap-runtime-revision" content="2026-11-07-update-recovery-check-2.6.5">
   <title>twinleaf.gg</title>
-  <base href="/">
+  <base href="./">
+  <script>
+    // A stable public page can already select its immutable asset release.
+    // Otherwise derive the asset base for pinned and local entrypoints.
+    (function () {
+      var base = document.querySelector('base');
+      var configured = base.getAttribute('href');
+      if (configured && configured !== './') { return; }
+      var release = location.pathname.match(/^\/releases\/[a-f0-9]{64}\//);
+      if (release) {
+        base.setAttribute('href', release[0]);
+      } else if (/^https?:$/.test(location.protocol)) {
+        base.setAttribute('href', '/');
+      }
+    })();
+  </script>
+  <script src="simulator-static.js"></script>
 
   <script>
     // Apply the embedded-app preference before Angular and its styles load.
@@ -26,9 +43,7 @@
   </script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="assets/iconfont/material-icons.css" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="preload" href="assets/tl-open-beta.webp" as="image" type="image/webp">
 </head>
 
 <body>

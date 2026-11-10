@@ -119,6 +119,12 @@ export class Yanmegaex extends PokemonCard {
 
     // Jet Cyclone
     if (WAS_ATTACK_USED(effect, 0, this)) {
+      const movableEnergy = player.active.cards.filter(c => c.superType === SuperType.ENERGY).length;
+      const hasBench = player.bench.some(b => b.cards.length > 0);
+      const moveCount = hasBench ? Math.min(3, movableEnergy) : 0;
+      if (moveCount === 0) {
+        return state;
+      }
       return store.prompt(state, new AttachEnergyPrompt(
         player.id,
         GameMessage.ATTACH_ENERGY_TO_BENCH,
@@ -126,7 +132,7 @@ export class Yanmegaex extends PokemonCard {
         PlayerType.BOTTOM_PLAYER,
         [SlotType.BENCH],
         { superType: SuperType.ENERGY },
-        { allowCancel: false, min: 3, max: 3, sameTarget: true }
+        { allowCancel: false, min: moveCount, max: moveCount, sameTarget: true }
       ), transfers => {
         transfers = transfers || [];
         for (const transfer of transfers) {

@@ -53,31 +53,38 @@ export function deepIterate(source: any, callback: (holder: any, key: string, va
 }
 
 export function deepClone(source: any, ignores: Function[] = [], refMap: {s: Object, d: Object}[] = []): any {
-  if (source === null) { return null; }
-
-  if (source instanceof Array) {
-    return source.map((item: any) => deepClone(item, ignores, refMap));
+  // A playability probe clones a large state graph. Repeated refMap.find calls
+  // made that work quadratic; keep the public reference list and index it once.
+  const references = new WeakMap<Object, Object>();
+  for (const entry of refMap) {
+    // Primitive sources can appear in a caller-provided map, but they never
+    // participate in object lookup. WeakMap cannot use them as keys.
+    const key = entry.s;
+    if ((typeof key === 'object' && key !== null) || typeof key === 'function') {
+      if (!references.has(key)) { references.set(key, entry.d); }
+    }
   }
-
-  if (source instanceof Object) {
-    if (ignores.some(ignore => source instanceof ignore)) {
-      return source;
-    }
-    const ref = refMap.find(item => item.s === source);
-    if (ref !== undefined) {
-      return ref.d;
-    }
-    const dest = Object.create(source);
-    refMap.push({s: source, d: dest});
-    for (const key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        dest[key] = deepClone(source[key], ignores, refMap);
+  const clone = (value: any): any => {
+    if (value === null) { return null; }
+    // Functions are executable card definitions; preserve their callable
+    // reference rather than creating an object with Function's prototype.
+    if (typeof value === 'function') { return value; }
+    // Preserve the existing array-copy behavior and prototype-backed objects.
+    if (value instanceof Array) { return value.map(clone); }
+    if (value instanceof Object) {
+      if (ignores.some(ignore => value instanceof ignore)) { return value; }
+      if (references.has(value)) { return references.get(value); }
+      const dest = Object.create(value);
+      references.set(value, dest);
+      refMap.push({s: value, d: dest});
+      for (const key in value) {
+        if (Object.prototype.hasOwnProperty.call(value, key)) { dest[key] = clone(value[key]); }
       }
+      return dest;
     }
-    return dest;
-  }
-
-  return source;
+    return value;
+  };
+  return clone(source);
 }
 
 export function generateId<T extends {id: number}[]>(array: T): number {

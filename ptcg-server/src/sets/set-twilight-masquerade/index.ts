@@ -1,3 +1,7 @@
+import { Chandelure } from './chandelure';
+import { Lampent } from './lampent';
+import { Litwick } from './litwick';
+import { Cramorant } from './cramorant';
 import { Card } from '../../game/store/card/card';
 import { Abra } from './abra';
 import { Aggron } from './aggron';
@@ -255,4 +259,8 @@ export const setTwilightMasquerade: Card[] = [
   new EnhancedHammerHR(),
   new RescueBoardHR(),
   new LuminousEnergyHR(),
+  new Cramorant(),
+  new Litwick(),
+  new Lampent(),
+  new Chandelure(),
 ];

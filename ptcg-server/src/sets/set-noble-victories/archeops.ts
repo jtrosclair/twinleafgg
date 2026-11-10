@@ -3,7 +3,7 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { CheckEvolveEffect, EvolveEffect } from '../../game/store/effects/game-effects';
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { StateUtils } from '../../game/store/state-utils';
 import { PlayerType, SlotType } from '../../game/store/actions/play-card-action';
@@ -82,7 +82,7 @@ export class Archeops extends PokemonCard {
       });
     }
 
-    if (effect instanceof EvolveEffect) {
+    if (((effect instanceof CheckEvolveEffect || (effect instanceof EvolveEffect && !effect.preflightComplete)) && effect.playedFromHand)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

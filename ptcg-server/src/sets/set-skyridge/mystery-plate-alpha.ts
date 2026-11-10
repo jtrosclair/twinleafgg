@@ -1,4 +1,4 @@
-import { Attack, Card, ChooseCardsPrompt, ChoosePokemonPrompt, GameMessage, PlayerType, SlotType } from '../../game';
+import { Attack, ChoosePokemonPrompt, GameMessage, PlayerType, SlotType } from '../../game';
 import { CardTag, CardType, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { ColorlessCostReducer } from '../../game/store/card/pokemon-interface';
 import { TrainerCard } from '../../game/store/card/trainer-card';
@@ -8,7 +8,7 @@ import { AttackEffect } from '../../game/store/effects/game-effects';
 
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_BURNED, YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED, YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED } from '../../game/store/prefabs/attack-effects';
-import { SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
+import { SEARCH_DECK_REVEAL_AND_MOVE } from '../../game/store/prefabs/search-reveal-attack';
 import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
@@ -82,19 +82,8 @@ export class MysteryPlateAlpha extends TrainerCard {
       const opponent = effect.opponent;
 
       if (opponent.getPrizeLeft() >= 5) {
-        let cards: Card[] = [];
-        store.prompt(state, new ChooseCardsPrompt(
-          player,
-          GameMessage.CHOOSE_CARD_TO_HAND,
-          player.deck,
-          { superType: SuperType.TRAINER },
-          { min: 0, max: 1, allowCancel: false }
-        ), selected => {
-          cards = selected || [];
-          player.deck.moveCardsTo(cards, player.hand);
-          SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-          SHUFFLE_DECK(store, state, player);
-        });
+        const attacker = effect.source.getPokemonCard();
+        if (attacker) return SEARCH_DECK_REVEAL_AND_MOVE(store, state, effect, attacker, { superType: SuperType.TRAINER }, 1);
       } else if (opponent.getPrizeLeft() === 1) {
         YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED(store, state, effect);
         YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED(store, state, effect);

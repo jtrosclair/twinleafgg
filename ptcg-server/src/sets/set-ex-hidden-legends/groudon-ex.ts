@@ -1,10 +1,11 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, CardTag, GameError, GameMessage, SuperType, ChooseCardsPrompt } from '../../game';
 import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect } from '../../game/store/effects/game-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Groudonex extends PokemonCard {
+export class Groudonex extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.BASIC;
   public tags = [CardTag.POKEMON_ex];
   public cardType: CardType = F;
@@ -46,6 +47,10 @@ export class Groudonex extends PokemonCard {
       }
     }
 
+    return Groudonex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       effect.ignoreResistance = true;
     }

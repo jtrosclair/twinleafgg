@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, GameMessage, CoinFlipPrompt, StateUtils, ChoosePokemonPrompt, PlayerType, SlotType, PowerType } from '../../game';
@@ -6,7 +7,7 @@ import { KnockOutEffect } from '../../game/store/effects/game-effects';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Froslassex extends PokemonCard {
+export class Froslassex extends PokemonCard implements CopiedAttackOwnershipContract {
 
   public stage: Stage = Stage.STAGE_1;
 
@@ -63,6 +64,10 @@ export class Froslassex extends PokemonCard {
       });
     }
 
+    return Froslassex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
 
       const player = effect.player;

@@ -1,0 +1,947 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-11-07T05:00:48.510Z",
+  "status": "verified-and-deployed",
+  "description": "Bounded visual simplification of official Pokemon TCG energy SVG contours using aggressive SVGO path and numeric optimizations. This follows the earlier pixel-identical minification release and accepts a defined minimum 0.95 isolated-glyph overlap metric to reduce artwork bytes further.",
+  "scope": {
+    "svgFiles": 23,
+    "changedEnergyFiles": 21,
+    "unchangedBranding": [
+      "assets/cardback.svg",
+      "assets/tl-open-beta.svg"
+    ],
+    "sourceDimensions": {
+      "energyIcons": [
+        100,
+        100
+      ],
+      "basicEnergyAttachments": [
+        138,
+        192
+      ]
+    },
+    "uiDisplayDimensionsUnchanged": true,
+    "officialContoursUsed": true,
+    "newHandDrawnSymbols": false,
+    "analyticEllipseReplacement": false,
+    "dependenciesAdded": false,
+    "remoteCardArtwork": "Unchanged URLs, image dimensions, lazy loading, async decoding and browser HTTP caching.",
+    "gameplaySourceChanges": false,
+    "performanceClaim": "Package byte measurements only; no phone speed or rendering speed claim."
+  },
+  "releases": {
+    "before": {
+      "packageHash": "3a9b5bff1a33c45712fcb97173d143fefa345068124a902e9380405a50999630",
+      "buildId": "ffa5adc2-db33-4945-8711-ce8679ce3244",
+      "builtAt": "2026-11-07T04:44:45.582Z"
+    },
+    "after": {
+      "packageHash": "6ff0b913aece399611bd2182af6b21202189bdd12e3eaea7a356da9cfffecfb1",
+      "buildId": "1a6f56aa-8a8e-4298-b042-32bda3a60b5b",
+      "builtAt": "2026-11-07T05:00:05.085Z",
+      "origin": "https://sim-static.prizemap.app",
+      "workerVersion": "7fa49739-547e-49ce-aa60-bbecf39551cd"
+    }
+  },
+  "optimization": {
+    "tool": {
+      "node": "v24.22.1",
+      "svgo": "4.1.0"
+    },
+    "sourceAnchor": "Original official full precision glyphs from docs/simulator-svg-webp-results.json; comparison baseline is the already minified 3a9 package.",
+    "settings": {
+      "preset": "preset-default",
+      "pathArcsAndCurveOptimizations": true,
+      "localAffineNormalization": "Per-file optional original viewBox to0-origin uniform local grid, preserving outer dimensions/layout before default numeric rounding",
+      "colorConversion": true,
+      "ellipseReplacement": false,
+      "brandingChanged": false,
+      "minimumFidelity": 0.95,
+      "qualityMetric": "isolated-glyph-iou-and-palette-v1",
+      "qualitySizes": [
+        24,
+        108,
+        512
+      ]
+    },
+    "chosenFamilies": {
+      "colorless": "local100-default-p0",
+      "darkness": "local100-default-p0",
+      "dragon": "local100-default-p0",
+      "fairy": "local200-default-p0",
+      "fighting": "local100-default-p0",
+      "fire": "local200-default-p0",
+      "grass": "local100-default-p0",
+      "lightning": "local100-default-p0",
+      "metal": "local200-default-p0",
+      "psychic": "local200-default-p0",
+      "water": "local100-default-p0",
+      "energyless": "local100-default-p2"
+    },
+    "selection": "Common icon/attachment candidate must pass every quality threshold at 24/108/512px. Final selection minimizes actual existing bootstrap gzip6 using measured family choices and a bounded search. Branding remains byte-identical."
+  },
+  "measurements": {
+    "method": {
+      "gzipLevel": 6,
+      "brotliQuality": 6,
+      "units": "Bytes; percentages use exact totals.",
+      "runtimeScope": "Every file in simulator-manifest.json assets; archive is separate.",
+      "aggregation": "Sum of separately compressed files, without HTTP headers.",
+      "exclusions": "Remote card artwork and network/protocol overhead are excluded. Sizes do not measure device loading or play performance."
+    },
+    "sourceSvg": {
+      "scope": "All 23 committed SVG files. Source gzip/Brotli totals sum individually compressed files and are not package transfer sizes.",
+      "originalOfficialFullprecisionReference": {
+        "all": 107193,
+        "energy": 95047,
+        "branding": 12146
+      },
+      "groups": {
+        "energySymbols": {
+          "files": 12,
+          "changedFiles": 12,
+          "before": {
+            "raw": 24758,
+            "gzip6": 10716,
+            "brotli6": 10332
+          },
+          "after": {
+            "raw": 4953,
+            "gzip6": 3274,
+            "brotli6": 2984
+          },
+          "savings": {
+            "raw": {
+              "before": 24758,
+              "after": 4953,
+              "saved": 19805,
+              "percentSmaller": 79.9943
+            },
+            "gzip6": {
+              "before": 10716,
+              "after": 3274,
+              "saved": 7442,
+              "percentSmaller": 69.4476
+            },
+            "brotli6": {
+              "before": 10332,
+              "after": 2984,
+              "saved": 7348,
+              "percentSmaller": 71.1189
+            }
+          }
+        },
+        "basicEnergyAttachments": {
+          "files": 9,
+          "changedFiles": 9,
+          "before": {
+            "raw": 23721,
+            "gzip6": 9558,
+            "brotli6": 9264
+          },
+          "after": {
+            "raw": 4688,
+            "gzip6": 2831,
+            "brotli6": 2591
+          },
+          "savings": {
+            "raw": {
+              "before": 23721,
+              "after": 4688,
+              "saved": 19033,
+              "percentSmaller": 80.2369
+            },
+            "gzip6": {
+              "before": 9558,
+              "after": 2831,
+              "saved": 6727,
+              "percentSmaller": 70.3808
+            },
+            "brotli6": {
+              "before": 9264,
+              "after": 2591,
+              "saved": 6673,
+              "percentSmaller": 72.0315
+            }
+          }
+        },
+        "branding": {
+          "files": 2,
+          "changedFiles": 0,
+          "before": {
+            "raw": 12146,
+            "gzip6": 5518,
+            "brotli6": 5459
+          },
+          "after": {
+            "raw": 12146,
+            "gzip6": 5518,
+            "brotli6": 5459
+          },
+          "savings": {
+            "raw": {
+              "before": 12146,
+              "after": 12146,
+              "saved": 0,
+              "percentSmaller": 0
+            },
+            "gzip6": {
+              "before": 5518,
+              "after": 5518,
+              "saved": 0,
+              "percentSmaller": 0
+            },
+            "brotli6": {
+              "before": 5459,
+              "after": 5459,
+              "saved": 0,
+              "percentSmaller": 0
+            }
+          }
+        }
+      },
+      "totalRaw": {
+        "before": 60625,
+        "after": 21787,
+        "saved": 38838,
+        "percentSmaller": 64.0627
+      },
+      "energyRaw": {
+        "before": 48479,
+        "after": 9641,
+        "saved": 38838,
+        "percentSmaller": 80.113
+      }
+    },
+    "bootstrapCounterfactual": {
+      "scope": "Replace only the 23 exact SVG values in the 3a9 presentation bootstrap, retaining all other data, logical aliases and percent-encoded UTF-8 packaging. This isolates artwork simplification from regenerated package metadata.",
+      "raw": {
+        "before": 767247,
+        "after": 726441,
+        "saved": 40806,
+        "percentSmaller": 5.3185
+      },
+      "gzip6": {
+        "before": 234263,
+        "after": 218304,
+        "saved": 15959,
+        "percentSmaller": 6.8124
+      },
+      "brotli6": {
+        "before": 210701,
+        "after": 199188,
+        "saved": 11513,
+        "percentSmaller": 5.4641
+      }
+    },
+    "energyContribution": {
+      "scope": "Marginal compressed contribution: full bootstrap minus the same bootstrap with all 21 energy SVG values and their alias/CSS references removed. Marginal compressed contributions are not additive file-size sums.",
+      "raw": {
+        "before": 60664,
+        "after": 19858,
+        "saved": 40806,
+        "percentSmaller": 67.2656
+      },
+      "gzip6": {
+        "before": 20654,
+        "after": 4695,
+        "saved": 15959,
+        "percentSmaller": 77.2683
+      },
+      "brotli6": {
+        "before": 14536,
+        "after": 3023,
+        "saved": 11513,
+        "percentSmaller": 79.2034
+      }
+    },
+    "runtime": {
+      "filesBefore": 9,
+      "filesAfter": 9,
+      "raw": {
+        "before": 12498045,
+        "after": 12457239,
+        "saved": 40806,
+        "percentSmaller": 0.3265
+      },
+      "gzip6": {
+        "before": 2260569,
+        "after": 2244610,
+        "saved": 15959,
+        "percentSmaller": 0.706
+      },
+      "brotli6": {
+        "before": 1537917,
+        "after": 1526404,
+        "saved": 11513,
+        "percentSmaller": 0.7486
+      }
+    },
+    "runtimeGroups": {
+      "bootstrap": {
+        "filesBefore": 1,
+        "filesAfter": 1,
+        "raw": {
+          "before": 767247,
+          "after": 726441,
+          "saved": 40806,
+          "percentSmaller": 5.3185
+        },
+        "gzip6": {
+          "before": 234263,
+          "after": 218304,
+          "saved": 15959,
+          "percentSmaller": 6.8124
+        },
+        "brotli6": {
+          "before": 210701,
+          "after": 199188,
+          "saved": 11513,
+          "percentSmaller": 5.4641
+        }
+      },
+      "main": {
+        "filesBefore": 1,
+        "filesAfter": 1,
+        "raw": {
+          "before": 11426628,
+          "after": 11426628,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "gzip6": {
+          "before": 1938815,
+          "after": 1938815,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "brotli6": {
+          "before": 1242333,
+          "after": 1242333,
+          "saved": 0,
+          "percentSmaller": 0
+        }
+      },
+      "other": {
+        "filesBefore": 4,
+        "filesAfter": 4,
+        "raw": {
+          "before": 195200,
+          "after": 195200,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "gzip6": {
+          "before": 64857,
+          "after": 64857,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "brotli6": {
+          "before": 63218,
+          "after": 63218,
+          "saved": 0,
+          "percentSmaller": 0
+        }
+      },
+      "polyfills": {
+        "filesBefore": 1,
+        "filesAfter": 1,
+        "raw": {
+          "before": 37091,
+          "after": 37091,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "gzip6": {
+          "before": 13013,
+          "after": 13013,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "brotli6": {
+          "before": 12611,
+          "after": 12611,
+          "saved": 0,
+          "percentSmaller": 0
+        }
+      },
+      "runtime": {
+        "filesBefore": 1,
+        "filesAfter": 1,
+        "raw": {
+          "before": 1216,
+          "after": 1216,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "gzip6": {
+          "before": 696,
+          "after": 696,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "brotli6": {
+          "before": 660,
+          "after": 660,
+          "saved": 0,
+          "percentSmaller": 0
+        }
+      },
+      "styles": {
+        "filesBefore": 1,
+        "filesAfter": 1,
+        "raw": {
+          "before": 70663,
+          "after": 70663,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "gzip6": {
+          "before": 8925,
+          "after": 8925,
+          "saved": 0,
+          "percentSmaller": 0
+        },
+        "brotli6": {
+          "before": 8394,
+          "after": 8394,
+          "saved": 0,
+          "percentSmaller": 0
+        }
+      }
+    },
+    "zipArchive": {
+      "before": 2231049,
+      "after": 2215212,
+      "saved": 15837,
+      "percentSmaller": 0.7098,
+      "beforePath": "simulator-package.3a9b5bff1a33c45712fcb97173d143fefa345068124a902e9380405a50999630.zip",
+      "afterPath": "simulator-package.6ff0b913aece399611bd2182af6b21202189bdd12e3eaea7a356da9cfffecfb1.zip",
+      "beforeSha256": "3029229fcf015d526594c7eb76cf50c9918677d6b336f8b630b68eae4e5285a6",
+      "afterSha256": "a2c0c3fb7bf4a5b82703bb958e6c5dfc89fca218fc675faceb4b3d34c78ddadc"
+    }
+  },
+  "verification": {
+    "artwork": {
+      "status": "passed",
+      "metric": "isolated-glyph-iou-and-palette-v1",
+      "minimumThreshold": 0.95,
+      "definition": "Remove only the first painted background disk, then compare the remaining glyph alpha using soft IoU and alpha-threshold 0.5 binary IoU. Check full-canvas alpha separately and compare foreground/background opaque-interior palette values. Each required metric must be at least 0.95 at 24/108/512px.",
+      "interpretation": "This is at least 95% glyph overlap under a defined image metric, not 95% whole-image pixel identity and not a claim that every visible pixel is unchanged.",
+      "paletteDefinition": "Color accuracy=1-max(mean absolute R/G/B channel error)/255 over opaque interior pixels; alpha and hidden RGB do not inflate glyph/color scores.",
+      "assets": 23,
+      "energyAssets": 21,
+      "renderChecks": 63,
+      "passedChecks": 63,
+      "allPassed": true,
+      "brandingUnchanged": true,
+      "minGlyphSoftIoU": 0.9618062818669108,
+      "minGlyphBinaryIoU": 0.95,
+      "minCanvasAlphaSoftIoU": 0.9999580346453889,
+      "minForegroundColorAccuracy": 0.9997549019607843,
+      "minBackgroundColorAccuracy": 0.9998491704374057
+    },
+    "negativeControl": {
+      "expectedRejectionObserved": true,
+      "modifiedAsset": "assets/energy-icons/grass.svg",
+      "description": "Remove the grass foreground glyph while retaining its circular background. The canvas alpha remains 1, but isolated glyph IoU and foreground palette accuracy become 0, so all 3 modified-asset checks reject it.",
+      "renderChecks": 63,
+      "rejectedChecks": 3,
+      "minGlyphSoftIoU": 0,
+      "minGlyphBinaryIoU": 0,
+      "minCanvasAlphaSoftIoU": 1
+    },
+    "sourceIntegrity": {
+      "verifiedSvgFiles": 23,
+      "beforeAndAfterSha256MatchFrozenArtworkEvidence": true,
+      "brandingUnchanged": true
+    },
+    "packageBudget": {
+      "passed": true,
+      "budgets": [
+        {
+          "name": "gzipRuntimeBytes",
+          "actual": 2244610,
+          "maximum": 4194304,
+          "passed": true
+        },
+        {
+          "name": "archiveBytes",
+          "actual": 2215212,
+          "maximum": 5242880,
+          "passed": true
+        },
+        {
+          "name": "individualFileBytes",
+          "actual": 11426628,
+          "maximum": 20971520,
+          "passed": true
+        }
+      ]
+    },
+    "browser": {
+      "status": "passed",
+      "packageHash": "6ff0b913aece399611bd2182af6b21202189bdd12e3eaea7a356da9cfffecfb1",
+      "scope": "Desktop browser presentation verification; no new physical WebView gesture or winning-game replay tests were run for this SVG asset change.",
+      "localPuzzles": [
+        {
+          "name": "Trapped in the Phantom Maze",
+          "allScansLazyAsync": true,
+          "boardPainted": true,
+          "bootstrap": [
+            "http://localhost:4200/simulator-static.840a691871f38a1f7822.js?local=1794027605079.5671"
+          ],
+          "scanSizes": [
+            "736x1024"
+          ],
+          "svg": [
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            }
+          ],
+          "unsafeImages": 0
+        },
+        {
+          "name": "Explosive Hand",
+          "allScansLazyAsync": true,
+          "boardPainted": true,
+          "bootstrap": [
+            "http://localhost:4200/simulator-static.840a691871f38a1f7822.js?local=1794027605079.5671"
+          ],
+          "scanSizes": [
+            "736x1024"
+          ],
+          "svg": [
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            }
+          ],
+          "unsafeImages": 0
+        },
+        {
+          "name": "Breaking Through the Wall",
+          "allScansLazyAsync": true,
+          "boardPainted": true,
+          "bootstrap": [
+            "http://localhost:4200/simulator-static.840a691871f38a1f7822.js?local=1794027605079.5671"
+          ],
+          "scanSizes": [
+            "736x1024"
+          ],
+          "svg": [
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            }
+          ],
+          "unsafeImages": 0
+        },
+        {
+          "name": "Something's Fishy",
+          "allScansLazyAsync": true,
+          "boardPainted": true,
+          "bootstrap": [
+            "http://localhost:4200/simulator-static.840a691871f38a1f7822.js?local=1794027605079.5671"
+          ],
+          "scanSizes": [
+            "736x1024"
+          ],
+          "svg": [
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            }
+          ],
+          "unsafeImages": 0
+        },
+        {
+          "name": "Deck out with Dengo",
+          "allScansLazyAsync": true,
+          "boardPainted": true,
+          "bootstrap": [
+            "http://localhost:4200/simulator-static.840a691871f38a1f7822.js?local=1794027605079.5671"
+          ],
+          "scanSizes": [
+            "736x1024"
+          ],
+          "svg": [
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            }
+          ],
+          "unsafeImages": 0
+        }
+      ],
+      "inline": {
+        "check": {
+          "cssSvgBackgrounds": 6,
+          "inline": [
+            {
+              "display": [
+                18,
+                18
+              ],
+              "loaded": true,
+              "natural": [
+                100,
+                100
+              ],
+              "svg": true
+            }
+          ]
+        },
+        "logs": []
+      },
+      "live": {
+        "check": {
+          "base": "https://sim-static.prizemap.app/releases/6ff0b913aece399611bd2182af6b21202189bdd12e3eaea7a356da9cfffecfb1/",
+          "bootstrap": [
+            "https://sim-static.prizemap.app/releases/6ff0b913aece399611bd2182af6b21202189bdd12e3eaea7a356da9cfffecfb1/simulator-static.840a691871f38a1f7822.js"
+          ],
+          "hashPrefix": "#gz2.",
+          "path": "/sandbox-viewer",
+          "scanSizes": [
+            "736x1024"
+          ],
+          "svg": [
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            },
+            {
+              "loaded": true,
+              "natural": [
+                138,
+                192
+              ]
+            }
+          ],
+          "unsafeImages": 0
+        },
+        "logs": []
+      },
+      "screenshots": {
+        "comparison": "/Users/jerrytrosclair/.codex/visualizations/2026/11/06/01a1af35-a82d-7891-8651-53d54b357e07/webp-comparison/svg-simplified-comparison.png",
+        "liveBoard": "/Users/jerrytrosclair/.codex/visualizations/2026/11/06/01a1af35-a82d-7891-8651-53d54b357e07/webp-comparison/svg-simplified-live-board.png"
+      }
+    },
+    "delivery": {
+      "status": "passed",
+      "checkedAt": "2026-11-07T05:02:16.574Z",
+      "origin": "https://sim-static.prizemap.app",
+      "manifest": {
+        "cold": "downloadManifestAssets",
+        "warm": "reuseCachedPackage",
+        "conditionalStatus": 304,
+        "inventoryValidated": true
+      },
+      "verifiedAssets": 9,
+      "archive": {
+        "path": "simulator-package.6ff0b913aece399611bd2182af6b21202189bdd12e3eaea7a356da9cfffecfb1.zip",
+        "bytes": 2215212,
+        "integrity": true,
+        "immutable": true,
+        "cors": true
+      },
+      "routes": [
+        {
+          "path": "/",
+          "status": 200,
+          "stableUrl": true,
+          "noRedirect": true,
+          "noStore": true,
+          "internalAssetsPinned": true
+        },
+        {
+          "path": "/index.html",
+          "status": 200,
+          "stableUrl": true,
+          "noRedirect": true,
+          "noStore": true,
+          "internalAssetsPinned": true
+        },
+        {
+          "path": "/sandbox-viewer",
+          "status": 200,
+          "stableUrl": true,
+          "noRedirect": true,
+          "noStore": true,
+          "internalAssetsPinned": true
+        },
+        {
+          "path": "/table/12",
+          "status": 200,
+          "stableUrl": true,
+          "noRedirect": true,
+          "noStore": true,
+          "internalAssetsPinned": true
+        },
+        {
+          "path": "/releases/<packageHash>/sandbox-viewer",
+          "status": 200,
+          "exactIndexBytes": true
+        },
+        {
+          "path": "/releases/<packageHash>/table/12",
+          "status": 200,
+          "exactIndexBytes": true
+        },
+        {
+          "path": "/releases/ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff/sandbox-viewer",
+          "status": 404,
+          "noFallback": true
+        },
+        {
+          "path": "/releases/<packageHash>/__missing__.js",
+          "status": 404,
+          "noFallback": true
+        },
+        {
+          "path": "/releases/<packageHash>/table/__missing__.js",
+          "status": 404,
+          "noFallback": true
+        }
+      ],
+      "previousRelease": {
+        "packageHash": "3a9b5bff1a33c45712fcb97173d143fefa345068124a902e9380405a50999630",
+        "verifiedAssets": 9,
+        "archiveVerified": true,
+        "immutableFilesUnchanged": true
+      },
+      "sourceAttestationHash": "423f826e7af6c9fae8ef7d009dd9bca7a82dc0489a7e0298c56b6b8d02bd02aa"
+    },
+    "artifact": {
+      "status": "passed",
+      "ok": true,
+      "packageHash": "6ff0b913aece399611bd2182af6b21202189bdd12e3eaea7a356da9cfffecfb1",
+      "verifiedManifestAssets": 9,
+      "embeddedImageLookups": 105,
+      "legacyAliases": 53,
+      "verifiedSvgAssets": 23,
+      "verifiedSvgPaths": [
+        "assets/cardback.svg",
+        "assets/tl-open-beta.svg",
+        "assets/energy-icons/darkness.svg",
+        "assets/energy-icons/fairy.svg",
+        "assets/energy-icons/fighting.svg",
+        "assets/energy-icons/fire.svg",
+        "assets/energy-icons/grass.svg",
+        "assets/energy-icons/lightning.svg",
+        "assets/energy-icons/metal.svg",
+        "assets/energy-icons/psychic.svg",
+        "assets/energy-icons/colorless.svg",
+        "assets/energy-icons/water.svg",
+        "assets/energy-icons/dragon.svg",
+        "assets/energy-icons/energyless.svg",
+        "assets/energy/dark.svg",
+        "assets/energy/fairy.svg",
+        "assets/energy/fighting.svg",
+        "assets/energy/fire.svg",
+        "assets/energy/grass.svg",
+        "assets/energy/lightning.svg",
+        "assets/energy/metal.svg",
+        "assets/energy/psychic.svg",
+        "assets/energy/water.svg"
+      ],
+      "gameplaySourceFilesUnchanged": 10295,
+      "cardLibraryHashUnchanged": "f975f8dce2e2c768a42d7b7df6b61b9bbe6149521e6da274762d184a70c0166b",
+      "catalogueHashUnchanged": "3007151948194fa669da6771cdd269de8c7c1b61644bfdf407cf370ebd26b25c",
+      "exactImageReferencesUnchanged": 13483,
+      "zipBytes": 2215212,
+      "zipSha256": "a2c0c3fb7bf4a5b82703bb958e6c5dfc89fca218fc675faceb4b3d34c78ddadc",
+      "verifiedArchiveAssets": 9,
+      "zipEntries": 10,
+      "qualityMode": "bounded-visual",
+      "qualityMetric": "isolated-glyph-iou-and-palette-v1",
+      "minimumFidelity": 0.95,
+      "officialReferenceDirectory": "/tmp/twinleaf-svg-minify-before",
+      "qualitySummary": {
+        "assets": 23,
+        "energyAssets": 21,
+        "renderChecks": 63,
+        "passedChecks": 63,
+        "allPassed": true,
+        "brandingUnchanged": true,
+        "minGlyphSoftIoU": 0.9618062818669108,
+        "minGlyphBinaryIoU": 0.95,
+        "minCanvasAlphaSoftIoU": 0.9999580346453889,
+        "minForegroundColorAccuracy": 0.9997549019607843,
+        "minBackgroundColorAccuracy": 0.9998491704374057
+      },
+      "qualityChecksVerified": 63,
+      "allQualityInputAndOutputHashesVerified": true,
+      "unchangedBrandingAssets": 2,
+      "unchangedNonSvgAssetFiles": 35,
+      "unchangedFrontendSourceFiles": 188
+    },
+    "automatedChecks": {
+      "status": "passed",
+      "command": "npm --prefix ptcg-play run test:assets",
+      "nodeAssetAndStaticResourceTests": 22,
+      "manifestGuard": "passed including below-threshold glyph/alpha/palette, lowered fidelity floor, missing enlarged-size evidence and invented blank-glyph cases",
+      "productionBuild": "passed",
+      "fullNpmTestRerun": false
+    }
+  },
+  "evidence": {
+    "artwork": "docs/simulator-svg-simplification-artwork.json",
+    "independentQuality": "docs/simulator-svg-simplification-quality.json",
+    "negativeControl": "docs/simulator-svg-simplification-negative-control.json",
+    "beforePackageReport": "/tmp/twinleaf-svg-lossy-root-before/docs/simulator-bundle-results.json",
+    "afterPackageReport": "docs/simulator-bundle-results.json",
+    "perFileSha256": "docs/simulator-svg-simplification-artwork.json#files",
+    "originalOfficialProvenance": "ptcg-play/scripts/ui-assets-manifest.json",
+    "sourceBackup": "/tmp/twinleaf-svg-lossy-root-before",
+    "browser": "docs/simulator-svg-simplification-browser.json",
+    "artifact": "docs/simulator-svg-simplification-artifact-verification.json",
+    "delivery": "docs/simulator-delivery-results.json"
+  }
+}

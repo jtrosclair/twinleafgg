@@ -30,7 +30,15 @@ $ptcg-light-theme: map-merge($ptcg-light-theme, (ptcg: $ptcg-colors));
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include mat.all-component-themes($ptcg-dark-theme);
+@include mat.core-theme($ptcg-dark-theme);
+@include mat.button-theme($ptcg-dark-theme);
+@include mat.dialog-theme($ptcg-dark-theme);
+@include mat.input-theme($ptcg-dark-theme);
+@include mat.form-field-theme($ptcg-dark-theme);
+@include mat.progress-bar-theme($ptcg-dark-theme);
+@include mat.progress-spinner-theme($ptcg-dark-theme);
+@include mat.select-theme($ptcg-dark-theme);
+@include mat.snack-bar-theme($ptcg-dark-theme);
 
 
 @include ptcg-theme($ptcg-dark-theme);
@@ -38,7 +46,16 @@ $ptcg-light-theme: map-merge($ptcg-light-theme, (ptcg: $ptcg-colors));
 // Dark is the unscoped baseline. Light is emitted below the root selector so
 // Angular Material and Twinleaf's custom theme mixins update together.
 html[data-theme='light'] {
-  @include mat.all-component-colors($ptcg-light-theme);
+  @include mat.core-color($ptcg-light-theme);
+  @include mat.button-color($ptcg-light-theme);
+  @include mat.dialog-color($ptcg-light-theme);
+  @include mat.input-color($ptcg-light-theme);
+  @include mat.form-field-color($ptcg-light-theme);
+  @include mat.progress-bar-color($ptcg-light-theme);
+  @include mat.progress-spinner-color($ptcg-light-theme);
+  @include mat.select-color($ptcg-light-theme);
+  @include mat.option-color($ptcg-light-theme);
+  @include mat.snack-bar-color($ptcg-light-theme);
   @include ptcg-theme($ptcg-light-theme);
 }
 

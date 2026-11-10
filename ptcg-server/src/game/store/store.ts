@@ -1,4 +1,6 @@
 import { AbstractAttackEffect, ApplyWeaknessEffect, DealDamageEffect, PutDamageEffect } from './effects/attack-effects';
+import { CheckProvidedEnergyEffect } from './effects/check-effects';
+import { mirrorOnlyEnergyForQuery } from './prefabs/mirror-only-energy';
 import { StateUtils } from './state-utils';
 import { resolveCopyAttackSessions } from './prefabs/copy-attack-delegation';
 import { Action } from './actions/action';
@@ -6,8 +8,17 @@ import { AbortGameAction } from './actions/abort-game-action';
 import { AppendLogAction } from './actions/append-log-action';
 import { ConcedeAction } from './actions/concede-action';
 import { Card } from './card/card';
+import { PokemonCard } from './card/pokemon-card';
+import { TrainerCard } from './card/trainer-card';
+import { Stage } from './card/card-types';
+import { CardTarget, PlayCardAction, PlayerType, SlotType } from './actions/play-card-action';
 import { ChangeAvatarAction } from './actions/change-avatar-action';
 import { Effect } from './effects/effect';
+import { clearAttackDamageScopes } from './prefabs/attack-after-damage';
+import { AfterEvolveEffect, AttackEffect, CheckEvolveEffect, EvolveEffect, RetreatEffect, RetreatStartEffect } from './effects/game-effects';
+import { ATTACK_RETREAT_LOCK_UNTIL_TARGET_END_TURN } from './prefabs/retreat-lock-until-target-end-turn';
+import { MarkerConstants } from './markers/marker-constants';
+import { EndTurnEffect } from './effects/game-phase-effects';
 import { GameError } from '../game-error';
 import { GameMessage, GameLog } from '../game-message';
 import { Prompt } from './prompts/prompt';
@@ -23,11 +34,11 @@ import { playCardReducer } from './reducers/play-card-reducer';
 import { playEnergyReducer } from './effect-reducers/play-energy-effect';
 import { playPokemonReducer } from './effect-reducers/play-pokemon-effect';
 import { playPokemonFromDeckReducer } from './effect-reducers/play-pokemon-from-deck-effect';
-import { playTrainerReducer } from './effect-reducers/play-trainer-effect';
+import { playTrainerReducer, preflightDualStadiumCancellation } from './effect-reducers/play-trainer-effect';
 import { playerTurnReducer } from './reducers/player-turn-reducer';
 import { gamePhaseReducer } from './effect-reducers/game-phase-effect';
 import { gameReducer } from './effect-reducers/game-effect';
-import { checkState, checkStateReducer } from './effect-reducers/check-effect';
+import { checkBenchSize, checkState, checkStateReducer } from './effect-reducers/check-effect';
 import { playerStateReducer } from './reducers/player-state-reducer';
 import { retreatReducer } from './effect-reducers/retreat-effect';
 import { setupPhaseReducer } from './reducers/setup-reducer';
@@ -57,6 +68,25 @@ export class Store implements StoreLike {
 
   constructor(private handler: StoreHandler) { }
 
+  /** Restore a stable snapshot without retaining callbacks from the previous game. */
+  public restoreState(state: State): void {
+    clearAttackDamageScopes(this.state);
+    if (this.state !== state) clearAttackDamageScopes(state);
+    this.promptItems = [];
+    this.waitItems = [];
+    this.logId = state.logs.reduce((max, log) => Math.max(max, log.id || 0), 0);
+    this.state = state;
+    // Snapshots may carry the default five slots even with a bench-expanding
+    // effect already in play. Rebuild capacity before deriving playable cards.
+    // The state-check guard belongs to the old execution, not the restored game.
+    state.benchSizeChangeHandled = false;
+    if ([GamePhase.PLAYER_TURN, GamePhase.ATTACK, GamePhase.BETWEEN_TURNS].includes(state.phase)) {
+      checkBenchSize(this, state);
+      state.benchSizeChangeHandled = false;
+    }
+    this.state = this.calculatePlayability(state);
+  }
+
   public dispatch(action: Action, clientRoleId?: number): State {
     let state = this.state;
 
@@ -69,18 +99,21 @@ export class Store implements StoreLike {
         throw new GameError(GameMessage.ILLEGAL_ACTION);
       }
       state = sandboxReducer(this, state, action, clientRoleId);
+      state = this.calculatePlayability(state);
       this.handler.onStateChange(state);
       return state;
     }
 
     if (action instanceof AbortGameAction) {
       state = abortGameReducer(this, state, action);
+      state = this.calculatePlayability(state);
       this.handler.onStateChange(state);
       return state;
     }
 
     if (action instanceof ConcedeAction) {
       state = concedeReducer(this, state, action);
+      state = this.calculatePlayability(state);
       this.handler.onStateChange(state);
       return state;
     }
@@ -89,6 +122,7 @@ export class Store implements StoreLike {
       || action instanceof ReorderBenchAction
       || action instanceof ChangeAvatarAction) {
       state = playerStateReducer(this, state, action);
+      state = this.calculatePlayability(state);
       this.handler.onStateChange(state);
       return state;
     }
@@ -98,6 +132,7 @@ export class Store implements StoreLike {
       if (this.promptItems.length === 0) {
         state = checkState(this, state);
       }
+      state = this.calculatePlayability(state);
       this.handler.onStateChange(state);
       return state;
     }
@@ -118,6 +153,63 @@ export class Store implements StoreLike {
   }
 
   public reduceEffect(state: State, effect: Effect): State {
+    const preflight = preflightDualStadiumCancellation(this, state, effect);
+    if (preflight !== undefined) return preflight;
+    // A completed attack's retreat lock belongs to the affected Pokémon,
+    // independent of whether its attacker is still in any visible zone.
+    if ((effect instanceof RetreatStartEffect || effect instanceof RetreatEffect)
+      && effect.player.active.marker.hasMarker(ATTACK_RETREAT_LOCK_UNTIL_TARGET_END_TURN)) {
+      throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+    }
+    if (effect instanceof EvolveEffect) {
+      // Reject invalid targets and current restrictions before any on-evolve
+      // handlers can alter damage, prompts, markers, or card zones.
+      if (!effect.target.getPokemonCard()) throw new GameError(GameMessage.INVALID_TARGET);
+      if (!effect.source.cards.includes(effect.pokemonCard)
+        && effect.target.getPokemonCard() !== effect.pokemonCard) throw new GameError(GameMessage.INVALID_TARGET);
+      // The legacy reducer fan-out is not read-only: some cards react even to
+      // unrelated events. Check on a fully isolated clone so a rejected move
+      // cannot leave prompts, markers or damage on the live state.
+      const references: {s: Object, d: Object}[] = [];
+      const isolatedState: State = deepClone(state, [], references);
+      const cloned = <T extends Object>(value: T): T => {
+        const match = references.find(entry => entry.s === value);
+        if (!match) throw new GameError(GameMessage.INVALID_TARGET);
+        return match.d as T;
+      };
+      // Card-specific Trainer overrides use the handler's format, so preserve
+      // it (and any other game settings) in the isolated handler as well.
+      const settings = (this.handler as any).gameSettings;
+      const isolatedSettings = settings && typeof settings === 'object'
+        ? deepClone(settings, [], references) : settings;
+      const isolatedHandler: StoreHandler & {gameSettings?: unknown, format?: unknown} = {
+        onStateChange: () => undefined,
+        gameSettings: isolatedSettings,
+        format: (this.handler as any).format
+      };
+      const isolatedStore = new Store(isolatedHandler);
+      isolatedStore.state = isolatedState;
+      const preflight = new CheckEvolveEffect(cloned(effect.player), cloned(effect.target), cloned(effect.pokemonCard), cloned(effect.source), effect.playedFromHand);
+      try {
+        isolatedStore.reduceEffect(isolatedState, preflight);
+      } finally {
+        isolatedStore.cleanup();
+      }
+      // Every legacy EvolveEffect caller expects rejection to throw; a silent
+      // cancellation could let the caller apply follow-up effects to a
+      // Pokémon that did not evolve.
+      if (preflight.preventDefault) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+      effect.preflightComplete = true;
+    }
+    // Clear Vision affects the player for the rest of the game, even if the
+    // Pokémon that used or copied it has since left play. Reject the attack
+    // before any card handler can perform attack side effects.
+    if (effect instanceof AttackEffect && !effect.preventDefault && effect.attack
+      && effect.player.marker.hasMarker(MarkerConstants.CLEAR_VISION_GX_LOCK)
+      && (effect.attack.gxAttack === true ||
+        (typeof effect.attack.name === 'string' && effect.attack.name.includes('-GX')))) {
+      throw new GameError(GameMessage.CANNOT_USE_ATTACK);
+    }
     // Upstream attack prevention runs before fan-out so blocked effects never trigger cards.
     if (effect instanceof AbstractAttackEffect && effect.target && effect.source
       && (effect.target.preventDamageNextTurn || effect.target.preventEffectsOfAttacksNextTurn)) {
@@ -134,11 +226,22 @@ export class Store implements StoreLike {
       }
     }
 
+    // Attacking-player marker boosts are resolved before defending Pokémon's
+    // damage reducers, regardless of card traversal order.
+    if (effect instanceof DealDamageEffect && !effect.preventDefault) {
+      state = this.propagatePlayerMarkerEffect(state, effect);
+    }
     state = this.propagateEffect(state, effect);
     state = resolveCopyAttackSessions(this, state, effect);
 
     if (effect.preventDefault === true) {
       return state;
+    }
+
+    // Expire player-scoped effects only after an end turn is accepted.
+    if (effect instanceof EndTurnEffect) {
+      state = this.propagatePlayerMarkerEffect(state, effect);
+      if (effect.preventDefault) return state;
     }
 
     state = gamePhaseReducer(this, state, effect);
@@ -151,10 +254,15 @@ export class Store implements StoreLike {
     state = attackReducer(this, state, effect);
     state = checkStateReducer(this, state, effect);
 
-    // Calculate playability after all effects are processed
-    // The calculatingPlayability flag prevents nested calls during playability checks
-    state = this.calculatePlayability(state);
+    // Only signal a successful evolution after every existing blocker has
+    // accepted it. Its evolved Pokémon is now in play for Ability checks.
+    if (effect instanceof EvolveEffect && !effect.preventDefault && effect.target.getPokemonCard() === effect.pokemonCard) {
+      state = this.reduceEffect(state, new AfterEvolveEffect(effect.player, effect.target, effect.pokemonCard, effect.playedFromHand));
+    }
 
+    // Effects include nested reducers and read-only HP/type queries. Derive
+    // playable-card hints once at restore/dispatch boundaries, after the state
+    // settles, rather than cloning the whole game after every internal effect.
     return state;
   }
 
@@ -267,6 +375,7 @@ export class Store implements StoreLike {
   }
 
   public cleanup(): void {
+    clearAttackDamageScopes(this.state);
     this.promptItems = [];
     this.waitItems = [];
     this.logId = 0;
@@ -341,14 +450,22 @@ export class Store implements StoreLike {
         }
 
         // Check each card in hand
-        for (const card of player.hand.cards) {
+        for (const [handIndex, card] of player.hand.cards.entries()) {
           try {
             // Skip cards without valid IDs (shouldn't happen, but safety check)
             if (card.id === undefined || card.id === -1) {
               continue;
             }
 
-            if (CAN_PLAY_CARD(this, state, player, card)) {
+            // Trainer checks and evolution checks can run arbitrary card
+            // effects. Keep those probes off the live board; some legacy
+            // handlers react to query effects by adding markers or prompts.
+            const needsIsolation = card instanceof TrainerCard
+              || (card instanceof PokemonCard && card.stage !== Stage.BASIC);
+            const canPlay = needsIsolation
+              ? this.checkCardHint(state, player.id, handIndex, CAN_PLAY_CARD)
+              : CAN_PLAY_CARD(this, state, player, card);
+            if (canPlay) {
               player.playableCardIds.push(card.id);
             }
           } catch (error) {
@@ -378,15 +495,100 @@ export class Store implements StoreLike {
     return state;
   }
 
+  private checkCardHint(
+    state: State,
+    playerId: number,
+    handIndex: number,
+    canPlayCard: typeof import('./prefabs/prefabs').CAN_PLAY_CARD,
+  ): boolean {
+    const copy: State = deepClone(state);
+    const player = copy.players.find(item => item.id === playerId);
+    const card = player?.hand.cards[handIndex];
+    if (!player || !card) return false;
+    const probe = this.createPlayabilityProbe(copy, state);
+    try {
+      if (canPlayCard(probe, copy, player, card,
+        () => this.checkTrainerPlay(state, playerId, handIndex))) return true;
+      if (card instanceof PokemonCard && card.powers.some(power => power.useFromHand && power.useFromHandToBench)) {
+        const index = player.bench.findIndex(slot => slot.cards.length === 0);
+        if (index < 0) return false;
+        try {
+          playCardReducer(probe, copy, new PlayCardAction(playerId, handIndex,
+            { player: PlayerType.BOTTOM_PLAYER, slot: SlotType.BENCH, index }));
+          return player.bench[index].cards.includes(card);
+        } catch { return false; }
+      }
+      return false;
+    } finally {
+      probe.cleanup();
+    }
+  }
+
+  private createPlayabilityProbe(state: State, original: State): Store {
+    // The same format-specific Trainer overrides apply in a hint and in an
+    // actual action. Clone handler settings so probes cannot mutate them.
+    const settings = (this.handler as any).gameSettings;
+    const handler = {
+      gameSettings: settings === original.gameSettings ? state.gameSettings
+        : settings && typeof settings === 'object' ? deepClone(settings) : settings,
+      format: (this.handler as any).format,
+      onStateChange: () => {}
+    };
+    const probe = new Store(handler);
+    probe.state = state;
+    probe.calculatingPlayability = true;
+    return probe;
+  }
+
+  private checkTrainerPlay(state: State, playerId: number, handIndex: number): boolean {
+    const player = state.players.find(item => item.id === playerId);
+    if (!player) { return false; }
+    const targets: CardTarget[] = [{ player: PlayerType.BOTTOM_PLAYER, slot: SlotType.BOARD, index: 0 }];
+    player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (_list, _card, target) => targets.push(target));
+
+    for (const target of targets) {
+      // Clone cards too: Trainers can move cards, set markers, or open prompts
+      // before returning. All of those changes belong only to this probe.
+      const copy: State = deepClone(state);
+      const probe = this.createPlayabilityProbe(copy, state);
+      try {
+        playCardReducer(probe, copy, new PlayCardAction(playerId, handIndex, target));
+        return true;
+      } catch {
+        // Some Trainers require a specific Pokemon target rather than the board.
+      } finally {
+        probe.cleanup();
+      }
+    }
+    return false;
+  }
+
+  private propagatePlayerMarkerEffect(state: State, effect: Effect): State {
+    for (const owner of state.players) {
+      if (owner.marker.markers.length === 0) continue;
+      for (const marker of owner.marker.markers.slice()) {
+        const source = marker.source;
+        if (source && source.reducePlayerMarkerEffect) {
+          state = source.reducePlayerMarkerEffect(this, state, effect, owner, marker);
+        }
+        if (effect.preventDefault) return state;
+      }
+    }
+    return state;
+  }
+
   private propagateEffect(state: State, effect: Effect): State {
     const cards: Card[] = [];
+    const virtual = new Set(effect instanceof CheckProvidedEnergyEffect ? mirrorOnlyEnergyForQuery(state, effect) : []);
     for (const player of state.players) {
       player.stadium.cards.forEach(c => cards.push(c));
       player.supporter.cards.forEach(c => cards.push(c));
       player.active.cards.forEach(c => cards.push(c));
+      if (effect instanceof CheckProvidedEnergyEffect && effect.source === player.active) virtual.forEach(c => cards.push(c));
       player.active.tools.forEach(t => cards.push(t));
       for (const bench of player.bench) {
         bench.cards.forEach(c => cards.push(c));
+        if (effect instanceof CheckProvidedEnergyEffect && effect.source === bench) virtual.forEach(c => cards.push(c));
         bench.tools.forEach(t => cards.push(t));
       }
       for (const prize of player.prizes) {
@@ -397,7 +599,11 @@ export class Store implements StoreLike {
       player.discard.cards.forEach(c => cards.push(c));
     }
     cards.sort(c => c.superType);
-    cards.forEach(c => { state = this.callReduceEffect(c, this, state, effect); });
+    cards.forEach(c => {
+      if (virtual.has(c) && effect instanceof CheckProvidedEnergyEffect) {
+        state = (c as Card & { reduceMirrorOnlyEnergyEffect: (store: StoreLike, state: State, effect: CheckProvidedEnergyEffect) => State }).reduceMirrorOnlyEnergyEffect(this, state, effect);
+      } else state = this.callReduceEffect(c, this, state, effect);
+    });
     return state;
   }
 

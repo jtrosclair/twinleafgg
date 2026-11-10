@@ -109,6 +109,17 @@ describe('copied handler ownership architectural acceptance', () => {
     expect(b.player.active.damage).toBe(0);
   });
 
+  it('does not apply Drednaw Impervious Shell when its Ability is blocked', () => {
+    const b = battle(); b.player.active.cards = [new Drednaw()];
+    const reduce = b.store.reduceEffect.bind(b.store);
+    spyOn(b.store, 'reduceEffect').and.callFake((state: State, effect: Effect) => {
+      if (effect instanceof PowerEffect) throw new Error('Ability blocked');
+      return reduce(state, effect);
+    });
+    hit(b, 200);
+    expect(b.player.active.damage).toBe(200);
+  });
+
   it('copies the legitimate conditional Hard Crunch bonus', () => {
     const b = battle(); b.opponent.active.damage = 10; copy(b, new Drednaw());
     expect(b.opponent.active.damage).toBe(170);

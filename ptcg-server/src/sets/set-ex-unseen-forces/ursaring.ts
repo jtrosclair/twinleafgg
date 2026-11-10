@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
@@ -7,7 +8,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { CONFIRMATION_PROMPT, IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE } from '../../game/store/prefabs/attack-effects';
 
-export class Ursaring extends PokemonCard {
+export class Ursaring extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom = 'Teddiursa';
   public cardType: CardType = C;
@@ -79,6 +80,11 @@ export class Ursaring extends PokemonCard {
       }
     }
 
+    return Ursaring.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  /** Attack effects only; Intimidating Ring remains in the normal reducer. */
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Drag Off
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;

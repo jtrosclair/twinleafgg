@@ -5,7 +5,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { COIN_FLIP_PROMPT, IS_POKEMON_POWER_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
 import { StateUtils } from '../../game';
-import { MoveCardsEffect } from '../../game/store/effects/game-effects';
+import { AttackEffect, MoveCardsEffect } from '../../game/store/effects/game-effects';
 
 export class Parasect extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -45,10 +45,10 @@ export class Parasect extends PokemonCard {
             if (IS_POKEMON_POWER_BLOCKED(store, state, player, this)) {
               return;
             }
-            if (player.active.getPokemonCard() === this &&
+            if (player.active.getPokemonCard() === this && (
               player.active.specialConditions.includes(SpecialCondition.ASLEEP) ||
               player.active.specialConditions.includes(SpecialCondition.CONFUSED) ||
-              player.active.specialConditions.includes(SpecialCondition.PARALYZED)) {
+              player.active.specialConditions.includes(SpecialCondition.PARALYZED))) {
               return;
             }
             isParasectInPlay = true;
@@ -60,10 +60,11 @@ export class Parasect extends PokemonCard {
         return state;
       }
 
-      if (effect.sourceEffect.powerType === PowerType.POKEMON_POWER ||
-        effect.sourceEffect.powerType === PowerType.POKEPOWER ||
-        effect.sourceEffect.powerType === PowerType.POKEBODY ||
-        effect.sourceCard?.attacks.some(attack => attack.name === effect.sourceEffect.name)) {
+      if (effect.sourceEffect?.powerType === PowerType.POKEMON_POWER ||
+        effect.sourceEffect?.powerType === PowerType.POKEPOWER ||
+        effect.sourceEffect?.powerType === PowerType.POKEBODY ||
+        effect.sourceEffect instanceof AttackEffect ||
+        effect.sourceCard?.attacks.some(attack => attack.name === effect.sourceEffect?.name)) {
         // Check if the source is in the discard pile of any player
         if (state.players.some(player => effect.source === player.discard)) {
           effect.preventDefault = true;

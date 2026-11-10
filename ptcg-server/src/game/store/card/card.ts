@@ -3,11 +3,16 @@ import { Effect } from '../effects/effect';
 import { State } from '../state/state';
 import { StoreLike } from '../store-like';
 import { CardList } from '../state/card-list';
-import { Marker } from '../state/card-marker';
+import { Marker, MarkerItem } from '../state/card-marker';
 import { Attack, Power } from './pokemon-types';
 import { Player } from '../state/player';
 
 export abstract class Card {
+
+  /** Resolve a lasting player marker even if its source is no longer in a
+   * normally propagated zone. DealDamageEffect is dispatched before card
+   * reducers; a non-prevented EndTurnEffect is dispatched after them. */
+  public reducePlayerMarkerEffect?(store: StoreLike, state: State, effect: Effect, owner: Player, marker: MarkerItem): State;
 
   public abstract set: string;
 

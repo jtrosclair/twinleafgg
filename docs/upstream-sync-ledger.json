@@ -1,0 +1,624 @@
+{
+  "schema": 1,
+  "baseUpstream": "2f01a5ff4057f734640a2770cea3c1e7d61eb644",
+  "latestObservedUpstream": "c531dc84f6d079e7531a9c3986a2f51ddeecad6c",
+  "description": "Per-commit review record for the PrizeMap simulator fork. Partial ports are not full commits. Never infer an applied watermark from the latest observed SHA.",
+  "commits": [
+    {
+      "sha": "e315e91da98509559708dc8b937202f7f39f87dc",
+      "date": "2026-09-12",
+      "subject": "Added requested cards pansage, simisage and stakataka",
+      "status": "partial",
+      "notes": "Ported Pansage PAR with corrected Fire weakness and optional private search. Simisage PAR deferred: need to distinguish Ability removal from blocked Ability use; other additions unreviewed. Candidate: 530 exact saved states, 6 focused specs, four winning replays. Not deployed. Follow-up: ported Stakataka UNB and SMP 180/209 aliases, preserving printed IDs; 14 focused engine/registry tests (including Prism Star Lost Zone) and 530 saved states passed in isolation. Simisage remains deferred."
+    },
+    {
+      "sha": "295871ca0b9bd9310e78bd356ca87f53987831d2",
+      "date": "2026-09-13",
+      "subject": "Merge branch 'the-epsd:main' into main",
+      "status": "deferred",
+      "notes": "Merge commit spans many files; first-parent changes need review beyond the individually logged child commits."
+    },
+    {
+      "sha": "c9aea764b9d65b7acb5adbab36f24e136224a4c5",
+      "date": "2026-09-13",
+      "subject": "Implement card request SCR Rhyperior",
+      "status": "partial",
+      "notes": "Ported Rhyhorn SCR and Rhydon SCR with four real-engine/registry tests, 530 matching saved states, four recorded winning replays and verified artwork. Rhyperior SCR is deferred: its Wide Wall needs a shared Supporter-target interception missing from the Boss\u2019s Orders path. Not deployed."
+    },
+    {
+      "sha": "360df40414d7fed23050587496c815b3732079f9",
+      "date": "2026-10-11",
+      "subject": "add(frontend): Take Damage Animation",
+      "status": "not-applicable",
+      "notes": "React 3D damage animation code is not used by the Angular single-player simulator."
+    },
+    {
+      "sha": "95313f768e83eba793816fd56a1a6b4b63cb810a",
+      "date": "2026-10-11",
+      "subject": "add(frontend): ShowCardsPrompt Animation",
+      "status": "deferred",
+      "notes": "React ShowCards animation is not used, but commit also changes many card handlers; those parts need independent review."
+    },
+    {
+      "sha": "93e6bf8f231cdbcb176da8033d9c25872792bddd",
+      "date": "2026-10-11",
+      "subject": "fix(frontend): Activate Ability Spotlight Animation",
+      "status": "not-applicable",
+      "notes": "React 3D ability animation code is not used by the Angular single-player simulator."
+    },
+    {
+      "sha": "3348ebdc898f175a2ed8f999133cd13d1afd01f5",
+      "date": "2026-10-12",
+      "subject": "refactor(cards): EffectOfAbilityEffect",
+      "status": "deferred",
+      "notes": "Cross-cutting refactor changes shared engine effects and many card handlers; requires per-card effect, ownership, knock-out, damage, serialization and recorded-puzzle tests before port."
+    },
+    {
+      "sha": "db4eebfcfb1e1a04b2d99411ea8e5d61d540e1fc",
+      "date": "2026-10-13",
+      "subject": "refactor(cards): EffectOfAbilityEffect Pt 2",
+      "status": "deferred",
+      "notes": "Cross-cutting refactor changes shared engine effects and many card handlers; requires per-card effect, ownership, knock-out, damage, serialization and recorded-puzzle tests before port."
+    },
+    {
+      "sha": "49205ef1746459c14270cdf7ad4644f5e62ed010",
+      "date": "2026-10-13",
+      "subject": "refactor(cards): EffectOfAbilityEffect Pt 3",
+      "status": "deferred",
+      "notes": "Cross-cutting refactor changes shared engine effects and many card handlers; requires per-card effect, ownership, knock-out, damage, serialization and recorded-puzzle tests before port."
+    },
+    {
+      "sha": "c51047b6c46174b0d33a32c25de81e1e48bcf6fe",
+      "date": "2026-10-13",
+      "subject": "refactor(cards): Celebrations Reprints",
+      "status": "deferred",
+      "notes": "Reprint rewrite deletes existing definitions; preserve all fullNames and print aliases, compare registry and real puzzle states before port."
+    },
+    {
+      "sha": "a8b6fe9075f982f7722e3c9ee2ce5e39cea1f1ca",
+      "date": "2026-10-13",
+      "subject": "fix(frontend): Deck Flight Animation Fix",
+      "status": "not-applicable",
+      "notes": "React 3D deck animation code is not used by the Angular single-player simulator."
+    },
+    {
+      "sha": "107e7e1687bbf81368a12f23a89029d5a0b72e55",
+      "date": "2026-10-14",
+      "subject": "refactor(cards): canPlay SWSH",
+      "status": "deferred",
+      "notes": "Broad canPlay refactor touches many card handlers and can change playable-card hints and validation; requires per-card legality and puzzle replay tests."
+    },
+    {
+      "sha": "852e712eb055d2c9afa967956ef3b4ef498040fa",
+      "date": "2026-10-14",
+      "subject": "refactor(cards): canPlay SM",
+      "status": "deferred",
+      "notes": "Broad canPlay refactor touches many card handlers and can change playable-card hints and validation; requires per-card legality and puzzle replay tests."
+    },
+    {
+      "sha": "e207317b699c4356c43ed68bec88d5b588b99606",
+      "date": "2026-10-14",
+      "subject": "refactor(cards): canPlay XY",
+      "status": "deferred",
+      "notes": "Broad canPlay refactor touches many card handlers and can change playable-card hints and validation; requires per-card legality and puzzle replay tests."
+    },
+    {
+      "sha": "88dab92dd10d50edc23538d96d37d283d895e364",
+      "date": "2026-10-14",
+      "subject": "refactor(cards): canPlay BW",
+      "status": "deferred",
+      "notes": "Broad canPlay refactor touches many card handlers and can change playable-card hints and validation; requires per-card legality and puzzle replay tests."
+    },
+    {
+      "sha": "a139b22983c0efdc4364cd5d2e3342dbe4dac02f",
+      "date": "2026-10-14",
+      "subject": "refactor(cards): canPlay HGSS",
+      "status": "deferred",
+      "notes": "Broad canPlay refactor touches many card handlers and can change playable-card hints and validation; requires per-card legality and puzzle replay tests."
+    },
+    {
+      "sha": "56d5fe2341098a31cbcefb6b6cec9412b41722d0",
+      "date": "2026-10-14",
+      "subject": "fix(card builder): Card Builder Bug Fixes/Improvements",
+      "status": "not-applicable",
+      "notes": "Offline card-builder and stub generator only; no simulator runtime or card definitions."
+    },
+    {
+      "sha": "1e0f787068fddc4b1db9a94c25e18a0845fda65b",
+      "date": "2026-10-14",
+      "subject": "add(cards): Hops Phantump, Hops Travenant",
+      "status": "partial",
+      "notes": "Ported Hop\u2019s Phantump ASC with self-protection targeting corrected. Four real-engine tests, 530-state differential, four winning puzzle replays, both browser builds and artwork check passed. Hop\u2019s Trevenant deferred: upstream uses any knockout, but its Ability needs a Hop-specific knockout; current snapshot schema tracks only a boolean. Not deployed."
+    },
+    {
+      "sha": "5c91273f264b376b41f845c037378a0e401a3646",
+      "date": "2026-10-14",
+      "subject": "add(cards): Diamond and Pearl Base",
+      "status": "partial",
+      "notes": "Ported Shinx, Starly and Turtwig with their printed +10 Weakness corrected from upstream. Existing artwork mappings verified; ten focused real-engine tests include copied Spark and Bench protection. Both browser builds passed in isolation. Combined verification: 530 matching saved states, four recorded puzzle wins, root npm test and seven API tests passing; the 95-file engine suite reports 825 passing and the same two ownership failures. Follow-up adds Grotle, Torterra and Luxio; 20 focused real-engine tests cover copied attacks, deck Energy attachment, invalid or stale targets, shuffle, healing and paralysis, with both browser builds, 530 matching saved states and four puzzle wins in isolation. Combined verification: 530 matching saved states, four recorded puzzle wins, root npm test and seven API tests passing; the engine suite reports 887 passing and the same two unlabelled ownership failures. Follow-up adds Machop, Machoke, Machamp, Riolu, Lucario and Ponyta with corrected printed Weakness, damage ordering and target validation. Thirty-five focused tests, both browser builds, 530 saved-state comparisons and four recorded wins passed in isolation; combined verification: 530 matching saved states and initial affordability and hand-playability checks, four recorded puzzle wins, root npm test and seven API tests passing; the 104-file engine suite has 985 passing and the same two unlabelled ownership failures. Follow-up adds Seaking, Hoothoot and Skorupi; 28 focused tests, both browser builds, 530 saved-state comparisons and four wins passed in isolation. Follow-up ports Goldeen DP with a scoped post-damage lifecycle: recoil follows outgoing damage, tracks the original attacker through switches, and works through delegated and legacy copied attacks. A 29-case focused suite and independent review passed; combined isolated verification matched 530 saved states and 3,457 first-action attempts, all four recorded wins, and seven API tests, with 1,172 engine tests passing and the same two unlabelled ownership failures. Manual legacy copy effects drain at enclosing attack completion, and in-flight prompt snapshots remain unsupported. Combined verification: 530 matching saved states, 1,860 matching first Item/Supporter action attempts, four recorded puzzle wins, root npm test and seven API tests passing; the 108-file engine suite has 1,050 passing and the same two unlabelled ownership failures. Other historical cards still need individual gameplay and collision review. Follow-up adds Wurmple, Stunky, Chatot, Clefairy, Heracross, Bibarel, Drapion and Rhyhorn DP. Forty-five focused cases cover post-damage status, coin delivery, switch protection, target replacement, copied attacks and recoil; both browser builds passed in isolation. Staravia was subsequently ported with an opt-in retreat-lock effect retained through source removal, copied attacks, and checkpoint restore; fourteen focused tests cover expiry and switch/evolution cleanup. Combined verification: 530 saved states and 3,457 first actions matched; four recorded puzzles won; root tests, seven API tests and production build passed. The 125-file card suite had 1,451 passing and the same two unlabelled copied-handler ownership failures. Round-19 adds Cherrim 45 and Magnemite 87 DP. The eight-card candidate passed 73 focused tests, both browser builds, 530 saved states, 3,457 initial actions and four verified candidate-browser wins in isolation. Round-20 adds Manaphy and Steelix DP. The eight-card candidate passed 62 focused tests, both browser builds, 530 saved states, 3,457 initial actions and four recorded puzzle solutions in isolation."
+    },
+    {
+      "sha": "aa221508df4fa155c800c2997dbef8ae412639d4",
+      "date": "2026-10-14",
+      "subject": "fix(cards): Escape Board",
+      "status": "applied",
+      "notes": "Escape Board lets the attached Pok\u00e9mon retreat while Asleep or Paralyzed without prematurely clearing conditions; disabled tools still block it. Seven red/green real-store tests, 530 exact saved-state comparisons and four recorded wins pass. Not deployed."
+    },
+    {
+      "sha": "fc0de6e978193eee653aa38e5b8a08036c6727af",
+      "date": "2026-10-14",
+      "subject": "fix(card builder): Reindexed Prefabs",
+      "status": "not-applicable",
+      "notes": "Only card-builder tooling changed; no simulator runtime or card definitions."
+    },
+    {
+      "sha": "f43aa6ed91179359aee6830c4ad309f2083b77ca",
+      "date": "2026-10-14",
+      "subject": "add(cards): Ascended Heroes Leftovers",
+      "status": "partial",
+      "notes": "Large Ascended Heroes card addition; individual new definitions and image mappings need gameplay and collision review. Follow-up: ported Noibat ASC and Okidogi ASC with ten focused real-engine tests for Tool search/reveal/shuffle and prior-turn Prize counts. Other commit changes remain to be reviewed; combined 530-state comparison and card/engine suite passed apart from the two pre-existing ownership failures. Further follow-up adds Poochyena, Noivern and Drampa ASC with nine real-engine tests and 530 matching saved states. Mightyena ASC subsequently ported with original-defender tracking through direct and copied attacks. Twelve focused tests, including lethal switch/prize cases and opponent-last-attack copying, passed; 530-state and four recorded puzzle checks passed in isolation. Further follow-up adds Galarian Zigzagoon/Linoone/Obstagoon ASC; six focused real-engine tests, 530-state comparison and four puzzle wins passed in isolation. Combined 530-state comparison and four recorded puzzle wins passed; engine suite has only the two pre-existing ownership failures. Follow-up corrects Obstagoon\u2019s Energy-card discard when an attached card provides no Energy; two red-to-green tests cover Special Energy and Pok\u00e9mon-as-Energy. The shared generic discard prefab remains to be reviewed. Further follow-up adds Pawniard/Bisharp/Kingambit ASC; 14 focused engine tests, 530 matching saved states, both browser builds and four puzzle wins passed in isolation. Combined verification: 530 matching saved states, four recorded puzzle wins, six API tests passing, and 689 engine tests passing with the same two unlabelled ownership failures. Follow-up adds Carbink ASC; 12 isolated real-engine tests and 530 matching saved states passed. Complex conflicting type-replacement ordering remains unproven. Combined verification with Carbink: 530 matching saved states, four recorded puzzle wins, six API tests passing, and 701 engine tests passing with the same two unlabelled ownership failures. Follow-up adds Team Rocket\u2019s Exeggcute, Vullaby, and Pangoro ASC; 12 isolated real-engine tests passed. Combined verification: 530 matching saved states, four puzzle wins, seven API tests passing, and 720 engine tests passing with the same two unlabelled ownership failures. Follow-up adds Team Rocket\u2019s Diglett and Zangoose ex ASC; 13 focused real-engine tests including asynchronous copied-attack attribution passed. Combined verification: 530 matching saved states, four recorded puzzle wins, root npm test and seven API tests passing; the engine suite reports 741 passing and the same two unlabelled ownership failures. Follow-up adds Hop\u2019s Pincurchin ex ASC; 13 isolated engine tests cover Ability blocking, target protection, lethal Knock Outs and copied attacks; both browser builds, 530 saved states and four recorded wins passed. Combined verification: 530 matching saved states, four recorded puzzle wins, root npm test and seven API tests passing; the engine suite reports 815 passing and the same two ownership failures."
+    },
+    {
+      "sha": "857a5678d93e37d307313ea27967c8da5be86660",
+      "date": "2026-10-14",
+      "subject": "fix(cards): ASC Leftovers",
+      "status": "partial",
+      "notes": "The upstream batch contains multiple card changes; remaining cards still need print-identity and gameplay review. Follow-up: ported Noibat ASC and Okidogi ASC with ten focused real-engine tests for Tool search/reveal/shuffle and prior-turn Prize counts. Other commit changes remain to be reviewed; combined 530-state comparison and card/engine suite passed apart from the two pre-existing ownership failures. Further follow-up adds Poochyena, Noivern and Drampa ASC with nine real-engine tests and 530 matching saved states. Mightyena ASC subsequently ported with original-defender tracking through direct and copied attacks. Twelve focused tests, including lethal switch/prize cases and opponent-last-attack copying, passed; 530-state and four recorded puzzle checks passed in isolation. Further follow-up adds Galarian Zigzagoon/Linoone/Obstagoon ASC; six focused real-engine tests, 530-state comparison and four puzzle wins passed in isolation. Combined 530-state comparison and four recorded puzzle wins passed; engine suite has only the two pre-existing ownership failures. Follow-up corrects Obstagoon\u2019s Energy-card discard when an attached card provides no Energy; two red-to-green tests cover Special Energy and Pok\u00e9mon-as-Energy. The shared generic discard prefab remains to be reviewed. Further follow-up adds Pawniard/Bisharp/Kingambit ASC; 14 focused engine tests, 530 matching saved states, both browser builds and four puzzle wins passed in isolation. Combined verification: 530 matching saved states, four recorded puzzle wins, six API tests passing, and 689 engine tests passing with the same two unlabelled ownership failures. Follow-up adds Carbink ASC; 12 isolated real-engine tests and 530 matching saved states passed. Complex conflicting type-replacement ordering remains unproven. Combined verification with Carbink: 530 matching saved states, four recorded puzzle wins, six API tests passing, and 701 engine tests passing with the same two unlabelled ownership failures. Follow-up adds Team Rocket\u2019s Exeggcute, Vullaby, and Pangoro ASC; 12 isolated real-engine tests passed. Combined verification: 530 matching saved states, four puzzle wins, seven API tests passing, and 720 engine tests passing with the same two unlabelled ownership failures. Follow-up adds Team Rocket\u2019s Diglett and Zangoose ex ASC; 13 focused real-engine tests including asynchronous copied-attack attribution passed. Combined verification: 530 matching saved states, four recorded puzzle wins, root npm test and seven API tests passing; the engine suite reports 741 passing and the same two unlabelled ownership failures. Follow-up adds Hop\u2019s Pincurchin ex ASC; 13 isolated engine tests cover Ability blocking, target protection, lethal Knock Outs and copied attacks; both browser builds, 530 saved states and four recorded wins passed. Combined verification: 530 matching saved states, four recorded puzzle wins, root npm test and seven API tests passing; the engine suite reports 815 passing and the same two ownership failures."
+    },
+    {
+      "sha": "269db72ba22d89c92fab645255cceb84fdab612b",
+      "date": "2026-10-15",
+      "subject": "add(cards): Mysterious Treasures",
+      "status": "partial",
+      "notes": "Ported Aron, Bronzor, Chikorita, Cyndaquil, Gible, Golbat, Paras, Seel, Snorunt and Zubat MT. Printed stats and image-map keys checked; 51 focused cases, both browser builds, 530 saved states, 3,457 first actions and four recorded wins passed in isolation. Barboach and Geodude remain deferred: simultaneous spread needs damage-reaction-safe target identity and Bench protection. Other historical additions remain unreviewed. Combined verification: 530 saved states, 3,457 first actions, four recorded wins, root npm test, seven API tests and production build passed; the 121-file card suite had 1,290 passing and the same two unlabelled ownership failures. Follow-up adds Doduo, Finneon, Magikarp, Slakoth, Snover and Teddiursa MT. Computed-base attacks preserve preexisting AttackEffect damage modifiers and still do no damage when their base is zero. Corrected the five earlier coin-gated conditions to flip after damage even if the defender changed, applying status only to the original defender. The three grouped MT suites pass 146 cases in isolation. Combined verification: 530 saved states and 3,457 first actions matched; four recorded puzzles won; root tests, seven API tests and production build passed. The 125-file card suite had 1,451 passing and the same two unlabelled copied-handler ownership failures. Round-17 adds Girafarig, Kricketot, Nidoran female and Chimecho MT. Combined eight-card candidate passed 59 focused direct/copied tests, 530 saved states, 3,457 initial actions and four recorded wins in isolation. Round-19 adds Kricketune 27 and Spinarak 103 MT. The eight-card candidate passed 73 focused tests, both browser builds, 530 saved states, 3,457 initial actions and four verified candidate-browser wins in isolation. Round-20 adds Bayleef, Dunsparce and Murkrow MT. The eight-card candidate passed 62 focused tests, both browser builds, 530 saved states, 3,457 initial actions and four recorded puzzle solutions in isolation."
+    },
+    {
+      "sha": "a9905a76a6c4103ba4b6cb9a49e86bad795c5c05",
+      "date": "2026-10-15",
+      "subject": "add(cards): Secret Wonders",
+      "status": "partial",
+      "notes": "Large historical card addition; remaining card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Additional Secret Wonders ports: Bagon 76, Growlithe 89, Ivysaur 51, Magmar 93, Roselia 62, Shellder 105, Shroomish 108 and Wartortle 75, with focused timing/copy/restore tests. Printed Roselia has Fire weakness +10; the official card-dex PDF has an apparent typo. Second Secret Wonders group adds Diglett 85, Electabuzz 87, Lickitung 91, Mareep 94, Nidoran male 97, Phanpy 98, Venonat 116 and Voltorb 117: 65 focused tests, 530 saved-state matches and four recorded wins in isolation. Clefairy 83 requires evolution timing; Lotad 92 awaits verified historical Energy semantics. Third group: Roserade 17, Pinsir 59, Psyduck 100, Rattata 103, Shuppet 110 and Stantler 113. Sixty-one focused tests, 530 states, 2,542 first actions and four recorded wins passed in isolation. Raticate and Squirtle depend on mirror-only conditional Special Energy; Grimer and Carvanha need attack-lock and hidden-choice work. Round-17 adds Shellos East Sea and Sableye SW. Combined eight-card candidate passed 59 focused direct/copied tests, 530 saved states, 3,457 initial actions and four recorded wins in isolation. Round-20 adds Donphan SW. The eight-card candidate passed 62 focused tests, both browser builds, 530 saved states, 3,457 initial actions and four recorded puzzle solutions in isolation."
+    },
+    {
+      "sha": "e7a1c390ae077f01cdc251c98b1d83e576c4c228",
+      "date": "2026-10-15",
+      "subject": "add(cards): Great Encounters",
+      "status": "partial",
+      "notes": "Ported Drowzee, Ekans, Slugma, Snubbull, Torchic, Wingull, Krabby, Mudkip, Mankey, Zangoose and Togetic GE. Artwork and printed attacks checked; 70 focused direct/copied and actual simulator snapshot cases, both browser builds, 530 saved states, 3,457 first actions and four recorded wins passed in isolation. Other additions remain unreviewed. Combined verification: 530 saved states and 3,457 first actions matched; all four recorded puzzles won; root tests, seven API tests and production build passed. The 128-file card suite had 1,553 passing and the same two unlabelled ownership failures. Round-17 adds Clamperl and Togepi GE. Combined eight-card candidate passed 59 focused direct/copied tests, 530 saved states, 3,457 initial actions and four recorded wins in isolation. Round-19 adds Arbok 33, Cacturne 34, Hariyama 41 and Delibird 36 GE. The eight-card candidate passed 73 focused tests, both browser builds, 530 saved states, 3,457 initial actions and four verified candidate-browser wins in isolation. Round-20 adds Feebas and Glameow GE. The eight-card candidate passed 62 focused tests, both browser builds, 530 saved states, 3,457 initial actions and four recorded puzzle solutions in isolation."
+    },
+    {
+      "sha": "3bed6d96ed20df17c35fd51f4ed774219b1ff22f",
+      "date": "2026-10-16",
+      "subject": "add(cards): Majestic Dawn",
+      "status": "partial",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-23 adds Leafeon, Fearow, Lickitung and Kangaskhan MD. The 24-card candidate passed 168 focused tests, both browser builds, 530 saved states, 3,457 initial actions and four candidate-browser puzzle solutions; other additions need review."
+    },
+    {
+      "sha": "ae90dafbf41073153fb6abb81e968b0026cb10fd",
+      "date": "2026-10-16",
+      "subject": "add(cards): Legends Awakened",
+      "status": "partial",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-23 adds two Gligar prints, Riolu, Nosepass, Metang, Numel, Poliwhirl, two Chinchou prints, Cubone, Oddish, Meowth, Beldum, Drifloon, Dratini, Ledyba, Dragonair, Poliwag, Weepinbell and Gliscor LA. The 24-card candidate passed 168 focused tests, both browser builds, 530 saved states, 3,457 initial actions and four candidate-browser puzzle solutions; other additions need review."
+    },
+    {
+      "sha": "22a8f0a47416049d6ed4cbf1df8672915ce1fceb",
+      "date": "2026-10-16",
+      "subject": "add(cards): Stormfront",
+      "status": "deferred",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied."
+    },
+    {
+      "sha": "27d7646cde7fa6203a13d655568ceabe97c4fea5",
+      "date": "2026-10-15",
+      "subject": "fix(cards): fix Gwynn unplayable with only one nonrule mon in hand, for real this time",
+      "status": "applied",
+      "notes": "Gwynn: permit one or two eligible non-rule-box Pok\u00e9mon; correct printed text and reject invalid plays before moving cards. Seven targeted real-engine checks pass. 530 saved states load; four intentional Gwynn text changes identified, no serialized or card-name changes. Four recorded solutions passed twice. Not deployed."
+    },
+    {
+      "sha": "b8fad7fa2312a835ab6b72acd2914997be032a34",
+      "date": "2026-10-16",
+      "subject": "refactor(cards): SelfKnockoutEffect, Dusknoir LV X",
+      "status": "deferred",
+      "notes": "Self-knockout refactor changes shared reducers, prefabs, effects, turn handling and numerous cards; needs extensive win-condition and saved-game regression tests."
+    },
+    {
+      "sha": "9d4e1c72d299857a2bc202c0735012a746cdcc92",
+      "date": "2026-10-16",
+      "subject": "fix(cards): Stadium Ability Lock - Power Plant/Path to the Peak",
+      "status": "applied",
+      "notes": "Ported Power Plant and Path to the Peak Ability-lock changes using upstream-compatible Stadium immunity checks. Handles entry probes, non-Ability powers, New Moon/Wicked Wind and modern versus pre-regulation rule boxes. Fourteen focused real-engine tests, 530 saved states, both browser builds and four recorded wins passed in isolation; combined 530-state comparison and four recorded puzzle wins passed; engine suite has only the two pre-existing ownership failures. Not deployed. Follow-up registered the previously unreachable Lunatone OBF 92; real catalogue/snapshot/New Moon tests pass, with Solrock PGO as partner and 530 existing snapshots unchanged in isolation."
+    },
+    {
+      "sha": "23fe45865c09a4bb6bf008b5792cf6035254248d",
+      "date": "2026-10-16",
+      "subject": "Merge pull request #870 from nlits-projects/rhyperior-request-addition",
+      "status": "partial",
+      "notes": "Merge duplicates c9aea764b: Rhyhorn/Rhydon SCR ported, Rhyperior Wide Wall deferred until Supporter targeting has a reliable shared hook."
+    },
+    {
+      "sha": "a37c90b3cce80f87f1ed21d6e4d90e37ca07f76a",
+      "date": "2026-10-16",
+      "subject": "Merge pull request #866 from thatrandomperson5/main",
+      "status": "partial",
+      "notes": "Merge includes e315e91da. Pansage PAR ported; Simisage and remaining promo/Stakataka changes need review. Follow-up: ported Stakataka UNB and SMP 180/209 aliases, preserving printed IDs; 14 focused engine/registry tests (including Prism Star Lost Zone) and 530 saved states passed in isolation. Simisage remains deferred."
+    },
+    {
+      "sha": "2d3938518c0ac3e26f2ba3bdcac0b733dfa6a654",
+      "date": "2026-10-16",
+      "subject": "fix(frontend): Animation Fixes",
+      "status": "not-applicable",
+      "notes": "React 3D board animation code is not used by the Angular single-player simulator."
+    },
+    {
+      "sha": "786a7e7fce17fcf8f9e19765081751cf74d586dc",
+      "date": "2026-10-17",
+      "subject": "add(cards): Mega Heatran ex, Lebanne, 30C Energy",
+      "status": "deferred",
+      "notes": "Includes 30C Energy metadata changes plus Mega Evolution promo cards; preserve all print aliases and test individually."
+    },
+    {
+      "sha": "928d9b22862eb6649dfcf50ed69830c52d1d2a5f",
+      "date": "2026-10-17",
+      "subject": "fix(formats): Delta Reign Validation",
+      "status": "partial",
+      "notes": "Added a separate Heracross LOT 18 definition and retained the original Heracross BRS 12 definition unchanged for old snapshots. The new printing checks only the owner's Benched Stage 2 Pok\u00e9mon. Five focused real-engine and identity tests passed. Combined verification: 530 comparable saved states matched, four recorded puzzle wins, seven API tests passing, and 720 engine tests passing with the same two unlabelled ownership failures. Relicanth TEF duplicate TWM file appears unregistered locally while TEF copy is registered. Format validation paths are retired."
+    },
+    {
+      "sha": "d89efe580127a05aff8b0456fd2ad587edbbee2d",
+      "date": "2026-10-17",
+      "subject": "add(cards): Card Requests",
+      "status": "partial",
+      "notes": "Ported Cramorant TWM 58, Oricorio PAL 33, Electabuzz TEF 53, Electivire TEF 54, Litwick/Lampent/Chandelure TWM 36\u201338, Slowpoke PAL 85, Tatsugiri PAR 141 and Tyrogue MEG 71. Each batch verified artwork, real-engine effects, 530 saved states and four recorded puzzle wins. Litwick private-search and full-Bench/empty-deck behavior was adapted. Remaining commit changes require review. Not deployed. Follow-up also ports Blissey SVI with verified image and real-effect tests; same 530-state/four-solution checks. Remaining cards need review. Further follow-up adds Heatmor WHT, adapting reveal and dual-type Fire eligibility; six focused real-engine tests passed. Combined 530-state comparison passed; card/engine suite has only the two pre-existing ownership failures. Reviewed existing Passimian SSP implementation and corrected its computed base damage so prior AttackEffect bonuses remain; the same fix covers Victini LOT. Eight focused direct/copied attack checks pass; all 530 saved states and 3,457 first actions matched in isolation."
+    },
+    {
+      "sha": "c982aa4dba65a03d4b24c7e57db05a85c6f28043",
+      "date": "2026-10-20",
+      "subject": "fix(cards): Delphox CRI",
+      "status": "deferred",
+      "notes": "Upstream relies on a newer multi-type Energy representation and helper absent from this fork; review against current wildcard semantics before porting. Separate Flare Magic scratch correction /private/tmp/prizemap-delphox-round6.fzcHvY adds Bench use, choice, per-card usage and no-op draw checks. It remains unported: direct re-entry through Grand Tree bypasses evolution events, leaving a player marker behind after the same card leaves play. A complete fix needs reliable accepted leave/enter-play lifecycle handling."
+    },
+    {
+      "sha": "0c3c59fb0878e70d602e79b53ff665daf4d3806c",
+      "date": "2026-10-20",
+      "subject": "fix(engine): RetreatEffect Fix",
+      "status": "partial",
+      "notes": "Ported server retreat-selection cancellation fix; upstream also changed the unused React frontend and .gitignore. Seven targeted real-engine checks pass. 530 saved states load; four intentional Gwynn text changes identified, no serialized or card-name changes. Four recorded solutions passed twice. Not deployed."
+    },
+    {
+      "sha": "d8b9ba8fa88248de1d773227bb8b584a6ef51dc1",
+      "date": "2026-10-21",
+      "subject": "fix(cards): ChooseCards Incorrect Order",
+      "status": "partial",
+      "notes": "Ported Gimmighoul SSP search-then-shuffle prompt ordering; two red/green real-engine tests pass, all 530 saved states match current baseline, and four puzzle wins replayed. The other files in this upstream commit remain unreviewed. Not deployed. Follow-up: ported Star Perfume card movement/reveal ordering and Grass dual-type eligibility for Hisuian Lilligant VSTAR ASR, tested with Galvantula and Special Energy. Six focused tests and 530-state candidate comparison passed; remaining files still need review. Further follow-up fixes Durant SIT Energy selection before shuffling; four focused tests and 530-state candidate comparison passed. Another follow-up fixes Energy Search Pro SSP to select, reveal, move and then shuffle, including zero selected; eleven focused engine and ClientSimulator tests include Parasect, prevented movement and redirection. Both browser builds, 530 saved states and four recorded wins passed in isolation. Follow-up corrects Spiritomb UPR Supporter selection and copied-attack attribution through Pok\u00e9mon Tower and Parasect, including Parasect status handling. Thirty-one focused tests and both browser builds passed in isolation. Combined verification: 530 matching saved states, four recorded puzzle wins, root npm test and seven API tests passing; the 100-file engine suite reports 918 passing and the same two unlabelled ownership failures. Follow-up ports Combee ASR, Cyndaquil ASR and Emolga SIT search ordering and copied-attack source attribution. Twenty-two focused tests, both browser builds, 530 saved-state comparisons and four wins passed in isolation; combined verification: 530 matching saved states and initial affordability and hand-playability checks, four recorded puzzle wins, root npm test and seven API tests passing; the 104-file engine suite has 985 passing and the same two unlabelled ownership failures. Follow-up ports Galarian Mr. Rime V ASR search sequencing; nine focused direct, copied and simulator tests, both browser builds, 530 saved states and four wins passed in isolation. Combined verification: 530 matching saved states, 1,860 matching first Item/Supporter action attempts, four recorded puzzle wins, root npm test and seven API tests passing; the 108-file engine suite has 1,050 passing and the same two unlabelled ownership failures. Follow-up ports Team Rocket\u2019s Proton DRI and Holon Transceiver DS search sequencing, plus discard-recovery provenance and selection for Onix UF, Slowpoke UF, Sea\u2019s Manaphy PCGP 146 and Floatzel GL RR. Sixty-one focused tests, both browser builds, 530 matching saved states and four recorded wins passed in isolation. Combined verification: 530 saved states and 3,457 seeded first actions matched; four recorded solutions won. The 117-file engine suite has 1,203 passing and the same two generic copied-handler ownership failures. Follow-up ports Premier Ball GE, Fearow CG and Mystery Plate Alpha SK search and reveal ordering. Twenty focused cases pass; the registered LV.X catalogue has no tag/stage mismatches, and 530 saved states, 3,457 seeded initial action attempts and four recorded wins matched in isolation. Follow-up adds missing Delta tags for Dragonite DS and Meowth HP and corrects Staraptor FB Lv. X SV stage and tag; five real-card search and active-only level-up tests pass (four failed on the old definitions), and 530 saved states match in isolation. Copied Technical Machine discovery remains a separately tracked limitation. Follow-up ports Raticate RG recovery ordering and copied-attack provenance, and Magneton CEC reveal, move, shuffle and self-KO sequencing. Thirteen focused cases include copied reprints/overrides, explicit empty searches, invalid cancellation and Ability provenance. Holon Farmer is deferred: preventing or redirecting its prompted discard cost currently consumes the Supporter, and prompt-continuation rollback is not established. Four real ClientSimulator cases reproduced that issue in the isolated candidate. Combined verification: 530 saved states, 3,457 first actions, four recorded wins, root npm test, seven API tests and production build passed; the 121-file card suite had 1,290 passing and the same two unlabelled ownership failures. A Prism Star discarded from hand can satisfy a discard even when its rule sends it to the Lost Zone; treating all redirected costs as unpaid is unsound. Prompt callbacks close over the original state graph, so cloning the state on failure without rebuilding continuations is also unsafe. Further transaction audit reproduced a rejected synchronous action retaining newly queued wait callbacks. A simple queue snapshot is unsafe: pre-existing callbacks can reference the replaced state or be replayed after already executing; no queue patch was integrated. A real sandbox edit during a pending Farmer cost also invalidates one-time preflight."
+    },
+    {
+      "sha": "01241561da68375d0d26cd06c346903375f54c4b",
+      "date": "2026-10-21",
+      "subject": "add(card images): Refferer Policy Support",
+      "status": "not-applicable",
+      "notes": "React image-loader and legacy full-server config; static simulator uses its own Cloudflare card-image proxy."
+    },
+    {
+      "sha": "fab0f74f9a3184cf31bdf8aaa01f1f957231eb67",
+      "date": "2026-10-21",
+      "subject": "fix(cards): Spiky Energy JTG",
+      "status": "applied",
+      "notes": "Spiky Energy: only apply retaliatory damage when attack damage is positive. Seven targeted real-engine checks pass. 530 saved states load; four intentional Gwynn text changes identified, no serialized or card-name changes. Four recorded solutions passed twice. Not deployed."
+    },
+    {
+      "sha": "321f727fe749859fca77719744d713009a04aeca",
+      "date": "2026-10-21",
+      "subject": "fix(cards): Jumbo Ice Cream PFL",
+      "status": "applied",
+      "notes": "Jumbo Ice: count provided Energy with actual attached-card effects. Seven targeted real-engine checks pass. 530 saved states load; four intentional Gwynn text changes identified, no serialized or card-name changes. Four recorded solutions passed twice. Not deployed."
+    },
+    {
+      "sha": "abc75170d9bdd46727743d4ccaa6fe5ff908569a",
+      "date": "2026-10-22",
+      "subject": "fix(cards, frontend): Forest of Vitality",
+      "status": "partial",
+      "notes": "Ported Forest of Vitality same-turn Grass evolution using an upstream-named StadiumEffect probe and transient per-evolution query; preserves original played-turn timestamps and updates playable-card checks. Added Wicked Wind and Lunatone OBF New Moon checks for this Stadium, including Ability suppression; removed New Moon clickable flag. Fourteen focused real-engine tests, 530 matching saved states, both browser builds and four recorded wins passed in isolation. Stadium immunity remains opt-in for other legacy Stadium effects; React changes are not used. Combined 530-state comparison passed; engine suite reports only the two pre-existing ownership failures. Not deployed. Follow-up registered the previously unreachable Lunatone OBF 92; real catalogue/snapshot/New Moon tests pass, with Solrock PGO as partner and 530 existing snapshots unchanged in isolation."
+    },
+    {
+      "sha": "afe935782ab7a0e255dfa2ad4e22b6bbef00214b",
+      "date": "2026-10-23",
+      "subject": "add(cards): Aura Seeker",
+      "status": "deferred",
+      "notes": "Six M7 cards were trialled, not applied: M7 image mappings unavailable; upstream reorganized paths. See docs/upstream-sync.md."
+    },
+    {
+      "sha": "da4a62d0794bbccc076898227a5f192994bcd468",
+      "date": "2026-10-23",
+      "subject": "fix(frontend): useFromHand Abilities, ShowCardsPrompt error",
+      "status": "deferred",
+      "notes": "Most changes are React UI, but shared prefab and ShowCardsPrompt changes need simulator state/serialization review."
+    },
+    {
+      "sha": "b63dae1a88c7e6cfb5ae0d37df8f641839fe3918",
+      "date": "2026-10-24",
+      "subject": "feat(tools): Card Builder Tool Mass-Import",
+      "status": "not-applicable",
+      "notes": "Only card-builder tooling changed; no simulator runtime or card definitions."
+    },
+    {
+      "sha": "7939057e4d8bb57e5a1e913b17f0b59ce02737aa",
+      "date": "2026-10-24",
+      "subject": "add(cards): Platinum",
+      "status": "partial",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-24 adds 30 Platinum cards including Life Herb in a 62-card batch. 338 focused cases, both browser builds, 530 saved states and four recorded puzzle replays passed; 3,456/3,457 initial actions matched with the sole pre-existing intentional Sob marker change. More additions remain to review."
+    },
+    {
+      "sha": "702953a83cfe3f82635236fdc3d29cccc1770e7f",
+      "date": "2026-10-24",
+      "subject": "add(cards): Rising Rivals",
+      "status": "deferred",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied."
+    },
+    {
+      "sha": "963be5b53027ed1d65adf39c9496cf859d4e036b",
+      "date": "2026-10-24",
+      "subject": "add(cards): Supreme Victors",
+      "status": "deferred",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied."
+    },
+    {
+      "sha": "2c6c5f87aad4e4fbc6c94118c31741eb563b32c6",
+      "date": "2026-10-25",
+      "subject": "add(cards): Supreme Victors Pt 2",
+      "status": "partial",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-22 ports 24 reviewed Supreme Victors cards: Bidoof, Buizel, Chimchar, Combee, Corphish, Croagunk, Doduo, Drifloon, Geodude, Kricketot, Magikarp, Magnemite, Mankey, Meditite, Meowth, Pikachu, Piplup, Sandshrew, Seel, Shinx, Shroomish, Starly, Surskit and Turtwig. Candidate passed 127 focused and 153 prior tests, both browser builds, 530 saved states, 3,457 initial actions and four recorded puzzle replays. Other upstream additions remain to review."
+    },
+    {
+      "sha": "47e01fed3e9af76c9c6c6c17e07684387514e3a9",
+      "date": "2026-10-25",
+      "subject": "add(cards): Arceus",
+      "status": "partial",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-21 ports Cherubi, Electrike 63, Gastly 64, Treecko 79, Wingull 81, Gulpin 66, Charmeleon, Grovyle 39, Bagon, Bronzor 34/54, Rapidash 47, Omanyte, Tangela 77, Graveler and Wormadam Sandy Cloak. Ninety-one focused tests, both browser builds, 530 saved states, 3,457 initial actions and four recorded puzzle wins passed in isolation; other additions still require review."
+    },
+    {
+      "sha": "bc849aeed16bde6aad2c0f82faaa455c233bd53e",
+      "date": "2026-10-25",
+      "subject": "refactor(cards): By Damage From An Attack Update",
+      "status": "deferred",
+      "notes": "Cross-cutting refactor changes shared engine effects and many card handlers; requires per-card effect, ownership, knock-out, damage, serialization and recorded-puzzle tests before port."
+    },
+    {
+      "sha": "5ea0f9403a2b5c753d2bc7bb452badb6b7cd931d",
+      "date": "2026-10-25",
+      "subject": "add(cards): HGSS",
+      "status": "partial",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-24 adds 32 HeartGold & SoulSilver base-set cards in a 62-card batch. 338 focused cases, both browser builds, 530 saved states and four recorded puzzle replays passed; 3,456/3,457 initial actions matched with the sole pre-existing intentional Sob marker change. More additions remain to review."
+    },
+    {
+      "sha": "eeecf2d072256fd04a40f1499bfc8a6134b39107",
+      "date": "2026-10-25",
+      "subject": "add(cards): Unleashed",
+      "status": "deferred",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied."
+    },
+    {
+      "sha": "e92c50aea203174c1eb5fbbf527777e1215aba46",
+      "date": "2026-10-25",
+      "subject": "fix(tools): Card Builder Tool Promo Issue",
+      "status": "not-applicable",
+      "notes": "Only card-builder tooling changed; no simulator runtime or card definitions."
+    },
+    {
+      "sha": "6e508e421b47230ccc65bc2a1c93fbd0d7edbc3f",
+      "date": "2026-10-25",
+      "subject": "add(cards): Diamond & Pearl Promos",
+      "status": "deferred",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied."
+    },
+    {
+      "sha": "a568074a4b966aa46808b893aca4c44d3a41bfc5",
+      "date": "2026-10-25",
+      "subject": "add(cards): HeartGold & SoulSilver Promos",
+      "status": "deferred",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied."
+    },
+    {
+      "sha": "1db0a050c54004b6419a69313896a94aed74ca7a",
+      "date": "2026-10-25",
+      "subject": "add(cards): Pop Series",
+      "status": "deferred",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied."
+    },
+    {
+      "sha": "4ab7d77926415e04e2d504e45c679d4b2a9554f4",
+      "date": "2026-10-25",
+      "subject": "add(cards): Remaining DPP Cards",
+      "status": "deferred",
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied."
+    },
+    {
+      "sha": "aee41bac3a20a232f12afca63c3368d726b1ff15",
+      "date": "2026-10-25",
+      "subject": "fix(tools): Card Builder Fixes",
+      "status": "not-applicable",
+      "notes": "Only card-builder tooling changed; no simulator runtime or card definitions."
+    },
+    {
+      "sha": "d4d90492ac3d1b0e2e2c37cf15aa4a2676903edd",
+      "date": "2026-10-27",
+      "subject": "fix(cards): Mega Rayquaza ex M6",
+      "status": "partial",
+      "notes": "Adapted Mega Rayquaza ex DLR 84 and the 138/141 variants, preserving the upstream M6 alias. Added deterministic replayable subset shuffling, effective Energy-type counting, three-Prize and custom-win checks. Full upstream commit is not claimed; the private-look attachment optionality lacks a card-specific official ruling."
+    },
+    {
+      "sha": "e8184d0a0581fe7bad4c2aee2323f23d79c8fc9c",
+      "date": "2026-10-29",
+      "subject": "fix(cards): Bug Out",
+      "status": "deferred",
+      "notes": "Adds Bug Out helper and effects for Delta Reign cards that are absent from this fork; reconsider after those cards are introduced."
+    },
+    {
+      "sha": "03f82b7489752d165019fd4c9d9b9fd7662b9054",
+      "date": "2026-11-01",
+      "subject": "fix(cards): Bug Fixes",
+      "status": "partial",
+      "notes": "Ported Arboliva ex DRI Oil Machine Gun Weakness/Resistance fix; 3 red/green real-game tests, 530 matching states, four recorded wins, both browser builds pass. Remaining card fixes in this multi-card commit not yet reviewed. Not deployed. Follow-up: Rosa\u2019s Encouragement now permits an optional zero selection, routes Energy through MoveCardsEffect, and enforces the attachment prompt\u2019s blocked targets. Three real-store tests pass; combined 530-state comparison passed; engine suite reports only the two pre-existing ownership failures."
+    },
+    {
+      "sha": "450a3e6a50d521d0749bf027cb69aa7b19671b23",
+      "date": "2026-11-01",
+      "subject": "fix(board): Dual Stadium Angular Board Discard Fix",
+      "status": "deferred",
+      "notes": "Fixes dual-stadium rendering in Angular; this fork lacks upstream dual-stadium engine/display helpers. Requires feature and serialized-state compatibility before port."
+    },
+    {
+      "sha": "0ced6beca7e01906bfe4fb789deb7b1df50845dd",
+      "date": "2026-11-01",
+      "subject": "fix(engine): Evolve Effect In-Play Fix",
+      "status": "partial",
+      "notes": "Ported a reviewed, source-aware evolution preflight and post-evolution event instead of upstream's unsafe early movement. Charizard ex OBF now checks Ability suppression after a successful hand-origin evolution; Rare Candy counts as hand-origin, deck evolution does not. Nine existing restrictions preflight on an isolated clone; five deck callers preserve source provenance; Regenerative Energy respects hand origin. Combined verification: 41 focused cases, 530 matching saved states, four recorded puzzle wins, seven API tests passing, and 780 engine tests passing with the same two unlabelled ownership failures. Round-21 also migrates 16 reviewed existing evolution Abilities, including Drizzile and Parasect, to the accepted-evolution event. It corrects Arboliva healing with an empty deck. 103 focused tests and 41 prior lifecycle tests pass; the unchanged baseline failed 60 focused cases. Both browser builds, 530 saved states, 3,457 initial actions and four recorded puzzle solutions passed in isolation. Other legacy evolution Abilities remain to be reviewed. Clone isolation does not guarantee safety for arbitrary future closures, and the existing ordinary hand-evolution player-marker cleanup remains broad. Round-22 migrates 12 additional hand-evolution Abilities (Bewear, Alakazam, Kadabra, Haunter, Mismagius, Rhyperior, Floette, Butterfree, Forretress, both Galarian Obstagoon prints, Alcremie). 101 focused tests passed against 61 pass/40 fail baseline; both browser builds, 530 saved states, 3,457 initial actions and four candidate-browser puzzle solutions passed. More JUST_EVOLVED callers remain to review."
+    },
+    {
+      "sha": "528fe2e58b075b2e62a007580821670c9567313a",
+      "date": "2026-11-01",
+      "subject": "fix(cards): Dragonite UNM Fix",
+      "status": "applied",
+      "notes": "Ported Hurricane Charge hand selection and per-type Energy logic with existing re-entry marker reset retained. Five focused real-engine tests, 530 saved-state comparisons, both browser builds and four recorded wins passed. Not deployed."
+    },
+    {
+      "sha": "ddaeb5e250e912076d6b0e0415f3ac07c7b2f0f4",
+      "date": "2026-11-02",
+      "subject": "fix(cards): Strange Timepiece Fix",
+      "status": "partial",
+      "notes": "Ported upstream playable-card check using the same evolved-Psychic eligibility as effect execution. Existing fork number-selection UI already excludes Basic Pok\u00e9mon and handles out-of-order evolution stacks, so retained it rather than copying upstream prompt rewrite. Focused regression tests; 530 saved-state comparison unchanged. Not deployed."
+    },
+    {
+      "sha": "c6203d415f255fb7dfe46c3dc1ac129785f06739",
+      "date": "2026-11-02",
+      "subject": "fix(formats): Standard Nightly Validation",
+      "status": "not-applicable",
+      "notes": "Standard deck legality validation in React/Angular deck editors and the retired full-server deck controller; those runtime paths are absent from the single-player simulator."
+    },
+    {
+      "sha": "779f58397acd9d6fc7251f1c3532c5eb3d8ae0aa",
+      "date": "2026-11-02",
+      "subject": "fix(cards): Yanmega ex DRI",
+      "status": "applied",
+      "notes": "Yanmega ex: support fewer than three movable Energy and no eligible Bench targets. Seven targeted real-engine checks pass. 530 saved states load; four intentional Gwynn text changes identified, no serialized or card-name changes. Four recorded solutions passed twice. Not deployed."
+    },
+    {
+      "sha": "374a6f0b66f5cf1dddbf2d5a5d99073e8c53e074",
+      "date": "2026-11-02",
+      "subject": "fix(cards): Redeemable Ticket",
+      "status": "applied",
+      "notes": "Ported Redeemable Ticket deck-top/deck-bottom ordering and no-prizes legality; retained shared trainer cleanup and additionally reset face-up/public flags for replacement prizes. Four real-store tests pass after the fix versus one before, covering sparse prizes, short deck, shuffling, secrecy, and item cleanup. 530 saved Twinleaf states match the previous baseline; four recorded puzzle solutions replayed to wins; both browser builds passed. Not deployed."
+    },
+    {
+      "sha": "bf6b5cc89875789b6c70c6f6b61a9a9137724f92",
+      "date": "2026-11-02",
+      "subject": "fix(cards): Magnezone PLS Fix",
+      "status": "deferred",
+      "notes": "Magnezone extra-Supporter handling requires a global allowance-gate change to support evolution after a Supporter was played, plus interactions with other extra-Supporter effects. Marker-only patch is incomplete; deferred."
+    },
+    {
+      "sha": "91017d1fe0924f359c8790a05324f4cefd91668c",
+      "date": "2026-11-02",
+      "subject": "fix(cards): Mew ex 30C, Mewtwo ex 30C",
+      "status": "deferred",
+      "notes": "Local Mew ex/Mewtwo ex already provide English 30C usSetNumber while preserving the Japanese raw set/number. Upstream overwrites raw fields and may alter deck import/print identity; needs alias and saved-puzzle compatibility tests."
+    },
+    {
+      "sha": "79153f05a776ac4045a0ce44af5af4add700c419",
+      "date": "2026-11-02",
+      "subject": "fix(cards): Antique Armor Fossil PBL",
+      "status": "partial",
+      "notes": "Ported upstream single-stage damage reduction to existing Antique Shield Fossil M5, retaining its legacy name and print identifier; added narrowly scoped in-play recognition so it functions as a Pok\u00e9mon. Nineteen focused tests cover real Weakness and Resistance, Tools, Garbotoxin, play, switch, KO, Lost City, and snapshot round-trip. Added opt-in post-Weakness damage reduction and corrected Lost City routing for Trainer fossils. Candidate matched 530 saved states; combined 530-state comparison and card/engine suite passed apart from the two pre-existing ownership failures. Not deployed."
+    },
+    {
+      "sha": "902ae6d8b509d07dbb986078d854ec49dc6dc212",
+      "date": "2026-11-02",
+      "subject": "feat(frontend): Format Rule Options - Angular",
+      "status": "not-applicable",
+      "notes": "Angular multiplayer create-game/invite UI and its translations were removed from the single-player simulator."
+    },
+    {
+      "sha": "13cb10284a8239f99fbd0b0c2dfe925e290a8e64",
+      "date": "2026-11-03",
+      "subject": "feat(rules): Retro Format Game Rules",
+      "status": "partial",
+      "notes": "Ported opt-in oldBurnRule with no new serialized field in legacy snapshots. Retro burn flips before damage, never removes Burn on heads, and retains actual Wela Volcano Park/Centiskorch recovery-suppression semantics instead of treating them as fixed damage-coin outcomes. Eighteen focused cases, both browser builds, 530 saved states and 3,457 first actions passed in isolation; combined verification pending. Follow-up adds optional oneRetreatPerTurn, oneStadiumPerTurn and allowSameNameStadium; omitted fields keep modern defaults and the existing snapshot shape. Twenty-seven tests, 530 saved states, 3,457 first actions and four puzzle wins passed in isolation, including compact snapshots, Prism Star and Hyperrogue exceptions. Confused retreat, setup and frontend retro options need separate audit. The optional flag has no emitted default under ES2017 or ES2022 class-field semantics, rejects explicit non-boolean values, and preserves the prior wire shape. No stored simulator payload in the 530-state corpus explicitly used this option. The behavior of a hypothetical external false burnFlipResult override in retro mode is not established."
+    },
+    {
+      "sha": "350cc2178c638ee10160251bc82b4eaee5c167ff",
+      "date": "2026-11-03",
+      "subject": "add(frontend): Rules UI - React",
+      "status": "not-applicable",
+      "notes": "React multiplayer invite/rule-selection UI is absent from the single-player simulator."
+    },
+    {
+      "sha": "ffd7c12f5da0db484966ae0f3d0c49e4d149af8b",
+      "date": "2026-11-06",
+      "subject": "refactor(cards): M6 to DLR Pt. 1",
+      "status": "partial",
+      "notes": "Ported the Delta Reign printed catalogue and kept upstream fullName identities where applicable; DLR numbered identities are resolved before generic suffix removal. Other Mega Deck and unrelated changes in this commit remain to be reviewed."
+    },
+    {
+      "sha": "958482a2c741e332c9f446ba540c68103f7d2091",
+      "date": "2026-11-07",
+      "subject": "refactor(cards): Mega Decks to DLR Pt. 2",
+      "status": "partial",
+      "notes": "Ported the Delta Reign cards and reprints, including explicit Energy and numbered artwork identities. Other Mega Deck and unrelated changes in this commit remain to be reviewed."
+    },
+    {
+      "sha": "d5a8bd6eac3580171945f611af848f9a2ca73bab",
+      "date": "2026-11-07",
+      "subject": "fix(cards): start.js",
+      "status": "not-applicable",
+      "notes": "The legacy full server start script is not used by the static simulator or Vercel in-process editor API."
+    },
+    {
+      "sha": "b014163c0791539d454c2cbab58b7c4a45d327da",
+      "date": "2026-11-07",
+      "subject": "add(cards): DLR SR's, New M7 Cards",
+      "status": "partial",
+      "notes": "Ported Delta Reign alternate prints through 141; unrelated M7 additions and other changes remain deferred."
+    },
+    {
+      "sha": "837aebeb5f7fbb0f26d1646e958875f16ae55134",
+      "date": "2026-11-07",
+      "subject": "fix(cards): Smeargle UD",
+      "status": "deferred",
+      "notes": "A real Smeargle UD + opposing Tierno test confirms that copying after a Supporter was already played is incorrectly rejected. Upstream's unconditional restore fixes that case, but a real copied Lt. Surge's Strategy test shows it also discards the copied effect's supporter-allowance change (-2 becomes 0). A scratch delta-based restore passes Tierno, Lt. Surge and asynchronous Janine cases, but real-engine regressions confirm ordinary TrainerEffect fan-out still treats a copied effect as playing a Supporter: Krookodile XY Bother blocks copied Tierno, and Hitmontop VIV counts a copied Bea as played. Gwynn M5's `supporterTurn === 0` check and the asynchronous end-turn clause on Misty's Cheerfulness need source-aware handling too. A copied-effect context must survive prompt callbacks; audit play observers before porting. Reproducers: /private/tmp/prizemap-smeargle-round5 and /private/tmp/prizemap-smeargle-review.r2NQbk."
+    },
+    {
+      "sha": "cfd71b70ee4c917033874a57aff15aca8d6177f6",
+      "date": "2026-11-09",
+      "subject": "add(cards): New M7 Cards",
+      "status": "deferred",
+      "notes": "Adds five Aura Seeker M7 cards, but all use placeholder cardback artwork and FLO fullName values despite set M7. The two Urshifu handlers award optional-discard effects before confirming the discard; validate identities, real artwork and timing before porting. Detailed identity, artwork and implementation audit: docs/upstream-m7-audit-2026-11-10.md. Japanese reveals are reported via official Pok\u00e9mon Card videos; English identities and working artwork mappings remain unverified. Urshifu requires completed-discard and spread-damage handling; Meowth and Persian need timing and modifier corrections."
+    },
+    {
+      "sha": "214480db84a7dd861467da06d55010af6dbbaf36",
+      "date": "2026-11-09",
+      "subject": "fix(cards): M7 Imports",
+      "status": "deferred",
+      "notes": "Follow-up imports for the five Aura Seeker cards; deferred with cfd71b70 pending artwork, identity and gameplay review. Detailed identity, artwork and implementation audit: docs/upstream-m7-audit-2026-11-10.md. Japanese reveals are reported via official Pok\u00e9mon Card videos; English identities and working artwork mappings remain unverified. Urshifu requires completed-discard and spread-damage handling; Meowth and Persian need timing and modifier corrections."
+    },
+    {
+      "sha": "1663d6a626b85f3035e0e0bd7be187623449d06b",
+      "date": "2026-11-09",
+      "subject": "feat(cube): Cube Draft WIP",
+      "status": "deferred",
+      "notes": "Cube Draft and React/editor work are outside the single-player simulator. Shared evolution changes also alter ordinary name matching (including prefix matches), so they require a separate compatibility and legality audit before any engine port."
+    },
+    {
+      "sha": "711837a0e11635ce72ea3ca789d3c889c9ebade9",
+      "date": "2026-11-09",
+      "subject": "refactor(ui): React 2D Frontend",
+      "status": "not-applicable",
+      "notes": "Changes only the upstream React 2D frontend and its assets. This fork uses the Angular simulator frontend; no server or card logic is changed."
+    },
+    {
+      "sha": "c531dc84f6d079e7531a9c3986a2f51ddeecad6c",
+      "date": "2026-11-10",
+      "subject": "feat(Share State): Added State Sharing, Undo",
+      "status": "not-applicable",
+      "notes": "Upstream networked snapshot sharing and multiplayer undo, including UI, server persistence and socket APIs, are outside the local single-player simulator. PrizeMap owns its undo controls; the existing simulator restoreState retains its stronger local cleanup and derived-state handling."
+    }
+  ]
+}

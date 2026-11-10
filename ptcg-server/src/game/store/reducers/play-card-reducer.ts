@@ -13,9 +13,10 @@ import { PokemonCardList } from '../state/pokemon-card-list';
 import { State, GamePhase } from '../state/state';
 import { StoreLike } from '../store-like';
 import { TrainerCard } from '../card/trainer-card';
-import { TrainerType } from '../card/card-types';
+import { CardTag, TrainerType } from '../card/card-types';
 import { Effect } from '../effects/effect';
 import { StateUtils } from '../state-utils';
+import { UsePowerEffect } from '../effects/game-effects';
 
 function findCardList(state: State, target: CardTarget): CardList | undefined {
   const player = target.player === PlayerType.BOTTOM_PLAYER
@@ -74,6 +75,15 @@ export function playCardReducer(store: StoreLike, state: State, action: Action):
           throw new GameError(GameMessage.INVALID_TARGET);
         }
 
+        // Some hand Abilities place an Evolution Pokémon directly on the Bench.
+        // An occupied target still follows the normal evolution path.
+        if (action.target.player === PlayerType.BOTTOM_PLAYER && action.target.slot === SlotType.BENCH && target.cards.length === 0) {
+          const power = handCard.powers.find(item => item.useFromHand && item.useFromHandToBench);
+          if (power) {
+            const handTarget = { player: PlayerType.BOTTOM_PLAYER, slot: SlotType.HAND, index: action.handIndex };
+            return store.reduceEffect(state, new UsePowerEffect(player, power, handCard, handTarget, target));
+          }
+        }
         const effect = new PlayPokemonEffect(player, handCard, target, action.target.slot, action.target.index);
         return store.reduceEffect(state, effect);
       }
@@ -92,12 +102,19 @@ export function playCardReducer(store: StoreLike, state: State, action: Action):
             effect = new PlaySupporterEffect(player, handCard, target);
             break;
           case TrainerType.STADIUM: {
+            // A dual Stadium is played as one card. Validate before other Stadium
+            // effects (such as Chaotic Swell) can consume either half.
+            if (handCard.tags.includes(CardTag.DUAL_STADIUM) && !player.hand.cards.some(card =>
+              card !== handCard && card.name === handCard.name && card.set === handCard.set
+              && card.tags.includes(CardTag.DUAL_STADIUM) && card.setNumber !== handCard.setNumber)) {
+              throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
+            }
             const stadium = StateUtils.getStadiumCard(state);
             const isHyperrogueOverPrismTower = handCard.name === 'Hyperrogue Ange Floette' && stadium?.name === 'Prism Tower';
-            if (player.stadiumPlayedTurn === state.turn && !isHyperrogueOverPrismTower) {
+            if (state.rules.oneStadiumPerTurn !== false && player.stadiumPlayedTurn === state.turn && !isHyperrogueOverPrismTower) {
               throw new GameError(GameMessage.STADIUM_ALREADY_PLAYED);
             }
-            if (stadium && stadium.name === handCard.name) {
+            if (state.rules.allowSameNameStadium !== true && stadium && stadium.name === handCard.name) {
               throw new GameError(GameMessage.SAME_STADIUM_ALREADY_IN_PLAY);
             }
             // Commit the allowance only after Trainer cancellation has allowed the play.

@@ -2,12 +2,13 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, EnergyType, SuperType, CardTag } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils, GameMessage, PlayerType, SlotType, ConfirmPrompt, ShuffleDeckPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
 import { AttachEnergyPrompt } from '../../game/store/prompts/attach-energy-prompt';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { IS_ABILITY_BLOCKED, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Charizardex extends PokemonCard {
+export class Charizardex extends PokemonCard implements CopiedAttackOwnershipContract {
 
   public regulationMark = 'G';
 
@@ -58,7 +59,7 @@ export class Charizardex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if ((effect instanceof EvolveEffect) && effect.pokemonCard === this) {
+    if ((effect instanceof AfterEvolveEffect) && effect.pokemonCard === this && effect.playedFromHand) {
       const player = effect.player;
 
       // Try to reduce PowerEffect, to check if something is blocking our ability
@@ -100,17 +101,7 @@ export class Charizardex extends PokemonCard {
       });
     }
 
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      const prizesTaken = 6 - opponent.getPrizeLeft();
-
-      const damagePerPrize = 30;
-
-      effect.damage = this.attacks[0].damage + (prizesTaken * damagePerPrize);
-    }
+    state = Charizardex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
 
     if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
       const player = effect.player;
@@ -123,6 +114,23 @@ export class Charizardex extends PokemonCard {
 
       effect.preventDefault = true;
     }
+    return state;
+  }
+
+  /** Attack-owned behavior only; the Tera rule remains on the actual card. */
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+
+      const prizesTaken = 6 - opponent.getPrizeLeft();
+
+      const damagePerPrize = 30;
+
+      effect.damage = this.attacks[0].damage + (prizesTaken * damagePerPrize);
+    }
+
     return state;
   }
 }

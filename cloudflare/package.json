@@ -1,0 +1,17 @@
+{
+  "name": "prizemap-simulator-assets",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.0.0" },
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "node ../tools/deploy-simulator.cjs",
+    "test": "node --test worker.spec.mjs retain-previous-release.spec.mjs ../tools/deploy-simulator.spec.cjs ../tools/sync-prizemap-engine.spec.cjs",
+    "test:delivery": "node check-delivery.mjs",
+    "check": "wrangler deploy --dry-run"
+  },
+  "devDependencies": {
+    "wrangler": "4.155.0"
+  }
+}

@@ -1,8 +1,9 @@
-import { Card, ChooseCardsPrompt, EnergyCard, GameLog, GameMessage, State, StateUtils, StoreLike } from '../../game';
-import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
+import { EnergyCard, State, StoreLike } from '../../game';
+import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { MOVE_CARDS, SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { RECOVER_DISCARD_BY_ATTACK } from '../../game/store/prefabs/recover-discard-attack';
 
 export class Onix extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -35,36 +36,7 @@ export class Onix extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      const hasSupporter = player.discard.cards.some(c => {
-        return c instanceof EnergyCard;
-      });
-
-      if (!hasSupporter) {
-        return state;
-      }
-
-      let cards: Card[] = [];
-      return store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_HAND,
-        player.discard,
-        { superType: SuperType.ENERGY },
-        { min: 0, max: 1, allowCancel: true }
-      ), selected => {
-        cards = selected || [];
-
-        if (cards.length > 0) {
-          cards.forEach((card, index) => {
-            store.log(state, GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
-          });
-
-          SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-          MOVE_CARDS(store, state, player.discard, player.hand, { cards: cards });
-        }
-      });
+      return RECOVER_DISCARD_BY_ATTACK(store, state, effect, card => card instanceof EnergyCard, 1, false);
     }
 
     return state;

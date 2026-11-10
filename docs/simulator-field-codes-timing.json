@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "measuredAt": "2026-11-07T02:48:33.612Z",
+  "desktopNodeOnly": true,
+  "runtime": "v24.22.1",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M4 Pro",
+  "method": "Actual production decodePuzzlePayload via CLI decoder(); identical validated compact JSON; gzip level 6; paired alternating order; output equality checked outside timed spans. No browser, phone, engine setup, DOM, network or producer encoding timings.",
+  "warmupPerFormatPerFixture": 100,
+  "samplesPerFormatPerFixture": 500,
+  "decoderSha256": "4310a9a2c11745f1298febf1570791863aaef1b52bc83cc53f2d2a18faa5fdcb",
+  "fieldHelperSha256": "16a4c7949de06989d0547984c5c9dfe64ad39073e4c21a8f1cd98b971d5d3602",
+  "fixtures": [
+    {
+      "name": "Trapped in the Phantom Maze",
+      "fixture": "tools/.puzzle-playthrough/phantom-maze.solution.json",
+      "compactJsonUtf8Bytes": 7637,
+      "decodedBase64Characters": 10184,
+      "decodedBase64Sha256": "e9c23a99ba29e61330efa6d157dcfe07b09be8f016d82c2edb1a0591cd7b0046",
+      "everyDecodedOutputIdentical": true,
+      "gz1": {
+        "tokenCharacters": 2238,
+        "compressedBytes": 1675,
+        "medianMs": 0.1495,
+        "p95Ms": 0.1765,
+        "minMs": 0.1282
+      },
+      "gz2": {
+        "tokenCharacters": 1858,
+        "compressedBytes": 1390,
+        "medianMs": 0.2168,
+        "p95Ms": 0.2545,
+        "minMs": 0.1931
+      },
+      "gz2MinusGz1MedianMs": 0.0673
+    },
+    {
+      "name": "Explosive Hand",
+      "fixture": "tools/.puzzle-playthrough/explosive-hand.solution.json",
+      "compactJsonUtf8Bytes": 7109,
+      "decodedBase64Characters": 9480,
+      "decodedBase64Sha256": "bc51ad4c7cb0bc7c68936944d2ea62ad28b0fdc3cb6cb69247a9facfea6ead8b",
+      "everyDecodedOutputIdentical": true,
+      "gz1": {
+        "tokenCharacters": 1942,
+        "compressedBytes": 1453,
+        "medianMs": 0.1392,
+        "p95Ms": 0.1551,
+        "minMs": 0.1208
+      },
+      "gz2": {
+        "tokenCharacters": 1602,
+        "compressedBytes": 1198,
+        "medianMs": 0.1785,
+        "p95Ms": 0.2057,
+        "minMs": 0.1553
+      },
+      "gz2MinusGz1MedianMs": 0.0393
+    },
+    {
+      "name": "Breaking Through the Wall",
+      "fixture": "tools/.puzzle-playthrough/breaking-through-wall.solution.json",
+      "compactJsonUtf8Bytes": 7464,
+      "decodedBase64Characters": 9952,
+      "decodedBase64Sha256": "ee3cb688a7968965cc47c4e6e63d7f0d37c93a367f39c0b58ead55121d2a68c2",
+      "everyDecodedOutputIdentical": true,
+      "gz1": {
+        "tokenCharacters": 2068,
+        "compressedBytes": 1548,
+        "medianMs": 0.1462,
+        "p95Ms": 0.1679,
+        "minMs": 0.1287
+      },
+      "gz2": {
+        "tokenCharacters": 1730,
+        "compressedBytes": 1294,
+        "medianMs": 0.2131,
+        "p95Ms": 0.26,
+        "minMs": 0.1867
+      },
+      "gz2MinusGz1MedianMs": 0.0669
+    },
+    {
+      "name": "Something's Fishy",
+      "fixture": "tools/.puzzle-playthrough/somethings-fishy.solution.json",
+      "compactJsonUtf8Bytes": 7247,
+      "decodedBase64Characters": 9664,
+      "decodedBase64Sha256": "0aff84e561058bd114bbd39fd49dc1e35096d843fda309694a5819407fb9f816",
+      "everyDecodedOutputIdentical": true,
+      "gz1": {
+        "tokenCharacters": 2090,
+        "compressedBytes": 1564,
+        "medianMs": 0.1419,
+        "p95Ms": 0.159,
+        "minMs": 0.1235
+      },
+      "gz2": {
+        "tokenCharacters": 1754,
+        "compressedBytes": 1312,
+        "medianMs": 0.2037,
+        "p95Ms": 0.2398,
+        "minMs": 0.1792
+      },
+      "gz2MinusGz1MedianMs": 0.0618
+    },
+    {
+      "name": "Deck out with Dengo",
+      "fixture": "tools/fixtures/deck-out-with-dengo.snapshot.json.gz",
+      "compactJsonUtf8Bytes": 7500,
+      "decodedBase64Characters": 10000,
+      "decodedBase64Sha256": "4d955544f15e32170a63d419f737e6a030079723f16dc289aebe3b2a05c425c4",
+      "everyDecodedOutputIdentical": true,
+      "gz1": {
+        "tokenCharacters": 2194,
+        "compressedBytes": 1642,
+        "medianMs": 0.1447,
+        "p95Ms": 0.1617,
+        "minMs": 0.1274
+      },
+      "gz2": {
+        "tokenCharacters": 1858,
+        "compressedBytes": 1390,
+        "medianMs": 0.1845,
+        "p95Ms": 0.2124,
+        "minMs": 0.164
+      },
+      "gz2MinusGz1MedianMs": 0.0398
+    }
+  ]
+}

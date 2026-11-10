@@ -1,0 +1,145 @@
+Twinleaf handoff — Holo rendering and action processing only
+November 9, 2026
+
+REQUEST
+Finish integrating, reviewing and testing the no-Holo/low-graphics rendering and
+simulator action-processing improvements in the current twinleafgg source.
+Startup optimization is deferred. Do not implement retained/prewarmed WebViews,
+new-puzzle bridge/lifecycle changes, code-cache/bootstrap changes, lazy/subset card
+catalogues, or constructor-allocation cleanup as part of this work.
+
+CURRENT WORKING-TREE STATE
+Repository: /Users/jerrytrosclair/Documents/GitHub/twinleafgg
+The requested performance changes are ALREADY applied locally, mixed with newer
+card/rules work from the main chat. Review and finish them; do not reapply the
+historical patch or replace files wholesale. Preserve all newer rules fixes.
+In particular, the current deepClone keeps functions callable; the older performance
+patch predates that correction and must not overwrite it.
+
+The profiling chat restored its exact pre-startup versions of:
+  ptcg-server/src/game/store/card/pokemon-card.ts
+  ptcg-server/src/game/store/card/trainer-card.ts
+and removed only its new card-defaults.spec.ts. All three files were checked against
+the profiling snapshot before this narrow rollback; no intervening edits were lost.
+The prior startup report is historical evidence, not the implementation plan.
+The currently installed standalone profiling APK includes that now-deferred cleanup;
+neither profiling APK is a release candidate. Rebuild from reviewed current source.
+
+RETAIN AND FINISH
+
+1. Automatic Holo OFF and cheaper rendering on low-end hardware.
+   Files:
+   ptcg-play/src/app/shared/services/display-performance.ts and .spec.ts
+   ptcg-play/src/app/shared/services/settings.service.ts
+   ptcg-play/src/app/shared/cards/card/card.component.ts, .scss and .spec.ts
+   ptcg-play/src/app/table/hand/hand.component.scss
+   ptcg-play/src/theme/_hand-card-styles.scss
+   tools/test-client-services.cjs
+
+   Keep the existing policy: a valid explicit Holo preference wins; otherwise
+   reduced motion or conservative low-hardware hints disable effects. The 3 GB
+   Samsung A03s reports deviceMemory=2 and hardwareConcurrency=8, so core count
+   alone misses it. Low hardware means memory <=2, or <=4 cores with memory <=4
+   or unknown. Ignore invalid hints, preserve the ordinary default when browser
+   APIs provide no low-end signal, and do not persist an automatic decision as
+   a manual preference. resetHoloEnabled() returns to automatic behavior.
+
+   Remove only visual effect classes/overlays. NEVER hide every ::after element:
+   a card-container pseudo-element reserves aspect ratio, and doing so made cards
+   disappear in the first discarded experiment. Preserve artwork, dimensions,
+   stack geometry/counts, playable borders and arrows.
+
+   Retain the low-graphics removal of expensive hand-card filter shadows/brightness
+   and redundant forced layers. End preference/artwork subscriptions when each
+   card is destroyed, retaining the 200-mount/destroy observer regression.
+
+2. Faster state cloning, preserving current engine semantics.
+   Files:
+   ptcg-server/src/utils/utils.ts and utils.spec.ts
+   Use one WeakMap per deepClone call instead of repeatedly searching refMap.
+   Preserve ignored classes, object cycles/shared references, prototype/own-field
+   behavior, caller-supplied refMap, legacy array-copy behavior and callable
+   function references. Keep the newer function/copy/snapshot fixes already in
+   the current source; do not substitute structuredClone or JSON cloning.
+
+3. Recalculate playable-card hints at stable action boundaries.
+   Files:
+   ptcg-server/src/game/store/store.ts
+   ptcg-server/src/client/simulator.spec.ts
+   ptcg-server/scripts/test-client.cjs
+   ptcg-server/tsconfig.client-test.json
+   Derive hints after restore and completed dispatch/prompt-continuation paths,
+   before notifying observers. Avoid rescanning Trainers after every nested
+   effect or display-only HP/type query. Preserve sandbox, reorder, concede/abort
+   and prompt paths; append-only logs need no rules scan.
+
+   This changes the schedule of presentation hints, not actual action legality.
+   Retain reducers, actual validation, rollback, effect fan-out, markers, callbacks,
+   prompts and all registered cards. Do not filter handlers by apparent relevance:
+   cards activated from hand/discard and indirectly copied effects must still run.
+
+MEASURED BENEFIT ON THE ANDROID PHONE
+Matched Phantom Maze Munkidori bench action, three runs/version, medians:
+  Before: 4,217.6 ms synchronous processing; 234 Trainer probes.
+  WeakMap clone alone: 2,381.7 ms; 234 probes.
+  Both processing changes: 201.6 ms; 6 probes (95.2% less processing time).
+Hand, bench, turn/phase, prompts and playable-card IDs matched. This invokes the
+normal GameService path; it excludes physical drag recognition and server work.
+With Holo already OFF, simpler hand presentation improved matched scroll callback
+cadence from about 27 to 59–60 per second. These are requestAnimationFrame rates,
+not guaranteed hardware frame presentation; the weak GPU still showed some jank.
+
+VALIDATION / FINISH CRITERIA
+Rebuild from one reviewed CURRENT source snapshot using the project's normal
+prepare:simulator pipeline. Do not reuse stale browser builds or generated metadata.
+Use current package scripts: root npm test; npm --prefix ptcg-server run test:cards;
+and npm --prefix ptcg-play run build. Keep/extend focused clone, Munkidori scan-budget,
+display-query, prompt-healing hint, hardware-policy and subscription tests.
+
+Replay all four existing known solutions with recorded intermediate checkpoints:
+Trapped in the Phantom Maze, Explosive Hand, Breaking Through the Wall, Something's
+Fishy. Compare before/after rules results, playable hints and effect delivery using
+the SAME card-library version, fixed clock and seeded randomness. Retain undo/reset
+checks and exercise prompt continuations, copied attacks and function-bearing cards.
+On the phone verify all card artwork retains dimensions in Auto/OFF/ON, inspect
+scrolling, and repeat the Munkidori action in the rebuilt simulator. If checking
+saved database states, use read-only access and write aggregate results only.
+
+Prior audit evidence (not exhaustive or release certification):
+  * 40 paired full solutions; 930 matching checkpoint pairs.
+  * 2,804,080 matching actual card-effect visits per variant.
+  * 530 saved states retained validation and canonical serialization.
+  * Activation cases included Lumineon on-play search, Munkidori with/without its
+    required Energy, two legitimate Munkidori uses, Exeggcute/Gengar from discard,
+    Pyukumuku from hand, suppression, marker cleanup and Manaphy protection.
+  * No previously passing functional test failed in the frozen old/new comparison.
+  * The later profiling snapshot passed 188 frontend tests and 40 desktop solution
+    replays. Four phone solutions also passed, with undo/re-win and reset.
+
+Unresolved findings must be checked against the latest main-chat work, not skipped:
+The audit reproduced Crobat V Dark Asset and Pyukumuku Pitch a Pyukumuku allowing
+another physical copy to bypass their shared once-per-turn limits. Those were
+present before these optimizations. Preserve the two-Munkidori success case when
+fixing shared limits; not every Ability shares a player-wide allowance.
+Two adversarial unlabelled copied-handler ownership cases also failed before/after
+(unrelated passive after copied Harden; unguarded Ability branch on AttackEffect).
+The last broad profiling run had 691 passes / 2 failures; two passing tests in that
+count were the now-removed startup-allocation tests. Rerun current source and report
+actual counts, new failures and unresolved baseline failures explicitly.
+
+Report reviewed source changes, current validation and remaining limitations.
+This handoff requests source integration and verification; no publishing is requested.
+
+EVIDENCE AND PATCH REFERENCE
+Artifacts live in:
+/Users/jerrytrosclair/Documents/Codex/2026-11-09/i-x20/outputs/
+  PrizeMap low-end performance.patch — cumulative narrow delta, ALREADY applied;
+    use as a reference and merge intent into current source, not as a blind patch.
+  PrizeMap performance source.zip — original 15 changed source/test/runner files.
+  PrizeMap performance follow-up.txt — matched action/rendering measurements.
+  PrizeMap rules audit.txt and PrizeMap rules audit measurements.json — limitations.
+  PrizeMap rules audit reproducers.zip — frozen comparison engines, four recorded
+    traces, full-state/effect-delivery comparison and activation reproducers.
+In this repo also read docs/performance-rules-audit-2026-11-09.txt and the current
+docs/upstream-sync.md. Follow the repository/card instructions for any rules edits.
+The profiling chat did not obtain a separate main-chat approval or review.

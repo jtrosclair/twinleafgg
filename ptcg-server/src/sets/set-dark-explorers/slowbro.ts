@@ -5,8 +5,9 @@ import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect, PowerEffect } from '../../game/store/effects/game-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 
-export class Slowbro extends PokemonCard {
+export class Slowbro extends PokemonCard implements CopiedAttackOwnershipContract {
 
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom = 'Slowpoke';
@@ -41,20 +42,25 @@ export class Slowbro extends PokemonCard {
       const prizesLeft = player.getPrizeLeft();
 
       // Check if ability is blocked
+      let blocked = false;
       try {
         const powerEffect = new PowerEffect(player, this.powers[0], this);
         store.reduceEffect(state, powerEffect);
       } catch {
-        // Ability is blocked, proceed with attack
-        return state;
+        blocked = true;
       }
 
       // If player has 2, 4, or 6 prizes left, can't attack
-      if (prizesLeft === 2 || prizesLeft === 4 || prizesLeft === 6) {
+      if (!blocked && (prizesLeft === 2 || prizesLeft === 4 || prizesLeft === 6)) {
         throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
       }
     }
 
+    return Slowbro.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  /** Lazy Headbutt's self-Sleep is an attack effect, not the Airhead Ability. */
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Lazy Headbutt - puts self to sleep
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;

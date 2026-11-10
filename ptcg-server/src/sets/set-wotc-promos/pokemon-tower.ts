@@ -1,7 +1,7 @@
 import { StateUtils } from '../../game/store/state-utils';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType } from '../../game/store/card/card-types';
-import { MoveCardsEffect, UseStadiumEffect } from '../../game/store/effects/game-effects';
+import { AttackEffect, MoveCardsEffect, UseStadiumEffect } from '../../game/store/effects/game-effects';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
@@ -34,7 +34,10 @@ export class PokemonTower extends TrainerCard {
           return state;
         }
 
-        if (effect.sourceCard?.attacks.some(attack => attack.name === effect.sourceEffect?.name)) {
+        // An AttackEffect retains attack provenance when a copycat's printed
+        // attacks have already been restored before an async prompt resolves.
+        if (effect.sourceEffect instanceof AttackEffect ||
+          effect.sourceCard?.attacks.some(attack => attack.name === effect.sourceEffect?.name)) {
           effect.preventDefault = true;
           return state;
         }

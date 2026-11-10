@@ -1,5 +1,6 @@
 import { Card } from '../../game/store/card/card';
 import { Alomomola } from './alomomola';
+import { Heatmor } from './heatmor';
 import { Amoongus } from './amoongus';
 import { AntiquePlumeFossil } from './antique-plume-fossil';
 import { Archen } from './archen';
@@ -116,6 +117,7 @@ export const setSV11: Card[] = [
   new Tirtouga(),
   new Virizion(),
   new Alomomola(),
+  new Heatmor(),
   new Drillbur(),
   new Emolga(),
   new EnergyCoin(),

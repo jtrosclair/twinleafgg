@@ -1,7 +1,7 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, PokemonType, TrainerType } from '../../game/store/card/card-types';
 import { GameError, GameLog, GameMessage, Power, PowerType, State, StateUtils, StoreLike, TrainerCard } from '../../game';
-import { AddSpecialConditionsEffect, DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
+import { AddSpecialConditionsEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { PowerEffect, RetreatEffect } from '../../game/store/effects/game-effects';
 import { PlayItemEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
@@ -68,22 +68,13 @@ export class AntiqueShieldFossil extends TrainerCard {
       effect.preventDefault = true;
     }
 
-    if (effect instanceof DealDamageEffect && state.phase === GamePhase.ATTACK) {
-      const defenderOwner = StateUtils.findOwner(state, effect.target);
-      const attackerOwner = StateUtils.findOwner(state, effect.source);
-      if (defenderOwner !== attackerOwner
-        && attackerOwner === StateUtils.getOpponent(state, defenderOwner)
-        && this.armorProtectionActive(store, state, defenderOwner)) {
-        effect.damage = Math.max(0, effect.damage - 10);
-      }
-    }
     if (effect instanceof PutDamageEffect && state.phase === GamePhase.ATTACK) {
       const defenderOwner = StateUtils.findOwner(state, effect.target);
       const attackerOwner = StateUtils.findOwner(state, effect.source);
       if (defenderOwner !== attackerOwner
         && attackerOwner === StateUtils.getOpponent(state, defenderOwner)
         && this.armorProtectionActive(store, state, defenderOwner)) {
-        effect.reduceDamage(10, this.powers[0].name);
+        effect.reduceDamageAfterWeakness(10, this.powers[0].name);
       }
     }
 

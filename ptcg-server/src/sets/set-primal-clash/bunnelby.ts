@@ -73,7 +73,9 @@ export class Bunnelby extends PokemonCard {
         ), selected => {
           const cards = selected || [];
           SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-          MOVE_CARDS(store, state, player.discard, player.deck, { cards, sourceCard: this, sourceEffect: this.attacks[1] });
+          // The attack definition on a copycat is restored before this prompt
+          // resolves. Retain the actual attack effect for discard protection.
+          MOVE_CARDS(store, state, player.discard, player.deck, { cards, sourceCard: this, sourceEffect: effect });
           SHUFFLE_DECK(store, state, player);
         });
       }

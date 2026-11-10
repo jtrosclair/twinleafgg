@@ -1,10 +1,10 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, EnergyType } from '../../game/store/card/card-types';
-import { Card, ChooseCardsPrompt, ShuffleDeckPrompt } from '../../game';
+import { ChooseCardsPrompt } from '../../game';
 import { StoreLike, State, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 
-import { SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Durant extends PokemonCard {
 
@@ -55,23 +55,19 @@ export class Durant extends PokemonCard {
         return state;
       }
 
-      let cards: Card[] = [];
-      store.prompt(state, new ChooseCardsPrompt(
+      return store.prompt(state, new ChooseCardsPrompt(
         player,
         GameMessage.CHOOSE_CARD_TO_HAND,
         player.deck,
         { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
         { min: 0, max: 2, allowCancel: false }
       ), selected => {
-        cards = selected || [];
-
-        SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-
-        player.deck.moveCardsTo(cards, player.hand);
-      });
-
-      return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-        player.deck.applyOrder(order);
+        const cards = selected || [];
+        if (cards.length > 0) {
+          MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: this, sourceEffect: effect });
+          SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
+        }
+        SHUFFLE_DECK(store, state, player);
       });
     }
 

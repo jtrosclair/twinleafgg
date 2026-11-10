@@ -11,6 +11,7 @@ import { CoinFlipPrompt } from '../prompts/coin-flip-prompt';
 import { PlayerType } from '../actions/play-card-action';
 import { MarkerConstants } from '../markers/marker-constants';
 import { StateUtils } from '../state-utils';
+import { ATTACK_RETREAT_LOCK_UNTIL_TARGET_END_TURN } from '../prefabs/retreat-lock-until-target-end-turn';
 
 function getActivePlayer(state: State): Player {
   return state.players[state.activePlayer];
@@ -74,11 +75,6 @@ export function initNextTurn(store: StoreLike, state: State): State {
     state = endGame(store, state, winner);
     return state;
   }
-
-  // opponenent wins
-  const winner = GameWinner.NONE;
-  state = endGame(store, state, winner);
-  return state;
 
   // Signal beginning of turn (for cards like Slumbering Forest, Oran Berry, etc.)
   const beginTurn = new BeginTurnEffect(player);
@@ -145,6 +141,23 @@ function handleSpecialConditions(store: StoreLike, state: State, effect: Between
         player.active.damage += effect.poisonDamage;
         break;
       case SpecialCondition.BURNED:
+        if (state.rules.oldBurnRule === true) {
+          const target = player.active, pokemon = target.getPokemonCard();
+          const applyOldBurn = (heads: boolean) => {
+            if (!heads && pokemon && player.active === target && target.getPokemonCard() === pokemon &&
+                target.specialConditions.includes(SpecialCondition.BURNED)) {
+              target.damage += effect.burnDamage;
+            }
+          };
+          // Wela / Centiskorch use burnFlipResult for recovery suppression,
+          // not as a coin result; retro burn never removes itself on heads.
+          pendingConditions++;
+          store.prompt(state, new CoinFlipPrompt(player.id, GameMessage.FLIP_BURNED), result => {
+            applyOldBurn(result);
+            conditionResolved();
+          });
+          break;
+        }
         player.active.damage += effect.burnDamage;
 
         if (effect.burnFlipResult === true) {
@@ -206,6 +219,12 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
 
   if (effect instanceof EndTurnEffect) {
     const player = state.players[state.activePlayer];
+
+    // Runs only after Store has accepted the EndTurnEffect; the lock targets
+    // the affected Pokémon and ends with its owner's turn, not the attacker's.
+    effect.player.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => {
+      slot.marker.removeMarker(ATTACK_RETREAT_LOCK_UNTIL_TARGET_END_TURN);
+    });
 
     player.canEvolve = false;
     if (effect.player.coinFlipCancelTrainerPlayTurnsRemaining > 0) effect.player.coinFlipCancelTrainerPlayTurnsRemaining--;

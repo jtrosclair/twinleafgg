@@ -33,107 +33,26 @@
       </div>
 
       <!-- Top Bench -->
-      <div class="ptcg-board-row ptcg-board-bench">
+      <div class="ptcg-board-row ptcg-board-bench" [style.--bench-columns]="benchColumns(topPlayer)"
+        [style.--bench-rows]="benchRows(topPlayer)" aria-label="Opponent's Bench">
         <ptcg-board-card *ngFor="let slot of topBench
         | slice:0:(topPlayer?.bench.length || defaultBenchSize); index as i" [cardList]="topPlayer?.bench[i]"
+          [style.grid-area]="benchSlotArea(topPlayer, i)"
+          [style.--bench-row-offset]="benchRowOffset(topPlayer, i)"
+          [class.bench-slot-empty]="!topPlayer?.bench[i]?.cards.length"
           [owner]="topPlayer?.id === clientId" (cardClick)="onCardClick($event, topPlayer?.bench[i])"
           [player]="PlayerType.TOP_PLAYER" [slot]="SlotType.BENCH" [index]="i">
         </ptcg-board-card>
       </div>
 
-      <!-- Mobile Compact Zone Grid (for mobile only) -->
-      <div class="mobile-zone-grid mobile-zone-grid-top">
-        <div class="zone-item zone-info zone-no-interact">
-          <div class="zone-label">Hand</div>
-          <div class="zone-count">{{topPlayer?.hand?.cards?.length || 0}}</div>
-        </div>
-        <div class="zone-item" [class.zone-disabled]="isDeckEmpty(topPlayer)"
-          (click)="$event.stopPropagation(); onDeckClick($event, topPlayer?.deck)">
-          <div class="zone-label">Deck</div>
-          <div class="zone-count">{{topPlayer?.deck?.cards?.length || 0}}</div>
-        </div>
-        <div class="zone-item" [class.zone-disabled]="isLostZoneEmpty(topPlayer)"
-          (click)="$event.stopPropagation(); onLostZoneClick($event, topPlayer?.lostzone)">
-          <div class="zone-label">Lost</div>
-          <div class="zone-count">{{topPlayer?.lostzone?.cards?.length || 0}}</div>
-        </div>
-        <div class="zone-item" [class.zone-disabled]="isDiscardEmpty(topPlayer)"
-          (click)="$event.stopPropagation(); onDiscardClick($event, topPlayer?.discard)">
-          <div class="zone-label">Discard</div>
-          <div class="zone-count">{{topPlayer?.discard?.cards?.length || 0}}</div>
-        </div>
-        <div class="zone-item zone-no-interact" [class.zone-disabled]="isPrizesEmpty(topPlayer)">
-          <div class="zone-label">Prizes</div>
-          <div class="zone-count">{{getPrizeCount(topPlayer)}}</div>
-        </div>
-      </div>
+      <ptcg-board-zone-button class="opponent-discard" label="Discard"
+        [count]="topPlayer?.discard?.cards?.length || 0" [countBelow]="true" [alignRight]="true"
+        [ariaLabel]="'Opponent discard: ' + (topPlayer?.discard?.cards?.length || 0) + ' cards'"
+        (zoneClick)="onDiscardClick(topPlayer?.discard?.cards[0], topPlayer?.discard)">
+      </ptcg-board-zone-button>
 
-      <!-- Desktop zones (hidden on mobile) -->
-      <div class="desktop-zones">
-        <!-- Top Lost Zone -->
-        <div class="ptcg-board-row ptcg-board-supporter" [class.zone-disabled]="isLostZoneEmpty(topPlayer)">
-          <ptcg-board-card class="lost-zone" [cardList]="topPlayer?.lostzone" [owner]="topPlayer?.id === clientId"
-            (cardClick)="onLostZoneClick($event, topPlayer?.lostzone)" showCardCount="true"
-            [style.transform]="'rotate(90deg)'">
-          </ptcg-board-card>
-        </div>
-
-        <!-- Top Supporter -->
-        <div class="ptcg-board-row ptcg-board-stadium">
-          <ptcg-board-card [cardList]="topPlayer?.supporter" [owner]="topPlayer?.id === clientId"
-            (cardClick)="onCardClick($event, null)">
-          </ptcg-board-card>
-        </div>
-
-        <!-- Top Deck -->
-        <div class="ptcg-board-row ptcg-board-deck" [class.zone-disabled]="isDeckEmpty(topPlayer)">
-          <div class="deck-container" style="position: relative;">
-            <ng-container *ngFor="let card of topPlayer?.deck?.cards; let idx = index">
-              <ptcg-board-card [cardList]="{ cards: [card] }" [owner]="topPlayer" class="deck-card"
-                [style.transform]="'translate(' + (idx * 0.25) + 'px, ' + (idx * 0.25) + 'px)'" [isFaceDown]="true">
-              </ptcg-board-card>
-            </ng-container>
-            <div class="card-count">{{topPlayer?.deck?.cards?.length || 0}}</div>
-            <!-- Clickable overlay for deck -->
-            <button class="deck-click-overlay" (click)="onDeckClick($event, topPlayer?.deck)" tabindex="0"
-              style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: default; border: none; background: none; padding: 0;"></button>
-          </div>
-        </div>
-
-        <!-- Top Discard -->
-        <div class="ptcg-board-row ptcg-board-discard" [class.zone-disabled]="isDiscardEmpty(topPlayer)">
-          <div class="discard-container">
-            <ng-container *ngFor="let i of createRange(topPlayer?.discard?.cards?.length || 0); let idx = index">
-              <ptcg-board-card (click)="onDiscardClick($event, topPlayer?.discard)" [cardList]="topPlayer?.discard"
-                [owner]="topPlayer" class="discard-card"
-                [style.transform]="'translate(' + (idx * 0.25) + 'px, ' + (idx * 0.25) + 'px)'">
-              </ptcg-board-card>
-            </ng-container>
-            <div class="card-count">{{topPlayer?.discard?.cards?.length || 0}}</div>
-          </div>
-        </div>
-
-        <!-- Top Prizes -->
-        <ptcg-board-prizes [player]="topPlayer" [clientId]="clientId" (prizeClick)="onPrizeClick(topPlayer, $event)">
-        </ptcg-board-prizes>
-      </div>
     </div>
 
-    <!-- <div class="background-image-container">
-      <div class="marker-container top-markers">
-        <div class="gx-marker" [class.used]="topPlayer?.usedGX"></div>
-        <div class="vstar-marker" [class.used]="topPlayer?.usedVSTAR"></div>
-      </div>
-      <img src="assets/twinleaf-board-center.png" alt="Twinleaf Logo">
-      <div class="coin-flip-container">
-         <ptcg-coin-flip [prompt]="activeCoinFlipPrompt">
-        </ptcg-coin-flip>
-      </div>
-      <div class="marker-container bottom-markers">
-        <div class="vstar-marker" [class.used]="bottomPlayer?.usedVSTAR"></div>
-        <div class="gx-marker" [class.used]="bottomPlayer?.usedGX"></div>
-      </div>
-    </div> -->
 
 
     <div class="ptcg-board-player">
@@ -152,9 +71,14 @@
       </div>
 
       <!-- Bottom Bench -->
-      <div class="ptcg-board-row ptcg-board-bench">
+      <div class="ptcg-board-row ptcg-board-bench" [style.--bench-columns]="benchColumns(bottomPlayer)"
+        [style.--bench-rows]="benchRows(bottomPlayer)" [dropTarget]="benchTarget"
+        ptcgDropHighlight [ptcgDropHighlightVisible]="benchHighlight$ | async" aria-label="Your Bench">
         <div class="ptcg-board-drop-target" *ngFor="let slot of bottomBench
         | slice:0:(bottomPlayer?.bench.length || defaultBenchSize)" [dropTarget]="bottomBenchTarget[slot.index]"
+          [style.grid-area]="benchSlotArea(bottomPlayer, slot.index)"
+          [style.--bench-row-offset]="benchRowOffset(bottomPlayer, slot.index)"
+          [class.bench-slot-empty]="!bottomPlayer?.bench[slot.index]?.cards.length"
           ptcgDropHighlight="outside" [ptcgDropHighlightVisible]="bottomBenchHighlight$[slot.index] | async">
           <ptcg-board-card
             [class.draggable]="!gameState.deleted && bottomPlayer?.id === clientId && bottomPlayer?.bench[slot.index].cards.length > 0"
@@ -166,90 +90,57 @@
         </div>
       </div>
 
-      <!-- Mobile Compact Zone Grid (for mobile only) -->
-      <div class="mobile-zone-grid">
-        <div class="zone-item zone-info zone-clickable" [class.zone-active]="!isHandHidden" (click)="$event.stopPropagation(); onHandToggleClick()">
-          <div class="zone-label">Hand</div>
-          <div class="zone-count">{{bottomPlayer?.hand?.cards?.length || 0}}</div>
-        </div>
-        <div class="zone-item" [class.zone-disabled]="isDeckEmpty(bottomPlayer)"
-          (click)="$event.stopPropagation(); onDeckClick($event, bottomPlayer?.deck)">
-          <div class="zone-label">Deck</div>
-          <div class="zone-count">{{bottomPlayer?.deck?.cards?.length || 0}}</div>
-        </div>
-        <div class="zone-item" [class.zone-disabled]="isLostZoneEmpty(bottomPlayer)"
-          (click)="$event.stopPropagation(); onLostZoneClick($event, bottomPlayer?.lostzone)">
-          <div class="zone-label">Lost</div>
-          <div class="zone-count">{{bottomPlayer?.lostzone?.cards?.length || 0}}</div>
-        </div>
-        <div class="zone-item" [class.zone-disabled]="isDiscardEmpty(bottomPlayer)"
-          (click)="$event.stopPropagation(); onDiscardClick($event, bottomPlayer?.discard)">
-          <div class="zone-label">Discard</div>
-          <div class="zone-count">{{bottomPlayer?.discard?.cards?.length || 0}}</div>
-        </div>
-        <div class="zone-item" [class.zone-disabled]="isPrizesEmpty(bottomPlayer)"
-          (click)="$event.stopPropagation(); onPrizesModalClick(bottomPlayer)">
-          <div class="zone-label">Prizes</div>
-          <div class="zone-count">{{getPrizeCount(bottomPlayer)}}</div>
-        </div>
+      <ptcg-board-zone-button class="player-prizes" label="Prizes" [count]="getPrizeCount(bottomPlayer)"
+        [ariaLabel]="'Your prizes: ' + getPrizeCount(bottomPlayer) + ' remaining'"
+        (zoneClick)="onPrizesModalClick(bottomPlayer)"></ptcg-board-zone-button>
+
+      <ptcg-board-zone-button class="player-discard" label="Discard"
+        [count]="bottomPlayer?.discard?.cards?.length || 0" [alignRight]="true"
+        [ariaLabel]="'Your discard: ' + (bottomPlayer?.discard?.cards?.length || 0) + ' cards'"
+        (zoneClick)="onDiscardClick(bottomPlayer?.discard?.cards[0], bottomPlayer?.discard)">
+      </ptcg-board-zone-button>
+
+      <button type="button" class="field-zone-button player-deck-count" aria-haspopup="dialog"
+        [disabled]="!bottomPlayer?.deck?.cards?.length"
+        [attr.aria-label]="'Your deck: ' + (bottomPlayer?.deck?.cards?.length || 0) + ' cards'"
+        (click)="onDeckClick(bottomPlayer?.deck?.cards[0], bottomPlayer?.deck)">
+        <span class="field-zone-label">Deck</span>
+        <span class="field-zone-total">{{bottomPlayer?.deck?.cards?.length || 0}}</span>
+      </button>
+
+    </div>
+    <div class="board-shared-zones" aria-label="Shared stadium and lost zones">
+      <button *ngIf="topPlayer?.lostzone?.cards?.length" type="button"
+        class="field-zone-button lost-zone-button opponent-lost" aria-haspopup="dialog"
+        [attr.aria-label]="'Opponent lost zone: ' + topPlayer.lostzone.cards.length + ' cards'"
+        (click)="onLostZoneClick(topPlayer.lostzone.cards[0], topPlayer.lostzone)">
+        <span class="field-zone-label">Lost</span>
+        <span class="field-zone-total">{{topPlayer.lostzone.cards.length}}</span>
+      </button>
+      <div class="shared-stadium-pair" *ngIf="stadiumCard?.cards?.length > 1; else singleStadium">
+        <button *ngFor="let stadium of stadiumHalves; let i = index" type="button" class="shared-stadium"
+          aria-haspopup="dialog" [attr.aria-label]="'Shared stadium: ' + stadium.name + (i === 0 ? ', left half' : ', right half')"
+          (click)="onStadiumClick(stadium)">
+          <ptcg-card [card]="stadium" [customArtworkUrl]="stadiumArtwork(stadium)" aria-hidden="true"></ptcg-card>
+        </button>
       </div>
-
-      <!-- Stadium - Single Slot for both players (visible on mobile and desktop) -->
-      <div class="ptcg-board-row ptcg-board-stadium stadium-always-visible">
-        <ptcg-board-card class="stadium-card" [cardList]="stadiumCard" [owner]="stadiumOwner"
-          (cardClick)="onStadiumClick($event)">
-        </ptcg-board-card>
-      </div>
-
-      <!-- Desktop zones (hidden on mobile) -->
-      <div class="desktop-zones">
-        <!-- Bottom Lost Zone -->
-        <div class="ptcg-board-row ptcg-board-stadium" [class.zone-disabled]="isLostZoneEmpty(bottomPlayer)">
-          <ptcg-board-card class="lost-zone" [cardList]="bottomPlayer?.lostzone" [owner]="bottomPlayer?.id === clientId"
-            (cardClick)="onLostZoneClick($event, bottomPlayer?.lostzone)" showCardCount="true">
-          </ptcg-board-card>
-        </div>
-
-        <!-- Bottom Supporter -->
-        <div class="ptcg-board-row ptcg-board-supporter">
-          <ptcg-board-card [cardList]="bottomPlayer?.supporter" [owner]="bottomPlayer?.id === clientId"
-            (cardClick)="onCardClick($event, null)">
-          </ptcg-board-card>
-        </div>
-
-        <!-- Bottom Deck -->
-        <div class="ptcg-board-row ptcg-board-deck" [class.zone-disabled]="isDeckEmpty(bottomPlayer)">
-          <div class="deck-container" style="position: relative;">
-            <ng-container *ngFor="let card of bottomPlayer?.deck?.cards; let idx = index">
-              <ptcg-board-card [cardList]="{ cards: [card] }" [owner]="bottomPlayer" class="deck-card"
-                [style.transform]="'translate(' + (idx * 0.25) + 'px, ' + (-idx * 0.25) + 'px)'" [isFaceDown]="true">
-              </ptcg-board-card>
-            </ng-container>
-            <div class="card-count">{{bottomPlayer?.deck?.cards?.length || 0}}</div>
-            <!-- Clickable overlay for deck -->
-            <button class="deck-click-overlay" (click)="onDeckClick($event, bottomPlayer?.deck)" tabindex="0"
-              style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: default; border: none; background: none; padding: 0;"></button>
-          </div>
-        </div>
-
-        <!-- Bottom Discard -->
-        <div class="ptcg-board-row ptcg-board-discard" [class.zone-disabled]="isDiscardEmpty(bottomPlayer)">
-          <div class="discard-container">
-            <ng-container *ngFor="let i of createRange(bottomPlayer?.discard?.cards?.length || 0); let idx = index">
-              <ptcg-board-card (click)="onDiscardClick($event, bottomPlayer?.discard)"
-                [cardList]="bottomPlayer?.discard" [owner]="bottomPlayer" class="discard-card"
-                [style.transform]="'translate(' + (idx * 0.25) + 'px, ' + (-idx * 0.25) + 'px)'">
-              </ptcg-board-card>
-            </ng-container>
-            <div class="card-count">{{bottomPlayer?.discard?.cards?.length || 0}}</div>
-          </div>
-        </div>
-
-        <!-- Prizes -->
-        <ptcg-board-prizes [player]="bottomPlayer" [clientId]="clientId"
-          (prizeClick)="onPrizeClick(bottomPlayer, $event)">
-        </ptcg-board-prizes>
-      </div>
+      <ng-template #singleStadium>
+        <button type="button" class="shared-stadium" [class.stadium-empty]="!stadiumCard?.cards?.length"
+          [disabled]="!stadiumCard?.cards?.length" aria-haspopup="dialog"
+          [attr.aria-label]="stadiumCard?.cards?.length ? 'Shared stadium: ' + stadiumCard.cards[0].name : 'Empty stadium zone'"
+          (click)="onStadiumClick(stadiumCard.cards[0])">
+          <ptcg-board-card *ngIf="stadiumCard?.cards?.length; else emptyStadium" class="stadium-card"
+            [cardList]="stadiumCard" [owner]="stadiumOwner" aria-hidden="true"></ptcg-board-card>
+          <ng-template #emptyStadium><span>Stadium</span></ng-template>
+        </button>
+      </ng-template>
+      <button *ngIf="bottomPlayer?.lostzone?.cards?.length" type="button"
+        class="field-zone-button lost-zone-button player-lost" aria-haspopup="dialog"
+        [attr.aria-label]="'Your lost zone: ' + bottomPlayer.lostzone.cards.length + ' cards'"
+        (click)="onLostZoneClick(bottomPlayer.lostzone.cards[0], bottomPlayer.lostzone)">
+        <span class="field-zone-label">Lost</span>
+        <span class="field-zone-total">{{bottomPlayer.lostzone.cards.length}}</span>
+      </button>
     </div>
   </div>
 </div>

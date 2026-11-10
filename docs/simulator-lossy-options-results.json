@@ -1,0 +1,1873 @@
+{
+  "measuredAt": "2026-11-07T03:30:19.758Z",
+  "packageHash": "291dcdbf50de5f5ee6405bab717c7c9718bb80b5e7d3a7cba0b00737430cdf08",
+  "method": "cwebp1.6.0 lossy -m6 -sharp_yuv -alpha_q100 at original dimensions. Keep all five masks lossless and retain original bytes when smaller. Replace every duplicate/legacy URL with one encoded value in actual bootstrap; recompress entire bootstrap. ZIP estimate uses the exact delta in raw DEFLATE9 entry content; other entries/ZIP overhead unchanged.",
+  "productionChanged": false,
+  "baselineRuntime": {
+    "files": 9,
+    "bytes": 14043590,
+    "gzipBytes": 3457377,
+    "brotliBytes": 2723443
+  },
+  "baselineArchiveBytes": 3428046,
+  "baselineBootstrap": {
+    "rawBytes": 2314247,
+    "gzip6Bytes": 1431710,
+    "brotli6Bytes": 1396777,
+    "zipDeflateBytes": 1425448
+  },
+  "maskImagesKeptLossless": [
+    "assets/card-mask-ace-spec.webp",
+    "assets/card-mask-radiant.webp",
+    "assets/card-mask-trainer.webp",
+    "assets/card-mask.webp",
+    "assets/fa-card-mask.webp"
+  ],
+  "variants": [
+    {
+      "label": "cardback-only-q90",
+      "reencodedUniqueImages": 1,
+      "bootstrap": {
+        "rawBytes": 1775935,
+        "gzip6Bytes": 1026713,
+        "brotli6Bytes": 989303,
+        "zipDeflateBytes": 1020748
+      },
+      "runtimeGzip6Bytes": 3052380,
+      "runtimeGzip6SavedBytes": 404997,
+      "runtimeGzip6SavedPercent": 11.713995899203356,
+      "runtimeBrotli6Bytes": 2315969,
+      "archiveEstimatedBytes": 3023346
+    },
+    {
+      "label": "cardback-only-q85",
+      "reencodedUniqueImages": 1,
+      "bootstrap": {
+        "rawBytes": 1711751,
+        "gzip6Bytes": 978292,
+        "brotli6Bytes": 940576,
+        "zipDeflateBytes": 972287
+      },
+      "runtimeGzip6Bytes": 3003959,
+      "runtimeGzip6SavedBytes": 453418,
+      "runtimeGzip6SavedPercent": 13.114508484322075,
+      "runtimeBrotli6Bytes": 2267242,
+      "archiveEstimatedBytes": 2974885
+    },
+    {
+      "label": "cardback-and-status-markers-q85",
+      "reencodedUniqueImages": 7,
+      "bootstrap": {
+        "rawBytes": 1539863,
+        "gzip6Bytes": 851499,
+        "brotli6Bytes": 831635,
+        "zipDeflateBytes": 845563
+      },
+      "runtimeGzip6Bytes": 2877166,
+      "runtimeGzip6SavedBytes": 580211,
+      "runtimeGzip6SavedPercent": 16.781826222595917,
+      "runtimeBrotli6Bytes": 2158301,
+      "archiveEstimatedBytes": 2848161
+    },
+    {
+      "label": "all-artwork-except-masks-q85",
+      "reencodedUniqueImages": 44,
+      "bootstrap": {
+        "rawBytes": 1224907,
+        "gzip6Bytes": 602601,
+        "brotli6Bytes": 583950,
+        "zipDeflateBytes": 596622
+      },
+      "runtimeGzip6Bytes": 2628268,
+      "runtimeGzip6SavedBytes": 829109,
+      "runtimeGzip6SavedPercent": 23.980867576778582,
+      "runtimeBrotli6Bytes": 1910616,
+      "archiveEstimatedBytes": 2599220
+    },
+    {
+      "label": "cardback-only-q75",
+      "reencodedUniqueImages": 1,
+      "bootstrap": {
+        "rawBytes": 1627783,
+        "gzip6Bytes": 915122,
+        "brotli6Bytes": 877986,
+        "zipDeflateBytes": 909158
+      },
+      "runtimeGzip6Bytes": 2940789,
+      "runtimeGzip6SavedBytes": 516588,
+      "runtimeGzip6SavedPercent": 14.941616144261966,
+      "runtimeBrotli6Bytes": 2204652,
+      "archiveEstimatedBytes": 2911756
+    },
+    {
+      "label": "cardback-and-status-markers-q75",
+      "reencodedUniqueImages": 7,
+      "bootstrap": {
+        "rawBytes": 1428543,
+        "gzip6Bytes": 764824,
+        "brotli6Bytes": 748179,
+        "zipDeflateBytes": 758882
+      },
+      "runtimeGzip6Bytes": 2790491,
+      "runtimeGzip6SavedBytes": 666886,
+      "runtimeGzip6SavedPercent": 19.28878453232031,
+      "runtimeBrotli6Bytes": 2074845,
+      "archiveEstimatedBytes": 2761480
+    },
+    {
+      "label": "all-artwork-except-masks-q75",
+      "reencodedUniqueImages": 45,
+      "bootstrap": {
+        "rawBytes": 1052227,
+        "gzip6Bytes": 469035,
+        "brotli6Bytes": 453930,
+        "zipDeflateBytes": 462908
+      },
+      "runtimeGzip6Bytes": 2494702,
+      "runtimeGzip6SavedBytes": 962675,
+      "runtimeGzip6SavedPercent": 27.844085270423214,
+      "runtimeBrotli6Bytes": 1780596,
+      "archiveEstimatedBytes": 2465506
+    },
+    {
+      "label": "cardback-only-q60",
+      "reencodedUniqueImages": 1,
+      "bootstrap": {
+        "rawBytes": 1592675,
+        "gzip6Bytes": 888577,
+        "brotli6Bytes": 850918,
+        "zipDeflateBytes": 882547
+      },
+      "runtimeGzip6Bytes": 2914244,
+      "runtimeGzip6SavedBytes": 543133,
+      "runtimeGzip6SavedPercent": 15.70939472322515,
+      "runtimeBrotli6Bytes": 2177584,
+      "archiveEstimatedBytes": 2885145
+    },
+    {
+      "label": "cardback-and-status-markers-q60",
+      "reencodedUniqueImages": 7,
+      "bootstrap": {
+        "rawBytes": 1384315,
+        "gzip6Bytes": 731430,
+        "brotli6Bytes": 715988,
+        "zipDeflateBytes": 725064
+      },
+      "runtimeGzip6Bytes": 2757097,
+      "runtimeGzip6SavedBytes": 700280,
+      "runtimeGzip6SavedPercent": 20.254661264883755,
+      "runtimeBrotli6Bytes": 2042654,
+      "archiveEstimatedBytes": 2727662
+    },
+    {
+      "label": "all-artwork-except-masks-q60",
+      "reencodedUniqueImages": 45,
+      "bootstrap": {
+        "rawBytes": 981059,
+        "gzip6Bytes": 416837,
+        "brotli6Bytes": 400838,
+        "zipDeflateBytes": 410886
+      },
+      "runtimeGzip6Bytes": 2442504,
+      "runtimeGzip6SavedBytes": 1014873,
+      "runtimeGzip6SavedPercent": 29.35384252281426,
+      "runtimeBrotli6Bytes": 1727504,
+      "archiveEstimatedBytes": 2413484
+    }
+  ],
+  "files": [
+    {
+      "path": "assets/cardback.webp",
+      "quality": 60,
+      "width": 745,
+      "height": 1040,
+      "originalBytes": 623970,
+      "encodedBytes": 82790,
+      "usedBytes": 82790,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/cardback.webp"
+    },
+    {
+      "path": "assets/tl-open-beta.webp",
+      "quality": 60,
+      "width": 4738,
+      "height": 815,
+      "originalBytes": 113588,
+      "encodedBytes": 89910,
+      "usedBytes": 89910,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/tl-open-beta.webp"
+    },
+    {
+      "path": "assets/imprison-marker.webp",
+      "quality": 60,
+      "width": 455,
+      "height": 455,
+      "originalBytes": 72214,
+      "encodedBytes": 16328,
+      "usedBytes": 16328,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/imprison-marker.webp"
+    },
+    {
+      "path": "assets/burned-marker.webp",
+      "quality": 60,
+      "width": 455,
+      "height": 455,
+      "originalBytes": 51058,
+      "encodedBytes": 11322,
+      "usedBytes": 11322,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/burned-marker.webp"
+    },
+    {
+      "path": "assets/paralyzed-marker.webp",
+      "quality": 60,
+      "width": 455,
+      "height": 455,
+      "originalBytes": 30596,
+      "encodedBytes": 8012,
+      "usedBytes": 8012,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/paralyzed-marker.webp"
+    },
+    {
+      "path": "assets/energy/neo-upper.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 22188,
+      "encodedBytes": 4154,
+      "usedBytes": 4154,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/neo-upper.webp"
+    },
+    {
+      "path": "assets/energy/legacy.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 20548,
+      "encodedBytes": 4078,
+      "usedBytes": 4078,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/legacy.webp"
+    },
+    {
+      "path": "assets/energy/electrode.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 19892,
+      "encodedBytes": 3698,
+      "usedBytes": 3698,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/electrode.webp"
+    },
+    {
+      "path": "assets/confused-marker.webp",
+      "quality": 60,
+      "width": 455,
+      "height": 455,
+      "originalBytes": 19548,
+      "encodedBytes": 6592,
+      "usedBytes": 6592,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/confused-marker.webp"
+    },
+    {
+      "path": "assets/energy/jet.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 19442,
+      "encodedBytes": 4894,
+      "usedBytes": 4894,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/jet.webp"
+    },
+    {
+      "path": "assets/poison-marker.webp",
+      "quality": 60,
+      "width": 455,
+      "height": 455,
+      "originalBytes": 19374,
+      "encodedBytes": 6888,
+      "usedBytes": 6888,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/poison-marker.webp"
+    },
+    {
+      "path": "assets/asleep-marker.webp",
+      "quality": 60,
+      "width": 455,
+      "height": 455,
+      "originalBytes": 18876,
+      "encodedBytes": 6254,
+      "usedBytes": 6254,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/asleep-marker.webp"
+    },
+    {
+      "path": "assets/energy/mist.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 18668,
+      "encodedBytes": 3316,
+      "usedBytes": 3316,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/mist.webp"
+    },
+    {
+      "path": "assets/energy/holons-magnemite.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 18666,
+      "encodedBytes": 3958,
+      "usedBytes": 3958,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/holons-magnemite.webp"
+    },
+    {
+      "path": "assets/energy/gift.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 18536,
+      "encodedBytes": 3480,
+      "usedBytes": 3480,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/gift.webp"
+    },
+    {
+      "path": "assets/energy/holons-magneton.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 18362,
+      "encodedBytes": 3824,
+      "usedBytes": 3824,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/holons-magneton.webp"
+    },
+    {
+      "path": "assets/energy/holons-voltorb.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 17212,
+      "encodedBytes": 3830,
+      "usedBytes": 3830,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/holons-voltorb.webp"
+    },
+    {
+      "path": "assets/energy/holons-castform.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 17146,
+      "encodedBytes": 2938,
+      "usedBytes": 2938,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/holons-castform.webp"
+    },
+    {
+      "path": "assets/energy/holons-electrode.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 16830,
+      "encodedBytes": 4006,
+      "usedBytes": 4006,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/holons-electrode.webp"
+    },
+    {
+      "path": "assets/prizemap-logo.webp",
+      "quality": 60,
+      "width": 300,
+      "height": 300,
+      "originalBytes": 15364,
+      "encodedBytes": 6006,
+      "usedBytes": 6006,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/prizemap-logo.webp"
+    },
+    {
+      "path": "assets/energy/double-turbo.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 15236,
+      "encodedBytes": 2994,
+      "usedBytes": 2994,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/double-turbo.webp"
+    },
+    {
+      "path": "assets/tools/bravery-charm.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 14390,
+      "encodedBytes": 1916,
+      "usedBytes": 1916,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/tools/bravery-charm.webp"
+    },
+    {
+      "path": "assets/type-icons-small.webp",
+      "quality": 60,
+      "width": 195,
+      "height": 125,
+      "originalBytes": 13750,
+      "encodedBytes": 6304,
+      "usedBytes": 6304,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/type-icons-small.webp"
+    },
+    {
+      "path": "assets/tools/vitality-band.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 13450,
+      "encodedBytes": 1940,
+      "usedBytes": 1940,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/tools/vitality-band.webp"
+    },
+    {
+      "path": "assets/energy/grass.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 9732,
+      "encodedBytes": 3384,
+      "usedBytes": 3384,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/grass.webp"
+    },
+    {
+      "path": "assets/energy/psychic.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 9546,
+      "encodedBytes": 2976,
+      "usedBytes": 2976,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/psychic.webp"
+    },
+    {
+      "path": "assets/energy/fairy.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 9302,
+      "encodedBytes": 2948,
+      "usedBytes": 2948,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/fairy.webp"
+    },
+    {
+      "path": "assets/energy/fire.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 8964,
+      "encodedBytes": 3474,
+      "usedBytes": 3474,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/fire.webp"
+    },
+    {
+      "path": "assets/energy/fighting.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 8950,
+      "encodedBytes": 3266,
+      "usedBytes": 3266,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/fighting.webp"
+    },
+    {
+      "path": "assets/energy/water.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 8662,
+      "encodedBytes": 3162,
+      "usedBytes": 3162,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/water.webp"
+    },
+    {
+      "path": "assets/energy/lightning.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 8454,
+      "encodedBytes": 3134,
+      "usedBytes": 3134,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/lightning.webp"
+    },
+    {
+      "path": "assets/energy/dark.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 7868,
+      "encodedBytes": 2918,
+      "usedBytes": 2918,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/dark.webp"
+    },
+    {
+      "path": "assets/energy/metal.webp",
+      "quality": 60,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 7166,
+      "encodedBytes": 2484,
+      "usedBytes": 2484,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy/metal.webp"
+    },
+    {
+      "path": "assets/trainer-types.webp",
+      "quality": 60,
+      "width": 94,
+      "height": 60,
+      "originalBytes": 4014,
+      "encodedBytes": 3186,
+      "usedBytes": 3186,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/trainer-types.webp"
+    },
+    {
+      "path": "assets/energy-icons/lightning.webp",
+      "quality": 60,
+      "width": 105,
+      "height": 105,
+      "originalBytes": 3080,
+      "encodedBytes": 2172,
+      "usedBytes": 2172,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy-icons/lightning.webp"
+    },
+    {
+      "path": "assets/energy-icons/fairy.webp",
+      "quality": 60,
+      "width": 105,
+      "height": 105,
+      "originalBytes": 3062,
+      "encodedBytes": 2142,
+      "usedBytes": 2142,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy-icons/fairy.webp"
+    },
+    {
+      "path": "assets/energy-icons/grass.webp",
+      "quality": 60,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2980,
+      "encodedBytes": 2068,
+      "usedBytes": 2068,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy-icons/grass.webp"
+    },
+    {
+      "path": "assets/energy-icons/psychic.webp",
+      "quality": 60,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2936,
+      "encodedBytes": 2086,
+      "usedBytes": 2086,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy-icons/psychic.webp"
+    },
+    {
+      "path": "assets/energy-icons/fire.webp",
+      "quality": 60,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2878,
+      "encodedBytes": 2042,
+      "usedBytes": 2042,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy-icons/fire.webp"
+    },
+    {
+      "path": "assets/energy-icons/water.webp",
+      "quality": 60,
+      "width": 105,
+      "height": 105,
+      "originalBytes": 2838,
+      "encodedBytes": 2046,
+      "usedBytes": 2046,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy-icons/water.webp"
+    },
+    {
+      "path": "assets/energy-icons/dragon.webp",
+      "quality": 60,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2564,
+      "encodedBytes": 1760,
+      "usedBytes": 1760,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy-icons/dragon.webp"
+    },
+    {
+      "path": "assets/energy-icons/fighting.webp",
+      "quality": 60,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2446,
+      "encodedBytes": 1772,
+      "usedBytes": 1772,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy-icons/fighting.webp"
+    },
+    {
+      "path": "assets/energy-icons/metal.webp",
+      "quality": 60,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2338,
+      "encodedBytes": 1642,
+      "usedBytes": 1642,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy-icons/metal.webp"
+    },
+    {
+      "path": "assets/energy-icons/colorless.webp",
+      "quality": 60,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2266,
+      "encodedBytes": 1648,
+      "usedBytes": 1648,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy-icons/colorless.webp"
+    },
+    {
+      "path": "assets/energy-icons/darkness.webp",
+      "quality": 60,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2074,
+      "encodedBytes": 1398,
+      "usedBytes": 1398,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q60/assets/energy-icons/darkness.webp"
+    },
+    {
+      "path": "assets/cardback.webp",
+      "quality": 75,
+      "width": 745,
+      "height": 1040,
+      "originalBytes": 623970,
+      "encodedBytes": 109122,
+      "usedBytes": 109122,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/cardback.webp"
+    },
+    {
+      "path": "assets/tl-open-beta.webp",
+      "quality": 75,
+      "width": 4738,
+      "height": 815,
+      "originalBytes": 113588,
+      "encodedBytes": 98174,
+      "usedBytes": 98174,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/tl-open-beta.webp"
+    },
+    {
+      "path": "assets/imprison-marker.webp",
+      "quality": 75,
+      "width": 455,
+      "height": 455,
+      "originalBytes": 72214,
+      "encodedBytes": 18968,
+      "usedBytes": 18968,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/imprison-marker.webp"
+    },
+    {
+      "path": "assets/burned-marker.webp",
+      "quality": 75,
+      "width": 455,
+      "height": 455,
+      "originalBytes": 51058,
+      "encodedBytes": 12810,
+      "usedBytes": 12810,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/burned-marker.webp"
+    },
+    {
+      "path": "assets/paralyzed-marker.webp",
+      "quality": 75,
+      "width": 455,
+      "height": 455,
+      "originalBytes": 30596,
+      "encodedBytes": 8840,
+      "usedBytes": 8840,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/paralyzed-marker.webp"
+    },
+    {
+      "path": "assets/energy/neo-upper.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 22188,
+      "encodedBytes": 4628,
+      "usedBytes": 4628,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/neo-upper.webp"
+    },
+    {
+      "path": "assets/energy/legacy.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 20548,
+      "encodedBytes": 4526,
+      "usedBytes": 4526,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/legacy.webp"
+    },
+    {
+      "path": "assets/energy/electrode.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 19892,
+      "encodedBytes": 4052,
+      "usedBytes": 4052,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/electrode.webp"
+    },
+    {
+      "path": "assets/confused-marker.webp",
+      "quality": 75,
+      "width": 455,
+      "height": 455,
+      "originalBytes": 19548,
+      "encodedBytes": 7202,
+      "usedBytes": 7202,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/confused-marker.webp"
+    },
+    {
+      "path": "assets/energy/jet.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 19442,
+      "encodedBytes": 5308,
+      "usedBytes": 5308,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/jet.webp"
+    },
+    {
+      "path": "assets/poison-marker.webp",
+      "quality": 75,
+      "width": 455,
+      "height": 455,
+      "originalBytes": 19374,
+      "encodedBytes": 7566,
+      "usedBytes": 7566,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/poison-marker.webp"
+    },
+    {
+      "path": "assets/asleep-marker.webp",
+      "quality": 75,
+      "width": 455,
+      "height": 455,
+      "originalBytes": 18876,
+      "encodedBytes": 6850,
+      "usedBytes": 6850,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/asleep-marker.webp"
+    },
+    {
+      "path": "assets/energy/mist.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 18668,
+      "encodedBytes": 3682,
+      "usedBytes": 3682,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/mist.webp"
+    },
+    {
+      "path": "assets/energy/holons-magnemite.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 18666,
+      "encodedBytes": 4378,
+      "usedBytes": 4378,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/holons-magnemite.webp"
+    },
+    {
+      "path": "assets/energy/gift.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 18536,
+      "encodedBytes": 3908,
+      "usedBytes": 3908,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/gift.webp"
+    },
+    {
+      "path": "assets/energy/holons-magneton.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 18362,
+      "encodedBytes": 4256,
+      "usedBytes": 4256,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/holons-magneton.webp"
+    },
+    {
+      "path": "assets/energy/holons-voltorb.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 17212,
+      "encodedBytes": 4222,
+      "usedBytes": 4222,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/holons-voltorb.webp"
+    },
+    {
+      "path": "assets/energy/holons-castform.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 17146,
+      "encodedBytes": 3246,
+      "usedBytes": 3246,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/holons-castform.webp"
+    },
+    {
+      "path": "assets/energy/holons-electrode.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 16830,
+      "encodedBytes": 4450,
+      "usedBytes": 4450,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/holons-electrode.webp"
+    },
+    {
+      "path": "assets/prizemap-logo.webp",
+      "quality": 75,
+      "width": 300,
+      "height": 300,
+      "originalBytes": 15364,
+      "encodedBytes": 6656,
+      "usedBytes": 6656,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/prizemap-logo.webp"
+    },
+    {
+      "path": "assets/energy/double-turbo.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 15236,
+      "encodedBytes": 3380,
+      "usedBytes": 3380,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/double-turbo.webp"
+    },
+    {
+      "path": "assets/tools/bravery-charm.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 14390,
+      "encodedBytes": 2204,
+      "usedBytes": 2204,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/tools/bravery-charm.webp"
+    },
+    {
+      "path": "assets/type-icons-small.webp",
+      "quality": 75,
+      "width": 195,
+      "height": 125,
+      "originalBytes": 13750,
+      "encodedBytes": 6864,
+      "usedBytes": 6864,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/type-icons-small.webp"
+    },
+    {
+      "path": "assets/tools/vitality-band.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 13450,
+      "encodedBytes": 2270,
+      "usedBytes": 2270,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/tools/vitality-band.webp"
+    },
+    {
+      "path": "assets/energy/grass.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 9732,
+      "encodedBytes": 3744,
+      "usedBytes": 3744,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/grass.webp"
+    },
+    {
+      "path": "assets/energy/psychic.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 9546,
+      "encodedBytes": 3252,
+      "usedBytes": 3252,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/psychic.webp"
+    },
+    {
+      "path": "assets/energy/fairy.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 9302,
+      "encodedBytes": 3270,
+      "usedBytes": 3270,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/fairy.webp"
+    },
+    {
+      "path": "assets/energy/fire.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 8964,
+      "encodedBytes": 3794,
+      "usedBytes": 3794,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/fire.webp"
+    },
+    {
+      "path": "assets/energy/fighting.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 8950,
+      "encodedBytes": 3534,
+      "usedBytes": 3534,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/fighting.webp"
+    },
+    {
+      "path": "assets/energy/water.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 8662,
+      "encodedBytes": 3434,
+      "usedBytes": 3434,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/water.webp"
+    },
+    {
+      "path": "assets/energy/lightning.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 8454,
+      "encodedBytes": 3434,
+      "usedBytes": 3434,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/lightning.webp"
+    },
+    {
+      "path": "assets/energy/dark.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 7868,
+      "encodedBytes": 3210,
+      "usedBytes": 3210,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/dark.webp"
+    },
+    {
+      "path": "assets/energy/metal.webp",
+      "quality": 75,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 7166,
+      "encodedBytes": 2660,
+      "usedBytes": 2660,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy/metal.webp"
+    },
+    {
+      "path": "assets/trainer-types.webp",
+      "quality": 75,
+      "width": 94,
+      "height": 60,
+      "originalBytes": 4014,
+      "encodedBytes": 3320,
+      "usedBytes": 3320,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/trainer-types.webp"
+    },
+    {
+      "path": "assets/energy-icons/lightning.webp",
+      "quality": 75,
+      "width": 105,
+      "height": 105,
+      "originalBytes": 3080,
+      "encodedBytes": 2462,
+      "usedBytes": 2462,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy-icons/lightning.webp"
+    },
+    {
+      "path": "assets/energy-icons/fairy.webp",
+      "quality": 75,
+      "width": 105,
+      "height": 105,
+      "originalBytes": 3062,
+      "encodedBytes": 2412,
+      "usedBytes": 2412,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy-icons/fairy.webp"
+    },
+    {
+      "path": "assets/energy-icons/grass.webp",
+      "quality": 75,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2980,
+      "encodedBytes": 2338,
+      "usedBytes": 2338,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy-icons/grass.webp"
+    },
+    {
+      "path": "assets/energy-icons/psychic.webp",
+      "quality": 75,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2936,
+      "encodedBytes": 2378,
+      "usedBytes": 2378,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy-icons/psychic.webp"
+    },
+    {
+      "path": "assets/energy-icons/fire.webp",
+      "quality": 75,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2878,
+      "encodedBytes": 2276,
+      "usedBytes": 2276,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy-icons/fire.webp"
+    },
+    {
+      "path": "assets/energy-icons/water.webp",
+      "quality": 75,
+      "width": 105,
+      "height": 105,
+      "originalBytes": 2838,
+      "encodedBytes": 2284,
+      "usedBytes": 2284,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy-icons/water.webp"
+    },
+    {
+      "path": "assets/energy-icons/dragon.webp",
+      "quality": 75,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2564,
+      "encodedBytes": 2004,
+      "usedBytes": 2004,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy-icons/dragon.webp"
+    },
+    {
+      "path": "assets/energy-icons/fighting.webp",
+      "quality": 75,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2446,
+      "encodedBytes": 1958,
+      "usedBytes": 1958,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy-icons/fighting.webp"
+    },
+    {
+      "path": "assets/energy-icons/metal.webp",
+      "quality": 75,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2338,
+      "encodedBytes": 1814,
+      "usedBytes": 1814,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy-icons/metal.webp"
+    },
+    {
+      "path": "assets/energy-icons/colorless.webp",
+      "quality": 75,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2266,
+      "encodedBytes": 1780,
+      "usedBytes": 1780,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy-icons/colorless.webp"
+    },
+    {
+      "path": "assets/energy-icons/darkness.webp",
+      "quality": 75,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2074,
+      "encodedBytes": 1594,
+      "usedBytes": 1594,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q75/assets/energy-icons/darkness.webp"
+    },
+    {
+      "path": "assets/cardback.webp",
+      "quality": 85,
+      "width": 745,
+      "height": 1040,
+      "originalBytes": 623970,
+      "encodedBytes": 172096,
+      "usedBytes": 172096,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/cardback.webp"
+    },
+    {
+      "path": "assets/tl-open-beta.webp",
+      "quality": 85,
+      "width": 4738,
+      "height": 815,
+      "originalBytes": 113588,
+      "encodedBytes": 114630,
+      "usedBytes": 113588,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/tl-open-beta.webp"
+    },
+    {
+      "path": "assets/imprison-marker.webp",
+      "quality": 85,
+      "width": 455,
+      "height": 455,
+      "originalBytes": 72214,
+      "encodedBytes": 26656,
+      "usedBytes": 26656,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/imprison-marker.webp"
+    },
+    {
+      "path": "assets/burned-marker.webp",
+      "quality": 85,
+      "width": 455,
+      "height": 455,
+      "originalBytes": 51058,
+      "encodedBytes": 17474,
+      "usedBytes": 17474,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/burned-marker.webp"
+    },
+    {
+      "path": "assets/paralyzed-marker.webp",
+      "quality": 85,
+      "width": 455,
+      "height": 455,
+      "originalBytes": 30596,
+      "encodedBytes": 11534,
+      "usedBytes": 11534,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/paralyzed-marker.webp"
+    },
+    {
+      "path": "assets/energy/neo-upper.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 22188,
+      "encodedBytes": 5986,
+      "usedBytes": 5986,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/neo-upper.webp"
+    },
+    {
+      "path": "assets/energy/legacy.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 20548,
+      "encodedBytes": 5832,
+      "usedBytes": 5832,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/legacy.webp"
+    },
+    {
+      "path": "assets/energy/electrode.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 19892,
+      "encodedBytes": 5132,
+      "usedBytes": 5132,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/electrode.webp"
+    },
+    {
+      "path": "assets/confused-marker.webp",
+      "quality": 85,
+      "width": 455,
+      "height": 455,
+      "originalBytes": 19548,
+      "encodedBytes": 9148,
+      "usedBytes": 9148,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/confused-marker.webp"
+    },
+    {
+      "path": "assets/energy/jet.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 19442,
+      "encodedBytes": 6552,
+      "usedBytes": 6552,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/jet.webp"
+    },
+    {
+      "path": "assets/poison-marker.webp",
+      "quality": 85,
+      "width": 455,
+      "height": 455,
+      "originalBytes": 19374,
+      "encodedBytes": 9382,
+      "usedBytes": 9382,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/poison-marker.webp"
+    },
+    {
+      "path": "assets/asleep-marker.webp",
+      "quality": 85,
+      "width": 455,
+      "height": 455,
+      "originalBytes": 18876,
+      "encodedBytes": 8552,
+      "usedBytes": 8552,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/asleep-marker.webp"
+    },
+    {
+      "path": "assets/energy/mist.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 18668,
+      "encodedBytes": 4792,
+      "usedBytes": 4792,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/mist.webp"
+    },
+    {
+      "path": "assets/energy/holons-magnemite.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 18666,
+      "encodedBytes": 5518,
+      "usedBytes": 5518,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/holons-magnemite.webp"
+    },
+    {
+      "path": "assets/energy/gift.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 18536,
+      "encodedBytes": 4998,
+      "usedBytes": 4998,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/gift.webp"
+    },
+    {
+      "path": "assets/energy/holons-magneton.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 18362,
+      "encodedBytes": 5462,
+      "usedBytes": 5462,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/holons-magneton.webp"
+    },
+    {
+      "path": "assets/energy/holons-voltorb.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 17212,
+      "encodedBytes": 5322,
+      "usedBytes": 5322,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/holons-voltorb.webp"
+    },
+    {
+      "path": "assets/energy/holons-castform.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 17146,
+      "encodedBytes": 4172,
+      "usedBytes": 4172,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/holons-castform.webp"
+    },
+    {
+      "path": "assets/energy/holons-electrode.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 16830,
+      "encodedBytes": 5546,
+      "usedBytes": 5546,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/holons-electrode.webp"
+    },
+    {
+      "path": "assets/prizemap-logo.webp",
+      "quality": 85,
+      "width": 300,
+      "height": 300,
+      "originalBytes": 15364,
+      "encodedBytes": 8382,
+      "usedBytes": 8382,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/prizemap-logo.webp"
+    },
+    {
+      "path": "assets/energy/double-turbo.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 15236,
+      "encodedBytes": 4454,
+      "usedBytes": 4454,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/double-turbo.webp"
+    },
+    {
+      "path": "assets/tools/bravery-charm.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 14390,
+      "encodedBytes": 3100,
+      "usedBytes": 3100,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/tools/bravery-charm.webp"
+    },
+    {
+      "path": "assets/type-icons-small.webp",
+      "quality": 85,
+      "width": 195,
+      "height": 125,
+      "originalBytes": 13750,
+      "encodedBytes": 8174,
+      "usedBytes": 8174,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/type-icons-small.webp"
+    },
+    {
+      "path": "assets/tools/vitality-band.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 13450,
+      "encodedBytes": 3166,
+      "usedBytes": 3166,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/tools/vitality-band.webp"
+    },
+    {
+      "path": "assets/energy/grass.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 9732,
+      "encodedBytes": 4678,
+      "usedBytes": 4678,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/grass.webp"
+    },
+    {
+      "path": "assets/energy/psychic.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 9546,
+      "encodedBytes": 4126,
+      "usedBytes": 4126,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/psychic.webp"
+    },
+    {
+      "path": "assets/energy/fairy.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 9302,
+      "encodedBytes": 4094,
+      "usedBytes": 4094,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/fairy.webp"
+    },
+    {
+      "path": "assets/energy/fire.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 8964,
+      "encodedBytes": 4650,
+      "usedBytes": 4650,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/fire.webp"
+    },
+    {
+      "path": "assets/energy/fighting.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 8950,
+      "encodedBytes": 4320,
+      "usedBytes": 4320,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/fighting.webp"
+    },
+    {
+      "path": "assets/energy/water.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 8662,
+      "encodedBytes": 4170,
+      "usedBytes": 4170,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/water.webp"
+    },
+    {
+      "path": "assets/energy/lightning.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 8454,
+      "encodedBytes": 4110,
+      "usedBytes": 4110,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/lightning.webp"
+    },
+    {
+      "path": "assets/energy/dark.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 7868,
+      "encodedBytes": 3926,
+      "usedBytes": 3926,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/dark.webp"
+    },
+    {
+      "path": "assets/energy/metal.webp",
+      "quality": 85,
+      "width": 138,
+      "height": 192,
+      "originalBytes": 7166,
+      "encodedBytes": 3246,
+      "usedBytes": 3246,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy/metal.webp"
+    },
+    {
+      "path": "assets/trainer-types.webp",
+      "quality": 85,
+      "width": 94,
+      "height": 60,
+      "originalBytes": 4014,
+      "encodedBytes": 3684,
+      "usedBytes": 3684,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/trainer-types.webp"
+    },
+    {
+      "path": "assets/energy-icons/lightning.webp",
+      "quality": 85,
+      "width": 105,
+      "height": 105,
+      "originalBytes": 3080,
+      "encodedBytes": 2982,
+      "usedBytes": 2982,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy-icons/lightning.webp"
+    },
+    {
+      "path": "assets/energy-icons/fairy.webp",
+      "quality": 85,
+      "width": 105,
+      "height": 105,
+      "originalBytes": 3062,
+      "encodedBytes": 2922,
+      "usedBytes": 2922,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy-icons/fairy.webp"
+    },
+    {
+      "path": "assets/energy-icons/grass.webp",
+      "quality": 85,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2980,
+      "encodedBytes": 2812,
+      "usedBytes": 2812,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy-icons/grass.webp"
+    },
+    {
+      "path": "assets/energy-icons/psychic.webp",
+      "quality": 85,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2936,
+      "encodedBytes": 2850,
+      "usedBytes": 2850,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy-icons/psychic.webp"
+    },
+    {
+      "path": "assets/energy-icons/fire.webp",
+      "quality": 85,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2878,
+      "encodedBytes": 2736,
+      "usedBytes": 2736,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy-icons/fire.webp"
+    },
+    {
+      "path": "assets/energy-icons/water.webp",
+      "quality": 85,
+      "width": 105,
+      "height": 105,
+      "originalBytes": 2838,
+      "encodedBytes": 2714,
+      "usedBytes": 2714,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy-icons/water.webp"
+    },
+    {
+      "path": "assets/energy-icons/dragon.webp",
+      "quality": 85,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2564,
+      "encodedBytes": 2422,
+      "usedBytes": 2422,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy-icons/dragon.webp"
+    },
+    {
+      "path": "assets/energy-icons/fighting.webp",
+      "quality": 85,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2446,
+      "encodedBytes": 2312,
+      "usedBytes": 2312,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy-icons/fighting.webp"
+    },
+    {
+      "path": "assets/energy-icons/metal.webp",
+      "quality": 85,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2338,
+      "encodedBytes": 2192,
+      "usedBytes": 2192,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy-icons/metal.webp"
+    },
+    {
+      "path": "assets/energy-icons/colorless.webp",
+      "quality": 85,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2266,
+      "encodedBytes": 2122,
+      "usedBytes": 2122,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy-icons/colorless.webp"
+    },
+    {
+      "path": "assets/energy-icons/darkness.webp",
+      "quality": 85,
+      "width": 104,
+      "height": 104,
+      "originalBytes": 2074,
+      "encodedBytes": 1936,
+      "usedBytes": 1936,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q85/assets/energy-icons/darkness.webp"
+    },
+    {
+      "path": "assets/cardback.webp",
+      "quality": 90,
+      "width": 745,
+      "height": 1040,
+      "originalBytes": 623970,
+      "encodedBytes": 220236,
+      "usedBytes": 220236,
+      "alphaExact": true,
+      "output": "/tmp/twinleaf-lossy-package-audit/q90/assets/cardback.webp"
+    }
+  ],
+  "combinedVisualSimplification": [
+    {
+      "quality": 85,
+      "omit": "Both loading logos and all five holo masks",
+      "archiveEstimatedBytes": 2438228,
+      "archiveSavedPercent": 28.87,
+      "runtimeGzip6Bytes": 2467265
+    },
+    {
+      "quality": 75,
+      "omit": "Both loading logos and all five holo masks",
+      "archiveEstimatedBytes": 2322111,
+      "archiveSavedPercent": 32.26,
+      "runtimeGzip6Bytes": 2351318
+    }
+  ],
+  "optionalAssetRemovals": {
+    "packageHash": "291dcdbf50de5f5ee6405bab717c7c9718bb80b5e7d3a7cba0b00737430cdf08",
+    "baseline": {
+      "bootstrapBytes": 2314247,
+      "bootstrapGzipBytes": 1431710
+    },
+    "method": "Independent group subtraction from exact current bootstrap; removes every alias and hashed duplicate for a removed unique image, preserving other bootstrap content. gzip level6; each scenario independent and not additive; excludes related CSS/JS source removal.",
+    "groups": [
+      {
+        "group": "twinleafBrand",
+        "physicalFiles": [
+          "assets/tl-open-beta.webp"
+        ],
+        "uniqueImages": 1,
+        "physicalBytes": 113588,
+        "bootstrapBytesSaved": 151569,
+        "bootstrapGzipBytesSaved": 109031
+      },
+      {
+        "group": "bothBrandLogos",
+        "physicalFiles": [
+          "assets/prizemap-logo.webp",
+          "assets/tl-open-beta.webp"
+        ],
+        "uniqueImages": 2,
+        "physicalBytes": 128952,
+        "bootstrapBytesSaved": 172267,
+        "bootstrapGzipBytesSaved": 124937
+      },
+      {
+        "group": "holoMasks",
+        "physicalFiles": [
+          "assets/card-mask-ace-spec.webp",
+          "assets/card-mask-radiant.webp",
+          "assets/card-mask-trainer.webp",
+          "assets/card-mask.webp",
+          "assets/fa-card-mask.webp"
+        ],
+        "uniqueImages": 5,
+        "physicalBytes": 43678,
+        "bootstrapBytesSaved": 59330,
+        "bootstrapGzipBytesSaved": 42407
+      },
+      {
+        "group": "statusMarkers",
+        "physicalFiles": [
+          "assets/asleep-marker.webp",
+          "assets/burned-marker.webp",
+          "assets/confused-marker.webp",
+          "assets/imprison-marker.webp",
+          "assets/paralyzed-marker.webp",
+          "assets/poison-marker.webp"
+        ],
+        "uniqueImages": 6,
+        "physicalBytes": 211666,
+        "bootstrapBytesSaved": 282959,
+        "bootstrapGzipBytesSaved": 204012
+      },
+      {
+        "group": "imprisonMarker",
+        "physicalFiles": [
+          "assets/imprison-marker.webp"
+        ],
+        "uniqueImages": 1,
+        "physicalBytes": 72214,
+        "bootstrapBytesSaved": 96411,
+        "bootstrapGzipBytesSaved": 71602
+      },
+      {
+        "group": "attachedEnergyIcons",
+        "physicalFiles": [
+          "assets/energy/dark.webp",
+          "assets/energy/double-turbo.webp",
+          "assets/energy/electrode.webp",
+          "assets/energy/fairy.webp",
+          "assets/energy/fighting.webp",
+          "assets/energy/fire.webp",
+          "assets/energy/gift.webp",
+          "assets/energy/grass.webp",
+          "assets/energy/holons-castform.webp",
+          "assets/energy/holons-electrode.webp",
+          "assets/energy/holons-magnemite.webp",
+          "assets/energy/holons-magneton.webp",
+          "assets/energy/holons-voltorb.webp",
+          "assets/energy/jet.webp",
+          "assets/energy/legacy.webp",
+          "assets/energy/lightning.webp",
+          "assets/energy/metal.webp",
+          "assets/energy/mist.webp",
+          "assets/energy/neo-upper.webp",
+          "assets/energy/psychic.webp",
+          "assets/energy/water.webp"
+        ],
+        "uniqueImages": 21,
+        "physicalBytes": 301370,
+        "bootstrapBytesSaved": 406456,
+        "bootstrapGzipBytesSaved": 302976
+      },
+      {
+        "group": "attachedToolIcons",
+        "physicalFiles": [
+          "assets/tools/bravery-charm.webp",
+          "assets/tools/vitality-band.webp"
+        ],
+        "uniqueImages": 2,
+        "physicalBytes": 27840,
+        "bootstrapBytesSaved": 37592,
+        "bootstrapGzipBytesSaved": 27891
+      },
+      {
+        "group": "energyTextIcons",
+        "physicalFiles": [
+          "assets/energy-icons/colorless.webp",
+          "assets/energy-icons/darkness.webp",
+          "assets/energy-icons/dragon.webp",
+          "assets/energy-icons/fairy.webp",
+          "assets/energy-icons/fighting.webp",
+          "assets/energy-icons/fire.webp",
+          "assets/energy-icons/grass.webp",
+          "assets/energy-icons/lightning.webp",
+          "assets/energy-icons/metal.webp",
+          "assets/energy-icons/psychic.webp",
+          "assets/energy-icons/water.webp"
+        ],
+        "uniqueImages": 11,
+        "physicalBytes": 29462,
+        "bootstrapBytesSaved": 40755,
+        "bootstrapGzipBytesSaved": 28537
+      },
+      {
+        "group": "typeAndTrainerSprites",
+        "physicalFiles": [
+          "assets/trainer-types.webp",
+          "assets/type-icons-small.webp"
+        ],
+        "uniqueImages": 2,
+        "physicalBytes": 17764,
+        "bootstrapBytesSaved": 24241,
+        "bootstrapGzipBytesSaved": 17492
+      },
+      {
+        "group": "cardback",
+        "physicalFiles": [
+          "assets/cardback.webp"
+        ],
+        "uniqueImages": 1,
+        "physicalBytes": 623970,
+        "bootstrapBytesSaved": 832260,
+        "bootstrapGzipBytesSaved": 626263
+      },
+      {
+        "group": "brandingPlusHolo",
+        "physicalFiles": [
+          "assets/card-mask-ace-spec.webp",
+          "assets/card-mask-radiant.webp",
+          "assets/card-mask-trainer.webp",
+          "assets/card-mask.webp",
+          "assets/fa-card-mask.webp",
+          "assets/prizemap-logo.webp",
+          "assets/tl-open-beta.webp"
+        ],
+        "uniqueImages": 7,
+        "physicalBytes": 172630,
+        "bootstrapBytesSaved": 231597,
+        "bootstrapGzipBytesSaved": 167429
+      }
+    ]
+  },
+  "analysis": {
+    "archetypeImagesAlreadyDeleted": 46,
+    "archetypeImagesShipped": 0,
+    "archetypeAdditionalSavingsBytes": 0,
+    "all136EncodingsPreservedDimensionsAndAlpha": true,
+    "engineDeduplication": {
+      "textPoolingGzipSavedBytes": 28876,
+      "textPoolingBrotliSavedBytes": -45,
+      "reprintFactoryGzipSavedBytes": 7353,
+      "defaultMetadataGzipSavedBytes": 123
+    },
+    "packageFloorNote": "The full card library still dominates after image compression. Chunking card sets can reduce initial web downloads but does not remove them from a complete offline archive."
+  }
+}

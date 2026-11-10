@@ -20,6 +20,8 @@ export enum GameEffects {
   KNOCK_OUT_EFFECT = 'KNOCK_OUT_EFFECT',
   HEAL_EFFECT = 'HEAL_EFFECT',
   EVOLVE_EFFECT = 'EVOLVE_EFFECT',
+  CHECK_EVOLVE_EFFECT = 'CHECK_EVOLVE_EFFECT',
+  AFTER_EVOLVE_EFFECT = 'AFTER_EVOLVE_EFFECT',
   DRAW_PRIZES_EFFECT = 'DRAW_PRIZES_EFFECT',
   MOVE_CARDS_EFFECT = 'MOVE_CARDS_EFFECT',
   EFFECT_OF_ABILITY_EFFECT = 'EFFECT_OF_ABILITY_EFFECT',
@@ -61,6 +63,7 @@ export class RetreatStartEffect implements Effect {
   readonly type: string = GameEffects.RETREAT_START_EFFECT;
   public preventDefault = false;
   public player: Player;
+  public ignoreStatusConditions = false;
 
   constructor(player: Player) {
     this.player = player;
@@ -74,7 +77,7 @@ export class UsePowerEffect implements Effect {
   public card: PokemonCard;
   public target: CardTarget;
 
-  constructor(player: Player, power: Power, card: PokemonCard, target: CardTarget) {
+  constructor(player: Player, power: Power, card: PokemonCard, target: CardTarget, public destination?: PokemonCardList) {
     this.player = player;
     this.power = power;
     this.card = card;
@@ -254,13 +257,36 @@ export class EvolveEffect implements Effect {
   public target: PokemonCardList;
   public pokemonCard: PokemonCard;
   public darkestImpulseSV?: boolean;
+  public readonly source: CardList;
+  public readonly playedFromHand: boolean;
+  public readonly clearPlayerMarkers: boolean;
+  public preflightComplete = false;
 
-  constructor(player: Player, target: PokemonCardList, pokemonCard: PokemonCard) {
+  constructor(player: Player, target: PokemonCardList, pokemonCard: PokemonCard, source: CardList = player.hand,
+    clearPlayerMarkers = false) {
     this.player = player;
     this.target = target;
     this.pokemonCard = pokemonCard;
-    this.target.triggerEvolutionAnimation = true;
+    this.source = source;
+    this.playedFromHand = source === player.hand && source.cards.includes(pokemonCard);
+    this.clearPlayerMarkers = clearPlayerMarkers;
   }
+}
+
+/** Runs only once an evolution has passed all existing reducers and moved. */
+export class AfterEvolveEffect implements Effect {
+  readonly type: string = GameEffects.AFTER_EVOLVE_EFFECT;
+  public preventDefault = false;
+  constructor(public player: Player, public target: PokemonCardList, public pokemonCard: PokemonCard,
+    public playedFromHand: boolean) { }
+}
+
+/** Read-only permission phase: legacy blockers should reject before reactions. */
+export class CheckEvolveEffect implements Effect {
+  readonly type: string = GameEffects.CHECK_EVOLVE_EFFECT;
+  public preventDefault = false;
+  constructor(public player: Player, public target: PokemonCardList, public pokemonCard: PokemonCard,
+    public source: CardList, public playedFromHand: boolean) { }
 }
 
 export class DrawPrizesEffect implements Effect {

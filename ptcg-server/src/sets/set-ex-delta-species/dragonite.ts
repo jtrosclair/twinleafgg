@@ -1,5 +1,5 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, EnergyType, SuperType } from '../../game/store/card/card-types';
+import { Stage, CardType, CardTag, EnergyType, SuperType } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
@@ -16,6 +16,7 @@ import { PutCountersEffect, PutDamageEffect } from '../../game/store/effects/att
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 
 export class Dragonite extends PokemonCard {
+  public tags = [CardTag.DELTA_SPECIES];
   public stage: Stage = Stage.STAGE_2;
   public evolvesFrom = 'Dragonair';
   public cardType: CardType = L;

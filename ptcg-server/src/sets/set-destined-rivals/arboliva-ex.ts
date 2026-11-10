@@ -38,6 +38,9 @@ export class Arbolivaex extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Oil Machine Gun
     if (WAS_ATTACK_USED(effect, 0, this)) {
+      // Ref: upstream 03f82b748 (Oil Salvo / Oil Machine Gun).
+      effect.ignoreWeakness = true;
+      effect.ignoreResistance = true;
       const player = effect.player;
       const opponent = effect.opponent;
 

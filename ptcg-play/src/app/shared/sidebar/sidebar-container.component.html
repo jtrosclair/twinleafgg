@@ -3,7 +3,7 @@
 <ng-content></ng-content>
 <!-- </div>
   <button mat-icon-button class="sidebar-toggle" (click)="toggleSidebar()">
-    <mat-icon>{{ isSidebarVisible ? 'chevron_right' : 'chevron_left' }}</mat-icon>
+    <svg class="ptcg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path [attr.d]="isSidebarVisible ? 'M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z' : 'M15.41 7.41 10.83 12l4.58 4.59L14 18l-6-6 6-6z'"></path></svg>
   </button>
   <ptcg-sidebar [class.hidden]="!isSidebarVisible">
     <ng-content select="ptcg-sidebar"></ng-content>

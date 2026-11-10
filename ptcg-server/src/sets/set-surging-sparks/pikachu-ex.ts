@@ -2,10 +2,11 @@ import { PokemonCard, CardTag, Stage, CardType, StoreLike, State, StateUtils, Po
 import { DiscardCardsEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 
 import { DAMAGED_FROM_FULL_HP, IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Pikachuex extends PokemonCard {
+export class Pikachuex extends PokemonCard implements CopiedAttackOwnershipContract {
   public tags = [CardTag.POKEMON_ex, CardTag.POKEMON_TERA];
   public stage: Stage = Stage.BASIC;
   public cardType: CardType = CardType.LIGHTNING;
@@ -45,6 +46,24 @@ export class Pikachuex extends PokemonCard {
       }
     }
 
+    state = Pikachuex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+
+    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+
+      // Target is not Active
+      if (effect.target === player.active || effect.target === opponent.active) {
+        return state;
+      }
+
+      effect.preventDefault = true;
+    }
+    return state;
+  }
+
+  /** Topaz Bolt's discard belongs to the attack, not Tera or Tenacious Heart. */
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
 
@@ -65,17 +84,6 @@ export class Pikachuex extends PokemonCard {
       });
     }
 
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Target is not Active
-      if (effect.target === player.active || effect.target === opponent.active) {
-        return state;
-      }
-
-      effect.preventDefault = true;
-    }
     return state;
   }
 }

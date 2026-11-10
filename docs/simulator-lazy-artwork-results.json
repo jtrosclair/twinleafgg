@@ -1,0 +1,236 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-11-06T17:55:10.653363+00:00",
+  "origin": "https://sim-static.prizemap.app",
+  "packageHash": "cad1f3d106221bf59166d7c779e8aae5128e85b1804c437d4649758dfa4cc3e3",
+  "buildId": "ec4ee13f-8c73-4a3b-8261-ef617333598a",
+  "behavior": {
+    "startup": "Validate embedded UI bundle and reset failed-image markers; immediately initialize local game. No snapshot artwork enumeration, preload links or image/font/storage await.",
+    "images": "Native loading=lazy and decoding=async attributes exist before src binding. Hidden face image subtrees are absent until revealed. Browser visibility/distance heuristics determine when rendered lazy images load.",
+    "imageSizesChanged": false,
+    "snapshotImageUrlsChanged": false,
+    "cache": "Published supported scans retain stable root /card-images URLs and existing browser/Cloudflare cache behavior. Stable entry URLs serve newest release in place.",
+    "offline": "Rules and state remain local; uncached or evicted card faces can require image downloads after readiness."
+  },
+  "controlledBrowserVerification": {
+    "method": "Production build served on localhost; visible custom artwork response held open by a local test server, host Undo issued while pending, then image released through test-host UI. Separately tested404 fallback and a terminal knockout. CUA UI/DOM checks only.",
+    "heldBefore": {
+      "board": true,
+      "hiddenFaceImages": 0,
+      "images": [
+        {
+          "complete": true,
+          "decoding": "async",
+          "held": false,
+          "loading": "lazy",
+          "width": 240
+        },
+        {
+          "complete": false,
+          "decoding": "async",
+          "held": true,
+          "loading": "lazy",
+          "width": 0
+        },
+        {
+          "complete": true,
+          "decoding": "async",
+          "held": false,
+          "loading": "lazy",
+          "width": 736
+        },
+        {
+          "complete": true,
+          "decoding": "async",
+          "held": false,
+          "loading": "lazy",
+          "width": 736
+        },
+        {
+          "complete": true,
+          "decoding": "async",
+          "held": false,
+          "loading": "lazy",
+          "width": 736
+        }
+      ],
+      "preloads": 0,
+      "timing": {
+        "navigationMs": 707.7,
+        "stages": {
+          "boardMounted": 46.9,
+          "boardPainted": 90,
+          "engineReady": 41.6,
+          "metadataReady": 34.4
+        },
+        "startedAtNavigationMs": 617.7000000476837
+      }
+    },
+    "hostBefore": {
+      "result": "Puzzle ready (StateUpdate received)",
+      "stateUpdates": "1",
+      "status": "{\"requested\":1,\"pending\":1,\"released\":false}"
+    },
+    "hostUndo": {
+      "result": "UndoDetected",
+      "stateUpdates": "2",
+      "status": "{\"requested\":1,\"pending\":1,\"released\":false}"
+    },
+    "heldAfter": {
+      "board": true,
+      "broken": 0,
+      "gameComplete": false,
+      "held": [
+        {
+          "complete": true,
+          "height": 825,
+          "width": 600
+        }
+      ]
+    },
+    "hostAfter": {
+      "result": "UndoDetected",
+      "stateUpdates": "2",
+      "status": "{\"requested\":1,\"pending\":0,\"released\":true}"
+    },
+    "failed": {
+      "board": true,
+      "broken": 0,
+      "images": [
+        {
+          "complete": true,
+          "fallback": true,
+          "width": 745
+        }
+      ]
+    },
+    "win": {
+      "boardOpacity": "0",
+      "complete": true,
+      "inert": true,
+      "modalCount": 0
+    }
+  },
+  "publicBrowser": {
+    "puzzle": "Phantom Maze",
+    "method": "CUA browser UI and DOM checks against the deployed production build. Three warm full reloads in the same desktop browser; boardPainted is the existing two-animation-frame diagnostic, not all-image completion.",
+    "firstNewReleasePaint": {
+      "allLazy": true,
+      "faceImages": 38,
+      "hiddenFaceImages": 0,
+      "images": 38,
+      "incomplete": 0,
+      "preloads": 0,
+      "release": "/releases/cad1f3d106221bf59166d7c779e8aae5128e85b1804c437d4649758dfa4cc3e3/",
+      "scanDimensions": [
+        "736x1024"
+      ],
+      "timing": {
+        "navigationMs": 903.6,
+        "stages": {
+          "boardMounted": 45.8,
+          "boardPainted": 121.3,
+          "engineReady": 41.8,
+          "metadataReady": 26.1
+        },
+        "startedAtNavigationMs": 782.2999999523163
+      }
+    },
+    "initialUniqueImageSources": 21,
+    "deckOpened": {
+      "images": 16,
+      "newSources": 9,
+      "allLazy": true,
+      "loaded": 16,
+      "dimensions": [
+        "736x1024"
+      ],
+      "broken": 0
+    },
+    "urlUnchanged": true,
+    "warmSamples": [
+      {
+        "hiddenFaceImages": 0,
+        "images": 38,
+        "preloads": 0,
+        "timing": {
+          "navigationMs": 410.7,
+          "stages": {
+            "boardMounted": 36.5,
+            "boardPainted": 147.8,
+            "engineReady": 34,
+            "metadataReady": 22.8
+          },
+          "startedAtNavigationMs": 262.90000009536743
+        }
+      },
+      {
+        "hiddenFaceImages": 0,
+        "images": 38,
+        "preloads": 0,
+        "timing": {
+          "navigationMs": 327.3,
+          "stages": {
+            "boardMounted": 35.9,
+            "boardPainted": 94.5,
+            "engineReady": 33.6,
+            "metadataReady": 21.9
+          },
+          "startedAtNavigationMs": 232.8000001907349
+        }
+      },
+      {
+        "hiddenFaceImages": 0,
+        "images": 38,
+        "preloads": 0,
+        "timing": {
+          "navigationMs": 418.3,
+          "stages": {
+            "boardMounted": 38.7,
+            "boardPainted": 97.7,
+            "engineReady": 36.3,
+            "metadataReady": 23.7
+          },
+          "startedAtNavigationMs": 320.60000014305115
+        }
+      }
+    ],
+    "warmMedians": {
+      "engineReadyMs": 34,
+      "boardMountedMs": 36.5,
+      "boardPaintedMs": 97.7,
+      "navigationToBoardPaintedMs": 410.7
+    },
+    "previousRelease": {
+      "packageHash": "e802592c74f792d2a680e14d1fca98efafde86ed834e77c766eb0d77e74b5918",
+      "warmMedians": {
+        "appStartAtNavigationMs": 285.7,
+        "engineReadyMs": 46,
+        "boardMountedMs": 48.5,
+        "boardPaintedMs": 122.2,
+        "navigationToBoardPaintedMs": 407.9
+      },
+      "imagePreloadCount": 50,
+      "initialImageElements": 44
+    },
+    "interpretation": "Zero all-card preloads and zero hidden deck/face-down image elements. Opening the deck adds 16 lazy images, including 9 source URLs absent from the initial DOM; all displayed scans remain 736x1024. Warm board-mount median fell from 48.5ms to 36.5ms after app start, while full navigation-to-board-paint was 407.9ms before and 410.7ms after. These small desktop samples do not establish a full-page or mobile speedup. DOM source counts do not measure network traffic or cache hits."
+  },
+  "verification": {
+    "npmTestPassed": true,
+    "runtimeSpecs": 15,
+    "cardRegressionSpecs": 44,
+    "frontendSpecs": 62,
+    "nodePackagingAndCacheSpecs": 80,
+    "standaloneFinalizerPassed": true,
+    "angularTemplateTypecheckPassed": true,
+    "productionBuildPassed": true,
+    "assetAudit": {
+      "referenced": 56,
+      "unused": 0,
+      "missing": 0
+    },
+    "liveDeliveryPassed": true,
+    "liveDeliveryReport": "simulator-delivery-results.json",
+    "browserHarness": "tools/test-client-simulator.cjs updated with held-visible-scan, no-preload, lazy-attribute and deferred-hidden-deck checks; syntax checked but not run by CLI. CUA checks above are actual browser evidence."
+  }
+}

@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
@@ -5,7 +6,7 @@ import { StoreLike, State, StateUtils, GamePhase } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { KnockOutEffect } from '../../game/store/effects/game-effects';
 
-export class Swellow extends PokemonCard {
+export class Swellow extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.STAGE_1;
   public cardType: CardType = CardType.COLORLESS;
   public hp: number = 90;
@@ -41,8 +42,7 @@ export class Swellow extends PokemonCard {
   public fullName: string = 'Swellow ROS';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
-    // Delta Plus
+    // Delta Plus belongs to the card, not to a copied attack.
     if (effect instanceof KnockOutEffect && effect.target === effect.player.active) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
@@ -63,6 +63,10 @@ export class Swellow extends PokemonCard {
       }
     }
 
+    return Swellow.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     return state;
   }
 }

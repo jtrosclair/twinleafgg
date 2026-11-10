@@ -1,0 +1,108 @@
+{
+  "verifiedAt": "2026-11-06T09:55:19.128Z",
+  "totalFreshPuzzleWins": 40,
+  "cardLibrary": {
+    "ok": true,
+    "hash": "5d3542beee3b0dbd568bb4967417f1a182e7c7ac5b047eed746320908efb8c21",
+    "cardsTotal": 13483
+  },
+  "puzzles": [
+    {
+      "name": "Trapped in the Phantom Maze",
+      "puzzleId": "225427fc-c922-4ad8-b546-d9361afe873d",
+      "publishedAt": "2026-11-03T21:05:12.200Z",
+      "sourceUrl": "https://www.prizemap.app/api/puzzles/details/225427fc-c922-4ad8-b546-d9361afe873d",
+      "snapshotSha256": "915099f17baefe165612be2265db5eea91eba6144caa54cfedb5eeef2c26ec99",
+      "orderedSteps": 21,
+      "freshReplays": 10,
+      "allWon": true,
+      "initialStateUnchanged": true,
+      "normalRandomness": true,
+      "solution": "Trade and Secret Box find four Transformation Tomes; replace Meowth with Pecharunt ex and N’s Reshiram with N’s Zekrom, power and promote N’s Zoroark, gust Mega Chandelure ex, then copy Rampaging Thunder for 500 damage.",
+      "artifact": "tools/.puzzle-playthrough/phantom-maze.solution.json",
+      "terminal": {
+        "turn": 5,
+        "phase": 7,
+        "winner": 0,
+        "pendingHumanPrompts": 0
+      }
+    },
+    {
+      "name": "Something's Fishy",
+      "puzzleId": "fc4be99a-d74b-4da6-930b-2b5fb7974456",
+      "publishedAt": "2026-09-25T18:01:00.000Z",
+      "sourceUrl": "https://www.prizemap.app/api/puzzles/details/fc4be99a-d74b-4da6-930b-2b5fb7974456",
+      "snapshotSha256": "dca0f218fada83a53a1407609db33b31031b357e3a2e83034ffe5ff253405524",
+      "orderedSteps": 19,
+      "freshReplays": 10,
+      "allWon": true,
+      "initialStateUnchanged": true,
+      "normalRandomness": true,
+      "solution": "Find Carvanha, Binding Mochi and Pecharunt ex; attach Darkness Energy, use Subjugating Chains to poison Carvanha, then use Assault for a 70-damage opening knockout.",
+      "artifact": "tools/.puzzle-playthrough/somethings-fishy.solution.json",
+      "terminal": {
+        "turn": 2,
+        "phase": 7,
+        "winner": 0,
+        "pendingHumanPrompts": 0
+      }
+    },
+    {
+      "name": "Explosive Hand",
+      "puzzleId": "f51f4400-b78e-4744-9be8-3e8aec0ca5cf",
+      "publishedAt": "2026-09-07T19:01:00.000Z",
+      "sourceUrl": "https://www.prizemap.app/api/puzzles/details/f51f4400-b78e-4744-9be8-3e8aec0ca5cf",
+      "snapshotSha256": "1d6daf349636d9fa2d79787c7c74245cb13359a2ebf3b75711860de7cccb8701",
+      "orderedSteps": 20,
+      "freshReplays": 10,
+      "allWon": true,
+      "initialStateUnchanged": true,
+      "normalRandomness": true,
+      "solution": "Use Timepiece and Rare Candy to enable two Cursed Blast knockouts, rebuild the evolution draw engine and a 16-card hand, then use Hand Power for 320 damage to finish Dragapult.",
+      "artifact": "tools/.puzzle-playthrough/explosive-hand.solution.json",
+      "terminal": {
+        "turn": 5,
+        "phase": 7,
+        "winner": 0,
+        "pendingHumanPrompts": 0
+      }
+    },
+    {
+      "name": "Breaking Through the Wall",
+      "puzzleId": "55cbdc21-2520-4eb5-b4c0-e8bb4212c1e8",
+      "publishedAt": "2026-10-15T22:29:00.000Z",
+      "sourceUrl": "https://www.prizemap.app/api/puzzles/details/55cbdc21-2520-4eb5-b4c0-e8bb4212c1e8",
+      "snapshotSha256": "e9cbced8fd573a9df69bc8edbc5af21f9847e028ae0205524193b60bb952234e",
+      "orderedSteps": 29,
+      "freshReplays": 10,
+      "allWon": true,
+      "initialStateUnchanged": true,
+      "normalRandomness": true,
+      "solution": "Draw and search for Greninja, Dusknoir and Starmie; place damage on Bastiodon and Meowth, gust Bastiodon active to disable its bench guard, then Jet Blow takes the final three prizes.",
+      "artifact": "tools/.puzzle-playthrough/breaking-through-wall.solution.json",
+      "terminal": {
+        "turn": 5,
+        "phase": 7,
+        "winner": 0,
+        "pendingHumanPrompts": 0
+      }
+    }
+  ],
+  "browser": {
+    "puzzle": "Trapped in the Phantom Maze",
+    "visibleControls": true,
+    "won": true,
+    "undoAndWinAgain": true,
+    "screenshot": "/tmp/twinleaf-phantom-maze-ui-win.png"
+  },
+  "checks": {
+    "focusedEngineTests": 56,
+    "clientAndComponentTests": 28,
+    "fullCardSuite": {
+      "total": 381,
+      "passed": 375,
+      "preExistingFailures": 6,
+      "report": "/var/folders/j1/v2wg0qh93kjb4_cmn27201p00000gn/T/twinleaf-card-regressions-g2kkbG/results.json"
+    }
+  }
+}

@@ -46,14 +46,10 @@ export class Pyukumuku extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.PYUK_MARKER, this)) {
-      effect.player.marker.removeMarker(this.PYUK_MARKER, this);
-    }
-
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
-      if (player.marker.hasMarker(this.PYUK_MARKER, this)) {
+      if (player.marker.hasMarker(this.PYUK_MARKER)) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
@@ -64,6 +60,16 @@ export class Pyukumuku extends PokemonCard {
       player.deck.moveTo(player.hand, 1);
     }
 
+    return state;
+  }
+
+  // A used Ability belongs to the player for the turn even if its source
+  // leaves play or enters the Lost Zone. Store dispatches this after an
+  // accepted end turn using the marker's retained source reference.
+  public reducePlayerMarkerEffect(_store: StoreLike, state: State, effect: Effect, owner: import('../../game/store/state/player').Player, marker: import('../../game/store/state/card-marker').MarkerItem): State {
+    if (effect instanceof EndTurnEffect && effect.player === owner && marker.name === this.PYUK_MARKER) {
+      owner.marker.removeMarker(this.PYUK_MARKER, this);
+    }
     return state;
   }
 

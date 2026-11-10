@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
@@ -6,7 +7,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Tangrowth extends PokemonCard {
+export class Tangrowth extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom: string = 'Tangela';
   public cardType = G;
@@ -62,6 +63,10 @@ export class Tangrowth extends PokemonCard {
     }
 
 
+    return Tangrowth.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       effect.damage -= effect.player.active.damage;
       return state;

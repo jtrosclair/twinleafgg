@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SpecialCondition, CardTag } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
@@ -7,7 +8,7 @@ import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { CoinFlipEffect } from '../../game/store/effects/play-card-effects';
 
-export class ErikasDratini extends PokemonCard {
+export class ErikasDratini extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.BASIC;
   public cardType: CardType = C;
   public tags = [CardTag.ERIKAS];
@@ -56,6 +57,10 @@ export class ErikasDratini extends PokemonCard {
       }
     }
 
+    return ErikasDratini.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       const damage = effect.damage;

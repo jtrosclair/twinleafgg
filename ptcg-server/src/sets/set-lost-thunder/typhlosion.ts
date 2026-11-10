@@ -82,9 +82,9 @@ export class Typhlosion extends PokemonCard {
         });
 
         if (sourceOwner === owner) {
-          effect.energyMap.forEach(em => {
-            em.provides = em.provides.map(() => CardType.FIRE);
-          });
+          // The base Energy map is populated after Pokemon reducers run, so
+          // applying this only to its current rows misses Energy added later.
+          effect.energyTypeOverride = CardType.FIRE;
         }
       }
     }

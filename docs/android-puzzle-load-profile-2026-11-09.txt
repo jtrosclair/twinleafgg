@@ -1,0 +1,112 @@
+SCOPE UPDATE — November 9, 2026: Startup optimization is deferred at the user's request. The profiling-only constructor edits have been reverted in the Twinleaf source. Continue only the Holo/rendering and action-processing work described in twinleafgg/docs/rendering-and-processing-handoff-2026-11-09.txt. The measurements and APK below are historical profiling evidence.
+
+PrizeMap Android puzzle load profile — November 9, 2026
+
+Measured on the connected Samsung Galaxy A03s (SM-A037U), Android 13,
+Helio P35 / Cortex-A53, 3 GB RAM, Android System WebView 156.0.8078.47.
+Holo remained OFF. All measurements below use the standalone PrizeMap Holo Test
+app and the current frozen simulator source with 13,515 registered card definitions.
+
+RESULT
+There is a large opportunity: retain the loaded simulator WebView between puzzles.
+The final-build prototype loaded a fresh puzzle in 0.43 seconds median
+over 12 switches across four puzzles. Reloading its document took 4.92 seconds
+median. That is 91.3% less time after the first startup.
+This is a validated prototype, not a completed native PrizeMap integration.
+Resident timing ends after two animation-frame callbacks; it does not wait for
+all new card artwork to download/decode. Reload image timing is separate below.
+
+TIMINGS
+Unchanged control, document reload, 5 runs: 5.04 s median.
+Repeat unchanged control, 3 runs: 5.03 s median;
+one reload took 9.16 s. All samples are retained in the measurements JSON.
+Allocation cleanup, document reload, 5 runs: 4.92 s median.
+Cleanup improvement: 118 ms / 2.3% in these small samples.
+Visible card images ready: 5.30 s control,
+5.12 s final-build median.
+Unchanged control, fresh Android test-app process, 3 runs: 10.18 s median from
+document navigation to board marker. Native launch and host polling are extra.
+No final-build cold-start speed improvement is claimed.
+Resident unchanged control: 0.43 s median (12 switches); final build: 0.43 s
+median, range 0.25–0.81 s.
+
+WHAT CONSUMES THE TIME
+The large compiled JavaScript bundle eagerly evaluates and constructs the complete
+card catalogue each time a WebView document starts. In cold control runs the main
+asset finished arriving in under 0.85 s, but Angular puzzle setup did not begin
+until 8.72–8.84 s. Constructor work, module evaluation and garbage collection
+dominated the startup CPU profile. On warmed document reloads setup began around
+4 s, followed by roughly another second to build and render the puzzle.
+These are embedded-asset timings; the installed app may have additional costs.
+The CPU profile itself adds overhead, so unprofiled runs provide the timing table.
+
+IMPLEMENTED SOURCE CHANGE
+PokemonCard and TrainerCard were allocating some mutable default arrays twice;
+PokemonCard also replaced a fresh Marker with another fresh Marker. Their Card
+parent already creates these as independent own properties on every instance.
+Removed only the redundant assignments/imports and added ownership regression tests.
+The patch is applied to the live Twinleaf working tree and frozen test source.
+It retains every card, effect handler, catalogue entry, callback, and rules scan.
+The result is a modest startup saving; it does not account for the large reuse gain.
+
+VALIDATION
+* All 13,515 normalized card definitions, own-property descriptors, callback strings
+  and internal aliases matched exactly before/after. Both SHA-256 values:
+  0ff34decc0547ad338ea21cfe33b0f584564cdba82be8d3aace6497b21049071
+* Mutable arrays, Marker and CardList remain independent own properties.
+* Engine/card suite: 691 passed, 2 failed across 84 isolated spec files.
+  Re-running the failing copied-handler suite with original constructors produced
+  the same two failures (unrelated passive after copied Harden; unguarded Ability
+  branch on initial AttackEffect). This is not a fully green engine suite.
+* Frontend service suite: 188 passed, 0 failed.
+* Four recorded known solutions: 40 desktop wins on the final source.
+* Final APK, real phone: four solutions won, final action undone and won again,
+  reset restored each new puzzle's starting state. Eight wins total; recorded
+  checkpoints matched. No accounts, attempts or scores were submitted.
+* Fresh game IDs and empty undo history checked on all 12 measured switches.
+* Short resident-runtime test, 20 switches with GC: JS heap 65.53 -> 65.91 MB;
+  DOM nodes stayed 1,225, listeners stayed 196. This is not total process RAM
+  and does not establish long-term leak freedom.
+* Angular production build, metadata generation, CJS/ESM engine build and signed
+  standalone APK verification completed. Three existing SCSS size warnings remain.
+
+HOW TO USE THE LARGE IMPROVEMENT IN PRIZEMAP
+The native PuzzleScreen currently mounts its own WebView inside a puzzle session.
+Keeping the asset-package lease alive does not preserve the JavaScript runtime.
+Use one retained, optionally prewarmed WebView and add an explicit fresh-puzzle
+request/acknowledgment bridge. Reset game ID, undo/history, completion, prompts,
+dialogs and the initial reset baseline; keep attempt/puzzle identity on every
+message so events from the previous puzzle cannot affect the current attempt.
+Reload on simulator-package changes, crashes and low-memory recovery. Restore
+theme/preferences for the new puzzle. A retained host must release memory when
+Android needs it. The first startup still requires initialization.
+The profiling prototype obtained Angular services through Ivy inspection and
+used their normal fresh-game path. That inspection is not a production API.
+Route away from the old table before replacing its game to avoid stale-ID routing.
+The existing PushStateChange/undo message is not a fresh-puzzle loader.
+Known solutions validate engine/game isolation; native integration also needs
+attempt, back-navigation, lifecycle, update and recovery tests before release.
+
+EXPERIMENTS NOT SHIPPED
+Switching bootstrap to AOT made no difference: this Angular 12 production build
+already removes the dynamic compiler/bootstrap path. Removing abstract-class
+constructor argument forwarding also showed no useful improvement. Scratch
+byte-edited bundles are not included in the deliverable APK. No card subset or
+handler filtering was introduced, including cards activated indirectly by effects.
+
+SCOPE AND DELIVERABLES
+The installed production app has no accessible WebView debugging socket. These
+are real-device standalone measurements, not end-to-end measurements of its full
+React Native wrapper, puzzle API, account/attempt startup, or navigation.
+Only the separate app.codex.prizemap.holotest test package was updated. The main
+PrizeMap app and saved progress were not replaced. No deployment was published.
+The test app was left on the initial Phantom Maze board, Holo OFF, with all 28
+card image elements having nonzero sizes. Temporary debugger forwarding removed.
+
+Current standalone APK: PrizeMap load profiling.apk
+SHA-256: 4800c31672ea9f5e8ae34b24297dde9fb200d6254a52da6bb2697c4e32cbd4ae
+The older PrizeMap Holo Test.apk is preserved for the prior audit's reproducibility.
+phone-changes.json and Phone restore kit.zip describe the currently installed APK.
+See PrizeMap load measurements.json for all samples, solution checkpoints and
+test results; PrizeMap startup allocation cleanup.patch for the narrow change;
+PrizeMap load profiling source.zip for the frozen source, fixtures and scripts.

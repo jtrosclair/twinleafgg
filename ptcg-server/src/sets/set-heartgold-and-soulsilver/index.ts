@@ -1,3 +1,35 @@
+import { Arcanine } from './arcanine';
+import { Azumarill } from './azumarill';
+import { Caterpie } from './caterpie';
+import { Growlithe } from './growlithe';
+import { Hoothoot } from './hoothoot';
+import { Jigglypuff } from './jigglypuff';
+import { Ledyba } from './ledyba';
+import { Magikarp } from './magikarp';
+import { Marill } from './marill';
+import { Meowth } from './meowth';
+import { Paras } from './paras';
+import { Pikachu } from './pikachu';
+import { Skiploom } from './skiploom';
+import { Slowpoke } from './slowpoke';
+import { Staryu } from './staryu';
+import { Wobbuffet } from './wobbuffet';
+import { Sandslash } from './sandslash';
+import { Weezing } from './weezing';
+import { Qwilfish } from './qwilfish';
+import { Donphan2 } from './donphan2';
+import { Heracross } from './heracross';
+import { Meganium2 } from './meganium2';
+import { Parasect } from './parasect';
+import { Gyarados2 } from './gyarados2';
+import { Farfetchd } from './farfetchd';
+import { Furret } from './furret';
+import { Girafarig } from './girafarig';
+import { Snubbull } from './snubbull';
+import { Miltank } from './miltank';
+import { Quagsire } from './quagsire';
+import { Sentret } from './sentret';
+import { Butterfree } from './butterfree';
 import { BillHS, CopycatHS, EnergySwitchPKHS, FullHealHS, PokeBallHS, ProfessorElmsTrainingMethodHS } from './other-prints';
 import { Card } from '../../game/store/card/card';
 import { Bayleef } from './bayleef';
@@ -49,6 +81,39 @@ import {
 } from './other-prints';
 
 export const setHeartGoldAndSoulSilver: Card[] = [
+  new Arcanine(),
+  new Azumarill(),
+  new Caterpie(),
+  new Growlithe(),
+  new Hoothoot(),
+  new Jigglypuff(),
+  new Ledyba(),
+  new Magikarp(),
+  new Marill(),
+  new Meowth(),
+  new Paras(),
+  new Pikachu(),
+  new Skiploom(),
+  new Slowpoke(),
+  new Staryu(),
+  new Wobbuffet(),
+  new Sandslash(),
+  new Weezing(),
+  new Qwilfish(),
+  new Donphan2(),
+  new Heracross(),
+  new Meganium2(),
+  new Parasect(),
+  new Gyarados2(),
+  new Farfetchd(),
+  new Furret(),
+  new Girafarig(),
+  new Snubbull(),
+  new Miltank(),
+  new Quagsire(),
+  new Sentret(),
+  new Butterfree(),
+
   new Bayleef(),
   new Blissey(),
   new Chansey(),

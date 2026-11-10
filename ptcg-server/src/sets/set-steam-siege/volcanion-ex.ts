@@ -1,6 +1,10 @@
-import { PokemonCard, Stage, PowerType, CardType, ChooseCardsPrompt, EnergyCard, EnergyType, GameError, GameMessage, State, StoreLike, SuperType, CardTag } from '../../game';
+import { PokemonCard, Stage, PowerType, CardType, ChooseCardsPrompt, EnergyCard, EnergyType, GameError, GameMessage, State, StateUtils, StoreLike, SuperType, CardTag } from '../../game';
 import { DealDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
+import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { Player } from '../../game/store/state/player';
+import { MarkerItem } from '../../game/store/state/card-marker';
+import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
 
 import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
@@ -64,13 +68,22 @@ export class VolcanionEX extends PokemonCard {
       });
     }
 
-    if (effect instanceof DealDamageEffect && effect.player.marker.hasMarker(this.STEAM_UP_MARKER)) {
+    return state;
+  }
+
+  public reducePlayerMarkerEffect(store: StoreLike, state: State, effect: Effect, owner: Player, marker: MarkerItem): State {
+    if (marker.name !== this.STEAM_UP_MARKER) return state;
+    if (effect instanceof EndTurnEffect && effect.player === owner) {
+      owner.marker.removeMarker(this.STEAM_UP_MARKER, this);
+    } else if (effect instanceof DealDamageEffect && effect.player === owner && effect.damage > 0
+      && effect.target === StateUtils.getOpponent(state, owner).active) {
       const source = effect.source.getPokemonCard();
-      if (source && source.stage === Stage.BASIC && source.cardType === CardType.FIRE) {
-        effect.damage += 30;
+      if (source && source.stage === Stage.BASIC) {
+        const check = new CheckPokemonTypeEffect(effect.source);
+        state = store.reduceEffect(state, check);
+        if (check.cardTypes.includes(CardType.FIRE)) effect.damage += 30;
       }
     }
-
     return state;
   }
 }

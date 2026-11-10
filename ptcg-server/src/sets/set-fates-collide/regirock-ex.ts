@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, PowerType, PlayerType, StateUtils } from '../../game';
@@ -6,7 +7,7 @@ import {WAS_ATTACK_USED} from '../../game/store/prefabs/prefabs';
 import {DealDamageEffect, PutDamageEffect} from '../../game/store/effects/attack-effects';
 import {EndTurnEffect} from '../../game/store/effects/game-phase-effects';
 
-export class RegirockEx extends PokemonCard {
+export class RegirockEx extends PokemonCard implements CopiedAttackOwnershipContract {
   public tags = [ CardTag.POKEMON_EX ];
   public stage: Stage = Stage.BASIC;
   public cardType: CardType = F;
@@ -53,6 +54,10 @@ export class RegirockEx extends PokemonCard {
       }
     }
     
+    return RegirockEx.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Bedrock Press
     if (WAS_ATTACK_USED(effect, 0, this)){
       const opponent = effect.opponent;

@@ -7,7 +7,8 @@ $ptcg-energy-card-offset: 13%;
 // ==================== MAIN COMPONENT STYLES ====================
 .ptcg-board-card {
   max-width: map-get($ptcg-size, card);
-  min-width: map-get($ptcg-size, board-card);
+  min-width: 0;
+  width: 100%;
   position: relative;
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 
@@ -48,7 +49,7 @@ $ptcg-energy-card-offset: 13%;
   }
 
   &.face-down:after {
-    background-image: url(~src/assets/cardback.png);
+    background-image: url(~src/assets/cardback.svg);
     background-repeat: no-repeat;
     background-size: 100% 100%;
     content: "";
@@ -212,7 +213,49 @@ $ptcg-energy-card-offset: 13%;
     z-index: 1;
   }
 
-  // ==================== CARD COUNTS AND DAMAGE ====================
+  // ==================== HP, CARD COUNTS AND DAMAGE ====================
+  .ptcg-card-hp {
+    position: absolute;
+    top: -3%;
+    right: -3%;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    gap: .2em;
+    padding: .06em .18em .06em .3em;
+    border: 1px solid #c9cdd0;
+    border-radius: .3em;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+    color: #111;
+    font-family: inherit;
+    font-size: clamp(11px, calc(var(--bench-card-size, 69px) * .2), 17px);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.05;
+    white-space: nowrap;
+    pointer-events: none;
+
+    &.hp-increased { color: #16803c; }
+    &.hp-decreased { color: #c62828; }
+  }
+
+  .ptcg-card-hp-types {
+    display: flex;
+    align-items: center;
+    gap: .08em;
+
+    ptcg-energy { display: flex; }
+
+    // The shared symbols normally reserve space for attack costs.
+    ::ng-deep .ptcg-energy {
+      width: .85em;
+      height: .85em;
+      margin: 0;
+      transform: none;
+    }
+  }
+
   .ptcg-card-counts {
     bottom: 0;
     padding: $ptcg-board-tiny-padding 0;
@@ -227,8 +270,8 @@ $ptcg-energy-card-offset: 13%;
 
   .ptcg-card-damage {
     position: absolute;
-    top: -10%;
-    right: -10%;
+    top: 17%;
+    right: -3%;
     z-index: 2;
     width: 24px;
     height: 24px;
@@ -546,8 +589,8 @@ $ptcg-energy-card-offset: 13%;
         transparent 65%);
     background-size: 300% 300%;
     mix-blend-mode: soft-light;
-    -webkit-mask-image: url('/assets/card-mask.png');
-    mask-image: url('/assets/card-mask.png');
+    -webkit-mask-image: url('/assets/card-mask.webp');
+    mask-image: url('/assets/card-mask.webp');
     -webkit-mask-size: 100% 100%;
     mask-size: 100% 100%;
     will-change: background-position;
@@ -586,8 +629,8 @@ $ptcg-energy-card-offset: 13%;
         transparent 65%);
     background-size: 300% 300%;
     mix-blend-mode: soft-light;
-    -webkit-mask-image: url('/assets/fa-card-mask.png');
-    mask-image: url('/assets/fa-card-mask.png');
+    -webkit-mask-image: url('/assets/fa-card-mask.webp');
+    mask-image: url('/assets/fa-card-mask.webp');
     -webkit-mask-size: 100% 100%;
     mask-size: 100% 100%;
     will-change: background-position;
@@ -624,8 +667,8 @@ $ptcg-energy-card-offset: 13%;
           transparent 65%);
       background-size: 300% 300%;
       mix-blend-mode: soft-light;
-      -webkit-mask-image: url('/assets/card-mask-radiant.png');
-      mask-image: url('/assets/card-mask-radiant.png');
+      -webkit-mask-image: url('/assets/card-mask-radiant.webp');
+      mask-image: url('/assets/card-mask-radiant.webp');
       -webkit-mask-size: 100% 100%;
       mask-size: 100% 100%;
       will-change: background-position;

@@ -1,21 +1,19 @@
-import { Component, Input, OnChanges, ViewChildren, QueryList, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnChanges, ChangeDetectorRef } from '@angular/core';
 import { Card, ChoosePrizePrompt, CardList } from 'ptcg-server';
 
 import { GameService } from '../../../api/services/game.service';
 import { LocalGameState } from '../../../shared/session/session.interface';
-import { BoardCardComponent } from '../../board/board-card/board-card.component';
 
 @Component({
   selector: 'ptcg-prompt-choose-prize',
   templateUrl: './prompt-choose-prize.component.html',
   styleUrls: ['./prompt-choose-prize.component.scss']
 })
-export class PromptChoosePrizeComponent implements OnChanges, AfterViewChecked {
+export class PromptChoosePrizeComponent implements OnChanges {
 
   @Input() prompt: ChoosePrizePrompt;
   @Input() gameState: LocalGameState;
 
-  @ViewChildren(BoardCardComponent) boardCards: QueryList<BoardCardComponent>;
 
   public cards: Card[];
   public prizes: (CardList | null)[] = new Array(6).fill(null);
@@ -25,10 +23,7 @@ export class PromptChoosePrizeComponent implements OnChanges, AfterViewChecked {
   public message: string;
   public isInvalid = false;
   public hasSecret: boolean;
-  public revealed = false;
   private result: number[] = [];
-  private lastRevealedState: boolean = null;
-  private lastRevealToggleCount: number = -1;
 
   // Maps grid positions to the index of non-empty prizes only
   private prizeIndexMap: { [visualIndex: number]: number } = {};
@@ -37,43 +32,11 @@ export class PromptChoosePrizeComponent implements OnChanges, AfterViewChecked {
   // Maps from the non-empty prize index to grid position
   private prizeToGridMap: { [prizeIndex: number]: number } = {};
 
-  // Property to force re-render of the component
-  public revealToggleCount = 0;
 
   constructor(
     private gameService: GameService,
     private cdr: ChangeDetectorRef
   ) { }
-
-  // Toggle card reveal in replay mode
-  public toggleReveal(): void {
-    this.revealed = !this.revealed;
-    this.revealToggleCount++; // Increment counter to force component update
-    this.updateCardFaceDownState();
-  }
-
-  // Update isFaceDown state on all board-card components
-  private updateCardFaceDownState(): void {
-    if (!this.boardCards) {
-      return;
-    }
-
-    this.boardCards.forEach((boardCard, index) => {
-      const prize = this.prizes[index];
-      if (prize && prize.cards.length > 0) {
-        boardCard.isFaceDown = !this.revealed && prize.isSecret;
-      }
-    });
-  }
-
-  ngAfterViewChecked(): void {
-    // Update card face down state when reveal state or toggle count changes
-    if (this.lastRevealedState !== this.revealed || this.lastRevealToggleCount !== this.revealToggleCount) {
-      this.lastRevealedState = this.revealed;
-      this.lastRevealToggleCount = this.revealToggleCount;
-      this.updateCardFaceDownState();
-    }
-  }
 
   public minimize() {
     this.gameService.setPromptMinimized(this.gameState.localId, true);
@@ -97,7 +60,7 @@ export class PromptChoosePrizeComponent implements OnChanges, AfterViewChecked {
       return;
     }
 
-    // The server expects an index into the filtered list of non-empty prizes
+    // The prompt decoder expects an index into the filtered list of non-empty prizes
     const nonEmptyPrizeIndex = this.prizeIndexMap[gridIndex];
 
     if (nonEmptyPrizeIndex === undefined) {
@@ -141,12 +104,12 @@ export class PromptChoosePrizeComponent implements OnChanges, AfterViewChecked {
     return nonEmptyPrizeIndex !== undefined && this.result.indexOf(nonEmptyPrizeIndex) !== -1;
   }
 
-  // TrackBy function to force recreation when reveal state changes
+  // Keep prize grid positions stable during selection.
   public trackByPrize(index: number, prize: CardList | null): any {
     if (!prize) {
       return `empty-${index}`;
     }
-    return `prize-${index}-${this.revealed}-${this.revealToggleCount}`;
+    return `prize-${index}`;
   }
 
   // Keep this for backward compatibility
@@ -185,8 +148,8 @@ export class PromptChoosePrizeComponent implements OnChanges, AfterViewChecked {
         }
       });
 
-      // Create the non-empty prize index mapping that the server expects
-      // The server expects indexes into the filtered array of non-empty prizes
+      // Create the non-empty prize index mapping that the prompt decoder expects
+      // The prompt decoder expects indexes into the filtered array of non-empty prizes
       const nonEmptyPrizes = player.prizes.filter(p => p.cards.length > 0);
 
       // Each non-empty prize gets a sequential index
@@ -216,9 +179,6 @@ export class PromptChoosePrizeComponent implements OnChanges, AfterViewChecked {
       this.result = [];
       this.isInvalid = true;
 
-      // Reset revealed state whenever the prompt changes
-      this.revealed = false;
-      this.revealToggleCount = 0;
     }
   }
 }

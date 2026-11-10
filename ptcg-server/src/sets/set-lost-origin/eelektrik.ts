@@ -6,7 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, BoardEffect } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils, GameMessage, ConfirmPrompt, PlayerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
 import { ADD_PARALYZED_TO_PLAYER_ACTIVE, COIN_FLIP_PROMPT, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class Eelektrik extends PokemonCard {
@@ -44,7 +44,7 @@ export class Eelektrik extends PokemonCard {
     // Ref: set-astral-radiance/togekiss.ts (Shine of Happiness - EvolveEffect on-evolve ability pattern)
     // Ref: set-journey-together/volcanion-ex.ts (AddSpecialConditionsPowerEffect from ability)
     // Ref: AGENTS-patterns.md (ADD_PARALYZED_TO_PLAYER_ACTIVE for opponent)
-    if (effect instanceof EvolveEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this && effect.playedFromHand && state.players[state.activePlayer] === effect.player) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {

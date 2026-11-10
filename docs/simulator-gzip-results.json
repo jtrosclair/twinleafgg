@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-11-07T01:12:14.591Z",
+  "method": "Production TypeScript decodePuzzlePayload with pinned gzip inflator; current compiled ClientSimulator and full StateSerializer oracle; five exact published snapshots and legal actions with normal RNG. No browser, network, API mutation or gameplay source changes.",
+  "decoderSource": "ptcg-play/src/app/shared/services/puzzle-payload.ts",
+  "decoderSourceSha256": "6561e839e934c3a075219c61b1661732fce4fb6c6d015a9eaaf6758cc9f067ed",
+  "engineEntrySha256": "728d27c9f601e6ca38958a09db7c393481afff044638feb040a5aec14b16af7b",
+  "gzipEncoding": "gz1. + unpadded Base64URL(gzip level 6 of UTF-8 compact serialized JSON)",
+  "outputDirectory": "/var/folders/j1/v2wg0qh93kjb4_cmn27201p00000gn/T/twinleaf-gzip-puzzles",
+  "fixtures": [
+    {
+      "name": "Trapped in the Phantom Maze",
+      "fixture": "tools/.puzzle-playthrough/phantom-maze.solution.json",
+      "gzipPayloadFile": "/var/folders/j1/v2wg0qh93kjb4_cmn27201p00000gn/T/twinleaf-gzip-puzzles/phantom-maze.gz1.txt",
+      "viewerUrlFile": "/var/folders/j1/v2wg0qh93kjb4_cmn27201p00000gn/T/twinleaf-gzip-puzzles/phantom-maze.url.txt",
+      "sizes": {
+        "legacyBase64Characters": 30924,
+        "compactJsonUtf8Bytes": 7637,
+        "compactBase64Characters": 10184,
+        "gzipBytes": 1675,
+        "gzipTransportCharacters": 2238,
+        "gzipViewerUrlCharacters": 2285
+      },
+      "verification": {
+        "gzipJsonBytesIdentical": true,
+        "fullHydratedStateIdentical": true,
+        "sharedReferencesIdentical": true,
+        "canonicalFullStateSha256": "1a5637928442180efab311aa26c8a46184345e73e5068fe177ebb8b3b2508354",
+        "legacyPlainInputUnchanged": true,
+        "emittedPlainHistoryUnchanged": true,
+        "undoResetRoundtripIdentical": true,
+        "normalizedEmissionSha256": "50e61aa6683bed95fb332606a5ea6440f15c1ccc536e99dc350aa7786130886e"
+      },
+      "winningReplays": 10
+    },
+    {
+      "name": "Explosive Hand",
+      "fixture": "tools/.puzzle-playthrough/explosive-hand.solution.json",
+      "gzipPayloadFile": "/var/folders/j1/v2wg0qh93kjb4_cmn27201p00000gn/T/twinleaf-gzip-puzzles/explosive-hand.gz1.txt",
+      "viewerUrlFile": "/var/folders/j1/v2wg0qh93kjb4_cmn27201p00000gn/T/twinleaf-gzip-puzzles/explosive-hand.url.txt",
+      "sizes": {
+        "legacyBase64Characters": 30352,
+        "compactJsonUtf8Bytes": 7109,
+        "compactBase64Characters": 9480,
+        "gzipBytes": 1453,
+        "gzipTransportCharacters": 1942,
+        "gzipViewerUrlCharacters": 1989
+      },
+      "verification": {
+        "gzipJsonBytesIdentical": true,
+        "fullHydratedStateIdentical": true,
+        "sharedReferencesIdentical": true,
+        "canonicalFullStateSha256": "4b232c51994c30e6070a994eff5032756f2c84b1a3722535b0bd9a6b3fdcfb94",
+        "legacyPlainInputUnchanged": true,
+        "emittedPlainHistoryUnchanged": true,
+        "undoResetRoundtripIdentical": true,
+        "normalizedEmissionSha256": "7913c41d7d9974d60a4ac65d7cfcdb54deb4ca54163523677c6d8f9f501b8236"
+      },
+      "winningReplays": 10
+    },
+    {
+      "name": "Breaking Through the Wall",
+      "fixture": "tools/.puzzle-playthrough/breaking-through-wall.solution.json",
+      "gzipPayloadFile": "/var/folders/j1/v2wg0qh93kjb4_cmn27201p00000gn/T/twinleaf-gzip-puzzles/breaking-through-wall.gz1.txt",
+      "viewerUrlFile": "/var/folders/j1/v2wg0qh93kjb4_cmn27201p00000gn/T/twinleaf-gzip-puzzles/breaking-through-wall.url.txt",
+      "sizes": {
+        "legacyBase64Characters": 30772,
+        "compactJsonUtf8Bytes": 7464,
+        "compactBase64Characters": 9952,
+        "gzipBytes": 1548,
+        "gzipTransportCharacters": 2068,
+        "gzipViewerUrlCharacters": 2115
+      },
+      "verification": {
+        "gzipJsonBytesIdentical": true,
+        "fullHydratedStateIdentical": true,
+        "sharedReferencesIdentical": true,
+        "canonicalFullStateSha256": "66309dda5e8cd12c5b4c7925e71556a311f971c142a93a7d7cb119de6b300546",
+        "legacyPlainInputUnchanged": true,
+        "emittedPlainHistoryUnchanged": true,
+        "undoResetRoundtripIdentical": true,
+        "normalizedEmissionSha256": "bb2332d3077f832f8110b62e0ff167c011378007a02bd89a9e52bdb874d0240f"
+      },
+      "winningReplays": 10
+    },
+    {
+      "name": "Something's Fishy",
+      "fixture": "tools/.puzzle-playthrough/somethings-fishy.solution.json",
+      "gzipPayloadFile": "/var/folders/j1/v2wg0qh93kjb4_cmn27201p00000gn/T/twinleaf-gzip-puzzles/somethings-fishy.gz1.txt",
+      "viewerUrlFile": "/var/folders/j1/v2wg0qh93kjb4_cmn27201p00000gn/T/twinleaf-gzip-puzzles/somethings-fishy.url.txt",
+      "sizes": {
+        "legacyBase64Characters": 30532,
+        "compactJsonUtf8Bytes": 7247,
+        "compactBase64Characters": 9664,
+        "gzipBytes": 1564,
+        "gzipTransportCharacters": 2090,
+        "gzipViewerUrlCharacters": 2137
+      },
+      "verification": {
+        "gzipJsonBytesIdentical": true,
+        "fullHydratedStateIdentical": true,
+        "sharedReferencesIdentical": true,
+        "canonicalFullStateSha256": "7af34a24f19b0469e3887acb37624106487ffabebcd394c76d33b1a383121b40",
+        "legacyPlainInputUnchanged": true,
+        "emittedPlainHistoryUnchanged": true,
+        "undoResetRoundtripIdentical": true,
+        "normalizedEmissionSha256": "34600641aca6a3f7c6a5dc1fc9a5875771b2a64fd0a9350af312d6a44e908a05"
+      },
+      "winningReplays": 10
+    },
+    {
+      "name": "Deck out with Dengo",
+      "fixture": "tools/fixtures/deck-out-with-dengo.snapshot.json.gz",
+      "gzipPayloadFile": "/var/folders/j1/v2wg0qh93kjb4_cmn27201p00000gn/T/twinleaf-gzip-puzzles/deck-out-with-dengo.gz1.txt",
+      "viewerUrlFile": "/var/folders/j1/v2wg0qh93kjb4_cmn27201p00000gn/T/twinleaf-gzip-puzzles/deck-out-with-dengo.url.txt",
+      "sizes": {
+        "legacyBase64Characters": 30788,
+        "compactJsonUtf8Bytes": 7500,
+        "compactBase64Characters": 10000,
+        "gzipBytes": 1642,
+        "gzipTransportCharacters": 2194,
+        "gzipViewerUrlCharacters": 2241
+      },
+      "verification": {
+        "gzipJsonBytesIdentical": true,
+        "fullHydratedStateIdentical": true,
+        "sharedReferencesIdentical": true,
+        "canonicalFullStateSha256": "4b76a80b13f8a7c144199b9c29f0445bbcb6263989fbeaf47bcf7f5b39fafa9e",
+        "legacyPlainInputUnchanged": true,
+        "emittedPlainHistoryUnchanged": true,
+        "undoResetRoundtripIdentical": true,
+        "normalizedEmissionSha256": "3fa88146ca4ff873be6149fb2695f9427386041337e18ac97cffc58413e7ba42"
+      }
+    }
+  ],
+  "winningReplays": 40,
+  "dengoTuroNestCases": [
+    {
+      "promotion": 0,
+      "promoted": "Genesect ex SV11B",
+      "chosenCardId": 1,
+      "chosen": "Fezandipiti ex SFA",
+      "verified": true
+    },
+    {
+      "promotion": 1,
+      "promoted": "Gimmighoul SSP",
+      "chosenCardId": 1,
+      "chosen": "Fezandipiti ex SFA",
+      "verified": true
+    },
+    {
+      "promotion": 2,
+      "promoted": "Solrock M1L",
+      "chosenCardId": 1,
+      "chosen": "Fezandipiti ex SFA",
+      "verified": true
+    },
+    {
+      "promotion": 3,
+      "promoted": "Gimmighoul SSP",
+      "chosenCardId": 1,
+      "chosen": "Fezandipiti ex SFA",
+      "verified": true
+    },
+    {
+      "promotion": 4,
+      "promoted": "Gimmighoul SSP",
+      "chosenCardId": 1,
+      "chosen": "Fezandipiti ex SFA",
+      "verified": true
+    }
+  ],
+  "outgoingStateUpdatesRemainPlainBase64": true,
+  "normalRandomness": true,
+  "physicalWebViewTest": false,
+  "deployment": false
+}

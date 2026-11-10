@@ -134,6 +134,7 @@ import { Spiritomb } from './spiritomb';
 import { Spritzee } from './spritzee';
 import { Squirtle } from './squirtle';
 import { Stunfisk } from './stunfisk';
+import { Stakataka } from './stakataka';
 import { Tangela } from './tangela';
 import { Tangrowth } from './tangrowth';
 import { Tentacool } from './tentacool';
@@ -380,6 +381,7 @@ export const setUnbrokenBonds: Card[] = [
   new Spritzee(),
   new Squirtle(),
   new Stunfisk(),
+  new Stakataka(),
   new Tangela(),
   new Tangrowth(),
   new Tentacool(),

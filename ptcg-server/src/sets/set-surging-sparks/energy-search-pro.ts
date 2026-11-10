@@ -1,4 +1,3 @@
-import { Card } from '../../game/store/card/card';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { Effect } from '../../game/store/effects/effect';
@@ -8,11 +7,11 @@ import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
-import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
+import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
 import { EnergyCard, StateUtils } from '../../game';
-import { SHOW_CARDS_TO_PLAYER } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
 
-function* playCard(next: Function, store: StoreLike, state: State, effect: TrainerEffect): IterableIterator<State> {
+function playCard(store: StoreLike, state: State, effect: TrainerEffect): State {
   const player = effect.player;
   const opponent = StateUtils.getOpponent(state, player);
 
@@ -26,30 +25,27 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
     .filter((value, index, self) => self.indexOf(value) === index)
     .length;
 
-  let cards: Card[] = [];
-  yield store.prompt(state, new ChooseCardsPrompt(
+  // Ref: set-silver-tempest/durant.ts (select, move, reveal, then shuffle)
+  return store.prompt(state, new ChooseCardsPrompt(
     player,
     GameMessage.CHOOSE_CARD_TO_HAND,
     player.deck,
     { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
     { min: 0, max: uniqueBasicEnergies, allowCancel: false, differentTypes: true }
   ), selected => {
-    cards = selected || [];
-
-    if (selected.length > 1) {
-      if (selected[0].name === selected[1].name) {
-        throw new GameError(GameMessage.CAN_ONLY_SELECT_TWO_DIFFERENT_ENERGY_TYPES);
-      }
+    const cards = selected || [];
+    if (cards.length === 0) {
+      SHUFFLE_DECK(store, state, player);
+      return;
     }
-
-    SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-
-    player.deck.moveCardsTo(cards, player.hand);
-
-  });
-
-  return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-    player.deck.applyOrder(order);
+    // Ref: set-silver-tempest/durant.ts (reveal searched cards and shuffle).
+    // Queue the move only after the reveal finishes, so it cannot be reordered.
+    store.prompt(state, new ShowCardsPrompt(opponent.id, GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards), () => {
+      MOVE_CARDS(store, state, player.deck, player.hand, {
+        cards, sourceCard: effect.trainerCard, sourceEffect: effect
+      });
+      SHUFFLE_DECK(store, state, player);
+    });
   });
 }
 
@@ -78,8 +74,7 @@ export class EnergySearchPro extends TrainerCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (effect instanceof TrainerEffect && effect.trainerCard === this) {
-      const generator = playCard(() => generator.next(), store, state, effect);
-      return generator.next().value;
+      return playCard(store, state, effect);
     }
 
     return state;

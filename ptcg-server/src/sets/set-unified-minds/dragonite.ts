@@ -1,13 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, EnergyType, SuperType, BoardEffect } from '../../game/store/card/card-types';
+import { Stage, CardType, EnergyType, SuperType } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { StoreLike, State, EnergyCard, GameError, GameMessage, PlayerType, AttachEnergyPrompt, SlotType, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
-import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
+
+import { WAS_ATTACK_USED, WAS_POWER_USED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
 import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
 
 export class Dragonite extends PokemonCard {
@@ -40,14 +38,15 @@ export class Dragonite extends PokemonCard {
 
   public readonly HURRICANE_CHARGE_MARKER = 'HURRICANE_CHARGE_MARKER';
 
+  private isUsableEnergy(card: unknown): card is EnergyCard {
+    return card instanceof EnergyCard && card.energyType === EnergyType.BASIC
+      && card.provides.some(type => type === CardType.WATER || type === CardType.LIGHTNING);
+  }
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
+    // A returned and replayed card is a new in-play instance for once-per-turn
+    // purposes. Preserve the fork's existing marker reset on re-entry.
     if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
-      const player = effect.player;
-      player.marker.removeMarker(this.HURRICANE_CHARGE_MARKER, this);
-    }
-
-    if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.HURRICANE_CHARGE_MARKER, this)) {
       effect.player.marker.removeMarker(this.HURRICANE_CHARGE_MARKER, this);
     }
 
@@ -58,77 +57,39 @@ export class Dragonite extends PokemonCard {
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
-      const hasEnergyInDiscard = player.hand.cards.some(c => {
-        return c instanceof EnergyCard
-          && c.energyType === EnergyType.BASIC
-          && (c.provides.includes(CardType.WATER) || (c.provides.includes(CardType.LIGHTNING)));
-      });
-
-      if (!hasEnergyInDiscard) {
+      const blocked = player.hand.cards.map((card, index) => this.isUsableEnergy(card) ? -1 : index)
+        .filter(index => index >= 0);
+      if (blocked.length === player.hand.cards.length) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
-      if (player.marker.hasMarker(this.HURRICANE_CHARGE_MARKER, this)) {
-        throw new GameError(GameMessage.POWER_ALREADY_USED);
-      }
+      USE_ABILITY_ONCE_PER_TURN(player, this.HURRICANE_CHARGE_MARKER, this);
+      ABILITY_USED(player, this);
 
-      const blocked: number[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        const checkProvidedEnergy = new CheckProvidedEnergyEffect(player, cardList);
-        store.reduceEffect(state, checkProvidedEnergy);
-
-        checkProvidedEnergy.energyMap.forEach((em, index) => {
-          if (!(em.provides.includes(CardType.WATER) || em.provides.includes(CardType.LIGHTNING))) {
-            const globalIndex = cardList.cards.indexOf(em.card);
-            if (globalIndex !== -1 && !blocked.includes(globalIndex)) {
-              blocked.push(globalIndex);
-            }
-          }
-        });
-      });
-
-      state = store.prompt(state, new AttachEnergyPrompt(
+      return store.prompt(state, new AttachEnergyPrompt(
         player.id,
-        GameMessage.ATTACH_ENERGY_TO_BENCH,
+        GameMessage.ATTACH_ENERGY_CARDS,
         player.hand,
         PlayerType.BOTTOM_PLAYER,
         [SlotType.BENCH, SlotType.ACTIVE],
         { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
         {
-          allowCancel: false,
-          min: 1,
+          allowCancel: true,
+          min: 0,
           max: 2,
           blocked,
-          differentTypes: true,
+          maxPerType: 1,
           validCardTypes: [CardType.WATER, CardType.LIGHTNING]
         },
       ), transfers => {
-        transfers = transfers || [];
-
-        player.marker.addMarker(this.HURRICANE_CHARGE_MARKER, this);
-
-        if (transfers.length === 0) {
-          return state;
-        }
-
-        if (transfers.length > 1) {
-          if (transfers[0].card.name === transfers[1].card.name) {
-            throw new GameError(GameMessage.CAN_ONLY_SELECT_TWO_DIFFERENT_ENERGY_TYPES);
-          }
-        }
-
-        for (const transfer of transfers) {
+        for (const transfer of transfers || []) {
+          if (!this.isUsableEnergy(transfer.card)) throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
           const target = StateUtils.getTarget(state, player, transfer.to);
-          player.hand.moveCardTo(transfer.card, target);
-
-          player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-            if (cardList.getPokemonCard() === this) {
-              cardList.addBoardEffect(BoardEffect.ABILITY_USED);
-            }
-          });
+          MOVE_CARDS(store, state, player.hand, target, { cards: [transfer.card], sourceCard: this });
         }
       });
     }
+    REMOVE_MARKER_AT_END_OF_TURN(effect, this.HURRICANE_CHARGE_MARKER, this);
     return state;
   }
 }

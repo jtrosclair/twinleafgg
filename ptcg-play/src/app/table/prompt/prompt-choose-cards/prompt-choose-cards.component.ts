@@ -1,411 +1,329 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Card, CardList, ChooseCardsPrompt } from 'ptcg-server';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { DndService, DragSource, DropTarget } from '@ng-dnd/core';
+import { Observable } from 'rxjs';
+import { AnimationEvent } from '@angular/animations';
+import { Card, ChooseCardsPrompt, SuperType } from 'ptcg-server';
 
 import { GameService } from '../../../api/services/game.service';
 import { LocalGameState } from '../../../shared/session/session.interface';
 import { CardsBaseService } from '../../../shared/cards/cards-base.service';
-import { PromptCardItem } from './prompt-choose-cards.interface';
+import { handCardKey } from '../../hand/hand-layout';
+import { PromptCardItem, PromptCardStack, SelectorCardType, SelectorDraggedCard } from './prompt-choose-cards.interface';
+import { ptcgPromptAnimations } from '../prompt.animations';
+import { CardSlotRule, cardSlotRules, partialSelectionPrompt } from './card-slot-rules';
 
 @Component({
   selector: 'ptcg-prompt-choose-cards',
   templateUrl: './prompt-choose-cards.component.html',
-  styleUrls: ['./prompt-choose-cards.component.scss']
+  styleUrls: ['./prompt-choose-cards.component.scss'],
+  animations: [ptcgPromptAnimations.selectorVisibility]
 })
-export class PromptChooseCardsComponent implements OnChanges {
-
-  @Input() set prompt(prompt: ChooseCardsPrompt) {
-    this.promptValue = prompt;
-    this.cards = prompt.cards;
-    this.filter = prompt.filter;
-    this.allowedCancel = prompt.options.allowCancel;
-    this.blocked = prompt.options.blocked;
-    this.message = prompt.message;
-    this.promptId = prompt.id;
-    this.isSecret = prompt.options.isSecret;
-    this.cardbackMap = {};
-    this.selectedCards = [];
-    this.result = [];
-    this.currentIndex = 0;
-
-    // Start with invalid state if min > 0
-    this.isInvalid = prompt.options.min > 0;
-
-    if (prompt.options.isSecret) {
-      prompt.cards.cards.forEach((c, i) => {
-        this.cardbackMap[i] = true;
-      });
-    }
-
-    // Initialize card items
-    this.initializeCardItems();
-  }
-
+export class PromptChooseCardsComponent implements OnChanges, OnDestroy {
+  @Input() prompt: ChooseCardsPrompt;
   @Input() gameState: LocalGameState;
-
-  public cards: CardList;
-  public allowedCancel: boolean;
-  public promptId: number;
-  public message: string;
-  public filter: Partial<Card>;
-  public blocked: number[];
-  public isInvalid = false;
-  public isSecret: boolean;
-  public revealed = false;
-  public cardbackMap: { [index: number]: boolean } = {};
-  public promptValue: ChooseCardsPrompt;
+  @Input() minimized = false;
+  public boardView = false;
+  public fadeDuration = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+    ? 0 : 100;
 
   public currentTab = 'Valid';
-  public tabs = ['Valid', 'All'];
-  public filteredCards: Card[] = [];
-  private result: number[] = [];
-
-  // Carousel properties
   public promptItems: PromptCardItem[] = [];
-  public allPromptItems: PromptCardItem[] = []; // Store all cards
-  public visibleCards: PromptCardItem[] = [];
-  public currentIndex = 0;
+  public cardStacks: PromptCardStack[] = [];
   public selectedCards: PromptCardItem[] = [];
-  public filterMap: { [fullName: string]: boolean } = {};
+  public slotCards: PromptCardItem[] = [];
+  public slots: number[] = [];
+  public slotRules: CardSlotRule[] = [];
+  public isInvalid = true;
+  public slotTargets: Array<DropTarget<SelectorDraggedCard>> = [];
+  public slotSources: Array<DragSource<SelectorDraggedCard>> = [];
+  public slotOver: Array<Observable<boolean>> = [];
+  public trayTarget: DropTarget<SelectorDraggedCard>;
+  public rowTarget: DropTarget<SelectorDraggedCard>;
+  public trayOver: Observable<boolean>;
+  public rowOver: Observable<boolean>;
+  public draggingIndex: number | undefined;
 
-  private lastWheelTime = 0;
-  private readonly WHEEL_DELAY = 200; // milliseconds between wheel events
+  private allItems: PromptCardItem[] = [];
+  private partialPrompt: ChooseCardsPrompt;
+  private stackSources = new Map<string, DragSource<SelectorDraggedCard>>();
+  private result: number[] = [];
+  private suppressClickUntil = 0;
+  private touchStart?: { x: number; y: number };
+  private touchMode?: 'scroll' | 'drag';
+  private touchScrollable = true;
 
   constructor(
     private gameService: GameService,
-    private cardsBaseService: CardsBaseService
-  ) { }
+    private cardsBaseService: CardsBaseService,
+    private dnd: DndService
+  ) {
+    this.trayTarget = this.createTarget(true);
+    this.rowTarget = this.createTarget(false);
+    this.trayOver = this.trayTarget.listen(monitor => monitor.isOver({ shallow: true }) && monitor.canDrop());
+    this.rowOver = this.rowTarget.listen(monitor => monitor.isOver() && monitor.canDrop());
+  }
 
-  ngOnChanges(changes: SimpleChanges) {
-    // Handle prompt changes
-    if (changes.prompt) {
-      const currentPrompt = changes.prompt.currentValue;
-      const previousPrompt = changes.prompt.previousValue;
+  ngOnChanges(changes: SimpleChanges): void {
+    // Keep the layout mounted until fade-out finishes; restore it before fade-in.
+    if (!this.minimized) { this.boardView = false; }
+    if (changes.prompt && this.prompt) {
+      this.releaseCardConnections();
+      this.currentTab = 'Valid';
+      this.selectedCards = [];
+      this.slotCards = Array(this.isSetupGame ? 6 : this.maxCards).fill(undefined);
+      this.partialPrompt = partialSelectionPrompt(this.prompt);
+      this.slotRules = cardSlotRules(this.prompt, this.slotCards.length);
+      this.result = [];
+      const blocked = this.prompt.options.blocked || [];
+      this.allItems = this.prompt.cards.cards.map((card, index) => ({
+        card, index, originalIndex: index,
+        isAvailable: !blocked.includes(index) && Object.keys(this.prompt.filter || {})
+          .every(key => (this.prompt.filter as any)[key] === (card as any)[key]),
+        isSecret: this.prompt.options.isSecret,
+        scanUrl: ''
+      }));
+      this.slots = Array.from({ length: this.isSetupGame ? 6 : this.maxCards }, (_, index) => index);
+      this.slotSources = this.slots.map(slot => this.createSource(() => this.slotCards[slot]));
+      this.slotTargets = this.slots.map(slot => this.createTarget(true, slot));
+      this.slotOver = this.slotTargets.map(target => target.listen(monitor => monitor.isOver() && monitor.canDrop()));
+      this.updateFilteredItems();
+    }
+    if (this.prompt) { this.updateValidity(); }
+  }
 
-      // Only reinitialize if we have a new prompt or the prompt content has changed
-      if (currentPrompt && (!previousPrompt ||
-        currentPrompt.id !== previousPrompt.id ||
-        currentPrompt.cards !== previousPrompt.cards)) {
-        this.initializePrompt();
+  public onVisibilityDone(event: AnimationEvent): void {
+    if (event.toState === 'hidden' && this.minimized) { this.boardView = true; }
+  }
+
+  ngOnDestroy(): void {
+    this.releaseCardConnections();
+    this.trayTarget.unsubscribe();
+    this.rowTarget.unsubscribe();
+  }
+
+  private releaseCardConnections(): void {
+    this.slotSources.forEach(source => source.unsubscribe());
+    this.stackSources.forEach(source => source.unsubscribe());
+    this.stackSources.clear();
+    this.slotTargets.forEach(target => target.unsubscribe());
+    this.draggingIndex = undefined;
+  }
+
+  private createSource(getItem: () => PromptCardItem | undefined): DragSource<SelectorDraggedCard> {
+    return this.dnd.dragSource<SelectorDraggedCard>(SelectorCardType, {
+      canDrag: () => {
+        const item = getItem();
+        return !!item && !this.minimized && !this.gameState.deleted
+          && (this.selectedCards.includes(item) || this.canSelect(item));
+      },
+      beginDrag: () => {
+        const item = getItem();
+        this.draggingIndex = item.index;
+        return { data: item, promptId: this.prompt.id, localId: this.gameState.localId,
+          selected: this.selectedCards.includes(item) };
+      },
+      endDrag: () => {
+        this.draggingIndex = undefined;
+        this.suppressClickUntil = Date.now() + 350;
       }
-    }
-
-    // Handle game state changes
-    if (changes.gameState) {
-      const currentState = changes.gameState.currentValue;
-      const previousState = changes.gameState.previousValue;
-
-      // Update validity if game state has changed
-      if (currentState && (!previousState ||
-        currentState.state !== previousState.state)) {
-        this.updateValidity();
-      }
-    }
-  }
-
-  private initializePrompt() {
-    if (!this.promptValue) {
-      return;
-    }
-
-    // Reset state
-    this.cards = this.promptValue.cards;
-    this.filter = this.promptValue.filter;
-    this.allowedCancel = this.promptValue.options.allowCancel;
-    this.blocked = this.promptValue.options.blocked;
-    this.message = this.promptValue.message;
-    this.promptId = this.promptValue.id;
-    this.isSecret = this.promptValue.options.isSecret;
-    this.cardbackMap = {};
-    this.selectedCards = [];
-    this.result = [];
-    this.currentIndex = 0;
-
-    // Start with invalid state if min > 0
-    this.isInvalid = this.promptValue.options.min > 0;
-
-    if (this.promptValue.options.isSecret) {
-      this.promptValue.cards.cards.forEach((c, i) => {
-        this.cardbackMap[i] = true;
-      });
-    }
-
-    // Initialize card items
-    this.initializeCardItems();
-  }
-
-  private initializeCardItems() {
-    if (!this.cards || !this.cards.cards) {
-      return;
-    }
-
-    // Build filter map
-    this.filterMap = this.buildFilterMap(this.cards.cards, this.filter, this.blocked || []);
-
-    // Build card list
-    this.allPromptItems = this.buildCardList(this.cards.cards);
-    this.updateFilteredItems();
-
-    // Initialize visible cards with first card centered
-    this.currentIndex = 0;
-    this.updateVisibleCards();
-  }
-
-  private updateFilteredItems() {
-    if (this.currentTab === 'Valid') {
-      this.promptItems = this.allPromptItems.filter(item => item.isAvailable);
-    } else {
-      this.promptItems = [...this.allPromptItems];
-    }
-    this.updateVisibleCards();
-  }
-
-  public onTabChange(tab: string) {
-    this.currentTab = tab;
-    this.currentIndex = 0; // Reset to first card when switching tabs
-    this.updateFilteredItems();
-  }
-
-  private buildFilterMap(cards: Card[], filter: Partial<Card>, blocked: number[]) {
-    const filterMap: { [fullName: string]: boolean } = {};
-
-    for (let i = 0; i < cards.length; i++) {
-      const card = cards[i];
-      let isBlocked = blocked.includes(i);
-      if (isBlocked === false) {
-        for (const key in filter) {
-          if (filter.hasOwnProperty(key)) {
-            isBlocked = isBlocked || (filter as any)[key] !== (card as any)[key];
-          }
-        }
-      }
-      filterMap[card.fullName] = !isBlocked;
-    }
-    return filterMap;
-  }
-
-  private buildCardList(cards: Card[]): PromptCardItem[] {
-    return cards.map((card, index) => {
-      const item: PromptCardItem = {
-        card,
-        index,
-        originalIndex: index,
-        isAvailable: this.filterMap[card.fullName],
-        isSecret: !!this.cardbackMap[index],
-        scanUrl: this.cardsBaseService.getScanUrl(card),
-        showButtons: false
-      };
-      return item;
     });
   }
 
-  public minimize() {
-    this.gameService.setPromptMinimized(this.gameState.localId, true);
-  }
-
-  public cancel() {
-    const gameId = this.gameState.gameId;
-    const id = this.promptId;
-    this.gameService.resolvePrompt(gameId, id, null);
-  }
-
-  public confirm() {
-    if (this.isInvalid) {
-      return;
-    }
-
-    const gameId = this.gameState.gameId;
-    const id = this.promptId;
-
-    // Final validation before sending
-    const selectedCards = this.result ? this.result.map(index => this.cards.cards[index]) : [];
-    if (this.promptValue.validate(selectedCards)) {
-      this.gameService.resolvePrompt(gameId, id, this.result || []);
-    }
-  }
-
-  // Carousel functionality
-  public nextCards() {
-    if (this.currentIndex < this.promptItems.length - 1) {
-      this.currentIndex++;
-      this.updateVisibleCards();
-    }
-  }
-
-  public previousCards() {
-    if (this.currentIndex > 0) {
-      this.currentIndex--;
-      this.updateVisibleCards();
-    }
-  }
-
-  private updateVisibleCards() {
-    // Clear the current visible cards
-    this.visibleCards = [];
-
-    const startIdx = Math.max(0, this.currentIndex);
-    const endIdx = Math.min(this.promptItems.length, startIdx + 3);
-
-    // Get the main visible cards
-    const mainCards = this.promptItems.slice(startIdx, endIdx);
-
-    // Add left-side cards if available
-    if (this.currentIndex > 0) {
-      const leftCard = this.promptItems[this.currentIndex - 1];
-      if (leftCard) {
-        this.visibleCards.push({ ...leftCard, isLeftSide: true, isLeftBack: false });
-      }
-
-      // Add left-back card if available
-      if (this.currentIndex > 1) {
-        const leftBackCard = this.promptItems[this.currentIndex - 2];
-        if (leftBackCard) {
-          this.visibleCards.unshift({ ...leftBackCard, isLeftSide: true, isLeftBack: true });
+  private createTarget(selecting: boolean, slot?: number): DropTarget<SelectorDraggedCard> {
+    return this.dnd.dropTarget<SelectorDraggedCard>(SelectorCardType, {
+      canDrop: monitor => this.canDropCard(monitor.getItem(), selecting, slot),
+      drop: monitor => {
+        // An incompatible slot must not bubble into the tray and fill another slot.
+        if (!monitor.didDrop() && (!selecting || slot !== undefined || monitor.isOver({ shallow: true }))) {
+          this.dropCard(monitor.getItem(), selecting, slot);
         }
       }
-    }
-
-    // Add the main cards
-    this.visibleCards.push(...mainCards);
+    });
   }
 
-  public onWheel(event: WheelEvent) {
-    // Prevent default scrolling behavior
-    event.preventDefault();
-
-    const now = Date.now();
-    if (now - this.lastWheelTime < this.WHEEL_DELAY) {
-      return; // Skip if not enough time has passed
+  public canDropCard(drag: SelectorDraggedCard, selecting: boolean, slot?: number): boolean {
+    if (!drag?.data || this.minimized || this.gameState.deleted || drag.promptId !== this.prompt.id
+      || drag.localId !== this.gameState.localId || this.allItems[drag.data.index] !== drag.data
+      || drag.selected !== this.selectedCards.includes(drag.data)) { return false; }
+    if (!selecting) { return drag.selected; }
+    if (slot !== undefined && !this.slots.includes(slot)) { return false; }
+    if (drag.selected) {
+      if (slot === undefined || this.slotCards[slot] === drag.data || !this.slotRules[slot].accepts(drag.data.card)) {
+        return false;
+      }
+      const previous = this.slotCards.indexOf(drag.data);
+      const displaced = this.slotCards[slot];
+      return !displaced || this.slotRules[previous].accepts(displaced.card);
     }
+    return this.canSelect(drag.data) && (slot === undefined
+      || (!this.slotCards[slot] && this.slotRules[slot].accepts(drag.data.card)));
+  }
 
-    this.lastWheelTime = now;
-
-    // Determine scroll direction
-    if (event.deltaY > 0) {
-      // Scrolling down/right
-      this.nextCards();
-    } else if (event.deltaY < 0) {
-      // Scrolling up/left
-      this.previousCards();
+  public dropCard(drag: SelectorDraggedCard, selecting: boolean, slot?: number): void {
+    if (!this.canDropCard(drag, selecting, slot)) { return; }
+    if (!selecting) { this.removeCard(drag.data); }
+    else if (!drag.selected) { this.selectCard(drag.data, slot); }
+    else {
+      const previous = this.slotCards.indexOf(drag.data);
+      this.slotCards[previous] = this.slotCards[slot];
+      this.slotCards[slot] = drag.data;
+      this.syncSelection();
     }
   }
 
-  public toggleCardSelection(cardItem: PromptCardItem, event?: MouseEvent) {
-    if (!this.filterMap[cardItem.card.fullName]) {
-      return; // Card is unavailable
-    }
+  get maxCards(): number { return this.prompt.options.max; }
+  get isSetupGame(): boolean { return this.prompt.message === 'CHOOSE_STARTING_POKEMONS'; }
+  get isDiscard(): boolean {
+    return ['CHOOSE_CARD_TO_DISCARD', 'CHOOSE_POKEMON_TO_DISCARD', 'CHOOSE_ENERGY_TO_DISCARD']
+      .includes(this.prompt.message);
+  }
+  get showTabs(): boolean { return !this.isDiscard && !this.prompt.options.isSecret && !this.isSetupGame; }
 
-    // Skip all animation and directly update the selection state
-    this.toggleCardSelectionNoAnimation(cardItem);
+  get sourceCard(): Card | undefined {
+    const player = this.gameState?.state.players.find(item => item.id === this.prompt.playerId);
+    const cards = player?.supporter.cards || [];
+    return cards[cards.length - 1];
   }
 
-  // The data update function
-  private toggleCardSelectionNoAnimation(cardItem: PromptCardItem) {
-    const selectedIndex = this.selectedCards.findIndex(item => item.card.id === cardItem.card.id);
+  get instructionKey(): string {
+    if (this.prompt.message === 'CHOOSE_CARD_TO_DISCARD') { return 'PROMPT_DISCARD_INSTRUCTION'; }
+    if (this.prompt.message === 'CHOOSE_CARD_TO_HAND') { return 'PROMPT_HAND_INSTRUCTION'; }
+    return 'GAME_MESSAGES.' + this.prompt.message;
+  }
 
-    if (selectedIndex === -1) {
-      // Card is not selected, add it if we haven't reached max
-      const maxCards = this.promptValue?.options?.max || 1;
-      if (this.selectedCards.length < maxCards) {
-        // Add to selected cards
-        this.selectedCards.push(cardItem);
+  get instructionParams(): { quantity: string; cardType: string } {
+    const count = this.maxCards;
+    const pokemon = this.prompt.filter?.superType === SuperType.POKEMON;
+    const energy = this.prompt.filter?.superType === SuperType.ENERGY;
+    return {
+      quantity: this.prompt.options.min < count ? `up to ${count}` : String(count),
+      cardType: pokemon ? 'Pokémon' : energy ? (count === 1 ? 'Energy card' : 'Energy cards')
+        : (count === 1 ? 'card' : 'cards')
+    };
+  }
 
-        // Remove from promptItems (displayed cards)
-        const displayedIndex = this.promptItems.findIndex(item => item.card.id === cardItem.card.id);
-        if (displayedIndex !== -1) {
-          this.promptItems.splice(displayedIndex, 1);
-        }
+  public onTabChange(tab: string, viewport: HTMLElement): void {
+    this.currentTab = tab;
+    this.updateFilteredItems();
+    viewport.scrollLeft = 0;
+  }
 
-        // Adjust current index if necessary to prevent display shift
-        if (displayedIndex < this.currentIndex) {
-          this.currentIndex = Math.max(0, this.currentIndex - 1);
-        }
-      }
-    } else {
-      // Card is already selected, remove it
-      const selectedCard = this.selectedCards.splice(selectedIndex, 1)[0];
-
-      // Re-insert into promptItems at appropriate position
-      let insertIndex = 0;
-      for (let i = 0; i < this.promptItems.length; i++) {
-        if (this.promptItems[i].originalIndex > selectedCard.originalIndex) {
-          break;
-        }
-        insertIndex = i + 1;
-      }
-
-      this.promptItems.splice(insertIndex, 0, selectedCard);
-
-      // Adjust current index if necessary
-      if (insertIndex <= this.currentIndex) {
-        this.currentIndex = Math.min(this.promptItems.length - 1, this.currentIndex + 1);
-      }
+  private updateFilteredItems(): void {
+    const selected = new Set(this.selectedCards.map(item => item.index));
+    this.promptItems = this.allItems.filter(item => !selected.has(item.index)
+      && (this.currentTab === 'All' || item.isAvailable));
+    const groups = new Map<string, PromptCardItem[]>();
+    for (const item of this.promptItems) {
+      // Secret cards retain their individual positions without revealing duplicates.
+      const key = item.isSecret ? `hidden-${item.index}` : handCardKey(item.card);
+      if (!groups.has(key)) { groups.set(key, []); }
+      groups.get(key).push(item);
     }
+    this.cardStacks = Array.from(groups, ([key, copies]) => {
+      // A blocked print must never prevent selecting an eligible copy beneath it.
+      const front = copies.find(item => item.isAvailable) || copies[0];
+      // Keep each DOM node's connection stable when its representative copy changes.
+      if (!this.stackSources.has(key)) {
+        this.stackSources.set(key, this.createSource(() => this.cardStacks.find(stack => stack.key === key)?.front));
+      }
+      return { key, front, copies, source: this.stackSources.get(key) };
+    });
+  }
 
-    // Update visible cards
-    this.updateVisibleCards();
+  public canSelect(item: PromptCardItem): boolean {
+    return item.isAvailable && !this.minimized && !this.gameState.deleted && this.selectedCards.length < this.maxCards
+      && !this.selectedCards.some(selected => selected.index === item.index)
+      && this.emptySlotFor(item) !== -1
+      && this.partialPrompt.validate([...this.selectedCards.map(selected => selected.card), item.card]);
+  }
 
-    // Update validity and result
+  private emptySlotFor(item: PromptCardItem): number {
+    return this.slots.findIndex(slot => !this.slotCards[slot] && this.slotRules[slot].accepts(item.card));
+  }
+
+  public selectCard(item: PromptCardItem, slot = this.emptySlotFor(item)): void {
+    if (!this.canSelect(item)) { return; }
+    if (!this.slots.includes(slot) || this.slotCards[slot] || !this.slotRules[slot].accepts(item.card)) { return; }
+    this.slotCards[slot] = item;
+    this.syncSelection();
+  }
+
+  public removeCard(item: PromptCardItem): void {
+    if (this.gameState.deleted) { return; }
+    this.slotCards = this.slotCards.map(selected => selected?.index === item.index ? undefined : selected);
+    this.syncSelection();
+  }
+
+  private syncSelection(): void {
+    this.selectedCards = this.slotCards.filter(Boolean);
+    this.updateFilteredItems();
     this.updateValidity();
   }
 
-  public isCardSelected(card: Card): boolean {
-    return this.selectedCards.some(sc => sc.card.id === card.id);
+  private updateValidity(): void {
+    this.result = this.selectedCards.map(item => item.index);
+    this.isInvalid = (this.isSetupGame && !this.slotCards[0])
+      || !this.prompt.validate(this.result.map(index => this.prompt.cards.cards[index]));
   }
 
-  public showCardInfo(item: PromptCardItem) {
-    const facedown = this.cardbackMap[item.index];
-    this.cardsBaseService.showCardInfo({ card: item.card, facedown });
+  public toggleBoard(): void {
+    this.gameService.setPromptMinimized(this.gameState.localId, !this.minimized);
   }
 
-  public getSlotArray(): number[] {
-    if (this.isSetupGame) {
-      return Array(6).fill(0).map((_, i) => i);
+  public confirm(): void {
+    this.updateValidity();
+    if (this.minimized || this.gameState.deleted || this.isInvalid) { return; }
+    this.gameService.resolvePrompt(this.gameState.gameId, this.prompt.id, this.result);
+  }
+
+  public cancel(): void {
+    if (this.minimized || this.gameState.deleted || !this.prompt.options.allowCancel) { return; }
+    this.gameService.resolvePrompt(this.gameState.gameId, this.prompt.id, null);
+  }
+
+  public cardName(item: PromptCardItem): string {
+    return item.isSecret ? `Face-down card ${item.index + 1}` : item.card.name;
+  }
+
+  public stackLabel(stack: PromptCardStack): string {
+    return `Inspect ${this.cardName(stack.front)}${stack.copies.length > 1 ? `, ${stack.copies.length} copies remaining` : ''}`;
+  }
+
+  public showCardInfo(item: PromptCardItem): void {
+    if (this.minimized || this.draggingIndex !== undefined || Date.now() < this.suppressClickUntil) { return; }
+    this.cardsBaseService.showCardInfo({ card: item.card, facedown: item.isSecret });
+  }
+
+  public onTouchStart(event: TouchEvent, scrollable = true): void {
+    const touch = event.touches.length === 1 ? event.touches[0] : undefined;
+    this.touchStart = touch && { x: touch.clientX, y: touch.clientY };
+    this.touchScrollable = scrollable;
+    this.touchMode = undefined;
+  }
+
+  public onTouchMove(event: TouchEvent): void {
+    if (!this.touchStart || event.touches.length !== 1 || this.draggingIndex !== undefined) { return; }
+    const dx = Math.abs(event.touches[0].clientX - this.touchStart.x);
+    const dy = Math.abs(event.touches[0].clientY - this.touchStart.y);
+    if (!this.touchMode && Math.max(dx, dy) >= 8) {
+      this.touchMode = this.touchScrollable && dx > dy ? 'scroll' : 'drag';
     }
-    const maxCards = this.promptValue?.options?.max || 1;
-    return Array(maxCards).fill(0).map((_, i) => i);
+    if (Math.max(dx, dy) >= 8) { this.suppressClickUntil = Date.now() + 350; }
+    if (this.touchMode !== 'drag') { event.stopPropagation(); }
   }
 
-  private updateValidity() {
-    // Map selected cards to their original indices
-    const selectedIndices = this.selectedCards.map(item => item.originalIndex);
-    const selectedCards = selectedIndices.map(index => this.cards.cards[index]);
-
-    // Check min/max constraints
-    const min = this.promptValue?.options?.min || 0;
-    const max = this.promptValue?.options?.max || this.cards.cards.length;
-
-    if (selectedCards.length < min || selectedCards.length > max) {
-      this.isInvalid = true;
-      return;
-    }
-
-    // Validate using server-side validation
-    this.isInvalid = !this.promptValue.validate(selectedCards);
-
-    // Update the result array to match selected cards
-    this.result = selectedIndices;
-    this.onChange(selectedIndices);
+  public onTouchEnd(): void {
+    if (this.touchStart && Date.now() < this.suppressClickUntil) { this.suppressClickUntil = Date.now() + 350; }
+    this.touchStart = undefined;
+    this.touchMode = undefined;
   }
 
-  public onChange(result: number[]) {
-    if (!result || !this.promptValue) {
-      this.isInvalid = true;
-      this.result = [];
-      return;
-    }
-
-    const selectedCards = result.map(index => this.cards.cards[index]);
-    const isValidSelection = this.promptValue.validate(selectedCards);
-
-    // Store valid results
-    if (isValidSelection) {
-      this.result = result;
-    }
-
-    this.isInvalid = !isValidSelection;
+  public onWheel(event: WheelEvent, viewport: HTMLElement): void {
+    // Native horizontal gestures already scroll the row; map a mouse wheel to it too.
+    if (Math.abs(event.deltaX) >= Math.abs(event.deltaY) || viewport.scrollWidth <= viewport.clientWidth) { return; }
+    event.preventDefault();
+    viewport.scrollLeft += event.deltaY;
   }
 
-  get isSetupGame(): boolean {
-    return this.promptValue?.message === 'CHOOSE_STARTING_POKEMONS';
-  }
+  public trackStack(_index: number, stack: PromptCardStack): string { return stack.key; }
 }

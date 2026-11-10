@@ -5,7 +5,7 @@ import { Effect } from '../effects/effect';
 import { BoardEffect, SpecialCondition, Stage } from '../card/card-types';
 import { State } from '../state/state';
 import { StoreLike } from '../store-like';
-import { CheckPokemonPlayedTurnEffect, CheckSpecialConditionRemovalEffect } from '../effects/check-effects';
+import { CheckPokemonPlayedTurnEffect } from '../effects/check-effects';
 import { EvolveEffect } from '../effects/game-effects';
 
 /**
@@ -71,7 +71,7 @@ export function playPokemonReducer(store: StoreLike, state: State, effect: Effec
       (isEvolved && Array.isArray(pokemonCard.evolvesFromBase) && pokemonCard.evolvesFromBase.length > 0 && pokemonCard.evolvesFromBase.includes(effect.pokemonCard.evolvesFrom));
 
     if (isValidEvolution) {
-      const playedTurnEffect = new CheckPokemonPlayedTurnEffect(effect.player, effect.target);
+      const playedTurnEffect = new CheckPokemonPlayedTurnEffect(effect.player, effect.target, effect.pokemonCard);
       store.reduceEffect(state, playedTurnEffect);
 
       if (state.turn == 0 && player.canEvolve === false) {
@@ -89,19 +89,10 @@ export function playPokemonReducer(store: StoreLike, state: State, effect: Effec
         throw new GameError(GameMessage.POKEMON_CANT_EVOLVE_THIS_TURN);
       }
 
-      const evolveEffect = new EvolveEffect(effect.player, effect.target, effect.pokemonCard);
+      const evolveEffect = new EvolveEffect(effect.player, effect.target, effect.pokemonCard, effect.player.hand, true);
       store.reduceEffect(state, evolveEffect);
+      if (evolveEffect.preventDefault) return state;
       effect.pokemonCard.marker.markers = [];
-
-      // Check which special conditions should be preserved during evolution
-      const checkRemovalEffect = new CheckSpecialConditionRemovalEffect(effect.player, effect.target);
-      store.reduceEffect(state, checkRemovalEffect);
-      effect.target._preservedConditionsDuringEvolution = checkRemovalEffect.preservedConditions;
-
-      effect.player.removePokemonEffects(effect.target);
-
-      // Clear the preserved conditions after evolution is complete
-      effect.target._preservedConditionsDuringEvolution = undefined;
 
       effect.target.marker.markers = [];
       effect.target.showBasicAnimation = false;

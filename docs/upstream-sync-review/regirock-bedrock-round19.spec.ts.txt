@@ -1,0 +1,83 @@
+import { setupGame, padDeck, getCardByName } from './test-helpers';
+import { useAttack, useAbility } from './card-test-helpers';
+import { AttackEffect } from '../../game/store/effects/game-effects';
+import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
+import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { CardType, TrainerType } from '../../game/store/card/card-types';
+import { TrainerCard } from '../../game/store/card/trainer-card';
+import { StoreLike } from '../../game/store/store-like';
+import { State } from '../../game/store/state/state';
+import { Effect } from '../../game/store/effects/effect';
+import { GamePhase } from '../../game/store/state/state';
+import { Player } from '../../game/store/state/player';
+import { CardList } from '../../game/store/state/card-list';
+import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
+import { StateSerializer } from '../../game/serializer/state-serializer';
+import { Base64 } from '../../utils/base64';
+import { CardManager } from '../../game/cards/card-manager';
+import { ensureClientCards } from '../../client/cards';
+import { ClientSimulator } from '../../client/simulator';
+import { AttackAction } from '../../game/store/actions/game-actions';
+import { MarkerConstants } from '../../game/store/markers/marker-constants';
+
+class BlockEnd extends TrainerCard {
+  public name='Block'; public fullName='Block TST'; public set='TST'; public trainerType=TrainerType.STADIUM;
+  public reduceEffect(_store:StoreLike,state:State,effect:Effect):State {if(effect instanceof EndTurnEffect) effect.preventDefault=true; return state;}
+}
+function game(copied: boolean) {
+  const g = setupGame({turn: 3, player1: {active: {card:copied?'Mew TM':'Regirock EX FCO',energy:['Fighting Energy SVE','Fighting Energy SVE','Fighting Energy SVE']},bench:[{card:'Charmander BS'}],deck:padDeck(10)},player2:{active:{card:'Squirtle BS'},deck:padDeck(10)}});
+  g.player1.active.getPokemonCard()!.hp = 1000; g.player1.active.getPokemonCard()!.weakness=[{type:CardType.GRASS}];g.player2.active.getPokemonCard()!.hp=1000;
+  if (copied) {g.player1.lostzone.cards.push(getCardByName('Regirock EX FCO'));g.overridePrompt('Choose attack',()=>({index:0,attack:'Bedrock Press'}));useAbility(g.store,g.state,0,'Lost Link');}
+  else useAttack(g.store,g.state,0,'Bedrock Press');
+  return g;
+}
+function incoming(g: ReturnType<typeof game>, direct=false) {
+  g.state.phase=GamePhase.ATTACK;g.state.activePlayer=1;
+  const attack=new AttackEffect(g.player2,g.player1,{name:'Grass hit',cost:[],damage:30,text:''});
+  g.player2.active.getPokemonCard()!.cardType=CardType.GRASS;
+  return g.store.reduceEffect(g.state,direct?new PutDamageEffect(attack,30):new DealDamageEffect(attack,30));
+}
+describe('Regirock Bedrock Press lifecycle',()=>{
+  for (const copied of [false,true]) for (const direct of [false,true]) it(`${copied?'copied':'direct'} reduces ${direct?'PutDamage':'DealDamage'} after weakness`,()=>{
+    const g=game(copied);incoming(g,direct);expect(g.player1.active.damage).toBe(40);
+  });
+  for (const copied of [false,true]) it(`${copied?'copied':'direct'} expires after the opponent end turn`,()=>{
+    const g=game(copied);g.state.activePlayer=1;g.state.phase=GamePhase.FINISHED;g.store.reduceEffect(g.state,new EndTurnEffect(g.player2));incoming(g);expect(g.player1.active.damage).toBe(60);
+  });
+  for (const copied of [false,true]) it(`${copied?'copied':'direct'} survives a prevented opponent end turn`,()=>{
+    const g=game(copied);g.player2.stadium.cards.push(new BlockEnd());g.state.activePlayer=1;g.state.phase=GamePhase.FINISHED;g.store.reduceEffect(g.state,new EndTurnEffect(g.player2));incoming(g);expect(g.player1.active.damage).toBe(40);
+  });
+  for (const copied of [false,true]) it(`${copied?'copied':'direct'} does not reduce damage from its own attack`,()=>{
+    const g=game(copied);g.player1.active.getPokemonCard()!.weakness=[];g.state.activePlayer=0;g.state.phase=GamePhase.ATTACK;const a=new AttackEffect(g.player1,g.player2,{name:'Self',cost:[],damage:30,text:''});const e=new DealDamageEffect(a,30);e.target=g.player1.active;g.store.reduceEffect(g.state,e);expect(g.player1.active.damage).toBe(30);
+  });
+  for (const copied of [false,true]) it(`${copied?'copied':'direct'} follows switching cleanup`,()=>{
+    const g=game(copied);const old=g.player1.active;g.player1.switchPokemon(g.player1.bench[0]);g.player1.switchPokemon(old);incoming(g);expect(g.player1.active.damage).toBe(60);
+  });
+  it('preserves legacy target-slot marker reduction on existing snapshots',()=>{
+    const g=game(false);const target=g.player1.active,source=target.getPokemonCard()!;
+    target.marker.removeMarker(MarkerConstants.REGIROCK_EX_BEDROCK_PRESS_REDUCTION);
+    target.marker.addMarker('BEDROCK_PRESS_MARKER',source);incoming(g);expect(target.damage).toBe(20);
+  });
+  it('restores Lost Link protection from a real Mew checkpoint before the opponent acts',()=>{
+    const g=game(true);g.state.activePlayer=1;g.state.phase=GamePhase.ATTACK;
+    const lists=g.state.players.flatMap(p=>[p.active,...p.bench,p.deck,p.hand,p.discard,p.lostzone,p.stadium,p.supporter,...p.prizes]);
+    const cards=Array.from(new Set(lists.flatMap(list=>list.cards)));cards.forEach((card,index)=>card.id=index);g.state.cardNames=cards.map(card=>card.fullName);
+    StateSerializer.setKnownCards(CardManager.getInstance().getAllCards());const sim=new ClientSimulator();
+    sim.loadSnapshot({stateData:new Base64().encode(new StateSerializer().serialize(g.state))});
+    const state=sim.state,store=(sim as any).store;state.players[0].active.getPokemonCard()!.weakness=[{type:CardType.GRASS}];state.players[1].active.getPokemonCard()!.cardType=CardType.GRASS;
+    const hit=()=>{const attack=new AttackEffect(state.players[1],state.players[0],{name:'Hit',cost:[],damage:30,text:''});store.reduceEffect(state,new DealDamageEffect(attack,30));};
+    hit();expect(state.players[0].active.damage).toBe(40);state.players[0].active.damage=0;
+    state.phase=GamePhase.FINISHED;store.reduceEffect(state,new EndTurnEffect(state.players[1]));state.phase=GamePhase.ATTACK;hit();expect(state.players[0].active.damage).toBe(60);sim.cleanup();
+  });
+  it('preserves the protection in a real simulator snapshot',()=>{
+    ensureClientCards();const state=new State();state.phase=GamePhase.PLAYER_TURN;state.turn=2;state.players=[new Player(),new Player()];
+    const add=(list:CardList,name:string)=>{const card=CardManager.getInstance().getCardByName(name)!;expect(card).toBeDefined();card.id=state.cardNames.length;state.cardNames.push(card.fullName);list.cards.push(card);};
+    state.players.forEach((p,i)=>{p.id=i+1;p.name=i?'Opponent':'Player';p.bench=Array.from({length:5},()=>new PokemonCardList());p.prizes=Array.from({length:6},()=>new CardList());p.prizes.forEach(x=>add(x,'Fire Energy SVE'));for(let j=0;j<8;j++)add(p.deck,'Fire Energy SVE');add(p.active,i?'Mew ex MEW':'Regirock EX FCO');});
+    for(let j=0;j<3;j++)add(state.players[0].active,'Fighting Energy SVE');
+    const sim=new ClientSimulator();sim.loadSnapshot({stateData:new Base64().encode(new StateSerializer().serialize(state))});sim.dispatch(new AttackAction(sim.humanPlayerId,'Bedrock Press'));
+    expect(sim.state.players[0].active.marker.hasMarker(MarkerConstants.REGIROCK_EX_BEDROCK_PRESS_REDUCTION)).toBe(true);
+    const snapshot=sim.getStateData(),restored=new ClientSimulator();const decoded=restored.validateSnapshot(snapshot);
+    expect(decoded.players[0].active.marker.hasMarker(MarkerConstants.REGIROCK_EX_BEDROCK_PRESS_REDUCTION)).toBe(true);
+    restored.loadSnapshot({stateData:snapshot});expect(restored.state.players[0].active.marker.hasMarker(MarkerConstants.REGIROCK_EX_BEDROCK_PRESS_REDUCTION)).toBe(false);sim.cleanup();restored.cleanup();
+  });
+});

@@ -79,11 +79,7 @@ export class GlaceonV extends PokemonCard {
 
         const pokemonCard = cards[0] as PokemonCard;
 
-        // Move card to hand temporarily for EvolveEffect
-        player.deck.moveCardTo(pokemonCard, player.hand);
-
-        // Evolve this Pokemon using EvolveEffect
-        const evolveEffect = new EvolveEffect(player, player.active, pokemonCard);
+        const evolveEffect = new EvolveEffect(player, player.active, pokemonCard, player.deck);
         store.reduceEffect(state, evolveEffect);
 
         // Shuffle deck

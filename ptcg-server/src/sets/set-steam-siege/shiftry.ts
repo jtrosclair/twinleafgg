@@ -7,7 +7,7 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { UseStadiumEffect } from '../../game/store/effects/game-effects';
-import { ToolEffect } from '../../game/store/effects/play-card-effects';
+import { StadiumEffect, ToolEffect } from '../../game/store/effects/play-card-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { WAS_ATTACK_USED, REPLACE_MARKER_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
 
@@ -55,7 +55,7 @@ export class Shiftry extends PokemonCard {
     }
 
     // Block Stadium effects while either marker is active on either player
-    if (effect instanceof UseStadiumEffect) {
+    if (effect instanceof UseStadiumEffect || effect instanceof StadiumEffect) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

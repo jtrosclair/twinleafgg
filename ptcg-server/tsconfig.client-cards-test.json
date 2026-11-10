@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.client-test.json",
+  "compilerOptions": {
+    "outDir": ".client-card-regression"
+  },
+  "include": [
+    "src/client/index.ts",
+    "src/client/card-regression.spec.ts",
+    "src/client/snapshot-card-regression.spec.ts"
+  ]
+}

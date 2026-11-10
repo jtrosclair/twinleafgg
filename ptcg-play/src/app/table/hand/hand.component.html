@@ -1,16 +1,29 @@
-<div class="ptcg-hand">
-  <div class="ptcg-hand" [class.opponent]="isOpponent">
-    <div class="ptcg-hand-container">
-      <dnd-sortable-list [spec]="handSpec" hoverTrigger="fixed" [children]="tempList" [listId]="handListId">
-        <ng-template dndSortableTemplate let-context>
-          <ptcg-card [style.margin]="calculateContainerMargin()" [dndSortableRender]="context"
-            #render="dndSortableRender" [dragSource]="render.source" [noHTML5Preview]="true" [card]="context.data.card"
-            [artworksContext]="player?.hand" (click)="onCardClick(context.data.card, context.index)"
-            [class.draggable]="!gameState.deleted && player?.id === clientId" [ptcgCardPlaceholder]="render.isDragging$"
-            [class.cardback]="isFaceDown">
-          </ptcg-card>
-        </ng-template>
-      </dnd-sortable-list>
-    </div>
-  </div>
+<div class="hand-viewport" role="region" aria-label="Hand. Swipe horizontally to browse cards."
+  tabindex="0" (wheel)="onWheel($event)" (touchstart)="onTouchStart($event)"
+  (touchmove)="onTouchMove($event)" (touchend)="onTouchEnd()" (touchcancel)="onTouchEnd()">
+  <dnd-sortable-list [spec]="handSpec" [horizontal]="true" hoverTrigger="fixed"
+    [children]="stacks" [listId]="handListId">
+    <ng-template dndSortableTemplate let-context>
+      <div class="hand-stack" [class.playable]="context.data.playable"
+        [dndSortableRender]="context" #render="dndSortableRender">
+        <ptcg-card *ngFor="let copy of context.data.backingCards; let depth = index"
+          class="hand-stack-copy" [style.--stack-depth]="depth + 1" [card]="copy.card"
+          [showCardName]="false" [artworksContext]="player?.hand" [cardback]="isFaceDown" aria-hidden="true">
+        </ptcg-card>
+        <ptcg-card class="hand-card" [dragSource]="render.source" [noHTML5Preview]="true"
+          [card]="context.data.card" [showCardName]="false" [artworksContext]="player?.hand"
+          [placeholder]="render.isDragging$ | async" [cardback]="isFaceDown"
+          [class.draggable]="!isDeleted && player?.id === clientId && !isFaceDown"
+          role="button" tabindex="0" [attr.aria-label]="cardLabel(context.data)"
+          (click)="onCardClick(context.data.card, context.data.index)"
+          (keydown.enter)="onCardClick(context.data.card, context.data.index)"
+          (keydown.space)="$event.preventDefault(); onCardClick(context.data.card, context.data.index)">
+        </ptcg-card>
+        <span *ngIf="context.data.playable" class="playable-arrow" aria-hidden="true"></span>
+        <span *ngIf="context.data.copies.length > 1" class="stack-count" aria-hidden="true">
+          {{context.data.copies.length}}
+        </span>
+      </div>
+    </ng-template>
+  </dnd-sortable-list>
 </div>

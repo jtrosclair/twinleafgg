@@ -3,9 +3,10 @@ import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
+import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
 import { StateUtils } from '../../game/store/state-utils';
 import { Card, ChooseCardsPrompt, GameError, GameMessage, PowerType } from '../../game';
-import { ABILITY_USED, ADD_MARKER, BLOCK_IF_HAS_SPECIAL_CONDITION, HAS_MARKER, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { ABILITY_USED, ADD_MARKER, BLOCK_IF_HAS_SPECIAL_CONDITION, HAS_MARKER, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN, SHUFFLE_DECK, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Fearow extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -66,20 +67,23 @@ export class Fearow extends PokemonCard {
         }
       });
 
-      let cards: Card[] = [];
       store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_HAND,
-        player.deck,
-        {},
+        player, GameMessage.CHOOSE_CARD_TO_HAND, player.deck, {},
         { min: 0, max: 1, allowCancel: false, blocked }
       ), selected => {
-        cards = selected || [];
-
-        SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-        MOVE_CARDS(store, state, player.deck, player.hand, { cards: cards, sourceCard: this, sourceEffect: this.powers[0] });
-
-        SHUFFLE_DECK(store, state, player);
+        if (!Array.isArray(selected) || selected.length > 1 ||
+          selected.some((card: Card) => !(card instanceof PokemonCard) ||
+            !player.deck.cards.includes(card) || !card.tags.includes(CardTag.DELTA_SPECIES))) {
+          throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+        }
+        if (selected.length === 0) {
+          SHUFFLE_DECK(store, state, player);
+          return;
+        }
+        store.prompt(state, new ShowCardsPrompt(opponent.id, GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, selected), () => {
+          MOVE_CARDS(store, state, player.deck, player.hand, { cards: selected, sourceCard: this, sourceEffect: this.powers[0] });
+          SHUFFLE_DECK(store, state, player);
+        });
       });
     }
 

@@ -6,7 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, BoardEffect } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, GameMessage, ConfirmPrompt, PlayerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect, HealEffect } from '../../game/store/effects/game-effects';
+import { AfterEvolveEffect, HealEffect } from '../../game/store/effects/game-effects';
 import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class Togetic extends PokemonCard {
@@ -42,7 +42,7 @@ export class Togetic extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Voice of Happiness - on-evolve, may heal 30 from Active
     // Ref: set-scarlet-and-violet/arboliva.ts (Enriching Oil - on-evolve heal via EvolveEffect)
-    if (effect instanceof EvolveEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this && effect.playedFromHand && state.players[state.activePlayer] === effect.player) {
       const player = effect.player;
 
       // Check if active has any damage to heal

@@ -12,7 +12,8 @@ export class RapidStrikeEnergy extends EnergyCard {
 
   public tags = [CardTag.RAPID_STRIKE];
   public regulationMark = 'E';
-  public provides: CardType[] = [C];
+  public provides: CardType[] = [C, C];
+  public blendedEnergyCount = 2;
   public energyType = EnergyType.SPECIAL;
   public set: string = 'BST';
   public cardImage: string = 'assets/cardback.png';
@@ -45,7 +46,7 @@ As long as this card is attached to a Pokémon, it provides 2 in any combination
         // Only provide the specific energy type that's needed
         effect.energyMap.push({
           card: this,
-          provides: [neededType]
+          provides: [neededType, neededType]
         });
       }
     }

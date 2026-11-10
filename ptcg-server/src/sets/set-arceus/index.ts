@@ -1,3 +1,19 @@
+import { WormadamSandyCloak } from './wormadam-sandy-cloak';
+import { Graveler } from './graveler';
+import { Bronzor } from './bronzor';
+import { Tangela2 } from './tangela2';
+import { Omanyte } from './omanyte';
+import { Rapidash2 } from './rapidash2';
+import { Bronzor2 } from './bronzor2';
+import { Bagon } from './bagon';
+import { Grovyle2 } from './grovyle2';
+import { Charmeleon } from './charmeleon';
+import { Gulpin2 } from './gulpin2';
+import { Wingull2 } from './wingull2';
+import { Treecko2 } from './treecko2';
+import { Gastly2 } from './gastly2';
+import { Electrike2 } from './electrike2';
+import { Cherubi } from './cherubi';
 import { Card } from '../../game/store/card/card';
 import { Arceus } from './arceus';
 import { ArceusDark } from './arceus-dark';
@@ -20,6 +36,22 @@ import { Spiritomb } from './spiritomb';
 import { UltimateZone } from './ultimate-zone';
 
 export const setArceus: Card[] = [
+  new WormadamSandyCloak(),
+  new Graveler(),
+  new Bronzor(),
+  new Tangela2(),
+  new Omanyte(),
+  new Rapidash2(),
+  new Bronzor2(),
+  new Bagon(),
+  new Grovyle2(),
+  new Charmeleon(),
+  new Gulpin2(),
+  new Wingull2(),
+  new Treecko2(),
+  new Gastly2(),
+  new Electrike2(),
+  new Cherubi(),
   new BeginningDoor(),
   new ExpertBelt(),
   new Arceus(),

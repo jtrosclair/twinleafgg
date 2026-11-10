@@ -3,6 +3,7 @@ import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
 import { PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { DealDamageEffect } from '../../game/store/effects/attack-effects';
+import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class RadiantHawlucha extends PokemonCard {
 
@@ -60,9 +61,11 @@ export class RadiantHawlucha extends PokemonCard {
       if (effect.target !== opponent.active) {
         return state;
       }
-        
+
       const targetCard = effect.target.getPokemonCard();
-      if (targetCard && targetCard.tags.includes(CardTag.POKEMON_VMAX)) {
+      // Ref: set-astral-radiance/radiant-greninja.ts (Ability permission).
+      if (targetCard && targetCard.tags.includes(CardTag.POKEMON_VMAX) &&
+        !IS_ABILITY_BLOCKED(store, state, player, this)) {
         effect.damage += 30;
       }
     }
@@ -70,4 +73,3 @@ export class RadiantHawlucha extends PokemonCard {
     return state;
   }
 }
-        

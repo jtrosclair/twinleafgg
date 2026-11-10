@@ -1,3 +1,28 @@
+import { Donphan } from './donphan';
+import { ShellosEastSea } from './shellos-east-sea';
+import { Sableye } from './sableye';
+import { Roserade } from './roserade';
+import { Shuppet } from './shuppet';
+import { Rattata } from './rattata';
+import { Psyduck } from './psyduck';
+import { Stantler } from './stantler';
+import { Pinsir } from './pinsir';
+import { Mareep } from './mareep';
+import { Venonat } from './venonat';
+import { Lickitung } from './lickitung';
+import { Electabuzz } from './electabuzz';
+import { Voltorb } from './voltorb';
+import { Phanpy } from './phanpy';
+import { Diglett } from './diglett';
+import { Nidoran } from './nidoran';
+import { Bagon } from './bagon';
+import { Growlithe } from './growlithe';
+import { Ivysaur } from './ivysaur';
+import { Magmar } from './magmar';
+import { Shellder } from './shellder';
+import { Roselia } from './roselia';
+import { Wartortle } from './wartortle';
+import { Shroomish } from './shroomish';
 import { BebesSearchSW, PlusPowerSW, PotionSW, SwitchSW, DarknessEnergySpecialSW, MetalEnergyN1SW } from './other-prints';
 import { Card } from '../../game/store/card/card';
 import { Bulbasaur } from './bulbasaur';
@@ -24,6 +49,34 @@ import { Trapinch } from './trapinch';
 import { NightMaintenanceSW } from './other-prints';
 
 export const setSecretWonders: Card[] = [
+  new Donphan(),
+  new ShellosEastSea(),
+  new Sableye(),
+  new Roserade(),
+  new Shuppet(),
+  new Rattata(),
+  new Psyduck(),
+  new Stantler(),
+  new Pinsir(),
+
+  new Mareep(),
+  new Venonat(),
+  new Lickitung(),
+  new Electabuzz(),
+  new Voltorb(),
+  new Phanpy(),
+  new Diglett(),
+  new Nidoran(),
+
+  new Bagon(),
+  new Growlithe(),
+  new Ivysaur(),
+  new Magmar(),
+  new Shellder(),
+  new Roselia(),
+  new Wartortle(),
+  new Shroomish(),
+
   new Bulbasaur(),
   new Duskull(),
   new Flaaffy(),

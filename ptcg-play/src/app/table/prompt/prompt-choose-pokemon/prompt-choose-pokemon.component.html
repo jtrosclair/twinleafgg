@@ -1,9 +1,9 @@
-<div *ngIf="!useInteractiveBoard || (gameState && gameState.replay)">
+<div *ngIf="!useInteractiveBoard">
   <div class="ptcg-prompt-title">
     <h2 translate>PROMPT_CHOOSE_POKEMON_TITLE</h2>
     <div class="ptcg-u-spacer"></div>
-    <button mat-button mat-icon-button *ngIf="!gameState.replay" (click)="minimize()">
-      <mat-icon>keyboard_arrow_down</mat-icon>
+    <button mat-button mat-icon-button (click)="minimize()">
+      <svg class="ptcg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"></path></svg>
     </button>
   </div>
 
@@ -16,11 +16,11 @@
   </div>
 
   <div class="ptcg-prompt-actions">
-    <button mat-raised-button *ngIf="allowedCancel && !gameState.replay" [disabled]="gameState.deleted"
+    <button mat-raised-button *ngIf="allowedCancel" [disabled]="gameState.deleted"
       (click)="cancel()">
       {{ 'BUTTON_CANCEL' | translate }}
     </button>
-    <button mat-raised-button *ngIf="!gameState.replay" [disabled]="gameState.deleted || isInvalid" (click)="confirm()">
+    <button mat-raised-button [disabled]="gameState.deleted || isInvalid" (click)="confirm()">
       {{ 'BUTTON_OK' | translate }}
     </button>
   </div>

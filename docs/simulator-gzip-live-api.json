@@ -1,0 +1,12 @@
+{
+  "verifiedAt": "2026-11-07T01:24:13.946Z",
+  "apiStatus": 200,
+  "puzzleId": "aaab568c-ab61-4a06-b33b-e0a60c53a2cd",
+  "name": "Deck out with Dengo",
+  "origin": "https://sim-static.prizemap.app",
+  "pathname": "/sandbox-viewer",
+  "gzip": true,
+  "payloadCharacters": 2194,
+  "decodedBase64Characters": 10000,
+  "decodedBytesSha256": "82ed6f3044b57188c53d5d434d517051298154b9e9d35071be1118d5932b7e00"
+}

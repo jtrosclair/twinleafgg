@@ -1,8 +1,8 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
-import { StoreLike, State, GameMessage, GameError, PlayerType, TrainerCard, Card, ChooseCardsPrompt, GameLog } from '../../game';
+import { StoreLike, State, GameMessage, GameError, PlayerType, TrainerCard, ChooseCardsPrompt, GameLog } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { AttackEffect } from '../../game/store/effects/game-effects';
 
@@ -53,26 +53,37 @@ export class Spiritomb extends PokemonCard {
         return state;
       }
     
-      let cards: Card[] = [];
+      const required = Math.min(2, supporterAmount);
+      // Ref: set-chilling-reign/doctor.ts (mandatory cards from a public discard pile)
       store.prompt(state, new ChooseCardsPrompt(
         player,
         GameMessage.CHOOSE_CARD_TO_HAND,
         player.discard,
         { superType: SuperType.TRAINER, trainerType: TrainerType.SUPPORTER },
-        { min: 0, max: 2, allowCancel: true }
+        { min: required, max: required, allowCancel: false }
       ), selected => {
-        cards = selected || [];
-        
-        cards.forEach(card => {
-          store.log(state, GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
-        });
-      
+        // ChooseCardsPrompt validates the count and filter but does not ensure
+        // distinct, still-present cards. Validate before opening any prompts or
+        // mutating state; an invalid response remains retryable.
+        if (!Array.isArray(selected) || selected.length !== required ||
+          new Set(selected).size !== required || selected.some(card =>
+            !(card instanceof TrainerCard) || card.superType !== SuperType.TRAINER ||
+            card.trainerType !== TrainerType.SUPPORTER || !player.discard.cards.includes(card))) {
+          throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+        }
+        const cards = selected;
+
         if (cards.length > 0) {
           SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
         }
       
         if (cards.length > 0) {
-          player.discard.moveCardsTo(cards, player.hand);
+          MOVE_CARDS(store, state, player.discard, player.hand, {
+            cards, sourceCard: this, sourceEffect: effect
+          });
+          cards.filter(card => player.hand.cards.includes(card)).forEach(card => {
+            store.log(state, GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
+          });
         }
       });
     }

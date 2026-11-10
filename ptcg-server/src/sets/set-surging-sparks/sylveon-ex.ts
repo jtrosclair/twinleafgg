@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { ChoosePokemonPrompt, GameError, GameMessage, PlayerType, ShuffleDeckPrompt, SlotType, State, StateUtils, StoreLike } from '../..';
@@ -6,8 +7,11 @@ import { Effect } from '../../game/store/effects/effect';
 import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { Player } from '../../game/store/state/player';
+import { MarkerItem } from '../../game/store/state/card-marker';
+import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
 
-export class Sylveonex extends PokemonCard {
+export class Sylveonex extends PokemonCard implements CopiedAttackOwnershipContract {
 
   public stage: Stage = Stage.STAGE_1;
 
@@ -56,13 +60,50 @@ export class Sylveonex extends PokemonCard {
   public readonly ANGELITE_MARKER = 'ANGELITE_MARKER';
   public readonly CLEAR_ANGELITE_MARKER = 'CLEAR_ANGELITE_MARKER';
 
+  /** Continue Magical Charm when its source is outside normal effect fan-out. */
+  public reducePlayerMarkerEffect(_store: StoreLike, state: State, effect: Effect, owner: Player, marker: MarkerItem): State {
+    if (marker.name !== this.CLEAR_DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER ||
+      !(effect instanceof DealDamageEffect || effect instanceof EndTurnEffect) || effect.player !== owner) return state;
+    // Store already visits these zones when propagating effects. Do not apply
+    // the same reduction or turn cleanup twice while the source remains there.
+    const isPropagated = state.players.some(player =>
+      [player.stadium, player.supporter, player.active, ...player.bench, ...player.prizes,
+        player.hand, player.deck, player.discard].some(list =>
+        list.cards.includes(this) || (list instanceof PokemonCardList && list.tools.includes(this)))
+    );
+    if (isPropagated) return state;
+    if (effect instanceof DealDamageEffect &&
+      effect.source.marker.hasMarker(this.DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this)) {
+      effect.damage -= 100;
+    }
+    if (effect instanceof EndTurnEffect) {
+      owner.marker.removeMarker(this.CLEAR_DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this);
+      owner.active.marker.removeMarker(this.DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this);
+    }
+    return state;
+  }
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+
+      // Target is not Active
+      if (effect.target === player.active || effect.target === opponent.active) {
+        return state;
+      }
+
+      effect.preventDefault = true;
+    }
+    return Sylveonex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number, sourceCard?: PokemonCard): State {
 
     if (effect instanceof EndTurnEffect
       && effect.player.marker.hasMarker(this.CLEAR_DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this)) {
       effect.player.marker.removeMarker(this.CLEAR_DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this);
-      const opponent = StateUtils.getOpponent(state, effect.player);
-      opponent.active.marker.removeMarker(this.DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this);
+      effect.player.active.marker.removeMarker(this.DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this);
     }
 
     if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.CLEAR_ANGELITE_MARKER, this)) {
@@ -78,8 +119,9 @@ export class Sylveonex extends PokemonCard {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
-      opponent.active.marker.addMarker(this.DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this);
-      opponent.marker.addMarker(this.CLEAR_DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this);
+      const markerSource = sourceCard ?? this;
+      opponent.active.marker.addMarker(this.DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, markerSource);
+      opponent.marker.addMarker(this.CLEAR_DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, markerSource);
     }
 
     if (effect instanceof DealDamageEffect && effect.source.marker.hasMarker(this.DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this)) {
@@ -123,17 +165,7 @@ export class Sylveonex extends PokemonCard {
       });
     }
 
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
 
-      // Target is not Active
-      if (effect.target === player.active || effect.target === opponent.active) {
-        return state;
-      }
-
-      effect.preventDefault = true;
-    }
     return state;
   }
 

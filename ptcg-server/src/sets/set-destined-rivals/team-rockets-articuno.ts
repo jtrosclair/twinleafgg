@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType } from '../../game/store/card/card-types';
 import { StoreLike, State, PowerType, GamePhase, PlayerType } from '../../game';
@@ -5,7 +6,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { PutCountersEffect } from '../../game/store/effects/attack-effects';
 
-export class TeamRocketsArticuno extends PokemonCard {
+export class TeamRocketsArticuno extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.BASIC;
   public tags = [CardTag.TEAM_ROCKET];
   public cardType: CardType = W;
@@ -58,6 +59,10 @@ export class TeamRocketsArticuno extends PokemonCard {
       }
     }
 
+    return TeamRocketsArticuno.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Dark Frost
     if (WAS_ATTACK_USED(effect, 0, this)) {
       if (effect.player.active.cards.some(c => c.superType === SuperType.ENERGY && c.name === 'Team Rocket Energy')) { effect.damage += 60; }

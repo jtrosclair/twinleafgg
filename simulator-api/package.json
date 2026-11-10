@@ -1,0 +1,11 @@
+{
+  "name": "prizemap-simulator-api",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/service.test.cjs",
+    "dev": "../cloudflare/node_modules/.bin/wrangler dev --local --config wrangler.jsonc",
+    "check": "../cloudflare/node_modules/.bin/wrangler deploy --dry-run --config wrangler.jsonc",
+    "build": "node build.cjs",
+    "refresh:images": "node refresh-images.cjs"
+  }
+}

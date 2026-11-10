@@ -1,6 +1,7 @@
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { CONFIRMATION_PROMPT, DRAW_CARDS, IS_ABILITY_BLOCKED, JUST_EVOLVED } from '../../game/store/prefabs/prefabs';
+import { CONFIRMATION_PROMPT, DRAW_CARDS, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 import { PowerType, StoreLike, State, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 
@@ -35,7 +36,7 @@ export class Kadabra extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (JUST_EVOLVED(effect, this)) {
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this && effect.playedFromHand && state.players[state.activePlayer] === effect.player) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {

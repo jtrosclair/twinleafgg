@@ -1,4 +1,5 @@
 import { Card } from '../../game/store/card/card';
+import { Blissey } from './blissey';
 import { Annihilape } from './annihilape';
 import { Arboliva } from './arboliva';
 import { Arcanineex } from './arcanine-ex';
@@ -216,4 +217,5 @@ export const setScarletAndViolet: Card[] = [
   new Toedscruel(),
   new Wiglett(),
   new Wugtrio(),
+  new Blissey(),
 ];

@@ -7,6 +7,14 @@ import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { HealEffect } from '../../game/store/effects/game-effects';
 import { Player } from '../../game/store/state/player';
+import { GameError } from '../../game/game-error';
+import { GameMessage } from '../../game/game-message';
+
+function getProvidedEnergyCount(store: StoreLike, state: State, player: Player): number {
+  const checkEnergy = new CheckProvidedEnergyEffect(player, player.active);
+  store.reduceEffect(state, checkEnergy);
+  return checkEnergy.energyMap.reduce((sum, entry) => sum + entry.provides.length, 0);
+}
 
 export class JumboIce extends TrainerCard {
   public trainerType: TrainerType = TrainerType.ITEM;
@@ -32,7 +40,7 @@ export class JumboIce extends TrainerCard {
     }
 
     // Must have 3 or more Energy attached
-    const energyCount = player.active.energies.cards.length;
+    const energyCount = getProvidedEnergyCount(store, state, player);
     if (energyCount < 3) {
       return false;
     }
@@ -46,16 +54,11 @@ export class JumboIce extends TrainerCard {
       const player = effect.player;
       const activePokemon = player.active.getPokemonCard();
 
-      if (activePokemon && player.active.damage > 0) {
-        // Check if the Pokemon has 3 or more Energy attached
-        const checkEnergy = new CheckProvidedEnergyEffect(player);
-        store.reduceEffect(state, checkEnergy);
-
-        if (checkEnergy.energyMap.length >= 3) {
-          const healEffect = new HealEffect(player, player.active, 80);
-          store.reduceEffect(state, healEffect);
-        }
+      if (!activePokemon || player.active.damage === 0 || getProvidedEnergyCount(store, state, player) < 3) {
+        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }
+      const healEffect = new HealEffect(player, player.active, 80);
+      store.reduceEffect(state, healEffect);
       player.supporter.moveCardTo(this, player.discard);
     }
 

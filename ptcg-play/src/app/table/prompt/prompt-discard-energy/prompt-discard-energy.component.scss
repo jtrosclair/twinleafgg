@@ -80,7 +80,7 @@ ptcg-board-card {
     opacity: 0;
     transition: opacity 0.2s ease;
 
-    mat-icon {
+    .ptcg-icon {
       color: white;
       font-size: 24px;
     }
@@ -347,7 +347,7 @@ h3 {
   opacity: 0;
   transition: opacity $transition-speed ease;
 
-  mat-icon {
+  .ptcg-icon {
     color: white;
     font-size: 24px;
   }

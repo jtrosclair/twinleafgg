@@ -1,3 +1,7 @@
+import { Lickitung } from './lickitung';
+import { Kangaskhan } from './kangaskhan';
+import { Fearow } from './fearow';
+import { Leafeon2 } from './leafeon2';
 import { DuskBallMD, PokeBallMD, SuperScoopUpMD, EnergySearchMD, DarknessEnergySpecialMD, MetalEnergyN1MD } from './other-prints';
 import { Card } from '../../game/store/card/card';
 import { Bronzong } from './bronzong';
@@ -21,6 +25,10 @@ import { UnownQ } from './unown-q';
 import { WarpPointMD } from './other-prints';
 
 export const setMajesticDawn: Card[] = [
+  new Lickitung(),
+  new Kangaskhan(),
+  new Fearow(),
+  new Leafeon2(),
   new Bronzong(),
   new Bronzor(),
   new Buneary(),

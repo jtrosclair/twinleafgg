@@ -1,0 +1,492 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-11-06T17:41:23.083806+00:00",
+  "origin": "https://sim-static.prizemap.app",
+  "packageHash": "e802592c74f792d2a680e14d1fca98efafde86ed834e77c766eb0d77e74b5918",
+  "buildId": "75cd8355-10b7-4afc-900d-8579013b75cd",
+  "behavior": {
+    "startup": "Queue deduplicated browser image preloads and immediately initialize game; no await for image loads, fonts or artwork storage.",
+    "artwork": "Normal img sources and browser HTTP caching. Published supported scans use stable root /card-images URLs shared by preload and visible image; local/file use original URLs.",
+    "imageSizesChanged": false,
+    "snapshotImageUrlsChanged": false,
+    "blobOrIndexedDbArtworkRuntimeRemoved": true,
+    "readiness": "Initial StateUpdate and board readiness can precede images. Artwork-settled diagnostics are separate; navigationMs remains the board-paint timestamp.",
+    "offline": "Gameplay rules remain local. Uncached or evicted image resources can load after readiness; offline faces are not guaranteed."
+  },
+  "controlledBrowserVerification": {
+    "method": "Production build served locally; custom artwork HTTP response withheld by a local server, then released through a visible test-host button. CUA UI/DOM checks only.",
+    "heldBefore": {
+      "boardVisible": true,
+      "heldImages": [
+        {
+          "complete": false,
+          "source": "http://localhost:4202/held-card.png?v=1793986287914",
+          "width": 0
+        }
+      ],
+      "preloadCount": 4,
+      "timing": {
+        "artwork": {
+          "elapsedMs": 4.5,
+          "failed": 0,
+          "loaded": 0,
+          "pending": 4,
+          "queued": 4,
+          "uniqueScans": 4
+        },
+        "navigationMs": 726,
+        "stages": {
+          "artworkStart": 30.6,
+          "boardMounted": 48.7,
+          "boardPainted": 93.1,
+          "engineReady": 43.2,
+          "metadataReady": 30.5
+        },
+        "startedAtNavigationMs": 632.9000000953674
+      }
+    },
+    "heldHostBefore": {
+      "status": "{\"requested\":1,\"pending\":1,\"released\":false}",
+      "result": "Puzzle ready (StateUpdate received)",
+      "stateUpdates": "1"
+    },
+    "heldUndo": {
+      "result": "UndoDetected",
+      "status": "{\"requested\":1,\"pending\":1,\"released\":false}",
+      "stateUpdates": "2"
+    },
+    "heldAfter": {
+      "brokenImages": 0,
+      "complete": false,
+      "heldImages": [
+        {
+          "complete": true,
+          "height": 825,
+          "width": 600
+        }
+      ],
+      "timing": {
+        "artwork": {
+          "elapsedMs": 16110.300000190737,
+          "failed": 0,
+          "loaded": 4,
+          "pending": 0,
+          "queued": 4,
+          "uniqueScans": 4
+        },
+        "navigationMs": 726,
+        "stages": {
+          "artworkSettled": 16142,
+          "artworkStart": 30.6,
+          "boardMounted": 48.7,
+          "boardPainted": 93.1,
+          "engineReady": 43.2,
+          "metadataReady": 30.5
+        },
+        "startedAtNavigationMs": 632.9000000953674
+      }
+    },
+    "heldHostAfter": {
+      "result": "UndoDetected",
+      "status": "{\"requested\":1,\"pending\":0,\"released\":true}",
+      "stateUpdates": "2"
+    },
+    "failedArtwork": {
+      "boardVisible": true,
+      "brokenImages": 0,
+      "customImages": [
+        {
+          "complete": true,
+          "fallback": true,
+          "width": 745
+        }
+      ],
+      "timing": {
+        "artwork": {
+          "elapsedMs": 92.59999990463255,
+          "failed": 1,
+          "loaded": 3,
+          "pending": 0,
+          "queued": 4,
+          "uniqueScans": 4
+        },
+        "navigationMs": 431.9,
+        "stages": {
+          "artworkSettled": 123.8,
+          "artworkStart": 30,
+          "boardMounted": 44.4,
+          "boardPainted": 144.2,
+          "engineReady": 41.4,
+          "metadataReady": 30
+        },
+        "startedAtNavigationMs": 287.7000000476837
+      }
+    },
+    "knockoutPresentation": {
+      "background": "rgba(9, 22, 36, 0.7)",
+      "boardOpacity": "0",
+      "complete": true,
+      "inert": true,
+      "modalCount": 0
+    }
+  },
+  "publicBrowser": {
+    "puzzle": "Phantom Maze",
+    "method": "Same desktop browser tab and puzzle; three warm full navigations before and after. Existing boardPainted diagnostic is two animation frames after route mount, not a guarantee that all artwork is decoded. No mobile-device benchmark.",
+    "beforePackageHash": "f14ef845e06478f2847d204444273bf45e879e84c9d974a5dc3dfff8dbe5f091",
+    "beforeMedians": {
+      "appStartAtNavigationMs": 280.1,
+      "engineReadyMs": 69.1,
+      "boardMountedMs": 70,
+      "boardPaintedMs": 106.9,
+      "navigationToBoardPaintedMs": 375.8
+    },
+    "afterMedians": {
+      "appStartAtNavigationMs": 285.7,
+      "engineReadyMs": 46,
+      "boardMountedMs": 48.5,
+      "boardPaintedMs": 122.2,
+      "navigationToBoardPaintedMs": 407.9
+    },
+    "interpretation": "Board mount median improved from 70.0ms to 48.5ms after app start. Warm full-navigation paint median was 375.8ms before and 407.9ms after; these three-run samples do not show a full-page paint speedup. The verified change removes image completion from game readiness, demonstrated under a held image response and on the first public load.",
+    "beforeSamples": [
+      {
+        "blobImages": 39,
+        "dimensions": [
+          "736x1024"
+        ],
+        "images": 44,
+        "incompleteImages": 0,
+        "release": "/releases/f14ef845e06478f2847d204444273bf45e879e84c9d974a5dc3dfff8dbe5f091/",
+        "timing": {
+          "artwork": {
+            "elapsedMs": 32.299999952316284,
+            "failedScans": 0,
+            "memoryHits": 0,
+            "networkRequests": 0,
+            "persistentHits": 50,
+            "uniqueScans": 50
+          },
+          "navigationMs": 402.5,
+          "stages": {
+            "artworkReady": 54.6,
+            "artworkStart": 22.1,
+            "boardMounted": 70,
+            "boardPainted": 106.9,
+            "engineReady": 69.1,
+            "metadataReady": 22.1
+          },
+          "startedAtNavigationMs": 295.60000014305115
+        }
+      },
+      {
+        "blobImages": 39,
+        "dimensions": [
+          "736x1024"
+        ],
+        "images": 44,
+        "incompleteImages": 0,
+        "release": "/releases/f14ef845e06478f2847d204444273bf45e879e84c9d974a5dc3dfff8dbe5f091/",
+        "timing": {
+          "artwork": {
+            "elapsedMs": 34,
+            "failedScans": 0,
+            "memoryHits": 0,
+            "networkRequests": 0,
+            "persistentHits": 50,
+            "uniqueScans": 50
+          },
+          "navigationMs": 321.2,
+          "stages": {
+            "artworkReady": 59.3,
+            "artworkStart": 25.1,
+            "boardMounted": 73.6,
+            "boardPainted": 109.7,
+            "engineReady": 72.5,
+            "metadataReady": 25.1
+          },
+          "startedAtNavigationMs": 211.5
+        }
+      },
+      {
+        "blobImages": 39,
+        "dimensions": [
+          "736x1024"
+        ],
+        "images": 44,
+        "incompleteImages": 0,
+        "release": "/releases/f14ef845e06478f2847d204444273bf45e879e84c9d974a5dc3dfff8dbe5f091/",
+        "timing": {
+          "artwork": {
+            "elapsedMs": 23.09999990463257,
+            "failedScans": 0,
+            "memoryHits": 0,
+            "networkRequests": 0,
+            "persistentHits": 50,
+            "uniqueScans": 50
+          },
+          "navigationMs": 375.8,
+          "stages": {
+            "artworkReady": 45.2,
+            "artworkStart": 22,
+            "boardMounted": 59.3,
+            "boardPainted": 95.7,
+            "engineReady": 58.5,
+            "metadataReady": 22
+          },
+          "startedAtNavigationMs": 280.10000014305115
+        }
+      }
+    ],
+    "afterSamples": [
+      {
+        "blobImages": 0,
+        "dimensions": [
+          "736x1024"
+        ],
+        "images": 44,
+        "incompleteImages": 0,
+        "release": "/releases/e802592c74f792d2a680e14d1fca98efafde86ed834e77c766eb0d77e74b5918/",
+        "rootProxyImages": 39,
+        "timing": {
+          "artwork": {
+            "elapsedMs": 142.10000014305115,
+            "failed": 0,
+            "loaded": 50,
+            "pending": 0,
+            "queued": 50,
+            "uniqueScans": 50
+          },
+          "navigationMs": 487.1,
+          "stages": {
+            "artworkSettled": 164.8,
+            "artworkStart": 21.6,
+            "boardMounted": 48.5,
+            "boardPainted": 167.2,
+            "engineReady": 46,
+            "metadataReady": 21.6
+          },
+          "startedAtNavigationMs": 319.90000009536743
+        },
+        "settledTiming": {
+          "artwork": {
+            "elapsedMs": 142.10000014305115,
+            "failed": 0,
+            "loaded": 50,
+            "pending": 0,
+            "queued": 50,
+            "uniqueScans": 50
+          },
+          "navigationMs": 487.1,
+          "stages": {
+            "artworkSettled": 164.8,
+            "artworkStart": 21.6,
+            "boardMounted": 48.5,
+            "boardPainted": 167.2,
+            "engineReady": 46,
+            "metadataReady": 21.6
+          },
+          "startedAtNavigationMs": 319.90000009536743
+        }
+      },
+      {
+        "blobImages": 0,
+        "dimensions": [
+          "736x1024"
+        ],
+        "images": 44,
+        "incompleteImages": 0,
+        "release": "/releases/e802592c74f792d2a680e14d1fca98efafde86ed834e77c766eb0d77e74b5918/",
+        "rootProxyImages": 39,
+        "timing": {
+          "artwork": {
+            "elapsedMs": 95.09999990463255,
+            "failed": 0,
+            "loaded": 50,
+            "pending": 0,
+            "queued": 50,
+            "uniqueScans": 50
+          },
+          "navigationMs": 407.9,
+          "stages": {
+            "artworkSettled": 120.1,
+            "artworkStart": 24.1,
+            "boardMounted": 50.7,
+            "boardPainted": 122.2,
+            "engineReady": 48.3,
+            "metadataReady": 24.1
+          },
+          "startedAtNavigationMs": 285.7000000476837
+        },
+        "settledTiming": {
+          "artwork": {
+            "elapsedMs": 95.09999990463255,
+            "failed": 0,
+            "loaded": 50,
+            "pending": 0,
+            "queued": 50,
+            "uniqueScans": 50
+          },
+          "navigationMs": 407.9,
+          "stages": {
+            "artworkSettled": 120.1,
+            "artworkStart": 24.1,
+            "boardMounted": 50.7,
+            "boardPainted": 122.2,
+            "engineReady": 48.3,
+            "metadataReady": 24.1
+          },
+          "startedAtNavigationMs": 285.7000000476837
+        }
+      },
+      {
+        "blobImages": 0,
+        "dimensions": [
+          "736x1024"
+        ],
+        "images": 44,
+        "incompleteImages": 0,
+        "release": "/releases/e802592c74f792d2a680e14d1fca98efafde86ed834e77c766eb0d77e74b5918/",
+        "rootProxyImages": 39,
+        "timing": {
+          "artwork": {
+            "elapsedMs": 88.90000009536743,
+            "failed": 0,
+            "loaded": 50,
+            "pending": 0,
+            "queued": 50,
+            "uniqueScans": 50
+          },
+          "navigationMs": 328.1,
+          "stages": {
+            "artworkSettled": 110.7,
+            "artworkStart": 20.8,
+            "boardMounted": 48.4,
+            "boardPainted": 112.3,
+            "engineReady": 46,
+            "metadataReady": 20.7
+          },
+          "startedAtNavigationMs": 215.79999995231628
+        },
+        "settledTiming": {
+          "artwork": {
+            "elapsedMs": 88.90000009536743,
+            "failed": 0,
+            "loaded": 50,
+            "pending": 0,
+            "queued": 50,
+            "uniqueScans": 50
+          },
+          "navigationMs": 328.1,
+          "stages": {
+            "artworkSettled": 110.7,
+            "artworkStart": 20.8,
+            "boardMounted": 48.4,
+            "boardPainted": 112.3,
+            "engineReady": 46,
+            "metadataReady": 20.7
+          },
+          "startedAtNavigationMs": 215.79999995231628
+        }
+      }
+    ],
+    "firstNewReleasePaint": {
+      "images": 44,
+      "incompleteImages": 36,
+      "preloadCount": 50,
+      "release": "/releases/e802592c74f792d2a680e14d1fca98efafde86ed834e77c766eb0d77e74b5918/",
+      "scanUrls": [
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FBLK%2FBLK_040_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpc%2FM5%2FM5_36_R_JP.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FPOR%2FPOR_088_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FDRI%2FDRI_010_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FJTG%2FJTG_008_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FSCR%2FSCR_063_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FTEF%2FTEF_144_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FMEG%2FMEG_119_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FSVI%2FSVI_186_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FJTG%2FJTG_027_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FJTG%2FJTG_175_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FJTG%2FJTG_116_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FJTG%2FJTG_098_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FASC%2FASC_198_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FRCL%2FRCL_154_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FBLW%2FBLW_111_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FDEX%2FDEX_102_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FJTG%2FJTG_152_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FSSP%2FSSP_170_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FJTG%2FJTG_153_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FCRI%2FCRI_083_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FTWM%2FTWM_163_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FTWM%2FTWM_095_R_EN.png",
+        "https://sim-static.prizemap.app/card-images?url=https%3A%2F%2Flimitlesstcg.nyc3.cdn.digitaloceanspaces.com%2Ftpci%2FPOR%2FPOR_062_R_EN.png"
+      ],
+      "timing": {
+        "artwork": {
+          "elapsedMs": 11.299999952316284,
+          "failed": 0,
+          "loaded": 0,
+          "pending": 50,
+          "queued": 50,
+          "uniqueScans": 50
+        },
+        "navigationMs": 1560,
+        "stages": {
+          "artworkStart": 27.7,
+          "boardMounted": 62.1,
+          "boardPainted": 137.9,
+          "engineReady": 57.7,
+          "metadataReady": 27.6
+        },
+        "startedAtNavigationMs": 1422.1000001430511
+      }
+    },
+    "firstNewReleaseArtworkSettled": {
+      "incompleteImages": 0,
+      "scanDimensions": [
+        "736x1024"
+      ],
+      "timing": {
+        "artwork": {
+          "elapsedMs": 499.69999980926514,
+          "failed": 0,
+          "loaded": 50,
+          "pending": 0,
+          "queued": 50,
+          "uniqueScans": 50
+        },
+        "navigationMs": 1560,
+        "stages": {
+          "artworkSettled": 528.4,
+          "artworkStart": 27.7,
+          "boardMounted": 62.1,
+          "boardPainted": 137.9,
+          "engineReady": 57.7,
+          "metadataReady": 27.6
+        },
+        "startedAtNavigationMs": 1422.1000001430511
+      }
+    },
+    "urlUnchanged": true,
+    "imageDimensionsBeforeAndAfter": "736x1024",
+    "firstNewReleasePendingVisibleImages": 36,
+    "all50PreloadsSucceeded": true
+  },
+  "verification": {
+    "npmTestPassed": true,
+    "runtimeSpecs": 15,
+    "cardRegressionSpecs": 44,
+    "frontendSpecs": 65,
+    "nodePackagingAndCacheSpecs": 80,
+    "standaloneFinalizerPassed": true,
+    "angularTemplateTypecheckPassed": true,
+    "productionBuildPassed": true,
+    "assetAudit": {
+      "referenced": 56,
+      "unused": 0,
+      "missing": 0
+    },
+    "liveDeliveryReport": "simulator-delivery-results.json",
+    "browserHarnessUpdated": "tools/test-client-simulator.cjs contains held-all-scans and separate artwork-settled offline checks; syntax checked, not run via CLI. Controlled CUA browser checks are reported above."
+  }
+}

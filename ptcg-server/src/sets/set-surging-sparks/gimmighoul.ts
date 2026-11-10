@@ -59,7 +59,7 @@ export class Gimmighoul extends PokemonCard {
       }
 
       let cards: Card[] = [];
-      store.prompt(state, new ChooseCardsPrompt(
+      return store.prompt(state, new ChooseCardsPrompt(
         player,
         GameMessage.CHOOSE_CARD_TO_HAND,
         player.deck,
@@ -71,13 +71,13 @@ export class Gimmighoul extends PokemonCard {
         SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
 
         player.deck.moveCardsTo(cards, player.hand);
-      });
-
-      return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-        player.deck.applyOrder(order);
+        // Ref: set-astral-radiance/cyndaquil.ts (resolve search before shuffle).
+        store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
+          player.deck.applyOrder(order);
+        });
       });
     }
 
     return state;
   }
-} 
+}

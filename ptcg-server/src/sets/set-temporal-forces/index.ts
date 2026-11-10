@@ -1,3 +1,5 @@
+import { Electivire } from './electivire';
+import { Electabuzz } from './electabuzz';
 import { Card } from '../../game/store/card/card';
 import { Beldum } from './beldum';
 import { BiancasDevotion } from './biancas-devotion';
@@ -228,4 +230,6 @@ export const setTemporalForces: Card[] = [
   new Girafarig(),
   new Farigirafex(),
   new GreatTusk2(),
+  new Electabuzz(),
+  new Electivire(),
 ];

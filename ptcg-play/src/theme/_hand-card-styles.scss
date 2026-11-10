@@ -1,0 +1,64 @@
+@import 'selectable-arrow';
+
+$hand-selectable-blue: #54ddff;
+
+// Keep the hand and selectors' card affordances identical.
+@mixin hand-card-face {
+  display: block;
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  border-radius: 7px;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.4));
+  cursor: pointer;
+
+  &.draggable { cursor: grab; }
+  &:active.draggable { cursor: grabbing; }
+  &:focus-visible { outline: 2px solid white; outline-offset: 5px; }
+  &.low-graphics { filter: none; }
+}
+
+@mixin hand-stack-copy {
+  display: block;
+  position: absolute;
+  inset-inline: 2px;
+  top: calc(var(--stack-depth) * -11px);
+  z-index: calc(3 - var(--stack-depth));
+  pointer-events: none;
+  filter: brightness(0.85) drop-shadow(0 -1px 2px rgba(0, 0, 0, 0.35));
+  &.low-graphics { filter: none; }
+}
+
+@mixin hand-card-outline {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--hand-blue);
+  border-radius: 8px;
+  box-shadow: 0 0 7px 1px rgba(49, 202, 255, 0.75), inset 0 0 4px rgba(49, 202, 255, 0.45);
+  pointer-events: none;
+}
+
+@mixin hand-stack-count {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  min-width: 28px;
+  height: 28px;
+  padding-inline: 3px;
+  box-sizing: border-box;
+  border: 1px solid #c5ced9;
+  border-radius: 50%;
+  background: #fafcff;
+  color: #182432;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}

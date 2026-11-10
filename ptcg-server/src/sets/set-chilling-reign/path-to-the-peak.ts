@@ -7,6 +7,18 @@ import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { GameError, GameMessage, PokemonCardList, PowerType } from '../../game';
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
+import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { Power } from '../../game/store/card/pokemon-types';
+
+const RULE_BOX_TAGS = [CardTag.POKEMON_V, CardTag.POKEMON_VMAX, CardTag.POKEMON_VSTAR,
+  CardTag.POKEMON_EX, CardTag.BREAK, CardTag.POKEMON_GX, CardTag.PRISM_STAR,
+  CardTag.RADIANT, CardTag.POKEMON_VUNION];
+
+function isLockedPower(power: Power): boolean {
+  return power.powerType === PowerType.ABILITY && !power.exemptFromAbilityLock
+    && !power.useFromHand && !power.useFromDiscard;
+}
 
 export class PathToThePeak extends TrainerCard {
 
@@ -26,8 +38,21 @@ export class PathToThePeak extends TrainerCard {
 
   public text = 'Pokémon with a Rule Box in play (both yours and your opponent\'s) have no Abilities. (Pokémon V, Pokémon-GX, etc. have Rule Boxes.)';
 
+  private hasRuleBox(card: PokemonCard): boolean {
+    // Matches upstream Card.hasRuleBox(): older, pre-regulation lowercase ex
+    // cards do not have a Rule Box. Modern Mega ex also has the ex tag.
+    return (card.tags.includes(CardTag.POKEMON_ex) && !!card.regulationMark)
+      || RULE_BOX_TAGS.some(tag => card.tags.includes(tag));
+  }
+
+  private affectsSlot(store: StoreLike, state: State, slot: PokemonCardList): boolean {
+    const owner = StateUtils.findOwner(state, slot);
+    return !IS_STADIUM_EFFECT_BLOCKED(store, state, owner, slot, this);
+  }
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    // Ref: upstream 9d4e1c72d (Stadium Ability lock); set-mega-evolution/forest-of-vitality.ts (Stadium immunity).
     if (effect instanceof CheckPokemonPowersEffect && StateUtils.getStadiumCard(state) === this) {
       const targetPokemon = effect.target;
       if (!targetPokemon) {
@@ -35,45 +60,25 @@ export class PathToThePeak extends TrainerCard {
       }
 
       // Check if target is in play
-      const targetCardList = StateUtils.findCardList(state, targetPokemon);
-      if (!(targetCardList instanceof PokemonCardList)) {
+      const targetCardList = StateUtils.findPokemonSlot(state, targetPokemon);
+      if (!targetCardList) {
         return state;
       }
 
       // Check if Pokemon has a Rule Box
-      if (targetPokemon.tags.includes(CardTag.POKEMON_V) ||
-        targetPokemon.tags.includes(CardTag.POKEMON_VMAX) ||
-        targetPokemon.tags.includes(CardTag.POKEMON_VSTAR) ||
-        targetPokemon.tags.includes(CardTag.POKEMON_ex) ||
-        targetPokemon.tags.includes(CardTag.POKEMON_EX) ||
-        targetPokemon.tags.includes(CardTag.BREAK) ||
-        targetPokemon.tags.includes(CardTag.POKEMON_GX) ||
-        targetPokemon.tags.includes(CardTag.PRISM_STAR) ||
-        targetPokemon.tags.includes(CardTag.RADIANT)) {
+      if (this.hasRuleBox(targetPokemon) && this.affectsSlot(store, state, targetCardList)) {
         // Filter out all abilities
         effect.powers = effect.powers.filter(power =>
-          power.powerType !== PowerType.ABILITY
+          !isLockedPower(power)
         );
       }
     }
 
     if (effect instanceof PowerEffect && StateUtils.getStadiumCard(state) === this &&
-      !effect.power.exemptFromAbilityLock) {
-
-      if (effect.power.useFromDiscard || effect.power.useFromHand) {
-        return state;
-      }
-
-      const pokemonCard = effect.card;
-      if (pokemonCard.tags.includes(CardTag.POKEMON_V) ||
-        pokemonCard.tags.includes(CardTag.POKEMON_VMAX) ||
-        pokemonCard.tags.includes(CardTag.POKEMON_VSTAR) ||
-        pokemonCard.tags.includes(CardTag.POKEMON_ex) ||
-        pokemonCard.tags.includes(CardTag.POKEMON_EX) ||
-        pokemonCard.tags.includes(CardTag.BREAK) ||
-        pokemonCard.tags.includes(CardTag.POKEMON_GX) ||
-        pokemonCard.tags.includes(CardTag.PRISM_STAR) ||
-        pokemonCard.tags.includes(CardTag.RADIANT)) {
+      isLockedPower(effect.power) && this.hasRuleBox(effect.card)) {
+      const slot = StateUtils.findPokemonSlot(state, effect.card);
+      // Entering-play Abilities are probed before the Pokémon occupies a slot.
+      if (!slot || this.affectsSlot(store, state, slot)) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
     }

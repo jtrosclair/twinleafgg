@@ -94,9 +94,7 @@ export class Eevee extends PokemonCard {
             cards = selected || [];
             if (cards.length > 0) {
               const pokemonCard = cards[0] as PokemonCard;
-              // Move from deck to hand so EvolveEffect can move it from hand to target
-              player.deck.moveCardsTo(cards, player.hand);
-              const evolveEffect = new EvolveEffect(player, cardList, pokemonCard);
+              const evolveEffect = new EvolveEffect(player, cardList, pokemonCard, player.deck);
               store.reduceEffect(state, evolveEffect);
             }
           });

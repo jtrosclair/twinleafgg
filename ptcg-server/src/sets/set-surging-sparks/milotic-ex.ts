@@ -1,10 +1,11 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard, Stage, CardType, CardTag, PowerType, StoreLike, State, SpecialCondition, GamePhase, StateUtils } from '../../game';
 import { AbstractAttackEffect, AddSpecialConditionsEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { PowerEffect } from '../../game/store/effects/game-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Miloticex extends PokemonCard {
+export class Miloticex extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom: string = 'Feebas';
   public cardType: CardType = CardType.WATER;
@@ -123,6 +124,10 @@ export class Miloticex extends PokemonCard {
       }
     }
 
+    return Miloticex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const specialConditionEffect = new AddSpecialConditionsEffect(effect, [SpecialCondition.ASLEEP]);
       state = store.reduceEffect(state, specialConditionEffect);

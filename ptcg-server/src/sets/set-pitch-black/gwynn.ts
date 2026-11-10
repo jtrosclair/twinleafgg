@@ -1,4 +1,4 @@
-import { PokemonCard } from '../../game';
+import { PokemonCard, Player } from '../../game';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { Effect } from '../../game/store/effects/effect';
@@ -41,7 +41,7 @@ function* playGwynn(next: Function, store: StoreLike, state: State, effect: Trai
   });
 
   const selectableCount = player.hand.cards.length - blocked.length;
-  if (selectableCount < 2) {
+  if (selectableCount < 1) {
     throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
   }
 
@@ -70,7 +70,12 @@ export class Gwynn extends TrainerCard {
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Gwynn';
   public fullName: string = 'Gwynn M5';
-  public text: string = 'Discard 2 Pokémon from your hand (excluding any Rule Box Pokémon). Draw 3 cards for each Pokémon discarded in this way.';
+  public text: string = 'Discard up to 2 Pokémon from your hand (excluding any Rule Box Pokémon). Draw 3 cards for each Pokémon discarded in this way.';
+
+  public canPlay(_store: StoreLike, _state: State, player: Player): boolean {
+    return player.supporterTurn === 0 && player.hand.cards.some(card =>
+      card instanceof PokemonCard && !pokemonCardHasRuleBox(card));
+  }
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof TrainerEffect && effect.trainerCard === this) {
@@ -78,6 +83,10 @@ export class Gwynn extends TrainerCard {
 
       if (player.supporterTurn > 0) {
         throw new GameError(GameMessage.SUPPORTER_ALREADY_PLAYED);
+      }
+
+      if (!this.canPlay(store, state, player)) {
+        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }
 
       player.hand.moveCardTo(effect.trainerCard, player.supporter);

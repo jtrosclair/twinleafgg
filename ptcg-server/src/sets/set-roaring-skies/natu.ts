@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
@@ -6,7 +7,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { KnockOutEffect } from '../../game/store/effects/game-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Natu extends PokemonCard {
+export class Natu extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.BASIC;
   public cardType: CardType = CardType.PSYCHIC;
   public hp: number = 40;
@@ -34,8 +35,7 @@ export class Natu extends PokemonCard {
   public fullName: string = 'Natu ROS';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
-    // Delta Plus
+    // Delta Plus belongs to the card, not to a copied attack.
     if (effect instanceof KnockOutEffect) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
@@ -56,6 +56,10 @@ export class Natu extends PokemonCard {
       }
     }
 
+    return Natu.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);

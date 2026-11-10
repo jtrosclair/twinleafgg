@@ -1,0 +1,6 @@
+<button type="button" class="zone-rail" [class.count-below]="countBelow" [class.align-right]="alignRight"
+  [disabled]="count === 0" aria-haspopup="dialog" [attr.aria-label]="ariaLabel || label + ': ' + count"
+  (click)="zoneClick.emit()">
+  <span class="zone-rail-panel" aria-hidden="true"><span class="zone-rail-label">{{label}}</span></span>
+  <span class="zone-rail-tab" aria-hidden="true">{{count}}</span>
+</button>

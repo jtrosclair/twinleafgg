@@ -145,10 +145,7 @@ export class Finizen extends PokemonCard {
           });
         }
 
-        // Move the evolution card from deck to bench first
-        player.deck.moveCardTo(cards[0], player.bench[finizensNewBenchIndex]);
-
-        const evolveEffect = new EvolveEffect(player, player.bench[finizensNewBenchIndex], cards[0]);
+        const evolveEffect = new EvolveEffect(player, player.bench[finizensNewBenchIndex], cards[0], player.deck);
         store.reduceEffect(state, evolveEffect);
 
         return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {

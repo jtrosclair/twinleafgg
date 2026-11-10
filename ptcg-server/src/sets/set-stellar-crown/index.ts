@@ -45,6 +45,8 @@ import { ArchaludonIR, AreaZeroUnderdepthsHR, BraveryCharmHR, BriarFA, BriarSIR,
 import { Raboot } from './raboot';
 import { RagingBolt } from './raging-bolt';
 import { Rapidash } from './rapidash';
+import { Rhyhorn } from './rhyhorn';
+import { Rhydon } from './rhydon';
 import { Salandit } from './salandit';
 import { Salazzle } from './salazzle';
 import { Scorbunny } from './scorbunny';
@@ -102,6 +104,8 @@ export const setStellarCrown: Card[] = [
   new Raboot(),
   new RagingBolt(),
   new Rapidash(),
+  new Rhyhorn(),
+  new Rhydon(),
   new Salandit(),
   new Salazzle(),
   new Scorbunny(),

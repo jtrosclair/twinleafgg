@@ -167,6 +167,13 @@ function handleBenchSizeChange(store: StoreLike, state: State, benchSizes: numbe
   return state;
 }
 
+/** Reconcile bench capacity without running knockouts, prizes, or turn effects. */
+export function checkBenchSize(store: StoreLike, state: State): State {
+  const effect = new CheckTableStateEffect(state.players.map(() => 5));
+  store.reduceEffect(state, effect);
+  return handleBenchSizeChange(store, state, effect.benchSizes);
+}
+
 function chooseActivePokemons(state: State): ChoosePokemonPrompt[] {
   const prompts: ChoosePokemonPrompt[] = [];
 
@@ -400,9 +407,7 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
   }
 
   // Check table state and handle bench size after KOs
-  const checkTableStateEffect = new CheckTableStateEffect([5, 5]);
-  store.reduceEffect(state, checkTableStateEffect);
-  handleBenchSizeChange(store, state, checkTableStateEffect.benchSizes);
+  checkBenchSize(store, state);
   if (store.hasPrompts()) {
     yield store.waitPrompt(state, () => next());
   }

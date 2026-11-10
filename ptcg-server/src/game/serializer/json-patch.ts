@@ -1,4 +1,4 @@
-import { deepCompare } from '../../utils';
+import { deepCompare } from '../../utils/utils';
 import { JsonDiff, JsonPathDiff } from './json-patch.interface';
 
 export class JsonPatch {

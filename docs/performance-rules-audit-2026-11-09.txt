@@ -1,0 +1,62 @@
+Follow-up review requested by Jerry. This file records a completed audit, not approval from a separate chat or permission to deploy.
+
+PrizeMap performance and rules audit — November 9, 2026
+
+Verdict
+The two performance changes have strong evidence of preserving real effect execution in the tested cases. There is no newly failing functional test in the 627-spec old/new comparison, and every checkpoint and actual effect-delivery trace matched across 40 paired full solutions. This is not proof that every card combination works. The wider investigation reproduced existing rules bugs, and the phone APK is a profiling build behind newer Twinleaf rules fixes. It should not be treated as a verified release candidate.
+
+Twinleaf project coordination
+I read the repository's current docs/upstream-sync.md and relevant engine/card instructions. That record already acknowledges the two unlabelled copied-handler ownership failures; they are not dismissed here. This session has no list/read/message chat tools, and the computer-use tool explicitly blocks controlling the Codex app, so I could not send a message to the other project chat or obtain another agent's approval. A concrete handoff has been saved as docs/performance-rules-audit-2026-11-09.txt in twinleafgg.
+
+Version discipline
+The saved CommonJS engine build alongside the Android build was frozen as candidate; the Android application uses its ESM sibling. Its critical clone and Store paths were inspected, and the full phone solution was exercised separately. Baseline uses the same frozen card library and all other modules, restoring only the saved pre-optimization Store and deepClone implementation files. This avoids attributing other Twinleaf edits to the speed changes. The portable archive includes both frozen desktop engines and their identities.
+The source project continued changing during this audit. I additionally froze and compiled a final source snapshot and ran its whole suite and four solution traces ten times each. 2 source files changed after that final snapshot: sets/set-ascended-heroes/galarian-obstagoon.ts, sets/tests/upstream-galarian-obstagoon-asc.spec.ts. Those later edits are outside the frozen-source claim. No source files were overwritten to roll back the other project's work.
+Phone APK SHA-256: 7d42143856f19321aea386de9e74ad3cd45cd29062708ad4d53793984c0ce99b
+
+Full solution comparison
+Four existing recorded winning traces were used: Breaking Through the Wall (29 steps), Explosive Hand (20), Trapped in the Phantom Maze (21), and Something's Fishy (19). Each was replayed with ten random seeds in both old and optimized engines. Each recorded intermediate expected turn, phase, active player, prize count, and completion flag was asserted. All 80 paired-session runs reached the required human win.
+There were 930 pairs of checkpoints, including loads, covering 890 ordered actions/prompt responses per engine. The comparison checked the complete reachable state graph, canonical serialized state, actual engine effect sequence, and the per-card effect-delivery sequence. It matched 23,590 actual engine effects and 2,804,080 card-effect visits on each side. Hint-only simulations were excluded from the delivery trace because reducing those simulations is the intended change. Their resulting playable-card hints were still included in the state comparisons.
+A first strict comparison found differences in time-derived game-stat IDs. The rerun used the same fixed clock and seeded randomness in both engines, rather than deleting game fields from comparisons; no state or event differences remained. Log timestamp fields alone were normalized. Each engine also retained all recorded physical card choices when shuffles reordered prompt rows.
+The optimized frozen engine then won 40 additional fresh sessions with ordinary randomness and clock behavior. The final current-source snapshot independently won the same 40 ordinary-randomness sessions. These are complete solution replays, not just snapshot loads.
+
+Android integration
+The actual installed PrizeMap Holo Test app completed the 21-step Phantom Maze solution through the normal GameService entry points inside Angular. It reached FINISHED with human winner 0, undid the finish, replayed the final attack/prompt, and won again. Reset restored the original board/hand. This exercised the WebView and UI service path; it did not physically tap/drag every control. The separate test app has no login or score submission. The phone was left on the original local test puzzle, with the user's existing holo preference preserved.
+
+Saved-state compatibility
+A separate database read used BEGIN READ ONLY, selected only puzzle board URLs, rolled back and closed the connection, and wrote aggregate results only. Of 667 rows, 530 contained applicable Twinleaf states; 134 were other formats, two lacked a fragment, and one had an existing decode failure. All 530 applicable states validated in both frozen engines, with zero canonical serialized-state changes, zero card-name changes, and zero losses of validity. This checks saved-state compatibility, not all possible actions for those puzzles. No raw database payloads were saved or modified.
+
+Broader card/engine tests
+The 77-file suite was run against both frozen engine versions using the same freshly compiled tests:
+Before optimization: 610 passed, 17 failed (627 total).
+Phone-build engine: 611 passed, 16 failed (627 total).
+No test that passed before the performance change failed afterward. The one newly passing case is the intentional Munkidori scan-budget regression, which checks that redundant Trainer scans were removed without changing the result. The other 16 failures were identical in both versions: four function/copy snapshot cases, nine Forest of Vitality cases, one newer Obstagoon registration case, and two known copied-handler ownership cases.
+Those tests include fixes added after the profiling build. The final newer source snapshot's 81-file suite had 665 passing and 2 failing tests (667 total). Its two failures remain the known copied-handler ownership cases. This newer source includes fixes absent from the phone build, such as preserving callable card functions during cloning and the corrected Forest of Vitality behavior. Passing newer source tests does not retroactively certify the older APK.
+
+The activation concern
+None of the scanned card implementations reads playableCardIds. The event fan-out methods propagateEffect, callReduceEffect, and propagatePlayerMarkerEffect were unchanged by the optimization; checkTrainerPlay and calculatePlayability themselves were also unchanged. The optimization does not remove the actual reducer/callback/marker/prompt dispatch paths. What moved was when presentation hints are recalculated.
+The source scan inspected all production engine/card TypeScript files and 55 card-specific canPlay implementations (plus the base method). The possible writes found in canPlay bodies were local counters/temporary arrays, not direct game-state updates. A runtime check called each card-specific canPlay on each of the four real starting states: 220 cases caused no state, prompt-callback, or wait-callback mutation. Counter Catcher rejected two ineligible positions without mutation, as expected.
+Focused behavioral scenarios ran against the old frozen engine, optimized frozen engine and final newer source. Eleven scenarios passed in each version, including Lumineon's on-bench search, Path to the Peak suppression, Munkidori's damage movement and required Darkness Energy, independent legitimate uses of two Munkidori copies, end-turn marker cleanup, Exeggcute activation from discard, Toedscruel recovery prevention, Gengar activation from discard, Pyukumuku activation from hand, and Manaphy bench protection with/without Ability lock.
+
+Two additional real rules bugs reproduced in all three versions:
+1. Crobat V DAA permits a second physical copy to trigger Dark Asset in the same turn. Accepting the second prompt draws the hand back from five to six. The printed restriction is shared across all Dark Asset uses, not per physical card.
+2. Pyukumuku FST permits a second physical copy to use Pitch a Pyukumuku in the same turn. The printed restriction is also shared across copies.
+Both handlers test player.marker.hasMarker(markerName, this), and Marker matches the physical source object when supplied. That checks only that copy's marker. A focused correction should enforce the player-wide allowance for these named abilities while preserving per-Pokemon allowances such as Munkidori. Regression coverage should retain the successful two-Munkidori scenario as a counterexample to globally suppressing repeated abilities.
+These two newly reproduced bugs were not fixed during this audit; their failing assertions and before/after reproductions are in the packet.
+
+Existing copied-handler limitation
+The two whole-suite failures use adversarial handlers with unlabelled attack-owned and Ability-owned branches. One incorrectly inherits an unrelated defensive passive after copied Harden; another incorrectly adds an Ability-owned bonus to a copied initial AttackEffect. They reproduce before and after the optimization and are already acknowledged in Twinleaf's sync record. Ordinary named-card and copy/marker regressions continue passing, but generic copied-attack ownership remains an architectural limitation. A durable fix needs explicit branch ownership; reducing hint scans neither causes nor solves it.
+
+Recommendation for Twinleaf
+Keep the measured performance changes for integration: the tested engine event path still executes, and the speedup comes from avoiding repeated speculative work. Rebuild the app from a single reviewed current source snapshot, including its existing callable-function and rule fixes, then run this solution/activation audit against that release build. Track or resolve the Crobat/Pyukumuku shared limits and the known copied-handler limitation explicitly. Do not promote the older profiling APK on the strength of the original 294-test claim alone.
+
+Independent rules references
+Official Crobat V text: https://asia.pokemon-card.com/ph/card-search/detail/619/
+Official Pyukumuku text: https://asia.pokemon-card.com/ph/card-search/detail/1816/
+Official Advanced Player's Rulebook v3.4, Abilities and shared once-per-turn limits: https://asia.pokemon-card.com/sg/wp-content/uploads/sites/6/2025/10/EN_advanced_manual-2025.pdf
+
+Artifacts
+PrizeMap rules audit measurements.json contains the aggregate evidence and engine identities.
+PrizeMap rules audit reproducers.zip contains frozen baseline/candidate JavaScript engines, the four public recorded traces, the comparison and targeted activation scripts, and final audit results. No credentials, signing keys, or database snapshots are included. The targeted activation script intentionally exits nonzero for the reproduced existing Crobat/Pyukumuku bugs. The database script is optional and requires the user's existing configured web checkout.
+
+Local evidence directory: /Users/jerrytrosclair/Documents/Codex/2026-11-09/i-x20/work/rules-audit
+User-facing audit packet: /Users/jerrytrosclair/Documents/Codex/2026-11-09/i-x20/outputs/PrizeMap rules audit reproducers.zip

@@ -1,6 +1,6 @@
 import { Card } from '../store/card/card';
 import { deepClone } from '../../utils/utils';
-import { CardsInfo } from '../../backend/interfaces/cards.interface';
+import { CardsInfo } from './cards-info';
 
 export class CardManager {
 

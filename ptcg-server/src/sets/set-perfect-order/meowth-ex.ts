@@ -2,7 +2,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { PowerType, StoreLike, State, TrainerCard, GameMessage, GameError } from '../../game';
+import { PowerType, StoreLike, State, TrainerCard, GameMessage } from '../../game';
 import { AfterAttackEffect, EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { ABILITY_USED, CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, MOVE_CARDS, SEARCH_DECK_FOR_CARDS_TO_HAND } from '../../game/store/prefabs/prefabs';
 
@@ -46,7 +46,9 @@ export class Meowthex extends PokemonCard {
       }
 
       if (player.marker.hasMarker(this.TRUMP_CARD_MARKER)) {
-        throw new GameError(GameMessage.POWER_ALREADY_USED);
+        // Ref: set-darkness-ablaze/crobat-v.ts (Dark Asset).
+        // Skip the used ability while allowing this Pokemon to be benched.
+        return state;
       }
 
       // Try to reduce PowerEffect, to check if something is blocking our ability

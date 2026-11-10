@@ -1,8 +1,9 @@
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { GameMessage, PowerType, State, StateUtils, StoreLike } from '../../game';
+import { GameMessage, PowerType, ShowCardsPrompt, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, JUST_EVOLVED, MOVE_CARDS, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
+import { CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, MOVE_CARDS, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
 
 export class Floette extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -34,7 +35,7 @@ export class Floette extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (JUST_EVOLVED(effect, this) && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this && effect.playedFromHand && state.players[state.activePlayer] === effect.player && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
 
       CONFIRMATION_PROMPT(store, state, effect.player, wantToUse => {
         if (wantToUse) {
@@ -44,8 +45,12 @@ export class Floette extends PokemonCard {
           if (opponent.hand.cards.length > 0) {
             const randomIndex = Math.floor(Math.random() * opponent.hand.cards.length);
             const randomCard = opponent.hand.cards[randomIndex];
-            MOVE_CARDS(store, state, opponent.hand, opponent.deck, { cards: [randomCard], sourceCard: this, sourceEffect: this.powers[0] });
-            SHUFFLE_DECK(store, state, opponent);
+            store.prompt(state, new ShowCardsPrompt(
+              player.id, GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, [randomCard]
+            ), () => {
+              MOVE_CARDS(store, state, opponent.hand, opponent.deck, { cards: [randomCard], sourceCard: this, sourceEffect: this.powers[0] });
+              SHUFFLE_DECK(store, state, opponent);
+            });
           }
         }
       }, GameMessage.WANT_TO_USE_ABILITY);

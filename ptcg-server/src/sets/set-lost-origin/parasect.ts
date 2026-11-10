@@ -7,7 +7,7 @@ import { Stage, CardType, SpecialCondition } from '../../game/store/card/card-ty
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { StoreLike, State, StateUtils, GameMessage, ConfirmPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
 import { WAS_ATTACK_USED, COIN_FLIP_PROMPT, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class Parasect extends PokemonCard {
@@ -45,7 +45,7 @@ export class Parasect extends PokemonCard {
     // Ability: Lethargy Spores
     // Ref: set-destined-rivals/marnies-grimmsnarl-ex.ts (EvolveEffect + ConfirmPrompt + ability-blocked pattern)
     // Ref: set-team-up/jirachi.ts (addSpecialCondition directly on PokemonCardList)
-    if (effect instanceof EvolveEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this && effect.playedFromHand && state.players[state.activePlayer] === effect.player) {
       const player = effect.player;
 
       // Check if ability is blocked

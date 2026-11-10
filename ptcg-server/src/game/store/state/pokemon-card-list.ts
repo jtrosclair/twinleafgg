@@ -21,6 +21,8 @@ export class PokemonCardList extends CardList {
   public sleepFlips = 1;
   public boardEffect: BoardEffect[] = [];
   public hpBonus: number = 0;
+  /** Effective types refreshed by the local simulator for board presentation. */
+  public cardTypes?: CardType[];
   public tools: Card[] = [];
   public energies: CardList = new CardList();
   public stadium: Card | undefined;
@@ -100,6 +102,8 @@ export class PokemonCardList extends CardList {
       } else if (card.name === 'Antique Plume Fossil') {
         result.push(card as PokemonCard);
       } else if (card.name === 'Antique Cover Fossil') {
+        result.push(card as PokemonCard);
+      } else if (card.name === 'Antique Shield Fossil' && !this.tools.includes(card) && !this.energies.cards.includes(card)) {
         result.push(card as PokemonCard);
       } else if (card.name === 'Claw Fossil') {
         result.push(card as PokemonCard);

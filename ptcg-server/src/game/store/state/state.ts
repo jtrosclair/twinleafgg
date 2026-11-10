@@ -10,6 +10,16 @@ export interface WinConditions {
   cardsInDeck?: number;
 }
 
+/** Persist only active copied-attack lifecycles; absent on older snapshots. */
+export interface CopiedAttackCheckpoint {
+  copycatCard: PokemonCard;
+  sourceCard: PokemonCard;
+  playerId: number;
+  attackIndex: number;
+  selectedAttack?: Attack;
+  endTurnsRemaining: number;
+}
+
 export enum GamePhase {
   WAITING_FOR_PLAYERS,
   SETUP,
@@ -29,6 +39,8 @@ export enum GameWinner {
 }
 
 export class State {
+
+  public copiedAttackCheckpoints?: CopiedAttackCheckpoint[];
 
   public cardNames: string[] = [];
 

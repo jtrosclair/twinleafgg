@@ -79,6 +79,7 @@ export class PutDamageEffect extends AbstractAttackEffect implements Effect {
   public weaknessApplied: boolean = false;
 
   private nonstackingDamageReducers: string[] = [];
+  private postWeaknessReductions: { amount: number; source?: string }[] = [];
 
   constructor(base: AttackEffect, damage: number) {
     super(base);
@@ -93,6 +94,23 @@ export class PutDamageEffect extends AbstractAttackEffect implements Effect {
     if (source) {
       this.nonstackingDamageReducers.push(source);
     }
+  }
+
+  // Defensive effects stated to apply after Weakness and Resistance must not
+  // run during propagation of a direct PutDamageEffect: its reducer may not
+  // have calculated Weakness yet. Existing immediate reductions are unchanged.
+  reduceDamageAfterWeakness(amount: number, source?: string): void {
+    if (source && this.postWeaknessReductions.some(reduction => reduction.source === source)) {
+      return;
+    }
+    this.postWeaknessReductions.push({ amount, source });
+  }
+
+  applyPostWeaknessReductions(): void {
+    for (const reduction of this.postWeaknessReductions) {
+      this.reduceDamage(reduction.amount, reduction.source);
+    }
+    this.postWeaknessReductions = [];
   }
 }
 

@@ -1,10 +1,10 @@
-import { Card, ChooseCardsPrompt, GameLog, PokemonCard, Stage, CardType, GameMessage, CoinFlipPrompt } from '../../game';
+import { PokemonCard, Stage, CardType, GameMessage, CoinFlipPrompt } from '../../game';
 import { EnergyType } from '../../game/store/card/card-types';
 import { EnergyCard } from '../../game/store/card/energy-card';
-import { StateUtils } from '../../game/store/state-utils';
 import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { MOVE_CARDS, SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { RECOVER_DISCARD_BY_ATTACK } from '../../game/store/prefabs/recover-discard-attack';
 
 export class Slowpoke extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -38,50 +38,10 @@ export class Slowpoke extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Fishing Tail
     if (WAS_ATTACK_USED(effect, 0, this)){
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-    
-      let pokemons = 0;
-      let energies = 0;
-      const blocked: number[] = [];
-      player.discard.cards.forEach((c, index) => {
-        if (c instanceof EnergyCard && c.energyType === EnergyType.BASIC) {
-          energies += 1;
-        } else if (c instanceof PokemonCard) {
-          pokemons += 1;
-        } else {
-          blocked.push(index);
-        }
-      });
-
-      // Player does not have correct cards in discard
-      if (pokemons === 0 && energies === 0) {
-        return state;
-      }
-      
-      const maxPokemons = Math.min(pokemons, 1);
-      const maxEnergies = Math.min(energies, 1);
-    
-      let cards: Card[] = [];
-      return store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_HAND,
-        player.discard,
-        {},
-        { min: 0, max: 1, allowCancel: false, blocked, maxPokemons, maxEnergies }
-      ), selected => {
-        cards = selected || [];
-        
-        if (cards.length > 0){
-          cards.forEach((card, index) => {
-            store.log(state, GameLog.LOG_PLAYER_PUTS_CARD_IN_HAND, { name: player.name, card: card.name });
-          });
-
-          SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-          MOVE_CARDS(store, state, player.discard, player.hand, { cards: cards });
-        }
-      });
-      return state;
+      return RECOVER_DISCARD_BY_ATTACK(store, state, effect, card =>
+        (card instanceof EnergyCard && card.energyType === EnergyType.BASIC) ||
+        (card instanceof PokemonCard && [Stage.BASIC, Stage.STAGE_1, Stage.STAGE_2, Stage.VMAX,
+          Stage.VSTAR, Stage.MEGA, Stage.BREAK].includes(card.stage)), 1, false);
     }
       
     // Trip Over

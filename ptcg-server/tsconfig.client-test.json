@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.browser.json",
+  "compilerOptions": {
+    "outDir": ".client-test",
+    "declaration": false,
+    "types": ["node", "jasmine"]
+  },
+  "include": ["src/client/index.ts", "src/client/simulator.spec.ts", "src/client/card-metadata.spec.ts", "src/utils/base64.spec.ts", "src/utils/utils.spec.ts", "src/game/serializer/compact-state.spec.ts"],
+  "exclude": ["node_modules"]
+}

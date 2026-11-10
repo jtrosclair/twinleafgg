@@ -111,11 +111,7 @@ export class Clefable extends PokemonCard {
             ), targets => {
               if (targets && targets.length > 0) {
                 const target = targets[0];
-                player.deck.moveCardTo(evolutionCard, target);
-                target.clearEffects();
-                target.pokemonPlayedTurn = state.turn;
-
-                const evolveEffect = new EvolveEffect(player, target, evolutionCard);
+                const evolveEffect = new EvolveEffect(player, target, evolutionCard, player.deck);
                 store.reduceEffect(state, evolveEffect);
               }
               SHUFFLE_DECK(store, state, player);

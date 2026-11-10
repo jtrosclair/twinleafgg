@@ -6,7 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { GameError, GameMessage, PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { CheckEvolveEffect, EvolveEffect } from '../../game/store/effects/game-effects';
 import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class Dracovish extends PokemonCard {
@@ -42,7 +42,7 @@ export class Dracovish extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Primal Law (passive - block opponent from evolving while in active spot)
     // Ref: set-phantom-forces/spiritomb.ts (B Cancel - EvolveEffect blocking)
-    if (effect instanceof EvolveEffect) {
+    if (((effect instanceof CheckEvolveEffect || (effect instanceof EvolveEffect && !effect.preflightComplete)) && effect.playedFromHand)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

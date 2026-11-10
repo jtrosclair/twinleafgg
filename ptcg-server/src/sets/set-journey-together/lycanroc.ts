@@ -3,7 +3,7 @@ import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
 import { StoreLike, State, PlayerType, Power, PowerType, Attack, StateUtils, SlotType, AttachEnergyPrompt, ConfirmPrompt, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
 
 export class Lycanroc extends PokemonCard {
 
@@ -41,7 +41,7 @@ export class Lycanroc extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if ((effect instanceof EvolveEffect) && effect.pokemonCard === this) {
+    if ((effect instanceof AfterEvolveEffect) && effect.pokemonCard === this && effect.playedFromHand) {
       const player = effect.player;
 
       // Try to reduce PowerEffect, to check if something is blocking our ability

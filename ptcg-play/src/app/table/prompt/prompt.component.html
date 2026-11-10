@@ -2,7 +2,7 @@
   <ng-template let-type let-item="item">
     <ng-container [ngSwitch]="type">
       <div class="ptcg-card" *ngSwitchCase="'PROMPT_CARD'">
-        <ptcg-card class="ptcg-prompt-card-preview" [class.cardback]="item.data.isSecret" [card]="item.data.card">
+        <ptcg-card class="ptcg-prompt-card-preview" [cardback]="item.data.isSecret" [card]="item.data.card">
         </ptcg-card>
       </div>
     </ng-container>
@@ -23,10 +23,6 @@
           [prompt]="prompt"></ptcg-prompt-choose-attack>
         <ptcg-prompt-choose-energy *ngSwitchCase="'Choose energy'" [gameState]="gameState"
           [prompt]="prompt"></ptcg-prompt-choose-energy>
-        <ptcg-prompt-game-over *ngSwitchCase="'Game over'" [gameState]="gameState"
-          [prompt]="prompt"></ptcg-prompt-game-over>
-        <ptcg-prompt-invite-player *ngSwitchCase="'Invite player'" [gameState]="gameState"
-          [prompt]="prompt"></ptcg-prompt-invite-player>
         <ptcg-prompt-move-damage *ngSwitchCase="'Move damage'" [gameState]="gameState"
           [prompt]="prompt"></ptcg-prompt-move-damage>
         <ptcg-prompt-move-energy *ngSwitchCase="'Move energy'" [gameState]="gameState"
@@ -53,9 +49,9 @@
     </div>
   </div>
 
-  <div class="ptcg-minimized-prompt" *ngIf="minimized && prompt?.type !== 'Choose pokemon'">
+  <div class="ptcg-minimized-prompt" *ngIf="minimized && prompt?.type !== 'Choose pokemon' && prompt?.type !== 'Choose cards'">
     <button mat-fab color="primary" (click)="maximize()">
-      <mat-icon>keyboard_arrow_up</mat-icon>
+      <svg class="ptcg-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.41 15.41 12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path></svg>
     </button>
   </div>
 </div>
@@ -69,9 +65,10 @@
   [prompt]="prompt">
 </ptcg-prompt-choose-prize>
 
-<!-- Always render the choose-cards prompt if it's the current prompt and not minimized -->
-<ptcg-prompt-choose-cards *ngIf="prompt?.type === 'Choose cards' && !minimized" [gameState]="gameState"
-  [prompt]="prompt">
+<!-- Keep selections and scroll position while inspecting the board. -->
+<ptcg-prompt-choose-cards *ngIf="prompt?.type === 'Choose cards'" #cardSelector [gameState]="gameState"
+  [prompt]="prompt" [minimized]="minimized"
+  [@selectorFade]="{value: true, params: {duration: cardSelector.fadeDuration}}">
 </ptcg-prompt-choose-cards>
 
 <ptcg-prompt-wait *ngIf="prompt?.type === 'WaitPrompt'" [gameState]="gameState" [prompt]="prompt"></ptcg-prompt-wait>

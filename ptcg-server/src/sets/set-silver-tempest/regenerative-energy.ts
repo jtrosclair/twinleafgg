@@ -25,7 +25,7 @@ Whenever you play a Pokémon from your hand to evolve the Pokémon V this card i
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     // Provide energy when attached to Single Strike Pokemon
-    if (effect instanceof EvolveEffect && effect.target.cards.includes(this)) {
+    if (effect instanceof EvolveEffect && effect.playedFromHand && effect.target.cards.includes(this)) {
       const player = effect.player;
 
       if (IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {

@@ -92,7 +92,7 @@ export class CheckPokemonPlayedTurnEffect implements Effect {
   public target: PokemonCardList;
   public pokemonPlayedTurn: number;
 
-  constructor(player: Player, target: PokemonCardList) {
+  constructor(player: Player, target: PokemonCardList, public evolutionCard?: PokemonCard) {
     this.player = player;
     this.target = target;
     this.pokemonPlayedTurn = target.pokemonPlayedTurn;
@@ -166,6 +166,8 @@ export class CheckProvidedEnergyEffect implements Effect {
   private _energyMap: EnergyMap[] = [];
   public totalProvidedTypes: EnergyMap[] = [];
   public specialEnergiesProvideColorless: boolean = false;
+  // Optional late-bound type override; applies to rows added later in fan-out.
+  public energyTypeOverride?: CardType;
 
   constructor(player: Player, source?: PokemonCardList) {
     this.player = player;
@@ -178,8 +180,12 @@ export class CheckProvidedEnergyEffect implements Effect {
       this._energyMap.forEach((value) => {
         if (value.card.energyType === EnergyType.SPECIAL) {
           value.provides = [CardType.COLORLESS];
+          value.disableBlend = true;
         }
       });
+    }
+    if (this.energyTypeOverride !== undefined) {
+      this._energyMap.forEach(value => { value.provides = value.provides.map(() => this.energyTypeOverride!); value.disableBlend = true; });
     }
     return this._energyMap;
   }

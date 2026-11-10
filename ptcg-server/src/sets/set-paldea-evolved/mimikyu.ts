@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
@@ -9,7 +10,7 @@ import { PowerType } from '../../game/store/card/pokemon-types';
 import { StateUtils } from '../../game/store/state-utils';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Mimikyu extends PokemonCard {
+export class Mimikyu extends PokemonCard implements CopiedAttackOwnershipContract {
 
   public stage: Stage = Stage.BASIC;
 
@@ -87,6 +88,10 @@ export class Mimikyu extends PokemonCard {
       }
     }
 
+    return Mimikyu.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const attackEffect = effect as AttackEffect;
       const damageEffect = new PutCountersEffect(attackEffect, 70);

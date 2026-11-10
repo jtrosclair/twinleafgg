@@ -1,9 +1,8 @@
 import { AnimationEvent } from '@angular/animations';
-import { Component, Input, OnChanges, SimpleChanges, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
-import { Prompt, GamePhase } from 'ptcg-server';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
+import { Prompt } from 'ptcg-server';
 
 import { GameService } from '../../api/services/game.service';
-import { GameOverPrompt } from './prompt-game-over/game-over.prompt';
 import { LocalGameState } from '../../shared/session/session.interface';
 import { ptcgPromptAnimations } from './prompt.animations';
 
@@ -11,10 +10,10 @@ import { ptcgPromptAnimations } from './prompt.animations';
   selector: 'ptcg-prompt',
   templateUrl: './prompt.component.html',
   styleUrls: ['./prompt.component.scss'],
-  animations: [ptcgPromptAnimations.promptContent],
+  animations: [ptcgPromptAnimations.promptContent, ptcgPromptAnimations.selectorFade],
   encapsulation: ViewEncapsulation.None
 })
-export class PromptComponent implements OnChanges {
+export class PromptComponent implements OnChanges, OnDestroy {
 
   @Input() gameState: LocalGameState;
   @Input() clientId: number;
@@ -23,6 +22,7 @@ export class PromptComponent implements OnChanges {
   public animationState: 'void' | 'enter' | 'exit' = 'void';
   public prompt: Prompt<any>;
   public minimized = false;
+  private promptUpdate = 0;
 
   constructor(
     private gameService: GameService,
@@ -30,7 +30,9 @@ export class PromptComponent implements OnChanges {
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {
+    const update = ++this.promptUpdate;
     if (!this.gameState || !this.clientId) {
+      this.prompt = undefined;
       return this.toggle(false);
     }
 
@@ -40,29 +42,26 @@ export class PromptComponent implements OnChanges {
       differentGame = !previousState || previousState.localId !== this.gameState.localId;
     }
 
-    // In replay mode, we need special handling
-    if (this.gameState.replay) {
-      // If we're navigating through replay states (position changes), hide any active prompts
-      if (changes.gameState && changes.gameState.previousValue &&
-        changes.gameState.previousValue.replayPosition !== this.gameState.replayPosition) {
-        this.prompt = undefined;
-        this.toggle(false);
-        return;
-      }
-    }
-
-    let prompt = this.gameState.state.prompts.find(p => {
+    const prompt = this.gameState.state.prompts.find(p => {
       return p.playerId === this.clientId && p.result === undefined;
     });
 
-    prompt = prompt || this.checkGameOver(this.gameState);
+    // A reset can arrive while the next prompt's enter callback is queued.
+    // Clear it immediately and invalidate that callback before it can reappear.
+    if (!prompt) {
+      this.prompt = undefined;
+      this.minimized = false;
+      return this.toggle(false);
+    }
+
     const promptId = prompt ? prompt.id : -1;
     const currentId = this.prompt ? this.prompt.id : -1;
 
-    if (currentId !== promptId || differentGame) {
+    if (currentId !== promptId || this.prompt?.type !== prompt.type || differentGame) {
       this.prompt = undefined;
       // setTimeout, because we would like the new prompt animate before displaying
       window.setTimeout(() => {
+        if (update !== this.promptUpdate) { return; }
         this.prompt = prompt;
         this.minimized = false;
         this.maximize();
@@ -74,6 +73,8 @@ export class PromptComponent implements OnChanges {
       this.toggle(prompt !== undefined && !this.minimized);
     }
   }
+
+  ngOnDestroy(): void { this.promptUpdate++; }
 
   public maximize() {
     if (this.gameState.promptMinimized) {
@@ -98,12 +99,6 @@ export class PromptComponent implements OnChanges {
     } else if (this.animationState !== 'exit' && value === false) {
       this.animationState = 'exit';
     }
-  }
-
-  private checkGameOver(gameState: LocalGameState): GameOverPrompt | undefined {
-    // Return undefined to prevent the old game over prompt from appearing
-    // The new game over screen is now handled directly by the table component
-    return undefined;
   }
 
   public cannotBeMinimized(): boolean {

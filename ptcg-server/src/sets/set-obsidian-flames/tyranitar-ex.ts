@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, PlayerType, StateUtils } from '../../game';
@@ -6,7 +7,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class Tyranitarex extends PokemonCard {
+export class Tyranitarex extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.STAGE_2;
   public evolvesFrom = 'Pupitar';
   public tags = [CardTag.POKEMON_ex, CardTag.POKEMON_TERA];
@@ -40,6 +41,21 @@ export class Tyranitarex extends PokemonCard {
   public fullName: string = 'Tyranitar ex OBF';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+
+      // Target is not Active
+      if (effect.target === player.active || effect.target === opponent.active) {
+        return state;
+      }
+
+      effect.preventDefault = true;
+    }
+    return Tyranitarex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Mountain Hurl
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
@@ -66,17 +82,7 @@ export class Tyranitarex extends PokemonCard {
       }
     }
 
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
 
-      // Target is not Active
-      if (effect.target === player.active || effect.target === opponent.active) {
-        return state;
-      }
-
-      effect.preventDefault = true;
-    }
     return state;
   }
 }

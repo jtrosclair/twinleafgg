@@ -15,7 +15,6 @@ export class CardInfoListPopupComponent {
   public card: Card;
   public cardList: CardList;
   public facedown: boolean;
-  public allowReveal: boolean;
   public options: CardInfoPaneOptions;
   public sortDiscards: boolean = false;
   private originalDiscard: Card[] = [];
@@ -27,7 +26,6 @@ export class CardInfoListPopupComponent {
   ) {
     this.card = data.card;
     this.cardList = data.cardList;
-    this.allowReveal = data.allowReveal;
     this.facedown = data.facedown;
     this.options = data.options;
     this.originalDiscard = this.cardList.cards.slice(); // Clone discard pile

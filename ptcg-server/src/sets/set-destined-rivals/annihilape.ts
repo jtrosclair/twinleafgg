@@ -2,8 +2,9 @@ import { PokemonCard, Stage, CardType, State, StoreLike, PowerType } from '../..
 import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect } from '../../game/store/effects/game-effects';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 
-export class Annihilape extends PokemonCard {
+export class Annihilape extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.STAGE_2;
   public evolvesFrom = 'Primeape';
   public cardType: CardType = F;
@@ -34,13 +35,16 @@ export class Annihilape extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Vessel of Rage
     if (effect instanceof AttackEffect && effect.source.cards.includes(this)) {
-      if (IS_ABILITY_BLOCKED(store, state, effect.player, this)) { return state; }
-
-      if (effect.source.damage >= 20) {
+      if (!IS_ABILITY_BLOCKED(store, state, effect.player, this) && effect.source.damage >= 20) {
         effect.damage += 120;
       }
     }
 
+    return Annihilape.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  /** Impact Blow's next-turn restriction belongs to the attack, not its Ability. */
+  public reduceCopiedAttackEffect(_store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Impact Blow
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;

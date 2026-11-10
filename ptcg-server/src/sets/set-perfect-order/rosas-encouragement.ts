@@ -4,6 +4,7 @@ import { StoreLike, State, GameMessage, StateUtils, AttachEnergyPrompt, PlayerTy
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { GameError } from '../../game/game-error';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 export class RosasEncouragement extends TrainerCard {
   public trainerType: TrainerType = TrainerType.SUPPORTER;
@@ -71,7 +72,8 @@ Attach up to 2 Basic Energy cards from your discard pile to 1 of your Stage 2 Po
         throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }
 
-      // Block all non-Stage-2 Pokemon as attach targets
+      // Ref: set-astral-radiance/origin-forme-palkia-vstar.ts (restricted Energy attachment).
+      // Block all non-Stage-2 Pokemon as attach targets.
       const blockedTo: CardTarget[] = [];
       let stage2Count = 0;
       player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (_cardList, card, target) => {
@@ -98,12 +100,12 @@ Attach up to 2 Basic Energy cards from your discard pile to 1 of your Stage 2 Po
         PlayerType.BOTTOM_PLAYER,
         [SlotType.ACTIVE, SlotType.BENCH],
         { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
-        { allowCancel: false, min: 1, max: maxToAttach, sameTarget: true, blockedTo }
+        { allowCancel: false, min: 0, max: maxToAttach, sameTarget: true, blockedTo }
       ), transfers => {
         transfers = transfers || [];
         for (const transfer of transfers) {
           const target = StateUtils.getTarget(state, player, transfer.to);
-          player.discard.moveCardTo(transfer.card, target);
+          MOVE_CARDS(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this });
         }
 
       });

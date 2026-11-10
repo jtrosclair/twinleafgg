@@ -47,6 +47,9 @@ export class PreventDamageEffect extends EffectOfAttackEffect {
 
   constructor(base: AttackEffect) {
     super(base);
+    // This effect protects the attacking Pokémon; the defender's protection
+    // must not prevent an effect applied to the attacker.
+    this.target = base.source;
   }
 
   applyEffect(): void {

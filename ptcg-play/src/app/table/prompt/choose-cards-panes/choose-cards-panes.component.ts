@@ -70,7 +70,7 @@ export class ChooseCardsPanesComponent implements OnChanges, OnInit {
       const selectedCard = {
         ...originalCard,
         isSecret: this.promptValue?.options?.isSecret || false,
-        cardImage: this.promptValue?.options?.isSecret ? 'assets/cardback.png' : card.cardImage,
+        cardImage: this.promptValue?.options?.isSecret ? 'assets/cardback.svg' : card.cardImage,
         originalIndex: this.cards.indexOf(card)
       };
       this.selectedCards.push(selectedCard);

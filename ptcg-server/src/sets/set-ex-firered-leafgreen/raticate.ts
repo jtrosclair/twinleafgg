@@ -1,9 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
-import { Card, ChooseCardsPrompt, GameMessage, PowerType, State, StoreLike, TrainerCard } from '../../game';
+import { Card, ChooseCardsPrompt, GameError, GameMessage, PowerType, State, StoreLike, TrainerCard } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
-import { AFTER_ATTACK, MOVE_CARDS, SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
 import { FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE } from '../../game/store/prefabs/attack-effects';
 
 export class Raticate extends PokemonCard {
@@ -45,43 +47,41 @@ export class Raticate extends PokemonCard {
     if (effect instanceof AddSpecialConditionsEffect && effect.target.getPokemonCard() === this) {
       effect.preventDefault = true;
     }
+    return Raticate.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
 
-    if (AFTER_ATTACK(effect, 0, this)) {
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      // Capture the actual attacker and attack effect before copy delegation restores
+      // its printed attacks. The discard search resolves after outgoing damage.
       const player = effect.player;
       const opponent = effect.opponent;
-
-      let pokemons = 0;
-      let energies = 0;
-      let trainers = 0;
-      const blocked: number[] = [];
-      player.discard.cards.forEach((c, index) => {
-        if (c.superType === SuperType.ENERGY) {
-          energies += 1;
-        } else if (c instanceof PokemonCard) {
-          pokemons += 1;
-        } else if (c instanceof TrainerCard) {
-          trainers += 1;
-        } else {
-          blocked.push(index);
-        }
-      });
-
-      const maxPokemons = Math.min(pokemons, 1);
-      const maxEnergies = Math.min(energies, 1);
-      const maxTrainers = Math.min(trainers, 1);
-      const count = maxPokemons + maxEnergies + maxTrainers;
-
-      let cards: Card[] = [];
-      store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_HAND,
-        player.discard,
-        {},
-        { min: 0, max: count, allowCancel: false, blocked, maxPokemons, maxEnergies, maxTrainers }
-      ), selected => {
-        cards = selected || [];
-        SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-        MOVE_CARDS(store, state, player.discard, player.hand, { cards, sourceCard: this, sourceEffect: this.attacks[0] });
+      const attacker = effect.source.getPokemonCard();
+      afterAttackDamage(state, effect, (attackStore, attackState) => {
+        const source = player.discard;
+        const isPokemon = (card: Card) => card instanceof PokemonCard && [
+          Stage.BASIC, Stage.STAGE_1, Stage.STAGE_2, Stage.VMAX, Stage.VSTAR, Stage.MEGA, Stage.BREAK
+        ].includes(card.stage);
+        const isTrainer = (card: Card) => card instanceof TrainerCard;
+        const isEnergy = (card: Card) => card.superType === SuperType.ENERGY;
+        const maxPokemons = Math.min(1, source.cards.filter(isPokemon).length);
+        const maxTrainers = Math.min(1, source.cards.filter(isTrainer).length);
+        const maxEnergies = Math.min(1, source.cards.filter(isEnergy).length);
+        const count = maxPokemons + maxTrainers + maxEnergies;
+        if (!count) return attackState;
+        const blocked = source.cards.map((card, index) => isPokemon(card) || isTrainer(card) || isEnergy(card) ? -1 : index).filter(index => index >= 0);
+        return attackStore.prompt(attackState, new ChooseCardsPrompt(player, GameMessage.CHOOSE_CARD_TO_HAND, source, {},
+          { min: count, max: count, allowCancel: false, blocked, maxPokemons, maxTrainers, maxEnergies }), selected => {
+          if (!Array.isArray(selected) || selected.length !== count || new Set(selected).size !== count ||
+            selected.some(card => !card || !source.cards.includes(card) || (!isPokemon(card) && !isTrainer(card) && !isEnergy(card))) ||
+            selected.filter(isPokemon).length !== maxPokemons || selected.filter(isTrainer).length !== maxTrainers ||
+            selected.filter(isEnergy).length !== maxEnergies) {
+            throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+          }
+          attackStore.prompt(attackState, new ShowCardsPrompt(opponent.id, GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, selected), () => {
+            MOVE_CARDS(attackStore, attackState, source, player.hand, { cards: selected, sourceCard: attacker, sourceEffect: effect });
+          });
+        });
       });
     }
 

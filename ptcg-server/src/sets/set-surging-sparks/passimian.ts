@@ -57,7 +57,9 @@ export class Passimian extends PokemonCard {
         }
       });
 
-      effect.damage = basicCount * 20;
+      // Ref: set-mysterious-treasures/magikarp.ts (preserve pre-existing attack modifiers).
+      const base = basicCount * 20;
+      effect.damage = base > 0 ? Math.max(0, effect.damage + base - effect.attack.damage) : 0;
     }
 
     return state;

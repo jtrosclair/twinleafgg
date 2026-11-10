@@ -1,3 +1,4 @@
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils, Card } from '../../game';
@@ -7,7 +8,7 @@ import { DiscardCardsEffect, PutDamageEffect } from '../../game/store/effects/at
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-export class HearthflameMaskOgerponex extends PokemonCard {
+export class HearthflameMaskOgerponex extends PokemonCard implements CopiedAttackOwnershipContract {
 
   public tags = [CardTag.POKEMON_ex, CardTag.POKEMON_TERA];
 
@@ -51,6 +52,21 @@ export class HearthflameMaskOgerponex extends PokemonCard {
   public fullName: string = 'Hearthflame Mask Ogerpon ex TWM';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+
+      // Target is not Active
+      if (effect.target === player.active || effect.target === opponent.active) {
+        return state;
+      }
+
+      effect.preventDefault = true;
+    }
+    return HearthflameMaskOgerponex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
       effect.damage = effect.player.active.damage * 2;
@@ -75,17 +91,7 @@ export class HearthflameMaskOgerponex extends PokemonCard {
 
     }
 
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Target is not Active
-      if (effect.target === player.active || effect.target === opponent.active) {
-        return state;
-      }
-
-      effect.preventDefault = true;
-    }
+    
     return state;
   }
 }

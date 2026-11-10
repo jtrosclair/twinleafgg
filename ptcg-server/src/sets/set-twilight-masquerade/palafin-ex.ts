@@ -1,6 +1,6 @@
 import { PokemonCard, Stage, CardType, CardTag, PowerType, StoreLike, State, GameError, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { CheckEvolveEffect, EvolveEffect } from '../../game/store/effects/game-effects';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Palafinex extends PokemonCard {
@@ -35,7 +35,7 @@ export class Palafinex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof EvolveEffect && effect.pokemonCard === this) {
+    if ((effect instanceof CheckEvolveEffect || (effect instanceof EvolveEffect && !effect.preflightComplete)) && effect.pokemonCard === this) {
       if (!IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
         throw new GameError(GameMessage.CANNOT_EVOLVE);
       }

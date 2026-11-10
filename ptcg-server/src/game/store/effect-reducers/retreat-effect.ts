@@ -43,7 +43,7 @@ function promptBenchAndRetreat(store: StoreLike, state: State, player: Player): 
     GameMessage.CHOOSE_POKEMON_TO_SWITCH,
     PlayerType.BOTTOM_PLAYER,
     [SlotType.BENCH],
-    { min: 1, max: 1, allowCancel: true, blocked: [] }
+    { min: 1, max: 1, allowCancel: false, blocked: [] }
   ), (benchResult: PokemonCardList[] | null) => {
     if (benchResult === null) {
       return;
@@ -76,11 +76,11 @@ export function retreatReducer(store: StoreLike, state: State, effect: Effect): 
     }
 
     const sp = player.active.specialConditions;
-    if (sp.includes(SpecialCondition.PARALYZED) || sp.includes(SpecialCondition.ASLEEP)) {
+    if ((sp.includes(SpecialCondition.PARALYZED) || sp.includes(SpecialCondition.ASLEEP)) && !effect.ignoreStatusConditions) {
       throw new GameError(GameMessage.BLOCKED_BY_SPECIAL_CONDITION);
     }
 
-    if (player.retreatedTurn === state.turn) {
+    if (state.rules.oneRetreatPerTurn !== false && player.retreatedTurn === state.turn) {
       throw new GameError(GameMessage.RETREAT_ALREADY_USED);
     }
 
@@ -148,7 +148,7 @@ export function retreatReducer(store: StoreLike, state: State, effect: Effect): 
       throw new GameError(GameMessage.BLOCKED_BY_SPECIAL_CONDITION);
     }
 
-    if (player.retreatedTurn === state.turn) {
+    if (state.rules.oneRetreatPerTurn !== false && player.retreatedTurn === state.turn) {
       throw new GameError(GameMessage.RETREAT_ALREADY_USED);
     }
 

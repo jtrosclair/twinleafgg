@@ -1,8 +1,7 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Card, DiscardEnergyPrompt, FilterType, SuperType, State, PlayerType, SlotType, CardTarget, PokemonCardList } from 'ptcg-server';
 import { GameService } from '../../../api/services/game.service';
 import { LocalGameState } from '../../../shared/session/session.interface';
-import { Subscription, interval } from 'rxjs';
 import { CardsBaseService } from '../../../shared/cards/cards-base.service';
 
 // Interfaces for our self-contained implementation
@@ -27,7 +26,7 @@ export interface EnergySelection {
   templateUrl: './prompt-discard-energy.component.html',
   styleUrls: ['./prompt-discard-energy.component.scss']
 })
-export class PromptDiscardEnergyComponent implements OnInit, OnDestroy {
+export class PromptDiscardEnergyComponent implements OnInit {
   @Input() prompt: DiscardEnergyPrompt;
   @Input() gameState: LocalGameState;
 
@@ -53,51 +52,15 @@ export class PromptDiscardEnergyComponent implements OnInit, OnDestroy {
   public PlayerType = PlayerType;
   public statusMessage = '';
 
-  // Debug state to track reset
-  private resetCount = 0;
-  private stateCheckSubscription: Subscription | null = null;
-
   public isConfirming = false;
-
-  private confirmAttempts = 0;
-  private lastSelectionSent: string | null = null;
 
   constructor(
     private gameService: GameService,
     private cardsBaseService: CardsBaseService
   ) { }
 
-  ngOnInit() {
-    if (this.prompt && this.gameState) {
-      this.initializePrompt();
-
-      // Start a polling interval to check if the prompt is still active
-      // This is a backup approach since we can't directly access socketService
-      this.stateCheckSubscription = interval(1000).subscribe(() => {
-        if (this.isConfirming) {
-          // Check if this prompt ID is still in the list of active prompts
-          const isPromptStillActive = this.gameState.state.prompts.some(p => p.id === this.prompt.id);
-
-          if (!isPromptStillActive) {
-            this.isConfirming = false;
-            this.statusMessage = 'Selection confirmed!';
-            setTimeout(() => this.statusMessage = '', 2000);
-
-            // Stop checking once resolved
-            this.stateCheckSubscription?.unsubscribe();
-            this.stateCheckSubscription = null;
-          }
-        }
-      });
-    }
-  }
-
-  ngOnDestroy() {
-    // Clean up subscription
-    if (this.stateCheckSubscription) {
-      this.stateCheckSubscription.unsubscribe();
-      this.stateCheckSubscription = null;
-    }
+  ngOnInit(): void {
+    if (this.prompt && this.gameState) { this.initializePrompt(); }
   }
 
   private initializePrompt(): void {
@@ -428,7 +391,6 @@ export class PromptDiscardEnergyComponent implements OnInit, OnDestroy {
   }
 
   public resetSelection(): void {
-    this.resetCount++;
 
     // Reset all UI state to initial values
     if (this.selectedPokemon) {
@@ -444,9 +406,6 @@ export class PromptDiscardEnergyComponent implements OnInit, OnDestroy {
     this.availableEnergies = [];
     this.isInvalid = true;
 
-    // Reset confirmation tracking
-    this.confirmAttempts = 0;
-    this.lastSelectionSent = null;
 
   }
 
@@ -462,129 +421,24 @@ export class PromptDiscardEnergyComponent implements OnInit, OnDestroy {
   }
 
   public confirm(): void {
-
-    // Check validation status
-    if (this.isInvalid) {
-      this.statusMessage = 'Selection is invalid. Please check your selections.';
-      setTimeout(() => this.statusMessage = '', 3000);
-      return;
-    }
-
-    // Check if any energy is selected - only required when minSelection > 0
-    if (this.minSelection > 0 && this.selectedEnergies.length === 0) {
-      this.statusMessage = `Please select at least ${this.minSelection} energy card(s).`;
-      setTimeout(() => this.statusMessage = '', 3000);
-      return;
-    }
-
-    // Double-check min constraints
-    if (this.selectedEnergies.length < this.minSelection) {
-      this.statusMessage = `Please select at least ${this.minSelection} energy card(s).`;
-      setTimeout(() => this.statusMessage = '', 3000);
-      return;
-    }
-
-    // Double-check max constraints
-    if (this.maxSelection !== undefined && this.selectedEnergies.length > this.maxSelection) {
-      this.statusMessage = `Please select at most ${this.maxSelection} energy card(s).`;
-      setTimeout(() => this.statusMessage = '', 3000);
-      return;
-    }
-
-    try {
-      // Add a guard to prevent multiple confirms
-      if (this.isConfirming) {
+    if (this.isConfirming) { return; }
+    this.validateSelection();
+    if (this.isInvalid) { return; }
+    for (const selection of this.selectedEnergies) {
+      const target = selection.pokemon.target;
+      if (this.isTargetBlocked(target) || this.getBlockedIndices(target).includes(selection.originalIndex)) {
+        this.statusMessage = 'Cannot discard this energy card. Try another.';
         return;
       }
-
-      this.isConfirming = true;
-      this.confirmAttempts++;
-      this.statusMessage = 'Confirming selection...';
-
-      // Log selection count for debugging
-      const countDisplay = this.maxSelection !== undefined
-        ? `${this.selectedEnergies.length}/${this.maxSelection}`
-        : this.selectedEnergies.length.toString();
-
-      // Double-check that we're not trying to discard from blocked Pokémon
-      for (const selection of this.selectedEnergies) {
-        const target = selection.pokemon.target;
-        if (this.isTargetBlocked(target)) {
-          this.isConfirming = false;
-          this.statusMessage = 'Cannot discard energy from this Pokémon. Try another.';
-          setTimeout(() => this.statusMessage = '', 3000);
-          return;
-        }
-
-        // Check if energy card is blocked
-        const blockedIndices = this.getBlockedIndices(target);
-        if (blockedIndices.includes(selection.originalIndex)) {
-          this.isConfirming = false;
-          this.statusMessage = 'Cannot discard this specific energy card. Try another.';
-          setTimeout(() => this.statusMessage = '', 3000);
-          return;
-        }
-      }
-
-
-      // Create the exact structure that the server expects
-      // The server expects array of {from: CardTarget, index: number}
-      const results = [];
-
-      // Process all selected energies (will be empty array if none selected)
-      for (const selection of this.selectedEnergies) {
-        // Create a plain object with no references to our component objects
-        results.push({
-          from: {
-            player: selection.pokemon.target.player,
-            slot: selection.pokemon.target.slot,
-            index: selection.pokemon.target.index
-          },
-          index: selection.originalIndex
-        });
-      }
-
-      const selectionJson = JSON.stringify(results);
-
-      // Track if we're sending the same selection repeatedly
-      const isDuplicateSelection = selectionJson === this.lastSelectionSent;
-      this.lastSelectionSent = selectionJson;
-
-      try {
-        // Use a try/catch to handle socket errors
-        this.gameService.resolvePrompt(
-          this.gameState.gameId,
-          this.prompt.id,
-          results
-        );
-
-        // Reset confirming flag after a set time, so user can try again if needed
-        setTimeout(() => {
-          if (this.isConfirming) {
-            this.isConfirming = false;
-
-            if (this.confirmAttempts >= 3) {
-              if (this.selectedEnergies.length > 1) {
-                this.statusMessage = 'Server not responding. Try simplifying your selection.';
-              } else {
-                this.statusMessage = 'Server not responding. Try a different energy card.';
-              }
-            } else {
-              this.statusMessage = 'Server did not respond. Try again.';
-            }
-
-            setTimeout(() => this.statusMessage = '', 3000);
-          }
-        }, 5000); // Increased timeout to give server more time
-      } catch (serverError) {
-        this.isConfirming = false;
-        this.statusMessage = 'Error confirming selection. Try different energy cards.';
-        setTimeout(() => this.statusMessage = '', 3000);
-      }
-    } catch (error) {
+    }
+    const result = this.selectedEnergies.map(selection => ({
+      from: { ...selection.pokemon.target }, index: selection.originalIndex
+    }));
+    this.isConfirming = true;
+    try {
+      this.gameService.resolvePrompt(this.gameState.gameId, this.prompt.id, result);
+    } finally {
       this.isConfirming = false;
-      this.statusMessage = 'An error occurred. Please try again.';
-      setTimeout(() => this.statusMessage = '', 3000);
     }
   }
 
@@ -600,27 +454,6 @@ export class PromptDiscardEnergyComponent implements OnInit, OnDestroy {
     this.gameService.setPromptMinimized(this.gameState.localId, true);
   }
 
-  public retryWithSingleEnergy(): void {
-    if (this.selectedEnergies.length <= 1) {
-      // Already have 0 or 1 selected, nothing to simplify
-      return;
-    }
-
-    // Keep only the first energy card
-    const firstSelection = this.selectedEnergies[0];
-    this.selectedEnergies = [firstSelection];
-
-    // Update available energies if needed
-    this.updateAvailableEnergies();
-
-    // Validate the simplified selection
-    this.validateSelection();
-
-    // Show status message
-    this.statusMessage = 'Simplified to a single energy card. Try confirming again.';
-    setTimeout(() => this.statusMessage = '', 3000);
-  }
-
   public getCardScanUrl(card: Card): string {
     return this.cardsBaseService.getScanUrl(card);
   }
@@ -633,13 +466,13 @@ export class PromptDiscardEnergyComponent implements OnInit, OnDestroy {
 
     // Handle special energy cards
     const specialEnergyUrls = {
-      'Double Turbo Energy': 'assets/energy/double-turbo.png',
-      'Jet Energy': 'assets/energy/jet.png',
-      'Gift Energy': 'assets/energy/gift.png',
-      'Mist Energy': 'assets/energy/mist.png',
-      'Legacy Energy': 'assets/energy/legacy.png',
-      'Neo Upper Energy': 'assets/energy/neo-upper.png',
-      'Electrode': 'assets/energy/neo-upper.png',
+      'Double Turbo Energy': 'assets/energy/double-turbo.webp',
+      'Jet Energy': 'assets/energy/jet.webp',
+      'Gift Energy': 'assets/energy/gift.webp',
+      'Mist Energy': 'assets/energy/mist.webp',
+      'Legacy Energy': 'assets/energy/legacy.webp',
+      'Neo Upper Energy': 'assets/energy/neo-upper.webp',
+      'Electrode': 'assets/energy/neo-upper.webp',
       // Add more special energy mappings as needed
     };
 
@@ -650,21 +483,21 @@ export class PromptDiscardEnergyComponent implements OnInit, OnDestroy {
 
     // Handle basic energy cards
     const basicEnergyUrls = {
-      'Grass Energy': 'assets/energy/grass.png',
-      'Fire Energy': 'assets/energy/fire.png',
-      'Water Energy': 'assets/energy/water.png',
-      'Lightning Energy': 'assets/energy/lightning.png',
-      'Psychic Energy': 'assets/energy/psychic.png',
-      'Fighting Energy': 'assets/energy/fighting.png',
-      'Darkness Energy': 'assets/energy/dark.png',
-      'Metal Energy': 'assets/energy/metal.png',
-      'Fairy Energy': 'assets/energy/fairy.png',
-      'Electrode': 'assets/energy/electrode.png',
-      'Holon\'s Castform': 'assets/energy/holon-castform.png',
-      'Holon\'s Magnemite': 'assets/energy/holons-magnemite.png',
-      'Holon\'s Magneton': 'assets/energy/holons-magneton.png',
-      'Holon\'s Voltorb': 'assets/energy/holons-voltorb.png',
-      'Holon\'s Electrode': 'assets/energy/holons-electrode.png',
+      'Grass Energy': 'assets/energy/grass.svg',
+      'Fire Energy': 'assets/energy/fire.svg',
+      'Water Energy': 'assets/energy/water.svg',
+      'Lightning Energy': 'assets/energy/lightning.svg',
+      'Psychic Energy': 'assets/energy/psychic.svg',
+      'Fighting Energy': 'assets/energy/fighting.svg',
+      'Darkness Energy': 'assets/energy/dark.svg',
+      'Metal Energy': 'assets/energy/metal.svg',
+      'Fairy Energy': 'assets/energy/fairy.svg',
+      'Electrode': 'assets/energy/electrode.webp',
+      'Holon\'s Castform': 'assets/energy/holons-castform.webp',
+      'Holon\'s Magnemite': 'assets/energy/holons-magnemite.webp',
+      'Holon\'s Magneton': 'assets/energy/holons-magneton.webp',
+      'Holon\'s Voltorb': 'assets/energy/holons-voltorb.webp',
+      'Holon\'s Electrode': 'assets/energy/holons-electrode.webp',
     };
 
     return basicEnergyUrls[card.name] || '';

@@ -3,13 +3,14 @@ import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { StateUtils } from '../../game/store/state-utils';
 import { SlotType } from '../../game/store/actions/play-card-action';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE } from '../../game/store/prefabs/attack-effects';
 
-export class Dragapultex extends PokemonCard {
+export class Dragapultex extends PokemonCard implements CopiedAttackOwnershipContract {
 
   public stage: Stage = Stage.STAGE_2;
 
@@ -53,9 +54,7 @@ export class Dragapultex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (WAS_ATTACK_USED(effect, 1, this)) {
-      PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE(6, store, state, effect, [SlotType.BENCH]);
-    }
+    state = Dragapultex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
 
     if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
       const player = effect.player;
@@ -68,6 +67,15 @@ export class Dragapultex extends PokemonCard {
 
       effect.preventDefault = true;
     }
+    return state;
+  }
+
+  /** Attack-owned behavior only; the Tera rule remains on the actual card. */
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (WAS_ATTACK_USED(effect, 1, this)) {
+      PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE(6, store, state, effect, [SlotType.BENCH]);
+    }
+
     return state;
   }
 }

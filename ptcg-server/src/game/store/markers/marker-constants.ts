@@ -4,6 +4,8 @@
  */
 
 export class MarkerConstants {
+  // Latios-GX Clear Vision is a player-scoped effect for the rest of the game.
+  public static readonly CLEAR_VISION_GX_LOCK = 'LATIOS_GX_UNM_CLEAR_VISION_MARKER';
   // ===== COMMON MARKERS (used across multiple cards) =====
   public static readonly ATTACK_USED_MARKER = 'ATTACK_USED_MARKER';
   public static readonly ATTACK_USED_2_MARKER = 'ATTACK_USED_2_MARKER';
@@ -262,4 +264,4 @@ export class MarkerConstants {
   public static readonly TOTAL_FREEDOM_MARKER = 'TOTAL_FREEDOM_MARKER';
   public static readonly UNSEEN_FLASH_MARKER = 'UNSEEN_FLASH_MARKER';
 
-} 
+}

@@ -1,4 +1,5 @@
 import { Card } from '../../game/store/card/card';
+import { Pansage } from './pansage';
 import { Aegislash } from './aegislash';
 import { Aegislashex } from './aegislash-ex';
 import { AncientBoosterEnergyCapsule } from './ancient-booster-energy-capsule';
@@ -96,6 +97,8 @@ import { Wimpod } from './wimpod';
 import { Xatu } from './xatu';
 import { Yamask } from './yamask';
 import { Zacian } from './zacian';
+import { Tatsugiri } from './tatsugiri';
+
 export const setParadoxRift: Card[] = [
   new Aegislash(),
   new Aegislashex(),
@@ -241,4 +244,6 @@ export const setParadoxRift: Card[] = [
   new CounterCatcherHR(),
   new LuxuriousCapeHR(),
   new ReversalEnergyHR(),
+  new Tatsugiri(),
+  new Pansage(),
 ];

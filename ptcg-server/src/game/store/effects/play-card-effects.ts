@@ -20,12 +20,22 @@ export enum PlayCardEffects {
   TRAINER_EFFECT = 'TRAINER_EFFECT',
   ENERGY_EFFECT = 'ENERGY_EFFECT',
   TOOL_EFFECT = 'TOOL_EFFECT',
+  STADIUM_EFFECT = 'STADIUM_EFFECT',
   SUPPORTER_EFFECT = 'SUPPORTER_EFFECT',
   COIN_FLIP_EFFECT = 'COIN_FLIP_EFFECT',
   COIN_FLIP_SEQUENCE_EFFECT = 'COIN_FLIP_SEQUENCE_EFFECT',
   TRAINER_CARD_TO_DECK_EFFECT = 'TRAINER_CARD_TO_DECK_EFFECT',
   DISCARD_TO_HAND_EFFECT = 'DISCARD_TO_HAND_EFFECT',
   TRAINER_TARGET_EFFECT = 'TRAINER_TARGET_EFFECT',
+}
+
+/** Check whether a Stadium effect can be applied to an in-play Pokémon. */
+export class StadiumEffect implements Effect {
+  readonly type: string = PlayCardEffects.STADIUM_EFFECT;
+  public preventDefault = false;
+  public skipAbilityLockCheck = false;
+
+  constructor(public player: Player, public target: PokemonCardList, public stadium?: TrainerCard) {}
 }
 
 export class AttachEnergyEffect implements Effect {
@@ -80,6 +90,8 @@ export class PlaySupporterEffect implements Effect {
 export class PlayStadiumEffect implements Effect {
   readonly type: string = PlayCardEffects.PLAY_STADIUM_EFFECT;
   public preventDefault = false;
+  /** A dual Stadium's Trainer-cancellation coin was resolved before propagation. */
+  public dualCancellationChecked = false;
   public player: Player;
   public trainerCard: TrainerCard;
 

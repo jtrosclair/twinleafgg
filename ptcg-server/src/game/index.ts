@@ -1,10 +1,8 @@
+export * from './cards/cards-info';
 export * from './cards/card-manager';
 export * from './cards/deck-analyser';
 
 export * from './core/game-settings';
-export * from './core/player-stats';
-export * from './core/replay.interface';
-export * from './core/replay';
 export * from './serializer';
 
 export * from './game-error';

@@ -10,6 +10,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, BLOCK_IF_GX_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { MarkerConstants } from '../../game/store/markers/marker-constants';
 
 export class LatiosGx extends PokemonCard {
   public tags = [CardTag.POKEMON_GX];
@@ -21,7 +22,7 @@ export class LatiosGx extends PokemonCard {
 
   public readonly TAG_PURGE_MARKER = 'LATIOS_GX_UNM_TAG_PURGE_MARKER';
   public readonly CLEAR_TAG_PURGE_MARKER = 'LATIOS_GX_UNM_CLEAR_TAG_PURGE_MARKER';
-  public readonly CLEAR_VISION_MARKER = 'LATIOS_GX_UNM_CLEAR_VISION_MARKER';
+  public readonly CLEAR_VISION_MARKER = MarkerConstants.CLEAR_VISION_GX_LOCK;
 
   public powers = [  {
     name: 'Power Bind',
@@ -56,17 +57,15 @@ export class LatiosGx extends PokemonCard {
     if (effect instanceof AttackEffect && effect.player.active.getPokemonCard() === this) {
       const player = effect.player;
 
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
+      if (!IS_ABILITY_BLOCKED(store, state, player, this)) {
+        let pokemonCount = 0;
+        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, () => {
+          pokemonCount++;
+        });
 
-      let pokemonCount = 0;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, () => {
-        pokemonCount++;
-      });
-
-      if (pokemonCount <= 4) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
+        if (pokemonCount <= 4) {
+          throw new GameError(GameMessage.CANNOT_USE_POWER);
+        }
       }
     }
 
@@ -113,14 +112,6 @@ export class LatiosGx extends PokemonCard {
       player.usedGX = true;
 
       opponent.marker.addMarker(this.CLEAR_VISION_MARKER, this);
-    }
-
-    // Block opponent's GX attacks for the rest of the game
-    if (effect instanceof AttackEffect && effect.attack && effect.attack.name.includes('-GX')) {
-      const player = effect.player;
-      if (player.marker.hasMarker(this.CLEAR_VISION_MARKER, this)) {
-        throw new GameError(GameMessage.CANNOT_USE_ATTACK);
-      }
     }
 
     return state;

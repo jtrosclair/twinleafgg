@@ -1,149 +1,92 @@
 @import '../../../theme/variables.scss';
+@import '../../../theme/hand-card-styles';
 
-// Host container - fixed positioning
 :host {
-  position: fixed;
-  bottom: 5px; // Default for more than 7 cards
-  left: 0;
-  right: 0;
-  z-index: 1000; // Always in front
-  pointer-events: none; // Allow clicks through to board
-  display: flex;
-  justify-content: center;
-
-  &.small-hand {
-    bottom: 40px; // 60px from bottom when 7 or fewer cards
-  }
+  --hand-card-width: clamp(94px, 29vw, 132px);
+  --hand-blue: #{$hand-selectable-blue};
+  position: absolute;
+  inset-inline: 0;
+  bottom: var(--hand-bottom, -40px);
+  z-index: 10;
+  display: block;
+  pointer-events: none;
 
   &.opponent {
-    top: 5px;
+    top: -22px;
     bottom: auto;
-    z-index: 999; // Slightly lower than player hand
-
-    &.small-hand {
-      top: 40px; // 60px from top for opponent with 7 or fewer cards
-    }
-  }
-}
-
-// Main hand container
-.ptcg-hand {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  pointer-events: auto; // Re-enable clicks on the hand itself
-  width: 100%;
-  max-width: 800px;
-
-  &.opponent {
     transform: rotate(180deg);
   }
 }
 
-// Card container - grid layout with 7 columns
-.ptcg-hand-container {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
+.hand-viewport {
   width: 100%;
-  padding: 12px 8px;
-  background: transparent;
-  align-items: end;
-  justify-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  pointer-events: auto;
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-padding-inline: 14px;
+
+  &::-webkit-scrollbar { display: none; }
+  &:focus-visible { outline: 2px solid var(--hand-blue); outline-offset: -2px; }
 }
 
-// Sortable list styling
 dnd-sortable-list {
-  display: contents; // Makes grid work with the sortable list
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
+  box-sizing: border-box;
+  width: max-content;
+  min-width: 100%;
+  padding: 40px 10px 12px;
 }
 
-// Individual card styling
-ptcg-card {
-  width: 100%;
-  height: auto;
-  max-width: 100%; // Fill grid cell
-  min-width: 40px;
-  transition: transform 0.2s ease, z-index 0s;
+.hand-stack {
   position: relative;
-  z-index: 1;
+  flex: 0 0 var(--hand-card-width);
+  width: var(--hand-card-width);
+  isolation: isolate;
+  transition: transform 150ms ease;
 
-  &:hover {
-    transform: translateY(-20px) scale(1.15);
-    z-index: 100;
-  }
-
-  &.dragging {
-    opacity: 0.5;
-    transform: rotate(5deg) scale(1.1);
-    z-index: 1000;
-  }
-
-  &:not(.dragging) {
-    transition: transform 200ms ease;
-  }
+  &:focus-within { z-index: 2; }
 }
 
-// Badge positioning
-ptcg-badge {
-  position: absolute;
-  width: 80%;
-  padding: 5px;
-  font-size: smaller;
-  z-index: 2;
+.hand-card {
+  @include hand-card-face;
 }
 
-// Opponent hand adjustments
-.ptcg-hand.opponent {
-  ptcg-card {
-    max-width: 80%; // Slightly smaller for opponent
-
-    &:hover {
-      transform: translateY(-10px) scale(1.05);
-    }
-  }
+.hand-stack-copy {
+  @include hand-stack-copy;
 }
 
-// Wider screens - 8 columns
-@media (min-width: 751px) {
-  .ptcg-hand-container {
-    grid-template-columns: repeat(8, 1fr);
-  }
+.playable .hand-card::after {
+  @include hand-card-outline;
 }
 
-// Mobile responsive adjustments
-@media (max-width: 768px) {
-  :host {
-    bottom: 20px;
-
-    &.opponent {
-      top: 20px;
-    }
-  }
-
-  .ptcg-hand-container {
-    gap: 4px;
-    padding: 8px 4px;
-  }
-
-  ptcg-card {
-    max-width: 100%; // Fill grid cell
-    min-width: 35px;
-
-    &:hover {
-      transform: translateY(-15px) scale(1.1);
-    }
-  }
+.playable .hand-card.low-graphics::after {
+  // Preserve the solid playable border without the two blurred glow passes.
+  box-shadow: none;
 }
 
-// Extra small screens - tighter spacing
-@media (max-width: 480px) {
-  .ptcg-hand-container {
-    gap: 2px;
-    padding: 4px 2px;
-  }
+.playable-arrow {
+  @include selectable-arrow(var(--hand-blue));
+}
 
-  ptcg-card {
-    max-width: 100%; // Fill grid cell
-    min-width: 30px;
-  }
+.stack-count {
+  @include hand-stack-count;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hand-stack:hover { transform: translateY(-10px); z-index: 2; }
+}
+
+@media (max-height: 500px) {
+  :host { --hand-card-width: 88px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hand-stack { transition: none; }
 }

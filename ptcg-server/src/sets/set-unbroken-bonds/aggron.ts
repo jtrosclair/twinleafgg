@@ -6,8 +6,21 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils } from '../../game';
 import { PutCountersEffect } from '../../game/store/effects/attack-effects';
+import { AfterDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED, ADD_MARKER, ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT, CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
+
+const EXTRA_TIGHT_PRESS_MARKER = 'AGGRON_UNB_EXTRA_TIGHT_PRESS_MARKER';
+
+function retaliate(store: StoreLike, state: State, effect: Effect, source: PokemonCard): State {
+  if (ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT(state, effect, { source }) &&
+      effect.target.marker.hasMarker(EXTRA_TIGHT_PRESS_MARKER, source)) {
+    const counters = new PutCountersEffect(effect, 80);
+    counters.target = effect.source;
+    return store.reduceEffect(state, counters);
+  }
+  return state;
+}
 
 export class Aggron extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -18,7 +31,7 @@ export class Aggron extends PokemonCard {
   public resistance = [{ type: P, value: -20 }];
   public retreat = [C, C, C, C];
 
-  public readonly EXTRA_TIGHT_PRESS_MARKER = 'AGGRON_UNB_EXTRA_TIGHT_PRESS_MARKER';
+  public readonly EXTRA_TIGHT_PRESS_MARKER = EXTRA_TIGHT_PRESS_MARKER;
   public readonly CLEAR_EXTRA_TIGHT_PRESS_MARKER = 'AGGRON_UNB_CLEAR_EXTRA_TIGHT_PRESS_MARKER';
 
   public attacks = [
@@ -26,7 +39,8 @@ export class Aggron extends PokemonCard {
       name: 'Extra-Tight Press',
       cost: [M, C, C],
       damage: 80,
-      text: 'During your opponent\'s next turn, if this Pokémon is damaged by an attack (even if this Pokémon is Knocked Out), put 8 damage counters on the Attacking Pokémon.'
+      text: 'During your opponent\'s next turn, if this Pokémon is damaged by an attack (even if this Pokémon is Knocked Out), put 8 damage counters on the Attacking Pokémon.',
+      copiedReactiveAfterDamage: (store: StoreLike, state: State, effect: AfterDamageEffect, copycat: PokemonCard) => retaliate(store, state, effect, copycat)
     },
     {
       name: 'Giga Impact',
@@ -54,13 +68,7 @@ export class Aggron extends PokemonCard {
     }
 
     // Retaliate when damaged
-    if (ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT(state, effect, { source: this })) {
-      if (effect.target.marker.hasMarker(this.EXTRA_TIGHT_PRESS_MARKER, this)) {
-        const damageEffect = new PutCountersEffect(effect, 80);
-        damageEffect.target = effect.source;
-        store.reduceEffect(state, damageEffect);
-      }
-    }
+    state = retaliate(store, state, effect, this);
 
     CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN(state, effect, this.CLEAR_EXTRA_TIGHT_PRESS_MARKER, this.EXTRA_TIGHT_PRESS_MARKER, this);
 

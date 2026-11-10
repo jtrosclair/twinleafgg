@@ -101,6 +101,10 @@ export class AttachEnergyPrompt extends Prompt<CardAssign[]> {
     if (result.some(r => this.options.blocked.includes(this.cardList.cards.indexOf(r.card)))) {
       return false;
     }
+    if (result.some(r => this.options.blockedTo.some(target =>
+      target.player === r.to.player && target.slot === r.to.slot && target.index === r.to.index))) {
+      return false;
+    }
 
     if (this.options.maxPerType) {
       const typeCounts = new Map<CardType, number>();
