@@ -152,3 +152,18 @@ export class MegaCharizardXex4PFL extends MegaCharizardXexPFL13 {
   public fullName: string = 'Mega Charizard X ex4 PFL';
   public set = 'PFL';
 }
+
+import { Flygon } from './flygon';
+import { Ambipom } from './ambipom';
+
+export class AmbipomIR extends Ambipom {
+  public set = 'PFL';
+  public setNumber = '107';
+  public fullName = 'AmbipomIR PFL';
+}
+
+export class FlygonIR extends Flygon {
+  public set = 'PFL';
+  public setNumber = '101';
+  public fullName = 'FlygonIR PFL';
+}

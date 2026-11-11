@@ -24,8 +24,8 @@ export class MegaSlowbroex extends PokemonCard {
   }];
 
   public regulationMark = 'I';
-  public set: string = 'MEP';
-  public setNumber = '71';
+  public set: string = 'PBL';
+  public setNumber = '31';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Mega Slowbro ex';
   public fullName: string = 'Mega Slowbro ex MEP';

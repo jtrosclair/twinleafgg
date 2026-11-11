@@ -28,8 +28,8 @@ export class Vikavolt extends PokemonCard {
     text: 'If this Pokémon doesn\'t have any Bolty [L] Energy attached, this attack does nothing.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '25';
+  public set: string = "PBL";
+  public setNumber: string = "26";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Vikavolt';

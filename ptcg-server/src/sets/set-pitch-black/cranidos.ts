@@ -20,8 +20,8 @@ export class Cranidos extends PokemonCard {
     text: 'Your opponent switches their Active Pokémon with 1 of their Benched Pokémon.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '42';
+  public set: string = 'PBL';
+  public setNumber: string = '44';
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Cranidos';

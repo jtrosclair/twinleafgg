@@ -28,7 +28,7 @@ export class Tropius extends PokemonCard {
     text: '',
   }];
 
-  public set: string = 'M5';
+  public set: string = "PBL";
   public setNumber: string = '1';
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';

@@ -19,8 +19,8 @@ export class ChiYu extends PokemonCard {
     text: 'If this Pokémon has 2 or more damage counters on it, this attack does 90 more damage. Don\'t apply Weakness for this attack\'s damage.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '57';
+  public set: string = 'PBL';
+  public setNumber: string = '59';
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Chi-Yu';

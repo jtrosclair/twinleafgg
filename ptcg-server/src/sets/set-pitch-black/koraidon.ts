@@ -25,8 +25,8 @@ export class Koraidon extends PokemonCard {
     text: 'Discard all Energy attached to this Pokémon.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '45';
+  public set: string = "PBL";
+  public setNumber: string = "47";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Koraidon';

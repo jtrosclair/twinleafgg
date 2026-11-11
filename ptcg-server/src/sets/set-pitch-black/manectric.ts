@@ -32,8 +32,8 @@ export class Manectric extends PokemonCard {
     text: 'This attack\'s damage isn\'t affected by effects on your opponent\'s Active Pokémon.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '23';
+  public set: string = "PBL";
+  public setNumber: string = "24";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Manectric';

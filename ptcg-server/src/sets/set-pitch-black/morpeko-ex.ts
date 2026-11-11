@@ -31,8 +31,8 @@ export class Morpekoex extends PokemonCard {
     text: 'This attack does 40 more damage for each damage counter on this Pokémon.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '53';
+  public set: string = "PBL";
+  public setNumber: string = "55";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Morpeko ex';

@@ -1516,8 +1516,17 @@ export function SEARCH_DECK_FOR_CARDS_TO_HAND(store: StoreLike, state: State, pl
     return;
   const opponent = StateUtils.getOpponent(state, player);
 
+  // A filtered Energy search requires an Energy when one is actually available
+  // in the deck. Other searches default to an optional empty selection.
+  const isEnergySearch = filter.superType === SuperType.ENERGY || filter.energyType !== undefined;
+  const hasMatchingEnergy = isEnergySearch && player.deck.cards.some(card =>
+    Object.keys(filter).every(key => (filter as any)[key] === (card as any)[key]));
+  const searchOptions = hasMatchingEnergy && (options.max === undefined || options.max > 0)
+    ? { ...options, min: Math.max(options.min || 0, 1) }
+    : options;
+
   store.prompt(state, new ChooseCardsPrompt(
-    player, GameMessage.CHOOSE_CARD_TO_HAND, player.deck, filter, options,
+    player, GameMessage.CHOOSE_CARD_TO_HAND, player.deck, filter, searchOptions,
   ), selected => {
     const cards = selected || [];
     if (Object.keys(filter).length > 0) {

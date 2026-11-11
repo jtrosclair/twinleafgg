@@ -39,8 +39,8 @@ export class Annihilape extends PokemonCard {
     text: 'Place 5 damage counters on 1 of your opponent\'s Benched Pokémon.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '39';
+  public set: string = 'PBL';
+  public setNumber: string = '41';
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Annihilape';

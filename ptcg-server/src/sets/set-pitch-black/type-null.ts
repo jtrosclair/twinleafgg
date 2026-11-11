@@ -17,8 +17,8 @@ export class TypeNull extends PokemonCard {
     text: '',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '67';
+  public set: string = "PBL";
+  public setNumber: string = "69";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Type: Null';

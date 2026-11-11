@@ -21,8 +21,8 @@ export class Marshadow extends PokemonCard {
     text: 'This attack does 30 damage times the number of [C] in your opponent\'s Active Pokémon\'s Retreat Cost.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '38';
+  public set: string = "PBL";
+  public setNumber: string = "40";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Marshadow';

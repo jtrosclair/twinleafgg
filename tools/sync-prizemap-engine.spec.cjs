@@ -65,8 +65,9 @@ test('isolated preparation and publish use a fast-forward, and an already-pushed
   write('package.json',JSON.stringify({name:'sim-sync-fixture',version:'1.0.0'}));
   write('package-lock.json',JSON.stringify({name:'sim-sync-fixture',version:'1.0.0',lockfileVersion:3,packages:{'':{name:'sim-sync-fixture',version:'1.0.0'}}}));
   write('lib/simulator-engine/service.mjs','old-engine');write('lib/simulator-engine/source-snapshot.json.gz','old-snapshot');write('lib/simulator-engine/provenance.json',JSON.stringify(mkMeta('old-engine','old-snapshot')));
-  write('lib/data/simulator-card-art.json','old-art');
-  write('scripts/refresh-simulator-card-art.cjs',`require('fs').writeFileSync('lib/data/simulator-card-art.json','new-art');`);
+  const legacyArt=JSON.stringify({'Annihilape M5':['Annihilape','M5 39','https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/M5/M5_39_R_JP_XS.png',150]});
+  write('lib/data/simulator-card-art.json',legacyArt);
+  write('scripts/refresh-simulator-card-art.cjs',`const fs=require('fs');const target='lib/data/simulator-card-art.json';const temporary=target+'.tmp';const imageMap={'M5 39':'https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/M5/M5_39_R_JP_XS.png'};const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));const validateCoverage=()=>{};fs.writeFileSync(temporary,'{}');\n    validateCoverage(read(target), read(temporary), imageMap);\n    fs.renameSync(temporary,target);`);
   const next=mkMeta('new-engine','new-snapshot');
   write('lib/simulator-engine/generate.cjs',`const fs=require('fs');fs.writeFileSync('lib/simulator-engine/service.mjs','new-engine');fs.writeFileSync('lib/simulator-engine/source-snapshot.json.gz','new-snapshot');fs.writeFileSync('lib/simulator-engine/provenance.json',${JSON.stringify(JSON.stringify(next))});`);
   write('lib/simulator-engine/verify.cjs','');write('lib/simulator-engine/engine.test.mjs','');write('tests/simulator-gzip-validation.test.cjs','');write('tests/simulator-card-art.test.cjs','');write('tests/simulator-version.test.cjs','');
@@ -80,6 +81,9 @@ test('isolated preparation and publish use a fast-forward, and an already-pushed
   const {prepare}=require('./sync-prizemap-engine.cjs');
   const meta=prepare({stage,web,source:sim});assert.equal(meta.changed,true);
   assert.equal(run(bare,'rev-parse','main'),meta.base,'prepare must not push');
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(meta.repo,'lib/data/simulator-card-art.json'),'utf8')),
+    {'Annihilape M5':['Annihilape','M5 39','https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/M5/M5_39_R_JP_XS.png',150]},
+    'legacy card artwork remains when its indexed image is still available');
   const changedFiles=run(meta.repo,'diff-tree','--no-commit-id','--name-only','-r',meta.commit).split('\n').sort();
   assert.deepEqual(changedFiles,['lib/data/simulator-card-art.json','lib/simulator-engine/provenance.json','lib/simulator-engine/service.mjs','lib/simulator-engine/source-snapshot.json.gz']);
   const fetchJson=async url=>url.includes('simulator-manifest')?{packageHash:'new-package'}:{bundleSha256:meta.bundleSha256,sourceSnapshotSha256:meta.snapshotSha256,artworkCatalogueSha256:meta.artworkSha256,simulatorPackageHash:'new-package'};

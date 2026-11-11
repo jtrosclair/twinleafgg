@@ -28,8 +28,8 @@ export class MegaDarkraiex extends PokemonCard {
     text: 'If your opponent\'s Active Pokémon is affected by any Special Condition, it is now Knocked Out.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '46';
+  public set: string = "PBL";
+  public setNumber: string = "48";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Mega Darkrai ex';

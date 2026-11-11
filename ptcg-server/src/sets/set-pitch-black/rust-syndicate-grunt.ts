@@ -20,8 +20,8 @@ import { CLEAN_UP_SUPPORTER } from '../../game/store/prefabs/prefabs';
 export class RustSyndicateGrunt extends TrainerCard {
   public trainerType: TrainerType = TrainerType.SUPPORTER;
   public regulationMark = 'J';
-  public set: string = 'M5';
-  public setNumber: string = '77';
+  public set: string = "PBL";
+  public setNumber: string = "81";
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Rust Syndicate Grunt';
   public fullName: string = 'Rust Syndicate Grunt M5';

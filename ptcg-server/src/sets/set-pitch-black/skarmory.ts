@@ -27,8 +27,8 @@ export class Skarmory extends PokemonCard {
     text: 'Discard up to 2 Basic [M] Energy from your hand. This attack does 40 damage times the number of Energy discarded in this way.',
   },];
 
-  public set: string = 'M5';
-  public setNumber: string = '58';
+  public set: string = "PBL";
+  public setNumber: string = "60";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Skarmory';

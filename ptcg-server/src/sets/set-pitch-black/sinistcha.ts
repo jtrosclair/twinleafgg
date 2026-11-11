@@ -27,7 +27,7 @@ export class Sinistcha extends PokemonCard {
     text: 'If you have 6 or more Pokémon in your discard with the Ghost Veil Ability, place 4 damage counters on each of your opponent\'s Pokémon.',
   }];
 
-  public set: string = 'M5';
+  public set: string = "PBL";
   public setNumber: string = '6';
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';

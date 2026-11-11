@@ -1,5 +1,5 @@
 import { Card } from '../card/card';
-import { CardType } from '../card/card-types';
+import { CardType, Stage } from '../card/card-types';
 import { AttackEffect } from '../effects/game-effects';
 import { EffectOfAttackEffect } from '../effects/effect-of-attack-effects';
 import { State } from '../state/state';
@@ -144,9 +144,17 @@ export function OPPONENT_CANNOT_PLAY_TRAINER_CARDS(
 
 export function OPPONENT_CANNOT_PLAY_CARDS(
   _store: StoreLike, state: State, effect: AttackEffect, _source: Card,
-  _options: { item?: boolean; supporter?: boolean; stadium?: boolean; tool?: boolean; energy?: boolean; pokemon?: boolean },
+  options: { item?: boolean; supporter?: boolean; stadium?: boolean; tool?: boolean; energy?: boolean; specialEnergy?: boolean; pokemon?: boolean },
 ): State {
-  effect.opponent.trainerCardsBlockedNextTurn = true;
+  const player = effect.opponent;
+  const selected = Object.values(options).some(Boolean);
+  if (!selected) player.trainerCardsBlockedNextTurn = true;
+  if (options.item) player.marker.addMarker(player.ATTACK_EFFECT_ITEM_LOCK, _source, 'attack', 'player');
+  if (options.supporter) player.marker.addMarker(player.ATTACK_EFFECT_SUPPORTER_LOCK, _source, 'attack', 'player');
+  if (options.stadium) player.marker.addMarker(player.ATTACK_EFFECT_STADIUM_LOCK, _source, 'attack', 'player');
+  if (options.tool) player.marker.addMarker(player.ATTACK_EFFECT_TOOL_LOCK, _source, 'attack', 'player');
+  if (options.energy) player.energyCardsBlockedNextTurn = true;
+  if (options.specialEnergy) player.marker.addMarker(player.ATTACK_EFFECT_SPECIAL_ENERGY_LOCK, _source, 'attack', 'player');
   return state;
 }
 
@@ -255,16 +263,21 @@ export function DEFENDING_POKEMON_TAKES_MORE_DAMAGE_DURING_YOUR_NEXT_TURN(
 // Upstream pending/active self-protection; legacy prefab PREVENT_DAMAGE remains unchanged.
 class NextTurnPreventDamageEffect extends EffectOfAttackEffect {
   readonly type = 'NEXT_TURN_PREVENT_DAMAGE_EFFECT';
-  constructor(base: AttackEffect) { super(base); this.target = base.source; }
-  applyEffect(): void { this.player.active.preventDamageNextTurnPending = true; }
+  constructor(base: AttackEffect, private sourceStage?: Stage) { super(base); this.target = base.source; }
+  applyEffect(): void {
+    this.player.active.preventDamageNextTurnPending = true;
+    this.player.active.preventDamageNextTurnFilterPending = this.sourceStage === undefined ? undefined : { sourceStage: this.sourceStage };
+  }
 }
 class PreventEffectsOfAttacksEffect extends EffectOfAttackEffect {
   readonly type = 'PREVENT_EFFECTS_OF_ATTACKS_EFFECT';
   constructor(base: AttackEffect) { super(base); this.target = base.source; }
   applyEffect(): void { this.player.active.preventEffectsOfAttacksNextTurnPending = true; }
 }
-export function PREVENT_DAMAGE(store: StoreLike, state: State, effect: AttackEffect, source: Card): State {
-  const protection = new NextTurnPreventDamageEffect(effect); protection.markerSource = source;
+export function PREVENT_DAMAGE(
+  store: StoreLike, state: State, effect: AttackEffect, source: Card, filter?: { sourceStage?: Stage }
+): State {
+  const protection = new NextTurnPreventDamageEffect(effect, filter?.sourceStage); protection.markerSource = source;
   return store.reduceEffect(state, protection);
 }
 

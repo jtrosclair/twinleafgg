@@ -21,13 +21,13 @@ import { Drilbur } from './drilbur';
 import { Electrike } from './electrike';
 import { Finizen } from './finizen';
 import { Fomantis } from './fomantis';
-import { FossilExcavationSite } from './fossil-excavation-site';
-import { GladionsDecisiveBattle } from './gladions-decisive-battle';
+import { FossilQuarry as FossilExcavationSite } from './fossil-quarry';
+import { GladionsFinalBattle } from './gladions-final-battle';
 import { Goldeen } from './goldeen';
 import { Grubbin } from './grubbin';
 import { Gwynn } from './gwynn';
 import { Heatran } from './heatran';
-import { HeroicBomb } from './heroic-bomb';
+import { TremendousBomb } from './tremendous-bomb';
 import { Inkay } from './inkay';
 import { Jynx } from './jynx';
 import { Koraidon } from './koraidon';
@@ -39,11 +39,13 @@ import { Manectric } from './manectric';
 import { Mankey } from './mankey';
 import { Maschiff } from './maschiff';
 import { Marshadow } from './marshadow';
+import { Mandibuzz } from './mandibuzz';
 import { MegaChandelureex } from './mega-chandelure-ex';
 import { MegaDarkraiex } from './mega-darkrai-ex';
+import { MegaDelphoxex } from './mega-delphox-ex';
 import { MegaExcadrillex } from './mega-excadrill-ex';
 import { MegaZeraoraex } from './mega-zeraora-ex';
-import { MistysCheerfulness } from './mistys-cheerfulness';
+import { MistysVitality } from './mistys-vitality';
 import { Miraidon } from './miraidon';
 import { Morpekoex } from './morpeko-ex';
 import { Mabosstiff } from './mabosstiff';
@@ -75,9 +77,19 @@ import { Trumbeak } from './trumbeak';
 import { Tropius } from './tropius';
 import { TypeNull } from './type-null';
 import { Vikavolt } from './vikavolt';
+import { Vullaby } from './vullaby';
 import { Wailmer } from './wailmer';
 import { Wailordex } from './wailord-ex';
 import { Zarude } from './zarude';
+import {
+  FomantisIR, ArmarougeIR, GoldeenIR, PrimarinaIR, ManectricIR, SlowbroIR, DhelmiseIR,
+  ThievulIR, BastiodonIR, ToucannonIR, SilvallyIR, LurantisexFA, WailordexFA,
+  MegaZeraoraexFA, MegaChandelureexFA, RampardosexFA, MegaDarkraiexFA, MorpekoexFA,
+  MegaExcadrillexFA, BraveBangleFAPBL, CrushingHammerFAPBL, DarkBellFA, EnergySwitchFAPBL,
+  GladionsFinalBattleFA, GwynnFA, IronDefenderFAPBL, MistysVitalityFA, RustSyndicateGruntFA,
+  TremendousBombFA, MegaZeraoraexSIR, MegaChandelureexSIR, MegaDarkraiexSIR, MorpekoexSIR,
+  GladionsFinalBattleSIR, GwynnSIR, MegaDarkraiexHR,
+} from './upstream-prints';
 
 export const setPitchBlack: Card[] = [
   new Annihilape(),
@@ -103,12 +115,12 @@ export const setPitchBlack: Card[] = [
   new Finizen(),
   new Fomantis(),
   new FossilExcavationSite(),
-  new GladionsDecisiveBattle(),
+  new GladionsFinalBattle(),
   new Goldeen(),
   new Grubbin(),
   new Gwynn(),
   new Heatran(),
-  new HeroicBomb(),
+  new TremendousBomb(),
   new Inkay(),
   new Jynx(),
   new Koraidon(),
@@ -120,11 +132,13 @@ export const setPitchBlack: Card[] = [
   new Mankey(),
   new Maschiff(),
   new Marshadow(),
+  new Mandibuzz(),
   new MegaChandelureex(),
   new MegaDarkraiex(),
+  new MegaDelphoxex(),
   new MegaExcadrillex(),
   new MegaZeraoraex(),
-  new MistysCheerfulness(),
+  new MistysVitality(),
   new Miraidon(),
   new Morpekoex(),
   new Mabosstiff(),
@@ -156,7 +170,44 @@ export const setPitchBlack: Card[] = [
   new Tropius(),
   new TypeNull(),
   new Vikavolt(),
+  new Vullaby(),
   new Wailmer(),
   new Wailordex(),
   new Zarude(),
+  new FomantisIR(),
+  new ArmarougeIR(),
+  new GoldeenIR(),
+  new PrimarinaIR(),
+  new ManectricIR(),
+  new SlowbroIR(),
+  new DhelmiseIR(),
+  new ThievulIR(),
+  new BastiodonIR(),
+  new ToucannonIR(),
+  new SilvallyIR(),
+  new LurantisexFA(),
+  new WailordexFA(),
+  new MegaZeraoraexFA(),
+  new MegaChandelureexFA(),
+  new RampardosexFA(),
+  new MegaDarkraiexFA(),
+  new MorpekoexFA(),
+  new MegaExcadrillexFA(),
+  new BraveBangleFAPBL(),
+  new CrushingHammerFAPBL(),
+  new DarkBellFA(),
+  new EnergySwitchFAPBL(),
+  new GladionsFinalBattleFA(),
+  new GwynnFA(),
+  new IronDefenderFAPBL(),
+  new MistysVitalityFA(),
+  new RustSyndicateGruntFA(),
+  new TremendousBombFA(),
+  new MegaZeraoraexSIR(),
+  new MegaChandelureexSIR(),
+  new MegaDarkraiexSIR(),
+  new MorpekoexSIR(),
+  new GladionsFinalBattleSIR(),
+  new GwynnSIR(),
+  new MegaDarkraiexHR(),
 ];

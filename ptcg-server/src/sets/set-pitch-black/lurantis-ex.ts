@@ -30,7 +30,7 @@ export class Lurantisex extends PokemonCard {
     text: 'During your opponent\'s next turn, this Pokémon takes 50 less damage from attacks.',
   }];
 
-  public set: string = 'M5';
+  public set: string = "PBL";
   public setNumber: string = '4';
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';

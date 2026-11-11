@@ -22,8 +22,8 @@ export class Bronzor extends PokemonCard {
     text: 'If your opponent\'s Active Pokémon is a [M] Pokémon, this attack does 30 more damage.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '61';
+  public set: string = 'PBL';
+  public setNumber: string = '63';
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Bronzor';

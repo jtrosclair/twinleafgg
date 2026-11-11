@@ -291,12 +291,15 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
     opponent.forEachPokemon(PlayerType.TOP_PLAYER, slot => { slot.noWeaknessNextTurn = false; });
     opponent.forEachPokemon(PlayerType.TOP_PLAYER, slot => {
       slot.preventDamageNextTurn = false;
+      slot.preventDamageNextTurnFilter = undefined;
       slot.preventEffectsOfAttacksNextTurn = false;
       slot.surviveOnTenHpNextTurn = null;
     });
     player.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => {
       slot.preventDamageNextTurn = slot.preventDamageNextTurnPending;
       slot.preventDamageNextTurnPending = false;
+      slot.preventDamageNextTurnFilter = slot.preventDamageNextTurnFilterPending;
+      slot.preventDamageNextTurnFilterPending = undefined;
       slot.preventEffectsOfAttacksNextTurn = slot.preventEffectsOfAttacksNextTurnPending;
       slot.preventEffectsOfAttacksNextTurnPending = false;
       slot.surviveOnTenHpNextTurn = slot.surviveOnTenHpNextTurnPending;

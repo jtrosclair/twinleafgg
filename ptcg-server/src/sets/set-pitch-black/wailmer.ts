@@ -21,8 +21,8 @@ export class Wailmer extends PokemonCard {
     text: '',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '14';
+  public set: string = "PBL";
+  public setNumber: string = "15";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Wailmer';

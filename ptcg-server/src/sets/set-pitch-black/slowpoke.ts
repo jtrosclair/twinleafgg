@@ -27,8 +27,8 @@ export class Slowpoke extends PokemonCard {
     text: '',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '28';
+  public set: string = "PBL";
+  public setNumber: string = "29";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Slowpoke';

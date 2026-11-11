@@ -19,7 +19,7 @@ export class Fomantis extends PokemonCard {
     text: 'This Pokémon also does 10 damage to itself.',
   }];
 
-  public set: string = 'M5';
+  public set: string = "PBL";
   public setNumber: string = '3';
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';

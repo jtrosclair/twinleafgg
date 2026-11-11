@@ -21,8 +21,8 @@ export class Spiritomb extends PokemonCard {
     text: 'If you have 13 or more Pokémon in your discard with the Ghost Veil Ability, choose 2 of your opponent\'s Pokémon and quadruple the number of damage counters on each of them.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '33';
+  public set: string = "PBL";
+  public setNumber: string = "35";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Spiritomb';

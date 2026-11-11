@@ -33,8 +33,8 @@ export class Zarude extends PokemonCard {
     text: 'If any of your Benched Pokémon has any Shadow Darkness Energy attached to them, this attack does 70 more damage.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '54';
+  public set: string = "PBL";
+  public setNumber: string = "56";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Zarude';

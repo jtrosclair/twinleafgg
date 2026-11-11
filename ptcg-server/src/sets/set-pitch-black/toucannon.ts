@@ -32,8 +32,8 @@ export class Toucannon extends PokemonCard {
     text: 'This attack does 20 more damage for each Benched Pokémon in play (both yours and your opponent\'s).',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '66';
+  public set: string = "PBL";
+  public setNumber: string = "68";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Toucannon';

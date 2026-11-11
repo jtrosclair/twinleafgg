@@ -43,7 +43,7 @@ export class AntiqueShieldFossil extends TrainerCard {
     powerType: PowerType.TRAINER_ABILITY,
   }];
 
-  public set: string = 'M5';
+  public set: string = 'PBL';
   public setNumber: string = '72';
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';

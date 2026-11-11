@@ -26,8 +26,8 @@ export class Lampent extends PokemonCard {
     text: 'Search your deck for up to 3 Lampent and put them onto your Bench.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '35';
+  public set: string = "PBL";
+  public setNumber: string = "37";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Lampent';

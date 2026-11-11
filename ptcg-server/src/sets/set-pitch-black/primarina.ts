@@ -29,8 +29,8 @@ export class Primarina extends PokemonCard {
     text: 'Return this Pokémon and all cards attached to it into your hand.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '19';
+  public set: string = "PBL";
+  public setNumber: string = "20";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Primarina';

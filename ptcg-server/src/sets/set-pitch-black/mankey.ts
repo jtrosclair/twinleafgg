@@ -15,8 +15,8 @@ export class Mankey extends PokemonCard {
     text: '',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '40';
+  public set: string = "PBL";
+  public setNumber: string = "42";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Mankey';

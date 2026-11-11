@@ -263,3 +263,43 @@ export class MegaZygardeexHR extends MegaZygardeex {
   public setNumber = '117';
   public usSetNumber = 'POR 124';
 }
+import { CrushingHammer } from '../set-scarlet-and-violet/crushing-hammer';
+import { EnergySearch } from '../set-scarlet-and-violet/energy-search';
+import { PokeBall } from '../set-jungle/pokeball';
+import { PokemonCatcher } from '../set-scarlet-and-violet/pokemon-catcher';
+import { Potion } from '../set-scarlet-and-violet/potion';
+
+export class CrushingHammerPOR extends CrushingHammer {
+  public fullName = 'Crushing Hammer POR';
+  public set = 'POR';
+  public setNumber = '71';
+  public regulationMark = 'J';
+}
+
+export class EnergySearchPOR extends EnergySearch {
+  public fullName = 'Energy Search POR';
+  public set = 'POR';
+  public setNumber = '72';
+  public regulationMark = 'J';
+}
+
+export class PokeBallPOR extends PokeBall {
+  public fullName = 'Poke Ball POR';
+  public set = 'POR';
+  public setNumber = '80';
+  public regulationMark = 'J';
+}
+
+export class PokemonCatcherPOR extends PokemonCatcher {
+  public fullName = 'Pokemon Catcher POR';
+  public set = 'POR';
+  public setNumber = '82';
+  public regulationMark = 'J';
+}
+
+export class PotionPOR extends Potion {
+  public fullName = 'Potion POR';
+  public set = 'POR';
+  public setNumber = '83';
+  public regulationMark = 'J';
+}

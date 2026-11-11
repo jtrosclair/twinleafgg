@@ -80,7 +80,7 @@ import { Drapion } from './drapion';
 import { ChienPao } from './chien-pao';
 import { Laprasex } from './lapras-ex';
 import { HoleDiggingShovel } from './hole-digging-shovel';
-import { SpewpaIR, RowletIR, TalonflameIR, AurorusIR, DedenneIR, ClefairyIR, EspurrIR, ProbopassIR, DrapionIR, DoubladeIR, RaticateIR, DecidueyeexFA, SalazzleexFA, MegaStarmieexFA, MegaClefableexFA, MegaZygardeexFA, YveltalexFA, MegaSkarmoryexFA, MeowthexFA, EnergyRecyclerFA, SacredAshFA, PokePadFA, PokePadNormal, WondrousPatchFA, TarragonFA, NaveenFA, RosasEncouragementFA, JacintheFA, ForestOfVitalityFA, LumioiseCityFA, JacintheSIR, MegaClefableexSIR, MegaStarmieexSIR, MegaZygardeexHR, MegaZygardeexSIR, MeowthexSIR, RosasEncouragementSIR, JudgePOR } from './other-prints';
+import { SpewpaIR, RowletIR, TalonflameIR, AurorusIR, DedenneIR, ClefairyIR, EspurrIR, ProbopassIR, DrapionIR, DoubladeIR, RaticateIR, DecidueyeexFA, SalazzleexFA, MegaStarmieexFA, MegaClefableexFA, MegaZygardeexFA, YveltalexFA, MegaSkarmoryexFA, MeowthexFA, EnergyRecyclerFA, SacredAshFA, PokePadFA, PokePadNormal, WondrousPatchFA, TarragonFA, NaveenFA, RosasEncouragementFA, JacintheFA, ForestOfVitalityFA, LumioiseCityFA, JacintheSIR, MegaClefableexSIR, MegaStarmieexSIR, MegaZygardeexHR, MegaZygardeexSIR, MeowthexSIR, RosasEncouragementSIR, JudgePOR, CrushingHammerPOR, EnergySearchPOR, PokeBallPOR, PokemonCatcherPOR, PotionPOR } from './other-prints';
 
 export const setPerfectOrder: Card[] = [
   new Barbaracle(),
@@ -203,5 +203,10 @@ export const setPerfectOrder: Card[] = [
   new RosasEncouragementSIR(),
   new JacintheSIR(),
   new MegaZygardeexHR(),
-  new JudgePOR()
+  new JudgePOR(),
+  new CrushingHammerPOR(),
+  new EnergySearchPOR(),
+  new PokeBallPOR(),
+  new PokemonCatcherPOR(),
+  new PotionPOR()
 ];

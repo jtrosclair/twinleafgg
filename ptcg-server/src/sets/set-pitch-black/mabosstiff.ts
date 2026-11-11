@@ -27,8 +27,8 @@ export class Mabosstiff extends PokemonCard {
     text: 'During your opponent\'s next turn, this Pokémon takes 100 extra damage from attacks from your opponent\'s Pokémon.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '56';
+  public set: string = "PBL";
+  public setNumber: string = "58";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Mabosstiff';

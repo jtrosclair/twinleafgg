@@ -22,8 +22,8 @@ export class Seaking extends PokemonCard {
     text: 'This attack does 30 damage for each [W] Energy attached to this Pokémon to 1 of your opponent\'s Pokémon. (Don\'t apply Weakness and Resistance for Benched Pokémon.)',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '13';
+  public set: string = "PBL";
+  public setNumber: string = "14";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Seaking';

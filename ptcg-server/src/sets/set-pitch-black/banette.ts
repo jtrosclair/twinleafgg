@@ -30,8 +30,8 @@ export class Banette extends PokemonCard {
     text: 'You may search your deck for any card and put it into your hand. If you do, shuffle your deck.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '32';
+  public set: string = 'PBL';
+  public setNumber: string = '34';
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Banette';

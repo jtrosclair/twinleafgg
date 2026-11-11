@@ -10,11 +10,11 @@ import { Player } from '../../game/store/state/player';
 
 export class Jett extends TrainerCard {
   public trainerType: TrainerType = TrainerType.SUPPORTER;
-  public set: string = 'MEP';
+  public set: string = 'PBL';
   public name: string = 'Jett';
   public fullName: string = 'Jett MEP';
   public cardImage: string = 'assets/cardback.png';
-  public setNumber: string = '75';
+  public setNumber: string = '79';
 
   public text: string =
     'Draw a card for each of your opponent\'s Mega Evolution Pokemon ex in play.';

@@ -183,6 +183,8 @@ export * from './set-destined-rivals';
 export * from './set-black-bolt-white-flare';
 
 //MEG Era
+export * from './11-mega-evolution/set-aura-seeker';
+export * from './set-mega-x-mega-parade';
 export * from './set-mega-evolution-promos';
 export * from './set-mega-evolution';
 export * from './set-phantasmal-flames';

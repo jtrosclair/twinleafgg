@@ -30,7 +30,7 @@ export class Heatran extends PokemonCard {
     text: 'During your opponent\'s next turn, this Pokémon doesn\'t take damage from attacks by Pokémon that are Burned.',
   }];
 
-  public set: string = 'M5';
+  public set: string = "PBL";
   public setNumber: string = '7';
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';

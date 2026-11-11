@@ -13,6 +13,13 @@ import { Golduck } from './golduck';
 import { Slowpoke } from './slowpoke';
 import { MegaSlowbroex } from './mega-slowbro-ex';
 import { Jett } from './jett';
+import {
+  MegaCharizardXex2MEP, MegaCharizardYexMEP, NsZekromMEP, MegaGardevoirexMEP,
+  MegaLucarioex2MEP, MegaMeganiumexMEP, MegaEmboarexMEP, MegaFeraligatrexMEP,
+  DelphoxMEP, CrobatMEP, GoodraMEP, ToxelMEP, FennekinMEP,
+} from './upstream-round34-prints';
+import { Pikachuex2 } from './pikachu-ex-2';
+import { Pikachuex } from './pikachu-ex';
 
 export const setMegaEvolutionPromos: Card[] = [
   new Psyduck(),
@@ -50,4 +57,19 @@ export const setMegaEvolutionPromos: Card[] = [
   new Lida(),
   new MegaHeatranex(),
   new MegaTatsugiriex(),
+  new MegaCharizardXex2MEP(),
+  new MegaCharizardYexMEP(),
+  new NsZekromMEP(),
+  new MegaGardevoirexMEP(),
+  new MegaLucarioex2MEP(),
+  new MegaMeganiumexMEP(),
+  new MegaEmboarexMEP(),
+  new MegaFeraligatrexMEP(),
+  new DelphoxMEP(),
+  new CrobatMEP(),
+  new GoodraMEP(),
+  new ToxelMEP(),
+  new FennekinMEP(),
+  new Pikachuex2(),
+  new Pikachuex(),
 ];

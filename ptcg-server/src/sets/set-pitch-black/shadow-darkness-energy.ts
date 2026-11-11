@@ -13,10 +13,10 @@ export class ShadowDarknessEnergy extends EnergyCard {
 
   public provides: CardType[] = [CardType.COLORLESS];
   public energyType = EnergyType.SPECIAL;
-  public set: string = 'M5';
+  public set: string = 'PBL';
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
-  public setNumber: string = '81';
+  public setNumber: string = '83';
   public name = 'Shadow Darkness Energy';
   public fullName: string = 'Shadow Darkness Energy M5';
 

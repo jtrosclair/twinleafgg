@@ -48,8 +48,8 @@ export class Silvally extends PokemonCard {
     text: 'Discard 1 Energy attached to this Pokémon.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '68';
+  public set: string = "PBL";
+  public setNumber: string = "70";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Silvally';

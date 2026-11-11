@@ -65,7 +65,7 @@ function* playGwynn(next: Function, store: StoreLike, state: State, effect: Trai
 export class Gwynn extends TrainerCard {
   public trainerType: TrainerType = TrainerType.SUPPORTER;
   public regulationMark: string = 'J';
-  public set: string = 'M5';
+  public set: string = "PBL";
   public setNumber: string = '78';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Gwynn';

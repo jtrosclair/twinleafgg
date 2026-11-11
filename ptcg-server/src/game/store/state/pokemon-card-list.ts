@@ -50,6 +50,8 @@ export class PokemonCardList extends CardList {
   public cannotUsePowersNextTurn = false;
   public preventDamageNextTurnPending = false;
   public preventDamageNextTurn = false;
+  public preventDamageNextTurnFilterPending?: { sourceStage?: Stage };
+  public preventDamageNextTurnFilter?: { sourceStage?: Stage };
   public preventEffectsOfAttacksNextTurnPending = false;
   public preventEffectsOfAttacksNextTurn = false;
   public weaknessOverrideType?: CardType;
@@ -202,6 +204,8 @@ export class PokemonCardList extends CardList {
     this.cannotUsePowersNextTurn = false;
     this.preventDamageNextTurnPending = false;
     this.preventDamageNextTurn = false;
+    this.preventDamageNextTurnFilterPending = undefined;
+    this.preventDamageNextTurnFilter = undefined;
     this.preventEffectsOfAttacksNextTurnPending = false;
     this.preventEffectsOfAttacksNextTurn = false;
     this.weaknessOverrideType = undefined;
@@ -260,6 +264,8 @@ export class PokemonCardList extends CardList {
     this.cannotUsePowersNextTurn = false;
     this.preventDamageNextTurnPending = false;
     this.preventDamageNextTurn = false;
+    this.preventDamageNextTurnFilterPending = undefined;
+    this.preventDamageNextTurnFilter = undefined;
     this.preventEffectsOfAttacksNextTurnPending = false;
     this.preventEffectsOfAttacksNextTurn = false;
     this.weaknessOverrideType = undefined;

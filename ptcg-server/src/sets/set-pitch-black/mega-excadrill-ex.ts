@@ -29,8 +29,8 @@ export class MegaExcadrillex extends PokemonCard {
     text: 'If this Pokémon has at least 2 extra Energy attached to it (in addition to this attack\'s cost), this attack does 130 more damage.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '63';
+  public set: string = "PBL";
+  public setNumber: string = "65";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Mega Excadrill ex';

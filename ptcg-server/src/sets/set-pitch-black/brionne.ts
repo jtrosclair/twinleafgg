@@ -16,8 +16,8 @@ export class Brionne extends PokemonCard {
     text: '',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '18';
+  public set: string = 'PBL';
+  public setNumber: string = '19';
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Brionne';

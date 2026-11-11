@@ -27,8 +27,8 @@ export class Sizzlipede extends PokemonCard {
     text: 'Reveal the bottom 7 cards of your deck. This attack does 50 damage times the number of Pokémon that have the attack Bug Panic. Then, shuffle those Pokémon back into your deck and discard all other revealed cards.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '8';
+  public set: string = "PBL";
+  public setNumber: string = "9";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Sizzlipede';

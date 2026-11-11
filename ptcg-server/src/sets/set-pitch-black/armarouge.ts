@@ -21,8 +21,8 @@ export class Armarouge extends PokemonCard {
     text: 'This attack does 40 more damage for each Benched Pokémon that has an [R] Energy attached.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '11';
+  public set: string = 'PBL';
+  public setNumber: string = '12';
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Armarouge';

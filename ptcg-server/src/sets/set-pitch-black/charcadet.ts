@@ -18,8 +18,8 @@ export class Charcadet extends PokemonCard {
     text: 'Flip a coin. If tails, this attack does nothing.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '10';
+  public set: string = 'PBL';
+  public setNumber: string = '11';
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Charcadet';

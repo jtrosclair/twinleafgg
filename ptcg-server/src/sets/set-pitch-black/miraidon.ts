@@ -37,8 +37,8 @@ export class Miraidon extends PokemonCard {
     text: 'This Pokémon also does 30 damage to itself.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '27';
+  public set: string = "PBL";
+  public setNumber: string = "28";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Miraidon';

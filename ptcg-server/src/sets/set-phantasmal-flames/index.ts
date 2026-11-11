@@ -1,6 +1,8 @@
-import { Ludicolo2PFL, Zacian2PFL, Toxtricity2PFL, Wigglytuff2PFL, MegaCharizardXex2PFL, Oricorioex2PFL, Rotomex2PFL, MegaSharpedoex2PFL, MegaLopunnyex2PFL, BattleColosseum2PFL, Dawn2PFL, Firebreather2PFL, GrimsleysGambit2PFL, SacredCharm2PFL, SwitchPFL, IgnitionEnergyPFL, MegaCharizardXex3PFL, Rotomex3PFL, MegaSharpedoex3PFL, MegaLopunnyex3PFL, Dawn3PFL, Blowtorch2PFL, MegaCharizardXex4PFL } from './other-prints';
+import { Ludicolo2PFL, Zacian2PFL, Toxtricity2PFL, Wigglytuff2PFL, MegaCharizardXex2PFL, Oricorioex2PFL, Rotomex2PFL, MegaSharpedoex2PFL, MegaLopunnyex2PFL, BattleColosseum2PFL, Dawn2PFL, Firebreather2PFL, GrimsleysGambit2PFL, SacredCharm2PFL, SwitchPFL, IgnitionEnergyPFL, MegaCharizardXex3PFL, Rotomex3PFL, MegaSharpedoex3PFL, MegaLopunnyex3PFL, Dawn3PFL, Blowtorch2PFL, MegaCharizardXex4PFL, AmbipomIR, FlygonIR } from './other-prints';
 import { Card } from '../../game';
+import { Aipom } from './aipom';
 import { Ambipom } from './ambipom';
+import { Archaludon } from './archaludon';
 import { BattleColosseum } from './battle-colosseum';
 import { Blowtorch } from './blowtorch';
 import { Bronzong } from './bronzong';
@@ -13,11 +15,15 @@ import { Charmander } from './charmander';
 import { Charmeleon } from './charmeleon';
 import { Darmanitan } from './darmanitan';
 import { Darumaka } from './darumaka';
+import { Duraludon } from './duraludon';
 import { Dawn } from './dawn';
 import { Empoleonex } from './empoleon-ex';
 import { Firebreather } from './firebreather';
+import { Flygon } from './flygon';
 import { Gastly } from './gastly';
 import { Genesect } from './genesect';
+import { Gligar } from './gligar';
+import { Gliscor } from './gliscor';
 import { GrimsleysGambit } from './grimsleys-gambit';
 import { Haunter } from './haunter';
 import { Jigglypuff } from './jigglypuff';
@@ -45,12 +51,16 @@ import { SacredCharm } from './sacred-charm';
 import { Seviper } from './seviper';
 import { Toxel } from './toxel';
 import { Toxtricity } from './toxtricity';
+import { Trapinch } from './trapinch';
 import { Wigglytuff } from './wigglytuff';
 import { WonderPatch } from './wonder-patch';
 import { Zacian } from './zacian';
 
 export const setPhantasmalFlames: Card[] = [
+  new Aipom(),
   new Ambipom(),
+  new AmbipomIR(),
+  new Archaludon(),
   new BattleColosseum(),
   new Blowtorch(),
   new Bronzong(),
@@ -63,11 +73,16 @@ export const setPhantasmalFlames: Card[] = [
   new Charmeleon(),
   new Darmanitan(),
   new Darumaka(),
+  new Duraludon(),
   new Dawn(),
   new Empoleonex(),
   new Firebreather(),
+  new Flygon(),
+  new FlygonIR(),
   new Gastly(),
   new Genesect(),
+  new Gligar(),
+  new Gliscor(),
   new GrimsleysGambit(),
   new Haunter(),
   new Jigglypuff(),
@@ -95,6 +110,7 @@ export const setPhantasmalFlames: Card[] = [
   new Seviper(),
   new Toxel(),
   new Toxtricity(),
+  new Trapinch(),
   new Wigglytuff(),
   new WonderPatch(),
   new Zacian(),

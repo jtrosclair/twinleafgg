@@ -41,8 +41,8 @@ export class Rampardosex extends PokemonCard {
     text: 'During your next turn, attacks used by this Pokémon deal 150 more damage to your opponent\'s Active Pokémon.',
   }];
 
-  public set: string = 'M5';
-  public setNumber: string = '43';
+  public set: string = "PBL";
+  public setNumber: string = "45";
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Rampardos ex';

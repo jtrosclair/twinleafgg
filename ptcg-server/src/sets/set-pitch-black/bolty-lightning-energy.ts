@@ -12,10 +12,10 @@ import { StoreLike } from '../../game/store/store-like';
 export class BoltyLightningEnergy extends EnergyCard {
   public provides: CardType[] = [CardType.COLORLESS];
   public energyType = EnergyType.SPECIAL;
-  public set: string = 'M5';
+  public set: string = 'PBL';
   public regulationMark: string = 'J';
   public cardImage: string = 'assets/cardback.png';
-  public setNumber: string = '80';
+  public setNumber: string = '84';
   public name = 'Bolty [L] Energy';
   public fullName: string = 'Bolty [L] Energy M5';
   public text = `As long as this card is attached to a Pokémon, it provides [L] Energy.
