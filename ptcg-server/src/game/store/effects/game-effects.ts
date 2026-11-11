@@ -44,6 +44,13 @@ export class MovedToActiveEffect implements Effect {
   }
 }
 
+/** Emitted after an Active Pokémon moves to the Bench so its Poké-Body can react. */
+export class MovedFromActiveToBenchEffect implements Effect {
+  readonly type = 'MOVED_FROM_ACTIVE_TO_BENCH_EFFECT';
+  public preventDefault = false;
+  constructor(public player: Player, public pokemonCard: PokemonCard) {}
+}
+
 export class RetreatEffect implements Effect {
   readonly type: string = GameEffects.RETREAT_EFFECT;
   public preventDefault = false;
@@ -156,6 +163,7 @@ export class UseAttackEffect implements Effect {
   public attack: Attack;
   public source: PokemonCardList;
   public ignoreStatusConditions = false;
+  public ignoreEnergyCost = false;
   public delegateFrom?: PokemonCard;
   constructor(player: Player, attack: Attack) {
     this.player = player;

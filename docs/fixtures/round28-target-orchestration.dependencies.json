@@ -1,0 +1,114 @@
+{
+  "patchInputs": [
+    {
+      "path": "ptcg-server/src/game/store/card/pokemon-types.ts",
+      "baselineSha256": "bfc6a88bb6594de294d6a3d342aad509151c3fd301b6f43f0ffdf94f2cfbd8fb",
+      "prototypeSha256": "55da23159fc32905fc78eddb772ea4322ec3b836c3c7af4d46956ad073f62644"
+    },
+    {
+      "path": "ptcg-server/src/game/store/effects/game-effects.ts",
+      "baselineSha256": "bc4c9890ca693050be7d92e3959f0828b97f4187ae8924ad84fbd45a4907dd28",
+      "prototypeSha256": "eadda2dcadfeb1fcff32c91257f12301249aaa584259970607f3de4eb4fdd474"
+    },
+    {
+      "path": "ptcg-server/src/game/store/effects/attack-effects.ts",
+      "baselineSha256": "8599d3f197d556481cb43ac82684c4f429cd2aa1cd1a8df2d40cc8663d95c145",
+      "prototypeSha256": "de44bb3b3bd99e68775fdedbe0ec04c7a5a367c81c584b0f6590d018a281b5ee"
+    },
+    {
+      "path": "ptcg-server/src/game/store/effect-reducers/attack-effect.ts",
+      "baselineSha256": "93b239a90fc09d500409bfbe823207d633f24330269a0f32a2a17873bd2afdef",
+      "prototypeSha256": "906f7e0d4cb02d8c82ed1c2ac5b24488e2a5c8713f8ba5d64ddf26f79021fc66"
+    },
+    {
+      "path": "ptcg-server/src/game/store/effect-reducers/game-effect.ts",
+      "baselineSha256": "3181b62fd9ca68c56c41fecbdf04a236a32173a437e9ef70913af2689e31e4b5",
+      "prototypeSha256": "f4900de377640ad811590ce2d57afbed17b101efc828cc864731629db86112a6"
+    },
+    {
+      "path": "ptcg-server/src/game/store/prefabs/attack-after-damage.ts",
+      "baselineSha256": "8dedce1a0cb2f5e228691560705e215091f08a494ffd6c3bec5350fe23b1183a",
+      "prototypeSha256": "80f6cd1a5c9aaabef9642e65703b6833fb73a2bb967b040c4dab5a6d6ca82db5"
+    },
+    {
+      "path": "ptcg-server/src/game/store/prefabs/copy-attack-delegation.ts",
+      "baselineSha256": "21293efac02bee5b2406b2fc7d80026c7826adae2fde3459dade49ba8c370963",
+      "prototypeSha256": "9b06ec5cfc7d2fc8dac60c7af4951eecb2de2a4e8c792e4eecfba96cb7bfc099"
+    },
+    {
+      "path": "ptcg-server/src/game/store/store.ts",
+      "baselineSha256": "bfaa914325784c52e0a1fdb49e8981d5dfb6d95d0995d6d80c39dd6611ea1d60",
+      "prototypeSha256": "b4f57ff5105ae4b3edabe6ecdcba5077cdb7490d168e596999b98dd2dedb8510"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-upstream-round28/targeted-damage.ts",
+      "baselineSha256": "89a04a839a98b118e40ad2d879b06bbb0db1d3f64f52f43535ed91b32de8087a",
+      "prototypeSha256": "a0c1ed53ad5821098d6c69150d977da12830d4ebd54b5c51c5363ddef19c6656"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-upstream-round28/index.ts",
+      "baselineSha256": "2fc0702538558de80b474dc19ef4e2bca9d98964082f5549a2186237c9b3ea77",
+      "prototypeSha256": "1eddbc89219338cb7e69139a1a987e803459ecc9a777370f5b5077364a9834c8"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-majestic-dawn/electrike.ts",
+      "baselineSha256": null,
+      "prototypeSha256": "1ce936f1048cbf327dc6fa34a514eacf70f2bb3edf630c1047abdce8ca91cf5e"
+    }
+  ],
+  "purpose": "Experimental intentionally failing reproduction only",
+  "otherSourceDependencies": [
+    {
+      "path": "ptcg-server/src/sets/tests/test-helpers.ts",
+      "sha256": "c5643a99d7d262d8a02ba7911b69b25d7ca3125c04f3884a9ad1768641ff93a9"
+    },
+    {
+      "path": "ptcg-server/src/sets/tests/card-test-helpers.ts",
+      "sha256": "37ac32f37b96750757c0ce6635f0d91c6683ccdfe82e0337bf69979905ffbe99"
+    },
+    {
+      "path": "ptcg-server/scripts/test-card-regressions.cjs",
+      "sha256": "5167f657e7d6597c868225763aad2a2ed73cbdb6febcfd9ac7eaa9a3323c9d8c"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-phantom-forces/mega-gengar-ex.ts",
+      "sha256": "b4e8cc498b6d411e06168d301fa2d75614640b285ad3d86c4db965974e442f0e"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-base-set/charmander.ts",
+      "sha256": "36fc05871cf93b1b9b145fed22b8844ca582d475dbb3eb9c298dbe07e089ff3a"
+    },
+    {
+      "path": "ptcg-server/src/game/store/actions/play-card-action.ts",
+      "sha256": "974a15718904a8d9bc3cba3f7d36eb588735b119539822baff31141e9c6da924"
+    },
+    {
+      "path": "ptcg-server/src/game/store/actions/game-actions.ts",
+      "sha256": "1e469aaa73da8b8d1d03579299e901cce78cb0444469926180dc6f6113b7d33e"
+    },
+    {
+      "path": "ptcg-server/src/game/store/effects/effect.ts",
+      "sha256": "0575ea6d7715d72dfe181c1466f3714579a696f7953a06b7c1a4794b359b2d4b"
+    },
+    {
+      "path": "ptcg-server/src/game/store/prefabs/copy-attack-delegation.ts",
+      "sha256": "21293efac02bee5b2406b2fc7d80026c7826adae2fde3459dade49ba8c370963"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-great-encounters/ge-attack-effects.ts",
+      "sha256": "d9c205cc07b43d16aecd7ada020f2e70bb7bb353cc1aa4be70d335f59fc2118a"
+    },
+    {
+      "path": "ptcg-server/src/sets/round26-attack-effects.ts",
+      "sha256": "de46fe24b02ac0bc7b9d35e170d56ea0abd67ed01232bdec8cca9831b834f5de"
+    },
+    {
+      "path": "ptcg-server/src/game/store/prefabs/retreat-lock-until-target-end-turn.ts",
+      "sha256": "0723406a9ce78151066243e5e3d4dbb357cf5e080deb77143e0abaf0b814a359"
+    },
+    {
+      "path": "ptcg-server/src/game/store/prefabs/recoil-after-attack.ts",
+      "sha256": "d79ba966f32543e36ae8b882212664c516bab3719f0d6edbc253fe60aa7c2c36"
+    }
+  ]
+}

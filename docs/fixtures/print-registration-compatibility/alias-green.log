@@ -1,0 +1,29 @@
+cards set
+cards set
+[
+  {
+    "root": "prizemap-svp-final-frozen",
+    "position": "first",
+    "status": 200,
+    "manager": "Different Name ZZ",
+    "api": [
+      "Different Name ZZ"
+    ],
+    "direct": [
+      "Different Name ZZ"
+    ]
+  },
+  {
+    "root": "prizemap-svp-final-frozen",
+    "position": "last",
+    "status": 200,
+    "manager": "Different Name ZZ",
+    "api": [
+      "Different Name ZZ"
+    ],
+    "direct": [
+      "Different Name ZZ"
+    ]
+  }
+]
+SET_ALIAS_TO_LEGACY_FULLNAME_PRESERVED

@@ -49,6 +49,10 @@ export class Sceptile extends PokemonCard {
       return state;
     }
     
+    return Sceptile.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const attachedEnergy = GET_TOTAL_ENERGY_ATTACHED_TO_PLAYERS_POKEMON(effect.player, store, state);
       effect.damage = 20 * attachedEnergy;

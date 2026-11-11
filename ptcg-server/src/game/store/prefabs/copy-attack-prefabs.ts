@@ -111,6 +111,36 @@ export interface CopyAttackViaAbilityOptions extends BuildAttackListOptions {
   requireActiveCopycat?: boolean;
 }
 
+/** Copy an attack from the supplied Pokémon, ignoring only its Energy cost. */
+export function COPY_ATTACK_FROM_POKEMON_LIST(
+  store: StoreLike,
+  state: State,
+  effect: import('../effects/game-effects').AttackEffect,
+  pokemonCards: PokemonCard[],
+  options: { allowCancel?: boolean } = {},
+): State {
+  const player = effect.player;
+  return store.prompt(
+    state,
+    new ChooseAttackPrompt(
+      player.id,
+      GameMessage.CHOOSE_ATTACK_TO_COPY,
+      pokemonCards,
+      { allowCancel: options.allowCancel ?? true },
+    ),
+    attack => {
+      if (!attack) return state;
+      const sourceCard = findPokemonCardForAttack(pokemonCards, attack);
+      if (!sourceCard) return state;
+      const useAttackEffect = new UseAttackEffect(player, attack);
+      useAttackEffect.delegateFrom = sourceCard;
+      useAttackEffect.source = player.active;
+      useAttackEffect.ignoreEnergyCost = true;
+      return store.reduceEffect(state, useAttackEffect);
+    },
+  );
+}
+
 /**
  * Ability: choose an attack from in-play Pokémon (with energy blocking) and use it.
  * Runs through UseAttackEffect with delegateFrom so energy/status checks apply.

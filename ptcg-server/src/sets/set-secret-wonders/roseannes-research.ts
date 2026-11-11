@@ -45,12 +45,10 @@ export class RoseannesResearch extends TrainerCard {
         {},
         { min: 0, max: 2, allowCancel: false, blocked }
       ), cards => {
-        if (!cards || cards.length === 0) {
-          return state;
+        if (cards && cards.length > 0) {
+          SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
+          cards.forEach(card => MOVE_CARD_TO(state, card, player.hand));
         }
-
-        SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-        cards.forEach(card => MOVE_CARD_TO(state, card, player.hand));
         SHUFFLE_DECK(store, state, player);
       });
 

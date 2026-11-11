@@ -33,7 +33,21 @@ export class PokemonCardList extends CardList {
   public showBasicAnimation: boolean = false;
   public triggerAttackAnimation: boolean = false;
   public damageReductionNextTurn: number = 0;
+  public damageReductionNextTurnFilter?: { sourceIsEvolution?: boolean; sourceStage?: Stage };
+  public damageReductionBeforeWeaknessNextTurn: number = 0;
+  public nextTurnCoinFlipCount?: { attackName: string; flips: number; sourceCardName: string };
+  public preventDamageUpToNextTurn: number = 0;
+  public coinFlipCancelAttackNextTurn: number = 0;
+  public surviveOnTenHpNextTurn: string | null = null;
+  public surviveOnTenHpNextTurnPending: string | null = null;
   public attackDamageReductionNextTurn = 0;
+  public attackDamageBonusNextTurn = 0;
+  public attackDamageBonusNextTurnPending = false;
+  public attackCostIncreaseDuringNextTurn = 0;
+  public noWeaknessNextTurn = false;
+  public cannotEvolveNextTurn = false;
+  public cannotRetreatNextTurn = false;
+  public cannotUsePowersNextTurn = false;
   public preventDamageNextTurnPending = false;
   public preventDamageNextTurn = false;
   public preventEffectsOfAttacksNextTurnPending = false;
@@ -45,6 +59,9 @@ export class PokemonCardList extends CardList {
   public defendingPokemonExtraDamageAttackerId?: number;
   public defendingPokemonExtraDamagePending = false;
   public defendingPokemonExtraDamageRearmAfterAttack = false;
+  public pendingEnergyAttachDamageCounters: { damage: number; attack: Attack; sourceCard: PokemonCard; attackerPlayerId: number } | null = null;
+  public retaliateOnDamageNextTurn: { damage: number; attack: Attack; sourceCard: PokemonCard; attackerPlayerId: number } | null = null;
+  public retaliateOnDamageNextTurnPending: { damage: number; attack: Attack; sourceCard: PokemonCard; attackerPlayerId: number } | null = null;
   public cannotAttackNextTurn: boolean = false;
   public cannotAttackNextTurnPending: boolean = false;
   public cannotUseAttacksNextTurn: string[] = [];
@@ -170,7 +187,19 @@ export class PokemonCardList extends CardList {
     this.cannotUseAttacksNextTurn = [];
     this.cannotUseAttacksNextTurnPending = [];
     this.damageReductionNextTurn = 0;
+    this.damageReductionNextTurnFilter = undefined;
+    this.damageReductionBeforeWeaknessNextTurn = 0;
+    this.preventDamageUpToNextTurn = 0;
+    this.coinFlipCancelAttackNextTurn = 0;
+    this.surviveOnTenHpNextTurn = null;
+    this.surviveOnTenHpNextTurnPending = null;
     this.attackDamageReductionNextTurn = 0;
+    this.attackDamageBonusNextTurn = 0;
+    this.attackDamageBonusNextTurnPending = false;
+    this.noWeaknessNextTurn = false;
+    this.cannotEvolveNextTurn = false;
+    this.cannotRetreatNextTurn = false;
+    this.cannotUsePowersNextTurn = false;
     this.preventDamageNextTurnPending = false;
     this.preventDamageNextTurn = false;
     this.preventEffectsOfAttacksNextTurnPending = false;
@@ -182,6 +211,9 @@ export class PokemonCardList extends CardList {
     this.defendingPokemonExtraDamageAttackerId = undefined;
     this.defendingPokemonExtraDamagePending = false;
     this.defendingPokemonExtraDamageRearmAfterAttack = false;
+    this.pendingEnergyAttachDamageCounters = null;
+    this.retaliateOnDamageNextTurn = null;
+    this.retaliateOnDamageNextTurnPending = null;
   }
 
   clearEffects(): void {
@@ -213,7 +245,19 @@ export class PokemonCardList extends CardList {
     this.burnDamage = 20;
     this.confusionDamage = 30;
     this.damageReductionNextTurn = 0;
+    this.damageReductionNextTurnFilter = undefined;
+    this.damageReductionBeforeWeaknessNextTurn = 0;
+    this.preventDamageUpToNextTurn = 0;
+    this.coinFlipCancelAttackNextTurn = 0;
+    this.surviveOnTenHpNextTurn = null;
+    this.surviveOnTenHpNextTurnPending = null;
     this.attackDamageReductionNextTurn = 0;
+    this.attackDamageBonusNextTurn = 0;
+    this.attackDamageBonusNextTurnPending = false;
+    this.noWeaknessNextTurn = false;
+    this.cannotEvolveNextTurn = false;
+    this.cannotRetreatNextTurn = false;
+    this.cannotUsePowersNextTurn = false;
     this.preventDamageNextTurnPending = false;
     this.preventDamageNextTurn = false;
     this.preventEffectsOfAttacksNextTurnPending = false;
@@ -225,6 +269,9 @@ export class PokemonCardList extends CardList {
     this.defendingPokemonExtraDamageAttackerId = undefined;
     this.defendingPokemonExtraDamagePending = false;
     this.defendingPokemonExtraDamageRearmAfterAttack = false;
+    this.pendingEnergyAttachDamageCounters = null;
+    this.retaliateOnDamageNextTurn = null;
+    this.retaliateOnDamageNextTurnPending = null;
     this.cannotAttackNextTurn = false;
     this.cannotAttackNextTurnPending = false;
     this.cannotUseAttacksNextTurn = [];

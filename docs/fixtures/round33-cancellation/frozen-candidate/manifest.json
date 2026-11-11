@@ -1,0 +1,359 @@
+{
+  "baseline": "/private/tmp/prizemap-round33-refresh-base",
+  "candidate": "/private/tmp/prizemap-round33-refresh",
+  "files": [
+    {
+      "path": "ptcg-server/src/sets/index.ts",
+      "baseline_sha256": "7bba007629150a879527c2040eea5c87f5e3be8faa937f84d151c7124d256452",
+      "candidate_sha256": "65bc9b8c469ff157112a89d7c7fdd8297eda6cf8499639a7c2f7018ed1ee694a"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-pop-series-8/round33-prints.ts",
+      "baseline_sha256": null,
+      "candidate_sha256": "67f1f277caf312367517b036998e07706bab198f33218a82bf6de294f2fec7d3"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-scarlet-and-violet-promos/round33-prints.ts",
+      "baseline_sha256": null,
+      "candidate_sha256": "06874d6a4743aac014e8ca2d60045dfb18cc4c6d6527f1f4132b69a01f97c1c2"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-upstream-round33/index.ts",
+      "baseline_sha256": null,
+      "candidate_sha256": "613b10926371c2334e579220aab4c0714a1796c1f7f822c69be6648855d47af9"
+    },
+    {
+      "path": "ptcg-server/src/sets/tests/upstream-round33-gameplay.spec.ts",
+      "baseline_sha256": null,
+      "candidate_sha256": "0fef574d0536cadd1193a0a8767684fa71f8bfd74dd89bdd9d24b42354a2f9e8"
+    },
+    {
+      "path": "ptcg-server/src/sets/tests/upstream-round33-metadata.spec.ts",
+      "baseline_sha256": null,
+      "candidate_sha256": "c2c6c7bb0e93aa5d49615b678f601bbc86891ed257d1213ec39dc26b5f8ee0eb"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "ptcg-server/src/sets/set-diamond-and-pearl/luxio.ts",
+      "baseline_sha256": "9000c60599818abf4cd364efc79bfdaa5430b32987ebde64735529d1209fee15",
+      "candidate_sha256": "9000c60599818abf4cd364efc79bfdaa5430b32987ebde64735529d1209fee15"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-diamond-and-pearl/piplup.ts",
+      "baseline_sha256": "992a95ed5218be9d7bec49786db86308ba3a562b1661bfadc3b08ca0147f7f3f",
+      "candidate_sha256": "992a95ed5218be9d7bec49786db86308ba3a562b1661bfadc3b08ca0147f7f3f"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-pop-series-6/other-prints.ts",
+      "baseline_sha256": "375445c3e23e01cb4074cda60fe2846f8c46f463c7a5046ca7691bbe345ebfdf",
+      "candidate_sha256": "375445c3e23e01cb4074cda60fe2846f8c46f463c7a5046ca7691bbe345ebfdf"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-journey-together/ionos-kilowattrel.ts",
+      "baseline_sha256": "b752cb9a494e04df6c4b007414bdbf62d9e0bc9cfbe86fb5c72b3459d4276bce",
+      "candidate_sha256": "b752cb9a494e04df6c4b007414bdbf62d9e0bc9cfbe86fb5c72b3459d4276bce"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-journey-together/lillies-ribombee.ts",
+      "baseline_sha256": "1560da2f6b20097ab9565d5f108caa10be710ae4ce47ed7f83a47fe0547df332",
+      "candidate_sha256": "1560da2f6b20097ab9565d5f108caa10be710ae4ce47ed7f83a47fe0547df332"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-journey-together/hops-snorlax.ts",
+      "baseline_sha256": "ccf810ec7e1e8ab8762fc685df0a577734ef6f8666dedff9d5ba8081abf527f5",
+      "candidate_sha256": "ccf810ec7e1e8ab8762fc685df0a577734ef6f8666dedff9d5ba8081abf527f5"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-journey-together/hops-zacian-ex.ts",
+      "baseline_sha256": "2346a9c17aadcbde8246f8353cecdfe36046cd419c84ddcd0c2a3b66344fbd51",
+      "candidate_sha256": "2346a9c17aadcbde8246f8353cecdfe36046cd419c84ddcd0c2a3b66344fbd51"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-journey-together/ionos-bellibolt-ex.ts",
+      "baseline_sha256": "0338ef46bb9511bd1bb7b6d907598782798108a490285155f1163e101e786511",
+      "candidate_sha256": "0338ef46bb9511bd1bb7b6d907598782798108a490285155f1163e101e786511"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-journey-together/lillies-clefairy-ex.ts",
+      "baseline_sha256": "b7c53d56de6568ef52a182d1d43edd885223a70c8ef5b169a9616a023f011f6a",
+      "candidate_sha256": "b7c53d56de6568ef52a182d1d43edd885223a70c8ef5b169a9616a023f011f6a"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-destined-rivals/cynthias-garchomp-ex.ts",
+      "baseline_sha256": "854c799853352d64150d3646a7afcbb172dfd7c3f64edf5d66cac697fef9a99f",
+      "candidate_sha256": "854c799853352d64150d3646a7afcbb172dfd7c3f64edf5d66cac697fef9a99f"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-scarlet-and-violet/professors-research.ts",
+      "baseline_sha256": "0c2ca0e487e5e57df0a5faef5f04607eab4d8d9d75edc5b88ebdbe15f64adc1f",
+      "candidate_sha256": "0c2ca0e487e5e57df0a5faef5f04607eab4d8d9d75edc5b88ebdbe15f64adc1f"
+    },
+    {
+      "path": "ptcg-server/data/limitlesstcg-images.json",
+      "baseline_sha256": "7de55f6f07f0e09e24b32df04687efaf84937850124abc3c8bb5928d193ae966",
+      "candidate_sha256": "7de55f6f07f0e09e24b32df04687efaf84937850124abc3c8bb5928d193ae966"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-stellar-crown/bouffalant.ts",
+      "baseline_sha256": "97655f2fd6077e79dc8cf3b06c1375f5b813e65487a4158798ddd37903500021",
+      "candidate_sha256": "97655f2fd6077e79dc8cf3b06c1375f5b813e65487a4158798ddd37903500021"
+    }
+  ],
+  "printed_metadata": [
+    {
+      "fullName": "Iono's Kilowattrel SVP",
+      "set": "SVP",
+      "number": "182",
+      "name": "Iono's Kilowattrel",
+      "hp": 120,
+      "stage": 3,
+      "type": 4,
+      "retreat": 1,
+      "regulationMark": "I",
+      "evolvesFrom": "Iono's Wattrel",
+      "attacks": [
+        {
+          "name": "Mach Bolt",
+          "damage": 70,
+          "cost": [
+            4,
+            9,
+            9
+          ]
+        }
+      ],
+      "powers": [
+        "Flashing Draw"
+      ]
+    },
+    {
+      "fullName": "Lillie's Ribombee SVP",
+      "set": "SVP",
+      "number": "183",
+      "name": "Lillie's Ribombee",
+      "hp": 70,
+      "stage": 3,
+      "type": 5,
+      "retreat": 0,
+      "regulationMark": "I",
+      "evolvesFrom": "Lillie's Cutiefly",
+      "attacks": [
+        {
+          "name": "Magical Shot",
+          "damage": 50,
+          "cost": [
+            5
+          ]
+        }
+      ],
+      "powers": [
+        "Inviting Wink"
+      ]
+    },
+    {
+      "fullName": "Hop's Snorlax SVP",
+      "set": "SVP",
+      "number": "184",
+      "name": "Hop's Snorlax",
+      "hp": 150,
+      "stage": 2,
+      "type": 9,
+      "retreat": 4,
+      "regulationMark": "I",
+      "attacks": [
+        {
+          "name": "Dynamic Press",
+          "damage": 140,
+          "cost": [
+            9,
+            9,
+            9
+          ]
+        }
+      ],
+      "powers": [
+        "Extra Helpings"
+      ]
+    },
+    {
+      "fullName": "Hop's Zacian ex SVP",
+      "set": "SVP",
+      "number": "193",
+      "name": "Hop's Zacian ex",
+      "hp": 230,
+      "stage": 2,
+      "type": 8,
+      "retreat": 2,
+      "regulationMark": "I",
+      "attacks": [
+        {
+          "name": "Insta-Strike",
+          "damage": 30,
+          "cost": [
+            9
+          ]
+        },
+        {
+          "name": "Brave Slash",
+          "damage": 240,
+          "cost": [
+            8,
+            8,
+            8,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "fullName": "Iono's Bellibolt ex SVP",
+      "set": "SVP",
+      "number": "194",
+      "name": "Iono's Bellibolt ex",
+      "hp": 280,
+      "stage": 3,
+      "type": 4,
+      "retreat": 2,
+      "regulationMark": "I",
+      "evolvesFrom": "Iono's Tadbulb",
+      "attacks": [
+        {
+          "name": "Thunderous Bolt",
+          "damage": 230,
+          "cost": [
+            4,
+            4,
+            4,
+            9
+          ]
+        }
+      ],
+      "powers": [
+        "Electric Streamer"
+      ]
+    },
+    {
+      "fullName": "Lillie's Clefairy ex SVP",
+      "set": "SVP",
+      "number": "195",
+      "name": "Lillie's Clefairy ex",
+      "hp": 190,
+      "stage": 2,
+      "type": 5,
+      "retreat": 1,
+      "regulationMark": "I",
+      "attacks": [
+        {
+          "name": "Full Moon Rondo",
+          "damage": 20,
+          "cost": [
+            5,
+            9
+          ]
+        }
+      ],
+      "powers": [
+        "Fairy Zone"
+      ]
+    },
+    {
+      "fullName": "Cynthia's Garchomp ex SVP",
+      "set": "SVP",
+      "number": "204",
+      "name": "Cynthia's Garchomp ex",
+      "hp": 330,
+      "stage": 4,
+      "type": 6,
+      "retreat": 0,
+      "regulationMark": "I",
+      "evolvesFrom": "Cynthia's Gabite",
+      "attacks": [
+        {
+          "name": "Corkscrew Dive",
+          "damage": 100,
+          "cost": [
+            6
+          ]
+        },
+        {
+          "name": "Draconic Buster",
+          "damage": 260,
+          "cost": [
+            6,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "fullName": "Professor's Research SVP",
+      "set": "SVP",
+      "number": "221",
+      "name": "Professor's Research",
+      "regulationMark": "G",
+      "text": "Discard your hand and draw 7 cards."
+    },
+    {
+      "fullName": "Luxio P8",
+      "set": "P8",
+      "number": "8",
+      "name": "Luxio",
+      "hp": 80,
+      "stage": 3,
+      "type": 4,
+      "retreat": 0,
+      "evolvesFrom": "Shinx",
+      "attacks": [
+        {
+          "name": "Fasten Claws",
+          "damage": 10,
+          "cost": [
+            9
+          ]
+        },
+        {
+          "name": "Thunder Fang",
+          "damage": 30,
+          "cost": [
+            4,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "fullName": "Piplup P8",
+      "set": "P8",
+      "number": "15",
+      "name": "Piplup",
+      "hp": 60,
+      "stage": 2,
+      "type": 3,
+      "retreat": 1,
+      "attacks": [
+        {
+          "name": "Peck",
+          "damage": 10,
+          "cost": []
+        },
+        {
+          "name": "Water Splash",
+          "damage": 20,
+          "cost": [
+            3,
+            9
+          ]
+        }
+      ]
+    }
+  ],
+  "evidence": {
+    "focused_tests": "/private/tmp/prizemap-round33-refresh-tests.log",
+    "corpus": "/private/tmp/prizemap-round33-refresh-corpus.log",
+    "artwork": "/private/tmp/prizemap-round33-refresh-artwork.log",
+    "numbered_import": "/private/tmp/prizemap-round33-refresh-import.log",
+    "prior_superset_catalogue": "/private/tmp/prizemap-round33-catalogue.json",
+    "refreshed_legacy_deck": "/private/tmp/prizemap-round33-refresh-deck-fallback.log"
+  }
+}

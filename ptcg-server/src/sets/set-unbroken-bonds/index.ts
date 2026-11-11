@@ -1,3 +1,4 @@
+import { DevolutionSprayZBatch112 } from './devolution-spray-z-batch11';
 import { Card } from '../../game/store/card/card';
 import { Aggron } from './aggron';
 import { AlolanDiglett } from './alolan-diglett';
@@ -489,4 +490,5 @@ export const setUnbrokenBonds: Card[] = [
   new PersianGx3(),
   new CelesteelaGx3(),
   new BeastBringer2(),
+  new DevolutionSprayZBatch112(),
 ];

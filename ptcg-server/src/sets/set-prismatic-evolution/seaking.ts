@@ -46,11 +46,8 @@ export class Seaking extends PokemonCard {
   public fullName: string = 'Seaking PRE';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    state = Seaking.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      player.deck.moveTo(player.hand, 2);
-
       if (!IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
         // Dynamically set barrage if Festival Grounds is in play
         const stadiumCard = StateUtils.getStadiumCard(state);
@@ -62,6 +59,11 @@ export class Seaking extends PokemonCard {
       }
     }
 
+    return state;
+  }
+
+  public reduceCopiedAttackEffect(_store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (WAS_ATTACK_USED(effect, 0, this)) effect.player.deck.moveTo(effect.player.hand, 2);
     return state;
   }
 }

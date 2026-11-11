@@ -2,10 +2,11 @@ import { ChooseCardsPrompt, GameError, GameMessage } from '../../game';
 import { TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
-import { DRAW_CARDS, MOVE_CARDS, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
+import { DRAW_CARDS, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
+import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
 
 export class BillsMaintenance extends TrainerCard {
   public trainerType: TrainerType = TrainerType.SUPPORTER;
@@ -46,8 +47,10 @@ export class BillsMaintenance extends TrainerCard {
           return;
         }
         MOVE_CARDS(store, state, player.hand, player.deck, { cards: cards, sourceCard: this });
-        SHUFFLE_DECK(store, state, player);
-        DRAW_CARDS(player, 3);
+        return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
+          player.deck.applyOrder(order);
+          DRAW_CARDS(player, 3);
+        });
       });
       return state;
     }

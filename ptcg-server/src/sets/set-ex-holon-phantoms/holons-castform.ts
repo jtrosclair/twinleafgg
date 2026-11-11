@@ -44,6 +44,9 @@ export class HolonsCastform extends PokemonCard implements EnergyCard {
   public blendedEnergyCount = 1;
   public energyEffect: any = undefined;
 
+  /** This printed card becomes an Energy only in a canonical attachment zone. */
+  public isEnergyWhenAttached(): boolean { return true; }
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Auto-detect if we've been removed from energies and reset superType back to POKEMON
     if (this.superType === SuperType.ENERGY) {

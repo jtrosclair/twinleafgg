@@ -1,0 +1,2424 @@
+{
+  "scope": "set TypeScript files excluding tests",
+  "typescript": "4.9.5",
+  "filesScanned": 10670,
+  "sourceTreeSha256": "4a567617fd09bba5aef163f6568744810bf8f347fab69e76ee38519b2e2bda57",
+  "total": 301,
+  "grouped": {
+    "AttackEffect direct": 95,
+    "AttackEffect inside callback": 3,
+    "WAS_ATTACK_USED inside callback": 34,
+    "other direct": 19,
+    "WAS_ATTACK_USED direct": 150
+  },
+  "rows": [
+    {
+      "file": "set-30th-celebration/darkrai-cresselia-legend.ts",
+      "line": 80,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[0] | !StateUtils.checkEnoughEnergy(energy.energyMap, cost)"
+    },
+    {
+      "file": "set-30th-celebration/darkrai-cresselia-legend.ts",
+      "line": 87,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": true,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[0] | !prompt.validate(selected)"
+    },
+    {
+      "file": "set-30th-celebration/darkrai-cresselia-legend.ts",
+      "line": 92,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": true,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[0] | !cards.every(c => effect.player.lostzone.cards.includes(c))"
+    },
+    {
+      "file": "set-30th-celebration/darkrai-cresselia-legend.ts",
+      "line": 111,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": true,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[1] | !prompt.validate(transfers, state)"
+    },
+    {
+      "file": "set-30th-celebration/english-palkia-lv-x.ts",
+      "line": 75,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | transfers.length !== energies.length || new Set(transfers.map(t => t.card)).size !== energies.length\n          || transfers.some(t => !energies.includes(t.card) || StateUtils.getTarget(state, player, t.from) !== source\n            || !player.bench.includes(StateUtils.getTarget(state, player, t.to)))"
+    },
+    {
+      "file": "set-ancient-origins/baltoy.ts",
+      "line": 59,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-ancient-origins/baltoy.ts",
+      "line": 86,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | opponent.deck.cards.length === 0"
+    },
+    {
+      "file": "set-ancient-origins/kyurem-ex.ts",
+      "line": 80,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect\n      && effect.player.active.marker.hasMarker(this.DEFENDING_CANNOT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-ascended-heroes/ns-vanillish.ts",
+      "line": 53,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect && effect.player.active.marker.hasMarker(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-ascended-heroes/regice-ex.ts",
+      "line": 46,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasEnergyInDiscard"
+    },
+    {
+      "file": "set-ascended-heroes/registeel-ex.ts",
+      "line": 45,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasEnergyInDiscard"
+    },
+    {
+      "file": "set-astral-radiance/hisuian-typhlosion-vstar.ts",
+      "line": 65,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedVSTAR === true"
+    },
+    {
+      "file": "set-astral-radiance/hisuian-voltorb.ts",
+      "line": 47,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | state.turn !== 2"
+    },
+    {
+      "file": "set-astral-radiance/kleavor-vstar.ts",
+      "line": 100,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedVSTAR === true"
+    },
+    {
+      "file": "set-astral-radiance/mamoswine.ts",
+      "line": 78,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-astral-radiance/origin-forme-dialga-v.ts",
+      "line": 64,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasMetalEnergyInDiscard"
+    },
+    {
+      "file": "set-astral-radiance/origin-forme-dialga-vstar.ts",
+      "line": 92,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedVSTAR === true"
+    },
+    {
+      "file": "set-astral-radiance/regice.ts",
+      "line": 100,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect && effect.player.active.marker.hasMarker(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, this) | pokemonCard && pokemonCard.tags.includes(CardTag.POKEMON_V) || pokemonCard && pokemonCard.tags.includes(CardTag.POKEMON_VSTAR) || pokemonCard && pokemonCard.tags.includes(CardTag.POKEMON_VMAX) || pokemonCard && pokemonCard.tags.includes(CardTag.POKEMON_VUNION)"
+    },
+    {
+      "file": "set-astral-radiance/shaymin.ts",
+      "line": 49,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | state.turn !== 2"
+    },
+    {
+      "file": "set-base-set/farfetchd.ts",
+      "line": 64,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | effect.player.marker.hasMarker(this.LEEK_SLAP_MARKER, this)"
+    },
+    {
+      "file": "set-base-set/haunter.ts",
+      "line": 61,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | !opponent.active.specialConditions.includes(SpecialCondition.ASLEEP)"
+    },
+    {
+      "file": "set-base-set/poliwhirl.ts",
+      "line": 93,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.attack === this.forgottenAttack &&\n      effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-base-set/porygon.ts",
+      "line": 54,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | cardList.specialConditions.length > 0"
+    },
+    {
+      "file": "set-base-set/porygon.ts",
+      "line": 94,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | cardList.specialConditions.length > 0"
+    },
+    {
+      "file": "set-battle-styles/conkeldurr.ts",
+      "line": 60,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-battle-styles/dottler.ts",
+      "line": 43,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-battle-styles/primeape.ts",
+      "line": 60,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | !hasBenched"
+    },
+    {
+      "file": "set-black-and-white/krokorok.ts",
+      "line": 80,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) | effect.attack === this.TORMENT_ATTACK"
+    },
+    {
+      "file": "set-boundaries-crossed/golduck-2.ts",
+      "line": 77,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)\n      && effect.attack === this.amnesiaAttack"
+    },
+    {
+      "file": "set-boundaries-crossed/patrat.ts",
+      "line": 40,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-brilliant-stars/beartic.ts",
+      "line": 57,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-brilliant-stars/breloom.ts",
+      "line": 48,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[1] && state.turn !== this.sporeBallTurn + 2"
+    },
+    {
+      "file": "set-brilliant-stars/charizard-vstar.ts",
+      "line": 59,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedVSTAR"
+    },
+    {
+      "file": "set-brilliant-stars/electabuzz.ts",
+      "line": 59,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[0] | effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)"
+    },
+    {
+      "file": "set-brilliant-stars/whimsicott-v.ts",
+      "line": 54,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.COTTON_GUARD_MARKER, this)"
+    },
+    {
+      "file": "set-brilliant-stars/whimsicott-vstar.ts",
+      "line": 80,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedVSTAR"
+    },
+    {
+      "file": "set-burning-shadows/noivern-gx.ts",
+      "line": 96,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 2, this) | player.usedGX"
+    },
+    {
+      "file": "set-burning-shadows/vileplume.ts",
+      "line": 54,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect | basicBlockEffect.target === effect.source"
+    },
+    {
+      "file": "set-call-of-legends/pachirisu.ts",
+      "line": 97,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !(cardList instanceof PokemonCardList)"
+    },
+    {
+      "file": "set-celestial-storm/mr-mime-gx.ts",
+      "line": 67,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | effect.player.usedGX"
+    },
+    {
+      "file": "set-celestial-storm/oricorio.ts",
+      "line": 48,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasBench"
+    },
+    {
+      "file": "set-celestial-storm/rayquaza-gx.ts",
+      "line": 153,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-celestial-storm/sableye.ts",
+      "line": 126,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) | effect.attack === this.DISABLED_ATTACK"
+    },
+    {
+      "file": "set-celestial-storm/swalot.ts",
+      "line": 81,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)\n      && effect.attack === this.amnesiaAttack"
+    },
+    {
+      "file": "set-celestial-storm/whismur.ts",
+      "line": 56,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | turn !== 2"
+    },
+    {
+      "file": "set-champions-path/alcremie-v.ts",
+      "line": 77,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-champions-path/grapploct-v.ts",
+      "line": 64,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-cosmic-eclipse/dragonium-z.ts",
+      "line": 66,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[0] | IS_TOOL_BLOCKED(store, state, effect.player, this)"
+    },
+    {
+      "file": "set-cosmic-eclipse/dragonium-z.ts",
+      "line": 69,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[0] | player.usedGX"
+    },
+    {
+      "file": "set-cosmic-eclipse/dusclops.ts",
+      "line": 74,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) | effect.attack === this.DISABLED_ATTACK"
+    },
+    {
+      "file": "set-cosmic-eclipse/flabebe.ts",
+      "line": 35,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-cosmic-eclipse/helioptile.ts",
+      "line": 60,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-cosmic-eclipse/kyogre.ts",
+      "line": 84,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | validTransfers.length < minToAttach"
+    },
+    {
+      "file": "set-cosmic-eclipse/natu.ts",
+      "line": 41,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-cosmic-eclipse/natu.ts",
+      "line": 68,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | opponent.deck.cards.length === 0"
+    },
+    {
+      "file": "set-cosmic-eclipse/onix.ts",
+      "line": 42,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasEnergyInDiscard"
+    },
+    {
+      "file": "set-cosmic-eclipse/piplup.ts",
+      "line": 43,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.BUBBLE_HOLD_MARKER, this)"
+    },
+    {
+      "file": "set-cosmic-eclipse/prinplup.ts",
+      "line": 48,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | !hasBenched"
+    },
+    {
+      "file": "set-cosmic-eclipse/solgaleo-and-lunala-gx.ts",
+      "line": 49,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | effect.player.active.marker.hasMarker(this.COSMIC_BURN_MARKER, this)"
+    },
+    {
+      "file": "set-cosmic-eclipse/ultra-necrozma.ts",
+      "line": 65,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect && effect.source.cards.includes(this) | opponent.getPrizeLeft() > 2"
+    },
+    {
+      "file": "set-cosmic-eclipse/ursaring.ts",
+      "line": 55,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-cosmic-eclipse/walrein.ts",
+      "line": 54,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.marker.hasMarker(this.COLD_SNAP_MARKER, this) || player.marker.hasMarker(this.CLEAR_COLD_SNAP_MARKER, this)"
+    },
+    {
+      "file": "set-crimson-invasion/regigigas.ts",
+      "line": 73,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasRegirock || !hasRegice || !hasRegisteel"
+    },
+    {
+      "file": "set-crown-zenith/simisear-vstar.ts",
+      "line": 83,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedVSTAR === true"
+    },
+    {
+      "file": "set-crown-zenith/zacian-vstar.ts",
+      "line": 79,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedVSTAR === true"
+    },
+    {
+      "file": "set-crown-zenith/zarude.ts",
+      "line": 46,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasBench"
+    },
+    {
+      "file": "set-dark-explorers/slowbro.ts",
+      "line": 55,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.getPokemonCard() === this | !blocked && (prizesLeft === 2 || prizesLeft === 4 || prizesLeft === 6)"
+    },
+    {
+      "file": "set-darkness-ablaze/nickit.ts",
+      "line": 55,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-darkness-ablaze/rowlet.ts",
+      "line": 88,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasBenched"
+    },
+    {
+      "file": "set-darkness-ablaze/shiinotic.ts",
+      "line": 63,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-delta-reign/giratina.ts",
+      "line": 30,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | effect.player.marker.hasMarker(CHAOS_CRAWLER_TURN + (state.turn - 2))"
+    },
+    {
+      "file": "set-delta-reign/mega-golurk-ex.ts",
+      "line": 43,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.getPokemonCard() === this | !IS_ABILITY_BLOCKED(store, state, player, this) && player.hand.cards.length < 10"
+    },
+    {
+      "file": "set-delta-reign/mega-rayquaza-cap.ts",
+      "line": 72,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[0] | IS_TOOL_BLOCKED(store, state, player, this)"
+    },
+    {
+      "file": "set-destined-rivals/team-rockets-mewtwo-ex.ts",
+      "line": 58,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect && effect.source.cards.includes(this) | teamRocketPokemonCount < 4"
+    },
+    {
+      "file": "set-destined-rivals/team-rockets-murkrow.ts",
+      "line": 129,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) | effect.attack === this.DISABLED_ATTACK"
+    },
+    {
+      "file": "set-destined-rivals/zeraora.ts",
+      "line": 48,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | !exPokemonOnOppBench"
+    },
+    {
+      "file": "set-diamond-and-pearl/grotle.ts",
+      "line": 56,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | transfers && (!Array.isArray(transfers) || transfers.length > 1)"
+    },
+    {
+      "file": "set-diamond-and-pearl/grotle.ts",
+      "line": 62,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !transfer || !(transfer.card instanceof EnergyCard)\n            || transfer.card.energyType !== EnergyType.BASIC || transfer.card.name !== 'Grass Energy'\n            || !player.deck.cards.includes(transfer.card)"
+    },
+    {
+      "file": "set-diamond-and-pearl/grotle.ts",
+      "line": 69,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !to || to.player !== PlayerType.BOTTOM_PLAYER\n            || (to.slot !== SlotType.ACTIVE && to.slot !== SlotType.BENCH)\n            || !Number.isInteger(to.index) || to.index < 0\n            || (to.slot === SlotType.ACTIVE && to.index !== 0)"
+    },
+    {
+      "file": "set-diamond-and-pearl/grotle.ts",
+      "line": 72,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !target.getPokemonCard()"
+    },
+    {
+      "file": "set-diamond-and-pearl/lucario.ts",
+      "line": 52,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | !Array.isArray(selected) || selected.length !== 1 ||\n          !opponent.bench.includes(selected[0]) || !selected[0].getPokemonCard()"
+    },
+    {
+      "file": "set-dragons-exalted/bibarel.ts",
+      "line": 75,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)\n      && effect.attack === this.amnesiaAttack"
+    },
+    {
+      "file": "set-dragons-exalted/slaking.ts",
+      "line": 49,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.getPokemonCard() === this | !IS_ABILITY_BLOCKED(store, state, player, this) | opponentActive && opponentActive.stage === Stage.BASIC"
+    },
+    {
+      "file": "set-emerging-powers/beartic-2.ts",
+      "line": 53,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.SHEER_COLD_MARKER, this)"
+    },
+    {
+      "file": "set-emerging-powers/klinklang.ts",
+      "line": 67,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.active.marker.hasMarker(this.ZAP_CANNON_MARKER, this)"
+    },
+    {
+      "file": "set-emerging-powers/terrakion.ts",
+      "line": 44,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.active.marker.hasMarker(this.SACRED_SWORD_MARKER, this)"
+    },
+    {
+      "file": "set-emerging-powers/throh.ts",
+      "line": 47,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.SCARF_HOLD_MARKER, this)"
+    },
+    {
+      "file": "set-emerging-powers/virizion.ts",
+      "line": 55,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.active.marker.hasMarker(this.SACRED_SWORD_MARKER, this)"
+    },
+    {
+      "file": "set-emerging-powers/whimsicott-2.ts",
+      "line": 88,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect | markers.length > 0 | effect.attack.name !== allowedAttack"
+    },
+    {
+      "file": "set-evolutions/poliwhirl.ts",
+      "line": 91,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) | effect.attack === this.AMNESIA_ATTACK"
+    },
+    {
+      "file": "set-evolving-skies/arctovish-v.ts",
+      "line": 68,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-evolving-skies/dialga.ts",
+      "line": 68,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-evolving-skies/espeon-v.ts",
+      "line": 66,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !blocked.length"
+    },
+    {
+      "file": "set-evolving-skies/lycanroc-vmax.ts",
+      "line": 74,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasValidTarget"
+    },
+    {
+      "file": "set-evolving-skies/medicham-v.ts",
+      "line": 67,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.marker.hasMarker(this.YOGA_LOOP_MARKER, this)"
+    },
+    {
+      "file": "set-evolving-skies/slaking.ts",
+      "line": 55,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect && effect.player.active.getPokemonCard() === this | StateUtils.getStadiumCard(state) !== undefined"
+    },
+    {
+      "file": "set-evolving-skies/sylveon-vmax.ts",
+      "line": 64,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasEnergyInHand"
+    },
+    {
+      "file": "set-evolving-skies/wobbuffet.ts",
+      "line": 56,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasBenched"
+    },
+    {
+      "file": "set-ex-deoxys/lunatone.ts",
+      "line": 82,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-ex-deoxys/lunatone.ts",
+      "line": 109,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | opponent.deck.cards.length === 0"
+    },
+    {
+      "file": "set-ex-deoxys/manectric-ex.ts",
+      "line": 67,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | !(cardList instanceof PokemonCardList)"
+    },
+    {
+      "file": "set-ex-dragon/rayquaza-ex.ts",
+      "line": 88,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | !(cardList instanceof PokemonCardList)"
+    },
+    {
+      "file": "set-ex-dragon/rayquaza-ex.ts",
+      "line": 113,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | !(cardList instanceof PokemonCardList)"
+    },
+    {
+      "file": "set-ex-dragon-frontiers/wooper.ts",
+      "line": 82,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) | effect.attack === this.MEMORY_SKIPPED_ATTACK"
+    },
+    {
+      "file": "set-ex-firered-leafgreen/raticate.ts",
+      "line": 79,
+      "method": "reduceCopiedAttackEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !Array.isArray(selected) || selected.length !== count || new Set(selected).size !== count ||\n            selected.some(card => !card || !source.cards.includes(card) || (!isPokemon(card) && !isTrainer(card) && !isEnergy(card))) ||\n            selected.filter(isPokemon).length !== maxPokemons || selected.filter(isTrainer).length !== maxTrainers ||\n            selected.filter(isEnergy).length !== maxEnergies"
+    },
+    {
+      "file": "set-ex-hidden-legends/groudon-ex.ts",
+      "line": 46,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && (effect.source.getPokemonCard()?.name === 'Kyogre ex' || effect.source.getPokemonCard()?.name === 'Rayquaza ex') | effect.opponent.active.getPokemonCard() === this"
+    },
+    {
+      "file": "set-ex-hidden-legends/kyogre-ex.ts",
+      "line": 49,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && (effect.source.getPokemonCard()?.name === 'Groudon ex' || effect.source.getPokemonCard()?.name === 'Rayquaza ex') | effect.opponent.active.getPokemonCard() === this"
+    },
+    {
+      "file": "set-ex-hidden-legends/walrein.ts",
+      "line": 146,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect && HAS_MARKER(this.SHEER_COLD_MARKER, effect.player.active, this)"
+    },
+    {
+      "file": "set-ex-legend-maker/absol.ts",
+      "line": 60,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect &&\n      !IS_POKEBODY_BLOCKED(store, state, StateUtils.getOpponent(state, effect.player), this) &&\n      effect.source.getPokemonCard()?.stage === Stage.BASIC | opponent.active.getPokemonCard() === this && !hasBenchPokemon"
+    },
+    {
+      "file": "set-ex-legend-maker/girafarig.ts",
+      "line": 95,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-ex-legend-maker/girafarig.ts",
+      "line": 122,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | opponent.deck.cards.length === 0"
+    },
+    {
+      "file": "set-ex-power-keepers/skitty.ts",
+      "line": 53,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect && HAS_MARKER(this.TAIL_WHIP_MARKER, effect.player.active, this)"
+    },
+    {
+      "file": "set-ex-team-magma-vs-team-aqua/team-aquas-kyogre.ts",
+      "line": 70,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect && effect.source.cards.includes(this) | teamAquaPokemonCount <= 3"
+    },
+    {
+      "file": "set-ex-team-magma-vs-team-aqua/team-aquas-walrein.ts",
+      "line": 100,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | !(card instanceof EnergyCard)\n            || (!card.provides.includes(CardType.WATER))"
+    },
+    {
+      "file": "set-ex-team-magma-vs-team-aqua/team-magmas-groudon.ts",
+      "line": 72,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect && effect.source.cards.includes(this) | teamMagmaPokemonCount <= 3"
+    },
+    {
+      "file": "set-ex-team-rocket-returns/rockets-wobbuffet.ts",
+      "line": 150,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) | effect.attack === this.DISABLED_ATTACK"
+    },
+    {
+      "file": "set-ex-unseen-forces/ursaring.ts",
+      "line": 59,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.source.getPokemonCard()?.stage === Stage.BASIC | opponent.active.getPokemonCard() === this"
+    },
+    {
+      "file": "set-fates-collide/fennekin.ts",
+      "line": 59,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect && effect.player.active.marker.hasMarker(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-fates-collide/zygarde.ts",
+      "line": 73,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect | effect.player.active.marker.hasMarker(this.AURA_BREAK_MARKER, this)"
+    },
+    {
+      "file": "set-flashfire/seedot.ts",
+      "line": 35,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-forbidden-light/arceus.ts",
+      "line": 96,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasGrass || !hasWater || !hasLightning"
+    },
+    {
+      "file": "set-forbidden-light/azelf.ts",
+      "line": 51,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | state.turn !== 2"
+    },
+    {
+      "file": "set-forbidden-light/greninja-gx.ts",
+      "line": 120,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | !hasBenched"
+    },
+    {
+      "file": "set-forbidden-light/ultra-necrozma-gx.ts",
+      "line": 73,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.getPrizeLeft() + opponent.getPrizeLeft() > 6"
+    },
+    {
+      "file": "set-forbidden-light/uxie.ts",
+      "line": 74,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(this.MEMORY_SKIP_MARKER, this)\n      && effect.attack.name === this.blockedAttackName"
+    },
+    {
+      "file": "set-forbidden-light/xerneas-gx.ts",
+      "line": 58,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.getPrizeLeft() + opponent.getPrizeLeft() > 6"
+    },
+    {
+      "file": "set-fossil/hypno.ts",
+      "line": 55,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-fossil/hypno.ts",
+      "line": 82,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | opponent.deck.cards.length === 0"
+    },
+    {
+      "file": "set-fossil/slowpoke.ts",
+      "line": 43,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | target.damage === 0"
+    },
+    {
+      "file": "set-furious-fists/slaking.ts",
+      "line": 79,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)\n      && effect.attack === this.amnesiaAttack"
+    },
+    {
+      "file": "set-fusion-strike/galarian-obstagoon.ts",
+      "line": 82,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)\n      && effect.attack === this.silencedAttack"
+    },
+    {
+      "file": "set-generations/charmeleon.ts",
+      "line": 42,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-great-encounters/delibird.ts",
+      "line": 42,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !selected || selected.length !== 1 || !player.deck.cards.includes(selected[0])"
+    },
+    {
+      "file": "set-great-encounters/porygon.ts",
+      "line": 39,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-guardians-rising/metagross-gx.ts",
+      "line": 119,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | effect.player.marker.hasMarker(this.HAMMER_MARKER_1, this)"
+    },
+    {
+      "file": "set-guardians-rising/slowbro.ts",
+      "line": 79,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)\n      && effect.attack === this.amnesiaAttack"
+    },
+    {
+      "file": "set-guardians-rising/tapu-lele-gx.ts",
+      "line": 154,
+      "method": "reduceCopiedAttackEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | !pokemonInPlayWithDamage"
+    },
+    {
+      "file": "set-gym-challenge/mistys-poliwag.ts",
+      "line": 87,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) | effect.attack === this.DISABLED_ATTACK"
+    },
+    {
+      "file": "set-gym-heros/brocks-zubat.ts",
+      "line": 41,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | playerBench === 0"
+    },
+    {
+      "file": "set-gym-heros/erikas-weepinbell.ts",
+      "line": 44,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | bench.length === 0"
+    },
+    {
+      "file": "set-heartgold-and-soulsilver/quagsire.ts",
+      "line": 57,
+      "method": "reduceCopiedAttackEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !target || !opponent.bench.includes(target) || !target.getPokemonCard()"
+    },
+    {
+      "file": "set-jungle/eevee.ts",
+      "line": 65,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, this) | effect.target.name === 'Eevee'"
+    },
+    {
+      "file": "set-jungle/marowak.ts",
+      "line": 67,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-jungle/rhyhorn.ts",
+      "line": 65,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, this) | effect.target.name === 'Rhyhorn'"
+    },
+    {
+      "file": "set-legendary-treasures/cobalion.ts",
+      "line": 75,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect && effect.player.active.marker.hasMarker(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-legendary-treasures/ursaring.ts",
+      "line": 55,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasTeddiursa || !slot"
+    },
+    {
+      "file": "set-lost-origin/aerodactyl-vstar.ts",
+      "line": 66,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedVSTAR === true"
+    },
+    {
+      "file": "set-lost-origin/giratina-vstar.ts",
+      "line": 60,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.lostzone.cards.length <= 9"
+    },
+    {
+      "file": "set-lost-origin/giratina-vstar.ts",
+      "line": 64,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedVSTAR === true"
+    },
+    {
+      "file": "set-lost-origin/glastrier.ts",
+      "line": 59,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-lost-origin/hisuian-zoroark-vstar.ts",
+      "line": 78,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasBenched"
+    },
+    {
+      "file": "set-lost-origin/hisuian-zoroark.ts",
+      "line": 81,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | !hasCardInDiscard"
+    },
+    {
+      "file": "set-lost-origin/jynx.ts",
+      "line": 52,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasBench"
+    },
+    {
+      "file": "set-lost-origin/kyurem-v.ts",
+      "line": 62,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasEnergyInHand"
+    },
+    {
+      "file": "set-lost-origin/magnezone-v.ts",
+      "line": 57,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasBench"
+    },
+    {
+      "file": "set-lost-origin/magnezone-vstar.ts",
+      "line": 73,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedVSTAR === true"
+    },
+    {
+      "file": "set-lost-origin/porygon.ts",
+      "line": 47,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-lost-origin/porygon.ts",
+      "line": 74,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | opponent.deck.cards.length === 0"
+    },
+    {
+      "file": "set-lost-origin/sableye.ts",
+      "line": 54,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.lostzone.cards.length <= 9"
+    },
+    {
+      "file": "set-lost-origin/silcoon.ts",
+      "line": 60,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect && effect.player.active.marker.hasMarker(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-lost-origin/slugma.ts",
+      "line": 50,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasEnergyInDiscard"
+    },
+    {
+      "file": "set-lost-origin/tynamo.ts",
+      "line": 42,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-lost-thunder/cubchoo.ts",
+      "line": 45,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | state.turn !== 2"
+    },
+    {
+      "file": "set-lost-thunder/lugia-gx.ts",
+      "line": 68,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.marker.hasMarker(this.PELAGIC_BLADE_MARKER, this)"
+    },
+    {
+      "file": "set-lost-thunder/mimikyu-gx.ts",
+      "line": 76,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 2, this) | !hasBenched"
+    },
+    {
+      "file": "set-lost-thunder/nihilego.ts",
+      "line": 97,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | opponent.getPrizeLeft() !== 2"
+    },
+    {
+      "file": "set-lost-thunder/poipole.ts",
+      "line": 60,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | cards.length === 0"
+    },
+    {
+      "file": "set-lost-thunder/wobbuffet.ts",
+      "line": 107,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && isOnBench(state, this) | attacker && attacker.tags.includes(CardTag.PRISM_STAR)"
+    },
+    {
+      "file": "set-lost-thunder/zeraora-gx.ts",
+      "line": 97,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | !hasEnergyInDiscard"
+    },
+    {
+      "file": "set-mega-evolution/cinderace.ts",
+      "line": 42,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-mega-evolution/inteleon.ts",
+      "line": 60,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | effect instanceof PlayPokemonEffect && effect.pokemonCard === this | effect.target !== effect.player.active"
+    },
+    {
+      "file": "set-neo-destiny/dark-feraligatr.ts",
+      "line": 79,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.source.getPokemonCard()?.tags.includes(CardTag.BABY) | effect.opponent.active.getPokemonCard() === this"
+    },
+    {
+      "file": "set-neo-genesis/totodile.ts",
+      "line": 59,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect && effect.player.active.marker.hasMarker(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, this) | StateUtils.getOpponent(state, effect.player).active.getPokemonCard() === this"
+    },
+    {
+      "file": "set-obsidian-flames/eiscue-ex.ts",
+      "line": 51,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.marker.hasMarker(this.SCALDING_BLOCK_MARKER, this)\n      && effect.source.marker.hasMarker(this.SCALDING_BLOCK_MARKER, this)"
+    },
+    {
+      "file": "set-obsidian-flames/geeta.ts",
+      "line": 85,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.marker.hasMarker(this.GEETA_MARKER, this)"
+    },
+    {
+      "file": "set-paldean-fates/technical-machine-crisis-punch.ts",
+      "line": 82,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[0] | IS_TOOL_BLOCKED(store, state, effect.player, this)"
+    },
+    {
+      "file": "set-paldean-fates/technical-machine-crisis-punch.ts",
+      "line": 87,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[0] | prizes !== 1"
+    },
+    {
+      "file": "set-paradox-rift/chi-yu.ts",
+      "line": 63,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasEnergyInDiscard"
+    },
+    {
+      "file": "set-paradox-rift/groudon.ts",
+      "line": 62,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasEnergyInHand"
+    },
+    {
+      "file": "set-paradox-rift/iron-bundle.ts",
+      "line": 122,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect && effect.player.active.marker.hasMarker(this.REFRIGERATED_STREAM_MARKER, this)"
+    },
+    {
+      "file": "set-paradox-rift/technical-machine-blindside.ts",
+      "line": 80,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[0] | IS_TOOL_BLOCKED(store, state, effect.player, this)"
+    },
+    {
+      "file": "set-paradox-rift/technical-machine-blindside.ts",
+      "line": 95,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[0] | !hasDamagedPokemon"
+    },
+    {
+      "file": "set-paradox-rift/technical-machine-devolution.ts",
+      "line": 81,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[0] | IS_TOOL_BLOCKED(store, state, effect.player, this)"
+    },
+    {
+      "file": "set-paradox-rift/technical-machine-evolution.ts",
+      "line": 186,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[0] | IS_TOOL_BLOCKED(store, state, effect.player, this)"
+    },
+    {
+      "file": "set-paradox-rift/technical-machine-turbo-energize.ts",
+      "line": 81,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[0] | IS_TOOL_BLOCKED(store, state, effect.player, this)"
+    },
+    {
+      "file": "set-paradox-rift/vanilluxe.ts",
+      "line": 57,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect | checkHpEffect.hp - effect.source.damage <= 40"
+    },
+    {
+      "file": "set-pcg-p-promotional-cards/auras-lucario2.ts",
+      "line": 80,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) | effect.attack === this.DISABLED_ATTACK"
+    },
+    {
+      "file": "set-pcg-p-promotional-cards/pokeparks-jirachi.ts",
+      "line": 50,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-pcg-p-promotional-cards/pokeparks-jirachi.ts",
+      "line": 77,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | opponent.deck.cards.length === 0"
+    },
+    {
+      "file": "set-perfect-order/klefki.ts",
+      "line": 68,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) | effect.attack === this.MEMORY_LOCKED_ATTACK"
+    },
+    {
+      "file": "set-phantasmal-flames/charcadet.ts",
+      "line": 42,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-phantom-forces/dialga-ex.ts",
+      "line": 64,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect | effect.player.active.marker.hasMarker(this.CHRONO_WIND_MARKER, this)"
+    },
+    {
+      "file": "set-plasma-freeze/cryogonal.ts",
+      "line": 68,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect\n      && effect.player.active.marker.hasMarker(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-plasma-freeze/jolteon.ts",
+      "line": 61,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(this.ELECTRI_DEFUSE_MARKER, this)"
+    },
+    {
+      "file": "set-plasma-storm/infernape.ts",
+      "line": 79,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)\n      && effect.attack === this.tormentAttack"
+    },
+    {
+      "file": "set-platinum/giratina-lv-x.ts",
+      "line": 70,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && !effect.source.cards.includes(this) | player.hand.cards.length === 0"
+    },
+    {
+      "file": "set-platinum/ralts.ts",
+      "line": 48,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-platinum/ralts.ts",
+      "line": 75,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | opponent.deck.cards.length === 0"
+    },
+    {
+      "file": "set-pokemon-151/blastoise-ex.ts",
+      "line": 50,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasEnergyInHand"
+    },
+    {
+      "file": "set-pokemon-151/eevee.ts",
+      "line": 53,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-pokemon-151/nidorina.ts",
+      "line": 43,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-pokemon-go/slaking-v.ts",
+      "line": 62,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect && effect.attack === this.attacks[0] | prizes === 2 || prizes === 4 || prizes === 6"
+    },
+    {
+      "file": "set-primal-clash/slugma.ts",
+      "line": 43,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !opponent.active.cards.some(c => c.superType === SuperType.ENERGY && (c as EnergyCard).provides.includes(CardType.GRASS)) &&\n        !opponent.active.cards.some(c => c.superType === SuperType.ENERGY && (c as EnergyCard).provides.includes(CardType.ANY))"
+    },
+    {
+      "file": "set-primal-clash/torchic.ts",
+      "line": 60,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | hasCardsInHand === false"
+    },
+    {
+      "file": "set-primal-clash/whiscash.ts",
+      "line": 80,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)\n      && effect.attack === this.amnesiaAttack"
+    },
+    {
+      "file": "set-prismatic-evolution/sylveon-ex.ts",
+      "line": 99,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[1] | effect.player.marker.hasMarker(this.ANGELITE_MARKER, this)"
+    },
+    {
+      "file": "set-rebel-clash/galarian-sirfetchd.ts",
+      "line": 52,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.active.marker.hasMarker(this.METEOR_ASSAULT_MARKER, this)"
+    },
+    {
+      "file": "set-rebel-clash/morpeko.ts",
+      "line": 119,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) | effect.attack === this.DISABLED_ATTACK"
+    },
+    {
+      "file": "set-rising-rivals/floatzel-gl.ts",
+      "line": 50,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | effect.player.marker.hasMarker(this.GIANT_WAVE_MARKER, this)"
+    },
+    {
+      "file": "set-roaring-skies/pikachu.ts",
+      "line": 61,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-scarlet-and-violet/toxicroak-ex.ts",
+      "line": 56,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length == 0"
+    },
+    {
+      "file": "set-scarlet-and-violet-promos/zacian-ex.ts",
+      "line": 67,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[1] | effect.player.marker.hasMarker(this.ATTACK_USED_MARKER, this)"
+    },
+    {
+      "file": "set-secret-wonders/gallade.ts",
+      "line": 94,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | prizes.length > 0 | chosenPrize.some(p => p.faceUpPrize == true)"
+    },
+    {
+      "file": "set-secret-wonders/gardevoir-lv-x.ts",
+      "line": 101,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | effect instanceof PlayPokemonEffect && effect.pokemonCard === this | effect.target !== effect.player.active"
+    },
+    {
+      "file": "set-secret-wonders/mew.ts",
+      "line": 56,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | pokemonCard !== this"
+    },
+    {
+      "file": "set-secret-wonders/mew.ts",
+      "line": 64,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | pokemonCards.length === 0"
+    },
+    {
+      "file": "set-secret-wonders/sableye.ts",
+      "line": 49,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !selected || new Set(selected).size !== selected.length || selected.some(card => !top.cards.includes(card) || card.superType !== SuperType.TRAINER)"
+    },
+    {
+      "file": "set-shining-legends/liepard.ts",
+      "line": 82,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) | effect.attack === this.DISABLED_ATTACK"
+    },
+    {
+      "file": "set-shrouded-fable/cresselia.ts",
+      "line": 83,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | prizes.length > 0 | wantToUse | prizeCard.faceUpPrize == true"
+    },
+    {
+      "file": "set-silver-tempest/alolan-vulpix-vstar.ts",
+      "line": 95,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedVSTAR === true"
+    },
+    {
+      "file": "set-silver-tempest/dedenne.ts",
+      "line": 58,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | state.turn !== this.togeDashTurn + 2"
+    },
+    {
+      "file": "set-silver-tempest/earthen-seal-stone.ts",
+      "line": 59,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[0] | IS_TOOL_BLOCKED(store, state, player, this)"
+    },
+    {
+      "file": "set-silver-tempest/earthen-seal-stone.ts",
+      "line": 63,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.attack === this.attacks[0] | player.usedVSTAR"
+    },
+    {
+      "file": "set-silver-tempest/indeedee.ts",
+      "line": 52,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | state.turn !== 1"
+    },
+    {
+      "file": "set-silver-tempest/morpeko.ts",
+      "line": 55,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | state.turn !== this.dedeShortTurn + 2"
+    },
+    {
+      "file": "set-silver-tempest/noivern.ts",
+      "line": 58,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | radiantTargets.length === 0"
+    },
+    {
+      "file": "set-silver-tempest/omastar-v.ts",
+      "line": 104,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-silver-tempest/ralts.ts",
+      "line": 85,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) | effect.attack === this.MEMORY_SKIPPED_ATTACK"
+    },
+    {
+      "file": "set-silver-tempest/snorunt.ts",
+      "line": 41,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-silver-tempest/stunfisk.ts",
+      "line": 54,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | hasSupporter"
+    },
+    {
+      "file": "set-silver-tempest/sunflora.ts",
+      "line": 49,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasEnergyInHand"
+    },
+    {
+      "file": "set-silver-tempest/terrakion.ts",
+      "line": 52,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.marker.hasMarker(this.CAVERN_TACKLE_MARKER, this)"
+    },
+    {
+      "file": "set-silver-tempest/unown-vstar.ts",
+      "line": 63,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedVSTAR === true"
+    },
+    {
+      "file": "set-steam-siege/meowth.ts",
+      "line": 51,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | state.turn !== 2"
+    },
+    {
+      "file": "set-stellar-crown/comfey.ts",
+      "line": 44,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-stellar-crown/comfey.ts",
+      "line": 48,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | opponent.deck.cards.length === 0"
+    },
+    {
+      "file": "set-stellar-crown/slowpoke.ts",
+      "line": 45,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasCardInDiscard"
+    },
+    {
+      "file": "set-stellar-crown/terapagos-ex.ts",
+      "line": 60,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | state.turn <= 2"
+    },
+    {
+      "file": "set-sun-and-moon-promos/carracosta-gx.ts",
+      "line": 69,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedGX"
+    },
+    {
+      "file": "set-sun-and-moon-promos/greninja-gx.ts",
+      "line": 88,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | !hasBenched"
+    },
+    {
+      "file": "set-sun-and-moon-promos/trevenant-dusknoir-gx.ts",
+      "line": 84,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedGX"
+    },
+    {
+      "file": "set-supreme-victors/relicanth.ts",
+      "line": 103,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) | effect.attack === this.MEMORY_SKIPPED_ATTACK"
+    },
+    {
+      "file": "set-surging-sparks/altaria.ts",
+      "line": 45,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-surging-sparks/slaking-ex.ts",
+      "line": 66,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.getPokemonCard() === this | !abilityBlocked && !hasSpecialPokemon"
+    },
+    {
+      "file": "set-surging-sparks/smoochum.ts",
+      "line": 51,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-surging-sparks/sylveon-ex.ts",
+      "line": 142,
+      "method": "reduceCopiedAttackEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | effect.player.marker.hasMarker(this.ANGELITE_MARKER, this)"
+    },
+    {
+      "file": "set-surging-sparks/tatsugiri-ex.ts",
+      "line": 94,
+      "method": "reduceCopiedAttackEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-surging-sparks/tatsugiri-ex.ts",
+      "line": 101,
+      "method": "reduceCopiedAttackEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | openSlots.length === 0"
+    },
+    {
+      "file": "set-surging-sparks/terapagos.ts",
+      "line": 48,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !teraPokemonInPlay"
+    },
+    {
+      "file": "set-surging-sparks/walrein.ts",
+      "line": 63,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect | HAS_MARKER(this.FRIGID_FANGS_MARKER, effect.player, this) | energyCount <= 2"
+    },
+    {
+      "file": "set-sword-and-shield/zacian-v.ts",
+      "line": 116,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | effect.player.marker.hasMarker(this.BRAVE_BLADE_MARKER, this)"
+    },
+    {
+      "file": "set-sword-and-shield-promos/deoxys-vstar.ts",
+      "line": 105,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedVSTAR === true"
+    },
+    {
+      "file": "set-sword-and-shield-promos/lucario-vstar.ts",
+      "line": 74,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedVSTAR === true"
+    },
+    {
+      "file": "set-sword-and-shield-promos/manaphy.ts",
+      "line": 59,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | opponent.hand.cards.length === 0"
+    },
+    {
+      "file": "set-sword-and-shield-promos/manaphy.ts",
+      "line": 66,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | openSlots.length === 0"
+    },
+    {
+      "file": "set-team-up/beedrill.ts",
+      "line": 55,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | cardList.damage <= 0"
+    },
+    {
+      "file": "set-team-up/cobalion-gx.ts",
+      "line": 116,
+      "method": "reduceCopiedOpponentAttackEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && HAS_MARKER(this.IRON_RULE_MARKER, effect.player, this)"
+    },
+    {
+      "file": "set-team-up/galvantula.ts",
+      "line": 60,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasCardInDiscard"
+    },
+    {
+      "file": "set-team-up/golduck.ts",
+      "line": 81,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)\n      && effect.attack === this.amnesiaAttack"
+    },
+    {
+      "file": "set-team-up/hitmonlee.ts",
+      "line": 59,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | state.turn !== this.hitAndRunTurn + 2"
+    },
+    {
+      "file": "set-team-up/mr-mime-gx.ts",
+      "line": 67,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | effect.player.usedGX"
+    },
+    {
+      "file": "set-team-up/vulpix.ts",
+      "line": 54,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-team-up/weedle-2.ts",
+      "line": 47,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasBench"
+    },
+    {
+      "file": "set-temporal-forces/gouging-fire-ex.ts",
+      "line": 58,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.marker.hasMarker(this.ATTACK_USED_MARKER, this)"
+    },
+    {
+      "file": "set-temporal-forces/miraidon.ts",
+      "line": 77,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !target.cards[0].tags.includes(CardTag.FUTURE)"
+    },
+    {
+      "file": "set-temporal-forces/mr-mime.ts",
+      "line": 60,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | cardList.specialConditions.length > 0"
+    },
+    {
+      "file": "set-temporal-forces/mr-mime.ts",
+      "line": 63,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | cardList !== player.active"
+    },
+    {
+      "file": "set-temporal-forces/raging-bolt-ex.ts",
+      "line": 59,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-temporal-forces/reuniclus.ts",
+      "line": 61,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0 || openSlots.length === 0"
+    },
+    {
+      "file": "set-triumphant/shuppet.ts",
+      "line": 88,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) | effect.attack === this.MEMORY_SKIPPED_ATTACK"
+    },
+    {
+      "file": "set-twilight-masquerade/aggron.ts",
+      "line": 66,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasBenched"
+    },
+    {
+      "file": "set-twilight-masquerade/chansey.ts",
+      "line": 44,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !hasEnergyInHand"
+    },
+    {
+      "file": "set-twilight-masquerade/greninja-ex.ts",
+      "line": 85,
+      "method": "reduceCopiedAttackEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-twilight-masquerade/hisuian-growlithe.ts",
+      "line": 43,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !stadiumCard"
+    },
+    {
+      "file": "set-twilight-masquerade/illumise.ts",
+      "line": 42,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | state.turn != 2"
+    },
+    {
+      "file": "set-twilight-masquerade/scream-tail-ex.ts",
+      "line": 63,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | turn !== 2"
+    },
+    {
+      "file": "set-ultra-prism/dawn-wings-necrozma-gx.ts",
+      "line": 107,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.getPrizeLeft() <= opponent.getPrizeLeft()"
+    },
+    {
+      "file": "set-ultra-prism/dusk-mane-necrozma-gx.ts",
+      "line": 88,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 2, this) | player.getPrizeLeft() <= opponent.getPrizeLeft()"
+    },
+    {
+      "file": "set-ultra-prism/silvally-gx.ts",
+      "line": 113,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedGX"
+    },
+    {
+      "file": "set-ultra-prism/spiritomb.ts",
+      "line": 72,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": true,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | !Array.isArray(selected) || selected.length !== required ||\n          new Set(selected).size !== required || selected.some(card =>\n            !(card instanceof TrainerCard) || card.superType !== SuperType.TRAINER ||\n            card.trainerType !== TrainerType.SUPPORTER || !player.discard.cards.includes(card))"
+    },
+    {
+      "file": "set-ultra-prism/spiritomb.ts",
+      "line": 101,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.TERRIFY_MARKER, this)"
+    },
+    {
+      "file": "set-unbroken-bonds/greninja-and-zoroark-gx.ts",
+      "line": 61,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | slots.length === 0"
+    },
+    {
+      "file": "set-unbroken-bonds/greninja-and-zoroark-gx.ts",
+      "line": 65,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedGX"
+    },
+    {
+      "file": "set-unbroken-bonds/hitmontop.ts",
+      "line": 51,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | state.turn !== this.specialComboTurn + 2"
+    },
+    {
+      "file": "set-unbroken-bonds/honchkrow-gx.ts",
+      "line": 133,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedGX"
+    },
+    {
+      "file": "set-unbroken-bonds/raichu.ts",
+      "line": 51,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.getPrizeLeft() < opponent.getPrizeLeft() + 3"
+    },
+    {
+      "file": "set-unbroken-bonds/rhyperior.ts",
+      "line": 59,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-unbroken-bonds/venomoth.ts",
+      "line": 40,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | effect.opponent.active.specialConditions.length === 0"
+    },
+    {
+      "file": "set-unified-minds/bibarel.ts",
+      "line": 111,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)\n      && effect.attack === this.amnesiaAttack"
+    },
+    {
+      "file": "set-unified-minds/blizzard-town.ts",
+      "line": 36,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && StateUtils.getStadiumCard(state) === this | remainingHp <= 40"
+    },
+    {
+      "file": "set-unified-minds/latios-gx.ts",
+      "line": 67,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.getPokemonCard() === this | !IS_ABILITY_BLOCKED(store, state, player, this) | pokemonCount <= 4"
+    },
+    {
+      "file": "set-unified-minds/liepard.ts",
+      "line": 60,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect | effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)"
+    },
+    {
+      "file": "set-unified-minds/mega-sableye-tyranitar-gx.ts",
+      "line": 54,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedGX"
+    },
+    {
+      "file": "set-unified-minds/steelix.ts",
+      "line": 69,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && (effect.player.marker.hasMarker(this.GIGATON_SHAKE_MARKER, this)\n        || effect.player.marker.hasMarker(this.CLEAR_GIGATON_SHAKE_MARKER, this))"
+    },
+    {
+      "file": "set-unified-minds/weavile-gx.ts",
+      "line": 109,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 1, this) | player.usedGX"
+    },
+    {
+      "file": "set-vivid-voltage/exeggutor.ts",
+      "line": 85,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) | effect.attack === this.DISABLED_ATTACK"
+    },
+    {
+      "file": "set-vivid-voltage/metagross.ts",
+      "line": 99,
+      "method": "reduceCopiedOpponentAttackEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.LEG_QUAKE_MARKER, this)"
+    },
+    {
+      "file": "set-vivid-voltage/sableye.ts",
+      "line": 90,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) | effect.attack === this.DISABLED_ATTACK"
+    },
+    {
+      "file": "set-x-and-y/braixen.ts",
+      "line": 43,
+      "method": "reduceEffect",
+      "kind": "WAS_ATTACK_USED",
+      "insideFunctionCallback": false,
+      "context": "WAS_ATTACK_USED(effect, 0, this) | player.deck.cards.length === 0"
+    },
+    {
+      "file": "set-x-and-y/simisage.ts",
+      "line": 77,
+      "method": "reduceEffect",
+      "kind": "AttackEffect",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof AttackEffect\n      && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)\n      && effect.attack === this.tormentAttack"
+    },
+    {
+      "file": "set-x-and-y/wigglytuff.ts",
+      "line": 71,
+      "method": "reduceEffect",
+      "kind": "other",
+      "insideFunctionCallback": false,
+      "context": "effect instanceof UseAttackEffect\n      && effect.player.active.marker.hasMarker(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, this)"
+    }
+  ]
+}

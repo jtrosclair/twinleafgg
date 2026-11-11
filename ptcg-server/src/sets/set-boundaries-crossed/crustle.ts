@@ -45,6 +45,10 @@ export class Crustle extends PokemonCard {
     // Refs: set-lost-thunder/donphan.ts (Sturdy), prefabs/prefabs.ts (SURVIVE_ON_TEN_IF_FULL_HP)
     SURVIVE_ON_TEN_IF_FULL_HP(store, state, effect, { source: this, reason: this.powers[0].name });
 
+    return Crustle.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Attack 1: Stone Edge
     // Ref: set-emerging-powers/darmanitan.ts (Rock Smash)
     if (WAS_ATTACK_USED(effect, 0, this)) {

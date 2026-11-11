@@ -48,13 +48,7 @@ export class Eevee extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      const dealDamage = new DealDamageEffect(effect, 10);
-      dealDamage.target = player.active;
-      return store.reduceEffect(state, dealDamage);
-    }
+    if (WAS_ATTACK_USED(effect, 0, this)) return Eevee.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
 
     if (effect instanceof EndTurnEffect) {
       const player = effect.player;
@@ -90,4 +84,17 @@ export class Eevee extends PokemonCard {
     }
     return state;
   }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      const player = effect.player;
+
+      const dealDamage = new DealDamageEffect(effect, 10);
+      dealDamage.target = player.active;
+      return store.reduceEffect(state, dealDamage);
+    }
+
+    return state;
+  }
+
 }

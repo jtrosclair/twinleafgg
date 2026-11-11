@@ -9,17 +9,15 @@ import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
 import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
-import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 
 function* playCard(next: Function, store: StoreLike, state: State, effect: TrainerEffect): IterableIterator<State> {
 
   const player = effect.player;
   const opponent = StateUtils.getOpponent(state, player);
-
-  if (player.deck.cards.length === 0) {
-    throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-  }
+  const hasBasicEnergy = player.deck.cards.some(card =>
+    card.superType === SuperType.ENERGY && card.energyType === EnergyType.BASIC
+  );
 
   // We will discard this card after prompt confirmation
   effect.preventDefault = true;
@@ -30,7 +28,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
     GameMessage.CHOOSE_CARD_TO_HAND,
     player.deck,
     { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
-    { min: 1, max: 1, allowCancel: false }
+    { min: hasBasicEnergy ? 1 : 0, max: 1, allowCancel: false }
   ), selected => {
     cards = selected || [];
     next();

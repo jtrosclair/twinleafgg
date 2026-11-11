@@ -30,6 +30,11 @@ class OwnershipDefender extends PokemonCard {
 // They model the absent ownership boundary; they are not replacement card implementations.
 class MixedOwnershipSource extends Onix {
   public powers = [{ name: 'Fixture Shell', powerType: PowerType.ABILITY, text: 'Prevent incoming damage of 200 or more.' }];
+  // This fixture declares the ownership boundary explicitly: Harden belongs to
+  // the copied attack, while the DealDamageEffect branch below is an Ability.
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, attackIndex: number): State {
+    return Onix.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, attackIndex);
+  }
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     state = super.reduceEffect(store, state, effect);
     if (effect instanceof DealDamageEffect && effect.target.cards.includes(this) && effect.damage >= 200) {
@@ -41,6 +46,12 @@ class MixedOwnershipSource extends Onix {
 class InitialOwnershipSource extends OwnershipDefender {
   public powers = [{ name: 'Fixture Boost', powerType: PowerType.ABILITY, text: 'This Pokémon attacks do 40 more damage.' }];
   public attacks = [{ name: 'Fixture Attack', cost: [], damage: 40, text: 'This attack does 10 more damage.' }];
+  // The copied contract contains only the attack-owned bonus. The additional
+  // identical AttackEffect branch in reduceEffect models the separate Ability.
+  public reduceCopiedAttackEffect(_store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) effect.damage += 10;
+    return state;
+  }
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
       effect.damage += 10; // Attack-owned branch.

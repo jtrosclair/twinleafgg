@@ -1,3 +1,4 @@
+import { GalvantulaBatch112 } from './galvantula-batch11';
 import { Card } from '../../game/store/card/card';
 import { Baltoy } from './baltoy';
 import { Baltoy2 } from './baltoy-2';
@@ -453,4 +454,5 @@ export const setSwordAndShield: Card[] = [
   new SnorlaxVmax2(),
   new TeamYellGrunt3(),
   new ZamazentaV3(),
+  new GalvantulaBatch112(),
 ];

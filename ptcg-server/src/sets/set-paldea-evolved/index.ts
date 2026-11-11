@@ -1,3 +1,4 @@
+import { Dedenneex } from './dedenne-ex';
 import { Tandemaus } from './tandemaus';
 import { Oricorio } from './oricorio';
 import { Card } from '../../game/store/card/card';
@@ -225,4 +226,5 @@ export const setPaldeaEvolved: Card[] = [
   new Oricorio(),
   new Slowpoke(),
   new Tandemaus(),
+  new Dedenneex(),
 ];

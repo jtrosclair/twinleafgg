@@ -1,0 +1,447 @@
+{
+  "checkedAt": "2026-11-10T19:23:10.087Z",
+  "scope": "Deferred research only; no movement or dynamic-choice persistence changes are proposed by the restoration-only patch.",
+  "originalMatrix": {
+    "checkedAt": "2026-11-10T18:57:26.027Z",
+    "runs": 72,
+    "sourceHashes": {
+      "game/serializer/state-serializer.ts": "51f02059d9f13a655c648fb8536a65315b2ff65603d58ce1f98445b8811d9801",
+      "game/store/state/card-list.ts": "90a8f6e5ddd39a0e13bc462f4ec0e85859d9df6f44b30b617929ee428d24462c",
+      "game/store/state/pokemon-card-list.ts": "ece311b3885490aa012f682d63f9a02af255baf25cbb2692908b4826c86d577e",
+      "game/store/card/pokemon-energy-role.ts": null,
+      "sets/set-ex-delta-species/holons-magnemite.ts": "54ea8ca0a5529313deb9e23cdd5d55df934685b5df669bab85ce05dfefac09ce"
+    }
+  },
+  "finalMatrix": {
+    "checkedAt": "2026-11-10T19:17:32.562Z",
+    "sourceHashes": {
+      "ptcg-server/src/game/store/card/pokemon-energy-role.ts": "e25ea3f9c26b3f8545e726839517052625b03040a4d61992fa90fe93ecaab1bd",
+      "ptcg-server/src/game/serializer/state-serializer.ts": "12bd5cf22f564439f1f6b187076c6e12b68599a75891eb1d41200e536db91196",
+      "ptcg-server/src/game/store/state/card-list.ts": "90a8f6e5ddd39a0e13bc462f4ec0e85859d9df6f44b30b617929ee428d24462c",
+      "ptcg-server/src/game/store/state/pokemon-card-list.ts": "ece311b3885490aa012f682d63f9a02af255baf25cbb2692908b4826c86d577e"
+    },
+    "comparedScenarios": 12,
+    "matchesOriginalPreChangeLive": 12,
+    "matchesOriginalPreChangeForcedEnergy": 12,
+    "scenarios": [
+      {
+        "name": "whole-bounce-MoveCardsEffect",
+        "physicalIdsUnique": false,
+        "mirrorsMatchPhysicalSlot": true,
+        "holonOccurrences": 2,
+        "basicOccurrences": 2,
+        "holonForm": 3,
+        "sourceMirrors": [],
+        "destinationMirrors": [],
+        "destinationPokemon": "Dummy TEST",
+        "zones": {
+          "active": [],
+          "bench": [
+            [
+              3
+            ]
+          ],
+          "hand": [
+            1,
+            2,
+            0,
+            1,
+            2
+          ],
+          "discard": [],
+          "deck": [],
+          "lost": []
+        },
+        "error": null
+      },
+      {
+        "name": "whole-discard-MoveCardsEffect",
+        "physicalIdsUnique": true,
+        "mirrorsMatchPhysicalSlot": true,
+        "holonOccurrences": 1,
+        "basicOccurrences": 1,
+        "holonForm": 3,
+        "sourceMirrors": [],
+        "destinationMirrors": [],
+        "destinationPokemon": "Dummy TEST",
+        "zones": {
+          "active": [],
+          "bench": [
+            [
+              3
+            ]
+          ],
+          "hand": [],
+          "discard": [
+            0,
+            1,
+            2
+          ],
+          "deck": [],
+          "lost": []
+        },
+        "error": null
+      },
+      {
+        "name": "normal-KnockOutEffect",
+        "physicalIdsUnique": true,
+        "mirrorsMatchPhysicalSlot": true,
+        "holonOccurrences": 1,
+        "basicOccurrences": 1,
+        "holonForm": 3,
+        "sourceMirrors": [],
+        "destinationMirrors": [],
+        "destinationPokemon": "Dummy TEST",
+        "zones": {
+          "active": [],
+          "bench": [
+            [
+              3
+            ]
+          ],
+          "hand": [],
+          "discard": [
+            0,
+            1,
+            2
+          ],
+          "deck": [],
+          "lost": []
+        },
+        "error": null
+      },
+      {
+        "name": "direct-PokemonList-moveTo-hand",
+        "physicalIdsUnique": false,
+        "mirrorsMatchPhysicalSlot": true,
+        "holonOccurrences": 2,
+        "basicOccurrences": 2,
+        "holonForm": 3,
+        "sourceMirrors": [],
+        "destinationMirrors": [],
+        "destinationPokemon": "Dummy TEST",
+        "zones": {
+          "active": [],
+          "bench": [
+            [
+              3
+            ]
+          ],
+          "hand": [
+            1,
+            2,
+            0,
+            1,
+            2
+          ],
+          "discard": [],
+          "deck": [],
+          "lost": []
+        },
+        "error": null
+      },
+      {
+        "name": "direct-PokemonList-moveTo-discard",
+        "physicalIdsUnique": false,
+        "mirrorsMatchPhysicalSlot": true,
+        "holonOccurrences": 2,
+        "basicOccurrences": 2,
+        "holonForm": 3,
+        "sourceMirrors": [],
+        "destinationMirrors": [],
+        "destinationPokemon": "Dummy TEST",
+        "zones": {
+          "active": [],
+          "bench": [
+            [
+              3
+            ]
+          ],
+          "hand": [],
+          "discard": [
+            1,
+            2,
+            0,
+            1,
+            2
+          ],
+          "deck": [],
+          "lost": []
+        },
+        "error": null
+      },
+      {
+        "name": "proper-PokemonList-transfer",
+        "physicalIdsUnique": true,
+        "mirrorsMatchPhysicalSlot": true,
+        "holonOccurrences": 1,
+        "basicOccurrences": 1,
+        "holonForm": 3,
+        "sourceMirrors": [],
+        "destinationMirrors": [
+          1,
+          2
+        ],
+        "destinationPokemon": "Dummy TEST",
+        "zones": {
+          "active": [
+            0
+          ],
+          "bench": [
+            [
+              3,
+              1,
+              2
+            ]
+          ],
+          "hand": [],
+          "discard": [],
+          "deck": [],
+          "lost": []
+        },
+        "error": null
+      },
+      {
+        "name": "mirror-CardList-moveTo-transfer",
+        "physicalIdsUnique": false,
+        "mirrorsMatchPhysicalSlot": true,
+        "holonOccurrences": 2,
+        "basicOccurrences": 2,
+        "holonForm": 3,
+        "sourceMirrors": [],
+        "destinationMirrors": [],
+        "destinationPokemon": "Dummy TEST",
+        "zones": {
+          "active": [
+            0,
+            1,
+            2
+          ],
+          "bench": [
+            [
+              3,
+              1,
+              2
+            ]
+          ],
+          "hand": [],
+          "discard": [],
+          "deck": [],
+          "lost": []
+        },
+        "error": null
+      },
+      {
+        "name": "mirror-CardList-moveCardsTo-transfer",
+        "physicalIdsUnique": false,
+        "mirrorsMatchPhysicalSlot": true,
+        "holonOccurrences": 2,
+        "basicOccurrences": 2,
+        "holonForm": 3,
+        "sourceMirrors": [],
+        "destinationMirrors": [
+          1,
+          2
+        ],
+        "destinationPokemon": "Dummy TEST",
+        "zones": {
+          "active": [
+            0,
+            1,
+            2
+          ],
+          "bench": [
+            [
+              3,
+              1,
+              2
+            ]
+          ],
+          "hand": [],
+          "discard": [],
+          "deck": [],
+          "lost": []
+        },
+        "error": null
+      },
+      {
+        "name": "mirror-to-mirror-moveTo-transfer",
+        "physicalIdsUnique": true,
+        "mirrorsMatchPhysicalSlot": false,
+        "holonOccurrences": 1,
+        "basicOccurrences": 1,
+        "holonForm": 3,
+        "sourceMirrors": [],
+        "destinationMirrors": [
+          1,
+          2
+        ],
+        "destinationPokemon": "Dummy TEST",
+        "zones": {
+          "active": [
+            0,
+            1,
+            2
+          ],
+          "bench": [
+            [
+              3
+            ]
+          ],
+          "hand": [],
+          "discard": [],
+          "deck": [],
+          "lost": []
+        },
+        "error": null
+      },
+      {
+        "name": "mirror-to-mirror-moveCardsTo-transfer",
+        "physicalIdsUnique": true,
+        "mirrorsMatchPhysicalSlot": false,
+        "holonOccurrences": 1,
+        "basicOccurrences": 1,
+        "holonForm": 3,
+        "sourceMirrors": [],
+        "destinationMirrors": [
+          1,
+          2
+        ],
+        "destinationPokemon": "Dummy TEST",
+        "zones": {
+          "active": [
+            0,
+            1,
+            2
+          ],
+          "bench": [
+            [
+              3
+            ]
+          ],
+          "hand": [],
+          "discard": [],
+          "deck": [],
+          "lost": []
+        },
+        "error": null
+      },
+      {
+        "name": "moveToTopOfDestination-copy",
+        "physicalIdsUnique": false,
+        "mirrorsMatchPhysicalSlot": true,
+        "holonOccurrences": 2,
+        "basicOccurrences": 2,
+        "holonForm": 3,
+        "sourceMirrors": [
+          1,
+          2
+        ],
+        "destinationMirrors": [],
+        "destinationPokemon": "Dummy TEST",
+        "zones": {
+          "active": [
+            0,
+            1,
+            2
+          ],
+          "bench": [
+            [
+              3
+            ]
+          ],
+          "hand": [],
+          "discard": [],
+          "deck": [
+            0,
+            1,
+            2
+          ],
+          "lost": []
+        },
+        "error": null
+      },
+      {
+        "name": "whole-bounce-then-reattach-same-id",
+        "physicalIdsUnique": false,
+        "mirrorsMatchPhysicalSlot": true,
+        "holonOccurrences": 2,
+        "basicOccurrences": 2,
+        "holonForm": 1,
+        "sourceMirrors": [],
+        "destinationMirrors": [],
+        "destinationPokemon": "Dummy TEST",
+        "zones": {
+          "active": [
+            5
+          ],
+          "bench": [
+            [
+              3
+            ]
+          ],
+          "hand": [
+            1,
+            2,
+            0,
+            1,
+            2
+          ],
+          "discard": [],
+          "deck": [],
+          "lost": []
+        },
+        "error": "CANNOT_USE_POWER"
+      }
+    ]
+  },
+  "movementFixture": {
+    "path": "movement-alias.red.spec.fixture.ts",
+    "sha256": "c9213f638d2982c43f79ae88d872e1821188944cb04c2b91bbc26b1e970335a9",
+    "passed": 4,
+    "failed": 5,
+    "failedCases": [
+      "canonical Pokemon/Energy movement aliases - deferred research bounces a whole Pokemon with exactly one occurrence of each attached physical card",
+      "canonical Pokemon/Energy movement aliases - deferred research moves a whole Pokemon directly to discard without duplicating attachment mirrors",
+      "canonical Pokemon/Energy movement aliases - deferred research moves physical attachments with their mirrors using moveTo",
+      "canonical Pokemon/Energy movement aliases - deferred research moves physical attachments with their mirrors using moveCardsTo",
+      "canonical Pokemon/Energy movement aliases - deferred research can use the returned physical Holon card once after a whole-Pokemon bounce"
+    ]
+  },
+  "buzzapFixture": {
+    "path": "buzzap-choice.red.spec.fixture.ts",
+    "sha256": "d1abfcdcb7752f9c51702b4f8f24b0910bcf61cb6eb7a7c92bb96043740bc8c6",
+    "passed": 0,
+    "failed": 1,
+    "stateSetup": "Constructed post-Buzzap Water attachment; power itself is not replayed.",
+    "liveProvidedWater": 2,
+    "restored": {
+      "superType": "POKEMON",
+      "chosenEnergyType": null,
+      "providedSymbols": 0
+    },
+    "failedCases": [
+      {
+        "name": "Buzzap chosen Energy type - deferred research preserves an already attached Electrode and its chosen Energy after restoration",
+        "messages": [
+          "Expected 1 to be 3.",
+          "Expected undefined to be 3.",
+          "Expected $.length = 0 to equal 2.\nExpected $[0] = undefined to equal 3.\nExpected $[1] = undefined to equal 3."
+        ]
+      }
+    ]
+  },
+  "unchangedSemantics": [
+    "Whole-Pokemon bounce/direct moveTo can duplicate both physical Energy cards and mirrors.",
+    "Bare energies CardList transfers can leave physical placement stale or duplicate it.",
+    "A duplicated bounced Holon can trigger CANNOT_USE_POWER on reattachment.",
+    "moveToTopOfDestination is an intentional temporary-list copy helper for existing callers.",
+    "Discard form is reset on the next ordinary card reducer effect; Lost Zone is not fanned out."
+  ],
+  "deferredWork": [
+    "Define atomic physical placement plus Energy mirror movement for every route.",
+    "Distinguish live transfers from temporary-list copy helpers.",
+    "Specify and persist Buzzap chosen Energy type with explicit backward compatibility; placement cannot reconstruct a lost choice.",
+    "Add all-six-print real movement/reattach and malformed-alias controls before broad movement changes."
+  ]
+}

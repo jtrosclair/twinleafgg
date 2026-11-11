@@ -1,3 +1,5 @@
+import { Ambipom } from './ambipom';
+import { Aipom } from './aipom';
 import { RareCandyPGO, ConkeldurrV2PGO, ConkeldurrV3PGO, SlakingV2PGO, ProfessorsResearchPGO, ProfessorsResearch2PGO, LureModule2PGO } from './other-prints';
 import { Card } from '../../game/store/card/card';
 import { AlolanRaticate } from './alolan-raticate';
@@ -61,4 +63,6 @@ export const setPokemonGO: Card[] = [
   new ProfessorsResearchPGO(),
   new ProfessorsResearch2PGO(),
   new LureModule2PGO(),
+  new Aipom(),
+  new Ambipom(),
 ];

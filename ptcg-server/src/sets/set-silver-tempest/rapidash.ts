@@ -107,4 +107,9 @@ export class Rapidash extends PokemonCard {
     return state;
   }
 
+  /** Fire Mane has no extra effect; Heat Boost belongs to the Ability. */
+  public reduceCopiedAttackEffect(_store: StoreLike, state: State, _effect: Effect, _attackIndex: number): State {
+    return state;
+  }
+
 }

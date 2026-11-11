@@ -1,3 +1,4 @@
+import { buildPrintCatalogue, PrintCompatibility } from '../cards/print-compatibility';
 import { GameError } from '../game-error';
 import { GameCoreError } from '../game-message';
 import { Serializer, SerializerContext, SerializedState, Serialized } from './serializer.interface';
@@ -18,12 +19,14 @@ import { JsonDiff } from './json-patch.interface';
 import { GameSettings } from '../core/game-settings';
 import { cardReplacementMap, stripNumericSuffix } from './card-replacements';
 import { restoreCompactDefaults } from './compact-state';
+import { restorePokemonEnergyRoles } from '../store/card/pokemon-energy-role';
 
 export class StateSerializer {
 
   public serializers: Serializer<any>[];
   public static knownCards: Card[] = [];
-  private static knownCardsByFullName: Map<string, Card> = new Map();
+  private static knownCardsByFullName: ReadonlyMap<string, Card> = new Map();
+  private static printCompatibility = new PrintCompatibility([]);
 
   constructor() {
     this.serializers = [
@@ -40,12 +43,88 @@ export class StateSerializer {
   }
 
   public static normalizeCardName(name: string): string {
+    const index = StateSerializer.printCompatibility;
+    const exact = index.resolveIdentifier(name);
+    if (exact.recognized) return exact.card?.fullName || '';
+    return StateSerializer.normalizeCardNameLegacy(name, index.legacyCards);
+  }
+
+  private static normalizeCardNameLegacy(name: string, cards: Card[]): string {
+    // PBL full-art Trainers have upstream internal FA aliases. Resolve only
+    // the exact printed collector numbers before generic number stripping.
+    const pblPlain = name.match(/^(Crushing Hammer|Energy Switch)\s+PBL$/i);
+    if (pblPlain) return cards.find(candidate => candidate.name === pblPlain[1]
+      && candidate.set !== 'PBL')?.fullName || '';
+    const pblItem = name.match(/^(Crushing Hammer|Energy Switch)( FA)?\s+PBL\s+(\d+)$/i);
+    if (pblItem) {
+      const printed = pblItem[1].toLowerCase(), number = String(Number(pblItem[3]));
+      if ((printed === 'crushing hammer' && number === '105') || (printed === 'energy switch' && number === '107')) {
+        const card = cards.find(candidate => candidate.name.toLowerCase() === printed
+          && candidate.set === 'PBL' && candidate.setNumber === number);
+        return card?.fullName || '';
+      } else {
+        // Preserve the pre-existing generic fallback rather than resolving a
+        // wrong collector number to one of these new full-art printings.
+        if (pblItem[2]) return '';
+        return cards.find(candidate => candidate.name === pblItem[1]
+          && candidate.set !== 'PBL')?.fullName || '';
+      }
+    }
+    // New DPP promo identities use the fork's existing numeric collector IDs,
+    // while external exports may spell them DP01, DP04, and so on.
+    const dppPromo = name.match(/^(Turtwig|Pachirisu|Buneary|Buizel|Chatot|Shinx)\s+DPP\s+(?:DP)?0*(\d+)$/i);
+    if (dppPromo) {
+      const numbers: { [key: string]: string } = { turtwig: '1', pachirisu: '4', buneary: '6', buizel: '13', chatot: '14', shinx: '15' };
+      const cardName = dppPromo[1].toLowerCase(), number = String(Number(dppPromo[2]));
+      if (numbers[cardName] !== number) return '';
+      const card = cards.find(candidate => candidate.name.toLowerCase() === cardName
+        && candidate.set === 'DPP' && candidate.setNumber === number);
+      return card?.fullName || '';
+    }
+    // New Arceus printings share names with already registered printings.
+    // Preserve legacy unnumbered resolution while resolving these numbers
+    // exactly, even if card registration order changes.
+    const round27 = name.match(/^(Electrike|Tangela|Treecko|Manectric|Ponyta)\s+AR\s+0*(\d+)$/i);
+    if (round27) {
+      const expected: { [key: string]: string[] } = {
+        electrike: ['62', '63'], tangela: ['76', '77'], treecko: ['78', '79'],
+        manectric: ['44'], ponyta: ['72']
+      };
+      const cardName = round27[1].toLowerCase();
+      const number = String(Number(round27[2]));
+      if (expected[cardName]?.includes(number)) {
+        const card = cards.find(candidate => candidate.name.toLowerCase() === cardName
+          && candidate.set === 'AR' && candidate.setNumber === number);
+        return card?.fullName || '';
+      }
+    }
     // These two Unleashed cards share a printed name but have different attacks.
     // Never resolve an unavailable print to its same-named counterpart.
     const unleashedLarvitar = name.match(/^Larvitar\s+UL\s+0*(50|51)$/i);
     if (unleashedLarvitar) {
-      const card = StateSerializer.knownCards.find(candidate => candidate.set === 'UL'
+      const card = cards.find(candidate => candidate.set === 'UL'
         && candidate.name === 'Larvitar' && candidate.setNumber === unleashedLarvitar[1]);
+      return card?.fullName || '';
+    }
+    // Majestic Dawn has two Aipom prints with distinct attacks. Resolve the
+    // numbered print before generic set suffix stripping, independent of
+    // catalogue registration order.
+    const aipomMd = name.match(/^Aipom\s+MD\s+0*(50|51)$/i);
+    if (aipomMd) {
+      const card = cards.find(candidate => candidate.set === 'MD'
+        && candidate.name === 'Aipom' && candidate.setNumber === aipomMd[1]);
+      return card?.fullName || '';
+    }
+    // Unleashed also has two similarly named Fighting-type prints with
+    // different attacks. Resolve the numbered records before generic suffix stripping.
+    const unleashedNumbered = name.match(/^(Pupitar\s+UL\s+0*39|Onix\s+UL\s+0*57)$/i);
+    if (unleashedNumbered) {
+      const [, printed] = unleashedNumbered;
+      const match = printed.match(/^(Pupitar|Onix)\s+UL\s+0*(39|57)$/i)!;
+      const expectedNumber = match[1].toLowerCase() === 'pupitar' ? '39' : '57';
+      const card = cards.find(candidate => candidate.set === 'UL'
+        && candidate.name.toLowerCase() === match[1].toLowerCase()
+        && candidate.setNumber === expectedNumber);
       return card?.fullName || '';
     }
     // Preserve existing canonical identities while resolving these distinct new prints.
@@ -54,7 +133,7 @@ export class StateSerializer {
       const cardName = (reviewedPrint[1] || reviewedPrint[4] || reviewedPrint[7]).toLowerCase();
       const set = (reviewedPrint[2] || reviewedPrint[5] || reviewedPrint[8]).toUpperCase();
       const number = reviewedPrint[3] || reviewedPrint[6] || reviewedPrint[9];
-      const card = StateSerializer.knownCards.find(candidate => candidate.name.toLowerCase() === cardName
+      const card = cards.find(candidate => candidate.name.toLowerCase() === cardName
         && candidate.set === set && candidate.setNumber === number);
       return card?.fullName || '';
     }
@@ -70,7 +149,7 @@ export class StateSerializer {
         '132': ['Bubbly Water Energy', 'Bubble Water Energy'],
         '133': ['Growing Grass Energy', 'Growing G Energy', 'Grow Grass Energy', 'Grow G Energy'],
       };
-      const card = StateSerializer.knownCards.find(candidate => candidate.set === 'DLR'
+      const card = cards.find(candidate => candidate.set === 'DLR'
         && String(Number(candidate.setNumber)) === number
         && (fold(candidate.name) === expectedName || (printedEnergyAliases[number] || []).some(alias => fold(alias) === expectedName)));
       if (card) {
@@ -85,7 +164,7 @@ export class StateSerializer {
       const printNumbers: { [key: string]: string } = { '58': '84', '110': '138', '113': '141' };
       const targetNumber = rayquazaM6[1] ? printNumbers[String(Number(rayquazaM6[1]))] : '84';
       if (targetNumber) {
-        const card = StateSerializer.knownCards.find(candidate => candidate.set === 'DLR'
+        const card = cards.find(candidate => candidate.set === 'DLR'
           && candidate.setNumber === targetNumber && candidate.name === 'Mega Rayquaza ex');
         if (card) return card.fullName;
       }
@@ -142,11 +221,15 @@ export class StateSerializer {
     const cardName = cardWithoutSetId.split(' ').slice(0, -1).join(' ').trim();
 
 
-    let card: Card | undefined = StateSerializer.knownCards.find(c => {
+    let card: Card | undefined = cards.find(c => {
       if (cardWithoutSetId === c?.fullName || cardWithoutSetId === c?.fullName.replace('é', 'e')) {
         return true;
       }
+      return false;
+    });
 
+    if (!card) {
+      card = cards.find(c => {
       //try using alternate set abbreviations
 
       if (cardWithoutSetId == c?.name.replace('é', 'e') + ' ' + c?.set) {
@@ -154,10 +237,11 @@ export class StateSerializer {
       }
 
       return false;
-    });
+      });
+    }
 
     if (!card) {
-      card = StateSerializer.knownCards.find(c => {
+      card = cards.find(c => {
         if (cardName === c?.name?.replace('é', 'e')) {
           return true;
         }
@@ -264,6 +348,7 @@ export class StateSerializer {
     }
 
     const state = parsed[1];
+    restorePokemonEnergyRoles(state);
     return state;
   }
 
@@ -311,12 +396,17 @@ export class StateSerializer {
   }
 
   public static setKnownCards(cards: Card[]) {
+    const { index, compatibility } = buildPrintCatalogue(cards);
     StateSerializer.knownCards = cards;
-    StateSerializer.knownCardsByFullName = new Map(cards.map(card => [card.fullName, card]));
+    StateSerializer.knownCardsByFullName = index;
+    StateSerializer.printCompatibility = compatibility;
     console.log("cards set")
   }
 
   public static hasKnownCard(fullName: string): boolean {
+    if (StateSerializer.printCompatibility.isCanonical(fullName) && !StateSerializer.printCompatibility.hasLegacyCanonical(fullName)) {
+      return !!StateSerializer.printCompatibility.resolveIdentifier(fullName).card;
+    }
     return StateSerializer.knownCardsByFullName.has(fullName);
   }
 
@@ -325,7 +415,9 @@ export class StateSerializer {
     const names: string[] = parsed[1].cardNames;
     const cards: Card[] = names.map((name, index) => {
       const fixedName = name?.replace("�", "é")
-      const card = StateSerializer.knownCardsByFullName.get(fixedName);
+      const card = StateSerializer.printCompatibility.isCanonical(fixedName) && !StateSerializer.printCompatibility.hasLegacyCanonical(fixedName)
+        ? StateSerializer.printCompatibility.resolveIdentifier(fixedName).card
+        : StateSerializer.knownCardsByFullName.get(fixedName);
       if (card === undefined) {
         throw new GameError(GameCoreError.ERROR_SERIALIZER, `Unknown cards '${fixedName}'.`);
       }

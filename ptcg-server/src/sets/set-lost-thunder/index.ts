@@ -1,3 +1,4 @@
+import { LanturnBatch112 } from './lanturn-batch11';
 import { Card } from '../../game/store/card/card';
 import { AlolanDiglett } from './alolan-diglett';
 import { AlolanDugtrio } from './alolan-dugtrio';
@@ -505,4 +506,5 @@ export const setLostThunder: Card[] = [
   new GenesectGx3(),
   new ChoiceHelmet2(),
   new WaitAndSeeHammer2(),
+  new LanturnBatch112(),
 ];

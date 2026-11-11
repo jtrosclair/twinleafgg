@@ -1,3 +1,4 @@
+import { BlastoiseCEL, CharizardCEL, VenusaurCEL, DarkGyaradosCEL, TeamMagmasGroudonCEL, HereComesTeamRocketCELBatch112, RocketsZapdosCEL, SPikachuCEL, ClaydolCEL, UmbreonStarCEL, CleffaCEL, MewtwoExCEL, TapuLeleGxCEL, ShiningMagikarpCEL, ImpostorProfessorOakCEL, MRayquazaExCEL, RocketsAdminCELBatch112, MewExCEL, GardevoirExCEL, XerneasExCEL, DonphanCEL, LuxrayGLLVXCEL, GarchompCLVXCEL } from './other-prints';
 import { Card } from '../../game/store/card/card';
 import { Blastoise } from './blastoise';
 import { Charizard } from './charizard';
@@ -107,4 +108,27 @@ export const setCelebrations: Card[] = [
   new HereComesTeamRocketCEL(),
   new Mew2(),
   new RocketsAdminCEL(),
+  new BlastoiseCEL(),
+  new CharizardCEL(),
+  new VenusaurCEL(),
+  new DarkGyaradosCEL(),
+  new TeamMagmasGroudonCEL(),
+  new HereComesTeamRocketCELBatch112(),
+  new RocketsZapdosCEL(),
+  new SPikachuCEL(),
+  new ClaydolCEL(),
+  new UmbreonStarCEL(),
+  new CleffaCEL(),
+  new MewtwoExCEL(),
+  new TapuLeleGxCEL(),
+  new ShiningMagikarpCEL(),
+  new ImpostorProfessorOakCEL(),
+  new MRayquazaExCEL(),
+  new RocketsAdminCELBatch112(),
+  new MewExCEL(),
+  new GardevoirExCEL(),
+  new XerneasExCEL(),
+  new DonphanCEL(),
+  new LuxrayGLLVXCEL(),
+  new GarchompCLVXCEL(),
 ];

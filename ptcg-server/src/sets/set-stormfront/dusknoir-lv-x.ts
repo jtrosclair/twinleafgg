@@ -74,3 +74,10 @@ export class DusknoirLvX extends PokemonCard {
 
 
 
+
+
+export class DusknoirLVXExactPrint extends DusknoirLvX {
+  public fullName: string = 'Dusknoir LV.X SF';
+  public set: string = 'SF';
+  public setNumber: string = '96';
+}

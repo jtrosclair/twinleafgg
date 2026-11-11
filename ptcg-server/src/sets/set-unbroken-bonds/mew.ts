@@ -48,9 +48,7 @@ export class Mew extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-      PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE(3, store, state, effect);
-    }
+    state = Mew.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
 
     if (effect instanceof PutDamageEffect) {
       // Find the owner of the target (the defending player)
@@ -94,4 +92,13 @@ export class Mew extends PokemonCard {
     }
     return state;
   }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE(3, store, state, effect);
+    }
+
+    return state;
+  }
+
 }

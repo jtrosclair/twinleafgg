@@ -1,0 +1,13 @@
+Card regression workspace: /var/folders/j1/v2wg0qh93kjb4_cmn27201p00000gn/T/twinleaf-card-regressions-psvRGd/ptcg-server
+Compiling current source for 3 isolated card/engine spec files…
+PASS sets/tests/upstream-round33-gameplay.spec.js (7 passed, 0 failed, 0 pending)
+PASS sets/tests/upstream-round33-metadata.spec.js (4 passed, 0 failed, 0 pending)
+PASS sets/tests/upstream-round33-lookup.spec.js (12 passed, 0 failed, 0 pending)
+{
+  "files": 3,
+  "passed": 23,
+  "failed": 0,
+  "pending": 0,
+  "failingFiles": [],
+  "report": "/var/folders/j1/v2wg0qh93kjb4_cmn27201p00000gn/T/twinleaf-card-regressions-psvRGd/results.json"
+}

@@ -45,6 +45,22 @@ export class Jellicentex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    state = Jellicentex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+
+    if (effect instanceof PlayItemEffect || effect instanceof AttachPokemonToolEffect) {
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+
+      if (opponent.active.getPokemonCard() === this) {
+        if (!IS_ABILITY_BLOCKED(store, state, opponent, this)) {
+          throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
+        }
+      }
+    }
+    return state;
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       // Check attack cost
@@ -64,16 +80,7 @@ export class Jellicentex extends PokemonCard {
       }
     }
 
-    if (effect instanceof PlayItemEffect || effect instanceof AttachPokemonToolEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      if (opponent.active.getPokemonCard() === this) {
-        if (!IS_ABILITY_BLOCKED(store, state, opponent, this)) {
-          throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
-        }
-      }
-    }
     return state;
   }
+
 }

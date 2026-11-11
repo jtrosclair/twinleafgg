@@ -1,0 +1,279 @@
+{
+  "schemaVersion": 1,
+  "status": "deferred-do-not-integrate",
+  "investigatedAt": "2026-11-10T18:13:36.905187+00:00",
+  "runtimeSharedFilesChanged": false,
+  "noDeployment": true,
+  "reports": {
+    "originalSceptileRepro": {
+      "passed": 2,
+      "failed": 2
+    },
+    "finalSceptileBaseline": {
+      "passed": 15,
+      "failed": 12
+    },
+    "finalSceptileCandidate": {
+      "passed": 27,
+      "failed": 0
+    },
+    "finalCoreBaseline": {
+      "passed": 7,
+      "failed": 11
+    },
+    "finalCoreCandidate": {
+      "passed": 18,
+      "failed": 0
+    },
+    "staleTargetBaseline": {
+      "passed": 2,
+      "failed": 0
+    },
+    "staleTargetCardOnlyCandidate": {
+      "passed": 0,
+      "failed": 2
+    },
+    "reusedTargetBaseline": {
+      "passed": 1,
+      "failed": 0
+    },
+    "reusedTargetCombinedCandidate": {
+      "passed": 0,
+      "failed": 1
+    },
+    "reusedSourceBaseline": {
+      "passed": 0,
+      "failed": 1
+    },
+    "reusedSourceCombinedCandidate": {
+      "passed": 0,
+      "failed": 1
+    }
+  },
+  "strictCombinedGate": {
+    "passed": 134,
+    "failed": 0,
+    "files": 4,
+    "limitations": "Excludes deliberately red reused-slot/source counterexamples; 134passing does not establish complete lifecycle safety."
+  },
+  "researchFixtures": {
+    "sceptile-power-of-nature.proposed.spec.fixture.ts": {
+      "sha256": "fc041dddff0b332478a84c75b7cc601a02f2f09e6980c34e25e2799803f61ab1"
+    },
+    "stale-attack-damage.proposed.spec.fixture.ts": {
+      "sha256": "cb9f074fdb5f91da40624f3f21ed090f19525462f1f97dc8105758940614783e"
+    },
+    "sceptile-stale-target.red.spec.fixture.ts": {
+      "sha256": "2762a77974b63511f294a256860ebe82d83164187d49960d083309c6573fb1c1"
+    },
+    "stale-reused-target.red.spec.fixture.ts": {
+      "sha256": "2fdf94c0b6cb768faaf97a2bda87440dcd99fd41b3dba1dee91be684f5c58281"
+    },
+    "stale-reused-source.red.spec.fixture.ts": {
+      "sha256": "ef46f4e0102c55515c279c9371b930ae8ffe6f0356ca195eeedaaf1ab5f607cd"
+    }
+  },
+  "corpus": {
+    "scope": "Only the proposed Sceptile Ability fix against the latest shared source including ownership batch3; incomplete core proposal excluded.",
+    "readOnlyDatabase": true,
+    "inputs": {
+      "files": 10742,
+      "missing": [],
+      "added": [],
+      "changed": [
+        {
+          "path": "ptcg-server/src/sets/set-celestial-storm/sceptile.ts",
+          "baseline": "6117a8f24c353874fb405e74dd5fa7c2c0352a8010f9b23e951eaf8b9882e7e3",
+          "candidate": "d95d3ab96918f2b621d24ba40c0130d393ff28cfb2aa80cb6805a739b03acb0c"
+        }
+      ]
+    },
+    "snapshotComparison": {
+      "all": {
+        "rows": 669,
+        "noFragment": 2,
+        "decodeFailure": 1,
+        "nonSimulator": 134,
+        "compared": 532,
+        "bothValid": 532,
+        "bothInvalid": 0,
+        "baselineOnlyValid": 0,
+        "candidateOnlyValid": 0,
+        "serializedChanged": 0,
+        "cardNamesChanged": 0,
+        "deserializedStateChanged": 0
+      },
+      "active": {
+        "rows": 439,
+        "noFragment": 0,
+        "decodeFailure": 1,
+        "nonSimulator": 62,
+        "compared": 376,
+        "bothValid": 376,
+        "bothInvalid": 0,
+        "baselineOnlyValid": 0,
+        "candidateOnlyValid": 0,
+        "serializedChanged": 0,
+        "cardNamesChanged": 0,
+        "deserializedStateChanged": 0
+      }
+    },
+    "firstActionComparison": {
+      "rows": 669,
+      "skipped": 137,
+      "missingFragment": 2,
+      "invalidPayload": 1,
+      "unsupportedFormat": 134,
+      "modes": {
+        "trainers": {
+          "comparable": 532,
+          "beforeOnlyError": 0,
+          "afterOnlyError": 0,
+          "bothError": 0,
+          "actions": 1867,
+          "matching": 1867,
+          "succeededInBoth": 1859,
+          "rejectedInBoth": 8,
+          "changed": 0,
+          "noActions": 59,
+          "changedCards": {},
+          "changedFields": {},
+          "rejectionReasons": {
+            "ACTION_IN_PROGRESS": 8
+          }
+        },
+        "attacks": {
+          "comparable": 532,
+          "beforeOnlyError": 0,
+          "afterOnlyError": 0,
+          "bothError": 0,
+          "actions": 684,
+          "matching": 684,
+          "succeededInBoth": 145,
+          "rejectedInBoth": 539,
+          "changed": 0,
+          "noActions": 5,
+          "changedCards": {},
+          "changedFields": {},
+          "rejectionReasons": {
+            "NOT_ENOUGH_ENERGY": 534,
+            "CANNOT_USE_POWER": 2,
+            "ACTION_IN_PROGRESS": 2,
+            "CANNOT_PLAY_THIS_CARD": 1
+          }
+        },
+        "abilities": {
+          "comparable": 532,
+          "beforeOnlyError": 0,
+          "afterOnlyError": 0,
+          "bothError": 0,
+          "actions": 917,
+          "matching": 917,
+          "succeededInBoth": 576,
+          "rejectedInBoth": 341,
+          "changed": 0,
+          "noActions": 99,
+          "changedCards": {},
+          "changedFields": {},
+          "rejectionReasons": {
+            "CANNOT_USE_POWER": 288,
+            "OTHER_ERROR": 26,
+            "BLOCKED_BY_ABILITY": 22,
+            "CANNOT_PLAY_THIS_CARD": 1,
+            "ACTION_IN_PROGRESS": 4
+          }
+        }
+      },
+      "active": {
+        "rows": 439,
+        "skipped": 63,
+        "missingFragment": 0,
+        "invalidPayload": 1,
+        "unsupportedFormat": 62,
+        "modes": {
+          "trainers": {
+            "comparable": 376,
+            "beforeOnlyError": 0,
+            "afterOnlyError": 0,
+            "bothError": 0,
+            "actions": 1379,
+            "matching": 1379,
+            "succeededInBoth": 1379,
+            "rejectedInBoth": 0,
+            "changed": 0,
+            "noActions": 22,
+            "changedCards": {},
+            "changedFields": {},
+            "rejectionReasons": {}
+          },
+          "attacks": {
+            "comparable": 376,
+            "beforeOnlyError": 0,
+            "afterOnlyError": 0,
+            "bothError": 0,
+            "actions": 487,
+            "matching": 487,
+            "succeededInBoth": 92,
+            "rejectedInBoth": 395,
+            "changed": 0,
+            "noActions": 2,
+            "changedCards": {},
+            "changedFields": {},
+            "rejectionReasons": {
+              "NOT_ENOUGH_ENERGY": 393,
+              "CANNOT_USE_POWER": 1,
+              "CANNOT_PLAY_THIS_CARD": 1
+            }
+          },
+          "abilities": {
+            "comparable": 376,
+            "beforeOnlyError": 0,
+            "afterOnlyError": 0,
+            "bothError": 0,
+            "actions": 675,
+            "matching": 675,
+            "succeededInBoth": 424,
+            "rejectedInBoth": 251,
+            "changed": 0,
+            "noActions": 60,
+            "changedCards": {},
+            "changedFields": {},
+            "rejectionReasons": {
+              "CANNOT_USE_POWER": 216,
+              "OTHER_ERROR": 26,
+              "BLOCKED_BY_ABILITY": 8,
+              "CANNOT_PLAY_THIS_CARD": 1
+            }
+          }
+        }
+      },
+      "minimumCoverage": {
+        "comparable": 1,
+        "actions": 1
+      }
+    },
+    "totalActionAttempts": 3468,
+    "matchingActionAttempts": 3468,
+    "succeededInBoth": 2580,
+    "rejectedInBoth": 888,
+    "bundles": [
+      {
+        "name": "baseline",
+        "bytes": 13490283,
+        "sha256": "9b748663ec80cdfa3d3bed716e4d154402235ac146ca135389e197d8ff70b06c",
+        "inputFiles": 10742
+      },
+      {
+        "name": "candidate",
+        "bytes": 13490477,
+        "sha256": "a4092dbec4af9d76b9dc9f068468fac540f9578c24ba3deb8fd10eeff8251611",
+        "inputFiles": 10742
+      }
+    ],
+    "limitations": [
+      "First-action comparison stops at unresolved human prompts; it is not a full-turn proof.",
+      "Existing same-result action rejections are included; no new differing outcomes were observed.",
+      "Passing saved-state/action corpus does not resolve the deliberately red source/target identity cases."
+    ]
+  }
+}

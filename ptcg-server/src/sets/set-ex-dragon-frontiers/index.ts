@@ -1,3 +1,5 @@
+import { Milotic } from './milotic';
+import { Feebas } from './feebas';
 import { Card } from '../../game';
 import { Altariaex } from './altaria-ex';
 import { Bayleef } from './bayleef';
@@ -101,4 +103,6 @@ export const setEXDragonFrontiers: Card[] = [
   new ProfessorElmsTrainingMethodDF(),
   new SwitchDF(),
   new TvReporterDF(),
+  new Feebas(),
+  new Milotic(),
 ];

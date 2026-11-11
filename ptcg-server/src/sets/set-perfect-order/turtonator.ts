@@ -99,6 +99,10 @@ export class Turtonator extends PokemonCard {
       }
     }
 
+    return Turtonator.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Heat Breath - coin flip for +80 damage
     if (WAS_ATTACK_USED(effect, 0, this) && effect instanceof AttackEffect) {
       const player = effect.player;

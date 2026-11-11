@@ -1,3 +1,86 @@
+import { Zapdos2 } from './zapdos2';
+import { Yanmega } from './yanmega';
+import { Yanma2 } from './yanma2';
+import { Yanma } from './yanma';
+import { Wailord } from './wailord';
+import { Wailmer } from './wailmer';
+import { Venusaur } from './venusaur';
+import { Swampert } from './swampert';
+import { SpiritombC } from './spiritomb-c';
+import { Spinda } from './spinda';
+import { Solrock } from './solrock';
+import { SkarmoryFB } from './skarmory-fb';
+import { Shedinja } from './shedinja';
+import { Seaking } from './seaking';
+import { Sandslash } from './sandslash';
+import { SableyeG } from './sableye-g';
+import { Rotom } from './rotom';
+import { RoseradeC } from './roserade-c';
+import { Rhyperior } from './rhyperior';
+import { Relicanth2 } from './relicanth2';
+import { RegigigasFB } from './regigigas-fb';
+import { RayquazaC } from './rayquaza-c';
+import { RaticateG } from './raticate-g';
+import { Raichu } from './raichu';
+import { Primeape } from './primeape';
+import { Plusle } from './plusle';
+import { Pinsir } from './pinsir';
+import { Parasect } from './parasect';
+import { Numel } from './numel';
+import { Ninjask } from './ninjask';
+import { Nincada } from './nincada';
+import { NightTeleporter } from './night-teleporter';
+import { Murkrow } from './murkrow';
+import { Moltres2 } from './moltres2';
+import { Minun } from './minun';
+import { MimeJr } from './mime-jr';
+import { Milotic2 } from './milotic2';
+import { Milotic } from './milotic';
+import { MiloticC } from './milotic-c';
+import { Metang } from './metang';
+import { Metagross } from './metagross';
+import { Mawile } from './mawile';
+import { Masquerain } from './masquerain';
+import { Marshtomp } from './marshtomp';
+import { ManectricG } from './manectric-g';
+import { Magmortar } from './magmortar';
+import { Magmar } from './magmar';
+import { Lunatone } from './lunatone';
+import { LickilickyC } from './lickilicky-c';
+import { Growlithe } from './growlithe';
+import { Garchomp } from './garchomp';
+import { Gabite } from './gabite';
+import { Exploud } from './exploud';
+import { EmpoleonFB } from './empoleon-fb';
+import { ElectivireFBLVX } from './electivire-fblvx';
+import { ElectivireFB } from './electivire-fb';
+import { DusknoirFB } from './dusknoir-fb';
+import { DrifblimFB } from './drifblim-fb';
+import { Dodrio } from './dodrio';
+import { Dewgong } from './dewgong';
+import { CyrussInitiative } from './cyruss-initiative';
+import { CynthiasGuidance } from './cynthias-guidance';
+import { CrawdauntG } from './crawdaunt-g';
+import { Claydol } from './claydol';
+import { Chingling } from './chingling';
+import { Chimecho } from './chimecho';
+import { Cherubi } from './cherubi';
+import { ChatotG } from './chatot-g';
+import { CharizardG } from './charizard-g';
+import { ChampionsRoom } from './champions-room';
+import { Carnivine } from './carnivine';
+import { Camerupt } from './camerupt';
+import { ButterfreeFB } from './butterfree-fb';
+import { Breloom } from './breloom';
+import { BlazikenFBLVX } from './blaziken-fblvx';
+import { BlazikenFB } from './blaziken-fb';
+import { BattleTower } from './battle-tower';
+import { Articuno2 } from './articuno2';
+import { ArcanineG } from './arcanine-g';
+import { AbsolGLVX } from './absol-glvx';
+import { AbsolG } from './absol-g';
+import { CharizardGLVX } from './charizard-glvx';
+import { RayquazaCLVX } from './rayquaza-clvx';
 import { ArticunoRound25 } from './articuno-round25';
 import { CameruptGRound25 } from './camerupt-g-round25';
 import { LucarioCRound25 } from './lucario-c-round25';
@@ -141,4 +224,87 @@ export const setSupremeVictors: Card[] = [
 
   // Other prints
   new VsSeekerSV(),
+  new RayquazaCLVX(),
+  new CharizardGLVX(),
+  new AbsolG(),
+  new AbsolGLVX(),
+  new ArcanineG(),
+  new Articuno2(),
+  new BattleTower(),
+  new BlazikenFB(),
+  new BlazikenFBLVX(),
+  new Breloom(),
+  new ButterfreeFB(),
+  new Camerupt(),
+  new Carnivine(),
+  new ChampionsRoom(),
+  new CharizardG(),
+  new ChatotG(),
+  new Cherubi(),
+  new Chimecho(),
+  new Chingling(),
+  new Claydol(),
+  new CrawdauntG(),
+  new CynthiasGuidance(),
+  new CyrussInitiative(),
+  new Dewgong(),
+  new Dodrio(),
+  new DrifblimFB(),
+  new DusknoirFB(),
+  new ElectivireFB(),
+  new ElectivireFBLVX(),
+  new EmpoleonFB(),
+  new Exploud(),
+  new Gabite(),
+  new Garchomp(),
+  new Growlithe(),
+  new LickilickyC(),
+  new Lunatone(),
+  new Magmar(),
+  new Magmortar(),
+  new ManectricG(),
+  new Marshtomp(),
+  new Masquerain(),
+  new Mawile(),
+  new Metagross(),
+  new Metang(),
+  new MiloticC(),
+  new Milotic(),
+  new Milotic2(),
+  new MimeJr(),
+  new Minun(),
+  new Moltres2(),
+  new Murkrow(),
+  new NightTeleporter(),
+  new Nincada(),
+  new Ninjask(),
+  new Numel(),
+  new Parasect(),
+  new Pinsir(),
+  new Plusle(),
+  new Primeape(),
+  new Raichu(),
+  new RaticateG(),
+  new RayquazaC(),
+  new RegigigasFB(),
+  new Relicanth2(),
+  new Rhyperior(),
+  new RoseradeC(),
+  new Rotom(),
+  new SableyeG(),
+  new Sandslash(),
+  new Seaking(),
+  new Shedinja(),
+  new SkarmoryFB(),
+  new Solrock(),
+  new Spinda(),
+  new SpiritombC(),
+  new Swampert(),
+  new Venusaur(),
+  new Wailmer(),
+  new Wailord(),
+  new Yanma(),
+  new Yanma2(),
+  new Yanmega(),
+  new Zapdos2(),
 ];

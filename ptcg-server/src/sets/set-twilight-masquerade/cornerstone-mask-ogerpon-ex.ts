@@ -49,19 +49,8 @@ export class CornerstoneMaskOgerponex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
+    state = CornerstoneMaskOgerponex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
 
-      const damage = 140; // Direct damage without weakness
-      effect.damage = 0;
-
-      if (damage > 0) {
-        opponent.active.damage += damage;
-        const afterDamage = new AfterDamageEffect(effect, damage);
-        state = store.reduceEffect(state, afterDamage);
-      }
-    }
     // Prevent damage from Pokemon-EX
     if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)) {
       const pokemonCard = effect.target.getPokemonCard();
@@ -134,4 +123,22 @@ export class CornerstoneMaskOgerponex extends PokemonCard {
     }
     return state;
   }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+
+      const damage = 140; // Direct damage without weakness
+      effect.damage = 0;
+
+      if (damage > 0) {
+        opponent.active.damage += damage;
+        const afterDamage = new AfterDamageEffect(effect, damage);
+        state = store.reduceEffect(state, afterDamage);
+      }
+    }
+    return state;
+  }
+
 }

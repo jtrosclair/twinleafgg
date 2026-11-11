@@ -90,6 +90,11 @@ export class Swampert extends PokemonCard {
       player.marker.removeMarker(this.POWER_DRAW_MARKER, this);
     }
 
+    return Swampert.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+
     if (effect instanceof AttackEffect && effect.attack == this.attacks[0]) {
       const player = effect.player;
 

@@ -201,3 +201,17 @@ export * from './set-stormfront';
 export * from './set-majestic-dawn';
 export * from './set-arceus';
 export * from './set-delta-reign';
+
+export * from './set-upstream-round27';
+
+export * from './set-upstream-round28';
+
+export * from './set-upstream-round29';
+
+export * from './set-upstream-round30';
+
+export * from './set-upstream-round31';
+
+export * from './set-upstream-round32';
+
+export * from './set-upstream-round33';

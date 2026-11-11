@@ -44,32 +44,13 @@ export class Goldeen extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
+      const opponent = StateUtils.getOpponent(state, effect.player);
 
       // Defending Pokemon has no energy cards attached
       if (!opponent.active.cards.some(c => c.superType === SuperType.ENERGY)) {
         return state;
       }
-
-      state = store.prompt(state, [
-        new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
-      ], result => {
-        if (result === true) {
-
-          let card: Card;
-          return store.prompt(state, new ChooseCardsPrompt(
-            player,
-            GameMessage.CHOOSE_CARD_TO_DISCARD,
-            opponent.active,
-            { superType: SuperType.ENERGY },
-            { min: 1, max: 1, allowCancel: false }
-          ), selected => {
-            card = selected[0];
-            return store.reduceEffect(state, new DiscardCardsEffect(effect, [card]));
-          });
-        }
-      });
+      state = Goldeen.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
 
       if (!IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
         // Dynamically set barrage if Festival Grounds is in play
@@ -80,6 +61,25 @@ export class Goldeen extends PokemonCard {
           this.attacks[0].barrage = false;
         }
       }
+    }
+    return state;
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+      if (!opponent.active.cards.some(c => c.superType === SuperType.ENERGY)) return state;
+      state = store.prompt(state, [new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)], result => {
+        if (result === true) {
+          let card: Card;
+          return store.prompt(state, new ChooseCardsPrompt(player, GameMessage.CHOOSE_CARD_TO_DISCARD,
+            opponent.active, { superType: SuperType.ENERGY }, { min: 1, max: 1, allowCancel: false }), selected => {
+            card = selected[0];
+            return store.reduceEffect(state, new DiscardCardsEffect(effect, [card]));
+          });
+        }
+      });
     }
     return state;
   }

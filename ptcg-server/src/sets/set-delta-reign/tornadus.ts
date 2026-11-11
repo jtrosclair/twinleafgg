@@ -39,6 +39,10 @@ export class Tornadus extends PokemonCard {
       return reduceIncarnateUnionEffect(store, state, effect, this);
     }
 
+    return Tornadus.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Ref: set-destined-rivals/cynthias-garchomp-ex.ts (Corkscrew Dive)
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;

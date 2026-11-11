@@ -1,3 +1,4 @@
+import { HoOhVBatch112 } from './ho-oh-v-batch11';
 import { Card } from '../../game/store/card/card';
 import { AlolanVulpixV } from './alolan-vulpix-v';
 import { AlolanVulpixVSTAR } from './alolan-vulpix-vstar';
@@ -471,4 +472,5 @@ export const setSilverTempest: Card[] = [
   new MawileVstar2(),
   new Brandon3(),
   new Wallace3(),
+  new HoOhVBatch112(),
 ];

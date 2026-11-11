@@ -1,0 +1,9 @@
+Started
+........cards set
+.cards set
+............cards set
+......
+
+
+27 specs, 0 failures
+Finished in 0.94 seconds

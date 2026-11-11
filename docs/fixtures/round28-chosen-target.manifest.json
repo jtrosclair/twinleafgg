@@ -1,0 +1,27 @@
+{
+  "files": [
+    {
+      "path": "round28-chosen-target.red.md",
+      "sha256": "da06a3352c1f9603a530ce97a31a16b9ad5adf7a6d82adbb58ed12fa911caf0a"
+    },
+    {
+      "path": "round28-chosen-target.red.spec.fixture.ts",
+      "sha256": "c96f9530f8d5c28bd6624b408f4d641b904cde2b87a8dc60078521fddfba5891"
+    },
+    {
+      "path": "round28-choice-belt.red.spec.fixture.ts",
+      "sha256": "ceee3b7818ec7d1e28fb6eba00c76f517196d42d4cbef914f17292aaa71e39fc"
+    },
+    {
+      "path": "round28-src/ptcg-server/src/sets/set-majestic-dawn/electrike.ts",
+      "sha256": "59ead39183703166f20ec6cbd6ef3fd1861d14b3c02a38c49eac4bd58aa629fc"
+    },
+    {
+      "path": "round28-src/ptcg-server/src/sets/set-upstream-round28/targeted-damage.ts",
+      "sha256": "90faf85150a136bb121e5afbd6569e860e1e26f0ee7b8b3e909e038b3c107896"
+    }
+  ],
+  "testLog": "/private/tmp/prizemap-round28-portable-check.log",
+  "expected": "2 pass, 5 intentional failures",
+  "scope": "research only"
+}

@@ -1,3 +1,4 @@
+import { PrintCompatibility } from '../ptcg-server/src/game/cards/print-compatibility';
 // Port of the deck import parsing and aliases from twinleafgg commit 37db120e6.
 // Parsing semantics intentionally follow the former HTTP controller.
 import { CardManager } from '../ptcg-server/src/game/cards/card-manager';
@@ -911,12 +912,41 @@ function findDlrPrint(index: Map<string, Card | undefined>, name: string, collec
     ? card : undefined;
 }
 
+// These Arceus names have multiple printed attacks. Resolve the old and new
+// collector numbers exactly, including padded imports; never substitute the
+// other print if a requested identity is unavailable.
+const ROUND27_AR_PRINTS = new Set([
+  'electrike|ar|62', 'electrike|ar|63', 'tangela|ar|76', 'tangela|ar|77',
+  'treecko|ar|78', 'treecko|ar|79', 'manectric|ar|44', 'ponyta|ar|72'
+]);
+function round27ArKey(name: string, set: string, number: string): string | undefined {
+  if (set.toUpperCase() !== 'AR' || !/^\d+$/.test(number)) return undefined;
+  const key = `${name.toLowerCase()}|ar|${String(Number(number))}`;
+  return ROUND27_AR_PRINTS.has(key) ? key : undefined;
+}
+
+// Only these newly introduced identities get strict promo-number routing;
+// existing DPP print fallbacks retain their historical behaviour.
+const ROUND29_DPP_PRINTS: { [key: string]: string } = {
+  turtwig: '1', pachirisu: '4', buneary: '6', buizel: '13', chatot: '14', shinx: '15'
+};
+function round29DppName(name: string, set: string): boolean {
+  return set.toUpperCase() === 'DPP' && Object.prototype.hasOwnProperty.call(ROUND29_DPP_PRINTS, name.toLowerCase());
+}
+function round29DppKey(name: string, number: string): string | undefined {
+  const match = number.match(/^(?:DP)?0*(\d+)$/i);
+  const expected = ROUND29_DPP_PRINTS[name.toLowerCase()];
+  if (!match || !expected || String(Number(match[1])) !== expected) return undefined;
+  return `${name.toLowerCase()}|dpp|${expected}`;
+}
+
 export class DeckImportParser {
   private imageCache: Map<string, string>;
   constructor(images: Map<string, string> = new Map()) { this.imageCache = images; }
   public getCards(cards: string[]) {
     const cardManager = CardManager.getInstance();
-    const allCards = cardManager.getAllCards();
+    const compatibility = new PrintCompatibility(cardManager.getAllCards());
+    const allCards = compatibility.legacyCards;
     const dlrPrints = dlrPrintIndex(allCards);
 
     // Build lookup maps
@@ -950,10 +980,26 @@ export class DeckImportParser {
       const unleashedLarvitar = cardIdentifier.trim().match(/^Larvitar\s+UL\s+0*(50|51)$/i);
       const reviewedPrint = cardIdentifier.trim().match(/^(Inkay)\s+(LOR)\s+0*(77)$|^(Duskull)\s+(SF)\s+0*(60)$|^(Crobat)\s+(UL)\s+0*(14)$/i);
       const reviewedKey = reviewedPrint && `${(reviewedPrint[1] || reviewedPrint[4] || reviewedPrint[7]).toLowerCase()}|${(reviewedPrint[2] || reviewedPrint[5] || reviewedPrint[8]).toLowerCase()}|${reviewedPrint[3] || reviewedPrint[6] || reviewedPrint[9]}`;
-      const card = externalDlr
+      const deltaInput = cardIdentifier.trim().match(/^(Treecko|Charmander|Charmeleon)\s+(P4|P5)\s+0*(\d+)$/i);
+      const deltaKey = deltaInput && `${deltaInput[1].toLowerCase()}|${deltaInput[2].toLowerCase()}|${deltaInput[3]}`;
+      const reviewedDelta = deltaKey && ['treecko|p4|15', 'charmander|p5|10', 'charmeleon|p5|5'].includes(deltaKey) ? deltaKey : undefined;
+      const dppInput = cardIdentifier.trim().match(/^(.*?)\s+(DPP)\s+((?:DP)?\d+)$/i);
+      const isRound29Dpp = !!dppInput && round29DppName(dppInput[1], dppInput[2]);
+      const dppKey = isRound29Dpp && round29DppKey(dppInput![1], dppInput![3]);
+      const pblInput = cardIdentifier.trim().match(/^(Crushing Hammer|Energy Switch)(?: FA)?\s+PBL\s+(\d+)$/i);
+      const pblKey = pblInput && `${pblInput[1].toLowerCase()}|pbl|${String(Number(pblInput[2]))}`;
+      const reviewedPbl = pblKey && ['crushing hammer|pbl|105', 'energy switch|pbl|107'].includes(pblKey) ? pblKey : undefined;
+      const arInput = cardIdentifier.trim().match(/^(.*?)\s+(AR)\s+(\d+)$/i);
+      const arKey = arInput && round27ArKey(arInput[1], arInput[2], arInput[3]);
+      const exact = compatibility.resolveIdentifier(cardIdentifier);
+      const card = exact.recognized ? exact.card : externalDlr
         ? findDlrPrint(dlrPrints, externalDlr[1], externalDlr[2])
         : unleashedLarvitar ? cardsByNameSetNumber.get(`larvitar|ul|${unleashedLarvitar[1]}`)
         : reviewedKey ? cardsByNameSetNumber.get(reviewedKey)
+        : arKey ? cardsByNameSetNumber.get(arKey)
+        : isRound29Dpp ? (dppKey ? cardsByNameSetNumber.get(dppKey) : undefined)
+        : reviewedDelta ? cardsByNameSetNumber.get(reviewedDelta)
+        : reviewedPbl ? cardsByNameSetNumber.get(reviewedPbl)
         : cardsByFullName.get(cardIdentifier.toLowerCase());
 
       if (card) {
@@ -999,8 +1045,17 @@ export class DeckImportParser {
     parseErrors: string[];
   } {
     const cardManager = CardManager.getInstance();
-    const allCards = cardManager.getAllCards();
+    const compatibility = new PrintCompatibility(cardManager.getAllCards());
+    const allCards = compatibility.legacyCards;
     const dlrPrints = dlrPrintIndex(allCards);
+    const legacyFullNames = new Set(allCards.map(card => card.fullName));
+    // Manager indexes legacyFullName aliases too. Validate the resolved card,
+    // not the lookup spelling, against the legacy catalogue.
+    const lookupLegacyManager = (name: string): Card | undefined => {
+      const found = cardManager.getCardByName(name);
+      const identity = found && (found as any).printCompatibilityIdentity;
+      return found && legacyFullNames.has(found.fullName) && !compatibility.isCanonical(identity) ? found : undefined;
+    };
 
     // Normalize quotes, hyphens, and other common character variants
     const normalizeName = (name: string): string => {
@@ -1037,7 +1092,10 @@ export class DeckImportParser {
       }
       // Create key by name + set only (fallback ignoring number)
       const nameSetKey = `${normalizedName}|${setLower}`;
-      cardsByNameSet.set(nameSetKey, card);
+      // Newly registered prints must not take over an established fallback.
+      const newArPrint = ['Electrike AR 62', 'Tangela AR 76', 'Treecko AR 78', 'Manectric AR2', 'Ponyta AR2'].includes(card.fullName);
+      const precisePbl = card.set === 'PBL' && (card.fullName === 'Crushing Hammer FA PBL' || card.fullName === 'Energy Switch FA PBL');
+      if (!newArPrint && !precisePbl) cardsByNameSet.set(nameSetKey, card);
     }
 
     const lines = deckList.split('\n');
@@ -1096,14 +1154,26 @@ export class DeckImportParser {
       const unleashedLarvitar = setCode === 'UL' && normalizeName(parsed.name) === 'larvitar'
         ? parsed.setNumber.match(/^0*(50|51)$/) : null;
       const reviewedKey = `${normalizeName(parsed.name)}|${setCode.toLowerCase()}|${parsed.setNumber.replace(/^0+(?=\d)/, '')}`;
-      const reviewedPrint = ['inkay|lor|77', 'duskull|sf|60', 'crobat|ul|14'].includes(reviewedKey);
-      let card = setCode === 'DLR'
+      const pblName = normalizeName(parsed.name).replace(/ fa$/, '');
+      const pblNumber = parsed.setNumber.replace(/^0+(?=\d)/, '');
+      const isPblItem = setCode === 'PBL' && ['crushing hammer', 'energy switch'].includes(pblName)
+        && /^\d+$/.test(parsed.setNumber);
+      const pblKey = isPblItem && ((pblName === 'crushing hammer' && pblNumber === '105')
+        || (pblName === 'energy switch' && pblNumber === '107')) ? `${pblName}|pbl|${pblNumber}` : undefined;
+      const isRound29Dpp = round29DppName(parsed.name, setCode);
+      const dppKey = isRound29Dpp && round29DppKey(parsed.name, parsed.setNumber);
+      const reviewedPrint = ['inkay|lor|77', 'duskull|sf|60', 'crobat|ul|14'].includes(reviewedKey)
+        || !!round27ArKey(parsed.name, setCode, parsed.setNumber);
+      const exact = compatibility.resolve(parsed.name, setCode, parsed.setNumber);
+      let card = exact.recognized ? exact.card : setCode === 'DLR'
         ? findDlrPrint(dlrPrints, parsed.name, parsed.setNumber)
         : unleashedLarvitar ? cardsByNameSetNumber.get(`larvitar|ul|${unleashedLarvitar[1]}`)
         : reviewedPrint ? cardsByNameSetNumber.get(reviewedKey)
+        : isRound29Dpp ? (dppKey ? cardsByNameSetNumber.get(dppKey) : undefined)
+        : isPblItem ? (pblKey ? cardsByNameSetNumber.get(pblKey) : undefined)
         : cardsByFullName.get(fullName.toLowerCase());
 
-      if (setCode !== 'DLR' && !unleashedLarvitar && !reviewedPrint) {
+      if (!exact.recognized && setCode !== 'DLR' && !unleashedLarvitar && !reviewedPrint && !isRound29Dpp && !isPblItem) {
         // Second try: normalized fullName match
         if (!card) {
           card = cardsByFullName.get(normalizeName(fullName));
@@ -1123,7 +1193,7 @@ export class DeckImportParser {
 
         // Fifth try: just by fullName without number matching
         if (!card) {
-          card = cardManager.getCardByName(fullName);
+          card = lookupLegacyManager(fullName);
         }
 
         // Sixth try: repeat all lookups using set code aliases
@@ -1135,7 +1205,7 @@ export class DeckImportParser {
               || cardsByFullName.get(normalizeName(aliasFullName))
               || cardsByNameSetNumber.get(`${normalizeName(parsed.name)}|${aliasCode.toLowerCase()}|${parsed.setNumber}`)
               || cardsByNameSet.get(`${normalizeName(parsed.name)}|${aliasCode.toLowerCase()}`)
-              || cardManager.getCardByName(aliasFullName);
+              || lookupLegacyManager(aliasFullName);
             if (card) { break; }
           }
         }

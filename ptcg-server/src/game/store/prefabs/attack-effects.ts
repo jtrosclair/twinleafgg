@@ -63,6 +63,15 @@ export function KNOCK_OUT_OPPONENTS_ACTIVE_POKEMON(
   return store.reduceEffect(state, knockOutEffect);
 }
 
+/** Mark the current Defending Pokémon to be Knocked Out when its owner's next turn ends. */
+export function KNOCK_OUT_DEFENDING_POKEMON_AT_END_OF_OPPONENTS_NEXT_TURN(
+  _store: StoreLike, state: State, effect: AttackEffect, _source: Card,
+): State {
+  const target = effect.opponent.active.getPokemonCard();
+  if (target) target.knockOutAtEndOfTurnPlayerId = effect.opponent.id;
+  return state;
+}
+
 export function PUT_X_CARDS_FROM_YOUR_DISCARD_PILE_INTO_YOUR_HAND(
   x: number,
   filterFn: (card: Card) => boolean = () => true,

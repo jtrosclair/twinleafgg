@@ -1,0 +1,41 @@
+cards set
+cards set
+cards set
+cards set
+[
+  {
+    "root": "prizemap-svp-final-frozen",
+    "position": "first",
+    "mode": "client",
+    "restoredLegacy": true,
+    "extra": "Professor's Research221 SVP"
+  },
+  {
+    "root": "prizemap-svp-final-frozen",
+    "position": "first",
+    "mode": "api",
+    "restoredLegacy": true,
+    "extra": {
+      "valid": true,
+      "getLegacy": true
+    }
+  },
+  {
+    "root": "prizemap-svp-final-frozen",
+    "position": "last",
+    "mode": "client",
+    "restoredLegacy": true,
+    "extra": "Professor's Research221 SVP"
+  },
+  {
+    "root": "prizemap-svp-final-frozen",
+    "position": "last",
+    "mode": "api",
+    "restoredLegacy": true,
+    "extra": {
+      "valid": true,
+      "getLegacy": true
+    }
+  }
+]
+CLIENT_AND_API_COLLISION_ROUTES_FIXED

@@ -1,3 +1,8 @@
+import { Raichu } from './raichu';
+import { Ponyta } from './ponyta';
+import { Pidgeot } from './pidgeot';
+import { Haunter } from './haunter';
+import { Gengar } from './gengar';
 import { Card } from '../../game/store/card/card';
 import { Abra } from './abra';
 import { Alakazamex } from './alakazam-ex';
@@ -179,4 +184,9 @@ export const setPokemon151: Card[] = [
   new SwitchHR(),
   new BasicPsychicEnergyHR(),
 
+  new Gengar(),
+  new Haunter(),
+  new Pidgeot(),
+  new Ponyta(),
+  new Raichu(),
 ];

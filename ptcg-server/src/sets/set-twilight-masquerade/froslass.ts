@@ -82,4 +82,10 @@ export class Froslass extends PokemonCard {
 
     return state;
   }
+
+  /** Its printed attack has no additional effects; its Ability is not copied. */
+  public reduceCopiedAttackEffect(_store: StoreLike, state: State, _effect: Effect, _attackIndex: number): State {
+    return state;
+  }
+
 }

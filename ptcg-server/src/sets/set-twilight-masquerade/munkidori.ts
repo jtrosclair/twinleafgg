@@ -52,10 +52,7 @@ export class Munkidori extends PokemonCard {
   public readonly ADRENA_BRAIN_MARKER = 'ADRENA_BRAIN_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-      const specialConditionEffect = new AddSpecialConditionsEffect(effect, [SpecialCondition.CONFUSED]);
-      store.reduceEffect(state, specialConditionEffect);
-    }
+    state = Munkidori.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
 
     if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
       const player = effect.player;
@@ -206,4 +203,14 @@ export class Munkidori extends PokemonCard {
     }
     return state;
   }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      const specialConditionEffect = new AddSpecialConditionsEffect(effect, [SpecialCondition.CONFUSED]);
+      store.reduceEffect(state, specialConditionEffect);
+    }
+
+    return state;
+  }
+
 }

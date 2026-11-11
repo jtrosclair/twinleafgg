@@ -96,6 +96,9 @@ import { Zeraora } from './zeraora';
 import { CiphermaniacsCodebreaking } from './cryptomaniacs-deciphering';
 import { Sawsbuck } from './sawsbuck';
 
+import { Bronzor } from './bronzor';
+import { IronBoulderex } from './iron-boulder-ex';
+import { Whimsicott } from './whimsicott';
 export const setTemporalForces: Card[] = [
 
   new AncientBoosterEnergyCapsuleTEF(),
@@ -232,4 +235,7 @@ export const setTemporalForces: Card[] = [
   new GreatTusk2(),
   new Electabuzz(),
   new Electivire(),
+  new Bronzor(),
+  new IronBoulderex(),
+  new Whimsicott(),
 ];

@@ -66,6 +66,10 @@ export class Metagross extends PokemonCard {
       effect.cost = [];
     }
 
+    return Metagross.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Attack 1: Leg Quake
     // Ref: set-champions-path/alcremie-v.ts (Sweet Splash - CANT_ATTACK_MARKER on Evolution Pokemon)
     if (WAS_ATTACK_USED(effect, 0, this)) {
@@ -78,11 +82,7 @@ export class Metagross extends PokemonCard {
       }
     }
 
-    // Block attacks from marked Pokemon
-    if (effect instanceof AttackEffect
-      && effect.player.active.marker.hasMarker(this.LEG_QUAKE_MARKER, this)) {
-      throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
-    }
+    state = Metagross.prototype.reduceCopiedOpponentAttackEffect.call(this, store, state, effect, 0);
 
     // Cleanup at end of turn
     if (effect instanceof EndTurnEffect) {
@@ -93,4 +93,17 @@ export class Metagross extends PokemonCard {
 
     return state;
   }
+
+  public reduceCopiedOpponentAttackEffect(_store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.LEG_QUAKE_MARKER, this)) {
+      throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+    }
+    return state;
+  }
+
+  public hasCopiedOpponentAttackEffect(state: State, copycat: PokemonCard, playerId: number, _attackIndex: number): boolean {
+    return state.players.some(player => player.id !== playerId &&
+      [player.active, ...player.bench].some(slot => slot.cards.length > 0 && slot.marker.hasMarker(this.LEG_QUAKE_MARKER, copycat)));
+  }
+
 }

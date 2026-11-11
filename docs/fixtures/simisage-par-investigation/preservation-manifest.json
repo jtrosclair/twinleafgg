@@ -1,0 +1,209 @@
+{
+  "preservedAt": "2026-11-10T21:46:00.636202+00:00",
+  "status": "DEFERRED_NONSHIPPING",
+  "upstreamCommit": "e315e91da98509559708dc8b937202f7f39f87dc",
+  "requires": "Audited intrinsic-power query migration before Simisage integration",
+  "originalScratch": "/private/tmp/prizemap-simisage-par-investigation",
+  "originalCandidateManifestSha256": "b861cd4074ade63ccdd1bbc775da9159024f695e25005b00fb5db8c2af756939",
+  "originalVerificationReportSha256": "1415ff35efd42fc586a8742565cb0827e779a520901a1cef9d9fe9368777a214",
+  "sharedRuntimeEdited": false,
+  "sourceSuffix": ".fixture.ts means retained research source, not registered or compiled simulator code",
+  "files": [
+    {
+      "kind": "original evidence",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/candidate-manifest.json",
+      "fixturePath": "candidate-manifest.json",
+      "sha256": "b861cd4074ade63ccdd1bbc775da9159024f695e25005b00fb5db8c2af756939"
+    },
+    {
+      "kind": "original evidence",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/verification-results.json",
+      "fixturePath": "verification-results.json",
+      "sha256": "1415ff35efd42fc586a8742565cb0827e779a520901a1cef9d9fe9368777a214"
+    },
+    {
+      "kind": "original evidence",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/baseline-source-inventory.json",
+      "fixturePath": "baseline-source-inventory.json",
+      "sha256": "1151e8afdac8544b966969a93228264832c4dbe314c4601ba16f24c81b48a41b"
+    },
+    {
+      "kind": "original evidence",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/green-results.json",
+      "fixturePath": "green-results.json",
+      "sha256": "441ae58696e33303c7f1c9019e79046c79f6b6889f71cad05e5e251eae0bf917"
+    },
+    {
+      "kind": "original evidence",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/red-results.json",
+      "fixturePath": "red-results.json",
+      "sha256": "1b5584c9cf06deac8e2457a837ab4a04f2eff72afb88f85cc1808560bfa62a80"
+    },
+    {
+      "kind": "original evidence",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/replay-results.json",
+      "fixturePath": "replay-results.json",
+      "sha256": "0ad75937d676d53b5af99b997edcc1361c0fdf71eaeecc865ae2b3644b377ce3"
+    },
+    {
+      "kind": "original evidence",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/aerodactyl-live-red.json",
+      "fixturePath": "aerodactyl-live-red.json",
+      "sha256": "fc1070bef7301b347a89188e4264c7b1b719d9c312bf360172a8285778e590ee"
+    },
+    {
+      "kind": "original evidence",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/run-focused.cjs",
+      "fixturePath": "run-focused.cjs",
+      "sha256": "1fc7dea061610d51815e6353ff1090c6e2ca59ab15a0fe769d80396c629c80aa"
+    },
+    {
+      "kind": "original evidence",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/aerodactyl-live-red.cjs",
+      "fixturePath": "aerodactyl-live-red.cjs",
+      "sha256": "7a856424eee293dc9813a63f59be6bd81db38e83e15844e0ce54006e1f3dfc25"
+    },
+    {
+      "kind": "original scratch checksums; relative paths refer to scratch",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/SHA256SUMS",
+      "fixturePath": "original-scratch.SHA256SUMS",
+      "sha256": "373f0de30f10869f3dab86e2fee278d12fac8959447039ec50aa908b9d3bf572"
+    },
+    {
+      "kind": "isolated compile configuration",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/ptcg-server/tsconfig.simisage.json",
+      "fixturePath": "tsconfig.simisage.fixture.json",
+      "sha256": "1a6683c67638fb79141d534569d6a259652f6855cde039e564e35293ebde3281"
+    },
+    {
+      "kind": "nonshipping candidate source",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/ptcg-server/src/game/store/effects/check-effects.ts",
+      "fixturePath": "candidate/ptcg-server/src/game/store/effects/check-effects.fixture.ts",
+      "sha256": "75b63eac93951ca2273469e9999f3995226cc803b714b6d191f2d5b6412e64e9"
+    },
+    {
+      "kind": "exact baseline source for owned changed path",
+      "sourcePath": "/Users/jerrytrosclair/Documents/GitHub/twinleafgg/ptcg-server/src/game/store/effects/check-effects.ts",
+      "fixturePath": "baseline/ptcg-server/src/game/store/effects/check-effects.fixture.ts",
+      "sha256": "28df3af277297201f701a7112de35f7599e220423da9e349201752663abe57b2"
+    },
+    {
+      "kind": "nonshipping candidate source",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/ptcg-server/src/sets/set-crown-zenith/sky-seal-stone.ts",
+      "fixturePath": "candidate/ptcg-server/src/sets/set-crown-zenith/sky-seal-stone.fixture.ts",
+      "sha256": "b8d22407794a769e9f4f90f7afbe10136e1f37cd5cb0c8f189f0fdb0d7d12130"
+    },
+    {
+      "kind": "exact baseline source for owned changed path",
+      "sourcePath": "/Users/jerrytrosclair/Documents/GitHub/twinleafgg/ptcg-server/src/sets/set-crown-zenith/sky-seal-stone.ts",
+      "fixturePath": "baseline/ptcg-server/src/sets/set-crown-zenith/sky-seal-stone.fixture.ts",
+      "sha256": "a91b628affb5e53d9eb6e795291217bb61557aeeff675925e6076f82405edcdc"
+    },
+    {
+      "kind": "nonshipping candidate source",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/ptcg-server/src/sets/set-paradox-rift/index.ts",
+      "fixturePath": "candidate/ptcg-server/src/sets/set-paradox-rift/index.fixture.ts",
+      "sha256": "1cde02196be5e56efdeda132a3e36edda7dc46c8c601334452384926ad3f22fe"
+    },
+    {
+      "kind": "exact baseline source for owned changed path",
+      "sourcePath": "/Users/jerrytrosclair/Documents/GitHub/twinleafgg/ptcg-server/src/sets/set-paradox-rift/index.ts",
+      "fixturePath": "baseline/ptcg-server/src/sets/set-paradox-rift/index.fixture.ts",
+      "sha256": "964a5ae9a1821dcdfa1dd367c19466f5112c6e2e9c47ac05638ea22d9b76fdb8"
+    },
+    {
+      "kind": "nonshipping candidate source",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/ptcg-server/src/sets/set-paradox-rift/simisage.ts",
+      "fixturePath": "candidate/ptcg-server/src/sets/set-paradox-rift/simisage.fixture.ts",
+      "sha256": "ca26e6d7f38772585ac24b136c29d2f3feadf642f29afa8e00186be127262979"
+    },
+    {
+      "kind": "nonshipping candidate source",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/ptcg-server/src/sets/set-silver-tempest/forest-seal-stone.ts",
+      "fixturePath": "candidate/ptcg-server/src/sets/set-silver-tempest/forest-seal-stone.fixture.ts",
+      "sha256": "f107c4b0fcdbdbc2fe90e25545ca35202e0fe37962b4ba31360bb53a83c0c833"
+    },
+    {
+      "kind": "exact baseline source for owned changed path",
+      "sourcePath": "/Users/jerrytrosclair/Documents/GitHub/twinleafgg/ptcg-server/src/sets/set-silver-tempest/forest-seal-stone.ts",
+      "fixturePath": "baseline/ptcg-server/src/sets/set-silver-tempest/forest-seal-stone.fixture.ts",
+      "sha256": "2f481c981f3fabfb8d27ebd685c38a1f983f1b335aacf8a90eae3b3a22a833ac"
+    },
+    {
+      "kind": "nonshipping candidate source",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/ptcg-server/src/sets/tests/simisage-par.blockers.red.spec.ts",
+      "fixturePath": "candidate/ptcg-server/src/sets/tests/simisage-par.blockers.red.spec.fixture.ts",
+      "sha256": "c2d662fd2e76365104e461d485813543254b596d3630f30a519cecb1113df406"
+    },
+    {
+      "kind": "nonshipping candidate source",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/ptcg-server/src/sets/tests/simisage-par.investigation.spec.ts",
+      "fixturePath": "candidate/ptcg-server/src/sets/tests/simisage-par.investigation.spec.fixture.ts",
+      "sha256": "ca1006d8031f07036f5bfd810f8c236da73ce6be7c46ab7aa6a72a910e4942f4"
+    },
+    {
+      "kind": "original log bytes with unignored extension",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/compile-final.log",
+      "fixturePath": "logs/compile-final.log.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "original log bytes with unignored extension",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/green-final.log",
+      "fixturePath": "logs/green-final.log.txt",
+      "sha256": "e3a5bc0c19482f36ca3b495f8bb2842738df12e265fcae6e38a7b66cb5d2847a"
+    },
+    {
+      "kind": "original log bytes with unignored extension",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/red-final.log",
+      "fixturePath": "logs/red-final.log.txt",
+      "sha256": "6a30a1aecb3bc9d0dd1e4d477eb5c87c771e3864d5097793111dbccf643343cb"
+    },
+    {
+      "kind": "original log bytes with unignored extension",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/green-tests.log",
+      "fixturePath": "logs/green-tests.log.txt",
+      "sha256": "faae6f9e8996298050af980f09413f54a1f1a6090cfdb4c22b2ab0561ab9189d"
+    },
+    {
+      "kind": "original log bytes with unignored extension",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/blockers.red.log",
+      "fixturePath": "logs/blockers.red.log.txt",
+      "sha256": "ed271463571cd100b7781e0c6469c852b5075272936f71fdf8a984cceec92ec3"
+    },
+    {
+      "kind": "original log bytes with unignored extension",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/aerodactyl-live-red.log",
+      "fixturePath": "logs/aerodactyl-live-red.log.txt",
+      "sha256": "8e62a5f19d798ab10ccb161bfbaabef06d815bb6aa896f0874a8942393954800"
+    },
+    {
+      "kind": "original legal puzzle replay log",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/breaking-through-wall.solution.json.replay.log",
+      "fixturePath": "logs/breaking-through-wall.solution.json.replay.log.txt",
+      "sha256": "35540768cf268b20d2f055a9d00c611876e052c370f952daf26800f2cf8cff9e"
+    },
+    {
+      "kind": "original legal puzzle replay log",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/explosive-hand.solution.json.replay.log",
+      "fixturePath": "logs/explosive-hand.solution.json.replay.log.txt",
+      "sha256": "529dcf0ce65681dd8460543e521a3c86f6a3d339eeaecad614bc66495969686c"
+    },
+    {
+      "kind": "original legal puzzle replay log",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/phantom-maze.solution.json.replay.log",
+      "fixturePath": "logs/phantom-maze.solution.json.replay.log.txt",
+      "sha256": "61bc806deeb558428b4b186fe3c6d3d56087dc36ba476234e5a6de862706d855"
+    },
+    {
+      "kind": "original legal puzzle replay log",
+      "sourcePath": "/private/tmp/prizemap-simisage-par-investigation/somethings-fishy.solution.json.replay.log",
+      "fixturePath": "logs/somethings-fishy.solution.json.replay.log.txt",
+      "sha256": "2f9c9b1093791145757daed34db18d62395871778bcb8f8dcdd220802a587ab8"
+    }
+  ],
+  "gitIgnoreNotice": {
+    "README.md": "Ignored by repository-wide *.md; explicitly force-add this specific README when committing if desired.",
+    "logs": "Original *.log files ignored; evidence here uses .log.txt suffix, with exact original bytes."
+  }
+}

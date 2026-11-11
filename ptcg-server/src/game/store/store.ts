@@ -2,7 +2,7 @@ import { AbstractAttackEffect, ApplyWeaknessEffect, DealDamageEffect, PutDamageE
 import { CheckProvidedEnergyEffect } from './effects/check-effects';
 import { mirrorOnlyEnergyForQuery } from './prefabs/mirror-only-energy';
 import { StateUtils } from './state-utils';
-import { resolveCopyAttackSessions } from './prefabs/copy-attack-delegation';
+import { preflightCopiedOpponentAttacks, resolveCopyAttackSessions } from './prefabs/copy-attack-delegation';
 import { Action } from './actions/action';
 import { AbortGameAction } from './actions/abort-game-action';
 import { AppendLogAction } from './actions/append-log-action';
@@ -11,11 +11,13 @@ import { Card } from './card/card';
 import { PokemonCard } from './card/pokemon-card';
 import { TrainerCard } from './card/trainer-card';
 import { Stage } from './card/card-types';
+import { PowerType } from './card/pokemon-types';
+import { PokemonCardList } from './state/pokemon-card-list';
 import { CardTarget, PlayCardAction, PlayerType, SlotType } from './actions/play-card-action';
 import { ChangeAvatarAction } from './actions/change-avatar-action';
 import { Effect } from './effects/effect';
 import { clearAttackDamageScopes } from './prefabs/attack-after-damage';
-import { AfterEvolveEffect, AttackEffect, CheckEvolveEffect, EvolveEffect, RetreatEffect, RetreatStartEffect } from './effects/game-effects';
+import { AfterEvolveEffect, AttackEffect, CheckEvolveEffect, EvolveEffect, PowerEffect, RetreatEffect, RetreatStartEffect } from './effects/game-effects';
 import { ATTACK_RETREAT_LOCK_UNTIL_TARGET_END_TURN } from './prefabs/retreat-lock-until-target-end-turn';
 import { MarkerConstants } from './markers/marker-constants';
 import { EndTurnEffect } from './effects/game-phase-effects';
@@ -34,6 +36,7 @@ import { playCardReducer } from './reducers/play-card-reducer';
 import { playEnergyReducer } from './effect-reducers/play-energy-effect';
 import { playPokemonReducer } from './effect-reducers/play-pokemon-effect';
 import { playPokemonFromDeckReducer } from './effect-reducers/play-pokemon-from-deck-effect';
+import { playPokemonFromDiscardReducer } from './effect-reducers/play-pokemon-from-discard-effect';
 import { playTrainerReducer, preflightDualStadiumCancellation } from './effect-reducers/play-trainer-effect';
 import { playerTurnReducer } from './reducers/player-turn-reducer';
 import { gamePhaseReducer } from './effect-reducers/game-phase-effect';
@@ -201,6 +204,13 @@ export class Store implements StoreLike {
       if (preflight.preventDefault) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
       effect.preflightComplete = true;
     }
+    if (effect instanceof PowerEffect && !effect.preventDefault
+      && [PowerType.POKEPOWER, PowerType.POKEBODY, PowerType.POKEMON_POWER].includes(effect.power.powerType)) {
+      const cardList = effect.target ?? StateUtils.findCardList(state, effect.card);
+      if (cardList instanceof PokemonCardList && cardList.cannotUsePowersNextTurn) {
+        throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+      }
+    }
     // Clear Vision affects the player for the rest of the game, even if the
     // Pokémon that used or copied it has since left play. Reject the attack
     // before any card handler can perform attack side effects.
@@ -209,6 +219,9 @@ export class Store implements StoreLike {
       && (effect.attack.gxAttack === true ||
         (typeof effect.attack.name === 'string' && effect.attack.name.includes('-GX')))) {
       throw new GameError(GameMessage.CANNOT_USE_ATTACK);
+    }
+    if (effect instanceof AttackEffect && !effect.preventDefault) {
+      state = preflightCopiedOpponentAttacks(this, state, effect);
     }
     // Upstream attack prevention runs before fan-out so blocked effects never trigger cards.
     if (effect instanceof AbstractAttackEffect && effect.target && effect.source
@@ -248,6 +261,7 @@ export class Store implements StoreLike {
     state = playEnergyReducer(this, state, effect);
     state = playPokemonReducer(this, state, effect);
     state = playPokemonFromDeckReducer(this, state, effect);
+    state = playPokemonFromDiscardReducer(this, state, effect);
     state = playTrainerReducer(this, state, effect);
     state = retreatReducer(this, state, effect);
     state = gameReducer(this, state, effect);

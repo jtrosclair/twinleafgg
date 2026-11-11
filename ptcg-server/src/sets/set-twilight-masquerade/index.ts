@@ -106,6 +106,11 @@ import { WalkingWake } from './walking-wake';
 import { WellspringMaskOgerponex } from './wellspring-mask-ogerpon-ex';
 import { Zapdos } from './zapdos';
 
+import { Lucian } from './lucian';
+import { Milotic } from './milotic';
+import { Scolipede } from './scolipede';
+import { Varoom } from './varoom';
+import { Whirlipede } from './whirlipede';
 export const setTwilightMasquerade: Card[] = [
   new Aggron(),
   new Ariados(),
@@ -263,4 +268,9 @@ export const setTwilightMasquerade: Card[] = [
   new Litwick(),
   new Lampent(),
   new Chandelure(),
+  new Lucian(),
+  new Milotic(),
+  new Scolipede(),
+  new Varoom(),
+  new Whirlipede(),
 ];

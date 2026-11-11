@@ -1,0 +1,176 @@
+cards set
+{
+  "ok": true,
+  "name": "Explosive Hand",
+  "sourceUrl": "https://www.prizemap.app/api/puzzles/details/f51f4400-b78e-4744-9be8-3e8aec0ca5cf",
+  "snapshotSha256": "1d6daf349636d9fa2d79787c7c74245cb13359a2ebf3b75711860de7cccb8701",
+  "replays": 2,
+  "orderedSteps": 20,
+  "terminal": {
+    "title": "Explosive Hand",
+    "turn": 5,
+    "phase": 7,
+    "winner": 0,
+    "complete": true,
+    "players": [
+      {
+        "id": 2,
+        "active": "Alakazam M1S",
+        "hand": [
+          [
+            14,
+            "Special Red Card M4"
+          ],
+          [
+            15,
+            "Special Red Card M4"
+          ],
+          [
+            16,
+            "Buddy-Buddy Poffin TEF"
+          ],
+          [
+            17,
+            "Buddy-Buddy Poffin TEF"
+          ],
+          [
+            18,
+            "Buddy-Buddy Poffin TEF"
+          ],
+          [
+            10,
+            "Hilda SV11W"
+          ],
+          [
+            9,
+            "Hilda SV11W"
+          ],
+          [
+            8,
+            "Telepath [P] Energy M3"
+          ],
+          [
+            7,
+            "Hilda SV11W"
+          ],
+          [
+            6,
+            "Telepath [P] Energy M3"
+          ],
+          [
+            5,
+            "Gwynn M5"
+          ],
+          [
+            4,
+            "Dawn M2"
+          ],
+          [
+            3,
+            "Telepath [P] Energy M3"
+          ],
+          [
+            2,
+            "Hilda SV11W"
+          ],
+          [
+            1,
+            "Dawn M2"
+          ],
+          [
+            0,
+            "Psychic Energy SVE"
+          ],
+          [
+            44,
+            "Kadabra M1S"
+          ],
+          [
+            45,
+            "Budew ASC"
+          ]
+        ],
+        "deck": 0,
+        "prizes": 0,
+        "bench": [
+          {
+            "index": 0,
+            "name": "Abra TWM",
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 1,
+            "name": "Alakazam M1S",
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 2,
+            "name": "Kadabra M1S",
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 3,
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 4,
+            "energy": [],
+            "damage": 0
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "hand": [
+          [
+            104,
+            "Risky Ruins MEG"
+          ],
+          [
+            105,
+            "Risky Ruins MEG"
+          ]
+        ],
+        "deck": 44,
+        "prizes": 1,
+        "bench": [
+          {
+            "index": 0,
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 1,
+            "name": "Fezandipiti ex ASC",
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 2,
+            "name": "Dudunsparce TEF",
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 3,
+            "name": "Dragapult ex TWM",
+            "energy": [
+              "Psychic Energy SVE"
+            ],
+            "damage": 0
+          },
+          {
+            "index": 4,
+            "energy": [],
+            "damage": 0
+          }
+        ]
+      }
+    ],
+    "pending": []
+  }
+}

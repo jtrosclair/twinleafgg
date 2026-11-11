@@ -1,3 +1,13 @@
+import { SylveonTK6S, WigglytuffTK7B } from './other-prints';
+import { Sylveon } from './sylveon';
+import { Suicune } from './suicune';
+import { SalamenceEX } from './salamence-ex';
+import { PikachuLibre } from './pikachu-libre';
+import { Noivern } from './noivern';
+import { Malamar } from './malamar';
+import { Latios } from './latios';
+import { Latias } from './latias';
+import { Giratina } from './giratina';
 import { Card } from '../../game/store/card/card';
 import { Azelf } from './azelf';
 import { Celebi } from './celebi';
@@ -61,4 +71,15 @@ export const setXYPromos: Card[] = [
   new Jirachi2XYP(),
   new YveltalEx3XYP(),
   new Karen2XYP(),
+  new Giratina(),
+  new Latias(),
+  new Latios(),
+  new Malamar(),
+  new Noivern(),
+  new PikachuLibre(),
+  new SalamenceEX(),
+  new Suicune(),
+  new Sylveon(),
+  new SylveonTK6S(),
+  new WigglytuffTK7B(),
 ];

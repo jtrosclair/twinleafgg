@@ -1,3 +1,5 @@
+import { Bronzor } from './bronzor';
+import { Altaria } from './altaria';
 import { Card } from '../../game/store/card/card';
 import { Absolex } from './absol-ex';
 import { Barboach } from './barboach';
@@ -149,6 +151,8 @@ export const setObsidianFlames: Card[] = [
   new CharizardexHR(),
   new ArtazonHR(),
   new FireEnergyHR(),
-  new VaroomIR()
+  new VaroomIR(),
 
+  new Altaria(),
+  new Bronzor(),
 ];

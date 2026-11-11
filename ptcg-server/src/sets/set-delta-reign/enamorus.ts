@@ -38,6 +38,10 @@ export class Enamorus extends PokemonCard {
       return reduceIncarnateUnionEffect(store, state, effect, this);
     }
 
+    return Enamorus.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Rising Heart
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const opponentActive = effect.opponent.active.getPokemonCard();

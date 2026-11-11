@@ -1,0 +1,5825 @@
+{
+  "scope": "set TypeScript files excluding tests; raw text match, not verified behavior",
+  "filesScanned": 10670,
+  "sourceTreeSha256": "4a567617fd09bba5aef163f6568744810bf8f347fab69e76ee38519b2e2bda57",
+  "helperFiles": 933,
+  "effectFiles": 237,
+  "anyFiles": 1163,
+  "rows": [
+    {
+      "file": "set-30th-celebration/drifloon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-30th-celebration/english-palkia.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-30th-celebration/mew-ex.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-30th-celebration/pikachu-32.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-30th-celebration/volbeat.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ancient-origins/bellossom.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ancient-origins/cottonee.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ancient-origins/malamar.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ancient-origins/persian.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ancient-origins/porygon-z-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ancient-origins/regice.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ancient-origins/sliggoo.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ancient-origins/spinarak.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ancient-origins/volcarona-2.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-aquapolis/chinchou.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-aquapolis/gloom.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-aquapolis/horsea.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-aquapolis/oddish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-aquapolis/porygon2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-arceus/arceus-lightning.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-arceus/arceus-psychic.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-arceus/gengar.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ascended-heroes/beautifly.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ascended-heroes/cascoon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ascended-heroes/croconaw.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ascended-heroes/frosmoth.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ascended-heroes/larrys-dunsparce.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ascended-heroes/marill.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ascended-heroes/mega-froslass-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ascended-heroes/mightyena.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ascended-heroes/pawniard.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/azelf.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/bronzor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/darkrai-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/glameow.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/heatran-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/heatran-vmax.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/hisuian-decidueye-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/hisuian-lilligant.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-astral-radiance/hisuian-overqwil.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/hisuian-sneasler-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/hisuian-typhlosion-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/hisuian-zoroark.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/hisuian-zorua.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/kirlia.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/luxray-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/magneton.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/mismagius.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/origin-forme-palkia-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/petilil.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/purugly.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/ralts.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/regirock.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/registeel.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/swinub.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/ursaluna.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-astral-radiance/uxie.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/abra.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/beedrill.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/caterpie.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/clefairy.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/dewgong.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/drowzee.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/electabuzz.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/gyarados.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/haunter.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/ivysaur.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/kakuna.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/koffing.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/magnemite.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/magneton.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/metapod.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/nidoking.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/ninetales.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/pidgeotto.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/pidgey.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/squirtle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/starmie.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/tangela.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/vuplix.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-base-set/weedle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-battle-styles/cacturne.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-battle-styles/centiskorch.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-battle-styles/chimecho.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-battle-styles/corphish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-battle-styles/entei.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-battle-styles/galarian-slowpoke.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-battle-styles/grumpig.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-battle-styles/lickilicky.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-battle-styles/luxray.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-battle-styles/mawile.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-battle-styles/mienshao.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-battle-styles/salazzle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-battle-styles/sizzlipede.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-battle-styles/tapu-bulu.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-battle-styles/zubat.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-black-and-white/alomomola2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-black-and-white/darmanitan.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-black-and-white/darumaka2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-black-and-white/joltik.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-black-and-white/munna.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-black-and-white/musharna.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-black-and-white/patrat2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-black-and-white/servine.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-black-and-white/simipour.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-black-and-white/swanna.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-black-and-white/throh.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-black-and-white/venipede.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-black-and-white/zebstrika.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-black-bolt-white-flare/deino.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-black-bolt-white-flare/foongus.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-black-bolt-white-flare/gothorita.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-black-bolt-white-flare/purrloin.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-black-bolt-white-flare/serperior-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/black-kyurem-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/celebi-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/croagunk-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/croagunk.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/delibird.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/duskull.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/gligar.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/gliscor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/gloom.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/golduck.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/golurk.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/grumpig.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/jellicent.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/liepard.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/lillipup.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/lopunny.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/meowth.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/petilil.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/psyduck.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/purrloin.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-boundaries-crossed/raticate.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/skarmory-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/togepi.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/toxicroak.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/unfezant.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/watchog.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-boundaries-crossed/whimsicott.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakpoint/bayleef.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakpoint/clefairy.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakpoint/drapion.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakpoint/froakie.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakpoint/furfrou.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakpoint/garbodor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakpoint/luxio.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakpoint/mawile.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakpoint/pangoro.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-breakpoint/rattata.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-breakpoint/shinx.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-breakpoint/stantler.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakthrough/beheeyem.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakthrough/chatot.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakthrough/dedenne.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakthrough/florges.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakthrough/glalie-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakthrough/magnemite-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakthrough/magneton.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakthrough/marowak.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-breakthrough/meloetta.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-breakthrough/mismagius.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakthrough/piloswine.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-breakthrough/prinplup.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakthrough/remoraid.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-breakthrough/scatterbug.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakthrough/snover.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakthrough/snubbull.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-breakthrough/swinub.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakthrough/swoobat.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-breakthrough/ursaring.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-breakthrough/vanillish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakthrough/vivillon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-breakthrough/zorua.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-brilliant-stars/breloom.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-brilliant-stars/dusclops.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-brilliant-stars/duskull.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-brilliant-stars/floatzel.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-brilliant-stars/grimer.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-brilliant-stars/lumineon-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-brilliant-stars/luxio.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-brilliant-stars/minccino.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-brilliant-stars/morpeko-v.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-brilliant-stars/piplup.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-brilliant-stars/probopass.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-brilliant-stars/snorunt.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-brilliant-stars/staraptor.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-burning-shadows/alolan-grimer.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/alolan-muk-gx-2.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-burning-shadows/alolan-muk-gx.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-burning-shadows/alolan-vulpix.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/bruxish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/butterfree.ts",
+      "afterHelper": true,
+      "afterEffect": true
+    },
+    {
+      "file": "set-burning-shadows/darkrai.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/electabuzz.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/gloom.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/golisopod-gx.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-burning-shadows/heatmor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/heracross.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-burning-shadows/inkay.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/malamar.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/marill.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/mudsdale.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-burning-shadows/noctowl.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/oddish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/palossand.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-burning-shadows/pikachu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/scolipede.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/seviper.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/shiinotic.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/tapu-fini-gx.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/toxicroak.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/vileplume.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-burning-shadows/whirlipede.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-celebrations/dark-gyarados.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celebrations/dialga.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celebrations/flying-pikachu-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/ariados.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-celestial-storm/baltoy.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/claydol.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/deoxys-3.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-celestial-storm/donphan.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-celestial-storm/dunsparce.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-celestial-storm/gulpin.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/illumise.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/jirachi-prism-star.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/jirachi.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/larvitar.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/loudred.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/lunatone.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/luvdisc.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/palossand-gx.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/pelipper.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/shiftry-gx.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/shuppet-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/skitty.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/spinarak.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/spoink.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-celestial-storm/surskit.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/torkoal.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/victreebel.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/voltorb.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-celestial-storm/whismur-2.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-champions-path/beedrill.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-champions-path/centiskorch.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-champions-path/eldegoss-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-champions-path/malamar.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-champions-path/vulpix.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-champions-path/weedle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-chaos-rising/claydol.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-chaos-rising/emolga.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-chaos-rising/mareep.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-chaos-rising/metagross.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-chaos-rising/octillery.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-chaos-rising/skuntank.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-chaos-rising/vulpix.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-chilling-reign/ampharos.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-chilling-reign/banette.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-chilling-reign/blissey-v.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-chilling-reign/celebi-v.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-chilling-reign/delibird.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-chilling-reign/drizzile.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-chilling-reign/gastly.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-chilling-reign/kirlia.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-chilling-reign/lapras.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-chilling-reign/liepard-v.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-chilling-reign/qwilfish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-chilling-reign/ralts.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-chilling-reign/scolipede.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-chilling-reign/shaymin.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-chilling-reign/tapu-fini.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-chilling-reign/whirlipede.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/alolan-grimer.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/alolan-sandshrew.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-cosmic-eclipse/charizard-braixen-gx.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/cradily.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/dartrix.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-cosmic-eclipse/golett.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/kirlia.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/koffing.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-cosmic-eclipse/lileep.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/mimikyu-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/pikachu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/probopass.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/raichu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/ralts.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-cosmic-eclipse/rockruff.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-cosmic-eclipse/skrelp.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/slugma.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/slurpuff.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/spheal-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/swoobat.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/tangela.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/togedemaru-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/trevenant.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-cosmic-eclipse/weavile.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-cosmic-eclipse/weezing.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-cosmic-eclipse/xatu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crimson-invasion/alolan-exeggutor-gx.ts",
+      "afterHelper": true,
+      "afterEffect": true
+    },
+    {
+      "file": "set-crimson-invasion/cacturne.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-crimson-invasion/camerupt.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crimson-invasion/cubone.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crimson-invasion/emolga.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-crimson-invasion/exeggcute.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crimson-invasion/gastrodon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crimson-invasion/gengar.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crimson-invasion/gourgeist.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crimson-invasion/hakamo-o.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-crimson-invasion/houndoom.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crimson-invasion/kartana-gx.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-crimson-invasion/minccino.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crimson-invasion/misdreavus.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crimson-invasion/salandit.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crimson-invasion/salazzle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crimson-invasion/weedle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crimson-invasion/wigglytuff.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crown-zenith/absol.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crown-zenith/bellossom.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-crown-zenith/exeggcute.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crown-zenith/girafarig.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crown-zenith/hatterene-v.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-crown-zenith/hatterene-vmax.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crown-zenith/luxray.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crown-zenith/mewtwo.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crown-zenith/regigigas-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-crown-zenith/rockruff.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-crown-zenith/salazzle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dark-explorers/accelgor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dark-explorers/carnivine.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-dark-explorers/chansey.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dark-explorers/chatot.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dark-explorers/ducklett.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dark-explorers/eelektross.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-dark-explorers/entei-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dark-explorers/glaceon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dark-explorers/herdier.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-dark-explorers/ivysaur.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dark-explorers/klink.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-dark-explorers/kyogre-ex.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-dark-explorers/larvesta-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dark-explorers/raikou-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dark-explorers/sableye.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dark-explorers/shelmet.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dark-explorers/slowking.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dark-explorers/umbreon-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dark-explorers/venusaur.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dark-explorers/vullaby.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-dark-explorers/woobat.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dark-explorers/zorua-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/ampharos.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/arctovish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/ariados.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/combusken.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/crobat-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/fletchinder.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/golisopod.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/gothitelle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/greedent.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-darkness-ablaze/heatran.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/houndoom-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/klang.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/larvesta.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/manectric.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/mareanie.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/morelull.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/parasect.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/pincurchin.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/purrloin.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/starly.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/tapu-koko.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/toxapex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/vanillish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/vanillite.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/wigglytuff.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-darkness-ablaze/wimpod.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-delta-reign/combee.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-delta-reign/druddigon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-delta-reign/giratina.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-delta-reign/growlithe.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-delta-reign/inkay.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-delta-reign/rotom.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-delta-reign/swablu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-delta-reign/virizion.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-destined-rivals/ethans-pichu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-destined-rivals/hearthflame-mask-ogerpon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-destined-rivals/marnies-impidimp.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-destined-rivals/mistys-lapras.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-destined-rivals/mistys-staryu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-destined-rivals/primeape.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-destined-rivals/rotom.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-destined-rivals/stevens-claydol.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-destined-rivals/team-rockets-chingling.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-destined-rivals/team-rockets-crobat-ex.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-destined-rivals/team-rockets-drowzee.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-destined-rivals/team-rockets-ekans.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-destined-rivals/team-rockets-flaaffy.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-destined-rivals/team-rockets-golbat.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-destined-rivals/team-rockets-larvitar.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-destined-rivals/team-rockets-meowth.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-destined-rivals/team-rockets-nidoking-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-destined-rivals/team-rockets-persian-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-destined-rivals/team-rockets-zubat.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-destined-rivals/yanma.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-detective-pikachu/bulbasaur.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-diamond-and-pearl/cleffa.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-diamond-and-pearl/haunter.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragon-vault/dratini-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragon-vault/dratini.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragon-vault/druddigon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-exalted/claydol.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-dragons-exalted/deino.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-exalted/gothorita.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-exalted/honchkrow.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-dragons-exalted/houndoom.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-exalted/maractus.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-exalted/milotic.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-exalted/ninjask.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-dragons-exalted/palpitoad.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-exalted/roserade-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-exalted/sawk.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-dragons-exalted/swablu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-exalted/tympole.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-exalted/vulpix.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-exalted/wailmer.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-exalted/yanma.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-dragons-majesty/bagon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-majesty/charmander.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-majesty/heatmor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-majesty/kingdra-gx.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-dragons-majesty/milotic.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-majesty/phione.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-majesty/reshiram-gx.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-majesty/swablu-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-dragons-majesty/torchic.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-emerging-powers/beartic.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-emerging-powers/cinccino.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-emerging-powers/cobalion.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-emerging-powers/cubchoo.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-emerging-powers/darmanitan.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-emerging-powers/emolga.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-emerging-powers/ferrothorn.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-emerging-powers/galvantula.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-emerging-powers/gothita.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-emerging-powers/klang.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-emerging-powers/petilil.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-emerging-powers/sewaddle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-emerging-powers/venipede.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-emerging-powers/woobat.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolutions/beedrill.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolutions/dewgong.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-evolutions/drowzee.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolutions/electabuzz.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolutions/flying-pikachu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolutions/gastly.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolutions/growlithe.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-evolutions/gyarados.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolutions/haunter.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolutions/kakuna.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolutions/m-pidgeot-ex.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-evolutions/magnemite.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolutions/magneton.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolutions/mew.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolutions/starmie.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolutions/tangela.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolutions/vulpix.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolving-skies/ampharos.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolving-skies/emolga.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolving-skies/flabebe.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolving-skies/flareon-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolving-skies/florges.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolving-skies/golduck.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolving-skies/hypno.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolving-skies/nuzleaf.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolving-skies/rufflet.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-evolving-skies/seedot.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolving-skies/shiftry.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-evolving-skies/trevenant-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-evolving-skies/vaporeon-v.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-evolving-skies/vigoroth.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-crystal-guardians/alakazam-star.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-crystal-guardians/banette.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-crystal-guardians/exploud-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-crystal-guardians/ivysaur2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-crystal-guardians/treecko.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-crystal-guardians/treecko2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-crystal-guardians/venusaur.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-delta-species/dratini2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-delta-species/groudon-star.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-delta-species/holons-electrode.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-delta-species/holons-voltorb.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-delta-species/koffing.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-delta-species/magnemite.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-delta-species/meowth.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-delta-species/porygon2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-delta-species/ralts.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-delta-species/shelgon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-delta-species/zubat.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-deoxys/koffing.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-deoxys/seedot.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-deoxys/slugma.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-deoxys/weezing.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-dragon/corphish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-dragon/grimer.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ex-dragon/horsea.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-dragon/houndour.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-dragon/latias-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-dragon/magnemite.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-dragon/mareep.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-dragon/muk-ex.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ex-dragon/snorunt.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-dragon-frontiers/bayleef.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-dragon-frontiers/chikorita.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-dragon-frontiers/feraligatr.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-dragon-frontiers/horsea.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-dragon-frontiers/kingdra-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-dragon-frontiers/kirlia.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-dragon-frontiers/ralts2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-dragon-frontiers/shellder.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-dragon-frontiers/vibrava.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-emerald/loudred.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-emerald/meditite.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-firered-leafgreen/bulbasaur.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-firered-leafgreen/exeggcute.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-firered-leafgreen/exeggutor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-firered-leafgreen/nidoqueen.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-firered-leafgreen/nidorina.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-firered-leafgreen/porygon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-firered-leafgreen/squirtle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-firered-leafgreen/venusaur-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-firered-leafgreen/voltorb.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-firered-leafgreen/wartortle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-hidden-legends/clamperl.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-hidden-legends/exploud.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-hidden-legends/golbat.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-hidden-legends/gorebyss.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-hidden-legends/jirachi.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-hidden-legends/kyogre-ex.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ex-hidden-legends/oddish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-hidden-legends/spheal.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-hidden-legends/vileplume-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-holon-phantoms/latias.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-holon-phantoms/meowth.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-holon-phantoms/omastar.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-holon-phantoms/pidgeotto.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ex-legend-maker/anorith.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-legend-maker/bellsprout.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-legend-maker/girafarig.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-legend-maker/growlithe.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-legend-maker/lunatone.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-legend-maker/muk.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-legend-maker/pikachu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-legend-maker/roselia.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-legend-maker/skitty.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-legend-maker/victreebel.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-legend-maker/voltorb.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-legend-maker/wynaut.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-ruby-and-sapphire/kirlia2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-ruby-and-sapphire/linoone.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-ruby-and-sapphire/marshtomp.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-ruby-and-sapphire/mudkip.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-ruby-and-sapphire/ralts.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-ruby-and-sapphire/skitty2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-ruby-and-sapphire/swampert.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-ruby-and-sapphire/torchic.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-sandstorm/aerodactyl-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-sandstorm/azurill.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-sandstorm/dunsparce.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ex-sandstorm/elekid.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-sandstorm/kabuto.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-sandstorm/natu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-sandstorm/omanyte.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-sandstorm/pichu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-sandstorm/wailmer.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ex-sandstorm/wailord-ex.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ex-sandstorm/zigzagoon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-team-magma-vs-team-aqua/raikou-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-team-magma-vs-team-aqua/swampert-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-team-magma-vs-team-aqua/team-aquas-cacnea.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-team-magma-vs-team-aqua/team-aquas-cacturne.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-team-magma-vs-team-aqua/team-aquas-chinchou.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ex-team-rocket-returns/dark-electrode.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ex-team-rocket-returns/dark-pupitar.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-team-rocket-returns/dratini.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-team-rocket-returns/rockets-scyther-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-team-rocket-returns/rockets-suicune-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-team-rocket-returns/seadra.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-unseen-forces/ariados.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ex-unseen-forces/bayleef.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-unseen-forces/gligar.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-unseen-forces/oddish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-unseen-forces/porygon2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ex-unseen-forces/slugma.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-expedition/bulbasaur.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-expedition/charmander.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-expedition/clefairy.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-expedition/gengar.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-expedition/haunter.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-expedition/ivysaur.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-expedition/oddish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-expedition/venusaur.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fates-collide/delphox.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fates-collide/fennekin-2.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-fates-collide/gothita.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fates-collide/grumpig.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-fates-collide/hawlucha.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fates-collide/shuckle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fates-collide/vullaby.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fates-collide/whimsicott.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-flashfire/buneary.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-flashfire/dusclops.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-flashfire/espurr.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-flashfire/furfrou.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-flashfire/qwilfish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-flashfire/roselia.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-flashfire/shinx.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-flashfire/skuntank.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-flashfire/sneasel-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-flashfire/walrein.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-forbidden-light/abomasnow.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-forbidden-light/amaura.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-forbidden-light/azelf.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-forbidden-light/greninja-gx.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-forbidden-light/heliolisk.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-forbidden-light/honedge-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-forbidden-light/hoopa.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-forbidden-light/infernape.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-forbidden-light/meowstic.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-forbidden-light/noivern.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-forbidden-light/poipole.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-forbidden-light/spewpa.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-forbidden-light/xurkitree.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-forbidden-light/zygarde-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-furious-fists/aurorus.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-furious-fists/clauncher.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-furious-fists/clawitzer.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-furious-fists/clefable.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-furious-fists/drapion.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-furious-fists/gothita.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-furious-fists/hitmontop.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-furious-fists/hypno.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-furious-fists/leafeon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-furious-fists/mienshao.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-furious-fists/pikachu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-furious-fists/plusle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-furious-fists/raichu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-furious-fists/skorupi.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-furious-fists/sylveon.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-furious-fists/tornadus.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-furious-fists/weepinbell.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fusion-strike/absol.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-fusion-strike/bewear.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fusion-strike/boltund-v.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-fusion-strike/chandelure-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fusion-strike/claydol.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-fusion-strike/drakloak.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-fusion-strike/dubwool.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fusion-strike/frosmoth.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fusion-strike/galarian-darmanitan.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fusion-strike/galarian-zigzagoon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fusion-strike/garbodor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fusion-strike/gligar.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fusion-strike/gliscor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fusion-strike/jynx.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fusion-strike/landorus.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fusion-strike/mantine.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fusion-strike/mew-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fusion-strike/simipour.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fusion-strike/sizzlipede-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fusion-strike/sliggoo.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fusion-strike/trubbish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-fusion-strike/tynamo.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-great-encounters/weedle.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-guardians-rising/alolan-sandslash.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-guardians-rising/castform.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-guardians-rising/chandelure.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-guardians-rising/clefable.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-guardians-rising/goodra.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-guardians-rising/goomy.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-guardians-rising/gothitelle.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-guardians-rising/gothorita.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-guardians-rising/helioptile.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-guardians-rising/litwick.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-guardians-rising/minior.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-guardians-rising/murkrow.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-guardians-rising/phantump.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-guardians-rising/politoed.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-guardians-rising/tentacruel.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-guardians-rising/turtonator.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-guardians-rising/whiscash.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-guardians-rising/wimpod.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-guardians-rising/wishiwashi-gx.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-gym-heros/brocks-zubat-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-heartgold-and-soulsilver/hoppip.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-heartgold-and-soulsilver/slowking.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-hidden-fates/moltres-zapdos-articuno-gx.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-hidden-fates/onix-gx.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-hidden-fates/reshiram-gx.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-hidden-fates/seviper.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-hidden-fates/voltorb.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-journey-together/accelgor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-legendary-treasures/crustle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-legendary-treasures/gallade.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-legendary-treasures/gardevoir.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-legendary-treasures/gothita.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-legendary-treasures/kirlia-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-legendary-treasures/phione.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-legendary-treasures/ralts-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-legendary-treasures/ralts.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-legendary-treasures/sableye.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-legendary-treasures/swablu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-legendary-treasures/xatu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-legends-awakened/mesprit-lv-x.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-origin/ariados.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-origin/darkrai.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-origin/electrike.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-origin/hariyama.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-origin/hisuian-goodra-v.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-lost-origin/hisuian-zoroark-v.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-lost-origin/horsea.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-lost-origin/litleo.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-origin/makuhita.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-origin/mimikyu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-origin/nuzleaf.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-lost-origin/poliwrath.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-origin/raichu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-origin/roserade.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-origin/seviper.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-lost-origin/shiftry.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-lost-origin/spinarak.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-origin/swanna.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/ariados.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/bayleef.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/brionne.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-lost-thunder/bruxish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/dedenne.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/dialga.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/electabuzz.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/entei.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/flaaffy.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/forretress.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-lost-thunder/hitmontop.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/jigglypuff.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/lapras.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/mareep-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/meloetta.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/morelull.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/pikipek-2.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-lost-thunder/popplio.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/primarina.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/quilava.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/spinarak.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-lost-thunder/stantler.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/suicune-gx.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-lost-thunder/tangela.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/tapu-fini.ts",
+      "afterHelper": true,
+      "afterEffect": true
+    },
+    {
+      "file": "set-lost-thunder/tapu-koko.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-lost-thunder/toucannon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/toxapex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-lost-thunder/wurmple-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-majestic-dawn/bronzor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-majestic-dawn/buneary.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-majestic-dawn/croagunk.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-majestic-dawn/toxicroak.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-mega-evolution/abra.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-mega-evolution/bayleef.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-mega-evolution/mega-latias-ex.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-mega-evolution/ninjask.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-mega-evolution/onix.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-mysterious-treasures/gabite.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-mysterious-treasures/mesprit.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-mysterious-treasures/nidorina.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-neo-discovery/yanma.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-neo-genesis/hoothoot.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-neo-revelation/zubat.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-next-destinies/beheeyem.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-next-destinies/emolga.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-next-destinies/frillish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-next-destinies/hippowdon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-next-destinies/jigglypuff.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-next-destinies/kricketune.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-next-destinies/moltres.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-next-destinies/nuzleaf.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-next-destinies/shiftry.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-next-destinies/starmie.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-nintendo-promos/whismur.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-noble-victories/accelgor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-noble-victories/bisharp-2.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-noble-victories/cryogonal-2.ts",
+      "afterHelper": true,
+      "afterEffect": true
+    },
+    {
+      "file": "set-noble-victories/cryogonal.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-noble-victories/lilligant.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-noble-victories/litwick-2.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-noble-victories/litwick.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-noble-victories/reuniclus-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-noble-victories/stunfisk.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-noble-victories/swadloon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-noble-victories/volcarona.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-noble-victories/yamask.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-obsidian-flames/bonsly.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-obsidian-flames/finizen.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-paldea-evolved/dudunsparce.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-paldean-fates/numel.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-paldean-fates/tropius.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-paradox-rift/tatsugiri.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-pcg-p-promotional-cards/larousses-munchlax.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-pcg-p-promotional-cards/pokeparks-celebi.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-pcg-p-promotional-cards/pokeparks-munchlax.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-pcg-p-promotional-cards/samiyas-buizel2.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-pcg-p-promotional-cards/seas-manaphy.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-pcg-p-promotional-cards/seas-manaphy5.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-pcg-p-promotional-cards/treecko.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-perfect-order/amaura.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-perfect-order/binacle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-perfect-order/chien-pao.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-perfect-order/decidueye-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-perfect-order/klefki.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-perfect-order/lapras-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-perfect-order/meowstic.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-perfect-order/meowth-ex.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-perfect-order/salazzle-ex.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-phantasmal-flames/buneary.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-phantasmal-flames/mega-gengar-ex.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-phantom-forces/alomomola.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-phantom-forces/dedenne.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-phantom-forces/frillish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-phantom-forces/galvantula.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-phantom-forces/gliscor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-phantom-forces/gulpin.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-phantom-forces/honchkrow.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-phantom-forces/klefki.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-phantom-forces/litleo.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-phantom-forces/lumineon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-phantom-forces/purrloin.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-phantom-forces/spearow.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-phantom-forces/spiritomb.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-phantom-forces/swalot.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-phantom-forces/venonat.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-pitch-black/banette.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-pitch-black/cranidos.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-pitch-black/mega-zeraora-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-pitch-black/wailord-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-blast/accelgor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-blast/aggron.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-plasma-blast/azelf.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-plasma-blast/chatot.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-blast/drifloon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-blast/eelektrik.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-blast/fraxure.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-blast/glalie.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-blast/houndour.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-plasma-blast/musharna.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-blast/octillery.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-blast/palkia-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-blast/remoraid.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-blast/reuniclus.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-plasma-blast/shelmet.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-blast/snorunt.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-blast/squirtle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-freeze/cacnea.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-freeze/deino.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-plasma-freeze/dragonair.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-freeze/glaceon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-freeze/hariyama.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-freeze/lampent.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-freeze/litwick.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-freeze/metagross.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-freeze/metang.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-freeze/nidoqueen.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-freeze/nidoran-f.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-freeze/nidorina.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-freeze/pachirisu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-freeze/palpitoad.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-freeze/seismitoad.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-plasma-freeze/staraptor.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-plasma-freeze/vanilluxe.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-freeze/zweilous.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-storm/bouffalant.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-storm/combee.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-plasma-storm/galvantula.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-storm/heatmor.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-plasma-storm/liepard.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-storm/lotad.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-storm/loudred.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-storm/magnemite.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-storm/magneton.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-storm/magnezone.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-plasma-storm/maractus.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-storm/monferno.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-plasma-storm/piloswine.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-storm/purrloin.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-storm/scrafty.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-plasma-storm/simisear.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-storm/solrock.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-plasma-storm/timburr.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-plasma-storm/togepi.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-platinum/kirlia.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-pokemon-151/fearow.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-primal-clash/azumarill.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-primal-clash/bibarel.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-primal-clash/electrike-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-primal-clash/gorebyss-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-primal-clash/gorebyss.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-primal-clash/honedge.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-primal-clash/horsea.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-primal-clash/illumise.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-primal-clash/kyogre-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-primal-clash/manectric.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-primal-clash/masquerain.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-primal-clash/nidoqueen-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-primal-clash/ninetales.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-primal-clash/sealeo.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-primal-clash/shroomish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-primal-clash/tentacool.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-primal-clash/vulpix.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-rebel-clash/abomasnow.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/bronzong.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-rebel-clash/chandelure.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/cinderace-vmax.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/clefairy.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/eldegoss-v.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-rebel-clash/falinks.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/galarian-darumaka.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/galarian-mr-mime.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/heatmor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/heracross.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-rebel-clash/indeedee.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/litwick.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/magikarp.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-rebel-clash/magmortar.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/malamar-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/masquerain.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-rebel-clash/meditite.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/milotic-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/ninetales.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/seismitoad.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/shuckle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/stunky.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/toxtricity-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rebel-clash/tympole.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-rising-rivals/kakuna.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-roaring-skies/altaria.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-roaring-skies/articuno-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-roaring-skies/bagon-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-roaring-skies/cascoon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-roaring-skies/electrode.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-roaring-skies/exeggcute.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-roaring-skies/gallade-ex.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-roaring-skies/inkay.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-roaring-skies/pelipper.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-roaring-skies/shaymin-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-roaring-skies/victini.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-scarlet-and-violet/rotom.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-secret-wonders/bulbasaur.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-secret-wonders/flaaffy.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-secret-wonders/sentret.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-secret-wonders/skiploom.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-secret-wonders/trapinch.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-shining-fates/crobat-vmax.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-shining-fates/morpeko-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-shining-legends/arbok.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-shining-legends/carnivine.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-shining-legends/ekans.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-shining-legends/entei-gx.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-shining-legends/jynx.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-shining-legends/qwilfish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-shining-legends/shining-jirachi.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-shining-legends/stunfisk.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-shining-legends/yveltal.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-silver-tempest/amoonguss.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-silver-tempest/dragonair.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-silver-tempest/drowzee.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-silver-tempest/honchkrow.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-silver-tempest/milotic.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-silver-tempest/misdreavus.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-silver-tempest/ninetales.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-silver-tempest/relicanth.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-silver-tempest/unown-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-skyridge/flareon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-skyridge/haunter.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-skyridge/lapras.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-southern-islands/onix.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-steam-siege/armaldo.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-steam-siege/deino.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-steam-siege/drifblim.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-steam-siege/flaaffy.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-steam-siege/gastrodon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-steam-siege/jumpluff.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-steam-siege/lampent.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-steam-siege/mareep.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-steam-siege/nosepass.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-steam-siege/probopass.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-steam-siege/spiritomb.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-steam-siege/toxicroak.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-stellar-crown/gulpin.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-stellar-crown/swalot.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-stormfront/dusclops.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-stormfront/dusclops2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-stormfront/haunter.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-stormfront/machop.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-stormfront/regigigas-lv-x.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sun-and-moon/arcanine.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sun-and-moon/brionne.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sun-and-moon/butterfree.ts",
+      "afterHelper": true,
+      "afterEffect": true
+    },
+    {
+      "file": "set-sun-and-moon/cosmoem.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sun-and-moon/cosmog.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sun-and-moon/dewpider.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sun-and-moon/golbat.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sun-and-moon/hariyama.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-sun-and-moon/hypno.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sun-and-moon/incineroar.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sun-and-moon/lanturn.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sun-and-moon/mareanie.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sun-and-moon/morelull.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sun-and-moon/pinsir.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-sun-and-moon/poliwrath.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sun-and-moon/primarina.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sun-and-moon/shiinotic.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sun-and-moon/spinda.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sun-and-moon/torkoal.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sun-and-moon/toucannon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sun-and-moon/umbreon-gx.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-supreme-victors/staraptor-fb.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-surging-sparks/feebas.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-surging-sparks/spheal.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sword-and-shield/cinderace-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sword-and-shield/claydol.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sword-and-shield/clobbopus.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sword-and-shield/cloyster.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sword-and-shield/cramorant-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sword-and-shield/drapion.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sword-and-shield/galarian-linoone.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-sword-and-shield/galarian-ponyta.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sword-and-shield/galvantula.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sword-and-shield/gastly.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-sword-and-shield/gengar.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sword-and-shield/haunter.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sword-and-shield/heatmor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sword-and-shield/hoothoot.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-sword-and-shield/lapras-v.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-sword-and-shield/morpeko-v.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-sword-and-shield/noctowl.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-sword-and-shield/salandit.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sword-and-shield/salazzle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-sword-and-shield/skorupi.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-team-rocket/dark-gloom.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-team-rocket/drowzee.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-team-rocket/oddish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-team-up/aerodactyl.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-team-up/bronzong.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-team-up/charmeleon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-team-up/emolga.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-team-up/heliolisk.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-team-up/hitmonchan.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-team-up/jynx.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-team-up/nidoking.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-team-up/omanyte.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-team-up/parasect.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-team-up/pidgeot.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-team-up/poochyena.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-team-up/staryu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-team-up/tentacool.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-team-up/torracat.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-team-up/zoroark.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-team-up/zorua.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-triumphant/magmortar.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-triumphant/venomoth.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-twilight-masquerade/iron-thorns-ex.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-twilight-masquerade/poliwhirl.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-twilight-masquerade/poliwrath.ts",
+      "afterHelper": true,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ultra-prism/abomasnow.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ultra-prism/alolan-vulpix.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ultra-prism/bronzong.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ultra-prism/bronzor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ultra-prism/cosmog.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ultra-prism/drifblim.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ultra-prism/drifloon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ultra-prism/infernape.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ultra-prism/lopunny.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ultra-prism/manaphy.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ultra-prism/monferno.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ultra-prism/pachirisu.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ultra-prism/pheromosa-gx.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ultra-prism/prinplup.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ultra-prism/roserade.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-ultra-prism/shaymin.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ultra-prism/toxicroak.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ultra-prism/turtonator.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-ultra-prism/yanmega.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unbroken-bonds/arbok.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unbroken-bonds/chatot.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unbroken-bonds/drowzee.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unbroken-bonds/ekans.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unbroken-bonds/gastly-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unbroken-bonds/gliscor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unbroken-bonds/inkay.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unbroken-bonds/kingler.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unbroken-bonds/litten.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unbroken-bonds/persian-gx.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-unbroken-bonds/poliwhirl.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unbroken-bonds/raticate.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-unbroken-bonds/rhyhorn.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-unbroken-bonds/squirtle.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unbroken-bonds/tentacruel.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unbroken-bonds/torracat.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unbroken-bonds/venomoth.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-unbroken-bonds/venonat-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unbroken-bonds/wigglytuff.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-undaunted/eevee.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-undaunted/leafeon.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-undaunted/muk.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-undaunted/slowpoke.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unified-minds/archeops.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-unified-minds/audino.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unified-minds/beheeyem.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unified-minds/breloom.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unified-minds/celebi.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unified-minds/druddigon.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-unified-minds/elgyem.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unified-minds/exeggutor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unified-minds/foongus.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unified-minds/giratina.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unified-minds/joltik.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unified-minds/relicanth.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unified-minds/shroomish.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unified-minds/snover.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unified-minds/talonflame.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unified-minds/tynamo.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-unified-minds/vigoroth.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-unified-minds/xurkitree.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unleashed/aipom.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unleashed/manaphy.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unleashed/roselia.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-unleashed/suicune-and-entei-legend-top.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-vivid-voltage/alcremie.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-vivid-voltage/ampharos-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-vivid-voltage/coalossal-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-vivid-voltage/dedenne.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-vivid-voltage/dusclops.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-vivid-voltage/ferroseed.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-vivid-voltage/ferrothorn.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-vivid-voltage/galarian-darmanitan-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-vivid-voltage/garbodor.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-vivid-voltage/orbeetle-v.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-vivid-voltage/shiftry.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-vivid-voltage/yanma.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-vivid-voltage/yanmega.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-x-and-y/arbok.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-x-and-y/beedrill.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-x-and-y/bisharp.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-x-and-y/blastoise-ex.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-x-and-y/delcatty.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-x-and-y/dunsparce.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-x-and-y/emolga-ex.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-x-and-y/froakie.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-x-and-y/frogadier.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-x-and-y/grumpig.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-x-and-y/jigglypuff-2.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-x-and-y/krookodile.ts",
+      "afterHelper": false,
+      "afterEffect": true
+    },
+    {
+      "file": "set-x-and-y/pumpkaboo.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-x-and-y/simisear.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-x-and-y/spewpa.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-x-and-y/venusaur-ex.ts",
+      "afterHelper": true,
+      "afterEffect": false
+    },
+    {
+      "file": "set-x-and-y/volbeat.ts",
+      "afterHelper": true,
+      "afterEffect": true
+    }
+  ]
+}

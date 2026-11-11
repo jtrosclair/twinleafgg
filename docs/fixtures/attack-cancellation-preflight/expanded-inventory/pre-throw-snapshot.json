@@ -1,0 +1,79 @@
+{
+  "scope": "WAS_ATTACK_USED blocks with syntactically suspicious operations before a direct GameError",
+  "typescript": "4.9.5",
+  "total": 12,
+  "rows": [
+    {
+      "file": "set-celestial-storm/rayquaza-gx.ts",
+      "line": 152,
+      "before": "const player = effect.player;\nBLOCK_IF_GX_ATTACK_USED(player);\nplayer.usedGX = true;\n",
+      "guard": "if (player.deck.cards.length === 0) {\n        throw new GameError(GameMessage.CANNOT_USE_POWER);\n      }"
+    },
+    {
+      "file": "set-cosmic-eclipse/prinplup.ts",
+      "line": 47,
+      "before": "const player = effect.player;\nconst opponent = StateUtils.getOpponent(state, player);\nconst checkProvidedEnergy = new CheckProvidedEnergyEffect(player);\nstate = store.reduceEffect(state, checkProvidedEnergy);\nconst hasBenched = opponent.bench.some(b => b.cards.length > 0);\n",
+      "guard": "if (!hasBenched) {\n        throw new GameError(GameMessage.CANNOT_USE_ATTACK);\n      }"
+    },
+    {
+      "file": "set-evolving-skies/espeon-v.ts",
+      "line": 65,
+      "before": "const player = effect.player;\nconst opponent = StateUtils.getOpponent(state, player);\nconst blocked: CardTarget[] = [];\nopponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card, target) => {\n        if (cardList.vPokemon()) {\n          return state;\n        } else {\n          blocked.push(target);\n        }\n      });\n",
+      "guard": "if (!blocked.length) {\n        throw new GameError(GameMessage.CANNOT_USE_ATTACK);\n      }"
+    },
+    {
+      "file": "set-evolving-skies/lycanroc-vmax.ts",
+      "line": 73,
+      "before": "const player = effect.player;\nconst opponent = StateUtils.getOpponent(state, player);\nconst blocked: CardTarget[] = [];\nlet hasValidTarget = false;\nopponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card, target) => {\n        if (cardList.cards.length === 0) {\n          blocked.push(target);\n          return;\n        }\n        const checkHp = new CheckHpEffect(opponent, cardList);\n        store.reduceEffect(state, checkHp);\n        const remainingHp = checkHp.hp - cardList.damage;\n        if (remainingHp <= 60) {\n          hasValidTarget = true;\n        } else {\n          blocked.push(target);\n        }\n      });\n",
+      "guard": "if (!hasValidTarget) {\n        throw new GameError(GameMessage.CANNOT_USE_ATTACK);\n      }"
+    },
+    {
+      "file": "set-ex-team-magma-vs-team-aqua/team-aquas-walrein.ts",
+      "line": 84,
+      "before": ": { source: CardTarget, blocked: number[] }[] = [];\nplayer.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, pokemonCard, target) => {\n        const blocked: number[] = [];\n        let energyIndex = 0;\n        cardList.cards.forEach(card => {\n          if (card.superType !== SuperType.ENERGY) {\n            return;\n          }\n          const isBasicWater = card instanceof EnergyCard\n            && card.energyType === EnergyType.BASIC\n            && card.provides.includes(CardType.WATER);\n          if (!isBasicWater) {\n            blocked.push(energyIndex);\n          } else {\n            availableTypedEnergy += 1;\n          }\n          energyIndex++;\n        });\n        blockedMap.push({ source: target, blocked });\n      });\nif (availableTypedEnergy === 0) {\n        return state;\n      }\n",
+      "guard": "return store.prompt(state, new DiscardEnergyPrompt(\n        player.id,\n        GameMessage.CHOOSE_ENERGIES_TO_HAND,\n        PlayerType.BOTTOM_PLAYER,\n        [SlotType.ACTIVE, SlotType.BENCH],\n        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Water Energy' },\n        { allowCancel: false, blockedMap }\n      ), transfers => {\n        if (transfers === null || transfers.length === 0) {\n          return state;\n        }\n\n        for (const transfer of transfers) {\n        "
+    },
+    {
+      "file": "set-forbidden-light/arceus.ts",
+      "line": 95,
+      "before": "const player = effect.player;\nlet hasGrass = false;\nlet hasWater = false;\nlet hasLightning = false;\nplayer.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {\n        if (cardList === player.active) {\n          return;\n        }\n        const checkType = new CheckPokemonTypeEffect(cardList);\n        store.reduceEffect(state, checkType);\n        if (checkType.cardTypes.includes(CardType.GRASS)) { hasGrass = true; }\n        if (checkType.cardTypes.includes(CardType.WATER)) { hasWater = true; }\n        if (checkType.cardTypes.includes(CardType.LIGHTNING)) { hasLightning = true; }\n      });\n",
+      "guard": "if (!hasGrass || !hasWater || !hasLightning) {\n        throw new GameError(GameMessage.CANNOT_USE_ATTACK);\n      }"
+    },
+    {
+      "file": "set-guardians-rising/tapu-lele-gx.ts",
+      "line": 153,
+      "before": "const player = effect.player;\nconst blocked: CardTarget[] = [];\nplayer.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {\n        if (cardList.damage === 0) {\n          blocked.push(target);\n        }\n      });\nconst hasPokeBenchWithDamage = player.bench.some(b => b.damage > 0);\nconst hasActiveWIthDamage = player.active.damage > 0;\nconst pokemonInPlayWithDamage = hasPokeBenchWithDamage || hasActiveWIthDamage;\n",
+      "guard": "if (!pokemonInPlayWithDamage) {\n        throw new GameError(GameMessage.CANNOT_USE_POWER);\n      }"
+    },
+    {
+      "file": "set-lost-thunder/poipole.ts",
+      "line": 59,
+      "before": "const player = effect.player;\nconst prizes = player.prizes.filter(p => p.isSecret);\nconst cards: Card[] = [];\nprizes.forEach(p => { p.cards.forEach(c => cards.push(c)); });\n",
+      "guard": "if (cards.length === 0) {\n        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);\n      }"
+    },
+    {
+      "file": "set-primal-clash/torchic.ts",
+      "line": 59,
+      "before": "const player = effect.player;\nlet hasCardsInHand = false;\nconst blocked: number[] = [];\nplayer.hand.cards.forEach((c, index) => {\n        if (c instanceof EnergyCard) {\n          if (c.provides.includes(CardType.FIRE)) {\n            hasCardsInHand = true;\n          } else {\n            blocked.push(index);\n          }\n        }\n      });\n",
+      "guard": "if (hasCardsInHand === false) {\n        throw new GameError(GameMessage.CANNOT_USE_POWER);\n      }"
+    },
+    {
+      "file": "set-secret-wonders/gallade.ts",
+      "line": 74,
+      "before": "const player = effect.player;\nconst prizes = player.prizes.filter(p => p.isSecret);\nconst cards: Card[] = [];\nprizes.forEach(p => { p.cards.forEach(c => cards.push(c)); });\n",
+      "guard": "if (prizes.length > 0) {\n        const options: { message: string, value: number }[] = [];\n        for (let i = cards.length; i >= 0; i--) {\n          options.push({ message: `Flip ${i} prize card(s)`, value: i });\n        }\n\n        store.prompt(state, new SelectPrompt(\n          player.id,\n          GameMessage.REVEAL_ONE_OF_YOUR_PRIZES,\n          options.map(c => c.message),\n          { allowCancel: false }\n        ), choice => {\n          const numCardsToFlip = options[choice].value;\n\n      "
+    },
+    {
+      "file": "set-shrouded-fable/cresselia.ts",
+      "line": 68,
+      "before": "const player = effect.player;\nconst prizes = player.prizes.filter(p => p.isSecret);\nconst cards: Card[] = [];\nprizes.forEach(p => { p.cards.forEach(c => cards.push(c)); });\n",
+      "guard": "if (prizes.length > 0) {\n        state = store.prompt(state, new ConfirmPrompt(\n          effect.player.id,\n          GameMessage.WANT_TO_USE_ABILITY,\n        ), wantToUse => {\n          if (wantToUse) {\n\n            state = store.prompt(state, new ChoosePrizePrompt(\n              player.id,\n              GameMessage.CHOOSE_POKEMON,\n              { count: 1, allowCancel: true },\n            ), chosenPrize => {\n              const prizeCard = chosenPrize[0];\n\n              if (prizeCard.faceUpPri"
+    },
+    {
+      "file": "set-silver-tempest/noivern.ts",
+      "line": 57,
+      "before": "const player = effect.player;\nconst opponent = StateUtils.getOpponent(state, player);\nconst radiantTargets: CardTarget[] = [];\nopponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card, target) => {\n        if (cardList.cards.some(c => c instanceof PokemonCard && (c as PokemonCard).tags.includes(CardTag.RADIANT))) {\n          radiantTargets.push(target);\n        }\n      });\n",
+      "guard": "if (radiantTargets.length === 0) {\n        throw new GameError(GameMessage.CANNOT_USE_ATTACK);\n      }"
+    }
+  ]
+}

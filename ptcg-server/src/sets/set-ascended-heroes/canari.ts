@@ -14,6 +14,8 @@ import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
 import { StateUtils } from '../../game/store/state-utils';
 import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { MarkerConstants } from '../../game/store/markers/marker-constants';
 
 function* playCard(next: Function, store: StoreLike, state: State,
   self: Canari, effect: TrainerEffect): IterableIterator<State> {
@@ -96,6 +98,7 @@ function* playCard(next: Function, store: StoreLike, state: State,
 
   return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
     player.deck.applyOrder(order);
+    player.marker.addMarkerToState(MarkerConstants.CANARI_PLAYED_FROM_HAND_THIS_TURN);
   });
 }
 
@@ -113,6 +116,9 @@ export class Canari extends TrainerCard {
   Search your deck for up to 4 [L] Pokémon, reveal them, and put them into your hand. Then, shuffle your deck.`;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(MarkerConstants.CANARI_PLAYED_FROM_HAND_THIS_TURN)) {
+      effect.player.marker.removeMarker(MarkerConstants.CANARI_PLAYED_FROM_HAND_THIS_TURN);
+    }
     if (effect instanceof TrainerEffect && effect.trainerCard === this) {
       const generator = playCard(() => generator.next(), store, state, this, effect);
       return generator.next().value;

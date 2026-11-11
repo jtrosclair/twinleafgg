@@ -1,0 +1,416 @@
+{
+  "checkedAt": "2026-11-10T21:14:01.871Z",
+  "method": "Actual production handle(Request) from each isolated bundle; POST /v1/deck-import/parse, body.deckList contains leading quantity1. No network requests or source edits.",
+  "bundles": [
+    {
+      "path": "/private/tmp/prizemap-round33-v6-route-base.cjs",
+      "sha256": "49d0c7d5acc9ceee069ed3c47c0f8ae978a240cc2c293a315c8ec24bf2f1f5dd"
+    },
+    {
+      "path": "/private/tmp/prizemap-round33-v6-route-candidate.cjs",
+      "sha256": "93e8b8166bc5fd97669d63712afce71eac9108dc10cafa601b3214e782e00c26"
+    }
+  ],
+  "cases": [
+    {
+      "input": "Professor's-Research SVP 221",
+      "kind": "correct",
+      "expected": "Professor's Research221 SVP",
+      "deckListInput": "1 Professor's-Research SVP 221",
+      "before": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Professor's-Research SVP",
+            "setNumber": "221"
+          }
+        ],
+        "errors": []
+      },
+      "after": {
+        "status": 200,
+        "known": [
+          {
+            "fullName": "Professor's Research221 SVP",
+            "setNumber": "221"
+          }
+        ],
+        "unknown": [],
+        "errors": []
+      },
+      "passed": true
+    },
+    {
+      "input": "Professor's-Research SVP 00221",
+      "kind": "correct",
+      "expected": "Professor's Research221 SVP",
+      "deckListInput": "1 Professor's-Research SVP 00221",
+      "before": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Professor's-Research SVP",
+            "setNumber": "00221"
+          }
+        ],
+        "errors": []
+      },
+      "after": {
+        "status": 200,
+        "known": [
+          {
+            "fullName": "Professor's Research221 SVP",
+            "setNumber": "221"
+          }
+        ],
+        "unknown": [],
+        "errors": []
+      },
+      "passed": true
+    },
+    {
+      "input": "Professor's-Research SVP 999",
+      "kind": "wrong",
+      "deckListInput": "1 Professor's-Research SVP 999",
+      "before": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Professor's-Research SVP",
+            "setNumber": "999"
+          }
+        ],
+        "errors": []
+      },
+      "after": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Professor's-Research SVP",
+            "setNumber": "999"
+          }
+        ],
+        "errors": []
+      },
+      "passed": true
+    },
+    {
+      "input": "Professor's-Research SVP 0999",
+      "kind": "wrong",
+      "deckListInput": "1 Professor's-Research SVP 0999",
+      "before": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Professor's-Research SVP",
+            "setNumber": "0999"
+          }
+        ],
+        "errors": []
+      },
+      "after": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Professor's-Research SVP",
+            "setNumber": "0999"
+          }
+        ],
+        "errors": []
+      },
+      "passed": true
+    },
+    {
+      "input": "Iono's-Kilowattrel SVP 182",
+      "kind": "correct",
+      "expected": "Iono's Kilowattrel182 SVP",
+      "deckListInput": "1 Iono's-Kilowattrel SVP 182",
+      "before": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Iono's-Kilowattrel SVP",
+            "setNumber": "182"
+          }
+        ],
+        "errors": []
+      },
+      "after": {
+        "status": 200,
+        "known": [
+          {
+            "fullName": "Iono's Kilowattrel182 SVP",
+            "setNumber": "182"
+          }
+        ],
+        "unknown": [],
+        "errors": []
+      },
+      "passed": true
+    },
+    {
+      "input": "Iono's-Kilowattrel SVP 00182",
+      "kind": "correct",
+      "expected": "Iono's Kilowattrel182 SVP",
+      "deckListInput": "1 Iono's-Kilowattrel SVP 00182",
+      "before": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Iono's-Kilowattrel SVP",
+            "setNumber": "00182"
+          }
+        ],
+        "errors": []
+      },
+      "after": {
+        "status": 200,
+        "known": [
+          {
+            "fullName": "Iono's Kilowattrel182 SVP",
+            "setNumber": "182"
+          }
+        ],
+        "unknown": [],
+        "errors": []
+      },
+      "passed": true
+    },
+    {
+      "input": "Iono's-Kilowattrel SVP 999",
+      "kind": "wrong",
+      "deckListInput": "1 Iono's-Kilowattrel SVP 999",
+      "before": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Iono's-Kilowattrel SVP",
+            "setNumber": "999"
+          }
+        ],
+        "errors": []
+      },
+      "after": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Iono's-Kilowattrel SVP",
+            "setNumber": "999"
+          }
+        ],
+        "errors": []
+      },
+      "passed": true
+    },
+    {
+      "input": "Iono's-Kilowattrel SVP 0999",
+      "kind": "wrong",
+      "deckListInput": "1 Iono's-Kilowattrel SVP 0999",
+      "before": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Iono's-Kilowattrel SVP",
+            "setNumber": "0999"
+          }
+        ],
+        "errors": []
+      },
+      "after": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Iono's-Kilowattrel SVP",
+            "setNumber": "0999"
+          }
+        ],
+        "errors": []
+      },
+      "passed": true
+    },
+    {
+      "input": "Lillie's-Ribombee SVP 183",
+      "kind": "correct",
+      "expected": "Lillie's Ribombee183 SVP",
+      "deckListInput": "1 Lillie's-Ribombee SVP 183",
+      "before": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Lillie's-Ribombee SVP",
+            "setNumber": "183"
+          }
+        ],
+        "errors": []
+      },
+      "after": {
+        "status": 200,
+        "known": [
+          {
+            "fullName": "Lillie's Ribombee183 SVP",
+            "setNumber": "183"
+          }
+        ],
+        "unknown": [],
+        "errors": []
+      },
+      "passed": true
+    },
+    {
+      "input": "Lillie's-Ribombee SVP 00183",
+      "kind": "correct",
+      "expected": "Lillie's Ribombee183 SVP",
+      "deckListInput": "1 Lillie's-Ribombee SVP 00183",
+      "before": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Lillie's-Ribombee SVP",
+            "setNumber": "00183"
+          }
+        ],
+        "errors": []
+      },
+      "after": {
+        "status": 200,
+        "known": [
+          {
+            "fullName": "Lillie's Ribombee183 SVP",
+            "setNumber": "183"
+          }
+        ],
+        "unknown": [],
+        "errors": []
+      },
+      "passed": true
+    },
+    {
+      "input": "Lillie's-Ribombee SVP 999",
+      "kind": "wrong",
+      "deckListInput": "1 Lillie's-Ribombee SVP 999",
+      "before": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Lillie's-Ribombee SVP",
+            "setNumber": "999"
+          }
+        ],
+        "errors": []
+      },
+      "after": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Lillie's-Ribombee SVP",
+            "setNumber": "999"
+          }
+        ],
+        "errors": []
+      },
+      "passed": true
+    },
+    {
+      "input": "Lillie's-Ribombee SVP 0999",
+      "kind": "wrong",
+      "deckListInput": "1 Lillie's-Ribombee SVP 0999",
+      "before": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Lillie's-Ribombee SVP",
+            "setNumber": "0999"
+          }
+        ],
+        "errors": []
+      },
+      "after": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Lillie's-Ribombee SVP",
+            "setNumber": "0999"
+          }
+        ],
+        "errors": []
+      },
+      "passed": true
+    },
+    {
+      "input": "Professor's-Research SVP 222",
+      "kind": "wrong",
+      "deckListInput": "1 Professor's-Research SVP 222",
+      "before": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Professor's-Research SVP",
+            "setNumber": "222"
+          }
+        ],
+        "errors": []
+      },
+      "after": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Professor's-Research SVP",
+            "setNumber": "222"
+          }
+        ],
+        "errors": []
+      },
+      "passed": true
+    },
+    {
+      "input": "Professor's-Research SVP 0222",
+      "kind": "wrong",
+      "deckListInput": "1 Professor's-Research SVP 0222",
+      "before": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Professor's-Research SVP",
+            "setNumber": "0222"
+          }
+        ],
+        "errors": []
+      },
+      "after": {
+        "status": 200,
+        "known": [],
+        "unknown": [
+          {
+            "fullName": "Professor's-Research SVP",
+            "setNumber": "0222"
+          }
+        ],
+        "errors": []
+      },
+      "passed": true
+    }
+  ],
+  "passed": 14,
+  "failed": 0
+}

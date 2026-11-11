@@ -1,0 +1,31 @@
+TAP version 13
+# cards set
+# Subtest: SVP numbered prints resolve exact identities and artwork across both endpoints
+ok 1 - SVP numbered prints resolve exact identities and artwork across both endpoints
+  ---
+  duration_ms: 1533.957542
+  ...
+# Subtest: unregistered collector numbers stay unknown for both endpoints
+ok 2 - unregistered collector numbers stay unknown for both endpoints
+  ---
+  duration_ms: 3213.504541
+  ...
+# Subtest: wrong collector tokens appended to internal identities stay unknown
+ok 3 - wrong collector tokens appended to internal identities stay unknown
+  ---
+  duration_ms: 1702.814583
+  ...
+# Subtest: missing exact registration cannot select a different print
+ok 4 - missing exact registration cannot select a different print
+  ---
+  duration_ms: 285.688709
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7952.03875

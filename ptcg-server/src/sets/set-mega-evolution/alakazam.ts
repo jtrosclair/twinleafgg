@@ -51,6 +51,10 @@ export class Alakazam extends PokemonCard {
       }, GameMessage.WANT_TO_USE_ABILITY);
     }
 
+    return Alakazam.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       PUT_X_DAMAGE_COUNTERS_ON_YOUR_OPPONENTS_ACTIVE_POKEMON(effect.player.hand.cards.length * 2, store, state, effect);
     }

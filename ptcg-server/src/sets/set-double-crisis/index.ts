@@ -1,3 +1,5 @@
+import { TeamMagmasSecretBase } from './team-magmas-secret-base';
+import { TeamAquasSealeo } from './team-aquas-sealeo';
 import { Card } from '../../game/store/card/card';
 import { TeamAquasGreatBall } from './team-aquas-great-ball';
 import { TeamMagmasGreatBall } from './team-magmas-great-ball';
@@ -11,4 +13,6 @@ export const setDoubleCrisis: Card[] = [
 
   // Other prints
   new TeamAquasSecretBase(),
+  new TeamAquasSealeo(),
+  new TeamMagmasSecretBase(),
 ];

@@ -1,0 +1,124 @@
+cards set
+{
+  "ok": true,
+  "name": "Something's Fishy",
+  "sourceUrl": "https://www.prizemap.app/api/puzzles/details/fc4be99a-d74b-4da6-930b-2b5fb7974456",
+  "snapshotSha256": "dca0f218fada83a53a1407609db33b31031b357e3a2e83034ffe5ff253405524",
+  "replays": 2,
+  "orderedSteps": 19,
+  "terminal": {
+    "title": "Something's Fishy",
+    "turn": 2,
+    "phase": 7,
+    "winner": 0,
+    "complete": true,
+    "players": [
+      {
+        "id": 2,
+        "active": "Carvanha M2",
+        "hand": [
+          [
+            52,
+            "Boss's Orders ASC"
+          ]
+        ],
+        "deck": 39,
+        "prizes": 5,
+        "bench": [
+          {
+            "index": 0,
+            "name": "Tatsugiri TWM",
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 1,
+            "name": "Munkidori SFA",
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 2,
+            "name": "Meowth ex POR",
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 3,
+            "name": "Pecharunt exFA SFA",
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 4,
+            "energy": [],
+            "damage": 0
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "hand": [
+          [
+            104,
+            "Lillie's Determination M1L"
+          ],
+          [
+            105,
+            "Jumbo Ice M2"
+          ],
+          [
+            106,
+            "Pokémon Center Lady M1S"
+          ],
+          [
+            107,
+            "Switch MEG"
+          ],
+          [
+            108,
+            "Spiky Energy JTG"
+          ],
+          [
+            109,
+            "Lumioise City M3"
+          ],
+          [
+            110,
+            "Hilda SV11W"
+          ]
+        ],
+        "deck": 44,
+        "prizes": 6,
+        "bench": [
+          {
+            "index": 0,
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 1,
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 2,
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 3,
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 4,
+            "energy": [],
+            "damage": 0
+          }
+        ]
+      }
+    ],
+    "pending": []
+  }
+}

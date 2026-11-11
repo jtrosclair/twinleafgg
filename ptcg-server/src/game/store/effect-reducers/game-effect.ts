@@ -30,14 +30,14 @@ import {
 import { AfterAttackEffect, EndTurnEffect } from '../effects/game-phase-effects';
 import { CoinFlipPrompt } from '../prompts/coin-flip-prompt';
 import { StateUtils } from '../state-utils';
+import { MarkerConstants } from '../markers/marker-constants';
 import { GamePhase, State } from '../state/state';
 import { StoreLike } from '../store-like';
 import { MoveCardsEffect } from '../effects/game-effects';
 import { GameStatsTracker } from '../game-stats-tracker';
 import { PokemonCardList } from '../state/pokemon-card-list';
-import { MOVE_CARDS, ADD_MARKER, HAS_MARKER } from '../prefabs/prefabs';
+import { MOVE_CARDS, ADD_MARKER, HAS_MARKER, COIN_FLIP_PROMPT } from '../prefabs/prefabs';
 import { CardList } from '../state/card-list';
-import { MarkerConstants } from '../markers/marker-constants';
 import { ConfirmPrompt } from '../prompts/confirm-prompt';
 import { checkState } from './check-effect';
 import { ChooseAttackPrompt } from '../prompts/choose-attack-prompt';
@@ -118,6 +118,24 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
     throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
   }
 
+  // Smokescreen / Sand-Attack: any tails cancels this attack and ends the turn.
+  if (attackingPokemon.coinFlipCancelAttackNextTurn > 0) {
+    const flips = attackingPokemon.coinFlipCancelAttackNextTurn;
+    let anyTails = false;
+    for (let i = 0; i < flips; i++) {
+      let heads = false;
+      state = COIN_FLIP_PROMPT(store, state, player, result => { heads = result; });
+      if (store.hasPrompts()) {
+        yield store.waitPrompt(state, () => next());
+      }
+      if (!heads) anyTails = true;
+    }
+    if (anyTails) {
+      state = store.reduceEffect(state, new EndTurnEffect(player));
+      return state;
+    }
+  }
+
   // Get the actual PokemonCard for power checks
   const attackingPokemonCard = attackingPokemon.getPokemonCard();
   // Check for barrage on powers (and not blocked)
@@ -133,9 +151,13 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
     const checked = checkCopiedAttackCost(store, state, player, effect.delegateFrom, attack, attackingPokemonCard);
     state = checked.state;
     checkAttackCost = checked.effect;
+    if (effect.ignoreEnergyCost) checkAttackCost.cost = [];
   } else {
     checkAttackCost = new CheckAttackCostEffect(player, attack);
     state = store.reduceEffect(state, checkAttackCost);
+    if (attackingPokemon.attackCostIncreaseDuringNextTurn > 0) {
+      checkAttackCost.cost.push(...Array(attackingPokemon.attackCostIncreaseDuringNextTurn).fill(CardType.COLORLESS));
+    }
   }
 
   const checkProvidedEnergy = new CheckProvidedEnergyEffect(player, attackingPokemon);
@@ -357,6 +379,9 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
         && state.players[state.activePlayer] === attacker;
       if (duringOpponentsTurn) {
         knockedOutOwner.pokemonKnockedOutDuringOpponentsLastTurn = true;
+        if (card.tags.includes(CardTag.POKEMON_SV_MEGA) && card.tags.includes(CardTag.POKEMON_ex)) {
+          knockedOutOwner.marker.addMarkerToState(MarkerConstants.MEGA_EX_KNOCKED_OUT_DURING_OPPONENTS_LAST_TURN);
+        }
         const ko = effect.target.attackDamageKnockOut;
         if (state.phase === GamePhase.ATTACK && ko && ko.turn === state.turn && ko.playerId === attacker.id) {
           knockedOutOwner.pokemonKnockedOutByAttackDuringOpponentsLastTurn = true;
@@ -761,7 +786,7 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
 
   if (effect instanceof CoinFlipEffect) {
     // Simulate coin flip and store result
-    const result = Math.random() < 0.5;
+    const result = effect.forcedResult ?? Math.random() < 0.5;
     (effect as CoinFlipEffect).result = result;
 
     const player = (effect as CoinFlipEffect).player;

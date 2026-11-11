@@ -1,3 +1,8 @@
+import { Simisage } from './simisage';
+import { Simipour } from './simipour';
+import { Plusle } from './plusle';
+import { Panpour } from './panpour';
+import { Mausholdex } from './maushold-ex';
 import { Card } from '../../game/store/card/card';
 import { Pansage } from './pansage';
 import { Aegislash } from './aegislash';
@@ -246,4 +251,9 @@ export const setParadoxRift: Card[] = [
   new ReversalEnergyHR(),
   new Tatsugiri(),
   new Pansage(),
+  new Mausholdex(),
+  new Panpour(),
+  new Plusle(),
+  new Simipour(),
+  new Simisage(),
 ];

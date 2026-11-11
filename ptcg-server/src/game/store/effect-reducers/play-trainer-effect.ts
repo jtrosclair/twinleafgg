@@ -91,6 +91,11 @@ export function preflightDualStadiumCancellation(store: StoreLike, state: State,
 
 // Upstream coin-flip gate: run before any play-zone changes, attachment or replacement.
 export function playTrainerReducer(store: StoreLike, state: State, effect: Effect): State {
+  if ((effect instanceof PlayItemEffect || effect instanceof PlaySupporterEffect
+    || effect instanceof PlayStadiumEffect || effect instanceof AttachPokemonToolEffect)
+    && effect.player.trainerCardsBlockedNextTurn) {
+    throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+  }
   // A dual Stadium is legal only when both different halves are present.
   // Check before the coin-flip gate or any other play-zone mutation.
   if (effect instanceof PlayStadiumEffect && effect.trainerCard.tags.includes(CardTag.DUAL_STADIUM)
@@ -132,6 +137,9 @@ function playTrainerWithoutCoinFlip(store: StoreLike, state: State, effect: Effe
     const player = effect.player;
 
     if (player.marker.hasMarker(player.ATTACK_EFFECT_SUPPORTER_LOCK)) {
+      throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+    }
+    if (player.supporterCardsBlockedNextTurn) {
       throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
 

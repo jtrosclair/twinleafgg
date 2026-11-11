@@ -18,6 +18,7 @@ import { Player } from '../state/player';
 import { GamePhase, State } from '../state/state';
 import { StoreLike } from '../store-like';
 import { PlayerType } from '../actions/play-card-action';
+import { CoinFlipEffect, CoinFlipSequenceEffect } from '../effects/play-card-effects';
 
 export function cloneAttack(attack: Attack): Attack {
   return { ...attack, cost: [...(attack.cost || [])] };
@@ -121,34 +122,43 @@ function withSourceMarkerConstants<T>(
  */
 export interface CopiedAttackOwnershipContract {
   reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, attackIndex: number, sourceCard?: PokemonCard): State;
+  /** Pure preflight: throw to prevent an opponent attack; do not mutate state. */
+  reduceCopiedOpponentAttackEffect?(store: StoreLike, state: State, effect: Effect, attackIndex: number, sourceCard?: PokemonCard): State;
+  /** Pure predicate for a player/target effect that outlives its user. */
+  hasCopiedOpponentAttackEffect?(state: State, copycat: PokemonCard, playerId: number, attackIndex: number): boolean;
 }
 type OwnedCopiedAttackReducer = CopiedAttackOwnershipContract['reduceCopiedAttackEffect'];
+type OwnedCopiedAttackRetainer = NonNullable<CopiedAttackOwnershipContract['hasCopiedOpponentAttackEffect']>;
 
-function ownedCopiedAttackReducer(sourceCard: PokemonCard): OwnedCopiedAttackReducer | undefined {
+function ownedCopiedAttackMethod<T extends (...args: any[]) => any>(sourceCard: PokemonCard, method: keyof CopiedAttackOwnershipContract): T | undefined {
   // An instance-level override can change attack behavior; do not silently
   // replace it with an inherited implementation. Executable ownership is
   // accepted only from a card class prototype, not data in a snapshot.
   if (Object.prototype.hasOwnProperty.call(sourceCard, 'reduceEffect') ||
-      Object.prototype.hasOwnProperty.call(sourceCard, 'reduceCopiedAttackEffect')) return undefined;
+      Object.prototype.hasOwnProperty.call(sourceCard, method)) return undefined;
   let prototype = Object.getPrototypeOf(sourceCard);
   let depth = 0;
   let effectDepth: number | undefined;
   let reducerDepth: number | undefined;
-  let reducer: OwnedCopiedAttackReducer | undefined;
+  let reducer: T | undefined;
   while (prototype && prototype !== Object.prototype) {
     if (effectDepth === undefined && Object.prototype.hasOwnProperty.call(prototype, 'reduceEffect')) {
       effectDepth = depth;
     }
-    if (reducerDepth === undefined && Object.prototype.hasOwnProperty.call(prototype, 'reduceCopiedAttackEffect')) {
-      const descriptor = Object.getOwnPropertyDescriptor(prototype, 'reduceCopiedAttackEffect');
+    if (reducerDepth === undefined && Object.prototype.hasOwnProperty.call(prototype, method)) {
+      const descriptor = Object.getOwnPropertyDescriptor(prototype, method);
       if (typeof descriptor?.value !== 'function') return undefined;
       reducerDepth = depth;
-      reducer = descriptor.value;
+      reducer = descriptor.value as T;
     }
     prototype = Object.getPrototypeOf(prototype);
     depth++;
   }
   return reducerDepth !== undefined && effectDepth !== undefined && reducerDepth <= effectDepth ? reducer : undefined;
+}
+
+function ownedCopiedAttackReducer(sourceCard: PokemonCard): OwnedCopiedAttackReducer | undefined {
+  return ownedCopiedAttackMethod<OwnedCopiedAttackReducer>(sourceCard, 'reduceCopiedAttackEffect');
 }
 
 function delegateToSource(
@@ -159,12 +169,22 @@ function delegateToSource(
   store: StoreLike,
   state: State,
   effect: Effect,
+  reaction?: OwnedCopiedAttackReducer,
 ): State {
   // Only source-handler calls see this facade. The real Store still fans out to
   // the copycat, Tools, Stadiums, etc., with their own Abilities unchanged.
   // Permission-checked source Abilities are denied: a copied attack does not
   // grant source Ability permission, even during delayed effects. This facade
   // cannot split legacy passive branches that omit PowerEffect permission checks.
+  const withContext = <T>(fn: () => T): T => withTemporaryDelegatedAttacks(
+    copycatCard, sourceCard,
+    () => withSourceMarkerConstants(copycatCard, sourceCard, fn), clonedAttacks,
+  );
+  const wrapCallback = <T extends (...args: any[]) => any>(callback: T): T => {
+    return function(this: unknown, ...args: any[]) {
+      return withContext(() => callback.apply(this, args));
+    } as T;
+  };
   const attackOnlyStore = new Proxy(store, {
     get(target, key) {
       if (key === 'reduceEffect') {
@@ -173,24 +193,39 @@ function delegateToSource(
             && (nestedEffect.card === copycatCard || nestedEffect.card === sourceCard)) {
             throw new GameError(GameMessage.CANNOT_USE_POWER);
           }
+          if ((nestedEffect instanceof CoinFlipEffect || nestedEffect instanceof CoinFlipSequenceEffect)
+            && typeof nestedEffect.callback === 'function') {
+            // A coin effect may be dispatched more than once. Isolate this
+            // dispatch's callback instead of modifying the caller's effect;
+            // otherwise pending flips can rebind each other to the wrong copycat.
+            let callback: (...args: any[]) => void = wrapCallback(nestedEffect.callback as (...args: any[]) => void);
+            const isolated = new Proxy(nestedEffect, {
+              get: (event, property, receiver) => property === 'callback' ? callback : Reflect.get(event, property, receiver),
+              set: (event, property, value, receiver) => {
+                if (property === 'callback') { callback = value; return true; }
+                return Reflect.set(event, property, value, receiver);
+              }
+            });
+            return target.reduceEffect(s, isolated);
+          }
           return target.reduceEffect(s, nestedEffect);
         };
+      }
+      if (key === 'prompt') {
+        return (s: State, prompt: unknown, callback: (...args: any[]) => void) =>
+          (target.prompt as any)(s, prompt, wrapCallback(callback));
+      }
+      if (key === 'waitPrompt') {
+        return (s: State, callback: () => void) => target.waitPrompt(s, wrapCallback(callback));
       }
       const value = Reflect.get(target, key);
       return typeof value === 'function' ? value.bind(target) : value;
     },
   });
-  const ownedReducer = ownedCopiedAttackReducer(sourceCard);
-  return withTemporaryDelegatedAttacks(
-    copycatCard,
-    sourceCard,
-    () => withSourceMarkerConstants(copycatCard, sourceCard, () =>
-      ownedReducer
-        ? ownedReducer.call(copycatCard, attackOnlyStore, state, effect, attackIndex, sourceCard)
-        : sourceCard.reduceEffect.call(copycatCard, attackOnlyStore, state, effect)
-    ),
-    clonedAttacks,
-  );
+  const ownedReducer = reaction ?? ownedCopiedAttackReducer(sourceCard);
+  return withContext(() => ownedReducer
+    ? ownedReducer.call(copycatCard, attackOnlyStore, state, effect, attackIndex, sourceCard)
+    : sourceCard.reduceEffect.call(copycatCard, attackOnlyStore, state, effect));
 }
 
 /**
@@ -276,6 +311,13 @@ function isCopycatInPlay(state: State, copycatCard: PokemonCard): boolean {
   return false;
 }
 
+function hasOwnedOpponentRestriction(session: CopyAttackSession, state: State): boolean {
+  if (!ownedCopiedAttackReducer(session.sourceCard) ||
+      !ownedCopiedAttackMethod<OwnedCopiedAttackReducer>(session.sourceCard, 'reduceCopiedOpponentAttackEffect')) return false;
+  const retain = ownedCopiedAttackMethod<OwnedCopiedAttackRetainer>(session.sourceCard, 'hasCopiedOpponentAttackEffect');
+  return !!retain && retain.call(session.sourceCard, state, session.copycatCard, session.playerId, session.attackIndex);
+}
+
 function isClonedAttack(session: CopyAttackSession, attack: Attack | undefined): boolean {
   if (attack === undefined) {
     return false;
@@ -340,7 +382,7 @@ export function openCopyAttackSession(
 ): void {
   const sessions = sessionsForState(state);
   for (let i = sessions.length - 1; i >= 0; i--) {
-    if (sessions[i].copycatCard === copycatCard) {
+    if (sessions[i].copycatCard === copycatCard && !hasOwnedOpponentRestriction(sessions[i], state)) {
       sessions.splice(i, 1);
     }
   }
@@ -364,6 +406,19 @@ export function openCopyAttackSession(
   persistCopyAttackSessions(state, sessions);
 }
 
+/** Reject opponent attacks before any card handler runs attack side effects. */
+export function preflightCopiedOpponentAttacks(store: StoreLike, state: State, effect: AttackEffect): State {
+  for (const session of sessionsForState(state)) {
+    if (effect.player.id === session.playerId ||
+        (!isCopycatInPlay(state, session.copycatCard) && !hasOwnedOpponentRestriction(session, state))) continue;
+    const reaction = ownedCopiedAttackReducer(session.sourceCard)
+      && ownedCopiedAttackMethod<OwnedCopiedAttackReducer>(session.sourceCard, 'reduceCopiedOpponentAttackEffect');
+    if (reaction) state = delegateToSource(session.copycatCard, session.sourceCard, session.clonedAttacks,
+      session.attackIndex, store, state, effect, reaction);
+  }
+  return state;
+}
+
 /**
  * After global fan-out: run source handlers as `.call(copycat)` when the effect
  * is part of the copied attack lifecycle.
@@ -379,8 +434,16 @@ export function resolveCopyAttackSessions(
     const session = sessions[i];
 
     if (!isCopycatInPlay(state, session.copycatCard)) {
-      sessions.splice(i, 1);
-      changed = true;
+      if (!hasOwnedOpponentRestriction(session, state)) {
+        sessions.splice(i, 1); changed = true; continue;
+      }
+      // Detached copies may only run their attack-owned end-turn cleanup.
+      if (effect instanceof EndTurnEffect) {
+        state = delegateToSource(session.copycatCard, session.sourceCard, session.clonedAttacks,
+          session.attackIndex, store, state, effect);
+        session.endTurnsRemaining -= 1; changed = true;
+        if (session.endTurnsRemaining <= 0 || !hasOwnedOpponentRestriction(session, state)) sessions.splice(i, 1);
+      }
       continue;
     }
 

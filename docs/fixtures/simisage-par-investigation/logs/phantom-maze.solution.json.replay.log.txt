@@ -1,0 +1,154 @@
+cards set
+{
+  "ok": true,
+  "name": "Trapped in the Phantom Maze",
+  "sourceUrl": "https://www.prizemap.app/api/puzzles/details/225427fc-c922-4ad8-b546-d9361afe873d",
+  "snapshotSha256": "915099f17baefe165612be2265db5eea91eba6144caa54cfedb5eeef2c26ec99",
+  "replays": 2,
+  "orderedSteps": 21,
+  "terminal": {
+    "title": "Trapped in the Phantom Maze",
+    "turn": 5,
+    "phase": 7,
+    "winner": 0,
+    "complete": true,
+    "players": [
+      {
+        "id": 2,
+        "active": "N's Zoroark exFA JTG",
+        "hand": [
+          [
+            15,
+            "Poké Pad MC"
+          ],
+          [
+            47,
+            "N's Castle JTG"
+          ],
+          [
+            48,
+            "N's Castle JTG"
+          ]
+        ],
+        "deck": 12,
+        "prizes": 0,
+        "bench": [
+          {
+            "index": 0,
+            "name": "Pecharunt ex SFA",
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 1,
+            "name": "N's Darmanitan JTG",
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 2,
+            "name": "N's Zekrom M2a",
+            "energy": [
+              "Darkness Energy BLW",
+              "Darkness Energy BLW",
+              "Darkness Energy BLW"
+            ],
+            "damage": 0
+          },
+          {
+            "index": 3,
+            "name": "N's Zoroark ex JTG",
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 4,
+            "name": "N's Zoroark ex JTG",
+            "energy": [],
+            "damage": 0
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "hand": [
+          [
+            74,
+            "Prime Catcher TEF"
+          ],
+          [
+            75,
+            "Air Balloon ASC"
+          ],
+          [
+            76,
+            "Telepath [P] Energy M3"
+          ],
+          [
+            77,
+            "Psychic Energy SVE"
+          ],
+          [
+            78,
+            "Xerosic's Machinations SFA"
+          ],
+          [
+            79,
+            "Boss's Orders MEG"
+          ],
+          [
+            80,
+            "Pokegear SVI"
+          ],
+          [
+            81,
+            "Poke Pad POR"
+          ]
+        ],
+        "deck": 14,
+        "prizes": 2,
+        "bench": [
+          {
+            "index": 0,
+            "name": "Elgyem BLK",
+            "energy": [
+              "Psychic Energy SVE"
+            ],
+            "damage": 0
+          },
+          {
+            "index": 1,
+            "name": "Mega Chandelure ex M5",
+            "energy": [
+              "Telepath [P] Energy M3"
+            ],
+            "damage": 0
+          },
+          {
+            "index": 2,
+            "name": "Mega Chandelure ex M5",
+            "energy": [
+              "Telepath [P] Energy M3"
+            ],
+            "damage": 0
+          },
+          {
+            "index": 3,
+            "name": "Shaymin DRI",
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 4,
+            "name": "Maractus JTG",
+            "energy": [
+              "Telepath [P] Energy M3"
+            ],
+            "damage": 0
+          }
+        ]
+      }
+    ],
+    "pending": []
+  }
+}

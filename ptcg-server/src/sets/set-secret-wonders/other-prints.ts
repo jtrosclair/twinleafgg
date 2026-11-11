@@ -1,3 +1,5 @@
+import { Rival } from '../set-diamond-and-pearl/rival';
+import { ProfessorRowanDP } from '../set-diamond-and-pearl/professor-rowan';
 import { BebesSearch } from '../set-mysterious-treasures/bebes-search';
 import { PlusPower } from '../set-base-set/pluspower';
 import { Potion } from '../set-base-set/potion';
@@ -46,5 +48,17 @@ export class DarknessEnergySpecialSW extends DarknessEnergySpecial {
 export class MetalEnergyN1SW extends MetalEnergyN1 {
   public setNumber = '130';
   public fullName: string = 'Metal Energy SW';
+  public set = 'SW';
+}
+
+export class ProfessorRowanSW extends ProfessorRowanDP {
+  public setNumber = '123';
+  public fullName: string = 'Professor Rowan SW';
+  public set = 'SW';
+}
+
+export class RivalSW extends Rival {
+  public setNumber = '124';
+  public fullName: string = 'Rival SW';
   public set = 'SW';
 }

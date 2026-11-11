@@ -69,6 +69,10 @@ export class LatiosGx extends PokemonCard {
       }
     }
 
+    return LatiosGx.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Attack 1: Tag Purge
     // Ref: set-team-up/latias-and-latios-gx.ts (Aero Unit-GX - prevent damage marker pattern)
     if (WAS_ATTACK_USED(effect, 0, this)) {

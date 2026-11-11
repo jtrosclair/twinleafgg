@@ -35,6 +35,7 @@ export class StaraptorFBLVX extends PokemonCard {
   public setNumber: string = '147';
   public name: string = 'Staraptor FB Lv. X';
   public fullName: string = 'Staraptor FB Lv. X SV';
+  public legacyFullName: string = 'Staraptor FB LV.X SV';
 
   public readonly FAST_CALL_MARKER = 'FAST_CALL_MARKER';
 

@@ -8,6 +8,10 @@ const crypto = require('node:crypto');
 
 const root = path.resolve(__dirname, '..');
 const generated = ['lib/simulator-engine/service.mjs', 'lib/simulator-engine/source-snapshot.json.gz', 'lib/simulator-engine/provenance.json', 'lib/data/simulator-card-art.json'];
+const legacyArtworkAliases = {
+  'Drillbur SV11B': 'Drilbur BLK 45',
+  'DrillburAR SV11B': 'DrilburAR BLK 124',
+};
 const expectedRemote = /^(https:\/\/github\.com\/jtrosclair\/pokepuzzles-web(?:\.git)?|git@github\.com:jtrosclair\/pokepuzzles-web(?:\.git)?|ssh:\/\/git@github\.com\/jtrosclair\/pokepuzzles-web(?:\.git)?)$/i;
 const sha = data => crypto.createHash('sha256').update(data).digest('hex');
 
@@ -29,6 +33,14 @@ function checkFiles(dir, metadata) {
 function sameEngine(a, b) { return a.bundleSha256 === b.bundleSha256 && a.sourceSnapshotSha256 === b.sourceSnapshotSha256; }
 function sameRelease(a, b, oldArt, newArt) { return sameEngine(a, b) && oldArt === newArt; }
 function verifyRemote(remote) { if (!expectedRemote.test(remote)) throw new Error('PrizeMap web origin is not the expected jtrosclair/pokepuzzles-web repository'); }
+function preserveLegacyArtworkAliases(repo) {
+  const file = path.join(repo, 'scripts/refresh-simulator-card-art.cjs');
+  const source = fs.readFileSync(file, 'utf8');
+  const marker = '    validateCoverage(read(target), read(temporary), imageMap);';
+  if (!source.includes(marker)) throw new Error('PrizeMap artwork refresh script has an unexpected shape');
+  const replacement = `    const previous = read(target);\n    const extracted = read(temporary);\n    for (const [legacy, current] of Object.entries(${JSON.stringify(legacyArtworkAliases)})) {\n      if (!extracted[legacy] && previous[legacy] && extracted[current]) extracted[legacy] = previous[legacy];\n    }\n    fs.writeFileSync(temporary, JSON.stringify(Object.fromEntries(Object.entries(extracted).sort())) + '\\n');\n    validateCoverage(previous, read(temporary), imageMap);`;
+  fs.writeFileSync(file, source.replace(marker, replacement));
+}
 function currentRemoteHead(repo) {
   const out = command('git', ['ls-remote', '--exit-code', 'origin', 'refs/heads/main'], repo, { capture: true });
   const match = /^([0-9a-f]{40})\s+refs\/heads\/main$/m.exec(out);
@@ -64,6 +76,7 @@ function prepare({ stage, web, source = root }) {
   console.log('Installing PrizeMap dependencies from its lockfile.');
   command('npm', ['ci', '--ignore-scripts', '--no-audit', '--no-fund'], repo);
   command(process.execPath, ['lib/simulator-engine/generate.cjs', source], repo);
+  preserveLegacyArtworkAliases(repo);
   command(process.execPath, ['scripts/refresh-simulator-card-art.cjs', source], repo);
   const after = readManifest(repo);
   checkFiles(repo, after);
@@ -170,4 +183,4 @@ function parseArgs(args) {
 if (require.main === module) {
   (async () => { const { action, options } = parseArgs(process.argv.slice(2)); await (action === 'prepare' ? prepare(options) : publish(options)); })().catch(error => { console.error(`Simulator synchronization failed: ${error.message}`); process.exitCode = 1; });
 }
-module.exports = { sameEngine, sameRelease, checkFiles, verifyRemote, parseArgs, ensureLiveManifest, prepare, publish };
+module.exports = { sameEngine, sameRelease, checkFiles, verifyRemote, parseArgs, ensureLiveManifest, prepare, publish, preserveLegacyArtworkAliases };

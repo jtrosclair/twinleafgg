@@ -165,9 +165,22 @@ function discoverAdditionalSetModules(setCode: string): string[] {
     if (modules.includes(moduleName)) continue;
     const moduleDir = path.join(setsDir, moduleName);
     if (!fs.existsSync(moduleDir) || !fs.statSync(moduleDir).isDirectory()) continue;
-    const files: string[] = fs.readdirSync(moduleDir).filter((file: string) => file.endsWith('.ts') && file !== 'index.ts');
+    const files: string[] = fs.readdirSync(moduleDir).filter((file: string) => file.endsWith('.ts') && file !== 'index.ts')
+      .map((file: string) => path.join(moduleDir, file));
+    // Late-registration aggregators may import definitions from their native
+    // set folders instead of duplicating card classes in the aggregator.
+    const indexPath = path.join(moduleDir, 'index.ts');
+    if (fs.existsSync(indexPath)) {
+      const indexText: string = fs.readFileSync(indexPath, 'utf8');
+      const importedSource = /from\s+['"](\.\.\/[^'"]+)['"]/g;
+      let imported: RegExpExecArray | null;
+      while ((imported = importedSource.exec(indexText)) !== null) {
+        const file = path.resolve(moduleDir, `${imported[1]}.ts`);
+        if (file.startsWith(setsDir + path.sep) && fs.existsSync(file)) files.push(file);
+      }
+    }
     for (const file of files) {
-      const source: string = fs.readFileSync(path.join(moduleDir, file), 'utf8');
+      const source: string = fs.readFileSync(file, 'utf8');
       const declarations = /public\s+(set|fullName)(?:\s*:\s*string)?\s*=\s*(['"])((?:\\.|(?!\2)[^\\])*)\2/g;
       let declaration: RegExpExecArray | null;
       let found = false;

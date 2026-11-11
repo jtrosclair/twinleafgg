@@ -38,6 +38,10 @@ export class Thundurus extends PokemonCard {
       return reduceIncarnateUnionEffect(store, state, effect, this);
     }
 
+    return Thundurus.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Thunder Edge
     if (WAS_ATTACK_USED(effect, 0, this)) {
       THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS(store, state, effect, 90);

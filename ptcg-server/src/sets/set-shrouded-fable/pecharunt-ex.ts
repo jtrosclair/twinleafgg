@@ -127,15 +127,7 @@ export class Pecharuntex extends PokemonCard {
       return generator.next().value;
     }
 
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      const damagePerPrize = 60;
-
-      effect.damage = opponent.prizesTaken * damagePerPrize;
-    }
+    state = Pecharuntex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
 
     if (effect instanceof CheckTableStateEffect) {
       state.players.forEach(player => {
@@ -154,4 +146,19 @@ export class Pecharuntex extends PokemonCard {
     }
     return state;
   }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+
+      const damagePerPrize = 60;
+
+      effect.damage = opponent.prizesTaken * damagePerPrize;
+    }
+
+    return state;
+  }
+
 }

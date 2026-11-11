@@ -111,6 +111,10 @@ export class IronLeavesex extends PokemonCard {
       });
     }
 
+    return IronLeavesex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Prism Edge
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;

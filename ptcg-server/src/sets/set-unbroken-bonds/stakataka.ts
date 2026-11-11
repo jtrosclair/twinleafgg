@@ -31,6 +31,10 @@ export class Stakataka extends PokemonCard {
         effect.hp += 80;
       }
     }
+    return Stakataka.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const opponent = StateUtils.getOpponent(state, effect.player);
       return FLIP_UNTIL_TAILS_AND_COUNT_HEADS(store, state, effect.player, heads => {

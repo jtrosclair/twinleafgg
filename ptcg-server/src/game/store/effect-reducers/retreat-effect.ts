@@ -70,6 +70,10 @@ export function retreatReducer(store: StoreLike, state: State, effect: Effect): 
   if (effect instanceof RetreatStartEffect) {
     const player = effect.player;
 
+    if (player.active.cannotRetreatNextTurn) {
+      throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+    }
+
     const hasBenchPokemon = player.bench.some(b => b.cards.length > 0);
     if (!hasBenchPokemon) {
       throw new GameError(GameMessage.INVALID_TARGET);
@@ -138,6 +142,10 @@ export function retreatReducer(store: StoreLike, state: State, effect: Effect): 
   /* Retreat pokemon */
   if (effect instanceof RetreatEffect) {
     const player = effect.player;
+
+    if (player.active.cannotRetreatNextTurn) {
+      throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+    }
 
     if (player.bench[effect.benchIndex].cards.length === 0) {
       throw new GameError(GameMessage.INVALID_TARGET);

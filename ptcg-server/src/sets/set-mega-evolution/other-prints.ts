@@ -1,3 +1,28 @@
+import { EnergyCard } from '../../game/store/card/energy-card';
+import { CardType } from '../../game/store/card/card-types';
+import { Shuckle } from './shuckle';
+import { AcerolasMischief } from './acerolas-mischief';
+import { PokemonCenterLady } from '../set-flashfire/pokemon-center-lady';
+import { WallysCompassion as WallysCompassionMEG132Batch12 } from './wallys-compassion';
+import { PowerProtein as PowerProteinMEG124Batch12 } from './power-protein';
+import { MysteryGarden as MysteryGardenMEG122Batch12 } from './mystery-garden';
+import { MegaSignal as MegaSignalMEG121Batch12 } from './mega-signal';
+import { LilliesDetermination as LilliesDeterminationMEG119Batch12 } from './lillies-determination';
+import { FightingGong as FightingGongMEG116Batch12 } from './fighting-gong';
+import { MegaLatiasex as MegaLatiasexMEG100Batch12 } from './mega-latias-ex';
+import { MegaMawileEx as MegaMawileExMEG94Batch12 } from './mega-mawile-ex';
+import { MegaAbsolex as MegaAbsolexMEG86Batch12 } from './mega-absol-ex';
+import { MegaManectricEx as MegaManectricExMEG50Batch12 } from './mega-manectric-ex';
+import { MegaAbomasnowEx as MegaAbomasnowExMEG36Batch12 } from './mega-abomasnow-ex';
+import { MegaCameruptEx as MegaCameruptExMEG22Batch12 } from './mega-camerupt-ex';
+import { Gumshoos as GumshoosMEG110Batch12 } from './gumshoos';
+import { Steelix as SteelixMEG93Batch12 } from './steelix';
+import { Garganacl as GarganaclMEG84Batch12 } from './garganacl';
+import { Houndstone as HoundstoneMEG66Batch12 } from './houndstone';
+import { Clawitizer as ClawitizerMEG38Batch12 } from './clawitizer';
+import { Snover as SnoverMEG35Batch12 } from './snover';
+import { Ninjask as NinjaskMEG17Batch12 } from './ninjask';
+import { Ivysaur as IvysaurMEG2Batch12 } from './ivysaur';
 import { BossOrders } from '../set-paldea-evolved/boss-orders';
 import { Repel } from '../set-sun-and-moon/repel';
 import { EnergySwitchPK } from '../set-ex-power-keepers/other-prints';
@@ -371,4 +396,103 @@ export class MegaLucarioex4MEG extends MegaLucarioexMEG77 {
   public setNumber = '188';
   public fullName: string = 'Mega Lucario ex4 MEG';
   public set = 'MEG';
+}
+
+export class AcerolasMischiefFA extends AcerolasMischief {
+  public setNumber = '165';
+  public fullName: string = 'Acerola\'s Mischief FA MEG';
+  public set = 'MEG';
+}
+
+export class AcerolasMischiefSIR extends AcerolasMischief {
+  public setNumber = '183';
+  public fullName: string = 'Acerola\'s Mischief SIR MEG';
+  public set = 'MEG';
+}
+
+export class ShuckleMEG136 extends Shuckle {
+  public regulationMark = 'I';
+  public setNumber = '136';
+  public fullName = 'ShuckleIR MEG';
+  public set = 'MEG';
+}
+
+export class GrassEnergy extends EnergyCard {
+  public provides: CardType[] = [CardType.GRASS];
+  public set: string = 'MEE';
+  public regulationMark = 'ENERGY';
+  public cardImage: string = 'assets/cardback.png';
+  public setNumber: string = '1';
+  public name = 'Grass Energy';
+  public fullName = 'Grass Energy MEE';
+}
+
+export class FireEnergy extends EnergyCard {
+  public provides: CardType[] = [CardType.FIRE];
+  public set: string = 'MEE';
+  public regulationMark = 'ENERGY';
+  public cardImage: string = 'assets/cardback.png';
+  public setNumber: string = '2';
+  public name = 'Fire Energy';
+  public fullName = 'Fire Energy MEE';
+}
+
+export class WaterEnergy extends EnergyCard {
+  public provides: CardType[] = [CardType.WATER];
+  public set: string = 'MEE';
+  public regulationMark = 'ENERGY';
+  public cardImage: string = 'assets/cardback.png';
+  public setNumber: string = '3';
+  public name = 'Water Energy';
+  public fullName = 'Water Energy MEE';
+}
+
+export class LightningEnergy extends EnergyCard {
+  public provides: CardType[] = [CardType.LIGHTNING];
+  public set: string = 'MEE';
+  public regulationMark = 'ENERGY';
+  public cardImage: string = 'assets/cardback.png';
+  public setNumber: string = '4';
+  public name = 'Lightning Energy';
+  public fullName = 'Lightning Energy MEE';
+}
+
+export class PsychicEnergy extends EnergyCard {
+  public provides: CardType[] = [CardType.PSYCHIC];
+  public set: string = 'MEE';
+  public regulationMark = 'ENERGY';
+  public cardImage: string = 'assets/cardback.png';
+  public setNumber: string = '5';
+  public name = 'Psychic Energy';
+  public fullName = 'Psychic Energy MEE';
+}
+
+export class FightingEnergy extends EnergyCard {
+  public provides: CardType[] = [CardType.FIGHTING];
+  public set: string = 'MEE';
+  public regulationMark = 'ENERGY';
+  public cardImage: string = 'assets/cardback.png';
+  public setNumber: string = '6';
+  public name = 'Fighting Energy';
+  public fullName = 'Fighting Energy MEE';
+}
+
+export class DarknessEnergy extends EnergyCard {
+  public provides: CardType[] = [CardType.DARK];
+  public set: string = 'MEE';
+  public regulationMark = 'ENERGY';
+  public cardImage: string = 'assets/cardback.png';
+  public setNumber: string = '7';
+  public name = 'Darkness Energy';
+  public fullName = 'Darkness Energy MEE';
+}
+
+export class MetalEnergy extends EnergyCard {
+  public provides: CardType[] = [CardType.METAL];
+  public set: string = 'MEE';
+  public regulationMark = 'ENERGY';
+  public cardImage: string = 'assets/cardback.png';
+  public setNumber: string = '8';
+  public name = 'Metal Energy';
+  public fullName = 'Metal Energy MEE';
 }

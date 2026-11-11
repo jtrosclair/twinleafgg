@@ -1,7 +1,12 @@
+import { Wigglytuff2 } from '../set-x-and-y/wigglytuff-2';
+import { Sylveon } from './sylveon';
+import { Karen as KarenXYP177Batch11 } from './karen';
+import { Jirachi as JirachiXYP67Batch11 } from './jirachi';
+import { Meloetta as MeloettaBatch11 } from './meloetta';
 import { Xerneas } from '../set-steam-siege/xerneas';
 import { Yveltal } from '../set-steam-siege/yveltal';
-import { XerneasEX } from '../set-x-and-y/xerneas-ex';
-import { YveltalEx } from '../set-x-and-y/yveltal-ex';
+import { XerneasEX, XerneasEX as XerneasEXXY97 } from '../set-x-and-y/xerneas-ex';
+import { YveltalEx, YveltalEx as YveltalExXY79 } from '../set-x-and-y/yveltal-ex';
 import { Dragalge } from '../set-flashfire/dragalge';
 import { GroudonEx } from '../set-primal-clash/groudon-ex';
 import { HoopaEX } from '../set-ancient-origins/hoopa-ex';
@@ -10,8 +15,6 @@ import { MewEx } from '../set-legendary-treasures/mew-ex';
 import { PalaceBook } from '../set-sun-and-moon-promos/palace-book';
 import { Froakie as FroakieBKP38 } from '../set-breakpoint/froakie';
 import { Volcanion } from '../set-steam-siege/volcanion';
-import { XerneasEX as XerneasEXXY97 } from '../set-x-and-y/xerneas-ex';
-import { YveltalEx as YveltalExXY79 } from '../set-x-and-y/yveltal-ex';
 import { VolcanionEX } from '../set-steam-siege/volcanion-ex';
 import { MagearnaEX } from '../set-steam-siege/magearna-ex';
 import { Jirachi as JirachiXYP67 } from '../set-x-and-y-promos/jirachi';
@@ -135,4 +138,16 @@ export class Karen2XYP extends KarenXYP177 {
   public setNumber = '177a';
   public fullName: string = 'Karen2 XYP';
   public set = 'XYP';
+}
+
+export class SylveonTK6S extends Sylveon {
+  public setNumber = '30';
+  public fullName: string = "Sylveon TK6S";
+  public set = 'TK6S';
+}
+
+export class WigglytuffTK7B extends Wigglytuff2 {
+  public setNumber = '30';
+  public fullName: string = "Wigglytuff TK7B";
+  public set = 'TK7B';
 }

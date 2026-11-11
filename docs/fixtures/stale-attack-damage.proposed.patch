@@ -1,0 +1,115 @@
+--- a/ptcg-server/src/game/store/store.ts
++++ b/ptcg-server/src/game/store/store.ts
+@@ -153,6 +153,13 @@
+   }
+ 
+   public reduceEffect(state: State, effect: Effect): State {
++    // A queued damage selection can outlive its table slot while reactions
++    // settle. Cancel it before any card can react to that departed target.
++    if ((effect instanceof PutDamageEffect || effect instanceof DealDamageEffect) &&
++      !state.players.some(player => player.active === effect.target || player.bench.includes(effect.target))) {
++      effect.preventDefault = true;
++      return state;
++    }
+     const preflight = preflightDualStadiumCancellation(this, state, effect);
+     if (preflight !== undefined) return preflight;
+     // A completed attack's retreat lock belongs to the affected Pokémon,
+@@ -217,7 +224,9 @@
+     if (effect instanceof AbstractAttackEffect && effect.target && effect.source
+       && (effect.target.preventDamageNextTurn || effect.target.preventEffectsOfAttacksNextTurn)) {
+       const targetOwner = StateUtils.findOwner(state, effect.target);
+-      const sourceOwner = StateUtils.findOwner(state, effect.source);
++      const sourceOwner = state.players.find(player => player.active === effect.source || player.bench.includes(effect.source))
++        ?? state.players.find(player => player === effect.player);
++      if (!sourceOwner) { throw new GameError(GameMessage.INVALID_GAME_STATE); }
+       if (targetOwner !== sourceOwner) {
+         const damage = effect instanceof PutDamageEffect || effect instanceof DealDamageEffect;
+         const nonDamage = !damage && !(effect instanceof ApplyWeaknessEffect);
+--- a/ptcg-server/src/game/store/effect-reducers/attack-effect.ts
++++ b/ptcg-server/src/game/store/effect-reducers/attack-effect.ts
+@@ -30,7 +30,14 @@
+ 
+   if (effect instanceof PutDamageEffect) {
+     const target = effect.target;
+-    const sourceOwner = StateUtils.findOwner(state, effect.source);
++    const targetOwner = state.players.find(player => player.active === target || player.bench.includes(target));
++    // Card fan-out can remove the target after Store's initial preflight.
++    if (!targetOwner) { effect.preventDefault = true; return state; }
++    // The attack's captured player remains authoritative when a reaction has
++    // detached its original source slot before queued damage resolves.
++    const sourceOwner = state.players.find(player => player.active === effect.source || player.bench.includes(effect.source))
++      ?? state.players.find(player => player === effect.player);
++    if (!sourceOwner) { throw new GameError(GameMessage.INVALID_GAME_STATE); }
+     const targetCard = target.getPokemonCard();
+ 
+     if (targetCard === undefined) {
+@@ -51,8 +58,12 @@
+       state = store.reduceEffect(state, applyWeakness);
+ 
+       effect.damage = applyWeakness.damage;
+-
+-      const targetOwner = StateUtils.findOwner(state, target);
++      // Weakness processing is a nested dispatch and may also move the target.
++      if (targetOwner.active !== target && !targetOwner.bench.includes(target)) {
++        effect.preventDefault = true;
++        return state;
++      }
++
+       targetOwner.marker.addMarkerToState(targetOwner.DAMAGE_DEALT_MARKER);
+     }
+ 
+@@ -71,7 +82,7 @@
+     const damageBefore = target.damage;
+     target.damage += damage;
+     if (damage > 0 && effect.attackEffect) {
+-      const hp = new CheckHpEffect(StateUtils.findOwner(state, target), target);
++      const hp = new CheckHpEffect(targetOwner, target);
+       store.reduceEffect(state, hp);
+       if (target.damage >= hp.hp) {
+         target.attackDamageKnockOut = { attack: effect.attack, sourceCard: effect.source.getPokemonCard(), playerId: effect.player.id, turn: state.turn };
+@@ -86,7 +97,6 @@
+         effect: effect.attack.name,
+       });
+ 
+-      const targetOwner = StateUtils.findOwner(state, target);
+       targetOwner.marker.addMarkerToState(targetOwner.DAMAGE_DEALT_MARKER);
+ 
+       // Track damage dealt by the attacking Pokemon
+@@ -111,7 +121,7 @@
+       }
+ 
+       if (effect.attackEffect.damageKnockOutsToLostZone && target.attackDamageKnockOut
+-        && StateUtils.findOwner(state, target) === effect.opponent) {
++        && targetOwner === effect.opponent) {
+         const hp = new CheckHpEffect(effect.opponent, target);
+         store.reduceEffect(state, hp);
+         if (damageBefore < hp.hp && target.damage >= hp.hp) {
+@@ -120,9 +130,13 @@
+         }
+       }
+ 
+-      const afterDamageEffect = new AfterDamageEffect(effect.attackEffect, damage);
+-      afterDamageEffect.target = effect.target;
+-      store.reduceEffect(state, afterDamageEffect);
++      // A nested HP/reaction query may have removed the already-damaged slot.
++      // Keep the committed damage/log, but do not emit a stale target follow-up.
++      if (targetOwner.active === target || targetOwner.bench.includes(target)) {
++        const afterDamageEffect = new AfterDamageEffect(effect.attackEffect, damage);
++        afterDamageEffect.target = effect.target;
++        store.reduceEffect(state, afterDamageEffect);
++      }
+     }
+ 
+     // --- Track damaged targets for animation ---
+@@ -150,6 +164,11 @@
+   }
+ 
+   if (effect instanceof DealDamageEffect) {
++    // Propagation may have invalidated the target before any nested type query.
++    if (!state.players.some(player => player.active === effect.target || player.bench.includes(effect.target))) {
++      effect.preventDefault = true;
++      return state;
++    }
+     const base = effect.attackEffect;
+ 
+     const applyWeakness = new ApplyWeaknessEffect(base, effect.damage);

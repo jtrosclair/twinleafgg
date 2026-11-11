@@ -1,3 +1,6 @@
+import { DuskManeNecrozma } from './dusk-mane-necrozma';
+import { SolgaleoGX as SolgaleoGXSMP104Batch11 } from './solgaleo-gx';
+import { PikachuZekromGX as PikachuZekromGXSMP168Batch11 } from './pikachu-and-zekrom-gx';
 import { Stakataka } from '../set-unbroken-bonds/stakataka';
 import { Passimian } from '../set-sun-and-moon/passimian';
 import { Oranguru } from '../set-sun-and-moon/oranguru';
@@ -7,11 +10,10 @@ import { Popplio as PopplioSUM39 } from '../set-sun-and-moon/popplio';
 import { Vikavolt } from '../set-sun-and-moon/vikavolt';
 import { TapuKoko as TapuKokoSMP30 } from '../set-sun-and-moon-promos/tapu-koko';
 import { TapuBuluGX } from '../set-burning-shadows/tapu-bulu-gx';
-import { TapuKokoGX } from '../set-guardians-rising/tapu-koko-gx';
+import { TapuKokoGX, TapuKokoGX as TapuKokoGXGRI47 } from '../set-guardians-rising/tapu-koko-gx';
 import { EspeonGX } from '../set-sun-and-moon/espeon-gx';
 import { DecidueyeGX } from '../set-sun-and-moon/decidueye-gx';
 import { Cosmog } from '../set-sun-and-moon/cosmog';
-import { TapuKokoGX as TapuKokoGXGRI47 } from '../set-guardians-rising/tapu-koko-gx';
 import { Lucario } from '../set-burning-shadows/lucario';
 import { NecrozmaGX } from '../set-burning-shadows/necrozma-gx';
 import { MarshadowGX } from '../set-burning-shadows/marshadow-gx';
@@ -34,7 +36,7 @@ import { Delcatty } from '../set-celestial-storm/delcatty';
 import { GlaceonGX } from '../set-ultra-prism/glaceon-gx';
 import { Raikou } from '../set-lost-thunder/raikou';
 import { Giratina } from '../set-lost-thunder/giratina';
-import { Charizard } from '../set-team-up/charizard';
+import { Charizard, Charizard as CharizardTEU14 } from '../set-team-up/charizard';
 import { Zapdos as ZapdosTEU40 } from '../set-team-up/zapdos';
 import { Nidoqueen } from '../set-team-up/nidoqueen';
 import { Jirachi } from '../set-team-up/jirachi';
@@ -49,9 +51,8 @@ import { Buzzwole } from '../set-cosmic-eclipse/buzzwole';
 import { Entei } from '../set-cosmic-eclipse/entei';
 import { Phione } from '../set-cosmic-eclipse/phione';
 import { Blacephalon } from '../set-cosmic-eclipse/blacephalon';
-import { Charizard as CharizardTEU14 } from '../set-team-up/charizard';
 import { CharizardBraixenGX } from '../set-cosmic-eclipse/charizard-braixen-gx';
-import { ReshiramCharizardGX as ReshiramCharizardGXUNB20 } from '../set-unbroken-bonds/reshiram-and-charizard-gx';
+import { ReshiramCharizardGX as ReshiramCharizardGXUNB20, ReshiramCharizardGX } from '../set-unbroken-bonds/reshiram-and-charizard-gx';
 import { PikachuZekromGX as PikachuZekromGXSMP168 } from '../set-sun-and-moon-promos/pikachu-and-zekrom-gx';
 import { SolgaleoGX as SolgaleoGXSMP104 } from '../set-sun-and-moon-promos/solgaleo-gx';
 import { VenusaurSnivyGX } from '../set-cosmic-eclipse/venusaur-and-snivy-gx';
@@ -62,8 +63,7 @@ import { MagikarpWailordGX } from '../set-team-up/magikarp-and-wailord-gx';
 import { Mew } from '../set-unbroken-bonds/mew';
 import { LucarioMelmetalGX } from '../set-unbroken-bonds/lucario-and-melmetal-gx';
 import { Lycanroc } from '../set-forbidden-light/lycanroc';
-import { ReshiramCharizardGX } from '../set-unbroken-bonds/reshiram-and-charizard-gx';
-import { TapuKoko } from './tapu-koko';
+import { TapuKoko, TapuKoko as TapuKokoSMP30Batch11 } from './tapu-koko';
 import { EspeonDeoxysGX } from '../set-unified-minds/espeon-and-deoxys-gx';
 import { UmbreonDarkraiGX } from '../set-unified-minds/umbreon-and-darkrai-gx';
 import { CharizardGX } from '../set-burning-shadows/charizard-gx';
@@ -486,4 +486,10 @@ export class Stakataka2SMP extends Stakataka {
   public set = 'SMP';
   public setNumber = '209';
   public fullName = 'Stakataka2 SMP';
+}
+
+export class DuskManeNecrozmaSMP extends DuskManeNecrozma {
+  public setNumber = '124';
+  public fullName: string = "Dusk Mane Necrozma SMP 124";
+  public set = 'SMP';
 }

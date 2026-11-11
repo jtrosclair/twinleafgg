@@ -40,11 +40,7 @@ export class VolcanionEX extends PokemonCard {
   public readonly STEAM_UP_MARKER = 'STEAM_UP_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Volcanic Heat
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      player.active.cannotAttackNextTurnPending = true;
-    }
+    state = VolcanionEX.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
 
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
@@ -86,4 +82,15 @@ export class VolcanionEX extends PokemonCard {
     }
     return state;
   }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    // Volcanic Heat
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      const player = effect.player;
+      player.active.cannotAttackNextTurnPending = true;
+    }
+
+    return state;
+  }
+
 }

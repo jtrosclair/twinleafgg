@@ -105,10 +105,14 @@ export class Mewex extends PokemonCard {
 
     }
 
+    return Mewex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  /** Genome Hacking is attack-owned; Restart and its cleanup remain card-owned. */
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       return COPY_OPPONENT_ACTIVE_ATTACK(store, state, effect as AttackEffect);
     }
-
     return state;
   }
 

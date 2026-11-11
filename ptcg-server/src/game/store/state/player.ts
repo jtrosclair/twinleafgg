@@ -3,13 +3,16 @@ import { GameMessage } from '../../game-message';
 import { CardTarget, PlayerType, SlotType } from '../actions/play-card-action';
 import { CardTag } from '../card/card-types';
 import { PokemonCard } from '../card/pokemon-card';
-import { MovedToActiveEffect } from '../effects/game-effects';
+import { MovedFromActiveToBenchEffect, MovedToActiveEffect } from '../effects/game-effects';
 import { CardList } from './card-list';
 import { Marker } from './card-marker';
 import { PokemonCardList } from './pokemon-card-list';
 import { GameStats } from './game-stats-interfaces';
 export class Player {
   public coinFlipCancelTrainerPlayTurnsRemaining = 0;
+  public trainerCardsBlockedNextTurn = false;
+  public supporterCardsBlockedNextTurn = false;
+  public energyCardsBlockedNextTurn = false;
   public pokemonKnockedOutDuringOpponentsLastTurn = false;
   public pokemonKnockedOutByAttackDuringOpponentsLastTurn = false;
 
@@ -268,6 +271,7 @@ export class Player {
     const benchIndex = this.bench.indexOf(target);
     if (benchIndex !== -1) {
       const temp = this.active;
+      const pokemonLeavingActive = temp.getPokemonCard();
 
       // Remove player-level markers scoped to the active Pokemon.
       // Uses both targetScope metadata (migrated) and whitelist (unmigrated).
@@ -283,6 +287,10 @@ export class Player {
 
       this.active = this.bench[benchIndex];
       this.bench[benchIndex] = temp;
+
+      if (store && state && pokemonLeavingActive) {
+        store.reduceEffect(state, new MovedFromActiveToBenchEffect(this, pokemonLeavingActive));
+      }
 
       const activePokemon = this.active.getPokemonCard();
       if (activePokemon) {

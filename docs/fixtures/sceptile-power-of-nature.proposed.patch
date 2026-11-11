@@ -1,0 +1,48 @@
+--- a/ptcg-server/src/sets/set-celestial-storm/sceptile.ts
++++ b/ptcg-server/src/sets/set-celestial-storm/sceptile.ts
+@@ -4,6 +4,7 @@
+ import { PowerType } from '../../game/store/card/pokemon-types';
+ import { PutDamageEffect } from '../../game/store/effects/attack-effects';
+ import { Effect } from '../../game/store/effects/effect';
++import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
+ import { GET_TOTAL_ENERGY_ATTACHED_TO_PLAYERS_POKEMON, IS_ABILITY_BLOCKED, PREVENT_DAMAGE_IF_SOURCE_HAS_TAG, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+ 
+ export class Sceptile extends PokemonCard {
+@@ -37,18 +38,28 @@
+ 
+   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+ 
+-    if (effect instanceof PutDamageEffect && effect.source.getPokemonCard() != null) {
+-      const player = effect.player;
+-      const opponent = StateUtils.getOpponent(state, player);
+-      
+-      if (IS_ABILITY_BLOCKED(store, state, opponent, this)) {
+-        return state;
++    // Refs: set-fusion-strike/blissey.ts (target-owner protection),
++    // set-team-up/kakuna.ts (effective Grass Energy on the damaged Pokemon).
++    if (effect instanceof PutDamageEffect) {
++      const source = effect.source.getPokemonCard();
++      if (!source || !source.tags.includes(CardTag.ULTRA_BEAST)) { return state; }
++
++      const owner = state.players.find(player => StateUtils.isPokemonInPlay(player, this));
++      // AttackEffect retains the attacker's player even if a reaction moves its
++      // source slot. A stale target is not one of this owner's in-play Pokemon.
++      if (!owner || effect.player === owner ||
++        (effect.target !== owner.active && !owner.bench.includes(effect.target))) { return state; }
++
++      if (IS_ABILITY_BLOCKED(store, state, owner, this)) { return state; }
++
++      const energy = new CheckProvidedEnergyEffect(owner, effect.target);
++      state = store.reduceEffect(state, energy);
++      if (StateUtils.checkEnoughEnergy(energy.energyMap, [CardType.GRASS])) {
++        PREVENT_DAMAGE_IF_SOURCE_HAS_TAG(effect, CardTag.ULTRA_BEAST, source);
+       }
+-      
+-      PREVENT_DAMAGE_IF_SOURCE_HAS_TAG(effect, CardTag.ULTRA_BEAST, effect.source.getPokemonCard()!);
+       return state;
+     }
+-    
++
+     return Sceptile.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+   }
+ 

@@ -59,6 +59,10 @@ export class Meganium extends PokemonCard {
       }
     }
 
+    return Meganium.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Attack 1: Green Force
     // Ref: set-fates-collide/kabutops.ts (Cling)
     if (WAS_ATTACK_USED(effect, 0, this)) {

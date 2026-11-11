@@ -1,0 +1,42 @@
+{
+  "suite": "red",
+  "file": "simisage-par.blockers.red.spec.js",
+  "passed": 0,
+  "failed": 5,
+  "pending": 0,
+  "failures": [
+    {
+      "name": "Simisage PAR integration blockers: effective intrinsic Ability presence Galarian Weezing SHF removes the opponent Ability from the intrinsic query",
+      "expectations": [
+        "Expected true to be false."
+      ]
+    },
+    {
+      "name": "Simisage PAR integration blockers: effective intrinsic Ability presence Iron Thorns ex TWM removes the opponent Ability from the intrinsic query",
+      "expectations": [
+        "Expected true to be false."
+      ]
+    },
+    {
+      "name": "Simisage PAR integration blockers: effective intrinsic Ability presence actual Ancient Star attack grants its user an intrinsic Ability",
+      "expectations": [
+        "Expected false to be true."
+      ]
+    },
+    {
+      "name": "Simisage PAR integration blockers: effective intrinsic Ability presence ordinary usable-power UI queries must not pollute the intrinsic printed definition",
+      "expectations": [
+        "Expected 1 to be 0.",
+        "Expected 1 to be 0."
+      ]
+    },
+    {
+      "name": "Simisage PAR integration blockers: effective intrinsic Ability presence a gained Ability remains removed independent of fan-out order",
+      "expectations": [
+        "Expected true to be false."
+      ]
+    }
+  ],
+  "status": "failed",
+  "suiteFailures": []
+}

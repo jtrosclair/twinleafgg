@@ -1,6 +1,6 @@
 import { Stufful } from './stufful';
 import { Tinkatink } from './tinkatink';
-import { BossOrdersMEG, EnergySwitchPKMEG, RareCandyMEG, RepelMEG, SwitchMEG, UltraBallMEG, Bulbasaur2MEG, Ivysaur2MEG, Ninjask2MEG, Snover2MEG, Clawitizer2MEG, Inteleon2MEG, Houndstone2MEG, Garganacl2MEG, Steelix2MEG, Gumshoos2MEG, MegaVenusaurEx2MEG, MegaCameruptEx2MEG, MegaAbomasnowEx2MEG, MegaManectricEx2MEG, MegaGardevoirex2MEG, MegaLucarioex2MEG, MegaAbsolex2MEG, MegaMawileEx2MEG, MegaLatiasex2MEG, MegaKangaskhanex2MEG, AirBalloonMEG, BuddyBuddyPoffinMEG, FightingGong2MEG, LilliesDetermination2MEG, MegaSignal2MEG, MysteryGarden2MEG, NightlyStretcherMEG, PowerProtein2MEG, RareCandy2MEG, WallysCompassion2MEG, MegaVenusaurEx3MEG, MegaGardevoirex3MEG, MegaLucarioex3MEG, MegaAbsolex3MEG, MegaLatiasex3MEG, MegaKangaskhanex3MEG, LilliesDetermination3MEG, WallysCompassion3MEG, MegaGardevoirex4MEG, MegaLucarioex4MEG } from './other-prints';
+import { BossOrdersMEG, EnergySwitchPKMEG, RareCandyMEG, RepelMEG, SwitchMEG, UltraBallMEG, Bulbasaur2MEG, Ivysaur2MEG, Ninjask2MEG, Snover2MEG, Clawitizer2MEG, Inteleon2MEG, Houndstone2MEG, Garganacl2MEG, Steelix2MEG, Gumshoos2MEG, MegaVenusaurEx2MEG, MegaCameruptEx2MEG, MegaAbomasnowEx2MEG, MegaManectricEx2MEG, MegaGardevoirex2MEG, MegaLucarioex2MEG, MegaAbsolex2MEG, MegaMawileEx2MEG, MegaLatiasex2MEG, MegaKangaskhanex2MEG, AirBalloonMEG, BuddyBuddyPoffinMEG, FightingGong2MEG, LilliesDetermination2MEG, MegaSignal2MEG, MysteryGarden2MEG, NightlyStretcherMEG, PowerProtein2MEG, RareCandy2MEG, WallysCompassion2MEG, MegaVenusaurEx3MEG, MegaGardevoirex3MEG, MegaLucarioex3MEG, MegaAbsolex3MEG, MegaLatiasex3MEG, MegaKangaskhanex3MEG, LilliesDetermination3MEG, WallysCompassion3MEG, MegaGardevoirex4MEG, MegaLucarioex4MEG, AcerolasMischiefFA, AcerolasMischiefSIR, ShuckleMEG136, GrassEnergy, FireEnergy, WaterEnergy, LightningEnergy, PsychicEnergy, FightingEnergy, DarknessEnergy, MetalEnergy } from './other-prints';
 import { Card } from '../../game/store/card/card';
 import { Abra } from './abra';
 import { AcerolasMischief } from './acerolas-mischief';
@@ -76,6 +76,16 @@ import { IronDefender } from './iron-defender';
 
 import { Tyrogue } from './tyrogue';
 
+import { Bewear } from './bewear';
+import { Dialga } from './dialga';
+import { Frosmoth } from './frosmoth';
+import { Pachirisu } from './pachirisu';
+import { Raikou } from './raikou';
+import { Shuckle } from './shuckle';
+import { Tangela } from './tangela';
+import { Tangrowth } from './tangrowth';
+import { Tinkaton } from './tinkaton';
+import { Tinkatuff } from './tinkatuff';
 export const setMegaEvolution: Card[] = [
   new Abra(),
   new AcerolasMischief(),
@@ -207,4 +217,25 @@ export const setMegaEvolution: Card[] = [
   new Tyrogue(),
   new Stufful(),
   new Tinkatink(),
+  new AcerolasMischiefFA(),
+  new AcerolasMischiefSIR(),
+  new ShuckleMEG136(),
+  new GrassEnergy(),
+  new FireEnergy(),
+  new WaterEnergy(),
+  new LightningEnergy(),
+  new PsychicEnergy(),
+  new FightingEnergy(),
+  new DarknessEnergy(),
+  new MetalEnergy(),
+  new Bewear(),
+  new Dialga(),
+  new Frosmoth(),
+  new Pachirisu(),
+  new Raikou(),
+  new Shuckle(),
+  new Tangela(),
+  new Tangrowth(),
+  new Tinkaton(),
+  new Tinkatuff(),
 ];

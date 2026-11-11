@@ -14,13 +14,13 @@ import {
   LostZoneCardsEffect,
   AfterWeaknessAndResistanceEffect
 } from '../effects/attack-effects';
-import { HealEffect } from '../effects/game-effects';
+import { AttackEffect, HealEffect } from '../effects/game-effects';
 import { StateUtils } from '../state-utils';
 import { getCardTarget } from '../../../simple-bot/simple-tactics/simple-tactics';
 import { EffectOfAttackEffect } from '../effects/effect-of-attack-effects';
 import { GameStatsTracker } from '../game-stats-tracker';
 import { CheckHpEffect } from '../effects/check-effects';
-import { CardTag } from '../card/card-types';
+import { CardTag, Stage } from '../card/card-types';
 
 export function attackReducer(store: StoreLike, state: State, effect: Effect): State {
   if (effect instanceof GustOpponentBenchEffect) {
@@ -37,6 +37,14 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
       throw new GameError(GameMessage.ILLEGAL_ACTION);
     }
 
+    if (effect.attackEffect) {
+      effect.damage += effect.source.attackDamageBonusNextTurn;
+    }
+
+    if (target.damageReductionBeforeWeaknessNextTurn > 0) {
+      effect.damage = Math.max(0, effect.damage - target.damageReductionBeforeWeaknessNextTurn);
+    }
+
     const opponent = StateUtils.getOpponent(state, effect.player);
     if (target !== opponent.active && !effect.weaknessApplied) {
       effect.damage = Math.max(0, effect.damage - effect.source.attackDamageReductionNextTurn);
@@ -46,7 +54,7 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
       // Apply weakness
       const applyWeakness = new ApplyWeaknessEffect(effect.attackEffect, effect.damage);
       applyWeakness.target = effect.target;
-      applyWeakness.ignoreWeakness = effect.attackEffect.ignoreWeakness;
+      applyWeakness.ignoreWeakness = effect.attackEffect.ignoreWeakness || target.noWeaknessNextTurn;
       applyWeakness.ignoreResistance = effect.attackEffect.ignoreResistance;
       state = store.reduceEffect(state, applyWeakness);
 
@@ -58,8 +66,17 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
 
     effect.applyPostWeaknessReductions();
 
+    if (target.preventDamageUpToNextTurn > 0 && effect.damage <= target.preventDamageUpToNextTurn) {
+      effect.preventDefault = true;
+      return state;
+    }
+
     // Apply damage reduction for "during opponent's next turn" effects
-    if (target.damageReductionNextTurn > 0) {
+    const reductionFilter = target.damageReductionNextTurnFilter;
+    const attackerStage = effect.player.active.getPokemonCard()?.stage;
+    if (target.damageReductionNextTurn > 0
+      && (!reductionFilter?.sourceIsEvolution || attackerStage !== Stage.BASIC)
+      && (reductionFilter?.sourceStage === undefined || attackerStage === reductionFilter.sourceStage)) {
       effect.damage = Math.max(0, effect.damage - target.damageReductionNextTurn);
     }
 
@@ -68,8 +85,23 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
       effect.damage += target.defendingPokemonExtraDamageNextTurn;
     }
     const damage = Math.max(0, effect.damage);
+    if (effect.attackEffect && target.surviveOnTenHpNextTurn) {
+      effect.surviveOnTenHPReason = target.surviveOnTenHpNextTurn;
+    }
     const damageBefore = target.damage;
     target.damage += damage;
+    const retaliation = target.retaliateOnDamageNextTurn;
+    const defendingPlayer = StateUtils.findOwner(state, target);
+    if (damage > 0 && effect.attackEffect && retaliation
+      && retaliation.attackerPlayerId === defendingPlayer.id
+      && StateUtils.getOpponent(state, defendingPlayer) === effect.player) {
+      const retaliatingPlayer = defendingPlayer;
+      const revenge = new AttackEffect(retaliatingPlayer, effect.player, retaliation.attack);
+      revenge.source = target;
+      const counters = new PutCountersEffect(revenge, retaliation.damage);
+      counters.target = effect.source;
+      store.reduceEffect(state, counters);
+    }
     if (damage > 0 && effect.attackEffect) {
       const hp = new CheckHpEffect(StateUtils.findOwner(state, target), target);
       store.reduceEffect(state, hp);

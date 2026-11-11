@@ -1,0 +1,57 @@
+{
+  "createdAt": "2026-11-10T21:39:27.018795+00:00",
+  "scope": "Isolated investigation only; not approved for integration",
+  "upstreamCommit": "e315e91da98509559708dc8b937202f7f39f87dc",
+  "baselineInventorySha256": "1151e8afdac8544b966969a93228264832c4dbe314c4601ba16f24c81b48a41b",
+  "files": [
+    {
+      "path": "src/game/store/effects/check-effects.ts",
+      "beforeSha256": "28df3af277297201f701a7112de35f7599e220423da9e349201752663abe57b2",
+      "afterSha256": "75b63eac93951ca2273469e9999f3995226cc803b714b6d191f2d5b6412e64e9",
+      "sharedSha256AtReview": "28df3af277297201f701a7112de35f7599e220423da9e349201752663abe57b2",
+      "sharedBaselineMatches": true
+    },
+    {
+      "path": "src/sets/set-crown-zenith/sky-seal-stone.ts",
+      "beforeSha256": "a91b628affb5e53d9eb6e795291217bb61557aeeff675925e6076f82405edcdc",
+      "afterSha256": "b8d22407794a769e9f4f90f7afbe10136e1f37cd5cb0c8f189f0fdb0d7d12130",
+      "sharedSha256AtReview": "a91b628affb5e53d9eb6e795291217bb61557aeeff675925e6076f82405edcdc",
+      "sharedBaselineMatches": true
+    },
+    {
+      "path": "src/sets/set-paradox-rift/index.ts",
+      "beforeSha256": "964a5ae9a1821dcdfa1dd367c19466f5112c6e2e9c47ac05638ea22d9b76fdb8",
+      "afterSha256": "1cde02196be5e56efdeda132a3e36edda7dc46c8c601334452384926ad3f22fe",
+      "sharedSha256AtReview": "964a5ae9a1821dcdfa1dd367c19466f5112c6e2e9c47ac05638ea22d9b76fdb8",
+      "sharedBaselineMatches": true
+    },
+    {
+      "path": "src/sets/set-paradox-rift/simisage.ts",
+      "beforeSha256": null,
+      "afterSha256": "ca26e6d7f38772585ac24b136c29d2f3feadf642f29afa8e00186be127262979",
+      "sharedSha256AtReview": null,
+      "sharedBaselineMatches": true
+    },
+    {
+      "path": "src/sets/set-silver-tempest/forest-seal-stone.ts",
+      "beforeSha256": "2f481c981f3fabfb8d27ebd685c38a1f983f1b335aacf8a90eae3b3a22a833ac",
+      "afterSha256": "f107c4b0fcdbdbc2fe90e25545ca35202e0fe37962b4ba31360bb53a83c0c833",
+      "sharedSha256AtReview": "2f481c981f3fabfb8d27ebd685c38a1f983f1b335aacf8a90eae3b3a22a833ac",
+      "sharedBaselineMatches": true
+    },
+    {
+      "path": "src/sets/tests/simisage-par.blockers.red.spec.ts",
+      "beforeSha256": null,
+      "afterSha256": "c2d662fd2e76365104e461d485813543254b596d3630f30a519cecb1113df406",
+      "sharedSha256AtReview": null,
+      "sharedBaselineMatches": true
+    },
+    {
+      "path": "src/sets/tests/simisage-par.investigation.spec.ts",
+      "beforeSha256": null,
+      "afterSha256": "ca1006d8031f07036f5bfd810f8c236da73ce6be7c46ab7aa6a72a910e4942f4",
+      "sharedSha256AtReview": null,
+      "sharedBaselineMatches": true
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import { PetililBatch112 } from './petilil-batch11';
 import { CobalionNVI, NNVI, RockyHelmetNVI, Terrakion2NVI, Cobalion2NVI, N2NVI, Virizion2NVI, Victini4NVI } from './other-prints';
 import { Card } from '../../game/store/card/card';
 import { Archen } from './archen';
@@ -198,4 +199,5 @@ export const setNobleVictories: Card[] = [
   new Lilligant(),
   new Litwick2(),
   new Virizion(),
+  new PetililBatch112(),
 ];

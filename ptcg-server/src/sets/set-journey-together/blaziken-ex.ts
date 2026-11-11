@@ -89,6 +89,10 @@ export class Blazikenex extends PokemonCard {
       });
     }
 
+    return Blazikenex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Burning Assault
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;

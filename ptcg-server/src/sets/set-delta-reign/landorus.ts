@@ -37,6 +37,10 @@ export class Landorus extends PokemonCard {
       return reduceIncarnateUnionEffect(store, state, effect, this);
     }
 
+    return Landorus.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Gaia Crush
     if (WAS_ATTACK_USED(effect, 0, this)) {
       DISCARD_A_STADIUM_CARD_IN_PLAY(state);

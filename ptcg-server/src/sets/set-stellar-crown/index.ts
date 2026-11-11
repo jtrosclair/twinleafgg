@@ -60,6 +60,10 @@ import { Marill } from './marill';
 import { AntiqueCoverFossil } from './antique-cover-fossil';
 import { Toedscool } from './toedscool';
 
+import { AntiqueRootFossil } from './antique-root-fossil';
+import { Cradily } from './cradily';
+import { Lileep } from './lileep';
+import { Rhyperior } from './rhyperior';
 export const setStellarCrown: Card[] = [
   new Archaludon(),
   new AreaZeroUnderdepths(),
@@ -153,5 +157,9 @@ export const setStellarCrown: Card[] = [
   new BlastoiseexSCR(),
   new YamaskSCR(),
   new Crabominable2SCR(),
-  new Gulpin2SCR()
+  new Gulpin2SCR(),
+  new AntiqueRootFossil(),
+  new Cradily(),
+  new Lileep(),
+  new Rhyperior(),
 ];

@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": ".simisage-test",
+    "rootDir": "src",
+    "noEmitOnError": true,
+    "declaration": false,
+    "sourceMap": false
+  },
+  "include": [
+    "src/sets/tests/simisage-par.investigation.spec.ts",
+    "src/client/index.ts",
+    "src/sets/tests/simisage-par.blockers.red.spec.ts"
+  ]
+}

@@ -1033,3 +1033,478 @@ Release verification after the DLR and harness overlays: 4,319 card checks
 passed; the same two generic unannotated copied-handler ownership tests remain
 failing. Fifteen API tests, the Cloudflare tests and four recorded puzzle wins
 passed. The release package build passed its mobile size budgets.
+
+Local follow-up (not yet deployed): Magmortar's Buddy Boost prompt now rejects
+non-Basic and non-Fire/Lightning Energy at submission as well as in its UI;
+its hand-attachment locks and reactions require a separate timing fix. Island
+Cave and Calamitous Snowy Mountain now ignore explicitly annotated deck/discard
+attachments, and Frozen City exempts Team Plasma Pokémon. Six focused baseline
+cases failed before these Stadium changes; 36 combined tests now pass, including
+manual attachments, Water/evolution exceptions and Magmortar validation. All
+532 supported saved states and 3,468 sampled initial actions match; 137
+unsupported or invalid records were skipped. Unannotated attachment sources
+remain open.
+
+Local copied-attack follow-up (not yet deployed): callbacks from a copied
+attack's prompts and coin flips now temporarily restore its attack and marker
+context. The baseline failed three real delayed-effect reproductions; the
+candidate passed 62 focused checks, 532 matching saved states, 3,468 matching
+first actions and four recorded puzzle wins. Coin events use a per-dispatch
+proxy, preserving the caller's callback while giving concurrent dispatches
+separate contexts; future observers must not assume coin-event object identity.
+Direct after-attack-damage queues, arbitrary external scheduling, and restoring
+in-flight prompt closures remain outside this change. The two unannotated
+ownership acceptance failures remain
+open and unchanged.
+Combined local callback, Energy and Stadium overlay: 98 focused checks passed;
+all 532 supported saved states and 3,468 sampled initial actions matched the
+published engine (137 rows skipped). Full-solution replays and a full card run
+remain required after the next card batch is integrated.
+The callback wrapper does not cover `afterAttackDamage` continuations, which
+run with the raw store. A targeted scan of 98 current registrations found 14
+closures passing `this` as a card/source argument, but none directly reading
+`this.attacks` or `this.*MARKER`; that scan does not prove all helper or future
+code paths safe.
+`Attack.effect` and `copiedReactiveAfterDamage` are also outside the wrapper;
+the latter is currently used by Aggron UNB and passes the copycat explicitly.
+Coin-event `preventDefault` and `result` fields still forward to the original
+effect object, so callback isolation does not make concurrent reuse of the
+same event's mutable status fully independent.
+Independent follow-up adds real Dusclops nested-prompt source identity and
+multi-observer/multi-coin interleaving regressions; 18 combined checks passed.
+The broader Magmortar hand-attachment fix is still isolated: its preflight
+suppression probe can invoke an unrelated external observer even on a cloned
+state. The non-shipping [pure suppression research](pure-suppression-migration.md)
+records a reproducible red diagnostic, a five-family experimental evaluator,
+and the remaining capability and protection work; it is not wired into play.
+A first-pass classification of the 71 directly detected PowerEffect branches
+is recorded in [the suppression classification](pure-suppression-classification.md);
+indirect paths and full capability coverage still require manual review.
+
+Round-27 local overlay (not yet deployed): 37 printed identities were added:
+Electrike AR 62, Geodude AR 65, Ponyta AR 72, Rattata AR 73, Snorunt AR 75,
+Tangela AR 76, Treecko AR 78, Manectric AR 44, Aron RR 57, Rhydon SV 80,
+Plusle HSP 16, Hitmonlee HSP 25, Exeggcute HS 63, Phanpy P2 15, Pikachu P2
+16, Bulbasaur P2 12, Ivysaur P2 7, Multi Technical Machine 01 P2 9, TV
+Reporter P2 11, Ivysaur P3 14, Jolteon P3 3, Grovyle P4 7, Mudkip P4 11,
+Pidgey P4 12, Treecko δ P4 15, Heal Energy P4 8, Scramble Energy P4 10,
+Charmeleon δ P5 5, Charmander δ P5 10, Bill's Maintenance P5 6, Rare Candy
+P5 7, δ Rainbow Energy P5 9, Cherrim P8 6, Rare Candy P8 10, Roseanne's
+Research P8 11, Chimchar P8 12 and Turtwig P8 17. Definitions live in their
+native set directories but use a last-registered aggregator to preserve old
+unnumbered fallback resolution. Delta Pokémon use their ordinary gameplay names
+and retain their δ-marked serialized full names; numbered deck imports and
+API lookups support both forms.
+
+Existing base fixes included with the reprints: Heal Energy ignores explicitly
+marked deck/discard attachments; Roseanne's Research shuffles after zero chosen
+cards; Bill's Maintenance draws only after its shuffle; Ivysaur's Poison Seed
+uses attack-origin effects and honors protection, including when copied. Heal's
+legacy unannotated non-hand attachments and Bill's prevented-movement cases
+remain unaudited. The isolated full overlay passed 219 focused card tests,
+19 API tests, all 37 artwork mappings, 532 matching saved states, 3,468 matching
+first actions and four recorded puzzle wins. Its catalogue gained exactly 37
+unique identities without changing 27,559 prior serializer fallbacks; 38,719
+old deck-import inputs also retained their outcomes. The current combined tree
+still requires its own final verification; the upstream ledger remains partial.
+Combined round-27 full-card verification: 4,589 checks passed and the same two
+unannotated copied-handler ownership acceptance checks failed; no other suite
+failed. All 532 supported saved states and 3,468 sampled first actions matched
+the published engine; 137 unsupported or invalid records were skipped.
+The combined tree also replayed Breaking Through the Wall, Explosive Hand,
+Trapped in the Phantom Maze and Something's Fishy to wins. Independent
+round-27 review checked printed metadata for all 24 new Pokémon, reprint
+metadata for all 13 variants, and 12 additional reprint gameplay cases. These
+checks do not cover every possible later action or interaction.
+A [portable ownership counterexample](fixtures/copied-ownership-research.md)
+shows why arbitrary identical-predicate legacy branches cannot be partitioned
+reliably without executable ownership information. The existing explicit
+contract is a migration path; adding it to the two acceptance fixtures would
+change their unannotated-handler intent, so those tests remain unchanged.
+Round-28 chosen-target attacks remain under development: the
+[portable red fixtures](fixtures/round28-chosen-target.red.md) reproduce a
+missed Choice Belt bonus against an Active V and spurious Active damage when
+a Bench target is selected. The fixture and helper are non-shipping research;
+these cards must not be registered until target selection, modifier timing,
+Weakness/Resistance and protection are correct for direct and copied attacks.
+
+Round-28 local overlay (not yet deployed) adds 18 reviewed identities: Haunter
+AR 42; Buneary DP 73; Glaceon MD 20; Shellos East Sea MD 73; Vulpix MT 107;
+Charmander SW 82; Staravia SF 52; Spinarak HS 83; Buizel UL 45; Eevee P3 13;
+Pikachu P4 13; Burmy Sandy Cloak MD 54; Ponyta SF 71; Snover SF 74; Swablu
+GE 86; Sandshrew HS 79; Beldum SV 90; and Poliwag UL 58. The isolated overlay
+passed 180 focused tests, 20 API tests, 532 identical saved states, 3,468
+matching first actions, four recorded wins, and all 18 artwork checks. Its
+catalogue added exactly 18 identities without changing 27,635 prior serializer
+fallbacks or 38,827 prior deck-import inputs. The combined current tree still
+needs its own test run; the chosen-target group remains separate and unresolved.
+Combined round-28 full-card run: 4,769 passed and the same two unannotated
+copied-handler ownership acceptance checks failed; there were no other failures.
+The API suite passed 20 tests and all 532 applicable saved states matched.
+Combined round-28 verification: the root client suite and all 20 API tests
+passed; 532 supported saved states and 3,468 initial actions matched the
+published engine, with 137 unsupported/invalid records skipped. All four
+recorded puzzle solutions won. The full card run passed 4,769 checks and
+retained the same two unannotated copied-handler ownership failures.
+
+Local ownership migration (not yet deployed): attack-only contracts now cover
+Meganium BKP, Zoroark BKT, Jumpluff EVS, Pinsir EVS, Vanilluxe PAR, Turtonator
+M3, Seviper M2 (PFL), Machamp PLB, Slaking ex SSP, Cobalion-GX TEU, Latios-GX
+UNM and Metagross VIV, including inherited print variants. A separate explicit
+opponent-attack preflight and retention predicate preserves Cobalion and
+Metagross restrictions through bounce/knockout, switching, serialization and
+later copied attacks, without sending opponent attacks to unannotated handlers.
+The isolated candidate passed 86 focused checks, 532 matching saved states and
+3,468 matching opening actions; independent review also verified an actual
+ClientSimulator detached-effect snapshot/undo roundtrip. The original two
+unannotated ownership acceptance tests remain unchanged and failing. Final
+combined-tree tests and recorded replays are still required.
+Combined round-28 plus ownership migration: 4,812 full-card checks passed,
+with only the same two unannotated ownership acceptance failures; 20 API tests
+passed, 532 saved states matched exactly, and all 3,468 sampled first actions
+matched (137 rows skipped). The added client regression exercises detached
+Iron Rule through snapshot restoration, compact checkpoints and undo.
+The combined tree also passed the 68-spec client suite with the new real
+snapshot/undo regression and replayed the four recorded solutions to wins.
+A separate [non-targeted copied-attack cancellation fixture](fixtures/round28-nontarget-cancellation.red.md)
+reproduces existing Clefable Metronome damage after a loaded Sand Attack tails
+cancellation. It is not fixed by the targeted-damage prototype and remains open.
+Sceptile CES has an independently reproduced, pre-existing Power of Nature
+ownership/Energy check issue; see the [non-shipping red fixture](fixtures/sceptile-power-of-nature.red.md).
+The ownership migration preserves that behavior while a separate fix is reviewed.
+A further local attack-ownership migration covers Landorus M6, Thundurus M6,
+Enamorus M6, Tornadus M6, Stakataka UNB, Crustle BCR, Shedinja DRX, Registeel
+CES, Sceptile CES, Ninjask VIV and Klinklang SCR, including inherited variants.
+Independent review and 132 focused checks passed; the isolated candidate matched
+532 saved states and 3,468 initial actions. Sceptile's separate Power of Nature
+bug remains under review. Final combined-tree tests are still needed.
+The combined 55-card tree plus this ownership batch passed 502 focused tests
+and matched all 532 supported saved states and 3,468 sampled opening actions.
+A full browser/replay run remains required after the last ownership migration.
+Post-migration combined verification passed 4,859 full-card checks, with the
+same two unannotated copied-handler ownership checks still failing and no other
+card failures. All 20 API checks passed, and Breaking Through the Wall,
+Explosive Hand, Trapped in the Phantom Maze and Something's Fishy replayed to
+wins. The root client, service, touch, and packaging suites also passed.
+Local ownership batch 3 adds attack-only contracts for Latias ex, Fezandipiti
+ex, Bloodmoon Ursaluna ex, Pecharunt ex, Mega Kangaskhan ex, Fan Rotom,
+Pidgeot ex, Gholdengo ex, Chien-Pao, Iron Leaves ex, Hariyama, Squawkabilly
+ex, Blaziken ex, Kyurem, Mega Venusaur ex, Alakazam, Munkidori, Cornerstone
+Mask Ogerpon ex, Jellicent ex, and Seaking, including compatible inherited
+prints. Its isolated typechecked run passed 251 checks, including direct and
+copied attacks, Ability isolation, delayed restrictions and alternate prints.
+All 532 supported saved states and 3,468 sampled first actions matched the
+prior local tree (137 records skipped). Combined-tree verification is pending;
+the two unannotated ownership acceptance tests have not been changed.
+The combined local tree subsequently passed 621 focused card and ownership
+checks; a complete card and replay run is still required after final overlays.
+Round-29 local overlay (not yet deployed) adds Turtwig DPP 1, Pachirisu DPP 4,
+Buneary DPP 6, Buizel DPP 13, Chatot DPP 14, Shinx DPP 15, and Beldum UL 44.
+Its independently reviewed candidate passed 67 focused tests, 23 API tests,
+seven artwork mappings, four puzzle replays, and comparisons of 532 saved
+states, 3,468 opening actions, 27,673 prior serializer inputs and 38,881 prior
+deck imports. Existing Dialga DPP DP17 fallback behavior remains unchanged.
+The exact combined tree passed 5,045 full-card checks, with the same two
+unannotated ownership acceptance failures and no other card failures. All 23
+API checks passed and the four recorded puzzle solutions replayed to wins.
+The full client, service, touch and packaging suite also passed.
+Four Energy-discard cards remain deferred pending the
+[restored Pokémon-as-Energy investigation](fixtures/round29-holon-energy/README.md).
+The separate [Sceptile and queued-damage proposal](fixtures/sceptile-and-stale-damage.investigation.md)
+is also deferred because selected source/target identity can change while a
+slot is reused. Neither research prototype is integrated.
+Local ownership batch 4 migrates Klefki SVI, Mega Diancie ex PFL, Crustle DRI,
+Dipplin TWM, Giratina LOT, Eevee SSP, Mew UNB, Gardevoir ex SVI, Miraidon ex
+SVI, Brute Bonnet PAR, Marshadow UNB, Goldeen TWM, Flutter Mane TEF, Mega
+Rayquaza ex DLR and Volcanion-EX STS. Its independently reviewed, typechecked
+candidate passed 417 focused checks, matched 533 comparable saved states and
+3,476 sampled first actions, and tested 13 inherited prints. Full combined-tree
+verification remains pending; the two unannotated acceptance tests remain open.
+Round-30 local overlay (not yet deployed) adds Manaphy, Pachirisu, Riolu,
+Staravia, Buneary, Piplup, Starly and Turtwig P6, plus Delibird, Stantler and
+Mareep P7. The reviewed candidate passed 105 focused checks, 24 API checks,
+11 artwork mappings and four puzzle replays. It preserved 533 saved states,
+3,476 opening actions, 27,687 prior serializer inputs and 52,581 prior
+deck-import inputs. Piplup P6 uses its printed 20+ damage; the existing Piplup
+DP parent still has a separate 10+ error, preserved here to avoid changing old
+puzzles without dedicated review. Lucario P6 and Ralts P7 remain deferred for
+separate attack-timing and printed-cost issues. Final combined tests are pending.
+The exact round-30 combined tree passed 5,249 full-card checks, with only the
+same two unannotated ownership acceptance failures. All 24 API checks passed,
+and the four recorded solutions replayed to wins. The client, service, touch
+and packaging checks also passed.
+Round-31 local overlay (not yet deployed) adds Makuhita MEP 68, Chikorita MEP
+69, Charmeleon MEP 79, High Pressure System P3 10 and Low Pressure System P3
+11. Its independently reviewed candidate passed 21 focused checks, 25 API
+checks, five artwork mappings and four recorded puzzle replays. It matched
+533 supported saved states, 3,478 first actions, 27,709 prior serializer and
+52,625 prior deck-import inputs. Chikorita MEP has its printed Grass attack
+cost and Charmeleon MEP its printed 110 HP; the incorrect older parent prints
+were left unchanged for separate review. Toxel and Fennekin MEP are deferred
+because canceled attacks can still search; see the
+[non-shipping reproduction](fixtures/round31-canceled-search/README.md).
+Brave Bangle and Iron Defender PBL also remain deferred due to
+[pre-existing modifier bugs](fixtures/pbl-parent-bugs/README.md).
+The round-31 combined tree passed 5,270 full-card checks, with only the same
+two unannotated copied-handler failures. All 25 API checks and all four recorded
+puzzle replays passed. Client, service, touch and packaging checks also passed.
+The local serializer now restores the Energy role of six explicitly opted-in
+Pokémon-as-Energy cards when their attachment references are unambiguous. This
+fixes the restored Holon/Charjabug selection case without changing the wire
+schema or shared card-movement code. The reviewed candidate passed 118 focused
+checks, 69 client checks and two independent snapshot-diff cases; it matched
+534 supported saved states and 3,487 sampled first actions from one consistent
+database snapshot. Existing ambiguous placements, Buzzap's missing chosen type,
+and separate whole-stack movement defects remain outside this fix. The older
+[research fixture](fixtures/round29-holon-energy/README.md) records the original
+failure and its broader, unshipped movement experiment.
+The integrated Energy fix passed 5,307 full-card checks and all 25 API checks;
+the same two unannotated ownership tests remain the only card failures. All
+four recorded puzzle solutions replayed to wins. Client, service, touch and
+packaging tests also passed. A separate run replayed those four solutions in
+ten unseeded sessions each, all 40 to wins.
+Round-32 local overlay (not yet deployed) adds Bidoof MT, Team Aqua's Spheal
+DCR, Gastly MEW, Helioptile/Pikachu/Rolycoly/Slurpuff/Swirlix ASC, Vibrava PFL,
+Seaking JU, and Crushing Hammer/Energy Switch FA PBL. The reviewed candidate
+passed 268 focused tests, 29 API checks, 12 artwork mappings, four puzzle
+replays and a 576-case PBL collision matrix; 534 saved states, 3,487 actions,
+27,719 prior serializer inputs and 52,645 deck-import inputs matched. Applin
+SCR remains deferred because four existing saved states resolve that name to
+Applin DRI; Pikachu ex SVP and Turtwig MD 78 have other existing fallback
+collisions. A separate [Team Aqua's Great Ball reproduction](fixtures/team-aqua-great-ball/README.md)
+records its pre-existing selection and shuffle defects. Full combined-tree
+verification remains pending.
+The subsequent local Team Aqua's Great Ball fix permits one eligible Basic
+Team Aqua Pokémon and one basic Water Energy, reveals before moving, and
+shuffles even when selecting nothing. Its sorted detached search view preserves
+deck order/privacy and handles blocked selections. Independent review and 18
+focused checks passed; 534 saved states and 3,485 sampled initial actions
+matched the pre-fix tree. The fixture records the old behavior.
+The combined tree including this fix passed 5,817 full-card checks, all 29 API
+checks and four recorded puzzle replays. Only the same two unannotated
+ownership acceptance checks failed; the root client, service, touch and
+packaging checks passed.
+The exact combined tree passed 5,534 full-card checks and all 29 API checks;
+the same two unannotated ownership tests remain the only card failures. All
+four recorded puzzle solutions replayed to wins. Client, service, touch and
+packaging checks also passed.
+Local ownership batch 5 covers 26 more source cards, including Lillie's
+Clefairy ex, Meowth ex POR, Mew ex MEW and Eevee ex PRE. It separates their
+attack reactions from Abilities and declares 23 implemented effect-free
+attacks explicitly, including inherited prints. The reviewed candidate passed
+223 typechecked checks and ten independent real-action checks, matched 534
+supported saved states and 3,487 initial actions, and replayed four puzzle
+solutions to wins. Bouffalant SCR was excluded because its existing next-turn
+attack lock was missing; see its [original red fixture](fixtures/bouffalant-boundless-power.red.md).
+Full combined-tree verification remains pending.
+The subsequent local Bouffalant SCR fix applies Boundless Power's next-turn
+restriction to the actual attack source, including copies and the SVP print,
+without copying Curly Wall. It passed 18 focused tests and an independent
+Bench-source action test; 534 supported saved states and 3,485 sampled first
+actions matched the prior tree. The red fixture records the pre-fix baseline.
+The integrated Bouffalant and copied-ownership regression run passed 386 checks.
+The next local ownership migration covers Tapu Lele-GX GRI, Swampert CES,
+Shining Genesect SLG, Eevee SUM and Rapidash SIT, including inherited prints.
+The reviewed candidate passed real direct/copied attacks, asynchronous GX and
+coin prompts, and physical Ability-source controls. It matched 534 saved states
+and 3,485 sampled actions and replayed four recorded solutions to wins. Four
+baseline marker-leak controls are synthetic and do not establish a reachable
+saved-puzzle failure. The two general unannotated ownership tests remain open.
+The local Meowth ex POR fix returns Pokémon-as-Energy with its attacker and
+removes only successfully moved Tool aliases. It passed 296 focused checks,
+69 client checks and 40 recorded puzzle replays; the reviewed candidate matched
+534 supported states and 3,485 sampled first actions, then matched 30 affected
+states and 235 actions again after the Bouffalant integration. A separate
+[pre-AfterAttack switch fixture](fixtures/meowth-pre-afterattack-switch/README.md)
+documents an existing source-identity defect reproduced with injected timing;
+the fix here does not claim to resolve it.
+The combined tree after the Bouffalant, five-card ownership and Meowth changes
+passed 5,799 full-card checks, all 29 API checks, the complete root client and
+packaging suite, and four recorded puzzle replays. The same two unannotated
+ownership acceptance checks remain the only full-card failures.
+The combined batch-5 tree passed 5,683 full-card checks and all 29 API checks;
+only the same two unannotated ownership acceptance tests failed. The root
+client, service, touch and packaging suite also passed. These checks preceded
+the subsequent CSS-only prompt-layering hotfix, which was separately deployed.
+The [targeted-copy orchestration fixture](fixtures/round28-target-orchestration.red.md)
+records a separate synthetic ambiguity: the same legacy `preventDefault` write
+can mean prompt orchestration or cancellation. Its accompanying patch is a
+non-shipping reproducer, not a proposed production change.
+The [round-33 lookup investigation](fixtures/round33-lookup-compatibility/README.md)
+preserves the earlier deferred candidate and a duplicate-definition
+counterexample. Its replacement is now integrated locally with five SVP prints:
+Iono's Kilowattrel 182, Lillie's Ribombee 183 and Professor's Research 221,
+222 and 223. Numbered SVP and PR-SV imports select the requested print; older
+unnumbered and incorrect-number fallbacks are preserved. Missing exact prints
+are not silently replaced, and pre-existing canonical or legacy-alias owners
+retain precedence when definitions collide. Seven other print candidates remain
+deferred in the [cancellation fixture](fixtures/round33-cancellation/README.md).
+An [attack-cancellation preflight investigation](fixtures/attack-cancellation-preflight/README.md)
+reproduces direct and copied attack side effects after a failed coin flip.
+Its proposed preflight is deferred: it can bypass native attack legality checks
+on tails. The record includes both native Cobalion-GX and Galarian Sirfetch'd
+regressions, a 92-branch legality inventory, and the rejected prototype.
+The [expanded inventory](fixtures/attack-cancellation-preflight/expanded-inventory/README.md)
+finds 301 attack-related throw sites, including 37 inside callbacks, and a
+real hidden-zone legality control. These are audit candidates rather than 301
+proven preconditions; prompt-result validation cannot be hoisted blindly.
+The [Simisage PAR investigation](fixtures/simisage-par-investigation/README.md)
+is deferred pending a reliable intrinsic-Ability query. The existing query can
+miss gained or removed Abilities, include Tool-granted effects, mutate printed
+power arrays and depend on traversal order; the saved evidence includes a real
+four-action Ancient Star counterexample.
+
+The final five-print resolver candidate passed 38 strict focused checks, four
+API checks, five generated browser artwork mappings and four recorded puzzle
+solutions. Against the prior local tree, 534 supported saved states and 3,485
+sampled first Trainer, attack and Ability actions matched. An independent
+real-engine suite also exercised the two Pokémon's Abilities and direct and
+copied attacks. These are sampled checks: they do not prove all historical
+payloads or later actions safe. The existing attack-cancellation problem can
+still allow damage or effects after a failed attack coin flip, including on
+inherited attacks; the seven affected candidate prints remain deferred. The
+two copied-handler ownership failures were resolved by declaring explicit
+attack-only contracts on the synthetic mixed-handler fixtures. This validates
+the ownership contract; arbitrary unannotated mixed handlers are not
+generically partitioned. The final manifest SHA-256 is
+`08c11fca24aab7a524f44b0019dafff020e542969759274597bc93cf73a66d77`.
+
+The compatibility guard does extra catalogue work at startup. In six paired
+local Mac process samples under load, median catalogue initialization rose
+from 17.89 ms for 14,072 cards to 29.68 ms for 14,077 cards; 64 synthetic
+contracts measured 29.90 ms with 14,139 cards. These are small desktop samples,
+not an end-to-end puzzle-start benchmark; mobile WebView performance has not
+been measured. The batch is integrated in the local source and remains a
+partial upstream port; it has not been established as deployed by this record.
+
+After integration of the frozen five-print batch, the full card suite ran 225
+spec files: 5,866 tests passed and the two copied-handler ownership tests
+failed. The fixtures now declare explicit attack-only contracts, and the
+updated full run passes 5,868 tests with no failures. The root
+client/service/touch/packaging suite and all 34 API tests passed. Four recorded
+puzzle solutions replayed to wins on the integrated build. The
+534-state/3,485-action comparison remains a sample of the final candidate, not
+an exhaustive guarantee for all puzzles.
+
+Smeargle UD's upstream Supporter-counter workaround remains deferred. Resetting
+the counter around `TrainerEffect` can bypass a previously played Supporter,
+but also changes how other in-play cards observe copied effects: Krookodile XY
+can reject the copied Tierno effect, Hitmontop VIV can count copied Bea as
+played, and Gwynn M5 and Misty's Cheerfulness have additional counter/timing
+checks. A safe port needs copied-effect context that survives prompt callbacks
+and is visible to those observers. The tentative local counter patch was
+reverted; it passed the general card suite but did not cover these real
+interaction regressions. The four puzzle replays passed on the built candidate;
+the final source was restored to its pre-patch Smeargle behavior.
+
+DPP follow-up: added four cards: Double Full Heal DP (collector 105), reusing
+the existing Sandstorm implementation; Energy Restore DP (106), with its
+three-coin retrieval effect; Night Pokémon Center DP (108), with its target and
+coin-dependent heal/discard effect; and Professor Rowan DP (112), with its
+retain-one, shuffle and draw-four effect. All four print identities are
+registered. The full 225-file card regression suite passed (5,868 passed, 0
+failed). The production build passed at 2.18 MiB gzip runtime, and all four
+saved puzzle solutions won against this exact four-card state. The other files
+in the DPP commit remain under review.
+
+Upstream card import batch 01 has begun. Added and registered 67 Arceus-set
+cards so far: eight Trainers (Bench Shield, Buffer Piece, Department Store
+Girl, Energy Restore, Professor Oak's Visit, Dome Fossil, Helix Fossil and Old
+Amber) and 59 Pokémon. Fossils use the local `cardTypez` field for their
+in-play Pokémon type; Professor Oak's Visit uses the local
+`DRAW_CARDS(player, 3)` signature. The Pokémon imports include upstream attack
+and Ability implementations. Local compatibility work added bounded next-turn
+damage prevention, attack coin-cancel timing, Endure timing, and type/tag
+helpers required by those cards. The full 225-file card suite passed (5,868
+passed, 0 failed), the browser package compiled, and all four saved puzzle
+solutions replayed to wins against the rebuilt package. The batch inventory
+under `docs/fixtures` is git-ignored by the repository's `*.md` rule, so this
+tracked log is the durable progress record. Continue batch 01 with the DPP
+promo print identities and remaining Arceus cards; check aliases and collector
+numbers before adding duplicate definitions.
+
+Upstream card catalog batch 01 continuation: added the remaining 24 DPP promo
+print identities from the first inventory (23 standalone cards plus the
+Ultimate Zone DPP print), and imported Pidgeot HP 14. Added three legacy-name
+aliases for Electrike AR, Tangela AR, and Treecko AR, which already existed as
+numbered prints locally and were not duplicated. DPP promo types and helper
+calls were adapted to the fork's scalar card-type and prefab APIs. Pidgeot HP's
+Delta Reserve is implemented with the local `EffectOfAbilityEffect` path and
+checks that Holon Energy is attached, the Poké-Body itself is usable, targets
+are in play and Delta Species are exempt. New targeted tests cover all 24 DPP
+promo identities, Dialga's draw, Regigigas's pre-damage switch, Pidgeot's lock,
+and the three Arceus aliases. The full 228-file suite passed (5,901 passed,
+0 failed), the browser package compiled, and all four saved PrizeMap puzzle
+solutions replayed to wins. A broad upstream/local set-number inventory yields
+1,691 candidate print identities before alias and inherited-print review; this
+is a review queue, not a verified count of missing implementations. Continue
+with the next reviewed 100-print batch and test existing puzzle solutions
+after each integration.
+
+Upstream catalog batch 02 (reviewed 100-print candidate block): imported and
+registered 83 new card identities across Diamond & Pearl, Great Encounters,
+Dragon Frontiers and Holon Phantoms, plus 17 DPP promo reprint identities. Eight
+of those promo aliases depended on base cards missing locally, so those base
+implementations were imported and registered as well. Adapted upstream helper
+calls for this fork, including card-type representation, draw signatures,
+Pokémon-stack movement, Altaria's evolution-only damage reduction, Deoxys's
+before-weakness reduction, trainer-play lock timing, and all-attack damage
+bonus timing. `tsc -p tsconfig.browser.json --noEmit` passes. Focused DPP and
+Great Encounters regressions pass 97/97; the full existing card suite passes
+5,901/5,901 across 228 specs. The browser build succeeds, and the four saved
+PrizeMap puzzle solutions (Trapped in the Phantom Maze, Explosive Hand,
+Breaking Through the Wall, and Something's Fishy) replay to wins on this
+build. This verifies no regressions against the saved puzzle corpus; card
+specific coverage for the new print block is still being expanded. Continue
+with the next reviewed 100-print candidate block; the 1,691-item raw queue is
+not a verified missing-card total.
+
+Upstream catalog batch 03 (next 100 reviewed identities): added 56 Great
+Encounters and 38 Legends Awakened card implementations, plus six DPP promo
+print aliases that resolve to existing indexed implementations. The local
+compatibility adapters cover fork-specific helper signatures, trainer locks,
+Ability locks and multi-flip attacks; Buneary's Double Kick resolves its two
+printed coin flips. All 100 candidate names have registry checks, and the two
+gameplay smoke cases pass. The complete 229-file card/engine suite passes
+6,004 tests with zero failures; the browser TypeScript build passes; and all
+four saved PrizeMap puzzle solutions replay to wins. Fossil and modern SVI
+Energy Search now require selection of a Basic Energy when one is available;
+when none is present, the search resolves without a selection. The client
+regression covers the DPP reprint. The candidate inventory is a review
+queue, not a verified count of remaining missing cards; continue with the next
+100 reviewed identities.
+
+Upstream catalog batch 04 (100 reviewed identities): added 65 Legends Awakened
+and 35 Majestic Dawn card implementations. Compatibility work adapted the fork's
+scalar card-type API, coin and damage helpers, Poké-Power locks, and numbered
+Aipom MD print resolution. Added a native play-from-discard effect and reducer
+for Garchomp LV.X's Restore attack. Batch gameplay coverage checks Hitmonchan's
+Counter Punch, Jirachi's Doom Desire, Glaceon's Chilly Breath, and Garchomp's
+Restore. All 100 names resolve to the expected set and collector number. The
+full 230-file card/engine suite passes 6,108 tests with zero failures; the
+client card regressions pass 51/51; production TypeScript compile passes; and
+all four saved PrizeMap solutions replay to wins. The updated inventory shows
+1,031 unique candidate names remaining before further alias and duplicate
+review; this is not a verified missing-card count. Continue with the next 100.
+
+Upstream catalog batch 09 (100 reviewed identities): added 5 Stormfront, 82
+Supreme Victors, and 13 HeartGold & SoulSilver print identities. One Supreme
+Victors print uses the existing Staraptor FB LV.X implementation through a
+legacy spelling alias.
+Adapted old draw and card-type APIs, and ported delayed Knock Out at end of the
+opponent's next turn plus next-turn retreat-cost increases. The batch identity
+and targeted gameplay suite passed 103/103, and the browser TypeScript check
+passed. This turn's verification after batch 10 also replayed all four saved
+PrizeMap solutions successfully.
+
+Upstream catalog batch 10 (next 100 reviewed identities): imported 27 HS, 18
+HSP, 44 Unleashed, 9 Black & White Promo, and 2 Theme Deck print identities.
+Five shared-print entries were registered as aliases; no existing card files
+were overwritten. Added compatibility for dual-type Legend Pokémon, draw count
+modifiers, attack-cost increases, attack-damage bonuses, and local helper APIs.
+The 100 identity checks passed, the browser TypeScript check and production
+browser compile passed, and all four saved PrizeMap puzzle solutions reached a
+human win. The refreshed candidate inventory contains 431 unique review
+candidates; this queue still needs print-alias and inherited-card review and is
+not a verified missing-card count. The complete card/engine suite was not run
+for this batch. Continue with the next reviewed 100-print block.

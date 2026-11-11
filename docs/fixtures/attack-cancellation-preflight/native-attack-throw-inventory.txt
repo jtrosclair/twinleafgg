@@ -1,0 +1,92 @@
+ptcg-server/src/sets/set-30th-celebration/darkrai-cresselia-legend.ts:75	effect instanceof AttackEffect && effect.attack === this.attacks[0]
+ptcg-server/src/sets/set-30th-celebration/darkrai-cresselia-legend.ts:98	effect instanceof AttackEffect && effect.attack === this.attacks[1]
+ptcg-server/src/sets/set-astral-radiance/mamoswine.ts:77	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-base-set/poliwhirl.ts:91	effect instanceof AttackEffect && effect.attack === this.forgottenAttack && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-battle-styles/conkeldurr.ts:59	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-black-and-white/krokorok.ts:78	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-boundaries-crossed/golduck-2.ts:74	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) && effect.attack === this.amnesiaAttack
+ptcg-server/src/sets/set-brilliant-stars/beartic.ts:56	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-brilliant-stars/breloom.ts:47	effect instanceof AttackEffect && effect.attack === this.attacks[1] && state.turn !== this.sporeBallTurn + 2
+ptcg-server/src/sets/set-brilliant-stars/electabuzz.ts:55	effect instanceof AttackEffect && effect.attack === this.attacks[0]
+ptcg-server/src/sets/set-brilliant-stars/whimsicott-v.ts:53	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.COTTON_GUARD_MARKER, this)
+ptcg-server/src/sets/set-celestial-storm/sableye.ts:124	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-celestial-storm/swalot.ts:78	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) && effect.attack === this.amnesiaAttack
+ptcg-server/src/sets/set-champions-path/alcremie-v.ts:75	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-champions-path/grapploct-v.ts:62	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-cosmic-eclipse/dragonium-z.ts:62	effect instanceof AttackEffect && effect.attack === this.attacks[0]
+ptcg-server/src/sets/set-cosmic-eclipse/dusclops.ts:72	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-cosmic-eclipse/helioptile.ts:58	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-cosmic-eclipse/piplup.ts:42	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.BUBBLE_HOLD_MARKER, this)
+ptcg-server/src/sets/set-cosmic-eclipse/ursaring.ts:53	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-dark-explorers/slowbro.ts:40	effect instanceof AttackEffect && effect.player.active.getPokemonCard() === this
+ptcg-server/src/sets/set-darkness-ablaze/nickit.ts:53	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-darkness-ablaze/shiinotic.ts:61	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-delta-reign/mega-golurk-ex.ts:39	effect instanceof AttackEffect && effect.player.active.getPokemonCard() === this
+ptcg-server/src/sets/set-delta-reign/mega-rayquaza-cap.ts:68	effect instanceof AttackEffect && effect.attack === this.attacks[0]
+ptcg-server/src/sets/set-destined-rivals/team-rockets-murkrow.ts:127	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-dragons-exalted/bibarel.ts:72	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) && effect.attack === this.amnesiaAttack
+ptcg-server/src/sets/set-dragons-exalted/slaking.ts:42	effect instanceof AttackEffect && effect.player.active.getPokemonCard() === this
+ptcg-server/src/sets/set-emerging-powers/beartic-2.ts:52	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.SHEER_COLD_MARKER, this)
+ptcg-server/src/sets/set-emerging-powers/throh.ts:46	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.SCARF_HOLD_MARKER, this)
+ptcg-server/src/sets/set-emerging-powers/whimsicott-2.ts:82	effect instanceof AttackEffect
+ptcg-server/src/sets/set-evolutions/poliwhirl.ts:89	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-evolving-skies/arctovish-v.ts:67	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-evolving-skies/dialga.ts:66	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-ex-dragon-frontiers/wooper.ts:80	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-ex-hidden-legends/groudon-ex.ts:44	effect instanceof AttackEffect && (effect.source.getPokemonCard()?.name === 'Kyogre ex' || effect.source.getPokemonCard()?.name === 'Rayquaza ex')
+ptcg-server/src/sets/set-ex-hidden-legends/kyogre-ex.ts:47	effect instanceof AttackEffect && (effect.source.getPokemonCard()?.name === 'Groudon ex' || effect.source.getPokemonCard()?.name === 'Rayquaza ex')
+ptcg-server/src/sets/set-ex-legend-maker/absol.ts:44	effect instanceof AttackEffect && !IS_POKEBODY_BLOCKED(store, state, StateUtils.getOpponent(state, effect.player), this) && effect.source.getPokemonCard()?.stage === Stage.BASIC
+ptcg-server/src/sets/set-ex-team-rocket-returns/rockets-wobbuffet.ts:148	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-ex-unseen-forces/ursaring.ts:50	effect instanceof AttackEffect && effect.source.getPokemonCard()?.stage === Stage.BASIC
+ptcg-server/src/sets/set-fates-collide/zygarde.ts:71	effect instanceof AttackEffect
+ptcg-server/src/sets/set-forbidden-light/uxie.ts:71	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.MEMORY_SKIP_MARKER, this) && effect.attack.name === this.blockedAttackName
+ptcg-server/src/sets/set-furious-fists/slaking.ts:76	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) && effect.attack === this.amnesiaAttack
+ptcg-server/src/sets/set-fusion-strike/galarian-obstagoon.ts:79	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) && effect.attack === this.silencedAttack
+ptcg-server/src/sets/set-guardians-rising/slowbro.ts:76	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) && effect.attack === this.amnesiaAttack
+ptcg-server/src/sets/set-gym-challenge/mistys-poliwag.ts:85	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-jungle/eevee.ts:63	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-jungle/rhyhorn.ts:63	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-lost-origin/glastrier.ts:58	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-lost-thunder/wobbuffet.ts:96	effect instanceof AttackEffect && isOnBench(state, this)
+ptcg-server/src/sets/set-neo-destiny/dark-feraligatr.ts:64	effect instanceof AttackEffect && effect.source.getPokemonCard()?.tags.includes(CardTag.BABY)
+ptcg-server/src/sets/set-obsidian-flames/eiscue-ex.ts:48	effect instanceof AttackEffect && effect.player.marker.hasMarker(this.SCALDING_BLOCK_MARKER, this) && effect.source.marker.hasMarker(this.SCALDING_BLOCK_MARKER, this)
+ptcg-server/src/sets/set-obsidian-flames/geeta.ts:84	effect instanceof AttackEffect && effect.player.marker.hasMarker(this.GEETA_MARKER, this)
+ptcg-server/src/sets/set-paldean-fates/technical-machine-crisis-punch.ts:77	effect instanceof AttackEffect && effect.attack === this.attacks[0]
+ptcg-server/src/sets/set-paradox-rift/technical-machine-blindside.ts:76	effect instanceof AttackEffect && effect.attack === this.attacks[0]
+ptcg-server/src/sets/set-paradox-rift/technical-machine-devolution.ts:77	effect instanceof AttackEffect && effect.attack === this.attacks[0]
+ptcg-server/src/sets/set-paradox-rift/technical-machine-evolution.ts:184	effect instanceof AttackEffect && effect.attack === this.attacks[0]
+ptcg-server/src/sets/set-paradox-rift/technical-machine-turbo-energize.ts:77	effect instanceof AttackEffect && effect.attack === this.attacks[0]
+ptcg-server/src/sets/set-paradox-rift/vanilluxe.ts:39	effect instanceof AttackEffect
+ptcg-server/src/sets/set-pcg-p-promotional-cards/auras-lucario2.ts:78	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-perfect-order/klefki.ts:66	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-phantom-forces/dialga-ex.ts:62	effect instanceof AttackEffect
+ptcg-server/src/sets/set-plasma-freeze/jolteon.ts:59	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.ELECTRI_DEFUSE_MARKER, this)
+ptcg-server/src/sets/set-plasma-storm/infernape.ts:76	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) && effect.attack === this.tormentAttack
+ptcg-server/src/sets/set-platinum/giratina-lv-x.ts:54	effect instanceof AttackEffect && !effect.source.cards.includes(this)
+ptcg-server/src/sets/set-primal-clash/whiscash.ts:77	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) && effect.attack === this.amnesiaAttack
+ptcg-server/src/sets/set-prismatic-evolution/sylveon-ex.ts:89	effect instanceof AttackEffect && effect.attack === this.attacks[1]
+ptcg-server/src/sets/set-rebel-clash/morpeko.ts:117	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-roaring-skies/pikachu.ts:59	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-scarlet-and-violet-promos/zacian-ex.ts:64	effect instanceof AttackEffect && effect.attack === this.attacks[1]
+ptcg-server/src/sets/set-shining-legends/liepard.ts:80	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-silver-tempest/earthen-seal-stone.ts:55	effect instanceof AttackEffect && effect.attack === this.attacks[0]
+ptcg-server/src/sets/set-silver-tempest/omastar-v.ts:103	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-silver-tempest/ralts.ts:83	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-supreme-victors/relicanth.ts:101	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-surging-sparks/slaking-ex.ts:44	effect instanceof AttackEffect && effect.player.active.getPokemonCard() === this
+ptcg-server/src/sets/set-surging-sparks/walrein.ts:55	effect instanceof AttackEffect
+ptcg-server/src/sets/set-team-up/cobalion-gx.ts:115	effect instanceof AttackEffect && HAS_MARKER(this.IRON_RULE_MARKER, effect.player, this)
+ptcg-server/src/sets/set-team-up/golduck.ts:78	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) && effect.attack === this.amnesiaAttack
+ptcg-server/src/sets/set-team-up/vulpix.ts:52	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-triumphant/shuppet.ts:86	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-ultra-prism/spiritomb.ts:100	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.TERRIFY_MARKER, this)
+ptcg-server/src/sets/set-unbroken-bonds/rhyperior.ts:58	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.CANT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-unified-minds/bibarel.ts:108	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) && effect.attack === this.amnesiaAttack
+ptcg-server/src/sets/set-unified-minds/blizzard-town.ts:27	effect instanceof AttackEffect && StateUtils.getStadiumCard(state) === this
+ptcg-server/src/sets/set-unified-minds/latios-gx.ts:57	effect instanceof AttackEffect && effect.player.active.getPokemonCard() === this
+ptcg-server/src/sets/set-unified-minds/liepard.ts:58	effect instanceof AttackEffect
+ptcg-server/src/sets/set-unified-minds/steelix.ts:66	effect instanceof AttackEffect && (effect.player.marker.hasMarker(this.GIGATON_SHAKE_MARKER, this) || effect.player.marker.hasMarker(this.CLEAR_GIGATON_SHAKE_MARKER, this))
+ptcg-server/src/sets/set-vivid-voltage/exeggutor.ts:83	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-vivid-voltage/metagross.ts:98	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.LEG_QUAKE_MARKER, this)
+ptcg-server/src/sets/set-vivid-voltage/sableye.ts:88	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this)
+ptcg-server/src/sets/set-x-and-y/simisage.ts:74	effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK_MARKER, this) && effect.attack === this.tormentAttack

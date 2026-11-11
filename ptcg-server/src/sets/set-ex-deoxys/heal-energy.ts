@@ -19,7 +19,7 @@ export class HealEnergy extends EnergyCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && effect.energyCard === this) {
+    if (effect instanceof AttachEnergyEffect && effect.energyCard === this && effect.sourceZone === undefined) {
       const player = effect.player;
 
       if (IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.target)) {

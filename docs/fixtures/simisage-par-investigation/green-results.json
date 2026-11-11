@@ -1,0 +1,10 @@
+{
+  "suite": "green",
+  "file": "simisage-par.investigation.spec.js",
+  "passed": 27,
+  "failed": 0,
+  "pending": 0,
+  "failures": [],
+  "status": "passed",
+  "suiteFailures": []
+}

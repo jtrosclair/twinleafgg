@@ -26,6 +26,12 @@ export abstract class PokemonCard extends Card {
 
   public legacyFullName?: string;
 
+  /** Delayed Knock Out due when the named player's turn ends. */
+  public knockOutAtEndOfTurnPlayerId?: number;
+
+  /** Additional Colorless retreat cost until the owner's next turn ends. */
+  public retreatCostIncreaseNextTurn?: number;
+
   public stage: Stage = Stage.BASIC;
 
   public retreat: CardType[] = [];
@@ -59,4 +65,11 @@ export abstract class PokemonCard extends Card {
   public wasMovedToActiveThisTurn?(player: any): boolean {
     return player.movedToActiveThisTurn.includes(this.id);
   }
+}
+
+/** Returns whether a Pokémon has the requested primary or additional type. */
+export function pokemonHasCardType(pokemon: PokemonCard, cardType: CardType): boolean {
+  const primaryType = pokemon.cardType as unknown;
+  return (Array.isArray(primaryType) ? primaryType.includes(cardType) : primaryType === cardType)
+    || (pokemon.additionalCardTypes?.includes(cardType) ?? false);
 }

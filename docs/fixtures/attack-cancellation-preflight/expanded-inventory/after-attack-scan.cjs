@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+'use strict';
+// Textual upper bound for code requiring cancellation/cleanup review.
+const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');const repo=path.resolve(process.argv[2]||path.join(__dirname,'../../../..')),root=path.join(repo,'ptcg-server/src/sets');
+function* walk(dir){for(const e of fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name))){const p=path.join(dir,e.name);if(e.isDirectory()&&!['tests','__tests__'].includes(e.name))yield*walk(p);else if(e.isFile()&&p.endsWith('.ts')&&!p.endsWith('.spec.ts'))yield p}}
+const rows=[],digest=crypto.createHash('sha256');let scanned=0;for(const file of walk(root)){const rel=path.relative(root,file).split(path.sep).join('/'),src=fs.readFileSync(file,'utf8');digest.update(rel+'\0'+src+'\0');scanned++;const afterHelper=/AFTER_ATTACK\s*\(/.test(src),afterEffect=/instanceof\s+AfterAttackEffect/.test(src);if(afterHelper||afterEffect)rows.push({file:rel,afterHelper,afterEffect})}console.log(JSON.stringify({scope:'set TypeScript files excluding tests; raw text match, not verified behavior',filesScanned:scanned,sourceTreeSha256:digest.digest('hex'),helperFiles:rows.filter(x=>x.afterHelper).length,effectFiles:rows.filter(x=>x.afterEffect).length,anyFiles:rows.length,rows},null,2));

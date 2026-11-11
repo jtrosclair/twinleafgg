@@ -76,30 +76,44 @@ export class Meowthex extends PokemonCard {
       effect.player.marker.removeMarker(this.TRUMP_CARD_MARKER);
     }
 
+    return Meowthex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  /** Tuck Tail's after-attack return is separate from the Last-Ditch Ability. */
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (effect instanceof AfterAttackEffect && effect.attack === this.attacks[0]) {
       const player = effect.player;
-      const pokemons = player.active.getPokemons();
-      const otherCards = player.active.cards.filter(card =>
-        !(card instanceof PokemonCard) &&
+      const source = player.active;
+      const pokemons = source.getPokemons();
+      // Class identity does not distinguish attachments: Holon Pokemon keep
+      // their PokemonCard prototype while acting as Energy. Move every card
+      // outside the evolution stack and tools before returning the stack.
+      const otherCards = source.cards.filter(card =>
         !pokemons.includes(card as PokemonCard) &&
-        (!player.active.tools || !player.active.tools.includes(card))
+        (!source.tools || !source.tools.includes(card))
       );
-      const tools = [...player.active.tools];
-      player.active.clearEffects();
+      const tools = [...source.tools];
+      source.clearEffects();
 
       // Move other cards to hand
       if (otherCards.length > 0) {
-        MOVE_CARDS(store, state, player.active, player.hand, { cards: otherCards });
+        MOVE_CARDS(store, state, source, player.hand, { cards: otherCards });
       }
 
       // Move tools to hand explicitly
       for (const tool of tools) {
-        player.active.moveCardTo(tool, player.hand);
+        const previousHandCopies = player.hand.cards.filter(card => card === tool).length;
+        source.moveCardTo(tool, player.hand);
+        // A Tool also present in cards is moved physically by moveCardTo;
+        // remove its remaining Tool alias only after a new hand entry arrived.
+        if (player.hand.cards.filter(card => card === tool).length > previousHandCopies) {
+          source.tools = source.tools.filter(attached => attached !== tool);
+        }
       }
 
       // Move Pokémon to hand
       if (pokemons.length > 0) {
-        MOVE_CARDS(store, state, player.active, player.hand, { cards: pokemons });
+        MOVE_CARDS(store, state, source, player.hand, { cards: pokemons });
       }
       return state;
     }

@@ -1,6 +1,6 @@
 import { CardManager } from '../game/cards/card-manager';
 import { StateSerializer } from '../game/serializer/state-serializer';
-import { AttackAction, PassTurnAction } from '../game/store/actions/game-actions';
+import { AttackAction, PassTurnAction, UseAbilityAction } from '../game/store/actions/game-actions';
 import { PlayCardAction, PlayerType, SlotType } from '../game/store/actions/play-card-action';
 import { ChangeAvatarAction } from '../game/store/actions/change-avatar-action';
 import { AbortGameAction, AbortGameReason } from '../game/store/actions/abort-game-action';
@@ -8,12 +8,13 @@ import { AppendLogAction } from '../game/store/actions/append-log-action';
 import { ConcedeAction } from '../game/store/actions/concede-action';
 import { ReorderBenchAction, ReorderHandAction } from '../game/store/actions/reorder-actions';
 import { SandboxModifyPokemonAction } from '../game/store/actions/sandbox-modify-pokemon-action';
-import { GameLog } from '../game/game-message';
+import { GameLog, GameMessage } from '../game/game-message';
 import { AttackEffect } from '../game/store/effects/game-effects';
 import { DealDamageEffect } from '../game/store/effects/attack-effects';
 import { CheckHpEffect, CheckPokemonTypeEffect } from '../game/store/effects/check-effects';
 import { SpecialCondition, SuperType, TrainerType } from '../game/store/card/card-types';
 import { Store } from '../game/store/store';
+import { cloneAttacks, openCopyAttackSession } from '../game/store/prefabs/copy-attack-delegation';
 import { CardList } from '../game/store/state/card-list';
 import { Player } from '../game/store/state/player';
 import { PokemonCardList } from '../game/store/state/pokemon-card-list';
@@ -53,6 +54,96 @@ describe('ClientSimulator', () => {
     add(state.players[0].active, 'Fire Energy SVE');
     return { state, add, encode: () => new Base64().encode(new StateSerializer().serialize(state)) };
   }
+
+  it('restores a detached copied Iron Rule through compact checkpoints and local undo', () => {
+    const f = fixture();
+    const [player, opponent] = f.state.players;
+    player.id = 43;
+    opponent.id = 42;
+    player.active.moveTo(player.discard);
+    f.add(player.active, 'Mew ex 30C');
+    f.add(player.bench[0], 'Cobalion-GX TEU');
+    const copycat = player.active.getPokemonCard()!;
+    const source = player.bench[0].getPokemonCard()!;
+    const attacks = cloneAttacks(source.attacks);
+    const store = new Store({ onStateChange() {} });
+    store.state = f.state;
+    f.state.phase = GamePhase.ATTACK;
+    openCopyAttackSession(f.state, player, copycat, source, attacks, attacks[1]);
+    store.reduceEffect(f.state, new AttackEffect(player, opponent, attacks[1]));
+    // The player-scoped attack lock must outlive its user's presence in play.
+    player.active.moveTo(player.discard);
+    f.add(player.active, 'Charmander BS');
+    f.state.phase = GamePhase.PLAYER_TURN;
+
+    const simulator = new ClientSimulator();
+    try {
+      simulator.loadSnapshot({ stateData: f.encode() });
+      const assertRestriction = () => {
+        const state = simulator.state;
+        const restoredCopycat = state.players[0].discard.cards.find(card => card.id === copycat.id)!;
+        const marker = state.players[1].marker.markers.find(item => item.name === 'IRON_RULE_MARKER')!;
+        expect(restoredCopycat).toBeDefined();
+        expect(restoredCopycat).not.toBe(copycat);
+        expect(marker.source).toBe(restoredCopycat);
+        expect(restoredCopycat).toBe(state.copiedAttackCheckpoints![0].copycatCard);
+        expect(restoredCopycat).toBe(state.playerLastAttack[player.id].sourceCard);
+        expect(state.players.map(owner => owner.id)).toEqual([43, 42]);
+        expect(state.prompts.length).toBe(0);
+        let blocked: { message: string } | undefined;
+        try {
+          const restoredStore: Store = (simulator as any).store;
+          restoredStore.reduceEffect(state, new AttackEffect(state.players[1], state.players[0], {
+            name: 'Checkpoint attack probe', cost: [], damage: 30, text: ''
+          }));
+        } catch (error) {
+          blocked = error as { message: string };
+        }
+        expect(blocked && blocked.message).toBe(GameMessage.BLOCKED_BY_EFFECT);
+      };
+      assertRestriction();
+      const checkpoint = simulator.getStateData();
+      simulator.pushState(checkpoint);
+      assertRestriction();
+      expect(simulator.getStateData()).toBe(checkpoint);
+      simulator.dispatch(new PassTurnAction(simulator.humanPlayerId));
+      expect(simulator.canUndo()).toBe(true);
+      expect(simulator.undo()).toBe(true);
+      assertRestriction();
+      expect(simulator.getStateData()).toBe(checkpoint);
+    } finally {
+      simulator.cleanup();
+    }
+  });
+
+  it('restores Pokemon-as-Energy through native checkpoints, local undo and reset', () => {
+    const f = fixture(), player = f.state.players[0];
+    f.add(player.hand, "Holon's Magnemite DS");
+    const simulator = new ClientSimulator();
+    try {
+      simulator.loadSnapshot({ stateData: f.encode() });
+      const initial = simulator.getStateData(), cardId = simulator.state.players[0].hand.cards[0].id;
+      simulator.dispatch(new UseAbilityAction(simulator.humanPlayerId, 'Special Energy Effect',
+        { player: PlayerType.BOTTOM_PLAYER, slot: SlotType.HAND, index: 0 }));
+      const prompt = simulator.state.prompts.find(item => item.result === undefined);
+      if (prompt) { simulator.resolvePrompt(prompt.id, [{ player: PlayerType.BOTTOM_PLAYER, slot: SlotType.ACTIVE, index: 0 }]); }
+      const assertAttached = () => {
+        const slot = simulator.state.players[0].active;
+        const card = slot.energies.cards.find(item => item.id === cardId)!;
+        expect(card).toBeDefined(); expect(card.superType).toBe(SuperType.ENERGY); expect(slot.cards).toContain(card);
+      };
+      assertAttached();
+      const attached = simulator.getStateData();
+      simulator.pushState(attached); assertAttached(); expect(simulator.getStateData()).toBe(attached);
+      simulator.dispatch(new PassTurnAction(simulator.humanPlayerId));
+      expect(simulator.undo()).toBe(true); assertAttached(); expect(simulator.getStateData()).toBe(attached);
+      simulator.pushState(initial);
+      expect(simulator.state.players[0].hand.cards.find(card => card.id === cardId)!.superType).toBe(SuperType.POKEMON);
+      expect(simulator.getStateData()).toBe(initial);
+      simulator.pushState(attached); assertAttached();
+      simulator.pushState(initial); expect(simulator.getStateData()).toBe(initial);
+    } finally { simulator.cleanup(); }
+  });
 
   it('executes a trainer, rejects invalid prompt choices, and undoes entirely in memory', () => {
     const f = fixture();

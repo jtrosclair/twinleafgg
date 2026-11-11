@@ -1,0 +1,224 @@
+[
+  {
+    "name": "Electrike",
+    "set": "AR",
+    "number": "62",
+    "fullName": "Electrike AR 62"
+  },
+  {
+    "name": "Geodude",
+    "set": "AR",
+    "number": "65",
+    "fullName": "Geodude AR"
+  },
+  {
+    "name": "Ponyta",
+    "set": "AR",
+    "number": "72",
+    "fullName": "Ponyta AR2"
+  },
+  {
+    "name": "Rattata",
+    "set": "AR",
+    "number": "73",
+    "fullName": "Rattata AR"
+  },
+  {
+    "name": "Snorunt",
+    "set": "AR",
+    "number": "75",
+    "fullName": "Snorunt AR"
+  },
+  {
+    "name": "Tangela",
+    "set": "AR",
+    "number": "76",
+    "fullName": "Tangela AR 76"
+  },
+  {
+    "name": "Treecko",
+    "set": "AR",
+    "number": "78",
+    "fullName": "Treecko AR 78"
+  },
+  {
+    "name": "Aron",
+    "set": "RR",
+    "number": "57",
+    "fullName": "Aron RR"
+  },
+  {
+    "name": "Rhydon",
+    "set": "SV",
+    "number": "80",
+    "fullName": "Rhydon SV"
+  },
+  {
+    "name": "Plusle",
+    "set": "HSP",
+    "number": "16",
+    "fullName": "Plusle HSP"
+  },
+  {
+    "name": "Exeggcute",
+    "set": "HS",
+    "number": "63",
+    "fullName": "Exeggcute HS"
+  },
+  {
+    "name": "Phanpy",
+    "set": "P2",
+    "number": "15",
+    "fullName": "Phanpy P2"
+  },
+  {
+    "name": "Pikachu",
+    "set": "P2",
+    "number": "16",
+    "fullName": "Pikachu P2"
+  },
+  {
+    "name": "Ivysaur",
+    "set": "P3",
+    "number": "14",
+    "fullName": "Ivysaur P3"
+  },
+  {
+    "name": "Jolteon",
+    "set": "P3",
+    "number": "3",
+    "fullName": "Jolteon P3"
+  },
+  {
+    "name": "Grovyle",
+    "set": "P4",
+    "number": "7",
+    "fullName": "Grovyle P4"
+  },
+  {
+    "name": "Mudkip",
+    "set": "P4",
+    "number": "11",
+    "fullName": "Mudkip P4"
+  },
+  {
+    "name": "Pidgey",
+    "set": "P4",
+    "number": "12",
+    "fullName": "Pidgey P4"
+  },
+  {
+    "name": "Treecko",
+    "set": "P4",
+    "number": "15",
+    "fullName": "Treecko δ P4"
+  },
+  {
+    "name": "Charmeleon",
+    "set": "P5",
+    "number": "5",
+    "fullName": "Charmeleon δ P5"
+  },
+  {
+    "name": "Manectric",
+    "set": "AR",
+    "number": "44",
+    "fullName": "Manectric AR2"
+  },
+  {
+    "name": "Bulbasaur",
+    "set": "P2",
+    "number": "12",
+    "fullName": "Bulbasaur P2"
+  },
+  {
+    "name": "Hitmonlee",
+    "set": "HSP",
+    "number": "25",
+    "fullName": "Hitmonlee HSP"
+  },
+  {
+    "name": "Charmander",
+    "set": "P5",
+    "number": "10",
+    "fullName": "Charmander δ P5"
+  },
+  {
+    "name": "Ivysaur",
+    "set": "P2",
+    "number": "7",
+    "fullName": "Ivysaur P2"
+  },
+  {
+    "name": "Multi Technical Machine 01",
+    "set": "P2",
+    "number": "9",
+    "fullName": "Multi Technical Machine 01 P2"
+  },
+  {
+    "name": "TV Reporter",
+    "set": "P2",
+    "number": "11",
+    "fullName": "TV Reporter P2"
+  },
+  {
+    "name": "Heal Energy",
+    "set": "P4",
+    "number": "8",
+    "fullName": "Heal Energy P4"
+  },
+  {
+    "name": "Scramble Energy",
+    "set": "P4",
+    "number": "10",
+    "fullName": "Scramble Energy P4"
+  },
+  {
+    "name": "Bill's Maintenance",
+    "set": "P5",
+    "number": "6",
+    "fullName": "Bill's Maintenance P5"
+  },
+  {
+    "name": "Rare Candy",
+    "set": "P5",
+    "number": "7",
+    "fullName": "Rare Candy P5"
+  },
+  {
+    "name": "δ Rainbow Energy",
+    "set": "P5",
+    "number": "9",
+    "fullName": "δ Rainbow Energy P5"
+  },
+  {
+    "name": "Cherrim",
+    "set": "P8",
+    "number": "6",
+    "fullName": "Cherrim P8"
+  },
+  {
+    "name": "Rare Candy",
+    "set": "P8",
+    "number": "10",
+    "fullName": "Rare Candy P8"
+  },
+  {
+    "name": "Roseanne's Research",
+    "set": "P8",
+    "number": "11",
+    "fullName": "Roseanne's Research P8"
+  },
+  {
+    "name": "Chimchar",
+    "set": "P8",
+    "number": "12",
+    "fullName": "Chimchar P8"
+  },
+  {
+    "name": "Turtwig",
+    "set": "P8",
+    "number": "17",
+    "fullName": "Turtwig P8"
+  }
+]

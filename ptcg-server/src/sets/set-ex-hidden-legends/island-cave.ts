@@ -17,7 +17,7 @@ export class IslandCave extends TrainerCard {
 
   reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && StateUtils.getStadiumCard(state) === this) {
+    if (effect instanceof AttachEnergyEffect && effect.sourceZone === undefined && StateUtils.getStadiumCard(state) === this) {
 
       const checkPokemonTypeEffect = new CheckPokemonTypeEffect(effect.target);
       store.reduceEffect(state, checkPokemonTypeEffect);

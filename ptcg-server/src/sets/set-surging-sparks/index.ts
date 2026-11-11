@@ -126,6 +126,7 @@ import { Zweilous } from './zweilous';
 import { Exeggutor } from './exeggutor';
 import { Turtonator } from './turtonator';
 
+import { Maushold } from './maushold';
 export const setSurgingSparks: Card[] = [
   new Dialga(),
   new Pikachuex(),
@@ -277,4 +278,5 @@ export const setSurgingSparks: Card[] = [
   new NightStretcherUR(),
   new JetEnergyUR(),
   new Tandemaus(),
+  new Maushold(),
 ];

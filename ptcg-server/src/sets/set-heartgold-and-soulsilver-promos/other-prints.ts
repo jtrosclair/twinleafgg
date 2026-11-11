@@ -1,3 +1,4 @@
+import { Smoochum } from '../set-heartgold-and-soulsilver/smoochum';
 import { Meganium } from '../set-heartgold-and-soulsilver/meganium-prime';
 import { Typhlosion } from '../set-heartgold-and-soulsilver/typhlosion';
 import { Cleffa } from '../set-heartgold-and-soulsilver/cleffa';
@@ -17,4 +18,10 @@ export class CleffaHSP extends Cleffa {
   public setNumber = '12';
   public fullName: string = 'Cleffa HSP';
   public set = 'HSP';
+}
+
+export class SmoochumHSP extends Smoochum {
+  public set: string = 'HSP';
+  public setNumber: string = '13';
+  public fullName: string = 'Smoochum HSP';
 }

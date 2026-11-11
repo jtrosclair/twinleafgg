@@ -1,3 +1,42 @@
+import { BillHS, CopycatHS, EnergySwitchPKHS, FullHealHS, PokeBallHS, ProfessorElmsTrainingMethodHS, HoOhLEGENDHS112, LugiaLEGENDHS114 } from './other-prints';
+import { Wooper } from './wooper';
+import { Wigglytuff } from './wigglytuff';
+import { Unown2 } from './unown2';
+import { Typhlosion2 } from './typhlosion2';
+import { Starmie } from './starmie';
+import { Smoochum } from './smoochum';
+import { Slowbro } from './slowbro';
+import { Shuckle } from './shuckle';
+import { Raichu } from './raichu';
+import { Persian } from './persian';
+import { Noctowl } from './noctowl';
+import { MoomooMilk } from './moomoo-milk';
+import { Metapod } from './metapod';
+import { Mareep } from './mareep';
+import { Mantine } from './mantine';
+import { LugiaLEGEND } from './lugia-legend';
+import { Ledian } from './ledian';
+import { Lapras } from './lapras';
+import { Koffing } from './koffing';
+import { Jynx } from './jynx';
+import { Igglybuff } from './igglybuff';
+import { HoOhLEGEND } from './ho-oh-legend';
+import { Hitmontop } from './hitmontop';
+import { Gyarados } from './gyarados';
+import { Granbull } from './granbull';
+import { Flaaffy } from './flaaffy';
+import { Feraligatr2 } from './feraligatr2';
+import { Exeggutor } from './exeggutor';
+import { Dunsparce } from './dunsparce';
+import { Delibird } from './delibird';
+import { Corsola } from './corsola';
+import { Clefairy } from './clefairy';
+import { Clefable } from './clefable';
+import { Blissey2 } from './blissey2';
+import { Ariados } from './ariados';
+import { Ampharos2 } from './ampharos2';
+import { Ampharos } from './ampharos';
+import { AlphLithograph } from './alph-lithograph';
 import { Arcanine } from './arcanine';
 import { Azumarill } from './azumarill';
 import { Caterpie } from './caterpie';
@@ -30,7 +69,7 @@ import { Miltank } from './miltank';
 import { Quagsire } from './quagsire';
 import { Sentret } from './sentret';
 import { Butterfree } from './butterfree';
-import { BillHS, CopycatHS, EnergySwitchPKHS, FullHealHS, PokeBallHS, ProfessorElmsTrainingMethodHS } from './other-prints';
+
 import { Card } from '../../game/store/card/card';
 import { Bayleef } from './bayleef';
 import { Blissey } from './blissey';
@@ -165,4 +204,44 @@ export const setHeartGoldAndSoulSilver: Card[] = [
   new FullHealHS(),
   new PokeBallHS(),
   new ProfessorElmsTrainingMethodHS(),
+  new AlphLithograph(),
+  new Ampharos(),
+  new Ampharos2(),
+  new Ariados(),
+  new Blissey2(),
+  new Clefable(),
+  new Clefairy(),
+  new Corsola(),
+  new Delibird(),
+  new Dunsparce(),
+  new Exeggutor(),
+  new Feraligatr2(),
+  new Flaaffy(),
+  new Granbull(),
+  new Gyarados(),
+  new Hitmontop(),
+  new HoOhLEGEND(),
+  new Igglybuff(),
+  new Jynx(),
+  new Koffing(),
+  new Lapras(),
+  new Ledian(),
+  new LugiaLEGEND(),
+  new Mantine(),
+  new Mareep(),
+  new Metapod(),
+  new MoomooMilk(),
+  new Noctowl(),
+  new Persian(),
+  new Raichu(),
+  new Shuckle(),
+  new Slowbro(),
+  new Smoochum(),
+  new Starmie(),
+  new Typhlosion2(),
+  new Unown2(),
+  new Wigglytuff(),
+  new Wooper(),
+  new HoOhLEGENDHS112(),
+  new LugiaLEGENDHS114(),
 ];

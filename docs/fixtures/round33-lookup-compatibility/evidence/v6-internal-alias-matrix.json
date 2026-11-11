@@ -1,0 +1,11 @@
+{
+  "cases": 3888,
+  "serializerChecks": 3888,
+  "parseOld": 3888,
+  "parseNew": 3888,
+  "getOld": 0,
+  "getInvalid": 0,
+  "getValid": 216,
+  "expectedGet": 216,
+  "failures": []
+}

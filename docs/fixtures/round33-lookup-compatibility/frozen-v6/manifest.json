@@ -1,0 +1,122 @@
+{
+  "baseline": "/private/tmp/prizemap-round33-refresh-base",
+  "candidate": "/private/tmp/prizemap-round33-refresh",
+  "files": [
+    {
+      "path": "ptcg-server/src/sets/index.ts",
+      "baseline_sha256": "7bba007629150a879527c2040eea5c87f5e3be8faa937f84d151c7124d256452",
+      "candidate_sha256": "65bc9b8c469ff157112a89d7c7fdd8297eda6cf8499639a7c2f7018ed1ee694a"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-scarlet-and-violet-promos/round33-prints.ts",
+      "baseline_sha256": null,
+      "candidate_sha256": "873c86aa4ecf7623cb3ea4e12b77087042c9695fe4931ae6d6fd8628c3874d57"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-upstream-round33/index.ts",
+      "baseline_sha256": null,
+      "candidate_sha256": "1d2b366d5a1550fdf486b25aea0b01f2f6f35cedf2adaed460c94c25177aeaea"
+    },
+    {
+      "path": "ptcg-server/src/game/serializer/state-serializer.ts",
+      "baseline_sha256": "132e5bb90a120015e124a6f4a0264243a80d660f124a66fc53da87b07870f4f7",
+      "candidate_sha256": "cd167e49da21c3606dcdddb22883570604ae64c35003de49539fed3049fd8733"
+    },
+    {
+      "path": "simulator-api/deck-import.ts",
+      "baseline_sha256": "34ec1587b694662dd835e5457ae4b36f683d69ebb0f6968ec084100f9fef7dd2",
+      "candidate_sha256": "cf30ece56fca6b1be7c220a5ea1d262a617dc8a49c3d3e53039b3eae2cd5a7db"
+    },
+    {
+      "path": "ptcg-server/src/sets/tests/upstream-round33-gameplay.spec.ts",
+      "baseline_sha256": null,
+      "candidate_sha256": "619721e7a6348c96ca3116474d05d233f4adec90bf2d16571cbb94bb64e9e928"
+    },
+    {
+      "path": "ptcg-server/src/sets/tests/upstream-round33-metadata.spec.ts",
+      "baseline_sha256": null,
+      "candidate_sha256": "f371a1694ba48f4043c013644a6d242c3bba0b9e19e72bb80a0724dc31102ecc"
+    },
+    {
+      "path": "ptcg-server/src/sets/tests/upstream-round33-lookup.spec.ts",
+      "baseline_sha256": null,
+      "candidate_sha256": "ef8cd4da1529d4ed39915811eadead2ca7637139fab7037fbeebf023324af970"
+    },
+    {
+      "path": "simulator-api/tests/round33-svp.test.cjs",
+      "baseline_sha256": null,
+      "candidate_sha256": "9955b7e9334f4abd3b01f1b10c6e99813898778651df7c96b39afe1354e8b233"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "ptcg-server/src/sets/set-journey-together/ionos-kilowattrel.ts",
+      "baseline_sha256": "b752cb9a494e04df6c4b007414bdbf62d9e0bc9cfbe86fb5c72b3459d4276bce",
+      "candidate_sha256": "b752cb9a494e04df6c4b007414bdbf62d9e0bc9cfbe86fb5c72b3459d4276bce"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-journey-together/lillies-ribombee.ts",
+      "baseline_sha256": "1560da2f6b20097ab9565d5f108caa10be710ae4ce47ed7f83a47fe0547df332",
+      "candidate_sha256": "1560da2f6b20097ab9565d5f108caa10be710ae4ce47ed7f83a47fe0547df332"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-scarlet-and-violet/professors-research.ts",
+      "baseline_sha256": "0c2ca0e487e5e57df0a5faef5f04607eab4d8d9d75edc5b88ebdbe15f64adc1f",
+      "candidate_sha256": "0c2ca0e487e5e57df0a5faef5f04607eab4d8d9d75edc5b88ebdbe15f64adc1f"
+    },
+    {
+      "path": "ptcg-server/data/limitlesstcg-images.json",
+      "baseline_sha256": "7de55f6f07f0e09e24b32df04687efaf84937850124abc3c8bb5928d193ae966",
+      "candidate_sha256": "7de55f6f07f0e09e24b32df04687efaf84937850124abc3c8bb5928d193ae966"
+    },
+    {
+      "path": "simulator-api/large-card-images.json",
+      "baseline_sha256": "fd7e04ce2fa29840d4baa873bb96164cfd696acb9fcb74cd42305c993800aeab",
+      "candidate_sha256": "fd7e04ce2fa29840d4baa873bb96164cfd696acb9fcb74cd42305c993800aeab"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-stellar-crown/bouffalant.ts",
+      "baseline_sha256": "97655f2fd6077e79dc8cf3b06c1375f5b813e65487a4158798ddd37903500021",
+      "candidate_sha256": "97655f2fd6077e79dc8cf3b06c1375f5b813e65487a4158798ddd37903500021"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-perfect-order/meowth-ex.ts",
+      "baseline_sha256": "544a2ccf0c0f68d858fee6ad7c0aa2fa750b5b458617b7c5da9721f3b3c9fbf2",
+      "candidate_sha256": "544a2ccf0c0f68d858fee6ad7c0aa2fa750b5b458617b7c5da9721f3b3c9fbf2"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-guardians-rising/tapu-lele-gx.ts",
+      "baseline_sha256": "16f15c046552973df1482e74e953cc3a25db4110f069af664e65792b6e940448",
+      "candidate_sha256": "16f15c046552973df1482e74e953cc3a25db4110f069af664e65792b6e940448"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-celestial-storm/swampert.ts",
+      "baseline_sha256": "adf337d29aa47bcd4374ea71e9f4d23fefb5693e9e041b1fdd7008dcb82da0e7",
+      "candidate_sha256": "adf337d29aa47bcd4374ea71e9f4d23fefb5693e9e041b1fdd7008dcb82da0e7"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-shining-legends/shining-genesect.ts",
+      "baseline_sha256": "19e2407a45283c510640a1c681670d2814ce9254afdca7eddae60bebaaf33342",
+      "candidate_sha256": "19e2407a45283c510640a1c681670d2814ce9254afdca7eddae60bebaaf33342"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-sun-and-moon/eevee.ts",
+      "baseline_sha256": "f9dc462d08dc42d179180f2acad5101ed8076a52fea9cc941c80ae11980c37f0",
+      "candidate_sha256": "f9dc462d08dc42d179180f2acad5101ed8076a52fea9cc941c80ae11980c37f0"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-silver-tempest/rapidash.ts",
+      "baseline_sha256": "0c067c8c8851eb7134c6778cc5e9048490fc96700bf959067786eccd2b1440e4",
+      "candidate_sha256": "0c067c8c8851eb7134c6778cc5e9048490fc96700bf959067786eccd2b1440e4"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-double-crisis/team-aquas-great-ball.ts",
+      "baseline_sha256": "c9485fcaf3afcbb9b9f2cf3d5cd852a15a47baf31b8358676d0315edf69c7ec6",
+      "candidate_sha256": "c9485fcaf3afcbb9b9f2cf3d5cd852a15a47baf31b8358676d0315edf69c7ec6"
+    }
+  ],
+  "prior_candidate_manifest": "aa8164837a0a4fada094fa12e4fc71261583e794732781c1cb85f8c1fa3ae007",
+  "limitations": [
+    "Two Pok\u00e9mon printings retain global ordinary-damage cancellation bug; seven effectful printings are deferred in docs/fixtures/round33-cancellation."
+  ]
+}

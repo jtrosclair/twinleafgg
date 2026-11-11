@@ -1,3 +1,47 @@
+import { Xatu } from './xatu';
+import { Weedle } from './weedle';
+import { Wartortle } from './wartortle';
+import { Ursaring2 } from './ursaring2';
+import { Tyranitar2 } from './tyranitar2';
+import { Tyranitar } from './tyranitar';
+import { Turtwig } from './turtwig';
+import { Tropius } from './tropius';
+import { Torterra } from './torterra';
+import { Torkoal } from './torkoal';
+import { Tauros } from './tauros';
+import { Sudowoodo } from './sudowoodo';
+import { Steelix2 } from './steelix2';
+import { Steelix } from './steelix';
+import { Spearow } from './spearow';
+import { Remoraid } from './remoraid';
+import { RaikouSuicuneLEGEND } from './raikou-suicune-legend';
+import { Pupitar } from './pupitar';
+import { Primeape } from './primeape';
+import { Poliwrath } from './poliwrath';
+import { Politoed } from './politoed';
+import { Onix } from './onix';
+import { Octillery } from './octillery';
+import { Numel } from './numel';
+import { Ninetales } from './ninetales';
+import { Mismagius } from './mismagius';
+import { Misdreavus } from './misdreavus';
+import { Minun } from './minun';
+import { Metang } from './metang';
+import { Metagross } from './metagross';
+import { Magmortar } from './magmortar';
+import { Lucario } from './lucario';
+import { LifeHerb } from './life-herb';
+import { Lanturn2 } from './lanturn2';
+import { Kingdra2 } from './kingdra2';
+import { Kakuna } from './kakuna';
+import { GoodRod } from './good-rod';
+import { Floatzel } from './floatzel';
+import { EngineersAdjustments } from './engineers-adjustments';
+import { EmceesChatter } from './emcees-chatter';
+import { Cherrim } from './cherrim';
+import { Carnivine } from './carnivine';
+import { Blastoise } from './blastoise';
+import { AlphLithograph } from './alph-lithograph';
 import { Crobat2 } from './crobat2';
 import { Fearow } from './fearow';
 import { Ursaring } from './ursaring';
@@ -102,4 +146,48 @@ export const setUnleashed: Card[] = [
   new CheerleadersCheerUL(),
   new PlusPowerUL(),
   new Crobat2(),
+  new AlphLithograph(),
+  new Blastoise(),
+  new Carnivine(),
+  new Cherrim(),
+  new EmceesChatter(),
+  new EngineersAdjustments(),
+  new Floatzel(),
+  new GoodRod(),
+  new Kakuna(),
+  new Kingdra2(),
+  new Lanturn2(),
+  new LifeHerb(),
+  new Lucario(),
+  new Magmortar(),
+  new Metagross(),
+  new Metang(),
+  new Minun(),
+  new Misdreavus(),
+  new Mismagius(),
+  new Ninetales(),
+  new Numel(),
+  new Octillery(),
+  new Onix(),
+  new Politoed(),
+  new Poliwrath(),
+  new Primeape(),
+  new Pupitar(),
+  new RaikouSuicuneLEGEND(),
+  new Remoraid(),
+  new Spearow(),
+  new Steelix(),
+  new Steelix2(),
+  new Sudowoodo(),
+  new Tauros(),
+  new Torkoal(),
+  new Torterra(),
+  new Tropius(),
+  new Turtwig(),
+  new Tyranitar(),
+  new Tyranitar2(),
+  new Ursaring2(),
+  new Wartortle(),
+  new Weedle(),
+  new Xatu(),
 ];

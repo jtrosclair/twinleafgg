@@ -68,6 +68,10 @@ export class MegaRayquazaex extends PokemonCard {
       });
     }
 
+    return MegaRayquazaex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Ref: set-black-and-white/mandibuzz.ts (energy-count damage).
     if (WAS_ATTACK_USED(effect, 0, this)) {
       let total = 0;

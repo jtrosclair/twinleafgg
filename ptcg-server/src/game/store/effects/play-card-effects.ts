@@ -13,6 +13,7 @@ export enum PlayCardEffects {
   ATTACH_ENERGY_EFFECT = 'ATTACH_ENERGY_EFFECT',
   PLAY_POKEMON_EFFECT = 'PLAY_POKEMON_EFFECT',
   PLAY_POKEMON_FROM_DECK_EFFECT = 'PLAY_POKEMON_FROM_DECK_EFFECT',
+  PLAY_POKEMON_FROM_DISCARD_EFFECT = 'PLAY_POKEMON_FROM_DISCARD_EFFECT',
   PLAY_SUPPORTER_EFFECT = 'PLAY_SUPPORTER_EFFECT',
   PLAY_STADIUM_EFFECT = 'PLAY_STADIUM_EFFECT',
   PLAY_POKEMON_TOOL_EFFECT = 'PLAY_POKEMON_TOOL_EFFECT',
@@ -186,6 +187,8 @@ export class CoinFlipEffect implements Effect {
   public player: Player;
   public callback?: (result: boolean) => void;
   public result?: boolean;
+  /** Optional card effect override (for example, Shiftry's Unlucky Wind). */
+  public forcedResult?: boolean;
   /** When true, stadiums like Glimwood Tangle will not intercept (used for reflips). */
   public skipReflipStadium?: boolean;
 
@@ -250,6 +253,27 @@ export class TrainerTargetEffect implements Effect {
 
 export class PlayPokemonFromDeckEffect implements Effect {
   readonly type: string = PlayCardEffects.PLAY_POKEMON_FROM_DECK_EFFECT;
+  public preventDefault = false;
+  public player: Player;
+  public pokemonCard: PokemonCard;
+  public target: PokemonCardList;
+  public slot?: SlotType;
+  public index?: number;
+
+  constructor(player: Player, pokemonCard: PokemonCard, target: PokemonCardList, slot?: SlotType, index?: number) {
+    this.player = player;
+    this.pokemonCard = pokemonCard;
+    this.target = target;
+    this.slot = slot;
+    this.index = index;
+    if (pokemonCard.stage === Stage.BASIC) {
+      this.target.showBasicAnimation = true;
+    }
+  }
+}
+
+export class PlayPokemonFromDiscardEffect implements Effect {
+  readonly type: string = PlayCardEffects.PLAY_POKEMON_FROM_DISCARD_EFFECT;
   public preventDefault = false;
   public player: Player;
   public pokemonCard: PokemonCard;

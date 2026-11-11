@@ -1,0 +1,135 @@
+cards set
+cards set
+cards set
+cards set
+cards set
+cards set
+cards set
+cards set
+cards set
+cards set
+cards set
+cards set
+{
+  "note": "ALT is synthetic but extends a real Professor Research card prototype; serializer and DeckImportParser are the real compiled engines.",
+  "hashes": [
+    {
+      "ptcg-server/src/game/serializer/state-serializer.ts": "132e5bb90a120015e124a6f4a0264243a80d660f124a66fc53da87b07870f4f7",
+      "simulator-api/deck-import.ts": "34ec1587b694662dd835e5457ae4b36f683d69ebb0f6968ec084100f9fef7dd2"
+    },
+    {
+      "ptcg-server/src/game/serializer/state-serializer.ts": "cd167e49da21c3606dcdddb22883570604ae64c35003de49539fed3049fd8733",
+      "simulator-api/deck-import.ts": "cf30ece56fca6b1be7c220a5ea1d262a617dc8a49c3d3e53039b3eae2cd5a7db"
+    }
+  ],
+  "reports": [
+    {
+      "place": "first",
+      "baseline": {
+        "wrongSerializer": "Professor's ResearchALT SVP",
+        "exactSerializer": "Professor's ResearchALT SVP",
+        "wrongDeck": {
+          "known": [
+            "Professor's ResearchALT SVP"
+          ],
+          "unknown": [],
+          "errors": []
+        },
+        "exactDeck": {
+          "known": [
+            "Professor's ResearchALT SVP"
+          ],
+          "unknown": [],
+          "errors": []
+        },
+        "exactGet": []
+      },
+      "candidate": {
+        "wrongSerializer": "Professor's Research BRS",
+        "exactSerializer": "Professor's ResearchALT SVP",
+        "wrongDeck": {
+          "known": [],
+          "unknown": [
+            "Professor's Research SVP"
+          ],
+          "errors": []
+        },
+        "exactDeck": {
+          "known": [
+            "Professor's Research221 SVP"
+          ],
+          "unknown": [],
+          "errors": []
+        },
+        "exactGet": [
+          "Professor's Research221 SVP"
+        ]
+      }
+    },
+    {
+      "place": "last",
+      "baseline": {
+        "wrongSerializer": "Professor's ResearchALT SVP",
+        "exactSerializer": "Professor's ResearchALT SVP",
+        "wrongDeck": {
+          "known": [
+            "Professor's ResearchALT SVP"
+          ],
+          "unknown": [],
+          "errors": []
+        },
+        "exactDeck": {
+          "known": [
+            "Professor's ResearchALT SVP"
+          ],
+          "unknown": [],
+          "errors": []
+        },
+        "exactGet": []
+      },
+      "candidate": {
+        "wrongSerializer": "Professor's Research BRS",
+        "exactSerializer": "Professor's Research221 SVP",
+        "wrongDeck": {
+          "known": [],
+          "unknown": [
+            "Professor's Research SVP"
+          ],
+          "errors": []
+        },
+        "exactDeck": {
+          "known": [
+            "Professor's ResearchALT SVP"
+          ],
+          "unknown": [],
+          "errors": []
+        },
+        "exactGet": [
+          "Professor's ResearchALT SVP"
+        ]
+      }
+    }
+  ],
+  "missingNewPrint": {
+    "wrongSerializer": "Professor's Research BRS",
+    "exactSerializer": "Professor's ResearchALT SVP",
+    "wrongDeck": {
+      "known": [],
+      "unknown": [
+        "Professor's Research SVP"
+      ],
+      "errors": []
+    },
+    "exactDeck": {
+      "known": [
+        "Professor's ResearchALT SVP"
+      ],
+      "unknown": [],
+      "errors": []
+    },
+    "exactGet": [
+      "Professor's ResearchALT SVP"
+    ]
+  }
+}
+V6_COUNTEREXAMPLE_REPRODUCED

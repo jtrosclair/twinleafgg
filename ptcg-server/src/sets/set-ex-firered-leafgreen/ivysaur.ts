@@ -1,10 +1,12 @@
-import { ADD_POISON_TO_PLAYER_ACTIVE, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
-import { CardType, Stage } from '../../game/store/card/card-types';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { conditionAfterDamage } from '../set-great-encounters/ge-attack-effects';
+import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
+import { CardType, Stage, SpecialCondition } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
 import { State, StoreLike } from '../../game';
 
-export class Ivysaur extends PokemonCard {
+export class Ivysaur extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom = 'Bulbasaur';
   public cardType: CardType = G;
@@ -32,11 +34,13 @@ export class Ivysaur extends PokemonCard {
   public fullName: string = 'Ivysaur RG';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    return Ivysaur.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
 
-    if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+  public reduceCopiedAttackEffect(_store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      conditionAfterDamage(state, effect, SpecialCondition.POISONED);
     }
-
     return state;
   }
 }

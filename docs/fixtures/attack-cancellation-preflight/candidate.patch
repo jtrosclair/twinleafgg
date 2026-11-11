@@ -1,0 +1,599 @@
+--- a/ptcg-server/src/game/store/effects/game-effects.ts
++++ b/ptcg-server/src/game/store/effects/game-effects.ts
+@@ -17,6 +17,7 @@
+   USE_POWER_EFFECT = 'USE_POWER_EFFECT',
+   POWER_EFFECT = 'POWER_EFFECT',
+   ATTACK_EFFECT = 'ATTACK_EFFECT',
++  CHECK_ATTACK_CANCELLATION_EFFECT = 'CHECK_ATTACK_CANCELLATION_EFFECT',
+   KNOCK_OUT_EFFECT = 'KNOCK_OUT_EFFECT',
+   HEAL_EFFECT = 'HEAL_EFFECT',
+   EVOLVE_EFFECT = 'EVOLVE_EFFECT',
+@@ -197,6 +198,24 @@
+     this.attack = attack;
+     this.damage = attack.damage;
+     this.source = player.active;
++  }
++}
++
++/** Opt-in attack-start checks resolve before attack-owned card handlers run. */
++export class CheckAttackCancellationEffect implements Effect {
++  readonly type: string = GameEffects.CHECK_ATTACK_CANCELLATION_EFFECT;
++  public preventDefault = false;
++  public player: Player;
++  public opponent: Player;
++  public attack: Attack;
++  public source: PokemonCardList;
++  public checkedSources = new Map<Card, Set<Function>>();
++
++  constructor(attack: AttackEffect) {
++    this.player = attack.player;
++    this.opponent = attack.opponent;
++    this.attack = attack.attack;
++    this.source = attack.source;
+   }
+ }
+ 
+--- a/ptcg-server/src/game/store/store.ts
++++ b/ptcg-server/src/game/store/store.ts
+@@ -2,7 +2,8 @@
+ import { CheckProvidedEnergyEffect } from './effects/check-effects';
+ import { mirrorOnlyEnergyForQuery } from './prefabs/mirror-only-energy';
+ import { StateUtils } from './state-utils';
+-import { preflightCopiedOpponentAttacks, resolveCopyAttackSessions } from './prefabs/copy-attack-delegation';
++import { resolveCopyAttackSessions } from './prefabs/copy-attack-delegation';
++import { checkAttackLegality } from './prefabs/attack-legality';
+ import { Action } from './actions/action';
+ import { AbortGameAction } from './actions/abort-game-action';
+ import { AppendLogAction } from './actions/append-log-action';
+@@ -15,9 +16,9 @@
+ import { ChangeAvatarAction } from './actions/change-avatar-action';
+ import { Effect } from './effects/effect';
+ import { clearAttackDamageScopes } from './prefabs/attack-after-damage';
+-import { AfterEvolveEffect, AttackEffect, CheckEvolveEffect, EvolveEffect, RetreatEffect, RetreatStartEffect } from './effects/game-effects';
++import { AfterEvolveEffect, AttackEffect, CheckAttackCancellationEffect, CheckEvolveEffect, EvolveEffect, RetreatEffect, RetreatStartEffect } from './effects/game-effects';
++import { attackCancellationHandler, markAttackCancellationChecked, clearAttackCancellationScopes, inheritAttackCancellationScope, isAttackLegalityPrechecked } from './prefabs/attack-cancellation-scope';
+ import { ATTACK_RETREAT_LOCK_UNTIL_TARGET_END_TURN } from './prefabs/retreat-lock-until-target-end-turn';
+-import { MarkerConstants } from './markers/marker-constants';
+ import { EndTurnEffect } from './effects/game-phase-effects';
+ import { GameError } from '../game-error';
+ import { GameMessage, GameLog } from '../game-message';
+@@ -71,7 +72,9 @@
+   /** Restore a stable snapshot without retaining callbacks from the previous game. */
+   public restoreState(state: State): void {
+     clearAttackDamageScopes(this.state);
++    clearAttackCancellationScopes(this.state, this);
+     if (this.state !== state) clearAttackDamageScopes(state);
++    if (this.state !== state) clearAttackCancellationScopes(state, this);
+     this.promptItems = [];
+     this.waitItems = [];
+     this.logId = state.logs.reduce((max, log) => Math.max(max, log.id || 0), 0);
+@@ -153,6 +156,7 @@
+   }
+ 
+   public reduceEffect(state: State, effect: Effect): State {
++    if (effect instanceof AttackEffect) inheritAttackCancellationScope(state, this, effect);
+     const preflight = preflightDualStadiumCancellation(this, state, effect);
+     if (preflight !== undefined) return preflight;
+     // A completed attack's retreat lock belongs to the affected Pokémon,
+@@ -201,17 +205,8 @@
+       if (preflight.preventDefault) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+       effect.preflightComplete = true;
+     }
+-    // Clear Vision affects the player for the rest of the game, even if the
+-    // Pokémon that used or copied it has since left play. Reject the attack
+-    // before any card handler can perform attack side effects.
+-    if (effect instanceof AttackEffect && !effect.preventDefault && effect.attack
+-      && effect.player.marker.hasMarker(MarkerConstants.CLEAR_VISION_GX_LOCK)
+-      && (effect.attack.gxAttack === true ||
+-        (typeof effect.attack.name === 'string' && effect.attack.name.includes('-GX')))) {
+-      throw new GameError(GameMessage.CANNOT_USE_ATTACK);
+-    }
+-    if (effect instanceof AttackEffect && !effect.preventDefault) {
+-      state = preflightCopiedOpponentAttacks(this, state, effect);
++    if (effect instanceof AttackEffect && !isAttackLegalityPrechecked(state, this, effect)) {
++      state = checkAttackLegality(this, state, effect);
+     }
+     // Upstream attack prevention runs before fan-out so blocked effects never trigger cards.
+     if (effect instanceof AbstractAttackEffect && effect.target && effect.source
+@@ -379,6 +374,7 @@
+ 
+   public cleanup(): void {
+     clearAttackDamageScopes(this.state);
++    clearAttackCancellationScopes(this.state, this);
+     this.promptItems = [];
+     this.waitItems = [];
+     this.logId = 0;
+@@ -603,7 +599,12 @@
+     }
+     cards.sort(c => c.superType);
+     cards.forEach(c => {
+-      if (virtual.has(c) && effect instanceof CheckProvidedEnergyEffect) {
++      if (effect instanceof CheckAttackCancellationEffect) {
++        const handler = attackCancellationHandler(c);
++        if (handler && markAttackCancellationChecked(effect.checkedSources, c, handler)) {
++          state = handler.call(c, this, state, effect);
++        }
++      } else if (virtual.has(c) && effect instanceof CheckProvidedEnergyEffect) {
+         state = (c as Card & { reduceMirrorOnlyEnergyEffect: (store: StoreLike, state: State, effect: CheckProvidedEnergyEffect) => State }).reduceMirrorOnlyEnergyEffect(this, state, effect);
+       } else state = this.callReduceEffect(c, this, state, effect);
+     });
+--- a/ptcg-server/src/game/store/prefabs/copy-attack-delegation.ts
++++ b/ptcg-server/src/game/store/prefabs/copy-attack-delegation.ts
+@@ -6,7 +6,8 @@
+ import { Effect } from '../effects/effect';
+ import { beginAttackDamageScope, cancelAttackDamageScope, finishAttackDamageScope, resolveAfterAttackDamage } from './attack-after-damage';
+ import { CheckAttackCostEffect } from '../effects/check-effects';
+-import { AttackEffect, KnockOutEffect, PowerEffect } from '../effects/game-effects';
++import { AttackEffect, CheckAttackCancellationEffect, KnockOutEffect, PowerEffect } from '../effects/game-effects';
++import { attackCancellationHandler, markAttackCancellationChecked } from './attack-cancellation-scope';
+ import {
+   AfterAttackEffect,
+   BeforeDoingDamageEffect,
+@@ -447,6 +448,17 @@
+       continue;
+     }
+ 
++    // A copied attack can itself leave an attack-start restriction whose
++    // marker belongs to the copycat rather than the original card.
++    if (effect instanceof CheckAttackCancellationEffect) {
++      const handler = attackCancellationHandler(session.sourceCard);
++      if (handler && markAttackCancellationChecked(effect.checkedSources, session.copycatCard, handler)) {
++        state = delegateToSource(session.copycatCard, session.sourceCard, session.clonedAttacks,
++          session.attackIndex, store, state, effect, handler as OwnedCopiedAttackReducer);
++      }
++      continue;
++    }
++
+     // An explicit attack-owned callback can react to damage received during a
+     // later turn without executing the source card's unrelated Abilities.
+     if (effect instanceof AfterDamageEffect && !effect.preventDefault &&
+--- /dev/null
++++ b/ptcg-server/src/game/store/prefabs/attack-cancellation-scope.ts
+@@ -0,0 +1,88 @@
++import { Card } from '../card/card';
++import { AttackEffect, CheckAttackCancellationEffect } from '../effects/game-effects';
++import { Player } from '../state/player';
++import { State } from '../state/state';
++import { StoreLike } from '../store-like';
++
++interface Scope {
++  state: State;
++  store: StoreLike;
++  player: Player;
++  checked: Map<Card, Set<Function>>;
++  precheckedAttack: AttackEffect;
++  touched: Map<AttackEffect, Map<Card, Set<Function>> | undefined>;
++}
++let scopes = new WeakMap<State, Scope[]>();
++// Keep transient dispatch bookkeeping off effects and serialized game state.
++const checkedEffects = new WeakMap<AttackEffect, Map<Card, Set<Function>>>();
++
++type CancellationHandler = (store: StoreLike, state: State, effect: CheckAttackCancellationEffect) => State;
++/** Accept executable preflight ownership only from a trusted card prototype. */
++export function attackCancellationHandler(card: Card): CancellationHandler | undefined {
++  if (Object.prototype.hasOwnProperty.call(card, 'reduceEffect') ||
++      Object.prototype.hasOwnProperty.call(card, 'reduceAttackCancellationEffect')) return undefined;
++  let proto = Object.getPrototypeOf(card), depth = 0, effectDepth: number | undefined;
++  let handlerDepth: number | undefined, handler: CancellationHandler | undefined;
++  while (proto && proto !== Object.prototype) {
++    if (effectDepth === undefined && Object.prototype.hasOwnProperty.call(proto, 'reduceEffect')) effectDepth = depth;
++    if (handlerDepth === undefined && Object.prototype.hasOwnProperty.call(proto, 'reduceAttackCancellationEffect')) {
++      const descriptor = Object.getOwnPropertyDescriptor(proto, 'reduceAttackCancellationEffect');
++      if (typeof descriptor?.value !== 'function') return undefined;
++      handlerDepth = depth; handler = descriptor.value;
++    }
++    proto = Object.getPrototypeOf(proto); depth++;
++  }
++  return handlerDepth !== undefined && effectDepth !== undefined && handlerDepth <= effectDepth ? handler : undefined;
++}
++
++export function beginAttackCancellationScope(state: State, store: StoreLike, player: Player, checked: Map<Card, Set<Function>>, precheckedAttack: AttackEffect): Scope {
++  const scope = { state, store, player, checked, precheckedAttack, touched: new Map<AttackEffect, Map<Card, Set<Function>> | undefined>() };
++  const stack = scopes.get(state) ?? []; stack.push(scope); scopes.set(state, stack);
++  return scope;
++}
++
++export function inheritAttackCancellationScope(state: State, store: StoreLike, effect: AttackEffect): void {
++  const stack = scopes.get(state), scope = stack && [...stack].reverse().find(item => item.store === store);
++  if (!scope || scope.player !== effect.player) return;
++  if (!scope.touched.has(effect)) scope.touched.set(effect, checkedEffects.get(effect));
++  checkedEffects.set(effect, scope.checked);
++}
++
++export function endAttackCancellationScope(scope: Scope): void {
++  for (const [effect, previous] of scope.touched) {
++    if (previous) checkedEffects.set(effect, previous); else checkedEffects.delete(effect);
++  }
++  const stack = scopes.get(scope.state); if (!stack) return;
++  const i = stack.indexOf(scope); if (i >= 0) stack.splice(i, 1);
++  if (!stack.length) scopes.delete(scope.state);
++}
++
++export function clearAttackCancellationScopes(state: State, store: StoreLike): void {
++  const stack = scopes.get(state) ?? [];
++  for (const scope of stack.filter(item => item.store === store).reverse()) {
++    for (const [effect, previous] of scope.touched) {
++      if (previous) checkedEffects.set(effect, previous); else checkedEffects.delete(effect);
++    }
++  }
++  const remaining = stack.filter(item => item.store !== store);
++  if (remaining.length) scopes.set(state, remaining); else scopes.delete(state);
++}
++
++/** Track the card and the owning reducer separately: a copied attack may
++ * share a marker source with a different, native cancellation reducer. */
++export function markAttackCancellationChecked(checked: Map<Card, Set<Function>>, card: Card, handler: Function): boolean {
++  let handlers = checked.get(card);
++  if (!handlers) checked.set(card, handlers = new Set());
++  if (handlers.has(handler)) return false;
++  handlers.add(handler);
++  return true;
++}
++
++export function wasAttackCancellationChecked(effect: AttackEffect, card: Card, handler: Function): boolean {
++  return checkedEffects.get(effect)?.get(card)?.has(handler) ?? false;
++}
++
++/** Only the exact outer event was checked before the cancellation prompt. */
++export function isAttackLegalityPrechecked(state: State, store: StoreLike, effect: AttackEffect): boolean {
++  return (scopes.get(state) ?? []).some(scope => scope.store === store && scope.precheckedAttack === effect);
++}
+--- a/ptcg-server/src/game/store/effect-reducers/game-effect.ts
++++ b/ptcg-server/src/game/store/effect-reducers/game-effect.ts
+@@ -14,8 +14,11 @@
+   CheckProvidedEnergyEffect
+ } from '../effects/check-effects';
+ import { Effect } from '../effects/effect';
++import { beginAttackCancellationScope, endAttackCancellationScope } from '../prefabs/attack-cancellation-scope';
++import { checkAttackLegality } from '../prefabs/attack-legality';
+ import {
+   AttackEffect,
++  CheckAttackCancellationEffect,
+   EvolveEffect,
+   HealEffect, KnockOutEffect,
+   PlaceDamageCountersEffect,
+@@ -173,15 +176,26 @@
+ 
+   const attackEffect = (effect instanceof AttackEffect) ? effect : new AttackEffect(player, opponent, attack);
+   attackEffect.source = attackingPokemon;
++  state = checkAttackLegality(store, state, attackEffect);
++  // Resolve opt-in attack-start cancellations before attack-owned handlers
++  // create prompts or change state. Copied effects inherit this result.
++  const preflight = new CheckAttackCancellationEffect(attackEffect);
++  state = store.reduceEffect(state, preflight);
++  if (store.hasPrompts()) yield store.waitPrompt(state, () => next());
++  if (preflight.preventDefault) {
++    attackEffect.preventDefault = true;
++    attackEffect.damage = 0;
++  }
++  const cancellationScope = beginAttackCancellationScope(state, store, player, preflight.checkedSources, attackEffect);
+   const attackDamageScope = beginAttackDamageScope(state);
+   try {
+     const copycatCard = attackingPokemon.getPokemonCard();
+-    if (delegateFrom && copycatCard) {
++    if (!preflight.preventDefault && delegateFrom && copycatCard) {
+       state = yield* runDelegatedCopiedAttackGenerator(next, {
+         store, state, player, opponent, copycatCard, sourceCard: delegateFrom,
+         selectedAttack: attack, sourceSlot: attackingPokemon, skipLog: true,
+       });
+-    } else {
++    } else if (!preflight.preventDefault) {
+       state = store.reduceEffect(state, attackEffect);
+       if (store.hasPrompts()) yield store.waitPrompt(state, () => next());
+     }
+@@ -240,6 +254,7 @@
+       state = yield* finishAttackDamageScope(() => next(), store, state, attackDamageScope);
+ 
+       const afterAttackEffect = new AfterAttackEffect(effect.player, opponent, attack, originalDefender);
++      afterAttackEffect.attackCancelled = preflight.preventDefault;
+       state = store.reduceEffect(state, afterAttackEffect);
+ 
+       if (store.hasPrompts()) {
+@@ -249,6 +264,7 @@
+ 
+   } finally {
+     cancelAttackDamageScope(attackDamageScope);
++    endAttackCancellationScope(cancellationScope);
+   }
+ 
+   if ((attack.barrage || hasBarragePower) && !(effect as any)._barrageUsed) {
+--- a/ptcg-server/src/sets/set-base-set/sandshrew.ts
++++ b/ptcg-server/src/sets/set-base-set/sandshrew.ts
+@@ -1,9 +1,10 @@
++import { wasAttackCancellationChecked } from '../../game/store/prefabs/attack-cancellation-scope';
+ import { GameMessage, PlayerType, PokemonCardList, StateUtils } from '../../game';
+ import { Stage } from '../../game/store/card/card-types';
+ import { PokemonCard } from '../../game/store/card/pokemon-card';
+ import { Attack } from '../../game/store/card/pokemon-types';
+ import { Effect } from '../../game/store/effects/effect';
+-import { AttackEffect } from '../../game/store/effects/game-effects';
++import { AttackEffect, CheckAttackCancellationEffect } from '../../game/store/effects/game-effects';
+ import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+ import { CoinFlipPrompt } from '../../game/store/prompts/coin-flip-prompt';
+ import { State } from '../../game/store/state/state';
+@@ -41,13 +42,9 @@
+       opponent.marker.addMarker(PokemonCardList.CLEAR_PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN, this);
+     }
+ 
+-    if (effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN, this)) {
+-      return store.prompt(state, new CoinFlipPrompt(effect.player.id, GameMessage.COIN_FLIP), (heads) => {
+-        if (!heads) {
+-          effect.damage = 0;
+-          effect.preventDefault = true;
+-        }
+-      });
++    if (effect instanceof AttackEffect && !wasAttackCancellationChecked(effect, this, Sandshrew.prototype.reduceAttackCancellationEffect) &&
++      effect.player.active.marker.hasMarker(PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN, this)) {
++      return Sandshrew.prototype.reduceAttackCancellationEffect.call(this, store, state, effect);
+     }
+ 
+     if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(PokemonCardList.CLEAR_PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN, this)) {
+@@ -63,4 +60,17 @@
+     return state;
+   }
+ 
++
++
++  public reduceAttackCancellationEffect(store: StoreLike, state: State, effect: AttackEffect | CheckAttackCancellationEffect): State {
++    if (effect.player.active.marker.hasMarker(PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN, this)) {
++      return store.prompt(state, new CoinFlipPrompt(effect.player.id, GameMessage.COIN_FLIP), (heads) => {
++        if (!heads) {
++          if (effect instanceof AttackEffect) effect.damage = 0;
++          effect.preventDefault = true;
++        }
++      });
++    }
++    return state;
++  }
+ }
+--- a/ptcg-server/src/sets/set-black-and-white/sandile.ts
++++ b/ptcg-server/src/sets/set-black-and-white/sandile.ts
+@@ -1,8 +1,9 @@
++import { wasAttackCancellationChecked } from '../../game/store/prefabs/attack-cancellation-scope';
+ import { PokemonCard } from '../../game/store/card/pokemon-card';
+ import { Stage, CardType } from '../../game/store/card/card-types';
+ import { StoreLike, State, StateUtils } from '../../game';
+ import { Effect } from '../../game/store/effects/effect';
+-import { AttackEffect } from '../../game/store/effects/game-effects';
++import { AttackEffect, CheckAttackCancellationEffect } from '../../game/store/effects/game-effects';
+ import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+ import { WAS_ATTACK_USED, COIN_FLIP_PROMPT } from '../../game/store/prefabs/prefabs';
+ 
+@@ -49,9 +50,9 @@
+     }
+ 
+     // Block attacks if marked
+-    if (effect instanceof AttackEffect && effect.player.active.marker.hasMarker(this.SAND_ATTACK_MARKER, this)) {
+-      effect.damage = 0;
+-      effect.preventDefault = true;
++    if (effect instanceof AttackEffect && !wasAttackCancellationChecked(effect, this, Sandile.prototype.reduceAttackCancellationEffect) &&
++      effect.player.active.marker.hasMarker(this.SAND_ATTACK_MARKER, this)) {
++      return Sandile.prototype.reduceAttackCancellationEffect.call(this, store, state, effect);
+     }
+ 
+     // Clean up marker at end of turn
+@@ -61,4 +62,13 @@
+ 
+     return state;
+   }
++
++
++  public reduceAttackCancellationEffect(store: StoreLike, state: State, effect: AttackEffect | CheckAttackCancellationEffect): State {
++    if (effect.player.active.marker.hasMarker(this.SAND_ATTACK_MARKER, this)) {
++      if (effect instanceof AttackEffect) effect.damage = 0;
++      effect.preventDefault = true;
++    }
++    return state;
++  }
+ }
+--- a/ptcg-server/src/sets/set-dark-explorers/flareon.ts
++++ b/ptcg-server/src/sets/set-dark-explorers/flareon.ts
+@@ -1,8 +1,9 @@
++import { wasAttackCancellationChecked } from '../../game/store/prefabs/attack-cancellation-scope';
+ import { PokemonCard } from '../../game/store/card/pokemon-card';
+ import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
+ import { PokemonCardList, StoreLike, State, StateUtils, GameMessage, ConfirmPrompt, EnergyCard, PlayerType } from '../../game';
+ import { Effect } from '../../game/store/effects/effect';
+-import { AttackEffect } from '../../game/store/effects/game-effects';
++import { AttackEffect, CheckAttackCancellationEffect } from '../../game/store/effects/game-effects';
+ import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+ import { CoinFlipEffect } from '../../game/store/effects/play-card-effects';
+ import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+@@ -47,13 +48,9 @@
+     }
+ 
+     // Block attacks if marked - coin flip
+-    if (effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN, this)) {
+-      const coinFlipEffect = new CoinFlipEffect(effect.player, (result: boolean) => {
+-        if (result === false) {
+-          effect.preventDefault = true;
+-        }
+-      });
+-      return store.reduceEffect(state, coinFlipEffect);
++    if (effect instanceof AttackEffect && !wasAttackCancellationChecked(effect, this, Flareon.prototype.reduceAttackCancellationEffect) &&
++      effect.player.active.marker.hasMarker(PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN, this)) {
++      return Flareon.prototype.reduceAttackCancellationEffect.call(this, store, state, effect);
+     }
+ 
+     // Clear marker at end of turn
+@@ -95,4 +92,17 @@
+ 
+     return state;
+   }
++
++
++  public reduceAttackCancellationEffect(store: StoreLike, state: State, effect: AttackEffect | CheckAttackCancellationEffect): State {
++    if (effect.player.active.marker.hasMarker(PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN, this)) {
++      const coinFlipEffect = new CoinFlipEffect(effect.player, (result: boolean) => {
++        if (result === false) {
++          effect.preventDefault = true;
++        }
++      });
++      return store.reduceEffect(state, coinFlipEffect);
++    }
++    return state;
++  }
+ }
+--- a/ptcg-server/src/sets/set-perfect-order/hippopotas.ts
++++ b/ptcg-server/src/sets/set-perfect-order/hippopotas.ts
+@@ -1,6 +1,7 @@
++import { wasAttackCancellationChecked } from '../../game/store/prefabs/attack-cancellation-scope';
+ import { PokemonCard, Stage, CardType, StoreLike, State, StateUtils, PokemonCardList, PlayerType } from '../../game';
+ import { Effect } from '../../game/store/effects/effect';
+-import { AttackEffect } from '../../game/store/effects/game-effects';
++import { AttackEffect, CheckAttackCancellationEffect } from '../../game/store/effects/game-effects';
+ import { CoinFlipEffect } from '../../game/store/effects/play-card-effects';
+ import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+ import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+@@ -43,17 +44,9 @@
+     }
+ 
+     // Prevent attack with coin flip during opponent's turn
+-    if (effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN, this)) {
+-      const player = effect.player;
+-
+-      const coinFlipEffect = new CoinFlipEffect(player, (result: boolean) => {
+-        if (result === false) {
+-          // Tails - attack doesn't happen
+-          effect.preventDefault = true;
+-        }
+-      });
+-
+-      return store.reduceEffect(state, coinFlipEffect);
++    if (effect instanceof AttackEffect && !wasAttackCancellationChecked(effect, this, Hippopotas.prototype.reduceAttackCancellationEffect) &&
++      effect.player.active.marker.hasMarker(PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN, this)) {
++      return Hippopotas.prototype.reduceAttackCancellationEffect.call(this, store, state, effect);
+     }
+ 
+     // Clear marker at end of turn
+@@ -68,4 +61,21 @@
+ 
+     return state;
+   }
++
++
++  public reduceAttackCancellationEffect(store: StoreLike, state: State, effect: AttackEffect | CheckAttackCancellationEffect): State {
++    if (effect.player.active.marker.hasMarker(PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN, this)) {
++      const player = effect.player;
++
++      const coinFlipEffect = new CoinFlipEffect(player, (result: boolean) => {
++        if (result === false) {
++          // Tails - attack doesn't happen
++          effect.preventDefault = true;
++        }
++      });
++
++      return store.reduceEffect(state, coinFlipEffect);
++    }
++    return state;
++  }
+ }
+--- a/ptcg-server/src/game/store/effects/game-phase-effects.ts
++++ b/ptcg-server/src/game/store/effects/game-phase-effects.ts
+@@ -79,6 +79,8 @@
+ export class AfterAttackEffect implements Effect {
+   readonly type: string = GamePhaseEffects.AFTER_ATTACK_EFFECT;
+   public preventDefault = false;
++  /** True when an attack-start effect stopped the attack before it resolved. */
++  public attackCancelled?: boolean;
+   public player: Player;
+   public opponent: Player;
+   public attack: Attack;
+--- a/ptcg-server/src/game/store/prefabs/prefabs.ts
++++ b/ptcg-server/src/game/store/prefabs/prefabs.ts
+@@ -43,7 +43,7 @@
+ }
+ 
+ export const AFTER_ATTACK = (effect: Effect, index: number, user: PokemonCard): effect is AfterAttackEffect => {
+-  return effect instanceof AfterAttackEffect && effect.attack === user.attacks[index];
++  return effect instanceof AfterAttackEffect && !effect.attackCancelled && effect.attack === user.attacks[index];
+ };
+ 
+ 
+--- a/ptcg-server/src/sets/set-30th-celebration/mew-ex.ts
++++ b/ptcg-server/src/sets/set-30th-celebration/mew-ex.ts
+@@ -49,7 +49,7 @@
+     }
+ 
+     // Teleportation Burst
+-    if (effect instanceof AfterAttackEffect && effect.attack === this.attacks[0]) {
++    if (effect instanceof AfterAttackEffect && !effect.attackCancelled && effect.attack === this.attacks[0]) {
+       const player = effect.player;
+       if (player.bench.some((b) => b.cards.length > 0)) {
+         store.prompt(
+--- a/ptcg-server/src/sets/set-30th-celebration/english-palkia.ts
++++ b/ptcg-server/src/sets/set-30th-celebration/english-palkia.ts
+@@ -23,7 +23,7 @@
+   }];
+ 
+   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+-    if (effect instanceof AfterAttackEffect && effect.attack === this.attacks[0]) {
++    if (effect instanceof AfterAttackEffect && !effect.attackCancelled && effect.attack === this.attacks[0]) {
+       const player = effect.player;
+       if (!player.bench.some(b => b.cards.length > 0)) { return state; }
+       return store.prompt(state, new ChoosePokemonPrompt(
+--- a/ptcg-server/src/sets/set-perfect-order/salazzle-ex.ts
++++ b/ptcg-server/src/sets/set-perfect-order/salazzle-ex.ts
+@@ -72,7 +72,7 @@
+     }
+ 
+     // Fatal Nail - Switch (after attack)
+-    if (effect instanceof AfterAttackEffect && effect.attack === this.attacks[1]) {
++    if (effect instanceof AfterAttackEffect && !effect.attackCancelled && effect.attack === this.attacks[1]) {
+       const player = effect.player;
+ 
+       // Switch this Pokemon with benched Pokemon
+--- a/ptcg-server/src/sets/set-perfect-order/meowth-ex.ts
++++ b/ptcg-server/src/sets/set-perfect-order/meowth-ex.ts
+@@ -76,7 +76,7 @@
+       effect.player.marker.removeMarker(this.TRUMP_CARD_MARKER);
+     }
+ 
+-    if (effect instanceof AfterAttackEffect && effect.attack === this.attacks[0]) {
++    if (effect instanceof AfterAttackEffect && !effect.attackCancelled && effect.attack === this.attacks[0]) {
+       const player = effect.player;
+       const pokemons = player.active.getPokemons();
+       const otherCards = player.active.cards.filter(card =>
+--- a/ptcg-server/src/sets/set-delta-reign/giratina.ts
++++ b/ptcg-server/src/sets/set-delta-reign/giratina.ts
+@@ -31,7 +31,7 @@
+       }
+       return PREVENT_DAMAGE(store, state, effect, this);
+     }
+-    if (effect instanceof AfterAttackEffect && effect.attack === this.attacks[0]) {
++    if (effect instanceof AfterAttackEffect && !effect.attackCancelled && effect.attack === this.attacks[0]) {
+       const marker = effect.player.marker;
+       marker.markers = marker.markers.filter(item => !item.name.startsWith(CHAOS_CRAWLER_TURN));
+       marker.addMarker(CHAOS_CRAWLER_TURN + state.turn, this, undefined, 'player');
+--- a/ptcg-server/src/sets/set-pitch-black/cranidos.ts
++++ b/ptcg-server/src/sets/set-pitch-black/cranidos.ts
+@@ -36,7 +36,7 @@
+         this.usedFlingOff = true;
+       }
+     }
+-    if (effect instanceof AfterAttackEffect && this.usedFlingOff && effect.attack === this.attacks[0]) {
++    if (effect instanceof AfterAttackEffect && !effect.attackCancelled && this.usedFlingOff && effect.attack === this.attacks[0]) {
+       this.usedFlingOff = false;
+       const player = effect.player;
+       const opponent = StateUtils.getOpponent(state, player);
+--- /dev/null
++++ b/ptcg-server/src/game/store/prefabs/attack-legality.ts
+@@ -0,0 +1,18 @@
++import { GameError } from '../../game-error';
++import { GameMessage } from '../../game-message';
++import { AttackEffect } from '../effects/game-effects';
++import { MarkerConstants } from '../markers/marker-constants';
++import { State } from '../state/state';
++import { StoreLike } from '../store-like';
++import { preflightCopiedOpponentAttacks } from './copy-attack-delegation';
++
++/** Run hard prohibitions before cancellation prompts or attack-owned effects. */
++export function checkAttackLegality(store: StoreLike, state: State, effect: AttackEffect): State {
++  if (effect.preventDefault) return state;
++  if (effect.attack && effect.player.marker.hasMarker(MarkerConstants.CLEAR_VISION_GX_LOCK)
++    && (effect.attack.gxAttack === true ||
++      (typeof effect.attack.name === 'string' && effect.attack.name.includes('-GX')))) {
++    throw new GameError(GameMessage.CANNOT_USE_ATTACK);
++  }
++  return preflightCopiedOpponentAttacks(store, state, effect);
++}

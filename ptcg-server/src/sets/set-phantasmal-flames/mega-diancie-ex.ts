@@ -33,6 +33,35 @@ export class MegaDiancieex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    state = MegaDiancieex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+
+    // Reduce damage by 30
+    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)) {
+      const pokemonCard = effect.target.getPokemonCard();
+
+      // It's not this pokemon card
+      if (pokemonCard !== this) {
+        return state;
+      }
+
+      // It's not an attack
+      if (state.phase !== GamePhase.ATTACK) {
+        return state;
+      }
+
+      const player = StateUtils.findOwner(state, effect.target);
+
+      // Try to reduce PowerEffect, to check if something is blocking our ability
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
+        return state;
+      }
+      effect.damage = Math.max(0, effect.damage - 30);
+    }
+
+    return state;
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
 
@@ -63,29 +92,7 @@ export class MegaDiancieex extends PokemonCard {
       });
     }
 
-    // Reduce damage by 30
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)) {
-      const pokemonCard = effect.target.getPokemonCard();
-
-      // It's not this pokemon card
-      if (pokemonCard !== this) {
-        return state;
-      }
-
-      // It's not an attack
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-
-      const player = StateUtils.findOwner(state, effect.target);
-
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-      effect.damage = Math.max(0, effect.damage - 30);
-    }
-
     return state;
   }
+
 }

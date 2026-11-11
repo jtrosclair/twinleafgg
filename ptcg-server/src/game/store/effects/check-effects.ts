@@ -140,7 +140,9 @@ export class CheckRetreatCostEffect implements Effect {
   constructor(player: Player) {
     this.player = player;
     const pokemonCard = player.active.getPokemonCard();
-    this.cost = pokemonCard !== undefined ? [...pokemonCard.retreat] : [];
+    this.cost = pokemonCard !== undefined
+      ? [...pokemonCard.retreat, ...Array(pokemonCard.retreatCostIncreaseNextTurn ?? 0).fill(CardType.COLORLESS)]
+      : [];
   }
 }
 

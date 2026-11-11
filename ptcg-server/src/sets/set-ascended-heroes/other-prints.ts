@@ -1,3 +1,30 @@
+import { Stunfiskex } from './stunfisk-ex';
+import { Mawile } from './mawile';
+import { Medicham } from './medicham';
+import { Hitmontop } from './hitmontop';
+import { Round32SlurpuffASC as Slurpuff } from './slurpuff';
+import { Vikavolt } from './vikavolt';
+import { Heliolisk } from './heliolisk';
+import { MegaCharizardYex as MegaCharizardYexASC22Batch12 } from './mega-charizard-y-ex';
+import { Pikachuex as PikachuexPRSV106 } from '../set-scarlet-and-violet-promos/pikachu-ex';
+import { MegaFeraligatrex as MegaFeraligatrexASC43Batch12 } from './mega-feraligatr-ex';
+import { MegaEmboarex as MegaEmboarexASC31Batch12 } from './mega-emboar-ex';
+import { MegaMeganiumex as MegaMeganiumexASC10Batch12 } from './mega-meganium-ex';
+import { MegaDragoniteex as MegaDragoniteexASC152Batch12 } from './mega-dragonite-ex';
+import { MegaScraftyex as MegaScraftyexASC135Batch12 } from './mega-scrafty-ex';
+import { MegaHawluchaex as MegaHawluchaexASC116Batch12 } from './mega-hawlucha-ex';
+import { MegaEelektrossex as MegaEelektrossexASC61Batch12 } from './mega-eelektross-ex';
+import { MegaFroslassex as MegaFroslassexASC47Batch12 } from './mega-froslass-ex';
+import { Canari as CanariASC185Batch12 } from './canari';
+import { MegaAudinoex as MegaAudinoexASC172Batch12 } from './mega-audino-ex';
+import { LarrysStaraptor as LarrysStaraptorASC170Batch12 } from './larrys-staraptor';
+import { Misdreavus as MisdreavusASC85Batch12 } from './misdreavus';
+import { Marill as MarillASC83Batch12 } from './marill';
+import { Snorunt as SnoruntASC46Batch12 } from './snorunt';
+import { Numel as NumelASC27Batch12 } from './numel';
+import { Dustox as DustoxASC15Batch12 } from './dustox';
+import { Beautifly as BeautiflyASC13Batch12 } from './beautifly';
+import { ErikasTangela as ErikasTangelaASC7Batch12 } from './erikas-tangela';
 import { Budew } from '../set-prismatic-evolution/budew';
 import { TeamRocketsTarountula } from '../set-destined-rivals/team-rockets-tarountula';
 import { TeamRocketsSpidops } from '../set-destined-rivals/team-rockets-spidops';
@@ -1124,5 +1151,53 @@ export class MegaCharizardYex2ASC extends MegaCharizardYexASC22 {
 export class MegaDragoniteex4ASC extends MegaDragoniteexASC152 {
   public setNumber = '295';
   public fullName: string = 'Mega Dragonite ex4 ASC';
+  public set = 'ASC';
+}
+
+export class HelioliskIR extends Heliolisk {
+  public setNumber = '229';
+  public fullName: string = 'HelioliskIR ASC';
+  public set = 'ASC';
+}
+
+export class VikavoltIR extends Vikavolt {
+  public setNumber = '230'
+  public fullName: string = 'VikavoltIR ASC';
+  public set = 'ASC';
+}
+
+export class SlurpuffIR extends Slurpuff {
+  public setNumber = '236';
+  public fullName: string = 'SlurpuffIR ASC';
+  public set = 'ASC';
+}
+
+export class HitmontopIR extends Hitmontop {
+  public setNumber = '240';
+  public fullName: string = 'HitmontopIR ASC';
+  public set = 'ASC';
+}
+
+export class MedichamIR extends Medicham {
+  public setNumber = '241';
+  public fullName: string = 'MedichamIR ASC'
+  public set = 'ASC';
+}
+
+export class MawileIR extends Mawile {
+  public setNumber = '246';
+  public fullName: string = 'MawileIR ASC';
+  public set = 'ASC';
+}
+
+export class StunfiskexFA extends Stunfiskex {
+  public setNumber = '252';
+  public fullName: string = 'Stunfisk ex FA ASC'
+  public set = 'ASC';
+}
+
+export class PikachuexSIR extends PikachuexPRSV106 {
+  public setNumber = '276';
+  public fullName: string = 'Pikachu ex SIR ASC';
   public set = 'ASC';
 }

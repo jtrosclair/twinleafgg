@@ -62,6 +62,10 @@ export class Machamp extends PokemonCard {
       }
     }
 
+    return Machamp.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Attack: Close Combat
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;

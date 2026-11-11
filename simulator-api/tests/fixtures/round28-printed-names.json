@@ -1,0 +1,110 @@
+[
+  {
+    "name": "Haunter",
+    "set": "AR",
+    "number": "42",
+    "fullName": "Haunter AR2"
+  },
+  {
+    "name": "Buneary",
+    "set": "DP",
+    "number": "73",
+    "fullName": "Buneary DP"
+  },
+  {
+    "name": "Glaceon",
+    "set": "MD",
+    "number": "20",
+    "fullName": "Glaceon MD2"
+  },
+  {
+    "name": "Shellos East Sea",
+    "set": "MD",
+    "number": "73",
+    "fullName": "Shellos East Sea MD"
+  },
+  {
+    "name": "Vulpix",
+    "set": "MT",
+    "number": "107",
+    "fullName": "Vulpix MT"
+  },
+  {
+    "name": "Charmander",
+    "set": "SW",
+    "number": "82",
+    "fullName": "Charmander SW"
+  },
+  {
+    "name": "Staravia",
+    "set": "SF",
+    "number": "52",
+    "fullName": "Staravia SF"
+  },
+  {
+    "name": "Spinarak",
+    "set": "HS",
+    "number": "83",
+    "fullName": "Spinarak HS"
+  },
+  {
+    "name": "Buizel",
+    "set": "UL",
+    "number": "45",
+    "fullName": "Buizel UL"
+  },
+  {
+    "name": "Eevee",
+    "set": "P3",
+    "number": "13",
+    "fullName": "Eevee P3"
+  },
+  {
+    "name": "Pikachu",
+    "set": "P4",
+    "number": "13",
+    "fullName": "Pikachu P4"
+  },
+  {
+    "name": "Burmy Sandy Cloak",
+    "set": "MD",
+    "number": "54",
+    "fullName": "Burmy Sandy Cloak MD"
+  },
+  {
+    "name": "Ponyta",
+    "set": "SF",
+    "number": "71",
+    "fullName": "Ponyta SF"
+  },
+  {
+    "name": "Snover",
+    "set": "SF",
+    "number": "74",
+    "fullName": "Snover SF"
+  },
+  {
+    "name": "Swablu",
+    "set": "GE",
+    "number": "86",
+    "fullName": "Swablu GE"
+  },
+  {
+    "name": "Sandshrew",
+    "set": "HS",
+    "number": "79",
+    "fullName": "Sandshrew HS"
+  },
+  {
+    "name": "Beldum",
+    "set": "SV",
+    "number": "90",
+    "fullName": "Beldum SV"
+  },
+  {
+    "name": "Poliwag",
+    "set": "UL",
+    "number": "58",
+    "fullName": "Poliwag UL"
+  }
+]

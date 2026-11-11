@@ -1,3 +1,4 @@
+import { Deoxys } from './deoxys';
 import { Card } from '../../game/store/card/card';
 import { GrassEnergy, FireEnergy, WaterEnergy, LightningEnergy, PsychicEnergy, FightingEnergy } from './basic-energies';
 import { Aerodactyl } from './aerodactyl';
@@ -19,6 +20,7 @@ import { Oddish } from './oddish';
 import { Omastar } from './omastar';
 import { Pidgey } from './pidgey';
 import { Pidgeotto } from './pidgeotto';
+import { Pidgeot } from './pidgeot';
 import { Pikachu } from './pikachu';
 import { Raichu } from './raichu';
 import { RareCandy } from './rare-candy';
@@ -47,6 +49,7 @@ export const setEXHolonPhantoms: Card[] = [
   new Omastar(),
   new Pidgey(),
   new Pidgeotto(),
+  new Pidgeot(),
   new Pikachu(),
   new Raichu(),
   new RareCandy(),
@@ -66,4 +69,5 @@ export const setEXHolonPhantoms: Card[] = [
   new LightningEnergy(),
   new PsychicEnergy(),
   new FightingEnergy(),
+  new Deoxys(),
 ];

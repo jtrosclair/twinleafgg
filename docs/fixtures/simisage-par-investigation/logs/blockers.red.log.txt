@@ -1,0 +1,58 @@
+Started
+FFFFF
+
+Failures:
+1) Simisage PAR integration blockers: effective intrinsic Ability presence Galarian Weezing SHF removes the opponent Ability from the intrinsic query
+  Message:
+    Expected true to be false.
+  Stack:
+    Error: Expected true to be false.
+        at <Jasmine>
+        at UserContext.<anonymous> (/private/tmp/prizemap-simisage-par-investigation/ptcg-server/.simisage-test/sets/tests/simisage-par.blockers.red.spec.js:18:86)
+        at <Jasmine>
+
+2) Simisage PAR integration blockers: effective intrinsic Ability presence Iron Thorns ex TWM removes the opponent Ability from the intrinsic query
+  Message:
+    Expected true to be false.
+  Stack:
+    Error: Expected true to be false.
+        at <Jasmine>
+        at UserContext.<anonymous> (/private/tmp/prizemap-simisage-par-investigation/ptcg-server/.simisage-test/sets/tests/simisage-par.blockers.red.spec.js:18:86)
+        at <Jasmine>
+
+3) Simisage PAR integration blockers: effective intrinsic Ability presence actual Ancient Star attack grants its user an intrinsic Ability
+  Message:
+    Expected false to be true.
+  Stack:
+    Error: Expected false to be true.
+        at <Jasmine>
+        at UserContext.<anonymous> (/private/tmp/prizemap-simisage-par-investigation/ptcg-server/.simisage-test/sets/tests/simisage-par.blockers.red.spec.js:27:82)
+        at <Jasmine>
+
+4) Simisage PAR integration blockers: effective intrinsic Ability presence ordinary usable-power UI queries must not pollute the intrinsic printed definition
+  Message:
+    Expected 1 to be 0.
+  Stack:
+    Error: Expected 1 to be 0.
+        at <Jasmine>
+        at UserContext.<anonymous> (/private/tmp/prizemap-simisage-par-investigation/ptcg-server/.simisage-test/sets/tests/simisage-par.blockers.red.spec.js:34:33)
+        at <Jasmine>
+  Message:
+    Expected 1 to be 0.
+  Stack:
+    Error: Expected 1 to be 0.
+        at <Jasmine>
+        at UserContext.<anonymous> (/private/tmp/prizemap-simisage-par-investigation/ptcg-server/.simisage-test/sets/tests/simisage-par.blockers.red.spec.js:37:41)
+        at <Jasmine>
+
+5) Simisage PAR integration blockers: effective intrinsic Ability presence a gained Ability remains removed independent of fan-out order
+  Message:
+    Expected true to be false.
+  Stack:
+    Error: Expected true to be false.
+        at <Jasmine>
+        at UserContext.<anonymous> (/private/tmp/prizemap-simisage-par-investigation/ptcg-server/.simisage-test/sets/tests/simisage-par.blockers.red.spec.js:46:82)
+        at <Jasmine>
+
+5 specs, 5 failures
+Finished in 0.658 seconds

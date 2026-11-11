@@ -1,0 +1,26 @@
+{"scope":"Real four-action diagnostic with untouched printed card stats and ordinary deck draws; no RNG override or source edits.","steps":[{"player":0,"attack":"Arm Thrust Needle","turn":6,"phase":2,"activePlayer":1,"protectedActive":true,"protectedDiscarded":false,"opposingDamage":100},{"player":1,"attack":"Ancient Star","turn":7,"phase":2,"activePlayer":0,"protectedActive":true,"protectedDiscarded":false,"opposingDamage":100},{"player":0,"attack":"Arm Thrust Needle","turn":8,"phase":2,"activePlayer":1,"protectedActive":true,"protectedDiscarded":false,"opposingDamage":200},{"player":1,"attack":"Lost Dive","turn":9,"phase":2,"activePlayer":0,"protectedActive":false,"protectedDiscarded":true,"opposingDamage":200}],"expected":"Ancient Star grants an Ability. Lost Dive must deal no damage to the Simisage protected by the second Arm Thrust Needle.","actual":{"protectedDiscarded":true,"remainingActive":"Mew ex MEW"},"reproducedBlocker":true}
+node:assert:152
+  throw new AssertionError(obj);
+  ^
+
+AssertionError [ERR_ASSERTION]: Protected Simisage must survive an attacker that gained an Ability from Ancient Star
+
+true !== false
+
+    at Object.<anonymous> (/private/tmp/prizemap-simisage-par-investigation/aerodactyl-live-red.cjs:12:145)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14)
+    at Object..js (node:internal/modules/cjs/loader:2060:10)
+    at Module.load (node:internal/modules/cjs/loader:1651:32)
+    at Module._load (node:internal/modules/cjs/loader:1443:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: true,
+  expected: false,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

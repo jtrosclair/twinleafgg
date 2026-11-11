@@ -1,0 +1,91 @@
+{
+  "baseline": "/private/tmp/prizemap-print-baseline",
+  "frozen_candidate_manifest_sha256": "08c11fca24aab7a524f44b0019dafff020e542969759274597bc93cf73a66d77",
+  "files": [
+    {
+      "path": "ptcg-server/src/client/cards.ts",
+      "baseline_sha256": "c724afc6ea4356123e7f513bf7c89731924b124e16af8503217739aec65107a8",
+      "candidate_sha256": "1cadfcf88a7cf30afb2dbe847a25fed8142ca20848af4b7e7a4a1922c5dbeae6",
+      "candidate_matches_manifest": true,
+      "current_matches_candidate": true
+    },
+    {
+      "path": "ptcg-server/src/game/cards/print-compatibility.ts",
+      "baseline_sha256": null,
+      "candidate_sha256": "9d098bac058f1bc0669046f525dcd7152d9b7bccd134d04762f1eaa498b31cd7",
+      "candidate_matches_manifest": true,
+      "current_matches_candidate": true
+    },
+    {
+      "path": "ptcg-server/src/game/serializer/state-serializer.ts",
+      "baseline_sha256": "132e5bb90a120015e124a6f4a0264243a80d660f124a66fc53da87b07870f4f7",
+      "candidate_sha256": "f6aa7e8f174dff0882aa9acc3cfb10b0b58001846a6fa507fb74f16bee3725ab",
+      "candidate_matches_manifest": true,
+      "current_matches_candidate": true
+    },
+    {
+      "path": "simulator-api/deck-import.ts",
+      "baseline_sha256": "34ec1587b694662dd835e5457ae4b36f683d69ebb0f6968ec084100f9fef7dd2",
+      "candidate_sha256": "6b51b7a1a069fa059d43137c415a90cff3b160cbfc32255a2723f0a3120908fa",
+      "candidate_matches_manifest": true,
+      "current_matches_candidate": true
+    },
+    {
+      "path": "ptcg-server/src/sets/index.ts",
+      "baseline_sha256": "7bba007629150a879527c2040eea5c87f5e3be8faa937f84d151c7124d256452",
+      "candidate_sha256": "65bc9b8c469ff157112a89d7c7fdd8297eda6cf8499639a7c2f7018ed1ee694a",
+      "candidate_matches_manifest": true,
+      "current_matches_candidate": true
+    },
+    {
+      "path": "ptcg-server/src/sets/set-upstream-round33/index.ts",
+      "baseline_sha256": null,
+      "candidate_sha256": "a1ee2cb1b776a052aaebc511baea4fc2bf9cc6a7b9598e0f522b2d11b49dede2",
+      "candidate_matches_manifest": true,
+      "current_matches_candidate": true
+    },
+    {
+      "path": "ptcg-server/src/sets/set-scarlet-and-violet-promos/round33-prints.ts",
+      "baseline_sha256": null,
+      "candidate_sha256": "21ddb94641229d32c2393907972d2b25986f1178a3abf65357c48a1f2a1830fe",
+      "candidate_matches_manifest": true,
+      "current_matches_candidate": true
+    },
+    {
+      "path": "ptcg-server/src/sets/tests/generic-print-compatibility.spec.ts",
+      "baseline_sha256": null,
+      "candidate_sha256": "50178a63039228d8f562043994bed6cb28aa896da3c3619c579ab2f12d525b67",
+      "candidate_matches_manifest": true,
+      "current_matches_candidate": true
+    },
+    {
+      "path": "ptcg-server/src/sets/tests/upstream-round33-lookup.spec.ts",
+      "baseline_sha256": null,
+      "candidate_sha256": "0c1b10201f61aecea2291d2d658108ed04380e9bdbf2608adf0917877da7e405",
+      "candidate_matches_manifest": true,
+      "current_matches_candidate": true
+    },
+    {
+      "path": "ptcg-server/src/sets/tests/upstream-round34-research.spec.ts",
+      "baseline_sha256": null,
+      "candidate_sha256": "a38f8fdd0d906c8f3204d6869d0e9d04f7080a57b7070dad184822a4fcfd6624",
+      "candidate_matches_manifest": true,
+      "current_matches_candidate": true
+    },
+    {
+      "path": "simulator-api/tests/round33-svp.test.cjs",
+      "baseline_sha256": null,
+      "candidate_sha256": "c2590f01fd9860e181739e099fc27ff253145320cfafb4ced9f165e128ecefdd",
+      "candidate_matches_manifest": true,
+      "current_matches_candidate": true
+    },
+    {
+      "path": "simulator-api/tests/legacy-alias-regression.test.cjs",
+      "baseline_sha256": null,
+      "candidate_sha256": "ac18ee451966ad824f5f25056918ff9722c4e87ab722ea5bc026dcd5611a4919",
+      "candidate_matches_manifest": null,
+      "current_matches_candidate": true
+    }
+  ],
+  "note": "Shared current hashes were checked after integration and all matched the frozen candidate; baseline_sha256 records the pre-integration preimage."
+}

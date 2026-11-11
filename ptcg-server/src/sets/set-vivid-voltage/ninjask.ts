@@ -51,6 +51,10 @@ export class Ninjask extends PokemonCard {
       SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player, { name: 'Shedinja' }, { min: 0, max: 1, allowCancel: true });
     }
 
+    return Ninjask.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Attack 1: Absorb
     // Ref: set-darkness-ablaze/toxapex.ts (heal all damage = damage = 0 pattern), AGENTS-patterns.md
     if (WAS_ATTACK_USED(effect, 0, this)) {

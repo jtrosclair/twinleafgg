@@ -153,6 +153,11 @@ export class ShiningGenesect extends PokemonCard {
       effect.player.marker.removeMarker(this.ENERGY_RELOAD_MARKER, this);
     }
 
+    return ShiningGenesect.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+
     if (effect instanceof AttackEffect && effect.attack === this.attacks[0]) {
       const player = effect.player;
 

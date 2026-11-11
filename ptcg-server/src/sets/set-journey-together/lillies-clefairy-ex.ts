@@ -67,6 +67,11 @@ export class LilliesClefairyex extends PokemonCard {
       }
     }
 
+    return LilliesClefairyex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  /** Full Moon Rondo belongs to the attack; Fairy Zone belongs to the card. */
+  public reduceCopiedAttackEffect(_store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Full Moon Rondo
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;

@@ -81,14 +81,16 @@ export function initNextTurn(store: StoreLike, state: State): State {
   store.reduceEffect(state, beginTurn);
 
   // Draw card for turn (can be blocked by effects like Luvdisc's Heart Wink)
+  let turnDrawCount = 1;
   try {
     const drawCardForTurn = new DrawCardForTurnEffect(player);
     store.reduceEffect(state, drawCardForTurn);
+    turnDrawCount = drawCardForTurn.drawCount;
   } catch {
     return state;
   }
 
-  player.deck.moveTo(player.hand, 1);
+  player.deck.moveTo(player.hand, turnDrawCount);
 
   // Check the drawn card
   const drawnCard = player.hand.cards[player.hand.cards.length - 1];
@@ -224,10 +226,24 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
     // the affected Pokémon and ends with its owner's turn, not the attacker's.
     effect.player.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => {
       slot.marker.removeMarker(ATTACK_RETREAT_LOCK_UNTIL_TARGET_END_TURN);
+      slot.attackCostIncreaseDuringNextTurn = 0;
     });
 
     player.canEvolve = false;
+    effect.player.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => {
+      if (slot.attackDamageBonusNextTurnPending) {
+        slot.attackDamageBonusNextTurnPending = false;
+      } else {
+        slot.attackDamageBonusNextTurn = 0;
+      }
+      slot.cannotEvolveNextTurn = false;
+      slot.cannotRetreatNextTurn = false;
+      slot.cannotUsePowersNextTurn = false;
+    });
     if (effect.player.coinFlipCancelTrainerPlayTurnsRemaining > 0) effect.player.coinFlipCancelTrainerPlayTurnsRemaining--;
+    effect.player.trainerCardsBlockedNextTurn = false;
+    effect.player.supporterCardsBlockedNextTurn = false;
+    effect.player.energyCardsBlockedNextTurn = false;
 
     player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
       cardList.removeSpecialCondition(SpecialCondition.ABILITY_USED);
@@ -238,6 +254,13 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
     });
 
     state.players.forEach(p => p.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => {
+      if (slot.retaliateOnDamageNextTurnPending) {
+        slot.retaliateOnDamageNextTurn = slot.retaliateOnDamageNextTurnPending;
+        slot.retaliateOnDamageNextTurnPending = null;
+      } else if (slot.retaliateOnDamageNextTurn
+        && slot.retaliateOnDamageNextTurn.attackerPlayerId !== effect.player.id) {
+        slot.retaliateOnDamageNextTurn = null;
+      }
       if (slot.defendingPokemonExtraDamagePending && slot.defendingPokemonExtraDamageAttackerId !== effect.player.id) {
         slot.defendingPokemonExtraDamagePending = false;
       } else if (!slot.defendingPokemonExtraDamagePending && slot.defendingPokemonExtraDamageAttackerId === effect.player.id) {
@@ -251,28 +274,40 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
         slot.weaknessOverrideClearArmed = false;
       } else slot.weaknessOverrideClearArmed = true;
     }));
+    effect.player.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => {
+      slot.pendingEnergyAttachDamageCounters = null;
+    });
     effect.player.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => { slot.attackDamageReductionNextTurn = 0; });
     effect.player.marker.removeMarker(effect.player.DAMAGE_DEALT_MARKER);
     effect.player.marker.removeMarker(MarkerConstants.REVENGE_MARKER);
     if (!effect.player.usedTurnSkip) {
       effect.player.pokemonKnockedOutDuringOpponentsLastTurn = false;
       effect.player.pokemonKnockedOutByAttackDuringOpponentsLastTurn = false;
+      effect.player.marker.removeMarker(MarkerConstants.MEGA_EX_KNOCKED_OUT_DURING_OPPONENTS_LAST_TURN);
     }
 
     // Clear damage reduction effects on opponent's Pokémon when their turn ends
     const opponent = StateUtils.getOpponent(state, player);
+    opponent.forEachPokemon(PlayerType.TOP_PLAYER, slot => { slot.noWeaknessNextTurn = false; });
     opponent.forEachPokemon(PlayerType.TOP_PLAYER, slot => {
       slot.preventDamageNextTurn = false;
       slot.preventEffectsOfAttacksNextTurn = false;
+      slot.surviveOnTenHpNextTurn = null;
     });
     player.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => {
       slot.preventDamageNextTurn = slot.preventDamageNextTurnPending;
       slot.preventDamageNextTurnPending = false;
       slot.preventEffectsOfAttacksNextTurn = slot.preventEffectsOfAttacksNextTurnPending;
       slot.preventEffectsOfAttacksNextTurnPending = false;
+      slot.surviveOnTenHpNextTurn = slot.surviveOnTenHpNextTurnPending;
+      slot.surviveOnTenHpNextTurnPending = null;
+      slot.coinFlipCancelAttackNextTurn = 0;
     });
     opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList) => {
       cardList.damageReductionNextTurn = 0;
+      cardList.damageReductionNextTurnFilter = undefined;
+      cardList.damageReductionBeforeWeaknessNextTurn = 0;
+      cardList.preventDamageUpToNextTurn = 0;
     });
 
     // Handle "cannot attack next turn" restrictions with two-stage cleanup
@@ -305,6 +340,20 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
 
     if (player === undefined) {
       throw new GameError(GameMessage.NOT_YOUR_TURN);
+    }
+
+    effect.player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
+      cardList.getPokemons().forEach(card => { card.retreatCostIncreaseNextTurn = 0; });
+    });
+    for (const owner of state.players) {
+      owner.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
+        const marked = cardList.getPokemons().some(card => {
+          if (card.knockOutAtEndOfTurnPlayerId !== effect.player.id) return false;
+          card.knockOutAtEndOfTurnPlayerId = undefined;
+          return true;
+        });
+        if (marked) cardList.damage = Number.MAX_SAFE_INTEGER;
+      });
     }
 
     state = checkState(store, state, () => {

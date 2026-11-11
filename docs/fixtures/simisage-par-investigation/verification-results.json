@@ -1,0 +1,104 @@
+{
+  "createdAt": "2026-11-10T21:43:32.926683+00:00",
+  "verdict": "INVESTIGATION_ONLY_NOT_READY_FOR_INTEGRATION",
+  "scratch": "/private/tmp/prizemap-simisage-par-investigation",
+  "manifestSha256": "b861cd4074ade63ccdd1bbc775da9159024f695e25005b00fb5db8c2af756939",
+  "compile": {
+    "configuration": "ptcg-server/tsconfig.simisage.json",
+    "strict": true,
+    "exitCode": 0,
+    "log": "compile-final.log"
+  },
+  "focusedTests": {
+    "green": {
+      "passed": 27,
+      "failed": 0,
+      "report": "green-results.json"
+    },
+    "requirementsStillRed": {
+      "passed": 0,
+      "failed": 5,
+      "report": "red-results.json",
+      "notSkippedOrReworded": true
+    }
+  },
+  "recordedPuzzleReplays": {
+    "puzzles": 4,
+    "replays": 8,
+    "failed": 0,
+    "report": "replay-results.json"
+  },
+  "actualAttackCounterexample": {
+    "probe": "aerodactyl-live-red.cjs",
+    "report": "aerodactyl-live-red.json",
+    "expectedAssertionExitCode": 1,
+    "reproduced": true,
+    "actions": [
+      "Simisage: Arm Thrust Needle",
+      "Aerodactyl VSTAR: Ancient Star",
+      "Simisage: Arm Thrust Needle",
+      "Aerodactyl VSTAR: Lost Dive"
+    ],
+    "fixtureControl": "Weakness Guard Energy on Aerodactyl keeps it alive for both legitimate attacks, without editing printed metadata."
+  },
+  "cardContractVerified": [
+    "Monkey Trio requires exactly Simisage, Simisear and Simipour in play on its owner side; removes only Colorless costs and is suppressed independently.",
+    "Copying Arm Thrust Needle does not copy Monkey Trio or grant permission to use it.",
+    "Self-protection belongs to the physical attacking or copied Pok\u00e9mon and does not test its own Ability permission.",
+    "Protection expires at the end of the opponent turn and is removed by switching; copying source removal does not remove the copy user protection.",
+    "Protection survives full StateSerializer roundtrip, including copied checkpoint restoration; reset removes the protection and old copied sessions.",
+    "Only ordinary attack damage is prevented; poison and damage counters remain effective.",
+    "The physical attacking Pok\u00e9mon named Simisage is excepted, regardless of selected/copied attack source.",
+    "Used VSTAR Abilities remain Abilities; Pok\u00e9mon Powers are not Abilities."
+  ],
+  "sharedBlockers": [
+    {
+      "problem": "The current CheckPokemonPowersEffect aliases target.powers; Tool/LV.X/gained-power queries can mutate intrinsic definition data.",
+      "source": "src/game/store/effects/check-effects.ts:39",
+      "evidence": "red-results.json: ordinary usable-power UI query mutation"
+    },
+    {
+      "problem": "The usable-power query adds Tool powers. Official rules distinguish being able to use a Tool Ability from the Pok\u00e9mon having that Ability.",
+      "source": "src/sets/set-silver-tempest/forest-seal-stone.ts:39; src/sets/set-crown-zenith/sky-seal-stone.ts:39",
+      "officialRuling": "https://asia.pokemon-card.com/sg/rules/search/?keyword=Vulpix",
+      "prototypeMitigation": "Explicit includeToolPowers=false mode; insufficient on its own if earlier ordinary query already polluted card.powers."
+    },
+    {
+      "problem": "Galarian Weezing and Iron Thorns implement ability-use rejection but not effective-power removal queries.",
+      "sources": [
+        "src/sets/set-shining-fates/galarian-weezing.ts:61",
+        "src/sets/set-twilight-masquerade/iron-thorns-ex.ts:68"
+      ],
+      "evidence": "red-results.json: two removal requirements fail"
+    },
+    {
+      "problem": "Ancient Star grants an Ability in card text, but does not add it to effective-power query.",
+      "source": "src/sets/set-lost-origin/aerodactyl-vstar.ts:56",
+      "evidence": "aerodactyl-live-red.json and red-results.json"
+    },
+    {
+      "problem": "Single-pass query is traversal-order dependent: a remover can filter powers before Unown appends Star Cipher, leaving a gained Ability present under Garbotoxin.",
+      "sources": [
+        "src/game/store/store.ts:583",
+        "src/sets/set-silver-tempest/unown-vstar.ts:80",
+        "src/sets/set-dragons-exalted/garbodor.ts:53"
+      ],
+      "evidence": "red-results.json: gained Ability remains removed independent of fan-out order"
+    }
+  ],
+  "recommendedIncrementalSequence": [
+    "First isolate queried power arrays from immutable card definitions, with regression tests for ordinary UI and repeated Tool/gained-power queries.",
+    "Define an explicit intrinsic-Ability presence query distinct from activation permission and Tool usability; collect intrinsic printed, inherited and genuinely gained powers before applying removal.",
+    "Audit removal producers one at a time with ownership, Ability Shield/Stadium immunity, suppression, source-zone and exception tests; missing adapters must remain visible failures.",
+    "Once that contract is reliable, revisit this attack-owned Simisage candidate and rerun direct/copy/restore/reset tests plus saved-state/action corpus against the then-current shared tree."
+  ],
+  "limitations": [
+    "No claim that all legacy Ability removers or inherited/gained powers have been exhaustively audited.",
+    "IS_ABILITY_BLOCKED remains appropriate for Monkey Trio permission but is not used as an attacker-has-Ability predicate.",
+    "General stale source/target slot reuse and broader movement lifecycle proposals remain outside this isolated investigation.",
+    "Existing saved-state/action corpus was not rerun because integration is blocked; eight recorded real puzzle wins are compatibility smoke evidence only.",
+    "No app bundle, metadata generator, deployment or shared runtime source was changed."
+  ],
+  "primaryCardText": "https://asia.pokemon-card.com/hk-en/card-search/detail/10682/",
+  "sourceBaselineFilesStillMatchShared": true
+}

@@ -60,4 +60,10 @@ export class Vanilluxe extends PokemonCard {
     
     return state;
   }
+
+  // This card's printed attack has no effect; its handler is Ability-only.
+  public reduceCopiedAttackEffect(_store: StoreLike, state: State, _effect: Effect, _attackIndex: number): State {
+    return state;
+  }
+
 }

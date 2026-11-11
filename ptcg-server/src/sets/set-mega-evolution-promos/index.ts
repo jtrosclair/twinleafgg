@@ -1,3 +1,9 @@
+import { MegaTatsugiriex } from './mega-tatsugiri-ex';
+import { MegaHeatranex } from './mega-heatran-ex';
+import { Lida } from './lida';
+import { Lebanne } from './lebanne';
+import { Grisham } from './grisham';
+import { CelebratoryFanfare } from './celebratory-fanfare';
 import { MeganiumMEP, InteleonMEP, AlakazamMEP, LunatoneMEP, Alakazam2MEP, RioluMEP, MegaLatiasexMEP, MegaLucarioexMEP, MegaVenusaurExMEP, CeruledgeMEP, ZacianMEP, ToxtricityMEP, CharcadetMEP, MegaCharizardXexMEP, OricorioexMEP, MegaKangaskhanexMEP, HaunterMEP, DoubladeMEP, TyrantrumMEP, BarbaracleMEP, SerperiorMEP, TyruntIRMEP } from './other-prints';
 import { Card } from '../../game/store/card/card';
 import { Psyduck } from './psyduck';
@@ -38,4 +44,10 @@ export const setMegaEvolutionPromos: Card[] = [
   new TyrantrumMEP(),
   new DoubladeMEP(),
   new TyruntIRMEP(),
+  new CelebratoryFanfare(),
+  new Grisham(),
+  new Lebanne(),
+  new Lida(),
+  new MegaHeatranex(),
+  new MegaTatsugiriex(),
 ];

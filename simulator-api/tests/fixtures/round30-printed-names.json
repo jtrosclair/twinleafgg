@@ -1,0 +1,68 @@
+[
+  {
+    "name": "Manaphy",
+    "set": "P6",
+    "number": "3",
+    "fullName": "Manaphy P6"
+  },
+  {
+    "name": "Pachirisu",
+    "set": "P6",
+    "number": "4",
+    "fullName": "Pachirisu P6"
+  },
+  {
+    "name": "Riolu",
+    "set": "P6",
+    "number": "8",
+    "fullName": "Riolu P6"
+  },
+  {
+    "name": "Staravia",
+    "set": "P6",
+    "number": "10",
+    "fullName": "Staravia P6"
+  },
+  {
+    "name": "Buneary",
+    "set": "P6",
+    "number": "12",
+    "fullName": "Buneary P6"
+  },
+  {
+    "name": "Piplup",
+    "set": "P6",
+    "number": "15",
+    "fullName": "Piplup P6"
+  },
+  {
+    "name": "Starly",
+    "set": "P6",
+    "number": "16",
+    "fullName": "Starly P6"
+  },
+  {
+    "name": "Turtwig",
+    "set": "P6",
+    "number": "17",
+    "fullName": "Turtwig P6"
+  },
+  {
+    "name": "Delibird",
+    "set": "P7",
+    "number": "6",
+    "fullName": "Delibird P7"
+  },
+  {
+    "name": "Stantler",
+    "set": "P7",
+    "number": "9",
+    "fullName": "Stantler P7"
+  },
+  {
+    "name": "Mareep",
+    "set": "P7",
+    "number": "14",
+    "fullName": "Mareep P7"
+  }
+]

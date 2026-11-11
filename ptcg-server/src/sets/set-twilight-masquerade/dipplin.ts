@@ -39,17 +39,8 @@ export class Dipplin extends PokemonCard {
   public fullName: string = 'Dipplin TWM1';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Handle the Do the Wave attack
+    state = Dipplin.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      const activePokemon = opponent.active.getPokemonCard();
-
-      if (activePokemon) {
-        const playerBenched = player.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
-        effect.damage = playerBenched * 20;
-      }
-
       if (!IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
         // Dynamically set barrage if Festival Grounds is in play
         const stadiumCard = StateUtils.getStadiumCard(state);
@@ -58,6 +49,19 @@ export class Dipplin extends PokemonCard {
         } else {
           this.attacks[0].barrage = false;
         }
+      }
+    }
+    return state;
+  }
+
+  public reduceCopiedAttackEffect(_store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      const player = effect.player;
+      const opponent = StateUtils.getOpponent(state, player);
+      const activePokemon = opponent.active.getPokemonCard();
+      if (activePokemon) {
+        const playerBenched = player.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
+        effect.damage = playerBenched * 20;
       }
     }
     return state;

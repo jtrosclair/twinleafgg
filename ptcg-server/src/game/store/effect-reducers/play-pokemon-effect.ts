@@ -71,6 +71,9 @@ export function playPokemonReducer(store: StoreLike, state: State, effect: Effec
       (isEvolved && Array.isArray(pokemonCard.evolvesFromBase) && pokemonCard.evolvesFromBase.length > 0 && pokemonCard.evolvesFromBase.includes(effect.pokemonCard.evolvesFrom));
 
     if (isValidEvolution) {
+      if (effect.target.cannotEvolveNextTurn) {
+        throw new GameError(GameMessage.POKEMON_CANT_EVOLVE_THIS_TURN);
+      }
       const playedTurnEffect = new CheckPokemonPlayedTurnEffect(effect.player, effect.target, effect.pokemonCard);
       store.reduceEffect(state, playedTurnEffect);
 

@@ -1,0 +1,121 @@
+cards set
+{
+  "ok": true,
+  "name": "Breaking Through the Wall",
+  "sourceUrl": "https://www.prizemap.app/api/puzzles/details/55cbdc21-2520-4eb5-b4c0-e8bb4212c1e8",
+  "snapshotSha256": "e9cbced8fd573a9df69bc8edbc5af21f9847e028ae0205524193b60bb952234e",
+  "replays": 2,
+  "orderedSteps": 29,
+  "terminal": {
+    "title": "Breaking Through the Wall",
+    "turn": 5,
+    "phase": 7,
+    "winner": 0,
+    "complete": true,
+    "players": [
+      {
+        "id": 2,
+        "active": "Mega Starmie ex M3",
+        "hand": [
+          [
+            5,
+            "Dusclops PRE"
+          ],
+          [
+            50,
+            "Dusknoir PRE"
+          ],
+          [
+            51,
+            "Legacy Energy TWM"
+          ],
+          [
+            52,
+            "Mega Starmie ex M3"
+          ]
+        ],
+        "deck": 4,
+        "prizes": 0,
+        "bench": [
+          {
+            "index": 0,
+            "name": "Fezandipiti ex ASC",
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 1,
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 2,
+            "name": "Mega Greninja ex M4",
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 3,
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 4,
+            "energy": [],
+            "damage": 0
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "hand": [
+          [
+            98,
+            "Philippe M4"
+          ]
+        ],
+        "deck": 15,
+        "prizes": 1,
+        "bench": [
+          {
+            "index": 0,
+            "name": "Mega Excadrill ex M5",
+            "energy": [
+              "Metal Energy SVE",
+              "Metal Energy SVE",
+              "Metal Energy SVE",
+              "Metal Energy SVE"
+            ],
+            "damage": 0
+          },
+          {
+            "index": 1,
+            "name": "Drilbur M5",
+            "energy": [
+              "Metal Energy SVE"
+            ],
+            "damage": 0
+          },
+          {
+            "index": 2,
+            "name": "Metang TEF",
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 3,
+            "name": "Metang TEF",
+            "energy": [],
+            "damage": 0
+          },
+          {
+            "index": 4,
+            "energy": [],
+            "damage": 0
+          }
+        ]
+      }
+    ],
+    "pending": []
+  }
+}

@@ -1,7 +1,7 @@
 import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, PlayerType, StateUtils } from '../../game';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 
 export class Bouffalant extends PokemonCard {
@@ -55,6 +55,13 @@ export class Bouffalant extends PokemonCard {
       if (targetPokemon && targetPokemon.cardType === CardType.COLORLESS && targetPokemon.stage === Stage.BASIC && StateUtils.findOwner(state, effect.target) === player) {
         effect.reduceDamage(60, this.powers[0].name);
       }
+    }
+    return Bouffalant.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(_store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      effect.source.cannotAttackNextTurnPending = true;
     }
     return state;
   }

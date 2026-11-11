@@ -1,3 +1,15 @@
+import { Drilbur } from './drilbur';
+import { Whirlipede } from './whirlipede';
+import { Venipede } from './venipede';
+import { Unfezant } from './unfezant';
+import { Tranquill } from './tranquill';
+import { Stoutland } from './stoutland';
+import { Pidove } from './pidove';
+import { Lillipup } from './lillipup';
+import { Herdier } from './herdier';
+import { Golurk } from './golurk';
+import { Golett } from './golett';
+import { Cubchoo } from './cubchoo';
 import { Card } from '../../game/store/card/card';
 import { Alomomola } from './alomomola';
 import { Heatmor } from './heatmor';
@@ -12,7 +24,6 @@ import { Carracosta } from './carracosta';
 import { Cobalion } from './cobalion';
 import { Cottonee } from './cottonee';
 import { Dewott } from './dewott';
-import { Drillbur } from './drillbur';
 import { Ducklett } from './ducklett';
 import { Duosion } from './duosion';
 import { Durant } from './durant';
@@ -42,7 +53,7 @@ import { Larvesta } from './larvesta';
 import { Meloettaex } from './meloetta-ex';
 import { NsPlan } from './ns-plan';
 import { Oshawott } from './oshawott';
-import { AirBalloonSV11, CarracostaAR, AlomomolaAR, CherenSV11, EnergyRetrievalSV11, LarvestaAR, PrismEnergySV11, ProfessorsResearchSV11, SeismitoadAR, TirtougaAR, ServineAR, SnivyAR, TympoleAR, VictiniAR, VolcaronaAR, HaxorusAR, FraxureAR, AxewAR, CobalionAR, DrillburAR, EelektrikAR, ElgyemAR, CottoneeAR, EmolgaAR, PalpitoadAR, TynamoAR, ExcadrillexFA, FennelFA, GenesectexFA, KyuremexFA, MeloettaexFA, SerperiorexFA, ZekromexFA, ExcadrillexSIR, GenesectexSIR, KyuremexSIR, MeloettaexSIR, SerperiorexSIR, ZekromexSIR, ZekromexBR, JoltikAR, GalvantulaAR, DewottAR, EmboarAR, FrillishAR, OshawottAR, PigniteAR, SamurottAR, TepigAR, VirizionAR, ArchenAR, ArcheopsAR, DeinoAR, TerrakionAR, ZoroarkAR, ZoruaAR, ZweilousAR, ReshiramexFA, KeldeoexFA, WhimsicottexFA, HydreigonexFA, JellicentexFA, BouffalantexFA, HildaFA, HildaSIR, BouffalantexSIR, HydreigonexSIR, JellicentexSIR, KeldeoexSIR, ReshiramexSIR, WhimsicottexSIR, ReshiramexWR, ToolScrapperSV11, NsPlanFA, NsPlanSIR, VictiniRRB, VictiniRRW, Pokegear30SV11 } from './other-prints';
+import { AirBalloonSV11, CarracostaAR, AlomomolaAR, CherenSV11, EnergyRetrievalSV11, LarvestaAR, PrismEnergySV11, ProfessorsResearchSV11, SeismitoadAR, TirtougaAR, ServineAR, SnivyAR, TympoleAR, VictiniAR, VolcaronaAR, HaxorusAR, FraxureAR, AxewAR, CobalionAR, DrillburAR, EelektrikAR, ElgyemAR, CottoneeAR, EmolgaAR, PalpitoadAR, TynamoAR, ExcadrillexFA, FennelFA, GenesectexFA, KyuremexFA, MeloettaexFA, SerperiorexFA, ZekromexFA, ExcadrillexSIR, GenesectexSIR, KyuremexSIR, MeloettaexSIR, SerperiorexSIR, ZekromexSIR, ZekromexBR, JoltikAR, GalvantulaAR, DewottAR, EmboarAR, FrillishAR, OshawottAR, PigniteAR, SamurottAR, TepigAR, VirizionAR, ArchenAR, ArcheopsAR, DeinoAR, TerrakionAR, ZoroarkAR, ZoruaAR, ZweilousAR, ReshiramexFA, KeldeoexFA, WhimsicottexFA, HydreigonexFA, JellicentexFA, BouffalantexFA, HildaFA, HildaSIR, BouffalantexSIR, HydreigonexSIR, JellicentexSIR, KeldeoexSIR, ReshiramexSIR, WhimsicottexSIR, ReshiramexWR, ToolScrapperSV11, NsPlanFA, NsPlanSIR, VictiniRRB, VictiniRRW, Pokegear30SV11, VictiniARBatch112, GolettAR, GolurkAR, LillipupAR, HerdierAR, StoutlandAR, VenipedeIR, WhirlipedeIR } from './other-prints';
 import { Palpitoad } from './palpitoad';
 import { Pignite } from './pignite';
 import { Purrloin } from './purrloin';
@@ -118,7 +129,6 @@ export const setSV11: Card[] = [
   new Virizion(),
   new Alomomola(),
   new Heatmor(),
-  new Drillbur(),
   new Emolga(),
   new EnergyCoin(),
   new Excadrillex(),
@@ -242,4 +252,24 @@ export const setSV11: Card[] = [
 
   //SV11W WR
   new ReshiramexWR(),
+  new Cubchoo(),
+  new Golett(),
+  new Golurk(),
+  new Herdier(),
+  new Lillipup(),
+  new Pidove(),
+  new Stoutland(),
+  new Tranquill(),
+  new Unfezant(),
+  new Venipede(),
+  new Whirlipede(),
+  new VictiniARBatch112(),
+  new GolettAR(),
+  new GolurkAR(),
+  new LillipupAR(),
+  new HerdierAR(),
+  new StoutlandAR(),
+  new VenipedeIR(),
+  new WhirlipedeIR(),
+  new Drilbur(),
 ];

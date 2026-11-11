@@ -80,6 +80,10 @@ export class CobalionGX extends PokemonCard {
       });
     }
 
+    return CobalionGX.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       if (StateUtils.getStadiumCard(state) !== undefined) {
         THIS_ATTACK_DOES_X_MORE_DAMAGE(effect, store, state, 60);
@@ -97,15 +101,25 @@ export class CobalionGX extends PokemonCard {
       ADD_MARKER(this.IRON_RULE_MARKER, opponent, this);
     }
 
-    if (effect instanceof AttackEffect && HAS_MARKER(this.IRON_RULE_MARKER, effect.player, this)) {
-      throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
-    }
+    state = CobalionGX.prototype.reduceCopiedOpponentAttackEffect.call(this, store, state, effect, 0);
 
     if (effect instanceof EndTurnEffect && HAS_MARKER(this.IRON_RULE_MARKER, effect.player, this)) {
       REMOVE_MARKER(this.IRON_RULE_MARKER, effect.player, this);
     }
 
     return state;
+  }
+
+
+  public reduceCopiedOpponentAttackEffect(_store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    if (effect instanceof AttackEffect && HAS_MARKER(this.IRON_RULE_MARKER, effect.player, this)) {
+      throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+    }
+    return state;
+  }
+
+  public hasCopiedOpponentAttackEffect(state: State, copycat: PokemonCard, playerId: number, _attackIndex: number): boolean {
+    return state.players.some(player => player.id !== playerId && player.marker.hasMarker(this.IRON_RULE_MARKER, copycat));
   }
 
 }

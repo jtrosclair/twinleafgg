@@ -1,3 +1,4 @@
+import { Effect } from '../../game/store/effects/effect';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, GameError, GameMessage, PlayerType, PowerType, StateUtils } from '../../game';
@@ -161,4 +162,10 @@ export class Genesect extends PokemonCard {
     }
     return state;
   }
+
+  /** Its printed attack has no additional effects; its Ability is not copied. */
+  public reduceCopiedAttackEffect(_store: StoreLike, state: State, _effect: Effect, _attackIndex: number): State {
+    return state;
+  }
+
 }

@@ -326,3 +326,142 @@ test('round-26 padded and unpadded missing prints never fall back to older cards
     }
   } finally { manager.getAllCards = original; }
 });
+
+test('round-27 numbered Arceus imports resolve exact prints and preserve old fallbacks', async () => {
+  const engine = await mod; engine.ensureClientCards();
+  const expected = [['Electrike','62','Electrike AR 62'], ['Electrike','63','Electrike AR2'],
+    ['Tangela','76','Tangela AR 76'], ['Tangela','77','Tangela AR2'],
+    ['Treecko','78','Treecko AR 78'], ['Treecko','79','Treecko AR2'],
+    ['Manectric','44','Manectric AR2'], ['Ponyta','72','Ponyta AR2']];
+  const inputs = expected.flatMap(([name, number]) => [`${name} AR ${number}`, `${name} AR 0${number}`]);
+  const names = expected.flatMap(([, , fullName]) => [fullName, fullName]);
+  const parsed = await (await engine.handle(post('/v1/deck-import/parse', { deckList: inputs.map(x => `1 ${x}`).join('\n') }))).json();
+  assert.deepEqual(parsed.unknownCards, []); assert.deepEqual(parsed.knownCards.map(x => x.fullName), names);
+  const looked = await (await engine.handle(post('/v1/deck-import/get-cards', { cards: inputs }))).json();
+  assert.deepEqual(looked.cards.map(x => x.fullName), names);
+  const old = await (await engine.handle(post('/v1/deck-import/parse', { deckList:
+    '1 Electrike AR 999\n1 Tangela AR 999\n1 Treecko AR 999\n1 Manectric AR 999\n1 Ponyta AR 999' }))).json();
+  assert.deepEqual(old.knownCards.map(x => x.fullName), ['Electrike AR2', 'Tangela AR2', 'Treecko AR2']);
+  assert.deepEqual(old.unknownCards.map(x => x.name), ['Manectric', 'Ponyta']);
+});
+
+test('round-27 unavailable numbered prints are never replaced by a same-name card', async () => {
+  const engine = await mod; engine.ensureClientCards(); const manager = engine.CardManager.getInstance(), original = manager.getAllCards;
+  try {
+    const all = original.call(manager);
+    for (const [name, number] of [['Electrike','62'], ['Electrike','63'], ['Tangela','76'], ['Tangela','77'],
+      ['Treecko','78'], ['Treecko','79'], ['Manectric','44'], ['Ponyta','72']]) {
+      manager.getAllCards = () => all.filter(c => !(c.name === name && c.set === 'AR' && c.setNumber === number));
+      const parser = new engine.DeckImportParser();
+      for (const prefix of ['', '0']) {
+        const input = `${name} AR ${prefix}${number}`;
+        assert.equal(parser.parseDeckList(`1 ${input}`).unknownCards.length, 1, input);
+        assert.equal(parser.getCards([input]).cards.length, 0, input);
+      }
+      manager.getAllCards = original;
+    }
+  } finally { manager.getAllCards = original; }
+});
+
+test('round-27 printed names and artwork resolve through PrizeMap endpoints', async () => {
+  const engine = await mod, fixtures = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/round27-printed-names.json')));
+  const imageMap = JSON.parse(fs.readFileSync(path.join(root, 'simulator-api/large-card-images.json')));
+  const parsed = await (await engine.handle(post('/v1/deck-import/parse', { deckList:
+    fixtures.map(c => `1 ${c.name} ${c.set} ${c.number}`).join('\n') }))).json();
+  assert.deepEqual(parsed.unknownCards, []);
+  assert.deepEqual(parsed.knownCards.map(c => c.fullName), fixtures.map(c => c.fullName));
+  const looked = await (await engine.handle(post('/v1/deck-import/get-cards', { cards: fixtures.map(c => c.fullName) }))).json();
+  assert.deepEqual(looked.cards.map(c => c.fullName), fixtures.map(c => c.fullName));
+  for (const [index, fixture] of fixtures.entries()) {
+    const expected = imageMap[`${fixture.set} ${fixture.number}`];
+    assert.match(expected, /^https:\/\//, fixture.fullName);
+    assert.equal(parsed.knownCards[index].cardImage, expected, fixture.fullName + ' parse art');
+    assert.equal(looked.cards[index].cardImage, expected, fixture.fullName + ' lookup art');
+  }
+});
+
+test('delta species printed and serialized names both resolve to their exact print', async () => {
+  const engine = await mod;
+  const cases = [['Treecko','P4','15'],['Charmander','P5','10'],['Charmeleon','P5','5']];
+  const lines = cases.flatMap(([name,set,number]) => [`1 ${name} ${set} ${number}`, `1 ${name} δ ${set} ${number}`]);
+  const expected = cases.flatMap(([name,set]) => [`${name} δ ${set}`, `${name} δ ${set}`]);
+  const parsed = await (await engine.handle(post('/v1/deck-import/parse', {deckList:lines.join('\n')}))).json();
+  assert.deepEqual(parsed.unknownCards, []);
+  assert.deepEqual(parsed.knownCards.map(c=>c.fullName), expected);
+  const inputs = cases.flatMap(([name,set,number]) => [`${name} ${set} ${number}`,`${name} δ ${set}`]);
+  const looked = await (await engine.handle(post('/v1/deck-import/get-cards', {cards:inputs}))).json();
+  assert.deepEqual(looked.cards.map(c=>c.fullName), expected);
+});
+
+test('round-28 printed names resolve to exact print and artwork through PrizeMap endpoints', async () => {
+  const engine=await mod, fixtures=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures/round28-printed-names.json')));
+  const imageMap=JSON.parse(fs.readFileSync(path.join(root,'simulator-api/large-card-images.json')));
+  const parsed=await(await engine.handle(post('/v1/deck-import/parse',{deckList:fixtures.map(c=>`1 ${c.name} ${c.set} ${c.number}`).join('\n')}))).json();
+  assert.deepEqual(parsed.unknownCards,[]);assert.deepEqual(parsed.knownCards.map(c=>c.fullName),fixtures.map(c=>c.fullName));
+  const looked=await(await engine.handle(post('/v1/deck-import/get-cards',{cards:fixtures.map(c=>c.fullName)}))).json();
+  assert.deepEqual(looked.cards.map(c=>c.fullName),fixtures.map(c=>c.fullName));
+  for(const [i,c] of fixtures.entries()){const image=imageMap[`${c.set} ${c.number}`];assert.match(image,/^https:\/\//,c.fullName);assert.equal(parsed.knownCards[i].cardImage,image);assert.equal(looked.cards[i].cardImage,image)}
+});
+
+test('round29 DPP prints accept numeric, padded and DP-prefixed collector numbers',async()=>{
+ const engine=await mod, fixtures=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures/round29-dpp-printed-names.json'))),images=JSON.parse(fs.readFileSync(path.join(root,'simulator-api/large-card-images.json')));
+ const inputs=fixtures.flatMap(c=>[c.number,'0'+c.number,'DP'+c.number,'DP0'+c.number].map(n=>`${c.name} DPP ${n}`)),expected=fixtures.flatMap(c=>Array(4).fill(c.fullName));
+ const parsed=await(await engine.handle(post('/v1/deck-import/parse',{deckList:inputs.map(x=>`1 ${x}`).join('\n')}))).json();assert.deepEqual(parsed.unknownCards,[]);assert.deepEqual(parsed.knownCards.map(x=>x.fullName),expected);
+ const looked=await(await engine.handle(post('/v1/deck-import/get-cards',{cards:inputs}))).json();assert.deepEqual(looked.cards.map(x=>x.fullName),expected);
+ for(const [i,c] of fixtures.entries()){const url=images[`DPP ${c.number}`];assert.match(url,/^https:\/\//);assert.equal(parsed.knownCards[i*4].cardImage,url);assert.equal(looked.cards[i*4].cardImage,url)}
+ const old=await(await engine.handle(post('/v1/deck-import/parse',{deckList:'1 Chimchar DPP 2\n1 Chimchar DPP DP02\n1 Toxicroak G DPP DP41\n1 Dialga DPP 17\n1 Dialga DPP 37\n1 Dialga DPP DP17\n1 Dialga DPP DP37\n1 Chimchar DPP 999'}))).json();
+ assert.deepEqual(old.knownCards.map(x=>x.fullName),['Chimchar DPP','Chimchar DPP','Toxicroak G DPP','Dialga LV.X DPP 17','Dialga LV.X DPP 37','Dialga LV.X DPP 37','Dialga LV.X DPP 37','Chimchar DPP']);
+});
+
+test('round29 DPP missing and mismatched numbers never substitute another print',async()=>{
+ const engine=await mod;engine.ensureClientCards();const manager=engine.CardManager.getInstance(),original=manager.getAllCards,rows=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures/round29-dpp-printed-names.json')));
+ try{const all=original.call(manager);for(const c of rows){const parser=new engine.DeckImportParser();assert.equal(parser.parseDeckList(`1 ${c.name} DPP DP999`).unknownCards.length,1);assert.equal(parser.getCards([`${c.name} DPP DP999`]).cards.length,0);manager.getAllCards=()=>all.filter(x=>x.fullName!==c.fullName);const absent=new engine.DeckImportParser();for(const number of [c.number,`0${c.number}`,`DP${c.number}`,`DP0${c.number}`]){const line=`${c.name} DPP ${number}`;assert.equal(absent.parseDeckList(`1 ${line}`).unknownCards.length,1,line);assert.equal(absent.getCards([line]).cards.length,0,line)}manager.getAllCards=original}}finally{manager.getAllCards=original}
+});
+
+test('round29 extra prints resolve printed names and artwork',async()=>{
+ const engine=await mod,fixtures=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures/round29-extra-printed-names.json'))),images=JSON.parse(fs.readFileSync(path.join(root,'simulator-api/large-card-images.json')));
+ const parsed=await(await engine.handle(post('/v1/deck-import/parse',{deckList:fixtures.map(c=>`1 ${c.name} ${c.set} ${c.number}`).join('\n')}))).json();assert.deepEqual(parsed.unknownCards,[]);assert.deepEqual(parsed.knownCards.map(c=>c.fullName),fixtures.map(c=>c.fullName));
+ const looked=await(await engine.handle(post('/v1/deck-import/get-cards',{cards:fixtures.map(c=>c.fullName)}))).json();assert.deepEqual(looked.cards.map(c=>c.fullName),fixtures.map(c=>c.fullName));
+ for(const [i,c] of fixtures.entries()){const url=images[`${c.set} ${c.number}`];assert.match(url,/^https:\/\//,c.fullName);assert.equal(parsed.knownCards[i].cardImage,url);assert.equal(looked.cards[i].cardImage,url)}
+});
+
+test('round30 POP printed names resolve exact cards and art',async()=>{
+ const engine=await mod,fixtures=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures/round30-printed-names.json'))),images=JSON.parse(fs.readFileSync(path.join(root,'simulator-api/large-card-images.json')));
+ const lines=fixtures.map(c=>`1 ${c.name} ${c.set} ${c.number}`),parsed=await(await engine.handle(post('/v1/deck-import/parse',{deckList:lines.join('\n')}))).json();assert.deepEqual(parsed.unknownCards,[]);assert.deepEqual(parsed.knownCards.map(c=>c.fullName),fixtures.map(c=>c.fullName));
+ const looked=await(await engine.handle(post('/v1/deck-import/get-cards',{cards:fixtures.map(c=>c.fullName)}))).json();assert.deepEqual(looked.cards.map(c=>c.fullName),fixtures.map(c=>c.fullName));
+ for(const [i,c] of fixtures.entries()){const url=images[`${c.set} ${c.number}`];assert.match(url,/^https:\/\//,c.fullName);assert.equal(parsed.knownCards[i].cardImage,url);assert.equal(looked.cards[i].cardImage,url)}
+});
+
+test('round31 printed names resolve exact cards and artwork',async()=>{
+ const engine=await mod,fixtures=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures/round31-printed-names.json'))),images=JSON.parse(fs.readFileSync(path.join(root,'simulator-api/large-card-images.json')));
+ const parsed=await(await engine.handle(post('/v1/deck-import/parse',{deckList:fixtures.map(c=>`1 ${c.name} ${c.set} ${c.number}`).join('\n')}))).json();assert.deepEqual(parsed.unknownCards,[]);assert.deepEqual(parsed.knownCards.map(c=>c.fullName),fixtures.map(c=>c.fullName));
+ const looked=await(await engine.handle(post('/v1/deck-import/get-cards',{cards:fixtures.map(c=>c.fullName)}))).json();assert.deepEqual(looked.cards.map(c=>c.fullName),fixtures.map(c=>c.fullName));
+ for(const [i,c] of fixtures.entries()){const url=images[`${c.set} ${c.number}`];assert.match(url,/^https:\/\//,c.fullName);assert.equal(parsed.knownCards[i].cardImage,url);assert.equal(looked.cards[i].cardImage,url)}
+});
+
+test('round32 printed names resolve exact cards and artwork',async()=>{
+ const engine=await mod,fixtures=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures/round32-printed-names.json'))),images=JSON.parse(fs.readFileSync(path.join(root,'simulator-api/large-card-images.json')));
+ const parsed=await(await engine.handle(post('/v1/deck-import/parse',{deckList:fixtures.map(c=>`1 ${c.name} ${c.set} ${c.number}`).join('\n')}))).json();assert.deepEqual(parsed.unknownCards,[]);assert.deepEqual(parsed.knownCards.map(c=>c.fullName),fixtures.map(c=>c.fullName));
+ const looked=await(await engine.handle(post('/v1/deck-import/get-cards',{cards:fixtures.map(c=>c.fullName)}))).json();assert.deepEqual(looked.cards.map(c=>c.fullName),fixtures.map(c=>c.fullName));
+ for(const [i,c] of fixtures.entries()){const url=images[`${c.set} ${c.number}`];assert.match(url,/^https:\/\//,c.fullName);assert.equal(parsed.knownCards[i].cardImage,url);assert.equal(looked.cards[i].cardImage,url)}
+});
+
+test('PBL full-art Items resolve numbered names to exact print artwork',async()=>{
+ const engine=await mod,rows=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures/pbl-items-printed-names.json'))),images=JSON.parse(fs.readFileSync(path.join(root,'simulator-api/large-card-images.json')));
+ const lines=rows.flatMap(c=>[`${c.name} ${c.set} ${c.number}`,`${c.name} ${c.set} 0${c.number}`,`${c.fullName} ${c.number}`]),expected=rows.flatMap(c=>Array(3).fill(c.fullName)),parsed=await(await engine.handle(post('/v1/deck-import/parse',{deckList:lines.map(line=>`1 ${line}`).join('\n')}))).json();
+ assert.deepEqual(parsed.unknownCards,[]);assert.deepEqual(parsed.knownCards.map(c=>c.fullName),expected);
+ const lookup=await(await engine.handle(post('/v1/deck-import/get-cards',{cards:lines}))).json();assert.deepEqual(lookup.cards.map(c=>c.fullName),expected);
+ for(const [i,row] of rows.entries())for(let j=0;j<3;j++){assert.equal(parsed.knownCards[i*3+j].cardImage,images[`${row.set} ${row.number}`]);assert.equal(lookup.cards[i*3+j].cardImage,images[`${row.set} ${row.number}`])}
+});
+
+test('PBL full-art wrong and unnumbered inputs retain preexisting fallback in either catalogue order',async()=>{
+ const engine=await mod;engine.ensureClientCards();const manager=engine.CardManager.getInstance(),original=manager.getAllCards,all=original.call(manager),names=['Crushing Hammer FA PBL','Energy Switch FA PBL'];
+ const ids=['Crushing Hammer','Energy Switch'].flatMap(name=>['PBL','PBL 0','PBL 1','PBL 104','PBL 106','PBL 108','PBL 999','FA PBL 0','FA PBL 1','FA PBL 104','FA PBL 106','FA PBL 108','FA PBL 999'].map(suffix=>`${name} ${suffix}`));ids.push('Crushing Hammer PBL 107','Energy Switch PBL 105');
+ try{for(const reverse of [false,true]){const ordered=reverse?all.slice().reverse():all;manager.getAllCards=()=>ordered.filter(c=>!names.includes(c.fullName));const legacy=new engine.DeckImportParser(),old=legacy.parseDeckList(ids.map(line=>`1 ${line}`).join('\n')),oldGet=legacy.getCards(ids);manager.getAllCards=()=>ordered;const current=new engine.DeckImportParser(),next=current.parseDeckList(ids.map(line=>`1 ${line}`).join('\n')),nextGet=current.getCards(ids);assert.deepEqual(next.knownCards.map(c=>c.fullName),old.knownCards.map(c=>c.fullName));assert.deepEqual(next.unknownCards.map(c=>[c.name,c.setCode,c.setNumber]),old.unknownCards.map(c=>[c.name,c.setCode,c.setNumber]));assert.deepEqual(next.parseErrors,old.parseErrors);assert.deepEqual(nextGet.cards.map(c=>c.fullName),oldGet.cards.map(c=>c.fullName));}}
+ finally{manager.getAllCards=original}
+});
+
+test('PBL exact numbered inputs never substitute an unavailable print',async()=>{
+ const engine=await mod;engine.ensureClientCards();const manager=engine.CardManager.getInstance(),original=manager.getAllCards,all=original.call(manager),rows=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures/pbl-items-printed-names.json')));
+ try{for(const row of rows){manager.getAllCards=()=>all.filter(c=>c.fullName!==row.fullName);const parser=new engine.DeckImportParser();for(const input of [`${row.name} PBL ${row.number}`,`${row.name} PBL 0${row.number}`,`${row.fullName} ${row.number}`]){const parsed=parser.parseDeckList(`1 ${input}`);assert.equal(parsed.knownCards.length,0,input);assert.equal(parsed.unknownCards.length,1,input);assert.equal(parser.getCards([input]).cards.length,0,input)}}}finally{manager.getAllCards=original}
+});

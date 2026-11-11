@@ -1,0 +1,396 @@
+{
+  "checkedAt": "2026-11-10T19:23:10.168Z",
+  "scope": "Restoration-only patch. Final candidate reviewed and subsequently integrated by owning agent; no gameplay movement handlers or payload schema changed.",
+  "manifest": [
+    {
+      "path": "ptcg-server/src/game/serializer/state-serializer.ts",
+      "baselineSha256": "51f02059d9f13a655c648fb8536a65315b2ff65603d58ce1f98445b8811d9801",
+      "candidateSha256": "12bd5cf22f564439f1f6b187076c6e12b68599a75891eb1d41200e536db91196"
+    },
+    {
+      "path": "ptcg-server/src/game/store/card/pokemon-energy-role.ts",
+      "baselineSha256": null,
+      "candidateSha256": "e25ea3f9c26b3f8545e726839517052625b03040a4d61992fa90fe93ecaab1bd"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-ex-delta-species/holons-magnemite.ts",
+      "baselineSha256": "54ea8ca0a5529313deb9e23cdd5d55df934685b5df669bab85ce05dfefac09ce",
+      "candidateSha256": "0a17c2dd7df52c8371ee6f5db34ec2ed532ca0c4a4fddd9cb1b63f28ab6e53ec"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-ex-delta-species/holons-voltorb.ts",
+      "baselineSha256": "e512cd0c96040fd727cc14c0aa706d1f4f036621e1446d3d44abd120047a9c0a",
+      "candidateSha256": "866dbb92c0aeec5e9d08bd1a07c88a34caf08321fa5a2ef9f9551074d1c2e7f0"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-ex-delta-species/holons-magneton.ts",
+      "baselineSha256": "a77fb5da4bc9440f3bf28c57869e76cd6643c19177fc2bd9e465770fc023a321",
+      "candidateSha256": "3a88fbbba3c7cb0ef1f916219da9b7936fce38504815a45df8abf50b3ddbafa9"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-ex-delta-species/holons-electrode.ts",
+      "baselineSha256": "fc3ee1a172cde452d250b3f95b8eb93c6b26ae2758614a7a6d26184591edcd73",
+      "candidateSha256": "a824790f05eff534a75ebb97f66042712e54272a0d59c423fc3f2e5dd48e53a8"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-ex-holon-phantoms/holons-castform.ts",
+      "baselineSha256": "b7e52ddb77c17e65165a77cfd39329817a992486ad1135df37cc09560e05d0f9",
+      "candidateSha256": "90ee06d4e719568ccccbb4f95301b7baa6c8eaf972deeba61f8fb076e6d6ecfb"
+    },
+    {
+      "path": "ptcg-server/src/sets/set-unbroken-bonds/charjabug.ts",
+      "baselineSha256": "d87d5654596d5885c4cbf0134db9fc83f52fd43033b2e6a32465d1c0a4f53dd1",
+      "candidateSha256": "db6268ce0ff08020e8ef4b052ec3c437224367cef12298f40e522d02787eecc9"
+    },
+    {
+      "path": "ptcg-server/src/sets/tests/pokemon-energy-restore.spec.ts",
+      "baselineSha256": null,
+      "candidateSha256": "b89fa698dc462ede9d372a7fb7af87680079cec3314ed903ec775d4a483d1c1d"
+    },
+    {
+      "path": "ptcg-server/src/sets/tests/upstream-round29-restored-energy.spec.ts",
+      "baselineSha256": "44734f65a4c83bbc60ed9f6f224410ee8190cea35560571de793ea1f0d6c5f4f",
+      "candidateSha256": "a23ff543c3221f7e5f93067f366b2f10ecb00c57e49a1e80bde4327e5e73f419"
+    },
+    {
+      "path": "ptcg-server/src/client/simulator.spec.ts",
+      "baselineSha256": "0b19c99e47b71c275187ff7344c3b58f4a40f6f0ec76b07361e2408b98a22da8",
+      "candidateSha256": "31b710748d3a1bdb72fd8a09bd01b6ef36d72b90c5a08a6278a5a6122b984021"
+    }
+  ],
+  "frozenChecks": {
+    "manifestFiles": 11,
+    "runtimeFiles": 8,
+    "testFiles": 3,
+    "sourceInputDiff": {
+      "missing": [],
+      "added": [
+        "ptcg-server/src/game/store/card/pokemon-energy-role.ts"
+      ],
+      "changed": [
+        {
+          "path": "ptcg-server/src/game/serializer/state-serializer.ts",
+          "baseline": "51f02059d9f13a655c648fb8536a65315b2ff65603d58ce1f98445b8811d9801",
+          "candidate": "12bd5cf22f564439f1f6b187076c6e12b68599a75891eb1d41200e536db91196"
+        },
+        {
+          "path": "ptcg-server/src/sets/set-ex-holon-phantoms/holons-castform.ts",
+          "baseline": "b7e52ddb77c17e65165a77cfd39329817a992486ad1135df37cc09560e05d0f9",
+          "candidate": "90ee06d4e719568ccccbb4f95301b7baa6c8eaf972deeba61f8fb076e6d6ecfb"
+        },
+        {
+          "path": "ptcg-server/src/sets/set-ex-delta-species/holons-electrode.ts",
+          "baseline": "fc3ee1a172cde452d250b3f95b8eb93c6b26ae2758614a7a6d26184591edcd73",
+          "candidate": "a824790f05eff534a75ebb97f66042712e54272a0d59c423fc3f2e5dd48e53a8"
+        },
+        {
+          "path": "ptcg-server/src/sets/set-ex-delta-species/holons-magnemite.ts",
+          "baseline": "54ea8ca0a5529313deb9e23cdd5d55df934685b5df669bab85ce05dfefac09ce",
+          "candidate": "0a17c2dd7df52c8371ee6f5db34ec2ed532ca0c4a4fddd9cb1b63f28ab6e53ec"
+        },
+        {
+          "path": "ptcg-server/src/sets/set-ex-delta-species/holons-magneton.ts",
+          "baseline": "a77fb5da4bc9440f3bf28c57869e76cd6643c19177fc2bd9e465770fc023a321",
+          "candidate": "3a88fbbba3c7cb0ef1f916219da9b7936fce38504815a45df8abf50b3ddbafa9"
+        },
+        {
+          "path": "ptcg-server/src/sets/set-ex-delta-species/holons-voltorb.ts",
+          "baseline": "e512cd0c96040fd727cc14c0aa706d1f4f036621e1446d3d44abd120047a9c0a",
+          "candidate": "866dbb92c0aeec5e9d08bd1a07c88a34caf08321fa5a2ef9f9551074d1c2e7f0"
+        },
+        {
+          "path": "ptcg-server/src/sets/set-unbroken-bonds/charjabug.ts",
+          "baseline": "d87d5654596d5885c4cbf0134db9fc83f52fd43033b2e6a32465d1c0a4f53dd1",
+          "candidate": "db6268ce0ff08020e8ef4b052ec3c437224367cef12298f40e522d02787eecc9"
+        }
+      ]
+    },
+    "bundles": [
+      {
+        "name": "baseline",
+        "bytes": 13500008,
+        "sha256": "f775f1c70d609397a7331d714067e881b8d6b49a45c8d932583cdb41021e7c82",
+        "inputsSha256": "3530c42d5330ae34316104c054edd0d89734b5880c76a171358f6e9df84ff999",
+        "inputFiles": 10756
+      },
+      {
+        "name": "candidate",
+        "bytes": 13501253,
+        "sha256": "91aca5dabb83c39ac5197996718bdb66bed9dcfa16d0d666e9d37214b92c58b5",
+        "inputsSha256": "e7bc65d5528a82480c567d609a0710dde4296a50895c337dd4f490717994c3d3",
+        "inputFiles": 10757
+      }
+    ],
+    "actionEngineHashes": [
+      {
+        "name": "engine-0.cjs",
+        "sha256": "2de5d7a504595a1fe924f4b6d7977266b90d2180a5963343aa202af10ebfa2c4"
+      },
+      {
+        "name": "engine-1.cjs",
+        "sha256": "a6856c775e3c32ffc3a1adcad4e9e4493e15f1ac8083c09a0912156b10b3be7c"
+      }
+    ],
+    "baselineActionEngineContainsRestorationHelper": false
+  },
+  "tests": {
+    "newLifecycleSuite": {
+      "passed": 34,
+      "failed": 0,
+      "negativeControl": {
+        "passed": 11,
+        "failed": 23
+      }
+    },
+    "strictFocusedDriver": {
+      "files": 8,
+      "passed": 118,
+      "failed": 0,
+      "typescriptCompile": "passed"
+    },
+    "clientDriver": {
+      "passed": 69,
+      "failed": 0
+    },
+    "independentReviewer": {
+      "cardCasesPassed": 36,
+      "clientCasesPassed": 69,
+      "additionalSerializeDiffCases": 2,
+      "reportStatus": "Reviewer reported no new blocker to owning root agent."
+    },
+    "winningReplays": {
+      "checkedAt": "2026-11-10T19:21:22.937Z",
+      "compiledEngine": "/private/tmp/prizemap-pokemon-energy-restore/ptcg-server/.client-test",
+      "sourceHelperSha256": "e25ea3f9c26b3f8545e726839517052625b03040a4d61992fa90fe93ecaab1bd",
+      "method": "Exact recorded legal traces, 10 independent unseeded real-engine sessions each, no puzzle-state or RNG changes.",
+      "passed": 40,
+      "failed": 0,
+      "results": [
+        {
+          "name": "Trapped in the Phantom Maze",
+          "snapshotSha256": "915099f17baefe165612be2265db5eea91eba6144caa54cfedb5eeef2c26ec99",
+          "replays": 10,
+          "steps": 21
+        },
+        {
+          "name": "Breaking Through the Wall",
+          "snapshotSha256": "e9cbced8fd573a9df69bc8edbc5af21f9847e028ae0205524193b60bb952234e",
+          "replays": 10,
+          "steps": 29
+        },
+        {
+          "name": "Something's Fishy",
+          "snapshotSha256": "dca0f218fada83a53a1407609db33b31031b357e3a2e83034ffe5ff253405524",
+          "replays": 10,
+          "steps": 19
+        },
+        {
+          "name": "Explosive Hand",
+          "snapshotSha256": "1d6daf349636d9fa2d79787c7c74245cb13359a2ebf3b75711860de7cccb8701",
+          "replays": 10,
+          "steps": 20
+        }
+      ]
+    }
+  },
+  "savedStateAndFirstActionCorpus": {
+    "databaseSnapshotAt": "2026-11-10T19:12:36.800Z",
+    "isolation": "REPEATABLE READ",
+    "readOnly": true,
+    "databaseHostAndNameSha256": "29eb3d2fd212e9ce0ba3552b98c2b94e27d4075975da57f270ed30231741ce2d",
+    "eligibleLocatorsSha256": "306bc7137780b76c308e9651ec6b2c36bc64d8ab4e2effd2ce9b2bba3f23a6a8",
+    "recordsContentSha256": "54974a898bc48b102b3e9c2c76745a6c03715e44007b780adb7229368ccb15ff",
+    "totals": {
+      "rows": 671,
+      "activeRows": 441,
+      "noFragment": 2,
+      "decodeFailure": 1,
+      "nonSimulator": 134,
+      "compared": 534,
+      "bothValid": 534,
+      "bothInvalid": 0,
+      "baselineOnlyValid": 0,
+      "candidateOnlyValid": 0,
+      "serializedChanged": 0,
+      "cardNamesChanged": 0,
+      "deserializedStateChanged": 0
+    },
+    "tables": {
+      "Puzzle": {
+        "rows": 302,
+        "activeRows": 198,
+        "noFragment": 2,
+        "decodeFailure": 0,
+        "nonSimulator": 2,
+        "compared": 298,
+        "bothValid": 298,
+        "bothInvalid": 0,
+        "baselineOnlyValid": 0,
+        "candidateOnlyValid": 0,
+        "serializedChanged": 0,
+        "cardNamesChanged": 0,
+        "deserializedStateChanged": 0
+      },
+      "CreatedPuzzle": {
+        "rows": 369,
+        "activeRows": 243,
+        "noFragment": 0,
+        "decodeFailure": 1,
+        "nonSimulator": 132,
+        "compared": 236,
+        "bothValid": 236,
+        "bothInvalid": 0,
+        "baselineOnlyValid": 0,
+        "candidateOnlyValid": 0,
+        "serializedChanged": 0,
+        "cardNamesChanged": 0,
+        "deserializedStateChanged": 0
+      }
+    },
+    "actionModes": {
+      "trainers": {
+        "comparable": 534,
+        "beforeOnlyError": 0,
+        "afterOnlyError": 0,
+        "bothError": 0,
+        "actions": 1878,
+        "matching": 1878,
+        "succeededInBoth": 1870,
+        "rejectedInBoth": 8,
+        "changed": 0,
+        "noActions": 59,
+        "changedCards": {},
+        "changedFields": {},
+        "rejectionReasons": {
+          "ACTION_IN_PROGRESS": 8
+        }
+      },
+      "attacks": {
+        "comparable": 534,
+        "beforeOnlyError": 0,
+        "afterOnlyError": 0,
+        "bothError": 0,
+        "actions": 688,
+        "matching": 688,
+        "succeededInBoth": 147,
+        "rejectedInBoth": 541,
+        "changed": 0,
+        "noActions": 5,
+        "changedCards": {},
+        "changedFields": {},
+        "rejectionReasons": {
+          "NOT_ENOUGH_ENERGY": 536,
+          "CANNOT_USE_POWER": 2,
+          "ACTION_IN_PROGRESS": 2,
+          "CANNOT_PLAY_THIS_CARD": 1
+        }
+      },
+      "abilities": {
+        "comparable": 534,
+        "beforeOnlyError": 0,
+        "afterOnlyError": 0,
+        "bothError": 0,
+        "actions": 921,
+        "matching": 921,
+        "succeededInBoth": 575,
+        "rejectedInBoth": 346,
+        "changed": 0,
+        "noActions": 98,
+        "changedCards": {},
+        "changedFields": {},
+        "rejectionReasons": {
+          "CANNOT_USE_POWER": 291,
+          "OTHER_ERROR": 26,
+          "BLOCKED_BY_ABILITY": 24,
+          "CANNOT_PLAY_THIS_CARD": 1,
+          "ACTION_IN_PROGRESS": 4
+        }
+      }
+    },
+    "activeActionModes": {
+      "trainers": {
+        "comparable": 378,
+        "beforeOnlyError": 0,
+        "afterOnlyError": 0,
+        "bothError": 0,
+        "actions": 1390,
+        "matching": 1390,
+        "succeededInBoth": 1390,
+        "rejectedInBoth": 0,
+        "changed": 0,
+        "noActions": 22,
+        "changedCards": {},
+        "changedFields": {},
+        "rejectionReasons": {}
+      },
+      "attacks": {
+        "comparable": 378,
+        "beforeOnlyError": 0,
+        "afterOnlyError": 0,
+        "bothError": 0,
+        "actions": 491,
+        "matching": 491,
+        "succeededInBoth": 94,
+        "rejectedInBoth": 397,
+        "changed": 0,
+        "noActions": 2,
+        "changedCards": {},
+        "changedFields": {},
+        "rejectionReasons": {
+          "NOT_ENOUGH_ENERGY": 395,
+          "CANNOT_USE_POWER": 1,
+          "CANNOT_PLAY_THIS_CARD": 1
+        }
+      },
+      "abilities": {
+        "comparable": 378,
+        "beforeOnlyError": 0,
+        "afterOnlyError": 0,
+        "bothError": 0,
+        "actions": 679,
+        "matching": 679,
+        "succeededInBoth": 423,
+        "rejectedInBoth": 256,
+        "changed": 0,
+        "noActions": 59,
+        "changedCards": {},
+        "changedFields": {},
+        "rejectionReasons": {
+          "CANNOT_USE_POWER": 219,
+          "OTHER_ERROR": 26,
+          "BLOCKED_BY_ABILITY": 10,
+          "CANNOT_PLAY_THIS_CARD": 1
+        }
+      }
+    },
+    "totalMatchingActionOutcomes": 3487,
+    "activeMatchingActionOutcomes": 2560
+  },
+  "movement": {
+    "scenarios": 12,
+    "matchesOriginalPreChangeLive": 12,
+    "matchesOriginalPreChangeForcedEnergy": 12,
+    "moveImplementationsUnchanged": true,
+    "evidence": "deferred-lifecycle.results.json",
+    "deliberatelyRedSpecs": {
+      "movementPassed": 4,
+      "movementFailed": 5,
+      "buzzapPassed": 0,
+      "buzzapFailed": 1
+    }
+  },
+  "instanceSafety": {
+    "physicalIDsPreserved": true,
+    "canonicalCardAndEnergyMirrorReferencesPreserved": true,
+    "samePrintDistinctIDsAndSeparateRestorationsDistinct": true,
+    "printedTemplatesUnchanged": true,
+    "unknownMalformedPlacementsLeftUntouched": true
+  },
+  "limitations": [
+    "First-action corpus comparisons do not exhaust every possible multi-step action sequence.",
+    "Only trusted six-card fixed-symbol definitions opt in; no dynamic Buzzap choice is guessed.",
+    "Base Set Electrode choice persistence and existing move/mirror bugs remain explicitly deferred.",
+    "Existing immediate post-discard and Lost Zone form timing remains unchanged.",
+    "The obsolete full-movement candidate and name-specific serializer experiment are not approved parts of this patch."
+  ]
+}

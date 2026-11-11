@@ -114,6 +114,12 @@ export class Magmortar extends PokemonCard {
             allowCancel: true,
             min: 0,
             max: 2,
+            // AttachEnergyPrompt's filter is a display hint; blocked indices
+            // are also checked when validating a submitted result.
+            blocked: player.hand.cards.flatMap((card, index) =>
+              card instanceof EnergyCard && card.energyType === EnergyType.BASIC
+                && card.provides.some(type => type === CardType.FIRE || type === CardType.LIGHTNING)
+                ? [] : [index]),
             blockedTo: this.getBlockedTargets(player),
             validCardTypes: [CardType.FIRE, CardType.LIGHTNING],
             maxPerType: 1,

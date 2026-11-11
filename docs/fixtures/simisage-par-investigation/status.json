@@ -1,0 +1,10 @@
+{
+  "status": "DEFERRED_NONSHIPPING",
+  "integrationApproved": false,
+  "reason": "Shared engine cannot yet reliably distinguish intrinsic Ability ownership, removal, activation permission, Tool usability and attack-gained powers.",
+  "requiredBeforeIntegration": "An audited intrinsic-power query migration",
+  "focusedPassingTests": 27,
+  "explicitRedRequirements": 5,
+  "recordedWinningReplays": 8,
+  "preservationManifest": "preservation-manifest.json"
+}

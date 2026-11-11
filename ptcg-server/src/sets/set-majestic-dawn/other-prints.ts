@@ -1,3 +1,5 @@
+import { FossilExcavator } from '../set-mysterious-treasures/fossil-excavator';
+import { EnergyRestoreDP } from '../set-diamond-and-pearl/energy-restore';
 import { DuskBall } from '../set-surging-sparks/dusk-ball';
 import { PokeBall } from '../set-jungle/pokeball';
 import { SuperScoopUp } from '../set-diamond-and-pearl/super-scoop-up';
@@ -47,4 +49,16 @@ export class MetalEnergyN1MD extends MetalEnergyN1 {
   public setNumber = '95';
   public fullName: string = 'Metal Energy MD';
   public set = 'MD';
+}
+
+export class EnergyRestoreMD extends EnergyRestoreDP {
+  public set = 'MD';
+  public setNumber = '81';
+  public fullName = 'Energy Restore MD';
+}
+
+export class FossilExcavatorMD extends FossilExcavator {
+  public set = 'MD';
+  public setNumber = '82';
+  public fullName = 'Fossil Excavator MD';
 }

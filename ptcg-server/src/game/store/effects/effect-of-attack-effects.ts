@@ -2,6 +2,7 @@ import { Effect } from './effect';
 import { AbstractAttackEffect } from './attack-effects';
 import { AttackEffect } from './game-effects';
 import { Card } from '../card/card';
+import { PokemonCard } from '../card/pokemon-card';
 import { MarkerConstants } from '../markers/marker-constants';
 
 /**
@@ -22,6 +23,34 @@ export abstract class EffectOfAttackEffect extends AbstractAttackEffect implemen
    * Override this in subclasses
    */
   abstract applyEffect(): void;
+}
+
+/** Damage counters are placed on the Defending Pokémon when it receives Energy from hand. */
+export class DefendingPokemonTakesDamageOnEnergyAttachFromHandNextTurnEffect extends EffectOfAttackEffect {
+  readonly type = 'DEFENDING_POKEMON_TAKES_DAMAGE_ON_ENERGY_ATTACH_FROM_HAND_NEXT_TURN_EFFECT';
+  constructor(base: AttackEffect, public readonly damage: number) { super(base); }
+  applyEffect(): void {
+    this.opponent.active.pendingEnergyAttachDamageCounters = {
+      damage: this.damage,
+      attack: this.attack,
+      sourceCard: this.markerSource as PokemonCard,
+      attackerPlayerId: this.player.id,
+    };
+  }
+}
+
+/** Arm retaliation when this Pokémon is damaged by an attack next turn. */
+export class RetaliateOnDamageDuringOpponentsNextTurnEffect extends EffectOfAttackEffect {
+  readonly type = 'RETALIATE_ON_DAMAGE_DURING_OPPONENTS_NEXT_TURN_EFFECT';
+  constructor(base: AttackEffect, public readonly damage: number) { super(base); }
+  applyEffect(): void {
+    this.player.active.retaliateOnDamageNextTurnPending = {
+      damage: this.damage,
+      attack: this.attack,
+      sourceCard: this.markerSource as PokemonCard,
+      attackerPlayerId: this.player.id,
+    };
+  }
 }
 
 /**

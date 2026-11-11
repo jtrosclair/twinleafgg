@@ -50,6 +50,10 @@ export class Klinklang extends PokemonCard {
       PLAY_POKEMON_FROM_HAND_TO_BENCH(state, player, this);
     }
 
+    return Klinklang.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this))
       DISCARD_ALL_ENERGY_FROM_POKEMON(store, state, effect, this);
 

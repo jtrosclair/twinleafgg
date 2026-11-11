@@ -139,7 +139,7 @@ describe('ClientSimulator real card regressions', () => {
     expect(simulator.state.prompts.length).toBe(0);
   });
 
-  it('Energy Search only accepts a basic Energy and handles the dummy reveal locally', () => {
+  it('Energy Search requires a Basic Energy when one is available and handles the dummy reveal locally', () => {
     const f = fixture();
     f.add(f.player.hand, 'Energy Search SVI');
     f.add(f.player.deck, 'Double Colorless Energy BS');
@@ -148,10 +148,35 @@ describe('ClientSimulator real card regressions', () => {
     play(simulator, 'Energy Search SVI');
     const prompt = pending(simulator, ChooseCardsPrompt);
     const specialIndex = prompt.cards.cards.findIndex(card => card.fullName === 'Double Colorless Energy BS');
-    expect(() => simulator.resolvePrompt(prompt.id, [specialIndex])).toThrow();
+    expect(prompt.validate([prompt.cards.cards[specialIndex]])).toBe(false);
+    expect(prompt.validate([])).toBe(false);
     chooseCards(simulator, ['Water Energy SVE']);
     expect(simulator.state.players[0].hand.cards.map(card => card.fullName)).toEqual(['Water Energy SVE']);
     expect(simulator.state.prompts.length).toBe(0);
+  });
+
+  it('Energy Search DP requires a Basic Energy when available and resolves when none are available', () => {
+    const f = fixture();
+    f.add(f.player.hand, 'Energy Search DP');
+    f.add(f.player.deck, 'Water Energy SVE');
+    const simulator = f.load();
+    play(simulator, 'Energy Search DP');
+    const prompt = pending(simulator, ChooseCardsPrompt);
+    expect(prompt.validate([])).toBe(false);
+    chooseCards(simulator, ['Water Energy SVE']);
+    expect(simulator.state.players[0].hand.cards.map(card => card.fullName)).toEqual(['Water Energy SVE']);
+    expect(simulator.state.players[0].discard.cards.some(card => card.fullName === 'Energy Search DP')).toBe(true);
+    expect(simulator.state.prompts.length).toBe(0);
+
+    const empty = fixture();
+    empty.add(empty.player.hand, 'Energy Search DP');
+    empty.player.deck.cards.splice(0, empty.player.deck.cards.length);
+    empty.add(empty.player.deck, 'Mew ex MEW');
+    const noEnergySimulator = empty.load();
+    play(noEnergySimulator, 'Energy Search DP');
+    chooseCards(noEnergySimulator, []);
+    expect(noEnergySimulator.state.players[0].hand.cards).toEqual([]);
+    expect(noEnergySimulator.state.players[0].discard.cards.some(card => card.fullName === 'Energy Search DP')).toBe(true);
   });
 
   it('modern Energy Retrieval recovers two basic Energy and leaves special Energy discarded', () => {

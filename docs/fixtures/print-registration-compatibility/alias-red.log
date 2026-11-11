@@ -1,0 +1,20 @@
+cards set
+cards set
+[
+  {
+    "root": "prizemap-svp-expanded",
+    "position": "first",
+    "status": 200,
+    "manager": "Different Name ZZ",
+    "api": [],
+    "direct": []
+  },
+  {
+    "root": "prizemap-svp-expanded",
+    "position": "last",
+    "status": 200,
+    "manager": "Different Name ZZ",
+    "api": [],
+    "direct": []
+  }
+]

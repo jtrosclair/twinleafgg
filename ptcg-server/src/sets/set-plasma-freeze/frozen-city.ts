@@ -1,5 +1,5 @@
 import { GameLog, State, StateUtils, StoreLike } from '../../game';
-import { TrainerType } from '../../game/store/card/card-types';
+import { CardTag, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
 import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
@@ -22,7 +22,8 @@ export class FrozenCity extends TrainerCard {
 
   reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && effect.sourceZone === undefined && StateUtils.getStadiumCard(state) === this) {
+    if (effect instanceof AttachEnergyEffect && effect.sourceZone === undefined && StateUtils.getStadiumCard(state) === this
+      && !effect.target.getPokemonCard()?.tags.includes(CardTag.TEAM_PLASMA)) {
       const owner = StateUtils.findOwner(state, effect.target);
 
       store.log(state, GameLog.LOG_PLAYER_PLACES_DAMAGE_COUNTERS, { name: owner.name, damage: 20, target: effect.target.getPokemonCard()!.name, effect: this.name });

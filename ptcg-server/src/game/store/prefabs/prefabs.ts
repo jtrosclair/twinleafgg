@@ -185,6 +185,32 @@ export function NEXT_TURN_ATTACK_BONUS(effect: Effect, options: NextTurnAttackBo
   }
 }
 
+export function NEXT_TURN_ATTACK_BONUS_ALL_ATTACKS(
+  effect: Effect, options: { source: Card; bonusDamage: number; setupAttack: Attack },
+): void {
+  const { source, bonusDamage, setupAttack } = options;
+  const bonusMarker = `NEXT_TURN_ATTACK_BONUS_ALL:${source.fullName}`;
+  const clearMarker = `CLEAR_NEXT_TURN_ATTACK_BONUS_ALL:${source.fullName}`;
+  if (effect instanceof AttackEffect) {
+    if (source instanceof PokemonCard && effect.source.getPokemonCard() !== source) return;
+    if (HAS_MARKER(bonusMarker, effect.player, source)) {
+      effect.damage += bonusDamage;
+    }
+    if (effect.attack === setupAttack) {
+      REMOVE_MARKER(clearMarker, effect.player, source);
+      ADD_MARKER(bonusMarker, effect.player, source);
+    }
+  }
+  if (effect instanceof EndTurnEffect && HAS_MARKER(bonusMarker, effect.player, source)) {
+    if (HAS_MARKER(clearMarker, effect.player, source)) {
+      REMOVE_MARKER(bonusMarker, effect.player, source);
+      REMOVE_MARKER(clearMarker, effect.player, source);
+    } else {
+      ADD_MARKER(clearMarker, effect.player, source);
+    }
+  }
+}
+
 export interface NextTurnAttackBaseDamageOptions {
   setupAttack: Attack;
   boostedAttack: Attack;
@@ -1416,7 +1442,9 @@ export function DRAW_CARDS(player: Player, count: number) {
  * 
  * TODO: this should also allow the player to draw them 1 by 1 if they want
  */
-export function DRAW_UP_TO_X_CARDS(store: StoreLike, state: State, player: Player, count: number) {
+export function DRAW_UP_TO_X_CARDS(
+  store: StoreLike, state: State, player: Player, count: number, afterDraw?: () => void,
+) {
   if (count > 0) {
     const options: { message: string, value: number }[] = [];
     for (let i = count; i >= 0; i--) {
@@ -1431,8 +1459,28 @@ export function DRAW_UP_TO_X_CARDS(store: StoreLike, state: State, player: Playe
     ), choice => {
       const numCardsToDraw = options[choice].value;
       DRAW_CARDS(player, numCardsToDraw);
+      afterDraw?.();
     });
+  } else {
+    afterDraw?.();
   }
+}
+
+/** Shuffle a hand into its deck, then let the caller draw and continue sequencing. */
+export function SHUFFLE_HAND_INTO_DECK_THEN_DRAW(
+  store: StoreLike,
+  state: State,
+  player: Player,
+  options: { sourceCard: Card; resolveDraw: (store: StoreLike, state: State, player: Player) => void },
+): State {
+  const cards = [...player.hand.cards];
+  if (cards.length > 0) {
+    MOVE_CARDS(store, state, player.hand, player.deck, { cards, sourceCard: options.sourceCard });
+  }
+  return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
+    player.deck.applyOrder(order);
+    options.resolveDraw(store, state, player);
+  });
 }
 
 /**
@@ -2568,6 +2616,62 @@ export function MOVE_CARDS(
   return store.reduceEffect(state, new MoveCardsEffect(source, destination, options));
 }
 
+/** Move selected hand cards to the bottom of the deck, then continue after the move resolves. */
+export function MOVE_HAND_TO_DECK_THEN_DRAW(
+  store: StoreLike,
+  state: State,
+  player: Player,
+  options: {
+    cards: Card[];
+    drawCount: number;
+    sourceCard?: Card;
+    skipDrawIfMovePrevented?: boolean;
+    afterDraw?: () => void;
+    onMovePrevented?: () => void;
+  },
+): State {
+  const drawAndContinue = (): void => {
+    DRAW_CARDS(player, options.drawCount);
+    options.afterDraw?.();
+  };
+
+  if (options.cards.length === 0) {
+    drawAndContinue();
+    return state;
+  }
+
+  const moveEffect = new MoveCardsEffect(player.hand, player.deck, {
+    cards: options.cards,
+    toBottom: true,
+    sourceCard: options.sourceCard,
+  });
+  state = store.reduceEffect(state, moveEffect);
+  if (moveEffect.preventDefault) {
+    if (options.skipDrawIfMovePrevented === false) {
+      drawAndContinue();
+    } else {
+      options.onMovePrevented?.();
+    }
+    return state;
+  }
+
+  drawAndContinue();
+  return state;
+}
+
+/** Move a Pokémon stack, including attached cards, to a card pile. */
+export function MOVE_POKEMON_OFF_BOARD(
+  store: StoreLike,
+  state: State,
+  pokemon: PokemonCardList,
+  options: { pokemonDestination: CardList | PokemonCardList; sourceCard?: Card; sourceEffect?: any },
+): State {
+  return MOVE_CARDS(store, state, pokemon, options.pokemonDestination, {
+    sourceCard: options.sourceCard,
+    sourceEffect: options.sourceEffect,
+  });
+}
+
 // export function REMOVE_TOOL(store: StoreLike, state: State, source: PokemonCardList, tool: Card, destinationSlot: SlotType): State {
 //   if (!source.cards.includes(tool)) {
 //     return state;
@@ -3003,6 +3107,12 @@ export function CAN_PLAY_CARD(store: StoreLike, state: State, player: Player, ca
 export function BLOCK_RETREAT(store: StoreLike, state: State, effect: AttackEffect, source: Card): State {
   const retreatEffect = preventRetreatEffect(effect, source);
   return store.reduceEffect(state, retreatEffect);
+}
+
+/** Prevent the attacking Pokémon from retreating during its owner's next turn. */
+export function BLOCK_SELF_RETREAT(_store: StoreLike, state: State, effect: AttackEffect, _source: Card): State {
+  effect.player.active.cannotRetreatNextTurn = true;
+  return state;
 }
 
 /**

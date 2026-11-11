@@ -1,0 +1,22 @@
+[
+  {
+    "fixture": "breaking-through-wall.solution.json",
+    "requestedReplays": 2,
+    "exitCode": 0
+  },
+  {
+    "fixture": "explosive-hand.solution.json",
+    "requestedReplays": 2,
+    "exitCode": 0
+  },
+  {
+    "fixture": "phantom-maze.solution.json",
+    "requestedReplays": 2,
+    "exitCode": 0
+  },
+  {
+    "fixture": "somethings-fishy.solution.json",
+    "requestedReplays": 2,
+    "exitCode": 0
+  }
+]

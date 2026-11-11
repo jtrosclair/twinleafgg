@@ -1,0 +1,1413 @@
+// Port of the deck import parsing and aliases from twinleafgg commit 37db120e6.
+// Parsing semantics intentionally follow the former HTTP controller.
+import { CardManager } from '../ptcg-server/src/game/cards/card-manager';
+import { Card } from '../ptcg-server/src/game/store/card/card';
+import { SuperType, TrainerType } from '../ptcg-server/src/game/store/card/card-types';
+import { TrainerCard } from '../ptcg-server/src/game/store/card/trainer-card';
+
+const cardReplacements = [
+  // Diamond/star symbol to Prism Star conversion
+  { from: '♢', to: 'Prism Star' },
+  { from: '{*}', to: 'Prism Star' },
+
+  //Energy
+  { from: 'Beast Energy FLI', to: 'Beast Energy ♢ FLI' },
+  { from: 'Grass Energy 1', to: 'Grass Energy SVE 1' },
+  { from: 'Basic Grass Energy 1', to: 'Grass Energy SVE 1' },
+  { from: 'Basic Grass Energy SVE 1', to: 'Grass Energy SVE 1' },
+  { from: 'Basic {G} Energy SVE 1', to: 'Grass Energy SVE 1' },
+  { from: 'Basic {G} Energy SVE 1 PH', to: 'Grass Energy SVE 1' },
+  { from: 'Basic {G} Energy SVE 9', to: 'Grass Energy SVE 1' },
+  { from: 'Basic {G} Energy SVE 9 PH', to: 'Grass Energy SVE 1' },
+  { from: 'Basic {G} Energy SVALT 112', to: 'Grass Energy SVE 1' },
+  { from: 'Basic {G} Energy SVALT 131', to: 'Grass Energy SVE 1' },
+  { from: 'Basic {G} Energy EVO 91', to: 'Grass Energy BS 99' },
+  { from: 'Basic {G} Energy HS 115', to: 'Grass Energy HS 115' },
+  { from: 'Basic {G} Energy SVI 257', to: 'Grass Energy PAL 278' },
+  { from: 'Grass Energy2 SVE 9', to: 'Grass Energy SVE 9' },
+
+  { from: 'Fire Energy 2', to: 'Fire Energy SVE 2' },
+  { from: 'Basic Fire Energy 2', to: 'Fire Energy SVE 2' },
+  { from: 'Basic Fire Energy SVE 2', to: 'Fire Energy SVE 2' },
+  { from: 'Basic {R} Energy SVE 2', to: 'Fire Energy SVE 2' },
+  { from: 'Basic {R} Energy SVE 2 PH', to: 'Fire Energy SVE 2' },
+  { from: 'Basic {R} Energy SVE 10', to: 'Fire Energy SVE 2' },
+  { from: 'Basic {R} Energy SVE 10 PH', to: 'Fire Energy SVE 2' },
+  { from: 'Basic {R} Energy SVALT 113', to: 'Fire Energy SVE 2' },
+  { from: 'Basic {R} Energy SVALT 132', to: 'Fire Energy SVE 2' },
+  { from: 'Basic {R} Energy EVO 92', to: 'Fire Energy BS 98' },
+  { from: 'Basic {R} Energy HS 116', to: 'Fire Energy HS 116' },
+  { from: 'Basic {R} Energy OBF 230', to: 'Fire Energy OBF 230' },
+  { from: 'Fire Energy2 SVE 10', to: 'Fire Energy SVE 10' },
+
+  { from: 'Water Energy 3', to: 'Water Energy SVE 3' },
+  { from: 'Basic Water Energy 3', to: 'Water Energy SVE 3' },
+  { from: 'Basic Water Energy SVE 3', to: 'Water Energy SVE 3' },
+  { from: 'Basic {W} Energy SVE 3', to: 'Water Energy SVE 3' },
+  { from: 'Basic {W} Energy SVE 3 PH', to: 'Water Energy SVE 3' },
+  { from: 'Basic {W} Energy SVE 11', to: 'Water Energy SVE 3' },
+  { from: 'Basic {W} Energy SVE 11 PH', to: 'Water Energy SVE 3' },
+  { from: 'Basic {W} Energy SVALT 114', to: 'Water Energy SVE 3' },
+  { from: 'Basic {W} Energy SVALT 133', to: 'Water Energy SVE 3' },
+  { from: 'Basic {W} Energy EVO 93', to: 'Water Energy BS 102' },
+  { from: 'Basic {W} Energy HS 117', to: 'Water Energy HS 117' },
+  { from: 'Basic {W} Energy PAL 279', to: 'Water Energy PAL 279' },
+  { from: 'Water Energy2 SVE 11', to: 'Water Energy SVE 11' },
+
+  { from: 'Lightning Energy 4', to: 'Lightning Energy SVE 4' },
+  { from: 'Basic Lightning Energy 4', to: 'Lightning Energy SVE 4' },
+  { from: 'Basic Lightning Energy SVE 4', to: 'Lightning Energy SVE 4' },
+  { from: 'Basic {L} Energy SVE 4', to: 'Lightning Energy SVE 4' },
+  { from: 'Basic {L} Energy SVE 4 PH', to: 'Lightning Energy SVE 4' },
+  { from: 'Basic {L} Energy SVE 12', to: 'Lightning Energy SVE 4' },
+  { from: 'Basic {L} Energy SVE 12 PH', to: 'Lightning Energy SVE 4' },
+  { from: 'Basic {L} Energy SVALT 115', to: 'Lightning Energy SVE 4' },
+  { from: 'Basic {L} Energy SVALT 134', to: 'Lightning Energy SVE 4' },
+  { from: 'Basic {L} Energy EVO 94', to: 'Lightning Energy BS 100' },
+  { from: 'Basic {L} Energy HS 118', to: 'Lightning Energy HS 118' },
+  { from: 'Basic {L} Energy SVI 257', to: 'Lightning Energy SVI 257' },
+  { from: 'Lightning Energy2 SVE 12', to: 'Lightning Energy SVE 12' },
+
+  { from: 'Psychic Energy 5', to: 'Psychic Energy SVE 5' },
+  { from: 'Basic Psychic Energy 5', to: 'Psychic Energy SVE 5' },
+  { from: 'Basic Psychic Energy SVE 5', to: 'Psychic Energy SVE 5' },
+  { from: 'Basic {P} Energy SVE 5', to: 'Psychic Energy SVE 5' },
+  { from: 'Basic {P} Energy SVE 5 PH', to: 'Psychic Energy SVE 5' },
+  { from: 'Basic {P} Energy SVE 13', to: 'Psychic Energy SVE 5' },
+  { from: 'Basic {P} Energy SVE 13 PH', to: 'Psychic Energy SVE 5' },
+  { from: 'Basic {P} Energy SVALT 116', to: 'Psychic Energy SVE 5' },
+  { from: 'Basic {P} Energy SVALT 135', to: 'Psychic Energy SVE 5' },
+  { from: 'Basic {P} Energy EVO 95', to: 'Psychic Energy BS 101' },
+  { from: 'Basic {P} Energy HS 119', to: 'Psychic Energy HS 119' },
+  { from: 'Basic {P} Energy MEW 207', to: 'Psychic Energy MEW 207' },
+  { from: 'Psychic Energy2 SVE 13', to: 'Psychic Energy SVE 13' },
+
+  { from: 'Fighting Energy 6', to: 'Fighting Energy SVE 6' },
+  { from: 'Basic Fighting Energy 6', to: 'Fighting Energy SVE 6' },
+  { from: 'Basic Fighting Energy SVE 6', to: 'Fighting Energy SVE 6' },
+  { from: 'Basic {F} Energy SVE 6', to: 'Fighting Energy SVE 6' },
+  { from: 'Basic {F} Energy SVE 6 PH', to: 'Fighting Energy SVE 6' },
+  { from: 'Basic {F} Energy SVE 14', to: 'Fighting Energy SVE 6' },
+  { from: 'Basic {F} Energy SVE 14 PH', to: 'Fighting Energy SVE 6' },
+  { from: 'Basic {F} Energy SVALT 115', to: 'Fighting Energy SVE 6' },
+  { from: 'Basic {F} Energy SVALT 136', to: 'Fighting Energy SVE 6' },
+  { from: 'Basic {F} Energy EVO 96', to: 'Fighting Energy BS 97' },
+  { from: 'Basic {F} Energy HS 120', to: 'Fighting Energy HS 120' },
+  { from: 'Basic {F} Energy SVI 258', to: 'Fighting Energy SVI 258' },
+  { from: 'Fighting Energy2 SVE 14', to: 'Fighting Energy SVE 14' },
+
+  { from: 'Darkness Energy 7', to: 'Darkness Energy SVE 7' },
+  { from: 'Basic Darkness Energy 7', to: 'Darkness Energy SVE 7' },
+  { from: 'Basic Darkness Energy SVE 7', to: 'Darkness Energy SVE 7' },
+  { from: 'Basic {D} Energy SVE 7', to: 'Darkness Energy SVE 7' },
+  { from: 'Basic {D} Energy SVE 7 PH', to: 'Darkness Energy SVE 7' },
+  { from: 'Basic {D} Energy SVE 15', to: 'Darkness Energy SVE 7' },
+  { from: 'Basic {D} Energy SVE 15 PH', to: 'Darkness Energy SVE 7' },
+  { from: 'Basic {D} Energy SVALT 118', to: 'Darkness Energy SVE 7' },
+  { from: 'Basic {D} Energy SVALT 137', to: 'Darkness Energy SVE 7' },
+  { from: 'Basic {D} Energy EVO 97', to: 'Darkness Energy EVO 97' },
+  { from: 'Basic {D} Energy HS 121', to: 'Darkness Energy HS 121' },
+  { from: 'Basic {D} Energy SFA 98', to: 'Darkness Energy SFA 98' },
+  { from: 'Darkness Energy2 SVE 15', to: 'Darkness Energy SVE 15' },
+
+  { from: 'Metal Energy 8', to: 'Metal Energy SVE 8' },
+  { from: 'Basic Metal Energy 8', to: 'Metal Energy SVE 8' },
+  { from: 'Basic Metal Energy SVE 8', to: 'Metal Energy SVE 8' },
+  { from: 'Basic {M} Energy SVE 8', to: 'Metal Energy SVE 8' },
+  { from: 'Basic {M} Energy SVE 8 PH', to: 'Metal Energy SVE 8' },
+  { from: 'Basic {M} Energy SVE 16', to: 'Metal Energy SVE 8' },
+  { from: 'Basic {M} Energy SVE 16 PH', to: 'Metal Energy SVE 8' },
+  { from: 'Basic {M} Energy SVALT 119', to: 'Metal Energy SVE 8' },
+  { from: 'Basic {M} Energy SVALT 138', to: 'Metal Energy SVE 8' },
+  { from: 'Basic {M} Energy EVO 98', to: 'Metal Energy EVO 98' },
+  { from: 'Basic {M} Energy HS 122', to: 'Metal Energy HS 122' },
+  { from: 'Basic {M} Energy SFA 99', to: 'Metal Energy SFA 99' },
+  { from: 'Metal Energy2 SVE 16', to: 'Metal Energy SVE 16' },
+
+  //BS
+  { from: 'Pokemon Breeder BS 76', to: 'Pokémon Breeder BS 76' },
+  { from: 'Pokemon Trader BS 77', to: 'Pokémon Trader BS 77' },
+
+  //RS
+  { from: 'Skitty RS 44', to: 'Skitty RS2 44' },
+
+  //DX
+  { from: 'Ludicolo DX 19', to: 'Ludicolo DX2 19' },
+
+  //GRI
+  { from: 'Oricorio GRI 55', to: 'Oricorio GRI2 55' },
+
+  //SUM
+  { from: 'Rotom Dex SUM 159', to: 'Rotom DexSR SM 159' },
+
+  //SHF
+  { from: 'Snom SHF SV33', to: 'Snom SHFSV SV33' },
+
+  //TEU
+  { from: 'Charmander TEU 12', to: 'Charmander TEU2 12' },
+
+  //STS
+  { from: 'Pokémon Ranger STS 104', to: 'Pokemon Ranger STS 104' },
+
+  //VIV
+  { from: 'Talonflame V VIV 168', to: 'Talonflame VFA VIV 168' },
+
+  //PGO
+  { from: 'PokéStop PGO 68', to: 'PokeStop PGO 68' },
+
+  //BRS
+  { from: 'Ultra Ball BRS 186', to: 'Ultra BallHR BRS 186' },
+
+  //ASR
+  { from: 'Hisuian Qwilfish ASR 89', to: 'Hisuian Qwilfish2 ASR 89' },
+
+  //SVI
+  { from: 'Pokégear 3.0 SVI 186', to: 'Pokegear SVI 186' },
+  { from: 'Pokémon Catcher SVI 187', to: 'Pokemon Catcher SVI 187' },
+  { from: 'Riolu SVI 113', to: 'Riolu2 SVI 113' },
+
+  //SVI FA
+  { from: 'Armarouge SVI 203', to: 'ArmarougeIR SVI 203' },
+  { from: 'Slowpoke SVI 204', to: 'SlowpokeIR SVI 204' },
+  { from: 'Pawmot SVI 209', to: 'PawmotIR SVI 209' },
+  { from: 'Arven SVI 235', to: 'ArvenFA SVI 235' },
+  { from: 'Arven SVI 249', to: 'ArvenSIR SVI 249' },
+  { from: 'Fighting Energy SVI 258', to: 'Fighting EnergyHR SVI 258' },
+  { from: 'Lightning Energy SVI 257', to: 'Lightning EnergyHR SVI 257' },
+  { from: 'Gardevoir ex SVI 228', to: 'Gardevoir exFA SVI 228' },
+  { from: 'Gardevoir ex SVI 245', to: 'Gardevoir exSIR SVI 245' },
+  { from: 'Jacq SVI 236', to: 'JacqFA SVI 236' },
+  { from: 'Jacq SVI 250', to: 'JacqSIR SVI 250' },
+  { from: 'Katy SVI 237', to: 'KatyFA SVI 237' },
+  { from: 'Koraidon ex SVI 231', to: 'Koraidon exFA SVI 231' },
+  { from: 'Koraidon ex SVI 247', to: 'Koraidon exSIR SVI 247' },
+  { from: 'Koraidon ex SVI 254', to: 'Koraidon exHR SVI 254' },
+  { from: 'Magnezone ex SVI 226', to: 'Magnezone exFA SVI 226' },
+  { from: 'Miraidon ex SVI 227', to: 'Miraidon exFA SVI 227' },
+  { from: 'Miraidon ex SVI 244', to: 'Miraidon exSIR SVI 244' },
+  { from: 'Miraidon ex SVI 253', to: 'Miraidon exHR SVI 253' },
+  { from: 'Miriam SVI 238', to: 'MiriamFA SVI 238' },
+  { from: 'Miriam SVI 251', to: 'MiriamSIR SVI 251' },
+  { from: 'Nest Ball SVI 255', to: 'Nest BallHR SVI 255' },
+  { from: 'Penny SVI 239', to: 'PennyFA SVI 239' },
+  { from: 'Penny SVI 252', to: 'PennySIR SVI 252' },
+  { from: "Professor's Research SVI 240", to: "Professor's ResearchFA1 SVI 240" },
+  { from: "Professor's Research SVI 241", to: "Professor's ResearchFA2 SVI 241" },
+  { from: 'Ralts SVI 211', to: 'RaltsIR SVI 211' },
+  { from: 'Kirlia SVI 212', to: 'KirliaIR SVI 212' },
+  { from: 'Rare Candy SVI 256', to: 'Rare CandyHR SVI 256' },
+  { from: 'Skwovet SVI 222', to: 'SkwovetIR SVI 222' },
+  { from: 'Team Star Grunt SVI 242', to: 'Team Star GruntFA SVI 242' },
+
+  //SVP
+  { from: 'Charmander SVP 44', to: 'CharmanderIR SVP 44' },
+  { from: 'Iron Bundle SVP 66', to: 'Iron Bundle SVP 66' },
+  { from: 'Charizard ex SVP 74', to: 'Charizard ex2 SVP 74' },
+  { from: 'Meowscarada ex SVP 78', to: 'Meowscarada exFA SVP 78' },
+  { from: 'Skeledirge ex SVP 81', to: 'Skeledirge exFA SVP 81' },
+  { from: 'Quaquaval ex SVP 84', to: 'Quaquaval exFA SVP 84' },
+  { from: 'Pecharunt SVP 129', to: 'PecharuntIR SVP 129' },
+  { from: 'Miraidon ex SVP 142', to: 'Miraidon ex2 SVP 142' },
+  { from: 'Charizard ex SVP 161', to: 'Charizard ex3 SVP 161' },
+
+  //PAL
+  { from: 'Frigibax PAL 57', to: 'Frigibax PAL1 57' },
+  { from: 'Frigibax PAL 58', to: 'Frigibax PAL2 58' },
+  //PAL FA
+  { from: 'Frigibax PAL 208', to: 'FrigibaxIR PAL 208' },
+  { from: 'Arctibax PAL 209', to: 'ArctibaxIR PAL 209' },
+  { from: 'Baxcalibur PAL 210', to: 'BaxcaliburIR PAL 210' },
+  { from: 'Tinkatink PAL 216', to: 'TinkatinkIR PAL 216' },
+  { from: 'Tinkatuff PAL 217', to: 'TinkatuffIR PAL 217' },
+  { from: 'Flamigo PAL 227', to: 'FlamigoIR PAL 227' },
+  { from: 'Meowscarada ex PAL 231', to: 'Meowscarada exFA PAL 231' },
+  { from: 'Wo-Chien ex PAL 232', to: 'Wo-Chien exFA PAL 232' },
+  { from: 'Chi-Yu ex PAL 234', to: 'Chi-Yu exFA PAL 234' },
+  { from: 'Chien-Pao ex PAL 236', to: 'Chien-Pao exFA PAL 236' },
+  { from: 'Tinkaton ex PAL 240', to: 'Tinkaton exFA PAL 240' },
+  { from: 'Ting-Lu ex PAL 243', to: 'Ting-Lu exFA PAL 243' },
+  { from: 'Noivern ex PAL 246', to: 'Noivern exFA PAL 246' },
+  { from: 'Squawkabilly ex PAL 247', to: 'Squawkabilly exFA PAL 247' },
+  { from: 'Boss\'s Orders PAL 248', to: 'Boss\'s OrdersFA PAL 248' },
+  { from: 'Clavell PAL 249', to: 'ClavellFA PAL 249' },
+  { from: 'Giacomo PAL 252', to: 'GiacomoFA PAL 252' },
+  { from: 'Grusha PAL 253', to: 'GrushaFA PAL 253' },
+  { from: 'Iono PAL 254', to: 'IonoFA PAL 254' },
+  { from: 'Meowscarada ex PAL 256', to: 'Meowscarada exSIR PAL 256' },
+  { from: 'Wo-Chien ex PAL 257', to: 'Wo-Chien exSIR PAL 257' },
+  { from: 'Chi-Yu ex PAL 259', to: 'Chi-Yu exSIR PAL 259' },
+  { from: 'Chien-Pao ex PAL 261', to: 'Chien-Pao exSIR PAL 261' },
+  { from: 'Tinkaton ex PAL 262', to: 'Tinkaton exSIR PAL 262' },
+  { from: 'Ting-Lu ex PAL 263', to: 'Ting-Lu exSIR PAL 263' },
+  { from: 'Squawkabilly ex PAL 264', to: 'Squawkabilly exSIR PAL 264' },
+  { from: 'Boss\'s Orders PAL 265', to: 'Boss\'s OrdersSIR PAL 265' },
+  { from: 'Giacomo PAL 267', to: 'GiacomoSIR PAL 267' },
+  { from: 'Grusha PAL 268', to: 'GrushaSIR PAL 268' },
+  { from: 'Iono PAL 269', to: 'IonoSIR PAL 269' },
+  { from: 'Meowscarada ex PAL 271', to: 'Meowscarada exHR PAL 271' },
+  { from: 'Chien-Pao ex PAL 274', to: 'Chien-Pao exHR PAL 274' },
+  { from: 'Ting-Lu ex PAL 275', to: 'Ting-Lu exHR PAL 275' },
+  { from: 'Super Rod PAL 276', to: 'Super RodHR PAL 276' },
+  { from: 'Superior Energy Retrieval PAL 277', to: 'Superior Energy RetrievalHR PAL 277' },
+  { from: 'Froslass ex PAR 217', to: 'FroslassexFA PAR 217' },
+  { from: 'Garchomp ex PAR 219', to: 'GarchompexFA PAR 219' },
+  { from: 'Tsareena ex PAR 220', to: 'TsareenaexFA PAR 220' },
+  { from: 'Tapu Koko ex PAR 222', to: 'TapuKokoexFA PAR 222' },
+  { from: 'Iron Hands ex PAR 223', to: 'IronHandsexFA PAR 223' },
+  { from: 'Iron Valiant ex PAR 225', to: 'IronValiantexFA PAR 225' },
+  { from: 'Hoopa ex PAR 226', to: 'HoopaexFA PAR 226' },
+  { from: 'Sandy Shocks ex PAR 228', to: 'SandyShocksexFA PAR 228' },
+  { from: 'Roaring Moon ex PAR 229', to: 'RoaringMoonexFA PAR 229' },
+  { from: 'Gholdengo ex PAR 231', to: 'GholdengoexFA PAR 231' },
+  { from: 'Bombirdier ex PAR 234', to: 'BombirdierexFA PAR 234' },
+  { from: 'Mela PAR 236', to: 'MelaFA PAR 236' },
+  { from: 'Professor Sada\'s Vitality PAR 239', to: 'ProfessorSadasVitalityFA PAR 239' },
+  { from: 'Professor Turo\'s Scenario PAR 240', to: 'ProfessorTurosScenarioFA PAR 240' },
+  { from: 'Tulip PAR 244', to: 'TulipFA PAR 244' },
+  { from: 'Garchomp ex PAR 245', to: 'GarchompexSIR PAR 245' },
+  { from: 'Tapu Koko ex PAR 247', to: 'TapuKokoexSIR PAR 247' },
+  { from: 'Iron Hands ex PAR 248', to: 'IronHandsexSIR PAR 248' },
+  { from: 'Iron Valiant ex PAR 249', to: 'IronValiantexSIR PAR 249' },
+  { from: 'Sandy Shocks ex PAR 250', to: 'SandyShocksexSIR PAR 250' },
+  { from: 'Roaring Moon ex PAR 251', to: 'RoaringMoonexSIR PAR 251' },
+  { from: 'Gholdengo ex PAR 252', to: 'GholdengoexSIR PAR 252' },
+  { from: 'Mela PAR 254', to: 'MelaSIR PAR 254' },
+  { from: 'Professor Sada\'s Vitality PAR 256', to: 'ProfessorSadasVitalitySIR PAR 256' },
+  { from: 'Professor Turo\'s Scenario PAR 257', to: 'ProfessorTurosScenarioSIR PAR 257' },
+  { from: 'Tulip PAR 259', to: 'TulipSIR PAR 259' },
+  { from: 'Garchomp ex PAR 260', to: 'GarchompexHR PAR 260' },
+  { from: 'Iron Valiant ex PAR 261', to: 'IronValiantexHR PAR 261' },
+  { from: 'Roaring Moon ex PAR 262', to: 'RoaringMoonexHR PAR 262' },
+  { from: 'Beach Court PAR 263', to: 'BeachCourtHR PAR 263' },
+  { from: 'Counter Catcher PAR 264', to: 'CounterCatcherHR PAR 264' },
+  { from: 'Luxurious Cape PAR 265', to: 'LuxuriousCapeHR PAR 265' },
+  { from: 'Reversal Energy PAR 266', to: 'ReversalEnergyHR PAR 266' },
+
+  //151
+  //151 FA
+  { from: 'Bulbasaur MEW 166', to: 'BulbasaurIR MEW 166' },
+  { from: 'Ivysaur MEW 167', to: 'IvysaurIR MEW 167' },
+  { from: 'Charmander MEW 168', to: 'CharmanderIR MEW 168' },
+  { from: 'Charmeleon MEW 169', to: 'CharmeleonIR MEW 169' },
+  { from: 'Squirtle MEW 170', to: 'SquirtleIR MEW 170' },
+  { from: 'Wartortle MEW 171', to: 'WartortleIR MEW 171' },
+  { from: 'Nidoking MEW 174', to: 'NidokingIR MEW 174' },
+  { from: 'Venusaur ex MEW 182', to: 'Venusaur exFA MEW 182' },
+  { from: 'Charizard ex MEW 183', to: 'Charizard exFA MEW 183' },
+  { from: 'Blastoise ex MEW 184', to: 'Blastoise exFA MEW 184' },
+  { from: 'Arbok ex MEW 185', to: 'Arbok exFA MEW 185' },
+  { from: 'Alakazam ex MEW 188', to: 'Alakazam exFA MEW 188' },
+  { from: 'Kangaskhan ex MEW 190', to: 'Kangaskhan exFA MEW 190' },
+  { from: 'Zapdos ex MEW 192', to: 'Zapdos exFA MEW 192' },
+  { from: 'Mew ex MEW 193', to: 'Mew exFA MEW 193' },
+  { from: 'Erika\'s Invitation MEW 196', to: 'Erika\'s InvitationFA MEW 196' },
+  { from: 'Giovanni\'s Charisma MEW 197', to: 'Giovanni\'s CharismaFA MEW 197' },
+  { from: 'Venusaur ex MEW 198', to: 'Venusaur exSIR MEW 198' },
+  { from: 'Charizard ex MEW 199', to: 'Charizard exSIR MEW 199' },
+  { from: 'Blastoise ex MEW 200', to: 'Blastoise exSIR MEW 200' },
+  { from: 'Alakazam ex MEW 201', to: 'Alakazam exSIR MEW 201' },
+  { from: 'Zapdos ex MEW 202', to: 'Zapdos exSIR MEW 202' },
+  { from: 'Erika\'s Invitation MEW 203', to: 'Erika\'s InvitationSIR MEW 203' },
+  { from: 'Giovanni\'s Charisma MEW 204', to: 'Giovanni\'s CharismaSIR MEW 204' },
+  { from: 'Mew ex MEW 205', to: 'Mew exHR MEW 205' },
+  { from: 'Switch MEW 206', to: 'SwitchHR MEW 206' },
+  { from: 'Psychic Energy MEW 207', to: 'Psychic Energy MEW 207' },
+
+  //PAR
+  { from: 'Toedscool PAL 57 ', to: 'Toedscool PAL2 57' },
+  { from: 'Gimmighoul PAR 88', to: 'Gimmighoul2 PAR 88' },
+  //PAR FA
+  { from: 'Toedscruel PAR 185', to: 'ToedscruelIR PAR 185' },
+  { from: 'Magby PAR 186', to: 'MagbyIR PAR 186' },
+  { from: 'Iron Moth PAR 187', to: 'IronMothIR PAR 187' },
+  { from: 'Snorunt PAR 188', to: 'SnoruntIR PAR 188' },
+  { from: 'Mantyke PAR 189', to: 'MantykeIR PAR 189' },
+  { from: 'Vanillish PAR 190', to: 'VanillishIR PAR 190' },
+  { from: 'Blitzle PAR 195', to: 'BlitzleIR PAR 195' },
+  { from: 'Joltik PAR 196', to: 'JoltikIR PAR 196' },
+  { from: 'Gimmighoul PAR 198', to: 'GimmighoulIR PAR 198' },
+  { from: 'Groudon PAR 199', to: 'GroudonIR PAR 199' },
+  { from: 'Minior PAR 201', to: 'MiniorIR PAR 201' },
+  { from: 'Garganacl PAR 202', to: 'GarganacIR PAR 202' },
+  { from: 'Slither Wing PAR 203', to: 'SlitherWingIR PAR 203' },
+  { from: 'Garbodor PAR 204', to: 'GarbodorIR PAR 204' },
+  { from: 'Yveltal PAR 205', to: 'YveltalIR PAR 205' },
+  { from: 'Morpeko PAR 206', to: 'MorpekoIR PAR 206' },
+  { from: 'Brute Bonnet PAR 207', to: 'BruteBonnetIR PAR 207' },
+  { from: 'Ferrothorn PAR 209', to: 'FerrothorIR PAR 209' },
+  { from: 'Aegislash PAR 210', to: 'AegislashIR PAR 210' },
+  { from: 'Swablu PAR 213', to: 'SwabluIR PAR 213' },
+  { from: 'Porygon-Z PAR 214', to: 'PorygonZIR PAR 214' },
+  { from: 'Cyclizar PAR 215', to: 'CyclizarIR PAR 215' },
+  { from: 'Iron Jugulis PAR 216', to: 'IronJugulisIR PAR 216' },
+
+  //PAF Shiny Vault & Full arts
+  { from: 'Charmander PAF 109', to: 'CharmanderSV PAF 109' },
+  { from: 'Charmeleon PAF 110', to: 'CharmeleonSV PAF 110' },
+  { from: 'Frigibax PAF 128', to: 'FrigibaxSV PAF 128' },
+  { from: 'Mime Jr. PAF 157', to: 'MimeJrSV PAF 157' },
+  { from: 'Espathra ex PAF 214', to: 'Espathra exSV PAF 214' },
+  { from: 'Wugtrio PAF 224', to: 'WugtrioFA PAF 224' },
+  { from: 'Palafin PAF 225', to: 'PalafinFA PAF 225' },
+  { from: 'Pawmi PAF 226', to: 'PawmiFA PAF 226' },
+  { from: 'Clive PAF 227', to: 'CliveFA PAF 227' },
+  { from: 'Nemona PAF 229', to: 'NemonaFA PAF 229' },
+  { from: 'Paldean Student PAF 230', to: 'Paldean StudentFA PAF 230' },
+  { from: 'Paldean Student PAF 231', to: 'Paldean StudentFA2 PAF 231' },
+  { from: 'Mew ex PAF 232', to: 'Mew exSIR PAF 232' },
+  { from: 'Gardevoir ex PAF 233', to: 'Gardevoir exSIR PAF 233' },
+  { from: 'Charizard ex PAF 234', to: 'Charizard exSIR PAF 234' },
+  { from: 'Arven PAF 236', to: 'ArvenSIR PAF 235' },
+  { from: 'Clive PAF 236', to: 'CliveSIR PAF 236' },
+  { from: 'Iono PAF 237', to: 'IonoSIR PAF 237' },
+  { from: 'Nemona PAF 238', to: 'NemonaSIR PAF 238' },
+  { from: 'Penny PAF 236', to: 'PennySIR PAF 239' },
+
+  //TEF
+  { from: 'Great Tusk TEF 96', to: 'Great Tusk TEF2 96' },
+
+  //TEF FA
+  { from: 'Grotle TEF 164', to: 'GrotleIR TEF 164' },
+  { from: 'Charjabug TEF 169', to: 'CharjabugIR TEF 169' },
+  { from: 'Reuniclus TEF 171', to: 'ReuniclusIR TEF 171' },
+  { from: 'Relicanth TEF 173', to: 'RelicanthIR TEF 173' },
+  { from: 'Gastly TEF 177', to: 'GastlyIR TEF 177' },
+  { from: 'Metagross TEF 178', to: 'MetagrossIR TEF 178' },
+  { from: 'Chatot TEF 181', to: 'ChatotIR TEF 181' },
+  { from: 'Minccino TEF 182', to: 'MinccinoIR TEF 182' },
+  { from: 'Cinccino TEF 183', to: 'CinccinoIR TEF 183' },
+  { from: 'Torterra ex TEF 185', to: 'TorterraexFA TEF 185' },
+  { from: 'Iron Leaves ex TEF 186', to: 'IronLeavesexFA TEF 186' },
+  { from: 'Gouging Fire ex TEF 188', to: 'GougingFireexFA TEF 188' },
+  { from: 'Walking Wake ex TEF 189', to: 'WalkingWakeexFA TEF 189' },
+  { from: 'Iron Crown ex TEF 191', to: 'IronCrownexFA TEF 191' },
+  { from: 'Gengar ex TEF 193', to: 'GengarexFA TEF 193' },
+  { from: 'Raging Bolt ex TEF 196', to: 'RagingBoltexFA TEF 196' },
+  { from: 'Bianca\'s Devotion TEF 197', to: 'BiancasDevotionFA TEF 197' },
+  { from: 'Ciphermaniac\'s Codebreaking TEF 198', to: 'CiphermaniacsCodebreakingFA TEF 198' },
+  { from: 'Eri TEF 199', to: 'EriFA TEF 199' },
+  { from: 'Explorer\'s Guidance TEF 200', to: 'ExplorersGuidanceFA TEF 200' },
+  { from: 'Morty\'s Conviction TEF 201', to: 'MortysConvictionFA TEF 201' },
+  { from: 'Salvatore TEF 202', to: 'SalvatoreFA TEF 202' },
+  { from: 'Iron Leaves ex TEF 203', to: 'IronLeavesexSIR TEF 203' },
+  { from: 'Gouging Fire ex TEF 204', to: 'GougingFireexSIR TEF 204' },
+  { from: 'Walking Wake ex TEF 205', to: 'WalkingWakeexSIR TEF 205' },
+  { from: 'Iron Crown ex TEF 206', to: 'IronCrownexSIR TEF 206' },
+  { from: 'Raging Bolt ex TEF 208', to: 'RagingBoltexSIR TEF 208' },
+  { from: 'Bianca\'s Devotion TEF 209', to: 'BiancasDevotionSIR TEF 209' },
+  { from: 'Eri TEF 210', to: 'EriSIR TEF 210' },
+  { from: 'Morty\'s Conviction TEF 211', to: 'MortysConvictionSIR TEF 211' },
+  { from: 'Salvatore TEF 212', to: 'SalvatoreSIR TEF 212' },
+  { from: 'Iron Leaves ex TEF 213', to: 'IronLeavesexHR TEF 213' },
+  { from: 'Gouging Fire ex TEF 214', to: 'GougingFireexHR TEF 214' },
+  { from: 'Walking Wake ex TEF 215', to: 'WalkingWakeexHR TEF 215' },
+  { from: 'Iron Crown ex TEF 216', to: 'IronCrownexHR TEF 216' },
+  { from: 'Raging Bolt ex TEF 218', to: 'RagingBoltexHR TEF 218' },
+
+  //TWM
+  { from: 'Applin TWM 17', to: 'Applin TWM1 17' },
+  { from: 'Applin TWM 126', to: 'Applin TWM2 126' },
+  { from: 'Dipplin TWM 18', to: 'Dipplin TWM1 18' },
+  { from: 'Dipplin TWM 127', to: 'Dipplin TWM2 127' },
+  //TWM FA
+  { from: 'Dipplin TWM 170', to: 'DipplinIR TWM 170' },
+  { from: 'Poltchageist TWM 171', to: 'PoltchageistIR TWM 171' },
+  { from: 'Infernape TWM 173', to: 'InfernapeIR TWM 173' },
+  { from: 'Froslass TWM 174', to: 'FroslassIR TWM 174' },
+  { from: 'Phione TWM 175', to: 'PhioneIR TWM 175' },
+  { from: 'Hisuian Growlithe TWM 181', to: 'HisuianGrowlitheIR TWM 181' },
+  { from: 'Timburr TWM 183', to: 'TimburrIR TWM 183' },
+  { from: 'Lairon TWM 184', to: 'LaironIR TWM 184' },
+  { from: 'Applin TWM 185', to: 'ApplinIR TWM 185' },
+  { from: 'Tatsugiri TWM 186', to: 'TatsugiriIR TWM 186' },
+  { from: 'Chansey TWM 187', to: 'ChanseyIR TWM 187' },
+  { from: 'Eevee TWM 188', to: 'EeveeIR TWM 188' },
+  { from: 'Sinistcha ex TWM 189', to: 'Sinistcha exFA TWM 189' },
+  { from: 'Teal Mask Ogerpon ex TWM 190', to: 'Teal Mask Ogerpon exFA TWM 190' },
+  { from: 'Magcargo ex TWM 191', to: 'Magcargo exFA TWM 191' },
+  { from: 'Hearthflame Mask Ogerpon ex TWM 192', to: 'Hearthflame Mask Ogerpon exFA TWM 192' },
+  { from: 'Palafin ex TWM 193', to: 'Palafin exFA TWM 193' },
+  { from: 'Wellspring Mask Ogerpon ex TWM 194', to: 'Wellspring Mask Ogerpon exFA TWM 194' },
+  { from: 'Luxray ex TWM 195', to: 'Luxray exFA TWM 195' },
+  { from: 'Iron Thorns ex TWM 196', to: 'Iron Thorns exFA TWM 196' },
+  { from: 'Scream Tail ex TWM 197', to: 'Scream Tail exFA TWM 197' },
+  { from: 'Greninja ex TWM 198', to: 'Greninja exFA TWM 198' },
+  { from: 'Cornerstone Mask Ogerpon ex TWM 199', to: 'Cornerstone Mask Ogerpon exFA TWM 199' },
+  { from: 'Dragapult ex TWM 200', to: 'Dragapult exFA TWM 200' },
+  { from: 'Blissey ex TWM 201', to: 'Blissey exFA TWM 201' },
+  { from: 'Bloodmoon Ursaluna ex TWM 202', to: 'Bloodmoon Ursaluna exFA TWM 202' },
+  { from: 'Caretaker TWM 203', to: 'CaretakerFA TWM 203' },
+  { from: 'Carmine TWM 204', to: 'CarmineFA TWM 204' },
+  { from: 'Hassel TWM 205', to: 'HasselFA TWM 205' },
+  { from: 'Kieran TWM 206', to: 'KieranFA TWM 206' },
+  { from: 'Lana\'s Aid TWM 207', to: 'Lana\'s AidFA TWM 207' },
+  { from: 'Perrin TWM 209', to: 'PerrinFA TWM 209' },
+  { from: 'Sinistcha ex TWM 210', to: 'Sinistcha exSIR TWM 210' },
+  { from: 'Teal Mask Ogerpon ex TWM 211', to: 'Teal Mask Ogerpon exSIR TWM 211' },
+  { from: 'Hearthflame Mask Ogerpon ex TWM 212', to: 'Hearthflame Mask Ogerpon exSIR TWM 212' },
+  { from: 'Wellspring Mask Ogerpon ex TWM 213', to: 'Wellspring Mask Ogerpon exSIR TWM 213' },
+  { from: 'Greninja ex TWM 214', to: 'Greninja exSIR TWM 214' },
+  { from: 'Cornerstone Mask Ogerpon ex TWM 215', to: 'Cornerstone Mask Ogerpon exSIR TWM 215' },
+  { from: 'Bloodmoon Ursaluna ex TWM 216', to: 'Bloodmoon Ursaluna exSIR TWM 216' },
+  { from: 'Carmine TWM 217', to: 'CarmineSIR TWM 217' },
+  { from: 'Kieran TWM 218', to: 'KieranSIR TWM 218' },
+  { from: 'Lana\'s Aid TWM 219', to: 'Lana\'s AidSIR TWM 219' },
+  { from: 'Perrin TWM 220', to: 'PerrinSIR TWM 220' },
+  { from: 'Teal Mask Ogerpon ex TWM 221', to: 'Teal Mask Ogerpon exHR TWM 221' },
+  { from: 'Bloodmoon Ursaluna ex TWM 222', to: 'Bloodmoon Ursaluna exHR TWM 222' },
+  { from: 'Buddy-Buddy Poffin TWM 223', to: 'Buddy-Buddy PoffinHR TWM 223' },
+  { from: 'Enhanced Hammer TWM 224', to: 'Enhanced HammerHR TWM 224' },
+  { from: 'Rescue Board TWM 225', to: 'Rescue BoardHR TWM 225' },
+
+  //SFA
+  { from: 'Janine\'s Secret Art SFA 59', to: 'Janine\'s Secret Technique SFA 59' },
+  { from: 'Poké Vital A SFA 62', to: 'PokéVital A SFA 62' },
+  { from: 'Tapu Bulu SFA 65', to: 'Tapu BuluIR SFA 65' },
+  { from: 'Houndoom SFA 66', to: 'HoundoomIR SFA 66' },
+  { from: 'Horsea SFA 67', to: 'HorseaIR SFA 67' },
+  { from: 'Duskull SFA 68', to: 'DuskullIR SFA 68' },
+  { from: 'Dusclops SFA 69', to: 'DusclopsIR SFA 69' },
+  { from: 'Dusknoir SFA 70', to: 'DusknoirIR SFA 70' },
+  { from: 'Cresselia SFA 71', to: 'CresseliaIR SFA 71' },
+  { from: 'Zorua SFA 75', to: 'ZoruaIR SFA 75' },
+  { from: 'Cufant SFA 76', to: 'CufantIR SFA 76' },
+  { from: 'Fraxure SFA 77', to: 'FraxureIR SFA 77' },
+  { from: 'Kingdra ex SFA 80', to: 'Kingdra exFA SFA 80' },
+  { from: 'Revavroom ex SFA 81', to: 'Revavroom exFA SFA 81' },
+  { from: 'Okidogi ex SFA 82', to: 'Okidogi exFA SFA 82' },
+  { from: 'Munkidori ex SFA 83', to: 'Munkidori exFA SFA 83' },
+  { from: 'Fezandipiti ex SFA 84', to: 'Fezandipiti exFA SFA 84' },
+  { from: 'Pecharunt ex SFA 85', to: 'Pecharunt exFA SFA 85' },
+  { from: 'Cassiopeia SFA 86', to: 'CassiopeiaFA SFA 86' },
+  { from: 'Colress\'s Tenacity SFA 87', to: 'Colress\'s TenacityFA SFA 87' },
+  { from: 'Janine\'s Secret Art SFA 88', to: 'Janine\'s Secret ArtFA SFA 88' },
+  { from: 'Xerosic\'s Machinations SFA 89', to: 'Xerosic\'s MachinationsFA SFA 89' },
+  { from: 'Okidogi ex SFA 90', to: 'Okidogi exSIR SFA 90' },
+  { from: 'Munkidori ex SFA 91', to: 'Munkidori exSIR SFA 91' },
+  { from: 'Fezandipiti ex SFA 92', to: 'Fezandipiti exSIR SFA 92' },
+  { from: 'Pecharunt ex SFA 93', to: 'Pecharunt exSIR SFA 93' },
+  { from: 'Cassiopeia SFA 94', to: 'CassiopeiaSIR SFA 94' },
+  { from: 'Pecharunt ex SFA 95', to: 'Pecharunt exUR SFA 95' },
+  { from: 'Powerglass SFA 97', to: 'PowerglassUR SFA 97' },
+
+  //SCR FA
+  { from: 'Bulbasaur SCR 143', to: 'BulbasaurIR SCR 143' },
+  { from: 'Raboot SCR 147', to: 'RabootIR SCR 147' },
+  { from: 'Squirtle SCR 148', to: 'SquirtleIR SCR 148' },
+  { from: 'Joltik SCR 150', to: 'JoltikIR SCR 150' },
+  { from: 'Zeraora SCR 151', to: 'ZeraoraIR SCR 151' },
+  { from: 'Milcery SCR 152', to: 'MilceryIR SCR 152' },
+  { from: 'Meditite SCR 153', to: 'MedititeIR SCR 153' },
+  { from: 'Archaludon SCR 155', to: 'ArchaludonIR SCR 155' },
+  { from: 'Hydrapple ex SCR 156', to: 'Hydrapple exFA SCR 156' },
+  { from: 'Cinderace ex SCR 157', to: 'Cinderace exFA SCR 157' },
+  { from: 'Lapras ex SCR 158', to: 'Lapras exFA SCR 158' },
+  { from: 'Galvantula ex SCR 159', to: 'Galvantula exFA SCR 159' },
+  { from: 'Medicham ex SCR 161', to: 'Medicham exFA SCR 161' },
+  { from: 'Orthworm ex SCR 162', to: 'Orthworm exFA SCR 162' },
+  { from: 'Briar SCR 163', to: 'BriarFA SCR 163' },
+  { from: 'Crispin SCR 164', to: 'CrispinFA SCR 164' },
+  { from: 'Kofu SCR 165', to: 'KofuFA SCR 165' },
+  { from: 'Lacey SCR 166', to: 'LaceyFA SCR 166' },
+  { from: 'Hydrapple ex SCR 167', to: 'Hydrapple exSIR SCR 167' },
+  { from: 'Galvantula ex SCR 168', to: 'Galvantula exSIR SCR 168' },
+  { from: 'Terapagos ex SCR 170', to: 'Terapagos exSIR SCR 170' },
+  { from: 'Briar SCR 171', to: 'BriarSIR SCR 171' },
+  { from: 'Lacey SCR 172', to: 'LaceySIR SCR 172' },
+  { from: 'Terapagos ex SCR 173', to: 'Terapagos exHR SCR 173' },
+  { from: 'Area Zero Underdepths SCR 174', to: 'Area Zero UnderdepthsHR SCR 174' },
+
+  //SSP
+  { from: 'Charcadet SSP 33', to: 'Charcadet 2 SSP 33' },
+  { from: 'Lively Stadium SSP 180', to: 'Exciting Stadium SSP 180' },
+  //SSP FA
+  { from: 'Larvesta SSP 196', to: 'LarvestaIR SSP 196' },
+  { from: 'Feebas SSP 198', to: 'FeebasIR SSP 198' },
+  { from: 'Milotic ex SSP 218', to: 'Milotic exFA SSP 218' },
+  { from: 'Pikachu ex SSP 219', to: 'Pikachu exFA SSP 219' },
+  { from: 'Latias ex SSP 220', to: 'Latias exFA SSP 220' },
+  { from: 'Hydreigon ex SSP 223', to: 'Hydreigon exFA SSP 223' },
+  { from: 'Archaludon ex SSP 224', to: 'Archaludon exFA SSP 224' },
+  { from: 'Cyrano SSP 230', to: 'CyranoFA SSP 230' },
+  { from: 'Lisia\'s Appeal SSP 234', to: 'Lisia\'s AppealFA SSP 234' },
+  { from: 'Surfer SSP 235', to: 'SurferFA SSP 235' },
+  { from: 'Milotic ex SSP 237', to: 'Milotic exSIR SSP 237' },
+  { from: 'Pikachu ex SSP 238', to: 'Pikachu exSIR SSP 238' },
+  { from: 'Latias ex SSP 239', to: 'Latias exSIR SSP 239' },
+  { from: 'Hydreigon ex SSP 240', to: 'Hydreigon exSIR SSP 240' },
+  { from: 'Archaludon ex SSP 241', to: 'Archaludon exSIR SSP 241' },
+  { from: 'Lisia\'s Appeal SSP 246', to: 'Lisia\'s AppealSIR SSP 246' },
+  { from: 'Pikachu ex SSP 247', to: 'Pikachu exUR SSP 247' },
+  { from: 'Counter Gain SSP 249', to: 'Counter GainUR SSP 249' },
+
+  //PRE FA
+  { from: 'Professor\'s Research PRE 122', to: 'Professor\'s ResearchO PRE 122' },
+  { from: 'Professor\'s Research PRE 123', to: 'Professor\'s ResearchE PRE 123' },
+  { from: 'Professor\'s Research PRE 124', to: 'Professor\'s ResearchR PRE 124' },
+  { from: 'Professor\'s Research PRE 125', to: 'Professor\'s ResearchS PRE 125' },
+  { from: 'Amarys PRE 132', to: 'AmarysFA PRE 132' },
+  { from: 'Atticus PRE 133', to: 'AtticusFA PRE 133' },
+  { from: 'Atticus PRE 134', to: 'AtticusFA2 PRE 134' },
+  { from: 'Eri PRE 136', to: 'EriFA PRE 136' },
+  { from: 'Giacomo PRE 138', to: 'GiacomoFA PRE 138' },
+  { from: 'Mela PRE 140', to: 'MelaFA PRE 140' },
+  { from: 'Leafeon ex PRE 144', to: 'Leafeon exSAR PRE 144' },
+  { from: 'Teal Mask Ogerpon ex PRE 144', to: 'Teal Mask Ogerpon exSAR PRE 144' },
+  { from: 'Flareon ex PRE 146', to: 'Flareon exSAR PRE 146' },
+  { from: 'Ceruledge ex PRE 147', to: 'Ceruledge exSAR PRE 147' },
+  { from: 'Hearthflame Mask Ogerpon ex PRE 148', to: 'Hearthflame Mask Ogerpon exSAR PRE 148' },
+  { from: 'Vaporeon ex PRE 149', to: 'Vaporeon exSAR PRE 149' },
+  { from: 'Glaceon ex PRE 150', to: 'Glaceon exSAR PRE 150' },
+  { from: 'Palafin ex PRE 151', to: 'Palafin exSAR PRE 151' },
+  { from: 'Wellspring Mask Ogerpon ex PRE 152', to: 'Wellspring Mask Ogerpon exSAR PRE 152' },
+  { from: 'Jolteon ex PRE 153', to: 'Jolteon exSAR PRE 153' },
+  { from: 'Iron Hands ex PRE 154', to: 'Iron Hands exSAR PRE 154' },
+  { from: 'Espeon ex PRE 155', to: 'Espeon exSAR PRE 155' },
+  { from: 'Sylveon ex PRE 156', to: 'Sylveon exSAR PRE 156' },
+  { from: 'Iron Valiant ex PRE 157', to: 'Iron Valiant exSAR PRE 157' },
+  { from: 'Iron Crown ex PRE 158', to: 'Iron Crown exSAR PRE 158' },
+  { from: 'Sandy Shocks ex PRE 159', to: 'Sandy Shocks exSAR PRE 159' },
+  { from: 'Cornerstone Mask Ogerpon ex PRE 160', to: 'Cornerstone Mask Ogerpon exSAR PRE 160' },
+  { from: 'Umbreon ex PRE 161', to: 'Umbreon exSAR PRE 161' },
+  { from: 'Roaring Moon ex PRE 162', to: 'Roaring Moon exSAR PRE 162' },
+  { from: 'Pecharunt ex PRE 163', to: 'Pecharunt exSAR PRE 163' },
+  { from: 'Gholdengo ex PRE 164', to: 'Gholdengo exSAR PRE 164' },
+  { from: 'Dragapult ex PRE 165', to: 'Dragapult exSAR PRE 165' },
+  { from: 'Raging Bolt ex PRE 166', to: 'Raging Bolt exSAR PRE 166' },
+  { from: 'Eevee ex PRE 167', to: 'Eevee exSAR PRE 167' },
+  { from: 'Bloodmoon Ursaluna ex PRE 168', to: 'Bloodmoon Ursaluna exSAR PRE 168' },
+  { from: 'Terapagos ex PRE 169', to: 'Terapagos exSAR PRE 169' },
+  { from: 'Amarys PRE 170', to: 'AmarysSAR PRE 170' },
+  { from: 'Crispin PRE 171', to: 'CrispinSAR PRE 171' },
+  { from: 'Drayton PRE 172', to: 'DraytonSAR PRE 172' },
+  { from: 'Janine\'s Secret Art PRE 173', to: 'Janine\'s Secret ArtSAR PRE 173' },
+  { from: 'Kieran PRE 174', to: 'KieranSAR PRE 174' },
+  { from: 'Lacey PRE 175', to: 'LaceySAR PRE 175' },
+  { from: 'Iron Leaves ex PRE 176', to: 'Iron Leaves exUR PRE 176' },
+  { from: 'Teal Mask Ogerpon ex PRE 177', to: 'Teal Mask Ogerpon exUR PRE 177' },
+  { from: 'Walking Wake ex PRE 178', to: 'Walking Wake exUR PRE 178' },
+  { from: 'Pikachu ex PRE 179', to: 'Pikachu exUR PRE 179' },
+  { from: 'Terapagos ex PRE 180', to: 'Terapagos exUR PRE 180' },
+
+  //JTG
+  { from: 'Maractus JTG 160', to: 'MaractusIR JTG 160' },
+  { from: 'Wailord JTG 162', to: 'WailordIR JTG 162' },
+  { from: 'Iono\'s Kilowattrel JTG 163', to: 'Iono\'s KilowattrelIR JTG 163' },
+  { from: 'Lillie\'s Ribombee JTG 164', to: 'Lillie\'s RibombeeIR JTG 164' },
+  { from: 'Swinub JTG 165', to: 'SwinubIR JTG 165' },
+  { from: 'Lycanroc JTG 166', to: 'LycanrocIR JTG 166' },
+  { from: 'N\'s Zorua JTG 100', to: 'N\'s ZoruaIR JTG 100' },
+  { from: 'N\'s Reshiram JTG 167', to: 'N\'s ReshiramIR JTG 167' },
+  { from: 'Hop\'s Wooloo JTG 170', to: 'Hop\'s WoolooIR JTG 170' },
+  { from: 'Volcanion ex JTG 171', to: 'Volcanion exFA JTG 171' },
+  { from: 'Iono\'s Bellibolt ex JTG 172', to: 'Iono\'s Bellibolt exFA JTG 172' },
+  { from: 'Lillie\'s Clefairy ex JTG 173', to: 'Lillie\'s Clefairy exFA JTG 173' },
+  { from: 'Mamoswine ex JTG 174', to: 'Mamoswine exFA JTG 174' },
+  { from: 'N\'s Zoroark ex JTG 175', to: 'N\'s Zoroark exFA JTG 175' },
+  { from: 'Hop\'s Zacian ex JTG 176', to: 'Hop\'s Zacian exFA JTG 176' },
+  { from: 'Salamence ex JTG 177', to: 'Salamence exFA JTG 177' },
+  { from: 'Dudunsparce ex JTG 178', to: 'Dudunsparce exFA JTG 178' },
+  { from: 'Brock\'s Scouting JTG 179', to: 'Brock\'s RecruitmentFA JTG 179' },
+  { from: 'Iris\'s Fighting Spirit JTG 180', to: 'Iris\'s Fighting SpiritFA JTG 180' },
+  { from: 'Ruffian JTG 181', to: 'RuffianFA JTG 181' },
+  { from: 'Volcanion ex JTG 182', to: 'Volcanion exSIR JTG 182' },
+  { from: 'Iono\'s Bellibolt ex JTG 183', to: 'Iono\'s Bellibolt exSIR JTG 183' },
+  { from: 'Lillie\'s Clefairy ex JTG 184', to: 'Lillie\'s Clefairy exSIR JTG 184' },
+  { from: 'N\'s Zoroark ex JTG 185', to: 'N\'s Zoroark exSIR JTG 185' },
+  { from: 'Hop\'s Zacian ex JTG 186', to: 'Hop\'s Zacian exSIR JTG 186' },
+  { from: 'Salamence ex JTG 187', to: 'Salamence exSIR JTG 187' },
+  { from: 'Iono\'s Bellibolt ex JTG 188', to: 'Iono\'s Bellibolt exUR JTG 188' },
+  { from: 'N\'s Zoroark ex JTG 189', to: 'N\'s Zoroark exUR JTG 189' },
+  { from: 'Spiky Energy JTG 190', to: 'Spike EnergyUR JTG 190' },
+
+  //DRI
+  { from: 'Steven\'s Beldum DRI 19', to: 'Steven\'s BeldumIR DRI 19' },
+  { from: 'Marnie\'s Morpeko DRI 20', to: 'Marnie\'s MorpekoIR DRI 20' },
+  { from: 'Ethan\'s Ho-Oh ex DRI 239', to: 'Ethan\'s Ho-Oh exSIR DRI 239' },
+  { from: 'Cynthia\'s Roserade DRI 184', to: 'Cynthia\'s RoseradeIR DRI 184' },
+
+  //SV11B ARs
+  { from: 'Snivy SV11B 87', to: 'SnivyAR SV11B 87' },
+  { from: 'Servine SV11B 88', to: 'ServineAR SV11B 88' },
+  { from: 'Victini SV11B 97', to: 'VictiniAR SV11B 97' },
+  { from: 'Larvesta SV11B 103', to: 'LarvestaAR SV11B 103' },
+  { from: 'Volcarona SV11B 104', to: 'VolcaronaAR SV11B 104' },
+  { from: 'Tympole SV11B 107', to: 'TympoleAR SV11B 107' },
+  { from: 'Palpitoad SV11B 108', to: 'PalpitoadAR SV11B 108' },
+  { from: 'Seismitoad SV11B 109', to: 'SeismitoadAR SV11B 109' },
+  { from: 'Tirtouga SV11B 110', to: 'TirtougaAR SV11B 110' },
+  { from: 'Carracosta SV11B 111', to: 'CarracostaAR SV11B 111' },
+  { from: 'Alomomola SV11B 112', to: 'AlomomolaAR SV11B 112' },
+  { from: 'Emolga SV11B 113', to: 'EmolgaAR SV11B 113' },
+  { from: 'Tynamo SV11B 117', to: 'TynamoAR SV11B 117' },
+  { from: 'Eelektrik SV11B 118', to: 'EelektrikAR SV11B 118' },
+  { from: 'Drillbur SV11B 130', to: 'DrillburAR SV11B 130' },
+  { from: 'Cobalion SV11B 149', to: 'CobalionAR SV11B 149' },
+  { from: 'Axew SV11B 150', to: 'AxewAR SV11B 150' },
+  { from: 'Fraxure SV11B 151', to: 'FraxureAR SV11B 151' },
+  { from: 'Haxorus SV11B 152', to: 'HaxorusAR SV11B 152' },
+  //SV11B FAs
+  { from: 'Serperior ex SV11B 159', to: 'Serperior exFA SV11B 159' },
+  { from: 'Kyurem ex SV11B 160', to: 'Kyurem exFA SV11B 160' },
+  { from: 'Zekrom ex SV11B 161', to: 'Zekrom exFA SV11B 161' },
+  { from: 'Meloetta ex SV11B 162', to: 'Meloetta exFA SV11B 162' },
+  { from: 'Excadrill ex SV11B 163', to: 'Excadrill exFA SV11B 163' },
+  { from: 'Genesect ex SV11B 164', to: 'Genesect exFA SV11B 164' },
+  { from: 'N\'s Plot SV11B 165', to: 'N\'s PlotFA SV11B 165' },
+  { from: 'Fennel SV11B 166', to: 'FennelFA SV11B 166' },
+  //SV11B SIRs
+  { from: 'Serperior ex SV11B 167', to: 'Serperior exSIR SV11B 167' },
+  { from: 'Kyurem ex SV11B 168', to: 'Kyurem exSIR SV11B 168' },
+  { from: 'Zekrom ex SV11B 169', to: 'Zekrom exSIR SV11B 169' },
+  { from: 'Meloetta ex SV11B 170', to: 'Meloetta exSIR SV11B 170' },
+  { from: 'Excadrill ex SV11B 171', to: 'Excadrill exSIR SV11B 171' },
+  { from: 'Genesect ex SV11B 172', to: 'Genesect exSIR SV11B 172' },
+  { from: 'N\'s Plot SV11B 173', to: 'NsPlotSIR SV11B 173' },
+  //SV11B BRs
+  { from: 'Zekrom ex SV11B 174', to: 'Zekrom exBR SV11B 174' },
+
+  //SV11W ARs
+  { from: 'Cottonee SV11W 90', to: 'CottoneeAR SV11W 90' },
+  { from: 'Virizion SV11W 95', to: 'VirizionAR SV11W 95' },
+  { from: 'Tepig SV11W 96', to: 'TepigAR SV11W 96' },
+  { from: 'Pignite SV11W 97', to: 'PigniteAR SV11W 97' },
+  { from: 'Emboar SV11W 98', to: 'EmboarAR SV11W 98' },
+  { from: 'Oshawott SV11W 102', to: 'OshawottAR SV11W 102' },
+  { from: 'Dewott SV11W 103', to: 'DewottAR SV11W 103' },
+  { from: 'Samurott SV11W 104', to: 'SamurottAR SV11W 104' },
+  { from: 'Frillish SV11W 100', to: 'FrillishAR SV11W 100' },
+  { from: 'Joltik SV11W 113', to: 'JoltikAR SV11W 113' },
+  { from: 'Galvantula SV11W 114', to: 'GalvantulaAR SV11W 114' },
+  { from: 'Frillish SV11W 124', to: 'FrillishAR SV11W 124' },
+  { from: 'Archen SV11W 129', to: 'ArchenAR SV11W 129' },
+  { from: 'Archeops SV11W 130', to: 'ArcheopsAR SV11W 130' },
+  { from: 'Terrakion SV11W 133', to: 'TerrakionAR SV11W 133' },
+  { from: 'Zorua SV11W 140', to: 'ZoruaAR SV11W 140' },
+  { from: 'Zoroark SV11W 141', to: 'ZoroarkAR SV11W 141' },
+  { from: 'Deino SV11W 142', to: 'DeinoAR SV11W 142' },
+  { from: 'Zweilous SV11W 143', to: 'ZweilousAR SV11W 143' },
+
+  //SV11W FAs
+  { from: 'Whimsicott ex SV11W 159', to: 'Whimsicott exFA SV11W 159' },
+  { from: 'Reshiram ex SV11W 160', to: 'Reshiram exFA SV11W 160' },
+  { from: 'Keldeo ex SV11W 161', to: 'Keldeo exFA SV11W 161' },
+  { from: 'Jellicent ex SV11W 162', to: 'Jellicent exFA SV11W 162' },
+  { from: 'Hydreigon ex SV11W 163', to: 'Hydreigon exFA SV11W 163' },
+  { from: 'Bouffalant ex SV11W 164', to: 'Bouffalant exFA SV11W 164' },
+  { from: 'Hilda SV11W 166', to: 'HildaFA SV11W 166' },
+
+  //SV11W SIRs
+  { from: 'Whimsicott ex SV11W 167', to: 'Whimsicott exSIR SV11W 167' },
+  { from: 'Reshiram ex SV11W 168', to: 'Reshiram exSIR SV11W 168' },
+  { from: 'Keldeo ex SV11W 169', to: 'Keldeo exSIR SV11W 169' },
+  { from: 'Jellicent ex SV11W 170', to: 'Jellicent exSIR SV11W 170' },
+  { from: 'Hydreigon ex SV11W 171', to: 'Hydreigon exSIR SV11W 171' },
+  { from: 'Bouffalant ex SV11W 172', to: 'Bouffalant exSIR SV11W 172' },
+  { from: 'Hilda SV11W 173', to: 'HildaSIR SV11W 173' },
+
+  //SV11W White Rare
+  { from: 'Reshiram ex SV11W 174', to: 'Reshiram exWR SV11W 174' },
+
+  //Mega Evolution (me01 -> MEG)
+  { from: 'Energy Switch me01 115', to: 'Energy Switch MEG 115' },
+  { from: 'Mystery Garden me01 122', to: 'Mystery Garden MEG 122' },
+
+  //Perfect Order (me03 -> POR/M3) - card is implemented under its Japanese-print spelling
+  { from: 'Lumiose City POR 77', to: 'Lumioise City POR 77' },
+  { from: 'Lumiose City M3 77', to: 'Lumioise City M3 77' },
+  { from: 'Lumiose City me03 77', to: 'Lumioise City POR 77' },
+];
+
+// Mapping of common import format set codes to internal set codes
+// The import format uses codes like "CES" for Celestial Storm
+// This maps them to the internal codes used in this codebase
+const IMPORT_SET_CODE_MAP: { [key: string]: string } = {
+  // Sun & Moon Era
+  'SUM': 'SUM',
+  'GRI': 'GRI',
+  'BUS': 'BUS',
+  'SLG': 'SLG',
+  'CIN': 'CIN',
+  'UPR': 'UPR',
+  'FLI': 'FLI',
+  'CES': 'CES',
+  'DRM': 'DRM',
+  'LOT': 'LOT',
+  'TEU': 'TEU',
+  'DET': 'DET',
+  'UNB': 'UNB',
+  'UNM': 'UNM',
+  'HIF': 'HIF',
+  'CEC': 'CEC',
+  // Sword & Shield Era
+  'SSH': 'SSH',
+  'RCL': 'RCL',
+  'DAA': 'DAA',
+  'CPA': 'CPA',
+  'VIV': 'VIV',
+  'SHF': 'SHF',
+  'BST': 'BST',
+  'CRE': 'CRE',
+  'EVS': 'EVS',
+  'CEL': 'CEL',
+  'FST': 'FST',
+  'BRS': 'BRS',
+  'ASR': 'ASR',
+  'PGO': 'PGO',
+  'LOR': 'LOR',
+  'SIT': 'SIT',
+  'CRZ': 'CRZ',
+  // Scarlet & Violet Era
+  'SVP': 'SVP',
+  'SVI': 'SVI',
+  'PAL': 'PAL',
+  'OBF': 'OBF',
+  'MEW': 'MEW',
+  'PAR': 'PAR',
+  'PAF': 'PAF',
+  'TEF': 'TEF',
+  'TWM': 'TWM',
+  'SFA': 'SFA',
+  'SCR': 'SCR',
+  'SSP': 'SSP',
+  'PRE': 'PRE',
+  'JTG': 'JTG',
+  // Black & White Era
+  'BLW': 'BLW',
+  'EPO': 'EPO',
+  'NVI': 'NVI',
+  'NXD': 'NXD',
+  'DEX': 'DEX',
+  'DRX': 'DRX',
+  'DRV': 'DRV',
+  'BCR': 'BCR',
+  'PLS': 'PLS',
+  'PLF': 'PLF',
+  'PLB': 'PLB',
+  'LTR': 'LTR',
+  'BWP': 'BWP',
+  // XY Era
+  'XY': 'XY',
+  'FLF': 'FLF',
+  'FFI': 'FFI',
+  'PHF': 'PHF',
+  'PRC': 'PRC',
+  'DCR': 'DCR',
+  'ROS': 'ROS',
+  'AOR': 'AOR',
+  'BKT': 'BKT',
+  'BKP': 'BKP',
+  'GEN': 'GEN',
+  'FCO': 'FCO',
+  'STS': 'STS',
+  'EVO': 'EVO',
+  'XYP': 'XYP',
+  // WOTC Era
+  'BS': 'BS',
+  'JU': 'JU',
+  'FO': 'FO',
+  'TR': 'TR',
+  'G1': 'G1',
+  'G2': 'G2',
+  'N1': 'N1',
+  'N2': 'N2',
+  'N3': 'N3',
+  'N4': 'N4',
+  'LC': 'LC',
+  // Promos
+  'SMP': 'SMP',
+  'SM': 'SMP', // Alternative notation
+  'PR-SM': 'SMP',
+  // Energy set aliases
+  'MEE': 'SVE',
+};
+
+export const setCodeReplacements = [
+  { from: 'PR-SH', to: 'SWSH' },
+  { from: 'SP', to: 'SWSH' },
+  { from: 'PR-SW', to: 'SWSH' },
+  { from: 'PR-SV', to: 'SVP' },
+];
+
+// When a card is not found under its resolved set code, these aliases are tried in order.
+// Both directions must be listed if the alias should work both ways.
+export const SET_CODE_ALIASES: { [key: string]: string[] } = {
+  'POR': ['M3'],
+  'M3': ['POR'],
+  'M4': ['CRI'],
+  'CRI': ['M4'],
+  'M2a': ['ASC'],
+  'ASC': ['M2a'],
+  'M2': ['PFL'],
+  'PFL': ['M2']
+};
+
+interface ParsedCard {
+  quantity: number;
+  name: string;
+  setCode: string;
+  setNumber: string;
+  originalLine: string;
+}
+
+interface CardResult {
+  quantity: number;
+  name: string;
+  setCode: string;
+  setNumber: string;
+  fullName: string;
+  known: boolean;
+  cardData?: Card;
+  cardImage?: string;
+  superType?: string;
+  subType?: string;
+  markers?: string[];
+}
+
+interface UnknownCard {
+  name: string;
+  setCode: string;
+  setNumber: string;
+  fullName: string;
+  importLine: string;
+  addedAt: string;
+}
+
+interface UnknownCardsFile {
+  lastUpdated: string;
+  cards: UnknownCard[];
+}
+
+// DLR collector numbers distinguish alternate artwork and the two halves of
+// a Legendary Stadium. Never resolve a numbered DLR import by name alone.
+const DLR_PRINTED_NAME_ALIASES: { [number: string]: string[] } = {
+  '132': ['Bubbly Water Energy', 'Bubble Water Energy'],
+  '133': ['Growing Grass Energy', 'Growing G Energy', 'Grow Grass Energy', 'Grow G Energy'],
+};
+
+function foldDlrName(name: string): string {
+  return name.replace(/♀/g, 'f').replace(/♂/g, 'm').normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function dlrPrintIndex(cards: Card[]): Map<string, Card | undefined> {
+  const index = new Map<string, Card | undefined>();
+  for (const card of cards) {
+    if (card.set.toUpperCase() !== 'DLR' || !/^\d+$/.test(card.setNumber)) continue;
+    const number = String(Number(card.setNumber));
+    // A duplicated registry number is ambiguous; do not guess an identity.
+    index.set(number, index.has(number) ? undefined : card);
+  }
+  return index;
+}
+
+function findDlrPrint(index: Map<string, Card | undefined>, name: string, collectorNumber: string): Card | undefined {
+  if (!/^\d+$/.test(collectorNumber)) return undefined;
+  const number = String(Number(collectorNumber));
+  const card = index.get(number);
+  if (!card) return undefined;
+  const expected = foldDlrName(name);
+  return [card.name, ...(DLR_PRINTED_NAME_ALIASES[number] || [])].some(alias => foldDlrName(alias) === expected)
+    ? card : undefined;
+}
+
+// These Arceus names have multiple printed attacks. Resolve the old and new
+// collector numbers exactly, including padded imports; never substitute the
+// other print if a requested identity is unavailable.
+const ROUND27_AR_PRINTS = new Set([
+  'electrike|ar|62', 'electrike|ar|63', 'tangela|ar|76', 'tangela|ar|77',
+  'treecko|ar|78', 'treecko|ar|79', 'manectric|ar|44', 'ponyta|ar|72'
+]);
+// Keep unregistered SVP numbers on their previous lookup path rather than
+// matching a newly added print solely by its name and set.
+function round33SvpNormalizedName(name: string): string {
+  const normalized = name.toLowerCase().replace(/[\u2018\u2019\u201A\u201B\u2032\u2035`]/g, "'").replace(/-/g, ' ');
+  const internal: { [name: string]: string } = {
+    "iono's kilowattrel182": "iono's kilowattrel", "lillie's ribombee183": "lillie's ribombee", "professor's research221": "professor's research"
+  };
+  return internal[normalized] || normalized;
+}
+function round33SvpName(name: string, set: string): boolean {
+  return set.toUpperCase() === 'SVP' && ["iono's kilowattrel", "lillie's ribombee", "professor's research"].includes(round33SvpNormalizedName(name));
+}
+function round33SvpKey(name: string, number: string): string | undefined {
+  const expected: { [name: string]: string } = { "iono's kilowattrel": '182', "lillie's ribombee": '183', "professor's research": '221' };
+  const normalized = round33SvpNormalizedName(name);
+  const stripped = number.replace(/^0+(?=\d)/, '');
+  return expected[normalized] === stripped ? `${normalized}|svp|${stripped}` : undefined;
+}
+
+function round27ArKey(name: string, set: string, number: string): string | undefined {
+  if (set.toUpperCase() !== 'AR' || !/^\d+$/.test(number)) return undefined;
+  const key = `${name.toLowerCase()}|ar|${String(Number(number))}`;
+  return ROUND27_AR_PRINTS.has(key) ? key : undefined;
+}
+
+// Only these newly introduced identities get strict promo-number routing;
+// existing DPP print fallbacks retain their historical behaviour.
+const ROUND29_DPP_PRINTS: { [key: string]: string } = {
+  turtwig: '1', pachirisu: '4', buneary: '6', buizel: '13', chatot: '14', shinx: '15'
+};
+function round29DppName(name: string, set: string): boolean {
+  return set.toUpperCase() === 'DPP' && Object.prototype.hasOwnProperty.call(ROUND29_DPP_PRINTS, name.toLowerCase());
+}
+function round29DppKey(name: string, number: string): string | undefined {
+  const match = number.match(/^(?:DP)?0*(\d+)$/i);
+  const expected = ROUND29_DPP_PRINTS[name.toLowerCase()];
+  if (!match || !expected || String(Number(match[1])) !== expected) return undefined;
+  return `${name.toLowerCase()}|dpp|${expected}`;
+}
+
+export class DeckImportParser {
+  private imageCache: Map<string, string>;
+  constructor(images: Map<string, string> = new Map()) { this.imageCache = images; }
+  public getCards(cards: string[]) {
+    const cardManager = CardManager.getInstance();
+    const allCards = cardManager.getAllCards();
+    const dlrPrints = dlrPrintIndex(allCards);
+
+    // Build lookup maps
+    const cardsByFullName = new Map<string, Card>();
+    const cardsByNameSetNumber = new Map<string, Card>();
+
+    for (const card of allCards) {
+      cardsByFullName.set(card.fullName.toLowerCase(), card);
+      const key = `${card.name.toLowerCase()}|${card.set.toLowerCase()}|${card.setNumber}`;
+      cardsByNameSetNumber.set(key, card);
+    }
+
+    interface CardMetadata {
+      name: string;
+      setCode: string;
+      setNumber: string;
+      fullName: string;
+      cardData?: Card;
+      cardImage?: string;
+      superType?: string;
+      subType?: string;
+      markers?: string[];
+    }
+
+    const results: CardMetadata[] = [];
+
+    for (const cardIdentifier of cards) {
+      // Preserve canonical full names; also accept the numbered external DLR
+      // names used in puzzle payloads and exported deck lists.
+      const externalDlr = cardIdentifier.trim().match(/^(.*?)\s+DLR\s+(\d+)$/i);
+      const unleashedLarvitar = cardIdentifier.trim().match(/^Larvitar\s+UL\s+0*(50|51)$/i);
+      const reviewedPrint = cardIdentifier.trim().match(/^(Inkay)\s+(LOR)\s+0*(77)$|^(Duskull)\s+(SF)\s+0*(60)$|^(Crobat)\s+(UL)\s+0*(14)$/i);
+      const reviewedKey = reviewedPrint && `${(reviewedPrint[1] || reviewedPrint[4] || reviewedPrint[7]).toLowerCase()}|${(reviewedPrint[2] || reviewedPrint[5] || reviewedPrint[8]).toLowerCase()}|${reviewedPrint[3] || reviewedPrint[6] || reviewedPrint[9]}`;
+      const deltaInput = cardIdentifier.trim().match(/^(Treecko|Charmander|Charmeleon)\s+(P4|P5)\s+0*(\d+)$/i);
+      const deltaKey = deltaInput && `${deltaInput[1].toLowerCase()}|${deltaInput[2].toLowerCase()}|${deltaInput[3]}`;
+      const reviewedDelta = deltaKey && ['treecko|p4|15', 'charmander|p5|10', 'charmeleon|p5|5'].includes(deltaKey) ? deltaKey : undefined;
+      const dppInput = cardIdentifier.trim().match(/^(.*?)\s+(DPP)\s+((?:DP)?\d+)$/i);
+      const isRound29Dpp = !!dppInput && round29DppName(dppInput[1], dppInput[2]);
+      const dppKey = isRound29Dpp && round29DppKey(dppInput![1], dppInput![3]);
+      const round33Input = cardIdentifier.trim().replace(/[\u2018\u2019\u201A\u201B\u2032\u2035`]/g, "'")
+        .match(/^(Iono's[ -]Kilowattrel(?:182)?|Lillie's[ -]Ribombee(?:183)?|Professor's[ -]Research(?:221)?)\s+(?:SVP|PR-SV)\s+(\d+)$/i);
+      const round33Key = round33Input && round33SvpKey(round33Input[1], round33Input[2]);
+      const pblInput = cardIdentifier.trim().match(/^(Crushing Hammer|Energy Switch)(?: FA)?\s+PBL\s+(\d+)$/i);
+      const pblKey = pblInput && `${pblInput[1].toLowerCase()}|pbl|${String(Number(pblInput[2]))}`;
+      const reviewedPbl = pblKey && ['crushing hammer|pbl|105', 'energy switch|pbl|107'].includes(pblKey) ? pblKey : undefined;
+      const arInput = cardIdentifier.trim().match(/^(.*?)\s+(AR)\s+(\d+)$/i);
+      const arKey = arInput && round27ArKey(arInput[1], arInput[2], arInput[3]);
+      const card = externalDlr
+        ? findDlrPrint(dlrPrints, externalDlr[1], externalDlr[2])
+        : unleashedLarvitar ? cardsByNameSetNumber.get(`larvitar|ul|${unleashedLarvitar[1]}`)
+        : reviewedKey ? cardsByNameSetNumber.get(reviewedKey)
+        : arKey ? cardsByNameSetNumber.get(arKey)
+        : isRound29Dpp ? (dppKey ? cardsByNameSetNumber.get(dppKey) : undefined)
+        : reviewedDelta ? cardsByNameSetNumber.get(reviewedDelta)
+        : reviewedPbl ? cardsByNameSetNumber.get(reviewedPbl)
+        : round33Input ? (round33Key ? cardsByNameSetNumber.get(round33Key) : undefined)
+        : cardsByFullName.get(cardIdentifier.toLowerCase());
+
+      if (card) {
+        results.push({
+          name: card.name,
+          setCode: card.set,
+          setNumber: card.setNumber,
+          fullName: card.fullName,
+          cardData: card,
+          cardImage: this.getCardImageForCard(card),
+          superType: this.getSuperTypeString(card.superType),
+          subType: this.getSubTypeString(card),
+          markers: this.getCardMarkers(card)
+        });
+      }
+    }
+
+    return { ok: true, cards: results, count: results.length };
+  }
+
+  private getCardMarkers(card: Card): string[] {
+    const markers: string[] = [];
+
+    // Get all property names from the card instance
+    for (const key in card) {
+      if (key.includes('Marker') || key.includes('MARKER')) {
+        const value = (card as any)[key];
+        // Only include string values
+        if (typeof value === 'string') {
+          markers.push(value);
+        }
+      }
+    }
+
+    return markers;
+  }
+
+  public parseDeckList(deckList: string): {
+    ok: boolean;
+    knownCards: CardResult[];
+    unknownCards: CardResult[];
+    totalCards: number;
+    parseErrors: string[];
+  } {
+    const cardManager = CardManager.getInstance();
+    const allCards = cardManager.getAllCards();
+    const dlrPrints = dlrPrintIndex(allCards);
+
+    // Normalize quotes, hyphens, and other common character variants
+    const normalizeName = (name: string): string => {
+      return name.toLowerCase()
+        .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035`]/g, "'") // smart quotes -> straight apostrophe
+        .replace(/-/g, ' '); // hyphens -> spaces
+    };
+
+    // Build lookup maps
+    const cardsByFullName = new Map<string, Card>();
+    const cardsByNameSetNumber = new Map<string, Card>();
+    const cardsByNameSet = new Map<string, Card>();
+
+    const addNameSetNumberLookup = (card: Card, setCode: string, setNumber: string): void => {
+      const normalizedName = normalizeName(card.name);
+      const key = `${normalizedName}|${setCode.toLowerCase()}|${setNumber}`;
+      cardsByNameSetNumber.set(key, card);
+    };
+
+    for (const card of allCards) {
+      cardsByFullName.set(card.fullName.toLowerCase(), card);
+      cardsByFullName.set(normalizeName(card.fullName), card);
+      // Create keys by name + set + setNumber
+      const normalizedName = normalizeName(card.name);
+      const setLower = card.set.toLowerCase();
+      addNameSetNumberLookup(card, card.set, card.setNumber);
+      // Also allow deck lists to match against the English US image set number.
+      if (card.usSetNumber) {
+        const [usSetCode, ...usSetNumberParts] = card.usSetNumber.split(' ');
+        const usSetNumber = usSetNumberParts.join(' ');
+        if (usSetCode && usSetNumber) {
+          addNameSetNumberLookup(card, usSetCode, usSetNumber);
+        }
+      }
+      // Create key by name + set only (fallback ignoring number)
+      const nameSetKey = `${normalizedName}|${setLower}`;
+      // Newly registered prints must not take over an established fallback.
+      const newArPrint = ['Electrike AR 62', 'Tangela AR 76', 'Treecko AR 78', 'Manectric AR2', 'Ponyta AR2'].includes(card.fullName);
+      const precisePbl = card.set === 'PBL' && (card.fullName === 'Crushing Hammer FA PBL' || card.fullName === 'Energy Switch FA PBL');
+      if (!newArPrint && !precisePbl) cardsByNameSet.set(nameSetKey, card);
+    }
+
+    const lines = deckList.split('\n');
+    const knownCards: CardResult[] = [];
+    const unknownCards: CardResult[] = [];
+    const parseErrors: string[] = [];
+    let totalCards = 0;
+
+    for (const line of lines) {
+      const trimmedLine = line.trim();
+
+      // Skip empty lines and section headers
+      if (!trimmedLine ||
+        trimmedLine.startsWith('Pokémon:') ||
+        trimmedLine.startsWith('Pokemon:') ||
+        trimmedLine.startsWith('Trainer:') ||
+        trimmedLine.startsWith('Energy:') ||
+        trimmedLine.match(/^(Pokémon|Pokemon|Trainer|Energy|Total Cards):\s*\d+$/i)) {
+        continue;
+      }
+
+      // Normalize smart quotes/apostrophes in the input line before parsing
+      let processedLine = trimmedLine
+        .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035`]/g, "'");
+
+      // Apply card replacements to the full line before parsing
+      // This handles replacements like "Pokégear 3.0 SVI 186" -> "Pokegear SVI 186"
+      for (const replacement of cardReplacements) {
+        processedLine = processedLine.replace(new RegExp(replacement.from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), replacement.to);
+      }
+
+      const parsed = this.parseCardLine(processedLine);
+
+      if (!parsed) {
+        parseErrors.push(`Could not parse line: "${trimmedLine}"`);
+        continue;
+      }
+
+      totalCards += parsed.quantity;
+
+      // Apply set code replacements first
+      let processedSetCode = parsed.setCode.toUpperCase();
+      for (const replacement of setCodeReplacements) {
+        if (processedSetCode === replacement.from.toUpperCase()) {
+          processedSetCode = replacement.to.toUpperCase();
+          break;
+        }
+      }
+
+      // Try to find the card
+      const setCode = IMPORT_SET_CODE_MAP[processedSetCode] || processedSetCode;
+
+      const fullName = `${parsed.name} ${setCode}`;
+      // DLR uses distinct executable identities for each numbered print and
+      // paired Stadium half. Do not fall through to an unnumbered name match.
+      const unleashedLarvitar = setCode === 'UL' && normalizeName(parsed.name) === 'larvitar'
+        ? parsed.setNumber.match(/^0*(50|51)$/) : null;
+      const reviewedKey = `${normalizeName(parsed.name)}|${setCode.toLowerCase()}|${parsed.setNumber.replace(/^0+(?=\d)/, '')}`;
+      const pblName = normalizeName(parsed.name).replace(/ fa$/, '');
+      const pblNumber = parsed.setNumber.replace(/^0+(?=\d)/, '');
+      const isPblItem = setCode === 'PBL' && ['crushing hammer', 'energy switch'].includes(pblName)
+        && /^\d+$/.test(parsed.setNumber);
+      const pblKey = isPblItem && ((pblName === 'crushing hammer' && pblNumber === '105')
+        || (pblName === 'energy switch' && pblNumber === '107')) ? `${pblName}|pbl|${pblNumber}` : undefined;
+      const isRound33Svp = round33SvpName(parsed.name, setCode);
+      const round33Key = isRound33Svp && round33SvpKey(parsed.name, parsed.setNumber);
+      const isRound29Dpp = round29DppName(parsed.name, setCode);
+      const dppKey = isRound29Dpp && round29DppKey(parsed.name, parsed.setNumber);
+      const reviewedPrint = ['inkay|lor|77', 'duskull|sf|60', 'crobat|ul|14'].includes(reviewedKey)
+        || !!round27ArKey(parsed.name, setCode, parsed.setNumber);
+      let card = setCode === 'DLR'
+        ? findDlrPrint(dlrPrints, parsed.name, parsed.setNumber)
+        : unleashedLarvitar ? cardsByNameSetNumber.get(`larvitar|ul|${unleashedLarvitar[1]}`)
+        : reviewedPrint ? cardsByNameSetNumber.get(reviewedKey)
+        : isRound29Dpp ? (dppKey ? cardsByNameSetNumber.get(dppKey) : undefined)
+        : isPblItem ? (pblKey ? cardsByNameSetNumber.get(pblKey) : undefined)
+        : isRound33Svp ? (round33Key ? cardsByNameSetNumber.get(round33Key) : undefined)
+        : cardsByFullName.get(fullName.toLowerCase());
+
+      if (setCode !== 'DLR' && !unleashedLarvitar && !reviewedPrint && !isRound29Dpp && !isPblItem && !isRound33Svp) {
+        // Second try: normalized fullName match
+        if (!card) {
+          card = cardsByFullName.get(normalizeName(fullName));
+        }
+
+        // Third try: name + set + number match
+        if (!card) {
+          const key = `${normalizeName(parsed.name)}|${setCode.toLowerCase()}|${parsed.setNumber}`;
+          card = cardsByNameSetNumber.get(key);
+        }
+
+        // Fourth try: name + set match (ignoring number)
+        if (!card) {
+          const nameSetKey = `${normalizeName(parsed.name)}|${setCode.toLowerCase()}`;
+          card = cardsByNameSet.get(nameSetKey);
+        }
+
+        // Fifth try: just by fullName without number matching
+        if (!card) {
+          card = cardManager.getCardByName(fullName);
+        }
+
+        // Sixth try: repeat all lookups using set code aliases
+        if (!card) {
+          const aliases = SET_CODE_ALIASES[setCode] || SET_CODE_ALIASES[processedSetCode] || [];
+          for (const aliasCode of aliases) {
+            const aliasFullName = `${parsed.name} ${aliasCode}`;
+            card = cardsByFullName.get(aliasFullName.toLowerCase())
+              || cardsByFullName.get(normalizeName(aliasFullName))
+              || cardsByNameSetNumber.get(`${normalizeName(parsed.name)}|${aliasCode.toLowerCase()}|${parsed.setNumber}`)
+              || cardsByNameSet.get(`${normalizeName(parsed.name)}|${aliasCode.toLowerCase()}`)
+              || cardManager.getCardByName(aliasFullName);
+            if (card) { break; }
+          }
+        }
+
+      }
+
+      const cardResult: CardResult = {
+        quantity: parsed.quantity,
+        name: parsed.name,
+        setCode: setCode,
+        setNumber: card ? card.setNumber : parsed.setNumber,
+        fullName: card ? card.fullName : fullName,
+        known: !!card,
+        cardData: card || undefined,
+        cardImage: card ? this.getCardImageForCard(card) : this.getCardImage(setCode, parsed.setNumber),
+        superType: card ? this.getSuperTypeString(card.superType) : undefined,
+        subType: card ? this.getSubTypeString(card) : undefined,
+        markers: card ? this.getCardMarkers(card) : undefined
+      };
+
+      if (card) {
+        knownCards.push(cardResult);
+      } else {
+        unknownCards.push(cardResult);
+      }
+    }
+
+    return {
+      ok: true,
+      knownCards,
+      unknownCards,
+      totalCards,
+      parseErrors
+    };
+  }
+
+  private getCardImageForCard(card: Card): string | undefined {
+    if (card.usSetNumber) {
+      const [usSetCode, ...usSetNumberParts] = card.usSetNumber.split(' ');
+      const usSetNumber = usSetNumberParts.join(' ');
+      const usImage = usSetCode && usSetNumber ? this.getCardImage(usSetCode, usSetNumber) : undefined;
+      if (usImage) {
+        return usImage;
+      }
+    }
+
+    return this.getCardImage(card.set, card.setNumber);
+  }
+
+  private getCardImage(setCode: string, setNumber: string): string | undefined {
+    if (!this.imageCache) {
+      return undefined;
+    }
+
+    // Format: "SETCODE SETNUMBER" (e.g., "CES 71")
+    const key = `${setCode} ${setNumber}`;
+    return this.imageCache.get(key);
+  }
+
+  private getSuperTypeString(superType: SuperType): string {
+    switch (superType) {
+      case SuperType.POKEMON:
+        return 'Pokemon';
+      case SuperType.TRAINER:
+        return 'Trainer';
+      case SuperType.ENERGY:
+        return 'Energy';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  private getSubTypeString(card: Card): string | undefined {
+    // Only Trainer cards have subTypes
+    if (card.superType !== SuperType.TRAINER) {
+      return undefined;
+    }
+
+    const trainerCard = card as TrainerCard;
+    switch (trainerCard.trainerType) {
+      case TrainerType.ITEM:
+        return 'Item';
+      case TrainerType.SUPPORTER:
+        return 'Supporter';
+      case TrainerType.STADIUM:
+        return 'Stadium';
+      case TrainerType.TOOL:
+        return 'Tool';
+      default:
+        return undefined;
+    }
+  }
+
+
+
+
+  private parseCardLine(line: string): ParsedCard | null {
+    // Format: "QUANTITY NAME SET NUMBER"
+    // Examples:
+    //   "3 Onix CES 71"
+    //   "1 Tapu Lele-GX GRI 60"
+    //   "4 Double Colorless Energy SUM 136"
+    //   "1 Articuno-GX CES 31"
+    //   "5 Basic {G} Energy SVE 1"
+
+    // Mapping of energy type abbreviations to full names
+    const energyTypeMap: { [key: string]: string } = {
+      'G': 'Grass',
+      'R': 'Fire',
+      'W': 'Water',
+      'L': 'Lightning',
+      'P': 'Psychic',
+      'F': 'Fighting',
+      'D': 'Darkness',
+      'M': 'Metal',
+      'Y': 'Fairy',
+      'N': 'Dragon',
+      'C': 'Colorless'
+    };
+
+    // Handle basic energy with type abbreviation format: "5 Basic {G} Energy SVE 1"
+    const basicEnergyAbbrevMatch = line.match(/^(\d+)\s+Basic\s+\{([GRWLPFDMYNC])\}\s+Energy(?:\s+([A-Z][A-Z0-9]{1,3}|[0-9](?=[A-Z0-9]{0,2}[A-Z])[A-Z0-9]{1,3})\s+([A-Z]*\d+\w*))?$/i);
+
+    if (basicEnergyAbbrevMatch) {
+      const typeAbbrev = basicEnergyAbbrevMatch[2].toUpperCase();
+      const energyType = energyTypeMap[typeAbbrev] || 'Colorless';
+      return {
+        quantity: parseInt(basicEnergyAbbrevMatch[1], 10),
+        name: `${energyType} Energy`,
+        setCode: 'SUM', // Default to SUM for basic energy
+        setNumber: basicEnergyAbbrevMatch[4] || '0',
+        originalLine: line
+      };
+    }
+
+    // Handle basic energy with duplicate "Energy" word: "11 Lightning Energy Energy 30"
+    const basicEnergyDuplicateMatch = line.match(/^(\d+)\s+(Fire|Water|Grass|Lightning|Psychic|Fighting|Darkness|Metal|Fairy)\s+Energy\s+Energy\s+([A-Z]*\d+\w*)$/i);
+
+    if (basicEnergyDuplicateMatch) {
+      return {
+        quantity: parseInt(basicEnergyDuplicateMatch[1], 10),
+        name: `${basicEnergyDuplicateMatch[2]} Energy`,
+        setCode: 'SUM',
+        setNumber: basicEnergyDuplicateMatch[3],
+        originalLine: line
+      };
+    }
+
+    // Handle basic energy with optional set/number
+    const basicEnergyMatch = line.match(/^(\d+)\s+(Fire|Water|Grass|Lightning|Psychic|Fighting|Darkness|Metal|Fairy)\s+Energy(?:\s+([A-Z][A-Z0-9]{1,3}|[0-9](?=[A-Z0-9]{0,2}[A-Z])[A-Z0-9]{1,3})\s+([A-Z]*\d+\w*))?$/i);
+
+    if (basicEnergyMatch) {
+      return {
+        quantity: parseInt(basicEnergyMatch[1], 10),
+        name: `${basicEnergyMatch[2]} Energy`,
+        setCode: basicEnergyMatch[3] || 'SUM',
+        setNumber: basicEnergyMatch[4] || '0',
+        originalLine: line
+      };
+    }
+
+    // Standard format: QUANTITY NAME SET NUMBER
+    // The tricky part is that NAME can have spaces, so we match from the end
+    // Support hyphenated codes like PR-SV and digit-leading codes like 30C.
+    // A digit-leading code must contain a letter within its 2–4 characters.
+    const match = line.match(/^(\d+)\s+(.+?)\s+((?:[A-Z][A-Z0-9]{1,3}|[0-9](?=[A-Z0-9]{0,2}[A-Z])[A-Z0-9]{1,3})(?:-[A-Z][A-Z0-9]{1,3})?)\s+([A-Z]*\d+\w*)$/i);
+    if (match) {
+      return {
+        quantity: parseInt(match[1], 10),
+        name: match[2].trim(),
+        setCode: match[3].toUpperCase(),
+        setNumber: match[4],
+        originalLine: line
+      };
+    }
+
+    // Alternative format with SV prefix: "1 Card Name SV01 123"
+    const svMatch = line.match(/^(\d+)\s+(.+?)\s+(SV\d+[A-Z]?)\s+([A-Z]*\d+\w*)$/i);
+    if (svMatch) {
+      return {
+        quantity: parseInt(svMatch[1], 10),
+        name: svMatch[2].trim(),
+        setCode: svMatch[3].toUpperCase(),
+        setNumber: svMatch[4],
+        originalLine: line
+      };
+    }
+
+    return null;
+  }
+
+}

@@ -1,0 +1,12 @@
+8a5791d317d2f72d3d85096dcb123b51007ea1215c56fa1910e073f3556a80ed  ./README.md
+92c012024e0c084bc68afbfbf749a0d55c5f4a3b70c1504b3ab2cda8d6e5ae42  ./audit/baseline.red.log
+a7314bf2748c5b0229736c5a05b61c12c24867c689029289257a3c73244aa1f2  ./audit/baseline.red.spec.fixture.ts
+90d161983bceff75b3d5eb0551ff10f4d57ed4b2493b3cb6d9048147d4ce6d3f  ./audit/candidate.red.log
+1d9d134f5d37768c3ee913e541cf9e2011a2c352ddea111fe84b7823f8e5ac32  ./audit/candidate.red.spec.fixture.ts
+0e40aebec38af4bad82ffeffe8d51e86303e1b075c7cc74c2de0ced3c42c189d  ./frozen-candidate/manifest.json
+65bc9b8c469ff157112a89d7c7fdd8297eda6cf8499639a7c2f7018ed1ee694a  ./frozen-candidate/ptcg-server/src/sets/index.ts
+67f1f277caf312367517b036998e07706bab198f33218a82bf6de294f2fec7d3  ./frozen-candidate/ptcg-server/src/sets/set-pop-series-8/round33-prints.ts
+06874d6a4743aac014e8ca2d60045dfb18cc4c6d6527f1f4132b69a01f97c1c2  ./frozen-candidate/ptcg-server/src/sets/set-scarlet-and-violet-promos/round33-prints.ts
+613b10926371c2334e579220aab4c0714a1796c1f7f822c69be6648855d47af9  ./frozen-candidate/ptcg-server/src/sets/set-upstream-round33/index.ts
+0fef574d0536cadd1193a0a8767684fa71f8bfd74dd89bdd9d24b42354a2f9e8  ./frozen-candidate/ptcg-server/src/sets/tests/upstream-round33-gameplay.spec.ts
+c2c6c7bb0e93aa5d49615b678f601bbc86891ed257d1213ec39dc26b5f8ee0eb  ./frozen-candidate/ptcg-server/src/sets/tests/upstream-round33-metadata.spec.ts

@@ -1,0 +1,267 @@
+--- a/ptcg-server/src/game/store/card/pokemon-types.ts
++++ b/ptcg-server/src/game/store/card/pokemon-types.ts
+@@ -18,6 +18,8 @@
+ export interface Attack {
+   cost: CardType[];
+   damage: number;
++  /** Base damage for attacks that select an opposing target after modifiers. */
++  targetedOpponentDamage?: number;
+   damageCalculation?: string;
+   copycatAttack?: boolean;
+   gxAttack?: boolean;
+--- a/ptcg-server/src/game/store/effects/game-effects.ts
++++ b/ptcg-server/src/game/store/effects/game-effects.ts
+@@ -178,11 +178,23 @@
+ 
+ export class AttackEffect implements Effect {
+   readonly type: string = GameEffects.ATTACK_EFFECT;
+-  public preventDefault = false;
++  private _preventDefault = false;
++  public get preventDefault(): boolean { return this._preventDefault; }
++  public set preventDefault(value: boolean) {
++    this._preventDefault = value;
++    if (value) this.cancelAttackEffects = true;
++  }
++  /** Suppress a target-specific effect without cancelling an attack on another target. */
++  public preventOnlyTargetEffects(): void { this._preventDefault = true; }
+   public player: Player;
+   public opponent: Player;
+   public attack: Attack;
+   public damage: number;
++  /** A targeted attack resolves damage after selecting its target. */
++  public deferDefaultDamage = false;
++  public deferredTargetDamage?: number;
++  /** An external effect explicitly cancels this entire attack. */
++  public cancelAttackEffects = false;
+   public ignoreWeakness = false;
+   public ignoreResistance = false;
+   public source: PokemonCardList;
+@@ -195,7 +207,8 @@
+     this.player = player;
+     this.opponent = opponent;
+     this.attack = attack;
+-    this.damage = attack.damage;
++    this.damage = attack.targetedOpponentDamage ?? attack.damage;
++    this.deferDefaultDamage = attack.targetedOpponentDamage !== undefined;
+     this.source = player.active;
+   }
+ }
+--- a/ptcg-server/src/game/store/effects/attack-effects.ts
++++ b/ptcg-server/src/game/store/effects/attack-effects.ts
+@@ -27,6 +27,8 @@
+ export abstract class AbstractAttackEffect {
+   public attackEffect: AttackEffect;
+   public attack: Attack;
++  /** The printed damage of an explicitly targeted damage event, if present. */
++  public printedDamageOverride?: number;
+   public player: Player;
+   public opponent: Player;
+   public target: PokemonCardList;
+--- a/ptcg-server/src/game/store/effect-reducers/attack-effect.ts
++++ b/ptcg-server/src/game/store/effect-reducers/attack-effect.ts
+@@ -159,6 +159,7 @@
+     state = store.reduceEffect(state, applyWeakness);
+ 
+     const dealDamage = new PutDamageEffect(base, applyWeakness.damage);
++    dealDamage.printedDamageOverride = effect.printedDamageOverride;
+     dealDamage.target = effect.target;
+     dealDamage.weaknessApplied = true;
+     state = store.reduceEffect(state, dealDamage);
+--- a/ptcg-server/src/game/store/effect-reducers/game-effect.ts
++++ b/ptcg-server/src/game/store/effect-reducers/game-effect.ts
+@@ -173,7 +173,7 @@
+ 
+   const attackEffect = (effect instanceof AttackEffect) ? effect : new AttackEffect(player, opponent, attack);
+   attackEffect.source = attackingPokemon;
+-  const attackDamageScope = beginAttackDamageScope(state);
++  const attackDamageScope = beginAttackDamageScope(state, attackEffect);
+   try {
+     const copycatCard = attackingPokemon.getPokemonCard();
+     if (delegateFrom && copycatCard) {
+--- a/ptcg-server/src/game/store/prefabs/attack-after-damage.ts
++++ b/ptcg-server/src/game/store/prefabs/attack-after-damage.ts
+@@ -7,12 +7,17 @@
+ // AttackEffect is transient, as are prompt continuations. Keeping callbacks
+ // outside State avoids persisting executable code in puzzle snapshots.
+ const pending = new WeakMap<AttackEffect, AfterDamageCallback[]>();
+-interface AttackDamageScope { state: State; effects: AttackEffect[]; }
++interface AttackDamageScope { state: State; effects: AttackEffect[]; attack?: AttackEffect; }
+ const scopes = new WeakMap<State, AttackDamageScope[]>();
+ 
++/** Whether any active enclosing attack has been explicitly canceled. */
++export function hasCancelledAttackInScope(state: State): boolean {
++  return (scopes.get(state) ?? []).some(scope => !!scope.attack?.cancelAttackEffects);
++}
++
+ /** Track nested legacy copy effects until the parent attack has dealt damage. */
+-export function beginAttackDamageScope(state: State): AttackDamageScope {
+-  const scope = { state, effects: [] };
++export function beginAttackDamageScope(state: State, attack?: AttackEffect): AttackDamageScope {
++  const scope: AttackDamageScope = { state, effects: [], attack };
+   const stack = scopes.get(state) ?? [];
+   stack.push(scope);
+   scopes.set(state, stack);
+--- a/ptcg-server/src/game/store/prefabs/copy-attack-delegation.ts
++++ b/ptcg-server/src/game/store/prefabs/copy-attack-delegation.ts
+@@ -547,7 +547,7 @@
+ 
+   const attackEffect = new AttackEffect(player, opponent, clonedAttack);
+   attackEffect.source = sourceSlot ?? player.active;
+-  const attackDamageScope = beginAttackDamageScope(state);
++  const attackDamageScope = beginAttackDamageScope(state, attackEffect);
+   try {
+     state = store.reduceEffect(state, attackEffect);
+ 
+--- a/ptcg-server/src/game/store/store.ts
++++ b/ptcg-server/src/game/store/store.ts
+@@ -18,7 +18,7 @@
+ import { AfterEvolveEffect, AttackEffect, CheckEvolveEffect, EvolveEffect, RetreatEffect, RetreatStartEffect } from './effects/game-effects';
+ import { ATTACK_RETREAT_LOCK_UNTIL_TARGET_END_TURN } from './prefabs/retreat-lock-until-target-end-turn';
+ import { MarkerConstants } from './markers/marker-constants';
+-import { EndTurnEffect } from './effects/game-phase-effects';
++import { BeforeDoingDamageEffect, EndTurnEffect } from './effects/game-phase-effects';
+ import { GameError } from '../game-error';
+ import { GameMessage, GameLog } from '../game-message';
+ import { Prompt } from './prompts/prompt';
+@@ -152,7 +152,27 @@
+     return state;
+   }
+ 
++  private targetedAttackContexts: AttackEffect[] = [];
++
++  private withTargetedAttack<T>(attack: AttackEffect, action: () => T): T {
++    const alreadyActive = this.targetedAttackContexts.includes(attack);
++    if (!alreadyActive && attack.deferredTargetDamage !== undefined) attack.damage = attack.deferredTargetDamage;
++    this.targetedAttackContexts.push(attack);
++    try { return action(); } finally {
++      this.targetedAttackContexts.pop();
++      if (!alreadyActive) { attack.deferredTargetDamage = attack.damage; attack.damage = 0; }
++    }
++  }
++
+   public reduceEffect(state: State, effect: Effect): State {
++    const attack = effect instanceof AttackEffect ? effect :
++      effect instanceof BeforeDoingDamageEffect || effect instanceof AbstractAttackEffect ? effect.attackEffect : undefined;
++    return attack?.deferDefaultDamage
++      ? this.withTargetedAttack(attack, () => this.reduceEffectInternal(state, effect))
++      : this.reduceEffectInternal(state, effect);
++  }
++
++  private reduceEffectInternal(state: State, effect: Effect): State {
+     const preflight = preflightDualStadiumCancellation(this, state, effect);
+     if (preflight !== undefined) return preflight;
+     // A completed attack's retreat lock belongs to the affected Pokémon,
+@@ -295,9 +315,10 @@
+       state.prompts.push(prompts[i]);
+     }
+ 
++    const targetedAttack = this.targetedAttackContexts[this.targetedAttackContexts.length - 1];
+     const promptItem: PromptItem = {
+       ids: prompts.map(prompt => prompt.id),
+-      then: then
++      then: targetedAttack ? results => this.withTargetedAttack(targetedAttack, () => then(results)) : then
+     };
+ 
+     this.promptItems.push(promptItem);
+@@ -305,7 +326,8 @@
+   }
+ 
+   public waitPrompt(state: State, callback: () => void): State {
+-    this.waitItems.push(callback);
++    const targetedAttack = this.targetedAttackContexts[this.targetedAttackContexts.length - 1];
++    this.waitItems.push(targetedAttack ? () => this.withTargetedAttack(targetedAttack, callback) : callback);
+     return state;
+   }
+ 
+--- a/ptcg-server/src/sets/set-upstream-round28/targeted-damage.ts
++++ b/ptcg-server/src/sets/set-upstream-round28/targeted-damage.ts
+@@ -1,19 +1,25 @@
+ import { ChoosePokemonPrompt, GameError, GameMessage, PlayerType, SlotType, State } from '../../game';
+-import { PutDamageEffect } from '../../game/store/effects/attack-effects';
++import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
+ import { AttackEffect } from '../../game/store/effects/game-effects';
+-import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
++import { afterAttackDamage, hasCancelledAttackInScope } from '../../game/store/prefabs/attack-after-damage';
+ 
+-/** Resolve printed splash damage against one opposing Benched Pokémon. */
+-export function targetedDamageAfterAttack(state: State, attack: AttackEffect, amount: number, _benchOnly: true): void {
++/** Resolve printed damage against one chosen opposing Pokémon after main damage. */
++export function targetedDamageAfterAttack(state: State, attack: AttackEffect, amount: number, benchOnly: boolean): void {
+   const opponent = attack.opponent;
++  if (!benchOnly) attack.deferDefaultDamage = true;
+   afterAttackDamage(state, attack, (store, next) => {
+-    const valid = () => opponent.bench.filter(slot => !!slot.getPokemonCard());
++    if (attack.cancelAttackEffects || hasCancelledAttackInScope(next)) return next;
++    const valid = () => benchOnly ? opponent.bench.filter(slot => !!slot.getPokemonCard()) :
++      [opponent.active, ...opponent.bench].filter(slot => !!slot.getPokemonCard());
+     if (!valid().length) return next;
+     return store.prompt(next, new ChoosePokemonPrompt(attack.player.id, GameMessage.CHOOSE_POKEMON_TO_DAMAGE,
+-      PlayerType.TOP_PLAYER, [SlotType.BENCH], { min: 1, max: 1, allowCancel: false }), selected => {
++      PlayerType.TOP_PLAYER, benchOnly ? [SlotType.BENCH] : [SlotType.ACTIVE, SlotType.BENCH],
++      { min: 1, max: 1, allowCancel: false }), selected => {
+         const target = selected && selected[0];
+         if (!target || !valid().includes(target)) throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+-        const damage = new PutDamageEffect(attack, amount); damage.target = target;
++        const damage = target === opponent.active ? new DealDamageEffect(attack, attack.deferredTargetDamage ?? attack.damage) : new PutDamageEffect(attack, amount);
++        if (target === opponent.active) damage.printedDamageOverride = amount;
++        damage.target = target;
+         return store.reduceEffect(next, damage);
+       });
+   });
+--- a/ptcg-server/src/sets/set-upstream-round28/index.ts
++++ b/ptcg-server/src/sets/set-upstream-round28/index.ts
+@@ -20,6 +20,8 @@
+ import { Round28BeldumSV90 } from '../set-supreme-victors/beldum';
+ import { Round28PoliwagUL58 } from '../set-unleashed/poliwag';
+ 
++import { Round28ElectrikeMD64 } from '../set-majestic-dawn/electrike';
++
+ // Register after established cards to preserve historical fallback priority.
+ export const setZzUpstreamRound28: Card[] = [
+   new Round28HaunterAR42(),
+@@ -40,4 +42,5 @@
+   new Round28SandshrewHS79(),
+   new Round28BeldumSV90(),
+   new Round28PoliwagUL58(),
++  new Round28ElectrikeMD64(),
+ ];
+--- /dev/null
++++ b/ptcg-server/src/sets/set-majestic-dawn/electrike.ts
+@@ -0,0 +1,37 @@
++import { PokemonCard } from '../../game/store/card/pokemon-card';
++import { CardType, Stage, SpecialCondition } from '../../game/store/card/card-types';
++import { State, StoreLike } from '../../game';
++import { Effect } from '../../game/store/effects/effect';
++import { WAS_ATTACK_USED, COIN_FLIP_PROMPT } from '../../game/store/prefabs/prefabs';
++import { conditionAfterDamage, coinConditionAfterDamage } from '../set-great-encounters/ge-attack-effects';
++import { recoilAfterAttack } from '../../game/store/prefabs/recoil-after-attack';
++import { retreatLockAfterDamage } from '../../game/store/prefabs/retreat-lock-until-target-end-turn';
++import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
++import { targetedDamageAfterAttack } from '../set-upstream-round28/targeted-damage';
++
++// Upstream: ptcg-server/src/sets/04-diamond-pearl-platinum/set-majestic-dawn/electrike.ts
++export class Round28ElectrikeMD64 extends PokemonCard implements CopiedAttackOwnershipContract {
++  public stage = Stage.BASIC;
++  public cardType = CardType.LIGHTNING;
++  public hp = 60;
++  public weakness = [{ type: CardType.FIGHTING, value: 10 }];
++  public resistance = [{ type: CardType.METAL, value: -20 }];
++  public retreat = [CardType.COLORLESS];
++  public attacks = [
++    { name: "Random Spark", cost: [CardType.LIGHTNING], damage: 0, targetedOpponentDamage: 10, text: "Choose 1 of your opponent's Pokémon. This attack does 10 damage to that Pokémon. (Don't apply Weakness and Resistance for Benched Pokémon.)" },
++    { name: "Tackle", cost: [CardType.COLORLESS, CardType.COLORLESS], damage: 20, text: "" }
++  ];
++  public set: string = "MD";
++  public setNumber = "64";
++  public cardImage = 'assets/cardback.png';
++  public name = "Electrike";
++  public fullName = "Electrike MD";
++
++  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
++    return Round28ElectrikeMD64.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
++  }
++  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
++    if (WAS_ATTACK_USED(effect, 0, this)) targetedDamageAfterAttack(state, effect, 10, false);
++    return state;
++  }
++}

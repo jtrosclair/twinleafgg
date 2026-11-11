@@ -4,6 +4,184 @@ import { AttackEffect } from '../effects/game-effects';
 import { EffectOfAttackEffect } from '../effects/effect-of-attack-effects';
 import { State } from '../state/state';
 import { StoreLike } from '../store-like';
+import { COIN_FLIP_PROMPT } from './prefabs';
+import { ChooseAttackPrompt } from '../prompts/choose-attack-prompt';
+import { GameMessage } from '../../game-message';
+import { Attack } from '../card/pokemon-types';
+import { PokemonCard } from '../card/pokemon-card';
+import { EndTurnEffect } from '../effects/game-phase-effects';
+import { PokemonCardList } from '../state/pokemon-card-list';
+
+import {
+  DefendingPokemonTakesDamageOnEnergyAttachFromHandNextTurnEffect,
+  RetaliateOnDamageDuringOpponentsNextTurnEffect,
+} from '../effects/effect-of-attack-effects';
+
+export function DEFENDING_POKEMON_TAKES_DAMAGE_ON_ENERGY_ATTACH_FROM_HAND_NEXT_TURN(
+  store: StoreLike, state: State, effect: AttackEffect, source: Card, damage: number,
+): State {
+  const delayed = new DefendingPokemonTakesDamageOnEnergyAttachFromHandNextTurnEffect(effect, damage);
+  delayed.markerSource = source;
+  return store.reduceEffect(state, delayed);
+}
+
+export function THIS_POKEMON_RETALIATES_ON_DAMAGE_DURING_OPPONENTS_NEXT_TURN(
+  store: StoreLike, state: State, effect: AttackEffect, source: Card, options: { damage: number },
+): State {
+  const delayed = new RetaliateOnDamageDuringOpponentsNextTurnEffect(effect, options.damage);
+  delayed.markerSource = source;
+  return store.reduceEffect(state, delayed);
+}
+
+export function FLIP_COIN_TO_PREVENT_DAMAGE_AND_EFFECTS_DURING_OPPONENTS_NEXT_TURN(
+  store: StoreLike, state: State, effect: AttackEffect, source: Card,
+): State {
+  return COIN_FLIP_PROMPT(store, state, effect.player, result => {
+    if (result) {
+      PREVENT_DAMAGE(store, state, effect, source);
+      PREVENT_EFFECTS_OF_ATTACKS(store, state, effect, source);
+    }
+  });
+}
+
+export function THIS_POKEMON_TAKES_LESS_DAMAGE_FROM_ATTACKS_DURING_OPPONENTS_NEXT_TURN(
+  _store: StoreLike, _state: State, effect: AttackEffect, reduction: number,
+): State {
+  effect.player.active.damageReductionNextTurn = Math.max(0, reduction);
+  return _state;
+}
+
+export function THIS_POKEMON_TAKES_LESS_DAMAGE_FROM_ATTACKS_DURING_OPPONENTS_NEXT_TURN_BEFORE_WEAKNESS_AND_RESISTANCE(
+  _store: StoreLike, state: State, effect: AttackEffect, reduction: number,
+): State {
+  effect.player.active.damageReductionBeforeWeaknessNextTurn = Math.max(0, reduction);
+  return state;
+}
+
+export function OPPONENTS_POKEMON_CANNOT_USE_THAT_ATTACK(
+  store: StoreLike, state: State, effect: AttackEffect, _source: Card,
+): State {
+  const target = effect.opponent.active.getPokemonCard();
+  if (!target || target.attacks.length === 0) return state;
+  return store.prompt(state, new ChooseAttackPrompt(effect.player.id,
+    GameMessage.CHOOSE_ATTACK_TO_DISABLE, [target], { allowCancel: false }), attack => {
+    if (attack) effect.opponent.active.cannotUseAttacksNextTurnPending.push(attack.name);
+  });
+}
+
+export function DEFENDING_POKEMON_CANNOT_ATTACK(
+  _store: StoreLike, state: State, effect: AttackEffect, _source: Card,
+): State {
+  effect.opponent.active.cannotAttackNextTurnPending = true;
+  return state;
+}
+
+export function DEFENDING_POKEMON_CANNOT_EVOLVE_NEXT_TURN(
+  _store: StoreLike, _state: State, effect: AttackEffect, _source: Card,
+): State {
+  effect.opponent.active.cannotEvolveNextTurn = true;
+  return _state;
+}
+
+export function DEFENDING_POKEMON_HAS_NO_ABILITIES_UNTIL_END_OF_YOUR_NEXT_TURN(
+  _store: StoreLike, _state: State, effect: AttackEffect, _source: Card,
+): State {
+  effect.opponent.active.cannotUsePowersNextTurn = true;
+  return _state;
+}
+
+export function OPPONENTS_POKEMON_CAN_ONLY_USE_THAT_ATTACK(
+  store: StoreLike, state: State, effect: AttackEffect, _source: Card,
+): State {
+  const target = effect.opponent.active.getPokemonCard();
+  if (!target || target.attacks.length === 0) return state;
+  return store.prompt(state, new ChooseAttackPrompt(effect.player.id,
+    GameMessage.CHOOSE_ATTACK_TO_DISABLE, [target], { allowCancel: false }), attack => {
+    if (attack) {
+      effect.opponent.active.cannotUseAttacksNextTurn = target.attacks
+        .filter(candidate => candidate.name !== attack.name)
+        .map(candidate => candidate.name);
+    }
+  });
+}
+
+export function OPPONENT_CANNOT_PLAY_SUPPORTER_CARDS(
+  _store: StoreLike, _state: State, effect: AttackEffect, _source: Card,
+): State {
+  effect.opponent.supporterCardsBlockedNextTurn = true;
+  return _state;
+}
+
+export function THIS_POKEMON_HAS_NO_WEAKNESS_DURING_OPPONENTS_NEXT_TURN(
+  _store: StoreLike, _state: State, effect: AttackEffect, _source: Card,
+): State {
+  effect.player.active.noWeaknessNextTurn = true;
+  return _state;
+}
+
+/** Arm every attack from this Pokémon for its owner's next turn. */
+export function ARM_NEXT_TURN_ATTACK_BONUS_ALL_ATTACKS(
+  target: PokemonCardList, _source: Card, bonus: number,
+): void {
+  target.attackDamageBonusNextTurn = bonus;
+  target.attackDamageBonusNextTurnPending = true;
+}
+
+/** Add Colorless costs to the Defending Pokémon's attacks for its next turn. */
+export function DEFENDING_POKEMON_ATTACKS_COST_MORE(
+  _store: StoreLike, state: State, effect: AttackEffect, amount: number,
+): State {
+  effect.opponent.active.attackCostIncreaseDuringNextTurn = Math.max(0, amount);
+  return state;
+}
+
+export function OPPONENT_CANNOT_PLAY_TRAINER_CARDS(
+  _store: StoreLike, state: State, effect: AttackEffect, _source: Card,
+): State {
+  effect.opponent.trainerCardsBlockedNextTurn = true;
+  return state;
+}
+
+export function OPPONENT_CANNOT_PLAY_CARDS(
+  _store: StoreLike, state: State, effect: AttackEffect, _source: Card,
+  _options: { item?: boolean; supporter?: boolean; stadium?: boolean; tool?: boolean; energy?: boolean; pokemon?: boolean },
+): State {
+  effect.opponent.trainerCardsBlockedNextTurn = true;
+  return state;
+}
+
+export function COIN_FLIPS_FOR_ATTACK(
+  source: PokemonCardList, attackName: string, defaultFlips: number,
+): number {
+  const override = source.nextTurnCoinFlipCount;
+  const card = source.getPokemonCard();
+  return override && card && override.attackName === attackName && override.sourceCardName === card.fullName
+    ? override.flips : defaultFlips;
+}
+
+export function FLIP_COIN_FOR_FLY(
+  store: StoreLike, state: State, effect: AttackEffect, source: Card,
+): State {
+  return COIN_FLIP_PROMPT(store, state, effect.player, heads => {
+    if (!heads) { effect.damage = 0; return; }
+    PREVENT_DAMAGE(store, state, effect, source);
+    PREVENT_EFFECTS_OF_ATTACKS(store, state, effect, source);
+  });
+}
+
+export function DEFENDING_POKEMON_FLIPS_COIN_TO_ATTACK(
+  _store: StoreLike, _state: State, effect: AttackEffect, _source: Card, coinFlips = 1,
+): State {
+  effect.opponent.active.coinFlipCancelAttackNextTurn = Math.max(1, coinFlips);
+  return _state;
+}
+
+export function THIS_POKEMON_SURVIVES_ON_TEN_HP_DURING_OPPONENTS_NEXT_TURN(
+  _store: StoreLike, _state: State, effect: AttackEffect, source: Card,
+): State {
+  effect.player.active.surviveOnTenHpNextTurnPending = source.name;
+  return _state;
+}
 
 // Upstream ReduceDamageEffect; separate from the fork's legacy marker-only class.
 export class OutgoingDamageReductionEffect extends EffectOfAttackEffect {
@@ -88,6 +266,15 @@ class PreventEffectsOfAttacksEffect extends EffectOfAttackEffect {
 export function PREVENT_DAMAGE(store: StoreLike, state: State, effect: AttackEffect, source: Card): State {
   const protection = new NextTurnPreventDamageEffect(effect); protection.markerSource = source;
   return store.reduceEffect(state, protection);
+}
+
+/** Increase the Defending Pokémon's retreat cost through the end of its owner's next turn. */
+export function DEFENDING_POKEMON_RETREAT_COSTS_MORE(
+  _store: StoreLike, state: State, effect: AttackEffect, amount: number,
+): State {
+  const target = effect.opponent.active.getPokemonCard();
+  if (target) target.retreatCostIncreaseNextTurn = (target.retreatCostIncreaseNextTurn ?? 0) + amount;
+  return state;
 }
 export function PREVENT_EFFECTS_OF_ATTACKS(store: StoreLike, state: State, effect: AttackEffect, source: Card): State {
   const protection = new PreventEffectsOfAttacksEffect(effect); protection.markerSource = source;

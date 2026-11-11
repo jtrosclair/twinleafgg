@@ -1,3 +1,11 @@
+import { Whirlipede } from './whirlipede';
+import { Venipede } from './venipede';
+import { Stoutland } from './stoutland';
+import { Herdier } from './herdier';
+import { Lillipup } from './lillipup';
+import { Golurk } from './golurk';
+import { Golett } from './golett';
+import { Drilbur } from './drilbur';
 import { ToolScrapper } from '../set-dragons-exalted/tool-scrapper';
 import { Cheren } from '../set-emerging-powers/cheren';
 import { PrismEnergy } from '../set-next-destinies/prism-energy';
@@ -15,7 +23,6 @@ import { Cobalion } from './cobalion';
 import { Cottonee } from './cottonee';
 import { Deino } from './deino';
 import { Dewott } from './dewott';
-import { Drillbur } from './drillbur';
 import { Eelektrik } from './eelektrik';
 import { Elgyem } from './elgyem';
 import { Emboar } from './emboar';
@@ -212,10 +219,10 @@ export class ElgyemAR extends Elgyem {
   public fullName: string = 'Elgyem BLK 120';
 }
 
-export class DrillburAR extends Drillbur {
+export class DrillburAR extends Drilbur {
   public setNumber = '124';
   public set = 'BLK';
-  public fullName: string = 'DrillburAR SV11B';
+  public fullName: string = 'DrilburAR BLK 124';
 }
 
 export class CobalionAR extends Cobalion {
@@ -560,4 +567,55 @@ export class ReshiramexWR extends Reshiramex {
   public setNumber = '173';
   public set = 'WHT';
   public fullName: string = 'Reshiram exWR SV11W';
+}
+export class VictiniARBatch112 extends Victini {
+  public setNumber = '208';
+  public set = 'SVP';
+  public fullName: string = "VictiniAR SV11B 208";
+}
+
+export class GolettAR extends Golett {
+  public setNumber = '122';
+  public set = 'BLK';
+  public fullName: string = "GolettAR SV11B";
+}
+
+export class GolurkAR extends Golurk {
+  public setNumber = '123';
+  public set = 'BLK';
+  public fullName: string = "GolurkAR SV11B";
+}
+
+export class LillipupAR extends Lillipup {
+  public setNumber = '154';
+  public set = 'WHT';
+  public fullName: string = "LillipupAR SV11W";
+}
+
+export class HerdierAR extends Herdier {
+  public setNumber = '155';
+  public set = 'WHT';
+  public fullName: string = "HerdierAR SV11W";
+}
+
+export class StoutlandAR extends Stoutland {
+  public setNumber = '156';
+  public set = 'WHT';
+  public fullName: string = "StoutlandAR SV11W";
+}
+
+// SV11W FAs
+
+export class VenipedeIR extends Venipede {
+  public regulationMark = 'I';
+  public setNumber = '132';
+  public fullName = "VenipedeIR BLK";
+  public set = 'BLK';
+}
+
+export class WhirlipedeIR extends Whirlipede {
+  public regulationMark = 'I';
+  public setNumber = '133';
+  public fullName = "WhirlipedeIR BLK";
+  public set = 'BLK';
 }

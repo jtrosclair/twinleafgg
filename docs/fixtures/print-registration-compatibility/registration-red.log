@@ -1,0 +1,40 @@
+cards set
+cards set
+cards set
+cards set
+[
+  {
+    "root": "prizemap-svp-expanded",
+    "position": "first",
+    "mode": "client",
+    "restoredLegacy": true,
+    "extra": "Professor's Research221 SVP"
+  },
+  {
+    "root": "prizemap-svp-expanded",
+    "position": "first",
+    "mode": "api",
+    "restoredLegacy": true,
+    "extra": {
+      "valid": true,
+      "getLegacy": true
+    }
+  },
+  {
+    "root": "prizemap-svp-expanded",
+    "position": "last",
+    "mode": "client",
+    "restoredLegacy": false,
+    "extra": "Professor's Research221 SVP"
+  },
+  {
+    "root": "prizemap-svp-expanded",
+    "position": "last",
+    "mode": "api",
+    "restoredLegacy": false,
+    "extra": {
+      "valid": true,
+      "getLegacy": false
+    }
+  }
+]

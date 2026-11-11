@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Makuhita",
+    "set": "MEP",
+    "number": "68",
+    "fullName": "Makuhita MEP"
+  },
+  {
+    "name": "Chikorita",
+    "set": "MEP",
+    "number": "69",
+    "fullName": "Chikorita MEP"
+  },
+  {
+    "name": "Charmeleon",
+    "set": "MEP",
+    "number": "79",
+    "fullName": "Charmeleon MEP"
+  },
+  {
+    "name": "High Pressure System",
+    "set": "P3",
+    "number": "10",
+    "fullName": "High Pressure System P3"
+  },
+  {
+    "name": "Low Pressure System",
+    "set": "P3",
+    "number": "11",
+    "fullName": "Low Pressure System P3"
+  }
+]
