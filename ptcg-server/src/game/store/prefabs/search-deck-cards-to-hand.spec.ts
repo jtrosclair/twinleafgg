@@ -40,7 +40,7 @@ describe('SEARCH_DECK_FOR_CARDS_TO_HAND selection requirements', () => {
     const store = { prompt: (_state: State, prompt: any) => { captured = prompt; } } as any;
 
     SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, new SearchEnergy(),
-      { superType: SuperType.TRAINER, trainerType: TrainerType.ITEM } as any);
+      { superType: SuperType.TRAINER, trainerType: TrainerType.ITEM } as any, { min: 1, max: 1 });
 
     expect(captured.options.min).toBe(0);
   });

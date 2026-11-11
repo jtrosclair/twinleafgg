@@ -1516,14 +1516,14 @@ export function SEARCH_DECK_FOR_CARDS_TO_HAND(store: StoreLike, state: State, pl
     return;
   const opponent = StateUtils.getOpponent(state, player);
 
-  // A filtered Energy search requires an Energy when one is actually available
-  // in the deck. Other searches default to an optional empty selection.
+  // Deck-to-hand searches can always be skipped, except that an Energy search
+  // requires at least one matching Energy whenever the deck contains one.
   const isEnergySearch = filter.superType === SuperType.ENERGY || filter.energyType !== undefined;
   const hasMatchingEnergy = isEnergySearch && player.deck.cards.some(card =>
     Object.keys(filter).every(key => (filter as any)[key] === (card as any)[key]));
-  const searchOptions = hasMatchingEnergy && (options.max === undefined || options.max > 0)
-    ? { ...options, min: Math.max(options.min || 0, 1) }
-    : options;
+  const min = hasMatchingEnergy && (options.max === undefined || options.max > 0)
+    ? Math.max(options.min || 0, 1) : 0;
+  const searchOptions = { ...options, min };
 
   store.prompt(state, new ChooseCardsPrompt(
     player, GameMessage.CHOOSE_CARD_TO_HAND, player.deck, filter, searchOptions,
