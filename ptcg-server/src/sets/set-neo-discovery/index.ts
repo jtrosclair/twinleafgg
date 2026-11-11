@@ -1,3 +1,6 @@
+import { Umbreon } from './umbreon';
+import { Espeon } from './espeon';
+import { Eevee } from './eevee';
 import { Card } from '../../game/store/card/card';
 import { HyperDevolutionSpray } from './hyper-devolution-spray';
 import { RuinWall } from './ruin-wall';
@@ -9,4 +12,7 @@ export const setNeoDiscovery: Card[] = [
   new RuinWall(),
   new UnwonE(),
   new Yanma(),
+  new Eevee(),
+  new Espeon(),
+  new Umbreon(),
 ];

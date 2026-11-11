@@ -166,3 +166,13 @@ export class ZoroarkTK extends Zoroark {
   public fullName: string = 'Zoroark TK5Z';
   public set = 'TK5Z';
 }
+
+export class Pansage2BWP extends Pansage {
+  public setNumber: string = '14';
+  public fullName: string = "Pansage2 BWP"
+}
+
+export class Axew2BWP extends Axew {
+  public setNumber: string = '16';
+  public fullName: string = 'Axew2 BWP';
+}

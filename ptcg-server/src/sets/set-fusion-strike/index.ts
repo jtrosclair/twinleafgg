@@ -1,3 +1,5 @@
+import { FireEnergySR } from './full-art';
+import { GrassEnergySR } from './full-art';
 import { Card } from '../../game/store/card/card';
 import { Absol } from './absol';
 import { Accelgor } from './accelgor';
@@ -573,4 +575,6 @@ export const setFusionStrike: Card[] = [
   new Sidney3(),
   new PowerTablet2(),
   new TrainingCourtFST(),
+  new GrassEnergySR(),
+  new FireEnergySR(),
 ];

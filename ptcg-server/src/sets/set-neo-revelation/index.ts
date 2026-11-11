@@ -1,3 +1,4 @@
+import { Porygon2 } from './porygon2';
 import { Card } from '../../game/store/card/card';
 import { RocketsHideout } from './rockets-hideout';
 import { Zubat } from './zubat';
@@ -13,4 +14,5 @@ export const setNeoRevelation: Card[] = [
 
   // Other prints
   new BalloonBerryN3(),
+  new Porygon2(),
 ];

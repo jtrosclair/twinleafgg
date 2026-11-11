@@ -1,3 +1,4 @@
+import { BronzorIR } from './full-art-batch14';
 import { Electivire } from './electivire';
 import { Electabuzz } from './electabuzz';
 import { Card } from '../../game/store/card/card';
@@ -238,4 +239,5 @@ export const setTemporalForces: Card[] = [
   new Bronzor(),
   new IronBoulderex(),
   new Whimsicott(),
+  new BronzorIR(),
 ];

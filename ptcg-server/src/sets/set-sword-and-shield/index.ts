@@ -1,3 +1,10 @@
+import { MetalEnergy } from './basic-energies';
+import { DarknessEnergy } from './basic-energies';
+import { FightingEnergy } from './basic-energies';
+import { PsychicEnergy } from './basic-energies';
+import { LightningEnergy } from './basic-energies';
+import { WaterEnergy } from './basic-energies';
+import { FireEnergy } from './basic-energies';
 import { GalvantulaBatch112 } from './galvantula-batch11';
 import { Card } from '../../game/store/card/card';
 import { Baltoy } from './baltoy';
@@ -455,4 +462,11 @@ export const setSwordAndShield: Card[] = [
   new TeamYellGrunt3(),
   new ZamazentaV3(),
   new GalvantulaBatch112(),
+  new FireEnergy(),
+  new WaterEnergy(),
+  new LightningEnergy(),
+  new PsychicEnergy(),
+  new FightingEnergy(),
+  new DarknessEnergy(),
+  new MetalEnergy(),
 ];

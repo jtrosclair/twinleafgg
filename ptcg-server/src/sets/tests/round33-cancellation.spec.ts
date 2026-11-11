@@ -1,0 +1,31 @@
+import { ensureClientCards } from '../../client/cards';
+import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
+import { PlayerType,SlotType } from '../../game/store/actions/play-card-action';
+import { padDeck,setupGame } from './test-helpers';
+import { useAbility,useAttack } from './card-test-helpers';
+import { clearCopyAttackSessionsForTests } from '../../game/store/prefabs/copy-attack-delegation';
+const F='Fire Energy SVE',L='Lightning Energy SVE',P='Psychic Energy SVE';
+const entries=[{name:"Hop's Zacian ex SVP",attack:'Insta-Strike',energy:[F]},{name:"Cynthia's Garchomp ex SVP",attack:'Corkscrew Dive',energy:['Fighting Energy SVE']},{name:"Hop's Snorlax SVP",attack:'Dynamic Press',energy:[F,F,F]},{name:"Iono's Bellibolt ex SVP",attack:'Thunderous Bolt',energy:[L,L,L,F]},{name:"Lillie's Clefairy ex SVP",attack:'Full Moon Rondo',energy:[P,F]}];
+describe('round33 real Sand Attack cancellation audit',()=>{
+ beforeAll(()=>ensureClientCards());beforeEach(()=>clearCopyAttackSessionsForTests());
+ for(const copied of [false,true])for(const markerScope of ['pokemon','player'] as const)for(const c of entries)it(c.name+' copied='+copied+' marker='+markerScope,()=>{
+  const g=setupGame({turn:5,player1:{active:{card:copied?'Mew ex 30C':c.name,energy:c.energy},bench:copied?[{card:c.name}]:[],deck:padDeck(12)},player2:{active:{card:'Hippopotas M3'},bench:[{card:'Charmander BS'}],deck:padDeck(12)}});g.player1.active.getPokemonCard()!.hp=1000;g.player2.active.getPokemonCard()!.hp=1000;g.player2.active.getPokemonCard()!.weakness=[];const attacker=g.player1.active,hand=g.player1.hand.cards.length;
+  const source=g.player2.active.getPokemonCard()!;
+  if(markerScope==='pokemon')attacker.marker.addMarker(PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN,source);
+  else g.player1.marker.addMarker(PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN,source);
+  spyOn(Math,'random').and.returnValue(.99);g.overridePrompt('Choose pokemon',()=>[{player:PlayerType.TOP_PLAYER,slot:SlotType.BENCH,index:0}]);
+  if(copied){g.overridePrompt('Choose attack',()=>({index:0,attack:c.attack}));useAbility(g.store,g.state,0,'Memory Helix')}else useAttack(g.store,g.state,0,c.attack);
+  expect(g.state.activePlayer).toBe(1);expect(g.player2.active.damage).toBe(0);expect(g.player2.bench[0].damage).toBe(0);expect(attacker.damage).toBe(0);expect(g.player1.hand.cards.length).toBe(hand);expect(attacker.cannotAttackNextTurn||attacker.cannotAttackNextTurnPending).toBe(false);
+ });
+ it('resolves normally on heads',()=>{
+  const g=setupGame({turn:5,player1:{active:{card:"Hop's Snorlax SVP",energy:[F,F,F]},deck:padDeck(12)},player2:{active:{card:'Hippopotas M3'},deck:padDeck(12)}});
+  g.player1.active.getPokemonCard()!.hp=1000;g.player2.active.getPokemonCard()!.hp=1000;
+  g.player1.active.getPokemonCard()!.attacks[0].cost=[];
+  g.player1.active.marker.addMarker(PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN,g.player2.active.getPokemonCard()!);
+  spyOn(Math,'random').and.returnValue(0.1);
+  useAttack(g.store,g.state,0,'Dynamic Press');
+  expect(g.state.activePlayer).toBe(1);
+  expect(g.player2.active.damage).toBe(170);
+  expect(g.player1.active.damage).toBe(80);
+ });
+});

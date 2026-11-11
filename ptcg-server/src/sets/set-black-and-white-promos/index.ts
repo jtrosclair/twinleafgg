@@ -1,4 +1,4 @@
-import { ReshiramBWP, ZekromBWP, ZoroarkBWP, EmboarBWP, Reshiram2BWP, Zekrom2BWP, ReshiramExBWP, ZekromExBWP, TornadusBWP, MewtwoExBWP, DarkraiExBWP, RayquazaExBWP, AltariaBWP, FlygonBWP, BlackKyuremBWP, DrifblimBWP, NinetalesBWP, ThundurusEXBWP, DeoxysEXBWP, LugiaExBWP, EeveeBWP, TornadusExBWP, Eevee2BWP, NBWP, ExcadrillTK, ZoroarkTK } from './other-prints';
+import { ReshiramBWP, ZekromBWP, ZoroarkBWP, EmboarBWP, Reshiram2BWP, Zekrom2BWP, ReshiramExBWP, ZekromExBWP, TornadusBWP, MewtwoExBWP, DarkraiExBWP, RayquazaExBWP, AltariaBWP, FlygonBWP, BlackKyuremBWP, DrifblimBWP, NinetalesBWP, ThundurusEXBWP, DeoxysEXBWP, LugiaExBWP, EeveeBWP, TornadusExBWP, Eevee2BWP, NBWP, ExcadrillTK, ZoroarkTK, Pansage2BWP, Axew2BWP } from './other-prints';
 import { Tepig2 } from './tepig2';
 import { Tepig } from './tepig';
 import { Snivy2 } from './snivy2';
@@ -67,4 +67,6 @@ export const setBlackAndWhitePromos: Card[] = [
   new Tepig2(),
   new ExcadrillTK(),
   new ZoroarkTK(),
+  new Pansage2BWP(),
+  new Axew2BWP(),
 ];

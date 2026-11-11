@@ -1,3 +1,4 @@
+import { AmbipomG } from './ambipom-g';
 import { YanmegaE4 } from './yanmega-e4';
 import { WhiscashE4 } from './whiscash-e4';
 import { Weezing } from './weezing';
@@ -234,4 +235,5 @@ export const setRisingRivals: Card[] = [
   new Weezing(),
   new WhiscashE4(),
   new YanmegaE4(),
+  new AmbipomG(),
 ];

@@ -1,10 +1,8 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
-import { PokemonCardList, StoreLike, State, StateUtils, GameMessage, ConfirmPrompt, EnergyCard, PlayerType } from '../../game';
+import { StoreLike, State, StateUtils, GameMessage, ConfirmPrompt, EnergyCard, PokemonCardList, PlayerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { CoinFlipEffect } from '../../game/store/effects/play-card-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Flareon extends PokemonCard {
@@ -46,23 +44,10 @@ export class Flareon extends PokemonCard {
       opponent.marker.addMarker(PokemonCardList.CLEAR_PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN, this);
     }
 
-    // Block attacks if marked - coin flip
-    if (effect instanceof AttackEffect && effect.player.active.marker.hasMarker(PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN, this)) {
-      const coinFlipEffect = new CoinFlipEffect(effect.player, (result: boolean) => {
-        if (result === false) {
-          effect.preventDefault = true;
-        }
-      });
-      return store.reduceEffect(state, coinFlipEffect);
-    }
-
-    // Clear marker at end of turn
     if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(PokemonCardList.CLEAR_PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN, this)) {
       effect.player.marker.removeMarker(PokemonCardList.CLEAR_PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN, this);
       const opponent = StateUtils.getOpponent(state, effect.player);
-      opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList) => {
-        cardList.marker.removeMarker(PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN, this);
-      });
+      opponent.forEachPokemon(PlayerType.TOP_PLAYER, cardList => cardList.marker.removeMarker(PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN, this));
     }
 
     // Fire Slash - may discard Fire energy for +30

@@ -1,3 +1,9 @@
+import { Zweilous } from './zweilous';
+import { Joltik } from './joltik';
+import { Hydreigonex } from './hydreigon-ex';
+import { Galvantula } from './galvantula';
+import { Deino } from './deino';
+import { Bouffalantex } from './bouffalant-ex';
 import { Drilbur } from './drilbur';
 import { Whirlipede } from './whirlipede';
 import { Venipede } from './venipede';
@@ -272,4 +278,10 @@ export const setSV11: Card[] = [
   new VenipedeIR(),
   new WhirlipedeIR(),
   new Drilbur(),
+  new Bouffalantex(),
+  new Deino(),
+  new Galvantula(),
+  new Hydreigonex(),
+  new Joltik(),
+  new Zweilous(),
 ];

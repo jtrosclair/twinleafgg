@@ -1,3 +1,6 @@
+import { AlakazamexSIR } from './full-art';
+import { AlakazamexFA } from './full-art';
+import { AntiqueHelixFossil } from './antique-helix-fossil';
 import { Raichu } from './raichu';
 import { Ponyta } from './ponyta';
 import { Pidgeot } from './pidgeot';
@@ -81,7 +84,7 @@ import { Zubat } from './zubat';
 
 export const setPokemon151: Card[] = [
   new Abra(),
-  // new AntiqueHelixFossil(),
+  new AntiqueHelixFossil(),
   new Alakazamex(),
   new Arbokex(),
   new Articuno(),
@@ -167,7 +170,7 @@ export const setPokemon151: Card[] = [
   new CharizardexFA(),
   new BlastoiseexFA(),
   new ArbokexFA(),
-  // new AlakazamexFA(),
+  new AlakazamexFA(),
   new KangaskhanexFA(),
   new ZapdosexFA(),
   new MewexFA(),
@@ -176,7 +179,7 @@ export const setPokemon151: Card[] = [
   new VenusaurexSIR(),
   new CharizardexSIR(),
   new BlastoiseexSIR(),
-  // new AlakazamexSIR(),
+  new AlakazamexSIR(),
   new ZapdosexSIR(),
   new ErikasInvitationSIR(),
   new GiovannisCharismaSIR(),

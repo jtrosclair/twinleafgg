@@ -1,3 +1,5 @@
+import { Shinx } from './shinx';
+import { ChiYu } from './chi-yu';
 import { Chandelure } from './chandelure';
 import { Lampent } from './lampent';
 import { Litwick } from './litwick';
@@ -273,4 +275,6 @@ export const setTwilightMasquerade: Card[] = [
   new Scolipede(),
   new Varoom(),
   new Whirlipede(),
+  new ChiYu(),
+  new Shinx(),
 ];

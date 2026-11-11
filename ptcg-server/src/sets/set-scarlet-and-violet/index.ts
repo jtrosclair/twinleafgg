@@ -1,3 +1,15 @@
+import { Rotom } from './rotom';
+import { Spidopsex3SVI } from './other-prints';
+import { Banetteex2SVI } from './other-prints';
+import { Gyaradosex2SVI } from './other-prints';
+import { Arcanineex2SVI } from './other-prints';
+import { Spidopsex2SVI } from './other-prints';
+import { Kingambit2SVI } from './other-prints';
+import { Riolu23SVI } from './other-prints';
+import { Dondozo2SVI } from './other-prints';
+import { Scovillain2SVI } from './other-prints';
+import { Dolliv2SVI } from './other-prints';
+import { ProfessorsResearch2SVI } from './other-prints';
 import { Floragato } from './floragato';
 import { Sprigatito } from './sprigatito';
 import { Card } from '../../game/store/card/card';
@@ -74,7 +86,7 @@ import { Scatterbug } from './scatterbug';
 import { Scovillain } from './scovillain';
 import { Shuppet } from './shuppet';
 import { Skwovet } from './skwovet';
-//import { Slowbro } from './slowbro';
+import { Slowbro } from './slowbro';
 import { Smoliv } from './smoliv';
 import { Spewpa } from './spewpa';
 import { Spidopsex } from './spidops-ex';
@@ -169,7 +181,7 @@ export const setScarletAndViolet: Card[] = [
   new Spewpa(),
   new Skwovet(),
   new Slowpoke(),
-  //new Slowbro(),
+  new Slowbro(),
   new Switch(),
   new TeamStarGrunt(),
   new Torkoal(),
@@ -222,4 +234,16 @@ export const setScarletAndViolet: Card[] = [
   new Blissey(),
   new Floragato(),
   new Sprigatito(),
+  new ProfessorsResearch2SVI(),
+  new Dolliv2SVI(),
+  new Scovillain2SVI(),
+  new Dondozo2SVI(),
+  new Riolu23SVI(),
+  new Kingambit2SVI(),
+  new Spidopsex2SVI(),
+  new Arcanineex2SVI(),
+  new Gyaradosex2SVI(),
+  new Banetteex2SVI(),
+  new Spidopsex3SVI(),
+  new Rotom(),
 ];

@@ -1,3 +1,10 @@
+import { DarkGolbat } from './dark-golbat';
+import { DarkWeezing } from './dark-weezing';
+import { DarkWartortle } from './dark-wartortle';
+import { DarkKadabra } from './dark-kadabra';
+import { DarkGyarados } from './dark-gyarados';
+import { DarkBlastoise } from './dark-blastoise';
+import { DarkAlakazam } from './dark-alakazam';
 import { Card } from '../../game';
 import { Challenge } from './challenge';
 import { DarkDragonair } from './dark-dragonair';
@@ -23,7 +30,7 @@ import { TheBosssWay } from './the-bosss-way';
 import { Voltorb } from './voltorb';
 
 // Other prints
-import { RainbowEnergyTR } from './other-prints';
+import { RainbowEnergyTR, DarkAlakazamTR18, DarkBlastoiseTR20, DarkDragoniteTR22, DarkVileplumeTR30 } from './other-prints';
 
 export const setTeamRocket: Card[] = [
   new Challenge(),
@@ -51,4 +58,15 @@ export const setTeamRocket: Card[] = [
 
   // Other prints
   new RainbowEnergyTR(),
+  new DarkAlakazam(),
+  new DarkBlastoise(),
+  new DarkGyarados(),
+  new DarkKadabra(),
+  new DarkWartortle(),
+  new DarkWeezing(),
+  new DarkAlakazamTR18(),
+  new DarkBlastoiseTR20(),
+  new DarkDragoniteTR22(),
+  new DarkVileplumeTR30(),
+  new DarkGolbat(),
 ];

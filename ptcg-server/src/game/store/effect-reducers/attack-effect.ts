@@ -21,6 +21,7 @@ import { EffectOfAttackEffect } from '../effects/effect-of-attack-effects';
 import { GameStatsTracker } from '../game-stats-tracker';
 import { CheckHpEffect } from '../effects/check-effects';
 import { CardTag, Stage } from '../card/card-types';
+import { COIN_FLIP_PROMPT } from '../prefabs/prefabs';
 
 export function attackReducer(store: StoreLike, state: State, effect: Effect): State {
   if (effect instanceof GustOpponentBenchEffect) {
@@ -35,6 +36,32 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
 
     if (targetCard === undefined) {
       throw new GameError(GameMessage.ILLEGAL_ACTION);
+    }
+
+    // Reflect Shield: ask before applying attack damage; heads prevents this
+    // damage and reflects counters onto the attacker, while tails takes damage.
+    const shieldRetaliation = target.retaliateOnDamageNextTurn;
+    const targetOwner = StateUtils.findOwner(state, target);
+    if (!(effect as any).reflectShieldFlipResolved
+      && effect.attackEffect
+      && effect.damage > 0
+      && shieldRetaliation !== null
+      && 'coinFlipPrevent' in shieldRetaliation
+      && shieldRetaliation.coinFlipPrevent === true
+      && shieldRetaliation.attackerPlayerId === targetOwner.id
+      && StateUtils.getOpponent(state, targetOwner) === effect.player) {
+      return COIN_FLIP_PROMPT(store, state, targetOwner, result => {
+        (effect as any).reflectShieldFlipResolved = true;
+        if (result) {
+          effect.damage = 0;
+          const revenge = new AttackEffect(targetOwner, effect.player, shieldRetaliation.attack);
+          revenge.source = target;
+          const counters = new PutCountersEffect(revenge, shieldRetaliation.damage);
+          counters.target = effect.source;
+          store.reduceEffect(state, counters);
+        }
+        store.reduceEffect(state, effect);
+      });
     }
 
     if (effect.attackEffect) {
@@ -91,16 +118,20 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
     const damageBefore = target.damage;
     target.damage += damage;
     const retaliation = target.retaliateOnDamageNextTurn;
-    const defendingPlayer = StateUtils.findOwner(state, target);
+    const defendingPlayer = targetOwner;
     if (damage > 0 && effect.attackEffect && retaliation
+      && (!('coinFlipPrevent' in retaliation) || retaliation.coinFlipPrevent !== true)
       && retaliation.attackerPlayerId === defendingPlayer.id
       && StateUtils.getOpponent(state, defendingPlayer) === effect.player) {
+      const retaliationDamage = 'reflect' in retaliation && retaliation.reflect
+        ? damage
+        : ('damage' in retaliation ? retaliation.damage : 0);
       const retaliatingPlayer = defendingPlayer;
       const revenge = new AttackEffect(retaliatingPlayer, effect.player, retaliation.attack);
       revenge.source = target;
-      const counters = new PutCountersEffect(revenge, retaliation.damage);
+      const counters = new PutCountersEffect(revenge, retaliationDamage);
       counters.target = effect.source;
-      store.reduceEffect(state, counters);
+      if (retaliationDamage > 0) store.reduceEffect(state, counters);
     }
     if (damage > 0 && effect.attackEffect) {
       const hp = new CheckHpEffect(StateUtils.findOwner(state, target), target);

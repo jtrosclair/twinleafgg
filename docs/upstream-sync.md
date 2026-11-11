@@ -1508,3 +1508,6 @@ human win. The refreshed candidate inventory contains 431 unique review
 candidates; this queue still needs print-alias and inherited-card review and is
 not a verified missing-card count. The complete card/engine suite was not run
 for this batch. Continue with the next reviewed 100-print block.
+
+
+Upstream catalog completion audit (2026-11-11): refreshed upstream/main and found no commits after c531dc84f6d079e7531a9c3986a2f51ddeecad6c. Registered seven exact SVP print variants (182, 183, 184, 193, 194, 195 and 204). Attack preflight now checks legacy Pokémon-marker and player-marker Sand Attack/Smokescreen states before fan-out, so a tails result prevents attack card effects while old puzzle payloads keep their marker representation. A normalized set/collector-number comparison matched all 15,504 non-test upstream identities against the built 15,750-card runtime catalogue with zero missing identities; normalization accounts for DP/SV prefixes and zero-padded local print numbers. The focused cancellation regression passed 21 cases, the full root test suite passed, and recorded solutions for Trapped in the Phantom Maze, Explosive Hand, Breaking Through the Wall, and Something's Fishy each reached a human win.

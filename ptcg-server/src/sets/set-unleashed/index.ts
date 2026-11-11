@@ -1,3 +1,4 @@
+import { RaikouSuicuneLEGEND2 } from './raikou-suicune-legend2';
 import { Xatu } from './xatu';
 import { Weedle } from './weedle';
 import { Wartortle } from './wartortle';
@@ -190,4 +191,5 @@ export const setUnleashed: Card[] = [
   new Wartortle(),
   new Weedle(),
   new Xatu(),
+  new RaikouSuicuneLEGEND2(),
 ];

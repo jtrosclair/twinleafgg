@@ -1,3 +1,5 @@
+import { SPikachu } from './s-pikachu';
+import { Pikachu } from './pikachu';
 import { Card } from '../../game/store/card/card';
 import { ComputerError } from './computer-error';
 import { Mew } from './mew';
@@ -21,4 +23,6 @@ export const setWOTCPromos: Card[] = [
   // Other prints
   new MewtwoPR(),
   new PsyduckPR(),
+  new Pikachu(),
+  new SPikachu(),
 ];

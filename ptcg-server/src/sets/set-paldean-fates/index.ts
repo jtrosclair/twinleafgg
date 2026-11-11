@@ -1,3 +1,4 @@
+import { StudentsInPaldeaPAF } from './other-prints';
 import { Card } from '../../game/store/card/card';
 import { Atticus } from './atticus';
 import { CharmanderPAF, MimikyuPAF, RareCandyPAF, CharizardexPAF, ElectricGeneratorPAF, IonoPAF, NestBallPAF, ProfessorsResearchPAF, ProfessorsResearch2PAF, UltraBallPAF, ArmarougePAF, NatuPAF, XatuPAF, CharcadetPAF, RaltsPAF, GardevoirexPAF, NoibatPAF, NoivernexPAF, SquawkabillyexPAF, ArtazonPAF } from './other-prints';
@@ -149,4 +150,5 @@ export const setPaldeanFates: Card[] = [
   new MiraidonexUR(),
   new TingLuexUR(),
   new KoraidonexUR(),
+  new StudentsInPaldeaPAF(),
 ];

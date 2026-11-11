@@ -1,3 +1,5 @@
+import { BrocksVulpix } from './brocks-vulpix';
+import { BrocksNinetales } from './brocks-ninetales';
 import { Card } from '../../game/store/card/card';
 import { BlainesRapidash } from './blaine-rapidash';
 import { ChaosGym } from './chaos-gym';
@@ -23,4 +25,6 @@ export const setGymChallenge: Card[] = [
 
   // Other prints
   new WarpPointG2(),
+  new BrocksNinetales(),
+  new BrocksVulpix(),
 ];

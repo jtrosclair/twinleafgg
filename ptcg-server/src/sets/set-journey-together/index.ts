@@ -1,3 +1,4 @@
+import { HopsZacianexFA } from './other-prints';
 import { Magearna } from './magearna';
 import { Card } from '../../game/store/card/card';
 import { Accelgor } from './accelgor';
@@ -213,4 +214,5 @@ export const setJourneyTogether: Card[] = [
   new ProfessorsResearchJTG(),
   new BlackBeltsTrainingJTG(),
   new Magearna(),
+  new HopsZacianexFA(),
 ];

@@ -1,3 +1,5 @@
+import { Tauros } from './tauros';
+import { ClefableJU17, ElectrodeJU18, FlareonJU19, JolteonJU20, KangaskhanJU21, MrMimeJU22, NidoqueenJU23, PidgeotJU24, PinsirJU25, ScytherJU26, SnorlaxJU27, VaporeonJU28, VenomothJU29, VictreebelJU30, VileplumeJU31, WigglytuffJU32 } from './other-prints';
 import { Card } from '../../game/store/card/card';
 import { Bellsprout } from './bellsprout';
 import { Butterfree } from './butterfree';
@@ -94,7 +96,24 @@ export const setJungle: Card[] = [
   new Victreebel(),
   new Vileplume(),
   new Weepinbell(),
-  new Wigglytuff()
+  new Wigglytuff(),
 
 
+  new ClefableJU17(),
+  new ElectrodeJU18(),
+  new FlareonJU19(),
+  new JolteonJU20(),
+  new KangaskhanJU21(),
+  new MrMimeJU22(),
+  new NidoqueenJU23(),
+  new PidgeotJU24(),
+  new PinsirJU25(),
+  new ScytherJU26(),
+  new SnorlaxJU27(),
+  new VaporeonJU28(),
+  new VenomothJU29(),
+  new VictreebelJU30(),
+  new VileplumeJU31(),
+  new WigglytuffJU32(),
+  new Tauros(),
 ];

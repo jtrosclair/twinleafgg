@@ -232,8 +232,10 @@ export class Store implements StoreLike {
         const damage = effect instanceof PutDamageEffect || effect instanceof DealDamageEffect;
         const nonDamage = !damage && !(effect instanceof ApplyWeaknessEffect);
         const damageFilter = effect.target.preventDamageNextTurnFilter;
-        const sourceStage = effect.source.getPokemonCard()?.stage;
-        const damageProtectionMatches = !damageFilter?.sourceStage || sourceStage === damageFilter.sourceStage;
+        const sourcePokemon = effect.source.getPokemonCard();
+        const damageProtectionMatches = (!damageFilter?.sourceStage || sourcePokemon?.stage === damageFilter.sourceStage)
+          && (damageFilter?.sourceHasAbility !== true
+            || sourcePokemon?.powers.some(power => power.powerType === PowerType.ABILITY) === true);
         if ((damage && effect.target.preventDamageNextTurn && damageProtectionMatches)
           || (nonDamage && effect.target.preventEffectsOfAttacksNextTurn)) {
           effect.preventDefault = true;

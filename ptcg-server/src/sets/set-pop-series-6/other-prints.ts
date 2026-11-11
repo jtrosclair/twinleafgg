@@ -1,3 +1,20 @@
+import { Rampardos } from '../set-mysterious-treasures/rampardos';
+import { Bastiodon as BastiodonBatch15 } from '../set-mysterious-treasures/bastiodon';
+import { Turtwig as TurtwigBatch15 } from '../set-diamond-and-pearl/turtwig';
+import { Starly as StarlyBatch15 } from '../set-diamond-and-pearl/starly';
+import { Staravia as StaraviaBatch15 } from '../set-diamond-and-pearl/staravia';
+import { Riolu as RioluBatch15 } from '../set-diamond-and-pearl/riolu';
+import { Piplup as PiplupBatch15 } from '../set-diamond-and-pearl/piplup';
+import { Pachirisu } from '../set-diamond-and-pearl/pachirisu';
+import { Manaphy as ManaphyBatch15 } from '../set-diamond-and-pearl/manaphy';
+import { Lucario as LucarioBatch15 } from '../set-diamond-and-pearl/lucario';
+import { Drifloon } from '../set-diamond-and-pearl/drifloon';
+import { Chimchar } from '../set-diamond-and-pearl/chimchar';
+import { Cherubi } from '../set-diamond-and-pearl/cherubi';
+import { Round28BunearyDP73 as Buneary } from '../set-diamond-and-pearl/buneary';
+import { Bidoof } from '../set-diamond-and-pearl/bidoof';
+import { Bastiodon } from '../set-mysterious-treasures/bastiodon';
+import { Lucario } from '../set-diamond-and-pearl/lucario';
 import { Manaphy } from '../set-diamond-and-pearl/manaphy';
 import { Round29PachirisuDPP4 } from '../set-diamond-and-pearl-promos/pachirisu';
 import { Riolu } from '../set-diamond-and-pearl/riolu';
@@ -58,4 +75,46 @@ export class Round30TurtwigP6 extends Turtwig {
   public set: string = 'P6';
   public setNumber: string = '17';
   public fullName: string = 'Turtwig P6';
+}
+
+export class BastiodonP6 extends Bastiodon {
+  public set: string = 'P6';
+  public setNumber: string = '1';
+  public fullName: string = 'Bastiodon P6';
+}
+
+export class LucarioP6 extends Lucario {
+  public set: string = 'P6';
+  public setNumber: string = '2';
+  public fullName: string = 'Lucario P6';
+}
+
+export class RampardosP6 extends Rampardos {
+  public set: string = 'P6';
+  public setNumber: string = '5';
+  public fullName: string = 'Rampardos P6';
+}
+
+export class DrifloonP6 extends Drifloon {
+  public set: string = 'P6';
+  public setNumber: string = '6';
+  public fullName: string = 'Drifloon P6';
+}
+
+export class BidoofP6 extends Bidoof {
+  public set: string = 'P6';
+  public setNumber: string = '11';
+  public fullName: string = 'Bidoof P6';
+}
+
+export class CherubiP6 extends Cherubi {
+  public set: string = 'P6';
+  public setNumber: string = '13';
+  public fullName: string = 'Cherubi P6';
+}
+
+export class ChimcharP6 extends Chimchar {
+  public set: string = 'P6';
+  public setNumber: string = '14';
+  public fullName: string = 'Chimchar P6';
 }

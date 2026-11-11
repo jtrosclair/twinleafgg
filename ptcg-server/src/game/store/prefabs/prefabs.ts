@@ -1005,7 +1005,9 @@ export function DISCARD_SPECIFIC_ENERGY_FROM_THIS_POKEMON(store: StoreLike, stat
   });
 }
 
-export function PUT_SPECIFIC_ENERGY_FROM_THIS_POKEMON_INTO_HAND(store: StoreLike, state: State, effect: AttackEffect, energyMap: CardType[]) {
+export function PUT_SPECIFIC_ENERGY_FROM_THIS_POKEMON_INTO_HAND(
+  store: StoreLike, state: State, effect: AttackEffect, energyMap: CardType[], options?: { onEnergyMoved?: () => void },
+) {
   const player = effect.player;
 
   const checkProvidedEnergy = new CheckProvidedEnergyEffect(player);
@@ -1020,6 +1022,7 @@ export function PUT_SPECIFIC_ENERGY_FROM_THIS_POKEMON_INTO_HAND(store: StoreLike
   ), energy => {
     const cards: Card[] = (energy || []).map(e => e.card);
     MOVE_CARDS(store, state, player.active, player.hand, { cards: cards });
+    if (cards.length > 0) options?.onEnergyMoved?.();
   });
 }
 

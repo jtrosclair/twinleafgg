@@ -1,3 +1,8 @@
+import { Omanyte } from './omanyte';
+import { Magneton } from './magneton';
+import { Kabuto } from './kabuto';
+import { AerodactylFO16, ArticunoFO17, DittoFO3, DragoniteFO19, GengarFO20, HaunterFO21, HitmonleeFO22, HypnoFO23, KabutopsFO24, LaprasFO25, MagnetonFO26, MoltresFO27, MukFO28, RaichuFO29, ZapdosFO30 } from './other-prints';
+import { Slowbro } from './slowbro';
 import { Card } from '../../game/store/card/card';
 import { Aerodactyl } from './aerodactyl';
 import { Arbok } from './arbok';
@@ -89,6 +94,25 @@ export const setFossil: Card[] = [
   new Tentacruel(),
   new Weezing(),
   new Zapdos(),
-  new Zubat()
+  new Zubat(),
 
+  new DittoFO3(),
+  new Slowbro(),
+  new AerodactylFO16(),
+  new ArticunoFO17(),
+  new DragoniteFO19(),
+  new GengarFO20(),
+  new HaunterFO21(),
+  new HitmonleeFO22(),
+  new HypnoFO23(),
+  new KabutopsFO24(),
+  new LaprasFO25(),
+  new MagnetonFO26(),
+  new MoltresFO27(),
+  new MukFO28(),
+  new RaichuFO29(),
+  new ZapdosFO30(),
+  new Kabuto(),
+  new Magneton(),
+  new Omanyte(),
 ];

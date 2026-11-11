@@ -1,3 +1,273 @@
+import { Ducklett as DucklettBatch16 } from '../set-darkness-ablaze/ducklett';
+import { Rookidee as RookideeBatch16 } from '../set-sword-and-shield/rookidee';
+import { Skwovet as SkwovetBatch16 } from '../set-rebel-clash/skwovet';
+import { Cinccino as CinccinoBatch16 } from '../set-sword-and-shield/cinccino';
+import { Impidimp as ImpidimpBatch16 } from '../set-rebel-clash/impidimp';
+import { Falinks as FalinksBatch16 } from '../set-rebel-clash/falinks';
+import { Carkol as CarkolBatch16 } from '../set-rebel-clash/carkol';
+import { Rolycoly as RolycolyBatch16 } from '../set-rebel-clash/rolycoly';
+import { Sinistea as SinisteaBatch16 } from '../set-darkness-ablaze/sinistea';
+import { Toxel as ToxelBatch16 } from '../set-darkness-ablaze/toxel';
+import { Arrokuda as ArrokudaBatch16 } from '../set-rebel-clash/arrokuda';
+import { GalarianMrMime as GalarianMrMimeBatch16 } from '../set-darkness-ablaze/galarian-mr-mime';
+import { Sizzlipede as SizzlipedeBatch16 } from '../set-sword-and-shield/sizzlipede';
+import { Raboot as RabootBatch16 } from '../set-sword-and-shield/raboot';
+import { Gossifleur as GossifleurBatch16 } from '../set-sword-and-shield/gossifleur';
+import { Applin2 as Applin2Batch16 } from '../set-rebel-clash/applin-2';
+import { Sobble3 as Sobble3Batch16 } from '../set-sword-and-shield/sobble-3';
+import { Drizzile as DrizzileBatch16 } from '../set-sword-and-shield/drizzile';
+import { Chewtle as ChewtleBatch16 } from '../set-sword-and-shield/chewtle';
+import { Blipbug as BlipbugBatch16 } from '../set-sword-and-shield/blipbug';
+import { Copperajah as CopperajahBatch16 } from '../set-darkness-ablaze/copperajah';
+import { DubwoolV as DubwoolVBatch16 } from '../set-rebel-clash/dubwool-v';
+import { Eiscue as EiscueBatch16 } from '../set-rebel-clash/eiscue';
+import { Dragapult as DragapultBatch16 } from '../set-rebel-clash/dragapult';
+import { FalinksV as FalinksVBatch16 } from '../set-rebel-clash/falinks-v';
+import { Barraskewda as BarraskewdaBatch16 } from '../set-rebel-clash/barraskewda';
+import { Centiskorch as CentiskorchBatch16 } from '../set-sword-and-shield/centiskorch';
+import { GalarianMrRime as GalarianMrRimeBatch16 } from '../set-darkness-ablaze/galarian-mr-rime';
+import { GalarianPerrserker as GalarianPerrserkerBatch16 } from '../set-sword-and-shield/galarian-perrserker';
+import { GalarianCursola as GalarianCursolaBatch16 } from '../set-rebel-clash/galarian-cursola';
+import { Arctozolt as ArctozoltBatch16 } from '../set-darkness-ablaze/arctozolt';
+import { Dracovish as DracovishBatch16 } from '../set-darkness-ablaze/dracovish';
+import { Flapple as FlappleBatch16 } from '../set-rebel-clash/flapple';
+import { GalarianRapidash as GalarianRapidashBatch16 } from '../set-sword-and-shield/galarian-rapidash';
+import { GalarianMeowth as GalarianMeowthBatch16 } from '../set-rebel-clash/galarian-meowth';
+import { GalarianZigzagoon as GalarianZigzagoonBatch16 } from '../set-sword-and-shield/galarian-zigzagoon';
+import { Appletun as AppletunBatch16 } from '../set-rebel-clash/appletun';
+import { GalarianObstagoon as GalarianObstagoonBatch16 } from '../set-sword-and-shield/galarian-obstagoon';
+import { Cinderace as CinderaceBatch16 } from '../set-sword-and-shield/cinderace';
+import { CinderaceV as CinderaceVBatch16 } from '../set-rebel-clash/cinderace-v';
+import { Coalossal as CoalossalBatch16 } from '../set-rebel-clash/coalossal';
+import { CrobatV as CrobatVBatch16 } from '../set-darkness-ablaze/crobat-v';
+import { EternatusVMAX as EternatusVMAXBatch16 } from '../set-darkness-ablaze/eternatus-vmax';
+import { EternatusV as EternatusVBatch16 } from '../set-darkness-ablaze/eternatus-v';
+import { Luxio as LuxioBatch16 } from '../set-rebel-clash/luxio';
+import { Inteleon as InteleonBatch16 } from '../set-sword-and-shield/inteleon';
+import { GalarianStunfisk as GalarianStunfiskBatch16 } from '../set-sword-and-shield/galarian-stunfisk';
+import { Oranguru as OranguruBatch16 } from '../set-sword-and-shield/oranguru';
+import { Grimmsnarl as GrimmsnarlBatch16 } from '../set-rebel-clash/grimmsnarl';
+import { Hatterene as HattereneBatch16 } from '../set-rebel-clash/hatterene';
+import { Greedent as GreedentBatch16 } from '../set-rebel-clash/greedent';
+import { Orbeetle as OrbeetleBatch16 } from '../set-sword-and-shield/orbeetle';
+import { AlcremieVmax as AlcremieVmaxBatch16 } from '../set-champions-path/alcremie-vmax';
+import { Skyla as SkylaBatch16 } from '../set-boundaries-crossed/skyla';
+import { Rose as RoseBatch16 } from '../set-darkness-ablaze/rose';
+import { PokeKid as PokeKidBatch16 } from '../set-sword-and-shield/poke-kid';
+import { Piers as PiersBatch16 } from '../set-champions-path/piers';
+import { CaraLiss as CaraLissBatch16 } from '../set-vivid-voltage/cara-liss';
+import { AlcremieV as AlcremieVBatch16 } from '../set-champions-path/alcremie-v';
+import { ProfessorsResearch as ProfessorsResearchBatch16 } from '../set-scarlet-and-violet/professors-research';
+import { BossOrders as BossOrdersBatch16 } from '../set-paldea-evolved/boss-orders';
+import { CramorantV as CramorantVBatch16 } from '../set-sword-and-shield/cramorant-v';
+import { Cufant as CufantBatch16 } from '../set-darkness-ablaze/cufant';
+import { Trapinch as TrapinchBatch16 } from '../set-darkness-ablaze/trapinch';
+import { IndeedeeV as IndeedeeVBatch16 } from '../set-sword-and-shield/indeedee-v';
+import { MorpekoVmax as MorpekoVmaxBatch16 } from '../set-sword-and-shield/morpeko-vmax';
+import { MorpekoV as MorpekoVBatch16 } from '../set-sword-and-shield/morpeko-v';
+import { Luxray as LuxrayBatch16 } from '../set-rebel-clash/luxray';
+import { Shinx as ShinxBatch16 } from '../set-rebel-clash/shinx';
+import { CinderaceVmax as CinderaceVmaxBatch16 } from '../set-rebel-clash/cinderace-vmax';
+import { Rillaboom as RillaboomBatch16 } from '../set-sword-and-shield/rillaboom';
+import { DhelmiseV as DhelmiseVBatch16 } from '../set-sword-and-shield/dhelmise-v';
+import { Decidueye as DecidueyeBatch16 } from '../set-darkness-ablaze/decidueye';
+import { GrimmsnarlVmax as GrimmsnarlVmaxBatch16 } from '../set-darkness-ablaze/grimmsnarl-vmax';
+import { GrimmsnarlV as GrimmsnarlVBatch16 } from '../set-darkness-ablaze/grimmsnarl-v';
+import { ToxtricityVmax as ToxtricityVmaxBatch16 } from '../set-rebel-clash/toxtricity-vmax';
+import { ToxtricityV as ToxtricityVBatch16 } from '../set-rebel-clash/toxtricity-v';
+import { LaprasVmax as LaprasVmaxBatch16 } from '../set-sword-and-shield/lapras-vmax';
+import { LaprasV as LaprasVBatch16 } from '../set-sword-and-shield/lapras-v';
+import { CentiskorchVmax as CentiskorchVmaxBatch16 } from '../set-darkness-ablaze/centiskorch-vmax';
+import { CentiskorchV as CentiskorchVBatch16 } from '../set-darkness-ablaze/centiskorch-v';
+import { CharizardVmax as CharizardVmaxBatch16 } from '../set-darkness-ablaze/charizard-vmax';
+import { RillaboomVmax as RillaboomVmaxBatch16 } from '../set-rebel-clash/rillaboom-vmax';
+import { RillaboomV as RillaboomVBatch16 } from '../set-rebel-clash/rillaboom-v';
+import { Dubwool as DubwoolBatch16 } from '../set-sword-and-shield/dubwool';
+import { Wooloo as WoolooBatch16 } from '../set-sword-and-shield/wooloo';
+import { Corvisquire as CorvisquireBatch16 } from '../set-sword-and-shield/corvisquire';
+import { Bunnelby as BunnelbyBatch16 } from '../set-darkness-ablaze/bunnelby';
+import { Swanna as SwannaBatch16 } from '../set-darkness-ablaze/swanna';
+import { Minccino as MinccinoBatch16 } from '../set-sword-and-shield/minccino';
+import { Duraludon as DuraludonBatch16 } from '../set-rebel-clash/duraludon';
+import { Corviknight as CorviknightBatch16 } from '../set-sword-and-shield/corviknight';
+import { Morgrem as MorgremBatch16 } from '../set-rebel-clash/morgrem';
+import { Thievul as ThievulBatch16 } from '../set-sword-and-shield/thievul';
+import { Nickit as NickitBatch16 } from '../set-sword-and-shield/nickit';
+import { GalarianLinoone as GalarianLinooneBatch16 } from '../set-sword-and-shield/galarian-linoone';
+import { Stonjourner as StonjournerBatch16 } from '../set-rebel-clash/stonjourner';
+import { Grapploct as GrapploctBatch16 } from '../set-sword-and-shield/grapploct';
+import { Clobbopus as ClobbopusBatch16 } from '../set-sword-and-shield/clobbopus';
+import { Sandaconda as SandacondaBatch16 } from '../set-sword-and-shield/sandaconda';
+import { Silicobra as SilicobraBatch16 } from '../set-sword-and-shield/silicobra';
+import { GalarianRunerigus as GalarianRunerigusBatch16 } from '../set-rebel-clash/galarian-runerigus';
+import { GalarianYamask as GalarianYamaskBatch16 } from '../set-rebel-clash/galarian-yamask';
+import { GalarianSirfetchd as GalarianSirfetchdBatch16 } from '../set-rebel-clash/galarian-sirfetchd';
+import { GalarianFarfetchd as GalarianFarfetchdBatch16 } from '../set-rebel-clash/galarian-farfetchd';
+import { Drakloak as DrakloakBatch16 } from '../set-rebel-clash/drakloak';
+import { Dreepy as DreepyBatch16 } from '../set-rebel-clash/dreepy';
+import { Indeedee as IndeedeeBatch16 } from '../set-rebel-clash/indeedee';
+import { Alcremie as AlcremieBatch16 } from '../set-rebel-clash/alcremie';
+import { Milcery as MilceryBatch16 } from '../set-rebel-clash/milcery';
+import { Hattrem as HattremBatch16 } from '../set-rebel-clash/hattrem';
+import { Hatenna as HatennaBatch16 } from '../set-rebel-clash/hatenna';
+import { Polteageist as PolteageistBatch16 } from '../set-darkness-ablaze/polteageist';
+import { Dedenne as DedenneBatch16 } from '../set-darkness-ablaze/dedenne';
+import { GalarianCorsola as GalarianCorsolaBatch16 } from '../set-rebel-clash/galarian-corsola';
+import { GalarianPonyta as GalarianPonytaBatch16 } from '../set-sword-and-shield/galarian-ponyta';
+import { Dracozolt as DracozoltBatch16 } from '../set-darkness-ablaze/dracozolt';
+import { Morpeko as MorpekoBatch16 } from '../set-rebel-clash/morpeko';
+import { Pincurchin as PincurchinBatch16 } from '../set-sword-and-shield/pincurchin';
+import { Toxtricity as ToxtricityBatch16 } from '../set-darkness-ablaze/toxtricity';
+import { Boltund as BoltundBatch16 } from '../set-sword-and-shield/boltund';
+import { Yamper as YamperBatch16 } from '../set-sword-and-shield/yamper';
+import { Arctovish as ArctovishBatch16 } from '../set-darkness-ablaze/arctovish';
+import { Cramorant as CramorantBatch16 } from '../set-rebel-clash/cramorant';
+import { Drednaw as DrednawBatch16 } from '../set-sword-and-shield/drednaw';
+import { GalarianDarmanitan as GalarianDarmanitanBatch16 } from '../set-rebel-clash/galarian-darmanitan';
+import { GalarianDarumaka as GalarianDarumakaBatch16 } from '../set-rebel-clash/galarian-darumaka';
+import { Suicune as SuicuneBatch16 } from '../set-darkness-ablaze/suicune';
+import { Scorbunny as ScorbunnyBatch16 } from '../set-sword-and-shield/scorbunny';
+import { Eldegoss as EldegossBatch16 } from '../set-sword-and-shield/eldegoss';
+import { Dottler as DottlerBatch16 } from '../set-sword-and-shield/dottler';
+import { Grookey as GrookeyBatch16 } from '../set-sword-and-shield/grookey';
+import { Rowlet as RowletBatch16 } from '../set-darkness-ablaze/rowlet';
+import { Frosmoth as FrosmothBatch16 } from '../set-sword-and-shield/frosmoth';
+import { BirdKeeper as BirdKeeperBatch16 } from '../set-darkness-ablaze/bird-keeper';
+import { Ducklett } from '../set-darkness-ablaze/ducklett';
+import { Rookidee } from '../set-sword-and-shield/rookidee';
+import { Skwovet } from '../set-rebel-clash/skwovet';
+import { Cinccino } from '../set-sword-and-shield/cinccino';
+import { Impidimp } from '../set-rebel-clash/impidimp';
+import { Falinks } from '../set-rebel-clash/falinks';
+import { Carkol } from '../set-rebel-clash/carkol';
+import { Rolycoly } from '../set-rebel-clash/rolycoly';
+import { Sinistea } from '../set-darkness-ablaze/sinistea';
+import { Toxel } from '../set-darkness-ablaze/toxel';
+import { Arrokuda } from '../set-rebel-clash/arrokuda';
+import { GalarianMrMime } from '../set-darkness-ablaze/galarian-mr-mime';
+import { Sizzlipede } from '../set-sword-and-shield/sizzlipede';
+import { Raboot } from '../set-sword-and-shield/raboot';
+import { Gossifleur } from '../set-sword-and-shield/gossifleur';
+import { Applin2 } from '../set-rebel-clash/applin-2';
+import { Sobble3 as Sobble3Batch15 } from '../set-sword-and-shield/sobble-3';
+import { Drizzile as DrizzileBatch15 } from '../set-sword-and-shield/drizzile';
+import { Chewtle as ChewtleBatch15 } from '../set-sword-and-shield/chewtle';
+import { Blipbug as BlipbugBatch15 } from '../set-sword-and-shield/blipbug';
+import { Copperajah as CopperajahBatch15 } from '../set-darkness-ablaze/copperajah';
+import { DubwoolV as DubwoolVBatch15 } from '../set-rebel-clash/dubwool-v';
+import { Eiscue as EiscueBatch15 } from '../set-rebel-clash/eiscue';
+import { Dragapult as DragapultBatch15 } from '../set-rebel-clash/dragapult';
+import { FalinksV as FalinksVBatch15 } from '../set-rebel-clash/falinks-v';
+import { Barraskewda as BarraskewdaBatch15 } from '../set-rebel-clash/barraskewda';
+import { Centiskorch as CentiskorchBatch15 } from '../set-sword-and-shield/centiskorch';
+import { GalarianMrRime as GalarianMrRimeBatch15 } from '../set-darkness-ablaze/galarian-mr-rime';
+import { GalarianPerrserker as GalarianPerrserkerBatch15 } from '../set-sword-and-shield/galarian-perrserker';
+import { GalarianCursola as GalarianCursolaBatch15 } from '../set-rebel-clash/galarian-cursola';
+import { Arctozolt as ArctozoltBatch15 } from '../set-darkness-ablaze/arctozolt';
+import { Dracovish as DracovishBatch15 } from '../set-darkness-ablaze/dracovish';
+import { Flapple as FlappleBatch15 } from '../set-rebel-clash/flapple';
+import { GalarianRapidash as GalarianRapidashBatch15 } from '../set-sword-and-shield/galarian-rapidash';
+import { GalarianMeowth as GalarianMeowthBatch15 } from '../set-rebel-clash/galarian-meowth';
+import { GalarianZigzagoon as GalarianZigzagoonBatch15 } from '../set-sword-and-shield/galarian-zigzagoon';
+import { Appletun as AppletunBatch15 } from '../set-rebel-clash/appletun';
+import { GalarianObstagoon as GalarianObstagoonBatch15 } from '../set-sword-and-shield/galarian-obstagoon';
+import { Cinderace as CinderaceBatch15 } from '../set-sword-and-shield/cinderace';
+import { CinderaceV as CinderaceVBatch15 } from '../set-rebel-clash/cinderace-v';
+import { Coalossal as CoalossalBatch15 } from '../set-rebel-clash/coalossal';
+import { CrobatV as CrobatVBatch15 } from '../set-darkness-ablaze/crobat-v';
+import { EternatusVMAX as EternatusVMAXBatch15 } from '../set-darkness-ablaze/eternatus-vmax';
+import { EternatusV as EternatusVBatch15 } from '../set-darkness-ablaze/eternatus-v';
+import { Luxio as LuxioBatch15 } from '../set-rebel-clash/luxio';
+import { Inteleon as InteleonBatch15 } from '../set-sword-and-shield/inteleon';
+import { GalarianStunfisk as GalarianStunfiskBatch15 } from '../set-sword-and-shield/galarian-stunfisk';
+import { Oranguru as OranguruBatch15 } from '../set-sword-and-shield/oranguru';
+import { Grimmsnarl as GrimmsnarlBatch15 } from '../set-rebel-clash/grimmsnarl';
+import { Hatterene as HattereneBatch15 } from '../set-rebel-clash/hatterene';
+import { Greedent as GreedentBatch15 } from '../set-rebel-clash/greedent';
+import { Orbeetle as OrbeetleBatch15 } from '../set-sword-and-shield/orbeetle';
+import { AlcremieVmax as AlcremieVmaxBatch15 } from '../set-champions-path/alcremie-vmax';
+import { Skyla as SkylaBatch15 } from '../set-boundaries-crossed/skyla';
+import { Rose as RoseBatch15 } from '../set-darkness-ablaze/rose';
+import { PokeKid as PokeKidBatch15 } from '../set-sword-and-shield/poke-kid';
+import { Piers as PiersBatch15 } from '../set-champions-path/piers';
+import { CaraLiss as CaraLissBatch15 } from '../set-vivid-voltage/cara-liss';
+import { AlcremieV as AlcremieVBatch15 } from '../set-champions-path/alcremie-v';
+import { ProfessorsResearch as ProfessorsResearchBatch15 } from '../set-scarlet-and-violet/professors-research';
+import { BossOrders as BossOrdersBatch15 } from '../set-paldea-evolved/boss-orders';
+import { CramorantV as CramorantVBatch15 } from '../set-sword-and-shield/cramorant-v';
+import { Cufant as CufantBatch15 } from '../set-darkness-ablaze/cufant';
+import { Trapinch as TrapinchBatch15 } from '../set-darkness-ablaze/trapinch';
+import { IndeedeeV as IndeedeeVBatch15 } from '../set-sword-and-shield/indeedee-v';
+import { MorpekoVmax as MorpekoVmaxBatch15 } from '../set-sword-and-shield/morpeko-vmax';
+import { MorpekoV as MorpekoVBatch15 } from '../set-sword-and-shield/morpeko-v';
+import { Luxray as LuxrayBatch15 } from '../set-rebel-clash/luxray';
+import { Shinx as ShinxBatch15 } from '../set-rebel-clash/shinx';
+import { CinderaceVmax as CinderaceVmaxBatch15 } from '../set-rebel-clash/cinderace-vmax';
+import { Rillaboom as RillaboomBatch15 } from '../set-sword-and-shield/rillaboom';
+import { DhelmiseV as DhelmiseVBatch15 } from '../set-sword-and-shield/dhelmise-v';
+import { Decidueye as DecidueyeBatch15 } from '../set-darkness-ablaze/decidueye';
+import { GrimmsnarlVmax as GrimmsnarlVmaxBatch15 } from '../set-darkness-ablaze/grimmsnarl-vmax';
+import { GrimmsnarlV as GrimmsnarlVBatch15 } from '../set-darkness-ablaze/grimmsnarl-v';
+import { ToxtricityVmax as ToxtricityVmaxBatch15 } from '../set-rebel-clash/toxtricity-vmax';
+import { ToxtricityV as ToxtricityVBatch15 } from '../set-rebel-clash/toxtricity-v';
+import { LaprasVmax as LaprasVmaxBatch15 } from '../set-sword-and-shield/lapras-vmax';
+import { LaprasV as LaprasVBatch15 } from '../set-sword-and-shield/lapras-v';
+import { CentiskorchVmax as CentiskorchVmaxBatch15 } from '../set-darkness-ablaze/centiskorch-vmax';
+import { CentiskorchV as CentiskorchVBatch15 } from '../set-darkness-ablaze/centiskorch-v';
+import { CharizardVmax as CharizardVmaxBatch15 } from '../set-darkness-ablaze/charizard-vmax';
+import { RillaboomVmax as RillaboomVmaxBatch15 } from '../set-rebel-clash/rillaboom-vmax';
+import { RillaboomV as RillaboomVBatch15 } from '../set-rebel-clash/rillaboom-v';
+import { Dubwool as DubwoolBatch15 } from '../set-sword-and-shield/dubwool';
+import { Wooloo as WoolooBatch15 } from '../set-sword-and-shield/wooloo';
+import { Corvisquire as CorvisquireBatch15 } from '../set-sword-and-shield/corvisquire';
+import { Bunnelby as BunnelbyBatch15 } from '../set-darkness-ablaze/bunnelby';
+import { Swanna as SwannaBatch15 } from '../set-darkness-ablaze/swanna';
+import { Minccino as MinccinoBatch15 } from '../set-sword-and-shield/minccino';
+import { Duraludon as DuraludonBatch15 } from '../set-rebel-clash/duraludon';
+import { Corviknight as CorviknightBatch15 } from '../set-sword-and-shield/corviknight';
+import { Morgrem as MorgremBatch15 } from '../set-rebel-clash/morgrem';
+import { Thievul as ThievulBatch15 } from '../set-sword-and-shield/thievul';
+import { Nickit as NickitBatch15 } from '../set-sword-and-shield/nickit';
+import { GalarianLinoone as GalarianLinooneBatch15 } from '../set-sword-and-shield/galarian-linoone';
+import { Stonjourner as StonjournerBatch15 } from '../set-rebel-clash/stonjourner';
+import { Grapploct as GrapploctBatch15 } from '../set-sword-and-shield/grapploct';
+import { Clobbopus as ClobbopusBatch15 } from '../set-sword-and-shield/clobbopus';
+import { Sandaconda as SandacondaBatch15 } from '../set-sword-and-shield/sandaconda';
+import { Silicobra as SilicobraBatch15 } from '../set-sword-and-shield/silicobra';
+import { GalarianRunerigus as GalarianRunerigusBatch15 } from '../set-rebel-clash/galarian-runerigus';
+import { GalarianYamask as GalarianYamaskBatch15 } from '../set-rebel-clash/galarian-yamask';
+import { GalarianSirfetchd as GalarianSirfetchdBatch15 } from '../set-rebel-clash/galarian-sirfetchd';
+import { GalarianFarfetchd as GalarianFarfetchdBatch15 } from '../set-rebel-clash/galarian-farfetchd';
+import { Drakloak as DrakloakBatch15 } from '../set-rebel-clash/drakloak';
+import { Dreepy as DreepyBatch15 } from '../set-rebel-clash/dreepy';
+import { Indeedee as IndeedeeBatch15 } from '../set-rebel-clash/indeedee';
+import { Alcremie as AlcremieBatch15 } from '../set-rebel-clash/alcremie';
+import { Milcery as MilceryBatch15 } from '../set-rebel-clash/milcery';
+import { Hattrem as HattremBatch15 } from '../set-rebel-clash/hattrem';
+import { Hatenna as HatennaBatch15 } from '../set-rebel-clash/hatenna';
+import { Polteageist as PolteageistBatch15 } from '../set-darkness-ablaze/polteageist';
+import { Dedenne as DedenneBatch15 } from '../set-darkness-ablaze/dedenne';
+import { GalarianCorsola as GalarianCorsolaBatch15 } from '../set-rebel-clash/galarian-corsola';
+import { GalarianPonyta as GalarianPonytaBatch15 } from '../set-sword-and-shield/galarian-ponyta';
+import { Dracozolt as DracozoltBatch15 } from '../set-darkness-ablaze/dracozolt';
+import { Morpeko as MorpekoBatch15 } from '../set-rebel-clash/morpeko';
+import { Pincurchin as PincurchinBatch15 } from '../set-sword-and-shield/pincurchin';
+import { Toxtricity as ToxtricityBatch15 } from '../set-darkness-ablaze/toxtricity';
+import { Boltund as BoltundBatch15 } from '../set-sword-and-shield/boltund';
+import { Yamper as YamperBatch15 } from '../set-sword-and-shield/yamper';
+import { Arctovish as ArctovishBatch15 } from '../set-darkness-ablaze/arctovish';
+import { Cramorant as CramorantBatch15 } from '../set-rebel-clash/cramorant';
+import { Drednaw as DrednawBatch15 } from '../set-sword-and-shield/drednaw';
+import { GalarianDarmanitan as GalarianDarmanitanBatch15 } from '../set-rebel-clash/galarian-darmanitan';
+import { GalarianDarumaka as GalarianDarumakaBatch15 } from '../set-rebel-clash/galarian-darumaka';
+import { Suicune as SuicuneBatch15 } from '../set-darkness-ablaze/suicune';
+import { Scorbunny as ScorbunnyBatch15 } from '../set-sword-and-shield/scorbunny';
+import { Eldegoss as EldegossBatch15 } from '../set-sword-and-shield/eldegoss';
+import { Dottler as DottlerBatch15 } from '../set-sword-and-shield/dottler';
+import { Grookey as GrookeyBatch15 } from '../set-sword-and-shield/grookey';
+import { Rowlet as RowletBatch15 } from '../set-darkness-ablaze/rowlet';
+import { Frosmoth as FrosmothBatch15 } from '../set-sword-and-shield/frosmoth';
+import { BirdKeeper as BirdKeeperBatch15 } from '../set-darkness-ablaze/bird-keeper';
 import { BirdKeeper } from '../set-darkness-ablaze/bird-keeper';
 import { Frosmoth } from '../set-sword-and-shield/frosmoth';
 import { Rowlet } from '../set-darkness-ablaze/rowlet';
@@ -949,4 +1219,328 @@ export class SobbleSHF extends Sobble3 {
   public set: string = 'SHF';
   public setNumber: string = 'SV025';
   public fullName: string = 'Sobble SHF';
+}
+
+export class RowletSHFBatch152 extends RowletBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV1';
+  public fullName: string = "Rowlet SHF SV1";
+}
+
+export class DartrixSHFSV extends Dartrix {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV2';
+  public fullName: string = 'Dartrix SHF SV2';
+}
+
+export class DecidueyeSHFBatch152 extends DecidueyeBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV3';
+  public fullName: string = "Decidueye SHF SV3";
+}
+
+export class GrookeySHFBatch152 extends GrookeyBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV4';
+  public fullName: string = "Grookey SHF SV4";
+}
+
+export class Thwackey2Batch152 extends Thwackey {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV5';
+  public fullName: string = "Thwackey SHF 12 SV5";
+}
+
+export class BlipbugSHFBatch152 extends BlipbugBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV7';
+  public fullName: string = "Blipbug SHF SV7";
+}
+
+export class DottlerSHFBatch152 extends DottlerBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV8';
+  public fullName: string = "Dottler SHF SV8";
+}
+
+export class OrbeetleSHFBatch152 extends OrbeetleBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV9';
+  public fullName: string = "Orbeetle SHF SV9";
+}
+
+export class GossifleurSHF extends Gossifleur {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV10';
+  public fullName: string = 'Gossifleur SHF SV10';
+}
+
+export class EldegossSHFBatch152 extends EldegossBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV11';
+  public fullName: string = "Eldegoss SHF SV11";
+}
+
+export class FlappleSHFBatch152 extends FlappleBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV13';
+  public fullName: string = "Flapple SHF SV13";
+}
+
+export class AppletunSHFBatch152 extends AppletunBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV14';
+  public fullName: string = "Appletun SHF SV14";
+}
+
+export class ScorbunnySHFBatch152 extends ScorbunnyBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV15';
+  public fullName: string = "Scorbunny SHF SV15";
+}
+
+export class RabootSHF extends Raboot {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV16';
+  public fullName: string = 'Raboot SHF SV16';
+}
+
+export class CinderaceSHFBatch152 extends CinderaceBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV17';
+  public fullName: string = "Cinderace SHF SV17";
+}
+
+export class SizzlipedeSHF extends Sizzlipede {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV18';
+  public fullName: string = "Sizzlipede SHF SV18";
+}
+
+export class CentiskorchSHFBatch152 extends CentiskorchBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV19';
+  public fullName: string = "Centiskorch SHF SV19";
+}
+
+export class GalarianMrMimeSHF extends GalarianMrMime {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV20';
+  public fullName: string = "Galarian Mr. Mime SHF SV20";
+}
+
+export class GalarianMrRimeSHFBatch152 extends GalarianMrRimeBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV21';
+  public fullName: string = "Galarian Mr. Rime SHF SV21";
+}
+
+export class SuicuneSHFBatch152 extends SuicuneBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV22';
+  public fullName: string = "Suicune SHF SV22";
+}
+
+export class GalarianDarumakaSHFBatch152 extends GalarianDarumakaBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV23';
+  public fullName: string = "Galarian Darumaka SHF SV23";
+}
+
+export class GalarianDarmanitanSHFBatch152 extends GalarianDarmanitanBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV24';
+  public fullName: string = "Galarian Darmanitan SHF SV24";
+}
+
+export class SobbleSHFBatch152 extends Sobble3Batch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV25';
+  public fullName: string = "Sobble SHF SV25";
+}
+
+export class DrizzileSHFBatch152 extends DrizzileBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV26';
+  public fullName: string = "Drizzile SHF SV26";
+}
+
+export class InteleonSHFBatch152 extends InteleonBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV27';
+  public fullName: string = "Inteleon SHF SV27";
+}
+
+export class ChewtleSHFBatch152 extends ChewtleBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV28';
+  public fullName: string = "Chewtle SHF SV28";
+}
+
+export class DrednawSHFBatch152 extends DrednawBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV29';
+  public fullName: string = "Drednaw SHF SV29";
+}
+
+export class CramorantSHFBatch152 extends CramorantBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV30';
+  public fullName: string = "Cramorant SHF SV30";
+}
+
+export class ArrokudaSHF extends Arrokuda {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV31';
+  public fullName: string = "Arrokuda SHF SV31";
+}
+
+export class BarraskewdaSHFBatch152 extends BarraskewdaBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV32';
+  public fullName: string = "Barraskewda SHF SV32";
+}
+
+export class FrosmothSHF2Batch152 extends FrosmothBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV34';
+  public fullName: string = "Frosmoth SHF SV034 SV34";
+}
+
+export class EiscueSHFBatch152 extends EiscueBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV35';
+  public fullName: string = "Eiscue SHF SV35";
+}
+
+export class DracovishSHFBatch152 extends DracovishBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV36';
+  public fullName: string = "Dracovish SHF SV36";
+}
+
+export class ArctovishSHFBatch152 extends ArctovishBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV37';
+  public fullName: string = "Arctovish SHF SV37";
+}
+
+export class Rotom2Batch152 extends Rotom {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV38';
+  public fullName: string = "Rotom SHF SV38";
+}
+
+export class YamperSHFBatch152 extends YamperBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV39';
+  public fullName: string = "Yamper SHF SV39";
+}
+
+export class BoltundSHFBatch152 extends BoltundBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV40';
+  public fullName: string = "Boltund SHF SV40";
+}
+
+export class ToxelSHF extends Toxel {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV41';
+  public fullName: string = "Toxel SHF SV41";
+}
+
+export class ToxtricitySHFBatch152 extends ToxtricityBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV42';
+  public fullName: string = "Toxtricity SHF SV42";
+}
+
+export class PincurchinSHFBatch152 extends PincurchinBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV43';
+  public fullName: string = "Pincurchin SHF SV43";
+}
+
+export class MorpekoSHFBatch152 extends MorpekoBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV44';
+  public fullName: string = "Morpeko SHF SV44";
+}
+
+export class DracozoltSHFBatch152 extends DracozoltBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV45';
+  public fullName: string = "Dracozolt SHF SV45";
+}
+
+export class ArctozoltSHFBatch152 extends ArctozoltBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV46';
+  public fullName: string = "Arctozolt SHF SV46";
+}
+
+export class GalarianPonytaSHFBatch152 extends GalarianPonytaBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV47';
+  public fullName: string = "Galarian Ponyta SHF SV47";
+}
+
+export class GalarianRapidashSHFBatch152 extends GalarianRapidashBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV48';
+  public fullName: string = "Galarian Rapidash SHF SV48";
+}
+
+export class GalarianCorsolaSHFBatch152 extends GalarianCorsolaBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV49';
+  public fullName: string = "Galarian Corsola SHF SV49";
+}
+
+export class GalarianCursolaSHFBatch152 extends GalarianCursolaBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV50';
+  public fullName: string = "Galarian Cursola SHF SV50";
+}
+
+export class DedenneSHFBatch152 extends DedenneBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV51';
+  public fullName: string = "Dedenne SHF SV51";
+}
+
+export class SinisteaSHF extends Sinistea {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV52';
+  public fullName: string = "Sinistea SHF SV52";
+}
+
+export class PolteageistSHFBatch152 extends PolteageistBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV53';
+  public fullName: string = "Polteageist SHF SV53";
+}
+
+export class HatennaSHFBatch152 extends HatennaBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV54';
+  public fullName: string = "Hatenna SHF SV54";
+}
+
+export class HattremSHFBatch152 extends HattremBatch15 {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV55';
+  public fullName: string = "Hattrem SHF SV55";
+}
+
+export class Koffing2Batch162 extends Koffing {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV76';
+  public fullName: string = 'Koffing SHF SV76';
+}
+
+export class GalarianWeezing2Batch162 extends GalarianWeezing {
+  public set: string = 'SHF';
+  public setNumber: string = 'SV77';
+  public fullName: string = 'Galarian Weezing SHF SV77';
 }

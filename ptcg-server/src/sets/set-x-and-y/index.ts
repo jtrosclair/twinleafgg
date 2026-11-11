@@ -1,3 +1,11 @@
+import { FairyEnergy } from './basic-energies';
+import { MetalEnergy } from './basic-energies';
+import { DarknessEnergy } from './basic-energies';
+import { FightingEnergy } from './basic-energies';
+import { PsychicEnergy } from './basic-energies';
+import { LightningEnergy } from './basic-energies';
+import { WaterEnergy } from './basic-energies';
+import { FireEnergy } from './basic-energies';
 import { Card } from '../../game/store/card/card';
 import { Aegislash } from './aegislash';
 import { Aegislash2 } from './aegislash-2';
@@ -289,4 +297,12 @@ export const setXY: Card[] = [
   new BlastoiseEx2(),
   new EmolgaEx2(),
   new SkarmoryEx2(),
+  new FireEnergy(),
+  new WaterEnergy(),
+  new LightningEnergy(),
+  new PsychicEnergy(),
+  new FightingEnergy(),
+  new DarknessEnergy(),
+  new MetalEnergy(),
+  new FairyEnergy(),
 ];

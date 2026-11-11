@@ -1,3 +1,6 @@
+import { Pawniard } from './pawniard';
+import { Kingambit } from './kingambit';
+import { Bisharp } from './bisharp';
 import { Bronzor } from './bronzor';
 import { Altaria } from './altaria';
 import { Card } from '../../game/store/card/card';
@@ -155,4 +158,7 @@ export const setObsidianFlames: Card[] = [
 
   new Altaria(),
   new Bronzor(),
+  new Bisharp(),
+  new Kingambit(),
+  new Pawniard(),
 ];

@@ -1,3 +1,7 @@
+import { JaninesSecretArt } from './alt-arts';
+import { BlackBeltsTrainingPRE4 } from './alt-arts';
+import { BlackBeltsTrainingPRE3 } from './alt-arts';
+import { BlackBeltsTrainingPRE2 } from './alt-arts';
 import { HabanBerry } from './haban-berry';
 import { Bronzong } from './bronzong';
 import { Card } from '../../game/store/card/card';
@@ -166,4 +170,8 @@ export const setPrismaticEvolution: Card[] = [
   new TerapagosexUR(),
   new Bronzong(),
   new HabanBerry(),
+  new BlackBeltsTrainingPRE2(),
+  new BlackBeltsTrainingPRE3(),
+  new BlackBeltsTrainingPRE4(),
+  new JaninesSecretArt(),
 ];

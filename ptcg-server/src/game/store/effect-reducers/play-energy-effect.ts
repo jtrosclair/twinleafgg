@@ -34,6 +34,11 @@ export function playEnergyReducer(store: StoreLike, state: State, effect: Effect
 
   /* Play energy card */
   if (effect instanceof AttachEnergyEffect) {
+    if (effect.target.energyAttachBlockedFromHandNextTurn
+      && effect.sourceZone === undefined
+      && effect.player.hand.cards.includes(effect.energyCard)) {
+      throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+    }
     if (effect.player.energyCardsBlockedNextTurn && effect.sourceZone === undefined) {
       throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }

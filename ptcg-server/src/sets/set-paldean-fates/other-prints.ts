@@ -74,6 +74,7 @@ export class RareCandyPAF extends RareCandy {
 }
 
 export class StudentsInPaldeaPAF extends StudentsInPaldea {
+  public fullName = 'Paldean Student PAF2';
   public setNumber = '86';
 }
 

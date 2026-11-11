@@ -1,3 +1,4 @@
+import { PokemonMarch } from './pokemon-march';
 import { Card } from '../../game/store/card/card';
 import { BillsTeleporter } from './bills-teleporter';
 import { Cleffa } from './cleffa';
@@ -41,4 +42,5 @@ export const setNeoGenesis: Card[] = [
   new MetalEnergyN1(),
   new RecycleEnergyN1(),
   new SuperEnergyRetrieval(),
+  new PokemonMarch(),
 ];

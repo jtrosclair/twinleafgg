@@ -11,6 +11,7 @@ import { Attack } from '../card/pokemon-types';
 import { PokemonCard } from '../card/pokemon-card';
 import { EndTurnEffect } from '../effects/game-phase-effects';
 import { PokemonCardList } from '../state/pokemon-card-list';
+import { RetaliateOnDamageOptions } from '../state/pokemon-card-list';
 
 import {
   DefendingPokemonTakesDamageOnEnergyAttachFromHandNextTurnEffect,
@@ -26,9 +27,10 @@ export function DEFENDING_POKEMON_TAKES_DAMAGE_ON_ENERGY_ATTACH_FROM_HAND_NEXT_T
 }
 
 export function THIS_POKEMON_RETALIATES_ON_DAMAGE_DURING_OPPONENTS_NEXT_TURN(
-  store: StoreLike, state: State, effect: AttackEffect, source: Card, options: { damage: number },
+  store: StoreLike, state: State, effect: AttackEffect, source: Card,
+  options: RetaliateOnDamageOptions,
 ): State {
-  const delayed = new RetaliateOnDamageDuringOpponentsNextTurnEffect(effect, options.damage);
+  const delayed = new RetaliateOnDamageDuringOpponentsNextTurnEffect(effect, options);
   delayed.markerSource = source;
   return store.reduceEffect(state, delayed);
 }
@@ -41,6 +43,15 @@ export function FLIP_COIN_TO_PREVENT_DAMAGE_AND_EFFECTS_DURING_OPPONENTS_NEXT_TU
       PREVENT_DAMAGE(store, state, effect, source);
       PREVENT_EFFECTS_OF_ATTACKS(store, state, effect, source);
     }
+  });
+}
+
+/** Flip a coin; if heads, prevent damage (but not other effects) next turn. */
+export function FLIP_COIN_TO_PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN(
+  store: StoreLike, state: State, effect: AttackEffect, source: Card,
+): State {
+  return COIN_FLIP_PROMPT(store, state, effect.player, result => {
+    if (result) PREVENT_DAMAGE(store, state, effect, source);
   });
 }
 
@@ -158,6 +169,14 @@ export function OPPONENT_CANNOT_PLAY_CARDS(
   return state;
 }
 
+/** Prevent attaching Energy from hand to the current Defending Pokémon next turn. */
+export function YOUR_OPPONENT_CANNOT_ATTACH_ENERGY_FROM_HAND_TO_DEFENDING_POKEMON(
+  _store: StoreLike, state: State, effect: AttackEffect, _source: Card,
+): State {
+  effect.opponent.active.energyAttachBlockedFromHandNextTurn = true;
+  return state;
+}
+
 export function COIN_FLIPS_FOR_ATTACK(
   source: PokemonCardList, attackName: string, defaultFlips: number,
 ): number {
@@ -263,10 +282,10 @@ export function DEFENDING_POKEMON_TAKES_MORE_DAMAGE_DURING_YOUR_NEXT_TURN(
 // Upstream pending/active self-protection; legacy prefab PREVENT_DAMAGE remains unchanged.
 class NextTurnPreventDamageEffect extends EffectOfAttackEffect {
   readonly type = 'NEXT_TURN_PREVENT_DAMAGE_EFFECT';
-  constructor(base: AttackEffect, private sourceStage?: Stage) { super(base); this.target = base.source; }
+  constructor(base: AttackEffect, private filter: { sourceStage?: Stage; sourceHasAbility?: boolean } = {}) { super(base); this.target = base.source; }
   applyEffect(): void {
     this.player.active.preventDamageNextTurnPending = true;
-    this.player.active.preventDamageNextTurnFilterPending = this.sourceStage === undefined ? undefined : { sourceStage: this.sourceStage };
+    this.player.active.preventDamageNextTurnFilterPending = Object.keys(this.filter).length ? this.filter : undefined;
   }
 }
 class PreventEffectsOfAttacksEffect extends EffectOfAttackEffect {
@@ -275,9 +294,9 @@ class PreventEffectsOfAttacksEffect extends EffectOfAttackEffect {
   applyEffect(): void { this.player.active.preventEffectsOfAttacksNextTurnPending = true; }
 }
 export function PREVENT_DAMAGE(
-  store: StoreLike, state: State, effect: AttackEffect, source: Card, filter?: { sourceStage?: Stage }
+  store: StoreLike, state: State, effect: AttackEffect, source: Card, filter?: { sourceStage?: Stage; sourceHasAbility?: boolean }
 ): State {
-  const protection = new NextTurnPreventDamageEffect(effect, filter?.sourceStage); protection.markerSource = source;
+  const protection = new NextTurnPreventDamageEffect(effect, filter); protection.markerSource = source;
   return store.reduceEffect(state, protection);
 }
 

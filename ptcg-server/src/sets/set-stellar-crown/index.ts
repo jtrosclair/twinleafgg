@@ -1,3 +1,7 @@
+import { Orthwormex } from './orthworm-ex';
+import { Terapagosex as TerapagosexCatalog16 } from './dipplin';
+import { Charjabug } from './charjabug';
+import { Applin } from './applin';
 import { VenusaurexSCR, BlastoiseexSCR, YamaskSCR, Crabominable2SCR, Gulpin2SCR } from './other-prints';
 import { Card } from '../../game/store/card/card';
 import { Archaludon } from './archaludon';
@@ -104,7 +108,7 @@ export const setStellarCrown: Card[] = [
   new Meltan(),
   new Noctowl(),
   new Ponyta(),
-  // new Orthwormex(),
+  new Orthwormex(),
   new Raboot(),
   new RagingBolt(),
   new Rapidash(),
@@ -162,4 +166,7 @@ export const setStellarCrown: Card[] = [
   new Cradily(),
   new Lileep(),
   new Rhyperior(),
+  new Applin(),
+  new Charjabug(),
+  new TerapagosexCatalog16(),
 ];

@@ -1,3 +1,85 @@
+import { ZubatBatch172 } from './zubat-batch16';
+import { XerneasBatch172 } from './xerneas-batch16';
+import { WimpodBatch172 } from './wimpod-batch16';
+import { WeedleBatch172 } from './weedle-batch16';
+import { WatchogBatch172 } from './watchog-batch16';
+import { VulpixBatch172 } from './vulpix-batch16';
+import { TrubbishBatch172 } from './trubbish-batch16';
+import { TrevenantBatch172 } from './trevenant-batch16';
+import { TaurosBatch172 } from './tauros-batch16';
+import { SudowoodoBatch172 } from './sudowoodo-batch16';
+import { StunkyBatch172 } from './stunky-batch16';
+import { SpecialRedCardBatch172 } from './special-red-card-batch16';
+import { SliggooBatch172 } from './sliggoo-batch16';
+import { SkuntankBatch172 } from './skuntank-batch16';
+import { SkrelpBatch172 } from './skrelp-batch16';
+import { RoxiesPerformanceBatch172 } from './roxies-performance-batch16';
+import { RemoraidBatch172 } from './remoraid-batch16';
+import { QwilfishBatch172 } from './qwilfish-batch16';
+import { QuilladinBatch172 } from './quilladin-batch16';
+import { PumpkabooBatch172 } from './pumpkaboo-batch16';
+import { PrismTowerBatch172 } from './prism-tower-batch16';
+import { PhilippeBatch172 } from './philippe-batch16';
+import { PhantumpBatch172 } from './phantump-batch16';
+import { PhanpyBatch172 } from './phanpy-batch16';
+import { PatratBatch172 } from './patrat-batch16';
+import { OctilleryBatch172 } from './octillery-batch16';
+import { NitroFireEnergyBatch172 } from './nitro-fire-energy-batch16';
+import { NinetalesBatch172 } from './ninetales-batch16';
+import { MinccinoBatch172 } from './minccino-batch16';
+import { MetangBatch172 } from './metang-batch16';
+import { MetagrossBatch172 } from './metagross-batch16';
+import { MeowsticBatch172 } from './meowstic-batch16';
+import { MegaPyroarexBatch172 } from './mega-pyroar-ex-batch16';
+import { MegaGreninjaexBatch172 } from './mega-greninja-ex-batch16';
+import { MegaFloetteexBatch172 } from './mega-floette-ex-batch16';
+import { MegaDragalgeexBatch172 } from './mega-dragalge-ex-batch16';
+import { MareepBatch172 } from './mareep-batch16';
+import { MagnetMetalEnergyBatch172 } from './magnet-metal-energy-batch16';
+import { LitleoBatch172 } from './litleo-batch16';
+import { KeldeoBatch172 } from './keldeo-batch16';
+import { KakunaBatch172 } from './kakuna-batch16';
+import { HoOhBatch172 } from './ho-oh-batch16';
+import { GreatHaulNet } from './great-haul-net';
+import { GourgeistexBatch172 } from './gourgeist-ex-batch16';
+import { GoomyBatch172 } from './goomy-batch16';
+import { GoodraBatch172 } from './goodra-batch16';
+import { GolisopodBatch172 } from './golisopod-batch16';
+import { GolbatBatch172 } from './golbat-batch16';
+import { GarbodorBatch172 } from './garbodor-batch16';
+import { FrogadierBatch172 } from './frogadier-batch16';
+import { FroakieBatch172 } from './froakie-batch16';
+import { FlaaffyBatch172 } from './flaaffy-batch16';
+import { FerrothornBatch172 } from './ferrothorn-batch16';
+import { FerroseedBatch172 } from './ferroseed-batch16';
+import { FennekinBatch172 } from './fennekin-batch16';
+import { EspurrBatch172 } from './espurr-batch16';
+import { EmolgaBatch172 } from './emolga-batch16';
+import { EmmaBatch172 } from './emma-batch16';
+import { DonphanBatch172 } from './donphan-batch16';
+import { DeoxysBatch172 } from './deoxys-batch16';
+import { Deoxys4Batch172 } from './deoxys-4-batch16';
+import { Deoxys3Batch172 } from './deoxys-3-batch16';
+import { Deoxys2Batch172 } from './deoxys-2-batch16';
+import { DelphoxBatch172 } from './delphox-batch16';
+import { DelibirdBatch172 } from './delibird-batch16';
+import { CrobatBatch172 } from './crobat-batch16';
+import { CobalionexBatch172 } from './cobalion-ex-batch16';
+import { ClaydolBatch172 } from './claydol-batch16';
+import { CinccinoexBatch172 } from './cinccino-ex-batch16';
+import { ChespinBatch172 } from './chespin-batch16';
+import { ChesnaughtBatch172 } from './chesnaught-batch16';
+import { CarnivineBatch172 } from './carnivine-batch16';
+import { BubbleWaterEnergyBatch172 } from './bubble-water-energy-batch16';
+import { BraixenBatch172 } from './braixen-batch16';
+import { BergmiteBatch172 } from './bergmite-batch16';
+import { BeldumBatch172 } from './beldum-batch16';
+import { BeedrillexBatch172 } from './beedrill-ex-batch16';
+import { BaltoyBatch172 } from './baltoy-batch16';
+import { AzsTranquilityBatch172 } from './azs-tranquility-batch16';
+import { AvaluggBatch172 } from './avalugg-batch16';
+import { AngeFloette } from './ange-floette';
+import { AmpharosBatch172 } from './ampharos-batch16';
 import { Card } from '../../game/store/card/card';
 import { Ampharos } from './ampharos';
 import { AdversityPolicy } from './adversity-policy';
@@ -253,4 +335,86 @@ export const setChaosRising: Card[] = [
   new AzsTranquilitySIR(),
   new RoxiesPerformanceSIR(),
   new MegaGreninjaexHR(),
+  new AmpharosBatch172(),
+  new AngeFloette(),
+  new AvaluggBatch172(),
+  new AzsTranquilityBatch172(),
+  new BaltoyBatch172(),
+  new BeedrillexBatch172(),
+  new BeldumBatch172(),
+  new BergmiteBatch172(),
+  new BraixenBatch172(),
+  new BubbleWaterEnergyBatch172(),
+  new CarnivineBatch172(),
+  new ChesnaughtBatch172(),
+  new ChespinBatch172(),
+  new CinccinoexBatch172(),
+  new ClaydolBatch172(),
+  new CobalionexBatch172(),
+  new CrobatBatch172(),
+  new DelibirdBatch172(),
+  new DelphoxBatch172(),
+  new Deoxys2Batch172(),
+  new Deoxys3Batch172(),
+  new Deoxys4Batch172(),
+  new DeoxysBatch172(),
+  new DonphanBatch172(),
+  new EmmaBatch172(),
+  new EmolgaBatch172(),
+  new EspurrBatch172(),
+  new FennekinBatch172(),
+  new FerroseedBatch172(),
+  new FerrothornBatch172(),
+  new FlaaffyBatch172(),
+  new FroakieBatch172(),
+  new FrogadierBatch172(),
+  new GarbodorBatch172(),
+  new GolbatBatch172(),
+  new GolisopodBatch172(),
+  new GoodraBatch172(),
+  new GoomyBatch172(),
+  new GourgeistexBatch172(),
+  new GreatHaulNet(),
+  new HoOhBatch172(),
+  new KakunaBatch172(),
+  new KeldeoBatch172(),
+  new LitleoBatch172(),
+  new MagnetMetalEnergyBatch172(),
+  new MareepBatch172(),
+  new MegaDragalgeexBatch172(),
+  new MegaFloetteexBatch172(),
+  new MegaGreninjaexBatch172(),
+  new MegaPyroarexBatch172(),
+  new MeowsticBatch172(),
+  new MetagrossBatch172(),
+  new MetangBatch172(),
+  new MinccinoBatch172(),
+  new NinetalesBatch172(),
+  new NitroFireEnergyBatch172(),
+  new OctilleryBatch172(),
+  new PatratBatch172(),
+  new PhanpyBatch172(),
+  new PhantumpBatch172(),
+  new PhilippeBatch172(),
+  new PrismTowerBatch172(),
+  new PumpkabooBatch172(),
+  new QuilladinBatch172(),
+  new QwilfishBatch172(),
+  new RemoraidBatch172(),
+  new RoxiesPerformanceBatch172(),
+  new SkrelpBatch172(),
+  new SkuntankBatch172(),
+  new SliggooBatch172(),
+  new SpecialRedCardBatch172(),
+  new StunkyBatch172(),
+  new SudowoodoBatch172(),
+  new TaurosBatch172(),
+  new TrevenantBatch172(),
+  new TrubbishBatch172(),
+  new VulpixBatch172(),
+  new WatchogBatch172(),
+  new WeedleBatch172(),
+  new WimpodBatch172(),
+  new XerneasBatch172(),
+  new ZubatBatch172(),
 ];

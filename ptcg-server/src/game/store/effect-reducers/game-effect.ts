@@ -118,9 +118,15 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
     throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
   }
 
-  // Smokescreen / Sand-Attack: any tails cancels this attack and ends the turn.
-  if (attackingPokemon.coinFlipCancelAttackNextTurn > 0) {
-    const flips = attackingPokemon.coinFlipCancelAttackNextTurn;
+  // Smokescreen / Sand-Attack: any tails cancels this attack before the
+  // attack's card-specific effects are allowed to run. Count the legacy
+  // marker form too, because saved puzzle payloads may contain it.
+  const legacyCancellationMarkers = [
+    ...attackingPokemon.marker.markers,
+    ...player.marker.markers,
+  ].filter(marker => marker.name === PokemonCardList.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN);
+  const flips = attackingPokemon.coinFlipCancelAttackNextTurn + legacyCancellationMarkers.length;
+  if (flips > 0) {
     let anyTails = false;
     for (let i = 0; i < flips; i++) {
       let heads = false;

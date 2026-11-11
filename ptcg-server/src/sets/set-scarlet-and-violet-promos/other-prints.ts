@@ -64,9 +64,51 @@ export class NsDarmanitanSVP extends NsDarmanitan {
   public set = 'SVP';
 }
 
+export class IonosKilowattrelSVP extends IonosKilowattrel {
+  public setNumber = '182';
+  public fullName: string = "Iono's Kilowattrel SVP";
+  public set = 'SVP';
+}
+
+export class LilliesRibombeeSVP extends LilliesRibombee {
+  public setNumber = '183';
+  public fullName: string = "Lillie's Ribombee SVP";
+  public set = 'SVP';
+}
+
+export class HopsSnorlaxSVP extends HopsSnorlax {
+  public setNumber = '184';
+  public fullName: string = "Hop's Snorlax SVP";
+  public set = 'SVP';
+}
+
+export class HopsZacianexSVP extends HopsZacianex {
+  public setNumber = '193';
+  public fullName: string = "Hop's Zacian ex SVP";
+  public set = 'SVP';
+}
+
+export class IonosBelliboltexSVP extends IonosBelliboltex {
+  public setNumber = '194';
+  public fullName: string = "Iono's Bellibolt ex SVP";
+  public set = 'SVP';
+}
+
+export class LilliesClefairyexSVP extends LilliesClefairyex {
+  public setNumber = '195';
+  public fullName: string = "Lillie's Clefairy ex SVP";
+  public set = 'SVP';
+}
+
 export class Charizardex4SVP extends CharizardexOBF125 {
   public setNumber = '196';
   public fullName: string = 'Charizard ex4 SVP';
+  public set = 'SVP';
+}
+
+export class CynthiasGarchompexSVP extends CynthiasGarchompex {
+  public setNumber = '204';
+  public fullName: string = "Cynthia's Garchomp ex SVP";
   public set = 'SVP';
 }
 

@@ -1,3 +1,5 @@
+import { ShiningMewtwo } from './shining-mewtwo';
+import { ShiningMagikarp } from './shining-magikarp';
 import { Card } from '../../game/store/card/card';
 import { DarkCroconaw } from './dark-croconaw';
 import { DarkFeraligatr } from './dark-feraligatr';
@@ -7,4 +9,6 @@ export const setNeoDestiny: Card[] = [
   new DarkCroconaw(),
   new DarkFeraligatr(),
   new EnergyStadium(),
+  new ShiningMagikarp(),
+  new ShiningMewtwo(),
 ];

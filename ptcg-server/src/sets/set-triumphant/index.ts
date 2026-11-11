@@ -1,3 +1,4 @@
+import { PalkiaDialgaLEGEND } from './palkia-dialga-legend';
 import { Card } from '../../game/store/card/card';
 import { AlphLithograph } from './alph-lithograph';
 import { BlackBelt } from './black-belt';
@@ -66,5 +67,5 @@ export const setTriumphant: Card[] = [
   new Yanma(),
   new Yanmega(),
 
-  // new PalkiaDialgaLEGEND(),
+  new PalkiaDialgaLEGEND(),
 ];

@@ -26,7 +26,8 @@ describe('Upstream delayed attack effects in batch 12', () => {
       player2: { active: { card: 'Mew ex MEW' }, deck: padDeck(10) },
     });
     useAttack(g.store, g.state, 0, 'Repulsor Axe');
-    expect(g.player1.active.retaliateOnDamageNextTurn?.damage).toBe(80);
+    const retaliation = g.player1.active.retaliateOnDamageNextTurn;
+    expect(retaliation && 'damage' in retaliation ? retaliation.damage : undefined).toBe(80);
     expect(g.state.activePlayer).toBe(1);
     const damageBeforeRetaliation = g.player2.active.damage;
     expect(damageBeforeRetaliation).toBeGreaterThan(0);

@@ -1,3 +1,4 @@
+import { PlusleIR } from './full-art-batch14';
 import { Simisage } from './simisage';
 import { Simipour } from './simipour';
 import { Plusle } from './plusle';
@@ -256,4 +257,5 @@ export const setParadoxRift: Card[] = [
   new Plusle(),
   new Simipour(),
   new Simisage(),
+  new PlusleIR(),
 ];

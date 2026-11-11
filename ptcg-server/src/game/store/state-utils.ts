@@ -15,6 +15,9 @@ export class StateUtils {
   static getStadium(state: State) {
     throw new Error('Method not implemented.');
   }
+  public static getProvidesUnitCount(provides: CardType[]): number {
+    return new Set(provides).size > 1 ? 1 : provides.length;
+  }
   public static checkEnoughEnergy(energy: EnergyMap[], cost: CardType[]): boolean {
     if (cost.length === 0) {
       return true;

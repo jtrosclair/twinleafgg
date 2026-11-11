@@ -14,6 +14,7 @@ export enum AttackEffects {
   KNOCK_OUT_OPPONENT_EFFECT = 'KNOCK_OUT_OPPONENT_EFFECT',
   AFTER_DAMAGE_EFFECT = 'AFTER_DAMAGE_EFFECT',
   PUT_COUNTERS_EFFECT = 'PUT_COUNTERS_EFFECT',
+  MOVE_COUNTERS_EFFECT = 'MOVE_COUNTERS_EFFECT',
   DISCARD_CARD_EFFECT = 'DISCARD_CARD_EFFECT',
   CARDS_TO_HAND_EFFECT = 'CARDS_TO_HAND_EFFECT',
   GUST_OPPONENT_BENCH_EFFECT = 'GUST_OPPONENT_BENCH_EFFECT',
@@ -143,6 +144,22 @@ export class PutCountersEffect extends AbstractAttackEffect implements Effect {
 
   constructor(base: AttackEffect | AbstractAttackEffect, damage: number) {
     super(base);
+    this.damage = damage;
+  }
+}
+
+/** Counter movement initiated by an attack, allowing effects to prevent the move. */
+export class MoveCountersAttackEffect extends AbstractAttackEffect implements Effect {
+  readonly type: string = AttackEffects.MOVE_COUNTERS_EFFECT;
+  public preventDefault = false;
+  public source: PokemonCardList;
+  public target: PokemonCardList;
+  public damage: number;
+
+  constructor(base: AttackEffect | AbstractAttackEffect, source: PokemonCardList, target: PokemonCardList, damage: number) {
+    super(base);
+    this.source = source;
+    this.target = target;
     this.damage = damage;
   }
 }

@@ -1,4 +1,5 @@
 import { Card } from '../../game/store/card/card';
+import { Eeveeex as EeveeexCatalog17 } from './eevee-ex';
 import { Aarune } from './aarune';
 import { AdventuringLantern } from './adventuring-lantern';
 import { Altaria } from './altaria';
@@ -240,5 +241,6 @@ export const setDeltaReign: Card[] = [
   new Zarude(),
   new ZinniasTrust(),
   new Zoroarkex(),
-  new Zorua()
+  new Zorua(),
+  new EeveeexCatalog17()
 ].sort((a, b) => Number(a.setNumber) - Number(b.setNumber));

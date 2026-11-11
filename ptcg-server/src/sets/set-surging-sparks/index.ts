@@ -1,3 +1,5 @@
+import { Feebas } from './feebas';
+import { Altaria } from './altaria';
 import { Tandemaus } from './tandemaus';
 import { Card } from '../../game/store/card/card';
 import { Annihilape } from '../set-surging-sparks/annihilape';
@@ -279,4 +281,6 @@ export const setSurgingSparks: Card[] = [
   new JetEnergyUR(),
   new Tandemaus(),
   new Maushold(),
+  new Altaria(),
+  new Feebas(),
 ];

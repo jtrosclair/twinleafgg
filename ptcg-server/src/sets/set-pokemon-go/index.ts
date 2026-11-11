@@ -1,3 +1,4 @@
+import { AlolanRattata } from './alolan-rattata';
 import { Ambipom } from './ambipom';
 import { Aipom } from './aipom';
 import { RareCandyPGO, ConkeldurrV2PGO, ConkeldurrV3PGO, SlakingV2PGO, ProfessorsResearchPGO, ProfessorsResearch2PGO, LureModule2PGO } from './other-prints';
@@ -65,4 +66,5 @@ export const setPokemonGO: Card[] = [
   new LureModule2PGO(),
   new Aipom(),
   new Ambipom(),
+  new AlolanRattata(),
 ];

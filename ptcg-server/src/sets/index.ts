@@ -51,11 +51,15 @@ export * from './set-nintendo-promos';
 export * from './set-unnumbered-promos';
 
 //POP Series
+export * from './set-pop-series-1';
 export * from './set-pop-series-2';
 export * from './set-pop-series-3';
 export * from './set-pop-series-4';
 export * from './set-pop-series-5';
+export * from './set-pop-series-6';
+export * from './set-pop-series-7';
 export * from './set-pop-series-8';
+export * from './set-pop-series-9';
 
 //Japan Promos ex-era
 export * from './set-pcg-l-promotional-cards';

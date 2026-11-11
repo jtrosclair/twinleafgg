@@ -7,6 +7,16 @@ import { Marker } from './card-marker';
 import { State } from './state';
 import { StateUtils } from '../state-utils';
 
+export type RetaliateOnDamageOptions =
+  | { damage: number; coinFlipPrevent?: boolean }
+  | { reflect: true };
+
+export type RetaliateOnDamageState = RetaliateOnDamageOptions & {
+  attack: Attack;
+  sourceCard: PokemonCard;
+  attackerPlayerId: number;
+};
+
 export class PokemonCardList extends CardList {
 
   public attackDamageKnockOut?: { attack: Attack; sourceCard?: PokemonCard; playerId: number; turn: number; destination?: 'lostzone'; targetCard?: PokemonCard };
@@ -50,8 +60,8 @@ export class PokemonCardList extends CardList {
   public cannotUsePowersNextTurn = false;
   public preventDamageNextTurnPending = false;
   public preventDamageNextTurn = false;
-  public preventDamageNextTurnFilterPending?: { sourceStage?: Stage };
-  public preventDamageNextTurnFilter?: { sourceStage?: Stage };
+  public preventDamageNextTurnFilterPending?: { sourceStage?: Stage; sourceHasAbility?: boolean };
+  public preventDamageNextTurnFilter?: { sourceStage?: Stage; sourceHasAbility?: boolean };
   public preventEffectsOfAttacksNextTurnPending = false;
   public preventEffectsOfAttacksNextTurn = false;
   public weaknessOverrideType?: CardType;
@@ -62,8 +72,9 @@ export class PokemonCardList extends CardList {
   public defendingPokemonExtraDamagePending = false;
   public defendingPokemonExtraDamageRearmAfterAttack = false;
   public pendingEnergyAttachDamageCounters: { damage: number; attack: Attack; sourceCard: PokemonCard; attackerPlayerId: number } | null = null;
-  public retaliateOnDamageNextTurn: { damage: number; attack: Attack; sourceCard: PokemonCard; attackerPlayerId: number } | null = null;
-  public retaliateOnDamageNextTurnPending: { damage: number; attack: Attack; sourceCard: PokemonCard; attackerPlayerId: number } | null = null;
+  public energyAttachBlockedFromHandNextTurn = false;
+  public retaliateOnDamageNextTurn: RetaliateOnDamageState | null = null;
+  public retaliateOnDamageNextTurnPending: RetaliateOnDamageState | null = null;
   public cannotAttackNextTurn: boolean = false;
   public cannotAttackNextTurnPending: boolean = false;
   public cannotUseAttacksNextTurn: string[] = [];

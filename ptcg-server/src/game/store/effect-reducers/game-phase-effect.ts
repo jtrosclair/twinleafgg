@@ -239,6 +239,7 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
       slot.cannotEvolveNextTurn = false;
       slot.cannotRetreatNextTurn = false;
       slot.cannotUsePowersNextTurn = false;
+      slot.energyAttachBlockedFromHandNextTurn = false;
     });
     if (effect.player.coinFlipCancelTrainerPlayTurnsRemaining > 0) effect.player.coinFlipCancelTrainerPlayTurnsRemaining--;
     effect.player.trainerCardsBlockedNextTurn = false;

@@ -4,6 +4,7 @@ import { AttackEffect } from './game-effects';
 import { Card } from '../card/card';
 import { PokemonCard } from '../card/pokemon-card';
 import { MarkerConstants } from '../markers/marker-constants';
+import { RetaliateOnDamageOptions } from '../state/pokemon-card-list';
 
 /**
  * Base class for effects that are caused by attacks
@@ -42,10 +43,10 @@ export class DefendingPokemonTakesDamageOnEnergyAttachFromHandNextTurnEffect ext
 /** Arm retaliation when this Pokémon is damaged by an attack next turn. */
 export class RetaliateOnDamageDuringOpponentsNextTurnEffect extends EffectOfAttackEffect {
   readonly type = 'RETALIATE_ON_DAMAGE_DURING_OPPONENTS_NEXT_TURN_EFFECT';
-  constructor(base: AttackEffect, public readonly damage: number) { super(base); }
+  constructor(base: AttackEffect, public readonly options: RetaliateOnDamageOptions) { super(base); }
   applyEffect(): void {
     this.player.active.retaliateOnDamageNextTurnPending = {
-      damage: this.damage,
+      ...this.options,
       attack: this.attack,
       sourceCard: this.markerSource as PokemonCard,
       attackerPlayerId: this.player.id,
