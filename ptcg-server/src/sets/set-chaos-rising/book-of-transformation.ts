@@ -4,6 +4,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { CardTarget, GameError, GameMessage, ChooseCardsPrompt, ChoosePokemonPrompt, PlayerType, SlotType, StoreLike, State } from '../../game';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { PokemonReplacedEffect } from '../../game/store/effects/game-effects';
 
 export class BookOfTransformation extends TrainerCard {
   public trainerType: TrainerType = TrainerType.ITEM;
@@ -61,6 +62,13 @@ export class BookOfTransformation extends TrainerCard {
             inPlayList.moveCardTo(inPlayList.cards[0], player.discard);
           }
           player.discard.moveCardTo(fromDiscard[0], inPlayList);
+          // Notify card-specific usage tracking without triggering play-from-hand
+          // Abilities or clearing the effects inherited by the replacement.
+          if (inPlayCard) {
+            state = store.reduceEffect(state, new PokemonReplacedEffect(
+              player, inPlayList, inPlayCard, fromDiscard[0] as PokemonCard
+            ));
+          }
           player.hand.moveCardTo(second, player.discard);
         });
       });
