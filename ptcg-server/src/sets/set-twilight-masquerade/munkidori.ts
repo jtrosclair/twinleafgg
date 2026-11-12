@@ -2,7 +2,7 @@ import { PokemonCard, Stage, CardType, PowerType, DamageMap, GameMessage, Player
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
 import { CheckHpEffect, CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { MoveDamageCountersEffect, PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
+import { MoveDamageCountersEffect, PlaceDamageCountersEffect, PokemonReplacedEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
@@ -62,8 +62,19 @@ export class Munkidori extends PokemonCard {
       player.marker.removeMarker(this.ADRENA_BRAIN_MARKER, this);
     }
 
-    if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.ADRENA_BRAIN_MARKER, this)) {
-      effect.player.marker.removeMarker(this.ADRENA_BRAIN_MARKER, this);
+    // Ref: set-chaos-rising/book-of-transformation.ts: the outgoing Pokémon's
+    // effects pass to the replacement; the incoming card's old use does not.
+    if (effect instanceof PokemonReplacedEffect
+      && (effect.previousPokemon === this || effect.pokemonCard === this)) {
+      effect.player.marker.removeMarker(this.ADRENA_BRAIN_MARKER, effect.previousPokemon);
+      effect.player.marker.removeMarker(this.ADRENA_BRAIN_MARKER, effect.pokemonCard);
+      if (effect.previousMarkers.some(marker => marker.name === this.ADRENA_BRAIN_MARKER)) {
+        effect.player.marker.addMarker(this.ADRENA_BRAIN_MARKER, effect.pokemonCard);
+      }
+    }
+
+    if (effect instanceof EndTurnEffect) {
+      effect.player.marker.removeMarker(this.ADRENA_BRAIN_MARKER);
     }
 
     if (WAS_POWER_USED(effect, 0, this)) {

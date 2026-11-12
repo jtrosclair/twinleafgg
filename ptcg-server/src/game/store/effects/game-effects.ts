@@ -8,6 +8,7 @@ import { CardTarget } from '../actions/play-card-action';
 import { TrainerCard } from '../card/trainer-card';
 import { CardList } from '../state/card-list';
 import { EnergyCard } from '../card/energy-card';
+import { MarkerItem } from '../state/card-marker';
 
 export enum GameEffects {
   RETREAT_EFFECT = 'RETREAT_EFFECT',
@@ -194,6 +195,21 @@ export class AttackEffect implements Effect {
     this.attack = attack;
     this.damage = attack.damage;
     this.source = player.active;
+  }
+}
+
+/** A card replaces a Pokémon while inheriting its existing in-play slot. */
+export class PokemonReplacedEffect implements Effect {
+  readonly type = 'POKEMON_REPLACED_EFFECT';
+  public preventDefault = false;
+  public readonly previousMarkers: MarkerItem[];
+  constructor(
+    public player: Player,
+    public target: PokemonCardList,
+    public previousPokemon: PokemonCard,
+    public pokemonCard: PokemonCard
+  ) {
+    this.previousMarkers = player.marker.markers.filter(marker => marker.source === previousPokemon).slice();
   }
 }
 
