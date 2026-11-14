@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { BoardInteractionService } from '../../../shared/services/board-interaction.service';
 import { GameService } from '../../../api/services/game.service';
 import { Subscription } from 'rxjs';
@@ -10,6 +10,8 @@ import { ChoosePokemonPrompt, CardTarget } from 'ptcg-server';
   styleUrls: ['./board-selection-overlay.component.scss']
 })
 export class BoardSelectionOverlayComponent implements OnInit, OnDestroy {
+  @Input() opponentBench: HTMLElement;
+
   public isActive = false;
   public prompt: ChoosePokemonPrompt;
   public message: string;
@@ -20,6 +22,11 @@ export class BoardSelectionOverlayComponent implements OnInit, OnDestroy {
   public allowCancel = true;
 
   private subscriptions: Subscription[] = [];
+
+  public get messageTop(): number | undefined {
+    const bench = this.opponentBench?.getBoundingClientRect();
+    return bench ? bench.top + bench.height / 2 : undefined;
+  }
 
   constructor(
     private boardInteractionService: BoardInteractionService,
@@ -91,4 +98,4 @@ export class BoardSelectionOverlayComponent implements OnInit, OnDestroy {
   private updateValidity(): void {
     this.isValid = this.boardInteractionService.isSelectionValid();
   }
-} 
+}

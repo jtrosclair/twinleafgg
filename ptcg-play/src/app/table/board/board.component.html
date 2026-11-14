@@ -1,5 +1,5 @@
 <!-- Move selection overlay out of container -->
-<ptcg-board-selection-overlay></ptcg-board-selection-overlay>
+<ptcg-board-selection-overlay [opponentBench]="opponentBench"></ptcg-board-selection-overlay>
 
 <dnd-preview [allBackends]="true">
   <ng-template let-type let-item="item">
@@ -33,7 +33,7 @@
       </div>
 
       <!-- Top Bench -->
-      <div class="ptcg-board-row ptcg-board-bench" [style.--bench-columns]="benchColumns(topPlayer)"
+      <div #opponentBench class="ptcg-board-row ptcg-board-bench" [style.--bench-columns]="benchColumns(topPlayer)"
         [style.--bench-rows]="benchRows(topPlayer)" aria-label="Opponent's Bench">
         <ptcg-board-card *ngFor="let slot of topBench
         | slice:0:(topPlayer?.bench.length || defaultBenchSize); index as i" [cardList]="topPlayer?.bench[i]"

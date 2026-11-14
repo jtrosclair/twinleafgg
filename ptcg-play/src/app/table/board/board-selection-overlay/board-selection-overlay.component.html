@@ -2,7 +2,7 @@
   <!-- Semi-transparent background overlay -->
   <div class="ptcg-overlay-background"></div>
 
-  <div class="ptcg-overlay-message">
+  <div class="ptcg-overlay-message" [style.top.px]="messageTop">
     <p [translate]="'GAME_MESSAGES.' + message"></p>
   </div>
 
