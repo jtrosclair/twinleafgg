@@ -23,7 +23,7 @@ function filesUnder(root, directory) {
 }
 
 /** Content hashes, never mtimes or private environment/credential files. */
-function captureBuildInputs(options = {}) {
+function buildInputFiles(options = {}) {
   const root = rootFor(options);
   const source = filesUnder(root, 'ptcg-play/src').filter(name => !isTest(name)
     && !name.startsWith('ptcg-play/src/assets/simulator/')
@@ -46,8 +46,13 @@ function captureBuildInputs(options = {}) {
   const names = [...new Set([...source, ...engine, ...scripts, ...configuration])]
     .filter(name => fs.existsSync(path.join(root, name))).sort();
   assert.ok(source.length && engine.length, 'Simulator build sources are missing; run this command from a complete checkout.');
+  return names;
+}
+
+function captureBuildInputs(options = {}) {
+  const root = rootFor(options);
   const hash = crypto.createHash('sha256').update('simulator-build-inputs:v1\0');
-  for (const name of names) { hash.update(name).update('\0').update(fs.readFileSync(path.join(root, name))).update('\0'); }
+  for (const name of buildInputFiles(options)) { hash.update(name).update('\0').update(fs.readFileSync(path.join(root, name))).update('\0'); }
   return hash.digest('hex');
 }
 
@@ -126,4 +131,4 @@ if (require.main === module) {
     console.log(process.argv[2] === 'capture' ? captureBuildInputs() : JSON.stringify(verifyDeploy(), null, 2));
   } catch (failure) { console.error(failure.message); process.exitCode = 1; }
 }
-module.exports = { captureBuildInputs, recordCompiledBuild, recordVerifiedPackage, verifyDeploy };
+module.exports = { buildInputFiles, captureBuildInputs, recordCompiledBuild, recordVerifiedPackage, verifyDeploy };

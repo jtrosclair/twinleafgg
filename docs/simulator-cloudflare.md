@@ -41,6 +41,23 @@ Worker and domain configuration changes do not invalidate frontend build
 inputs, so this command also supports deploying those changes with the same
 verified frontend. Use the npm deployment scripts to run these checks.
 
+Both deployment entrypoints additionally require committed release sources at
+the current `origin/production` commit. New or modified source, ignored build
+inputs missing from Git, unpublished commits and older clean checkouts are
+rejected before publication. Use a new production commit for an intentional
+rollback rather than deploying an old checkout. Detached CI checkouts at the
+published commit are supported.
+
+Before engine preparation or uploads, `tools/test-board-prompts.cjs` serves the
+verified immutable package to Chromium and replays the retained Crobat and
+Prime Catcher scenarios with mouse and touch. It checks banner wrapping,
+placement and real card selection through the banner, including eight opposing
+Benched Pokémon. Three injected regressions verify that the checks fail for
+the historical broken states. The test uses bundled fixtures and stub artwork,
+without external puzzle/image requests. Install `tools` dependencies and a
+Playwright Chromium browser, or supply `PLAYWRIGHT_CHROMIUM_EXECUTABLE`.
+The source and package checks run again immediately before the upload.
+
 Before publishing, deployment reads the current live manifest at
 `sim-static.prizemap.app`. If that release is absent locally, it downloads the
 advertised archive and package manifest, verifies their inventory/digests, and

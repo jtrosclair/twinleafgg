@@ -8,6 +8,9 @@ const { spawnSync } = require('node:child_process');
 const root = path.resolve(__dirname, '..');
 const cloudflare = path.join(root, 'cloudflare');
 const sync = path.join(root, 'tools/sync-prizemap-engine.cjs');
+const sourceCheck = path.join(root, 'tools/verify-release-source.cjs');
+const buildCheck = path.join(root, 'ptcg-play/scripts/build-attestation.cjs');
+const promptCheck = path.join(root, 'tools/test-board-prompts.cjs');
 
 function run(command, args, cwd) {
   const result = spawnSync(command, args, { cwd, stdio: 'inherit', env: process.env });
@@ -17,19 +20,26 @@ function run(command, args, cwd) {
 
 function deploy({ execute = run, makeStage = () => fs.mkdtempSync(path.join(os.tmpdir(), 'prizemap-simulator-sync-')),
   removeStage = stage => fs.rmSync(stage, { recursive: true, force: true }), log = console.log } = {}) {
-  const stage = makeStage();
+  let stage;
   let published = false;
   try {
-    execute(process.execPath, [path.join(root, 'ptcg-play/scripts/build-attestation.cjs'), 'verify'], root);
+    execute(process.execPath, [sourceCheck], root);
+    execute(process.execPath, [buildCheck, 'verify'], root);
+    execute(process.execPath, [promptCheck], root);
+    stage = makeStage();
     execute(process.execPath, [sync, 'prepare', '--stage', stage], root);
     execute(process.execPath, [path.join(cloudflare, 'retain-previous-release.mjs')], cloudflare);
+    // Preparation can take time. Reject source or artifact changes before any
+    // upload rather than discovering the mismatch after Cloudflare is live.
+    execute(process.execPath, [sourceCheck], root);
+    execute(process.execPath, [buildCheck, 'verify'], root);
     execute(path.join(cloudflare, 'node_modules/.bin/wrangler'), ['deploy'], cloudflare);
     published = true;
     execute(process.execPath, [sync, 'publish', '--stage', stage], root);
     removeStage(stage);
     log('Simulator and PrizeMap engine deployment verified.');
   } catch (error) {
-    const recovery = published
+    const recovery = !stage ? 'The simulator release did not start. No assets were published.' : published
       ? `The simulator was published, but its PrizeMap sync did not finish. Retry: node ${sync} publish --stage ${stage}`
       : `The simulator release did not finish. Staged files are retained at ${stage}.`;
     throw new Error(`${error.message}\n${recovery}`, { cause: error });

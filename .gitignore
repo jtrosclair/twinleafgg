@@ -93,3 +93,6 @@ tools/.puzzle-playthrough/
 !tools/fixtures/deck-out-with-dengo.snapshot.json.gz
 !tools/fixtures/phantom-maze.snapshot.json.gz
 !tools/fixtures/legacy-prizemap.snapshot.json.gz
+!tools/fixtures/revenge-of-the-assassin.snapshot.json.gz
+!tools/fixtures/skymonster-prime-catcher.snapshot.json.gz
+!tools/fixtures/skymonster-prime-catcher-eight.snapshot.json.gz

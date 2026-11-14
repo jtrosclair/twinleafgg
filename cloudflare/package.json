@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "node ../tools/deploy-simulator.cjs",
-    "test": "node --test worker.spec.mjs retain-previous-release.spec.mjs ../tools/deploy-simulator.spec.cjs ../tools/sync-prizemap-engine.spec.cjs",
+    "test": "node --test worker.spec.mjs retain-previous-release.spec.mjs ../tools/deploy-simulator.spec.cjs ../tools/verify-release-source.spec.cjs ../tools/sync-prizemap-engine.spec.cjs",
     "test:delivery": "node check-delivery.mjs",
     "check": "wrangler deploy --dry-run"
   },

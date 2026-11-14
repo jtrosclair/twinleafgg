@@ -113,6 +113,22 @@ if the simulator is already published, the error prints a command to retry the
 web sync from the retained staging directory. Direct `wrangler deploy` bypasses
 these safeguards and must not be used for simulator releases.
 
+Releases must come from a clean checkout of the latest commit pushed to
+`origin/production`. Commit and push source changes before deploying; local-only
+commits, untracked build inputs, dirty release files and older checkouts are
+rejected. Unrelated documentation changes are allowed.
+
+The release gate also tests the exact packaged UI in Chromium before uploading.
+Saved Crobat and Prime Catcher fixtures check single-line instructions, unchanged
+board placement, and mouse/touch selection through the banner, including an
+eight-Pokémon opponent bench. The checks deliberately reintroduce wrapping,
+tap interception and misplaced banners in a test page to verify that each
+regression is detected. Card artwork is stubbed so this gate needs no image CDN.
+Install `tools` dependencies and Chromium (`cd tools && npx playwright install
+chromium`), or set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to an installed browser.
+Use `npm run test:board-prompts` after building, or `npm run verify:release` for
+the full preflight. A missing browser or failed check stops publication.
+
 ## Board background
 
 The playmat follows the website theme: near-black with a purple hexagon grid in

@@ -8,7 +8,9 @@
   "scripts": {
     "build": "npm --prefix ptcg-play run build",
     "start": "npm --prefix tools run serve:client-simulator",
-    "test": "npm --prefix ptcg-play run prepare:simulator && npm --prefix ptcg-server run test:client && npm --prefix ptcg-server run test:client:cards && node tools/test-client-services.cjs && node --test tools/test-touch-drag.cjs tools/gzip-puzzle-payload.spec.cjs && node ptcg-play/scripts/finalize-client-build.spec.cjs && node ptcg-play/scripts/optimize-ui-assets.spec.cjs && node --test ptcg-play/scripts/static-resources.spec.cjs ptcg-play/scripts/audit-simulator-assets.spec.cjs ptcg-play/scripts/build-attestation.spec.cjs ptcg-play/scripts/package-client-build.spec.cjs ptcg-play/scripts/report-client-bundle.spec.cjs tools/check-simulator-package.spec.cjs cloudflare/worker.spec.mjs cloudflare/retain-previous-release.spec.mjs",
-    "deploy:cloudflare": "npm run build && npm --prefix cloudflare run deploy"
+    "test": "npm --prefix ptcg-play run prepare:simulator && npm --prefix ptcg-server run test:client && npm --prefix ptcg-server run test:client:cards && node tools/test-client-services.cjs && node --test tools/test-touch-drag.cjs tools/gzip-puzzle-payload.spec.cjs && node ptcg-play/scripts/finalize-client-build.spec.cjs && node ptcg-play/scripts/optimize-ui-assets.spec.cjs && node --test ptcg-play/scripts/static-resources.spec.cjs ptcg-play/scripts/audit-simulator-assets.spec.cjs ptcg-play/scripts/build-attestation.spec.cjs ptcg-play/scripts/package-client-build.spec.cjs ptcg-play/scripts/report-client-bundle.spec.cjs tools/check-simulator-package.spec.cjs tools/deploy-simulator.spec.cjs tools/verify-release-source.spec.cjs cloudflare/worker.spec.mjs cloudflare/retain-previous-release.spec.mjs",
+    "deploy:cloudflare": "npm run build && npm --prefix cloudflare run deploy",
+    "test:board-prompts": "node tools/test-board-prompts.cjs",
+    "verify:release": "node tools/verify-release-source.cjs && node ptcg-play/scripts/build-attestation.cjs verify && node tools/test-board-prompts.cjs"
   }
 }
