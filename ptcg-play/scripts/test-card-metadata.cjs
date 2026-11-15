@@ -85,19 +85,18 @@ assert.ok(baseline.constants.includes(`CLIENT_LIBRARY_HASH = '${info.hash}'`));
 assert.ok(baseline.constants.includes(`CLIENT_CARD_TOTAL = ${cards.length}`));
 const imageMap = JSON.parse(fs.readFileSync(path.join(server, 'data/limitlesstcg-images.json'), 'utf8'));
 const oldRows = cards.map(card => ({ fullName: card.fullName,
-  cardImage: imageMap[card.usSetNumber] || imageMap[`${card.set} ${card.setNumber}`]
-    || (card.set === 'PBL' && / M5(?: \d+)?$/.test(card.fullName) && imageMap[`M5 ${card.setNumber}`]) || card.cardImage }));
+  cardImage: imageMap[card.usSetNumber] || imageMap[`${card.set} ${card.setNumber}`] || card.cardImage }));
 assert.deepEqual(info.images.map(expandCardImageReference), oldRows.map(card => card.cardImage),
   'Every ordered image must expand to its preferred available indexed scan.');
-// Hide ‘n’ Sneak Attack uses these seven M5 cards. Their English PBL
-// references are not indexed yet, but their original Japanese scans exist.
+// Hide ‘n’ Sneak Attack uses these legacy M5 names with canonical PBL
+// collector identities. They must display their available English scans.
 for (const [name, number] of [['Dhelmise', '39'], ['Sinistcha', '6'], ['Poltchageist', '5'],
   ['Gwynn', '78'], ['Spiritomb', '35'], ['Shuppet', '33'], ['Banette', '34']]) {
   const index = names.indexOf(`${name} M5`);
   assert.ok(index >= 0, `${name} must be registered`);
-  const card = cards[index];
   assert.equal(expandCardImageReference(info.images[index]),
-    imageMap[card.usSetNumber] || imageMap[`M5 ${number}`], `${name} must have a scan, not a card back`);
+    `https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/PBL/PBL_${number.padStart(3, '0')}_R_EN.png`,
+    `${name} must display its English PBL scan`);
 }
 const artworkCases = build(undefined, [
   { fullName: 'Dhelmise M5', set: 'PBL', setNumber: '39', cardImage: 'assets/cardback.png' },
@@ -106,7 +105,7 @@ const artworkCases = build(undefined, [
   { fullName: 'Explicit image fallback', usSetNumber: 'MISSING 1', set: 'MISSING', setNumber: '2', cardImage: imageMap['SVE 5'] }
 ]);
 assert.deepEqual(artworkCases.payload.cardsInfo.images.map(expandCardImageReference),
-  [imageMap['M5 39'], imageMap['M5 39'], imageMap['TWM 163'], imageMap['SVE 5']]);
+  [imageMap['PBL 39'], imageMap['M5 39'], imageMap['TWM 163'], imageMap['SVE 5']]);
 assert.ok(info.images.some(image => image === ''), 'Missing scans must retain their empty fallback value.');
 assert.ok(info.images.some(image => image.startsWith('/tpci/')));
 assert.ok(info.images.some(image => image.startsWith('/tpc/')));
