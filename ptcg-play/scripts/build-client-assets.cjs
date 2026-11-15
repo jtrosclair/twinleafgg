@@ -18,8 +18,14 @@ const imageMap = JSON.parse(fs.readFileSync(imageMapFile, 'utf8'));
 // Both compiled formats use this registration order. The generated frontend
 // constants and metadata pin its SHA-256 identity without a runtime crypto job.
 const catalogueHash = crypto.createHash('sha256').update(JSON.stringify(cards.map(card => card.fullName))).digest('hex');
-const images = cards.map(card => compactCardImageReference(
-  imageMap[card.usSetNumber || `${card.set} ${card.setNumber}`] || card.cardImage));
+const images = cards.map(card => {
+  // These original Japanese printings retain M5 names after their engine set
+  // code became PBL. Preserve their available scans until PBL art is indexed.
+  const originalPrint = card.set === 'PBL' && / M5(?: \d+)?$/.test(card.fullName)
+    ? imageMap[`M5 ${card.setNumber}`] : undefined;
+  return compactCardImageReference(imageMap[card.usSetNumber]
+    || imageMap[`${card.set} ${card.setNumber}`] || originalPrint || card.cardImage);
+});
 if (images.some(image => !isCardImageReference(image))) {
   throw new Error('The card catalogue contains an invalid image reference.');
 }
@@ -27,6 +33,7 @@ if (images.some(image => !isCardImageReference(image))) {
 const digest = crypto.createHash('sha256');
 digest.update(`card-metadata-schema:${CARD_LIBRARY_SCHEMA_VERSION}\0`);
 digest.update(`catalogue-order:${catalogueHash}\0`);
+digest.update(`card-images:${JSON.stringify(images)}\0`);
 digest.update(fs.readFileSync(imageMapFile));
 const source = path.join(server, 'src');
 const engineFiles = ['game', 'sets', 'client', 'utils', 'simple-bot']

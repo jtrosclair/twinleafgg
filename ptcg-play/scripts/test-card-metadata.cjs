@@ -53,7 +53,9 @@ const cards = ensureClientCards();
 const names = cards.map(card => card.fullName);
 const sets = localRequire(path.join(server, 'browser/sets'));
 const setNames = Object.keys(sets).sort().filter(name => Array.isArray(sets[name]));
-assert.deepEqual(names, setNames.flatMap(name => sets[name].map(card => card.fullName)),
+const registered = new Set(cards);
+const registeredInExportOrder = [...new Set(setNames.flatMap(name => sets[name]).filter(card => registered.has(card)))];
+assert.deepEqual(names, registeredInExportOrder.map(card => card.fullName),
   'Every set segment and its internal card order must follow lexical ESM export order.');
 // Verify the already-built browser namespace rather than assuming CommonJS
 // insertion order matches webpack. A source-only checkout may have no artifact.
@@ -83,9 +85,28 @@ assert.ok(baseline.constants.includes(`CLIENT_LIBRARY_HASH = '${info.hash}'`));
 assert.ok(baseline.constants.includes(`CLIENT_CARD_TOTAL = ${cards.length}`));
 const imageMap = JSON.parse(fs.readFileSync(path.join(server, 'data/limitlesstcg-images.json'), 'utf8'));
 const oldRows = cards.map(card => ({ fullName: card.fullName,
-  cardImage: imageMap[card.usSetNumber || `${card.set} ${card.setNumber}`] || card.cardImage }));
+  cardImage: imageMap[card.usSetNumber] || imageMap[`${card.set} ${card.setNumber}`]
+    || (card.set === 'PBL' && / M5(?: \d+)?$/.test(card.fullName) && imageMap[`M5 ${card.setNumber}`]) || card.cardImage }));
 assert.deepEqual(info.images.map(expandCardImageReference), oldRows.map(card => card.cardImage),
-  'Every ordered image must expand to the exact previous full-name metadata URL.');
+  'Every ordered image must expand to its preferred available indexed scan.');
+// Hide ‘n’ Sneak Attack uses these seven M5 cards. Their English PBL
+// references are not indexed yet, but their original Japanese scans exist.
+for (const [name, number] of [['Dhelmise', '39'], ['Sinistcha', '6'], ['Poltchageist', '5'],
+  ['Gwynn', '78'], ['Spiritomb', '35'], ['Shuppet', '33'], ['Banette', '34']]) {
+  const index = names.indexOf(`${name} M5`);
+  assert.ok(index >= 0, `${name} must be registered`);
+  const card = cards[index];
+  assert.equal(expandCardImageReference(info.images[index]),
+    imageMap[card.usSetNumber] || imageMap[`M5 ${number}`], `${name} must have a scan, not a card back`);
+}
+const artworkCases = build(undefined, [
+  { fullName: 'Dhelmise M5', set: 'PBL', setNumber: '39', cardImage: 'assets/cardback.png' },
+  { fullName: 'Original scan fallback', usSetNumber: 'MISSING 1', set: 'M5', setNumber: '39', cardImage: 'assets/cardback.png' },
+  { fullName: 'English scan preferred', usSetNumber: 'TWM 163', set: 'M5', setNumber: '39', cardImage: 'assets/cardback.png' },
+  { fullName: 'Explicit image fallback', usSetNumber: 'MISSING 1', set: 'MISSING', setNumber: '2', cardImage: imageMap['SVE 5'] }
+]);
+assert.deepEqual(artworkCases.payload.cardsInfo.images.map(expandCardImageReference),
+  [imageMap['M5 39'], imageMap['M5 39'], imageMap['TWM 163'], imageMap['SVE 5']]);
 assert.ok(info.images.some(image => image === ''), 'Missing scans must retain their empty fallback value.');
 assert.ok(info.images.some(image => image.startsWith('/tpci/')));
 assert.ok(info.images.some(image => image.startsWith('/tpc/')));
