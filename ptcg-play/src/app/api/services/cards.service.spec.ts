@@ -20,7 +20,8 @@ describe('bundled simulator card-library startup', () => {
       schemaVersion: CARD_LIBRARY_SCHEMA_VERSION,
       hash: CLIENT_LIBRARY_HASH,
       catalogueHash: CLIENT_CATALOGUE_HASH,
-      images: Array(CLIENT_CARD_TOTAL).fill('/tpci/SVI/SVI_001_R_EN.png')
+      images: Array(CLIENT_CARD_TOTAL).fill('/tpci/SVI/SVI_001_R_EN.png'),
+      japaneseImages: Array(CLIENT_CARD_TOTAL).fill('/tpc/SV1V/SV1V_001_R_JP.png')
     };
     bundle = { urls: {}, json: {
       [manifestPath]: { ok: true, schemaVersion: CARD_LIBRARY_SCHEMA_VERSION,
@@ -72,6 +73,16 @@ describe('bundled simulator card-library startup', () => {
     second.subscribe(value => expect(value).toBe(info));
     service.getCardsInfo().subscribe(value => expect(value).toBe(info));
     expect(read).toHaveBeenCalledTimes(1);
+  });
+
+  it('accepts legacy metadata without Japanese art and rejects malformed optional Japanese tables', () => {
+    delete info.japaneseImages;
+    service.getCardsInfo().subscribe(value => expect(value).toBe(info));
+    for (const japaneseImages of [[], Array(CLIENT_CARD_TOTAL), Array(CLIENT_CARD_TOTAL).fill('/wrong/path.png')]) {
+      installBundle(); service = new CardsService();
+      info.japaneseImages = japaneseImages;
+      rejectsEmbedded();
+    }
   });
 
   it('rejects a missing bootstrap, either missing document, and foreign metadata without a fallback', () => {

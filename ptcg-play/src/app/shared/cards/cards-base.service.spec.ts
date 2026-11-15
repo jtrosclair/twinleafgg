@@ -94,6 +94,44 @@ describe('local simulator card library', () => {
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 
+  for (const language of ['EN', 'ES', 'FR', 'IT']) {
+    it('uses ' + language + ' for normal CDN image URLs as well as sized URLs', () => {
+      stored.cardLanguage = language;
+      service = create();
+      const card = new LocalArtPokemon();
+      card.cardImage = 'https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/PBL/PBL_039_R_EN.png';
+      expect(service.getScanUrl(card)).toContain(`PBL_039_R_${language}.png`);
+      card.cardImage = card.cardImage.replace('.png', '_SM.png');
+      expect(service.getScanUrl(card)).toContain(`PBL_039_R_${language}_SM.png`);
+      expect(fetchSpy).not.toHaveBeenCalled();
+    });
+  }
+
+  it('uses verified Japanese collector identities and falls back to English without a counterpart', () => {
+    const cards = ensureClientCards();
+    const card = cards.find(item => item.fullName === 'Dhelmise M5')!;
+    const original = card.cardImage;
+    service = create();
+    const metadata = { schemaVersion: CARD_LIBRARY_SCHEMA_VERSION, hash: CLIENT_LIBRARY_HASH,
+      catalogueHash: CLIENT_CATALOGUE_HASH, images: cards.map(item => item === card
+        ? '/tpci/PBL/PBL_039_R_EN.png' : item.cardImage),
+      japaneseImages: cards.map(item => item === card ? '/tpc/M5/M5_37_R_JP.png' : '') };
+    try {
+      service.loadCardsInfo(metadata);
+      for (const language of ['ja', 'JA', 'JP']) {
+        stored.cardLanguage = language;
+        expect(service.getScanUrl(card)).toContain('/tpc/M5/M5_37_R_JP.png');
+      }
+      expect(service.getScanUrl(card, 'EN')).toContain('/tpci/PBL/PBL_039_R_EN.png');
+      service.setCustomImageForCard(card, 'https://images.example/custom.png');
+      expect(service.getScanUrl(card)).toBe('https://images.example/custom.png');
+      service.clearCustomImageForCard(card);
+      service.loadCardsInfo({ ...metadata, japaneseImages: cards.map(() => '') });
+      expect(service.getScanUrl(card)).toContain('/tpci/PBL/PBL_039_R_EN.png');
+      expect(fetchSpy).not.toHaveBeenCalled();
+    } finally { card.cardImage = original; }
+  });
+
   it('sorts the presentation catalogue without changing registration order and refreshes names on reload', () => {
     const cards = ensureClientCards();
     const registrationOrder = [...cards];

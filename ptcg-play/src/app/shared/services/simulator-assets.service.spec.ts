@@ -86,6 +86,21 @@ describe('native lazy artwork loading', () => {
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 
+  it('falls back from a missing translated scan to English, then to the card back if English also fails', () => {
+    const localized = service.resolve(scan.replace('_EN.png', '_FR.png'));
+    const directive = new ImageCacheDirective(service);
+    directive.fallback = scan;
+    let src = localized;
+    const img = { getAttribute: () => src, get src() { return src; }, set src(value: string) { src = value; } } as HTMLImageElement;
+    directive.onError(img);
+    expect(new URL(src).searchParams.get('url')).toBe(scan);
+    expect(service.resolve(localized)).toBe(src);
+    directive.onError(img);
+    expect(src).toBe(dataImage);
+    expect(service.resolve(localized)).toBe(dataImage);
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
   it('binds exact packaged SVG aliases and already-resolved bytes through Angular URL sanitization', () => {
     const source = '<svg xmlns="http://www.w3.org/2000/svg"><path fill="#123456" d="M0 0h1v1z"/></svg>';
     for (const svg of ['data:image/svg+xml;base64,' + Buffer.from(source).toString('base64'),

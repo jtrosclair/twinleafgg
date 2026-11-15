@@ -48,7 +48,7 @@ export class CardsService {
     if (response?.ok !== true || !isCardLibraryMetadata(info, {
       hash: CLIENT_LIBRARY_HASH, catalogueHash: CLIENT_CATALOGUE_HASH, cardsTotal: CLIENT_CARD_TOTAL
     })
-      || Object.keys(info).some(key => !['schemaVersion', 'images', 'hash', 'catalogueHash'].includes(key))) {
+      || Object.keys(info).some(key => !['schemaVersion', 'images', 'japaneseImages', 'hash', 'catalogueHash'].includes(key))) {
       throw new Error('The embedded card library does not match this simulator. Reload this page and retry.');
     }
     return info;

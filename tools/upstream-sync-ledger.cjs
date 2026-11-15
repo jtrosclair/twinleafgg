@@ -10,9 +10,10 @@ const root = path.resolve(__dirname, '..');
 const ledgerPath = path.join(root, 'docs/upstream-sync-ledger.json');
 const git = (...args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
 
-function main() {
+async function main() {
   const command = process.argv[2] || 'status';
   if (!['status', 'refresh'].includes(command)) throw new Error('Use status or refresh');
+  if (command === 'refresh') await require('./refresh-card-images.cjs').refresh({ all: true });
   const ledger = JSON.parse(fs.readFileSync(ledgerPath, 'utf8'));
   if (ledger.schema !== 1 || !/^[a-f0-9]{40}$/.test(ledger.baseUpstream)) throw new Error('Invalid upstream sync ledger');
   const tip = git('rev-parse', 'upstream/main');
@@ -38,5 +39,5 @@ function main() {
 }
 
 if (require.main === module) {
-  try { main(); } catch (error) { console.error(`Upstream sync ledger: ${error.message}`); process.exitCode = 1; }
+  main().catch(error => { console.error(`Upstream sync ledger: ${error.message}`); process.exitCode = 1; });
 }

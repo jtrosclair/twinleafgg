@@ -36,7 +36,8 @@ function buildInputFiles(options = {}) {
   const configuration = ['package.json', 'package-lock.json', '.nvmrc',
     'ptcg-play/angular.json', 'ptcg-play/package.json', 'ptcg-play/package-lock.json', 'ptcg-play/.browserslistrc',
     'ptcg-server/package.json', 'ptcg-server/package-lock.json', 'ptcg-server/scripts/build-browser.cjs',
-    'ptcg-server/data/limitlesstcg-images.json'];
+    'ptcg-server/data/limitlesstcg-images.json', 'ptcg-server/data/japanese-card-images.json',
+    'ptcg-server/data/known-missing-card-images.json'];
   for (const directory of ['ptcg-play', 'ptcg-server']) {
     const absolute = path.join(root, directory);
     if (fs.existsSync(absolute)) configuration.push(...fs.readdirSync(absolute)

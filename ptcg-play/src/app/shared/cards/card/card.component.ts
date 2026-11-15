@@ -14,6 +14,7 @@ import { Subject } from 'rxjs';
 })
 export class CardComponent implements OnInit, OnDestroy {
   public scanUrl: string;
+  public fallbackScanUrl: string;
   public data: Card;
   private holoEnabled = true;
   private destroyed$ = new Subject<void>();
@@ -189,6 +190,7 @@ export class CardComponent implements OnInit, OnDestroy {
   }
 
   private resolveScanUrl(): string {
+    this.fallbackScanUrl = this.cardsBaseService.getScanUrl(this.data, 'EN');
     if (this.customImageUrl) {
       return this.simulatorAssets.resolve(this.customImageUrl);
     }

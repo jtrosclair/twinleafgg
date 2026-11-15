@@ -75,7 +75,14 @@ if (fs.existsSync(distribution)) {
 }
 assert.equal(info.images.length, cards.length);
 assert.equal(new Set(names).size, cards.length);
-assert.deepEqual(Object.keys(info).sort(), ['catalogueHash', 'hash', 'images', 'schemaVersion']);
+assert.deepEqual(Object.keys(info).sort(), ['catalogueHash', 'hash', 'images', 'japaneseImages', 'schemaVersion']);
+assert.equal(info.japaneseImages.length, cards.length);
+const dhelmiseIndex = names.indexOf('Dhelmise M5');
+assert.equal(info.japaneseImages[dhelmiseIndex], '/tpc/M5/M5_37_R_JP.png',
+  'Japanese Dhelmise is M5 37, not the English PBL collector number 39');
+assert.throws(() => applyClientCardMetadata({ ...info, japaneseImages: ['wrong length'] }, baseline.manifest), /does not match/);
+assert.throws(() => build(undefined, [{ fullName: 'New unmapped card TEST', set: 'TEST', setNumber: '1',
+  cardImage: 'assets/cardback.png' }]), /Run npm run sync:images/, 'New cards must not silently ship as card backs');
 const catalogueHash = crypto.createHash('sha256').update(JSON.stringify(names)).digest('hex');
 assert.equal(info.catalogueHash, catalogueHash);
 assert.equal(baseline.manifest.catalogueHash, catalogueHash);

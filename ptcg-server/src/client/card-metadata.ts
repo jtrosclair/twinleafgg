@@ -14,6 +14,8 @@ export interface CardLibraryMetadata {
   schemaVersion: number;
   /** Registration order, before the presentation service sorts the catalogue. */
   images: string[];
+  /** Verified equivalent JP printings, in the same registration order. */
+  japaneseImages?: string[];
   hash: string;
   catalogueHash: string;
 }
@@ -50,6 +52,12 @@ export function isCardLibraryMetadata(value: unknown, expected: CardLibraryIdent
   // Do not let sparse arrays skip entry validation before the library is mutated.
   for (let index = 0; index < metadata.images.length; index++) {
     if (!isCardImageReference(metadata.images[index])) { return false; }
+  }
+  if (metadata.japaneseImages !== undefined) {
+    if (!Array.isArray(metadata.japaneseImages) || metadata.japaneseImages.length !== expected.cardsTotal) return false;
+    for (let index = 0; index < metadata.japaneseImages.length; index++) {
+      if (!isCardImageReference(metadata.japaneseImages[index])) return false;
+    }
   }
   return true;
 }

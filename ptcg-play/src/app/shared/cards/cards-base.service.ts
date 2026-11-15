@@ -16,6 +16,7 @@ export class CardsBaseService implements OnDestroy {
   private names: string[] | undefined;
   private cardsByName: Map<string, Card> | undefined;
   private customImages: { [key: string]: string } = {};
+  private japaneseImages = new Map<string, string>();
   private overridesChangedSubject = new Subject<string>();
   public overridesChanged$ = this.overridesChangedSubject.asObservable();
 
@@ -33,6 +34,12 @@ export class CardsBaseService implements OnDestroy {
   public loadCardsInfo(cardsInfo: CardLibraryMetadata): void {
     applyClientCardMetadata(cardsInfo, {
       hash: CLIENT_LIBRARY_HASH, catalogueHash: CLIENT_CATALOGUE_HASH, cardsTotal: CLIENT_CARD_TOTAL
+    });
+    this.japaneseImages.clear();
+    if (cardsInfo.japaneseImages) ensureClientCards().forEach((card, index) => {
+      const reference = cardsInfo.japaneseImages[index];
+      if (reference) this.japaneseImages.set(card.fullName, reference.startsWith('/')
+        ? 'https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com' + reference : reference);
     });
     this.cards = this.sortCards(ensureClientCards());
     this.names = undefined;
@@ -84,17 +91,20 @@ export class CardsBaseService implements OnDestroy {
 
   public clearCustomImageForCard(card: Card): void { this.setCustomImageForCard(card, ''); }
 
-  public getScanUrl(card: Card): string {
-    return this.simulatorAssets.resolve(this.getRawScanUrl(card));
+  public getScanUrl(card: Card, language?: string): string {
+    return this.simulatorAssets.resolve(this.getRawScanUrl(card, language));
   }
 
   /** Stable artwork identity for prefetch/cache lookup, before local resolution. */
-  public getRawScanUrl(card: Card): string {
+  public getRawScanUrl(card: Card, preferredLanguage?: string): string {
     const key = `${card.set} ${card.setNumber}`;
-    let url = (card.usSetNumber && this.customImages[card.usSetNumber]) || this.customImages[key] || card.cardImage;
-    const language = this.preference('cardLanguage', 'EN');
-    if (['ES', 'IT', 'FR'].includes(language) && url.includes('_EN_')) {
-      url = url.replace('_EN_', `_${language}_`);
+    const custom = (card.usSetNumber && this.customImages[card.usSetNumber]) || this.customImages[key];
+    let url = custom || card.cardImage;
+    const language = (preferredLanguage || this.preference('cardLanguage', 'EN')).toUpperCase();
+    if (!custom && ['JA', 'JP'].includes(language)) {
+      url = this.japaneseImages.get(card.fullName) || url;
+    } else if (['ES', 'IT', 'FR'].includes(language)) {
+      url = url.replace(/_EN(?=[_.])/, `_${language}`);
     }
     const preferredSize = this.preference('preferredCardSize', 'SM');
     const size = ['XS', 'SM', 'MD', 'LG'].includes(preferredSize) ? preferredSize : 'SM';

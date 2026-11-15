@@ -9,6 +9,7 @@ const PLACEHOLDER = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
 @Injectable({ providedIn: 'root' })
 export class SimulatorAssetsService {
   private failed = new Set<string>();
+  private imageFallbacks = new Map<string, string>();
   private svgSource: { [path: string]: string } | undefined;
   private trustedSvgUrls = new Set<string>();
   private safeSvgUrls = new Map<string, SafeUrl>();
@@ -21,6 +22,7 @@ export class SimulatorAssetsService {
       throw new Error('The simulator presentation payload did not finish downloading. Reload this page and retry.');
     }
     this.failed.clear();
+    this.imageFallbacks.clear();
     this.svgSource = undefined;
     this.trustedSvgUrls.clear();
     this.safeSvgUrls.clear();
@@ -36,7 +38,8 @@ export class SimulatorAssetsService {
     const bundled = asset && simulatorStaticBundle()?.urls[asset];
     if (bundled) { return bundled; }
     const resolved = simulatorScanRequestUrl(url, typeof document === 'undefined' ? undefined : document.baseURI);
-    return this.failed.has(this.urlKey(resolved)) ? this.placeholder() : resolved;
+    const key = this.urlKey(resolved);
+    return this.failed.has(key) ? this.resolve(this.imageFallbacks.get(key) || this.placeholder()) : resolved;
   }
 
   /** Angular 12 excludes SVG from its data-URL allowlist. Trust only exact
@@ -64,11 +67,14 @@ export class SimulatorAssetsService {
   }
 
   /** One fallback assignment; a broken fallback cannot recursively retry. */
-  public fallbackImage(image: HTMLImageElement): void {
+  public fallbackImage(image: HTMLImageElement, englishFallback?: string): void {
     const fallback = this.placeholder(), current = image.getAttribute('src') || image.src;
     if (!current || current === fallback) { return; }
     if (!/^(?:data:|blob:)/i.test(current)) { this.failed.add(this.urlKey(current)); }
-    image.src = fallback;
+    const english = englishFallback && this.resolve(englishFallback);
+    const replacement = english && this.urlKey(english) !== this.urlKey(current) ? english : fallback;
+    this.imageFallbacks.set(this.urlKey(current), replacement);
+    image.src = replacement;
   }
 
   private urlKey(url: string): string {

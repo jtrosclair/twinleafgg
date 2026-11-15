@@ -2,7 +2,7 @@
   <span class="card-name" *ngIf="showCardName && !cardback">{{data.name}}</span>
   <div class="card-container" [ngClass]="getCardClass()">
     <ng-container *ngIf="!cardback">
-      <img class="ptcg-card-scan base-image" [ptcgImageCache]="simulatorAssets.resolve(customImageUrl || scanUrl)" alt="Card Image" draggable="false">
+      <img class="ptcg-card-scan base-image" [ptcgImageCache]="simulatorAssets.resolve(customImageUrl || scanUrl)" [ptcgImageFallback]="fallbackScanUrl" alt="Card Image" draggable="false">
       <img *ngIf="overlayUrl" class="ptcg-card-scan custom-artwork-overlay" [ptcgImageCache]="overlayUrl" alt="Custom Artwork"
         draggable="false">
       <div class="holo-overlay"></div>

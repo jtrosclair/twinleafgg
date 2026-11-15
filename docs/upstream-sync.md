@@ -10,6 +10,15 @@ For a future sync:
 
 1. Fetch `upstream`, then run `node tools/upstream-sync-ledger.cjs refresh`.
    `status` reports commits not yet recorded without modifying the ledger.
+   `refresh` also downloads the latest static image index, preserving local
+   legacy aliases, and refreshes the Japanese counterpart mappings for the
+   indexed English sets. Commit both image JSON files with the card batch. Network or malformed
+   data errors stop the refresh without replacing the existing files.
+   `npm run sync:images` runs that step alone; append `-- --all` to recheck every
+   Japanese print listing. No image-index requests are made during gameplay.
+   The package build rejects newly added cards without scans. The committed
+   `known-missing-card-images.json` only exempts existing unavailable scans;
+   add an exception deliberately when a new printing genuinely has no scan.
 2. Review unreviewed or partial entries and record the exact files and scope of
    any port. Statuses are `unreviewed`, `partial`, `applied`, `already-present`,
    `deferred`, or `not-applicable`; use `partial` when only part of a commit was
@@ -26,6 +35,15 @@ For a future sync:
    port is not a deployment. When a release is explicitly requested, use the
    guarded simulator deployment process, which also updates the web engine and
    featured-art catalogue.
+
+Card scans support the native app's English, Spanish, French, Italian and
+Japanese preferences. European languages share the English print identity;
+Japanese uses a verified equivalent printing from the card's JP print list
+(its illustration can differ). If no verified counterpart exists, or a
+localized scan fails, the simulator uses the English scan. The native puzzle
+and draft WebViews must allow `ja` when injecting `cardLanguage`; that native
+bridge change ships with the next app build. The committed Japanese table is
+bundled alongside the normal metadata, rather than fetched during setup.
 
 The first trial against upstream `837aebeb5` is documented at
 `/private/tmp/twinleaf-upstream-trial.yXnwhx/TRIAL-README.md`. It compared 530
