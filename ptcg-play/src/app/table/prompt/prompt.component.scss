@@ -47,6 +47,13 @@
   width: map-get($ptcg-size, card);
 }
 
+// The DnD library defaults to z-index: 100, below the prompt at 2000.
+// Keep the dragged card visible without intercepting the Pokémon drop target.
+ptcg-prompt dnd-preview-renderer {
+  z-index: 2100;
+  pointer-events: none;
+}
+
 .ptcg-prompt-title {
   margin: 0 0 map-get($padding, normal);
   display: flex;

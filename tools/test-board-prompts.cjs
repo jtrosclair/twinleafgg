@@ -165,6 +165,85 @@ async function verifyCase(browser, origin, scenario, touch, negativeControls) {
   } finally { await context.close(); }
 }
 
+async function assertEnergyPreview(page, point) {
+  const visible = await page.locator('ptcg-prompt dnd-preview-renderer').evaluate((renderer, point) => {
+    const previous = renderer.style.pointerEvents;
+    try {
+      // The preview normally ignores hit testing. Temporarily enable it to
+      // verify the actual paint order over the Pokémon under the finger.
+      renderer.style.pointerEvents = 'auto';
+      return document.elementFromPoint(point.x, point.y)?.closest('dnd-preview-renderer') === renderer;
+    } finally { renderer.style.pointerEvents = previous; }
+  }, point);
+  assert(visible, 'The dragged Energy must render above the attachment dialog.');
+  assert.equal(await page.locator('ptcg-prompt dnd-preview-renderer').evaluate(element =>
+    getComputedStyle(element).pointerEvents), 'none', 'The preview must not block the drop target.');
+}
+
+async function verifyEnergyAttachment(browser, origin, touch) {
+  const fixture = JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(__dirname, 'fixtures/exact-change.snapshot.json.gz'))));
+  const stateData = Buffer.from(JSON.stringify(fixture)).toString('base64');
+  const context = await browser.newContext({ viewport: { width: 393, height: 844 }, hasTouch: touch, isMobile: touch });
+  try {
+    await context.addInitScript(() => {
+      localStorage.setItem('language', 'en'); window.__boardPromptMessages = [];
+      window.ReactNativeWebView = { postMessage: text => window.__boardPromptMessages.push(JSON.parse(text)) };
+    });
+    await context.route('**/*', route => {
+      if (route.request().url().startsWith(origin + '/')) return route.continue();
+      if (route.request().resourceType() === 'image') return route.fulfill({ contentType: 'image/png', body: pixel });
+      return route.abort();
+    });
+    const page = await context.newPage(), errors = [];
+    page.setDefaultTimeout(15000); page.on('pageerror', error => errors.push(error.message));
+    await page.goto(origin + '/sandbox-viewer#' + stateData, { waitUntil: 'domcontentloaded' });
+    const toxtricity = page.locator('.ptcg-board-player:not(.upside-down) .ptcg-board-bench > ptcg-board-card').nth(2);
+    if (touch) await toxtricity.tap(); else await toxtricity.click();
+    const ability = page.locator('ptcg-card-info-pane ptcg-hover-highlight').filter({ hasText: 'Once during your turn' });
+    if (touch) await ability.tap(); else await ability.click();
+    const prompt = page.locator('ptcg-prompt-attach-energy'); await prompt.waitFor();
+    await page.waitForFunction(() => getComputedStyle(document.querySelector('.ptcg-prompt-container')).opacity === '1');
+    const source = prompt.locator('ptcg-choose-cards-panes ptcg-card:not(.unavailable)').first();
+    const target = prompt.locator('.ptcg-pokemon-row').last().locator('ptcg-board-card').first();
+    const from = await source.boundingBox(), to = await target.boundingBox();
+    const start = { x: from.x + from.width / 2, y: from.y + 25 };
+    const end = { x: to.x + to.width / 2, y: to.y + to.height / 2 };
+    let cdp;
+    if (touch) {
+      cdp = await context.newCDPSession(page);
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [start] });
+      for (let i = 1; i <= 18; i++) {
+        await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{
+          x: start.x + (end.x - start.x) * i / 18, y: start.y + (end.y - start.y) * i / 18
+        }] });
+      }
+    } else {
+      await page.mouse.move(start.x, start.y); await page.mouse.down();
+      await page.mouse.move(end.x, end.y, { steps: 18 });
+    }
+    await page.locator('ptcg-prompt dnd-preview-renderer').waitFor();
+    await assertEnergyPreview(page, end);
+    if (!touch) {
+      const style = await page.addStyleTag({ content: 'ptcg-prompt dnd-preview-renderer { z-index: 100 !important; }' });
+      await assert.rejects(() => assertEnergyPreview(page, end), /above the attachment dialog/);
+      await style.evaluate(node => node.remove());
+      await assertEnergyPreview(page, end);
+    }
+    if (touch) await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    else await page.mouse.up();
+    const ok = prompt.getByRole('button', { name: 'OK', exact: true });
+    if (touch) await ok.tap(); else await ok.click();
+    await prompt.waitFor({ state: 'detached' });
+    const latest = await page.evaluate(() => window.__boardPromptMessages.filter(message => message.type === 'StateUpdate').at(-1).data.stateData);
+    const before = decodeState(stateData).players[0], after = decodeState(latest).players[0];
+    assert.equal(after.deck.cards.length, before.deck.cards.length - 1);
+    assert.equal(after.bench[0].damage, before.bench[0].damage + 20);
+    assert.equal(after.bench[0].energies.cards.length, before.bench[0].energies.cards.length + 1);
+    assert.deepEqual(errors, []);
+    return { scenario: 'Exact Change Sinister Surge attachment and preview', input: touch ? 'touch' : 'mouse', passed: true };
+  } finally { await context.close(); }
+}
+
 async function verifyBoardPrompts() {
   const attestation = verifyDeploy();
   const release = path.join(root, 'ptcg-play/cloudflare-public/releases', attestation.packageHash);
@@ -175,7 +254,8 @@ async function verifyBoardPrompts() {
     for (const scenario of cases) for (const touch of [false, true]) {
       results.push(await verifyCase(browser, server.origin, scenario, touch, results.length === 0));
     }
-    return { ok: true, packageHash: attestation.packageHash, negativeControls: 3, results };
+    for (const touch of [false, true]) results.push(await verifyEnergyAttachment(browser, server.origin, touch));
+    return { ok: true, packageHash: attestation.packageHash, negativeControls: 4, results };
   } finally { if (browser) await browser.close(); await server.close(); }
 }
 
