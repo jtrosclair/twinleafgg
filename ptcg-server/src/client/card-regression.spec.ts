@@ -116,6 +116,16 @@ describe('ClientSimulator real card regressions', () => {
     expect(simulator.state.players[0].discard.cards.map(card => card.fullName).sort()).toEqual(['Potion BS', 'Professor Oak BS', 'Water Energy SVE'].sort());
   });
 
+  for (const fullName of ["Gladion's Decisive Battle M5", "Gladion's Final Battle FA PBL", "Gladion's Final Battle SIR PBL"]) {
+    it(`spends the turn's Supporter play for ${fullName}`, () => {
+      const f = fixture();
+      f.add(f.player.hand, fullName);
+      const simulator = f.load();
+      play(simulator, fullName);
+      expect(simulator.state.players[0].supporterTurn).toBe(1);
+    });
+  }
+
   it('Computer Search pays a two-card discard before searching and shuffling', () => {
     const f = fixture();
     ['Computer Search BS', 'Water Energy SVE', 'Potion BS'].forEach(name => f.add(f.player.hand, name));
