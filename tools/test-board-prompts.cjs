@@ -197,7 +197,7 @@ async function verifyEnergyAttachment(browser, origin, touch) {
     const page = await context.newPage(), errors = [];
     page.setDefaultTimeout(15000); page.on('pageerror', error => errors.push(error.message));
     await page.goto(origin + '/sandbox-viewer#' + stateData, { waitUntil: 'domcontentloaded' });
-    const toxtricity = page.locator('.ptcg-board-player:not(.upside-down) .ptcg-board-bench > ptcg-board-card').nth(2);
+    const toxtricity = page.locator('.ptcg-board-player:not(.upside-down) .ptcg-board-bench ptcg-board-card').nth(2);
     if (touch) await toxtricity.tap(); else await toxtricity.click();
     const ability = page.locator('ptcg-card-info-pane ptcg-hover-highlight').filter({ hasText: 'Once during your turn' });
     if (touch) await ability.tap(); else await ability.click();
