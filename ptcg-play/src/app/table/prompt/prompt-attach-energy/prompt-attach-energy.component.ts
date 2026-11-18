@@ -30,11 +30,11 @@ export class PromptAttachEnergyComponent implements OnChanges {
   public message: string;
   public cardListCards: Card[];
   public filter: FilterType;
-  public blocked: number[];
   public isInvalid = false;
   public results: AttachEnergyResult[] = [];
   private options: Partial<AttachEnergyOptions> = {};
   private initialCards: Card[];
+  private selectableCards: Card[];
   public dragSpec = {
     beginDrag: (item: Card) => ({ card: item }),
     canDrag: () => true
@@ -154,7 +154,7 @@ export class PromptAttachEnergyComponent implements OnChanges {
         item.cardList.cards = item.cardList.cards.filter(c => c !== r.card);
       }
     });
-    this.cardListCards = [...this.initialCards];
+    this.cardListCards = [...this.selectableCards];
     this.results = [];
     this.updateIsInvalid(this.results);
   }
@@ -206,8 +206,8 @@ export class PromptAttachEnergyComponent implements OnChanges {
       this.pokemonData = new PokemonData(state, playerId, playerType, slots);
       this.allowedCancel = prompt.options.allowCancel;
       this.initialCards = prompt.cardList.cards;
-      this.blocked = prompt.options.blocked;
-      this.cardListCards = this.initialCards.filter((card, index) => !this.blocked.includes(index));
+      this.selectableCards = this.initialCards.filter((_, index) => !prompt.options.blocked.includes(index));
+      this.cardListCards = [...this.selectableCards];
       this.filter = prompt.filter;
       this.message = prompt.message;
       this.promptId = prompt.id;

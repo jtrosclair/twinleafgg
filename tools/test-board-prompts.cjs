@@ -180,8 +180,9 @@ async function assertEnergyPreview(page, point) {
     getComputedStyle(element).pointerEvents), 'none', 'The preview must not block the drop target.');
 }
 
-async function verifyEnergyAttachment(browser, origin, touch) {
-  const fixture = JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(__dirname, 'fixtures/exact-change.snapshot.json.gz'))));
+async function verifyEnergyAttachment(browser, origin, touch, fixtureName) {
+  const beatScales = fixtureName === 'beat-scales';
+  const fixture = JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(__dirname, 'fixtures', fixtureName + '.snapshot.json.gz'))));
   const stateData = Buffer.from(JSON.stringify(fixture)).toString('base64');
   const context = await browser.newContext({ viewport: { width: 393, height: 844 }, hasTouch: touch, isMobile: touch });
   try {
@@ -197,14 +198,24 @@ async function verifyEnergyAttachment(browser, origin, touch) {
     const page = await context.newPage(), errors = [];
     page.setDefaultTimeout(15000); page.on('pageerror', error => errors.push(error.message));
     await page.goto(origin + '/sandbox-viewer#' + stateData, { waitUntil: 'domcontentloaded' });
-    const toxtricity = page.locator('.ptcg-board-player:not(.upside-down) .ptcg-board-bench ptcg-board-card').nth(2);
-    if (touch) await toxtricity.tap(); else await toxtricity.click();
+    const board = page.locator('.ptcg-board-player:not(.upside-down)');
+    const pokemon = beatScales ? board.locator('.ptcg-board-active ptcg-board-card').first()
+      : board.locator('.ptcg-board-bench ptcg-board-card').nth(2);
+    if (touch) await pokemon.tap(); else await pokemon.click();
     const ability = page.locator('ptcg-card-info-pane ptcg-hover-highlight').filter({ hasText: 'Once during your turn' });
     if (touch) await ability.tap(); else await ability.click();
+    if (beatScales) await page.locator('ptcg-prompt-show-cards').getByRole('button', { name: 'OK', exact: true }).click();
     const prompt = page.locator('ptcg-prompt-attach-energy'); await prompt.waitFor();
     await page.waitForFunction(() => getComputedStyle(document.querySelector('.ptcg-prompt-container')).opacity === '1');
-    const source = prompt.locator('ptcg-choose-cards-panes ptcg-card:not(.unavailable)').first();
-    const target = prompt.locator('.ptcg-pokemon-row').last().locator('ptcg-board-card').first();
+    const cards = prompt.locator('ptcg-choose-cards-panes ptcg-card');
+    if (beatScales) {
+      // Removing the Trainer in slot three leaves Lightning there in the visible list.
+      const opacity = await cards.evaluateAll(elements => elements.map(card => getComputedStyle(card).opacity));
+      assert.deepEqual(opacity, Array(5).fill('1'), 'Every Basic Energy must appear available before the first drag.');
+    }
+    const source = beatScales ? cards.nth(2) : prompt.locator('ptcg-choose-cards-panes ptcg-card:not(.unavailable)').first();
+    const rows = prompt.locator('.ptcg-pokemon-row');
+    const target = (beatScales ? rows.first() : rows.last()).locator('ptcg-board-card').first();
     const from = await source.boundingBox(), to = await target.boundingBox();
     const start = { x: from.x + from.width / 2, y: from.y + 25 };
     const end = { x: to.x + to.width / 2, y: to.y + to.height / 2 };
@@ -223,7 +234,7 @@ async function verifyEnergyAttachment(browser, origin, touch) {
     }
     await page.locator('ptcg-prompt dnd-preview-renderer').waitFor();
     await assertEnergyPreview(page, end);
-    if (!touch) {
+    if (!touch && !beatScales) {
       const style = await page.addStyleTag({ content: 'ptcg-prompt dnd-preview-renderer { z-index: 100 !important; }' });
       await assert.rejects(() => assertEnergyPreview(page, end), /above the attachment dialog/);
       await style.evaluate(node => node.remove());
@@ -237,10 +248,16 @@ async function verifyEnergyAttachment(browser, origin, touch) {
     const latest = await page.evaluate(() => window.__boardPromptMessages.filter(message => message.type === 'StateUpdate').at(-1).data.stateData);
     const before = decodeState(stateData).players[0], after = decodeState(latest).players[0];
     assert.equal(after.deck.cards.length, before.deck.cards.length - 1);
-    assert.equal(after.bench[0].damage, before.bench[0].damage + 20);
-    assert.equal(after.bench[0].energies.cards.length, before.bench[0].energies.cards.length + 1);
+    if (beatScales) {
+      const lightning = before.deck.cards.find(id => fixture[1].cardNames[id] === 'Lightning Energy SVE');
+      assert.deepEqual(after.active.energies.cards, [lightning], 'Lightning must attach directly to Kommo-o on the first drag.');
+    } else {
+      assert.equal(after.bench[0].damage, before.bench[0].damage + 20);
+      assert.equal(after.bench[0].energies.cards.length, before.bench[0].energies.cards.length + 1);
+    }
     assert.deepEqual(errors, []);
-    return { scenario: 'Exact Change Sinister Surge attachment and preview', input: touch ? 'touch' : 'mouse', passed: true };
+    return { scenario: beatScales ? 'Beat Scales Lightning Energy availability' : 'Exact Change Sinister Surge attachment and preview',
+      input: touch ? 'touch' : 'mouse', passed: true };
   } finally { await context.close(); }
 }
 
@@ -254,7 +271,9 @@ async function verifyBoardPrompts() {
     for (const scenario of cases) for (const touch of [false, true]) {
       results.push(await verifyCase(browser, server.origin, scenario, touch, results.length === 0));
     }
-    for (const touch of [false, true]) results.push(await verifyEnergyAttachment(browser, server.origin, touch));
+    for (const fixture of ['exact-change', 'beat-scales']) {
+      for (const touch of [false, true]) results.push(await verifyEnergyAttachment(browser, server.origin, touch, fixture));
+    }
     return { ok: true, packageHash: attestation.packageHash, negativeControls: 4, results };
   } finally { if (browser) await browser.close(); await server.close(); }
 }

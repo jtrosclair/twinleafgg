@@ -9,6 +9,7 @@ import { ChooseEnergyPrompt } from '../game/store/prompts/choose-energy-prompt';
 import { ChoosePokemonPrompt } from '../game/store/prompts/choose-pokemon-prompt';
 import { ConfirmPrompt } from '../game/store/prompts/confirm-prompt';
 import { AttachEnergyPrompt } from '../game/store/prompts/attach-energy-prompt';
+import { ShowCardsPrompt } from '../game/store/prompts/show-cards-prompt';
 import { Prompt } from '../game/store/prompts/prompt';
 import { CardList } from '../game/store/state/card-list';
 import { Player } from '../game/store/state/player';
@@ -440,6 +441,65 @@ describe('ClientSimulator real card regressions', () => {
     expect(simulator.state.players[0].active.energies.cards.length).toBe(2);
     expect(simulator.state.players[0].hand.cards.length).toBe(0);
     expect(simulator.state.players[0].energyPlayedTurn).toBe(f.state.turn);
+  });
+
+  it('Beat Scales shows six cards and distributes distinct Basic Energy among the player’s Dragons', () => {
+    const f = fixture('Kommo-o M6', 'Kommo-o M6');
+    f.add(f.player.bench[0], 'Kommo-o M6');
+    f.add(f.player.bench[1], 'Squirtle BS');
+    f.player.deck.cards = [];
+    const names = ['Squirtle BS', 'Fire Energy SVE', 'Double Turbo Energy BRS', 'Fire Energy SVE',
+      'Bill BS', 'Water Energy SVE', 'Lightning Energy SVE'];
+    names.forEach(name => f.add(f.player.deck, name));
+    const sim = f.load();
+    const player = sim.state.players[0];
+    const cards = player.deck.cards.slice();
+    ability(sim, 'Beat Scales', own(SlotType.BENCH));
+    const look = pending(sim, ShowCardsPrompt);
+    expect(look.cards).toEqual(cards.slice(0, 6));
+    expect(sim.state.prompts.filter(p => p.result === undefined)).toEqual([look]);
+    sim.resolvePrompt(look.id, true);
+
+    const attach = pending(sim, AttachEnergyPrompt);
+    for (const invalid of [
+      { index: 0, to: own() }, { index: 2, to: own() }, { index: 6, to: own() },
+      { index: 1, to: opposing() }, { index: 1, to: own(SlotType.BENCH, 1) },
+      { index: 1, to: own(SlotType.BENCH, 2) }, { index: 1, to: own(SlotType.ACTIVE, 1) },
+      { index: 3, to: own(SlotType.BENCH) }
+    ]) {
+      expect(() => sim.resolvePrompt(attach.id, [{ index: 3, to: own() }, invalid])).toThrow();
+    }
+    sim.resolvePrompt(attach.id, [
+      { index: 1, to: own() }, { index: 3, to: own(SlotType.BENCH) }, { index: 5, to: own(SlotType.BENCH) }
+    ]);
+    expect(player.active.energies.cards).toEqual([cards[1]]);
+    expect(player.bench[0].energies.cards).toEqual([cards[3], cards[5]]);
+    expect(player.deck.cards.map(card => card.id).sort()).toEqual([cards[0], cards[2], cards[4], cards[6]].map(card => card.id).sort());
+    expect(() => ability(sim, 'Beat Scales', own(SlotType.BENCH))).toThrow();
+
+    // The Active copy can still look at the four remaining cards and attach none.
+    ability(sim, 'Beat Scales');
+    const secondLook = pending(sim, ShowCardsPrompt);
+    expect(secondLook.cards.length).toBe(4);
+    sim.resolvePrompt(secondLook.id, true);
+    sim.resolvePrompt(pending(sim, AttachEnergyPrompt).id, []);
+    expect(sim.state.players[0].deck.cards.length).toBe(4);
+    expect(sim.state.prompts.length).toBe(0);
+  });
+
+  it('Beat Scales lets the player see a short deck with no Basic Energy before shuffling', () => {
+    const f = fixture('Kommo-o M6');
+    f.player.deck.cards = [];
+    const names = ['Bill BS', 'Double Turbo Energy BRS'];
+    names.forEach(name => f.add(f.player.deck, name));
+    const sim = f.load();
+    ability(sim, 'Beat Scales');
+    const look = pending(sim, ShowCardsPrompt);
+    expect(look.cards.map(card => card.fullName)).toEqual(names);
+    sim.resolvePrompt(look.id, true);
+    expect(sim.state.prompts.length).toBe(0);
+    expect(sim.state.players[0].deck.cards.map(card => card.fullName).sort()).toEqual(names);
+    expect(() => ability(sim, 'Beat Scales')).toThrow();
   });
 
   it('Elegant Heal heals active and bench Pokemon without producing negative damage', () => {

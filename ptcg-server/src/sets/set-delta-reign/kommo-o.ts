@@ -1,10 +1,10 @@
-import { AttachEnergyPrompt, CardList, CardType, ChooseCardsPrompt, EnergyType, GameError, GameMessage, PlayerType, PokemonCard, PowerType, SlotType, Stage, State, StateUtils, StoreLike, SuperType } from "../../game";
+import { AttachEnergyPrompt, CardList, CardTarget, CardType, EnergyType, GameError, GameMessage, PlayerType, PokemonCard, PowerType, ShowCardsPrompt, SlotType, Stage, State, StateUtils, StoreLike, SuperType } from "../../game";
 import { CheckPokemonTypeEffect } from "../../game/store/effects/check-effects";
 import { Effect } from "../../game/store/effects/effect";
 import { AttachEnergyEffect } from "../../game/store/effects/play-card-effects";
 import { EnergyCard } from "../../game/store/card/energy-card";
 import { ShuffleDeckPrompt } from "../../game/store/prompts/shuffle-prompt";
-import { WAS_POWER_USED, IS_ABILITY_BLOCKED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, REMOVE_MARKER_AT_END_OF_TURN, MOVE_CARDS } from "../../game/store/prefabs/prefabs";
+import { WAS_POWER_USED, IS_ABILITY_BLOCKED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, SHUFFLE_DECK, REMOVE_MARKER_AT_END_OF_TURN, MOVE_CARDS } from "../../game/store/prefabs/prefabs";
 
 export class KommoO extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -37,38 +37,8 @@ export class KommoO extends PokemonCard {
 
   public readonly SCALE_BEAT_MARKER = 'KOMMO_O_SCALE_BEAT_MARKER';
 
-  private getDragonBlockedTargets(store: StoreLike, state: State, player: State['players'][number]) {
-    const blockedTo: { player: PlayerType; slot: SlotType; index: number }[] = [];
-
-    const activePokemon = player.active.getPokemonCard();
-    if (activePokemon) {
-      const checkType = new CheckPokemonTypeEffect(player.active);
-      store.reduceEffect(state, checkType);
-      if (!checkType.cardTypes.includes(CardType.DRAGON)) {
-        blockedTo.push({ player: PlayerType.BOTTOM_PLAYER, slot: SlotType.ACTIVE, index: 0 });
-      }
-    } else {
-      blockedTo.push({ player: PlayerType.BOTTOM_PLAYER, slot: SlotType.ACTIVE, index: 0 });
-    }
-
-    player.bench.forEach((bench, index) => {
-      const pokemon = bench.getPokemonCard();
-      if (!pokemon) {
-        blockedTo.push({ player: PlayerType.BOTTOM_PLAYER, slot: SlotType.BENCH, index });
-        return;
-      }
-
-      const checkType = new CheckPokemonTypeEffect(bench);
-      store.reduceEffect(state, checkType);
-      if (!checkType.cardTypes.includes(CardType.DRAGON)) {
-        blockedTo.push({ player: PlayerType.BOTTOM_PLAYER, slot: SlotType.BENCH, index });
-      }
-    });
-    return blockedTo;
-  }
-
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Scale Beat
+    // Ref: set-delta-reign/mega-rayquaza-ex.ts (Ruler's Roar, look before attaching and notify after shuffling).
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
@@ -84,43 +54,43 @@ export class KommoO extends PokemonCard {
       ABILITY_USED(player, this);
 
       const deckTop = new CardList();
-      const cardsToLook = Math.min(6, player.deck.cards.length);
-      MOVE_CARDS(store, state, player.deck, deckTop, { count: cardsToLook, sourceCard: this });
+      // Keep the inspected cards in the deck until the player chooses which to attach.
+      deckTop.cards = player.deck.cards.slice(0, 6);
+      return store.prompt(state, new ShowCardsPrompt(player.id, GameMessage.CARDS_SHOWED_BY_EFFECT, deckTop.cards), () => {
+        const filter = { superType: SuperType.ENERGY, energyType: EnergyType.BASIC };
+        const blocked: number[] = [];
+        deckTop.cards.forEach((card, index) => {
+          if (card.superType !== SuperType.ENERGY || card.energyType !== EnergyType.BASIC) blocked.push(index);
+        });
 
-      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards);
+        const blockedTo: CardTarget[] = [];
+        let hasDragon = false;
+        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (slot, _card, target) => {
+          const type = new CheckPokemonTypeEffect(slot);
+          store.reduceEffect(state, type);
+          if (type.cardTypes.includes(CardType.DRAGON)) hasDragon = true;
+          else blockedTo.push(target);
+        });
 
-      // One prompt selects any Basic Energy and assigns each to a Dragon.
-      // Blocking every other card prevents unrelated cards from being attached.
-      const blocked = deckTop.cards.map((card, index) =>
-        card.superType === SuperType.ENERGY && card.energyType === EnergyType.BASIC ? -1 : index
-      ).filter(index => index !== -1);
-      const eligibleCount = deckTop.cards.length - blocked.length;
-      if (eligibleCount === 0) {
-        MOVE_CARDS(store, state, deckTop, player.deck, { sourceCard: this, sourceEffect: this.powers[0] });
-        return SHUFFLE_DECK(store, state, player);
-      }
-      const blockedTo = this.getDragonBlockedTargets(store, state, player);
-      return store.prompt(state, new AttachEnergyPrompt(
-        player.id, GameMessage.ATTACH_ENERGY_CARDS, deckTop, PlayerType.BOTTOM_PLAYER,
-        [SlotType.ACTIVE, SlotType.BENCH], { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
-        { allowCancel: false, min: 0, max: eligibleCount, blocked, blockedTo },
-      ), transfers => {
-        const attached: Array<{card: EnergyCard, target: ReturnType<typeof StateUtils.getTarget>}> = [];
-        const seen = new Set<EnergyCard>();
-        for (const transfer of transfers || []) {
-          const energy = transfer.card as EnergyCard;
-          if (seen.has(energy)) continue;
-          seen.add(energy);
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          MOVE_CARDS(store, state, deckTop, target, { cards: [energy], sourceCard: this, sourceEffect: this.powers[0] });
-          if (target.cards.includes(energy)) attached.push({card: energy, target});
+        const max = deckTop.cards.length - blocked.length;
+        if (max === 0 || !hasDragon) {
+          return SHUFFLE_DECK(store, state, player);
         }
-        MOVE_CARDS(store, state, deckTop, player.deck, { sourceCard: this, sourceEffect: this.powers[0] });
-        return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-          player.deck.applyOrder(order);
-          for (const entry of attached) {
-            if (entry.target.cards.includes(entry.card)) store.reduceEffect(state, new AttachEnergyEffect(player, entry.card, entry.target, 'deck'));
-          }
+        store.prompt(state, new AttachEnergyPrompt(
+          player.id, GameMessage.ATTACH_ENERGY_CARDS, deckTop, PlayerType.BOTTOM_PLAYER,
+          [SlotType.ACTIVE, SlotType.BENCH], filter, { allowCancel: false, min: 0, max, blocked, blockedTo }
+        ), transfers => {
+          const attached = transfers.map(({ card, to }) => {
+            const target = StateUtils.getTarget(state, player, to);
+            MOVE_CARDS(store, state, player.deck, target, { cards: [card], sourceCard: this, sourceEffect: this.powers[0] });
+            return { card: card as EnergyCard, target };
+          });
+          store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
+            player.deck.applyOrder(order);
+            for (const { card, target } of attached) {
+              if (target.cards.includes(card)) store.reduceEffect(state, new AttachEnergyEffect(player, card, target, 'deck'));
+            }
+          });
         });
       });
     }

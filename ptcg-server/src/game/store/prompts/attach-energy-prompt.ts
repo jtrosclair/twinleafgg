@@ -70,6 +70,15 @@ export class AttachEnergyPrompt extends Prompt<CardAssign[]> {
     if (player === undefined) {
       throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
     }
+    const targets: CardTarget[] = [];
+    for (const owner of state.players) {
+      const side = owner === player ? PlayerType.BOTTOM_PLAYER : PlayerType.TOP_PLAYER;
+      if (this.playerType === PlayerType.ANY || this.playerType === side) {
+        owner.forEachPokemon(side, (_list, _card, target) => {
+          if (this.slots.includes(target.slot)) targets.push(target);
+        });
+      }
+    }
     const transfers: CardAssign[] = [];
     result.forEach(t => {
       const cardList = this.cardList;
@@ -86,6 +95,10 @@ export class AttachEnergyPrompt extends Prompt<CardAssign[]> {
       if (this.options.blocked.includes(t.index)) {
         throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
       }
+      if (!targets.some(target => target.player === t.to?.player
+        && target.slot === t.to.slot && target.index === t.to.index)) {
+        throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+      }
       transfers.push({ to: t.to, card });
     });
     return transfers;
@@ -96,6 +109,9 @@ export class AttachEnergyPrompt extends Prompt<CardAssign[]> {
       return this.options.allowCancel;  // operation cancelled
     }
     if (result.length < this.options.min || result.length > this.options.max) {
+      return false;
+    }
+    if (new Set(result.map(r => r.card)).size !== result.length) {
       return false;
     }
     if (result.some(r => this.options.blocked.includes(this.cardList.cards.indexOf(r.card)))) {
