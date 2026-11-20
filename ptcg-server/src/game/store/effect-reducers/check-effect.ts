@@ -414,7 +414,7 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
         group = { destination, count: 0 };
         prizeGroups[opponentIndex].push(group);
       }
-      group.count += knockOutEffect.prizeCount;
+      group.count += Math.max(0, knockOutEffect.prizeCount);
     }
   }
 

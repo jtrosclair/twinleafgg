@@ -1,6 +1,8 @@
 import { AttackAction } from '../../game/store/actions/game-actions';
 import { PlayerType, SlotType } from '../../game/store/actions/play-card-action';
 import { CheckHpEffect, CheckPrizesDestinationEffect } from '../../game/store/effects/check-effects';
+import { Effect } from '../../game/store/effects/effect';
+import { State } from '../../game/store/state/state';
 import { padDeck, setupGame } from './test-helpers';
 
 const arceus = 'Arceus VSTAR BRS';
@@ -88,7 +90,19 @@ describe('Knock Outs caused by opposing attack damage', () => {
     const initialPrizes = player1.getPrizeLeft();
     store.dispatch(new AttackAction(player1.id, 'Trinity Nova'));
     expect(store.state.players[0].getPrizeLeft()).toBe(initialPrizes);
-    expect(store.state.players[1].legacyEnergyUsed).toBeTrue();
+    expect(store.state.players[1].legacyEnergyUsed).toBe(true);
+  });
+
+  it('floors each Knock Out’s Prizes at zero before combining simultaneous Knock Outs', () => {
+    const { store, player1, overridePrompt } = battle(electivire, munkidori, {
+      damage: 160, energy: [legacy], bench: [{ card: pecharunt, damage: 140 }, { card: gengar }]
+    });
+    const initialPrizes = player1.getPrizeLeft();
+    overridePrompt('Choose pokemon', () => [opposingActive, opposingBench]);
+    store.dispatch(new AttackAction(player1.id, 'Dual Bolt'));
+    expect(store.state.players[1].discard.cards.map(card => card.fullName)).toEqual(jasmine.arrayContaining([munkidori, pecharunt]));
+    // Munkidori ex has three reductions and Pecharunt ex has one.
+    expect(store.state.players[0].getPrizeLeft()).toBe(initialPrizes - 1);
   });
 
   for (const [attacker, attack, hasPecharunt, expected] of [
@@ -126,7 +140,7 @@ describe('Knock Outs caused by opposing attack damage', () => {
     overridePrompt('Put damage', () => [{ target: opposingBench, damage: 60 }]);
     store.dispatch(new AttackAction(player1.id, 'Phantom Dive'));
     expect(store.state.players[0].getPrizeLeft()).toBe(initialPrizes - 2);
-    expect(store.state.players[1].legacyEnergyUsed).toBeFalse();
+    expect(store.state.players[1].legacyEnergyUsed).toBe(false);
   });
 
   for (const damage of [true, false]) {
@@ -134,7 +148,7 @@ describe('Knock Outs caused by opposing attack damage', () => {
       const { store, player1, player2 } = battle(damage ? arceus : moon, mew, { energy: [gift], prizeCount: 2 });
       const original = store.reduceEffect.bind(store);
       let beforePrizes: number | undefined;
-      spyOn(store, 'reduceEffect').and.callFake((state, effect) => {
+      spyOn(store, 'reduceEffect').and.callFake((state: State, effect: Effect) => {
         if (effect instanceof CheckPrizesDestinationEffect && effect.player === player1) {
           beforePrizes = player2.hand.cards.length;
         }
@@ -151,6 +165,7 @@ describe('Knock Outs caused by opposing attack damage', () => {
       let shuffles = 0;
       overridePrompt('Choose cards', () => {
         searches++;
+        expect(player1.getPrizeLeft()).toBe(2);
         return [0, 1, 2];
       });
       overridePrompt('Shuffle deck', () => {
