@@ -123,7 +123,7 @@ describe('Knock Out retaliation and Prize timing', () => {
       overridePrompt('Put damage', () => { throw new Error('Unexpected retaliation choice'); });
       store.dispatch(new AttackAction(player1.id, 'Frenzied Gouging'));
       expect(player2.discard.cards).toContain(holder);
-      expect(player1.active.damage).toBe(70);
+      expect(player1.active.damage).toBe(200);
     });
   }
 
@@ -298,7 +298,7 @@ describe('Knock Out retaliation and Prize timing', () => {
   it('counts both Knock Outs from a single Spell Tag before calculating Prizes', () => {
     const { store, player1, player2, overridePrompt } = battle({ card: mew, tools: [spell] },
       { attacker: { ...miraidon, damage: 200 }, attackBench: [{ card: 'Shuppet M5', damage: 30 }],
-        attackPrizes: 2, defensePrizes: 4 });
+        attackPrizes: 2, defensePrizes: 3 });
     const attacker = player1.active.getPokemonCard()!;
     const shuppet = player1.bench[0].getPokemonCard()!;
     overridePrompt('Put damage', () => [{ target: foeActive, damage: 20 }, { target: foeBench(0), damage: 20 }]);
@@ -306,8 +306,34 @@ describe('Knock Out retaliation and Prize timing', () => {
     expect(player1.discard.cards).toContain(attacker);
     expect(player1.discard.cards).toContain(shuppet);
     expect(player1.getPrizeLeft()).toBe(0);
-    expect(player2.getPrizeLeft()).toBe(1);
+    expect(player2.getPrizeLeft()).toBe(0);
     expect(store.state.winner).toBe(GameWinner.PLAYER_2);
+  });
+
+  it('starts a fresh six-Prize tiebreaker from snapshots with fewer Prize slots', () => {
+    const { store, state, player1, player2, overridePrompt } = battle({ card: mew, tools: [spell] },
+      { attacker: { ...miraidon, damage: 200 }, attackBench: [{ card: 'Shuppet M5', damage: 30 }],
+        attackPrizes: 2, defensePrizes: 4 });
+    player1.usedVSTAR = true;
+    player2.usedGX = true;
+    player1.marker.addMarkerToState('OLD_MATCH_MARKER');
+    const tool = player2.active.tools[0];
+    const physical = (player: typeof player1) => new Set([
+      ...player.deck.cards, ...player.hand.cards, ...player.discard.cards, ...player.active.cards,
+      ...player.bench.flatMap(slot => slot.cards), ...player.prizes.flatMap(prizes => prizes.cards)
+    ]);
+    const size = state.players.map(player => physical(player).size);
+    overridePrompt('Put damage', () => [{ target: foeActive, damage: 20 }, { target: foeBench(0), damage: 20 }]);
+    store.dispatch(new AttackAction(player1.id, photon));
+    expect(state.phase).toBe(GamePhase.PLAYER_TURN);
+    expect(state.winner).toBe(GameWinner.NONE);
+    expect(state.isSuddenDeath).toBe(true);
+    expect(state.players.map(player => player.getPrizeLeft())).toEqual([6, 6]);
+    expect(state.players.map(player => physical(player).size)).toEqual(size);
+    expect(state.players[0].usedVSTAR).toBe(false);
+    expect(state.players[1].usedGX).toBe(false);
+    expect(state.players[0].marker.hasMarker('OLD_MATCH_MARKER')).toBe(false);
+    expect([...physical(state.players[1])].filter(card => card.id === tool.id).length).toBe(1);
   });
 
   it('continues a tiebreaker when both players take the same number of Prizes in one attack', () => {

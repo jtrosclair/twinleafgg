@@ -39,7 +39,7 @@ function putStartingPokemonsAndPrizes(player: Player, cards: Card[], state: Stat
     player.bench[i - 1].isSecret = true;
   }
   // Pre-Release format uses 4 prize cards, all other formats use 6
-  const prizeCount = state.gameSettings?.format === Format.PRE_RELEASE ? 4 : 6;
+  const prizeCount = !state.isSuddenDeath && state.gameSettings?.format === Format.PRE_RELEASE ? 4 : 6;
   for (let i = 0; i < prizeCount; i++) {
     player.deck.moveTo(player.prizes[i], 1);
   }
@@ -280,7 +280,7 @@ function* alternativeSetupSinglePlayer(player: Player, chooseCardsOptions: any, 
     });
 
   // Pre-Release format uses 4 prize cards, all other formats use 6
-  const prizeCount = state.gameSettings?.format === Format.PRE_RELEASE ? 4 : 6;
+  const prizeCount = !state.isSuddenDeath && state.gameSettings?.format === Format.PRE_RELEASE ? 4 : 6;
   // Then, choose prize cards from remaining hand
   // We need to create a temporary hand with only the remaining cards for selection
   const remainingCards = player.hand.cards.filter(c =>
@@ -571,7 +571,7 @@ function* allowExtraBenchPlacement(player: Player, chooseCardsOptions: any, stat
   }
 }
 
-function createPlayer(id: number, name: string, format?: Format): Player {
+export function createPlayer(id: number, name: string, format?: Format): Player {
   const player = new Player();
   player.id = id;
   player.name = name;

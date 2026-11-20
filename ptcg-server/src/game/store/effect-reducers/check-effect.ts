@@ -1,6 +1,9 @@
 import { GameError } from '../../game-error';
 import { GameLog, GameMessage } from '../../game-message';
+import { CardManager } from '../../cards/card-manager';
 import { PlayerType, SlotType } from '../actions/play-card-action';
+import { Card } from '../card/card';
+import { CardTag, Stage } from '../card/card-types';
 import { EnergyCard } from '../card/energy-card';
 import { PokemonCard } from '../card/pokemon-card';
 import { CheckHpEffect, CheckProvidedEnergyEffect, CheckTableStateEffect } from '../effects/check-effects';
@@ -8,9 +11,7 @@ import { Effect } from '../effects/effect';
 import { KnockOutEffect, MovedToActiveEffect } from '../effects/game-effects';
 import { TAKE_SPECIFIC_PRIZES, MOVE_CARDS } from '../prefabs/prefabs';
 import { ChoosePokemonPrompt } from '../prompts/choose-pokemon-prompt';
-import { CoinFlipPrompt } from '../prompts/coin-flip-prompt';
-import { ShuffleDeckPrompt } from '../prompts/shuffle-prompt';
-import { setupGame } from '../reducers/setup-reducer';
+import { createPlayer, setupGame } from '../reducers/setup-reducer';
 import { CardList } from '../state/card-list';
 import { PokemonCardList } from '../state/pokemon-card-list';
 import { GamePhase, GameWinner, State } from '../state/state';
@@ -345,39 +346,48 @@ export function checkWinner(store: StoreLike, state: State, onComplete?: () => v
 }
 
 function initiateSuddenDeath(store: StoreLike, state: State): State {
-  store.log(state, GameLog.LOG_SUDDEN_DEATH);
+  const manager = CardManager.getInstance();
+  const players = state.players.map(previous => {
+    const player = createPlayer(previous.id, previous.name);
+    player.avatarName = previous.avatarName;
+    player.deckId = previous.deckId;
+    player.sleeveImagePath = previous.sleeveImagePath;
 
-  // Reset decks
-  state.players.forEach(player => {
-    // Collect all cards back to deck including stadium, lost zone and any other zones
-    [player.active, ...player.bench, player.discard, ...player.prizes, player.hand, player.lostzone, player.stadium]
-      .forEach(cardList => cardList.moveTo(player.deck));
-
-    // Reset VSTAR and GX markers
-    player.usedGX = false;
-    player.usedVSTAR = false;
-
-    // Shuffle deck
-    return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-      player.deck.applyOrder(order);
+    const seen = new Set<Card>();
+    const collect = (card: Card): void => {
+      if (seen.has(card)) return;
+      seen.add(card);
+      card.cards.cards.forEach(collect);
+      const fresh = manager.getCardByName(card.fullName) ?? card;
+      fresh.id = card.id;
+      player.deck.cards.push(fresh);
+    };
+    [previous.deck, previous.hand, previous.discard, previous.lostzone,
+      previous.stadium, previous.supporter, ...previous.prizes].forEach(zone => zone.cards.forEach(collect));
+    [previous.active, ...previous.bench].forEach(slot => {
+      [...slot.cards, ...slot.tools, ...slot.energies.cards].forEach(collect);
     });
+    return player;
   });
 
-  // Coin flip for first player
-  return store.prompt(state, new CoinFlipPrompt(
-    state.players[0].id,
-    GameMessage.SETUP_WHO_BEGINS_FLIP
-  ), result => {
-    const firstPlayer = result ? 0 : 1;
-    setupSuddenDeathGame(store, state, firstPlayer);
-  });
-}
+  // A shortened puzzle can end in a draw without enough cards to set up
+  // two full hands and six Prizes each. Leave its finished board available.
+  if (players.some(player => player.deck.cards.length < 13 || !player.deck.cards.some(card =>
+    (card instanceof PokemonCard && card.stage === Stage.BASIC) || card.tags.includes(CardTag.PLAY_DURING_SETUP)))) {
+    return endGame(store, state, GameWinner.DRAW);
+  }
 
-function setupSuddenDeathGame(store: StoreLike, state: State, firstPlayer: number): State {
-  state.activePlayer = firstPlayer;
+  store.log(state, GameLog.LOG_SUDDEN_DEATH);
+  state.players = players;
+  state.activePlayer = 0;
   state.turn = 0;
   state.phase = GamePhase.SETUP;
+  state.winner = GameWinner.NONE;
   state.isSuddenDeath = true;
+  state.lastAttack = null;
+  state.playerLastAttack = {};
+  state.activeAbilityLockOrder = undefined;
+  state.copiedAttackCheckpoints = undefined;
 
   const generator = setupGame(() => generator.next(), store, state);
   return generator.next().value;
