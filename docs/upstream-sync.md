@@ -2455,3 +2455,43 @@ withholds the Prize. Selfish Lips fails against an actual Pokémon V,
 including Regieleki V after it switches out. Persistent Cells and Durable
 Blade leave their holder in discard when the attacker takes its final Prize.
 Mantine's Bounce into Arceus V is a passing control for Selfish Lips.
+
+## Gameplay re-audit, batch 22
+
+Last Gift and Final Wish use the exact Knock Out caused by opposing attack
+damage. They search and shuffle before the attacking player takes Prizes.
+The shared PrizeMap rule lets the owner take zero cards from these searches.
+All Just a Dream checks Komala's Sleep after the attack finishes. Selfish
+Lips recognizes Pokémon V, VMAX, VSTAR and V-UNION and identifies the original
+attacker even after Switching Bolt. Both Abilities prevent any Prizes for
+that Pokémon, including the extra Prizes from an attack.
+[Gengar print](https://www.pokemon-card.com/card-search/details.php/card/39458)
+[Manaphy print](https://www.pokemon-card.com/card-search/details.php/card/28244/regu/DP)
+[Komala and Powder Snow ruling](https://www.pokemon-card.com/rules/faq/search.php?page=2&regulation_faq_main=&sc_group_id=740)
+[Komala and Whirlwind ruling](https://www.pokemon-card.com/rules/faq/search.php?page=4&regulation_faq_main=&sc_group_id=850)
+[Jynx rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AB%E3%83%BC%E3%82%B8%E3%83%A5%E3%83%A9&regulation_faq_main_item1=all)
+
+Persistent Cells and Durable Blade return the full evolution stack before
+Prizes. The turn player can order either Ability with Lost City. Attached
+cards follow their own rules. Pokémon acting as Energy are discarded, and
+Recycle Energy returns itself after being discarded from play.
+[Reuniclus rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A9%E3%83%B3%E3%82%AF%E3%83%AB%E3%82%B9&regulation_faq_main_item1=all)
+[Aegislash rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%AE%E3%83%AB%E3%82%AC%E3%83%AB%E3%83%89&regulation_faq_main_item1=all)
+[February 2026 ordering update](https://professorprogram.pokemon.com/news/11473085)
+
+All 26 focused tests pass, with 15 failures on the preceding engine. The
+full engine passed 7,449 tests in 267 files. The changes combined with the
+checkout’s pending work passed 225 focused and simulator tests. All 559
+compatible saved puzzle states and 3,633 sampled opening actions matched
+exactly. Seven saved solutions reached wins. The attested production package
+met the mobile size budget and passed all ten mouse and touch checks. Both
+Durable Blade and Lost City orders reached the correct final Prize and card
+destinations in the browser engine.
+
+Subsequent real-action probes confirmed six open failures. Spiritomb LOR’s
+Cursed Message and Weezing PLS’s Aftermath trigger against Frenzied Gouging.
+Arbok HIF’s Last Pattern fails to discard after lethal attack damage.
+A Pokémon VSTAR still takes a Prize for Trevenant LOR despite Elder Tree Barrier.
+Black Market Prism Star reduces Prizes after Frenzied Gouging. Gengar POR’s
+Infinite Shadow fails to return its evolution stack before the final Prize.
+The ledger still marks `bc849aeed` partial.
