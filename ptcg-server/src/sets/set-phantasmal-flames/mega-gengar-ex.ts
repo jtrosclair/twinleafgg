@@ -1,9 +1,11 @@
-import { AttachEnergyPrompt, CardTag, CardType, GameMessage, GamePhase, PlayerType, PokemonCard, PowerType, SlotType, Stage, State, StateUtils, StoreLike, SuperType } from '../../game';
+import { AttachEnergyPrompt, CardTag, CardType, GameMessage, PlayerType, PokemonCard, PowerType, SlotType, Stage, State, StateUtils, StoreLike, SuperType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { KnockOutEffect } from '../../game/store/effects/game-effects';
 import { AfterAttackEffect } from '../../game/store/effects/game-phase-effects';
-import { ADD_MARKER, HAS_MARKER, IS_ABILITY_BLOCKED, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_MARKER, HAS_MARKER, IS_ABILITY_BLOCKED, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
+
+const shadowyConcealmentApplied = new WeakSet<KnockOutEffect>();
 
 export class MegaGengarex extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -38,51 +40,29 @@ export class MegaGengarex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof KnockOutEffect) {
-      const player = effect.player; // owner of the Pokémon that was Knocked Out
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Only during opponent's attack step
-      if (state.phase !== GamePhase.ATTACK || state.players[state.activePlayer] !== opponent) {
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect)) {
+      if (shadowyConcealmentApplied.has(effect)
+        || !effect.target.attackDamageKnockOut?.sourceCard?.tags.includes(CardTag.POKEMON_ex)) {
         return state;
       }
+      const player = effect.player;
 
-      // Ability must be in play on player's side and not blocked
-      let hasThisInPlay = false;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card === this) {
-          hasThisInPlay = true;
-        }
-      });
-      if (!hasThisInPlay || IS_ABILITY_BLOCKED(store, state, opponent, this)) {
+      const inPlay = effect.pokemonInPlayBeforeKnockOut
+        ? effect.pokemonInPlayBeforeKnockOut.includes(this)
+        : [player.active, ...player.bench].some(slot => slot.getPokemonCard() === this);
+      if (!inPlay || IS_ABILITY_BLOCKED(store, state, player, this)) {
         return state;
       }
 
       // Target must be a Darkness Pokémon
       const checkType = new CheckPokemonTypeEffect(effect.target);
       store.reduceEffect(state, checkType);
-      const isDarkPokemon = checkType.cardTypes.includes(D);
-      if (!isDarkPokemon) {
+      if (!checkType.cardTypes.includes(CardType.DARK)) {
         return state;
       }
 
-      // Attacking Pokémon must be a Pokémon ex
-      const attackingPokemon = opponent.active.getPokemonCard();
-      const attackerIsEx = attackingPokemon?.tags.includes(CardTag.POKEMON_ex) === true;
-      if (!attackerIsEx) {
-        return state;
-      }
-
-      // Prevent stacking if multiple copies are in play (mark the KO target for this resolution)
-      const NON_STACK_MARKER = 'MEGA_GENGAR_SHADOW_HIDING_APPLIED';
-      if (effect.target.marker.hasMarker(NON_STACK_MARKER, this)) {
-        return state;
-      }
-      effect.target.marker.addMarker(NON_STACK_MARKER, this);
-
-      if (effect.prizeCount > 0) {
-        effect.prizeCount -= 1;
-      }
+      shadowyConcealmentApplied.add(effect);
+      effect.prizeCount -= 1;
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {

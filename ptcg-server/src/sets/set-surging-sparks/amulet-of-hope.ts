@@ -1,13 +1,12 @@
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { CardTag, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
-import { State, GamePhase } from '../../game/store/state/state';
+import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
 import { BetweenTurnsEffect } from '../../game/store/effects/game-phase-effects';
-import { Card } from '../../game/store/card/card';
-import { ChooseCardsPrompt, GameLog, GameMessage, ShuffleDeckPrompt } from '../../game';
-import { ToolEffect } from '../../game/store/effects/play-card-effects';
+import { GameLog } from '../../game';
+import { APPLY_ONCE_PER_CARD, IS_TOOL_BLOCKED, SEARCH_DECK_FOR_CARDS_TO_HAND, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
+import { Player } from '../../game/store/state/player';
 
 export class AmuletofHope extends TrainerCard {
 
@@ -32,60 +31,25 @@ export class AmuletofHope extends TrainerCard {
 
   public readonly AMULET_OF_HOPE_MARKER = 'AMULET_OF_HOPE_MARKER';
 
+  private searchDeck(store: StoreLike, state: State, player: Player, effect: Effect): void {
+    if (player.deck.cards.length === 0) return;
+    store.log(state, GameLog.LOG_PLAYER_USES_ABILITY, { name: player.name, card: this.name });
+    SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, this, {}, { min: 0, max: 3, allowCancel: false }, effect);
+  }
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof KnockOutEffect && effect.target.tools.includes(this)) {
-      const player = effect.player;
-
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-
-      // Try to reduce ToolEffect, to check if something is blocking the tool from working
-      try {
-        const stub = new ToolEffect(effect.player, this);
-        store.reduceEffect(state, stub);
-      } catch {
-        return state;
-      }
-
-      const target = effect.target;
-      const cards = target.getPokemons();
-      cards.forEach(card => {
-        player.marker.addMarker(this.AMULET_OF_HOPE_MARKER, card);
-      });
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.target.tools.includes(this)
+      && !IS_TOOL_BLOCKED(store, state, effect.player, this) && APPLY_ONCE_PER_CARD(effect, this)) {
+      this.searchDeck(store, state, effect.player, effect);
     }
 
     if (effect instanceof BetweenTurnsEffect) {
-      state.players.forEach(player => {
-
-        if (!player.marker.hasMarker(this.AMULET_OF_HOPE_MARKER)) {
-          return state;
-        }
-
-        if (player.deck.cards.length === 0) {
-          return state;
-        }
-
-        store.log(state, GameLog.LOG_PLAYER_USES_ABILITY, { name: player.name, card: 'Amulet of Hope' });
-
-        let cards: Card[] = [];
-        store.prompt(state, new ChooseCardsPrompt(
-          player,
-          GameMessage.CHOOSE_CARD_TO_HAND,
-          player.deck,
-          {},
-          { min: 0, max: 3, allowCancel: false }
-        ), selected => {
-          cards = selected || [];
-          player.deck.moveCardsTo(cards, player.hand);
-        });
-
-        store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-          player.deck.applyOrder(order);
-        });
-
+      // Older snapshots may already have a queued search from a Knock Out.
+      for (const player of state.players) {
+        if (!player.marker.hasMarker(this.AMULET_OF_HOPE_MARKER)) continue;
         player.marker.removeMarker(this.AMULET_OF_HOPE_MARKER);
-      });
+        this.searchDeck(store, state, player, effect);
+      }
     }
 
     return state;

@@ -4,11 +4,10 @@
 
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils, GamePhase } from '../../game';
+import { StoreLike, State } from '../../game';
 import { CheckHpEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { ToolEffect } from '../../game/store/effects/play-card-effects';
+import { APPLY_ONCE_PER_CARD, IS_TOOL_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 
 export class IslandChallengeAmulet extends TrainerCard {
   public trainerType: TrainerType = TrainerType.TOOL;
@@ -25,11 +24,7 @@ export class IslandChallengeAmulet extends TrainerCard {
     if (effect instanceof CheckHpEffect && effect.target.tools.includes(this)) {
       const sourceCard = effect.target.getPokemonCard();
 
-      // Try to reduce ToolEffect, to check if something is blocking the tool from working
-      try {
-        const toolEffect = new ToolEffect(effect.player, this);
-        store.reduceEffect(state, toolEffect);
-      } catch {
+      if (IS_TOOL_BLOCKED(store, state, effect.player, this)) {
         return state;
       }
 
@@ -42,19 +37,14 @@ export class IslandChallengeAmulet extends TrainerCard {
         return state;
       }
 
-      effect.hp -= 100;
+      if (APPLY_ONCE_PER_CARD(effect, this)) effect.hp -= 100;
     }
 
     // Prize reduction when KO'd by opponent's attack
     // Ref: set-twilight-masquerade/legacy-energy.ts (KnockOutEffect prize reduction)
-    if (effect instanceof KnockOutEffect && effect.target.tools.includes(this)) {
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.target.tools.includes(this)) {
       const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
       const sourceCard = effect.target.getPokemonCard();
-
-      if (state.phase !== GamePhase.ATTACK || state.players[state.activePlayer] !== opponent) {
-        return state;
-      }
 
       if (!sourceCard) {
         return state;
@@ -65,15 +55,11 @@ export class IslandChallengeAmulet extends TrainerCard {
         return state;
       }
 
-      // Try to reduce ToolEffect, to check if something is blocking the tool from working
-      try {
-        const toolEffect = new ToolEffect(player, this);
-        store.reduceEffect(state, toolEffect);
-      } catch {
+      if (IS_TOOL_BLOCKED(store, state, player, this)) {
         return state;
       }
 
-      effect.prizeCount -= 1;
+      if (APPLY_ONCE_PER_CARD(effect, this)) effect.prizeCount -= 1;
     }
 
     return state;

@@ -659,6 +659,28 @@ export function YOUR_OPPONENTS_POKEMON_IS_KNOCKED_OUT_BY_DAMAGE_FROM_THIS_ATTACK
   return effect instanceof KnockOutEffect;
 }
 
+export function WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state: State, effect: Effect): effect is KnockOutEffect {
+  if (!(effect instanceof KnockOutEffect) || state.phase !== GamePhase.ATTACK) return false;
+  const attacker = state.players[state.activePlayer];
+  const damage = effect.target.attackDamageKnockOut;
+  return !!attacker && attacker !== effect.player && !!damage
+    && damage.turn === state.turn && damage.playerId === attacker.id;
+}
+
+const cardsAppliedByEffect = new WeakMap<Effect, Set<Card>>();
+
+/** Handle attachments referenced in both their slot's card list and its Tool list. */
+export function APPLY_ONCE_PER_CARD(effect: Effect, card: Card): boolean {
+  let applied = cardsAppliedByEffect.get(effect);
+  if (!applied) {
+    applied = new Set<Card>();
+    cardsAppliedByEffect.set(effect, applied);
+  }
+  if (applied.has(card)) return false;
+  applied.add(card);
+  return true;
+}
+
 export interface TakeSpecificPrizesOptions {
   destination?: CardList;
   skipReduce?: boolean;

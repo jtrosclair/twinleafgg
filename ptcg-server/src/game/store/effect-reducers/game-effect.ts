@@ -469,11 +469,14 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
         }
       } else {
         // Default behavior - move to discard
-        const tools = [...effect.target.tools];
+        const tools = new Set(effect.target.tools);
         // Move tools to discard BEFORE clearing effects (directly)
         for (const tool of tools) {
           effect.target.moveCardTo(tool, effect.player.discard);
         }
+        // Older slots can reference a Tool in both lists. The full-slot
+        // move below must not discard the same physical Tool again.
+        effect.target.tools = [];
         effect.target.clearEffects();
         state = MOVE_CARDS(store, state, effect.target, effect.player.discard);
       }

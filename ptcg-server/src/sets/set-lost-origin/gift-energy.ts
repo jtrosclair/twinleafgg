@@ -2,10 +2,9 @@ import { CardType, EnergyType } from '../../game/store/card/card-types';
 import { BetweenTurnsEffect } from '../../game/store/effects/game-phase-effects';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { StoreLike } from '../../game/store/store-like';
-import { State, GamePhase } from '../../game/store/state/state';
+import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { IS_SPECIAL_ENERGY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { DRAW_CARDS_UNTIL_CARDS_IN_HAND, IS_SPECIAL_ENERGY_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 
 
 export class GiftEnergy extends EnergyCard {
@@ -35,23 +34,11 @@ export class GiftEnergy extends EnergyCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof KnockOutEffect && effect.target.cards.includes(this)) {
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.target.cards.includes(this)) {
       const player = effect.player;
-
-      // Do not activate between turns, or when it's not opponents turn.
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
+      if (!IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {
+        DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 7);
       }
-
-      if (IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {
-        return state;
-      }
-
-      const target = effect.target;
-      const cards = target.getPokemons();
-      cards.forEach(card => {
-        player.marker.addMarker(this.GIFT_ENERGY_MARKER, card);
-      });
     }
 
     if (effect instanceof BetweenTurnsEffect) {
@@ -61,12 +48,8 @@ export class GiftEnergy extends EnergyCard {
           return;
         }
 
-        while (player.hand.cards.length < 7) {
-          if (player.deck.cards.length === 0) {
-            break;
-          }
-          player.deck.moveTo(player.hand, 1);
-        }
+        // Resolve a pending draw from a snapshot saved by an older engine.
+        DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 7);
         player.marker.removeMarker(this.GIFT_ENERGY_MARKER);
       });
     }

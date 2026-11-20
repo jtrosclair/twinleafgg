@@ -1,11 +1,10 @@
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { CardTag, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
-import { GamePhase, State } from '../../game/store/state/state';
+import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckHpEffect } from '../../game/store/effects/check-effects';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { IS_TOOL_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { APPLY_ONCE_PER_CARD, IS_TOOL_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 
 
 export class HerosMedal extends TrainerCard {
@@ -35,21 +34,18 @@ export class HerosMedal extends TrainerCard {
       if (IS_TOOL_BLOCKED(store, state, effect.player, this)) { return state; }
 
       // Only reduce HP for VMAX Pokemon
-      if (pokemonCard && pokemonCard.tags.includes(CardTag.POKEMON_VMAX)) {
+      if (pokemonCard?.tags.includes(CardTag.POKEMON_VMAX) && APPLY_ONCE_PER_CARD(effect, this)) {
         effect.hp -= 100;
       }
     }
 
-    if (effect instanceof KnockOutEffect && effect.target.tools.includes(this)) {
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.target.tools.includes(this)) {
       const pokemonCard = effect.target.getPokemonCard();
 
       if (IS_TOOL_BLOCKED(store, state, effect.player, this)) { return state; }
 
-      // Only reduce prize count if knocked out by damage from an attack
-      if (state.phase !== GamePhase.ATTACK) { return state; }
-
       // Only reduce prize count if it's a VMAX Pokemon
-      if (pokemonCard && pokemonCard.tags.includes(CardTag.POKEMON_VMAX)) {
+      if (pokemonCard?.tags.includes(CardTag.POKEMON_VMAX) && APPLY_ONCE_PER_CARD(effect, this)) {
         effect.prizeCount -= 1;
       }
     }

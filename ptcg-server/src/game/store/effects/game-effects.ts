@@ -235,6 +235,7 @@ export class KnockOutEffect implements Effect {
   public isLostCity: boolean = false;
   public knockOutDestination?: 'lostzone';
   public prizeIncreased: boolean = false;
+  public pokemonInPlayBeforeKnockOut?: readonly PokemonCard[];
 
   constructor(player: Player, target: PokemonCardList) {
     this.player = player;

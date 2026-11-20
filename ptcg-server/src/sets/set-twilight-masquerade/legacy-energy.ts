@@ -1,10 +1,9 @@
 import { StoreLike } from '../../game/store/store-like';
-import { State, GamePhase } from '../../game/store/state/state';
+import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { EnergyCard, CardType, EnergyType, CardTag, StateUtils } from '../../game';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
+import { EnergyCard, CardType, EnergyType, CardTag } from '../../game';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { IS_SPECIAL_ENERGY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { IS_SPECIAL_ENERGY_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 
 
 export class LegacyEnergy extends EnergyCard {
@@ -37,14 +36,8 @@ If the Pokémon this card is attached to is Knocked Out by damage from an attack
       effect.energyMap.push({ card: this, provides: [CardType.ANY] });
     }
 
-    if (effect instanceof KnockOutEffect && effect.target.cards.includes(this)) {
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.target.cards.includes(this)) {
       const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      if (state.phase !== GamePhase.ATTACK || state.players[state.activePlayer] != opponent) {
-        return state;
-      }
-
       if (IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {
         return state;
       }

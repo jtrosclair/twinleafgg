@@ -388,9 +388,15 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
 
   // Handle KOs first
   const pokemonsToDiscard = findKoPokemons(store, state);
+  const pokemonInPlay = pokemonsToDiscard.length > 1 ? state.players.map(player =>
+    [player.active, ...player.bench].flatMap(slot => slot.getPokemonCard() ?? [])
+  ) : undefined;
   for (const pokemonToDiscard of pokemonsToDiscard) {
     const owner = state.players[pokemonToDiscard.playerNum];
     const knockOutEffect = new KnockOutEffect(owner, pokemonToDiscard.cardList);
+    // Simultaneous Knock Outs share the board that existed before any
+    // Pokémon was removed, regardless of which effect is reduced first.
+    knockOutEffect.pokemonInPlayBeforeKnockOut = pokemonInPlay?.[pokemonToDiscard.playerNum];
     knockOutEffect.knockOutDestination = pokemonToDiscard.destination;
     state = store.reduceEffect(state, knockOutEffect);
 
