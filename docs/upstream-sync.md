@@ -2294,3 +2294,52 @@ resolves first.
 [Rescue Energy rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AC%E3%82%B9%E3%82%AD%E3%83%A5%E3%83%BC%E3%82%A8%E3%83%8D%E3%83%AB%E3%82%AE%E3%83%BC&regulation_faq_main_item1=all)
 [Rescue Scarf print](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/bw_dragons_exalted.pdf)
 [Lucky Egg errata](https://play.pokemon.com/fr-ca/resources/documents/tcg-errata/)
+
+## Gameplay re-audit, batch 19
+
+Rescue Energy and Rescue Scarf return the evolution stack before the final
+Prize, including after lethal recoil. An explicit Knock Out or damage from
+Pokémon Checkup does not trigger either card. The turn player chooses the
+order of competing effects on the same Knock Out. If Rescue Energy resolves
+before Lost Crisis, the Pokémon goes to hand and the remaining attachments
+go to the Lost Zone. Lost City sends only the Pokémon to the Lost Zone if it
+wins the ordering choice. Legacy attachment lists preserve physical cards
+without duplicating them.
+[Rescue Energy rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AC%E3%82%B9%E3%82%AD%E3%83%A5%E3%83%BC%E3%82%A8%E3%83%8D%E3%83%AB%E3%82%AE%E3%83%BC&regulation_faq_main_item1=all)
+[Rescue Scarf rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AC%E3%82%B9%E3%82%AD%E3%83%A5%E3%83%BC%E3%82%B9%E3%82%AB%E3%83%BC%E3%83%95&regulation_faq_main_item1=all)
+[Lost City rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AD%E3%82%B9%E3%83%88%E3%82%B7%E3%83%86%E3%82%A3&regulation_sidebar_form=all)
+
+Lucky Egg AR checks that its holder actually reached discard. Lucky Egg SSH
+uses its own wording and draws even when Lost City sends the holder to the
+Lost Zone. Farewell Bell can be attached as a Tool and searches after a
+qualifying VMAX Knock Out. Reversal Trigger checks Team Plasma and lethal
+damage from the opponent's attack. Both searches retain the simulator's
+optional deck-search behavior. Tool Jammer now disables Tools attached to
+the opposing Active Pokémon, with the printed exception for Tool Jammer.
+[Lucky Egg errata](https://play.pokemon.com/fr-ca/resources/documents/tcg-errata/)
+[Lucky Egg SSH print](https://www.pokemon-card.com/card-search/details.php/card/37727/regu/all)
+[Farewell Bell print](https://www.pokemon.com/fr/jcc-pokemon/cartes-pokemon/series/swsh8/234/)
+[Reversal Trigger print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/bw10/86)
+[Tool Jammer print](https://www.pokemon-card.com/card-search/details.php/card/39194/regu/all)
+
+All 32 focused tests pass. The preceding engine failed 21 of those tests.
+The full engine suite passed 7,361 tests across 264 spec files. The isolated
+build with the checkout's pending work applied passed 137 focused and
+simulator tests. The validator matched all 559 comparable saved states and
+3,633 sampled opening actions. Seven recorded solutions reached wins.
+The attested production package passed the mobile size budget and all ten
+mouse and touch board checks. The packaged browser engine completed both
+Rescue Energy and Lost Crisis resolution orders with the expected destinations.
+
+The next probes reproduced five failures across four implementations.
+Wish Connector misses Jirachi V's own Knock Out and incorrectly triggers
+after Frenzied Gouging. Deep Sea King misses attached Wash Water Energy.
+Both tested Energy Grounding printings prompt for a Basic Energy but fail
+to attach it to Lanturn. Celestial Storm requires damage from an opposing
+attack. Hidden Legends takes Basic Energy from discard after a qualifying
+Knock Out and is limited to one use per turn. Ordering across different
+Pokémon in a simultaneous Knock Out group remains open.
+[Wish Connector rulings](https://www.pokemon-card.com/rules/faq/search.php?page=241&regulation=all&sc_group_id=849%2F1000)
+[Deep Sea King print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh10tg/TG03/)
+[Celestial Storm Lanturn print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sm7/50/)
+[Hidden Legends Lanturn print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/ex5/38/)
