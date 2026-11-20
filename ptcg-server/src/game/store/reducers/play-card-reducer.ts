@@ -13,12 +13,13 @@ import { PokemonCardList } from '../state/pokemon-card-list';
 import { State, GamePhase } from '../state/state';
 import { StoreLike } from '../store-like';
 import { TrainerCard } from '../card/trainer-card';
-import { CardTag, TrainerType } from '../card/card-types';
+import { CardTag, Stage, TrainerType } from '../card/card-types';
 import { Effect } from '../effects/effect';
 import { StateUtils } from '../state-utils';
 import { UsePowerEffect } from '../effects/game-effects';
 import { HAS_SUPPORTER_PLAY_AVAILABLE } from '../prefabs/prefabs';
 import { recordActiveAbilityLockOrder } from '../state/active-ability-lock-order';
+import { resolveBasicBenchPlay } from '../prefabs/active-ability-lock';
 
 function findCardList(state: State, target: CardTarget): CardList | undefined {
   const player = target.player === PlayerType.BOTTOM_PLAYER
@@ -88,6 +89,9 @@ export function playCardReducer(store: StoreLike, state: State, action: Action):
           }
         }
         const effect = new PlayPokemonEffect(player, handCard, target, action.target.slot, action.target.index);
+        if (handCard.stage === Stage.BASIC && player.bench.includes(target) && target.cards.length === 0) {
+          return resolveBasicBenchPlay(store, state, effect);
+        }
         return store.reduceEffect(state, effect);
       }
 

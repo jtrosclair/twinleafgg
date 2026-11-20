@@ -43,10 +43,9 @@ export class Wobbuffet extends PokemonCard {
     return {
       power: this.powers[0],
       checkTargetProtection: true,
-      affects: (store, state, _owner, { player, card, slot }) => {
+      affects: (store, state, _owner, { card, slot, inHandOrDiscard }) => {
         if (!slot) {
-          const outsidePlay = player.hand.cards.includes(card) || player.discard.cards.includes(card);
-          return outsidePlay && !pokemonHasCardType(card, CardType.PSYCHIC);
+          return !!inHandOrDiscard && !pokemonHasCardType(card, CardType.PSYCHIC);
         }
         const types = new CheckPokemonTypeEffect(slot);
         store.reduceEffect(state, types);

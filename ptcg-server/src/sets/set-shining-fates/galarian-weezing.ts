@@ -51,7 +51,7 @@ export class GalarianWeezing extends PokemonCard {
     return {
       power: this.powers[0],
       exemptAbility: 'Neutralizing Gas',
-      affects: (_store, _state, owner, { player, slot }) => player !== owner && !!slot
+      affects: (_store, _state, owner, { player, slot, enteringBench }) => player !== owner && (!!slot || !!enteringBench)
     };
   }
 

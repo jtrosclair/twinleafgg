@@ -19,6 +19,7 @@ const flutter = 'Flutter Mane TEF';
 const bruteBonnet = 'Brute Bonnet PAR';
 const board = { player: PlayerType.BOTTOM_PLAYER, slot: SlotType.BOARD, index: 0 };
 const active = { ...board, slot: SlotType.ACTIVE };
+const bench = { ...board, slot: SlotType.BENCH };
 
 function expectAbility(store: StoreLike, state: State, owner: number, enabled: boolean, card?: PokemonCard): void {
   const player = state.players[owner];
@@ -166,6 +167,66 @@ describe('Active Ability lock precedence', () => {
     });
     expectAbility(store, state, 0, true);
     expectAbility(store, state, 1, true);
+  });
+
+  for (const [opposingActive, canUseRoar] of [
+    [klefki, false],
+    ['Galarian Weezing SHF', false],
+    ['Wobbuffet GEN', false],
+    [flutter, true],
+    [empoleon, true]
+  ] as const) {
+    it(`checks Ruler's Roar on the Bench when the opposing Active is ${opposingActive}`, () => {
+      const rayquaza = 'Mega Rayquaza ex DLR';
+      const { store, player1, overridePrompt } = setupGame({
+        turn: 5,
+        player1: { active: { card: mew }, hand: [rayquaza], deck: ['Fire Energy SVE'] },
+        player2: { active: { card: opposingActive } }
+      });
+      let confirmations = 0;
+      overridePrompt('Confirm', () => { confirmations++; return false; });
+      store.dispatch(new PlayCardAction(player1.id, 0, bench));
+      expect(player1.bench[0].getPokemonCard()?.fullName).toBe(rayquaza);
+      expect(confirmations).toBe(canUseRoar ? 1 : 0);
+    });
+  }
+
+  it("checks Emperor's Eyes when Mind Report would trigger on the Bench", () => {
+    const mindReport = 'Mewtwo UNB';
+    const { store, player1, overridePrompt } = setupGame({
+      turn: 5,
+      player1: { active: { card: mew }, hand: [mindReport], discard: ['Arven OBF'], deck: padDeck(5) },
+      player2: { active: { card: empoleon } }
+    });
+    let confirmations = 0;
+    overridePrompt('Confirm', () => { confirmations++; return false; });
+    store.dispatch(new PlayCardAction(player1.id, 0, bench));
+    expect(player1.bench[0].getPokemonCard()?.fullName).toBe(mindReport);
+    expect(confirmations).toBe(0);
+  });
+
+  it('lets Excited Dive operate from hand through Neutralizing Gas', () => {
+    const talonflame = 'Talonflame ex M6';
+    const { store, player1 } = setupGame({
+      turn: 5,
+      player1: { active: { card: 'Mega Kangaskhan ex M1S' }, hand: [talonflame] },
+      player2: { active: { card: 'Galarian Weezing SHF' } }
+    });
+    store.dispatch(new PlayCardAction(player1.id, 0, bench));
+    expect(player1.bench[0].getPokemonCard()?.fullName).toBe(talonflame);
+  });
+
+  it('blocks Excited Dive in hand under Bide Barricade without leaving Talonflame in play', () => {
+    const talonflame = 'Talonflame ex M6';
+    const { store, player1 } = setupGame({
+      turn: 5,
+      player1: { active: { card: 'Mega Kangaskhan ex M1S' }, hand: [talonflame] },
+      player2: { active: { card: 'Wobbuffet GEN' } }
+    });
+    expect(() => store.dispatch(new PlayCardAction(player1.id, 0, bench)))
+      .toThrow(jasmine.objectContaining({ message: GameMessage.BLOCKED_BY_ABILITY }));
+    expect(store.state.players[0].hand.cards.map(card => card.fullName)).toContain(talonflame);
+    expect(store.state.players[0].bench[0].getPokemonCard()).toBeUndefined();
   });
 
   it('limits Bide Barricade to non-Psychic Pokémon in play, hand and discard', () => {

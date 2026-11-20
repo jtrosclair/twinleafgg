@@ -52,7 +52,7 @@ export class Klefki extends PokemonCard {
     return {
       power: this.powers[0],
       exemptAbility: 'Mischievous Lock',
-      affects: (_store, _state, _owner, { card, slot }) => !!slot && card.stage === Stage.BASIC
+      affects: (_store, _state, _owner, { card, slot, enteringBench }) => (!!slot || !!enteringBench) && card.stage === Stage.BASIC
     };
   }
 

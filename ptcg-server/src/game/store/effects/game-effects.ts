@@ -135,7 +135,7 @@ export class PowerEffect implements Effect {
   static DISCARD_CARD_EFFECT: string;
   static PUT_COUNTERS_EFFECT: string;
 
-  constructor(player: Player, power: Power, card: PokemonCard, target?: PokemonCardList) {
+  constructor(player: Player, power: Power, card: PokemonCard, target?: PokemonCardList, public activationSlot?: CardTarget['slot']) {
     this.player = player;
     this.power = power;
     this.card = card;

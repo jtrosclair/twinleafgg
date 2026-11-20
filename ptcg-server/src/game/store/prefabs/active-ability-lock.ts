@@ -1,10 +1,12 @@
 import { GameError } from '../../game-error';
 import { GameMessage } from '../../game-message';
+import { SlotType } from '../actions/play-card-action';
 import type { PokemonCard } from '../card/pokemon-card';
 import { Power, PowerType } from '../card/pokemon-types';
 import { CheckPokemonPowersEffect } from '../effects/check-effects';
 import type { Effect } from '../effects/effect';
 import { PowerEffect } from '../effects/game-effects';
+import type { PlayPokemonEffect } from '../effects/play-card-effects';
 import { StateUtils } from '../state-utils';
 import { recordActiveAbilityLockOrder } from '../state/active-ability-lock-order';
 import type { Player } from '../state/player';
@@ -17,6 +19,8 @@ interface AbilityRecipient {
   player: Player;
   card: PokemonCard;
   slot?: PokemonCardList;
+  enteringBench?: boolean;
+  inHandOrDiscard?: boolean;
 }
 
 export interface ActiveAbilityLock {
@@ -27,6 +31,23 @@ export interface ActiveAbilityLock {
 }
 
 const probingActiveLocks = new WeakSet<State>();
+const pendingBasicBenchPlays = new WeakMap<State, PlayPokemonEffect>();
+
+export function resolveBasicBenchPlay(store: StoreLike, state: State, effect: PlayPokemonEffect): State {
+  // Older on-play Ability handlers probe while the incoming Pokémon is
+  // still in hand. Apply in-play locks for that specific entry trigger.
+  const previous = pendingBasicBenchPlays.get(state);
+  pendingBasicBenchPlays.set(state, effect);
+  try {
+    return store.reduceEffect(state, effect);
+  } finally {
+    if (previous) {
+      pendingBasicBenchPlays.set(state, previous);
+    } else {
+      pendingBasicBenchPlays.delete(state);
+    }
+  }
+}
 
 function suppressesPower(lock: ActiveAbilityLock, power: Power): boolean {
   return power.powerType === PowerType.ABILITY && !power.exemptFromAbilityLock && power.name !== lock.exemptAbility;
@@ -97,9 +118,21 @@ export function applyActiveAbilityLock(store: StoreLike, state: State, effect: E
     return;
   }
   const card = effect instanceof PowerEffect ? effect.card : effect.target;
+  // A hand Ability can move its card onto the Bench before another reducer
+  // checks it. Its original activation zone still decides whether it is locked.
+  const outsidePlay = effect instanceof PowerEffect
+    && (effect.activationSlot === SlotType.HAND || effect.activationSlot === SlotType.DISCARD);
   const slot = StateUtils.findPokemonSlot(state, card);
-  const inPlay = slot?.getPokemonCard() === card ? slot : undefined;
-  const recipient = { player: inPlay ? StateUtils.findOwner(state, inPlay) : effect.player, card, slot: inPlay };
+  const inPlay = !outsidePlay && slot?.getPokemonCard() === card ? slot : undefined;
+  const player = inPlay ? StateUtils.findOwner(state, inPlay) : effect.player;
+  const pendingPlay = pendingBasicBenchPlays.get(state);
+  const enteringBench = effect instanceof PowerEffect && !outsidePlay
+    && !effect.power.useFromHand && !effect.power.useFromDiscard
+    && pendingPlay?.pokemonCard === card && pendingPlay.player === player;
+  const recipient = {
+    player, card, slot: inPlay, enteringBench,
+    inHandOrDiscard: outsidePlay || player.hand.cards.includes(card) || player.discard.cards.includes(card)
+  };
   if (!suppresses(store, state, owner, source, lock, recipient)) {
     return;
   }

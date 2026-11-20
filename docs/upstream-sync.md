@@ -2135,3 +2135,14 @@ precedence changes preserve the previous handling of target protection for
 Klefki, Flutter Mane and Weezing. The direct Flutter Mane and Hide n Sneak
 interaction has no verified ruling in this audit. The other legacy
 suppression sources and Greninja XY's Mist Slash remain open.
+
+Real Bench plays exposed a timing regression during review. Ruler's Roar
+and Mind Report are in-play Abilities. Their older handlers probe before
+placement, so the engine now checks them as entering the Bench. Excited
+Dive is a hand Ability even when its resolution moves Talonflame ex to the
+Bench. Neutralizing Gas permits it and Bide Barricade blocks it. The focused
+checks use the normal PlayCardAction and inspect the resulting board and
+prompts.
+[Advanced rulebook, E-06](https://asia.pokemon-card.com/sg/wp-content/uploads/sites/6/2025/10/EN_advanced_manual-2025.pdf)
+[Mega Rayquaza ex print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me06/141/)
+[Official Talonflame ex hand-Ability ruling](https://www.pokemon-card.com/rules/faq/search.php?page=5&regulation=all&sc_group_id=728%2F1000)

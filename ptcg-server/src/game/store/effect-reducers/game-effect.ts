@@ -509,7 +509,7 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
     const card = effect.card;
 
     store.log(state, GameLog.LOG_PLAYER_USES_ABILITY, { name: player.name, ability: power.name });
-    state = store.reduceEffect(state, new PowerEffect(player, power, card, effect.destination));
+    state = store.reduceEffect(state, new PowerEffect(player, power, card, effect.destination, effect.target.slot));
     return state;
   }
 

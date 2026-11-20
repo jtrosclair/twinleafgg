@@ -50,8 +50,8 @@ export class EmpoleonV extends PokemonCard {
     return {
       power: this.powers[0],
       checkTargetProtection: true,
-      affects: (_store, _state, owner, { player, card, slot }) =>
-        player !== owner && !!slot && card.stage === Stage.BASIC && !pokemonHasRuleBox(card)
+      affects: (_store, _state, owner, { player, card, slot, enteringBench }) =>
+        player !== owner && (!!slot || !!enteringBench) && card.stage === Stage.BASIC && !pokemonHasRuleBox(card)
     };
   }
 
