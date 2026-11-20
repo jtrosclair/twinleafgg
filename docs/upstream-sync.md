@@ -2545,3 +2545,44 @@ Krookodile. Revenge incorrectly boosts Stunfisk’s damage after an explicit
 Knock Out. Shadowy Side Kick and Butterfly Edge fail to protect their user
 after a lethal hit. Stoutland’s Arf Arf Bark can use a stale damage flag
 after Frenzied Gouging. These paths are part of the ongoing review.
+
+## Gameplay re-audit, batch 24
+
+Gold Coffin searches and shuffles before Prizes when opposing attack damage
+Knocks Out Cofagrigus ex in either position. PrizeMap preserves its existing
+optional search rule. Bully of the Sands and Arf Arf Bark offer their optional
+discard after an accepted hand evolution or lethal opposing attack damage
+to the Active holder. Arf Arf Bark uses the current opposing Active after
+any attack switch. It can discard an attached Energy that currently provides
+no Energy. Stunfisk’s Revenge uses shared exact Knock Out history and accepts
+the legacy marker when a saved state already has it.
+[Cofagrigus ex print and rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%87%E3%82%B9%E3%82%AB%E3%83%BC%E3%83%B3ex&regulation_faq_main_item1=all)
+[Krookodile print](https://www.pokemon-card.com/card-search/details.php/card/41874/regu/all)
+[Stoutland rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A0%E3%83%BC%E3%83%A9%E3%83%B3%E3%83%89&regulation_faq_main_item1=all)
+[Stunfisk rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%9E%E3%83%83%E3%82%AE%E3%83%A7&page=4&regulation=all)
+
+Shadowy Side Kick and Butterfly Edge arm protection when the final Knock Out
+check confirms lethal damage from the real attack. The protection applies to
+the Pokémon that used or copied the attack and expires after the opposing
+turn. It blocks damage and attack effects. Shred bypasses the damage
+protection. The Robo Substitute case still qualifies with zero Prizes, and
+the Bide case at 10 HP leaves protection inactive.
+[Marshadow print](https://www.pokemon-card.com/card-search/details.php/card/47765/regu/all)
+[Beautifly print](https://www.pokemon-card.com/card-search/details.php/card/35245/regu/all)
+[Beautifly rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%A2%E3%82%B2%E3%83%8F%E3%83%B3%E3%83%88&regulation_faq_main_item1=all)
+
+All 25 focused tests pass. Fourteen fail on the preceding engine. The full
+engine passed 7,505 tests in 269 files. The combined pending work passed
+281 focused and simulator tests. All 559 compatible saved puzzle states
+and 3,633 sampled opening actions matched exactly. Seven saved solutions
+replayed to wins. The attested production package met the mobile size
+budget and passed all ten mouse and touch checks. The browser engine also
+confirmed protection for both attacks when copied with Genome Hacking.
+
+Eight additional failures are confirmed. Heads for Guts still allows lethal
+damage to discard Heracross BUS and Hariyama FST. Whirlwind’s switch loses the
+damage history used by Dhelmise V’s Anchor Anger and Accelgor’s Retribution.
+Discarding Benched Robo Substitute incorrectly changes the Active Spot or
+clears its effects. Star Order loses its bonus before the Knock Out check.
+Beast Bringer grants Prizes for another Pokémon’s attack. Altered
+Creation-GX grants an extra Prize for an explicit Knock Out.
