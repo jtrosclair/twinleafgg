@@ -16,6 +16,7 @@ import { PokemonCardList } from '../state/pokemon-card-list';
 import { GamePhase, GameWinner, State } from '../state/state';
 import { StoreLike } from '../store-like';
 import { GameStatsTracker } from '../game-stats-tracker';
+import { recordActiveAbilityLockOrder } from '../state/active-ability-lock-order';
 
 interface PokemonItem {
   playerNum: number;
@@ -169,6 +170,7 @@ function handleBenchSizeChange(store: StoreLike, state: State, benchSizes: numbe
 
 /** Reconcile bench capacity without running knockouts, prizes, or turn effects. */
 export function checkBenchSize(store: StoreLike, state: State): State {
+  recordActiveAbilityLockOrder(state);
   const effect = new CheckTableStateEffect(state.players.map(() => 5));
   store.reduceEffect(state, effect);
   return handleBenchSizeChange(store, state, effect.benchSizes);
@@ -177,7 +179,11 @@ export function checkBenchSize(store: StoreLike, state: State): State {
 function chooseActivePokemons(state: State): ChoosePokemonPrompt[] {
   const prompts: ChoosePokemonPrompt[] = [];
 
-  for (const player of state.players) {
+  // After simultaneous Knock Outs, the player whose turn is next promotes first.
+  const turnPlayer = state.players[state.activePlayer];
+  const nextPlayerIndex = turnPlayer?.usedTurnSkip ? state.activePlayer : (state.activePlayer === 0 ? 1 : 0);
+  const promotionOrder = nextPlayerIndex === 1 ? [...state.players].reverse() : state.players;
+  for (const player of promotionOrder) {
     const hasActive = player.active.cards.length > 0;
     const hasBenched = player.bench.some(bench => bench.cards.length > 0);
     if (!hasActive && hasBenched) {
@@ -456,7 +462,7 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
     }
   }
 
-  // Then handle new active Pokemon selection - opponent then player
+  // Then handle new Active Pokémon selection in turn order.
   const activePrompts = chooseActivePokemons(state);
   for (const prompt of activePrompts) {
     const player = state.players.find(p => p.id === prompt.playerId);
@@ -476,6 +482,7 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
       const temp = player.active;
       player.active = player.bench[benchIndex];
       player.bench[benchIndex] = temp;
+      recordActiveAbilityLockOrder(state);
       const newActivePokemon = player.active.getPokemonCard();
       if (newActivePokemon) {
         // Add to new tracking system

@@ -1,12 +1,9 @@
-import { GameError } from '../../game/game-error';
-import { GameMessage } from '../../game/game-message';
+import { ActiveAbilityLock, applyActiveAbilityLock } from '../../game/store/prefabs/active-ability-lock';
 import { CardType, SpecialCondition, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect } from '../../game/store/effects/game-effects';
-import { StateUtils } from '../../game/store/state-utils';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
@@ -50,6 +47,14 @@ export class GalarianWeezing extends PokemonCard {
 
   public setNumber: string = '42';
 
+  public activeAbilityLock(): ActiveAbilityLock {
+    return {
+      power: this.powers[0],
+      exemptAbility: 'Neutralizing Gas',
+      affects: (_store, _state, owner, { player, slot }) => player !== owner && !!slot
+    };
+  }
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
@@ -58,38 +63,7 @@ export class GalarianWeezing extends PokemonCard {
       store.reduceEffect(state, specialCondition);
     }
 
-    if (effect instanceof PowerEffect && effect.power.powerType === PowerType.ABILITY && effect.power.name !== 'Neutralizing Gas') {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      const cardList = StateUtils.findCardList(state, this);
-      const owner = StateUtils.findOwner(state, cardList);
-
-      if (!player.active.cards.includes(this) &&
-        !opponent.active.cards.includes(this)) {
-        return state;
-      }
-
-      if (owner === player) {
-        return state;
-      }
-
-      // Try reducing ability for opponent
-      try {
-        const powerEffect = new PowerEffect(player, this.powers[0], this);
-        store.reduceEffect(state, powerEffect);
-      } catch {
-        return state;
-      }
-
-      if (effect.power.useFromDiscard || effect.power.useFromHand) {
-        return state;
-      }
-
-      if (!effect.power.exemptFromAbilityLock) {
-        throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
-      }
-    }
+    applyActiveAbilityLock(store, state, effect, this);
     return state;
   }
 }

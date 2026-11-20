@@ -24,6 +24,7 @@ import { PokemonCard } from '../card/pokemon-card';
 import { ShowMulliganPrompt } from '../prompts/show-mulligan-prompt';
 import { ConfirmPrompt } from '../prompts/confirm-prompt';
 import { Format } from '../card/card-types';
+import { recordActiveAbilityLockOrder } from '../state/active-ability-lock-order';
 
 function putStartingPokemonsAndPrizes(player: Player, cards: Card[], state: State): void {
   if (cards.length === 0) {
@@ -248,6 +249,7 @@ function* alternativeSetupGame(next: Function, store: StoreLike, state: State): 
     p.bench.forEach(list => { list.isSecret = false; });
   }
 
+  recordActiveAbilityLockOrder(state, true);
   return initNextTurn(store, state);
 }
 
@@ -524,6 +526,7 @@ export function* setupGame(next: Function, store: StoreLike, state: State): Iter
     p.bench.forEach(list => { list.isSecret = false; });
   }
 
+  recordActiveAbilityLockOrder(state, true);
   return initNextTurn(store, state);
 }
 

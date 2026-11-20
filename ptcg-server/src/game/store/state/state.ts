@@ -3,6 +3,7 @@ import { Prompt } from '../prompts/prompt';
 import { StateLog } from './state-log';
 import { Rules } from './rules';
 import { Attack, GameSettings, PokemonCard } from '../..';
+import type { ActiveAbilityLockEntry } from './active-ability-lock-order';
 
 export interface WinConditions {
   selfDeckOut?: boolean;
@@ -39,6 +40,9 @@ export enum GameWinner {
 }
 
 export class State {
+
+  /** Oldest first, persisted when two Active Pokémon have competing locks. */
+  public activeAbilityLockOrder?: ActiveAbilityLockEntry[];
 
   public copiedAttackCheckpoints?: CopiedAttackCheckpoint[];
 

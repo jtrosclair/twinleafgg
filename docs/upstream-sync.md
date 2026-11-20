@@ -2113,3 +2113,25 @@ The follow-up must preserve damage modifiers on Greninja and effects that
 resolve after damage while bypassing modifiers on the defending Pokémon.
 [Official Mist Slash rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B2%E3%83%83%E3%82%B3%E3%82%A6%E3%82%AC&page=11&regulation=all&regulation_faq_main_item1=all)
 [Official Focus Sash ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%AE%E3%83%A9%E3%83%86%E3%82%A3%E3%83%8AEX&regulation_faq_main_item1=all)
+
+## Gameplay re-audit, batch 15
+
+The verified Active Ability interactions cover Empoleon V, Klefki, Flutter
+Mane, Galarian Weezing and Wobbuffet, including their inherited printings.
+When two Abilities can suppress each other at setup, the first player's
+Ability takes precedence. During play, the earlier Active takes precedence
+when both Abilities can suppress each other, including after switching and
+restoring a compact snapshot. Older snapshots that contain two suppressors
+and lack their activation history use the current turn player as the
+fallback. The engine now promotes the player due to act next first when
+both Active Pokémon are Knocked Out at the same time.
+[Official Empoleon V and Klefki ruling](https://www.pokemon-card.com/rules/faq/search.php?page=10&regulation=all&sc_group_id=871)
+[Official Empoleon V and Wobbuffet ruling](https://www.pokemon-card.com/rules/faq/search.php?page=2&regulation=all&sc_group_id=515)
+[Advanced rulebook, D-1](https://asia.pokemon-card.com/sg/wp-content/uploads/sites/6/2025/10/EN_advanced_manual-2025.pdf)
+
+All 12 focused cases pass. Seven fail on the previous engine. The existing
+Emperor's Eyes, Hide n Sneak and copied-Ability suites also pass. The
+precedence changes preserve the previous handling of target protection for
+Klefki, Flutter Mane and Weezing. The direct Flutter Mane and Hide n Sneak
+interaction has no verified ruling in this audit. The other legacy
+suppression sources and Greninja XY's Mist Slash remain open.

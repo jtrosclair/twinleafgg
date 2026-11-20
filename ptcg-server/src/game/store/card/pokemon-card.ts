@@ -3,6 +3,7 @@ import { Card } from './card';
 import { SuperType, Stage, PokemonType, CardType, CardTag, Format } from './card-types';
 import { Attack, Weakness, Resistance, Power } from './pokemon-types';
 import { TrainerCard } from './trainer-card';
+import type { ActiveAbilityLock } from '../prefabs/active-ability-lock';
 
 const RULE_BOX_TAGS = [CardTag.POKEMON_V, CardTag.POKEMON_VMAX, CardTag.POKEMON_VSTAR,
   CardTag.POKEMON_EX, CardTag.BREAK, CardTag.POKEMON_GX, CardTag.PRISM_STAR,
@@ -65,6 +66,8 @@ export abstract class PokemonCard extends Card {
   public canAttackTwice?: boolean;
 
   public damageTakenLastTurn?: number = 0;
+
+  public activeAbilityLock?(): ActiveAbilityLock;
 
   public wasMovedToActiveThisTurn?(player: any): boolean {
     return player.movedToActiveThisTurn.includes(this.id);

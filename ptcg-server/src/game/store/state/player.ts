@@ -8,6 +8,7 @@ import { CardList } from './card-list';
 import { Marker } from './card-marker';
 import { PokemonCardList } from './pokemon-card-list';
 import { GameStats } from './game-stats-interfaces';
+import { recordActiveAbilityLockSwitch } from './active-ability-lock-order';
 export class Player {
   public coinFlipCancelTrainerPlayTurnsRemaining = 0;
   public trainerCardsBlockedNextTurn = false;
@@ -288,6 +289,7 @@ export class Player {
 
       this.active = this.bench[benchIndex];
       this.bench[benchIndex] = temp;
+      recordActiveAbilityLockSwitch(this, state);
 
       if (store && state && pokemonLeavingActive) {
         store.reduceEffect(state, new MovedFromActiveToBenchEffect(this, pokemonLeavingActive));

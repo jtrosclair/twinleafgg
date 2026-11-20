@@ -48,6 +48,7 @@ import { Attack } from '../card/pokemon-types';
 import { WaitPrompt } from '../prompts/wait-prompt';
 import { CoinFlipEffect, CoinFlipSequenceEffect } from '../effects/play-card-effects';
 import { beginAttackDamageScope, cancelAttackDamageScope, finishAttackDamageScope, resolveAfterAttackDamage } from '../prefabs/attack-after-damage';
+import { recordActiveAbilityLockOrder } from '../state/active-ability-lock-order';
 
 
 function applyWeaknessAndResistance(
@@ -647,6 +648,9 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
       card: effect.pokemonCard.name
     });
     effect.source.moveCardTo(effect.pokemonCard, effect.target);
+    if (effect.target === effect.player.active && (pokemonCard.activeAbilityLock || effect.pokemonCard.activeAbilityLock)) {
+      recordActiveAbilityLockOrder(state);
+    }
     effect.target.pokemonPlayedTurn = state.turn;
     effect.target.marker.markers = [];
 

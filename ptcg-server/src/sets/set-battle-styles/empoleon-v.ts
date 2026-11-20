@@ -1,20 +1,9 @@
+import { ActiveAbilityLock, applyActiveAbilityLock } from '../../game/store/prefabs/active-ability-lock';
 import { PokemonCard, pokemonHasRuleBox } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils, AttachEnergyPrompt, PlayerType, SlotType, GameError, PowerType, Player, PokemonCardList } from '../../game';
-import { Power } from '../../game/store/card/pokemon-types';
-import { CheckPokemonPowersEffect } from '../../game/store/effects/check-effects';
-import { PowerEffect } from '../../game/store/effects/game-effects';
+import { StoreLike, State, StateUtils, AttachEnergyPrompt, PlayerType, SlotType, PowerType, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { GameMessage } from '../../game/game-message';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { CAN_APPLY_ABILITY_TO_TARGET } from '../../game/store/prefabs/effect-of-ability-prefabs';
-
-const checkingSuppression = new WeakSet<PokemonCardList>();
-
-function isSubjectToEmperorsEyes(power: Power): boolean {
-  return power.powerType === PowerType.ABILITY
-    && !power.exemptFromAbilityLock && !power.useFromDiscard && !power.useFromHand;
-}
 
 export class EmpoleonV extends PokemonCard {
 
@@ -57,6 +46,15 @@ export class EmpoleonV extends PokemonCard {
 
   public fullName: string = 'Empoleon V BST';
 
+  public activeAbilityLock(): ActiveAbilityLock {
+    return {
+      power: this.powers[0],
+      checkTargetProtection: true,
+      affects: (_store, _state, owner, { player, card, slot }) =>
+        player !== owner && !!slot && card.stage === Stage.BASIC && !pokemonHasRuleBox(card)
+    };
+  }
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
@@ -84,45 +82,7 @@ export class EmpoleonV extends PokemonCard {
       });
     }
 
-    // Ref: upstream 3348ebdc8 (apply the Ability lock to each eligible Pokémon).
-    if (effect instanceof CheckPokemonPowersEffect && effect.powers.some(isSubjectToEmperorsEyes)
-      && this.suppresses(store, state, effect.player, effect.target)) {
-      effect.powers = effect.powers.filter(power => !isSubjectToEmperorsEyes(power));
-    }
-
-    if (effect instanceof PowerEffect && isSubjectToEmperorsEyes(effect.power)
-      && this.suppresses(store, state, effect.player, effect.card)) {
-      throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
-    }
+    applyActiveAbilityLock(store, state, effect, this);
     return state;
   }
-
-  private suppresses(store: StoreLike, state: State, recipient: Player, pokemon: PokemonCard): boolean {
-    const owner = StateUtils.getOpponent(state, recipient);
-    if (owner.active.getPokemonCard() !== this || pokemon.stage !== Stage.BASIC || pokemonHasRuleBox(pokemon)) {
-      return false;
-    }
-
-    const target = recipient.getPokemonInPlay().find(slot => slot.getPokemonCard() === pokemon);
-    if (!target || checkingSuppression.has(target)) {
-      return false;
-    }
-
-    // Protection Abilities can query their own availability during the target probe.
-    checkingSuppression.add(target);
-    try {
-      const power = this.powers[0];
-      const source = new PowerEffect(owner, power, this, owner.active);
-      store.reduceEffect(state, source);
-      return !source.preventDefault && CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, power, this, target);
-    } catch (error) {
-      if (error instanceof GameError) {
-        return false;
-      }
-      throw error;
-    } finally {
-      checkingSuppression.delete(target);
-    }
-  }
 }
-

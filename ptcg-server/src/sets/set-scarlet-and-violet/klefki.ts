@@ -1,12 +1,11 @@
+import { ActiveAbilityLock, applyActiveAbilityLock } from '../../game/store/prefabs/active-ability-lock';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect } from '../../game/store/effects/game-effects';
-import { CheckPokemonPowersEffect } from '../../game/store/effects/check-effects';
 import { PowerType } from '../../game/store/card/pokemon-types';
-import { GameError, GameMessage, PokemonCardList, StateUtils } from '../../game';
+import { StateUtils } from '../../game/store/state-utils';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Klefki extends PokemonCard {
@@ -49,73 +48,17 @@ export class Klefki extends PokemonCard {
 
   public fullName: string = 'Klefki SVI';
 
+  public activeAbilityLock(): ActiveAbilityLock {
+    return {
+      power: this.powers[0],
+      exemptAbility: 'Mischievous Lock',
+      affects: (_store, _state, _owner, { card, slot }) => !!slot && card.stage === Stage.BASIC
+    };
+  }
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof CheckPokemonPowersEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Klefki is not active Pokemon
-      if (player.active.getPokemonCard() !== this
-        && opponent.active.getPokemonCard() !== this) {
-        return state;
-      }
-
-      // Get the target Pokemon card
-      const targetPokemon = effect.target;
-      if (!targetPokemon) {
-        return state;
-      }
-
-      // only remove abilities from Pokemon in play
-      const targetCardList = StateUtils.findCardList(state, targetPokemon);
-      if (!(targetCardList instanceof PokemonCardList)) {
-        return state;
-      }
-
-      // We are not removing abilities from Non-Basic Pokemon
-      if (targetPokemon.stage !== Stage.BASIC) {
-        return state;
-      }
-
-      // Filter out abilities (except Mischievous Lock) from Basic Pokemon
-      effect.powers = effect.powers.filter(power =>
-        power.powerType !== PowerType.ABILITY || power.name === 'Mischievous Lock'
-      );
-    }
-
-    if (effect instanceof PowerEffect && effect.power.powerType === PowerType.ABILITY && effect.power.name !== 'Mischievous Lock') {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Klefki is not active Pokemon
-      if (player.active.getPokemonCard() !== this
-        && opponent.active.getPokemonCard() !== this) {
-        return state;
-      }
-
-      // Mischievous Lock only affects Pokemon in play, not abilities used from discard.
-      if (effect.power.useFromDiscard || effect.power.useFromHand) {
-        return state;
-      }
-
-      // We are not blocking the Abilities from Non-Basic Pokemon
-      if (effect.card.stage !== Stage.BASIC) {
-        return state;
-      }
-
-      // Try reducing ability for each player  
-      try {
-        const powerEffect = new PowerEffect(player, this.powers[0], this);
-        store.reduceEffect(state, powerEffect);
-      } catch {
-        return state;
-      }
-      if (!effect.power.exemptFromAbilityLock) {
-        throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
-      }
-    }
-
+    applyActiveAbilityLock(store, state, effect, this);
     return Klefki.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
   }
 

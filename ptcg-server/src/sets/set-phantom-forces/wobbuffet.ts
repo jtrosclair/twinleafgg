@@ -1,13 +1,9 @@
-import { GameError } from '../../game/game-error';
-import { GameMessage } from '../../game/game-message';
+import { ActiveAbilityLock, applyActiveAbilityLock } from '../../game/store/prefabs/active-ability-lock';
+import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
 import { CardType, Stage } from '../../game/store/card/card-types';
-import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { PokemonCard, pokemonHasCardType } from '../../game/store/card/pokemon-card';
 import { PowerType } from '../../game/store/card/pokemon-types';
-import { CheckPokemonTypeEffect, CheckPokemonPowersEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { EffectOfAbilityEffect, PowerEffect } from '../../game/store/effects/game-effects';
-import { StateUtils } from '../../game/store/state-utils';
-import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
@@ -43,6 +39,22 @@ export class Wobbuffet extends PokemonCard {
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '36';
 
+  public activeAbilityLock(): ActiveAbilityLock {
+    return {
+      power: this.powers[0],
+      checkTargetProtection: true,
+      affects: (store, state, _owner, { player, card, slot }) => {
+        if (!slot) {
+          const outsidePlay = player.hand.cards.includes(card) || player.discard.cards.includes(card);
+          return outsidePlay && !pokemonHasCardType(card, CardType.PSYCHIC);
+        }
+        const types = new CheckPokemonTypeEffect(slot);
+        store.reduceEffect(state, types);
+        return !types.cardTypes.includes(CardType.PSYCHIC);
+      }
+    };
+  }
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
@@ -50,101 +62,7 @@ export class Wobbuffet extends PokemonCard {
       return state;
     }
 
-    if (effect instanceof CheckPokemonPowersEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Wobbuffet is not active Pokemon
-      const playerHasWobb = player.active.getPokemonCard() === this;
-      const opponentHasWobb = opponent.active.getPokemonCard() === this;
-      if (!playerHasWobb && !opponentHasWobb) {
-        return state;
-      }
-
-      let cardTypes = [effect.target.cardType].filter(Boolean) as CardType[];
-
-      const cardList = effect.target;
-      if (cardList instanceof PokemonCardList) {
-        const checkPokemonType = new CheckPokemonTypeEffect(cardList);
-        store.reduceEffect(state, checkPokemonType);
-        cardTypes = checkPokemonType.cardTypes;
-      }
-
-      // We are not blocking the Abilities from Psychic Pokemon
-      if (cardTypes.includes(CardType.PSYCHIC)) {
-        return state;
-      }
-
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      try {
-        const powerEffect = new PowerEffect(player, this.powers[0], this);
-        store.reduceEffect(state, powerEffect);
-      } catch {
-        return state;
-      }
-
-      // Check if we can apply the Ability lock to target Pokemon
-      if (cardList instanceof PokemonCardList) {
-        const canApplyAbility = new EffectOfAbilityEffect(playerHasWobb ? player : opponent, this.powers[0], this, cardList);
-        store.reduceEffect(state, canApplyAbility);
-        if (!canApplyAbility.target) {
-          return state;
-        }
-      }
-
-      // Filter out all abilities
-      effect.powers = effect.powers.filter(power =>
-        power.powerType !== PowerType.ABILITY
-      );
-    }
-
-    if (effect instanceof PowerEffect && effect.power.powerType === PowerType.ABILITY && effect.power.name !== 'Bide Barricade') {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Wobbuffet is not active Pokemon
-      const playerHasWobb = player.active.getPokemonCard() === this;
-      const opponentHasWobb = opponent.active.getPokemonCard() === this;
-      if (!playerHasWobb && !opponentHasWobb) {
-        return state;
-      }
-
-      let cardTypes = [effect.card.cardType];
-
-      const cardList = StateUtils.findCardList(state, effect.card);
-      if (cardList instanceof PokemonCardList) {
-        const checkPokemonType = new CheckPokemonTypeEffect(cardList);
-        store.reduceEffect(state, checkPokemonType);
-        cardTypes = checkPokemonType.cardTypes;
-      }
-
-      // We are not blocking the Abilities from Psychic Pokemon
-      if (cardTypes.includes(CardType.PSYCHIC)) {
-        return state;
-      }
-
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      try {
-        const powerEffect = new PowerEffect(player, this.powers[0], this);
-        store.reduceEffect(state, powerEffect);
-      } catch {
-        return state;
-      }
-
-      // Check if we can apply the Ability lock to target Pokemon
-      if (cardList instanceof PokemonCardList) {
-        const canApplyAbility = new EffectOfAbilityEffect(playerHasWobb ? player : opponent, this.powers[0], this, cardList);
-        store.reduceEffect(state, canApplyAbility);
-        if (!canApplyAbility.target) {
-          return state;
-        }
-      }
-
-      // Apply Ability lock
-      if (!effect.power.exemptFromAbilityLock) {
-        throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
-      }
-    }
+    applyActiveAbilityLock(store, state, effect, this);
     return state;
   }
 }

@@ -18,6 +18,7 @@ import { Effect } from '../effects/effect';
 import { StateUtils } from '../state-utils';
 import { UsePowerEffect } from '../effects/game-effects';
 import { HAS_SUPPORTER_PLAY_AVAILABLE } from '../prefabs/prefabs';
+import { recordActiveAbilityLockOrder } from '../state/active-ability-lock-order';
 
 function findCardList(state: State, target: CardTarget): CardList | undefined {
   const player = target.player === PlayerType.BOTTOM_PLAYER
@@ -36,6 +37,7 @@ export function playCardReducer(store: StoreLike, state: State, action: Action):
   const player = state.players[state.activePlayer];
 
   if (state.phase === GamePhase.PLAYER_TURN) {
+    recordActiveAbilityLockOrder(state);
 
     if (action instanceof PlayCardAction) {
       if (player === undefined || player.id !== action.id) {
