@@ -135,6 +135,40 @@ export function playTrainerReducer(store: StoreLike, state: State, effect: Effec
   return playTrainerWithoutCoinFlip(store, state, effect);
 }
 
+function resolveSupporterPlay(store: StoreLike, state: State, effect: TrainerEffect): State {
+  const player = effect.player;
+  const played = StateUtils.getSupportersPlayedThisTurn(player);
+  const previousAllowance = player.supporterTurn;
+  const previousPlayed = player.supportersPlayedThisTurn;
+  // Legacy Supporter handlers expect a nonpositive value while resolving a legal play.
+  player.supporterTurn = Math.min(0, previousAllowance);
+  player.supportersPlayedThisTurn = played;
+  try {
+    state = store.reduceEffect(state, effect);
+  } catch (error) {
+    player.supporterTurn = previousAllowance;
+    player.supportersPlayedThisTurn = previousPlayed;
+    throw error;
+  }
+  restorePlayedTrainerToPlayZoneIfNeeded(store, player, effect.trainerCard);
+  state = finalizeTrainerCleanup(
+    store,
+    state,
+    player,
+    effect.trainerCard,
+    state.rules.supporterCleanupAtEndTurn
+  );
+  store.log(state, GameLog.LOG_PLAYER_PLAYS_SUPPORTER, {
+    name: player.name,
+    card: effect.trainerCard.name
+  });
+
+  player.supporterTurn += 1;
+  player.supportersPlayedThisTurn = played + 1;
+
+  return state;
+}
+
 function playTrainerWithoutCoinFlip(store: StoreLike, state: State, effect: Effect): State {
 
   /* Play supporter card */
@@ -148,36 +182,14 @@ function playTrainerWithoutCoinFlip(store: StoreLike, state: State, effect: Effe
       throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
 
-    const played = StateUtils.getSupportersPlayedThisTurn(player);
-    const previousAllowance = player.supporterTurn;
-    const previousPlayed = player.supportersPlayedThisTurn;
-    // Legacy Supporter handlers expect a nonpositive value while resolving a legal play.
-    player.supporterTurn = Math.min(0, previousAllowance);
-    player.supportersPlayedThisTurn = played;
-    try {
-      state = store.reduceEffect(state, new TrainerEffect(player, effect.trainerCard, effect.target));
-    } catch (error) {
-      player.supporterTurn = previousAllowance;
-      player.supportersPlayedThisTurn = previousPlayed;
-      throw error;
+    const trainerEffect = new TrainerEffect(player, effect.trainerCard, effect.target);
+    if (effect.trainerCard.paySupporterCost) {
+      return effect.trainerCard.paySupporterCost(store, state, trainerEffect, paidState => {
+        trainerEffect.supporterCostPaid = true;
+        return resolveSupporterPlay(store, paidState, trainerEffect);
+      });
     }
-    restorePlayedTrainerToPlayZoneIfNeeded(store, player, effect.trainerCard);
-    state = finalizeTrainerCleanup(
-      store,
-      state,
-      player,
-      effect.trainerCard,
-      state.rules.supporterCleanupAtEndTurn
-    );
-    store.log(state, GameLog.LOG_PLAYER_PLAYS_SUPPORTER, {
-      name: player.name,
-      card: effect.trainerCard.name
-    });
-
-    player.supporterTurn += 1;
-    player.supportersPlayedThisTurn = played + 1;
-
-    return state;
+    return resolveSupporterPlay(store, state, trainerEffect);
   }
 
   /* Play stadium card */

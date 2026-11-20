@@ -142,6 +142,7 @@ export class PlayItemEffect implements Effect {
 export class TrainerEffect implements Effect {
   readonly type: string = PlayCardEffects.TRAINER_EFFECT;
   public preventDefault = false;
+  public supporterCostPaid = false;
   public player: Player;
   public trainerCard: TrainerCard;
   public target: CardList | undefined;

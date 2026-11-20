@@ -39,6 +39,7 @@ import { GameStatsTracker } from '../game-stats-tracker';
 import { PokemonCardList } from '../state/pokemon-card-list';
 import { MOVE_CARDS, ADD_MARKER, HAS_MARKER, COIN_FLIP_PROMPT } from '../prefabs/prefabs';
 import { CardList } from '../state/card-list';
+import { Player } from '../state/player';
 import { ConfirmPrompt } from '../prompts/confirm-prompt';
 import { checkState } from './check-effect';
 import { ChooseAttackPrompt } from '../prompts/choose-attack-prompt';
@@ -679,77 +680,37 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
       source.removeBoardEffect(BoardEffect.ABILITY_USED);
     }
 
-    // Helper to get owner of a CardList
-    const getOwner = (cardList: CardList) => {
-      try {
-        return StateUtils.findOwner(state, cardList);
-      } catch {
-        return undefined;
-      }
-    };
-
-    // Helper to check if a CardList is a player's discard
-    const isDiscardPile = (cardList: CardList) => {
-      const owner = getOwner(cardList);
-      return owner && owner.discard === cardList;
-    };
-
-    // Move logic for Prism Star cards
-    const moveWithPrismStarCheck = (cardsToMove: any[], src: CardList, dest: CardList) => {
-      if (isDiscardPile(dest)) {
-        const owner = getOwner(dest);
-        const toLostZone = cardsToMove.filter(card => card.tags && card.tags.includes(CardTag.PRISM_STAR));
-        const toDiscard = cardsToMove.filter(card => !(card.tags && card.tags.includes(CardTag.PRISM_STAR)));
-        if (toLostZone.length > 0 && owner) {
-          src.moveCardsTo(toLostZone, owner.lostzone);
-        }
-        if (toDiscard.length > 0) {
-          src.moveCardsTo(toDiscard, dest);
-        }
-      } else {
-        src.moveCardsTo(cardsToMove, dest);
-      }
-    };
-
-    // If specific cards are specified
-    if (effect.cards) {
-      moveWithPrismStarCheck(effect.cards, source, destination);
-      if (effect.toBottom) {
-        destination.cards = [...destination.cards.slice(effect.cards.length), ...effect.cards];
-      } else if (effect.toTop) {
-        destination.cards = [...effect.cards, ...destination.cards];
-      }
+    // Prism Star cards discarded by a move go to their owner's Lost Zone.
+    let discardOwner: Player | undefined;
+    try {
+      const owner = StateUtils.findOwner(state, destination);
+      if (owner.discard === destination) discardOwner = owner;
+    } catch {
+      // A temporary list does not have an owner.
     }
-    // If count is specified
-    else if (effect.count !== undefined) {
-      const cards = source.cards.slice(0, effect.count);
-      moveWithPrismStarCheck(cards, source, destination);
-      if (effect.toBottom) {
-        destination.cards = [...destination.cards.slice(cards.length), ...cards];
-      } else if (effect.toTop) {
-        destination.cards = [...cards, ...destination.cards];
+
+    const moveSelected = (cards: Card[]) => {
+      if (discardOwner) {
+        const toLostZone = cards.filter(card => card.tags.includes(CardTag.PRISM_STAR));
+        const toDiscard = cards.filter(card => !card.tags.includes(CardTag.PRISM_STAR));
+        source.moveCardsTo(toLostZone, discardOwner.lostzone);
+        return source.moveCardsTo(toDiscard, destination);
       }
-    }
-    // Move all cards
-    else {
-      // For move all, check for Prism Star cards
-      if (isDiscardPile(destination)) {
-        const owner = getOwner(destination);
-        const toLostZone = source.cards.filter(card => card.tags && card.tags.includes(CardTag.PRISM_STAR));
-        const toDiscard = source.cards.filter(card => !(card.tags && card.tags.includes(CardTag.PRISM_STAR)));
-        if (toLostZone.length > 0 && owner) {
-          source.moveCardsTo(toLostZone, owner.lostzone);
-        }
-        if (toDiscard.length > 0) {
-          source.moveCardsTo(toDiscard, destination);
-        }
-      } else {
-        if (effect.toTop) {
-          source.moveToTopOfDestination(destination);
-        } else {
-          source.moveTo(destination);
-        }
+      return source.moveCardsTo(cards, destination);
+    };
+
+    if (isPartialMove || discardOwner) {
+      const selected = effect.cards ?? source.cards.slice(0, effect.count);
+      const moved = moveSelected(selected);
+      // moveCardsTo appends, which already puts the cards at the bottom.
+      if (effect.toTop && !effect.toBottom && moved > 0) {
+        const movedCards = destination.cards.splice(-moved);
+        destination.cards.unshift(...movedCards);
       }
+    } else if (effect.toTop) {
+      source.moveToTopOfDestination(destination);
+    } else {
+      source.moveTo(destination);
     }
 
     // If source is a PokemonCardList and we moved all cards, discard remaining attached cards

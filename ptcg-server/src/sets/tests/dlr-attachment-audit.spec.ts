@@ -25,10 +25,10 @@ const active={player:PlayerType.BOTTOM_PLAYER,slot:SlotType.ACTIVE,index:0};
 function register(){const cm=CardManager.getInstance();for(const c of cards)if(!cm.isCardDefined(c.fullName))cm.defineSet([c]);}
 describe('Delta Reign attachment and subset shuffle audit',()=>{
  beforeAll(register);
- it('Delibird must choose an Energy, then shuffles only looked-at leftovers to the deck bottom',()=>{
+ it('Delibird may take an Energy, then shuffles only looked-at leftovers to the deck bottom',()=>{
   const g=setupGame({turn:3,player1:{active:{card:delibird},deck:['Fire Energy SVE','Ralts SIT','Water Energy SVE','Charmander BS','Psychic Energy SVE','Mew ex MEW','Lightning Energy SVE','Fighting Energy SVE']},player2:{active:{card:'Mew ex MEW'},deck:padDeck(10)}});
   const before=g.player1.deck.cards.slice();let shuffleCount=-1;
-  g.overridePrompt(ChooseCardsPromptType,p=>{const q=p as ChooseCardsPrompt;expect(q.options.min).toBe(1);expect(q.options.max).toBe(1);return [0];});
+  g.overridePrompt(ChooseCardsPromptType,p=>{const q=p as ChooseCardsPrompt;expect(q.options.min).toBe(0);expect(q.options.max).toBe(1);return [0];});
   g.overridePrompt('Shuffle deck',p=>{shuffleCount=(p as ShuffleDeckPrompt).count!;return [4,3,2,1,0];});
   useAbility(g.store,g.state,0,'Energizing Present');
   expect(shuffleCount).toBe(5);expect(g.player1.hand.cards).toContain(before[0]);

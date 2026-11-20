@@ -486,7 +486,8 @@ export class PokemonCardList extends CardList {
     super.moveTo(destination, count);
   }
 
-  public moveCardsTo(cards: Card[], destination: CardList): void {
+  public moveCardsTo(cards: Card[], destination: CardList): number {
+    let moved = 0;
     for (let i = 0; i < cards.length; i++) {
       let index = this.cards.indexOf(cards[i]);
       if (index !== -1) {
@@ -497,6 +498,7 @@ export class PokemonCardList extends CardList {
           this.energies.cards.splice(energyIndex, 1);
         }
         destination.cards.push(card[0]);
+        moved++;
         // If destination is a PokemonCardList and card is an energy card (not a Pokemon), add to energies.cards
         if (destination instanceof PokemonCardList) {
           // Only add actual energy cards (superType === ENERGY), not Pokemon cards that can act as energy
@@ -511,6 +513,7 @@ export class PokemonCardList extends CardList {
         if (index !== -1) {
           const card = this.energies.cards.splice(index, 1);
           destination.cards.push(card[0]);
+          moved++;
           // If destination is a PokemonCardList and card came from energies, add to destination energies.cards
           // (This handles both regular energy cards and Pokemon-as-energy cards)
           if (destination instanceof PokemonCardList) {
@@ -524,6 +527,7 @@ export class PokemonCardList extends CardList {
           if (index !== -1) {
             const card = this.tools.splice(index, 1);
             destination.cards.push(card[0]);
+            moved++;
             // If destination is a PokemonCardList and card is an energy card, add to energies.cards
             if (destination instanceof PokemonCardList) {
               const isEnergyCard = card[0].superType === SuperType.ENERGY || (card[0] as any).energyType !== undefined;
@@ -535,5 +539,6 @@ export class PokemonCardList extends CardList {
         }
       }
     }
+    return moved;
   }
 }

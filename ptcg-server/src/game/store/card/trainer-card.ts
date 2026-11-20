@@ -1,7 +1,7 @@
 import { Attack, Power, State, StoreLike } from '../../..';
 import { Effect } from '../effects/effect';
 import { AttackEffect, PowerEffect } from '../effects/game-effects';
-import { ToolEffect } from '../effects/play-card-effects';
+import { ToolEffect, TrainerEffect } from '../effects/play-card-effects';
 import { Card } from './card';
 import { Format, SuperType, TrainerType } from './card-types';
 
@@ -28,6 +28,11 @@ export abstract class TrainerCard extends Card {
 
   //Used on items and supporters that are "put into play", specifically for reference on Chaos Gym
   public putIntoPlay: boolean = false;
+
+  /** Cards with a required payment can finish it before committing the Supporter play. */
+  public paySupporterCost?(
+    store: StoreLike, state: State, effect: TrainerEffect, onPaid: (state: State) => State,
+  ): State;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof AttackEffect) {

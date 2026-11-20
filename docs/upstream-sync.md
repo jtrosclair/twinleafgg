@@ -1850,3 +1850,46 @@ and all ten standard mouse and touch board checks. In that same browser
 package, a mouse user confirmed zero Energy, and a touch user dragged
 Luminous Energy into the selection. Both paths kept the untouched deck
 cards ahead of the shuffled group.
+
+## Gameplay re-audit, batch 9
+
+Holon Farmer commits its Supporter play after the hand discard is paid. The
+recovery prompt then uses the actual discard pile, so the cost card itself
+can be recovered if eligible. The player must take as many eligible cards
+as are available up to three Pokémon and three Basic Energy. The Diamond &
+Pearl rules update applies to the historical Pokémon wording, including
+Pokémon LV.X. The recovery is revealed, put on top, then shuffled. A copied
+Holon Farmer uses the copying player’s hand and discard and preserves the
+Supporter allowance. Sandbox edits refresh stale payment and recovery choices.
+[Holon Farmer print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/ex11/91)
+[December 2005 PUI rulings archive](https://www.pokebeach.com/forums/threads/holon-farmer.55/)
+[Diamond & Pearl rules update](https://www.pokebeach.com/news/0507/dprules.pdf)
+
+The shared move reducer now reorders only cards actually moved, preserves
+the destination’s other cards, and clears a temporary list after moving it
+to the top. Prism Stars still go to the Lost Zone when discarded. This
+corrects the deck contents before subsequent draws in effects such as
+Lucian.
+[Lucian print](https://asia.pokemon-card.com/sg/card-search/detail/12639/)
+
+All 12 focused cases pass. Eleven exposed failures on the prior revision.
+A read-only scan found 96 active snapshots containing exact card identities
+from the audited deck-movement call sites. No snapshot in this scan contains
+Holon Farmer. A played Ciphermaniac’s Codebreaking in Red Card Blunder and
+a played Misty’s Psyduck in Love Prevails kept matching deck order and board
+state under both revisions.
+All 3,635 sampled opening actions matched across 559 comparable states.
+A separate check found no Holon Farmer among those 559 snapshots, including
+archived rows. Six recorded solutions reached a human win. The controlled
+Lucian play reproduced lost top cards and duplicate bottom cards before
+the fix, then drew the original top three for each player afterward.
+Two older Delibird and Gimmighoul tests now assert the current rulings and
+both pass on rerun. Across 7,144 engine cases, the full run plus reruns
+leave 7 failures, all reproduced in the previous revision. They cover
+catalogue counts, registration and artwork, two Pitch Black print marks,
+and a legacy Applin fallback expectation.
+
+The attested production browser package passed the mobile size budget.
+A mouse and a touch run each discarded Lightning Energy for Holon Farmer,
+then recovered it together with Charmeleon.
+All ten standard mouse and touch board checks also passed on that package.

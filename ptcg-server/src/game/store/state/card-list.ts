@@ -68,7 +68,8 @@ export class CardList {
     destination.cards.push(...cards);
   }
 
-  public moveCardsTo(cards: Card[], destination: CardList): void {
+  public moveCardsTo(cards: Card[], destination: CardList): number {
+    let moved = 0;
     for (let i = 0; i < cards.length; i++) {
       let index = this.cards.indexOf(cards[i]);
       if (index !== -1) {
@@ -84,6 +85,7 @@ export class CardList {
           }
         }
         destination.cards.push(card[0]);
+        moved++;
         // If destination is a PokemonCardList and card is an energy card (not a Pokemon), add to energies.cards
         if ('energies' in destination) {
           const destPkm = destination as any;
@@ -101,6 +103,7 @@ export class CardList {
         if (index !== -1) {
           const card = (this as any).tools.splice(index, 1);
           destination.cards.push(card[0]);
+          moved++;
           // If destination is a PokemonCardList and card is an energy card (not a Pokemon), add to energies.cards
           if ('energies' in destination) {
             const destPkm = destination as any;
@@ -115,6 +118,7 @@ export class CardList {
         }
       }
     }
+    return moved;
   }
 
   public moveCardTo(card: Card, destination: CardList): void {
@@ -122,7 +126,9 @@ export class CardList {
   }
 
   public moveToTopOfDestination(destination: CardList): void {
+    if (destination === this) return;
     destination.cards = [...this.cards, ...destination.cards];
+    this.cards = [];
   }
 
   public filter(query: Partial<Card>): Card[] {

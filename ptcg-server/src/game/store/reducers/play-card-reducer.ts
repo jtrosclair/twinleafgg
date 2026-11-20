@@ -100,6 +100,9 @@ export function playCardReducer(store: StoreLike, state: State, action: Action):
             if (!HAS_SUPPORTER_PLAY_AVAILABLE(store, state, player)) {
               throw new GameError(GameMessage.SUPPORTER_ALREADY_PLAYED);
             }
+            if (handCard.paySupporterCost && handCard.canPlay?.(store, state, player) === false) {
+              throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
+            }
             effect = new PlaySupporterEffect(player, handCard, target);
             break;
           case TrainerType.STADIUM: {
