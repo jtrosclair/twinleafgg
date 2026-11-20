@@ -2399,3 +2399,59 @@ effects across separate Pokémon in the same Knock Out group remains open.
 [Maractus print](https://www.pokemon-card.com/card-search/details.php/card/47221)
 [Simultaneous win conditions](https://assets.pokemon.com/assets/cms2-fi-fi/pdf/trading-card-game/rulebook/svi_rulebook_en.pdf)
 [February 2026 tiebreaker update](https://professorprogram.pokemon.com/news/11473085)
+
+## Gameplay re-audit, batch 21
+
+Vengeful Punch now places four counters on the original attacker, including
+after it switches to the Bench. A replacement Active receives none when the
+attacker leaves play. The Tool can trigger from a Benched holder and respects
+Tool Jammer. A physical Tool stored in both attachment lists resolves once.
+Both Spell Tag printings place exactly four counters after a Psychic holder
+takes lethal attack damage. The owner can split those counters across
+opposing Pokémon. These Tools still work through Ghost Veil.
+[Vengeful Punch print and switching rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AA%E3%83%99%E3%83%B3%E3%82%B8%E3%83%91%E3%83%B3%E3%83%81&regulation_faq_main_item1=all)
+[Spell Tag print](https://www.pokemon-card.com/card-search/details.php/card/35281)
+
+Desperate Blast, Bursting Needles and Explosive Needle require lethal
+opposing attack damage to the Active holder. They place Ability-sourced
+counters after the complete attack, so Ghost Veil can prevent them. The
+official Draining Kiss case heals before Desperate Blast resolves.
+[Golem print and healing ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B4%E3%83%AD%E3%83%BC%E3%83%8B%E3%83%A3&regulation_faq_main_item1=all)
+[Qwilfish print](https://www.pokemon-card.com/card-search/details.php/card/39406)
+[Maractus print](https://www.pokemon-card.com/card-search/details.php/card/47221)
+
+The turn player can order registered effects across different Pokémon in
+the same Knock Out group. The next turn player chooses during Pokémon
+Checkup. The engine resolves the queued effects before removing their
+holders, then processes any new Knock Outs before awarding Prizes to both
+players. It evaluates the ordinary winner once both sides receive their
+Prizes, then applies the existing PrizeMap win-condition overrides. Two
+fulfilled win conditions beat one. Equal claims start fresh six-Prize
+tiebreaker setup, and simultaneous Prizes count for both sides before
+checking for a lead. A shortened board that lacks the cards for a new game
+ends as a draw. Legacy immediate Knock Out handlers still need review.
+[Knock Out sequence and simultaneous win conditions](https://www.pokemon-card.com/assets/document/advanced_manual.pdf)
+[February 2026 ordering and tiebreaker update](https://professorprogram.pokemon.com/news/11473085)
+
+All 32 focused cases pass, including 23 failures on the preceding engine.
+All 7,423 tests across 266 files passed. The combined source with the
+checkout's pending work applied passed 199 focused and simulator tests.
+All 559 compatible saved states serialized and loaded identically. The
+opening-action comparison matched 3,616 of 3,633 cases exactly. Fifteen
+changes were confined to Prize statistic or Bench-reconciliation fields.
+An active Poison Chain case awards the opponent a previously skipped
+simultaneous Prize and still records the same winner. An archived Frenzied
+Gouging case now opens a tiebreaker because both players take their final
+Prizes and both have no Pokémon left in play. The prior result gave the
+turn player an early win. All seven recorded solutions still reach wins.
+The attested production package passed the mobile size budget and all ten
+mouse and touch checks. Its browser engine also verified both cross-Pokémon
+effect orders and the final Prize case with and without the mustLose rule.
+
+The next attack probes confirmed seven further failures across Gengar CRE,
+Manaphy PLS, Komala LOR, Jynx SIT, Reuniclus SIT and Aegislash UNM. Last Gift
+and Final Wish trigger after Frenzied Gouging and All Just a Dream incorrectly
+withholds the Prize. Selfish Lips fails against an actual Pokémon V,
+including Regieleki V after it switches out. Persistent Cells and Durable
+Blade leave their holder in discard when the attacker takes its final Prize.
+Mantine's Bounce into Arceus V is a passing control for Selfish Lips.
