@@ -260,6 +260,41 @@ export function OPTIONALLY_DISCARD_ONE_ENERGY_FROM_ATTACKER(
   });
 }
 
+/** Discard as many units of the type as possible, up to the printed amount. */
+export function DISCARD_AVAILABLE_ENERGY_FROM_ATTACKER(
+  store: StoreLike,
+  state: State,
+  effect: AttackEffect,
+  type: CardType,
+  amount: number,
+  afterDiscard?: (state: State) => void,
+): State {
+  const { player, source } = effect;
+  const provided = new CheckProvidedEnergyEffect(player, source);
+  state = store.reduceEffect(state, provided);
+  const eligible = provided.energyMap.filter(entry => source.cards.includes(entry.card)).map(entry => {
+    const supplies: CardType[] = [];
+    while (supplies.length < amount && StateUtils.checkEnoughEnergy([entry], [...supplies, type])) {
+      supplies.push(type);
+    }
+    return { card: entry.card, provides: supplies, disableBlend: true };
+  }).filter(entry => entry.provides.length > 0);
+  const units = Math.min(amount, eligible.reduce((count, entry) => count + entry.provides.length, 0));
+  if (units === 0) {
+    afterDiscard?.(state);
+    return state;
+  }
+
+  return store.prompt(state, new ChooseEnergyPrompt(
+    player.id, GameMessage.CHOOSE_ENERGIES_TO_DISCARD, eligible, Array(units).fill(type), { allowCancel: false }
+  ), selected => {
+    const discard = new DiscardCardsEffect(effect, selected.map(entry => entry.card));
+    discard.target = source;
+    state = store.reduceEffect(state, discard);
+    afterDiscard?.(state);
+  });
+}
+
 /**
  * Discards an exact amount of Energy from this Pokémon.
  *

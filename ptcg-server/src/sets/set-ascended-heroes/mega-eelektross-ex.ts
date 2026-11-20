@@ -1,7 +1,9 @@
-import { CardTag, CardType, GameMessage, PokemonCard, SlotType, Stage, State, StateUtils, StoreLike } from '../../game';
+import { CardTag, CardType, GameMessage, PokemonCard, SlotType, SpecialCondition, Stage, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ADD_PARALYZED_TO_PLAYER_ACTIVE, CONFIRMATION_PROMPT, THIS_ATTACK_DOES_X_DAMAGE_TO_X_OF_YOUR_OPPONENTS_POKEMON, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
+import { CONFIRMATION_PROMPT, THIS_ATTACK_DOES_X_DAMAGE_TO_X_OF_YOUR_OPPONENTS_POKEMON, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
+import { DISCARD_AVAILABLE_ENERGY_FROM_ATTACKER } from '../../game/store/prefabs/costs';
+import { afterAttackDamageForOriginalDefender } from '../../game/store/prefabs/post-damage-identity';
 
 export class MegaEelektrossex extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -34,27 +36,34 @@ export class MegaEelektrossex extends PokemonCard {
   public fullName: string = 'Mega Eelektross ex M2a';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    return this.reduceCopiedAttackEffect(store, state, effect, 0);
+  }
 
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      // Split Bomb: 60 damage to 2 opponent's Pokemon
-      // Don't apply Weakness and Resistance for Benched Pokemon
-      THIS_ATTACK_DOES_X_DAMAGE_TO_X_OF_YOUR_OPPONENTS_POKEMON(60, effect, store, state, 2, 2, false, [SlotType.ACTIVE, SlotType.BENCH]);
+      const count = Math.min(2, effect.opponent.getPokemonInPlay().length);
+      if (count > 0) {
+        return THIS_ATTACK_DOES_X_DAMAGE_TO_X_OF_YOUR_OPPONENTS_POKEMON(
+          60, effect, store, state, count, count, false, [SlotType.ACTIVE, SlotType.BENCH]
+        );
+      }
     }
 
+    // Ref: official Genome Hacking ruling (Disaster Shock works with no attached Lightning Energy).
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      // Disaster Shock: 190 damage, optionally discard 2 [L] Energy to Paralyze
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      CONFIRMATION_PROMPT(store, state, player, result => {
-        if (result) {
-          DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 2, L);
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, opponent, this);
-        }
-      }, GameMessage.WANT_TO_USE_EFFECT_OF_ATTACK);
+      afterAttackDamageForOriginalDefender(state, effect, (currentStore, currentState, target) =>
+        CONFIRMATION_PROMPT(currentStore, currentState, effect.player, confirm => {
+          if (confirm) {
+            DISCARD_AVAILABLE_ENERGY_FROM_ATTACKER(currentStore, currentState, effect, CardType.LIGHTNING, 2, resolvedState => {
+              const condition = new AddSpecialConditionsEffect(effect, [SpecialCondition.PARALYZED]);
+              condition.target = target;
+              currentStore.reduceEffect(resolvedState, condition);
+            });
+          }
+        }, GameMessage.WANT_TO_USE_EFFECT_OF_ATTACK)
+      );
     }
 
     return state;
   }
 }
-

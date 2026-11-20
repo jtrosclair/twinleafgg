@@ -1,15 +1,13 @@
-import { CardType, Stage } from '../../game/store/card/card-types';
+import { CardType, PokemonCard, Stage, State, StoreLike, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PokemonCard, StoreLike, State, StateUtils, PlayerType, SlotType, ChoosePokemonPrompt, GameMessage, ConfirmPrompt } from '../../game';
-import { AttackEffect } from '../../game/store/effects/game-effects';
-import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { AFTER_ATTACK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { DISCARD_UP_TO_X_TYPE_ENERGY_FROM_YOUR_POKEMON } from '../../game/store/prefabs/costs';
+import { DISCARD_AVAILABLE_ENERGY_FROM_ATTACKER } from '../../game/store/prefabs/costs';
+import { opponentSwitchAfterAttack } from '../../game/store/prefabs/opponent-switch-after-attack';
+import { CONFIRMATION_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Metagross extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
   public evolvesFrom = 'Metang';
-  public hp: number = 170;
+  public hp: number = 180;
   public cardType: CardType = M;
   public weakness = [{ type: R }];
   public resistance = [{ type: G, value: -30 }];
@@ -17,16 +15,16 @@ export class Metagross extends PokemonCard {
 
   public attacks = [{
     name: 'Bounce Back',
-    cost: [M, M, C],
+    cost: [M],
     damage: 60,
-    text: 'Your opponent switches their Active Pokemon with 1 of their Benched Pokemon.'
+    text: 'Switch out your opponent’s Active Pokémon to the Bench. (Your opponent chooses the new Active Pokémon.)'
   },
   {
     name: 'Metallic Hammer',
     cost: [M, M, M, C],
     damage: 150,
     damageCalculation: '+' as '+',
-    text: 'You may discard 3 [M] Energy from this Pokemon. If you do, this attack does 150 more damage.'
+    text: 'You may discard 3 [M] Energy from this Pokémon and have this attack do 150 more damage.'
   }];
 
   public regulationMark = 'J';
@@ -38,44 +36,22 @@ export class Metagross extends PokemonCard {
   public fullName: string = 'Metagross M4';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (AFTER_ATTACK(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      const hasBench = opponent.bench.some(b => b.cards.length > 0);
-      if (!hasBench) return state;
-      return store.prompt(state, new ChoosePokemonPrompt(
-        player.id,
-        GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-        PlayerType.TOP_PLAYER,
-        [SlotType.BENCH],
-        { allowCancel: false }
-      ), result => {
-        if (result && result.length > 0) {
-          opponent.switchPokemon(result[0]);
-        }
-      });
+    return this.reduceCopiedAttackEffect(store, state, effect, 0);
+  }
+
+  public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
+    // Ref: Magnezone PLS (the opponent chooses an unprotected defender’s replacement).
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      opponentSwitchAfterAttack(state, effect, effect.source.getPokemonCard() || this);
     }
-    if (WAS_ATTACK_USED(effect, 1, this) && effect instanceof AttackEffect) {
-      const player = effect.player;
-      const checkEnergy = new CheckProvidedEnergyEffect(player);
-      checkEnergy.source = effect.source;
-      state = store.reduceEffect(state, checkEnergy);
-      const metalCount = checkEnergy.energyMap.filter(e =>
-        e.provides.some((p: CardType) => p === CardType.METAL)
-      ).length;
-      if (metalCount >= 3) {
-        return store.prompt(state, new ConfirmPrompt(
-          player.id,
-          GameMessage.WANT_TO_DISCARD_ENERGY
-        ), confirm => {
-          if (confirm) {
-            effect.damage += 150;
-            return DISCARD_UP_TO_X_TYPE_ENERGY_FROM_YOUR_POKEMON(
-              store, state, effect, 3, CardType.METAL, 3, [SlotType.ACTIVE]
-            );
-          }
-        });
-      }
+    // Ref: official Metallic Hammer ruling (the bonus applies with any available Metal Energy).
+    if (WAS_ATTACK_USED(effect, 1, this)) {
+      return CONFIRMATION_PROMPT(store, state, effect.player, confirm => {
+        if (confirm) {
+          effect.damage += 150;
+          DISCARD_AVAILABLE_ENERGY_FROM_ATTACKER(store, state, effect, CardType.METAL, 3);
+        }
+      }, GameMessage.WANT_TO_USE_EFFECT_OF_ATTACK);
     }
     return state;
   }

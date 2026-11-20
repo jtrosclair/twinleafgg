@@ -1684,11 +1684,13 @@ human win, including the House of Dragon trace from the current published state.
 The 16 focused cases pass on this revision. Fifteen fail on the old code and
 the normal-Pokémon Poison control passes on both.
 
-The original ledger review window contained 38 commits whose subject begins
-with `fix`. Three were deferred entirely and ten were ported partially. This
-count includes frontend and import changes. It does not count individual
-bugs in multi-file commits, refactors or pre-window changes. Remaining legacy
-Trainer subtype definitions need review against the actual card classes and
+The original catalog sync ledger at `7a6f5e50e` recorded 35 commits whose
+subject begins with `fix`. Eight were fully deferred and ten were partial.
+The first re-audit batches expanded the ledger to 38 such commits and reduced
+the fully deferred count to three by this point. The count is by commit and
+includes frontend and import changes. Additional gameplay fixes can appear
+in multi-file commits, refactors or history before the sync window. Remaining
+legacy Trainer subtype definitions need review against the actual card classes and
 printed rules. In particular, Technical Machine TS-1 and TS-2 are a separate
 historical Trainer class and should not be reclassified as Pokémon Tools.
 [Call of Legends rulebook](https://assets.pokemon.com/assets/cms/pdf/tcg/rulebooks/Call_of_Legends_Rulebook.pdf)
@@ -1779,3 +1781,36 @@ reproduces 150 damage and no discard when Slowking copies either registered
 Metagross with zero or one Metal Energy.
 [Metallic Hammer ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A1%E3%82%BF%E3%83%AA%E3%83%83%E3%82%AF%E3%83%8F%E3%83%B3%E3%83%9E%E3%83%BC&regulation_faq_main_item1=all)
 [Chaos Rising Metagross](https://asia.pokemon-card.com/sg/card-search/detail/25252/)
+
+## Gameplay re-audit, batch 7
+
+Metagross M4 and CRI share the printed 180 HP and one-Metal Bounce Back. The
+opponent chooses the replacement during Bounce Back, and protection can stop
+the switch. Metallic Hammer adds 150 on confirmation and then discards
+available Metal Energy up to three units. The cost prompt counts effective
+Energy types and uses the actual attacker for copied attacks. Both existing
+saved card identities are retained. This corrects the Metagross portion of
+upstream `c1f7775ef`, which still has 170 HP and assigns the switch choice to
+the attacker. The other changes from that commit have their own review history.
+[Official Chaos Rising card](https://asia.pokemon-card.com/sg/card-search/detail/25252/)
+[Official Metallic Hammer ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A1%E3%82%BF%E3%83%AA%E3%83%83%E3%82%AF%E3%83%8F%E3%83%B3%E3%83%9E%E3%83%BC&regulation_faq_main_item1=all)
+
+Mega Eelektross ex applies Disaster Shock's damage before its optional
+Paralysis. A Pokémon copying the attack can choose the effect with zero
+Lightning Energy, or discard its available Lightning up to two units. The
+existing prevention check still applies to the original defender. Split Bomb
+takes as many opposing targets as are available up to two, with Weakness and
+Resistance applying to the Active as printed.
+[Official English card](https://asia.pokemon-card.com/sg/card-search/detail/24847/)
+[Official Disaster Shock ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A1%E3%82%AC%E3%82%B7%E3%83%93%E3%83%AB%E3%83%89%E3%83%B3ex&regulation_faq_main_item1=all)
+
+All 24 focused tests pass, compared with four on the prior engine. The wider
+targeted suite passed 116 tests. All 3,635 sampled opening actions matched
+across 559 comparable snapshots. The five recorded puzzle solutions still win.
+A read-only scan found 13 active saved states with Metagross, and one had it
+in play. The same Night Stretcher into Dusknoir Cursed Blast line won that
+saved draft under both engines. The attested production package passed the
+mobile budget and all ten standard mouse and touch board checks.
+In the same package, declining Metallic Hammer with a mouse kept all Energy
+and dealt 150 damage. Confirming and choosing three Metal on a touch viewport
+discarded them and dealt 300 damage.
