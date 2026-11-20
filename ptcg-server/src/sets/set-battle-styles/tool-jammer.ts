@@ -3,7 +3,9 @@ import { TrainerType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { ToolEffect } from '../../game/store/effects/play-card-effects';
+import { IS_TOOL_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { StateUtils } from '../../game/store/state-utils';
 
 export class ToolJammer extends TrainerCard {
 
@@ -25,20 +27,16 @@ export class ToolJammer extends TrainerCard {
     'As long as the Pokémon this card is attached to is in the Active Spot, Pokémon Tools attached to your opponent\'s Active Pokémon have no effect, except for Tool Jammer.';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof TrainerEffect && effect.trainerCard === this) {
-      // const player = effect.player;
-      // const opponent = StateUtils.getOpponent(state, player);
-      // const opponentActivePokemon = opponent.active;
-
-      // if (opponentActivePokemon && opponentActivePokemon.tools.length !== 0) {
-      //   for (const tool of opponentActivePokemon.tools) {
-      //     tool.reduceEffect = () => state;
-      //   }
-      // }
-
-      return state;
+    if (effect instanceof ToolEffect && effect.card.name !== this.name) {
+      const owner = state.players.find(player => player.active.getPokemonCard() && player.active.tools.includes(this));
+      if (owner && StateUtils.getOpponent(state, owner).active.tools.includes(effect.card)
+        && !IS_TOOL_BLOCKED(store, state, owner, this)) {
+        throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+      }
     }
     return state;
   }
 }
 
+import { GameError } from '../../game/game-error';
+import { GameMessage } from '../../game/game-message';

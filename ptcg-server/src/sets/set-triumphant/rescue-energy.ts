@@ -1,12 +1,11 @@
-import { Card } from '../../game/store/card/card';
 import { CardType, EnergyType } from '../../game/store/card/card-types';
 import { BetweenTurnsEffect } from '../../game/store/effects/game-phase-effects';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { StoreLike } from '../../game/store/store-like';
-import { State, GamePhase } from '../../game/store/state/state';
+import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-
+import { IS_SPECIAL_ENERGY_BLOCKED, WAS_KNOCKED_OUT_BY_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
+import { registerKnockOutRescue } from '../../game/store/prefabs/knock-out-effects';
 
 export class RescueEnergy extends EnergyCard {
 
@@ -32,39 +31,22 @@ export class RescueEnergy extends EnergyCard {
     'your hand. (Discard all cards attached to that Pokemon.)';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
-    if (effect instanceof KnockOutEffect && effect.target.cards.includes(this)) {
-      const player = effect.player;
-
-      // Do not activate between turns, or when it's not opponents turn.
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-
-      const target = effect.target;
-      const cards = target.getPokemons();
-      cards.forEach(card => {
-        player.marker.addMarker(this.RESCUE_ENERGY_MAREKER, card);
-      });
+    if (WAS_KNOCKED_OUT_BY_ATTACK_DAMAGE(state, effect) && effect.resolveBeforeDiscard
+      && (effect.target.cards.includes(this) || effect.target.energies.cards.includes(this)) && !IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.target)) {
+      registerKnockOutRescue(store, state, effect, this);
     }
 
+    // Keep resolving older saved matches that already queued this effect.
     if (effect instanceof BetweenTurnsEffect && effect.player.discard.cards.includes(this)) {
-      state.players.forEach(player => {
-
-        if (!player.marker.hasMarker(this.RESCUE_ENERGY_MAREKER)) {
-          return;
-        }
-
-        const rescued: Card[] = player.marker.markers
-          .filter(m => m.name === this.RESCUE_ENERGY_MAREKER && m.source !== undefined)
-          .map(m => m.source!);
-
-        player.discard.moveCardsTo(rescued, player.hand);
+      for (const player of state.players) {
+        if (!player.marker.hasMarker(this.RESCUE_ENERGY_MAREKER)) continue;
+        const cards = player.marker.markers
+          .filter(marker => marker.name === this.RESCUE_ENERGY_MAREKER)
+          .flatMap(marker => marker.source ? [marker.source] : []);
+        player.discard.moveCardsTo(cards, player.hand);
         player.marker.removeMarker(this.RESCUE_ENERGY_MAREKER);
-      });
+      }
     }
-
     return state;
   }
-
 }

@@ -659,12 +659,16 @@ export function YOUR_OPPONENTS_POKEMON_IS_KNOCKED_OUT_BY_DAMAGE_FROM_THIS_ATTACK
   return effect instanceof KnockOutEffect;
 }
 
-export function WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state: State, effect: Effect): effect is KnockOutEffect {
+export function WAS_KNOCKED_OUT_BY_ATTACK_DAMAGE(state: State, effect: Effect): effect is KnockOutEffect {
   if (!(effect instanceof KnockOutEffect) || state.phase !== GamePhase.ATTACK) return false;
   const attacker = state.players[state.activePlayer];
   const damage = effect.target.attackDamageKnockOut;
-  return !!attacker && attacker !== effect.player && !!damage
+  return !!attacker && !!damage
     && damage.turn === state.turn && damage.playerId === attacker.id;
+}
+
+export function WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state: State, effect: Effect): effect is KnockOutEffect {
+  return WAS_KNOCKED_OUT_BY_ATTACK_DAMAGE(state, effect) && state.players[state.activePlayer] !== effect.player;
 }
 
 const cardsAppliedByEffect = new WeakMap<Effect, Set<Card>>();

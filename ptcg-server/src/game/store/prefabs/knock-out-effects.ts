@@ -1,5 +1,6 @@
 import { GameMessage } from '../../game-message';
 import { CardTarget, PlayerType, SlotType } from '../actions/play-card-action';
+import { Card } from '../card/card';
 import { EnergyType, SuperType } from '../card/card-types';
 import { EnergyCard } from '../card/energy-card';
 import { TrainerCard } from '../card/trainer-card';
@@ -11,6 +12,32 @@ import { getAttackDamagePosition, PokemonCardList } from '../state/pokemon-card-
 import { State } from '../state/state';
 import { StoreLike } from '../store-like';
 import { MOVE_CARDS } from './prefabs';
+
+export function registerKnockOutRescue(store: StoreLike, state: State, effect: KnockOutEffect, source: Card): void {
+  if (effect.rescueSource) return;
+  effect.rescueSource = source;
+  const { target, player } = effect;
+  effect.beforeDiscard.set(source, {
+    label: source.name,
+    canResolve: () => !!target.getPokemonCard() && !effect.pokemonGoingToLostZone,
+    resolve: () => {
+      const card = target.getPokemonCard();
+      if (!card) return;
+      const stack = target.getPokemons();
+      const attached = new Set([...target.cards, ...target.tools, ...target.energies.cards]);
+      // Return the evolution stack now. Keep the attachments available to
+      // other Knock Out effects until the final destination is applied.
+      effect.rescuedPokemon = { card, attachments: [] };
+      MOVE_CARDS(store, state, target, player.hand, { cards: stack, sourceCard: source, sourceEffect: effect });
+      if (!player.hand.cards.includes(card)) {
+        effect.rescuedPokemon = undefined;
+        return;
+      }
+      const nested = stack.flatMap(pokemon => pokemon.cards?.cards.splice(0) ?? []);
+      effect.rescuedPokemon.attachments = [...new Set(nested)].filter(attachment => !attached.has(attachment));
+    }
+  });
+}
 
 export function wasActiveWhenDamaged(effect: KnockOutEffect): boolean {
   return getAttackDamagePosition(effect.target)?.active ?? effect.target === effect.player.active;

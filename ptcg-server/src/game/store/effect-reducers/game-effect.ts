@@ -42,7 +42,7 @@ import { CardList } from '../state/card-list';
 import { Player } from '../state/player';
 import { ConfirmPrompt } from '../prompts/confirm-prompt';
 import { checkState } from './check-effect';
-import { discardKnockedOutPokemon } from './knock-out';
+import { discardKnockedOutPokemon, needsKnockOutOrder } from './knock-out';
 import { ChooseAttackPrompt } from '../prompts/choose-attack-prompt';
 import { Card } from '../card/card';
 import { Attack } from '../card/pokemon-types';
@@ -401,7 +401,14 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
         }
       }
 
-      if (!effect.resolveBeforeDiscard || !effect.beforeDiscard.size) {
+      // Older slots can hold an Energy card only in their secondary list.
+      // The normal card fan-out already handled all other attached cards.
+      for (const energy of new Set(effect.target.energies.cards)) {
+        if (energy.superType === SuperType.ENERGY && !effect.target.cards.includes(energy)) {
+          state = energy.reduceEffect(store, state, effect);
+        }
+      }
+      if (!needsKnockOutOrder(effect)) {
         state = discardKnockedOutPokemon(store, state, effect);
       }
     }
@@ -645,7 +652,9 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
     }
 
     // If source is a PokemonCardList and we moved all cards, discard remaining attached cards
-    if (source instanceof PokemonCardList && source.getPokemons().length === 0) {
+    const resolvingRescuedKnockOut = effect.sourceEffect instanceof KnockOutEffect
+      && effect.sourceEffect.target === source && !!effect.sourceEffect.rescuedPokemon;
+    if (source instanceof PokemonCardList && source.getPokemons().length === 0 && !resolvingRescuedKnockOut) {
       const player = StateUtils.findOwner(state, source);
       source.moveTo(player.discard);
     }

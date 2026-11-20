@@ -54,6 +54,7 @@ export class TyranitarGx extends PokemonCard {
       && effect.target.attackDamageKnockOut?.sourceCard === this
       && !IS_ABILITY_BLOCKED(store, state, StateUtils.getOpponent(state, effect.player), this)) {
       effect.knockOutDestination = 'lostzone';
+      effect.knockOutDestinationLabel ??= 'Lost Out';
     }
 
     // Attack 1: Dusty Ruckus

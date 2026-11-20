@@ -3,10 +3,10 @@ import { TrainerType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { BetweenTurnsEffect } from '../../game/store/effects/game-phase-effects';
-import { Card } from '../../game/store/card/card';
 
+import { BetweenTurnsEffect } from '../../game/store/effects/game-phase-effects';
+import { IS_TOOL_BLOCKED, WAS_KNOCKED_OUT_BY_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
+import { registerKnockOutRescue } from '../../game/store/prefabs/knock-out-effects';
 
 export class RescueScarf extends TrainerCard {
 
@@ -30,28 +30,22 @@ export class RescueScarf extends TrainerCard {
   public readonly RESCUE_SCARF_MAREKER = 'RESCUE_SCARF_MAREKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof KnockOutEffect && effect.target.tools.includes(this)) {
-      const player = effect.player;
-      const target = effect.target;
-      const cards = target.getPokemons();
-      cards.forEach(card => {
-        player.marker.addMarker(this.RESCUE_SCARF_MAREKER, card);
-      });
+    if (WAS_KNOCKED_OUT_BY_ATTACK_DAMAGE(state, effect) && effect.resolveBeforeDiscard
+      && effect.target.tools.includes(this) && !IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+      registerKnockOutRescue(store, state, effect, this);
     }
 
+    // Keep resolving older saved matches that already queued this effect.
     if (effect instanceof BetweenTurnsEffect) {
-      state.players.forEach(player => {
-        if (!player.marker.hasMarker(this.RESCUE_SCARF_MAREKER)) {
-          return;
-        }
-        const rescued: Card[] = player.marker.markers
-          .filter(m => m.name === this.RESCUE_SCARF_MAREKER && m.source !== undefined)
-          .map(m => m.source!);
-        player.discard.moveCardsTo(rescued, player.hand);
+      for (const player of state.players) {
+        if (!player.marker.hasMarker(this.RESCUE_SCARF_MAREKER)) continue;
+        const cards = player.marker.markers
+          .filter(marker => marker.name === this.RESCUE_SCARF_MAREKER)
+          .flatMap(marker => marker.source ? [marker.source] : []);
+        player.discard.moveCardsTo(cards, player.hand);
         player.marker.removeMarker(this.RESCUE_SCARF_MAREKER);
-      });
+      }
     }
     return state;
   }
-
 }

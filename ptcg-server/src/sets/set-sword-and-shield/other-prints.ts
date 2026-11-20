@@ -219,6 +219,7 @@ export class LuckyEggSSH extends LuckyEgg {
   public set: string = 'SSH';
   public setNumber: string = '167';
   public fullName: string = 'Lucky Egg SSH';
+  public text = 'If the Pokémon this card is attached to is Knocked Out by damage from an opponent\'s attack, draw cards until you have 7 cards in your hand.';
 }
 
 export class PokemonCenterLadySSH extends PokemonCenterLady {

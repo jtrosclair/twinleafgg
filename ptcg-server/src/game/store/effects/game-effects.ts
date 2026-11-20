@@ -240,9 +240,14 @@ export class KnockOutEffect implements Effect {
   public prizeDestination?: CardList;
   public isLostCity: boolean = false;
   public knockOutDestination?: 'lostzone';
+  public knockOutDestinationLabel?: string;
+  public rescueSource?: Card;
+  public rescuedPokemon?: { card: PokemonCard; attachments: Card[] };
+  public pokemonGoingToLostZone = false;
   public prizeIncreased: boolean = false;
   public pokemonInPlayBeforeKnockOut?: readonly PokemonCard[];
   public readonly beforeDiscard = new Map<Card, BeforeKnockOutDiscard>();
+  public readonly afterDiscard = new Map<Card, () => void>();
   public simultaneousKnockOuts?: ReadonlySet<PokemonCardList>;
 
   constructor(player: Player, target: PokemonCardList, public readonly resolveBeforeDiscard = false) {

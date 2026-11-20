@@ -9,10 +9,41 @@ import { CardList } from '../state/card-list';
 import { State } from '../state/state';
 import { StoreLike } from '../store-like';
 
+function lostCityMarker(effect: KnockOutEffect) {
+  return effect.target.marker.markers.find(marker => marker.name === 'LOST_CITY_MARKER');
+}
+
+export function needsKnockOutOrder(effect: KnockOutEffect): boolean {
+  return effect.resolveBeforeDiscard && (effect.beforeDiscard.size > 0
+    || (effect.knockOutDestination === 'lostzone' && !!lostCityMarker(effect)));
+}
+
 export function* resolveKnockOutBeforeDiscard(
   next: () => void, store: StoreLike, state: State, effect: KnockOutEffect
 ): Generator<State, State, void> {
   const choices = [...effect.beforeDiscard.values()];
+  const city = lostCityMarker(effect);
+  if (effect.rescueSource || (effect.knockOutDestination === 'lostzone' && city)) {
+    const pokemonCanBeRedirected = () => !effect.pokemonGoingToLostZone && !!effect.target.getPokemonCard();
+    if (effect.knockOutDestination === 'lostzone') {
+      choices.push({
+        label: effect.knockOutDestinationLabel ?? 'Lost Zone',
+        canResolve: pokemonCanBeRedirected,
+        resolve: () => { effect.pokemonGoingToLostZone = true; }
+      });
+    }
+    if (city) {
+      choices.push({
+        label: city.source?.name ?? 'Lost City',
+        canResolve: pokemonCanBeRedirected,
+        resolve: () => {
+          effect.pokemonGoingToLostZone = true;
+          // Lost City resolved first. Only the Pokémon goes to the Lost Zone.
+          effect.knockOutDestination = undefined;
+        }
+      });
+    }
+  }
   while (choices.length) {
     const available = choices.filter(choice => choice.canResolve());
     if (!available.length) break;
@@ -43,7 +74,8 @@ export function* resolveKnockOutBeforeDiscard(
 }
 
 export function discardKnockedOutPokemon(store: StoreLike, state: State, effect: KnockOutEffect): State {
-  const card = effect.target.getPokemonCard();
+  const rescued = effect.rescuedPokemon;
+  const card = rescued?.card ?? effect.target.getPokemonCard();
   if (!card) return state;
 
   // A damage-provenance opt-in differs from Lost City: ALL attachments go too.
@@ -59,20 +91,23 @@ export function discardKnockedOutPokemon(store: StoreLike, state: State, effect:
         nested.forEach(collect);
       }
     };
-    [...effect.target.cards, ...effect.target.tools, ...effect.target.energies.cards].forEach(collect);
+    [...effect.target.cards, ...effect.target.tools, ...effect.target.energies.cards, ...(rescued?.attachments ?? [])]
+      .forEach(collect);
     effect.target.cards = [];
     effect.target.tools = [];
     effect.target.energies.cards = [];
     effect.target.damage = 0;
     effect.target.clearEffects();
     state = MOVE_CARDS(store, state, allCards, effect.player.lostzone);
-  } else if (effect.target.marker.hasMarker('LOST_CITY_MARKER') || card.tags.includes(CardTag.PRISM_STAR)) {
+  } else if (rescued || lostCityMarker(effect) || card.tags.includes(CardTag.PRISM_STAR)) {
     const lostZoned = new CardList();
     const attachedCards = new CardList();
     // Fossils played as Pokémon remain Trainer cards. Remember their
     // in-play role before clearing the slot, including an evolution stack.
     const pokemonCards = new Set<Card>(effect.target.getPokemons());
-    const additionalAttachments = [...new Set([...effect.target.tools, ...effect.target.energies.cards])]
+    const additionalAttachments = [...new Set([
+      ...effect.target.tools, ...effect.target.energies.cards, ...(rescued?.attachments ?? [])
+    ])]
       .filter(attached => !effect.target.cards.includes(attached));
 
     // Clear damage and effects before splitting cards
@@ -130,5 +165,6 @@ export function discardKnockedOutPokemon(store: StoreLike, state: State, effect:
     effect.target.clearEffects();
     state = MOVE_CARDS(store, state, effect.target, effect.player.discard);
   }
+  for (const resolve of effect.afterDiscard.values()) resolve();
   return state;
 }

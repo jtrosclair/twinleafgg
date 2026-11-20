@@ -17,7 +17,7 @@ import { GamePhase, GameWinner, State } from '../state/state';
 import { StoreLike } from '../store-like';
 import { GameStatsTracker } from '../game-stats-tracker';
 import { recordActiveAbilityLockOrder } from '../state/active-ability-lock-order';
-import { resolveKnockOutBeforeDiscard } from './knock-out';
+import { needsKnockOutOrder, resolveKnockOutBeforeDiscard } from './knock-out';
 
 interface PokemonItem {
   playerNum: number;
@@ -401,6 +401,9 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
     knockOutEffect.pokemonInPlayBeforeKnockOut = pokemonInPlay?.[pokemonToDiscard.playerNum];
     knockOutEffect.simultaneousKnockOuts = simultaneousKnockOuts;
     knockOutEffect.knockOutDestination = pokemonToDiscard.destination;
+    if (pokemonToDiscard.destination) {
+      knockOutEffect.knockOutDestinationLabel = pokemonToDiscard.cardList.attackDamageKnockOut?.attack.name;
+    }
     state = store.reduceEffect(state, knockOutEffect);
 
     if (store.hasPrompts()) {
@@ -408,7 +411,7 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
     }
 
     if (knockOutEffect.preventDefault === false) {
-      if (knockOutEffect.beforeDiscard.size) {
+      if (needsKnockOutOrder(knockOutEffect)) {
         state = yield* resolveKnockOutBeforeDiscard(() => next(), store, state, knockOutEffect);
       }
       const opponentIndex = pokemonToDiscard.playerNum === 0 ? 1 : 0;

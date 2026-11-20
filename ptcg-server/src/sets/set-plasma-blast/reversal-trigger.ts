@@ -1,10 +1,8 @@
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils } from '../../game';
+import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect, KnockOutEffect } from '../../game/store/effects/game-effects';
-import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { IS_TOOL_BLOCKED, SEARCH_DECK_FOR_CARDS_TO_HAND } from '../../game/store/prefabs/prefabs';
+import { IS_TOOL_BLOCKED, SEARCH_DECK_FOR_CARDS_TO_HAND, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 
 export class ReversalTrigger extends TrainerCard {
   public trainerType: TrainerType = TrainerType.TOOL;
@@ -19,44 +17,16 @@ export class ReversalTrigger extends TrainerCard {
   public damageDealt = false;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Reset damage flag at the start of each attack
-    if (effect instanceof AttackEffect) {
-      this.damageDealt = false;
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.resolveBeforeDiscard
+      && effect.target.tools.includes(this) && effect.target.getPokemonCard()?.tags.includes(CardTag.TEAM_PLASMA)
+      && !IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+      const player = effect.player;
+      effect.beforeDiscard.set(this, {
+        label: this.name,
+        canResolve: () => player.deck.cards.length > 0,
+        resolve: () => SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, this, {}, { max: 1, allowCancel: false }, effect)
+      });
     }
-
-    // Track if damage was dealt to the attached Pokemon
-    if ((effect instanceof DealDamageEffect || effect instanceof PutDamageEffect) &&
-      effect.target.tools.includes(this)) {
-      const player = StateUtils.findOwner(state, effect.target);
-
-      if (IS_TOOL_BLOCKED(store, state, player, this)) { return state; }
-
-      // Only works on Team Plasma Pokemon
-      const pokemon = effect.target.getPokemonCard();
-      if (pokemon && pokemon.tags.includes(CardTag.TEAM_PLASMA)) {
-        this.damageDealt = true;
-      }
-    }
-
-    // When KO'd by damage from attack, search deck for any card
-    if (effect instanceof KnockOutEffect && effect.target.tools.includes(this)
-      && this.damageDealt) {
-      const toolOwner = StateUtils.findOwner(state, effect.target);
-
-      // Only works on Team Plasma Pokemon
-      const pokemon = effect.target.getPokemonCard();
-      if (pokemon && pokemon.tags.includes(CardTag.TEAM_PLASMA)) {
-        this.damageDealt = false;
-
-        if (toolOwner.deck.cards.length > 0) {
-          SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, toolOwner, this,
-            {},
-            { min: 1, max: 1, allowCancel: false }
-          );
-        }
-      }
-    }
-
     return state;
   }
 }
