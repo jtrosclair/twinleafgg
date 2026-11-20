@@ -2146,3 +2146,11 @@ prompts.
 [Advanced rulebook, E-06](https://asia.pokemon-card.com/sg/wp-content/uploads/sites/6/2025/10/EN_advanced_manual-2025.pdf)
 [Mega Rayquaza ex print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me06/141/)
 [Official Talonflame ex hand-Ability ruling](https://www.pokemon-card.com/rules/faq/search.php?page=5&regulation=all&sc_group_id=728%2F1000)
+
+Final verification passed all 20 focused cases and all 7,273 engine tests
+in 260 files. The validator kept the same 559 compatible saved states and
+all 3,633 sampled first actions matched. Seven recorded solutions reached
+wins. The published openings for You've Got Mail!, Cursed Blast, and What a
+mischievous lock! verified suppression and recovery after switching. The
+attested production package met the mobile size budget and passed all ten
+mouse and touch checks.
