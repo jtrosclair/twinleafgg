@@ -1,3 +1,5 @@
+import { CardType, ChooseEnergyPrompt, GameMessage } from 'ptcg-server';
+import { PromptChooseEnergyComponent } from './prompt-choose-energy/prompt-choose-energy.component';
 import { PromptComponent } from './prompt.component';
 
 describe('prompt restoration lifecycle', () => {
@@ -83,5 +85,30 @@ describe('prompt restoration lifecycle', () => {
     flush();
     expect(component.prompt).toBeUndefined();
     expect(detectChanges).not.toHaveBeenCalled();
+  });
+});
+
+
+describe('Choose Energy prompt lifecycle', () => {
+  it('clears the selection and disables confirmation for each unpaid cost', () => {
+    const game = { resolvePrompt: jasmine.createSpy('resolvePrompt') };
+    const component = new PromptChooseEnergyComponent(game as any);
+    component.gameState = { gameId: 99 } as any;
+    const energy = [{ card: { fullName: 'Luminous Energy PAL' } as any, provides: [CardType.ANY] }];
+    const prompt = new ChooseEnergyPrompt(1, GameMessage.CHOOSE_ENERGIES_TO_DISCARD, energy, [CardType.WATER]);
+    prompt.id = 101;
+    component.prompt = prompt;
+    expect(component.isInvalid).toBe(true);
+    component.onChange([0]);
+    expect(component.isInvalid).toBe(false);
+    component.confirm();
+    expect(game.resolvePrompt).toHaveBeenCalledWith(99, 101, [0]);
+
+    const next = new ChooseEnergyPrompt(1, GameMessage.CHOOSE_ENERGIES_TO_DISCARD, energy, [CardType.DARK]);
+    next.id = 102;
+    component.prompt = next;
+    expect(component.isInvalid).toBe(true);
+    component.cancel();
+    expect(game.resolvePrompt).toHaveBeenCalledWith(99, 102, null);
   });
 });

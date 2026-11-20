@@ -225,6 +225,41 @@ export function DISCARD_UP_TO_X_TYPE_ENERGY_FROM_YOUR_POKEMON(
   });
 }
 
+/** Offer one attached Energy that currently provides the requested attack cost type. */
+export function OPTIONALLY_DISCARD_ONE_ENERGY_FROM_ATTACKER(
+  store: StoreLike,
+  state: State,
+  effect: AttackEffect,
+  type: CardType,
+  onDiscarded: (state: State) => void,
+): State {
+  const { player, source } = effect;
+  const provided = new CheckProvidedEnergyEffect(player, source);
+  state = store.reduceEffect(state, provided);
+  const cost = [type];
+  const eligible = provided.energyMap.filter(energy => source.cards.includes(energy.card)
+    && StateUtils.checkEnoughEnergy([energy], cost));
+  if (eligible.length === 0) {
+    return state;
+  }
+
+  return store.prompt(state, new ChooseEnergyPrompt(
+    player.id, GameMessage.CHOOSE_ENERGIES_TO_DISCARD, eligible, cost, { allowCancel: true }
+  ), selected => {
+    const card = selected?.[0]?.card;
+    if (!card) {
+      return;
+    }
+    const discard = new DiscardCardsEffect(effect, [card]);
+    discard.target = source;
+    state = store.reduceEffect(state, discard);
+    // A Prism Star sent to the Lost Zone still pays the discard.
+    if (player.discard.cards.includes(card) || player.lostzone.cards.includes(card)) {
+      onDiscarded(state);
+    }
+  });
+}
+
 /**
  * Discards an exact amount of Energy from this Pokémon.
  *

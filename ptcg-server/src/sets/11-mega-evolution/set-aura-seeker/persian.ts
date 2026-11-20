@@ -66,9 +66,9 @@ export class Persian extends PokemonCard {
 
     REMOVE_MARKER_AT_END_OF_TURN(effect, this.LARGE_COIN_MARKER, this);
 
-    // Greedy Slash
+    // Preserve damage modifiers already applied to the attack.
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      effect.damage = 20 * effect.player.hand.cards.length;
+      effect.damage += 20 * effect.player.hand.cards.length - effect.attack.damage;
     }
 
     return state;

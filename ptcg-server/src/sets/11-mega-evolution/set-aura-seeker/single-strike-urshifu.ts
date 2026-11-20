@@ -1,11 +1,9 @@
-import { PokemonCard, CardTag, Stage, CardType, StoreLike, State, ConfirmPrompt, GameMessage, SlotType } from "../../../game";
-import { CheckProvidedEnergyEffect } from "../../../game/store/effects/check-effects";
-import { Effect } from "../../../game/store/effects/effect";
-import { DISCARD_UP_TO_X_TYPE_ENERGY_FROM_YOUR_POKEMON } from "../../../game/store/prefabs/costs";
-import { WAS_ATTACK_USED } from "../../../game/store/prefabs/prefabs";
+import { PokemonCard, Stage, CardType, StoreLike, State } from '../../../game';
+import { Effect } from '../../../game/store/effects/effect';
+import { OPTIONALLY_DISCARD_ONE_ENERGY_FROM_ATTACKER } from '../../../game/store/prefabs/costs';
+import { WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
 
 export class SingleStrikeUrshifu extends PokemonCard {
-  public cardTag: CardTag[] = [CardTag.SINGLE_STRIKE];
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom = 'Kubfu';
   public hp: number = 140;
@@ -29,39 +27,11 @@ export class SingleStrikeUrshifu extends PokemonCard {
   public fullName: string = 'Single Strike Urshifu FLO';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Wicked Blow
+    // Ref: costs.ts (effective Energy typing and completed discard).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const checkEnergy = new CheckProvidedEnergyEffect(player);
-      checkEnergy.source = effect.source;
-      state = store.reduceEffect(state, checkEnergy);
-
-      const hasDark = checkEnergy.energyMap.some(e =>
-        e.provides.some((p: CardType) => p === CardType.DARK)
-      );
-
-      if (!hasDark) {
-        return state;
-      }
-
-      return store.prompt(
-        state,
-        new ConfirmPrompt(player.id, GameMessage.WANT_TO_DISCARD_ENERGY),
-        (confirm) => {
-          if (confirm) {
-            effect.damage += 140;
-            return DISCARD_UP_TO_X_TYPE_ENERGY_FROM_YOUR_POKEMON(
-              store,
-              state,
-              effect,
-              1,
-              CardType.DARK,
-              1,
-              [SlotType.ACTIVE],
-            );
-          }
-        },
-      );
+      return OPTIONALLY_DISCARD_ONE_ENERGY_FROM_ATTACKER(store, state, effect, CardType.DARK, () => {
+        effect.damage += 140;
+      });
     }
 
     return state;

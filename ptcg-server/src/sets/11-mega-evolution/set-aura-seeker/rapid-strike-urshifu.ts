@@ -1,12 +1,11 @@
-import { PokemonCard, CardTag, Stage, CardType, StoreLike, State, ConfirmPrompt, GameMessage, SlotType, StateUtils } from "../../../game";
-import { PutDamageEffect } from "../../../game/store/effects/attack-effects";
-import { CheckProvidedEnergyEffect } from "../../../game/store/effects/check-effects";
-import { Effect } from "../../../game/store/effects/effect";
-import { DISCARD_UP_TO_X_TYPE_ENERGY_FROM_YOUR_POKEMON } from "../../../game/store/prefabs/costs";
-import { WAS_ATTACK_USED } from "../../../game/store/prefabs/prefabs";
+import { PokemonCard, Stage, CardType, StoreLike, State } from '../../../game';
+import { PutDamageEffect } from '../../../game/store/effects/attack-effects';
+import { Effect } from '../../../game/store/effects/effect';
+import { OPTIONALLY_DISCARD_ONE_ENERGY_FROM_ATTACKER } from '../../../game/store/prefabs/costs';
+import { afterAttackDamage } from '../../../game/store/prefabs/attack-after-damage';
+import { WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
 
 export class RapidStrikeUrshifu extends PokemonCard {
-  public cardTag: CardTag[] = [CardTag.RAPID_STRIKE];
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom = 'Kubfu';
   public hp: number = 140;
@@ -29,47 +28,20 @@ export class RapidStrikeUrshifu extends PokemonCard {
   public fullName: string = 'Rapid Strike Urshifu FLO';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Torrential Strike
+    // Ref: attack-after-damage.ts and the official M7 050 discard requirement.
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const checkEnergy = new CheckProvidedEnergyEffect(player);
-      checkEnergy.source = effect.source;
-      state = store.reduceEffect(state, checkEnergy);
-
-      const hasWater = checkEnergy.energyMap.some(e =>
-        e.provides.some((p: CardType) => p === CardType.WATER)
-      );
-
-      if (!hasWater) {
-        return state;
-      }
-
-      return store.prompt(
-        state,
-        new ConfirmPrompt(player.id, GameMessage.WANT_TO_DISCARD_ENERGY),
-        (confirm) => {
-          if (confirm) {
-            state = DISCARD_UP_TO_X_TYPE_ENERGY_FROM_YOUR_POKEMON(
-              store,
-              state,
-              effect,
-              1,
-              CardType.WATER,
-              1,
-              [SlotType.ACTIVE],
-            );
-
-            const opponent = StateUtils.getOpponent(state, player);
-            opponent.bench.forEach(benched => {
-              if (benched.cards.length > 0) {
-                const damage = new PutDamageEffect(effect, 40);
-                damage.target = benched;
-                store.reduceEffect(state, damage);
-              }
-            });
+      return OPTIONALLY_DISCARD_ONE_ENERGY_FROM_ATTACKER(store, state, effect, CardType.WATER, paidState => {
+        afterAttackDamage(paidState, effect, (currentStore, currentState) => {
+          for (const target of effect.opponent.bench) {
+            if (target.getPokemonCard()) {
+              const damage = new PutDamageEffect(effect, 40);
+              damage.target = target;
+              currentState = currentStore.reduceEffect(currentState, damage);
+            }
           }
-        },
-      );
+          return currentState;
+        });
+      });
     }
 
     return state;

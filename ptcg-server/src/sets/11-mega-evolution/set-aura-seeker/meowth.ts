@@ -1,5 +1,6 @@
 import { CardType, PokemonCard, Stage, State, StoreLike } from '../../../game';
 import { Effect } from '../../../game/store/effects/effect';
+import { afterAttackDamage } from '../../../game/store/prefabs/attack-after-damage';
 import { DRAW_CARDS, WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
 
 export class Meowth extends PokemonCard {
@@ -29,9 +30,12 @@ export class Meowth extends PokemonCard {
   public fullName: string = 'Meowth FLO';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Pay Day
+    // Ref: attack-after-damage.ts (apply the draw after Pay Day’s damage).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      DRAW_CARDS(effect.player, 1);
+      afterAttackDamage(state, effect, (_store, currentState) => {
+        DRAW_CARDS(effect.player, 1);
+        return currentState;
+      });
     }
 
     return state;

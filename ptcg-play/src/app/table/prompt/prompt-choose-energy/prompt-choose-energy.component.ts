@@ -24,6 +24,7 @@ export class PromptChooseEnergyComponent {
     this.message = prompt.message;
     this.promptId = prompt.id;
     this.cost = prompt.cost;
+    this.onChange([]);
   }
 
   @Input() gameState: LocalGameState;

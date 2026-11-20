@@ -1741,3 +1741,41 @@ in the 559 comparable puzzle snapshots. Their original gameplay change
 [Official Aura Seeker preview](https://www.pokemon-card.com/ex/m7/index.html)
 [Single Strike Urshifu M7 049](https://www.pokemon-card.com/ex/m7/assets/images/card/m7-049-pk5dw.webp)
 [Rapid Strike Urshifu M7 050](https://www.pokemon-card.com/ex/m7/assets/images/card/m7-050-zbsr3.webp)
+
+## Gameplay re-audit, batch 6
+
+Wicked Blow and Torrential Strike offer one optional selection from the
+attacker's currently eligible Energy. Their bonuses require the selected card
+actually to be discarded. This uses effective typing for standard Energy,
+Luminous Energy, Blend Energy and Unit Energy, and respects Colorless overrides
+such as Temple of Sinnoh. Rapid Strike Urshifu applies its 40 damage to each
+unprotected opposing Benched Pokémon after the Active hit and before any Knock
+Out or Prize processing. Genome Hacking uses the copying Pokémon's own attached
+Energy. The printed M7 Urshifu do not have the old Strike designations. Their
+existing `FLO` saved names still resolve.
+[Single Strike Urshifu M7 049](https://www.pokemon-card.com/ex/m7/assets/images/card/m7-049-pk5dw.webp)
+[Rapid Strike Urshifu M7 050](https://www.pokemon-card.com/ex/m7/assets/images/card/m7-050-zbsr3.webp)
+[Luminous Energy print](https://asia.pokemon-card.com/sg/card-search/detail/7003/)
+
+Meowth's Pay Day draws after damage. Persian's Greedy Slash computes its
+printed multiplier while retaining other attack modifiers. Large Coin still
+requires at least two Pokémon with Pay Day in play and consumes its turn use.
+The Choose Energy dialog clears a prior selection and disables OK until the
+requested Energy is selected. Its Cancel action declines the optional cost.
+[Official Aura Seeker card preview](https://www.pokemon-card.com/ex/m7/index.html)
+
+All 21 focused Aura Seeker checks pass, compared with 5 on the baseline. The
+broader suites passed 134 engine tests and 208 Angular tests. Packaged browser
+checks demonstrated paid and declined discards, the initial disabled OK state,
+and the expected damage and Energy movement. All 3,635 sampled opening actions
+matched across 559 comparable saved states. Five recorded solutions reached wins.
+
+Metagross M4 and CRI need a separate treatment. The official Metallic Hammer
+ruling allows a Slowking copying the attack to add 150 with no Metal Energy.
+If it has any Metal Energy, it must discard the available amount up to the
+printed three. Also check both registered prints against the official 180 HP,
+one-Metal Bounce Back and the opponent's choice of replacement. The baseline
+reproduces 150 damage and no discard when Slowking copies either registered
+Metagross with zero or one Metal Energy.
+[Metallic Hammer ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A1%E3%82%BF%E3%83%AA%E3%83%83%E3%82%AF%E3%83%8F%E3%83%B3%E3%83%9E%E3%83%BC&regulation_faq_main_item1=all)
+[Chaos Rising Metagross](https://asia.pokemon-card.com/sg/card-search/detail/25252/)
