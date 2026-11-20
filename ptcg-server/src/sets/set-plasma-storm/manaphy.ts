@@ -4,12 +4,11 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, EnergyType, SuperType } from '../../game/store/card/card-types';
-import { EnergyCard, GameMessage, GamePhase, PlayerType, PowerType, SlotType, StoreLike, State, StateUtils } from '../../game';
+import { EnergyCard, GameMessage, PlayerType, PowerType, SlotType, StoreLike, State, StateUtils } from '../../game';
 import { AttachEnergyPrompt } from '../../game/store/prompts/attach-energy-prompt';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED, MULTIPLE_COIN_FLIPS_PROMPT, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
-import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
+import { registerKnockOutDeckSearch } from '../../game/store/prefabs/knock-out-effects';
+import { WAS_ATTACK_USED, MULTIPLE_COIN_FLIPS_PROMPT } from '../../game/store/prefabs/prefabs';
 
 export class Manaphy extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -20,7 +19,6 @@ export class Manaphy extends PokemonCard {
 
   public powers = [  {
     name: 'Final Wish',
-    useWhenInPlay: true,
     powerType: PowerType.ABILITY,
     text: 'When this Pokémon is Knocked Out by damage from an opponent\'s attack, search your deck for a card and put it into your hand. Shuffle your deck afterward.'
   }];
@@ -41,41 +39,8 @@ export class Manaphy extends PokemonCard {
   public fullName: string = 'Manaphy PLS';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Final Wish (passive - on KO)
-    // Ref: set-roaring-skies/articuno.ts (KnockOutEffect pattern)
-    if (effect instanceof KnockOutEffect && effect.target.cards.includes(this)) {
-      const player = StateUtils.findOwner(state, effect.target);
-      const opponent = StateUtils.getOpponent(state, player);
-
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-      if (state.players[state.activePlayer] !== opponent) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      if (player.deck.cards.length === 0) {
-        return state;
-      }
-
-      // Search deck for any card
-      store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_HAND,
-        player.deck,
-        {},
-        { min: 1, max: 1, allowCancel: false }
-      ), selected => {
-        if (selected && selected.length > 0) {
-          player.deck.moveCardsTo(selected, player.hand);
-        }
-        SHUFFLE_DECK(store, state, player);
-      });
-    }
+    // Ref: set-chilling-reign/gengar.ts (search before Knock Out discard)
+    registerKnockOutDeckSearch(store, state, effect, this, 1);
 
     // Attack 1: Seafaring
     // Ref: set-plasma-storm/victini-ex.ts (Turbo Energize attach from discard)

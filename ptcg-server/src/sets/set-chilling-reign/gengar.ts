@@ -1,9 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage } from '../../game/store/card/card-types';
-import { StoreLike, State, PowerType, GamePhase, GameLog } from '../../game';
+import { StoreLike, State, PowerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { CONFIRMATION_PROMPT, SEARCH_DECK_FOR_CARDS_TO_HAND, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { KnockOutEffect, PowerEffect } from '../../game/store/effects/game-effects';
+import { registerKnockOutDeckSearch } from '../../game/store/prefabs/knock-out-effects';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Gengar extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -35,34 +35,8 @@ export class Gengar extends PokemonCard {
   public fullName: string = 'Gengar CRE';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Last Gift
-    if (effect instanceof KnockOutEffect && effect.target.cards.includes(this)) {
-      const player = effect.player;
-
-      // i love checking for ability lock woooo
-      try {
-        const powerEffect = new PowerEffect(player, this.powers[0], this);
-        store.reduceEffect(state, powerEffect);
-      } catch {
-        return state;
-      }
-
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-
-      if (player.deck.cards.length === 0) {
-        return state;
-      }
-
-      store.log(state, GameLog.LOG_PLAYER_USES_ABILITY, { name: player.name, card: this.name });
-
-      CONFIRMATION_PROMPT(store, state, player, result => {
-        if (!result) { return state; }
-
-        SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, this, {}, { min: 0, max: 2, allowCancel: false }, this.powers[0]);
-      });
-    }
+    // Ref: set-fusion-strike/farewell-bell.ts (search before Knock Out discard)
+    registerKnockOutDeckSearch(store, state, effect, this, 2);
 
     // Pain Burst
     if (WAS_ATTACK_USED(effect, 0, this)) {

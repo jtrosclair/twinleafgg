@@ -1,4 +1,4 @@
-import { GameMessage } from '../../game-message';
+import { GameLog, GameMessage } from '../../game-message';
 import { CardTarget, PlayerType, SlotType } from '../actions/play-card-action';
 import { Card } from '../card/card';
 import { CardType, EnergyType, SuperType } from '../card/card-types';
@@ -17,14 +17,15 @@ import { Player } from '../state/player';
 import { State } from '../state/state';
 import { StoreLike } from '../store-like';
 import {
-  IS_ABILITY_BLOCKED, IS_TOOL_BLOCKED, MOVE_CARDS, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE
+  IS_ABILITY_BLOCKED, IS_TOOL_BLOCKED, MOVE_CARDS, SEARCH_DECK_FOR_CARDS_TO_HAND,
+  WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE
 } from './prefabs';
 
 export function registerKnockOutRescue(store: StoreLike, state: State, effect: KnockOutEffect, source: Card, canRescue = () => true): void {
   effect.rescueSource ??= source;
   const { target, player } = effect;
   effect.beforeDiscard.set(source, {
-    label: source.name,
+    label: (source instanceof PokemonCard ? source.powers[0]?.name : undefined) ?? source.name,
     canResolve: () => !!target.getPokemonCard() && !effect.pokemonGoingToLostZone && canRescue(),
     resolve: () => {
       const card = target.getPokemonCard();
@@ -41,6 +42,25 @@ export function registerKnockOutRescue(store: StoreLike, state: State, effect: K
       }
       const nested = stack.flatMap(pokemon => pokemon.cards?.cards.splice(0) ?? []);
       effect.rescuedPokemon.attachments = [...new Set(nested)].filter(attachment => !attached.has(attachment));
+    }
+  });
+}
+
+/** Register an attack-damage Knock Out Ability that searches its owner's deck. */
+export function registerKnockOutDeckSearch(
+  store: StoreLike, state: State, effect: Effect, source: PokemonCard, max: number
+): void {
+  if (!WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) || !effect.resolveBeforeDiscard
+    || effect.target.getPokemonCard() !== source || IS_ABILITY_BLOCKED(store, state, effect.player, source)) return;
+
+  const { player } = effect;
+  const ability = source.powers[0];
+  effect.beforeDiscard.set(source, {
+    label: ability.name,
+    canResolve: () => player.deck.cards.length > 0,
+    resolve: () => {
+      store.log(state, GameLog.LOG_PLAYER_USES_ABILITY, { name: player.name, card: source.name });
+      SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, source, {}, { max, allowCancel: false }, ability);
     }
   });
 }

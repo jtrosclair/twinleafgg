@@ -6,8 +6,8 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils, GameMessage, PlayerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
+import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
+import { registerKnockOutRescue } from '../../game/store/prefabs/knock-out-effects';
 import { PutCountersEffect } from '../../game/store/effects/attack-effects';
 import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
 import { SlotType } from '../../game/store/actions/play-card-action';
@@ -44,48 +44,10 @@ export class Reuniclus extends PokemonCard {
   public fullName: string = 'Reuniclus SIT 78';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Persistent Cells (passive - KO'd by opponent's attack -> go to hand)
-    // Ref: set-unified-minds/aegislash.ts (Durable Blade - KO by opponent's attack -> put in hand)
-    if (effect instanceof KnockOutEffect
-      && effect.target.cards.includes(this)
-      && effect.target.getPokemonCard() === this) {
-      const player = StateUtils.findOwner(state, effect.target);
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      // Only triggers if KO'd by opponent's attack (not your own attack)
-      if (effect.player === player) {
-        return state;
-      }
-
-      const target = effect.target;
-
-      // Discard all attached cards (non-Pokemon cards)
-      const pokemons = target.getPokemons();
-      const attachedCards = target.cards.filter(c => !pokemons.includes(c as PokemonCard));
-      attachedCards.forEach(c => {
-        target.moveCardTo(c, player.discard);
-      });
-
-      // Discard tools
-      const tools = target.tools.slice();
-      tools.forEach(c => {
-        target.moveCardTo(c, player.discard);
-      });
-
-      // Discard evolution cards (not this card)
-      const otherPokemons = pokemons.filter(c => c !== this);
-      otherPokemons.forEach(c => {
-        target.moveCardTo(c, player.discard);
-      });
-
-      // Put this card into hand
-      target.moveCardTo(this, player.hand);
-
-      // Prevent default KO discard
-      effect.preventDefault = true;
+    // Ref: set-dragons-exalted/rescue-scarf.ts (return the evolution stack before taking Prizes)
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.resolveBeforeDiscard
+      && effect.target.getPokemonCard() === this && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+      registerKnockOutRescue(store, state, effect, this);
     }
 
     // Attack 1: Cell Fork

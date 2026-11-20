@@ -6,8 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 
 export class Jynx extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -41,23 +40,14 @@ export class Jynx extends PokemonCard {
   public fullName: string = 'Jynx SIT 62';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Selfish Lips
-    // Ref: set-silver-tempest/togedemaru.ts (prizeCount = 0 when KO'd by certain condition)
-    // Ref: set-paldea-evolved/glimmora.ts (IS_ABILITY_BLOCKED on KnockOutEffect passive)
-    // If this Pokemon is KO'd by damage from a V Pokemon's attack, opponent takes no prizes
-    // effect.player is the player who KO'd the target (the attacker)
-    if (effect instanceof KnockOutEffect && effect.target.cards.includes(this)
+    // Ref: set-lost-origin/komala.ts (prevent Prizes for this Knock Out)
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect)
       && effect.target.getPokemonCard() === this) {
-      const owner = StateUtils.getOpponent(state, effect.player);
-      if (IS_ABILITY_BLOCKED(store, state, owner, this)) { return state; }
-      // Check if the attacker's active Pokemon is a Pokemon V
-      const attackerCard = effect.player.active.getPokemonCard();
-      if (attackerCard && (
-        attackerCard.tags.includes(CardTag.POKEMON_V) ||
-        attackerCard.tags.includes(CardTag.POKEMON_VMAX) ||
-        attackerCard.tags.includes(CardTag.POKEMON_VSTAR)
-      )) {
-        effect.prizeCount = 0;
+      const attacker = effect.target.attackDamageKnockOut?.sourceCard;
+      const pokemonV = [CardTag.POKEMON_V, CardTag.POKEMON_VMAX, CardTag.POKEMON_VSTAR, CardTag.POKEMON_VUNION];
+      if (attacker && pokemonV.some(tag => attacker.tags.includes(tag))
+        && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+        effect.preventPrizes = true;
       }
     }
 

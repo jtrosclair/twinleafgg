@@ -422,6 +422,8 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
       if (effect.preventDefault) continue;
 
       resolved.push(effect);
+      if (effect.preventPrizes) continue;
+
       const opponentIndex = pokemon.playerNum === 0 ? 1 : 0;
       const destination = effect.prizeDestination ?? state.players[opponentIndex].hand;
       let group = prizeGroups[opponentIndex].find(group => group.destination === destination);

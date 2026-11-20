@@ -4,12 +4,10 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SpecialCondition } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, StateUtils } from '../../game';
+import { PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { GamePhase } from '../../game/store/state/state';
 
 export class Komala extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -41,32 +39,12 @@ export class Komala extends PokemonCard {
   public fullName: string = 'Komala LOR 149';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: All Just a Dream (passive)
-    // Ref: set-dragons-exalted/shedinja.ts (KnockOutEffect prizeCount = 0),
-    //      set-ascended-heroes/larrys-komala.ts (SpecialCondition.ASLEEP check)
-    if (effect instanceof KnockOutEffect && effect.target.cards.includes(this)) {
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-
-      const pokemonCard = effect.target.getPokemonCard();
-      if (pokemonCard !== this) {
-        return state;
-      }
-
-      const owner = StateUtils.findOwner(state, effect.target);
-      if (!owner) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, owner, this)) {
-        return state;
-      }
-
-      // Check if Komala is Asleep
-      if (effect.target.specialConditions.includes(SpecialCondition.ASLEEP)) {
-        effect.prizeCount = 0;
-      }
+    // Ref: set-silver-tempest/jynx.ts (prevent Prizes for this Knock Out)
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect)
+      && effect.target.getPokemonCard() === this
+      && effect.target.specialConditions.includes(SpecialCondition.ASLEEP)
+      && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+      effect.preventPrizes = true;
     }
 
     // Attack 1: Collapse - This Pokemon is now Asleep
