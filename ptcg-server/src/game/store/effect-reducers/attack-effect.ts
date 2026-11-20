@@ -162,14 +162,15 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
       }
 
       if (effect.surviveOnTenHPReason !== undefined) {
-        const checkHpEffect = new CheckHpEffect(effect.player, target);
+        const checkHpEffect = new CheckHpEffect(targetOwner, target);
         state = store.reduceEffect(state, checkHpEffect);
-        if (target.damage > checkHpEffect.hp) {
+        if (target.damage >= checkHpEffect.hp) {
           store.log(state, GameLog.LOG_SURVIVES_ON_TEN_HP, {
             pokemon: targetCard.name,
             reason: effect.surviveOnTenHPReason,
           });
           target.damage = checkHpEffect.hp - 10;
+          target.attackDamageKnockOut = undefined;
         }
       }
 
