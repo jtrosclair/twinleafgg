@@ -2154,3 +2154,33 @@ wins. The published openings for You've Got Mail!, Cursed Blast, and What a
 mischievous lock! verified suppression and recovery after switching. The
 attested production package met the mobile size budget and passed all ten
 mouse and touch checks.
+
+## Gameplay re-audit, batch 16
+
+The shared survival check now treats damage equal to HP as lethal before
+applying a 10 HP survival effect. Surviving Pokémon clear the provisional
+attack-damage Knock Out record. The historical upstream change
+`3323d3aae` added the strict greater-than comparison, which is still present
+at `d3d7a0031`.
+
+Real attacks reproduced two incorrect Knock Outs. Trinity Nova dealt exactly
+200 damage to a full-HP Pikachu ex with Resolute Heart, and Talon Hunt dealt
+exactly 150 to a full-HP Machamp with Focus Sash. Both now leave 10 HP and
+award zero Prizes. The overkill control still saves Machamp and discards
+Focus Sash, and the pre-damaged Pikachu ex control still gives two Prizes.
+[Official Pikachu ex print](https://www.pokemon-card.com/card-search/details.php/card/47157/regu/all)
+[Official Focus Sash print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/xy3/91/)
+
+The full suite passed 7,277 engine tests across 261 files. All 559 compatible
+saved states and 3,633 sampled actions matched the previous engine. Seven
+recorded solutions reached wins. The attested production package met the
+mobile size budget and all ten mouse and touch checks passed.
+
+The next provenance cases are under `bc849aeed`. Actual attacks showed that
+Oh No You Don’t missed a live Benched Pecharunt ex when the historical player
+flag was false. It also incorrectly reduced Prizes with a stale true flag
+and after the explicit Knock Out effect from Frenzied Gouging. The official
+Phantom Dive ruling requires three Prizes when Munkidori ex takes lethal
+attack damage and Pecharunt ex is Knocked Out by counters in the same attack.
+[Official Munkidori ex print](https://asia.pokemon-card.com/ph/card-search/detail/13759/)
+[Official simultaneous Knock Out ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A2%E3%83%A2%E3%83%AF%E3%83%AD%E3%82%A6ex&regulation_faq_main_item1=all)
