@@ -336,6 +336,28 @@ describe('Knock Out retaliation and Prize timing', () => {
     expect([...physical(state.players[1])].filter(card => card.id === tool.id).length).toBe(1);
   });
 
+  it('reports a draw on a shortened puzzle with insufficient cards for another game', () => {
+    const { store, state, player1, player2 } = battle({ card: 'Cramorant LOR', tools: [punch] },
+      { attacker: { ...miraidon, damage: 190 }, attackBench: [], attackPrizes: 1, defensePrizes: 4 });
+    player1.deck.cards = [];
+    player2.deck.cards = [];
+    store.dispatch(new AttackAction(player1.id, photon));
+    expect(player1.getPrizeLeft()).toBe(0);
+    expect(player2.getPrizeLeft()).toBe(2);
+    expect(state.phase).toBe(GamePhase.FINISHED);
+    expect(state.winner).toBe(GameWinner.DRAW);
+  });
+
+  it('decides an unequal tiebreaker from the Prizes both players actually take', () => {
+    const { store, state, player1, player2 } = battle({ card: 'Cramorant LOR', tools: [punch] },
+      { attacker: { ...miraidon, damage: 190 }, attackPrizes: 6 });
+    state.isSuddenDeath = true;
+    store.dispatch(new AttackAction(player1.id, photon));
+    expect(player1.getPrizeLeft()).toBe(5);
+    expect(player2.getPrizeLeft()).toBe(4);
+    expect(state.winner).toBe(GameWinner.PLAYER_2);
+  });
+
   it('continues a tiebreaker when both players take the same number of Prizes in one attack', () => {
     const { store, state, player1, player2 } = battle({ card: 'Cramorant LOR', damage: 30 }, {
       attacker: { card: 'Zekrom BLW', damage: 90, energy: [lightning, lightning, darkness] }, attackPrizes: 6

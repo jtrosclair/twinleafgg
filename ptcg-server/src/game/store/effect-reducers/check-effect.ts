@@ -1,6 +1,7 @@
 import { GameError } from '../../game-error';
 import { GameLog, GameMessage } from '../../game-message';
 import { CardManager } from '../../cards/card-manager';
+import { deepClone } from '../../../utils/utils';
 import { PlayerType, SlotType } from '../actions/play-card-action';
 import { Card } from '../card/card';
 import { CardTag, Stage } from '../card/card-types';
@@ -358,7 +359,8 @@ function initiateSuddenDeath(store: StoreLike, state: State): State {
       if (seen.has(card)) return;
       seen.add(card);
       card.cards.cards.forEach(collect);
-      const fresh = manager.getCardByName(card.fullName) ?? card;
+      const fresh = manager.getCardByName(card.fullName) ?? deepClone(card);
+      fresh.cards = new CardList();
       fresh.id = card.id;
       player.deck.cards.push(fresh);
     };
