@@ -1,7 +1,7 @@
 import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, GameError, GameMessage, SuperType, CardList, ChooseCardsPrompt, ShowCardsPrompt, StateUtils } from "../../game";
 import { Effect } from "../../game/store/effects/effect";
 import { SHUFFLE_CARDS_TO_BOTTOM } from '../../game/store/prefabs/shuffle-cards-to-bottom';
-import { WAS_POWER_USED, IS_ABILITY_BLOCKED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, REMOVE_MARKER_AT_END_OF_TURN, MOVE_CARDS, SHOW_CARDS_TO_PLAYER } from "../../game/store/prefabs/prefabs";
+import { WAS_POWER_USED, IS_ABILITY_BLOCKED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, REMOVE_MARKER_AT_END_OF_TURN, MOVE_CARDS } from "../../game/store/prefabs/prefabs";
 
 export class Delibird extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -68,7 +68,9 @@ export class Delibird extends PokemonCard {
     state = MOVE_CARDS(store, state, player.deck, topCards, { count, sourceCard: this });
 
     // Always show the looked-at cards, even when none of them are Energy.
-    return store.prompt(state, new ShowCardsPrompt(player.id, GameMessage.CARDS_SHOWED_BY_EFFECT, topCards.cards), () => {
+    return store.prompt(state, new ShowCardsPrompt(
+      player.id, GameMessage.CARDS_SHOWED_BY_EFFECT, topCards.cards, { sourcePlayerId: player.id }
+    ), () => {
       const blocked: number[] = [];
       topCards.cards.forEach((card, index) => {
         if (card.superType !== SuperType.ENERGY) {
@@ -88,17 +90,26 @@ export class Delibird extends PokemonCard {
           GameMessage.CHOOSE_CARD_TO_HAND,
           topCards,
           { superType: SuperType.ENERGY },
-          { allowCancel: false, min: 1, max: 1, blocked },
+          // Ref: official Energizing Present ruling permits choosing no Energy.
+          { allowCancel: false, min: 0, max: 1, blocked },
         ),
         (cards) => {
           const chosenCard = (cards || [])[0];
 
-          if (chosenCard) {
-            MOVE_CARDS(store, state, topCards, player.hand, { cards: [chosenCard], sourceCard: this });
-            SHOW_CARDS_TO_PLAYER(store, state, StateUtils.getOpponent(state, player), [chosenCard]);
+          if (!chosenCard) {
+            this.putRemainingOnBottom(store, state, player, topCards);
+            return;
           }
 
-          this.putRemainingOnBottom(store, state, player, topCards);
+          const opponent = StateUtils.getOpponent(state, player);
+          store.prompt(state, new ShowCardsPrompt(
+            opponent.id, GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, [chosenCard], { sourcePlayerId: player.id }
+          ), () => {
+            const next = MOVE_CARDS(store, state, topCards, player.hand, {
+              cards: [chosenCard], sourceCard: this, sourceEffect: this.powers[0]
+            });
+            this.putRemainingOnBottom(store, next, player, topCards);
+          });
         },
       );
     });

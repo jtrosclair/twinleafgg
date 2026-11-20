@@ -1,3 +1,4 @@
+import { GameMessage } from '../../game/game-message';
 import { Card } from '../../game/store/card/card';
 import { CardManager } from '../../game/cards/card-manager';
 import { StateSerializer } from '../../game/serializer/state-serializer';
@@ -56,6 +57,10 @@ function send(x:ReturnType<typeof setup>,prompt:any,result:any) { (x.store as an
 function select(x:ReturnType<typeof setup>,cards:Card[]) { const prompt=pending(x,ChooseCardsPrompt)!; expect(prompt.validate(cards)).toBe(true); send(x,prompt,cards); }
 
 describe('Team Rocket’s Proton search sequencing',()=>{
+  it('asks the player to take found Pokémon into hand', () => {
+    const x = setup();
+    expect(pending(x, ChooseCardsPrompt)?.message).toBe(GameMessage.CHOOSE_CARD_TO_HAND);
+  });
   it('reveals three different physical Basic Rocket Pokémon before moving or shuffling',()=>{
     const x=setup(); select(x,[x.a,x.b,x.c]);
     const show=pending(x,ShowCardsPrompt)!; expect(show).toBeDefined(); expect(show.playerId).toBe(x.opponent.id); expect(show.cards).toEqual([x.a,x.b,x.c]);

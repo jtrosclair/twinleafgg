@@ -1,10 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, EnergyType } from '../../game/store/card/card-types';
-import { ChooseCardsPrompt } from '../../game';
-import { StoreLike, State, GameMessage } from '../../game';
+import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-
-import { MOVE_CARDS, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { SEARCH_DECK_REVEAL_AND_MOVE } from '../../game/store/prefabs/search-reveal-attack';
 
 export class Durant extends PokemonCard {
 
@@ -46,29 +45,11 @@ export class Durant extends PokemonCard {
   public fullName: string = 'Durant SIT';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Copied from Gimmighoul SSP's Minor Errand-Running
+    // Ref: set-astral-radiance/cyndaquil.ts (Charge Energy).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = effect.opponent;
-
-      if (player.deck.cards.length === 0) {
-        return state;
-      }
-
-      return store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_HAND,
-        player.deck,
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
-        { min: 0, max: 2, allowCancel: false }
-      ), selected => {
-        const cards = selected || [];
-        if (cards.length > 0) {
-          MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: this, sourceEffect: effect });
-          SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-        }
-        SHUFFLE_DECK(store, state, player);
-      });
+      return SEARCH_DECK_REVEAL_AND_MOVE(
+        store, state, effect, this, { superType: SuperType.ENERGY, energyType: EnergyType.BASIC }, 2
+      );
     }
 
     return state;

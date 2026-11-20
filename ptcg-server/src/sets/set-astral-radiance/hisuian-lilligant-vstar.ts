@@ -5,11 +5,12 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType, EnergyType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils, GameMessage, GameError } from '../../game';
+import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
 import { Card } from '../../game/store/card/card';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED, MOVE_CARDS, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, MOVE_CARDS, SHUFFLE_DECK, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class HisuianLilligantVstar extends PokemonCard {
   public tags = [CardTag.POKEMON_VSTAR];
@@ -75,7 +76,6 @@ export class HisuianLilligantVstar extends PokemonCard {
         }
       });
 
-      let cards: Card[] = [];
       return store.prompt(state, new ChooseCardsPrompt(
         player,
         GameMessage.CHOOSE_CARD_TO_HAND,
@@ -83,13 +83,17 @@ export class HisuianLilligantVstar extends PokemonCard {
         {},
         { min: 0, max: 5, allowCancel: false, blocked }
       ), selected => {
-        cards = selected || [];
-
-        if (cards.length > 0) {
-          MOVE_CARDS(store, state, player.deck, player.hand, { cards, sourceCard: this });
-          SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
+        if (!selected?.length) {
+          SHUFFLE_DECK(store, state, player);
+          return;
         }
-        SHUFFLE_DECK(store, state, player);
+        // Ref: set-surging-sparks/energy-search-pro.ts (reveal, move, then shuffle).
+        store.prompt(state, new ShowCardsPrompt(
+          opponent.id, GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, selected, { sourcePlayerId: player.id }
+        ), () => {
+          MOVE_CARDS(store, state, player.deck, player.hand, { cards: selected, sourceCard: this, sourceEffect: this.powers[0] });
+          SHUFFLE_DECK(store, state, player);
+        });
       });
     }
 

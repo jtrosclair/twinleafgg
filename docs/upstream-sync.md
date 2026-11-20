@@ -1814,3 +1814,39 @@ mobile budget and all ten standard mouse and touch board checks.
 In the same package, declining Metallic Hammer with a mouse kept all Energy
 and dealt 150 damage. Confirming and choosing three Metal on a touch viewport
 discarded them and dealt 300 damage.
+
+## Gameplay re-audit, batch 8
+
+Delibird MEE's Energizing Present lets the player choose zero or one Energy
+from the cards looked at, including Special Energy. It shows the looked-at
+cards to the player even if none are eligible. The selected card is revealed
+before it moves into hand. Only the looked-at remainder is shuffled and
+returned to the bottom, including when the player selects zero. The engine
+retains the original order of the rest of the deck.
+[Delibird print](https://www.pokemon-card.com/card-search/details.php/card/50460)
+[Official Energizing Present ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E5%B1%B1%E6%9C%AD&page=4&regulation=all)
+
+Gimmighoul SSP, Durant SIT and both Hisuian Lilligant VSTAR prints now wait
+for the reveal before moving selected cards into hand, then shuffle. Their
+private deck searches still permit selecting zero. Gimmighoul and Durant
+now use the existing shared attack search routine. Team Rocket’s Proton
+asks for cards to go into the hand, which matches the destination used by
+the engine.
+[Gimmighoul print](https://asia.pokemon-card.com/my/card-search/detail/16662/)
+[Durant print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/swsh12/13/)
+[Hisuian Lilligant VSTAR print](https://asia.pokemon-card.com/sg/card-search/detail/2286/)
+[Official Team Rocket deck guide](https://www.pokemon.com/uk/strategy/pokemon-tcg-scarlet-violet-destined-rivals-battle-pass-deck-strategies)
+
+All 28 focused tests passed, compared with 22 on the prior revision. The
+broader targeted suite passed 101 tests. Of 3,635 opening actions across
+559 comparable saved states, 3,633 matched exactly. The only two differences
+were Proton's prompt labels. Gimmighoul’s zero-card and two-card branches in
+When it Rains, it Pours! ended in the same game state under both engines
+with the same shuffle seed. The five standard recorded solutions plus
+Revenge of the Assassin reached a human win.
+Playing Proton on both affected saved boards also produced matching state
+after the search. The attested production package passed the mobile budget
+and all ten standard mouse and touch board checks. In that same browser
+package, a mouse user confirmed zero Energy, and a touch user dragged
+Luminous Energy into the selection. Both paths kept the untouched deck
+cards ahead of the shuffled group.

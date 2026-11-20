@@ -49,12 +49,9 @@ Search your deck for up to 3 Basic Team Rocket's Pokémon, reveal them, and put 
         .filter(c => !c.tags.includes(CardTag.TEAM_ROCKET))
         .map(c => player.deck.cards.indexOf(c));
 
-      // We will discard this card after prompt confirmation
-      effect.preventDefault = true;
-
       return store.prompt(state, new ChooseCardsPrompt(
         player,
-        GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
+        GameMessage.CHOOSE_CARD_TO_HAND,
         player.deck,
         { superType: SuperType.POKEMON, stage: Stage.BASIC },
         { min: 0, max: 3, allowCancel: false, blocked: blocked }

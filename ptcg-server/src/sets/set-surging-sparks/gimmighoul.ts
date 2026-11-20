@@ -1,10 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, EnergyType } from '../../game/store/card/card-types';
-import { Card, ChooseCardsPrompt, ShuffleDeckPrompt } from '../../game';
-import { StoreLike, State, GameMessage } from '../../game';
+import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-
-import { SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { SEARCH_DECK_REVEAL_AND_MOVE } from '../../game/store/prefabs/search-reveal-attack';
 
 export class Gimmighoul extends PokemonCard {
 
@@ -49,33 +48,11 @@ export class Gimmighoul extends PokemonCard {
   public cardImage: string = 'assets/cardback.png';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Minor Errand-Running
+    // Ref: set-astral-radiance/cyndaquil.ts (Charge Energy).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = effect.opponent;
-
-      if (player.deck.cards.length === 0) {
-        return state;
-      }
-
-      let cards: Card[] = [];
-      return store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_HAND,
-        player.deck,
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
-        { min: 0, max: 2, allowCancel: false }
-      ), selected => {
-        cards = selected || [];
-
-        SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-
-        player.deck.moveCardsTo(cards, player.hand);
-        // Ref: set-astral-radiance/cyndaquil.ts (resolve search before shuffle).
-        store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-          player.deck.applyOrder(order);
-        });
-      });
+      return SEARCH_DECK_REVEAL_AND_MOVE(
+        store, state, effect, this, { superType: SuperType.ENERGY, energyType: EnergyType.BASIC }, 2
+      );
     }
 
     return state;

@@ -44,10 +44,15 @@ describe('Hisuian Lilligant VSTAR ASR Star Perfume', () => {
   });
   it('moves and reveals selected cards, then shuffles only those remaining', () => {
     const x = setup(); x.power(); choose(x, [x.grass, x.dual, x.grassMon].map(card => x.player.deck.cards.indexOf(card)));
-    expect(x.player.hand.cards).toEqual([x.grass, x.dual, x.grassMon]);
-    expect(x.player.deck.cards.length).toBe(2); expect(x.player.deck.cards).toContain(x.water); expect(x.player.deck.cards).toContain(x.fireMon);
+    expect(x.player.hand.cards).toEqual([]);
+    expect(x.player.deck.cards).toContain(x.grass);
+    expect(x.player.deck.cards).toContain(x.dual);
     const show = x.state.prompts.find(p => p instanceof ShowCardsPrompt && p.result === undefined) as ShowCardsPrompt;
     expect(show).toBeDefined(); expect(show.playerId).toBe(x.opponent.id);
+    expect(x.state.prompts.some(p => p instanceof ShuffleDeckPrompt && p.result === undefined)).toBe(false);
+    (x.store as any).reducePrompt(x.state, new ResolvePromptAction(show.id, true));
+    expect(x.player.hand.cards).toEqual([x.grass, x.dual, x.grassMon]);
+    expect(x.player.deck.cards.length).toBe(2); expect(x.player.deck.cards).toContain(x.water); expect(x.player.deck.cards).toContain(x.fireMon);
     const shuffle = x.state.prompts.find(p => p instanceof ShuffleDeckPrompt && p.result === undefined) as ShuffleDeckPrompt;
     expect(shuffle).toBeDefined(); expect(shuffle.validate([1, 0], x.state)).toBe(true);
     const remaining = x.player.deck.cards.slice();
