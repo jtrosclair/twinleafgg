@@ -1653,3 +1653,40 @@ and Escape Rope brings Latios Active for Destructive Drake. The puzzle wins
 in 14 actions and prompt resolutions. Breaking Through the Wall wins from its
 current published snapshot, and the other three previously recorded solutions
 still reach wins.
+
+## Gameplay re-audit, batch 4
+
+Fossil Quarry now plays as a Stadium while keeping its saved `Fossil Excavation
+Site M5` identity. Its once-per-player search takes up to two Antique Items,
+limited by Bench capacity, then shuffles even after a zero-card choice. Trainer
+fossils with the existing `isFossil` role now count as Pokémon in their field
+slots, including for evolution. Skull Fossil's Spiky Skull uses the engine's
+Ability-sourced counter effect, including after a Knock Out, so Ghost Veil can
+prevent it. Skull and Shield both discard their attached cards when their own
+printed discard action removes them from play. Skull, Shield and Helix also
+reject Special Conditions applied by Abilities, verified against Toxic Powder
+with a normal Pokémon as the control.
+[Official Fossil Quarry Stadium](https://www.pokemon.com/uk/pokemon-news/discover-more-cards-from-the-pokemon-tcg-mega-evolution-pitch-black-expansion)
+[Official Antique Skull Fossil](https://www.pokemon.com/fr/jcc-pokemon/cartes-pokemon/series/me05/73/)
+
+Fossil Quarry also exposed the older `c304e3028` Antique Helix Fossil fix,
+which predates the initial sync window. The fork had a Pokémon definition with
+Trainer supertype and no Item actions. Its original `Antique Helix Fossil MEW`
+identity is now an Item outside play. Its Active-only Helical Swell blocks
+Stadiums played from the opponent's hand, and its discard action clears the
+entire Pokémon slot. [Official Antique Helix Fossil](https://www.pokemon-card.com/card-search/details.php/card/43475/regu/all)
+
+All 3,635 sampled opening actions matched across 559 compatible snapshots
+for the Quarry, Skull and Shield changes. The final revision also checked all
+16 sampled actions in the two snapshots containing fossil-related cards; no
+snapshot contained Antique Helix Fossil. Five recorded solutions reached a
+human win, including the House of Dragon trace from the current published state.
+
+The original ledger review window contained 38 commits whose subject begins
+with `fix`. Three were deferred entirely and ten were ported partially. This
+count includes frontend and import changes. It does not count individual
+bugs in multi-file commits, refactors or pre-window changes. Remaining legacy
+Trainer subtype definitions need review against the actual card classes and
+printed rules. In particular, Technical Machine TS-1 and TS-2 are a separate
+historical Trainer class and should not be reclassified as Pokémon Tools.
+[Call of Legends rulebook](https://assets.pokemon.com/assets/cms/pdf/tcg/rulebooks/Call_of_Legends_Rulebook.pdf)

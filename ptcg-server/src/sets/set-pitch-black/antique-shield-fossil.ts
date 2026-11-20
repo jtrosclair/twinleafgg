@@ -2,11 +2,12 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, PokemonType, TrainerType } from '../../game/store/card/card-types';
 import { GameError, GameLog, GameMessage, Power, PowerType, State, StateUtils, StoreLike, TrainerCard } from '../../game';
 import { AddSpecialConditionsEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
+import { AddSpecialConditionsPowerEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { PowerEffect, RetreatEffect } from '../../game/store/effects/game-effects';
 import { PlayItemEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { GamePhase } from '../../game/store/state/state';
-import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class AntiqueShieldFossil extends TrainerCard {
   public trainerType = TrainerType.ITEM;
@@ -64,7 +65,8 @@ export class AntiqueShieldFossil extends TrainerCard {
   }
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof AddSpecialConditionsEffect && effect.target.getPokemonCard() === this) {
+    if ((effect instanceof AddSpecialConditionsEffect || effect instanceof AddSpecialConditionsPowerEffect)
+      && effect.target.getPokemonCard() === this) {
       effect.preventDefault = true;
     }
 
@@ -82,7 +84,7 @@ export class AntiqueShieldFossil extends TrainerCard {
       const player = effect.player;
       store.log(state, GameLog.LOG_PLAYER_DISCARDS_CARD, { name: player.name, card: this.name, effect: this.powers[1].name });
       const cardList = StateUtils.findCardList(state, this);
-      cardList.moveCardTo(this, player.discard);
+      return MOVE_CARDS(store, state, cardList, player.discard);
     }
 
     if (effect instanceof PlayItemEffect && effect.trainerCard === this) {

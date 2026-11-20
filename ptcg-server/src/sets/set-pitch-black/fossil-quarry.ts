@@ -30,7 +30,7 @@ function* useStadium(
   const maxPick = Math.min(2, slots.length);
   const blocked: number[] = [];
   player.deck.cards.forEach((card, index) => {
-    if (!(card instanceof TrainerCard && card.name.includes('Antique'))) {
+    if (!(card instanceof TrainerCard && card.trainerType === TrainerType.ITEM && card.name.includes('Antique'))) {
       blocked.push(index);
     }
   });
@@ -49,6 +49,7 @@ function* useStadium(
       next();
     },
   );
+  // Ref: official Fossil Quarry print and play-pokemon-from-deck-effect.ts.
   cards.forEach((card, index) => {
     const playFromDeck = new PlayPokemonFromDeckEffect(player, card as PokemonCard, slots[index]);
     store.reduceEffect(state, playFromDeck);
@@ -60,7 +61,7 @@ function* useStadium(
 }
 
 export class FossilQuarry extends TrainerCard {
-  protected _trainerType = TrainerType.STADIUM;
+  public trainerType = TrainerType.STADIUM;
   public regulationMark = 'J';
   public set: string = 'PBL';
   public setNumber: string = '76';

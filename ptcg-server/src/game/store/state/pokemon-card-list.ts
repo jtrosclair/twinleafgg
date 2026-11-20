@@ -1,6 +1,7 @@
 import { Card } from '../card/card';
 import { BoardEffect, CardTag, CardType, SpecialCondition, Stage, SuperType } from '../card/card-types';
 import { PokemonCard } from '../card/pokemon-card';
+import { TrainerCard } from '../card/trainer-card';
 import { Power, Attack } from '../card/pokemon-types';
 import { CardList } from './card-list';
 import { Marker } from './card-marker';
@@ -117,6 +118,10 @@ export class PokemonCardList extends CardList {
     for (const card of this.cards) {
       if (card.superType === SuperType.POKEMON && !this.tools.includes(card) && !this.energies.cards.includes(card)) {
         result.push(card as PokemonCard);
+      } else if (card instanceof TrainerCard && card.powers.some(power => power.isFossil)
+        && !this.tools.includes(card) && !this.energies.cards.includes(card)) {
+        // The card stays an Item outside an in-play Pokémon slot.
+        result.push(card as unknown as PokemonCard);
       } else if (card.name === 'Lillie\'s Poké Doll') {
         result.push(card as PokemonCard);
       } else if (card.name === 'Clefairy Doll') {
