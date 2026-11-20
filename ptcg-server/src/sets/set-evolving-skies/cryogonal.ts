@@ -36,7 +36,7 @@ export class Cryogonal extends PokemonCard {
       const temp = new CardList();
       player.deck.moveTo(temp, 6);
 
-      SHOW_CARDS_TO_PLAYER(store, state, player, temp.cards);
+      SHOW_CARDS_TO_PLAYER(store, state, player, temp.cards, player);
 
       // Check if any cards drawn are basic energy
       const energyCardsDrawn = temp.cards.filter(card => {

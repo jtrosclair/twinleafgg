@@ -68,7 +68,7 @@ export class WishiwashiGx extends PokemonCard {
       const deckTop = new CardList();
       player.deck.moveTo(deckTop, Math.min(12, player.deck.cards.length));
 
-      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards);
+      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards, player);
 
       // Count available bench slots
       const openSlots = player.bench.filter(b => b.cards.length === 0).length;

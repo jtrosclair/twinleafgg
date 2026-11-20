@@ -1,9 +1,8 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, BoardEffect } from '../../game/store/card/card-types';
-import { StoreLike, State, CardList, GameMessage, PlayerType } from '../../game';
+import { StoreLike, State, PlayerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ConfirmCardsPrompt } from '../../game/store/prompts/confirm-cards-prompt';
-import { BLOCK_IF_DECK_EMPTY, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { LOOK_AT_TOPDECK_AND_DISCARD_OR_RETURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Rockruff extends PokemonCard {
 
@@ -35,10 +34,9 @@ export class Rockruff extends PokemonCard {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
-      BLOCK_IF_DECK_EMPTY(player);
-
-      const deckTop = new CardList();
-      player.deck.moveTo(deckTop, 1);
+      if (player.deck.cards.length === 0) {
+        return state;
+      }
 
       player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
         if (cardList.getPokemonCard() === this) {
@@ -46,21 +44,8 @@ export class Rockruff extends PokemonCard {
         }
       });
 
-      return store.prompt(state, new ConfirmCardsPrompt(
-        player.id,
-        GameMessage.DISCARD_FROM_TOP_OF_DECK,
-        deckTop.cards, // Fix error by changing toArray() to cards
-        { allowCancel: true },
-      ), selected => {
-
-        if (selected !== null) {
-          // Discard card
-          deckTop.moveCardsTo(deckTop.cards, player.discard);
-        } else {
-          // Move back to the top of your deck
-          deckTop.moveToTopOfDestination(player.deck);
-        }
-      });
+      // Ref: set-fusion-strike/sandshrew.ts (Dig It Up).
+      return LOOK_AT_TOPDECK_AND_DISCARD_OR_RETURN(store, state, player, player);
     }
     return state;
   }

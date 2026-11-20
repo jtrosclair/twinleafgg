@@ -4,6 +4,7 @@ import { Prompt } from './prompt';
 
 export interface ShowCardsOptions {
   allowCancel: boolean;
+  sourcePlayerId?: number;
 }
 
 export class ShowCardsPrompt extends Prompt<true> {
@@ -12,6 +13,9 @@ export class ShowCardsPrompt extends Prompt<true> {
 
   public options: ShowCardsOptions;
 
+  /** The owner of the revealed cards. The prompt player is their viewer. */
+  public sourcePlayerId?: number;
+
   constructor(
     playerId: number,
     public message: GameMessage,
@@ -19,6 +23,10 @@ export class ShowCardsPrompt extends Prompt<true> {
     options?: Partial<ShowCardsOptions>
   ) {
     super(playerId);
+
+    if (options?.sourcePlayerId !== undefined) {
+      this.sourcePlayerId = options.sourcePlayerId;
+    }
 
     // Default options
     this.options = Object.assign({}, {

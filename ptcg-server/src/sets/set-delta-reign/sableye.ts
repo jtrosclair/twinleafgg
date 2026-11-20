@@ -49,8 +49,8 @@ export class Sableye extends PokemonCard {
         sourceEffect: this.attacks[0],
       });
 
-      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards);
-      SHOW_CARDS_TO_PLAYER(store, state, opponent, deckTop.cards);
+      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards, opponent);
+      SHOW_CARDS_TO_PLAYER(store, state, opponent, deckTop.cards, opponent);
 
       if (openSlots.length === 0) {
         state = MOVE_CARDS(store, state, deckTop, opponent.deck, {

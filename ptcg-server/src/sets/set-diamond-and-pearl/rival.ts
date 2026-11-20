@@ -39,8 +39,8 @@ export class Rival extends TrainerCard {
       const deckTop = new CardList();
       const count = Math.min(5, player.deck.cards.length);
       MOVE_CARDS(store, state, player.deck, deckTop, { count, sourceCard: this });
-      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards);
-      SHOW_CARDS_TO_PLAYER(store, state, opponent, deckTop.cards);
+      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards, player);
+      SHOW_CARDS_TO_PLAYER(store, state, opponent, deckTop.cards, player);
 
       const takeCount = Math.min(3, deckTop.cards.length);
       if (takeCount === 0) {

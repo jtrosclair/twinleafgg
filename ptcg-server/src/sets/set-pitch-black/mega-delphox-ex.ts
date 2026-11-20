@@ -57,7 +57,7 @@ export class MegaDelphoxex extends PokemonCard {
       const deckTop = new CardList();
       MOVE_CARDS(store, state, player.deck, deckTop, { count: Math.min(9, player.deck.cards.length), sourceCard: this });
 
-      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards);
+      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards, player);
 
       const openSlots = player.bench.filter((b) => b.cards.length === 0).length;
       const basicCount = deckTop.cards.filter(

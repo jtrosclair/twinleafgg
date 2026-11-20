@@ -58,7 +58,7 @@ export class Lapras extends PokemonCard {
       const deckTop = new CardList();
       player.deck.moveTo(deckTop, count);
 
-      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards);
+      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards, player);
 
       return store.prompt(state, new OrderCardsPrompt(
         player.id,

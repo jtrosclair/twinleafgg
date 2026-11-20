@@ -62,7 +62,7 @@ export class UnownA extends PokemonCard {
       const deckTop = new CardList();
       const count = Math.min(2, player.deck.cards.length);
       MOVE_CARDS(store, state, player.deck, deckTop, { count, sourceCard: this });
-      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards);
+      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards, player);
 
       return store.prompt(state, new OrderCardsPrompt(
         player.id,

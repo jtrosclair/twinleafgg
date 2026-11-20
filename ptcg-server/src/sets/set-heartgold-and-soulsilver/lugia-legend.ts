@@ -74,7 +74,7 @@ export class LugiaLEGEND extends PokemonCard {
           count: Math.min(5, player.deck.cards.length),
           sourceCard: this,
         });
-        SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards);
+        SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards, player);
 
         const energies = deckTop.cards.filter(c => c instanceof EnergyCard) as EnergyCard[];
         const others = deckTop.cards.filter(c => c.superType !== SuperType.ENERGY);

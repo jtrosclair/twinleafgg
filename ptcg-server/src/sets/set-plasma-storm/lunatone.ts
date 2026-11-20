@@ -56,7 +56,7 @@ export class Lunatone extends PokemonCard {
       player.deck.moveTo(deckTop, count);
 
       // Show the top cards to the player
-      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards);
+      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards, player);
 
       // Let the player reorder them
       return store.prompt(state, new OrderCardsPrompt(

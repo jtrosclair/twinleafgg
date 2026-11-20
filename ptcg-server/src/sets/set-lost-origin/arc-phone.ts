@@ -39,13 +39,13 @@ export class ArcPhone extends TrainerCard {
 
       if (faceDownPrizes.length === 0) {
         // No face-down prizes to swap — show top card and return it to deck top
-        SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards);
+        SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards, player);
         deckTop.moveToTopOfDestination(player.deck);
         return state;
       }
 
       // Show the player the top card
-      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards);
+      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards, player);
 
       // Build blocked list from face-down prizes (only face-down, non-empty slots are selectable)
       const blocked: number[] = [];

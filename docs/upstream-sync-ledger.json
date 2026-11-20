@@ -365,8 +365,8 @@
       "sha": "da4a62d0794bbccc076898227a5f192994bcd468",
       "date": "2026-10-23",
       "subject": "fix(frontend): useFromHand Abilities, ShowCardsPrompt error",
-      "status": "deferred",
-      "notes": "Most changes are React UI, but shared prefab and ShowCardsPrompt changes need simulator state/serialization review."
+      "status": "partial",
+      "notes": "Ported Show Cards ownership and messaging into the shared engine. Explicit ownership preserves the source when a deck effect temporarily moves revealed cards out of their zone. Angular already enables Pokémon hand Abilities without requiring the playability hint and targets the selected physical copy. The React 2D and 3D presentation changes have no Angular equivalent. The related top-deck audit corrected Trick Shovel, Sandshrew FST and Rockruff JTG through the existing Confirm Cards prompt."
     },
     {
       "sha": "b63dae1a88c7e6cfb5ae0d37df8f641839fe3918",
@@ -624,15 +624,15 @@
       "sha": "cfd71b70ee4c917033874a57aff15aca8d6177f6",
       "date": "2026-11-09",
       "subject": "add(cards): New M7 Cards",
-      "status": "deferred",
-      "notes": "Adds five Aura Seeker M7 cards, but all use placeholder cardback artwork and FLO fullName values despite set M7. The two Urshifu handlers award optional-discard effects before confirming the discard; validate identities, real artwork and timing before porting. Detailed identity, artwork and implementation audit: docs/upstream-m7-audit-2026-11-10.md. Japanese reveals are reported via official Pokémon Card videos; English identities and working artwork mappings remain unverified. Urshifu requires completed-discard and spread-damage handling; Meowth and Persian need timing and modifier corrections."
+      "status": "partial",
+      "notes": "The fork now registers the five M7 cards from the catalog sync under legacy FLO fullName values. A real simulator audit reproduced Torrential Strike placing 40 damage on each opposing Benched Pokémon while the discard prompt is still open and verified both Urshifu attacks omit the optional cost with a qualifying Luminous Energy. The official Japanese scans establish collector numbers 049 and 050 and require an actual discard for the bonus. The official scans also omit the old Strike mechanic banners that local card tags currently grant. None of these five identities appears in the 559 comparable saved puzzles (401 active). Actual gameplay and artwork remain under review. Preserve the legacy identity while validating qualified Energy, discard timing, and attack damage as separate checks."
     },
     {
       "sha": "214480db84a7dd861467da06d55010af6dbbaf36",
       "date": "2026-11-09",
       "subject": "fix(cards): M7 Imports",
-      "status": "deferred",
-      "notes": "Follow-up imports for the five Aura Seeker cards; deferred with cfd71b70 pending artwork, identity and gameplay review. Detailed identity, artwork and implementation audit: docs/upstream-m7-audit-2026-11-10.md. Japanese reveals are reported via official Pokémon Card videos; English identities and working artwork mappings remain unverified. Urshifu requires completed-discard and spread-damage handling; Meowth and Persian need timing and modifier corrections."
+      "status": "already-present",
+      "notes": "Compared the commit with its parent: it only reorders and reformats equivalent TypeScript imports in Persian and the two Urshifu definitions. All three import blocks already match the post-commit form locally. The registered cards' actual gameplay defects are tracked against cfd71b70."
     },
     {
       "sha": "1663d6a626b85f3035e0e0bd7be187623449d06b",

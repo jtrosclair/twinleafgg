@@ -43,7 +43,7 @@ export class Sandshrew extends PokemonCard {
     // Ref: prefabs.ts (LOOK_AT_TOPDECK_AND_DISCARD_OR_RETURN)
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
-      LOOK_AT_TOPDECK_AND_DISCARD_OR_RETURN(store, state, player, player);
+      return LOOK_AT_TOPDECK_AND_DISCARD_OR_RETURN(store, state, player, player);
     }
 
     // Attack 2: Let's All Rollout

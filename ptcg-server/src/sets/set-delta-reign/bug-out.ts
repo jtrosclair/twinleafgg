@@ -53,8 +53,8 @@ export function BUG_OUT(
   const opponent = StateUtils.getOpponent(state, player);
   const revealed = revealBottomDeckCards(player.deck, BUG_OUT_REVEAL_COUNT);
 
-  SHOW_CARDS_TO_PLAYER(store, state, player, revealed);
-  SHOW_CARDS_TO_PLAYER(store, state, opponent, revealed);
+  SHOW_CARDS_TO_PLAYER(store, state, player, revealed, player);
+  SHOW_CARDS_TO_PLAYER(store, state, opponent, revealed, player);
 
   const bugOutPokemon = revealed.filter(card => hasAttackNamed(card, BUG_OUT_ATTACK_NAME));
 

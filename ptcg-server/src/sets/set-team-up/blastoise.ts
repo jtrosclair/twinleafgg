@@ -58,7 +58,7 @@ export class Blastoise extends PokemonCard {
       const temp = new CardList();
       player.deck.moveTo(temp, Math.min(6, player.deck.cards.length));
 
-      SHOW_CARDS_TO_PLAYER(store, state, player, temp.cards);
+      SHOW_CARDS_TO_PLAYER(store, state, player, temp.cards, player);
 
       const waterEnergyCount = temp.cards.filter(card =>
         card instanceof EnergyCard && card.energyType === EnergyType.BASIC && card.provides.includes(CardType.WATER)

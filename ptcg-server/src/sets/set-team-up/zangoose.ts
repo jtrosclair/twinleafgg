@@ -49,7 +49,7 @@ export class Zangoose extends PokemonCard {
       const deckTop = new CardList();
       player.deck.moveTo(deckTop, Math.min(6, player.deck.cards.length));
 
-      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards);
+      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards, player);
 
       const pokemonCount = deckTop.cards.filter(c => c instanceof PokemonCard).length;
 

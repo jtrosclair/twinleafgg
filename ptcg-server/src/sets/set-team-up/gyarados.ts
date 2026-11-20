@@ -53,7 +53,7 @@ export class Gyarados extends PokemonCard {
       const deckTop = new CardList();
       player.deck.moveTo(deckTop, Math.min(7, player.deck.cards.length));
 
-      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards);
+      SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards, player);
 
       // Count Water Energy cards
       const waterEnergy = deckTop.cards.filter(c =>

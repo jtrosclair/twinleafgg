@@ -1,3 +1,4 @@
+import { ConfirmCardsPrompt } from '../prompts/confirm-cards-prompt';
 import { GustOpponentBenchEffect } from '../effects/attack-effects';
 import { AttachEnergyOptions, AttachEnergyPrompt, Card, CardList, CardTarget, ChooseCardsOptions, ChooseCardsPrompt, ChoosePokemonPrompt, ChoosePrizePrompt, ChooseEnergyPrompt, ConfirmPrompt, DamageMap, EnergyCard, GameError, GameLog, GameMessage, MoveDamagePrompt, Player, PlayerType, PokemonCardList, PowerType, SelectPrompt, ShowCardsPrompt, ShuffleDeckPrompt, SlotType, State, StateUtils, StoreLike, TrainerCard } from '../..';
 import { TrainerEffect, AttachEnergyEffect, ToolEffect, CoinFlipEffect, CoinFlipSequenceEffect, PlayPokemonFromDeckEffect } from '../effects/play-card-effects';
@@ -2312,21 +2313,22 @@ export function LOOK_AT_TOP_X_CARDS_AND_BENCH_UP_TO_Y_POKEMON(
   });
 }
 
-export function LOOK_AT_TOPDECK_AND_DISCARD_OR_RETURN(store: StoreLike, state: State, choosingPlayer: Player, deckPlayer: Player) {
-  {
-    BLOCK_IF_DECK_EMPTY(deckPlayer);
-    const deckTop = new CardList();
-    deckPlayer.deck.moveTo(deckTop, 1);
-    SHOW_CARDS_TO_PLAYER(store, state, choosingPlayer, deckTop.cards);
-    SELECT_PROMPT_WITH_OPTIONS(store, state, choosingPlayer, GameMessage.CHOOSE_OPTION, [{
-      message: GameMessage.DISCARD_FROM_TOP_OF_DECK,
-      action: () => deckTop.moveToTopOfDestination(deckPlayer.discard),
-    },
-    {
-      message: GameMessage.RETURN_TO_TOP_OF_DECK,
-      action: () => deckTop.moveToTopOfDestination(deckPlayer.deck),
-    }]);
+export function LOOK_AT_TOPDECK_AND_DISCARD_OR_RETURN(store: StoreLike, state: State, choosingPlayer: Player, deckPlayer: Player): State {
+  const topCard = deckPlayer.deck.cards[0];
+  if (topCard === undefined) {
+    return state;
   }
+
+  return store.prompt(state, new ConfirmCardsPrompt(
+    choosingPlayer.id,
+    GameMessage.DISCARD_FROM_TOP_OF_DECK,
+    [topCard],
+    { allowCancel: true },
+  ), discard => {
+    if (discard === true) {
+      deckPlayer.deck.moveCardTo(topCard, deckPlayer.discard);
+    }
+  });
 }
 
 export function MOVE_CARDS_TO_HAND(store: StoreLike, state: State, player: Player, cards: Card[]) {
@@ -2336,14 +2338,24 @@ export function MOVE_CARDS_TO_HAND(store: StoreLike, state: State, player: Playe
   });
 }
 
-export function SHOW_CARDS_TO_PLAYER(store: StoreLike, state: State, player: Player, cards: Card[]): State {
-  if (cards.length === 0)
+export function SHOW_CARDS_TO_PLAYER(store: StoreLike, state: State, player: Player, cards: Card[], sourcePlayer?: Player): State {
+  if (cards.length === 0) {
     return state;
-  return store.prompt(state, new ShowCardsPrompt(
-    player.id,
-    GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
-    cards,
-  ), () => { });
+  }
+
+  let sourcePlayerId = sourcePlayer?.id;
+  if (sourcePlayerId === undefined) {
+    try {
+      sourcePlayerId = StateUtils.findOwner(state, StateUtils.findCardList(state, cards[0])).id;
+    } catch (error) {
+      if (!(error instanceof GameError) || error.message !== GameMessage.INVALID_GAME_STATE) {
+        throw error;
+      }
+    }
+  }
+  const message = sourcePlayerId === player.id ? GameMessage.CARDS_SHOWED_BY_EFFECT : GameMessage.CARDS_SHOWED_BY_THE_OPPONENT;
+  const options = sourcePlayerId === undefined ? undefined : { sourcePlayerId };
+  return store.prompt(state, new ShowCardsPrompt(player.id, message, cards, options), () => {});
 }
 
 export function SELECT_PROMPT(store: StoreLike, state: State, player: Player, values: string[], callback: (result: number) => void): State {

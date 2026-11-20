@@ -1701,3 +1701,43 @@ only in the shared Stadium slot, then as separate cards in either player's
 discard dialog. The ledger now classifies `450a3e6a5` as already present.
 The other two wholly deferred `fix` entries concern the shared reveal/from-hand
 changes and the Aura Seeker imports.
+
+## Gameplay re-audit, batch 5
+
+Show Cards now distinguishes the viewer from the card owner, including where
+a deck effect has already moved the cards into a temporary list. Own reveals
+such as Arc Phone use the effect label. Hand Scope keeps the opponent label.
+The optional source identifier is compatible with existing prompts.
+[Arc Phone print](https://assets.pokemon.com/assets/cms2/img/cards/web/SWSH11/SWSH11_EN_152.png)
+[Hand Scope print](https://assets.pokemon.com/assets/cms2/img/cards/web/XY4/XY4_EN_96.png)
+
+Trick Shovel offers only decks with a top card. Its confirmation shows that
+card and waits for the discard decision. Declining leaves the deck order intact.
+If both decks are empty, the Item cannot be played. Sandshrew FST and Rockruff
+JTG share the confirm path for Dig It Up. The attack can finish with an empty
+deck. [Trick Shovel print](https://assets.pokemon.com/assets/cms2/img/cards/web/XY2/XY2_EN_98.png)
+[Sandshrew print](https://assets.pokemon.com/assets/cms2/img/cards/web/SWSH8/SWSH8_EN_131.png)
+[Rockruff print](https://asia.pokemon-card.com/ph/card-search/detail/17931/)
+
+Thirteen focused reveal tests pass, including twelve that failed on the
+baseline. The wider targeted suite passed 154 engine tests and 207 Angular
+service and component tests. All 3,635 sampled opening actions matched across
+559 compatible snapshots, including 401 active states. Five recorded solutions
+reached a win. The attested production build also contains the final fossil
+condition fixes from batch 4. In the packaged simulator, mouse play of Trick
+Shovel kept its top card visible after the old timeout and left it on top after
+declining. On a touch-sized browser, tapping the hand card and Excited Dive
+put Talonflame ex directly onto the Bench.
+
+The last fully deferred commit named `fix`, `214480db8`, reformats import
+blocks already present locally. It does not address the M7 mechanics. The
+first-action probe reproduced Rapid Strike Urshifu damaging both Benched
+Pokémon before the required Water Energy was discarded. Both Urshifu attacks
+skip a qualifying Luminous Energy when offering the optional discard. The
+Japanese scans also omit the legacy Strike banners that the local definitions
+grant. A read-only query found no known M7/FLO identities from these five cards
+in the 559 comparable puzzle snapshots. Their original gameplay change
+`cfd71b70` stays open for actual fixes.
+[Official Aura Seeker preview](https://www.pokemon-card.com/ex/m7/index.html)
+[Single Strike Urshifu M7 049](https://www.pokemon-card.com/ex/m7/assets/images/card/m7-049-pk5dw.webp)
+[Rapid Strike Urshifu M7 050](https://www.pokemon-card.com/ex/m7/assets/images/card/m7-050-zbsr3.webp)
