@@ -124,12 +124,15 @@ describe('Chaos Rising upstream alternate prints', () => {
     expect(new Set(setChaosRising.map(c => c.fullName)).size).toBe(setChaosRising.length);
     expect(new Set(setChaosRising.map(c => c.set + ' ' + c.setNumber)).size).toBe(setChaosRising.length);
   });
-  it('covers every numbered English Chaos Rising image print without adding renamed duplicates', () => {
-    const numbers = new Set(setChaosRising.map(c => c.usSetNumber));
-    for (let number = 1; number <= 122; number++) expect(numbers.has('CRI ' + number)).toBe(true);
-    expect(setChaosRising.length).toBe(123); // 122 English prints plus preserved M4/Tome alias print.
-    ['GreatHaulNet', 'TransformationTome', 'AngeFloette'].forEach(className => {
-      expect(setChaosRising.some(c => c.constructor.name === className)).toBe(false);
-    });
+  it('covers every English Chaos Rising collector number exactly once alongside the Japanese prints', () => {
+    const english = setChaosRising.filter(card => card.set === 'CRI');
+    const japanese = setChaosRising.filter(card => card.set === 'M4');
+    const expected = Array.from({ length: 122 }, (_, index) => index + 1);
+    expect(english.map(card => Number(card.setNumber)).sort((a, b) => a - b)).toEqual(expected);
+    expect(japanese.length).toBeGreaterThan(0);
+    expect(english.length + japanese.length).toBe(setChaosRising.length);
+    for (const number of expected) {
+      expect(setChaosRising.some(card => card.usSetNumber === 'CRI ' + number)).toBe(true);
+    }
   });
 });

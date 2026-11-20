@@ -1893,3 +1893,39 @@ The attested production browser package passed the mobile size budget.
 A mouse and a touch run each discarded Lightning Energy for Holon Farmer,
 then recovered it together with Charmeleon.
 All ten standard mouse and touch board checks also passed on that package.
+
+## Gameplay re-audit, batch 10
+
+Four active saved states use the exact identifier `Applin SCR`. The two
+published puzzles and two corresponding drafts were created between January 26
+registration (`9bee5817a`) and March 25 removal (`f26049196`). Their original
+registered card has Spray Fluid for 20 damage. The temporary name fallback
+after removal used Destined Rivals' Mini Drain for 10. The catalog restored
+the Stellar Crown print in `7a6f5e50e`, preserving the original rules. The
+test now covers the exact and numbered identities as well as the old
+fallback when the Stellar Crown print is absent. In Festival Finale, a
+played Spray Fluid still dealt 40 through Weakness. In Twice in a row?, the
+saved deck's Applin still entered play with Spray Fluid after Boom Boom Groove.
+[Stellar Crown Applin print](https://asia.pokemon-card.com/sg/card-search/detail/13988/)
+[Destined Rivals Applin print](https://asia.pokemon-card.com/sg/card-search/detail/19565/)
+
+The main POP 6 and 7 sets already register the eleven cards from the old
+Round 30 overlay. The two Pitch Black Items already register in Pitch Black,
+where Crushing Hammer 105 and Energy Switch 107 now carry the J and I
+marks from their scans. The inherited Item effects remain the same.
+Registry checks cover all English Chaos Rising and Delta Reign collector
+numbers, plus the separately registered Japanese prints and Eevee ex MEE.
+[Crushing Hammer print](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/PBL/PBL_105_R_EN.png)
+[Energy Switch print](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/PBL/PBL_107_R_EN.png)
+
+The deck-import API passes 24 of 29 cases on both the baseline and candidate.
+The five remaining failures concern historical numbered print identities and
+fallbacks in Unleashed, Majestic Dawn, Stormfront, Arceus and DPP. The fetched
+Twinleaf main remains at `d3d7a0031`.
+
+The full engine suite passed all 7,145 cases in 256 spec files. All 15,750
+runtime print identities, classes and ordering matched the baseline, with
+the two intended regulation-mark corrections. All 3,635 sampled opening
+actions matched across 559 comparable saved states. Six recorded solutions
+reached a win. The attested production package passed the mobile budget
+and all ten mouse and touch board checks.

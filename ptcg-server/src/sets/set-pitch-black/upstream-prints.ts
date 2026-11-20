@@ -158,6 +158,7 @@ export class CrushingHammerFAPBL extends CrushingHammer {
   public set = 'PBL';
   public fullName = 'Crushing Hammer FA PBL';
   public setNumber = '105';
+  public regulationMark = 'J';
 }
 
 export class DarkBellFA extends DarkBell {
@@ -170,6 +171,7 @@ export class EnergySwitchFAPBL extends EnergySwitch {
   public set = 'PBL';
   public fullName = 'Energy Switch FA PBL';
   public setNumber = '107';
+  public regulationMark = 'I';
 }
 
 export class GladionsFinalBattleFA extends GladionsFinalBattle {

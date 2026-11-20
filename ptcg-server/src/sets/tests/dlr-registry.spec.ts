@@ -28,21 +28,21 @@ describe('complete Delta Reign catalogue', () => {
   afterEach(() => StateSerializer.setKnownCards(previous));
   it('registers every collector number exactly once with a unique executable identity', () => {
     expect(names.length).toBe(141);
-    expect(setDeltaReign.length).toBe(141);
-    expect(new Set(setDeltaReign.map(card => card.fullName)).size).toBe(141);
-    expect(setDeltaReign.map(card => Number(card.setNumber))).toEqual(Array.from({length: 141}, (_, i) => i + 1));
-    expect(setDeltaReign.every(card => card.set === 'DLR')).toBe(true);
+    const english = setDeltaReign.filter(card => card.set === 'DLR');
+    expect(new Set(setDeltaReign.map(card => card.fullName)).size).toBe(setDeltaReign.length);
+    expect(english.map(card => Number(card.setNumber))).toEqual(Array.from({length: 141}, (_, i) => i + 1));
+    expect(setDeltaReign.filter(card => card.set !== 'DLR').map(card => card.fullName)).toEqual(['Eevee ex MEE']);
   });
   it('has a distinct existing artwork URL for every print in browser metadata', () => {
     const images: { [key: string]: string } = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'data/limitlesstcg-images.json'), 'utf8'));
     for (const card of setDeltaReign) {
       const number = card.setNumber.padStart(3, '0');
-      expect(images[card.usSetNumber || card.set + ' ' + card.setNumber]).toContain('/DLR_' + number + '_');
+      expect(images[card.usSetNumber || card.set + ' ' + card.setNumber]).toContain('/' + card.set + '_' + number + '_');
     }
   });
   names.forEach((name, index) => it('resolves the printed identity and artwork for DLR ' + (index + 1), () => {
     const number = index + 1;
-    const card = setDeltaReign.find(item => Number(item.setNumber) === number)!;
+    const card = setDeltaReign.find(item => item.set === 'DLR' && Number(item.setNumber) === number)!;
     expect(StateSerializer.normalizeCardName(name + ' DLR ' + number)).toBe(card.fullName);
     expect(card.usSetNumber || card.set + ' ' + card.setNumber).toBe('DLR ' + number);
   }));
