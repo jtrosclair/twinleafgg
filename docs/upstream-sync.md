@@ -2343,3 +2343,59 @@ Pokémon in a simultaneous Knock Out group remains open.
 [Deep Sea King print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh10tg/TG03/)
 [Celestial Storm Lanturn print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sm7/50/)
 [Hidden Legends Lanturn print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/ex5/38/)
+
+## Gameplay re-audit, batch 20
+
+Wish Connector now uses the specific Basic Pokémon V Knock Out, including
+Jirachi V itself and Benched targets. Each copy can move one remaining
+Basic Energy to another Pokémon. Deep Sea King moves any attached card
+currently providing Water Energy, including Wash Water Energy, Aurora
+Energy and Pokémon attached as Energy. It honors effects such as Temple of
+Sinnoh and retains the order of the physical attachments in the prompt.
+Moving Splash Energy first prevents its rescue. Resolving Splash Energy
+first returns the Pokémon and discards Splash Energy. An ineligible Splash
+Energy also discards itself without taking the entire Pokémon stack.
+[Wish Connector rulings](https://www.pokemon-card.com/rules/faq/search.php?page=241&regulation=all&sc_group_id=849%2F1000)
+[Deep Sea King rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%AD%E3%83%B3%E3%82%B0%E3%83%89%E3%83%A9&page=1&regulation=all&regulation_faq_main_item1=all)
+[Moving Holon's Castform as Energy](https://www.pokemon-card.com/rules/faq/search.php?page=1119&regulation=all)
+[Splash Energy rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B9%E3%83%97%E3%83%A9%E3%83%83%E3%82%B7%E3%83%A5%E3%82%A8%E3%83%8D%E3%83%AB%E3%82%AE%E3%83%BC)
+
+Celestial Storm Lanturn uses Energy Grounding once per qualifying damage
+Knock Out before discard, including two targets Knocked Out together.
+Hidden Legends follows its English print. The Poké-Power can transfer one
+Basic Energy from the actual discard pile per opponent turn, even if two
+Lanturn are in play. A lethal attack effect with explicit provenance also
+qualifies, including Frenzied Gouging and Phantom Dive's counters. Direct
+damage-counter mutations without source information still require a
+separate review. Both Lightning Strike attacks discard only Energy that
+currently provides Lightning and apply the correct damage after the choice.
+[Celestial Storm English card text](https://assets.pokemon.com/assets/cms2-ru-ru/pdf/trading-card-game/tcg_sun_moon_7_card_translation.pdf)
+[Celestial Storm Energy Grounding rulings](https://www.pokemon-card.com/rules/faq/search.php?page=578&regulation=all)
+[Hidden Legends English card text](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/EX_Hidden_Legends.pdf)
+[Hidden Legends Energy Grounding rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A9%E3%83%B3%E3%82%BF%E3%83%BC%E3%83%B3&page=2&regulation=all)
+
+The candidate passes all 30 focused regressions. The preceding engine
+failed 24 and passed six. The complete engine and client card suites
+passed 7,391 tests across 265 files. An isolated build with the pending
+simulator work applied passed 167 focused and simulator tests. All 559
+comparable saved states and 3,633 sampled opening actions matched. Seven
+recorded puzzle solutions reached wins. The attested package met the mobile
+size budget and passed all ten mouse and touch board checks. The packaged
+client completed both Splash Energy and Deep Sea King effect orders with
+the expected destinations.
+
+The next action probes reproduced eight cases across Vengeful Punch, Spell
+Tag, Golem FST, Qwilfish CRE and Maractus JTG. Vengeful Punch misses the
+Benched holder and places eight counters on the replacement Active after
+Hit and Run. Spell Tag misses a Benched Psychic holder and can apply
+twice on a non-Psychic holder. Desperate Blast bypasses Ghost Veil and
+Bursting Needles triggers on nonlethal damage. Maractus retaliates from the
+Bench. Vengeful Punch can also leave a lethally damaged attacker in play
+when the attacker takes its final Prize. That case requires checking the
+new Knock Out before evaluating both players' win conditions. Ordering
+effects across separate Pokémon in the same Knock Out group remains open.
+[Vengeful Punch print](https://www.pokemon-card.com/card-search/details.php/card/43944/regu/all)
+[Vengeful Punch ruling after the attacker switches](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%A6%25E&page=28&regulation=all)
+[Maractus print](https://www.pokemon-card.com/card-search/details.php/card/47221)
+[Simultaneous win conditions](https://assets.pokemon.com/assets/cms2-fi-fi/pdf/trading-card-game/rulebook/svi_rulebook_en.pdf)
+[February 2026 tiebreaker update](https://professorprogram.pokemon.com/news/11473085)
