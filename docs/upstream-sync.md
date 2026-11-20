@@ -2184,3 +2184,52 @@ Phantom Dive ruling requires three Prizes when Munkidori ex takes lethal
 attack damage and Pecharunt ex is Knocked Out by counters in the same attack.
 [Official Munkidori ex print](https://asia.pokemon-card.com/ph/card-search/detail/13759/)
 [Official simultaneous Knock Out ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A2%E3%83%A2%E3%83%AF%E3%83%AD%E3%82%A6ex&regulation_faq_main_item1=all)
+
+## Gameplay re-audit, batch 17
+
+Munkidori ex, Mega Gengar ex, Legacy Energy, Gift Energy, Amulet of Hope,
+Hero's Medal and Island Challenge Amulet now check which opponent's attack
+actually dealt lethal damage to the target. Phantom Dive's damage counters
+and Frenzied Gouging's Knock Out effect do not trigger these effects.
+A simultaneous Knock Out retains the Pokémon that were in play before
+removals, so Munkidori ex can use the actual Pecharunt ex in that group.
+Phantom Dive takes three Prizes in the official Munkidori ex and Pecharunt
+ex case. Shadowy Concealment applies once per Knock Out across copies and
+can combine with Oh No You Don’t or Legacy Energy. A zero-Prize Knock Out
+cannot subtract Prizes from another simultaneous Knock Out.
+[Official Munkidori ex and Phantom Dive ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A2%E3%83%A2%E3%83%AF%E3%83%AD%E3%82%A6ex&regulation_faq_main_item1=all)
+[Official Mega Gengar ex print](https://asia.pokemon-card.com/sg/card-search/detail/21904/)
+[Official Legacy Energy print and rulings](https://asia.pokemon-card.com/sg/card-search/detail/12648/)
+
+Gift Energy draws during the Knock Out. Amulet of Hope searches, moves the
+chosen cards, and shuffles before Prizes are taken. Existing snapshots
+with pending legacy markers can still resolve them. A Hero's Medal or
+Island Challenge Amulet referenced by both attachment lists applies its
+HP and Prize changes once. Two physically distinct Island Challenge Amulets
+under Theta Double each apply their modifier. Standard Knock Outs discard
+each physical Tool once even if an older slot has both references.
+[Official Gift Energy print](https://asia.pokemon-card.com/ph/card-search/detail/2768/)
+[Official Amulet of Hope print](https://www.pokemon-card.com/card-search/details.php/card/46438)
+[Official Hero's Medal print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh4/201)
+[Official Island Challenge Amulet rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%81%97%E3%81%BE%E3%82%81%E3%81%90%E3%82%8A%E3%81%AE%E3%81%82%E3%81%8B%E3%81%97&regulation_faq_main_item1=all)
+
+Verification passed all 26 focused cases. The prior engine failed 19 of
+those cases and passed the seven controls. All 7,303 engine tests passed
+across 262 files. The validator matched all 559 compatible saved puzzle
+states and all 3,633 sampled opening actions. Seven recorded solutions
+reached wins. The attested package met the mobile size budget and passed
+all ten mouse and touch checks.
+
+Amulet of Hope opens its search during the Knock Out and resolves it
+before Prizes. The shared ordering of physical discard and asynchronous
+Knock Out prompts still needs review. So does the timing of Ability
+suppression when its source leaves play in the same Knock Out group.
+
+Heavy Baton remains open. Real attacks reproduced its prompt with a
+Retreat Cost modified to five, an explicit Knock Out, and a Benched
+holder. The prompt also requires a single destination and permits zero
+transfers. The printed rule requires a Retreat Cost of exactly four on the
+Active, allows splitting Basic Energy across the Bench, and requires a
+transfer when a legal move is available.
+[Official Heavy Baton print](https://www.pokemon-card.com/card-search/details.php/card/45283/regu/all)
+[Official Heavy Baton rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%86%E3%83%84%E3%83%8E%E3%82%AB%E3%82%A4%E3%83%8A&regulation_faq_main_item1=all)
