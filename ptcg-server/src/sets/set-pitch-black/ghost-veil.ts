@@ -5,6 +5,7 @@ import { StoreLike } from '../../game/store/store-like';
 import { Effect } from '../../game/store/effects/effect';
 import { AbstractAttackEffect, ApplyWeaknessEffect, DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import {
+  EffectOfAbilityEffect,
   PlaceDamageCountersEffect,
   PutDamageCountersEffect,
 } from '../../game/store/effects/game-effects';
@@ -34,6 +35,14 @@ export function countGhostVeilPokemonInDiscard(player: Player): number {
  *       set-lost-origin/enamorus-v.ts (AddSpecialConditionsPowerEffect — ability-sourced Special Conditions).
  */
 export function reduceGhostVeil(store: StoreLike, state: State, effect: Effect, self: PokemonCard): State {
+  if (effect instanceof EffectOfAbilityEffect && effect.target?.getPokemonCard() === self) {
+    const owner = StateUtils.findOwner(state, effect.target);
+    if (effect.player !== owner && !IS_ABILITY_BLOCKED(store, state, owner, self)) {
+      effect.target = undefined;
+    }
+    return state;
+  }
+
   if (effect instanceof AbstractAttackEffect && effect.target?.cards.includes(self)) {
     if (effect.target.getPokemonCard() !== self) {
       return state;

@@ -21,7 +21,7 @@ export function CAN_APPLY_ABILITY_TO_TARGET(
 ): boolean {
   const effect = new EffectOfAbilityEffect(abilityOwner, power, card, target);
   store.reduceEffect(state, effect);
-  return !!effect.target;
+  return !effect.preventDefault && !!effect.target;
 }
 
 /** Let the player choose and apply one Ability-sourced Special Condition. */

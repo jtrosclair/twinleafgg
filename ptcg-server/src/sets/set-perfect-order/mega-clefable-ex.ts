@@ -1,7 +1,8 @@
 import { PokemonCard, Stage, CardTag, CardType, PowerType, StoreLike, State, StateUtils, SuperType, ChooseCardsPrompt, GameMessage } from '../../game';
 import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
+import { AddSpecialConditionsPowerEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect } from '../../game/store/effects/game-effects';
+import { EffectOfAbilityEffect } from '../../game/store/effects/game-effects';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class MegaClefableex extends PokemonCard {
@@ -35,21 +36,20 @@ export class MegaClefableex extends PokemonCard {
   public fullName: string = 'Mega Clefable ex M3';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Wings of Light - Prevent opponent ability effects on this Pokemon
-    if (effect instanceof PowerEffect && effect.target && effect.target.cards.includes(this)) {
-      const pokemonCard = effect.target.getPokemonCard();
-      if (pokemonCard === this) {
-        const targetOwner = StateUtils.findOwner(state, effect.target);
-        const opponent = StateUtils.getOpponent(state, targetOwner);
-
-        // Only prevent effects from opponent's abilities
-        if (targetOwner === opponent) {
-          // Check if ability is blocked (to allow our own abilities)
-          if (!IS_ABILITY_BLOCKED(store, state, targetOwner, this)) {
-            effect.preventDefault = true;
-            return state;
-          }
-        }
+    // Ref: set-pitch-black/ghost-veil.ts (prevent effects of opposing Abilities).
+    if (effect instanceof EffectOfAbilityEffect && effect.target?.getPokemonCard() === this) {
+      const owner = StateUtils.findOwner(state, effect.target);
+      if (effect.player !== owner && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        effect.target = undefined;
+      }
+    }
+    if (effect instanceof AddSpecialConditionsPowerEffect && effect.target.getPokemonCard() === this
+      && effect.source instanceof PokemonCard) {
+      const owner = StateUtils.findOwner(state, effect.target);
+      const opponent = StateUtils.getOpponent(state, owner);
+      if (StateUtils.isPokemonInPlay(opponent, effect.source)
+        && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        effect.preventDefault = true;
       }
     }
 

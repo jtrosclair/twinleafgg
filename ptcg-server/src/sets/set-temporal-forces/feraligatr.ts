@@ -4,7 +4,7 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { StoreLike, State, StateUtils, PokemonCardList } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+import { AttackEffect, PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { ABILITY_USED, ADD_MARKER, BLOCK_EFFECT_IF_MARKER, HAS_MARKER, REMOVE_MARKER_AT_END_OF_TURN, THIS_POKEMON_CANNOT_USE_THIS_ATTACK_NEXT_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 
@@ -51,9 +51,13 @@ export class Feraligatr extends PokemonCard implements CopiedAttackOwnershipCont
 
       const cardList = StateUtils.findCardList(state, this);
       if (cardList instanceof PokemonCardList) {
-        cardList.damage += 50;
-        ADD_MARKER(this.TORRENTIAL_HEART_MARKER, effect.player, this);
-        ABILITY_USED(effect.player, this);
+        // Ref: set-paldea-evolved/meowscarada-ex.ts (source of Ability counters).
+        const counters = new PlaceDamageCountersEffect(effect.player, cardList, 50, this, this.powers[0]);
+        state = store.reduceEffect(state, counters);
+        if (!counters.preventDefault && counters.damage > 0) {
+          ADD_MARKER(this.TORRENTIAL_HEART_MARKER, effect.player, this);
+          ABILITY_USED(effect.player, this);
+        }
       }
     }
     return Feraligatr.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);

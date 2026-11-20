@@ -29,7 +29,8 @@ export class StealthyHood extends TrainerCard {
       }
     }
 
-    if (effect instanceof PlaceDamageCountersEffect && effect.target.tools.includes(this)) {
+    // Older counter effects omit their power. Explicit powers use the owner check above.
+    if (effect instanceof PlaceDamageCountersEffect && !effect.sourcePower && effect.target.tools.includes(this)) {
       effect.preventDefault = true;
     }
     return state;

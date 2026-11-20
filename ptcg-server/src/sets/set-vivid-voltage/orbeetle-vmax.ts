@@ -6,6 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils, GameError, GameMessage, PlayerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { WAS_ATTACK_USED, WAS_POWER_USED, IS_ABILITY_BLOCKED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, REMOVE_MARKER_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 
@@ -67,9 +68,7 @@ export class OrbeetleVmax extends PokemonCard {
 
       // Put 1 damage counter (10 damage) on each of opponent's Pokemon
       opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList) => {
-        if (cardList.cards.length > 0) {
-          cardList.damage += 10;
-        }
+        state = store.reduceEffect(state, new PlaceDamageCountersEffect(player, cardList, 10, this, this.powers[0]));
       });
     }
 

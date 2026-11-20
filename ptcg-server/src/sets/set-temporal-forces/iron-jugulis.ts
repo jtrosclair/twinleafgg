@@ -1,7 +1,7 @@
 import { CardTag, CardType, PokemonCard, PowerType, Stage, State, StateUtils, StoreLike } from '../../game';
-import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
+import { IS_ABILITY_BLOCKED, ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT } from '../../game/store/prefabs/prefabs';
 
 export class IronJugulis extends PokemonCard {
 
@@ -33,7 +33,7 @@ export class IronJugulis extends PokemonCard {
   public powers = [{
     name: 'Automated Combat',
     powerType: PowerType.ABILITY,
-    text: 'If this Pokémon is damaged by an attack from your opponent\'s Pokémon(even if this Pokémon is Knocked Out), put 3 damage counters on the Attacking Pokémon.'
+    text: 'If this Pokémon is in the Active Spot and is damaged by an attack from your opponent\'s Pokémon (even if this Pokémon is Knocked Out), put 3 damage counters on the Attacking Pokémon.'
   }];
 
   public set: string = 'TEF';
@@ -48,21 +48,13 @@ export class IronJugulis extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof PutDamageEffect || effect instanceof DealDamageEffect) {
-      const player = effect.player;
-
-      const cardList = StateUtils.findCardList(state, this);
-
-      if (effect.target !== cardList) {
-        return state;
+    // Ref: set-chaos-rising/chesnaught.ts (retaliation after actual damage).
+    if (ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT(state, effect, { source: this })
+      && effect.target.getPokemonCard() === this) {
+      const owner = StateUtils.findOwner(state, effect.target);
+      if (!IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        state = store.reduceEffect(state, new PlaceDamageCountersEffect(owner, effect.source, 30, this, this.powers[0]));
       }
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      const oppActive = effect.source;
-      oppActive.damage += 30;
     }
 
     return state;

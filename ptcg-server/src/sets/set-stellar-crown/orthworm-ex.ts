@@ -1,12 +1,11 @@
-import { PlayerType } from '../../game/store/actions/play-card-action';
 import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { PowerType } from '../../game/store/card/pokemon-types';
-import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { MarkerConstants } from '../../game/store/markers/marker-constants';
-import { BLOCK_RETREAT, BLOCK_RETREAT_IF_MARKER, IS_ABILITY_BLOCKED, REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { BLOCK_RETREAT, BLOCK_RETREAT_IF_MARKER, IS_ABILITY_BLOCKED, ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT, REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { StateUtils } from '../../game/store/state-utils';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
@@ -52,44 +51,22 @@ export class Orthwormex extends PokemonCard {
     REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN(effect, MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
 
 
-    if (effect instanceof PutDamageEffect || effect instanceof DealDamageEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      if (effect.target !== player.active && effect.target !== opponent.active) {
+    // Ref: set-chaos-rising/chesnaught.ts (retaliation after actual damage).
+    if (ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT(state, effect, { source: this, requireActiveSpot: false })
+      && effect.target.getPokemonCard() === this) {
+      const owner = StateUtils.findOwner(state, effect.target);
+      if (IS_ABILITY_BLOCKED(store, state, owner, this)) {
         return state;
       }
 
-      const targetPlayer = StateUtils.findOwner(state, effect.target);
-
-      let isOrthwormexInPlay = false;
-      targetPlayer.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card === this) {
-          isOrthwormexInPlay = true;
-        }
-      });
-
-      if (!isOrthwormexInPlay) {
-        return state;
+      const energy = new CheckProvidedEnergyEffect(owner, effect.target);
+      state = store.reduceEffect(state, energy);
+      const count = energy.energyMap.reduce((total, { provides }) =>
+        total + (provides.includes(CardType.METAL) || provides.includes(CardType.ANY)
+          ? StateUtils.getProvidesUnitCount(provides) : 0), 0);
+      if (count > 0) {
+        state = store.reduceEffect(state, new PlaceDamageCountersEffect(owner, effect.source, count * 20, this, this.powers[0]));
       }
-
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      const checkProvidedEnergyEffect = new CheckProvidedEnergyEffect(targetPlayer);
-      store.reduceEffect(state, checkProvidedEnergyEffect);
-
-      let energyCount = 0;
-      checkProvidedEnergyEffect.energyMap.forEach(em => {
-        energyCount += em.provides.filter(cardType =>
-          cardType === CardType.METAL || cardType === CardType.ANY
-        ).length;
-      });
-
-      const oppActive = player.active;
-      oppActive.damage += energyCount * 10;
     }
 
     return state;

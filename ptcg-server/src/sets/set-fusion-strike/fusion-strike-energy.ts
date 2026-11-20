@@ -56,7 +56,8 @@ export class FusionStrikeEnergy extends EnergyCard {
       }
     }
 
-    if (effect instanceof PlaceDamageCountersEffect && effect.target.energies.cards.includes(this)) {
+    // Older counter effects omit their power. Explicit powers use the owner check above.
+    if (effect instanceof PlaceDamageCountersEffect && !effect.sourcePower && effect.target.energies.cards.includes(this)) {
       effect.preventDefault = true;
     }
 

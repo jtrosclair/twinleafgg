@@ -1,4 +1,4 @@
-import { CardTag, CardType, Stage, TrainerType } from '../../game/store/card/card-types';
+import { CardTag, CardType, TrainerType } from '../../game/store/card/card-types';
 import { PowerType, Power } from '../../game/store/card/pokemon-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { CheckPokemonPowersEffect, CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
@@ -7,7 +7,6 @@ import { HealEffect, KnockOutEffect, PowerEffect } from '../../game/store/effect
 import { State, GamePhase } from '../../game/store/state/state';
 import { StateUtils } from '../../game/store/state-utils';
 import { Player } from '../../game/store/state/player';
-import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
 import { StoreLike } from '../../game/store/store-like';
 import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 import { GameError } from '../../game/game-error';
@@ -26,19 +25,6 @@ abstract class LegendaryHalf extends TrainerCard {
   }
 }
 
-// LV.X keeps the previous level's Evolution Stage; Restored, LEGEND and
-// V-UNION are not Evolution Pokémon (including when represented as stacks).
-function isEvolutionPokemon(slot: PokemonCardList): boolean {
-  const cards = slot.getPokemons();
-  let top = cards[cards.length - 1];
-  if (!top) return false;
-  if (top.stage === Stage.LV_X) {
-    top = [...cards].reverse().find(card => card.stage !== Stage.LV_X)!;
-    if (!top) return false;
-  }
-  return [Stage.STAGE_1, Stage.STAGE_2, Stage.VMAX, Stage.VSTAR, Stage.MEGA, Stage.BREAK].includes(top.stage);
-}
-
 export class LegendaryLavaLakeLeft extends LegendaryHalf {
   public setNumber = '94'; public name = 'Legendary Pyroduct'; public fullName = 'Legendary Lava Lake (Left) M6';
   public text = "Evolution Pokémon in play (both yours and your opponent's) have no Abilities.";
@@ -47,11 +33,11 @@ export class LegendaryLavaLakeLeft extends LegendaryHalf {
     const locked = (power: Power) => power.powerType === PowerType.ABILITY && !power.exemptFromAbilityLock && !power.useFromHand && !power.useFromDiscard;
     if (effect instanceof CheckPokemonPowersEffect && effect.target) {
       const slot = StateUtils.findPokemonSlot(state, effect.target);
-      if (slot && isEvolutionPokemon(slot) && !IS_STADIUM_EFFECT_BLOCKED(store, state, StateUtils.findOwner(state, slot), slot, this)) effect.powers = effect.powers.filter(power => !locked(power));
+      if (slot && StateUtils.isEvolutionPokemon(slot) && !IS_STADIUM_EFFECT_BLOCKED(store, state, StateUtils.findOwner(state, slot), slot, this)) effect.powers = effect.powers.filter(power => !locked(power));
     }
     if (effect instanceof PowerEffect && locked(effect.power)) {
       const slot = StateUtils.findPokemonSlot(state, effect.card);
-      if (slot && isEvolutionPokemon(slot) && !IS_STADIUM_EFFECT_BLOCKED(store, state, StateUtils.findOwner(state, slot), slot, this)) throw new GameError(GameMessage.CANNOT_USE_POWER);
+      if (slot && StateUtils.isEvolutionPokemon(slot) && !IS_STADIUM_EFFECT_BLOCKED(store, state, StateUtils.findOwner(state, slot), slot, this)) throw new GameError(GameMessage.CANNOT_USE_POWER);
     }
     return state;
   }

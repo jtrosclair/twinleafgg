@@ -2,7 +2,7 @@ import { GameError } from '../game-error';
 import { GameMessage } from '../game-message';
 import { CardTarget, PlayerType, SlotType } from './actions/play-card-action';
 import { Card } from './card/card';
-import { CardType } from './card/card-types';
+import { CardType, Stage } from './card/card-types';
 import { PokemonCard } from './card/pokemon-card';
 import { EnergyCard } from './card/energy-card';
 import { EnergyMap } from './prompts/choose-energy-prompt';
@@ -343,6 +343,13 @@ export class StateUtils {
       }
     });
     return inPlay;
+  }
+
+  /** A Pokémon LV.X retains the Evolution Stage of the Pokémon under it. */
+  public static isEvolutionPokemon(slot: PokemonCardList): boolean {
+    const previousLevel = slot.getPokemons().filter(card => card.stage !== Stage.LV_X);
+    const card = previousLevel[previousLevel.length - 1];
+    return !!card && [Stage.STAGE_1, Stage.STAGE_2, Stage.VMAX, Stage.VSTAR, Stage.MEGA, Stage.BREAK].includes(card.stage);
   }
 
   public static getStadiumCard(state: State): Card | undefined {

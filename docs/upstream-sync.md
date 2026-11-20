@@ -1959,3 +1959,73 @@ commits titled `fix`, 12 are applied, four were already present, 11 are
 inapplicable to the simulator and 11 are partial. None is wholly deferred.
 The Ampharos bug was part of the separately tracked shared Ability-effects
 refactor, so the title-based count does not measure individual gameplay bugs.
+
+## Gameplay re-audit, batch 12
+
+Hyper Blower respects Ability protection on the opponent's Active Pokémon.
+The Ability can be used through protection, but Iron Bundle stays on the
+Bench when the switch fails. The opponent can choose a protected Pokémon
+from their Bench as the replacement for an unprotected Active. A successful
+switch discards the entire Iron Bundle stack and clears the empty slot.
+The same card can use its Ability again if it leaves play and returns.
+Refrigerated Stream applies its attack lock only to the original defending
+Evolution Pokémon, after damage and subject to attack-effect protection.
+[Iron Bundle print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv04/56/)
+[Official Hyper Blower rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%86%E3%83%84%E3%83%8E%E3%83%84%E3%83%84%E3%83%9F&regulation_faq_main_item1=all)
+[Advanced rule E-12](https://asia.pokemon-card.com/my/wp-content/uploads/sites/6/2025/10/EN_advanced_manual-2025.pdf)
+
+Sand Stream and Eerie Beam run protection checks for each recipient.
+Ghost Veil and Mega Clefable ex respond to the shared target-side Ability
+effect. Shocking Block applies after successful Energy attachment from the
+hand, from Charjabug's owner, and includes V-UNION. Stealthy Hood and Fusion
+Strike Energy use ownership for explicitly attributed Ability counters.
+Legacy counter effects without an identified power retain their existing
+behavior until their callers can supply the source. Torrential Heart's
+bonus requires placement of its own five counters.
+[Team Rocket's Tyranitar](https://asia.pokemon-card.com/sg/card-search/detail/19642/)
+[Orbeetle VMAX](https://images.pokemontcg.io/swsh4/21.png)
+[Mega Clefable ex](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/me03/119)
+[Radiant Charjabug](https://www.pokemon.com/us/pokemon-news/mewtwo-vstar-rotom-vstar-and-more-in-pokemon-tcg-crown-zenith)
+[V-UNION rule](https://www.pokemon.com/static-assets/content-assets/cms2/pdf/trading-card-game/rulebook/par_rulebook_en.pdf)
+[Feraligatr](https://asia.pokemon-card.com/sg/card-search/detail/12131/)
+
+Iron Jugulis responds to a positive attack hit in the Active Spot once,
+including a lethal hit. Orthworm ex can also respond from the Bench and
+places two counters per effective Metal Energy on the Pokémon that attacked
+it. Zero damage and unrelated targets produce no retaliation. The local
+Orthworm fix corrects the one-counter multiplier in upstream `49205ef174`.
+[Iron Jugulis](https://asia.pokemon-card.com/sg/card-search/detail/12229/)
+[Orthworm ex](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sv07/162/)
+[Official Orthworm ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%9F%E3%83%9F%E3%82%BA%E3%82%BAex&regulation_faq_main_item1=all)
+
+In Grimothy Snarlson, both revisions promote Pidgeot ex and discard the same
+Iron Bundle and Air Balloon with the same Prize counts. The updated Bench
+slot clears the previous 90 damage. In Bundle of Joy, both revisions reject
+Hyper Blower from the Active Spot with no opposing Bench.
+Both puzzles were also solved from their published snapshots on both
+revisions. The Grimothy Snarlson replay uses Hyper Blower to free the Bench
+slot and takes all five Prizes in 23 steps. Bundle of Joy knocks out
+Bloodmoon Ursaluna ex in 31 steps. The two solutions are saved under
+`tools/.puzzle-playthrough` alongside the prior local replays.
+
+All 25 focused checks pass. Eighteen reproduce failures on the prior
+revision. The read-only comparison accepted all 559 compatible saved
+states with identical serialized state and card identities. The expanded
+validator response differs only by the new Iron Bundle marker metadata.
+In the opening-action comparison, the three changed outcomes out of 3,635
+were all Hyper Blower. One was from a nondeleted puzzle.
+Rechecking the 40 snapshots containing an Iron Bundle print on the final
+revision reproduced the same three changes, limited to empty-slot damage
+and discard entries. The full engine suite passed all 7,170 cases in
+257 files. The production package passed attestation and the mobile budget.
+All ten standard packaged mouse and touch checks passed. Four additional
+packaged mouse and touch checks covered Hyper Blower on the actual
+Grimothy Snarlson board and a copy with a Ghost Veil Active.
+
+The next Ability paths are still open. A real-store probe confirmed that
+Toxic Powder poisons an opposing Ghost Veil Shuppet because the existing
+condition effect identifies the recipient's side as the source. The other
+verified paths in the three Ability refactors remain listed separately in
+the ledger. Greninja XY's Mist Slash still needs review through the damage
+pipeline.
+[Brute Bonnet](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sv04/207)

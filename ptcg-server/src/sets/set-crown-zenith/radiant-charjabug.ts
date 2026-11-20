@@ -7,7 +7,7 @@ import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import {
   WAS_ATTACK_USED,
   IS_ABILITY_BLOCKED
@@ -46,23 +46,12 @@ export class RadiantCharjabug extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Shocking Block
-    // Ref: set-plasma-blast/froslass.ts (AttachEnergyEffect intercept, findCardList/findOwner pattern)
-    //      set-vivid-voltage/eelektross.ts (PlaceDamageCountersEffect)
-    if (effect instanceof AttachEnergyEffect) {
-      const attachingPlayer = effect.player;
+    // Ref: set-darkness-ablaze/arctozolt.ts (preventable counters after hand attachment).
+    if (effect instanceof AfterAttachEnergyFromHandEffect) {
       const targetCard = effect.target.getPokemonCard();
 
-      // Only trigger if attaching from hand
-      if (!attachingPlayer.hand.cards.includes(effect.energyCard)) {
-        return state;
-      }
-
-      // Only trigger if attached to a Pokemon V (includes V, VMAX, VSTAR)
-      if (!targetCard || (
-        !targetCard.tags.includes(CardTag.POKEMON_V) &&
-        !targetCard.tags.includes(CardTag.POKEMON_VMAX) &&
-        !targetCard.tags.includes(CardTag.POKEMON_VSTAR)
-      )) {
+      const pokemonVTags = [CardTag.POKEMON_V, CardTag.POKEMON_VMAX, CardTag.POKEMON_VSTAR, CardTag.POKEMON_VUNION];
+      if (!targetCard || !pokemonVTags.some(tag => targetCard.tags.includes(tag))) {
         return state;
       }
 
@@ -79,7 +68,7 @@ export class RadiantCharjabug extends PokemonCard {
       }
 
       // Put 2 damage counters on the Pokemon that had energy attached to it
-      const damageEffect = new PlaceDamageCountersEffect(attachingPlayer, effect.target, 20);
+      const damageEffect = new PlaceDamageCountersEffect(owner, effect.target, 20, this, this.powers[0]);
       store.reduceEffect(state, damageEffect);
     }
 

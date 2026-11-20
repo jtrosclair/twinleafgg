@@ -1,11 +1,15 @@
-import { ChoosePokemonPrompt, GameError, PlayerType, PokemonCardList, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
+import { ChoosePokemonPrompt, GameError, PlayerType, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
 import { GameMessage } from '../../game/game-message';
 import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { AddMarkerEffect } from '../../game/store/effects/attack-effects';
+import { CheckTableStateEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { UseAttackEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { MOVE_CARDS, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { CAN_APPLY_ABILITY_TO_TARGET } from '../../game/store/prefabs/effect-of-ability-prefabs';
+import { afterAttackDamageForOriginalDefender } from '../../game/store/prefabs/post-damage-identity';
+import { ABILITY_USED, MOVE_POKEMON_OFF_BOARD, REMOVE_MARKER_AT_END_OF_TURN, USE_ABILITY_ONCE_PER_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class IronBundle extends PokemonCard {
 
@@ -52,28 +56,33 @@ export class IronBundle extends PokemonCard {
   public fullName: string = 'Iron Bundle PAR';
 
   public readonly REFRIGERATED_STREAM_MARKER = 'REFRIGERATED_STREAM_MARKER';
+  public readonly HYPER_BLOWER_MARKER = 'HYPER_BLOWER_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    REMOVE_MARKER_AT_END_OF_TURN(effect, this.HYPER_BLOWER_MARKER, this);
+    if (effect instanceof CheckTableStateEffect) {
+      for (const player of state.players) {
+        if (player.marker.hasMarker(this.HYPER_BLOWER_MARKER, this) && !StateUtils.isPokemonInPlay(player, this)) {
+          player.marker.removeMarker(this.HYPER_BLOWER_MARKER, this);
+        }
+      }
+    }
 
+    // Ref: set-mega-evolution/hariyama.ts (target-side Ability protection).
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
-      const cardList = StateUtils.findCardList(state, this);
+      const source = player.bench.find(slot => slot.getPokemonCard() === this);
 
-      // Check if this card is in active spot
-      if (player.active.cards[0] === this) {
+      if (!source || !opponent.bench.some(slot => slot.getPokemonCard())) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
-      // Check if this card is on bench
-      const benchIndex = player.bench.indexOf(cardList as PokemonCardList);
-      if (benchIndex === -1) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      }
-
-      // Check if opponent has any benched Pokemon
-      if (!opponent.bench.some(b => b.cards.length > 0)) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
+      USE_ABILITY_ONCE_PER_TURN(player, this.HYPER_BLOWER_MARKER, this);
+      ABILITY_USED(player, this);
+      const defendingCard = opponent.active.getPokemonCard();
+      if (!CAN_APPLY_ABILITY_TO_TARGET(store, state, player, this.powers[0], this, opponent.active)) {
+        return state;
       }
 
       return store.prompt(state, new ChoosePokemonPrompt(
@@ -83,39 +92,24 @@ export class IronBundle extends PokemonCard {
         [SlotType.BENCH],
         { allowCancel: false }
       ), targets => {
-        if (targets && targets.length > 0) {
+        if (targets?.[0]?.getPokemonCard() && opponent.active.getPokemonCard() === defendingCard
+          && source.getPokemonCard() === this) {
           opponent.active.clearEffects();
           opponent.switchPokemon(targets[0]);
-          const cardList = player.bench[benchIndex];
-          const pokemons = cardList.getPokemons();
-          const otherCards = cardList.cards.filter(card =>
-            !(card instanceof PokemonCard) &&
-            !pokemons.includes(card as PokemonCard) &&
-            (!cardList.tools || !cardList.tools.includes(card))
-          );
-          const tools = [...cardList.tools];
-          // Move Pokémon cards to the discard
-          if (pokemons.length > 0) {
-            MOVE_CARDS(store, state, cardList, player.discard, { cards: pokemons });
-          }
-          // Move other cards (tools, energies, etc.) to the discard
-          if (otherCards.length > 0) {
-            MOVE_CARDS(store, state, cardList, player.discard, { cards: otherCards });
-          }
-          // Move tools to the discard
-          if (tools.length > 0) {
-            for (const tool of tools) {
-              cardList.moveCardTo(tool, player.discard);
-            }
-          }
-          return state;
+          return MOVE_POKEMON_OFF_BOARD(store, state, source, { pokemonDestination: player.discard, sourceCard: this });
         }
       });
     }
-    if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      opponent.active.marker.addMarker(this.REFRIGERATED_STREAM_MARKER, this);
+
+    // Ref: set-destined-rivals/team-rockets-raticate.ts (effects after damage).
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      afterAttackDamageForOriginalDefender(state, effect, (effectStore, afterState, target) => {
+        if (!StateUtils.isEvolutionPokemon(target)) return afterState;
+
+        const lock = new AddMarkerEffect(effect, this.REFRIGERATED_STREAM_MARKER, this);
+        lock.target = target;
+        return effectStore.reduceEffect(afterState, lock);
+      });
     }
 
     if (effect instanceof UseAttackEffect && effect.player.active.marker.hasMarker(this.REFRIGERATED_STREAM_MARKER, this)) {
