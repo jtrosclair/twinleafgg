@@ -2495,3 +2495,53 @@ A Pokémon VSTAR still takes a Prize for Trevenant LOR despite Elder Tree Barrie
 Black Market Prism Star reduces Prizes after Frenzied Gouging. Gengar POR’s
 Infinite Shadow fails to return its evolution stack before the final Prize.
 The ledger still marks `bc849aeed` partial.
+
+## Gameplay re-audit, batch 23
+
+Cursed Message, Aftermath and Last Pattern all require lethal opposing attack
+damage. Cursed Message uses PrizeMap’s existing optional search rule and
+shuffles before Prizes. Aftermath discards up to three cards from the top of
+the attacker’s deck. Last Pattern discards up to two distinct random cards
+from the attacker’s hand before Prizes enter it. The turn player can order
+simultaneous Knock Out effects. Emptying the attacker’s deck waits for the
+next mandatory draw before it causes a loss.
+[Spiritomb print](https://www.pokemon-card.com/card-search/details.php/card/41565)
+[Weezing print](https://www.pokemon-card.com/card-search/details.php/card/28255)
+[Arbok print](https://www.pokemon-card.com/card-search/details.php/card/36681/regu/all)
+[Arbok rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%A2%E3%83%BC%E3%83%9C%E3%83%83%E3%82%AF&regulation_faq_main_item1=all)
+
+Elder Tree Barrier shares Selfish Lips’ original-attacker check and covers
+Pokémon V, VMAX, VSTAR and V-UNION. Both Black Market Prism Star catalog names
+use the same implementation. Black Market checks the Knock Out before any
+Energy is transferred and applies its reduction to the final Prize count.
+Glutton-GX still adds two Prizes before the reduction. Draconic Disaster
+removes a qualifying Stadium before the Knock Out and sends a Prism Star
+Stadium to the Lost Zone.
+[Trevenant official expansion rules](https://www.pokemon-card.com/ex/s11/index.html)
+[Black Market rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%96%E3%83%A9%E3%83%83%E3%82%AF%E3%83%9E%E3%83%BC%E3%82%B1%E3%83%83%E3%83%88)
+
+Infinite Shadow returns the full Gengar evolution stack before Prizes.
+It works on the Bench and discards the attachments. Lucky Egg and Infinite
+Shadow use the engine’s Knock Out order choice. Choosing Lucky Egg first
+draws up to seven before the stack returns, as in the published card ruling.
+[Gengar print](https://www.pokemon-card.com/card-search/details.php/card/49682/)
+[Gengar rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B2%E3%83%B3%E3%82%AC%E3%83%BC)
+[February 2026 ordering rules](https://professorprogram.pokemon.com/news/11473085)
+
+All 31 focused tests pass. Seventeen fail on the preceding engine. The full
+engine passed 7,480 tests in 268 files. The combined pending work passed 256
+focused and simulator tests. All 559 compatible puzzle payloads and card
+identities matched exactly. Four deserialized states carried the intentional
+Gengar Ability text and metadata changes and otherwise matched exactly.
+No compatible snapshot contained the old Infinite Shadow marker. All 3,633
+sampled opening actions matched. Seven saved solutions reached wins. The
+attested package met the mobile size budget and passed all ten mouse and
+touch checks. Its browser engine also verified the final-Prize interactions
+for Black Market with Glutton-GX and Infinite Shadow with Lucky Egg.
+
+Six further real-action failures are confirmed. Gold Coffin searches after
+Frenzied Gouging. Bully of the Sands fails on lethal damage to Active
+Krookodile. Revenge incorrectly boosts Stunfisk’s damage after an explicit
+Knock Out. Shadowy Side Kick and Butterfly Edge fail to protect their user
+after a lethal hit. Stoutland’s Arf Arf Bark can use a stale damage flag
+after Frenzied Gouging. These paths are part of the ongoing review.
