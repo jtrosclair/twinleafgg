@@ -2,7 +2,7 @@ import { Card } from '../card/card';
 import { KNOWN_ATTACK_EFFECT_MARKERS, KNOWN_POKEMON_SCOPED_PLAYER_MARKERS } from '../prefabs/clear-effect-markers';
 
 /** What kind of game mechanic created this marker. */
-export type MarkerSourceType = 'attack' | 'ability' | 'trainer' | 'energy' | 'stadium';
+export type MarkerSourceType = 'attack' | 'ability' | 'ability-use' | 'trainer' | 'energy' | 'stadium';
 
 /** What entity this marker functionally affects. */
 export type MarkerTargetScope = 'pokemon' | 'player';

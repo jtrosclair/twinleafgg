@@ -12,6 +12,7 @@ import { CardTag, TrainerType } from '../card/card-types';
 import { Player } from '../state/player';
 import { TrainerCard } from '../card/trainer-card';
 import { CoinFlipEffect } from '../effects/play-card-effects';
+import { HAS_SUPPORTER_PLAY_AVAILABLE } from '../prefabs/prefabs';
 
 function getTrainerCleanupTarget(player: Player, trainerCard: TrainerCard) {
   return trainerCard.tags.includes(CardTag.PRISM_STAR) ? player.lostzone : player.discard;
@@ -96,6 +97,10 @@ export function playTrainerReducer(store: StoreLike, state: State, effect: Effec
     && effect.player.trainerCardsBlockedNextTurn) {
     throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
   }
+  if (effect instanceof PlaySupporterEffect
+    && !HAS_SUPPORTER_PLAY_AVAILABLE(store, state, effect.player)) {
+    throw new GameError(GameMessage.SUPPORTER_ALREADY_PLAYED);
+  }
   // A dual Stadium is legal only when both different halves are present.
   // Check before the coin-flip gate or any other play-zone mutation.
   if (effect instanceof PlayStadiumEffect && effect.trainerCard.tags.includes(CardTag.DUAL_STADIUM)
@@ -143,8 +148,19 @@ function playTrainerWithoutCoinFlip(store: StoreLike, state: State, effect: Effe
       throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
 
-    const playTrainer = new TrainerEffect(player, effect.trainerCard, effect.target);
-    state = store.reduceEffect(state, playTrainer);
+    const played = StateUtils.getSupportersPlayedThisTurn(player);
+    const previousAllowance = player.supporterTurn;
+    const previousPlayed = player.supportersPlayedThisTurn;
+    // Legacy Supporter handlers expect a nonpositive value while resolving a legal play.
+    player.supporterTurn = Math.min(0, previousAllowance);
+    player.supportersPlayedThisTurn = played;
+    try {
+      state = store.reduceEffect(state, new TrainerEffect(player, effect.trainerCard, effect.target));
+    } catch (error) {
+      player.supporterTurn = previousAllowance;
+      player.supportersPlayedThisTurn = previousPlayed;
+      throw error;
+    }
     restorePlayedTrainerToPlayZoneIfNeeded(store, player, effect.trainerCard);
     state = finalizeTrainerCleanup(
       store,
@@ -159,6 +175,7 @@ function playTrainerWithoutCoinFlip(store: StoreLike, state: State, effect: Effe
     });
 
     player.supporterTurn += 1;
+    player.supportersPlayedThisTurn = played + 1;
 
     return state;
   }

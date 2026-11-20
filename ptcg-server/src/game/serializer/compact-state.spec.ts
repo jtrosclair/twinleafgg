@@ -7,6 +7,7 @@ import { PlayCardAction, PlayerType, SlotType } from '../store/actions/play-card
 import { ChoosePokemonPrompt } from '../store/prompts/choose-pokemon-prompt';
 import { CardList } from '../store/state/card-list';
 import { Marker } from '../store/state/card-marker';
+import { MarkerConstants } from '../store/markers/marker-constants';
 import { Player } from '../store/state/player';
 import { PokemonCardList } from '../store/state/pokemon-card-list';
 import { GamePhase, State } from '../store/state/state';
@@ -83,6 +84,20 @@ describe('compact serialized snapshots', () => {
     for (const key of ['phase', 'turn', 'activePlayer', 'winner', 'logs', 'prompts', 'players', 'cardNames']) {
       expect({ key, present: Object.prototype.hasOwnProperty.call(state, key) }).toEqual({ key, present: false });
     }
+  });
+
+  it('round trips Supporter counts and Hop knockout provenance when present', () => {
+    const state = fixture();
+    const [player] = state.players;
+    player.supporterTurn = 1;
+    player.supportersPlayedThisTurn = 2;
+    const hopKnockout = MarkerConstants.HOPS_KNOCKED_OUT_BY_ATTACK_LAST_TURN;
+    player.marker.addMarkerToState(hopKnockout);
+
+    const restored = serializer.deserialize(compactSerializedState(serializer.serialize(state)));
+    expect(restored.players[0].supportersPlayedThisTurn).toBe(2);
+    expect(restored.players[0].marker.hasMarker(hopKnockout)).toBe(true);
+    expect(restored.players[1].supportersPlayedThisTurn).toBeUndefined();
   });
 
   it('restores the fixed wire defaults even when future constructors disagree', () => {

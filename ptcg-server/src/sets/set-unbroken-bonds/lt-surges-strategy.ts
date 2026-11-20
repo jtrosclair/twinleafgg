@@ -43,8 +43,9 @@ export class LtSurgesStrategy extends TrainerCard {
       if (this.playedSurgeThisTurn) {
         // Already played Lt. Surge's Strategy this turn, do nothing
       } else {
-        // going to be increased by one in the play-trainer file
-        player.supporterTurn = -2;
+        // Actual plays already made this turn count toward the limit of three.
+        // The play-trainer reducer increments the allowance for this play.
+        player.supporterTurn = Math.min(0, StateUtils.getSupportersPlayedThisTurn(player) - 2);
         player.hand.moveCardTo(this, player.discard);
 
         this.playedSurgeThisTurn = true;

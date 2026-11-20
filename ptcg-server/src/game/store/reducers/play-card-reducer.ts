@@ -17,6 +17,7 @@ import { CardTag, TrainerType } from '../card/card-types';
 import { Effect } from '../effects/effect';
 import { StateUtils } from '../state-utils';
 import { UsePowerEffect } from '../effects/game-effects';
+import { HAS_SUPPORTER_PLAY_AVAILABLE } from '../prefabs/prefabs';
 
 function findCardList(state: State, target: CardTarget): CardList | undefined {
   const player = target.player === PlayerType.BOTTOM_PLAYER
@@ -96,7 +97,7 @@ export function playCardReducer(store: StoreLike, state: State, action: Action):
             if (state.turn === 1 && handCard.firstTurn !== true) {
               throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
             }
-            if (player.supporterTurn > 0) {
+            if (!HAS_SUPPORTER_PLAY_AVAILABLE(store, state, player)) {
               throw new GameError(GameMessage.SUPPORTER_ALREADY_PLAYED);
             }
             effect = new PlaySupporterEffect(player, handCard, target);

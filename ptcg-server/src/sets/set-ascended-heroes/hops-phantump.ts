@@ -1,5 +1,5 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { CardType, Stage } from '../../game/store/card/card-types';
+import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { AbstractAttackEffect } from '../../game/store/effects/attack-effects';
@@ -8,6 +8,7 @@ import { MarkerConstants } from '../../game/store/markers/marker-constants';
 import { WAS_ATTACK_USED, COIN_FLIP_PROMPT, CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
 
 export class HopsPhantump extends PokemonCard {
+  public tags = [CardTag.HOPS];
   public stage: Stage = Stage.BASIC;
   public cardType: CardType = P;
   public hp: number = 70;

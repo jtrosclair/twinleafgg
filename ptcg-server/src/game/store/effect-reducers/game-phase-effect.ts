@@ -249,6 +249,7 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
     player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
       cardList.removeSpecialCondition(SpecialCondition.ABILITY_USED);
       cardList.removeBoardEffect(BoardEffect.ABILITY_USED);
+      cardList.marker.removeMarkersBySourceType('ability-use');
       if (card.damageTakenLastTurn !== undefined) {
         card.damageTakenLastTurn = 0;
       }
@@ -285,6 +286,7 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
       effect.player.pokemonKnockedOutDuringOpponentsLastTurn = false;
       effect.player.pokemonKnockedOutByAttackDuringOpponentsLastTurn = false;
       effect.player.marker.removeMarker(MarkerConstants.MEGA_EX_KNOCKED_OUT_DURING_OPPONENTS_LAST_TURN);
+      effect.player.marker.removeMarker(MarkerConstants.HOPS_KNOCKED_OUT_BY_ATTACK_LAST_TURN);
     }
 
     // Clear damage reduction effects on opponent's Pokémon when their turn ends
@@ -336,6 +338,7 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
     });
 
     player.supporterTurn = 0;
+    player.supportersPlayedThisTurn = undefined;
     player.active.attacksThisTurn = 0;
 
     // Preserve prizes taken this turn for "last turn" tracking

@@ -6,7 +6,7 @@ import { Attack } from '../card/pokemon-types';
 import { GamePhase } from '../state/state';
 import { PokemonCard } from '../card/pokemon-card';
 import { AbstractAttackEffect, AddSpecialConditionsEffect, AfterDamageEffect, ApplyWeaknessEffect, DealDamageEffect, DiscardCardsEffect, HealTargetEffect, PutCountersEffect, PutDamageEffect } from '../effects/attack-effects';
-import { AddSpecialConditionsPowerEffect, CheckHpEffect, CheckPokemonPlayedTurnEffect, CheckPokemonTypeEffect, CheckPrizesDestinationEffect, CheckProvidedEnergyEffect, CheckTableStateEffect } from '../effects/check-effects';
+import { AddSpecialConditionsPowerEffect, CheckHpEffect, CheckPokemonPlayedTurnEffect, CheckPokemonTypeEffect, CheckPrizesDestinationEffect, CheckProvidedEnergyEffect, CheckSupporterLimitEffect, CheckTableStateEffect } from '../effects/check-effects';
 import { Effect } from '../effects/effect';
 import { resolveAfterAttackDamage } from './attack-after-damage';
 import { AttackEffect, DrawPrizesEffect, EvolveEffect, KnockOutEffect, MoveCardsEffect, MoveDamageCountersEffect, PowerEffect, RetreatEffect, SpecialEnergyEffect } from '../effects/game-effects';
@@ -1748,7 +1748,7 @@ export function MOVE_CARD_TO(state: State, card: Card, destination: CardList) {
   StateUtils.findCardList(state, card).moveCardTo(card, destination);
 }
 
-export function SWITCH_ACTIVE_WITH_BENCHED(store: StoreLike, state: State, player: Player) {
+export function SWITCH_ACTIVE_WITH_BENCHED(store: StoreLike, state: State, player: Player, onSwitched?: () => void) {
   const hasBenched = player.bench.some(b => b.cards.length > 0);
   if (!hasBenched)
     return state;
@@ -1764,6 +1764,7 @@ export function SWITCH_ACTIVE_WITH_BENCHED(store: StoreLike, state: State, playe
       return state;
     const target = selected[0];
     player.switchPokemon(target, store, state);
+    if (player.active === target) onSwitched?.();
   });
 }
 
@@ -2846,6 +2847,18 @@ export function CAN_PLAY_SUPPORTER_CARD(store: StoreLike, state: State, player: 
   }
 }
 
+/** Checks the remaining allowance for playing a Supporter from hand. */
+export function HAS_SUPPORTER_PLAY_AVAILABLE(store: StoreLike, state: State, player: Player): boolean {
+  if (player.supporterTurn <= 0) {
+    return true;
+  }
+
+  const played = StateUtils.getSupportersPlayedThisTurn(player);
+  const checkLimit = new CheckSupporterLimitEffect(player);
+  store.reduceEffect(state, checkLimit);
+  return played < checkLimit.limit;
+}
+
 /**
  * Validates if a trainer card can be played under current game conditions
  * Dynamically checks by attempting to execute the card's logic and catching GameError
@@ -2870,9 +2883,7 @@ export function CAN_PLAY_TRAINER_CARD(store: StoreLike, state: State, player: Pl
         if (state.turn === 1 && !trainerCard.firstTurn) {
           return false;
         }
-        // Can't play supporter if one already played this turn
-        // Check supporterTurn (incremented when supporter is played) and supporter.cards (card in play area)
-        if (player.supporterTurn > 0) {
+        if (!HAS_SUPPORTER_PLAY_AVAILABLE(store, state, player)) {
           return false;
         }
         break;

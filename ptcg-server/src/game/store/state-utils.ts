@@ -12,6 +12,11 @@ import { PokemonCardList } from './state/pokemon-card-list';
 import { State } from './state/state';
 
 export class StateUtils {
+  public static getSupportersPlayedThisTurn(player: Player): number {
+    // Legacy puzzle snapshots only store the signed allowance.
+    return player.supportersPlayedThisTurn ?? Math.max(0, player.supporterTurn);
+  }
+
   static getStadium(state: State) {
     throw new Error('Method not implemented.');
   }

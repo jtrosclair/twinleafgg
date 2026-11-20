@@ -392,6 +392,9 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
         const ko = effect.target.attackDamageKnockOut;
         if (state.phase === GamePhase.ATTACK && ko && ko.turn === state.turn && ko.playerId === attacker.id) {
           knockedOutOwner.pokemonKnockedOutByAttackDuringOpponentsLastTurn = true;
+          if (card.tags.includes(CardTag.HOPS)) {
+            knockedOutOwner.marker.addMarkerToState(MarkerConstants.HOPS_KNOCKED_OUT_BY_ATTACK_LAST_TURN);
+          }
         }
       }
 

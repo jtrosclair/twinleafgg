@@ -146,7 +146,10 @@ export function sandboxReducer(store: StoreLike, state: State, action: Action, c
     }
 
     // Modify turn counters
-    if (mods.supporterTurn !== undefined) player.supporterTurn = mods.supporterTurn;
+    if (mods.supporterTurn !== undefined) {
+      player.supporterTurn = mods.supporterTurn;
+      player.supportersPlayedThisTurn = undefined;
+    }
     if (mods.retreatedTurn !== undefined) player.retreatedTurn = mods.retreatedTurn;
     if (mods.energyPlayedTurn !== undefined) player.energyPlayedTurn = mods.energyPlayedTurn;
     if (mods.stadiumPlayedTurn !== undefined) player.stadiumPlayedTurn = mods.stadiumPlayedTurn;

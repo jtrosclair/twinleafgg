@@ -1581,3 +1581,41 @@ also includes `7aa463245` (Hop’s Phantump/Trevenant tags), which needs validat
 against the already registered Ascended Heroes prints and Trevenant's
 Hop-specific knockout condition. Both replay commits after it only change the upstream React frontend. Their
 diffs contain no shared gameplay or Angular simulator changes.
+
+## Gameplay re-audit, batch 2
+
+Magnezone PLS now checks the actual number of Supporters played this turn.
+Dual Brains works after evolving mid-turn, never stacks across multiple
+Magnezone, and preserves Lt. Surge’s three-Supporter limit. Gyro Ball first
+switches the attacker, then lets the opponent choose a replacement if the
+original defender can be affected. Direct reducer calls, playable hints,
+copied attacks, suppression, and legacy Supporter snapshots are covered.
+[Official Dual Brains ruling](https://www.pokemon-card.com/rules/faq/details.php?id=8838)
+[Official Gyro Ball rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B3%E3%82%A4%E3%83%AB&page=6&regulation=all&regulation_faq_main_item1=all)
+
+Hop’s Phantump and Trevenant now participate in Hop-specific rules.
+Horrifying Revenge uses the actual source and type of the knockout on the
+opponent’s last turn. A Knock Out caused by damage counters, or of a non-Hop
+Pokémon, does not add 100 damage. Existing card names and set numbers are
+preserved. [Official Hop’s Trevenant](https://asia.pokemon-card.com/my/card-search/detail/24818/)
+
+Delphox M4/CRI counts Energy units on both sides. Flare Magic works from the
+Bench, takes one Basic Fire Energy, and uses the Pokémon’s turn history.
+Switching keeps the usage marker, while leaving play and evolving again via
+Grand Tree resets it. If no cards can be drawn, the Ability cannot pay its
+discard cost. [Official Delphox](https://www.pokemon.com/el/jcc-pokemon/cartas-pokemon/series/me04/13/)
+[Advanced rules, E-12 and E-30](https://asia.pokemon-card.com/sg/wp-content/uploads/sites/6/2025/10/EN_advanced_manual-2025.pdf)
+
+The Mewtwo ex and Mew ex 30C collector-number correction is already covered
+by distinct local English prints. Smeargle UD and the remaining partial
+Ability refactors still need their own gameplay reviews.
+
+Verification covered 559 compatible saved states including 401 active states.
+All 3,635 sampled opening outcomes matched after omitting the new saved
+Supporter count from the comparison. The count and Hop knockout marker
+round-trip in the compact snapshot test. Two active puzzles included Delphox.
+None in the compared active corpus included the affected Magnezone or Hop
+cards. Four recorded solutions and Revenge of the Assassin reached human
+wins. The packaged simulator passed ten browser regression checks. The full
+card suite plus the corrected Grand Tree fixture rerun passed 7,032 tests.
+Seven catalog or metadata assertions also fail on the pre-batch baseline.

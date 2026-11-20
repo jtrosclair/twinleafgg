@@ -13,8 +13,11 @@ class OpponentSwitchAfterAttack extends EffectOfAttackEffect {
 }
 
 /** Opponent chooses the replacement; protection applies to the original defender. */
-export function opponentSwitchAfterAttack(state: State, effect: AttackEffect, source: Card): void {
+export function opponentSwitchAfterAttack(
+  state: State, effect: AttackEffect, source: Card, shouldSwitch?: () => boolean
+): void {
   afterAttackDamageForOriginalDefender(state, effect, (store, afterState) => {
+    if (shouldSwitch && !shouldSwitch()) return afterState;
     const switched = new OpponentSwitchAfterAttack(effect, store, afterState);
     switched.markerSource = source;
     return store.reduceEffect(afterState, switched);

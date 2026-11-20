@@ -231,10 +231,12 @@ export class PokemonCardList extends CardList {
     this.retaliateOnDamageNextTurnPending = null;
   }
 
-  clearEffects(): void {
+  clearEffects(preserveAbilityUses = false): void {
     this.attackDamageKnockOut = undefined;
-    // Nuclear option: wipe all markers (used by evolution/KO)
-    this.marker.markers = [];
+    // Switching keeps that Pokémon in play, so it retains its turn usage.
+    this.marker.markers = preserveAbilityUses
+      ? this.marker.markers.filter(marker => marker.sourceType === 'ability-use')
+      : [];
 
     this.triggerEvolutionAnimation = false;
     this.showBasicAnimation = false;

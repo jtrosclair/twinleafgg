@@ -309,8 +309,8 @@
       "sha": "c982aa4dba65a03d4b24c7e57db05a85c6f28043",
       "date": "2026-10-20",
       "subject": "fix(cards): Delphox CRI",
-      "status": "deferred",
-      "notes": "Upstream relies on a newer multi-type Energy representation and helper absent from this fork; review against current wildcard semantics before porting. Separate Flare Magic scratch correction /private/tmp/prizemap-delphox-round6.fzcHvY adds Bench use, choice, per-card usage and no-op draw checks. It remains unported: direct re-entry through Grand Tree bypasses evolution events, leaving a player marker behind after the same card leaves play. A complete fix needs reliable accepted leave/enter-play lifecycle handling."
+      "status": "applied",
+      "notes": "Ported Energy Storm using the existing Energy-unit helper. The regression counts Blend Energy on both sides as one unit apiece and Ignition Energy on an Evolution Pokémon as three. Also reviewed the separate Flare Magic bug. The ability uses a Pokémon-scoped marker that survives switching and resets on genuine re-entry, with a Professor Turo’s Scenario and Grand Tree regression."
     },
     {
       "sha": "0c3c59fb0878e70d602e79b53ff665daf4d3806c",
@@ -547,15 +547,15 @@
       "sha": "bf6b5cc89875789b6c70c6f6b61a9a9137724f92",
       "date": "2026-11-02",
       "subject": "fix(cards): Magnezone PLS Fix",
-      "status": "deferred",
-      "notes": "Magnezone extra-Supporter handling requires a global allowance-gate change to support evolution after a Supporter was played, plus interactions with other extra-Supporter effects. Marker-only patch is incomplete; deferred."
+      "status": "applied",
+      "notes": "Ported the Dual Brains and Gyro Ball behavior. Real Supporter plays use a per-player turn count, so Dual Brains works after evolution, is non-stacking, and composes with Lt. Surge’s Strategy. Gyro Ball uses the post-damage switch pipeline, requires the attacker to switch first, and respects protection on the original defender. Regressions cover normal and copied attacks, ability suppression, and older saved states."
     },
     {
       "sha": "91017d1fe0924f359c8790a05324f4cefd91668c",
       "date": "2026-11-02",
       "subject": "fix(cards): Mew ex 30C, Mewtwo ex 30C",
-      "status": "deferred",
-      "notes": "Local Mew ex/Mewtwo ex already provide English 30C usSetNumber while preserving the Japanese raw set/number. Upstream overwrites raw fields and may alter deck import/print identity; needs alias and saved-puzzle compatibility tests."
+      "status": "already-present",
+      "notes": "The fork already registers exact English Mewtwo ex 30C 64 and Mew ex 30C 66, with the same mechanics as their distinct M6a original prints. English registry and compatibility tests cover both identities."
     },
     {
       "sha": "79153f05a776ac4045a0ce44af5af4add700c419",
@@ -659,8 +659,8 @@
       "sha": "7aa4632450f4343e98c7b7baf40c939568b03639",
       "date": "2026-11-18",
       "subject": "fix(cards): Hops Phantump, Hops Trevenant",
-      "status": "unreviewed",
-      "notes": "Adds missing Hop tags. Review alongside the already registered cards and the unsupported distinction between Hop and other knockouts."
+      "status": "applied",
+      "notes": "Ported both Hop tags for the existing ASC identities. Horrifying Revenge additionally requires a Hop Pokémon knockout caused by opposing attack damage; counter KOs and KOs of other Pokémon do not count. Provenance clears at the owner’s normal turn end and is saved in a scoped marker."
     },
     {
       "sha": "e4e72459ffa7c0067533d05f74987de273ed8915",

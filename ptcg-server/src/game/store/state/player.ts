@@ -48,6 +48,7 @@ export class Player {
   prizes: CardList[] = [];
 
   supporterTurn: number = 0;
+  supportersPlayedThisTurn?: number;
 
   ancientSupporter: boolean = false;
 
@@ -280,7 +281,7 @@ export class Player {
 
       // Remove attack effects from the Pokemon leaving active
       this.active.removeAttackEffects();
-      this.active.clearEffects();
+      this.active.clearEffects(true);
 
       // remove all special conditions
       this.active.specialConditions = [];
