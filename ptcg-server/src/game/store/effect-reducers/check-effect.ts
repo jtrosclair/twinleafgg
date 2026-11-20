@@ -431,7 +431,7 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
         group = { destination, count: 0 };
         prizeGroups[opponentIndex].push(group);
       }
-      group.count += Math.max(0, effect.prizeCount);
+      group.count += Math.max(0, effect.prizeCount - effect.prizeReduction);
     }
     state = yield* resolveKnockOutGroup(() => next(), store, state, resolved);
     pending = findKoPokemons(store, state).filter(pokemon => !processed.has(pokemon.card));

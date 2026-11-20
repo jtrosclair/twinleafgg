@@ -1,7 +1,7 @@
 import { GameLog, GameMessage } from '../../game-message';
 import { CardTarget, PlayerType, SlotType } from '../actions/play-card-action';
 import { Card } from '../card/card';
-import { CardType, EnergyType, SuperType } from '../card/card-types';
+import { CardTag, CardType, EnergyType, SuperType } from '../card/card-types';
 import { EnergyCard } from '../card/energy-card';
 import { PokemonCard } from '../card/pokemon-card';
 import { TrainerCard } from '../card/trainer-card';
@@ -46,12 +46,32 @@ export function registerKnockOutRescue(store: StoreLike, state: State, effect: K
   });
 }
 
+export function canUseKnockOutAbility(
+  store: StoreLike, state: State, effect: Effect, source: PokemonCard
+): effect is KnockOutEffect {
+  return WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.target.getPokemonCard() === source
+    && !IS_ABILITY_BLOCKED(store, state, effect.player, source);
+}
+
+const pokemonVTags = [CardTag.POKEMON_V, CardTag.POKEMON_VMAX, CardTag.POKEMON_VSTAR, CardTag.POKEMON_VUNION];
+
+/** Applies to protection that prevents every Prize for this Knock Out. */
+export function preventKnockOutPrizesAgainstPokemonV(
+  store: StoreLike, state: State, effect: Effect, source: PokemonCard
+): void {
+  if (canUseKnockOutAbility(store, state, effect, source)) {
+    const attacker = effect.target.attackDamageKnockOut?.sourceCard;
+    if (attacker && pokemonVTags.some(tag => attacker.tags.includes(tag))) {
+      effect.preventPrizes = true;
+    }
+  }
+}
+
 /** Register an attack-damage Knock Out Ability that searches its owner's deck. */
 export function registerKnockOutDeckSearch(
   store: StoreLike, state: State, effect: Effect, source: PokemonCard, max: number
 ): void {
-  if (!WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) || !effect.resolveBeforeDiscard
-    || effect.target.getPokemonCard() !== source || IS_ABILITY_BLOCKED(store, state, effect.player, source)) return;
+  if (!canUseKnockOutAbility(store, state, effect, source) || !effect.resolveBeforeDiscard) return;
 
   const { player } = effect;
   const ability = source.powers[0];

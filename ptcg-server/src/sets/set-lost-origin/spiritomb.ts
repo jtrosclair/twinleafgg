@@ -7,9 +7,8 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, SEARCH_DECK_FOR_CARDS_TO_HAND } from '../../game/store/prefabs/prefabs';
-import { GamePhase } from '../../game/store/state/state';
+import { registerKnockOutDeckSearch } from '../../game/store/prefabs/knock-out-effects';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Spiritomb extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -42,35 +41,8 @@ export class Spiritomb extends PokemonCard {
   public fullName: string = 'Spiritomb LOR 117';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Cursed Message (passive on KO)
-    // Ref: set-fusion-strike/farewell-bell.ts (KnockOutEffect trigger with deck search)
-    // Ref: set-lost-origin/komala.ts (KnockOutEffect during ATTACK phase check)
-    if (effect instanceof KnockOutEffect && effect.target.cards.includes(this)) {
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-
-      const pokemonCard = effect.target.getPokemonCard();
-      if (pokemonCard !== this) {
-        return state;
-      }
-
-      const owner = StateUtils.findOwner(state, effect.target);
-      if (!owner) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, owner, this)) {
-        return state;
-      }
-
-      if (owner.deck.cards.length > 0) {
-        SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, owner, this,
-          {},
-          { min: 1, max: 1, allowCancel: false }
-        );
-      }
-    }
+    // Ref: set-chilling-reign/gengar.ts (search before Knock Out discard)
+    registerKnockOutDeckSearch(store, state, effect, this, 1);
 
     // Attack 1: Chain of Spirits
     // Ref: set-lost-origin/gengar.ts (count copies of card in discard for damage bonus)

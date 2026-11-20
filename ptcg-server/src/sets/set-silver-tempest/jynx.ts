@@ -3,10 +3,11 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
+import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
+import { preventKnockOutPrizesAgainstPokemonV } from '../../game/store/prefabs/knock-out-effects';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Jynx extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -40,16 +41,8 @@ export class Jynx extends PokemonCard {
   public fullName: string = 'Jynx SIT 62';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ref: set-lost-origin/komala.ts (prevent Prizes for this Knock Out)
-    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect)
-      && effect.target.getPokemonCard() === this) {
-      const attacker = effect.target.attackDamageKnockOut?.sourceCard;
-      const pokemonV = [CardTag.POKEMON_V, CardTag.POKEMON_VMAX, CardTag.POKEMON_VSTAR, CardTag.POKEMON_VUNION];
-      if (attacker && pokemonV.some(tag => attacker.tags.includes(tag))
-        && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
-        effect.preventPrizes = true;
-      }
-    }
+    // Ref: set-lost-origin/komala.ts (prevent Prizes for the Knock Out)
+    preventKnockOutPrizesAgainstPokemonV(store, state, effect, this);
 
     // Attack 1: Psychic Assault
     // Ref: set-unbroken-bonds/wobbuffet.ts (Psychic - damage based on opponent's damage counters)

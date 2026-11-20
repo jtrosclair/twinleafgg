@@ -3,13 +3,12 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
+import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
-import { StoreLike, State, StateUtils } from '../../game';
+import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
-import { GamePhase } from '../../game/store/state/state';
+import { preventKnockOutPrizesAgainstPokemonV } from '../../game/store/prefabs/knock-out-effects';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Trevenant extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -42,36 +41,8 @@ export class Trevenant extends PokemonCard {
   public fullName: string = 'Trevenant LOR 17';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Elder Tree Barrier (passive)
-    // Ref: set-lost-origin/komala.ts (KnockOutEffect prizeCount = 0 pattern)
-    // Ref: set-chilling-reign/galarian-runerigus.ts (checking attacker's tags for POKEMON_VMAX)
-    if (effect instanceof KnockOutEffect && effect.target.cards.includes(this)) {
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-
-      const pokemonCard = effect.target.getPokemonCard();
-      if (pokemonCard !== this) {
-        return state;
-      }
-
-      const owner = StateUtils.findOwner(state, effect.target);
-      if (!owner) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, owner, this)) {
-        return state;
-      }
-
-      // Check if the attacker is a Pokemon V
-      const attacker = StateUtils.getOpponent(state, owner);
-      const attackerCard = attacker.active.getPokemonCard();
-
-      if (attackerCard && attackerCard.tags.includes(CardTag.POKEMON_V)) {
-        effect.prizeCount = 0;
-      }
-    }
+    // Ref: set-silver-tempest/jynx.ts (prevent all Prizes against Pokémon V)
+    preventKnockOutPrizesAgainstPokemonV(store, state, effect, this);
 
     // Attack 1: Giga Impact
     // Ref: set-unbroken-bonds/wartortle.ts (cannotAttackNextTurnPending = true)

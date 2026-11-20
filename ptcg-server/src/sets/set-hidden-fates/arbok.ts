@@ -5,10 +5,10 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Stage, CardType, TrainerType } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, StateUtils } from '../../game';
+import { Card, PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { canUseKnockOutAbility } from '../../game/store/prefabs/knock-out-effects';
+import { MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Arbok extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -41,30 +41,25 @@ export class Arbok extends PokemonCard {
   public fullName: string = 'Arbok HIF';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Last Pattern (passive - intercept KnockOutEffect)
-    // Ref: set-unified-minds/aegislash.ts (Durable Blade - KnockOutEffect interception)
-    if (effect instanceof KnockOutEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
-      const player = StateUtils.findOwner(state, effect.target);
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      // Only if knocked out by opponent's attack
-      if (effect.player === player) {
-        return state;
-      }
-
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Discard 2 random cards from opponent's hand
-      for (let i = 0; i < 2; i++) {
-        if (opponent.hand.cards.length > 0) {
-          const randomIndex = Math.floor(Math.random() * opponent.hand.cards.length);
-          const randomCard = opponent.hand.cards[randomIndex];
-          opponent.hand.moveCardTo(randomCard, opponent.discard);
+    // Ref: set-plasma-storm/weezing.ts (resolve before Knock Out discard)
+    if (canUseKnockOutAbility(store, state, effect, this) && effect.resolveBeforeDiscard) {
+      const opponent = StateUtils.getOpponent(state, effect.player);
+      const ability = this.powers[0];
+      effect.beforeDiscard.set(this, {
+        label: ability.name,
+        canResolve: () => opponent.hand.cards.length > 0,
+        resolve: () => {
+          const remaining = [...opponent.hand.cards];
+          const discarded: Card[] = [];
+          while (discarded.length < 2 && remaining.length > 0) {
+            const index = Math.floor(Math.random() * remaining.length);
+            discarded.push(...remaining.splice(index, 1));
+          }
+          MOVE_CARDS(store, state, opponent.hand, opponent.discard, {
+            cards: discarded, sourceCard: this, sourceEffect: ability
+          });
         }
-      }
+      });
     }
 
     // Attack 1: Rocket Tail

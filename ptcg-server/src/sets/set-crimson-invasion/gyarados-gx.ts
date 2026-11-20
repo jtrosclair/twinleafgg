@@ -7,7 +7,7 @@ import { Stage, CardType, CardTag, SuperType } from '../../game/store/card/card-
 import { StoreLike, State, StateUtils, GameMessage, Card, ChooseCardsPrompt, PlayerType, PokemonCardList } from '../../game';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED, BLOCK_IF_GX_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS, WAS_ATTACK_USED, BLOCK_IF_GX_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class GyaradosGx extends PokemonCard {
   public tags = [CardTag.POKEMON_GX];
@@ -56,7 +56,7 @@ export class GyaradosGx extends PokemonCard {
 
         const cardList = StateUtils.findCardList(state, stadiumCard);
         const owner = StateUtils.findOwner(state, cardList);
-        cardList.moveTo(owner.discard);
+        MOVE_CARDS(store, state, cardList, owner.discard, { cards: [stadiumCard], sourceCard: this, sourceEffect: effect });
       }
     }
 

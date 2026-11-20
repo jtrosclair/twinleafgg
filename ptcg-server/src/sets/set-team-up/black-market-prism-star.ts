@@ -4,8 +4,9 @@ import { StoreLike } from '../../game/store/store-like';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType, CardType, CardTag } from '../../game/store/card/card-types';
 import { StateUtils } from '../../game/store/state-utils';
-import { KnockOutEffect, MoveCardsEffect } from '../../game/store/effects/game-effects';
+import { MoveCardsEffect } from '../../game/store/effects/game-effects';
 import { CheckPokemonTypeEffect, CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
+import { WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 
 export class BlackMarketPrismStar extends TrainerCard {
   public trainerType: TrainerType = TrainerType.STADIUM;
@@ -21,7 +22,8 @@ export class BlackMarketPrismStar extends TrainerCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof KnockOutEffect && StateUtils.getStadiumCard(state) === this) {
+    // Ref: set-delta-reign/legendary-stadiums.ts (reduce Prizes for opposing attack damage)
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && StateUtils.getStadiumCard(state) === this) {
       const player = effect.player;
 
       // Check if the Pokémon is Dark
@@ -36,7 +38,8 @@ export class BlackMarketPrismStar extends TrainerCard {
       const hasDarknessEnergy = StateUtils.checkEnoughEnergy(energyMap, [CardType.DARK]);
 
       if (isDarkPokemon && hasDarknessEnergy) {
-        effect.prizeCount -= 1;
+        // Capture eligibility now and apply the reduction to the final Prize count.
+        effect.prizeReduction++;
       }
     }
 

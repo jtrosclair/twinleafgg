@@ -238,6 +238,7 @@ export class KnockOutEffect implements Effect {
   public target: PokemonCardList;
   public prizeCount: number;
   public preventPrizes = false;
+  public prizeReduction = 0;
   public prizeDestination?: CardList;
   public isLostCity: boolean = false;
   public knockOutDestination?: 'lostzone';

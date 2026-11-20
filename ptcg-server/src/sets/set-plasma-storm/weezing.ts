@@ -4,11 +4,11 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { GamePhase, PowerType, StoreLike, State, StateUtils } from '../../game';
+import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { canUseKnockOutAbility } from '../../game/store/prefabs/knock-out-effects';
+import { DISCARD_TOP_X_OF_OPPONENTS_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Weezing extends PokemonCard {
   public tags = [CardTag.TEAM_PLASMA];
@@ -21,7 +21,6 @@ export class Weezing extends PokemonCard {
 
   public powers = [  {
     name: 'Aftermath',
-    useWhenInPlay: true,
     powerType: PowerType.ABILITY,
     text: 'When this Pokémon is Knocked Out by damage from an opponent\'s attack, discard the top 3 cards of your opponent\'s deck.'
   }];
@@ -42,27 +41,16 @@ export class Weezing extends PokemonCard {
   public fullName: string = 'Weezing PLS';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Aftermath (passive - on KO)
-    // Ref: set-roaring-skies/articuno.ts (KnockOutEffect intercept pattern)
-    if (effect instanceof KnockOutEffect && effect.target.cards.includes(this)) {
-      const player = StateUtils.findOwner(state, effect.target);
+    // Ref: set-chilling-reign/gengar.ts (resolve before Knock Out discard)
+    if (canUseKnockOutAbility(store, state, effect, this) && effect.resolveBeforeDiscard) {
+      const { player } = effect;
       const opponent = StateUtils.getOpponent(state, player);
-
-      // Only trigger from attack damage
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-      if (state.players[state.activePlayer] !== opponent) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      // Discard top 3 cards of opponent's deck
-      const cardsToDiscard = Math.min(3, opponent.deck.cards.length);
-      opponent.deck.moveTo(opponent.discard, cardsToDiscard);
+      const ability = this.powers[0];
+      effect.beforeDiscard.set(this, {
+        label: ability.name,
+        canResolve: () => opponent.deck.cards.length > 0,
+        resolve: () => DISCARD_TOP_X_OF_OPPONENTS_DECK(store, state, player, 3, this, ability)
+      });
     }
 
     // Attack 1: Smogbank
