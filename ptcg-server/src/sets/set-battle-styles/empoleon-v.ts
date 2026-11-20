@@ -1,10 +1,20 @@
-import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { PokemonCard, pokemonHasRuleBox } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils, AttachEnergyPrompt, PlayerType, SlotType, GameError, PowerType } from '../../game';
+import { StoreLike, State, StateUtils, AttachEnergyPrompt, PlayerType, SlotType, GameError, PowerType, Player, PokemonCardList } from '../../game';
+import { Power } from '../../game/store/card/pokemon-types';
+import { CheckPokemonPowersEffect } from '../../game/store/effects/check-effects';
 import { PowerEffect } from '../../game/store/effects/game-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { GameMessage } from '../../game/game-message';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { CAN_APPLY_ABILITY_TO_TARGET } from '../../game/store/prefabs/effect-of-ability-prefabs';
+
+const checkingSuppression = new WeakSet<PokemonCardList>();
+
+function isSubjectToEmperorsEyes(power: Power): boolean {
+  return power.powerType === PowerType.ABILITY
+    && !power.exemptFromAbilityLock && !power.useFromDiscard && !power.useFromHand;
+}
 
 export class EmpoleonV extends PokemonCard {
 
@@ -74,46 +84,45 @@ export class EmpoleonV extends PokemonCard {
       });
     }
 
-    if (effect instanceof PowerEffect && effect.power.powerType === PowerType.ABILITY && effect.power.name !== 'Emperor\'s Eyes') {
-      const player = effect.player;
+    // Ref: upstream 3348ebdc8 (apply the Ability lock to each eligible Pokémon).
+    if (effect instanceof CheckPokemonPowersEffect && effect.powers.some(isSubjectToEmperorsEyes)
+      && this.suppresses(store, state, effect.player, effect.target)) {
+      effect.powers = effect.powers.filter(power => !isSubjectToEmperorsEyes(power));
+    }
 
-      const cardList = StateUtils.findCardList(state, this);
-      const owner = StateUtils.findOwner(state, cardList);
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Only proceed if Empoleon V is in the Active spot
-      if (owner.active.getPokemonCard() !== this) {
-        return state;
-      }
-
-      // Only check opponent's Active Pokemon
-      if (player === owner || player.active.getPokemonCard() !== effect.card) {
-        return state;
-      }
-
-      // Check if the opponent's active Pokémon has a rule box
-      if (player.active.hasRuleBox() || opponent.active.hasRuleBox()) {
-        return state; // Return if the opponent's active Pokémon has a rule box
-      }
-
-      if (effect.power.useFromDiscard || effect.power.useFromHand) {
-        return state;
-      }
-
-
-      // Try reducing ability
-      try {
-        const powerEffect = new PowerEffect(player, this.powers[0], this);
-        store.reduceEffect(state, powerEffect);
-      } catch {
-        return state;
-      }
-
-      if (!effect.power.exemptFromAbilityLock) {
-        throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
-      }
+    if (effect instanceof PowerEffect && isSubjectToEmperorsEyes(effect.power)
+      && this.suppresses(store, state, effect.player, effect.card)) {
+      throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
     }
     return state;
+  }
+
+  private suppresses(store: StoreLike, state: State, recipient: Player, pokemon: PokemonCard): boolean {
+    const owner = StateUtils.getOpponent(state, recipient);
+    if (owner.active.getPokemonCard() !== this || pokemon.stage !== Stage.BASIC || pokemonHasRuleBox(pokemon)) {
+      return false;
+    }
+
+    const target = recipient.getPokemonInPlay().find(slot => slot.getPokemonCard() === pokemon);
+    if (!target || checkingSuppression.has(target)) {
+      return false;
+    }
+
+    // Protection Abilities can query their own availability during the target probe.
+    checkingSuppression.add(target);
+    try {
+      const power = this.powers[0];
+      const source = new PowerEffect(owner, power, this, owner.active);
+      store.reduceEffect(state, source);
+      return !source.preventDefault && CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, power, this, target);
+    } catch (error) {
+      if (error instanceof GameError) {
+        return false;
+      }
+      throw error;
+    } finally {
+      checkingSuppression.delete(target);
+    }
   }
 }
 

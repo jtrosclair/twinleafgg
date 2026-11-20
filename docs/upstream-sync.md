@@ -2071,3 +2071,45 @@ hand by card effects needs separate review for attachment notifications.
 The Empoleon V path in `3348ebdc8` also needs review: the current probe
 wrongly exempts a non-Rule-Box Basic when Empoleon itself has a Rule Box.
 Greninja XY's Mist Slash remains open under `49205ef174`.
+
+## Gameplay re-audit, batch 14
+
+Emperor's Eyes checks each opposing Basic in play, including the Bench. It
+removes the Ability from power queries and blocks its execution when the
+recipient lacks a Rule Box and has no applicable protection. It checks
+Empoleon V's own suppression as the owner, so Path to the Peak turns the
+lock off. All three Battle Styles printings inherit the fix. The Rule Box
+check shares the existing Path to the Peak card-level rules, including the
+older lowercase ex exception. Thirteen focused checks passed.
+Eight of those checks failed on the prior revision. The 559 compatible
+saved states and 3,633 sampled opening actions matched the previous engine.
+All eight recorded solutions reached a win. The full suite passed 7,253
+tests in 259 spec files. The Emperor's Eyes and Special Condition tests
+also passed with the local in-progress engine changes overlaid.
+The attested production package passed its mobile size budget and all ten
+mouse and touch board checks.
+[Empoleon V print](https://asia.pokemon-card.com/sg/card-search/detail/1186/)
+[Official Rule Box definition and Snorlax ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AB%E3%83%BC%E3%83%AB%E3%82%92%E6%8C%81%E3%81%A4%E3%83%9D%E3%82%B1%E3%83%A2%E3%83%B3&regulation=all)
+
+The published What a mischievous lock! opening behaved identically on both
+revisions. With one card in hand, Klefki blocked Mew ex's Restart. Counter
+Catcher then promoted Pidgeot ex, and Restart drew three cards. This was
+an opening playthrough and had no terminal result. The competing-lock
+case remains open. The rules give the first player priority when Empoleon V
+and Klefki both start Active, and the local reproduction still shows Klefki
+keeping Mischievous Lock in that position. The earlier activation must also
+remain authoritative after a switch or snapshot restore.
+[Official Empoleon V and Klefki ruling](https://www.pokemon-card.com/rules/faq/search.php?page=10&regulation=all&sc_group_id=871)
+
+Mist Slash remains open. The local Greninja XY dealt 100 into printed Water
+Weakness and zero into an existing defending damage-prevention effect;
+both should be 50. Mew SW copying Mist Slash dealt 30 through Psychic
+Resistance instead of 50. Live Liepard Gentle Bite correctly prevents its damage
+because it affects the attacker. A normally played Muscle Band increased
+Mist Slash to 70, and Focus Sash still saved a full-HP Fighting Pokémon
+from a lethal hit. The upstream attack-index change moves damage outside
+the normal calculation and would drop existing attacker-side modifiers.
+The follow-up must preserve damage modifiers on Greninja and effects that
+resolve after damage while bypassing modifiers on the defending Pokémon.
+[Official Mist Slash rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B2%E3%83%83%E3%82%B3%E3%82%A6%E3%82%AC&page=11&regulation=all&regulation_faq_main_item1=all)
+[Official Focus Sash ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%AE%E3%83%A9%E3%83%86%E3%82%A3%E3%83%8AEX&regulation_faq_main_item1=all)

@@ -4,6 +4,10 @@ import { SuperType, Stage, PokemonType, CardType, CardTag, Format } from './card
 import { Attack, Weakness, Resistance, Power } from './pokemon-types';
 import { TrainerCard } from './trainer-card';
 
+const RULE_BOX_TAGS = [CardTag.POKEMON_V, CardTag.POKEMON_VMAX, CardTag.POKEMON_VSTAR,
+  CardTag.POKEMON_EX, CardTag.BREAK, CardTag.POKEMON_GX, CardTag.PRISM_STAR,
+  CardTag.RADIANT, CardTag.POKEMON_VUNION];
+
 export abstract class PokemonCard extends Card {
 
   public superType: SuperType = SuperType.POKEMON;
@@ -65,6 +69,12 @@ export abstract class PokemonCard extends Card {
   public wasMovedToActiveThisTurn?(player: any): boolean {
     return player.movedToActiveThisTurn.includes(this.id);
   }
+}
+
+export function pokemonHasRuleBox(pokemon: PokemonCard): boolean {
+  // The older lowercase ex cards have no Rule Box.
+  return (pokemon.tags.includes(CardTag.POKEMON_ex) && !!pokemon.regulationMark)
+    || RULE_BOX_TAGS.some(tag => pokemon.tags.includes(tag));
 }
 
 /** Returns whether a Pokémon has the requested primary or additional type. */
