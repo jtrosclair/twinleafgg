@@ -7,6 +7,7 @@ import { Stage, CardType, SpecialCondition } from '../../game/store/card/card-ty
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { Effect } from '../../game/store/effects/effect';
+import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
 import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
 
 export class Shiinotic extends PokemonCard {
@@ -50,7 +51,9 @@ export class Shiinotic extends PokemonCard {
       }
 
       // The Attacking Pokemon is now Asleep
-      effect.source.addSpecialCondition(SpecialCondition.ASLEEP);
+      return APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+        store, state, targetPlayer, this.powers[0], this, effect.source, [SpecialCondition.ASLEEP]
+      );
     }
 
     // Attack 1: Dream's Touch

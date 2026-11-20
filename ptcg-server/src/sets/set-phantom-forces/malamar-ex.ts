@@ -3,12 +3,12 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, CardTag, SuperType } from '../../game/store/card/card-types';
+import { Stage, CardType, CardTag, SpecialCondition, SuperType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect } from '../../game/store/effects/game-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { WAS_ATTACK_USED, MULTIPLE_COIN_FLIPS_PROMPT, IS_ABILITY_BLOCKED, ADD_SLEEP_TO_PLAYER_ACTIVE } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
+import { CONFIRMATION_PROMPT, WAS_ATTACK_USED, MULTIPLE_COIN_FLIPS_PROMPT, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class MalamarEx extends PokemonCard {
   public tags = [CardTag.POKEMON_EX];
@@ -44,8 +44,8 @@ export class MalamarEx extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Hyper Hypnosis (triggered on energy attach)
-    // Ref: set-furious-fists/eevee.ts (Energy Evolution - AttachEnergyEffect trigger)
-    if (effect instanceof AttachEnergyEffect && effect.target.cards.includes(this)) {
+    // Ref: set-chilling-reign/porygon-z.ts (optional effect after hand attachment).
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
@@ -53,15 +53,13 @@ export class MalamarEx extends PokemonCard {
         return state;
       }
 
-      // Check ability can be used (fires PowerEffect for interception)
-      try {
-        const powerEffect = new PowerEffect(player, this.powers[0], this);
-        store.reduceEffect(state, powerEffect);
-      } catch {
-        return state;
-      }
-
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, this);
+      return CONFIRMATION_PROMPT(store, state, player, confirmed => {
+        if (confirmed) {
+          return APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+            store, state, player, this.powers[0], this, opponent.active, [SpecialCondition.ASLEEP]
+          );
+        }
+      });
     }
 
     // Attack 1: MAXamar

@@ -24,6 +24,23 @@ export function CAN_APPLY_ABILITY_TO_TARGET(
   return !effect.preventDefault && !!effect.target;
 }
 
+export function APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+  store: StoreLike,
+  state: State,
+  abilityOwner: Player,
+  power: Power,
+  card: PokemonCard,
+  target: PokemonCardList,
+  conditions: SpecialCondition[],
+  poisonDamage?: number,
+): State {
+  if (!target.getPokemonCard() || !CAN_APPLY_ABILITY_TO_TARGET(store, state, abilityOwner, power, card, target)) {
+    return state;
+  }
+  return store.reduceEffect(state,
+    new AddSpecialConditionsPowerEffect(abilityOwner, card, target, conditions, poisonDamage));
+}
+
 /** Let the player choose and apply one Ability-sourced Special Condition. */
 export function CHOOSE_SPECIAL_CONDITION_FROM_ABILITY(
   store: StoreLike,
@@ -49,9 +66,9 @@ export function CHOOSE_SPECIAL_CONDITION_FROM_ABILITY(
     { allowCancel: false },
   ), choice => {
     const condition = conditions[choice];
-    if (condition === undefined || !CAN_APPLY_ABILITY_TO_TARGET(store, state, abilityOwner, power, card, target)) {
+    if (condition === undefined) {
       return;
     }
-    store.reduceEffect(state, new AddSpecialConditionsPowerEffect(abilityOwner, card, target, [condition]));
+    return APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(store, state, abilityOwner, power, card, target, [condition]);
   });
 }

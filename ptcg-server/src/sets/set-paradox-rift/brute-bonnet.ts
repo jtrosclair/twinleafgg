@@ -1,11 +1,12 @@
+import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
 import { GameError, PlayerType, PowerType, State, StateUtils, StoreLike } from '../../game';
 import { GameMessage } from '../../game/game-message';
-import { BoardEffect, CardTag, CardType, Stage } from '../../game/store/card/card-types';
+import { BoardEffect, CardTag, CardType, Stage, SpecialCondition } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { ADD_POISON_TO_PLAYER_ACTIVE, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class BruteBonnet extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -70,8 +71,12 @@ export class BruteBonnet extends PokemonCard {
         throw new GameError(GameMessage.POWER_ALREADY_USED);
       }
 
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, player, this);
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
+      APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+        store, state, player, this.powers[0], this, player.active, [SpecialCondition.POISONED]
+      );
+      APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+        store, state, player, this.powers[0], this, opponent.active, [SpecialCondition.POISONED]
+      );
 
       player.marker.addMarker(this.TOXIC_POWDER_MARKER, this);
 

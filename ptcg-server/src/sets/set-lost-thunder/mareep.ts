@@ -1,3 +1,4 @@
+import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
 import { GameError, GameMessage, PowerType, State, StateUtils, StoreLike } from '../../game';
 import { CardType, SpecialCondition, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
@@ -65,7 +66,9 @@ export class Mareep extends PokemonCard {
       player.marker.addMarker(this.FLUFFY_PILLOW_MARKER, this);
       const opponent = StateUtils.getOpponent(state, player);
 
-      opponent.active.addSpecialCondition(SpecialCondition.ASLEEP);
+      APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+        store, state, player, this.powers[0], this, opponent.active, [SpecialCondition.ASLEEP]
+      );
       return state;
     }
 

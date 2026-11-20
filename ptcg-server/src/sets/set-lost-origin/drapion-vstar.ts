@@ -1,3 +1,4 @@
+import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
 /* eslint-disable indent */
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SpecialCondition, BoardEffect } from '../../game/store/card/card-types';
@@ -70,9 +71,9 @@ export class DrapionVSTAR extends PokemonCard {
           cardList.addBoardEffect(BoardEffect.ABILITY_USED);
         }
       });
-      opponent.active.addSpecialCondition(SpecialCondition.POISONED);
-      opponent.active.addSpecialCondition(SpecialCondition.PARALYZED);
-      opponent.active.poisonDamage = 60;
+      APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+        store, state, player, this.powers[0], this, opponent.active, [SpecialCondition.POISONED, SpecialCondition.PARALYZED], 30
+      );
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {

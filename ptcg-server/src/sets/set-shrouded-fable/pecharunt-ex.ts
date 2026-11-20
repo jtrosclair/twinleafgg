@@ -1,3 +1,4 @@
+import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SpecialCondition, BoardEffect } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
@@ -63,7 +64,9 @@ function* useChainsOfControl(next: Function, store: StoreLike, state: State,
   if (target.length > 0) {
     player.active.clearEffects();
     player.switchPokemon(target[0]);
-    player.active.addSpecialCondition(SpecialCondition.POISONED);
+    APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+      store, state, player, effect.power, effect.card, player.active, [SpecialCondition.POISONED]
+    );
     player.chainsOfControlUsed = true;
   }
 }

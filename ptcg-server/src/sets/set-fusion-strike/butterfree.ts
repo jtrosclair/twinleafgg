@@ -1,7 +1,8 @@
+import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
 import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
-import { Attack, CardType, PokemonCard, Power, PowerType, Stage, State, StateUtils, StoreLike } from '../../game';
+import { Attack, CardType, PokemonCard, Power, PowerType, Stage, State, StateUtils, StoreLike, SpecialCondition } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ADD_BURN_TO_PLAYER_ACTIVE, ADD_CONFUSION_TO_PLAYER_ACTIVE, ADD_POISON_TO_PLAYER_ACTIVE, CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class Butterfree extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -40,9 +41,11 @@ export class Butterfree extends PokemonCard {
     if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this && effect.playedFromHand && state.players[state.activePlayer] === effect.player && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
       if (CONFIRMATION_PROMPT(store, state, effect.player, result => {
         if (result) {
-          ADD_BURN_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), this);
-          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), this);
-          ADD_POISON_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), this);
+          const player = effect.player;
+          const opponent = StateUtils.getOpponent(state, player);
+          APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+            store, state, player, this.powers[0], this, opponent.active, [SpecialCondition.BURNED, SpecialCondition.CONFUSED, SpecialCondition.POISONED]
+          );
         }
       })) {
         return state;

@@ -6,7 +6,8 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils, GameMessage, SpecialCondition, ConfirmPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachPokemonToolEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachPokemonToolFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
 import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class TapuLele extends PokemonCard {
@@ -41,7 +42,8 @@ export class TapuLele extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Charmed Charm
     // Ref: set-forbidden-light/goodra.ts (Hydration - trigger on attach)
-    if (effect instanceof AttachPokemonToolEffect && effect.target.getPokemonCard() === this) {
+    if (effect instanceof AfterAttachPokemonToolFromHandEffect && effect.target.getPokemonCard() === this
+      && state.players[state.activePlayer] === effect.player) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {
@@ -60,7 +62,9 @@ export class TapuLele extends PokemonCard {
         GameMessage.WANT_TO_USE_ABILITY
       ), wantToUse => {
         if (wantToUse) {
-          opponent.active.addSpecialCondition(SpecialCondition.CONFUSED);
+          return APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+            store, state, player, this.powers[0], this, opponent.active, [SpecialCondition.CONFUSED]
+          );
         }
       });
     }

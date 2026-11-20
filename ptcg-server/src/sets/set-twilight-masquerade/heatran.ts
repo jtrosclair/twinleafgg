@@ -1,10 +1,11 @@
-import { Card, GamePhase, PowerType, State, StateUtils, StoreLike } from '../../game';
+import { Card, PowerType, State, StateUtils, StoreLike } from '../../game';
 import { CardType, SpecialCondition, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { AfterDamageEffect, DiscardCardsEffect } from '../../game/store/effects/attack-effects';
+import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
+import { IS_ABILITY_BLOCKED, ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Heatran extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -57,20 +58,14 @@ export class Heatran extends PokemonCard {
       effect.damage += (totalDiscarded - 1) * 50;
     }
 
-    if (effect instanceof AfterDamageEffect && effect.target.cards.includes(this)) {
-      const player = effect.player;
-      const targetPlayer = StateUtils.findOwner(state, effect.target);
-
-      if (effect.damage <= 0 || player === targetPlayer || targetPlayer.active !== effect.target) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      if (state.phase === GamePhase.ATTACK) {
-        effect.source.addSpecialCondition(SpecialCondition.BURNED);
+    // Ref: set-temporal-forces/iron-jugulis.ts (retaliation after attack damage).
+    if (ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT(state, effect, { source: this })
+      && effect.target.getPokemonCard() === this) {
+      const owner = StateUtils.findOwner(state, effect.target);
+      if (!IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        return APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+          store, state, owner, this.powers[0], this, effect.source, [SpecialCondition.BURNED]
+        );
       }
     }
 

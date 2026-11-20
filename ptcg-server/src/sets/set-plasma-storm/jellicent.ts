@@ -7,6 +7,7 @@ import { Stage, CardType, CardTag, SpecialCondition } from '../../game/store/car
 import { GamePhase, PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { KnockOutEffect } from '../../game/store/effects/game-effects';
+import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON } from '../../game/store/prefabs/attack-effects';
 
@@ -43,30 +44,21 @@ export class Jellicent extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Spiteful Spirit (passive - on KO)
-    // Ref: set-roaring-skies/articuno.ts (KnockOutEffect intercept)
-    if (effect instanceof KnockOutEffect && effect.target.cards.includes(this)) {
-      const player = StateUtils.findOwner(state, effect.target);
+    // Ref: set-ascended-heroes/hops-trevenant.ts (attack-damage Knock Out provenance).
+    if (effect instanceof KnockOutEffect && effect.target === effect.player.active
+      && effect.target.getPokemonCard() === this && state.phase === GamePhase.ATTACK) {
+      const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
-
-      // Only triggers when active and from attack damage
-      if (player.active !== effect.target) {
-        return state;
+      const hit = effect.target.attackDamageKnockOut;
+      if (hit?.sourceCard && hit.turn === state.turn && hit.playerId === opponent.id
+        && !IS_ABILITY_BLOCKED(store, state, player, this)) {
+        const attacker = StateUtils.findPokemonSlot(state, hit.sourceCard);
+        if (attacker?.getPokemonCard() === hit.sourceCard && attacker === opponent.active) {
+          return APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+            store, state, player, this.powers[0], this, attacker, [SpecialCondition.CONFUSED, SpecialCondition.POISONED]
+          );
+        }
       }
-
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-      if (state.players[state.activePlayer] !== opponent) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      // Apply Confused and Poisoned directly to the opponent's active
-      opponent.active.addSpecialCondition(SpecialCondition.CONFUSED);
-      opponent.active.addSpecialCondition(SpecialCondition.POISONED);
     }
 
     // Attack 1: Aqua Bullet

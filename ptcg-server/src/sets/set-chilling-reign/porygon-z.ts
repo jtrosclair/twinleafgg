@@ -3,11 +3,12 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType } from '../../game/store/card/card-types';
+import { Stage, CardType, SpecialCondition } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, CONFIRMATION_PROMPT, ADD_CONFUSION_TO_PLAYER_ACTIVE } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
+import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, CONFIRMATION_PROMPT } from '../../game/store/prefabs/prefabs';
 import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
 
 export class PorygonZ extends PokemonCard {
@@ -42,14 +43,10 @@ export class PorygonZ extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Bug Transmission (passive - when energy attached from hand to this Pokemon)
-    // Ref: set-plasma-blast/genesect-ex.ts (Red Signal - AttachEnergyEffect intercept for on-attach ability)
-    if (effect instanceof AttachEnergyEffect && effect.target.getPokemonCard() === this) {
+    // Ref: set-crown-zenith/radiant-charjabug.ts (successful hand attachment).
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this
+      && state.players[state.activePlayer] === effect.player) {
       const player = effect.player;
-
-      // Only from hand
-      if (!player.hand.cards.includes(effect.energyCard)) {
-        return state;
-      }
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {
         return state;
@@ -59,7 +56,9 @@ export class PorygonZ extends PokemonCard {
 
       CONFIRMATION_PROMPT(store, state, player, result => {
         if (result) {
-          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, opponent, this);
+          return APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+            store, state, player, this.powers[0], this, opponent.active, [SpecialCondition.CONFUSED]
+          );
         }
       });
     }

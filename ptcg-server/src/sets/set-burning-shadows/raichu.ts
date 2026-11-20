@@ -1,7 +1,8 @@
-import { Attack, CardType, PokemonCard, Power, PowerType, Stage, State, StateUtils, StoreLike } from '../../game';
+import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
+import { Attack, CardType, PokemonCard, Power, PowerType, SpecialCondition, Stage, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EffectOfAbilityEffect } from '../../game/store/effects/game-effects';
-import { ADD_PARALYZED_TO_PLAYER_ACTIVE, CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, JUST_EVOLVED, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Raichu extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -37,19 +38,22 @@ export class Raichu extends PokemonCard {
   public fullName: string = 'Raichu BUS';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (JUST_EVOLVED(effect, this) && !IS_ABILITY_BLOCKED(store, state, effect.player, this))
-      if (CONFIRMATION_PROMPT(store, state, effect.player, result => {
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this && effect.playedFromHand
+      && state.players[state.activePlayer] === effect.player && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+      const player = effect.player;
+      return CONFIRMATION_PROMPT(store, state, player, result => {
         if (result) {
-          const opponent = StateUtils.getOpponent(state, effect.player);
-          const canApplyAbility = new EffectOfAbilityEffect(effect.player, this.powers[0], this, opponent.active);
-          store.reduceEffect(state, canApplyAbility);
-          if (canApplyAbility.target) {
-            ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, opponent, this);
-          }
+          const opponent = StateUtils.getOpponent(state, player);
+          APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+            store, state, player, this.powers[0], this, opponent.active, [SpecialCondition.PARALYZED]
+          );
         }
-      }))
-        if (WAS_ATTACK_USED(effect, 0, this))
-          THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 30);
+      });
+    }
+
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 30);
+    }
     return state;
   }
 }

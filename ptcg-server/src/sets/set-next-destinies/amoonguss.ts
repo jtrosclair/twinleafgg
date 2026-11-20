@@ -1,3 +1,5 @@
+import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SpecialCondition } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils, GameMessage } from '../../game';
@@ -37,7 +39,8 @@ export class Amoonguss extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Sporprise - when evolved, may confuse and poison opponent's active
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this && effect.playedFromHand
+      && state.players[state.activePlayer] === effect.player) {
       const player = effect.player;
 
       // Check if ability is blocked
@@ -52,8 +55,9 @@ export class Amoonguss extends PokemonCard {
       ), wantToUse => {
         if (wantToUse) {
           const opponent = StateUtils.getOpponent(state, player);
-          opponent.active.addSpecialCondition(SpecialCondition.CONFUSED);
-          opponent.active.addSpecialCondition(SpecialCondition.POISONED);
+          APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+            store, state, player, this.powers[0], this, opponent.active, [SpecialCondition.CONFUSED, SpecialCondition.POISONED]
+          );
         }
       });
 

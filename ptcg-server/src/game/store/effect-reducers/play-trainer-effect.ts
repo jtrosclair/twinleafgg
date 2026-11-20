@@ -1,5 +1,5 @@
 import {
-  AttachPokemonToolEffect, TrainerEffect, PlaySupporterEffect,
+  AfterAttachPokemonToolFromHandEffect, AttachPokemonToolEffect, TrainerEffect, PlaySupporterEffect,
   PlayItemEffect, PlayStadiumEffect
 } from '../effects/play-card-effects';
 import { GameError } from '../../game-error';
@@ -245,6 +245,7 @@ function playTrainerWithoutCoinFlip(store: StoreLike, state: State, effect: Effe
     const player = effect.player;
     const target = effect.target;
     const trainerCard = effect.trainerCard;
+    const fromHand = player.hand.cards.includes(trainerCard);
     const pokemonCard = target.getPokemonCard();
 
     if (pokemonCard === undefined) {
@@ -273,6 +274,9 @@ function playTrainerWithoutCoinFlip(store: StoreLike, state: State, effect: Effe
     const playTrainer = new TrainerEffect(player, trainerCard, target);
     state = store.reduceEffect(state, playTrainer);
 
+    if (fromHand && target.tools.includes(trainerCard)) {
+      state = store.reduceEffect(state, new AfterAttachPokemonToolFromHandEffect(player, trainerCard, target));
+    }
     return state;
   }
 

@@ -2029,3 +2029,45 @@ verified paths in the three Ability refactors remain listed separately in
 the ledger. Greninja XY's Mist Slash still needs review through the damage
 pipeline.
 [Brute Bonnet](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sv04/207)
+
+## Gameplay re-audit, batch 13
+
+Special Conditions from the reviewed Abilities carry the Ability owner's
+identity through protection checks. Toxic Powder still poisons Brute
+Bonnet's own Active while Ghost Veil, Stealthy Hood, Fusion Strike Energy and
+Mega Clefable ex can protect the opposing Active. Only the conditions that
+reach their targets update the corresponding damage or coin-flip settings.
+Drapion VSTAR's Hazard Star places three counters per Pokémon Checkup.
+Wafting Scent checks effective Grass Energy and pays the discard before the
+conditions take effect.
+[Brute Bonnet](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sv04/207)
+[Drapion VSTAR](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/ss-series/swsh11/119/)
+
+The reviewed hand-evolution Abilities use the accepted evolution event.
+Hyper Hypnosis keeps its printed optional choice, and Bug Transmission and
+Charmed Charm wait for accepted attachments from hand. Incandescent Body,
+Effect Spore and Spiteful Spirit check the actual attacker and its
+protection. Block checks suppression from Snorlax's side. Volt Tackle now
+executes its independent self-damage. Mareep CRZ is an Evolving Skies
+reprint and retains its existing attacks.
+[Dustox](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sm8/28/)
+[Pokemon GO Snorlax](https://www.pokemon.com/br/pokemon-estampas-ilustradas/cartas-de-pokemon/series/pgo/55)
+
+All 70 focused tests pass, including 42 that failed against the previous
+engine. Saved-state comparison accepted the same 559 snapshots, including
+401 nondeleted entries. Serialized states, card names and the expanded
+validator state all matched. In Absol clutch, Adrena-Brain moves exactly
+six counters onto Mega Kangaskhan ex, Subjugating Chains promotes and
+poisons Mega Absol ex, and Terminal Period takes the remaining two Prizes.
+The published puzzle reaches a win in seven actions on both revisions.
+All eight recorded solutions reached a win in the rebuilt browser engine.
+All 3,633 sampled opening actions matched across the 559 comparable saved
+states. The full engine suite passed 7,240 tests in 258 files. The attested
+production package passed the mobile size budget and all ten packaged
+mouse and touch board checks.
+
+The ledger still tracks open Ability paths. Direct Energy movement from
+hand by card effects needs separate review for attachment notifications.
+The Empoleon V path in `3348ebdc8` also needs review: the current probe
+wrongly exempts a non-Rule-Box Basic when Empoleon itself has a Rule Box.
+Greninja XY's Mist Slash remains open under `49205ef174`.

@@ -527,16 +527,16 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
     effect.specialConditions.forEach(sp => {
       target.addSpecialCondition(sp);
     });
-    if (effect.poisonDamage !== undefined) {
+    if (effect.specialConditions.includes(SpecialCondition.POISONED) && effect.poisonDamage !== undefined) {
       target.poisonDamage = effect.poisonDamage;
     }
-    if (effect.burnDamage !== undefined) {
+    if (effect.specialConditions.includes(SpecialCondition.BURNED) && effect.burnDamage !== undefined) {
       target.burnDamage = effect.burnDamage;
     }
-    if (effect.confusionDamage !== undefined) {
+    if (effect.specialConditions.includes(SpecialCondition.CONFUSED) && effect.confusionDamage !== undefined) {
       target.confusionDamage = effect.confusionDamage;
     }
-    if (effect.sleepFlips !== undefined) {
+    if (effect.specialConditions.includes(SpecialCondition.ASLEEP) && effect.sleepFlips !== undefined) {
       target.sleepFlips = effect.sleepFlips;
     }
     return state;

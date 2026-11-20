@@ -1,12 +1,13 @@
+import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
 import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType } from '../../game/store/card/card-types';
+import { Stage, CardType, SpecialCondition } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { StateUtils } from '../../game';
-import { ADD_CONFUSION_TO_PLAYER_ACTIVE, BLOCK_RETREAT, BLOCK_RETREAT_IF_MARKER, CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { BLOCK_RETREAT, BLOCK_RETREAT_IF_MARKER, CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED } from '../../game/store/prefabs/attack-effects';
 import { MarkerConstants } from '../../game/store/markers/marker-constants';
 
@@ -49,8 +50,12 @@ export class Haunter extends PokemonCard {
       CONFIRMATION_PROMPT(store, state, player, result => {
         if (!result) { return state; }
 
-        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, this);
-        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, opponent, this);
+        APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+          store, state, player, this.powers[0], this, player.active, [SpecialCondition.CONFUSED]
+        );
+        APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+          store, state, player, this.powers[0], this, opponent.active, [SpecialCondition.CONFUSED]
+        );
       });
     }
 

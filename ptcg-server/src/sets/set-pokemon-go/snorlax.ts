@@ -1,8 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SpecialCondition } from '../../game/store/card/card-types';
-import { StoreLike, State, PowerType, GameError, GameMessage, PlayerType, StateUtils } from '../../game';
-import { EffectOfAbilityEffect, RetreatEffect } from '../../game/store/effects/game-effects';
+import { StoreLike, State, PowerType, GameError, GameMessage, StateUtils } from '../../game';
+import { RetreatEffect } from '../../game/store/effects/game-effects';
 import { Effect } from '../../game/store/effects/effect';
+import { CAN_APPLY_ABILITY_TO_TARGET } from '../../game/store/prefabs/effect-of-ability-prefabs';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 
@@ -49,28 +50,9 @@ export class Snorlax extends PokemonCard {
 
     // Block
     if (effect instanceof RetreatEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      let isSnorlaxInPlay = false;
-      opponent.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (opponent.active.cards[0] == this) {
-          isSnorlaxInPlay = true;
-        }
-      });
-
-      if (isSnorlaxInPlay) {
-        // Try to reduce PowerEffect, to check if something is blocking our ability
-        if (IS_ABILITY_BLOCKED(store, state, player, this)) return state;
-
-        // Check if Block can target the retreating Pokemon
-        const canApplyAbility = new EffectOfAbilityEffect(opponent, this.powers[0], this, player.active);
-        store.reduceEffect(state, canApplyAbility);
-        if (!canApplyAbility.target) {
-          return state;
-        }
-
-        // Block the retreat action
+      const owner = StateUtils.getOpponent(state, effect.player);
+      if (owner.active.getPokemonCard() === this && !IS_ABILITY_BLOCKED(store, state, owner, this)
+        && CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, this.powers[0], this, effect.player.active)) {
         throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
       }
     }
