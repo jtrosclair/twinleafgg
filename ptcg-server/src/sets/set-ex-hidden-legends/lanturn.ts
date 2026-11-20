@@ -85,6 +85,7 @@ export class Lanturn extends PokemonCard {
 
     const attached = getAttachedBasicEnergy(target);
     effect.afterDiscard.set(this, () => {
+      if (player.marker.hasMarker(usage)) return;
       const energy = new CardList();
       energy.cards = attached.filter(card => player.discard.cards.includes(card));
       if (!energy.cards.length) return;

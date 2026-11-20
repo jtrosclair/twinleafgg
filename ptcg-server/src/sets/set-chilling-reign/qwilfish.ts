@@ -2,12 +2,13 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
-import { ADD_POISON_TO_PLAYER_ACTIVE, AFTER_ATTACK, IS_ABILITY_BLOCKED, ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT } from '../../game/store/prefabs/prefabs';
+import { ADD_POISON_TO_PLAYER_ACTIVE, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
 import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
-import { StateUtils } from '../../game/store/state-utils';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
 import { PowerType, State, StoreLike } from '../../game';
+import { registerKnockOutRetaliation } from '../../game/store/prefabs/knock-out-effects';
+
 export class Qwilfish extends PokemonCard {
   public tags = [CardTag.SINGLE_STRIKE];
   public stage: Stage = Stage.BASIC;
@@ -39,17 +40,8 @@ export class Qwilfish extends PokemonCard {
   public fullName: string = 'Qwilfish CRE';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Bursting Needles
-    // Ref: set-flashfire/qwilfish.ts (Counterattack Quills - ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT)
-    if (ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT(state, effect, { source: this })) {
-      const targetPlayer = StateUtils.findOwner(state, effect.target);
-
-      if (IS_ABILITY_BLOCKED(store, state, targetPlayer, this)) {
-        return state;
-      }
-
-      effect.source.damage += 60;
-    }
+    // Ref: knock-out-effects.ts (queue damage counters for the original attacker).
+    registerKnockOutRetaliation(store, state, effect, this, 60);
 
     // Attack 1: Poison Jab
     // Ref: set-flashfire/qwilfish.ts (Poison Sting - YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED)

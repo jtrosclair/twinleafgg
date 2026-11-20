@@ -6,7 +6,8 @@ import { EnergyCard } from '../card/energy-card';
 import { PokemonCard } from '../card/pokemon-card';
 import { TrainerCard } from '../card/trainer-card';
 import { CheckProvidedEnergyEffect } from '../effects/check-effects';
-import { KnockOutEffect } from '../effects/game-effects';
+import { Effect } from '../effects/effect';
+import { KnockOutEffect, PlaceDamageCountersEffect } from '../effects/game-effects';
 import { AttachEnergyPrompt } from '../prompts/attach-energy-prompt';
 import { ChooseCardsPrompt } from '../prompts/choose-cards-prompt';
 import { StateUtils } from '../state-utils';
@@ -15,7 +16,9 @@ import { getAttackDamagePosition, PokemonCardList } from '../state/pokemon-card-
 import { Player } from '../state/player';
 import { State } from '../state/state';
 import { StoreLike } from '../store-like';
-import { MOVE_CARDS } from './prefabs';
+import {
+  IS_ABILITY_BLOCKED, IS_TOOL_BLOCKED, MOVE_CARDS, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE
+} from './prefabs';
 
 export function registerKnockOutRescue(store: StoreLike, state: State, effect: KnockOutEffect, source: Card, canRescue = () => true): void {
   effect.rescueSource ??= source;
@@ -44,6 +47,39 @@ export function registerKnockOutRescue(store: StoreLike, state: State, effect: K
 
 export function wasActiveWhenDamaged(effect: KnockOutEffect): boolean {
   return getAttackDamagePosition(effect.target)?.active ?? effect.target === effect.player.active;
+}
+
+export function findKnockOutAttacker(state: State, effect: KnockOutEffect): PokemonCardList | undefined {
+  const attacker = effect.target.attackDamageKnockOut?.sourceCard;
+  if (!attacker) return;
+  const opponent = StateUtils.getOpponent(state, effect.player);
+  return opponent.getPokemonInPlay().find(slot => slot.getPokemonCard() === attacker);
+}
+
+export function registerKnockOutRetaliation(
+  store: StoreLike, state: State, effect: Effect, source: PokemonCard | TrainerCard, damage: number
+): void {
+  if (!WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) || !effect.resolveBeforeDiscard
+    || effect.beforeDiscard.has(source)) return;
+  const { player, target } = effect;
+  const pokemon = source instanceof PokemonCard ? source : undefined;
+  const ability = pokemon?.powers[0];
+  if (pokemon) {
+    if (target.getPokemonCard() !== pokemon || !wasActiveWhenDamaged(effect)
+      || IS_ABILITY_BLOCKED(store, state, player, pokemon)) return;
+  } else if (!(source instanceof TrainerCard) || !target.tools.includes(source)
+    || IS_TOOL_BLOCKED(store, state, player, source)) return;
+
+  effect.beforeDiscard.set(source, {
+    label: ability?.name ?? source.name,
+    canResolve: () => !!findKnockOutAttacker(state, effect),
+    resolve: () => {
+      const attacker = findKnockOutAttacker(state, effect);
+      if (attacker) {
+        store.reduceEffect(state, new PlaceDamageCountersEffect(player, attacker, damage, pokemon, ability));
+      }
+    }
+  });
 }
 
 export function getAttachedBasicEnergy(target: PokemonCardList): EnergyCard[] {

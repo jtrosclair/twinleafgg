@@ -3,10 +3,8 @@ import { TrainerType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { StateUtils } from '../../game';
-import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { IS_TOOL_BLOCKED } from '../../game/store/prefabs/prefabs';
+
+import { registerKnockOutRetaliation } from '../../game/store/prefabs/knock-out-effects';
 
 export class VengefulPunch extends TrainerCard {
 
@@ -30,48 +28,8 @@ export class VengefulPunch extends TrainerCard {
   public damageDealt = false;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    /*if (effect instanceof AfterDamageEffect && effect.target.tools.includes(this)) {
-      const player = effect.player;
-      const targetPlayer = StateUtils.findOwner(state, effect.target);
-  
-
-
-      if (effect.damage <= 0 || player === targetPlayer || targetPlayer.active !== effect.target) {
-        return state;
-      }
-  
-      const activePokemon = player.active as unknown as PokemonCard;
-      const maxHp = activePokemon.hp;
-  
-      if (state.phase === GamePhase.ATTACK) {
-        if (player.active.damage >= maxHp) {
-          effect.source.damage += 40;
-        }
-      }
-    }*/
-
-    if ((effect instanceof DealDamageEffect || effect instanceof PutDamageEffect) &&
-      effect.target.tools.includes(this)) {
-      const player = StateUtils.getOpponent(state, effect.player);
-
-      if (IS_TOOL_BLOCKED(store, state, effect.player, this)) { return state; }
-
-      if (player.active.tools.includes(this)) {
-        this.damageDealt = true;
-      }
-    }
-
-    if (effect instanceof KnockOutEffect && effect.target.tools.includes(this) && effect.player.marker.hasMarker(effect.player.DAMAGE_DEALT_MARKER)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-
-
-      if (this.damageDealt) {
-        opponent.active.damage += 40;
-      }
-    }
-
+    // Ref: knock-out-effects.ts (use the original attacking Pokémon).
+    registerKnockOutRetaliation(store, state, effect, this, 40);
     return state;
   }
 }

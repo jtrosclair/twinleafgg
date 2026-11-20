@@ -43,7 +43,7 @@ import { CardList } from '../state/card-list';
 import { Player } from '../state/player';
 import { ConfirmPrompt } from '../prompts/confirm-prompt';
 import { checkState } from './check-effect';
-import { discardKnockedOutPokemon, needsKnockOutOrder } from './knock-out';
+import { discardKnockedOutPokemon } from './knock-out';
 import { ChooseAttackPrompt } from '../prompts/choose-attack-prompt';
 import { Card } from '../card/card';
 import { Attack } from '../card/pokemon-types';
@@ -409,7 +409,7 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
           state = energy.reduceEffect(store, state, effect);
         }
       }
-      if (!needsKnockOutOrder(effect)) {
+      if (!effect.resolveBeforeDiscard) {
         state = discardKnockedOutPokemon(store, state, effect);
       }
     }

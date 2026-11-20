@@ -15,13 +15,13 @@ import { CardList } from '../state/card-list';
 import { PokemonCardList } from '../state/pokemon-card-list';
 import { GamePhase, GameWinner, State } from '../state/state';
 import { StoreLike } from '../store-like';
-import { GameStatsTracker } from '../game-stats-tracker';
 import { recordActiveAbilityLockOrder } from '../state/active-ability-lock-order';
-import { needsKnockOutOrder, resolveKnockOutBeforeDiscard } from './knock-out';
+import { resolveKnockOutGroup } from './knock-out';
 
 interface PokemonItem {
   playerNum: number;
   cardList: PokemonCardList;
+  card: PokemonCard;
   destination?: 'lostzone';
 }
 
@@ -47,7 +47,7 @@ function findKoPokemons(store: StoreLike, state: State): PokemonItem[] {
       // Never carry a Lost Crisis destination into another attack or checkup.
       if (ko) { delete ko.destination; delete ko.targetCard; }
       if (cardList.damage >= checkHpEffect.hp) {
-        pokemons.push({ playerNum: i, cardList, destination });
+        pokemons.push({ playerNum: i, cardList, card, destination });
       }
     });
   }
@@ -300,27 +300,26 @@ export function endGame(store: StoreLike, state: State, winner: GameWinner): Sta
 
 export function checkWinner(store: StoreLike, state: State, onComplete?: () => void): State {
   const points: [number, number] = [0, 0];
-  const reasons: [string[], string[]] = [[], []];
+  const prizeCounts = state.players.map(player => player.getPrizeLeft());
 
   for (let i = 0; i < state.players.length; i++) {
     const player = state.players[i];
+    const other = i === 0 ? 1 : 0;
 
-    // Check for no active Pokemon
-    if (player.active.cards.length === 0) {
+    if (!player.active.getPokemonCard() && !player.bench.some(slot => slot.getPokemonCard())) {
       store.log(state, GameLog.LOG_PLAYER_NO_ACTIVE_POKEMON, { name: player.name });
-      points[i === 0 ? 1 : 0]++;
-      reasons[i === 0 ? 1 : 0].push('no_active');
+      points[other]++;
     }
 
-    if (player.prizes.every(p => p.cards.length === 0)) {
+    if (prizeCounts[i] === 0) {
       store.log(state, GameLog.LOG_PLAYER_NO_PRIZE_CARD, { name: player.name });
       points[i]++;
-      reasons[i].push('no_prizes');
+    } else if (state.isSuddenDeath && prizeCounts[i] < prizeCounts[other]) {
+      points[i]++;
     }
   }
 
-  // Check for Sudden Death condition
-  if (points[0] > 0 && points[1] > 0) {
+  if (points[0] > 0 && points[0] === points[1]) {
     return initiateSuddenDeath(store, state);
   }
 
@@ -387,44 +386,41 @@ function setupSuddenDeathGame(store: StoreLike, state: State, firstPlayer: numbe
 export function* executeCheckState(next: Function, store: StoreLike, state: State, onComplete?: () => void): IterableIterator<State> {
   const prizeGroups: PrizeGroup[][] = state.players.map(() => []);
 
-  // Handle KOs first
-  const pokemonsToDiscard = findKoPokemons(store, state);
-  const pokemonInPlay = pokemonsToDiscard.length > 1 ? state.players.map(player =>
-    [player.active, ...player.bench].flatMap(slot => slot.getPokemonCard() ?? [])
-  ) : undefined;
-  const simultaneousKnockOuts = pokemonInPlay && new Set(pokemonsToDiscard.map(pokemon => pokemon.cardList));
-  for (const pokemonToDiscard of pokemonsToDiscard) {
-    const owner = state.players[pokemonToDiscard.playerNum];
-    const knockOutEffect = new KnockOutEffect(owner, pokemonToDiscard.cardList, true);
-    // Simultaneous Knock Outs share the board that existed before any
-    // Pokémon was removed, regardless of which effect is reduced first.
-    knockOutEffect.pokemonInPlayBeforeKnockOut = pokemonInPlay?.[pokemonToDiscard.playerNum];
-    knockOutEffect.simultaneousKnockOuts = simultaneousKnockOuts;
-    knockOutEffect.knockOutDestination = pokemonToDiscard.destination;
-    if (pokemonToDiscard.destination) {
-      knockOutEffect.knockOutDestinationLabel = pokemonToDiscard.cardList.attackDamageKnockOut?.attack.name;
-    }
-    state = store.reduceEffect(state, knockOutEffect);
-
-    if (store.hasPrompts()) {
-      yield store.waitPrompt(state, () => next());
-    }
-
-    if (knockOutEffect.preventDefault === false) {
-      if (needsKnockOutOrder(knockOutEffect)) {
-        state = yield* resolveKnockOutBeforeDiscard(() => next(), store, state, knockOutEffect);
+  // Resolve every Knock Out created by these effects before taking Prizes.
+  const processed = new Set<PokemonCard>();
+  let pending = findKoPokemons(store, state);
+  while (pending.length > 0) {
+    const pokemonInPlay = pending.length > 1 ? state.players.map(player =>
+      player.getPokemonInPlay().flatMap(slot => slot.getPokemonCard() ?? [])) : undefined;
+    const simultaneousKnockOuts = pokemonInPlay && new Set(pending.map(pokemon => pokemon.cardList));
+    const resolved: KnockOutEffect[] = [];
+    for (const pokemon of pending) {
+      const owner = state.players[pokemon.playerNum];
+      if (pokemon.cardList.getPokemonCard() !== pokemon.card) continue;
+      processed.add(pokemon.card);
+      const effect = new KnockOutEffect(owner, pokemon.cardList, true);
+      effect.pokemonInPlayBeforeKnockOut = pokemonInPlay?.[pokemon.playerNum];
+      effect.simultaneousKnockOuts = simultaneousKnockOuts;
+      effect.knockOutDestination = pokemon.destination;
+      if (pokemon.destination) {
+        effect.knockOutDestinationLabel = pokemon.cardList.attackDamageKnockOut?.attack.name;
       }
-      const opponentIndex = pokemonToDiscard.playerNum === 0 ? 1 : 0;
-      const defaultDestination = state.players[opponentIndex].hand;
-      const destination = knockOutEffect.prizeDestination || defaultDestination;
+      state = store.reduceEffect(state, effect);
+      if (store.hasPrompts()) yield store.waitPrompt(state, () => next());
+      if (effect.preventDefault) continue;
 
-      let group = prizeGroups[opponentIndex].find(g => g.destination === destination);
+      resolved.push(effect);
+      const opponentIndex = pokemon.playerNum === 0 ? 1 : 0;
+      const destination = effect.prizeDestination ?? state.players[opponentIndex].hand;
+      let group = prizeGroups[opponentIndex].find(group => group.destination === destination);
       if (!group) {
         group = { destination, count: 0 };
         prizeGroups[opponentIndex].push(group);
       }
-      group.count += Math.max(0, knockOutEffect.prizeCount);
+      group.count += Math.max(0, effect.prizeCount);
     }
+    state = yield* resolveKnockOutGroup(() => next(), store, state, resolved);
+    pending = findKoPokemons(store, state).filter(pokemon => !processed.has(pokemon.card));
   }
 
   // Check table state and handle bench size after KOs
@@ -433,49 +429,26 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
     yield store.waitPrompt(state, () => next());
   }
 
-  // Check if the game has ended before proceeding with prompts
-  if (state.phase === GamePhase.FINISHED) {
-    return state;
-  }
-
-  // Handle prize selection first - opponent then player (auto-select first X)
-  for (let i = 0; i < state.players.length; i++) {
+  // Both players take their Prizes for this check before the winner is decided.
+  for (let i = 0; i < state.players.length && state.phase !== GamePhase.FINISHED; i++) {
     const player = state.players[i];
-    for (const group of prizeGroups[i]) {
-      const prizeLeft = player.getPrizeLeft();
-
-      // In sudden death, taking any prize card means winning
-      if (group.count > 0 && state.isSuddenDeath) {
-        endGame(store, state, i === 0 ? GameWinner.PLAYER_1 : GameWinner.PLAYER_2);
-        return state;
-      }
-
-      // If prizes to take >= remaining prizes, automatically take all prizes and end game
-      if (group.count >= prizeLeft && prizeLeft > 0) {
-        const remainingPrizes = player.prizes.filter(p => p.cards.length > 0);
-        TAKE_SPECIFIC_PRIZES(store, state, player, remainingPrizes, {
-          destination: group.destination || player.hand,
-          skipReduce: false
-        });
-
-        GameStatsTracker.trackPrizeTaken(player, remainingPrizes.length);
-        endGame(store, state, i === 0 ? GameWinner.PLAYER_1 : GameWinner.PLAYER_2);
-        return state;
-      }
-
-      if (group.count > prizeLeft) {
-        group.count = prizeLeft;
-      }
-
-      // Auto-select the first X prizes
-      if (group.count > 0) {
-        const allPrizes = player.prizes.filter(p => p.cards.length > 0);
-        const selectedPrizes = allPrizes.slice(0, group.count);
-        const destination: CardList = group.destination || player.hand;
-        TAKE_SPECIFIC_PRIZES(store, state, player, selectedPrizes, { destination });
-      }
+    for (const { count, destination } of prizeGroups[i]) {
+      if (count <= 0) continue;
+      const prizes = player.prizes.filter(prize => prize.cards.length > 0).slice(0, count);
+      if (!prizes.length) continue;
+      TAKE_SPECIFIC_PRIZES(store, state, player, prizes, { destination });
+      if (store.hasPrompts()) yield store.waitPrompt(state, () => next());
     }
   }
+
+  state.benchSizeChangeHandled = false;
+  if (state.phase !== GamePhase.FINISHED) state = checkWinner(store, state);
+  if (state.phase === GamePhase.FINISHED) {
+    onComplete?.();
+    return state;
+  }
+  // An equal result can start the configured tiebreaker setup.
+  if (store.hasPrompts()) return state;
 
   // Then handle new Active Pokémon selection in turn order.
   const activePrompts = chooseActivePokemons(state);
@@ -516,10 +489,9 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
     }
   }
 
-  checkWinner(store, state, onComplete);
-
-  // Reset the bench size change handled flag after all effects are resolved
-  state.benchSizeChangeHandled = false;
+  // Promotion effects can themselves change which player wins.
+  if (activePrompts.length > 0) checkWinner(store, state, onComplete);
+  else onComplete?.();
 
   return state;
 }

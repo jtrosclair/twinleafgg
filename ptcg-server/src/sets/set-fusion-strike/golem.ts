@@ -4,11 +4,10 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { GamePhase, PowerType, StoreLike, State, StateUtils } from '../../game';
-import { AfterDamageEffect } from '../../game/store/effects/attack-effects';
+import { PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { CheckHpEffect } from '../../game/store/effects/check-effects';
-import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF } from '../../game/store/prefabs/prefabs';
+import { registerKnockOutRetaliation } from '../../game/store/prefabs/knock-out-effects';
 
 export class Golem extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -41,40 +40,8 @@ export class Golem extends PokemonCard {
   public fullName: string = 'Golem FST 137';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Desperate Blast (passive - when KO'd in active by opponent's attack, deal 100 to attacker)
-    // Ref: set-scarlet-and-violet/rocky-helmet.ts (AfterDamageEffect - damage to attacker when hit)
-    if (effect instanceof AfterDamageEffect) {
-      // This card must be the target (being hit)
-      if (!effect.target.cards.includes(this) || effect.target.getPokemonCard() !== this) {
-        return state;
-      }
-
-      if (effect.damage <= 0 || state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-
-      const targetPlayer = StateUtils.findOwner(state, effect.target);
-      const sourcePlayer = effect.player;
-
-      // Must be opponent's attack, and this must be in active spot
-      if (targetPlayer === sourcePlayer || targetPlayer.active !== effect.target) {
-        return state;
-      }
-
-      // Check ability blocked
-      if (IS_ABILITY_BLOCKED(store, state, targetPlayer, this)) {
-        return state;
-      }
-
-      // Check if this Pokemon is KO'd (damage >= HP)
-      const checkHp = new CheckHpEffect(targetPlayer, effect.target);
-      store.reduceEffect(state, checkHp);
-
-      if (effect.target.damage >= checkHp.hp) {
-        // Put 10 damage counters (100 damage) on the attacking Pokemon
-        effect.source.damage += 100;
-      }
-    }
+    // Ref: knock-out-effects.ts (queue damage counters for the original attacker).
+    registerKnockOutRetaliation(store, state, effect, this, 100);
 
     // Attack 1: Double-Edge
     // Ref: set-fusion-strike/arcanine.ts (THIS_POKEMON_DOES_DAMAGE_TO_ITSELF)
