@@ -912,17 +912,26 @@ function findDlrPrint(index: Map<string, Card | undefined>, name: string, collec
     ? card : undefined;
 }
 
-// These Arceus names have multiple printed attacks. Resolve the old and new
-// collector numbers exactly, including padded imports; never substitute the
-// other print if a requested identity is unavailable.
-const ROUND27_AR_PRINTS = new Set([
+// These prints have distinct gameplay. Keep the collector-number match
+// ahead of legacy names, even when the exact print is unavailable.
+const REVIEWED_NUMBERED_PRINTS = new Set([
+  'larvitar|ul|50', 'larvitar|ul|51', 'pupitar|ul|38', 'pupitar|ul|39',
+  'onix|ul|56', 'onix|ul|57', 'crobat|ul|14', 'inkay|lor|77',
+  'aipom|md|50', 'aipom|md|51', 'glaceon|md|5', 'glaceon|md|20',
+  'duskull|sf|60', 'voltorb|sf|80', 'voltorb|sf|81', 'voltorb|sf|SH3',
+  'haunter|ar|41', 'haunter|ar|42',
   'electrike|ar|62', 'electrike|ar|63', 'tangela|ar|76', 'tangela|ar|77',
-  'treecko|ar|78', 'treecko|ar|79', 'manectric|ar|44', 'ponyta|ar|72'
+  'treecko|ar|78', 'treecko|ar|79', 'manectric|ar|22', 'manectric|ar|44',
+  'ponyta|ar|46', 'ponyta|ar|72', 'ponyta|ar|SH11',
+  'dialga|dpp|17', 'dialga|dpp|37'
 ]);
-function round27ArKey(name: string, set: string, number: string): string | undefined {
-  if (set.toUpperCase() !== 'AR' || !/^\d+$/.test(number)) return undefined;
-  const key = `${name.toLowerCase()}|ar|${String(Number(number))}`;
-  return ROUND27_AR_PRINTS.has(key) ? key : undefined;
+
+function reviewedPrintKey(name: string, set: string, number: string): string | undefined {
+  const setCode = set.toLowerCase();
+  const cardName = setCode === 'dpp' && name.toLowerCase() === 'dialga lv.x' ? 'dialga' : name.toLowerCase();
+  const collectorNumber = setCode === 'dpp' ? number.replace(/^DP(?=\d)/i, '') : number;
+  const key = `${cardName}|${setCode}|${collectorNumber.toUpperCase().replace(/^0+(?=\d)/, '')}`;
+  return REVIEWED_NUMBERED_PRINTS.has(key) ? key : undefined;
 }
 
 // Only these newly introduced identities get strict promo-number routing;
@@ -977,9 +986,8 @@ export class DeckImportParser {
       // Preserve canonical full names; also accept the numbered external DLR
       // names used in puzzle payloads and exported deck lists.
       const externalDlr = cardIdentifier.trim().match(/^(.*?)\s+DLR\s+(\d+)$/i);
-      const unleashedLarvitar = cardIdentifier.trim().match(/^Larvitar\s+UL\s+0*(50|51)$/i);
-      const reviewedPrint = cardIdentifier.trim().match(/^(Inkay)\s+(LOR)\s+0*(77)$|^(Duskull)\s+(SF)\s+0*(60)$|^(Crobat)\s+(UL)\s+0*(14)$/i);
-      const reviewedKey = reviewedPrint && `${(reviewedPrint[1] || reviewedPrint[4] || reviewedPrint[7]).toLowerCase()}|${(reviewedPrint[2] || reviewedPrint[5] || reviewedPrint[8]).toLowerCase()}|${reviewedPrint[3] || reviewedPrint[6] || reviewedPrint[9]}`;
+      const numberedInput = this.parseCardLine(`1 ${cardIdentifier.trim()}`);
+      const reviewedKey = numberedInput && reviewedPrintKey(numberedInput.name, numberedInput.setCode, numberedInput.setNumber);
       const deltaInput = cardIdentifier.trim().match(/^(Treecko|Charmander|Charmeleon)\s+(P4|P5)\s+0*(\d+)$/i);
       const deltaKey = deltaInput && `${deltaInput[1].toLowerCase()}|${deltaInput[2].toLowerCase()}|${deltaInput[3]}`;
       const reviewedDelta = deltaKey && ['treecko|p4|15', 'charmander|p5|10', 'charmeleon|p5|5'].includes(deltaKey) ? deltaKey : undefined;
@@ -989,14 +997,10 @@ export class DeckImportParser {
       const pblInput = cardIdentifier.trim().match(/^(Crushing Hammer|Energy Switch)(?: FA)?\s+PBL\s+(\d+)$/i);
       const pblKey = pblInput && `${pblInput[1].toLowerCase()}|pbl|${String(Number(pblInput[2]))}`;
       const reviewedPbl = pblKey && ['crushing hammer|pbl|105', 'energy switch|pbl|107'].includes(pblKey) ? pblKey : undefined;
-      const arInput = cardIdentifier.trim().match(/^(.*?)\s+(AR)\s+(\d+)$/i);
-      const arKey = arInput && round27ArKey(arInput[1], arInput[2], arInput[3]);
       const exact = compatibility.resolveIdentifier(cardIdentifier);
       const card = exact.recognized ? exact.card : externalDlr
         ? findDlrPrint(dlrPrints, externalDlr[1], externalDlr[2])
-        : unleashedLarvitar ? cardsByNameSetNumber.get(`larvitar|ul|${unleashedLarvitar[1]}`)
         : reviewedKey ? cardsByNameSetNumber.get(reviewedKey)
-        : arKey ? cardsByNameSetNumber.get(arKey)
         : isRound29Dpp ? (dppKey ? cardsByNameSetNumber.get(dppKey) : undefined)
         : reviewedDelta ? cardsByNameSetNumber.get(reviewedDelta)
         : reviewedPbl ? cardsByNameSetNumber.get(reviewedPbl)
@@ -1151,9 +1155,8 @@ export class DeckImportParser {
       const fullName = `${parsed.name} ${setCode}`;
       // DLR uses distinct executable identities for each numbered print and
       // paired Stadium half. Do not fall through to an unnumbered name match.
-      const unleashedLarvitar = setCode === 'UL' && normalizeName(parsed.name) === 'larvitar'
-        ? parsed.setNumber.match(/^0*(50|51)$/) : null;
-      const reviewedKey = `${normalizeName(parsed.name)}|${setCode.toLowerCase()}|${parsed.setNumber.replace(/^0+(?=\d)/, '')}`;
+      const reviewedKey = reviewedPrintKey(parsed.name, setCode, parsed.setNumber);
+      const isStrictArceusPrint = setCode === 'AR' && ['manectric', 'ponyta'].includes(normalizeName(parsed.name));
       const pblName = normalizeName(parsed.name).replace(/ fa$/, '');
       const pblNumber = parsed.setNumber.replace(/^0+(?=\d)/, '');
       const isPblItem = setCode === 'PBL' && ['crushing hammer', 'energy switch'].includes(pblName)
@@ -1162,18 +1165,16 @@ export class DeckImportParser {
         || (pblName === 'energy switch' && pblNumber === '107')) ? `${pblName}|pbl|${pblNumber}` : undefined;
       const isRound29Dpp = round29DppName(parsed.name, setCode);
       const dppKey = isRound29Dpp && round29DppKey(parsed.name, parsed.setNumber);
-      const reviewedPrint = ['inkay|lor|77', 'duskull|sf|60', 'crobat|ul|14'].includes(reviewedKey)
-        || !!round27ArKey(parsed.name, setCode, parsed.setNumber);
       const exact = compatibility.resolve(parsed.name, setCode, parsed.setNumber);
       let card = exact.recognized ? exact.card : setCode === 'DLR'
         ? findDlrPrint(dlrPrints, parsed.name, parsed.setNumber)
-        : unleashedLarvitar ? cardsByNameSetNumber.get(`larvitar|ul|${unleashedLarvitar[1]}`)
-        : reviewedPrint ? cardsByNameSetNumber.get(reviewedKey)
+        : reviewedKey ? cardsByNameSetNumber.get(reviewedKey)
         : isRound29Dpp ? (dppKey ? cardsByNameSetNumber.get(dppKey) : undefined)
         : isPblItem ? (pblKey ? cardsByNameSetNumber.get(pblKey) : undefined)
+        : isStrictArceusPrint ? undefined
         : cardsByFullName.get(fullName.toLowerCase());
 
-      if (!exact.recognized && setCode !== 'DLR' && !unleashedLarvitar && !reviewedPrint && !isRound29Dpp && !isPblItem) {
+      if (!exact.recognized && setCode !== 'DLR' && !reviewedKey && !isRound29Dpp && !isPblItem && !isStrictArceusPrint) {
         // Second try: normalized fullName match
         if (!card) {
           card = cardsByFullName.get(normalizeName(fullName));

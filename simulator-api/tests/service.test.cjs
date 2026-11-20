@@ -294,6 +294,42 @@ test('an unavailable numbered Larvitar is not substituted with its other print',
   }
 });
 
+test('numbered imports choose the printed attacks and serialize as distinct puzzle cards', async () => {
+  const engine = await mod;
+  const cases = [
+    ['Aipom MD 051', 'Aipom MD2', 'Scratch'],
+    ['Glaceon MD 020', 'Glaceon MD2', 'Ice Shot'],
+    ['Haunter AR 042', 'Haunter AR2', 'Psyshot'],
+    ['Onix UL 056', 'Onix UL', 'Boundless Power'],
+    ['Onix UL 057', 'Onix UL2', 'Swing Around'],
+    ['Pupitar UL 039', 'Pupitar UL2', 'Hammer In'],
+    ['Voltorb SF 081', 'Voltorb SF2', 'Outlet'],
+    ['Dialga LV.X DPP DP017', 'Dialga LV.X DPP 17', 'Metal Flash'],
+    ['Dialga DPP DP037', 'Dialga LV.X DPP 37', 'Metal Flash']
+  ];
+  const names = cases.map(([input]) => input);
+  const expected = cases.map(([, fullName, attack]) => [fullName, attack]);
+  const parsed = await (await engine.handle(post('/v1/deck-import/parse', {
+    deckList: names.map(name => `1 ${name}`).join('\n')
+  }))).json();
+  const lookup = await (await engine.handle(post('/v1/deck-import/get-cards', { cards: names }))).json();
+  for (const cards of [parsed.knownCards, lookup.cards]) {
+    assert.deepEqual(cards.map(card => [card.fullName, card.cardData.attacks[0].name]), expected);
+  }
+  assert.deepEqual(parsed.unknownCards, []);
+
+  const fixture = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/dengo-state.json')));
+  const state = JSON.parse(Buffer.from(fixture.stateData, 'base64').toString('utf8'));
+  const fullNames = expected.map(([fullName]) => fullName);
+  state[1].cardNames.splice(0, fullNames.length, ...fullNames);
+  const validated = await (await engine.handle(post('/v1/game/validate-state', {
+    stateData: Buffer.from(JSON.stringify(state)).toString('base64')
+  }))).json();
+  assert.equal(validated.valid, true);
+  const normalized = JSON.parse(Buffer.from(validated.serializedState, 'base64').toString('utf8'));
+  assert.deepEqual(normalized[1].cardNames.slice(0, fullNames.length), fullNames);
+});
+
 test('round-26 numbered card names select their exact registered prints', async () => {
   const engine = await mod; const fixtures = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/round26-printed-names.json')));
   const result = await engine.handle(post('/v1/deck-import/parse', { deckList: fixtures.map(c => `1 ${c.name} ${c.set} ${c.number}`).join('\n') }));
@@ -332,7 +368,8 @@ test('round-27 numbered Arceus imports resolve exact prints and preserve old fal
   const expected = [['Electrike','62','Electrike AR 62'], ['Electrike','63','Electrike AR2'],
     ['Tangela','76','Tangela AR 76'], ['Tangela','77','Tangela AR2'],
     ['Treecko','78','Treecko AR 78'], ['Treecko','79','Treecko AR2'],
-    ['Manectric','44','Manectric AR2'], ['Ponyta','72','Ponyta AR2']];
+    ['Manectric','22','Manectric AR'], ['Manectric','44','Manectric AR2'],
+    ['Ponyta','46','Ponyta AR'], ['Ponyta','72','Ponyta AR2']];
   const inputs = expected.flatMap(([name, number]) => [`${name} AR ${number}`, `${name} AR 0${number}`]);
   const names = expected.flatMap(([, , fullName]) => [fullName, fullName]);
   const parsed = await (await engine.handle(post('/v1/deck-import/parse', { deckList: inputs.map(x => `1 ${x}`).join('\n') }))).json();
@@ -350,7 +387,7 @@ test('round-27 unavailable numbered prints are never replaced by a same-name car
   try {
     const all = original.call(manager);
     for (const [name, number] of [['Electrike','62'], ['Electrike','63'], ['Tangela','76'], ['Tangela','77'],
-      ['Treecko','78'], ['Treecko','79'], ['Manectric','44'], ['Ponyta','72']]) {
+      ['Treecko','78'], ['Treecko','79'], ['Manectric','22'], ['Manectric','44'], ['Ponyta','46'], ['Ponyta','72']]) {
       manager.getAllCards = () => all.filter(c => !(c.name === name && c.set === 'AR' && c.setNumber === number));
       const parser = new engine.DeckImportParser();
       for (const prefix of ['', '0']) {
@@ -410,7 +447,7 @@ test('round29 DPP prints accept numeric, padded and DP-prefixed collector number
  const looked=await(await engine.handle(post('/v1/deck-import/get-cards',{cards:inputs}))).json();assert.deepEqual(looked.cards.map(x=>x.fullName),expected);
  for(const [i,c] of fixtures.entries()){const url=images[`DPP ${c.number}`];assert.match(url,/^https:\/\//);assert.equal(parsed.knownCards[i*4].cardImage,url);assert.equal(looked.cards[i*4].cardImage,url)}
  const old=await(await engine.handle(post('/v1/deck-import/parse',{deckList:'1 Chimchar DPP 2\n1 Chimchar DPP DP02\n1 Toxicroak G DPP DP41\n1 Dialga DPP 17\n1 Dialga DPP 37\n1 Dialga DPP DP17\n1 Dialga DPP DP37\n1 Chimchar DPP 999'}))).json();
- assert.deepEqual(old.knownCards.map(x=>x.fullName),['Chimchar DPP','Chimchar DPP','Toxicroak G DPP','Dialga LV.X DPP 17','Dialga LV.X DPP 37','Dialga LV.X DPP 37','Dialga LV.X DPP 37','Chimchar DPP']);
+ assert.deepEqual(old.knownCards.map(x=>x.fullName),['Chimchar DPP','Chimchar DPP','Toxicroak G DPP','Dialga LV.X DPP 17','Dialga LV.X DPP 37','Dialga LV.X DPP 17','Dialga LV.X DPP 37','Chimchar DPP']);
 });
 
 test('round29 DPP missing and mismatched numbers never substitute another print',async()=>{

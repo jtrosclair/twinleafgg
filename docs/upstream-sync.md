@@ -1929,3 +1929,33 @@ the two intended regulation-mark corrections. All 3,635 sampled opening
 actions matched across 559 comparable saved states. Six recorded solutions
 reached a win. The attested production package passed the mobile budget
 and all ten mouse and touch board checks.
+
+## Gameplay re-audit, batch 11
+
+Both deck import endpoints resolve the reviewed numbered variants before the
+legacy name fallback. This keeps Aipom 51, Glaceon 20, Haunter 42, Onix 57,
+Pupitar 39 and Voltorb 81 on their own attacks and artwork. Manectric and
+Ponyta accept their registered Arceus collector numbers and report unknown
+numbers without silently selecting another print. The established Electrike,
+Tangela and Treecko fallbacks remain. Dialga LV.X DP17 and DP37 each retain
+their own artwork when entered with the DP prefix or zero padding. The
+previous DP17 test expected the DP37 artwork.
+[Aipom 51](https://images.pokemontcg.io/dp5/51.png)
+[Glaceon 20](https://images.pokemontcg.io/dp5/20.png)
+[Haunter 42](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Arceus.pdf)
+[Onix 57](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/UL/UL_057_R_EN.png)
+[Pupitar 39](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/hs-unleashed.pdf)
+[Voltorb 81](https://images.pokemontcg.io/dp7/81.png)
+[Dialga LV.X DP17](https://images.pokemontcg.io/dpp/DP17.png)
+[Dialga LV.X DP37](https://images.pokemontcg.io/dpp/DP37.png)
+
+All 30 API tests pass, including the five previously failing cases and a new
+round-trip through puzzle state validation. Across 30,610 numbered catalog
+inputs, the only 18 differences resolve to the requested collector number.
+Metadata lookups agree for all 15,750 registered canonical names.
+
+The current ledger covers 95 upstream commits through `d3d7a0031`. Of the 38
+commits titled `fix`, 12 are applied, four were already present, 11 are
+inapplicable to the simulator and 11 are partial. None is wholly deferred.
+The Ampharos bug was part of the separately tracked shared Ability-effects
+refactor, so the title-based count does not measure individual gameplay bugs.
