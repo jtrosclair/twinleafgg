@@ -498,8 +498,8 @@
       "sha": "450a3e6a50d521d0749bf027cb69aa7b19671b23",
       "date": "2026-11-01",
       "subject": "fix(board): Dual Stadium Angular Board Discard Fix",
-      "status": "deferred",
-      "notes": "Fixes dual-stadium rendering in Angular; this fork lacks upstream dual-stadium engine/display helpers. Requires feature and serialized-state compatibility before port."
+      "status": "already-present",
+      "notes": "Re-audit: the local Delta Reign port 46e742401 scopes the paired presentation to the shared Stadium zone. The discard dialog renders each physical card separately. All 27 engine and snapshot cases pass. In the packaged Angular simulator, both an owned and an opponent-owned Legendary Pyroduct render in collector-number order in play and as two separate discard cards after replacement through a real simulator action. No upstream Angular component changes are needed."
     },
     {
       "sha": "0ced6beca7e01906bfe4fb789deb7b1df50845dd",
@@ -562,7 +562,7 @@
       "date": "2026-11-02",
       "subject": "fix(cards): Antique Armor Fossil PBL",
       "status": "partial",
-      "notes": "Ported upstream single-stage damage reduction to existing Antique Shield Fossil M5, retaining its legacy name and print identifier; added narrowly scoped in-play recognition so it functions as a Pokémon. Nineteen focused tests cover real Weakness and Resistance, Tools, Garbotoxin, play, switch, KO, Lost City, and snapshot round-trip. Added opt-in post-Weakness damage reduction and corrected Lost City routing for Trainer fossils. Candidate matched 530 saved states; combined 530-state comparison and card/engine suite passed apart from the two pre-existing ownership failures. Not deployed."
+      "notes": "Ported upstream single-stage damage reduction to existing Antique Shield Fossil M5, retaining its legacy name and print identifier; added narrowly scoped in-play recognition so it functions as a Pokémon. Nineteen focused tests cover real Weakness and Resistance, Tools, Garbotoxin, play, switch, KO, Lost City, and snapshot round-trip. Added opt-in post-Weakness damage reduction and corrected Lost City routing for Trainer fossils. Candidate matched 530 saved states; combined 530-state comparison and card/engine suite passed apart from the two pre-existing ownership failures. Not deployed. Batch 4 also fixes the printed discard action to remove attachments with Shield Fossil and prevents Ability-sourced Special Conditions, verified with Toxic Powder."
     },
     {
       "sha": "902ae6d8b509d07dbb986078d854ec49dc6dc212",

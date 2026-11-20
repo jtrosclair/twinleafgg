@@ -1681,6 +1681,8 @@ for the Quarry, Skull and Shield changes. The final revision also checked all
 16 sampled actions in the two snapshots containing fossil-related cards; no
 snapshot contained Antique Helix Fossil. Five recorded solutions reached a
 human win, including the House of Dragon trace from the current published state.
+The 16 focused cases pass on this revision. Fifteen fail on the old code and
+the normal-Pokémon Poison control passes on both.
 
 The original ledger review window contained 38 commits whose subject begins
 with `fix`. Three were deferred entirely and ten were ported partially. This
@@ -1690,3 +1692,12 @@ Trainer subtype definitions need review against the actual card classes and
 printed rules. In particular, Technical Machine TS-1 and TS-2 are a separate
 historical Trainer class and should not be reclassified as Pokémon Tools.
 [Call of Legends rulebook](https://assets.pokemon.com/assets/cms/pdf/tcg/rulebooks/Call_of_Legends_Rulebook.pdf)
+
+
+Dual Stadium discard rendering was already covered by the local Delta Reign
+port. When a new Stadium replaces Legendary Pyroduct, both halves go to the
+old owner's discard. The packaged Angular UI shows the two halves together
+only in the shared Stadium slot, then as separate cards in either player's
+discard dialog. The ledger now classifies `450a3e6a5` as already present.
+The other two wholly deferred `fix` entries concern the shared reveal/from-hand
+changes and the Aura Seeker imports.
