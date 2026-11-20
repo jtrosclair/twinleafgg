@@ -198,6 +198,7 @@ export class AttackEffect implements Effect {
   public invisibleTentacles?: boolean = false;
   // Opt-in: only actual lethal attack damage may route a KO and all attachments.
   public damageKnockOutsToLostZone = false;
+  public protectAttackerOnDamageKnockOut = false;
   target: any;
 
   constructor(player: Player, opponent: Player, attack: Attack) {

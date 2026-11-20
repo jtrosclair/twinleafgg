@@ -96,6 +96,19 @@ export function findKnockOutAttacker(state: State, effect: KnockOutEffect): Poke
   return opponent.getPokemonInPlay().find(slot => slot.getPokemonCard() === attacker);
 }
 
+/** Arm protection only once the game has confirmed a Knock Out from this attack. */
+export function protectAttackerAfterKnockOut(state: State, effect: KnockOutEffect): void {
+  if (!getAttackDamagePosition(effect.target)?.protectAttacker
+    || !WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect)) return;
+  const attacker = findKnockOutAttacker(state, effect);
+  if (attacker !== StateUtils.getOpponent(state, effect.player).active) return;
+
+  // The end-turn reducer has already promoted other pending protections.
+  attacker.preventDamageNextTurn = true;
+  attacker.preventDamageNextTurnFilter = undefined;
+  attacker.preventEffectsOfAttacksNextTurn = true;
+}
+
 export function registerKnockOutRetaliation(
   store: StoreLike, state: State, effect: Effect, source: PokemonCard | TrainerCard, damage: number
 ): void {

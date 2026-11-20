@@ -45,11 +45,8 @@ export class Beautifly extends PokemonCard {
       THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(50, effect, store, state);
     }
 
-    // Attack 2: Butterfly Edge
-    // TODO: "If your opponent's Pokemon is Knocked Out by damage from this attack, prevent all effects of attacks, including damage, done to this Pokemon during your opponent's next turn." - KO-conditional damage prevention is not implementable with current prefabs. Damage is applied automatically.
-    if (WAS_ATTACK_USED(effect, 1, this)) {
-      // Damage only - conditional prevention on KO too complex
-    }
+    // Ref: set-mega-evolution/marshadow.ts (one-turn protection after lethal attack damage)
+    if (WAS_ATTACK_USED(effect, 1, this)) effect.protectAttackerOnDamageKnockOut = true;
 
     return state;
   }

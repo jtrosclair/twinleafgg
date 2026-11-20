@@ -10,6 +10,7 @@ import { PokemonCard } from '../card/pokemon-card';
 import { CheckHpEffect, CheckProvidedEnergyEffect, CheckTableStateEffect } from '../effects/check-effects';
 import { Effect } from '../effects/effect';
 import { KnockOutEffect, MovedToActiveEffect } from '../effects/game-effects';
+import { protectAttackerAfterKnockOut } from '../prefabs/knock-out-effects';
 import { TAKE_SPECIFIC_PRIZES, MOVE_CARDS } from '../prefabs/prefabs';
 import { ChoosePokemonPrompt } from '../prompts/choose-pokemon-prompt';
 import { createPlayer, setupGame } from '../reducers/setup-reducer';
@@ -421,6 +422,7 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
       if (store.hasPrompts()) yield store.waitPrompt(state, () => next());
       if (effect.preventDefault) continue;
 
+      protectAttackerAfterKnockOut(state, effect);
       resolved.push(effect);
       if (effect.preventPrizes) continue;
 

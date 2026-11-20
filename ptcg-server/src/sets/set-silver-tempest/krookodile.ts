@@ -4,11 +4,11 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, StateUtils, ConfirmPrompt, GameMessage } from '../../game';
+import { PowerType, StoreLike, State, StateUtils, ConfirmPrompt, GameMessage, Player } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { WAS_ATTACK_USED, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
+import { canUseKnockOutAbility, wasActiveWhenDamaged } from '../../game/store/prefabs/knock-out-effects';
+import { WAS_ATTACK_USED, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, IS_ABILITY_BLOCKED, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 export class Krookodile extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -40,68 +40,33 @@ export class Krookodile extends PokemonCard {
   public name: string = 'Krookodile';
   public fullName: string = 'Krookodile SIT 113';
 
-  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability (Part 1): On evolve - discard random card from opponent's hand
-    // Ref: set-silver-tempest/meowstic.ts (PlayPokemonEffect + ConfirmPrompt pattern)
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      if (opponent.hand.cards.length === 0) {
-        return state;
-      }
-
-      // Check if ability is blocked
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      state = store.prompt(state, new ConfirmPrompt(
-        player.id,
-        GameMessage.WANT_TO_USE_ABILITY,
-      ), wantToUse => {
-        if (wantToUse) {
-          // Discard a random card from opponent's hand
-          const handCards = opponent.hand.cards.slice();
-          if (handCards.length > 0) {
-            const randomIndex = Math.floor(Math.random() * handCards.length);
-            opponent.hand.moveCardTo(handCards[randomIndex], opponent.discard);
-          }
-        }
+  private offerDiscard(store: StoreLike, state: State, player: Player): void {
+    const opponent = StateUtils.getOpponent(state, player);
+    if (opponent.hand.cards.length === 0) return;
+    store.prompt(state, new ConfirmPrompt(player.id, GameMessage.WANT_TO_USE_ABILITY), confirmed => {
+      if (!confirmed || opponent.hand.cards.length === 0) return;
+      const index = Math.floor(Math.random() * opponent.hand.cards.length);
+      MOVE_CARDS(store, state, opponent.hand, opponent.discard, {
+        cards: [opponent.hand.cards[index]], sourceCard: this, sourceEffect: this.powers[0]
       });
+    });
+  }
+
+  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    // Ref: set-cosmic-eclipse/stoutland.ts (independent evolution and Knock Out triggers)
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this && effect.playedFromHand
+      && state.players[state.activePlayer] === effect.player
+      && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+      this.offerDiscard(store, state, effect.player);
     }
 
-    // Ability (Part 2): If this Pokemon is KO'd while active, discard random from opponent hand
-    // Ref: set-silver-tempest/togedemaru.ts (KnockOutEffect targeting this Pokemon)
-    if (effect instanceof KnockOutEffect && effect.target.getPokemonCard() === this) {
-      const attacker = effect.player;
-      const defender = StateUtils.getOpponent(state, attacker);
-
-      // Must be the active Pokemon of defender
-      if (defender.active.getPokemonCard() !== this) {
-        return state;
-      }
-
-      if (attacker.hand.cards.length === 0) {
-        return state;
-      }
-
-      // Check if ability is blocked
-      if (IS_ABILITY_BLOCKED(store, state, defender, this)) {
-        return state;
-      }
-
-      state = store.prompt(state, new ConfirmPrompt(
-        defender.id,
-        GameMessage.WANT_TO_USE_ABILITY,
-      ), wantToUse => {
-        if (wantToUse) {
-          const handCards = attacker.hand.cards.slice();
-          if (handCards.length > 0) {
-            const randomIndex = Math.floor(Math.random() * handCards.length);
-            attacker.hand.moveCardTo(handCards[randomIndex], attacker.discard);
-          }
-        }
+    if (canUseKnockOutAbility(store, state, effect, this) && effect.resolveBeforeDiscard && wasActiveWhenDamaged(effect)) {
+      const { player } = effect;
+      const attacker = StateUtils.getOpponent(state, player);
+      effect.beforeDiscard.set(this, {
+        label: this.powers[0].name,
+        canResolve: () => attacker.hand.cards.length > 0,
+        resolve: () => this.offerDiscard(store, state, player)
       });
     }
 

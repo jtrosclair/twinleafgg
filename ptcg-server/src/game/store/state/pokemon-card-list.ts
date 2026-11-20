@@ -34,6 +34,7 @@ export const attackEffectKnockOuts = new WeakMap<PokemonCard, { playerId: number
 export const attackDamagePositions = new WeakMap<AttackDamageKnockOut, {
   active: boolean;
   retreatCostBeforeSwitch?: number;
+  protectAttacker?: boolean;
 }>();
 
 export function getAttackDamagePosition(slot: PokemonCardList) {

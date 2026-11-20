@@ -1,8 +1,8 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State, GameMessage, SlotType, GamePhase, Card, ChooseCardsPrompt, ShuffleDeckPrompt, PowerType, GameLog } from '../../game';
+import { StoreLike, State, SlotType, PowerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect, PowerEffect } from '../../game/store/effects/game-effects';
+import { registerKnockOutDeckSearch } from '../../game/store/prefabs/knock-out-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE } from '../../game/store/prefabs/attack-effects';
 
@@ -40,44 +40,8 @@ export class Cofagrigusex extends PokemonCard {
   public fullName: string = 'Cofagrigus ex PAR';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Gold Coffin
-    if (effect instanceof KnockOutEffect && effect.target.cards.includes(this)) {
-      const player = effect.player;
-
-      // i love checking for ability lock woooo
-      try {
-        const powerEffect = new PowerEffect(player, this.powers[0], this);
-        store.reduceEffect(state, powerEffect);
-      } catch {
-        return state;
-      }
-
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-
-      if (player.deck.cards.length === 0) {
-        return state;
-      }
-
-      store.log(state, GameLog.LOG_PLAYER_USES_ABILITY, { name: player.name, card: 'Cofagrigus ex' });
-
-      let cards: Card[] = [];
-      store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_HAND,
-        player.deck,
-        {},
-        { min: 0, max: 1, allowCancel: false }
-      ), selected => {
-        cards = selected || [];
-        player.deck.moveCardsTo(cards, player.hand);
-      });
-
-      store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-        player.deck.applyOrder(order);
-      });
-    }
+    // Ref: set-lost-origin/spiritomb.ts (search before Knock Out discard)
+    registerKnockOutDeckSearch(store, state, effect, this, 1);
 
     // Hollow Hands
     if (WAS_ATTACK_USED(effect, 0, this)) {

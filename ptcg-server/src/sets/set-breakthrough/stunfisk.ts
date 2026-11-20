@@ -4,12 +4,10 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils } from '../../game';
+import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { GamePhase } from '../../game/store/state/state';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, WAS_POKEMON_KNOCKED_OUT_DURING_OPPONENTS_LAST_TURN } from '../../game/store/prefabs/prefabs';
 import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
 
 export class Stunfisk extends PokemonCard {
@@ -45,29 +43,11 @@ export class Stunfisk extends PokemonCard {
   public readonly REVENGE_MARKER = 'STUNFISK_BKT_REVENGE_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Track KO for Revenge
-    // Ref: set-primal-clash/teammates.ts (KnockOutEffect tracking)
-    if (effect instanceof KnockOutEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      const duringTurn = [GamePhase.PLAYER_TURN, GamePhase.ATTACK].includes(state.phase);
-
-      if (!duringTurn || state.players[state.activePlayer] !== opponent) {
-        return state;
-      }
-
-      const cardList = StateUtils.findCardList(state, this);
-      const owner = StateUtils.findOwner(state, cardList);
-      if (owner === player) {
-        player.marker.addMarker(this.REVENGE_MARKER, this);
-      }
-      return state;
-    }
-
-    // Attack 1: Revenge
+    // Ref: set-30th-celebration/tropius.ts (shared Knock Out history)
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      if (player.marker.hasMarker(this.REVENGE_MARKER, this)) {
+      const { player } = effect;
+      if (WAS_POKEMON_KNOCKED_OUT_DURING_OPPONENTS_LAST_TURN(player, { byAttackDamage: true })
+        || player.marker.hasMarker(this.REVENGE_MARKER, this)) {
         effect.damage += 80;
       }
     }

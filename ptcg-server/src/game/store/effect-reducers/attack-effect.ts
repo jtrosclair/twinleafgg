@@ -143,7 +143,10 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
           attack: effect.attack, sourceCard: effect.source.getPokemonCard(), playerId: effect.player.id,
           turn: state.turn
         };
-        attackDamagePositions.set(target.attackDamageKnockOut, { active: targetOwner.active === target });
+        attackDamagePositions.set(target.attackDamageKnockOut, {
+          active: targetOwner.active === target,
+          protectAttacker: effect.attackEffect.protectAttackerOnDamageKnockOut
+        });
       }
     }
 
