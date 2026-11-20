@@ -5,7 +5,7 @@ import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckRetreatCostEffect } from '../../game/store/effects/check-effects';
 import { StateUtils } from '../../game';
-import { IS_TOOL_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { APPLY_ONCE_PER_CARD, IS_TOOL_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class GravityGemstone extends TrainerCard {
 
@@ -31,9 +31,9 @@ export class GravityGemstone extends TrainerCard {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
-      if (IS_TOOL_BLOCKED(store, state, player, this)) { return state; }
-
-      if (player.active.tools.includes(this) || opponent.active.tools.includes(this)) {
+      const owner = player.active.tools.includes(this) ? player
+        : opponent.active.tools.includes(this) ? opponent : undefined;
+      if (owner && APPLY_ONCE_PER_CARD(effect, this) && !IS_TOOL_BLOCKED(store, state, owner, this)) {
         effect.cost.push(CardType.COLORLESS);
       }
     }

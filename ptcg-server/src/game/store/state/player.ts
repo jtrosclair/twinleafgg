@@ -4,11 +4,13 @@ import { CardTarget, PlayerType, SlotType } from '../actions/play-card-action';
 import { CardTag } from '../card/card-types';
 import { PokemonCard } from '../card/pokemon-card';
 import { MovedFromActiveToBenchEffect, MovedToActiveEffect } from '../effects/game-effects';
+import { CheckRetreatCostEffect } from '../effects/check-effects';
 import { CardList } from './card-list';
 import { Marker } from './card-marker';
-import { PokemonCardList } from './pokemon-card-list';
+import { getAttackDamagePosition, PokemonCardList } from './pokemon-card-list';
 import { GameStats } from './game-stats-interfaces';
 import { recordActiveAbilityLockSwitch } from './active-ability-lock-order';
+import { GamePhase } from './state';
 export class Player {
   public coinFlipCancelTrainerPlayTurnsRemaining = 0;
   public trainerCardsBlockedNextTurn = false;
@@ -274,6 +276,14 @@ export class Player {
     if (benchIndex !== -1) {
       const temp = this.active;
       const pokemonLeavingActive = temp.getPokemonCard();
+      const damageKnockOut = temp.attackDamageKnockOut;
+      const duringDamageResolution = damageKnockOut && damageKnockOut.turn === state?.turn && state.phase === GamePhase.ATTACK;
+      const damagePosition = getAttackDamagePosition(temp);
+      if (duringDamageResolution && damagePosition?.active && store && damagePosition.retreatCostBeforeSwitch === undefined) {
+        const retreatCost = new CheckRetreatCostEffect(this);
+        store.reduceEffect(state, retreatCost);
+        damagePosition.retreatCostBeforeSwitch = retreatCost.cost.length;
+      }
 
       // Remove player-level markers scoped to the active Pokemon.
       // Uses both targetScope metadata (migrated) and whitelist (unmigrated).
@@ -283,6 +293,10 @@ export class Player {
       // Remove attack effects from the Pokemon leaving active
       this.active.removeAttackEffects();
       this.active.clearEffects(true);
+      // Switching after damage cannot change what caused the Knock Out.
+      if (duringDamageResolution) {
+        temp.attackDamageKnockOut = damageKnockOut;
+      }
 
       // remove all special conditions
       this.active.specialConditions = [];

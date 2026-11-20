@@ -39,8 +39,16 @@ export class AmuletofHope extends TrainerCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.target.tools.includes(this)
-      && !IS_TOOL_BLOCKED(store, state, effect.player, this) && APPLY_ONCE_PER_CARD(effect, this)) {
-      this.searchDeck(store, state, effect.player, effect);
+      && !IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+      if (effect.resolveBeforeDiscard) {
+        effect.beforeDiscard.set(this, {
+          label: this.name,
+          canResolve: () => effect.player.deck.cards.length > 0,
+          resolve: () => this.searchDeck(store, state, effect.player, effect)
+        });
+      } else if (APPLY_ONCE_PER_CARD(effect, this)) {
+        this.searchDeck(store, state, effect.player, effect);
+      }
     }
 
     if (effect instanceof BetweenTurnsEffect) {

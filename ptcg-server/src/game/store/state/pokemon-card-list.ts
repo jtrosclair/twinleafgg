@@ -18,9 +18,29 @@ export type RetaliateOnDamageState = RetaliateOnDamageOptions & {
   attackerPlayerId: number;
 };
 
+interface AttackDamageKnockOut {
+  attack: Attack;
+  sourceCard?: PokemonCard;
+  playerId: number;
+  turn: number;
+  destination?: 'lostzone';
+  targetCard?: PokemonCard;
+}
+
+// Position is needed only while the live attack's effects are resolving.
+export const attackDamagePositions = new WeakMap<AttackDamageKnockOut, {
+  active: boolean;
+  retreatCostBeforeSwitch?: number;
+}>();
+
+export function getAttackDamagePosition(slot: PokemonCardList) {
+  const knockOut = slot.attackDamageKnockOut;
+  return knockOut && attackDamagePositions.get(knockOut);
+}
+
 export class PokemonCardList extends CardList {
 
-  public attackDamageKnockOut?: { attack: Attack; sourceCard?: PokemonCard; playerId: number; turn: number; destination?: 'lostzone'; targetCard?: PokemonCard };
+  public attackDamageKnockOut?: AttackDamageKnockOut;
   public damage: number = 0;
   public hp: number = 0;
   public specialConditions: SpecialCondition[] = [];

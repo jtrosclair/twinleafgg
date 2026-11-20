@@ -37,12 +37,12 @@ export class AttachEnergyPromptResolver extends PromptResolver {
     let value: CardAssign[] = [];
 
     for (let i = 0; i < cards.length && i < prompt.options.max; i++) {
-      const result = this.assignToBestTarget(copy, prompt, cardList, cards[i]);
+      const result = this.assignToBestTarget(copy, prompt, cardList, cards[i], value);
       if (result === undefined || result.value === null) {
         break;
       }
       value =  [ ...value, result.value[0] ];
-      results.push({ value, score: result.score });
+      if (prompt.validate(value)) results.push({ value, score: result.score });
     }
 
     results.sort((a, b) => b.score - a.score);
@@ -60,7 +60,9 @@ export class AttachEnergyPromptResolver extends PromptResolver {
     return cardList;
   }
 
-  private assignToBestTarget(state: State, prompt: AttachEnergyPrompt, cardList: CardList, card: Card): ResultItem | undefined {
+  private assignToBestTarget(
+    state: State, prompt: AttachEnergyPrompt, cardList: CardList, card: Card, assigned: CardAssign[]
+  ): ResultItem | undefined {
     const player = state.players.find(p => p.id === prompt.playerId);
     const opponent = state.players.find(p => p.id !== prompt.playerId);
     if (player === undefined || opponent === undefined) {
@@ -87,6 +89,14 @@ export class AttachEnergyPromptResolver extends PromptResolver {
 
     const blocked = prompt.options.blockedTo.map(b => StateUtils.getTarget(state, player, b));
     results = results.filter(i => !blocked.includes(i.cardList));
+    if (assigned.length && prompt.options.sameTarget) {
+      const target = StateUtils.getTarget(state, player, assigned[0].to);
+      results = results.filter(item => item.cardList === target);
+    }
+    if (assigned.length && prompt.options.differentTargets) {
+      const used = new Set(assigned.map(item => StateUtils.getTarget(state, player, item.to)));
+      results = results.filter(item => !used.has(item.cardList));
+    }
 
     if (results.length === 0) {
       return;

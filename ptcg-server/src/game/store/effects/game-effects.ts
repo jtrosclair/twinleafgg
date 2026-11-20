@@ -224,6 +224,12 @@ export class PokemonReplacedEffect implements Effect {
   }
 }
 
+interface BeforeKnockOutDiscard {
+  label: string;
+  canResolve: () => boolean;
+  resolve: () => void;
+}
+
 // how many prizes when target Pokemon is KO
 export class KnockOutEffect implements Effect {
   readonly type: string = GameEffects.KNOCK_OUT_EFFECT;
@@ -236,8 +242,10 @@ export class KnockOutEffect implements Effect {
   public knockOutDestination?: 'lostzone';
   public prizeIncreased: boolean = false;
   public pokemonInPlayBeforeKnockOut?: readonly PokemonCard[];
+  public readonly beforeDiscard = new Map<Card, BeforeKnockOutDiscard>();
+  public simultaneousKnockOuts?: ReadonlySet<PokemonCardList>;
 
-  constructor(player: Player, target: PokemonCardList) {
+  constructor(player: Player, target: PokemonCardList, public readonly resolveBeforeDiscard = false) {
     this.player = player;
     this.target = target;
     this.prizeCount = 1;

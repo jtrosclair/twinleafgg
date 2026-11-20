@@ -34,10 +34,19 @@ export class GiftEnergy extends EnergyCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.target.cards.includes(this)) {
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect)
+      && (effect.target.cards.includes(this) || effect.target.energies.cards.includes(this))) {
       const player = effect.player;
       if (!IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {
-        DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 7);
+        if (effect.resolveBeforeDiscard) {
+          effect.beforeDiscard.set(this, {
+            label: this.name,
+            canResolve: () => player.hand.cards.length < 7 && player.deck.cards.length > 0,
+            resolve: () => DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 7)
+          });
+        } else {
+          DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 7);
+        }
       }
     }
 

@@ -7,8 +7,7 @@ import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { WAS_ATTACK_USED, BLOCK_IF_GX_ATTACK_USED, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, BLOCK_IF_GX_ATTACK_USED, IS_ABILITY_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 import { THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS } from '../../game/store/prefabs/attack-effects';
 
 export class TyranitarGx extends PokemonCard {
@@ -51,23 +50,10 @@ export class TyranitarGx extends PokemonCard {
   public readonly LOST_OUT_MARKER = 'LOST_OUT_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Lost Out (passive - KO'd Pokemon go to Lost Zone)
-    // Ref: set-triumphant/gengar-prime.ts (Catastrophe - KnockOutEffect to Lost Zone)
-    if (effect instanceof KnockOutEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Check if the KO was from Tyranitar-GX's attack
-      if (opponent.active.getPokemonCard() === this) {
-        if (IS_ABILITY_BLOCKED(store, state, opponent, this)) {
-          return state;
-        }
-
-        const card = effect.target.getPokemonCard();
-        if (card !== undefined && !card.tags.includes(CardTag.PRISM_STAR)) {
-          effect.target.marker.addMarker(this.LOST_OUT_MARKER, this);
-        }
-      }
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect)
+      && effect.target.attackDamageKnockOut?.sourceCard === this
+      && !IS_ABILITY_BLOCKED(store, state, StateUtils.getOpponent(state, effect.player), this)) {
+      effect.knockOutDestination = 'lostzone';
     }
 
     // Attack 1: Dusty Ruckus

@@ -1,10 +1,11 @@
-import { Card, GamePhase, PlayerType, PowerType, State, StoreLike } from '../../game';
-import { CardType, EnergyType, Stage, SuperType } from '../../game/store/card/card-types';
+import { PowerType, State, StoreLike } from '../../game';
+import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
+import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
 import { BetweenTurnsEffect } from '../../game/store/effects/game-phase-effects';
-import { CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, MOVE_CARDS, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
+import { getAttachedBasicEnergy } from '../../game/store/prefabs/knock-out-effects';
 
 export class Huntail extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -39,51 +40,38 @@ export class Huntail extends PokemonCard {
   public readonly DIVER_CATCH_MARKER = 'DIVER_CATCH_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Diver Catch
-    if (effect instanceof KnockOutEffect) {
-      const player = effect.player;
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.resolveBeforeDiscard) {
+      const { player, target } = effect;
+      const inPlay = effect.pokemonInPlayBeforeKnockOut?.includes(this)
+        ?? [player.active, ...player.bench].some(slot => slot.getPokemonCard() === this);
+      if (!inPlay || IS_ABILITY_BLOCKED(store, state, player, this)) return state;
 
-      // Do not activate between turns, or when it's not opponents turn.
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) { return state; }
-      if (effect.target.getPokemonCard()?.cardType !== CardType.WATER) { return state; }
+      const type = new CheckPokemonTypeEffect(target);
+      store.reduceEffect(state, type);
+      if (!type.cardTypes.includes(CardType.WATER)) return state;
 
-      let isThisInPlay = false;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, card => {
-        if (card.getPokemonCard() === this) {
-          isThisInPlay = true;
-        }
-      });
-      if (!isThisInPlay) { return state; }
-
-      const target = effect.target;
-      const cards = target.cards.filter(card => card.superType === SuperType.ENERGY && card.energyType === EnergyType.BASIC && card.name === 'Water Energy');
-      cards.forEach(card => {
-        player.marker.addMarker(this.DIVER_CATCH_MARKER, card);
+      const getWater = () => getAttachedBasicEnergy(target).filter(card => card.provides.includes(CardType.WATER));
+      effect.beforeDiscard.set(this, {
+        label: this.powers[0].name,
+        canResolve: () => getWater().length > 0,
+        resolve: () => CONFIRMATION_PROMPT(store, state, player, confirmed => {
+          if (confirmed) MOVE_CARDS(store, state, target, player.hand, { cards: getWater(), sourceCard: this, sourceEffect: effect });
+        })
       });
     }
 
     if (effect instanceof BetweenTurnsEffect && effect.player.marker.hasMarker(this.DIVER_CATCH_MARKER)) {
-      state.players.forEach(player => {
-
-        if (!player.marker.hasMarker(this.DIVER_CATCH_MARKER)) {
-          return;
-        }
-
-        CONFIRMATION_PROMPT(store, state, player, result => {
-          if (result) {
-
-            const rescued: Card[] = player.marker.markers
-              .filter(m => m.name === this.DIVER_CATCH_MARKER && m.source !== undefined)
-              .map(m => m.source!);
-
-            MOVE_CARDS(store, state, player.discard, player.hand, { cards: rescued });
-            player.marker.removeMarker(this.DIVER_CATCH_MARKER);
-          }
+      // Older snapshots can still contain a pending Diver's Catch.
+      const player = effect.player;
+      const cards = player.marker.markers
+        .filter(marker => marker.name === this.DIVER_CATCH_MARKER && marker.source !== undefined)
+        .map(marker => marker.source!);
+      player.marker.removeMarker(this.DIVER_CATCH_MARKER);
+      if (cards.some(card => player.discard.cards.includes(card))) {
+        CONFIRMATION_PROMPT(store, state, player, confirmed => {
+          if (confirmed) MOVE_CARDS(store, state, player.discard, player.hand, { cards });
         });
-      });
+      }
     }
 
     return state;

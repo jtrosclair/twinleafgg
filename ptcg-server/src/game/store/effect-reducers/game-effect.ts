@@ -42,6 +42,7 @@ import { CardList } from '../state/card-list';
 import { Player } from '../state/player';
 import { ConfirmPrompt } from '../prompts/confirm-prompt';
 import { checkState } from './check-effect';
+import { discardKnockedOutPokemon } from './knock-out';
 import { ChooseAttackPrompt } from '../prompts/choose-attack-prompt';
 import { Card } from '../card/card';
 import { Attack } from '../card/pokemon-types';
@@ -400,85 +401,8 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
         }
       }
 
-      // A damage-provenance opt-in differs from Lost City: ALL attachments go too.
-      if (effect.knockOutDestination === 'lostzone') {
-        const allCards = new CardList();
-        const seen = new Set<Card>();
-        const collect = (attached: Card) => {
-          if (seen.has(attached)) { return; }
-          seen.add(attached);
-          allCards.cards.push(attached);
-          if (attached.cards) {
-            const nested = attached.cards.cards.splice(0);
-            nested.forEach(collect);
-          }
-        };
-        [...effect.target.cards, ...effect.target.tools, ...effect.target.energies.cards].forEach(collect);
-        effect.target.cards = [];
-        effect.target.tools = [];
-        effect.target.energies.cards = [];
-        effect.target.damage = 0;
-        effect.target.clearEffects();
-        state = MOVE_CARDS(store, state, allCards, effect.player.lostzone);
-      } else if (effect.target.marker.hasMarker('LOST_CITY_MARKER') || card.tags.includes(CardTag.PRISM_STAR)) {
-        const lostZoned = new CardList();
-        const attachedCards = new CardList();
-        // Fossils played as Pokémon remain Trainer cards. Remember their
-        // in-play role before clearing the slot, including an evolution stack.
-        const pokemonCards = new Set<Card>(effect.target.getPokemons());
-
-        // Clear damage and effects before splitting cards
-        effect.target.damage = 0;
-        effect.target.clearEffects();
-
-        // Splice in reverse so indices remain valid; do NOT pre-move tools/energies
-        // or effect.target.cards shrinks and later splice(indices[i], 1) can be out of bounds
-        while (effect.target.cards.length > 0) {
-          const removedCard = effect.target.cards.splice(effect.target.cards.length - 1, 1)[0];
-
-          // Handle cardlist cards (energy, tools, etc.)
-          if (removedCard.cards) {
-            const cards = removedCard.cards;
-            while (cards.cards.length > 0) {
-              const card = cards.cards[0];
-              attachedCards.cards.push(card);
-              cards.cards.splice(0, 1);
-            }
-          }
-
-          // Handle the main card
-          if (pokemonCards.has(removedCard) || removedCard.superType === SuperType.POKEMON || removedCard.tags.includes(CardTag.PRISM_STAR)) {
-            lostZoned.cards.push(removedCard);
-          } else {
-            attachedCards.cards.push(removedCard);
-          }
-        }
-
-        // Clear refs so the slot is fully emptied
-        effect.target.tools = [];
-        effect.target.energies.cards = [];
-
-        // Move attached cards to discard
-        if (attachedCards.cards.length > 0) {
-          state = MOVE_CARDS(store, state, attachedCards, effect.player.discard);
-        }
-
-        // Move Pokémon to lost zone
-        if (lostZoned.cards.length > 0) {
-          state = MOVE_CARDS(store, state, lostZoned, effect.player.lostzone);
-        }
-      } else {
-        // Default behavior - move to discard
-        const tools = new Set(effect.target.tools);
-        // Move tools to discard BEFORE clearing effects (directly)
-        for (const tool of tools) {
-          effect.target.moveCardTo(tool, effect.player.discard);
-        }
-        // Older slots can reference a Tool in both lists. The full-slot
-        // move below must not discard the same physical Tool again.
-        effect.target.tools = [];
-        effect.target.clearEffects();
-        state = MOVE_CARDS(store, state, effect.target, effect.player.discard);
+      if (!effect.resolveBeforeDiscard || !effect.beforeDiscard.size) {
+        state = discardKnockedOutPokemon(store, state, effect);
       }
     }
   }

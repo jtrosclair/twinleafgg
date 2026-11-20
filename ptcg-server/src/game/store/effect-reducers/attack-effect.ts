@@ -22,6 +22,7 @@ import { GameStatsTracker } from '../game-stats-tracker';
 import { CheckHpEffect } from '../effects/check-effects';
 import { CardTag, Stage } from '../card/card-types';
 import { COIN_FLIP_PROMPT } from '../prefabs/prefabs';
+import { attackDamagePositions } from '../state/pokemon-card-list';
 
 export function attackReducer(store: StoreLike, state: State, effect: Effect): State {
   if (effect instanceof GustOpponentBenchEffect) {
@@ -137,7 +138,11 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
       const hp = new CheckHpEffect(StateUtils.findOwner(state, target), target);
       store.reduceEffect(state, hp);
       if (target.damage >= hp.hp) {
-        target.attackDamageKnockOut = { attack: effect.attack, sourceCard: effect.source.getPokemonCard(), playerId: effect.player.id, turn: state.turn };
+        target.attackDamageKnockOut = {
+          attack: effect.attack, sourceCard: effect.source.getPokemonCard(), playerId: effect.player.id,
+          turn: state.turn
+        };
+        attackDamagePositions.set(target.attackDamageKnockOut, { active: targetOwner.active === target });
       }
     }
 

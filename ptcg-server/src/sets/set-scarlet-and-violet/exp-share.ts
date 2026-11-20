@@ -1,16 +1,9 @@
-import { GameMessage } from '../../game/game-message';
 import { TrainerCard } from '../../game/store/card/trainer-card';
-import { TrainerType, SuperType, EnergyType } from '../../game/store/card/card-types';
-import { StoreLike } from '../../game/store/store-like';
-import { State, GamePhase } from '../../game/store/state/state';
+import { TrainerType } from '../../game/store/card/card-types';
+import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { AttachEnergyPrompt } from '../../game/store/prompts/attach-energy-prompt';
-import { PlayerType, SlotType, CardTarget } from '../../game/store/actions/play-card-action';
-import { StateUtils } from '../../game/store/state-utils';
-import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
-import { IS_TOOL_BLOCKED } from '../../game/store/prefabs/prefabs';
-
+import { IS_TOOL_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
+import { registerKnockOutEnergyTransfer, wasActiveWhenDamaged } from '../../game/store/prefabs/knock-out-effects';
 
 export class ExpShare extends TrainerCard {
 
@@ -36,67 +29,14 @@ export class ExpShare extends TrainerCard {
   public readonly EXP_SHARE_MARKER: string = 'EXP_SHARE_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
-    if (effect instanceof KnockOutEffect && effect.target === effect.player.active) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      const active = effect.target;
-
-      if (IS_TOOL_BLOCKED(store, state, player, this)) { return state; }
-
-      // Do not activate between turns, or when it's not opponents turn.
-      if (state.phase !== GamePhase.ATTACK || state.players[state.activePlayer] !== opponent) {
-        return state;
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.resolveBeforeDiscard
+      && wasActiveWhenDamaged(effect)) {
+      const { player, target } = effect;
+      const recipient = [player.active, ...player.bench].find(slot => slot !== target && slot.tools.includes(this));
+      if (recipient && !IS_TOOL_BLOCKED(store, state, player, this)) {
+        registerKnockOutEnergyTransfer(store, state, effect, this, { max: 1, optional: true, recipient });
       }
-
-      if (active.marker.hasMarker(this.EXP_SHARE_MARKER)) {
-        return state;
-      }
-
-      let expShareCount = 0;
-      const blockedTo: CardTarget[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        if (cardList === effect.target) {
-          return;
-        }
-        if (cardList.tools.length > 0 && cardList.tools[0] instanceof ExpShare) {
-          expShareCount++;
-        } else {
-          blockedTo.push(target);
-        }
-      });
-
-      if (expShareCount === 0) {
-        return state;
-      }
-
-      // Add marker, do not invoke this effect for other exp. share
-      active.marker.addMarker(this.EXP_SHARE_MARKER, this);
-
-      // Make copy of the active pokemon cards,
-      // because they will be transfered to discard shortly
-      const activeCopy = new PokemonCardList();
-      activeCopy.cards = player.active.cards.slice();
-
-      state = store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_TO_BENCH,
-        activeCopy,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH],
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
-        { allowCancel: true, min: 1, max: expShareCount, differentTargets: true, blockedTo }
-      ), transfers => {
-        transfers = transfers || [];
-        active.marker.removeMarker(this.EXP_SHARE_MARKER);
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          player.discard.moveCardTo(transfer.card, target);
-        }
-      });
     }
-
     return state;
   }
-
 }

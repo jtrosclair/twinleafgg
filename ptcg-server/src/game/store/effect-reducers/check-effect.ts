@@ -17,6 +17,7 @@ import { GamePhase, GameWinner, State } from '../state/state';
 import { StoreLike } from '../store-like';
 import { GameStatsTracker } from '../game-stats-tracker';
 import { recordActiveAbilityLockOrder } from '../state/active-ability-lock-order';
+import { resolveKnockOutBeforeDiscard } from './knock-out';
 
 interface PokemonItem {
   playerNum: number;
@@ -391,12 +392,14 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
   const pokemonInPlay = pokemonsToDiscard.length > 1 ? state.players.map(player =>
     [player.active, ...player.bench].flatMap(slot => slot.getPokemonCard() ?? [])
   ) : undefined;
+  const simultaneousKnockOuts = pokemonInPlay && new Set(pokemonsToDiscard.map(pokemon => pokemon.cardList));
   for (const pokemonToDiscard of pokemonsToDiscard) {
     const owner = state.players[pokemonToDiscard.playerNum];
-    const knockOutEffect = new KnockOutEffect(owner, pokemonToDiscard.cardList);
+    const knockOutEffect = new KnockOutEffect(owner, pokemonToDiscard.cardList, true);
     // Simultaneous Knock Outs share the board that existed before any
     // Pokémon was removed, regardless of which effect is reduced first.
     knockOutEffect.pokemonInPlayBeforeKnockOut = pokemonInPlay?.[pokemonToDiscard.playerNum];
+    knockOutEffect.simultaneousKnockOuts = simultaneousKnockOuts;
     knockOutEffect.knockOutDestination = pokemonToDiscard.destination;
     state = store.reduceEffect(state, knockOutEffect);
 
@@ -405,6 +408,9 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
     }
 
     if (knockOutEffect.preventDefault === false) {
+      if (knockOutEffect.beforeDiscard.size) {
+        state = yield* resolveKnockOutBeforeDiscard(() => next(), store, state, knockOutEffect);
+      }
       const opponentIndex = pokemonToDiscard.playerNum === 0 ? 1 : 0;
       const defaultDestination = state.players[opponentIndex].hand;
       const destination = knockOutEffect.prizeDestination || defaultDestination;

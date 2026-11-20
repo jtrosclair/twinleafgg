@@ -2233,3 +2233,64 @@ Active, allows splitting Basic Energy across the Bench, and requires a
 transfer when a legal move is available.
 [Official Heavy Baton print](https://www.pokemon-card.com/card-search/details.php/card/45283/regu/all)
 [Official Heavy Baton rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%86%E3%83%84%E3%83%8E%E3%82%AB%E3%82%A4%E3%83%8A&regulation_faq_main_item1=all)
+
+## Gameplay re-audit, batch 18
+
+Heavy Baton uses a Retreat Cost of exactly four after modifiers. It requires
+a transfer when at least one Basic Energy and a legal Benched recipient are
+available, and it allows splitting up to three Energy across the Bench.
+Wishful Baton sends its Energy to one Benched Pokémon. Both use the Active
+position at the time of opposing attack damage, so a forced switch after
+lethal damage still permits the effect. A Tool lock that applies when the
+Knock Out resolves can block a Baton. Gravity Gemstone adds one to Retreat
+Cost per physical Tool, including the official Revavroom ex ruling with
+three copies.
+[Heavy Baton rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%98%E3%83%93%E3%83%BC%E3%83%90%E3%83%88%E3%83%B3&regulation_faq_main_item1=all)
+[Wishful Baton rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%81%AD%E3%81%8C%E3%81%84%E3%81%AE%E3%83%90%E3%83%88%E3%83%B3&regulation_faq_main_item1=all)
+
+Exp. Share is optional per copy and transfers one Basic Energy. The turn
+player chooses the order of competing Tool effects for the same Knock Out
+under the February 2026 rules update. Each card's owner makes that card's
+transfer choice with the Energy left after earlier transfers. This allows
+two Wishful Batons under Theta Double to move four Energy. Huntail checks
+effective Water type and returns only the remaining Basic Water Energy.
+Gift Energy and Amulet of Hope finish their draws or search before discard.
+PrizeMap's optional deck-search rule permits zero cards for Amulet of Hope.
+The official search rule requires at least one card from a nonempty deck.
+Tyranitar-GX's Lost Out checks the actual attacker and sends the remaining
+attachments to the Lost Zone after transfers. Lost City's discard preserves
+attachments that older saves stored only in the separate attachment lists.
+[Exp. Share print](https://www.pokemon-card.com/card-search/details.php/card/43122)
+[Huntail print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sv10/55/)
+[Knock Out timing, rule E-04](https://asia.pokemon-card.com/hk-en/wp-content/uploads/sites/6/2022/08/advanced-manual_EN.pdf)
+[Official February 2026 rules update](https://professorprogram.pokemon.com/news/11473085)
+[Tyranitar-GX print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sm8/121)
+
+The 26 focused cases all passed. The preceding engine failed 23 and passed
+three controls. All 7,329 engine tests passed across 263 files. An isolated
+build with the checkout's pending simulator changes applied passed 105
+focused and simulator tests. All 559 compatible saved states and 3,633
+sampled opening actions matched. Seven recorded solutions reached wins.
+The five-step published BloodMoon Trick opening matched on both engines.
+The current Retreat Cost was two before Counter Catcher removed the
+Gravity Gemstone holder from the Active Spot and one afterward.
+The production package met the mobile size budget and passed all ten
+mouse and touch checks. The built client engine offered both valid Tool
+orders to the human and reached a win after either choice.
+
+The selected ordering applies to registered effects on the same Knock Out.
+Applying all effects across a simultaneous group before any removal remains
+part of the wider engine audit.
+
+The next verified failures are in Rescue Energy, Rescue Scarf, Lucky Egg
+and Farewell Bell. Rescue Energy and Rescue Scarf leave the Pokémon in
+discard when the final Prize ends the game. Rescue Scarf also returns a
+Pokémon after Frenzied Gouging. Lucky Egg AR draws after Lost City routes
+its holder to the Lost Zone, and misses a lethal Dual Bolt against its
+Benched holder. Playing Farewell Bell from hand fails to attach it as a
+Tool. Rescue Energy's ruling with Lost Crisis also requires separate
+destinations for the Pokémon and its attachments when Rescue Energy
+resolves first.
+[Rescue Energy rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AC%E3%82%B9%E3%82%AD%E3%83%A5%E3%83%BC%E3%82%A8%E3%83%8D%E3%83%AB%E3%82%AE%E3%83%BC&regulation_faq_main_item1=all)
+[Rescue Scarf print](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/bw_dragons_exalted.pdf)
+[Lucky Egg errata](https://play.pokemon.com/fr-ca/resources/documents/tcg-errata/)
