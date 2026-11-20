@@ -1,5 +1,5 @@
-import { PokemonCard, Stage, CardType, CardTag, StoreLike, State, PowerType, StateUtils, PlayerType, GameLog } from '../../game';
-import { Effect, EvolveEffect } from '../../game/store/effects/game-effects';
+import { PokemonCard, Stage, CardType, CardTag, StoreLike, State, PowerType, StateUtils, GameLog } from '../../game';
+import { Effect, AfterEvolveEffect, PowerEffect, PutDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class TeamRocketsAmpharos extends PokemonCard {
@@ -32,34 +32,21 @@ export class TeamRocketsAmpharos extends PokemonCard {
   public fullName: string = 'Team Rocket\'s Ampharos DRI';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Darkest Impulse
-    if (effect instanceof EvolveEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      //const sourcePlayer = StateUtils.findOwner(state, effect.target);
-
-      if (IS_ABILITY_BLOCKED(store, state, opponent, this)) {
+    // Refs: upstream db4eebfcf (Darkest Impulse uses preventable counters),
+    // set-pitch-black/ghost-veil.ts (ability-sourced counter prevention).
+    // This fork signals completed evolutions through AfterEvolveEffect, so the
+    // evolved Pokémon's own Ability is in play when protection is checked.
+    if (effect instanceof AfterEvolveEffect && effect.playedFromHand
+      && state.players[state.activePlayer] === effect.player) {
+      const abilityOwner = StateUtils.getOpponent(state, effect.player);
+      if (effect.darkestImpulseSV || !StateUtils.isPokemonInPlay(abilityOwner, this)
+        || IS_ABILITY_BLOCKED(store, state, abilityOwner, this)) {
         return state;
       }
 
-      if (effect.darkestImpulseSV) {
-        return state;
-      }
-
-      // checking if this is on the opponent's side
-      let isAmphyOnOppsSide = false;
-      opponent.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-        if (cardList.getPokemonCard() === this) {
-          isAmphyOnOppsSide = true;
-        }
-      });
-      if (!isAmphyOnOppsSide) {
-        return state;
-      }
-
-      store.log(state, GameLog.LOG_PLAYER_USES_ABILITY, { name: player.name, ability: this.powers[0].name });
-
-      effect.target.damage += 40;
+      store.log(state, GameLog.LOG_PLAYER_USES_ABILITY, { name: abilityOwner.name, ability: this.powers[0].name });
+      const power = new PowerEffect(abilityOwner, this.powers[0], this, effect.target);
+      store.reduceEffect(state, new PutDamageCountersEffect(power, 40));
       effect.darkestImpulseSV = true;
     }
 

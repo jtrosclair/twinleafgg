@@ -301,6 +301,7 @@ export class EvolveEffect implements Effect {
 export class AfterEvolveEffect implements Effect {
   readonly type: string = GameEffects.AFTER_EVOLVE_EFFECT;
   public preventDefault = false;
+  public darkestImpulseSV?: boolean;
   constructor(public player: Player, public target: PokemonCardList, public pokemonCard: PokemonCard,
     public playedFromHand: boolean) { }
 }

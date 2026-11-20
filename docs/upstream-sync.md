@@ -1529,3 +1529,20 @@ for this batch. Continue with the next reviewed 100-print block.
 
 
 Upstream catalog completion audit (2026-11-11): refreshed upstream/main and found no commits after c531dc84f6d079e7531a9c3986a2f51ddeecad6c. Registered seven exact SVP print variants (182, 183, 184, 193, 194, 195 and 204). Attack preflight now checks legacy Pokémon-marker and player-marker Sand Attack/Smokescreen states before fan-out, so a tails result prevents attack card effects while old puzzle payloads keep their marker representation. A normalized set/collector-number comparison matched all 15,504 non-test upstream identities against the built 15,750-card runtime catalogue with zero missing identities; normalization accounts for DP/SV prefixes and zero-padded local print numbers. The focused cancellation regression passed 21 cases, the full root test suite passed, and recorded solutions for Trapped in the Phantom Maze, Explosive Hand, Breaking Through the Wall, and Something's Fishy each reached a human win.
+
+## 2026-11-20: Team Rocket’s Ampharos versus Hide n Sneak
+
+The inherited Ampharos implementation (unchanged since upstream `77c40e496`)
+mutated `target.damage` directly during `EvolveEffect`. Upstream
+`db4eebfcfb1e1a04b2d99411ea8e5d61d540e1fc` replaces that mutation with
+preventable counters as part of its larger ability-effect refactor. This port
+adapts only that card to the fork: react to the existing `AfterEvolveEffect`
+and dispatch `PutDamageCountersEffect` with the opposing Ampharos as source.
+The evolved Pokémon’s protection now participates; normal damage, suppression,
+hand/deck origin, active-player ownership and non-stacking behavior are covered.
+No saved card identity or Ghost Veil discard-count name changes are required.
+
+The new focused suite reproduces seven failures before the fix and passes all
+18 cases after it. Combined with evolution rounds 21–23 and the saved Hide n
+Sneak Prism Tower test, 235 tests pass. The ledger marks the upstream commit
+partial; its other card and engine changes remain deferred.

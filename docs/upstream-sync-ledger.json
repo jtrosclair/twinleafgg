@@ -92,8 +92,8 @@
       "sha": "db4eebfcfb1e1a04b2d99411ea8e5d61d540e1fc",
       "date": "2026-10-13",
       "subject": "refactor(cards): EffectOfAbilityEffect Pt 2",
-      "status": "deferred",
-      "notes": "Cross-cutting refactor changes shared engine effects and many card handlers; requires per-card effect, ownership, knock-out, damage, serialization and recorded-puzzle tests before port."
+      "status": "partial",
+      "notes": "Cross-cutting refactor changes shared engine effects and many card handlers; requires per-card effect, ownership, knock-out, damage, serialization and recorded-puzzle tests before port. 2026-11-20: Ported the Team Rocket’s Ampharos Darkest Impulse prevention fix only. Uses this fork’s existing AfterEvolveEffect so the evolved Pokémon’s protection is active, and PutDamageCountersEffect so Ghost Veil/Hide n Sneak and Stealthy Hood can prevent counters. Preserves hand-only, own-turn, opposing-owner and non-stacking conditions. Regression: hide-n-sneak-ampharos.spec.ts (18 passing); evolution rounds 21–23 and actual Hide n Sneak Prism Tower snapshot (217 passing). Other handlers and the shared upstream EffectOfAbilityEffect refactor remain deferred."
     },
     {
       "sha": "49205ef1746459c14270cdf7ad4644f5e62ed010",
