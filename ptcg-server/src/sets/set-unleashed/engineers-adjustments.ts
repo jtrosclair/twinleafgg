@@ -6,7 +6,7 @@ import { DRAW_CARDS, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
 
 export class EngineersAdjustments extends TrainerCard {
-  protected _trainerType: TrainerType = TrainerType.SUPPORTER;
+  public trainerType: TrainerType = TrainerType.SUPPORTER;
   public set: string = 'UL';
   public name: string = 'Engineer\'s Adjustments';
   public fullName: string = 'Engineer\'s Adjustments UL';

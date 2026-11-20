@@ -1619,3 +1619,37 @@ cards. Four recorded solutions and Revenge of the Assassin reached human
 wins. The packaged simulator passed ten browser regression checks. The full
 card suite plus the corrected Grand Tree fixture rerun passed 7,032 tests.
 Seven catalog or metadata assertions also fail on the pre-batch baseline.
+
+## Gameplay re-audit, batch 3
+
+Smeargle UD Portrait resolves a Supporter’s effect through its own play path.
+It can copy before or after a real Supporter play. Bother and Hitmontop’s
+Tornado Kick only react to an actual play. A choice is required when the
+revealed hand contains a Supporter. If the chosen effect’s cost is impossible,
+the copy resolves without that effect. Lt. Surge’s Strategy still sets a
+three-Supporter limit, and Misty’s Vitality resolves its Energy prompts and
+ends the turn. [Official Portrait card](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/hs_undaunted.pdf)
+[Pokémon’s Portrait ruling](https://www.pokemon-card.com/rules/faq/search.php?page=920&regulation=all&sc_group_id=849%2F1000)
+[Misty’s Vitality card text](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/me05/80/)
+
+Engineer’s Adjustments and Misty’s Vitality were falling back to Item in the
+fork. Their definitions now register as Supporters, including Misty’s full-art
+print. [Official Engineer’s Adjustments](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/hs-unleashed.pdf)
+
+An executable catalog check found 60 print identities affected by the legacy
+subtype field before this batch. The repaired cards account for three of the
+60. The read-only scan found four active records with Misty’s card and two of
+those also contain Fossil Excavation Site M5. Fossil Excavation Site is in the
+opponent’s deck and discard in both records. Review its registered definition
+against the alternate source and run real Stadium placement and fossil
+selection before applying that fix. [Official Fossil Quarry Stadium](https://www.pokemon.com/uk/pokemon-news/discover-more-cards-from-the-pokemon-tcg-mega-evolution-pitch-black-expansion)
+
+Across 559 compatible saved states, 3,631 of 3,635 sampled opening actions
+matched exactly. The four differences were two copies of Misty using the
+Supporter allowance and two Crispin prompts ordering the deck differently
+when Misty is classified as a Supporter. On the current published House of
+Dragon snapshot, Quick Ball finds Latias, Crispin and Red Assist power Latios,
+and Escape Rope brings Latios Active for Destructive Drake. The puzzle wins
+in 14 actions and prompt resolutions. Breaking Through the Wall wins from its
+current published snapshot, and the other three previously recorded solutions
+still reach wins.

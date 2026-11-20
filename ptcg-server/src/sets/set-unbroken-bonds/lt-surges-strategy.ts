@@ -3,7 +3,7 @@ import { TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { CopiedSupporterEffect, TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 
@@ -38,6 +38,11 @@ export class LtSurgesStrategy extends TrainerCard {
 
       if (player.getPrizeLeft() <= opponent.getPrizeLeft()) {
         throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
+      }
+
+      if (effect instanceof CopiedSupporterEffect) {
+        effect.maximumSupporterPlays = 3;
+        return state;
       }
 
       if (this.playedSurgeThisTurn) {

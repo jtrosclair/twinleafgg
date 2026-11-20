@@ -2,10 +2,12 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils, PokemonCardList, GameError, GameMessage, CoinFlipPrompt, ChooseCardsPrompt, TrainerCard } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PlayPokemonEffect, TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { CopiedSupporterEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { CardList } from '../../game/store/state/card-list';
+import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
 
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { ABILITY_USED, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Smeargle extends PokemonCard {
 
@@ -25,7 +27,7 @@ export class Smeargle extends PokemonCard {
     powerType: PowerType.POKEPOWER,
     text: 'Once during your turn (before your attack), if Smeargle is your ' +
       'Active Pokemon, you may look at your opponent\'s hand. If you do, ' +
-      'choose a Support card you find there and use the effect of that card ' +
+      'choose a Supporter card you find there and use the effect of that card ' +
       'as the effect of this power. This power can\'t be used if Smeargle ' +
       'is affected by a Special Condition.'
   }];
@@ -72,20 +74,31 @@ export class Smeargle extends PokemonCard {
         throw new GameError(GameMessage.POWER_ALREADY_USED);
       }
       player.marker.addMarker(this.PORTRAIT_MARKER, this);
+      ABILITY_USED(player, this);
+
+      // Ref: HS—Undaunted Card-Dex and the Pokémon TCG Portrait rulings.
+      // Activating Portrait looks at the whole hand and commits to a choice
+      // if the hand contains a Supporter.
+      const hand = new CardList();
+      hand.cards = [...opponent.hand.cards];
+      if (hand.cards.length === 0) return state;
+      const hasSupporter = hand.cards.some(card =>
+        card instanceof TrainerCard && card.trainerType === TrainerType.SUPPORTER);
+      if (!hasSupporter) {
+        return store.prompt(state, new ShowCardsPrompt(
+          player.id, GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, hand.cards
+        ), () => {});
+      }
 
       return store.prompt(state, new ChooseCardsPrompt(
         player,
         GameMessage.CHOOSE_CARD_TO_COPY_EFFECT,
-        opponent.hand,
+        hand,
         { superType: SuperType.TRAINER, trainerType: TrainerType.SUPPORTER },
-        { allowCancel: true, min: 1, max: 1 }
+        { allowCancel: false, min: 1, max: 1 }
       ), cards => {
-        if (cards === null || cards.length === 0) {
-          return;
-        }
-        const trainerCard = cards[0] as TrainerCard;
-        const playTrainerEffect = new TrainerEffect(player, trainerCard);
-        store.reduceEffect(state, playTrainerEffect);
+        const selected = cards?.[0];
+        if (selected instanceof TrainerCard) store.reduceEffect(state, new CopiedSupporterEffect(player, selected));
       });
     }
 

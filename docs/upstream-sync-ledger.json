@@ -617,8 +617,8 @@
       "sha": "837aebeb5f7fbb0f26d1646e958875f16ae55134",
       "date": "2026-11-07",
       "subject": "fix(cards): Smeargle UD",
-      "status": "deferred",
-      "notes": "A real Smeargle UD + opposing Tierno test confirms that copying after a Supporter was already played is incorrectly rejected. Upstream's unconditional restore fixes that case, but a real copied Lt. Surge's Strategy test shows it also discards the copied effect's supporter-allowance change (-2 becomes 0). A scratch delta-based restore passes Tierno, Lt. Surge and asynchronous Janine cases, but real-engine regressions confirm ordinary TrainerEffect fan-out still treats a copied effect as playing a Supporter: Krookodile XY Bother blocks copied Tierno, and Hitmontop VIV counts a copied Bea as played. Gwynn M5's `supporterTurn === 0` check and the asynchronous end-turn clause on Misty's Cheerfulness need source-aware handling too. A copied-effect context must survive prompt callbacks; audit play observers before porting. Reproducers: /private/tmp/prizemap-smeargle-round5 and /private/tmp/prizemap-smeargle-review.r2NQbk."
+      "status": "applied",
+      "notes": "Ported as an explicit copied Supporter effect. Portrait resolves the selected card’s own handler without triggering Supporter play locks or observers. Printed requirements still apply, and an unmet cost ends the copy safely. A copied Lt. Surge’s Strategy can still grant the printed three-Supporter limit. Engineer’s Adjustments and Misty’s Vitality use the proper Supporter subtype. Coverage includes delayed prompts, once-per-turn use, and snapshot load and undo."
     },
     {
       "sha": "cfd71b70ee4c917033874a57aff15aca8d6177f6",

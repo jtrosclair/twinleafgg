@@ -72,7 +72,7 @@ function* playMistysCheerfulness(
 }
 
 export class MistysVitality extends TrainerCard {
-  protected _trainerType: TrainerType = TrainerType.SUPPORTER;
+  public trainerType: TrainerType = TrainerType.SUPPORTER;
   public regulationMark: string = 'J';
   public set: string = 'PBL';
   public setNumber: string = '80';

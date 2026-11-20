@@ -10,7 +10,8 @@ import { ConcedeAction } from './actions/concede-action';
 import { Card } from './card/card';
 import { PokemonCard } from './card/pokemon-card';
 import { TrainerCard } from './card/trainer-card';
-import { Stage } from './card/card-types';
+import { Stage, TrainerType } from './card/card-types';
+import { CopiedSupporterEffect } from './effects/play-card-effects';
 import { PowerType } from './card/pokemon-types';
 import { PokemonCardList } from './state/pokemon-card-list';
 import { CardTarget, PlayCardAction, PlayerType, SlotType } from './actions/play-card-action';
@@ -156,6 +157,9 @@ export class Store implements StoreLike {
   }
 
   public reduceEffect(state: State, effect: Effect): State {
+    if (effect instanceof CopiedSupporterEffect) {
+      return this.resolveCopiedSupporter(state, effect);
+    }
     const preflight = preflightDualStadiumCancellation(this, state, effect);
     if (preflight !== undefined) return preflight;
     // A completed attack's retreat lock belongs to the affected Pokémon,
@@ -580,6 +584,51 @@ export class Store implements StoreLike {
       }
     }
     return false;
+  }
+
+  private resolveCopiedSupporter(state: State, effect: CopiedSupporterEffect): State {
+    const opponent = StateUtils.getOpponent(state, effect.player);
+    const handIndex = opponent.hand.cards.indexOf(effect.trainerCard);
+    if (handIndex === -1 || effect.trainerCard.trainerType !== TrainerType.SUPPORTER) {
+      throw new GameError(GameMessage.INVALID_TARGET);
+    }
+
+    // A revealed Supporter can be selected even if its cost or condition
+    // cannot be met. Validate on a copy before touching the live board.
+    const copy: State = deepClone(state);
+    const player = copy.players[state.players.indexOf(effect.player)];
+    const card = StateUtils.getOpponent(copy, player).hand.cards[handIndex] as TrainerCard;
+    const probe = this.createPlayabilityProbe(copy, state);
+    try {
+      probe.runCopiedSupporter(copy, new CopiedSupporterEffect(player, card));
+    } catch (error) {
+      if (error instanceof GameError) return state;
+      throw error;
+    } finally {
+      probe.cleanup();
+    }
+
+    return this.runCopiedSupporter(state, effect);
+  }
+
+  private runCopiedSupporter(state: State, effect: CopiedSupporterEffect): State {
+    const { player, trainerCard } = effect;
+    const allowance = player.supporterTurn;
+    const plays = StateUtils.getSupportersPlayedThisTurn(player);
+
+    // Older Supporter definitions check the allowance when their own handler
+    // starts. Run only that handler, so play locks and observers never see
+    // a borrowed effect as a Supporter played from the hand.
+    player.supporterTurn = 0;
+    let maximum: number | undefined;
+    try {
+      const next = this.callReduceEffect(trainerCard, this, state, effect);
+      maximum = effect.maximumSupporterPlays;
+      return next ?? state;
+    } finally {
+      player.supporterTurn = maximum === undefined
+        ? allowance : Math.min(allowance, plays + 1 - maximum);
+    }
   }
 
   private propagatePlayerMarkerEffect(state: State, effect: Effect): State {

@@ -153,6 +153,11 @@ export class TrainerEffect implements Effect {
   }
 }
 
+/** Resolves a borrowed Supporter's printed effect without playing the card. */
+export class CopiedSupporterEffect extends TrainerEffect {
+  public maximumSupporterPlays?: number;
+}
+
 export class EnergyEffect implements Effect {
   readonly type: string = PlayCardEffects.ENERGY_EFFECT;
   public preventDefault = false;
