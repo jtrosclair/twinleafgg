@@ -3,15 +3,12 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, CardTag, SuperType, EnergyType } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, StateUtils, GameMessage, GamePhase } from '../../game';
-import { AttachEnergyPrompt } from '../../game/store/prompts/attach-energy-prompt';
-import { PlayerType, SlotType, CardTarget } from '../../game/store/actions/play-card-action';
+import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
+import { PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { WAS_ATTACK_USED, ADD_SLEEP_TO_PLAYER_ACTIVE, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, ADD_SLEEP_TO_PLAYER_ACTIVE, IS_ABILITY_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP } from '../../game/store/prefabs/attack-effects';
-import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
+import { registerKnockOutEnergyTransfer } from '../../game/store/prefabs/knock-out-effects';
 
 export class JirachiV extends PokemonCard {
   public tags = [CardTag.POKEMON_V];
@@ -47,85 +44,16 @@ export class JirachiV extends PokemonCard {
   public readonly WISH_CONNECTOR_MARKER = 'JIRACHI_V_ASR_WISH_CONNECTOR_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Wish Connector
-    // Ref: set-scarlet-and-violet/exp-share.ts (KnockOutEffect - move energy from KO'd Pokemon to another Pokemon)
-    if (effect instanceof KnockOutEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      const target = effect.target;
-
-      // Only activate during opponent's attack phase
-      if (state.phase !== GamePhase.ATTACK || state.players[state.activePlayer] !== opponent) {
-        return state;
+    // Ref: set-scarlet-and-violet/exp-share.ts (transfer Basic Energy before discard).
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.resolveBeforeDiscard) {
+      const { player, target } = effect;
+      const knockedOut = target.getPokemonCard();
+      const inPlay = effect.pokemonInPlayBeforeKnockOut?.includes(this)
+        ?? [player.active, ...player.bench].some(slot => slot.getPokemonCard() === this);
+      if (knockedOut?.stage === Stage.BASIC && knockedOut.tags.includes(CardTag.POKEMON_V)
+        && inPlay && !IS_ABILITY_BLOCKED(store, state, player, this)) {
+        registerKnockOutEnergyTransfer(store, state, effect, this, { max: 1, optional: true, includeActive: true });
       }
-
-      // The KO'd Pokemon must be a Basic Pokemon V
-      const pokemonCard = target.getPokemonCard();
-      if (!pokemonCard || !pokemonCard.tags.includes(CardTag.POKEMON_V) || pokemonCard.stage !== Stage.BASIC) {
-        return state;
-      }
-
-      // Jirachi V must be on the player's bench (and not the one being KO'd)
-      const isJirachiBenched = player.bench.some(b =>
-        b.getPokemonCard() === this && b !== target
-      );
-
-      // Also check if Jirachi V is in the active (if it's not the one being KO'd)
-      const isJirachiActive = player.active.getPokemonCard() === this && player.active !== target;
-
-      if (!isJirachiBenched && !isJirachiActive) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      // Avoid double-triggering
-      if (target.marker.hasMarker(this.WISH_CONNECTOR_MARKER, this)) {
-        return state;
-      }
-
-      // Check if there are basic energy on the KO'd Pokemon
-      const hasBasicEnergy = target.cards.some(c =>
-        c.superType === SuperType.ENERGY && c.energyType === EnergyType.BASIC
-      );
-
-      if (!hasBasicEnergy) {
-        return state;
-      }
-
-      target.marker.addMarker(this.WISH_CONNECTOR_MARKER, this);
-
-      // Make a copy of the KO'd Pokemon's card list for the prompt
-      // (cards will be in discard when the prompt resolves)
-      const targetCopy = new PokemonCardList();
-      targetCopy.cards = target.cards.slice();
-
-      // Build blocked list - exclude the KO'd slot itself
-      const blockedTo: CardTarget[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, t) => {
-        if (cardList === target) {
-          blockedTo.push(t);
-        }
-      });
-
-      state = store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_TO_BENCH,
-        targetCopy,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.ACTIVE, SlotType.BENCH],
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
-        { allowCancel: true, min: 0, max: 1, differentTargets: false, blockedTo }
-      ), transfers => {
-        transfers = transfers || [];
-        target.marker.removeMarker(this.WISH_CONNECTOR_MARKER, this);
-        for (const transfer of transfers) {
-          const t = StateUtils.getTarget(state, player, transfer.to);
-          player.discard.moveCardTo(transfer.card, t);
-        }
-      });
     }
 
     // Attack 1: Hypnostrike

@@ -1,13 +1,13 @@
-import { Card, GameError, GameMessage, PlayerType, StateUtils } from '../../game';
+import { Card, GameError, GameMessage, PlayerType } from '../../game';
 import { CardType, EnergyType } from '../../game/store/card/card-types';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { CheckPokemonTypeEffect, CheckProvidedEnergyEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
 import { BetweenTurnsEffect } from '../../game/store/effects/game-phase-effects';
 import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { IS_SPECIAL_ENERGY_BLOCKED, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
-import { GamePhase, State } from '../../game/store/state/state';
+import { IS_SPECIAL_ENERGY_BLOCKED, MOVE_CARDS, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
+import { State } from '../../game/store/state/state';
+import { registerKnockOutRescue } from '../../game/store/prefabs/knock-out-effects';
 import { StoreLike } from '../../game/store/store-like';
 
 export class SplashEnergy extends EnergyCard {
@@ -38,7 +38,8 @@ export class SplashEnergy extends EnergyCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     // Provide energy when attached to Water Pokemon
-    if (effect instanceof CheckProvidedEnergyEffect && effect.source.cards.includes(this)) {
+    if (effect instanceof CheckProvidedEnergyEffect
+      && (effect.source.cards.includes(this) || effect.source.energies.cards.includes(this))) {
       const checkPokemonType = new CheckPokemonTypeEffect(effect.source);
       store.reduceEffect(state, checkPokemonType);
 
@@ -61,32 +62,27 @@ export class SplashEnergy extends EnergyCard {
     if (effect instanceof CheckTableStateEffect) {
       state.players.forEach(player => {
         player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (!cardList.cards.includes(this) || IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, cardList)) {
+          if (!(cardList.cards.includes(this) || cardList.energies.cards.includes(this)) || IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, cardList)) {
             return;
           }
 
           const checkPokemonType = new CheckPokemonTypeEffect(cardList);
           store.reduceEffect(state, checkPokemonType);
           if (!checkPokemonType.cardTypes.includes(CardType.WATER)) {
-            MOVE_CARDS(store, state, cardList, player.discard, { sourceCard: this, sourceEffect: this });
+            MOVE_CARDS(store, state, cardList, player.discard, { cards: [this], sourceCard: this, sourceEffect: effect });
           }
         });
       });
     }
 
-    // Rescue Pokemon when KO'd by opponent's attack damage;
-    if (effect instanceof KnockOutEffect && 
-        effect.target.cards.includes(this) &&
-        state.phase === GamePhase.ATTACK &&
-        effect.player.marker.hasMarker(effect.player.DAMAGE_DEALT_MARKER)) {
-      
-      const knockedPokemonOwner = StateUtils.findOwner(state, effect.target);
-      
-      if (!IS_SPECIAL_ENERGY_BLOCKED(store, state, knockedPokemonOwner, this, effect.target)) {
-        const cards = effect.target.getPokemons();
-        cards.forEach(card => {
-          knockedPokemonOwner.marker.addMarker(this.SPLASH_ENERGY_MARKER, card);
-        });
+    // Ref: set-triumphant/rescue-energy.ts (return an evolution stack before Prizes).
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.resolveBeforeDiscard) {
+      const { target, player } = effect;
+      const isAttached = () => target.cards.includes(this) || target.energies.cards.includes(this);
+      if (isAttached() && !IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, target)) {
+        const type = new CheckPokemonTypeEffect(target);
+        store.reduceEffect(state, type);
+        if (type.cardTypes.includes(CardType.WATER)) registerKnockOutRescue(store, state, effect, this, isAttached);
       }
     }
 

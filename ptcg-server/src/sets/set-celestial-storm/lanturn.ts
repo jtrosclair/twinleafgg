@@ -1,13 +1,10 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
-import { StoreLike, State, StateUtils, GameMessage, PlayerType, EnergyCard } from '../../game';
+import { StoreLike, State, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
-import { EnergyType, SuperType } from '../../game/store/card/card-types';
-import { CardList } from '../../game/store/state/card-list';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, MOVE_CARDS, WAS_ATTACK_USED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
+import { getAttachedEnergyOfType, registerKnockOutEnergyTransfer } from '../../game/store/prefabs/knock-out-effects';
 
 export class Lanturn extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -45,76 +42,28 @@ export class Lanturn extends PokemonCard {
   public readonly ENERGY_GROUNDING_MARKER = 'ENERGY_GROUNDING_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Energy Grounding Ability
-    if (effect instanceof KnockOutEffect && effect.target !== undefined) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      // Only trigger if Knock Out is from opponent's attack
-      if (state.players[state.activePlayer] !== opponent) {
-        return state;
+    // Ref: set-scarlet-and-violet/exp-share.ts (transfer Basic Energy before discard).
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.resolveBeforeDiscard) {
+      const { player, target } = effect;
+      const recipient = [player.active, ...player.bench].find(slot => slot.getPokemonCard() === this);
+      if (recipient && recipient !== target && !IS_ABILITY_BLOCKED(store, state, player, this)) {
+        registerKnockOutEnergyTransfer(store, state, effect, this, { max: 1, recipient });
       }
-      // Check if this Lanturn is in play
-      let foundLanturn: any = null;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card === this && cardList.cards.length > 0) {
-          foundLanturn = cardList;
-        }
-      });
-      if (!foundLanturn) {
-        return state;
-      }
-      // Check if there is a basic Energy in the knocked out Pokémon
-      const basicEnergies = effect.target.cards.filter(c => c.superType === SuperType.ENERGY && c.energyType === EnergyType.BASIC);
-      if (basicEnergies.length === 0) {
-        return state;
-      }
-      // Prompt to move 1 basic Energy to this Pokémon
-      const basicEnergiesList = new CardList();
-      basicEnergiesList.cards = basicEnergies;
-      state = store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.ATTACH_ENERGY_TO_BENCH,
-        basicEnergiesList,
-        {},
-        { min: 0, max: 1, allowCancel: false }
-      ), cards => {
-        if (!cards || cards.length === 0) {
-          return;
-        }
-        for (const card of cards) {
-          effect.target.moveCardTo(card, foundLanturn);
-        }
-      });
-      return state;
     }
 
-    // Lightning Strike attack
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const active = player.active;
-      // Find all Lightning Energy attached to this Pokémon
-      const lightningEnergies = active.cards.filter(c => c.superType === SuperType.ENERGY && (c as EnergyCard).provides.includes(CardType.LIGHTNING));
-      if (lightningEnergies.length > 0) {
-        const lightningEnergiesList = new CardList();
-        lightningEnergiesList.cards = lightningEnergies;
-        // Prompt to discard all Lightning Energy for extra damage
-        state = store.prompt(state, new ChooseCardsPrompt(
-          player,
-          GameMessage.WANT_TO_DISCARD_ENERGY,
-          lightningEnergiesList,
-          {},
-          { min: 0, max: lightningEnergies.length, allowCancel: true }
-        ), cards => {
-          if (cards && cards.length === lightningEnergies.length && cards.length > 0) {
-            // Discard all Lightning Energy and do 70 more damage
-            for (const card of cards) {
-              active.moveCardTo(card, player.discard);
-            }
+      const { player } = effect;
+      const source = effect.source;
+      const lightning = getAttachedEnergyOfType(store, state, player, source, CardType.LIGHTNING);
+      if (lightning.length > 0) {
+        CONFIRMATION_PROMPT(store, state, player, confirmed => {
+          if (!confirmed) return;
+          MOVE_CARDS(store, state, source, player.discard, { cards: lightning, sourceCard: this, sourceEffect: effect });
+          if (lightning.every(card => !source.cards.includes(card) && !source.energies.cards.includes(card))) {
             effect.damage += 70;
           }
-        });
+        }, GameMessage.WANT_TO_USE_EFFECT_OF_ATTACK);
       }
-      return state;
     }
 
     return state;

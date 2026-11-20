@@ -22,7 +22,7 @@ import { GameStatsTracker } from '../game-stats-tracker';
 import { CheckHpEffect } from '../effects/check-effects';
 import { CardTag, Stage } from '../card/card-types';
 import { COIN_FLIP_PROMPT } from '../prefabs/prefabs';
-import { attackDamagePositions } from '../state/pokemon-card-list';
+import { attackDamagePositions, attackEffectKnockOuts } from '../state/pokemon-card-list';
 
 export function attackReducer(store: StoreLike, state: State, effect: Effect): State {
   if (effect instanceof GustOpponentBenchEffect) {
@@ -137,7 +137,8 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
     if (damage > 0 && effect.attackEffect) {
       const hp = new CheckHpEffect(StateUtils.findOwner(state, target), target);
       store.reduceEffect(state, hp);
-      if (target.damage >= hp.hp) {
+      if (damageBefore < hp.hp && target.damage >= hp.hp) {
+        attackEffectKnockOuts.delete(targetCard);
         target.attackDamageKnockOut = {
           attack: effect.attack, sourceCard: effect.source.getPokemonCard(), playerId: effect.player.id,
           turn: state.turn
@@ -282,7 +283,9 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
     }
 
     const damage = Math.max(0, effect.damage);
+    const damageBefore = target.damage;
     target.damage += damage;
+    recordAttackEffectKnockOut(store, state, effect, damageBefore);
 
     // Track damage dealt by the attacking Pokemon
     if (damage > 0 && effect.attackEffect && effect.source) {
@@ -292,7 +295,6 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
 
   if (effect instanceof PutCountersEffect) {
     const target = effect.target;
-    target.attackDamageKnockOut = undefined;
     const sourceOwner = StateUtils.findOwner(state, effect.source);
     const targetCard = target.getPokemonCard();
     if (targetCard === undefined) {
@@ -300,7 +302,9 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
     }
 
     const damage = Math.max(0, effect.damage);
+    const damageBefore = target.damage;
     target.damage += damage;
+    recordAttackEffectKnockOut(store, state, effect, damageBefore);
 
     if (damage > 0) {
       store.log(state, GameLog.LOG_PLAYER_PLACES_DAMAGE_COUNTERS, {
@@ -396,4 +400,19 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
   }
 
   return state;
+}
+
+
+function recordAttackEffectKnockOut(
+  store: StoreLike, state: State, effect: KnockOutOpponentEffect | PutCountersEffect, damageBefore: number
+): void {
+  const { target, player } = effect;
+  const card = target.getPokemonCard();
+  if (!card || !effect.attackEffect || target.damage <= damageBefore) return;
+  const hp = new CheckHpEffect(StateUtils.findOwner(state, target), target);
+  store.reduceEffect(state, hp);
+  if (damageBefore < hp.hp && target.damage >= hp.hp) {
+    target.attackDamageKnockOut = undefined;
+    attackEffectKnockOuts.set(card, { playerId: player.id, turn: state.turn });
+  }
 }

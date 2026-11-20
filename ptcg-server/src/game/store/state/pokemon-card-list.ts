@@ -27,6 +27,9 @@ interface AttackDamageKnockOut {
   targetCard?: PokemonCard;
 }
 
+// Only attacks resolved in this game can set an effect-only Knock Out.
+export const attackEffectKnockOuts = new WeakMap<PokemonCard, { playerId: number; turn: number }>();
+
 // Position is needed only while the live attack's effects are resolving.
 export const attackDamagePositions = new WeakMap<AttackDamageKnockOut, {
   active: boolean;
@@ -519,11 +522,9 @@ export class PokemonCardList extends CardList {
         }
         destination.cards.push(card[0]);
         moved++;
-        // If destination is a PokemonCardList and card is an energy card (not a Pokemon), add to energies.cards
         if (destination instanceof PokemonCardList) {
-          // Only add actual energy cards (superType === ENERGY), not Pokemon cards that can act as energy
-          const isEnergyCard = card[0].superType === SuperType.ENERGY;
-          if (isEnergyCard && !destination.energies.cards.includes(card[0])) {
+          const isAttachedEnergy = energyIndex !== -1 || card[0].superType === SuperType.ENERGY;
+          if (isAttachedEnergy && !destination.energies.cards.includes(card[0])) {
             destination.energies.cards.push(card[0]);
           }
         }

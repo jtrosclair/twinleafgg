@@ -3,16 +3,12 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, SuperType, EnergyType } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, StateUtils, GameMessage, PlayerType, SlotType, CardTarget, PokemonCardList } from '../../game';
+import { Stage, CardType } from '../../game/store/card/card-types';
+import { PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
-import { AttachEnergyPrompt } from '../../game/store/prompts/attach-energy-prompt';
-import { GamePhase } from '../../game/store/state/state';
-import { CardList } from '../../game/store/state/card-list';
-import { EnergyCard } from '../../game/store/card/energy-card';
+import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
+import { getAttachedEnergyOfType, registerKnockOutEnergyTransfer, wasActiveWhenDamaged } from '../../game/store/prefabs/knock-out-effects';
 
 export class Kingdra extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -48,82 +44,18 @@ export class Kingdra extends PokemonCard {
   public readonly DEEP_SEA_KING_MARKER = 'KINGDRA_BST_DEEP_SEA_KING_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Deep Sea King (passive - when active KO'd by opponent, move W energy to this Pokemon)
-    // Ref: set-scarlet-and-violet/exp-share.ts (KnockOutEffect with energy move), set-burning-shadows/wishful-baton.ts
-    if (effect instanceof KnockOutEffect && effect.target === effect.player.active) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Only fire during attack phase when opponent is the active player
-      if (state.phase !== GamePhase.ATTACK || state.players[state.activePlayer] !== opponent) {
-        return state;
+    // Ref: set-scarlet-and-violet/exp-share.ts (transfer Energy before discard).
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.resolveBeforeDiscard
+      && wasActiveWhenDamaged(effect)) {
+      const { player, target } = effect;
+      const recipient = [player.active, ...player.bench].find(slot => slot.getPokemonCard() === this);
+      if (recipient && recipient !== target && !IS_ABILITY_BLOCKED(store, state, player, this)) {
+        registerKnockOutEnergyTransfer(store, state, effect, this, {
+          max: Infinity,
+          recipient,
+          getEnergy: () => getAttachedEnergyOfType(store, state, player, target, CardType.WATER)
+        });
       }
-
-      // Find this Kingdra on the bench
-      let kingdraCardList: PokemonCardList | null = null;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card === this && cardList !== effect.target) {
-          kingdraCardList = cardList;
-        }
-      });
-
-      if (!kingdraCardList) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      // Prevent double-triggering
-      if (effect.target.marker.hasMarker(this.DEEP_SEA_KING_MARKER, this)) {
-        return state;
-      }
-
-      const active = effect.target;
-
-      // Get Water energy cards from the active Pokemon
-      const waterEnergyCards = active.cards.filter(
-        c => c instanceof EnergyCard
-          && c.energyType === EnergyType.BASIC
-          && c.provides.includes(CardType.WATER)
-      );
-
-      if (waterEnergyCards.length === 0) {
-        return state;
-      }
-
-      active.marker.addMarker(this.DEEP_SEA_KING_MARKER, this);
-
-      // Make a snapshot of the water energy cards (they'll be moved to discard soon)
-      const energySnapshot = new CardList();
-      energySnapshot.cards = waterEnergyCards.slice();
-
-      // Build blockedTo to only allow moving to Kingdra's slot
-      const blockedTo: CardTarget[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        if (cardList !== kingdraCardList) {
-          blockedTo.push(target);
-        }
-      });
-
-      state = store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_TO_BENCH,
-        energySnapshot,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH, SlotType.ACTIVE],
-        { superType: SuperType.ENERGY },
-        { allowCancel: true, min: 0, max: waterEnergyCards.length, blockedTo }
-      ), transfers => {
-        transfers = transfers || [];
-        active.marker.removeMarker(this.DEEP_SEA_KING_MARKER, this);
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          // Cards have been moved to discard by KO; move from discard to target
-          player.discard.moveCardTo(transfer.card, target);
-        }
-      });
     }
 
     // Attack 1: Aqua Burst

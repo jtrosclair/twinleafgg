@@ -1,13 +1,16 @@
+import { GameMessage, PlayerType, State, StoreLike, StateUtils } from '../../game';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType } from '../../game/store/card/card-types';
+import { CardType, Stage, SuperType, EnergyType } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
-import { StoreLike, State, StateUtils, GameMessage, PlayerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
-import { EnergyType, SuperType } from '../../game/store/card/card-types';
+import { getAttachedBasicEnergy, getAttachedEnergyOfType } from '../../game/store/prefabs/knock-out-effects';
+import { CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, MOVE_CARDS, WAS_ATTACK_USED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
+import { AttachEnergyPrompt } from '../../game/store/prompts/attach-energy-prompt';
+import { SlotType, CardTarget } from '../../game/store/actions/play-card-action';
 import { CardList } from '../../game/store/state/card-list';
-import { CONFIRMATION_PROMPT, DISCARD_ALL_ENERGY_FROM_POKEMON, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { attackEffectKnockOuts } from '../../game/store/state/pokemon-card-list';
+import { GamePhase } from '../../game/store/state/state';
 
 export class Lanturn extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -40,61 +43,69 @@ export class Lanturn extends PokemonCard {
   public usedLightningStrike = false;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Energy Grounding Ability
-    if (effect instanceof KnockOutEffect && effect.target !== undefined) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      // Only trigger if Knock Out is from opponent's attack
-      if (state.players[state.activePlayer] !== opponent) {
-        return state;
-      }
-      // Check if this Lanturn is in play
-      let foundLanturn: any = null;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card === this && cardList.cards.length > 0) {
-          foundLanturn = cardList;
-        }
-      });
-      if (!foundLanturn) {
-        return state;
-      }
-      // Check if there is a basic Energy in the knocked out Pokémon
-      const basicEnergies = effect.target.cards.filter(c => c.superType === SuperType.ENERGY && c.energyType === EnergyType.BASIC);
-      if (basicEnergies.length === 0) {
-        return state;
-      }
-      // Prompt to move 1 basic Energy to this Pokémon
-      const basicEnergiesList = new CardList();
-      basicEnergiesList.cards = basicEnergies;
-      state = store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.ATTACH_ENERGY_TO_BENCH,
-        basicEnergiesList,
-        {},
-        { min: 0, max: 1, allowCancel: false }
-      ), cards => {
-        if (!cards || cards.length === 0) {
-          return;
-        }
-        for (const card of cards) {
-          effect.target.moveCardTo(card, foundLanturn);
-        }
-      });
-      return state;
+    if (effect instanceof KnockOutEffect && effect.resolveBeforeDiscard && state.phase === GamePhase.ATTACK) {
+      this.registerEnergyGrounding(store, state, effect);
     }
 
-    // Lightning Strike attack
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      CONFIRMATION_PROMPT(store, state, player, result => {
-        if (result) {
-          DISCARD_ALL_ENERGY_FROM_POKEMON(store, state, effect, this);
-          effect.damage = 90;
-        }
-      }, GameMessage.WANT_TO_USE_EFFECT_OF_ATTACK);
+      const { player, source } = effect;
+      const lightning = getAttachedEnergyOfType(store, state, player, source, CardType.LIGHTNING);
+      if (lightning.length > 0) {
+        CONFIRMATION_PROMPT(store, state, player, confirmed => {
+          if (!confirmed) return;
+          MOVE_CARDS(store, state, source, player.discard, { cards: lightning, sourceCard: this, sourceEffect: effect });
+          if (lightning.every(card => !source.cards.includes(card) && !source.energies.cards.includes(card))) {
+            effect.damage = 90;
+          }
+        }, GameMessage.WANT_TO_USE_EFFECT_OF_ATTACK);
+      }
     }
 
     return state;
+  }
+
+  // Ref: set-arceus/lucky-egg.ts (check the actual discard destination).
+  private registerEnergyGrounding(store: StoreLike, state: State, effect: KnockOutEffect): void {
+    const { player, target } = effect;
+    const attacker = state.players[state.activePlayer];
+    const knockedOut = target.getPokemonCard();
+    if (!knockedOut || player === attacker) return;
+    const attackKO = attackEffectKnockOuts.get(knockedOut);
+    const damageKO: boolean = WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect);
+    if (!damageKO && !(attackKO?.playerId === attacker.id && attackKO.turn === state.turn)) return;
+
+    const usage = this.ENERGY_GROUNDING_MARKER + '_' + state.turn;
+    if (player.marker.hasMarker(usage)) return;
+    const abilities = [player.active, ...player.bench].filter(slot => slot !== target
+      && !effect.simultaneousKnockOuts?.has(slot)).flatMap(slot => {
+      const card = slot.getPokemonCard();
+      return card instanceof Lanturn && !IS_POKEPOWER_BLOCKED(store, state, player, card) ? [card] : [];
+    });
+    if (abilities[0] !== this) return;
+
+    const attached = getAttachedBasicEnergy(target);
+    effect.afterDiscard.set(this, () => {
+      const energy = new CardList();
+      energy.cards = attached.filter(card => player.discard.cards.includes(card));
+      if (!energy.cards.length) return;
+
+      const blockedTo: CardTarget[] = [];
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (_slot, card, address) => {
+        if (!(card instanceof Lanturn) || !abilities.includes(card)) blockedTo.push(address);
+      });
+      store.prompt(state, new AttachEnergyPrompt(player.id, GameMessage.ATTACH_ENERGY_CARDS,
+        energy, PlayerType.BOTTOM_PLAYER, [SlotType.ACTIVE, SlotType.BENCH],
+        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
+        { allowCancel: true, min: 0, max: 1, blockedTo }), transfers => {
+        const transfer = transfers?.[0];
+        if (!transfer || player.marker.hasMarker(usage)) return;
+        const recipient = StateUtils.getTarget(state, player, transfer.to);
+        const sourceCard = recipient.getPokemonCard();
+        MOVE_CARDS(store, state, player.discard, recipient, { cards: [transfer.card], sourceCard, sourceEffect: effect });
+        player.marker.markers = player.marker.markers.filter(marker =>
+          !marker.name.startsWith(this.ENERGY_GROUNDING_MARKER + '_'));
+        player.marker.addMarkerToState(usage);
+      });
+    });
   }
 }
