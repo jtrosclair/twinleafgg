@@ -1,4 +1,4 @@
-import { AttachEnergyEffect } from '../effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect, AttachEnergyEffect } from '../effects/play-card-effects';
 import { AttackEffect } from '../effects/game-effects';
 import { PutCountersEffect } from '../effects/attack-effects';
 import { GameError } from '../../game-error';
@@ -52,7 +52,7 @@ export function playEnergyReducer(store: StoreLike, state: State, effect: Effect
       throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
 
-    const fromHand = effect.player.hand.cards.includes(effect.energyCard);
+    const fromHand = effect.sourceZone === undefined && effect.player.hand.cards.includes(effect.energyCard);
     const pendingAttachDamage = effect.target.pendingEnergyAttachDamageCounters;
     if (fromHand && pendingAttachDamage) {
       const attacker = state.players.find(player => player.id === pendingAttachDamage.attackerPlayerId);
@@ -91,6 +91,9 @@ export function playEnergyReducer(store: StoreLike, state: State, effect: Effect
       index
     });
 
+    if (fromHand && effect.target.cards.includes(effect.energyCard)) {
+      state = store.reduceEffect(state, new AfterAttachEnergyFromHandEffect(effect.player, effect.energyCard, effect.target));
+    }
     return state;
   }
 

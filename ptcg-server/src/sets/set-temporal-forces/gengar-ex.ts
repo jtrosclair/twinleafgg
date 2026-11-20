@@ -1,8 +1,9 @@
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, GameMessage, PlayerType, SlotType, StateUtils, PowerType, AttachEnergyPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/game-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Gengarex extends PokemonCard {
@@ -62,27 +63,14 @@ export class Gengarex extends PokemonCard {
       });
     }
 
-    if (effect instanceof AttachEnergyEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      // Find the owner of this Gengar-EX
-      let isGengarInPlay = false;
-      opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card) => {
-        if (card === this) {
-          isGengarInPlay = true;
-        }
-      });
-
-      if (!isGengarInPlay) {
-        return state;
+    // Ref: upstream db4eebfcf (opponent's attachment from hand and preventable counters).
+    if (effect instanceof AfterAttachEnergyFromHandEffect) {
+      const owner = StateUtils.getOpponent(state, effect.player);
+      if (StateUtils.isPokemonInPlay(owner, this) && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        state = store.reduceEffect(state, new PlaceDamageCountersEffect(owner, effect.target, 20, this, this.powers[0]));
       }
-
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-      effect.target.damage += 20;
     }
+
     return state;
   }
 }

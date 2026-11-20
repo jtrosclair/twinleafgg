@@ -1,9 +1,10 @@
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { ChoosePokemonPrompt, GameMessage, PlayerType, PowerType, SlotType, State, StoreLike } from '../../game';
+import { ChoosePokemonPrompt, GameError, GameMessage, PlayerType, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 
-import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { ABILITY_USED, MOVE_POKEMON_OFF_BOARD, REMOVE_MARKER_AT_END_OF_TURN, USE_ABILITY_ONCE_PER_TURN, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Starmie extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -34,33 +35,39 @@ export class Starmie extends PokemonCard {
   public name: string = 'Starmie';
   public fullName: string = 'Starmie MEW';
 
-  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+  private readonly MYSTERIOUS_COMET_MARKER = 'MYSTERIOUS_COMET_MARKER';
 
+  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    REMOVE_MARKER_AT_END_OF_TURN(effect, this.MYSTERIOUS_COMET_MARKER, this);
+
+    // Ref: upstream db4eebfcf (Mysterious Comet discards only after placing counters).
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
+      if (player.marker.hasMarker(this.MYSTERIOUS_COMET_MARKER, this)) {
+        throw new GameError(GameMessage.POWER_ALREADY_USED);
+      }
 
-      state = store.prompt(state, new ChoosePokemonPrompt(
+      return store.prompt(state, new ChoosePokemonPrompt(
         player.id,
         GameMessage.CHOOSE_POKEMON_TO_DAMAGE,
         PlayerType.TOP_PLAYER,
         [SlotType.ACTIVE, SlotType.BENCH],
-        { min: 1, max: 1, allowCancel: false },
+        { min: 1, max: 1, allowCancel: true }
       ), selected => {
-        const targets = selected || [];
-        targets.forEach(target => {
-          target.damage += 20;
-        });
+        const target = selected?.[0];
+        if (!target) return;
 
-      });
+        USE_ABILITY_ONCE_PER_TURN(player, this.MYSTERIOUS_COMET_MARKER, this);
+        ABILITY_USED(player, this);
+        const placement = new PlaceDamageCountersEffect(player, target, 20, this, this.powers[0]);
+        store.reduceEffect(state, placement);
 
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-        if (cardList.getPokemonCard() === this) {
-          cardList.moveTo(player.discard);
-          cardList.clearEffects();
+        const source = StateUtils.findPokemonSlot(state, this);
+        if (!placement.preventDefault && placement.damage > 0 && source) {
+          MOVE_POKEMON_OFF_BOARD(store, state, source, { pokemonDestination: player.discard, sourceCard: this });
+          player.marker.removeMarker(this.MYSTERIOUS_COMET_MARKER, this);
         }
       });
-
-      return state;
     }
 
     return state;

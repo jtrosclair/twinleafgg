@@ -1,8 +1,9 @@
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils, PowerType } from '../../game';
-import { AttackEffect } from '../../game/store/effects/game-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { Effect } from '../../game/store/effects/effect';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class Arctozolt extends PokemonCard {
@@ -32,17 +33,16 @@ export class Arctozolt extends PokemonCard {
   public name: string = 'Arctozolt';
   public fullName: string = 'Arctozolt DAA';
 
-  public reduceEffect(store: StoreLike, state: State, effect: AttackEffect): State {
+  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && StateUtils.isPokemonInPlay(effect.player, this)) {
-      const player = effect.player;
-
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
+    // Ref: upstream db4eebfcf (opponent's attachment from hand and preventable counters).
+    if (effect instanceof AfterAttachEnergyFromHandEffect) {
+      const owner = StateUtils.getOpponent(state, effect.player);
+      if (StateUtils.isPokemonInPlay(owner, this) && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        state = store.reduceEffect(state, new PlaceDamageCountersEffect(owner, effect.target, 20, this, this.powers[0]));
       }
-      effect.target.damage += 20;
     }
+
     return state;
   }
 }

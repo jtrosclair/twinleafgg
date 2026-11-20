@@ -431,7 +431,7 @@ export class PlaceDamageCountersEffect implements Effect {
   public damage: number;
   public source?: PokemonCard;
 
-  constructor(player: Player, target: PokemonCardList, damage: number, source?: PokemonCard) {
+  constructor(player: Player, target: PokemonCardList, damage: number, source?: PokemonCard, public readonly sourcePower?: Power) {
     this.player = player;
     this.target = target;
     this.damage = damage;

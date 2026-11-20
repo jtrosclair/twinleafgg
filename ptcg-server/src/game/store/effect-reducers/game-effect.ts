@@ -16,6 +16,7 @@ import {
 import { Effect } from '../effects/effect';
 import {
   AttackEffect,
+  EffectOfAbilityEffect,
   EvolveEffect,
   HealEffect, KnockOutEffect,
   PlaceDamageCountersEffect,
@@ -582,6 +583,16 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
       return state;
     }
 
+    if (effect.source && effect.sourcePower) {
+      const ability = new EffectOfAbilityEffect(effect.player, effect.sourcePower, effect.source, effect.target);
+      state = store.reduceEffect(state, ability);
+      if (ability.preventDefault || !ability.target) {
+        effect.preventDefault = true;
+        return state;
+      }
+      effect.target = ability.target;
+    }
+
     const target = effect.target;
     const targetCard = target.getPokemonCard();
     if (targetCard === undefined) {
@@ -592,7 +603,7 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
     target.damage += damage;
 
     if (damage > 0) {
-      const effectName = effect.source ? effect.source.name : '';
+      const effectName = effect.sourcePower?.name ?? effect.source?.name ?? '';
       store.log(state, GameLog.LOG_PLAYER_PLACES_DAMAGE_COUNTERS, {
         name: effect.player.name,
         damage: damage,

@@ -11,6 +11,7 @@ import { SlotType } from '../actions/play-card-action';
 
 export enum PlayCardEffects {
   ATTACH_ENERGY_EFFECT = 'ATTACH_ENERGY_EFFECT',
+  AFTER_ATTACH_ENERGY_EFFECT = 'AFTER_ATTACH_ENERGY_EFFECT',
   PLAY_POKEMON_EFFECT = 'PLAY_POKEMON_EFFECT',
   PLAY_POKEMON_FROM_DECK_EFFECT = 'PLAY_POKEMON_FROM_DECK_EFFECT',
   PLAY_POKEMON_FROM_DISCARD_EFFECT = 'PLAY_POKEMON_FROM_DISCARD_EFFECT',
@@ -51,6 +52,14 @@ export class AttachEnergyEffect implements Effect {
     this.energyCard = energyCard;
     this.target = target;
   }
+}
+
+/** Sent only after an Energy card was successfully attached from the hand. */
+export class AfterAttachEnergyFromHandEffect implements Effect {
+  readonly type: string = PlayCardEffects.AFTER_ATTACH_ENERGY_EFFECT;
+  public preventDefault = false;
+
+  constructor(public player: Player, public energyCard: EnergyCard, public target: PokemonCardList) {}
 }
 
 export class PlayPokemonEffect implements Effect {

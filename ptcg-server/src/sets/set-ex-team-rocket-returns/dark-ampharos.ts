@@ -1,6 +1,7 @@
-import { PokemonCard, Stage, CardType, CardTag, PowerType, StoreLike, State, StateUtils, PlayerType, GameLog } from '../../game';
+import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { PokemonCard, Stage, CardType, CardTag, PowerType, StoreLike, State, StateUtils, GameLog } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { AfterEvolveEffect, PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class DarkAmpharos extends PokemonCard {
@@ -38,41 +39,25 @@ export class DarkAmpharos extends PokemonCard {
   public fullName: string = 'Dark Ampharos TRR';
   public evolvesFrom: string = 'Dark Flaaffy';
 
+  private readonly DARKEST_IMPULSE_MARKER = 'TRR_DARKEST_IMPULSE_USED';
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Handle Darkest Impulse Poké-Body
-    if (effect instanceof EvolveEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      if (IS_ABILITY_BLOCKED(store, state, opponent, this)) { return state; }
-      if (effect.darkestImpulseSV) { return state; }
-
-      // Check if Dark Ampharos is in play
-      let isAmpharosInPlay = false;
-      opponent.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-        if (cardList.getPokemonCard() === this) {
-          isAmpharosInPlay = true;
-        }
-      });
-      if (!isAmpharosInPlay) { return state; }
-
-      store.log(state, GameLog.LOG_PLAYER_USES_ABILITY, { name: player.name, ability: this.powers[0].name });
-
-      effect.target.damage += 20; // 2 damage counters = 20 damage
-      effect.darkestImpulseSV = true;
+    if (effect instanceof EndTurnEffect) {
+      effect.player.marker.removeMarker(this.DARKEST_IMPULSE_MARKER);
     }
 
-    // Handle Shock Bolt attack
-    // if (WAS_ATTACK_USED(effect, 1, this)) {
-    //   const player = effect.player;
-    //   const cardList = player.active;
+    // Ref: upstream db4eebfcf (preventable counters), with this fork's completed evolution hook.
+    if (effect instanceof AfterEvolveEffect && effect.playedFromHand) {
+      const player = effect.player;
+      const owner = StateUtils.getOpponent(state, player);
+      if (!StateUtils.isPokemonInPlay(owner, this) || player.marker.hasMarker(this.DARKEST_IMPULSE_MARKER)
+        || IS_ABILITY_BLOCKED(store, state, owner, this)) return state;
 
-    //   // Discard all Lightning Energy
-    //   const discardEnergyEffect = new DiscardCardsEffect(effect, );
-    //   discardEnergyEffect.target = cardList;
-    //   store.reduceEffect(state, discardEnergyEffect);
-    // }
+      player.marker.addMarkerToState(this.DARKEST_IMPULSE_MARKER);
+      store.log(state, GameLog.LOG_PLAYER_USES_ABILITY, { name: owner.name, ability: this.powers[0].name });
+      return store.reduceEffect(state, new PlaceDamageCountersEffect(owner, effect.target, 20, this, this.powers[0]));
+    }
 
     return state;
   }
-} 
+}

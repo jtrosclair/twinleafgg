@@ -6,7 +6,8 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, DISCARD_ALL_ENERGY_FROM_POKEMON } from '../../game/store/prefabs/prefabs';
 
 export class Jolteon extends PokemonCard {
@@ -40,23 +41,12 @@ export class Jolteon extends PokemonCard {
   public fullName: string = 'Jolteon HIF';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Electromagnetic Wall (passive - trigger on opponent's energy attachment)
-    // Ref: set-crimson-invasion/gengar.ts (Gnawing Curse)
-    if (effect instanceof AttachEnergyEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Check if this Jolteon is the opponent's active Pokemon
-      if (opponent.active.getPokemonCard() !== this || !opponent.active.cards.includes(this)) {
-        return state;
+    // Ref: upstream db4eebfcf (Electromagnetic Wall requires an Active Jolteon).
+    if (effect instanceof AfterAttachEnergyFromHandEffect) {
+      const owner = StateUtils.getOpponent(state, effect.player);
+      if (owner.active.getPokemonCard() === this && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        state = store.reduceEffect(state, new PlaceDamageCountersEffect(owner, effect.target, 20, this, this.powers[0]));
       }
-
-      if (IS_ABILITY_BLOCKED(store, state, opponent, this)) {
-        return state;
-      }
-
-      // Put 2 damage counters (20 damage) on the Pokemon that received the energy
-      effect.target.damage += 20;
     }
 
     // Attack 1: Thunderbolt

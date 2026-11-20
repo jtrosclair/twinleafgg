@@ -1,3 +1,4 @@
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
@@ -96,7 +97,8 @@ export class Greninja extends PokemonCard {
           { allowCancel: false }
         ), result => {
           const target = result[0];
-          target.damage += 30;
+          // Ref: upstream 49205ef174 (preventable Ability damage counters).
+          store.reduceEffect(state, new PlaceDamageCountersEffect(player, target, 30, this, this.powers[0]));
           return state;
         });
       });

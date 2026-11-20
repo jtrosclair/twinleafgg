@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "baseUpstream": "2f01a5ff4057f734640a2770cea3c1e7d61eb644",
-  "latestObservedUpstream": "c531dc84f6d079e7531a9c3986a2f51ddeecad6c",
+  "latestObservedUpstream": "d3d7a00319f7a97ea8f663c55e1687b3cb0870cd",
   "description": "Per-commit review record for the PrizeMap simulator fork. Partial ports are not full commits. Never infer an applied watermark from the latest observed SHA.",
   "commits": [
     {
@@ -93,14 +93,14 @@
       "date": "2026-10-13",
       "subject": "refactor(cards): EffectOfAbilityEffect Pt 2",
       "status": "partial",
-      "notes": "Cross-cutting refactor changes shared engine effects and many card handlers; requires per-card effect, ownership, knock-out, damage, serialization and recorded-puzzle tests before port. 2026-11-20: Ported the Team Rocket’s Ampharos Darkest Impulse prevention fix only. Uses this fork’s existing AfterEvolveEffect so the evolved Pokémon’s protection is active, and PutDamageCountersEffect so Ghost Veil/Hide n Sneak and Stealthy Hood can prevent counters. Preserves hand-only, own-turn, opposing-owner and non-stacking conditions. Regression: hide-n-sneak-ampharos.spec.ts (18 passing); evolution rounds 21–23 and actual Hide n Sneak Prism Tower snapshot (217 passing). Other handlers and the shared upstream EffectOfAbilityEffect refactor remain deferred."
+      "notes": "Cross-cutting refactor changes shared engine effects and many card handlers; requires per-card effect, ownership, knock-out, damage, serialization and recorded-puzzle tests before port. 2026-11-20: Ported the Team Rocket’s Ampharos Darkest Impulse prevention fix only. Uses this fork’s existing AfterEvolveEffect so the evolved Pokémon’s protection is active, and PutDamageCountersEffect so Ghost Veil/Hide n Sneak and Stealthy Hood can prevent counters. Preserves hand-only, own-turn, opposing-owner and non-stacking conditions. Regression: hide-n-sneak-ampharos.spec.ts (18 passing); evolution rounds 21–23 and actual Hide n Sneak Prism Tower snapshot (217 passing). Other handlers and the shared upstream EffectOfAbilityEffect refactor remain deferred. Gameplay re-audit, batch 1: ported preventable counters for Dark Ampharos TRR, Gengar CIN, Gengar ex TEF, Arctozolt DAA, Jolteon HIF, Team Rocket’s Golbat and Crobat ex DRI, Meowscarada ex PAL, Volcarona-GX CEC, and Starmie MEW/PAF (including inherited print variants). Kept explicit ability provenance and applied reactive counters only after successful hand attachments/evolutions. Starmie discards its stack only when it places counters. The rest of the commit remains open."
     },
     {
       "sha": "49205ef1746459c14270cdf7ad4644f5e62ed010",
       "date": "2026-10-13",
       "subject": "refactor(cards): EffectOfAbilityEffect Pt 3",
-      "status": "deferred",
-      "notes": "Cross-cutting refactor changes shared engine effects and many card handlers; requires per-card effect, ownership, knock-out, damage, serialization and recorded-puzzle tests before port."
+      "status": "partial",
+      "notes": "Cross-cutting refactor changes shared engine effects and many card handlers; requires per-card effect, ownership, knock-out, damage, serialization and recorded-puzzle tests before port. Gameplay re-audit, batch 1: ported preventable Water Shuriken and Headbutt Tantrum counters. Zigzagoon also respects the Bench-only trigger and printed Surprise Attack coin result. Greninja XY Mist Slash is still open: upstream changes the attack index but its manual damage pipeline still applies Weakness."
     },
     {
       "sha": "c51047b6c46174b0d33a32c25de81e1e48bcf6fe",
@@ -484,8 +484,8 @@
       "sha": "e8184d0a0581fe7bad4c2aee2323f23d79c8fc9c",
       "date": "2026-10-29",
       "subject": "fix(cards): Bug Out",
-      "status": "deferred",
-      "notes": "Adds Bug Out helper and effects for Delta Reign cards that are absent from this fork; reconsider after those cards are introduced."
+      "status": "already-present",
+      "notes": "Adds Bug Out helper and effects for Delta Reign cards that are absent from this fork; reconsider after those cards are introduced. Rechecked current production: the Delta Reign port already shuffles all revealed Pokémon back and discards only non-Pokémon in set-delta-reign/bug-out.ts. Direct and copied attacks are covered by upstream-dlr-1-45.spec.ts. No additional port is needed."
     },
     {
       "sha": "03f82b7489752d165019fd4c9d9b9fd7662b9054",
@@ -654,6 +654,27 @@
       "subject": "feat(Share State): Added State Sharing, Undo",
       "status": "not-applicable",
       "notes": "Upstream networked snapshot sharing and multiplayer undo, including UI, server persistence and socket APIs, are outside the local single-player simulator. PrizeMap owns its undo controls; the existing simulator restoreState retains its stronger local cleanup and derived-state handling."
+    },
+    {
+      "sha": "7aa4632450f4343e98c7b7baf40c939568b03639",
+      "date": "2026-11-18",
+      "subject": "fix(cards): Hops Phantump, Hops Trevenant",
+      "status": "unreviewed",
+      "notes": "Adds missing Hop tags. Review alongside the already registered cards and the unsupported distinction between Hop and other knockouts."
+    },
+    {
+      "sha": "e4e72459ffa7c0067533d05f74987de273ed8915",
+      "date": "2026-11-18",
+      "subject": "fix(replays): Fixed Replay Controls - React Frontend",
+      "status": "not-applicable",
+      "notes": "Diff verified: only React replay controls and canvas input changed. No simulator engine or Angular puzzle runtime paths are touched."
+    },
+    {
+      "sha": "d3d7a00319f7a97ea8f663c55e1687b3cb0870cd",
+      "date": "2026-11-18",
+      "subject": "fix(replays): Replay Animations",
+      "status": "not-applicable",
+      "notes": "Diff verified: only React 3D replay animations and board transitions changed. No simulator engine or Angular puzzle runtime paths are touched."
     }
   ]
 }

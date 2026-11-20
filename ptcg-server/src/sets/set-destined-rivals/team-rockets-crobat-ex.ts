@@ -1,7 +1,7 @@
 import { PokemonCard, Stage, CardType, CardTag, StoreLike, State, PowerType, StateUtils, ChoosePokemonPrompt, GameMessage, PlayerType, SlotType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { AfterAttackEffect } from '../../game/store/effects/game-phase-effects';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { AfterEvolveEffect, PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, WAS_ATTACK_USED, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 export class TeamRocketsCrobatex extends PokemonCard {
@@ -39,28 +39,28 @@ export class TeamRocketsCrobatex extends PokemonCard {
   public usedAssassinsReturn = false;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Bite About
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
-      const player = StateUtils.findOwner(state, effect.target);
+    // Ref: upstream db4eebfcf (Bite About, optional preventable counters).
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this && effect.playedFromHand
+      && state.players[state.activePlayer] === effect.player) {
+      const player = effect.player;
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) return state;
+      const availableTargets = StateUtils.getOpponent(state, player).getPokemonInPlay().length;
+      const targetCount = Math.min(2, availableTargets);
+      if (targetCount === 0) return state;
 
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) { return state; }
+      return CONFIRMATION_PROMPT(store, state, player, useAbility => {
+        if (!useAbility) return;
 
-      CONFIRMATION_PROMPT(store, state, player, result => {
-        if (!result) {
-          return state;
-        }
-      });
-
-      return store.prompt(state, new ChoosePokemonPrompt(
-        player.id,
-        GameMessage.CHOOSE_POKEMON_TO_DAMAGE,
-        PlayerType.TOP_PLAYER,
-        [SlotType.ACTIVE, SlotType.BENCH],
-        { min: 1, max: 2, allowCancel: false },
-      ), selected => {
-        const targets = selected || [];
-        targets.forEach(target => {
-          target.damage += 20;
+        store.prompt(state, new ChoosePokemonPrompt(
+          player.id,
+          GameMessage.CHOOSE_POKEMON_TO_DAMAGE,
+          PlayerType.TOP_PLAYER,
+          [SlotType.ACTIVE, SlotType.BENCH],
+          { min: targetCount, max: targetCount, allowCancel: false }
+        ), selected => {
+          for (const target of new Set(selected ?? [])) {
+            store.reduceEffect(state, new PlaceDamageCountersEffect(player, target, 20, this, this.powers[0]));
+          }
         });
       });
     }

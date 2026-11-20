@@ -1546,3 +1546,38 @@ The new focused suite reproduces seven failures before the fix and passes all
 18 cases after it. Combined with evolution rounds 21–23 and the saved Hide n
 Sneak Prism Tower test, 235 tests pass. The ledger marks the upstream commit
 partial; its other card and engine changes remain deferred.
+
+## Gameplay re-audit, batch 1
+
+The ability refactor is being reviewed by behaviour and card path. The first
+batch ports targeted counter effects from `db4eebfcf` and `49205ef174`, with
+explicit Ability provenance. It retains the fork's existing artwork and saved
+card identities, including alternate printings. Attachment-triggered Abilities
+now observe completed hand attachments. Golbat and Crobat react after a
+completed hand evolution and honor the optional confirmation. Starmie stays in
+play when Mysterious Comet is prevented. Tests exercise the actual simulator
+actions and pending prompts, plus source-side and unprotected controls. The
+final suite passes 33 cases, 300 existing card/evolution regressions pass, and
+all ten packaged mouse/touch interaction checks pass. All four previously
+recorded solutions still win. The read-only comparison matched all 3,635
+sampled opening Trainer, attack, and Ability actions across 559 comparable
+saved states (401 active). Opening-action coverage excludes later prompt
+resolutions and is not proof of every solution.
+
+The real Revenge of the Assassin fixture opens with Battle Cage, which must
+stop Crobat counters against the opposing Bench. The browser gate now expects
+that prevention. A separate complete replay verifies the original puzzle wins
+by finding Team Rocket's Factory with Petrel, replacing Battle Cage, knocking
+out Clefairy with counters to bypass Lillie's Pearl, and finishing with Arbok.
+
+Bug Out was already fixed during the Delta Reign port. Its ledger entry now
+reflects the tested direct and copied attack behaviour.
+
+Remaining work includes the other card paths in all three ability-refactor
+commits, plus the reproduced Smeargle UD Supporter-copy and Magnezone PLS
+Supporter-limit failures. Use printed timing and costs as the expected result
+when an upstream implementation has omissions. The November 18 upstream tip
+also includes `7aa463245` (Hop’s Phantump/Trevenant tags), which needs validation
+against the already registered Ascended Heroes prints and Trevenant's
+Hop-specific knockout condition. Both replay commits after it only change the upstream React frontend. Their
+diffs contain no shared gameplay or Angular simulator changes.

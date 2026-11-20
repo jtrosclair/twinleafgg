@@ -1,3 +1,4 @@
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType, EnergyType, BoardEffect } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
@@ -120,7 +121,8 @@ export class Meowscaradaex extends PokemonCard {
           });
 
           targets.forEach(target => {
-            target.damage += 30;
+            // Ref: upstream db4eebfcf (preventable Ability damage counters).
+            store.reduceEffect(state, new PlaceDamageCountersEffect(player, target, 30, this, this.powers[0]));
             player.marker.addMarker(this.BOUQUET_MAGIC_MARKER, this);
           });
         });

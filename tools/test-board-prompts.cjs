@@ -13,8 +13,8 @@ const { verifyDeploy } = require('../ptcg-play/scripts/build-attestation.cjs');
 const root = path.resolve(__dirname, '..');
 const pixel = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLbtAAAAABJRU5ErkJggg==', 'base64');
 const cases = [
-  { name: 'Crobat damage', fixture: 'revenge-of-the-assassin.snapshot.json.gz',
-    card: "Team Rocket's Crobat ex", evolve: 1, targets: [1, 2], message: 'Choose Pokémon to deal damage to.' },
+  { name: 'Crobat counters under Battle Cage', fixture: 'revenge-of-the-assassin.snapshot.json.gz',
+    card: "Team Rocket's Crobat ex", evolve: 1, targets: [1, 2], expectedDamage: 0, message: 'Choose Pokémon to deal damage to.' },
   { name: 'Prime Catcher', fixture: 'skymonster-prime-catcher.snapshot.json.gz',
     card: 'Prime Catcher', targets: [2], message: 'Choose Pokémon to switch with the Active Pokémon.' },
   { name: 'Prime Catcher, eight opposing Pokémon', fixture: 'skymonster-prime-catcher-eight.snapshot.json.gz',
@@ -158,7 +158,12 @@ async function verifyCase(browser, origin, scenario, touch, negativeControls) {
     if (scenario.evolve !== undefined) {
       const latest = await page.evaluate(() => window.__boardPromptMessages.filter(message => message.type === 'StateUpdate').at(-1).data.stateData);
       const initial = decodeState(fixture.stateData), after = decodeState(latest);
-      for (const index of scenario.targets) assert.equal(after.players[1].bench[index].damage, (initial.players[1].bench[index].damage || 0) + 20);
+      for (const index of scenario.targets) {
+        // The saved puzzle opens with Battle Cage. The prompt still accepts
+        // the targets, then the Stadium prevents the counters.
+        assert.equal(after.players[1].bench[index].damage ?? 0,
+          (initial.players[1].bench[index].damage ?? 0) + scenario.expectedDamage);
+      }
     }
     assert.deepEqual(errors, []);
     return { scenario: scenario.name, input: touch ? 'touch' : 'mouse', passed: true };
