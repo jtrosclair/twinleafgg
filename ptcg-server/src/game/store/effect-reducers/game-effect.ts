@@ -3,6 +3,7 @@ import { checkCopiedAttackCost, runDelegatedCopiedAttackGenerator } from '../pre
 import { GameError } from '../../game-error';
 import { GameLog, GameMessage } from '../../game-message';
 import { BoardEffect, CardTag, CardType, SpecialCondition, SuperType } from '../card/card-types';
+import { EnergyCard } from '../card/energy-card';
 import { Resistance, Weakness } from '../card/pokemon-types';
 import { ApplyWeaknessEffect, DealDamageEffect } from '../effects/attack-effects';
 import {
@@ -404,7 +405,7 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
       // Older slots can hold an Energy card only in their secondary list.
       // The normal card fan-out already handled all other attached cards.
       for (const energy of new Set(effect.target.energies.cards)) {
-        if (energy.superType === SuperType.ENERGY && !effect.target.cards.includes(energy)) {
+        if (energy instanceof EnergyCard && !effect.target.cards.includes(energy)) {
           state = energy.reduceEffect(store, state, effect);
         }
       }

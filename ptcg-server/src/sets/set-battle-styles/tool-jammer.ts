@@ -1,3 +1,5 @@
+import { GameError } from '../../game/game-error';
+import { GameMessage } from '../../game/game-message';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
@@ -37,6 +39,3 @@ export class ToolJammer extends TrainerCard {
     return state;
   }
 }
-
-import { GameError } from '../../game/game-error';
-import { GameMessage } from '../../game/game-message';

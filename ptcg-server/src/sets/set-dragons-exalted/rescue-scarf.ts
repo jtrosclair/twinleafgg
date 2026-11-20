@@ -3,7 +3,6 @@ import { TrainerType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-
 import { BetweenTurnsEffect } from '../../game/store/effects/game-phase-effects';
 import { IS_TOOL_BLOCKED, WAS_KNOCKED_OUT_BY_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 import { registerKnockOutRescue } from '../../game/store/prefabs/knock-out-effects';
