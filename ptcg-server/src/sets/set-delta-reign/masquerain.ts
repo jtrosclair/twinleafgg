@@ -1,7 +1,7 @@
 import { CardType, PokemonCard, Stage, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { DEFENDING_POKEMON_CANNOT_ATTACK } from './block-attack';
+import { blockDefendingPokemonAfterDamage } from '../../game/store/prefabs/effect-of-attack-prefabs';
 import { BUG_OUT } from './bug-out';
 
 export class Masquerain extends PokemonCard {
@@ -34,9 +34,10 @@ export class Masquerain extends PokemonCard {
   public fullName: string = 'Masquerain M6';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Scary Patterns
+    // Frightening Patterns
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      return DEFENDING_POKEMON_CANNOT_ATTACK(store, state, effect, this);
+      blockDefendingPokemonAfterDamage(state, effect);
+      return state;
     }
 
     // Bug Out

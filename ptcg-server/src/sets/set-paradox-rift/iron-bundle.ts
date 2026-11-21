@@ -2,13 +2,12 @@ import { ChoosePokemonPrompt, GameError, PlayerType, PowerType, SlotType, State,
 import { GameMessage } from '../../game/game-message';
 import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { AddMarkerEffect } from '../../game/store/effects/attack-effects';
 import { CheckTableStateEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { UseAttackEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { CAN_APPLY_ABILITY_TO_TARGET } from '../../game/store/prefabs/effect-of-ability-prefabs';
-import { afterAttackDamageForOriginalDefender } from '../../game/store/prefabs/post-damage-identity';
+import { blockDefendingPokemonAfterDamage } from '../../game/store/prefabs/effect-of-attack-prefabs';
 import { ABILITY_USED, MOVE_POKEMON_OFF_BOARD, REMOVE_MARKER_AT_END_OF_TURN, USE_ABILITY_ONCE_PER_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class IronBundle extends PokemonCard {
@@ -103,13 +102,7 @@ export class IronBundle extends PokemonCard {
 
     // Ref: set-destined-rivals/team-rockets-raticate.ts (effects after damage).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      afterAttackDamageForOriginalDefender(state, effect, (effectStore, afterState, target) => {
-        if (!StateUtils.isEvolutionPokemon(target)) return afterState;
-
-        const lock = new AddMarkerEffect(effect, this.REFRIGERATED_STREAM_MARKER, this);
-        lock.target = target;
-        return effectStore.reduceEffect(afterState, lock);
-      });
+      blockDefendingPokemonAfterDamage(state, effect, true);
     }
 
     if (effect instanceof UseAttackEffect && effect.player.active.marker.hasMarker(this.REFRIGERATED_STREAM_MARKER, this)) {

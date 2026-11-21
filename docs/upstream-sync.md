@@ -6057,3 +6057,47 @@ eight recorded solutions won on both replays.
 The next `343b9ae42` modern paths are Joltik SFA's full shield, the printed
 defender restrictions on Eiscue ex, Iron Bundle and N's Vanillish, and damage
 timing on Mabosstiff PBL.
+
+## Gameplay re-audit, batch 100
+
+Closed the Scarlet & Violet and Mega Evolution card paths in `343b9ae42`.
+Scalding Block, Sheer Cold and Refrigerated Stream now apply a target-owned
+restriction to the same Pokémon after damage. Mist Energy still allows
+damage and prevents the restriction. Refrigerated Stream only applies the
+lock to an Evolution Pokémon. Frightening Patterns on Delta Reign Masquerain
+now uses the same path. The lock applies on the upcoming opposing turn,
+expires at the end of that turn, and clears when the affected Pokémon moves
+to the Bench, even if the original attacker has left play.
+[Eiscue ex](https://asia.pokemon-card.com/sg/card-search/detail/8983/)
+[N's Vanillish](https://www.pokemon-card.com/card-search/details.php/card/48560)
+[Iron Bundle](https://asia.pokemon-card.com/ph/card-search/detail/10733/)
+[Masquerain](https://www.pokemon-card.com/card-search/details.php/card/50518/)
+
+Scalding Block discards one attachment after damage, including Energy stored
+only in the attachment list of an older snapshot. Splashing Dodge on Joltik
+SFA prevents damage and attack effects on heads. Shred still deals damage
+through that protection.
+[Joltik](https://asia.pokemon-card.com/my/card-search/detail/13723/)
+
+Mabosstiff's Diving Headbutt adds 100 once after Weakness and Resistance,
+including when a copied attack sends the original Mabosstiff to the Lost
+Zone. Shred bypasses the modifier. Damage already reduced to zero by
+Resistance stays at zero. The existing attack name and saved marker values
+remain valid.
+[Mabosstiff](https://www.pokemon-card.com/card-search/details.php/card/50275/regu/all)
+[Mabosstiff ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%9E%E3%83%95%E3%82%A3%E3%83%86%E3%82%A3%E3%83%95&regulation_faq_main_item1=all)
+[Official damage calculation](https://asia.pokemon-card.com/my/wp-content/uploads/sites/6/2025/10/EN_advanced_manual-2025.pdf#page=6)
+
+All 11,732 engine checks, 110 combined WebView checks and 33 API checks
+pass. The new suite passes all 21 cases, including 12 failures on the
+preceding engine. All 559 compatible saved boards deserialize and round-trip
+byte-for-byte. All 5,484 sampled opening actions match. The attested
+production package passed the desktop and touch checks. All 211 client
+checks passed, and eight recorded solutions won on both replays.
+
+The next modern refactor group is `440e7857f`. Glimmora PAL and Fezandipiti
+TWM both still use a second random roll after showing a coin result.
+Live attacks reproduced a displayed heads followed by an awarded Prize
+for Glimmora and damage taken for Fezandipiti. A single attack on Cinccino
+ex generated two damage-prevention flips. Chansey MEW already has
+coverage for its one visible Prize flip and the timing of its self-benching.

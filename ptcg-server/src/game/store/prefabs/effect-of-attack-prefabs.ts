@@ -95,6 +95,28 @@ export function DEFENDING_POKEMON_CANNOT_ATTACK(
   return state;
 }
 
+class BlockDefendingPokemonAttackEffect extends EffectOfAttackEffect {
+  readonly type = 'BLOCK_DEFENDING_POKEMON_ATTACK_EFFECT';
+
+  applyEffect(): void {
+    this.target.cannotAttackNextTurn = true;
+  }
+}
+
+/** Apply an attack lock after damage to the original defender for its upcoming turn. */
+export function blockDefendingPokemonAfterDamage(state: State, effect: AttackEffect, evolutionOnly = false): void {
+  const source = effect.source.getPokemonCard();
+  if (!source) return;
+
+  afterAttackDamageForOriginalDefender(state, effect, (store, next, target) => {
+    if (evolutionOnly && !StateUtils.isEvolutionPokemon(target)) return next;
+    const restriction = new BlockDefendingPokemonAttackEffect(effect);
+    restriction.target = target;
+    restriction.markerSource = source;
+    return store.reduceEffect(next, restriction);
+  });
+}
+
 export function DEFENDING_POKEMON_CANNOT_EVOLVE_NEXT_TURN(
   _store: StoreLike, _state: State, effect: AttackEffect, _source: Card,
 ): State {

@@ -1,11 +1,12 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { State, StoreLike, StateUtils } from '../../game';
+import { State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { UseAttackEffect } from '../../game/store/effects/game-effects';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { blockDefendingPokemonAfterDamage } from '../../game/store/prefabs/effect-of-attack-prefabs';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class NsVanillish extends PokemonCard {
@@ -41,14 +42,12 @@ export class NsVanillish extends PokemonCard {
   public readonly DEFENDING_POKEMON_CANNOT_ATTACK_MARKER = 'DEFENDING_POKEMON_CANNOT_ATTACK_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Sheer Cold - prevent defending Pokemon from attacking during opponent's next turn
+    // Ref: set-paradox-rift/iron-bundle.ts (Refrigerated Stream), without a stage restriction.
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      opponent.active.marker.addMarker(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, this);
+      blockDefendingPokemonAfterDamage(state, effect);
     }
 
-    // Block attacks when marker is present
+    // Keep recognizing the attack marker used by older saved boards.
     if (effect instanceof UseAttackEffect && effect.player.active.marker.hasMarker(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, this)) {
       throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
@@ -61,6 +60,3 @@ export class NsVanillish extends PokemonCard {
     return state;
   }
 }
-
-
-

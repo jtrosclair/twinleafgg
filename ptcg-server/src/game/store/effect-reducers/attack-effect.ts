@@ -2,7 +2,7 @@ import { GustOpponentBenchEffect } from '../effects/attack-effects';
 import { GameError } from '../../game-error';
 import { GameLog, GameMessage } from '../../game-message';
 import { Effect } from '../effects/effect';
-import { State } from '../state/state';
+import { GamePhase, State } from '../state/state';
 import { StoreLike } from '../store-like';
 import {
   PutDamageEffect, DealDamageEffect, DiscardCardsEffect,
@@ -17,6 +17,7 @@ import {
 import { CoinFlipEffect } from '../effects/play-card-effects';
 import { AttackEffect, HealEffect } from '../effects/game-effects';
 import { StateUtils } from '../state-utils';
+import { MarkerConstants } from '../markers/marker-constants';
 import { getCardTarget } from '../../../simple-bot/simple-tactics/simple-tactics';
 import { EffectOfAttackEffect } from '../effects/effect-of-attack-effects';
 import { GameStatsTracker } from '../game-stats-tracker';
@@ -102,7 +103,14 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
       targetOwner.marker.addMarkerToState(targetOwner.DAMAGE_DEALT_MARKER);
     }
 
-    if (effect.damage > 0) effect.damage += effect.damageBonusAfterWeakness;
+    if (effect.damage > 0) {
+      effect.damage += effect.damageBonusAfterWeakness;
+      if (!ignoreDefendingDamageEffects && state.phase === GamePhase.ATTACK
+        && state.players[state.activePlayer] === sourceOwner && targetOwner !== sourceOwner
+        && target.marker.hasMarker(MarkerConstants.MABOSSTIFF_HEADBUTT_DAMAGE)) {
+        effect.damage += 100;
+      }
+    }
     effect.applyPostWeaknessReductions();
 
     if (!ignoreDefendingDamageEffects && target.preventDamageUpToNextTurn > 0

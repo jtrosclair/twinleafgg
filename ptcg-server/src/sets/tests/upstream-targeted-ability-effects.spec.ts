@@ -100,7 +100,7 @@ describe('Iron Bundle printed effects', () => {
       store.dispatch(new AttackAction(player1.id, 'Refrigerated Stream'));
       const target = store.state.players[1].active;
       expect(target.damage).toBe(80);
-      expect(target.marker.hasMarker('REFRIGERATED_STREAM_MARKER')).toBe(blocks);
+      expect(target.cannotAttackNextTurn).toBe(blocks);
     });
   }
 });

@@ -309,7 +309,9 @@ export function DISCARD_AVAILABLE_ENERGY_FROM_ATTACKER(
   const { player, source } = effect;
   const provided = new CheckProvidedEnergyEffect(player, source);
   state = store.reduceEffect(state, provided);
-  const eligible = provided.energyMap.filter(entry => source.cards.includes(entry.card)).map(entry => {
+  const eligible = provided.energyMap.filter(entry =>
+    source.cards.includes(entry.card) || source.energies.cards.includes(entry.card)
+  ).map(entry => {
     const supplies: CardType[] = [];
     while (supplies.length < amount && StateUtils.checkEnoughEnergy([entry], [...supplies, type])) {
       supplies.push(type);

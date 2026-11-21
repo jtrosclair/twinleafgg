@@ -1,10 +1,12 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { GamePhase, PlayerType, StoreLike, State, StateUtils } from '../../game';
+import { Player, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { MarkerConstants } from '../../game/store/markers/marker-constants';
+import { MarkerItem } from '../../game/store/state/card-marker';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Mabosstiff extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -34,35 +36,32 @@ export class Mabosstiff extends PokemonCard {
   public name: string = 'Mabosstiff';
   public fullName: string = 'Mabosstiff M5';
 
-  public readonly DIVING_DEBUFF_MARKER = 'M5_MABOSTIFF_DIVING';
-  public readonly CLEAR_DIVING_MARKER = 'M5_MABOSTIFF_CLEAR_DIVING';
+  public readonly DIVING_DEBUFF_MARKER = MarkerConstants.MABOSSTIFF_HEADBUTT_DAMAGE;
+  public readonly CLEAR_DIVING_MARKER = MarkerConstants.CLEAR_MABOSSTIFF_HEADBUTT_DAMAGE;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    // Diving Headbutt leaves the vulnerability on the attacker after damage.
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      player.active.marker.addMarker(this.DIVING_DEBUFF_MARKER, this);
-      opponent.marker.addMarker(this.CLEAR_DIVING_MARKER, this);
+      const { player, opponent, source } = effect;
+      const attacker = source.getPokemonCard();
+      afterAttackDamage(state, effect, (_store, next) => {
+        if (attacker && player.active === source && source.getPokemonCard() === attacker) {
+          source.marker.addMarker(this.DIVING_DEBUFF_MARKER, this, 'attack', 'pokemon');
+          opponent.marker.addMarker(this.CLEAR_DIVING_MARKER, this, 'attack', 'player');
+        }
+        return next;
+      });
     }
 
-    if ((effect instanceof DealDamageEffect || effect instanceof PutDamageEffect)
-      && state.phase === GamePhase.ATTACK
-      && effect.target.marker.hasMarker(this.DIVING_DEBUFF_MARKER, this)) {
-      const defenderOwner = StateUtils.findOwner(state, effect.target);
-      if (effect.player !== defenderOwner) {
-        effect.damage += 100;
-      }
-    }
+    return state;
+  }
 
-    if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.CLEAR_DIVING_MARKER, this)) {
-      effect.player.marker.removeMarker(this.CLEAR_DIVING_MARKER, this);
-      const opp = StateUtils.getOpponent(state, effect.player);
-      opp.forEachPokemon(PlayerType.TOP_PLAYER, cardList =>
-        cardList.marker.removeMarker(this.DIVING_DEBUFF_MARKER, this)
+  public reducePlayerMarkerEffect(_store: StoreLike, state: State, effect: Effect, owner: Player, marker: MarkerItem): State {
+    if (effect instanceof EndTurnEffect && effect.player === owner && marker.name === this.CLEAR_DIVING_MARKER) {
+      CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN(
+        state, effect, this.CLEAR_DIVING_MARKER, this.DIVING_DEBUFF_MARKER, this,
       );
     }
-
     return state;
   }
 }

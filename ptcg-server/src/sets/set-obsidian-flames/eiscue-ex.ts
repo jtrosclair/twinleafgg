@@ -6,8 +6,10 @@ import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { GameError, GameMessage, PlayerType, StateUtils } from '../../game';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { AttackEffect } from '../../game/store/effects/game-effects';
-import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
+import { UseAttackEffect } from '../../game/store/effects/game-effects';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { DISCARD_AVAILABLE_ENERGY_FROM_ATTACKER } from '../../game/store/prefabs/costs';
+import { blockDefendingPokemonAfterDamage } from '../../game/store/prefabs/effect-of-attack-prefabs';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 
 export class Eiscueex extends PokemonCard {
@@ -37,15 +39,18 @@ export class Eiscueex extends PokemonCard {
   public readonly SCALDING_BLOCK_MARKER = 'SCALDING_BLOCK_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    // Ref: set-paradox-rift/iron-bundle.ts (Refrigerated Stream), after outgoing damage.
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const opponent = effect.opponent;
-
-      DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1);
-      opponent.marker.addMarker(this.SCALDING_BLOCK_MARKER, this);
-      opponent.active.marker.addMarker(this.SCALDING_BLOCK_MARKER, this);
+      const attacker = effect.source.getPokemonCard();
+      afterAttackDamage(state, effect, (effectStore, next) =>
+        attacker && effect.source.getPokemonCard() === attacker
+          ? DISCARD_AVAILABLE_ENERGY_FROM_ATTACKER(effectStore, next, effect, CardType.COLORLESS, 1)
+          : next);
+      blockDefendingPokemonAfterDamage(state, effect);
     }
 
-    if (effect instanceof AttackEffect
+    // Snapshots saved before the attack lock used a typed slot flag.
+    if (effect instanceof UseAttackEffect
       && effect.player.marker.hasMarker(this.SCALDING_BLOCK_MARKER, this)
       && effect.source.marker.hasMarker(this.SCALDING_BLOCK_MARKER, this)) {
       throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
