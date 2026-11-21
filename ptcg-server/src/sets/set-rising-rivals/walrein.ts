@@ -62,7 +62,9 @@ export class Walrein extends PokemonCard {
           transfers = transfers || [];
           for (const transfer of transfers) {
             const target = StateUtils.getTarget(state, player, transfer.to);
-            store.reduceEffect(state, new AttachEnergyEffect(player, transfer.card as EnergyCard, target));
+            const attachEnergyEffect = new AttachEnergyEffect(player, transfer.card as EnergyCard, target);
+            attachEnergyEffect.sourcePower = this.powers[0].powerType;
+            store.reduceEffect(state, attachEnergyEffect);
           }
         });
       }, GameMessage.WANT_TO_USE_ABILITY);

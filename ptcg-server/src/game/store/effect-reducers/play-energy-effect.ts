@@ -1,4 +1,4 @@
-import { AfterAttachEnergyFromHandEffect, AttachEnergyEffect } from '../effects/play-card-effects';
+import { AfterAttachEnergyEffect, AfterAttachEnergyFromHandEffect, AttachEnergyEffect } from '../effects/play-card-effects';
 import { AttackEffect, MoveCardsEffect } from '../effects/game-effects';
 import { PutCountersEffect } from '../effects/attack-effects';
 import { GameError } from '../../game-error';
@@ -32,8 +32,9 @@ function emitAnimationEvent(store: StoreLike, eventName: string, data: {
 
 export function playEnergyReducer(store: StoreLike, state: State, effect: Effect): State {
 
-  if (effect instanceof AfterAttachEnergyFromHandEffect) {
-    const pending = effect.target.pendingEnergyAttachDamageCounters;
+  if (effect instanceof AfterAttachEnergyEffect) {
+    const handAttachment = effect instanceof AfterAttachEnergyFromHandEffect ? effect : undefined;
+    const pending = handAttachment && effect.target.pendingEnergyAttachDamageCounters;
     const attacker = pending && state.players.find(player => player.id === pending.attackerPlayerId);
     if (pending && attacker) {
       let source = attacker.active;
@@ -51,11 +52,13 @@ export function playEnergyReducer(store: StoreLike, state: State, effect: Effect
       });
     }
     const reactions = [...effect.reactions.values()].map(reaction => ({ ...reaction, target: effect.target }));
-    if (effect.reactionBatch) {
-      effect.reactionBatch.push(...reactions);
+    if (handAttachment?.reactionBatch) {
+      handAttachment.reactionBatch.push(...reactions);
     } else if (reactions.length > 0) {
       const chooser = state.players[state.activePlayer] ?? effect.player;
-      resolveHandEnergyReactions(store, state, chooser, reactions);
+      const resolve = () => resolveHandEnergyReactions(store, state, chooser, reactions);
+      if (!handAttachment && store.hasPrompts()) store.waitPrompt(state, resolve);
+      else resolve();
     }
     return state;
   }
@@ -114,9 +117,11 @@ export function playEnergyReducer(store: StoreLike, state: State, effect: Effect
     });
 
     if (fromHand && effect.target.cards.includes(effect.energyCard)) {
-      const completion = new AfterAttachEnergyFromHandEffect(effect.player, effect.energyCard, effect.target);
+      const completion = new AfterAttachEnergyFromHandEffect(effect.player, effect.energyCard, effect.target, effect.sourcePower);
       if (effect.completionBatch) effect.completionBatch.push(completion);
       else state = store.reduceEffect(state, completion);
+    } else if (effect.sourceZone) {
+      state = store.reduceEffect(state, new AfterAttachEnergyEffect(effect.player, effect.energyCard, effect.target));
     }
     return state;
   }

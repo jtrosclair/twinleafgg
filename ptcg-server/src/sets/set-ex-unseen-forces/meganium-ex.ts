@@ -1,11 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, CardTag } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
-import { StoreLike, State, GameMessage, GameError, AttachEnergyPrompt, PlayerType, SlotType, StateUtils } from '../../game';
+import { StoreLike, State, GameMessage, GameError, EnergyCard, AttachEnergyPrompt, PlayerType, SlotType, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { AttachEnergyEffect, AttachEnergyFromHandEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { HealEffect } from '../../game/store/effects/game-effects';
-import { ABILITY_USED, ADD_MARKER, BLOCK_IF_HAS_SPECIAL_CONDITION, HAS_MARKER, MOVE_CARD_TO, REMOVE_MARKER, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { ABILITY_USED, ADD_MARKER, BLOCK_IF_HAS_SPECIAL_CONDITION, HAS_MARKER, REMOVE_MARKER, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
 import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED } from '../../game/store/prefabs/attack-effects';
 
@@ -83,13 +83,12 @@ export class Meganiumex extends PokemonCard {
           ADD_MARKER(this.NURTURE_AND_HEAL_MARKER, player, this);
           ABILITY_USED(player, this);
 
-          //Attaching energy
           const target = StateUtils.getTarget(state, player, transfer.to);
-          MOVE_CARD_TO(state, transfer.card, target);
-
-          //Heal 30 from target
-          const healEffect = new HealEffect(player, target, 10);
-          state = store.reduceEffect(state, healEffect);
+          const attachment = new AttachEnergyEffect(player, transfer.card as EnergyCard, target);
+          attachment.sourcePower = effect.power.powerType;
+          store.reduceEffect(state, new AttachEnergyFromHandEffect(player, [attachment], false, attachedState => {
+            store.reduceEffect(attachedState, new HealEffect(player, target, 10));
+          }));
         }
       });
     }

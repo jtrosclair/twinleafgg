@@ -51,6 +51,7 @@ export function attachWithOptionalSecondEnergy(
   for (const card of candidates) {
     if (card === energyCard) continue;
     const extra = new AttachEnergyEffect(player, card, target);
+    extra.sourcePower = first.sourcePower;
     if (discardCost([first, extra]) > player.hand.cards.length - 2) continue;
     try {
       store.reduceEffect(state, new CheckEnergyAttachmentEffect(extra));

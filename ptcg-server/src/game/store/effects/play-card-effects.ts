@@ -2,6 +2,7 @@ import { Effect } from './effect';
 import { EnergyCard } from '../card/energy-card';
 import { Player } from '../state/player';
 import { PokemonCard } from '../card/pokemon-card';
+import type { PowerType } from '../card/pokemon-types';
 import { PokemonCardList } from '../state/pokemon-card-list';
 import { TrainerCard } from '../card/trainer-card';
 import { CardList } from '../state/card-list';
@@ -51,6 +52,7 @@ export class AttachEnergyEffect implements Effect {
   /** Set by the hand attachment resolver after checking interception and payment. */
   public handAttachmentPrepared = false;
   public completionBatch?: AfterAttachEnergyFromHandEffect[];
+  public sourcePower?: PowerType;
 
   constructor(
     player: Player, energyCard: EnergyCard, target: PokemonCardList,
@@ -111,18 +113,25 @@ export interface QueuedHandEnergyReaction extends HandEnergyReaction {
   target: PokemonCardList;
 }
 
-/** Sent only after an Energy card was successfully attached from the hand. */
-export class AfterAttachEnergyFromHandEffect implements Effect {
+export class AfterAttachEnergyEffect implements Effect {
   readonly type: string = PlayCardEffects.AFTER_ATTACH_ENERGY_EFFECT;
   public preventDefault = false;
   public readonly activePokemonAtAttachment: PokemonCard | undefined;
   public readonly recipientAtAttachment: PokemonCard | undefined;
   public readonly reactions = new Map<string, HandEnergyReaction>();
-  public reactionBatch?: QueuedHandEnergyReaction[];
 
   constructor(public player: Player, public energyCard: EnergyCard, public target: PokemonCardList) {
     this.activePokemonAtAttachment = player.active.getPokemonCard();
     this.recipientAtAttachment = target.getPokemonCard();
+  }
+}
+
+/** Sent only after an Energy card was successfully attached from the hand. */
+export class AfterAttachEnergyFromHandEffect extends AfterAttachEnergyEffect {
+  public reactionBatch?: QueuedHandEnergyReaction[];
+
+  constructor(player: Player, energyCard: EnergyCard, target: PokemonCardList, public readonly sourcePower?: PowerType) {
+    super(player, energyCard, target);
   }
 }
 

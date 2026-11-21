@@ -3957,3 +3957,56 @@ still win. The 2.50 MiB gzip build passed attestation, ten board scenarios,
 209 client-service checks, and the standard API suite passed 32 checks.
 The engine review still includes legacy hand-Energy source restrictions
 for Eevee, Beldum and Vileplume.
+
+## Gameplay re-audit, batch 55
+
+Eevee's Energy Evolution from Furious Fists and Sun & Moon asks whether to
+search after a Basic Energy from hand attaches successfully. The search
+uses the printed Energy type and evolves the Eevee in the affected slot.
+Declining leaves the deck in order. Accepting shuffles even after an empty
+selection. Sun & Moon also checks that it is the owner's turn. Welder
+finishes drawing first, and the active player can choose whether to
+resolve Energy Evolution before Arctozolt's Biting Whirlpool.
+[Official Sun & Moon Card-Dex](https://assets.pokemon.com/assets/cms2-ru-ru/pdf/trading-card-game/tcg_sun_moon_card_translation.pdf)
+[Official Energy Evolution rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%A8%E3%83%8A%E3%82%B8%E3%83%BC%E3%81%97%E3%82%93%E3%81%8B&regulation_header_search_item1=BW)
+[Pokémon Professor rulebook update](https://professorprogram.pokemon.com/news/11473085)
+
+Neo Discovery Eevee flips after confirmed hand attachments and the deck
+or discard paths that already use the typed attachment effect. On heads,
+its search uses the types the attached card provides, including Rainbow
+Energy. It evolves the recipient's actual slot and shuffles after the
+search. The discard interaction was stepped through with Dynamotor.
+Direct card moves that bypass the attachment effect and ordering across
+multiple non-hand reactions remain in the movement review.
+
+Beldum LA and Vileplume LA ask before using their Poké-Powers. Both check
+for hand origin, the pre-attack window, Special Conditions and the
+once-per-turn restriction. The reviewed Poké-Power attachment paths carry
+their source, including Meganium ex UF Nurture and Heal. The modern
+Spring Bloom Ability can still trigger Energy Reaction. Energy Reaction
+uses power-sourced Special Conditions. Disturbing Pollen locks Items,
+Tools, Supporters and Stadiums on heads.
+[Official Legends Awakened Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/DiamondPearl_LegendsAwakened.pdf)
+
+The three changed opening moves were Water Energy SUM attachments to
+Eevee on saved boards. Each now offers confirmation before its search.
+For each move, declining preserves deck order. Accepting and finding no
+matching evolution shuffles without changing deck contents or opening
+other prompts. Successful Bench and Active evolutions are covered by
+the focused engine checks.
+
+All 18 focused cases pass. Thirteen fail on the previous engine. All 559
+comparable saved snapshots match, and all seven recorded solutions win.
+The 5,225 sampled opening actions differ only on the three Eevee moves above.
+The full engine suite passes 10,694 checks, and 161 targeted checks pass
+with the existing local edits. The 2.50 MiB gzip production package passes
+attestation, ten board scenarios and 209 client-service checks. All 32
+standard API checks pass.
+
+The original ledger checkpoint, `7a6f5e50e`, marked eight of 35 commits
+titled `fix` as deferred and ten as partial. At this batch, the ledger has
+nine deferred and 56 partial commits across all titles. Of the 39 entries
+titled `fix`, 11 are partial and zero are deferred. This tally includes
+commits that mix gameplay with retired code. An individual defect count
+requires card-level review. Ampharos was originally deferred as part of
+the separately titled Ability refactor `db4eebfcf`.

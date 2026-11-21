@@ -96,7 +96,9 @@ export class Celebi extends PokemonCard {
           const extras = hasAlphaGrowth(target.getPokemonCard()) ? player.hand.cards.filter(
             (card): card is EnergyCard => card instanceof EnergyCard && card.name === 'Grass Energy'
           ) : [];
-          attachWithOptionalSecondEnergy(store, state, new AttachEnergyEffect(player, transfer.card, target), extras, false);
+          const attachment = new AttachEnergyEffect(player, transfer.card, target);
+          attachment.sourcePower = effect.power.powerType;
+          attachWithOptionalSecondEnergy(store, state, attachment, extras, false);
         }
 
       });

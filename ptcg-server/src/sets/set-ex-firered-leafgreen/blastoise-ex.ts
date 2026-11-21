@@ -66,6 +66,7 @@ export class Blastoiseex extends PokemonCard {
           const target = StateUtils.getTarget(state, player, transfer.to);
           const energyCard = transfer.card as EnergyCard;
           const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
+          attachEnergyEffect.sourcePower = effect.power.powerType;
           store.reduceEffect(state, attachEnergyEffect);
 
           target.damage += 10;

@@ -87,6 +87,7 @@ export class Feraligatr extends PokemonCard {
           }
           const energyCard = transfer.card as EnergyCard;
           const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
+          attachEnergyEffect.sourcePower = effect.power.powerType;
           store.reduceEffect(state, attachEnergyEffect);
         }
       });
