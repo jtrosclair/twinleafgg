@@ -1,3 +1,4 @@
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 import { GameMessage } from '../../game/game-message';
 import { StateUtils } from '../../game/store/state-utils';
 import { TrainerCard } from '../../game/store/card/trainer-card';
@@ -24,23 +25,19 @@ export class SurfingBeach extends TrainerCard {
     if (effect instanceof UseStadiumEffect && StateUtils.getStadiumCard(state) === this) {
       const player = effect.player;
 
-      let hasBenchWater = false;
-      let hasActiveWater = false;
+      const isEligible = (slot: typeof player.active) => {
+        const type = new CheckPokemonTypeEffect(slot);
+        store.reduceEffect(state, type);
+        return type.cardTypes.includes(CardType.WATER)
+          && !IS_STADIUM_EFFECT_BLOCKED(store, state, player, slot, this);
+      };
       const blocked: CardTarget[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, cardTarget) => {
-        const checkPokemonTypeEffect = new CheckPokemonTypeEffect(cardList);
-        store.reduceEffect(state, checkPokemonTypeEffect);
-        if (cardList === player.active && checkPokemonTypeEffect.cardTypes.includes(CardType.WATER)) {
-          hasActiveWater = true;
-        }
-        if (cardList !== player.active && checkPokemonTypeEffect.cardTypes.includes(CardType.WATER)) {
-          hasBenchWater = true;
-        } else {
-          blocked.push(cardTarget);
-        }
+      let hasEligibleBench = false;
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (slot, _card, target) => {
+        if (slot !== player.active && isEligible(slot)) hasEligibleBench = true;
+        else blocked.push(target);
       });
-
-      if (!(hasActiveWater && hasBenchWater)) {
+      if (!hasEligibleBench || !isEligible(player.active)) {
         throw new GameError(GameMessage.CANNOT_USE_STADIUM);
       }
 

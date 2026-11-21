@@ -1,3 +1,4 @@
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 import { Effect } from '../../game/store/effects/effect';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
@@ -23,7 +24,9 @@ export class NsCastle extends TrainerCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof CheckRetreatCostEffect && StateUtils.getStadiumCard(state) === this) {
-      if (effect.player.active.getPokemonCard()?.tags.includes(CardTag.NS)) {
+      const { player } = effect;
+      if (player.active.getPokemonCard()?.tags.includes(CardTag.NS)
+        && !IS_STADIUM_EFFECT_BLOCKED(store, state, player, player.active, this)) {
         effect.hasNoRetreatCost = true;
       }
     }

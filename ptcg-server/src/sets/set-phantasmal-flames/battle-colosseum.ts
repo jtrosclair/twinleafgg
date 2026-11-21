@@ -1,3 +1,4 @@
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
@@ -29,7 +30,8 @@ export class BattleColosseum extends TrainerCard {
         const sourceOwner = StateUtils.findOwner(state, sourcePokemon);
         if (sourceOwner === targetOpponent) {
           // Check if the target is a benched Pokemon (not active)
-          if (effect.target !== targetOwner.active && effect.target !== targetOpponent.active) {
+          if (targetOwner.bench.includes(effect.target)
+            && !IS_STADIUM_EFFECT_BLOCKED(store, state, targetOwner, effect.target, this)) {
             // Prevent damage counters to benched Pokemon from opponent's attacks/abilities
             effect.preventDefault = true;
           }
@@ -47,7 +49,8 @@ export class BattleColosseum extends TrainerCard {
           const sourceOwner = StateUtils.findOwner(state, sourceCardList);
           if (sourceOwner === targetOpponent) {
             // Check if the target is a benched Pokemon (not active)
-            if (effect.target !== targetOwner.active && effect.target !== targetOpponent.active) {
+            if (targetOwner.bench.includes(effect.target)
+              && !IS_STADIUM_EFFECT_BLOCKED(store, state, targetOwner, effect.target, this)) {
               // Prevent damage counters to benched Pokemon from opponent's attacks/abilities
               effect.preventDefault = true;
             }

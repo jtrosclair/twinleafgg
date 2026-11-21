@@ -1,3 +1,4 @@
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { CardType, TrainerType } from '../../game/store/card/card-types';
@@ -35,8 +36,10 @@ export class FullMetalLab extends TrainerCard {
       const checkPokemonType = new CheckPokemonTypeEffect(effect.target);
       store.reduceEffect(state, checkPokemonType);
 
-      if (checkPokemonType.cardTypes.includes(CardType.METAL)) {
-        effect.reduceDamage(30);
+      const owner = StateUtils.findOwner(state, effect.target);
+      if (owner !== effect.player && checkPokemonType.cardTypes.includes(CardType.METAL)
+        && !IS_STADIUM_EFFECT_BLOCKED(store, state, owner, effect.target, this)) {
+        effect.reduceDamageAfterWeakness(30, this.fullName);
       }
     }
 

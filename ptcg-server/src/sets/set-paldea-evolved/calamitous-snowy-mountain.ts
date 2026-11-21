@@ -1,3 +1,4 @@
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { CardType, Stage, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils, GameError, GameMessage, GameLog } from '../../game';
@@ -39,6 +40,7 @@ export class CalamitousSnowyMountain extends TrainerCard {
       }
 
       const owner = StateUtils.findOwner(state, effect.target);
+      if (IS_STADIUM_EFFECT_BLOCKED(store, state, owner, effect.target, this)) return state;
       store.log(state, GameLog.LOG_PLAYER_PLACES_DAMAGE_COUNTERS, { name: owner.name, damage: 20, target: effect.target.getPokemonCard()!.name, effect: this.name });
       effect.target.damage += 20;
     }

@@ -1,3 +1,4 @@
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 import { Effect } from '../../game/store/effects/effect';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
@@ -22,16 +23,10 @@ export class NightMine extends TrainerCard {
       const player = effect.player;
       const pokemonCard = player.active.getPokemonCard();
 
-      if (pokemonCard && pokemonCard.tags.includes(CardTag.POKEMON_TERA)) {
-        const index = effect.cost.indexOf(CardType.COLORLESS);
-        if (index > -1) {
-          effect.cost.splice(index, 0, CardType.COLORLESS);
-        } else {
-          effect.cost.push(CardType.COLORLESS);
-        }
-        return state;
+      if (pokemonCard?.tags.includes(CardTag.POKEMON_TERA)
+        && !IS_STADIUM_EFFECT_BLOCKED(store, state, player, player.active, this)) {
+        effect.cost.push(CardType.COLORLESS);
       }
-      return state;
     }
     return state;
   }

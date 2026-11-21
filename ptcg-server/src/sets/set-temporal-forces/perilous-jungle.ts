@@ -1,3 +1,4 @@
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { CardType, TrainerType } from '../../game/store/card/card-types';
@@ -35,7 +36,8 @@ export class PerilousJungle extends TrainerCard {
       const checkPokemonType = new CheckPokemonTypeEffect(effect.player.active);
       store.reduceEffect(state, checkPokemonType);
 
-      if ((checkPokemonType.cardTypes.includes(CardType.DARK))) {
+      if (checkPokemonType.cardTypes.includes(CardType.DARK)
+        || IS_STADIUM_EFFECT_BLOCKED(store, state, effect.player, effect.player.active, this)) {
         return state;
       }
 

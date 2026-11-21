@@ -1,3 +1,4 @@
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 import { Effect } from '../../game/store/effects/effect';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
@@ -25,8 +26,10 @@ export class GravityMountain extends TrainerCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (effect instanceof CheckHpEffect && StateUtils.getStadiumCard(state) === this) {
-      if (effect.target.getPokemonCard()?.stage === Stage.STAGE_2)
+      if (effect.target.isStage(Stage.STAGE_2)
+        && !IS_STADIUM_EFFECT_BLOCKED(store, state, effect.player, effect.target, this)) {
         effect.hp -= 30;
+      }
     }
 
 

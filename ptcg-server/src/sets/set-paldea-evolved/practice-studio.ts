@@ -1,8 +1,9 @@
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { Stage, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
-import { PutDamageEffect } from '../../game/store/effects/attack-effects';
+import { ApplyWeaknessEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { UseStadiumEffect } from '../../game/store/effects/game-effects';
 import { StateUtils } from '../../game/store/state-utils';
@@ -30,12 +31,12 @@ export class PracticeStudio extends TrainerCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof PutDamageEffect && StateUtils.getStadiumCard(state) === this) {
+    if (effect instanceof ApplyWeaknessEffect && StateUtils.getStadiumCard(state) === this) {
       const pokemonCard = effect.source.getPokemonCard();
       const opponent = StateUtils.getOpponent(state, effect.player);
 
-      const attack = effect.attack;
-      if (attack && attack.damage > 0 && effect.target === opponent.active && pokemonCard && pokemonCard.stage === Stage.STAGE_1) {
+      if (effect.damage > 0 && effect.target === opponent.active && pokemonCard?.stage === Stage.STAGE_1
+        && !IS_STADIUM_EFFECT_BLOCKED(store, state, effect.player, effect.source, this)) {
         effect.damage += 10;
       }
     }

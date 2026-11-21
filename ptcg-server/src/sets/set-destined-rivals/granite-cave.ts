@@ -1,4 +1,4 @@
-import { PokemonCard } from '../../game';
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { CardTag, TrainerType } from '../../game/store/card/card-types';
@@ -26,10 +26,10 @@ export class GraniteCave extends TrainerCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (effect instanceof PutDamageEffect && StateUtils.getStadiumCard(state) === this) {
-      const card = effect.target.getPokemonCard() as PokemonCard;
-
-      if (card.tags.includes(CardTag.STEVENS)) {
-        effect.damage = Math.max(0, effect.damage - 30);
+      const owner = StateUtils.findOwner(state, effect.target);
+      if (owner !== effect.player && effect.target.getPokemonCard()?.tags.includes(CardTag.STEVENS)
+        && !IS_STADIUM_EFFECT_BLOCKED(store, state, owner, effect.target, this)) {
+        effect.reduceDamageAfterWeakness(30, this.fullName);
       }
     }
 

@@ -1,4 +1,4 @@
-import { PlayerType, State, StateUtils, StoreLike } from '../../game';
+import { GameError, GameMessage, State, StateUtils, StoreLike } from '../../game';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType } from '../../game/store/card/card-types';
 import { Effect } from '../../game/store/effects/effect';
@@ -19,16 +19,17 @@ export class CelebratoryFanfare extends TrainerCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof UseStadiumEffect && StateUtils.getStadiumCard(state) === this) {
-      const player = effect.player;
+      const { player } = effect;
+      const damaged = player.getPokemonInPlay().filter(slot => slot.damage > 0
+        && !IS_STADIUM_EFFECT_BLOCKED(store, state, player, slot, this));
+      if (damaged.length === 0) throw new GameError(GameMessage.CANNOT_USE_STADIUM);
+      for (const slot of damaged) {
+        state = store.reduceEffect(state, new HealEffect(player, slot, 10));
+      }
 
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
-        if (IS_STADIUM_EFFECT_BLOCKED(store, state, player, cardList, this)) {
-          return;
-        }
-        store.reduceEffect(state, new HealEffect(player, cardList, 10));
+      return store.waitPrompt(state, () => {
+        store.reduceEffect(state, new EndTurnEffect(player));
       });
-
-      store.reduceEffect(state, new EndTurnEffect(player));
     }
 
     return state;

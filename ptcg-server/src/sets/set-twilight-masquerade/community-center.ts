@@ -1,3 +1,6 @@
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
+import { Effect } from '../../game/store/effects/effect';
+import { StateUtils } from '../../game/store/state-utils';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { HealEffect } from '../../game/store/effects/game-effects';
@@ -6,7 +9,6 @@ import { TrainerType } from '../../game/store/card/card-types';
 import { UseStadiumEffect } from '../../game/store/effects/game-effects';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
-import { PlayerType } from '../../game/store/actions/play-card-action';
 
 export class CommunityCenter extends TrainerCard {
 
@@ -26,19 +28,18 @@ export class CommunityCenter extends TrainerCard {
 
   public text = 'Once during each player\'s turn, if that player has already played a Supporter from their hand, they may heal 10 damage from each of their Pokémon';
 
-  useStadium(store: StoreLike, state: State, effect: UseStadiumEffect): State {
+  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    if (!(effect instanceof UseStadiumEffect) || StateUtils.getStadiumCard(state) !== this) return state;
 
-    const player = effect.player;
-
-    // Check if player has 6 Pokemon in play
-    if (player.supporterTurn == 0) {
+    const { player } = effect;
+    const damaged = player.getPokemonInPlay().filter(slot => slot.damage > 0
+      && !IS_STADIUM_EFFECT_BLOCKED(store, state, player, slot, this));
+    if (player.supporterTurn === 0 || damaged.length === 0) {
       throw new GameError(GameMessage.CANNOT_USE_STADIUM);
     }
-
-    player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
-      const healEffect = new HealEffect(player, cardList, 10);
-      state = store.reduceEffect(state, healEffect);
-    });
+    for (const slot of damaged) {
+      state = store.reduceEffect(state, new HealEffect(player, slot, 10));
+    }
     return state;
   }
 }

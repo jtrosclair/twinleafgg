@@ -1,3 +1,4 @@
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 import { Effect } from '../../game/store/effects/effect';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
@@ -26,8 +27,8 @@ export class CalamitousWasteland extends TrainerCard {
     if (effect instanceof CheckRetreatCostEffect && StateUtils.getStadiumCard(state) === this) {
       const player = effect.player;
 
-      if (player.active.isStage(Stage.BASIC)) {
-
+      if (player.active.isStage(Stage.BASIC)
+        && !IS_STADIUM_EFFECT_BLOCKED(store, state, player, player.active, this)) {
         const checkPokemonTypeEffect = new CheckPokemonTypeEffect(player.active);
         store.reduceEffect(state, checkPokemonTypeEffect);
 

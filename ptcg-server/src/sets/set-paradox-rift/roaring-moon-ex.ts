@@ -5,6 +5,8 @@ import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 import { Effect } from '../../game/store/effects/effect';
 import { ConfirmPrompt, GameMessage, StateUtils } from '../../game';
+import { MoveCardsEffect } from '../../game/store/effects/game-effects';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 import { KnockOutOpponentEffect } from '../../game/store/effects/attack-effects';
 import { THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
@@ -71,16 +73,16 @@ export class RoaringMoonex extends PokemonCard {
           effect.player.id,
           GameMessage.CALAMITY_STORM,
         ), wantToUse => {
-          if (wantToUse) {
-            // Discard Stadium
-            const cardList = StateUtils.findCardList(state, stadiumCard);
-            if (cardList) {
-              const player = StateUtils.findOwner(state, cardList);
-              cardList.moveTo(player.discard);
-            }
-            effect.damage += 120;
-            return state;
-          }
+          if (!wantToUse) return state;
+
+          effect.damage += 120;
+          afterAttackDamage(state, effect, (attackStore, attackState) => {
+            if (StateUtils.getStadiumCard(attackState) !== stadiumCard) return attackState;
+            const stadium = StateUtils.findCardList(attackState, stadiumCard);
+            const owner = StateUtils.findOwner(attackState, stadium);
+            return attackStore.reduceEffect(attackState,
+              new MoveCardsEffect(stadium, owner.discard, { sourceCard: this, sourceEffect: effect }));
+          });
           return state;
         });
         return state;

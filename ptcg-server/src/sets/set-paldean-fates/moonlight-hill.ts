@@ -1,6 +1,8 @@
-import { CardType, StoreLike, State, EnergyCard, TrainerCard, TrainerType, GameError, GameMessage, StateUtils, ChooseCardsPrompt, SuperType, PlayerType } from '../../game';
+import { CardType, StoreLike, State, EnergyCard, EnergyType, TrainerCard, TrainerType, GameError, GameMessage, StateUtils, ChooseCardsPrompt, SuperType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { HealEffect, UseStadiumEffect } from '../../game/store/effects/game-effects';
+import { HealEffect, MoveCardsEffect, UseStadiumEffect } from '../../game/store/effects/game-effects';
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
+
 export class MoonlightHill extends TrainerCard {
 
   public regulationMark = 'G';
@@ -17,46 +19,34 @@ export class MoonlightHill extends TrainerCard {
 
   public fullName = 'Moonlit Hill PAF';
 
-  public text = 'Once during each player\'s turn, that play may discard a Basic [P] Energy from their hand. If they do, they may heal 30 damage from each of their Pokémon.';
+  public text = 'Once during each player\'s turn, that player may discard a Basic [P] Energy from their hand. If they do, they may heal 30 damage from each of their Pokémon.';
 
-  reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof UseStadiumEffect && StateUtils.getStadiumCard(state) === this) {
-      return this.useStadium(store, state, effect);
-    }
-    return state;
-  }
+  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    if (!(effect instanceof UseStadiumEffect) || StateUtils.getStadiumCard(state) !== this) return state;
 
-  useStadium(store: StoreLike, state: State, effect: UseStadiumEffect): State {
-    const player = effect.player;
+    const { player } = effect;
+    const eligible = player.getPokemonInPlay().filter(slot => slot.damage > 0
+      && !IS_STADIUM_EFFECT_BLOCKED(store, state, player, slot, this));
+    const hasPayment = player.hand.cards.some(card => card instanceof EnergyCard
+      && card.energyType === EnergyType.BASIC && card.name === 'Psychic Energy');
+    if (!hasPayment || eligible.length === 0) throw new GameError(GameMessage.CANNOT_USE_STADIUM);
 
-    if (effect instanceof UseStadiumEffect && StateUtils.getStadiumCard(state) === this) {
-      throw new GameError(GameMessage.CANNOT_USE_STADIUM);
-    }
-
-    const hasEnergyInHand = player.hand.cards.some(c => {
-      return c instanceof EnergyCard;
-    });
-    if (!hasEnergyInHand) {
-      throw new GameError(GameMessage.CANNOT_USE_POWER);
-    }
-    state = store.prompt(state, new ChooseCardsPrompt(
-      player,
-      GameMessage.CHOOSE_CARD_TO_DISCARD,
-      player.hand,
-      { superType: SuperType.ENERGY, cardType: CardType.PSYCHIC },
-      { allowCancel: true, min: 1, max: 1 }
+    const previousUse = player.stadiumUsedTurn;
+    return store.prompt(state, new ChooseCardsPrompt(
+      player, GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand,
+      { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Psychic Energy' },
+      { allowCancel: true, min: 1, max: 1 },
     ), cards => {
-      cards = cards || [];
-      if (cards.length === 0) {
+      if (!cards?.length) {
+        player.stadiumUsedTurn = previousUse;
         return;
       }
-      // Heal each Pokemon by 10 damage
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
-        const healEffect = new HealEffect(player, cardList, 30);
-        state = store.reduceEffect(state, healEffect);
-      });
-      return state;
+      const move = new MoveCardsEffect(player.hand, player.discard, { cards, sourceCard: this });
+      state = store.reduceEffect(state, move);
+      if (move.preventDefault || !player.discard.cards.includes(cards[0])) return;
+      for (const slot of eligible) {
+        state = store.reduceEffect(state, new HealEffect(player, slot, 30));
+      }
     });
-    return state;
   }
 }

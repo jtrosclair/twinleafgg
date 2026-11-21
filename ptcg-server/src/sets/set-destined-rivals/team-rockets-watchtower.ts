@@ -1,3 +1,4 @@
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 import { Effect } from '../../game/store/effects/effect';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
@@ -8,7 +9,7 @@ import { TrainerType, CardType } from '../../game/store/card/card-types';
 import { StateUtils } from '../../game/store/state-utils';
 import { UseStadiumEffect, PowerEffect } from '../../game/store/effects/game-effects';
 import { CheckPokemonPowersEffect } from '../../game/store/effects/check-effects';
-import { PokemonCardList, PowerType } from '../../game';
+import { PokemonCard, PowerType } from '../../game';
 
 export class TeamRocketsWatchtower extends TrainerCard {
   public trainerType: TrainerType = TrainerType.STADIUM;
@@ -22,37 +23,22 @@ export class TeamRocketsWatchtower extends TrainerCard {
   public text: string =
     '[C] Pokémon in play (both yours and your opponent\'s) have no Abilities.';
 
+  private blocksAbility(store: StoreLike, state: State, card: PokemonCard): boolean {
+    if (card.cardType !== CardType.COLORLESS || StateUtils.getStadiumCard(state) !== this) return false;
+    const slot = StateUtils.findPokemonSlot(state, card);
+    return !!slot && !IS_STADIUM_EFFECT_BLOCKED(store, state, StateUtils.findOwner(state, slot), slot, this);
+  }
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
-    if (effect instanceof CheckPokemonPowersEffect && StateUtils.getStadiumCard(state) === this) {
-      const targetPokemon = effect.target;
-      if (!targetPokemon) {
-        return state;
-      }
-
-      const targetCardList = StateUtils.findCardList(state, targetPokemon);
-      if (targetPokemon.cardType === CardType.COLORLESS && targetCardList instanceof PokemonCardList) {
-        // Filter out all abilities
-        effect.powers = effect.powers.filter(power =>
-          power.powerType !== PowerType.ABILITY
-        );
-      }
+    if (effect instanceof CheckPokemonPowersEffect && effect.target && this.blocksAbility(store, state, effect.target)) {
+      effect.powers = effect.powers.filter(power =>
+        power.powerType !== PowerType.ABILITY || power.exemptFromAbilityLock || power.useFromHand || power.useFromDiscard);
     }
 
-    if (effect instanceof PowerEffect && StateUtils.getStadiumCard(state) === this) {
-      const pokemonCard = effect.card;
-
-      if (effect.power.useFromDiscard || effect.power.useFromHand) {
-        return state;
-      }
-
-      if (pokemonCard.cardType === CardType.COLORLESS && !effect.power.exemptFromAbilityLock) {
-        if (pokemonCard.powers.some(power => power.powerType === PowerType.ABILITY)) {
-          throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
-        }
-
-        return state;
-      }
+    if (effect instanceof PowerEffect && effect.power.powerType === PowerType.ABILITY
+      && !effect.power.exemptFromAbilityLock && !effect.power.useFromHand && !effect.power.useFromDiscard
+      && this.blocksAbility(store, state, effect.card)) {
+      throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
 
     if (effect instanceof UseStadiumEffect && StateUtils.getStadiumCard(state) === this) {

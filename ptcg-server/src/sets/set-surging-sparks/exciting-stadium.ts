@@ -1,3 +1,4 @@
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 import { Effect } from '../../game/store/effects/effect';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
@@ -25,7 +26,8 @@ export class ExcitingStadium extends TrainerCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof CheckHpEffect && StateUtils.getStadiumCard(state) === this) {
       const pokemonCard = effect.target;
-      if (pokemonCard && pokemonCard.isStage(Stage.BASIC)) {
+      if (pokemonCard.isStage(Stage.BASIC)
+        && !IS_STADIUM_EFFECT_BLOCKED(store, state, effect.player, pokemonCard, this)) {
         effect.hp += 30;
       }
     }

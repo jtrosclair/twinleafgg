@@ -6214,3 +6214,57 @@ All 5,484 existing sampled opening actions match. The two extra Memory
 Dive candidates both reject cleanly on their saved opening boards.
 The attested simulator passes all ten desktop and touch checks and 211
 client checks. Eight recorded puzzle solutions win on both replays.
+
+## Gameplay re-audit, batch 104
+
+Reviewed the Scarlet & Violet and Mega Evolution Stadium paths from
+`cfe494c46`. New Moon now applies to the actual Pokémon affected by
+Pokémon League Headquarters, Nighttime Mine, N's Castle, Calamitous
+Wasteland, Calamitous Snowy Mountain, Lively Stadium, Gravity Mountain,
+Perilous Jungle, Team Rocket's Watchtower, Postwick, Practice Studio,
+Granite Cave, Full Metal Lab, Surfing Beach, Battle Cage and
+Neutralization Zone. Previous implementations already cover Beach Court,
+Festival Grounds, Jamming Tower, Forest of Vitality, Risky Ruins,
+Ange Floette and the three Delta Reign dual Stadiums.
+[New Moon, Neutralization Zone and Forest of Vitality rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AB%E3%83%8A%E3%83%88%E3%83%BC%E3%83%B3&page=1&regulation=all&regulation_faq_main=)
+[Practice Studio and Calamitous Snowy Mountain rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AB%E3%83%8A%E3%83%88%E3%83%BC%E3%83%B3&page=3&regulation_faq_main_item1=all)
+[Pokémon League Headquarters](https://asia.pokemon-card.com/sg/card-search/detail/9133/)
+[Nighttime Mine](https://asia.pokemon-card.com/sg/card-search/detail/24778/)
+[Surfing Beach](https://asia.pokemon-card.com/sg/card-search/detail/21721/)
+
+Practice Studio adds damage before Weakness and Resistance and checks
+New Moon on the attacker. Neutralization Zone checks the printed ex and
+V categories for the attacker and Rule Box status for the defender. It
+prevents damage before Calamity Storm discards the Stadium, as ruled
+officially. Standard discard-to-hand and discard-to-deck move effects
+leave Neutralization Zone behind and move any other cards ordered by
+the effect. Recovery selection and effects staging a move in a temporary
+list still need individual verification.
+[Neutralization Zone card](https://asia.pokemon-card.com/my/card-search/detail/13782/)
+[Calamity Storm and Pokémon ex/V rulings](https://www.pokemon-card.com/rules/faq/search.php?page=3&regulation=all&sc_group_id=917)
+
+Moonlit Hill prompts for and discards a Basic Psychic Energy, restores
+the option after cancellation and heals the eligible Pokémon.
+Community Center activates after a Supporter from hand. Both Fanfare
+variants share the heal handler and end the turn after all heals and
+their prompts finish.
+[Moonlit Hill](https://asia.pokemon-card.com/sg/card-search/detail/11171/)
+[Community Center](https://asia.pokemon-card.com/sg/card-search/detail/12629/)
+[Celebration Fanfare print](https://www.pokemon-card.com/card-search/details.php/card/44244/regu/all)
+
+The focused suite passes 23 cases. The full engine suite passes 11,807,
+the combined WebView checkout passes 125 and the API passes 33. All 559 compatible saved boards have identical serialized
+and expanded states. All 5,486 sampled opening actions match. Of 359
+Stadium activations, 354 match and five now reject clicking the passive
+Neutralization Zone. Surfing Beach retains the same legal selections
+on both saved boards that offer its switch.
+The attested package passed the desktop and touch checks and all 211
+client checks. Eight recorded solutions won both replays.
+
+Live follow-up probes reproduce two remaining source-selection issues.
+Benched Alakazam ex deals its ordinary 120 damage with two Psychic
+Energy, but gets charged one extra under Pokémon League Headquarters
+when its Active teammate is Basic, and under Nighttime Mine when its
+Active teammate is Tera. Dedenne's Electromagnetic Sonar still offers a
+recovery prompt when Neutralization Zone is its only discarded Trainer.
+Neutralization Zone stays in the discard after the attempted choice.
