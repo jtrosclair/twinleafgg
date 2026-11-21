@@ -1,9 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
-import { Card, ChooseCardsPrompt, ConfirmPrompt, GameMessage, PokemonCardList, PowerType, ShuffleDeckPrompt, State, StoreLike } from '../../game';
+import { ChooseCardsPrompt, GameMessage, GamePhase, PowerType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
+import { CONFIRMATION_PROMPT, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
 
 export class Skiploom extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -36,54 +38,25 @@ export class Skiploom extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && effect.target.getPokemons().some(card => card === this)) {
-      const player = effect.player;
-
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      if (player.deck.cards.length === 0) {
-        return state;
-      }
-      return store.prompt(state, new ConfirmPrompt(
-        effect.player.id,
-        GameMessage.WANT_TO_USE_ABILITY,
-      ), wantToUse => {
-        if (wantToUse) {
-          let cards: Card[] = [];
-
-          state = store.prompt(state, new ChooseCardsPrompt(
-            player,
-            GameMessage.CHOOSE_CARD_TO_EVOLVE,
-            player.deck,
-            { superType: SuperType.POKEMON, stage: Stage.STAGE_2, evolvesFrom: 'Skiploom' },
-            { min: 1, max: 1, allowCancel: true }
-          ), selected => {
-            cards = selected || [];
-            if (cards.length > 0) {
-              if (effect.target.cards === player.active.cards) {
-                // Evolve Pokemon
-                player.deck.moveCardsTo(cards, player.active);
-                player.active.clearEffects();
-                player.active.pokemonPlayedTurn = state.turn;
-              } else {
-                const benchIndex = player.bench.indexOf(effect.target as PokemonCardList);
-                player.deck.moveCardsTo(cards, player.bench[benchIndex]);
-                player.bench[benchIndex].clearEffects();
-                player.bench[benchIndex].pokemonPlayedTurn = state.turn;
-              }
-
-
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this) {
+      const { player, target } = effect;
+      const canUse = () => state.players[state.activePlayer] === player
+        && (state.phase === GamePhase.PLAYER_TURN || state.phase === GamePhase.ATTACK)
+        && target.getPokemonCard() === this && player.deck.cards.length > 0;
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        CONFIRMATION_PROMPT(store, state, player, accepted => {
+          if (!accepted || !canUse()) return;
+          store.prompt(state, new ChooseCardsPrompt(player, GameMessage.CHOOSE_CARD_TO_EVOLVE, player.deck,
+            { superType: SuperType.POKEMON, stage: Stage.STAGE_2, evolvesFrom: this.name },
+            { min: 0, max: 1, allowCancel: false }), selected => {
+            const evolution = selected[0];
+            if (evolution instanceof PokemonCard && canUse() && player.deck.cards.includes(evolution)) {
+              store.reduceEffect(state, new EvolveEffect(player, target, evolution, player.deck));
             }
-
-            return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-              player.deck.applyOrder(order);
-            });
+            SHUFFLE_DECK(store, state, player);
           });
-        }
-      });
+        });
+      }, canUse);
     }
 
     return state;

@@ -2,7 +2,8 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, EnergyType, Stage, SuperType } from '../../game/store/card/card-types';
 import { AttachEnergyPrompt, EnergyCard, GameMessage, PlayerType, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { attachedEnergyProvides, queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
 import { HealEffect } from '../../game/store/effects/game-effects';
 import { COIN_FLIP_PROMPT, MOVE_CARDS, SEARCH_DECK_FOR_CARDS_TO_HAND, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
@@ -40,18 +41,10 @@ export class Manaphy extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Aqua Skin
-    if (effect instanceof AttachEnergyEffect && effect.target.getPokemonCard() === this) {
-      const player = effect.player;
-      if (!player.hand.cards.includes(effect.energyCard)) {
-        return state;
-      }
-      if (
-        effect.energyCard.energyType === EnergyType.BASIC &&
-        effect.energyCard.provides.includes(CardType.WATER)
-      ) {
-        const healEffect = new HealEffect(player, effect.target, 20);
-        store.reduceEffect(state, healEffect);
-      }
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this) {
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        store.reduceEffect(state, new HealEffect(effect.player, effect.target, 20));
+      }, () => attachedEnergyProvides(store, state, effect, CardType.WATER));
     }
 
     // Chase Up

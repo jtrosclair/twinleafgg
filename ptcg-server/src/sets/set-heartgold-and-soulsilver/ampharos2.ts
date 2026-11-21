@@ -39,23 +39,18 @@ export class Ampharos2 extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Conductivity
     if (effect instanceof AfterAttachEnergyFromHandEffect) {
-      const attachingPlayer = effect.player;
-      const owner = StateUtils.getOpponent(state, attachingPlayer);
-
-      if (!StateUtils.isPokemonInPlay(owner, this)) {
-        return state;
-      }
-
-      if (IS_POKEBODY_BLOCKED(store, state, owner, this)) {
-        return state;
-      }
-
-      store.reduceEffect(state, new PlaceDamageCountersEffect(
-        owner,
-        effect.target,
-        10,
-        this,
-      ));
+      const { player, target } = effect;
+      const owner = StateUtils.getOpponent(state, player);
+      const recipient = effect.recipientAtAttachment;
+      const power = this.powers[0];
+      const canResolve = () => !!recipient && target.getPokemonCard() === recipient
+        && player.getPokemonInPlay().includes(target) && StateUtils.isPokemonInPlay(owner, this)
+        && !IS_POKEBODY_BLOCKED(store, state, owner, this);
+      if (canResolve()) effect.reactions.set(`${power.name}:${this.id}`, {
+        label: power.name,
+        canResolve,
+        resolve: () => { store.reduceEffect(state, new PlaceDamageCountersEffect(owner, target, 10, this, power)); },
+      });
     }
 
     // Lightning Crush

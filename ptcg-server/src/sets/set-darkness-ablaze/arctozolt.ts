@@ -37,10 +37,18 @@ export class Arctozolt extends PokemonCard {
 
     // Ref: upstream db4eebfcf (opponent's attachment from hand and preventable counters).
     if (effect instanceof AfterAttachEnergyFromHandEffect) {
-      const owner = StateUtils.getOpponent(state, effect.player);
-      if (StateUtils.isPokemonInPlay(owner, this) && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
-        state = store.reduceEffect(state, new PlaceDamageCountersEffect(owner, effect.target, 20, this, this.powers[0]));
-      }
+      const { player, target } = effect;
+      const owner = StateUtils.getOpponent(state, player);
+      const recipient = effect.recipientAtAttachment;
+      const power = this.powers[0];
+      const canResolve = () => !!recipient && target.getPokemonCard() === recipient
+        && player.getPokemonInPlay().includes(target) && StateUtils.isPokemonInPlay(owner, this)
+        && !IS_ABILITY_BLOCKED(store, state, owner, this);
+      if (canResolve()) effect.reactions.set(`${power.name}:${this.id}`, {
+        label: power.name,
+        canResolve,
+        resolve: () => { store.reduceEffect(state, new PlaceDamageCountersEffect(owner, target, 20, this, power)); },
+      });
     }
 
     return state;

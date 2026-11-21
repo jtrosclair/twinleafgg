@@ -1,10 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, EnergyType, Stage, SuperType } from '../../game/store/card/card-types';
-import { AttachEnergyPrompt, CardList, ChoosePokemonPrompt, EnergyCard, GameMessage, PlayerType, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
+import { AttachEnergyPrompt, CardList, ChoosePokemonPrompt, EnergyCard, GameMessage, GamePhase, PlayerType, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { attachedEnergyProvides, queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
 import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { ABILITY_USED, ADD_MARKER, CONFIRMATION_PROMPT, HAS_MARKER, IS_POKEPOWER_BLOCKED, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { ABILITY_USED, ADD_MARKER, CONFIRMATION_PROMPT, HAS_MARKER, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Raikou extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -37,46 +38,23 @@ export class Raikou extends PokemonCard {
   public readonly ABILITY_USED_MARKER = 'ABILITY_USED_MARKER';
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Thunder Rumble
-    if (effect instanceof AttachEnergyEffect && effect.target.getPokemonCard() === this) {
-      const player = effect.player;
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this) {
+      const { player } = effect;
       const opponent = StateUtils.getOpponent(state, player);
-
-      if (effect.energyCard.name !== 'Lightning Energy') {
-        return state;
-      }
-      if (IS_POKEPOWER_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-      if (HAS_MARKER(this.ABILITY_USED_MARKER, player, this)) {
-        return state;
-      }
-
-      const hasBench = opponent.bench.some(b => b.cards.length > 0);
-      if (!hasBench) {
-        return state;
-      }
-
-      CONFIRMATION_PROMPT(store, state, player, result => {
-        if (!result) {
-          return;
-        }
-        ADD_MARKER(this.ABILITY_USED_MARKER, player, this);
-        ABILITY_USED(player, this);
-
-        store.prompt(state, new ChoosePokemonPrompt(
-          player.id,
-          GameMessage.CHOOSE_POKEMON_TO_DAMAGE,
-          PlayerType.TOP_PLAYER,
-          [SlotType.BENCH],
-          { min: 1, max: 1, allowCancel: false }
-        ), selected => {
-          const target = selected[0];
-          store.reduceEffect(
-            state,
-            new PlaceDamageCountersEffect(player, target, 10, this),
-          );
+      const canUse = () => state.players[state.activePlayer] === player && state.phase === GamePhase.PLAYER_TURN
+        && !HAS_MARKER(this.ABILITY_USED_MARKER, player, this) && opponent.bench.some(slot => slot.getPokemonCard())
+        && attachedEnergyProvides(store, state, effect, CardType.LIGHTNING);
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        CONFIRMATION_PROMPT(store, state, player, accepted => {
+          if (!accepted || !canUse()) return;
+          ADD_MARKER(this.ABILITY_USED_MARKER, player, this);
+          ABILITY_USED(player, this);
+          store.prompt(state, new ChoosePokemonPrompt(player.id, GameMessage.CHOOSE_POKEMON_TO_DAMAGE,
+            PlayerType.TOP_PLAYER, [SlotType.BENCH], { min: 1, max: 1, allowCancel: false }), ([target]) => {
+            if (target) store.reduceEffect(state, new PlaceDamageCountersEffect(player, target, 10, this, this.powers[0]));
+          });
         });
-      });
+      }, canUse);
     }
 
     // Thunder Climb

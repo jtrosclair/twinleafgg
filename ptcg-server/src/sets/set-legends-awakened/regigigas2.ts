@@ -5,10 +5,10 @@ import { PowerType } from '../../game';
 import { State } from '../../game';
 import { StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
 import { THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON } from '../../game/store/prefabs/attack-effects';
 import { COIN_FLIP_PROMPT } from '../../game/store/prefabs/prefabs';
-import { IS_POKEBODY_BLOCKED } from '../../game/store/prefabs/prefabs';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Regigigas2 extends PokemonCard {
@@ -42,11 +42,10 @@ export class Regigigas2 extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Recover Mechanism
-    if (effect instanceof AttachEnergyEffect && effect.target.getPokemonCard() === this) {
-      if (!IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
-        const conditions = effect.target.specialConditions.slice();
-        conditions.forEach(condition => effect.target.removeSpecialCondition(condition));
-      }
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this) {
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        effect.target.clearAllSpecialConditions();
+      });
     }
 
     // Gigaton Punch

@@ -1,7 +1,8 @@
 import { CardType, CoinFlipPrompt, GameMessage, PokemonCard, PowerType, Stage, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Combusken extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -56,26 +57,9 @@ export class Combusken extends PokemonCard {
       });
     }
 
-    if (effect instanceof AttachEnergyEffect && effect.target.cards.includes(this)) {
-      const player = effect.player;
-
-      if (effect.target.specialConditions.length === 0) {
-        return state;
-      }
-
-      const pokemonCard = effect.target.getPokemonCard();
-      if (pokemonCard !== this) {
-        return state;
-      }
-
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      const conditions = effect.target.specialConditions.slice();
-      conditions.forEach(condition => {
-        effect.target.removeSpecialCondition(condition);
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this) {
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        effect.target.clearAllSpecialConditions();
       });
     }
 

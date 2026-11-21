@@ -3,8 +3,8 @@ import { CardType, Stage } from '../../game/store/card/card-types';
 import { PowerType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { DRAW_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
 import { HealEffect } from '../../game/store/effects/game-effects';
 
 export class Magearna extends PokemonCard {
@@ -37,14 +37,10 @@ export class Magearna extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Auto Heal
-    if (effect instanceof AttachEnergyEffect && effect.player.active.cards.includes(this)) {
-      const player = effect.player;
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-      const healEffect = new HealEffect(effect.player, effect.target, 90);
-      store.reduceEffect(state, healEffect);
-      return state;
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.activePokemonAtAttachment === this) {
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        store.reduceEffect(state, new HealEffect(effect.player, effect.target, 90));
+      });
     }
 
     // Spike Draw

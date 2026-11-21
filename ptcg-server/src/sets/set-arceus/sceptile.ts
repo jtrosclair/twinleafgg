@@ -4,9 +4,10 @@ import { PowerType, State, StoreLike } from '../../game';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { HealEffect } from '../../game/store/effects/game-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { attachedEnergyProvides, queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
 import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED } from '../../game/store/prefabs/attack-effects';
-import { IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Sceptile extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -44,10 +45,10 @@ export class Sceptile extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Green Breath
-    if (effect instanceof AttachEnergyEffect && effect.target.getPokemonCard() === this) {
-      if (effect.energyCard.name === 'Grass Energy' && !IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this) {
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
         store.reduceEffect(state, new HealEffect(effect.player, effect.target, 20));
-      }
+      }, () => attachedEnergyProvides(store, state, effect, CardType.GRASS));
     }
 
     // Leaf Blast

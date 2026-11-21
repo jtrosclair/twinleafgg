@@ -43,6 +43,7 @@ export class RainbowEnergy extends EnergyCard {
     if (effect instanceof AfterAttachEnergyFromHandEffect && effect.energyCard === this) {
       const { player, target } = effect;
       const canResolve = () => target.cards.includes(this)
+        && target.getPokemonCard() === effect.recipientAtAttachment
         && !IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, target);
       if (canResolve()) {
         effect.reactions.set(this.name, {

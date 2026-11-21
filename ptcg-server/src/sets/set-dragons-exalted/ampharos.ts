@@ -2,6 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 import { THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON } from '../../game/store/prefabs/attack-effects';
@@ -39,26 +40,18 @@ export class Ampharos extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Electromagnetic Wall - damage when opponent attaches energy from hand
     if (effect instanceof AfterAttachEnergyFromHandEffect) {
-      const cardList = StateUtils.findCardList(state, this);
-      const owner = StateUtils.findOwner(state, cardList);
-
-      // Must be in play and active
-      if (!StateUtils.isPokemonInPlay(owner, this) || !owner.active.cards.includes(this)) {
-        return state;
-      }
-
-      // Check if ability is blocked
-      if (IS_ABILITY_BLOCKED(store, state, owner, this)) {
-        return state;
-      }
-
-      // Only trigger on opponent's energy attachments
-      if (effect.player === owner) {
-        return state;
-      }
-
-      // Put 3 damage counters on the Pokemon that energy is being attached to
-      effect.target.damage += 30;
+      const { player, target } = effect;
+      const owner = StateUtils.getOpponent(state, player);
+      const recipient = effect.recipientAtAttachment;
+      const power = this.powers[0];
+      const canResolve = () => !!recipient && target.getPokemonCard() === recipient
+        && player.getPokemonInPlay().includes(target) && StateUtils.isPokemonInPlay(owner, this)
+        && !IS_ABILITY_BLOCKED(store, state, owner, this);
+      if (owner.active.getPokemonCard() === this && canResolve()) effect.reactions.set(`${power.name}:${this.id}`, {
+        label: power.name,
+        canResolve,
+        resolve: () => { store.reduceEffect(state, new PlaceDamageCountersEffect(owner, target, 30, this, power)); },
+      });
     }
 
     // Attack: Electrobullet - 70 to active, 20 to a benched

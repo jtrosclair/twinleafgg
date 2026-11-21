@@ -1,8 +1,9 @@
 import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
-import { ADD_BURN_TO_PLAYER_ACTIVE, AFTER_ATTACK, IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { ADD_BURN_TO_PLAYER_ACTIVE, AFTER_ATTACK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { attachedEnergyProvides, queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
 import { PowerType, State, StoreLike } from '../../game';
-import { CardType, EnergyType, Stage } from '../../game/store/card/card-types';
+import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
 export class Flareon extends PokemonCard {
@@ -42,18 +43,10 @@ export class Flareon extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && effect.target.cards.includes(this)) {
-      if (IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
-        return state;
-      }
-
-      if (effect.energyCard.energyType === EnergyType.BASIC && effect.energyCard.provides.includes(CardType.FIRE)) {
-        //remove special conditions
-        const conditions = effect.target.specialConditions.slice();
-        conditions.forEach(condition => {
-          effect.target.removeSpecialCondition(condition);
-        });
-      }
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this) {
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        effect.target.clearAllSpecialConditions();
+      }, () => attachedEnergyProvides(store, state, effect, CardType.FIRE));
     }
 
     if (AFTER_ATTACK(effect, 0, this)) {

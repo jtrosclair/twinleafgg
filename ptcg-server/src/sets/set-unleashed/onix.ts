@@ -3,8 +3,9 @@ import { CardType, Stage } from '../../game/store/card/card-types';
 import { PowerType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { HealEffect } from '../../game/store/effects/game-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { IS_POKEBODY_BLOCKED, THIS_POKEMON_CANNOT_ATTACK_NEXT_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
+import { THIS_POKEMON_CANNOT_ATTACK_NEXT_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Onix extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -34,10 +35,10 @@ export class Onix extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Energy Healer
-    if (effect instanceof AttachEnergyEffect && effect.target.getPokemonCard() === this) {
-      if (!IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this) {
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
         store.reduceEffect(state, new HealEffect(effect.player, effect.target, 10));
-      }
+      });
     }
 
     // Boundless Power

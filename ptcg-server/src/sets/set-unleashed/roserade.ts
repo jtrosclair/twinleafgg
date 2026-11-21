@@ -1,8 +1,10 @@
-import { CardType, GameMessage, PokemonCard, PowerType, Stage, State, StateUtils, StoreLike } from '../../game';
+import { CardType, GamePhase, PokemonCard, PowerType, SpecialCondition, Stage, State, StateUtils, StoreLike } from '../../game';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { ADD_CONFUSION_TO_PLAYER_ACTIVE, ADD_POISON_TO_PLAYER_ACTIVE, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
+import { attachedEnergyProvides, queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
+import { CONFIRMATION_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Roserade extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -46,31 +48,22 @@ export class Roserade extends PokemonCard {
       effect.damage = 20 * energyCount;
     }
 
-    if (effect instanceof AttachEnergyEffect && effect.target.getPokemonCard() === this) {
-      const player = effect.player;
-
-      if (effect.target.specialConditions.length > 0) {
-        return state;
-      }
-
-      if (IS_POKEPOWER_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      if (effect.energyCard.name !== 'Grass Energy' && effect.energyCard.name !== 'Psychic Energy') {
-        return state;
-      }
-
-      CONFIRMATION_PROMPT(store, state, player, result => {
-        if (result) {
-          if (effect.energyCard.name === 'Grass Energy') {
-            ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, player), this);
-          }
-          if (effect.energyCard.name === 'Psychic Energy') {
-            ADD_POISON_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, player), this);
-          }
-        }
-      }, GameMessage.WANT_TO_USE_ABILITY);
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this) {
+      const { player, target } = effect;
+      const canUse = () => state.players[state.activePlayer] === player
+        && (state.phase === GamePhase.PLAYER_TURN || state.phase === GamePhase.ATTACK)
+        && target.specialConditions.length === 0
+        && attachedEnergyProvides(store, state, effect, CardType.GRASS, CardType.PSYCHIC);
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        CONFIRMATION_PROMPT(store, state, player, accepted => {
+          if (!accepted || !canUse()) return;
+          const conditions: SpecialCondition[] = [];
+          if (attachedEnergyProvides(store, state, effect, CardType.GRASS)) conditions.push(SpecialCondition.CONFUSED);
+          if (attachedEnergyProvides(store, state, effect, CardType.PSYCHIC)) conditions.push(SpecialCondition.POISONED);
+          const opponent = StateUtils.getOpponent(state, player);
+          APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(store, state, player, this.powers[0], this, opponent.active, conditions);
+        });
+      }, canUse);
     }
 
     return state;

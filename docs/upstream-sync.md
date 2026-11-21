@@ -3815,3 +3815,44 @@ complete two-Energy order selection in the packaged simulator.
 The remaining audit includes legacy Pokémon Powers and early Ability
 handlers that still react before the attachment, plus completed listeners
 that have yet to register with the shared order prompt.
+
+## Gameplay re-audit, batch 52
+
+Older Pokémon Powers, Poké-Bodies and Abilities now react after a
+successful hand attachment. The shared handler checks the printed power
+type for suppression. Energy type checks use what the physical Energy
+provides in play. Rainbow Energy can trigger both of Roserade's Energy
+Signal conditions or Sceptile's Green Breath. Iron Shell on Forretress
+requires a coin flip for a Basic Energy hand attachment outside of an
+attack. Sea's Manaphy still heals if the Pokémon has no Special Condition.
+[Official Energy Signal rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AD%E3%82%BC%E3%83%AC%E3%82%A4%E3%83%89&page=3&regulation_faq_main=)
+[Official Green Breath rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B8%E3%83%A5%E3%82%AB%E3%82%A4%E3%83%B3&page=5&regulation=all)
+[Official Forretress Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/DiamondPearl_LegendsAwakened.pdf)
+[Official Secret Wonders Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/DiamondPearl_SecretWonders.pdf)
+
+Skiploom's Solar Evolution uses normal deck evolution. When the current
+player resolves Solar Evolution first, Arctozolt's counters and the effect
+of Medical, Rainbow or Jet Energy no longer apply to the original Pokémon.
+Capture Energy can still search. If Red Signal moves Ampharos DRX to the
+Bench after Electromagnetic Wall triggers, its typed counters still land.
+Distinct copies of Ampharos and Arctozolt stack. Red Signal offers one
+confirmation and honors the chosen Pokémon's Ability protection.
+[Official Solar Evolution rulings](https://www.pokemon-card.com/rules/faq/search.php?page=286&regulation=all&sc_group_id=728%2F1000)
+[Official Medical Energy rulings](https://www.pokemon-card.com/rules/faq/search.php?sc_group_id=740)
+[Official Jet Energy rulings](https://www.pokemon-card.com/rules/faq/search.php?page=163&regulation_faq_main=&sc_group_id=525%2F1000)
+[Official Electromagnetic Wall and Red Signal ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%97%E3%83%A9%E3%82%BA%E3%83%9E%E3%82%A8%E3%83%8D%E3%83%AB%E3%82%AE%E3%83%BC&regulation_faq_main_item1=all)
+
+All 55 new cases pass, including 34 that fail on the prior engine. The
+full suite passes 10,622 tests. The existing working edits and this batch
+pass 272 targeted checks together. All 559 comparable saved puzzles have
+identical serialized payloads and deserialized states. All 5,225 sampled
+opening actions match and all seven recorded solutions still win. The API
+passes 32 tests. The 2.50 MiB gzip runtime package passes attestation, 10
+board scenarios and 209 Angular checks. Mouse and touch verify the two
+Solar Evolution and Arctozolt orders in the packaged simulator.
+
+The remaining attachment audit includes Eevee, Beldum and Vileplume
+origin and timing restrictions. Welder still needs grouped attachments
+and a draw that follows successful attachment before any Solar Evolution
+prompt. Its current draw checks the number selected and can still happen
+after all selected attachments were prevented.

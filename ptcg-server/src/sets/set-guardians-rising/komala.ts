@@ -5,9 +5,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, SpecialCondition } from '../../game';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, ADD_SLEEP_TO_PLAYER_ACTIVE } from '../../game/store/prefabs/prefabs';
+import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
+import { queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Komala extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -39,21 +41,12 @@ export class Komala extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Comatose (passive - when energy is attached from hand, become asleep)
-    // Ref: set-sun-and-moon/eevee.ts (Energy Evolution - AttachEnergyEffect intercept)
-    if (effect instanceof AttachEnergyEffect && effect.target.cards.includes(this)) {
-      const player = effect.player;
-
-      // Must be active
-      if (effect.target !== player.active) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      // AttachEnergyEffect is dispatched when attaching from hand, so make this Pokemon Asleep
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, this);
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.activePokemonAtAttachment === this
+      && effect.target.getPokemonCard() === this) {
+      const { player, target } = effect;
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(store, state, player, this.powers[0], this, target, [SpecialCondition.ASLEEP]);
+      }, () => player.active === target);
     }
 
     // Attack 1: Hypno Roll

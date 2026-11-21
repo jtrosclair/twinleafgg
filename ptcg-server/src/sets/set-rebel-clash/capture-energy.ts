@@ -2,7 +2,8 @@ import { CardType, EnergyType, Stage } from '../../game/store/card/card-types';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { Effect } from '../../game/store/effects/effect';
 import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
-import { GET_PLAYER_BENCH_SLOTS, IS_SPECIAL_ENERGY_BLOCKED, SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH } from '../../game/store/prefabs/prefabs';
+import { queueSpecialEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
+import { GET_PLAYER_BENCH_SLOTS, SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH } from '../../game/store/prefabs/prefabs';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 
@@ -31,17 +32,10 @@ When you attach this card from your hand to a Pokémon, search your deck for a B
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof AfterAttachEnergyFromHandEffect && effect.energyCard === this) {
-      const player = effect.player;
-
-      if (IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {
-        return state;
-      }
-
-      if (GET_PLAYER_BENCH_SLOTS(player).length === 0) {
-        return state;
-      }
-
-      SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player, { stage: Stage.BASIC }, { min: 0, max: 1 });
+      const { player } = effect;
+      queueSpecialEnergyReaction(store, state, effect, this, () => {
+        SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player, { stage: Stage.BASIC }, { min: 0, max: 1 });
+      }, () => player.deck.cards.length > 0 && GET_PLAYER_BENCH_SLOTS(player).length > 0);
     }
     return state;
   }

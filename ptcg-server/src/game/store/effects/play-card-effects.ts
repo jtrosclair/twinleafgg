@@ -116,11 +116,13 @@ export class AfterAttachEnergyFromHandEffect implements Effect {
   readonly type: string = PlayCardEffects.AFTER_ATTACH_ENERGY_EFFECT;
   public preventDefault = false;
   public readonly activePokemonAtAttachment: PokemonCard | undefined;
+  public readonly recipientAtAttachment: PokemonCard | undefined;
   public readonly reactions = new Map<string, HandEnergyReaction>();
   public reactionBatch?: QueuedHandEnergyReaction[];
 
   constructor(public player: Player, public energyCard: EnergyCard, public target: PokemonCardList) {
     this.activePokemonAtAttachment = player.active.getPokemonCard();
+    this.recipientAtAttachment = target.getPokemonCard();
   }
 }
 

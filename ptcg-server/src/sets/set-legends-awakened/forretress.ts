@@ -1,10 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, EnergyType, Stage } from '../../game/store/card/card-types';
-import { GameMessage, PlayerType, PowerType, State, StateUtils, StoreLike } from '../../game';
+import { GamePhase, PowerType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
-import { COIN_FLIP_PROMPT, CONFIRMATION_PROMPT, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
+import { COIN_FLIP_PROMPT, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Forretress extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -18,7 +19,7 @@ export class Forretress extends PokemonCard {
   public powers = [{
     name: 'Iron Shell',
     powerType: PowerType.POKEBODY,
-    text: 'Whenever you attach a basic Energy card from your hand to Forretress (excluding effects of attacks), you may flip a coin. If tails, put 2 damage counters on each Pokémon (both yours and your opponent\'s) (excluding any Forretress).'
+    text: 'Whenever you attach a basic Energy card from your hand to Forretress (excluding effects of attacks), flip a coin. If tails, put 2 damage counters on each Pokémon (both yours and your opponent\'s) (excluding any Forretress).'
   }];
 
   public attacks = [{
@@ -36,37 +37,20 @@ export class Forretress extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Iron Shell
-    if (effect instanceof AttachEnergyEffect && effect.target.getPokemonCard() === this) {
-      const player = effect.player;
-      if (!player.hand.cards.includes(effect.energyCard)) {
-        return state;
-      }
-      if (effect.energyCard.energyType !== EnergyType.BASIC) {
-        return state;
-      }
-      CONFIRMATION_PROMPT(store, state, player, wantToFlip => {
-        if (!wantToFlip) {
-          return;
-        }
-        COIN_FLIP_PROMPT(store, state, player, result => {
-          if (result) {
-            return;
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this
+      && effect.energyCard.energyType === EnergyType.BASIC && state.phase !== GamePhase.ATTACK) {
+      const { player } = effect;
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        COIN_FLIP_PROMPT(store, state, player, heads => {
+          if (heads) return;
+          for (const owner of state.players) {
+            for (const slot of owner.getPokemonInPlay()) {
+              if (slot.getPokemonCard()?.name === 'Forretress') continue;
+              store.reduceEffect(state, new PlaceDamageCountersEffect(player, slot, 20, this, this.powers[0]));
+            }
           }
-          const applyCounters = (p: typeof player, playerType: PlayerType) => {
-            p.forEachPokemon(playerType, (cardList, card) => {
-              if (card.name === 'Forretress') {
-                return;
-              }
-              store.reduceEffect(
-                state,
-                new PlaceDamageCountersEffect(player, cardList, 20, this),
-              );
-            });
-          };
-          applyCounters(player, PlayerType.BOTTOM_PLAYER);
-          applyCounters(StateUtils.getOpponent(state, player), PlayerType.TOP_PLAYER);
         });
-      }, GameMessage.WANT_TO_USE_ABILITY);
+      });
     }
 
     // Explosion

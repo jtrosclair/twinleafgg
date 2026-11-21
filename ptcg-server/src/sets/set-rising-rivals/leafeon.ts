@@ -3,9 +3,10 @@ import { CardType, EnergyType, Stage, SuperType } from '../../game/store/card/ca
 import { AttachEnergyPrompt, EnergyCard, GameMessage, PlayerType, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { HealEffect } from '../../game/store/effects/game-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect, AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
 import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP } from '../../game/store/prefabs/attack-effects';
-import { IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Leafeon extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -42,15 +43,10 @@ export class Leafeon extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Energy Refresh
-    if (effect instanceof AttachEnergyEffect) {
-      const player = effect.player;
-      if (player.active.getPokemonCard() !== this) {
-        return state;
-      }
-      if (IS_POKEBODY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-      store.reduceEffect(state, new HealEffect(player, effect.target, 20));
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.activePokemonAtAttachment === this) {
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        store.reduceEffect(state, new HealEffect(effect.player, effect.target, 20));
+      });
     }
 
     // Plus Energy

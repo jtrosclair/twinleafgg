@@ -1,8 +1,9 @@
 import { CardType, CoinFlipPrompt, GameMessage, PokemonCard, PowerType, Stage, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { attachedEnergyProvides, queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Combusken extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -46,30 +47,10 @@ export class Combusken extends PokemonCard {
       });
     }
 
-    if (effect instanceof AttachEnergyEffect && effect.target.cards.includes(this)) {
-      const player = effect.player;
-
-      if (effect.target.specialConditions.length === 0) {
-        return state;
-      }
-
-      if (!effect.energyCard.provides.includes(CardType.FIRE)) {
-        return state;
-      }
-
-      const pokemonCard = effect.target.getPokemonCard();
-      if (pokemonCard !== this) {
-        return state;
-      }
-
-      if (IS_POKEBODY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      const conditions = effect.target.specialConditions.slice();
-      conditions.forEach(condition => {
-        effect.target.removeSpecialCondition(condition);
-      });
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this) {
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        effect.target.clearAllSpecialConditions();
+      }, () => attachedEnergyProvides(store, state, effect, CardType.FIRE));
     }
 
     return state;

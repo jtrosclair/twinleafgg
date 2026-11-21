@@ -3,9 +3,10 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { CoinFlipPrompt, GameMessage, PowerType } from '../../game';
+import { attachedEnergyProvides, queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
 import { HealEffect } from '../../game/store/effects/game-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 
@@ -39,33 +40,11 @@ export class SeasManaphy4 extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && effect.target.cards.includes(this)) {
-      const player = effect.player;
-
-      if (effect.target.specialConditions.length === 0) {
-        return state;
-      }
-
-      if (!effect.energyCard.provides.includes(CardType.WATER)) {
-        return state;
-      }
-
-      const pokemonCard = effect.target.getPokemonCard();
-      if (pokemonCard !== this) {
-        return state;
-      }
-
-      if (IS_POKEBODY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      const healEffect = new HealEffect(player, effect.target, 10);
-      state = store.reduceEffect(state, healEffect);
-
-      const conditions = effect.target.specialConditions.slice();
-      conditions.forEach(condition => {
-        effect.target.removeSpecialCondition(condition);
-      });
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this) {
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        store.reduceEffect(state, new HealEffect(effect.player, effect.target, 10));
+        effect.target.clearAllSpecialConditions();
+      }, () => attachedEnergyProvides(store, state, effect, CardType.WATER));
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {

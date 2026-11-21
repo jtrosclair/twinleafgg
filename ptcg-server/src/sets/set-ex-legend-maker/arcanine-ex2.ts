@@ -1,12 +1,12 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Card, ChooseCardsPrompt, SelectOptionPrompt } from '../../game';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { Stage, CardType, CardTag, EnergyType } from '../../game/store/card/card-types';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { attachedEnergyProvides, queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
+import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { HealEffect } from '../../game/store/effects/game-effects';
-import { IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON } from '../../game/store/prefabs/attack-effects';
 import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
 import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
@@ -47,44 +47,11 @@ export class Arcanineex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && effect.target.getPokemonCard() === this) {
-      if (IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
-        return state;
-      }
-
-      if (effect.energyCard.energyType === EnergyType.BASIC && effect.energyCard.provides.includes(CardType.FIRE)) {
-        // heal
-        const healEffect = new HealEffect(effect.player, effect.target, 10);
-        store.reduceEffect(state, healEffect);
-        //remove special conditions
-        const conditions = effect.target.specialConditions.slice();
-        conditions.forEach(condition => {
-          effect.target.removeSpecialCondition(condition);
-        });
-      }
-
-      // Check special energies that provide [W]
-      if (effect.energyCard.energyType === EnergyType.SPECIAL) {
-        // Temporarily push the energy card to the list of cards to check if it provides [W]
-        effect.target.cards.push(effect.energyCard);
-        const checkFireEnergy = new CheckProvidedEnergyEffect(effect.player, effect.target);
-        store.reduceEffect(state, checkFireEnergy);
-        effect.target.cards.pop();
-
-        const energyMap = checkFireEnergy.energyMap.find(element => element.card === effect.energyCard);
-        const providedEnergy = energyMap?.provides;
-        if (providedEnergy?.includes(CardType.FIRE)
-          || providedEnergy?.includes(CardType.ANY)) {
-          //heal
-          const healEffect = new HealEffect(effect.player, effect.target, 10);
-          store.reduceEffect(state, healEffect);
-          //remove special conditions
-          const conditions = effect.target.specialConditions.slice();
-          conditions.forEach(condition => {
-            effect.target.removeSpecialCondition(condition);
-          });
-        }
-      }
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this) {
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        store.reduceEffect(state, new HealEffect(effect.player, effect.target, 10));
+        effect.target.clearAllSpecialConditions();
+      }, () => attachedEnergyProvides(store, state, effect, CardType.FIRE));
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {

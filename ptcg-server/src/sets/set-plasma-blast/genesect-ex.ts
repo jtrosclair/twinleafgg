@@ -1,9 +1,11 @@
 import { Effect } from '../../game/store/effects/effect';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { PowerType, StoreLike, State, StateUtils, ConfirmPrompt, GameMessage, ChoosePokemonPrompt, PlayerType, SlotType } from '../../game';
-import {CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, WAS_ATTACK_USED} from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { PowerType, StoreLike, State, StateUtils } from '../../game';
+import { GUST_OPPONENT_BENCHED_POKEMON_FROM_ABILITY } from '../../game/store/prefabs/ability-lock';
+import { queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
+import { CONFIRMATION_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import {THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON} from '../../game/store/prefabs/attack-effects';
 
 export class GenesectEX extends PokemonCard {
@@ -37,44 +39,18 @@ export class GenesectEX extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Red Signal
-    if (effect instanceof AttachEnergyEffect && effect.target.cards.includes(this)){
-      const player = effect.player;
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this
+      && effect.energyCard.name === 'Plasma Energy') {
+      const { player } = effect;
       const opponent = StateUtils.getOpponent(state, player);
-
-      const hasBench = opponent.bench.some(b => b.cards.length > 0);
-
-      if (!hasBench) {
-        return state;
-      }
-
-      if (effect.energyCard.name === 'Plasma Energy'){
-
-        const abilityLock = IS_ABILITY_BLOCKED(store, state, effect.player, this);
-        if (!abilityLock){
-          CONFIRMATION_PROMPT(store, state, effect.player, result => {
-            if (result){
-        
-              state = store.prompt(state, new ConfirmPrompt(
-                effect.player.id,
-                GameMessage.WANT_TO_USE_ABILITY,
-              ), wantToUse => {
-                if (wantToUse) {
-                  return store.prompt(state, new ChoosePokemonPrompt(
-                    player.id,
-                    GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-                    PlayerType.TOP_PLAYER,
-                    [SlotType.BENCH],
-                    { allowCancel: false }
-                  ), result => {
-                    const cardList = result[0];
-                    opponent.switchPokemon(cardList);
-                  });
-                }
-              });
-            }
-          });
-        }
-      }
+      const canUse = () => opponent.bench.some(slot => !!slot.getPokemonCard());
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        CONFIRMATION_PROMPT(store, state, player, accepted => {
+          if (accepted && canUse()) {
+            GUST_OPPONENT_BENCHED_POKEMON_FROM_ABILITY(store, state, player, this.powers[0], this);
+          }
+        });
+      }, canUse);
     }
 
     // Megalo Cannon

@@ -4,10 +4,11 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { EnergyCard, PowerType, StoreLike, State } from '../../game';
+import { PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { IS_ABILITY_BLOCKED, SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH, CONFIRMATION_PROMPT } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { attachedEnergyProvides, queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
+import { CONFIRMATION_PROMPT, GET_PLAYER_BENCH_SLOTS, SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH } from '../../game/store/prefabs/prefabs';
 
 export class Goomy extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -38,40 +39,18 @@ export class Goomy extends PokemonCard {
   public fullName: string = 'Goomy AOR';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Water Down
-    // Ref: set-vivid-voltage/wailord.ts (Water Veil - AttachEnergyEffect intercept)
-    if (effect instanceof AttachEnergyEffect && effect.target.cards.includes(this)) {
-      const player = effect.player;
-
-      // Check if this is a Water energy from hand
-      if (!(effect.energyCard instanceof EnergyCard && effect.energyCard.provides.includes(CardType.WATER))) {
-        return state;
-      }
-
-      // Check the target is this Pokemon
-      if (effect.target.getPokemonCard() !== this) {
-        return state;
-      }
-
-      // Check ability block
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      // "you may" - optional
-      CONFIRMATION_PROMPT(store, state, player, result => {
-        if (result) {
-          SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player,
-            { name: 'Goomy' },
-            { max: 1, min: 0, allowCancel: true }
-          );
-        }
-      });
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this) {
+      const { player } = effect;
+      const canUse = () => player.deck.cards.length > 0 && GET_PLAYER_BENCH_SLOTS(player).length > 0
+        && attachedEnergyProvides(store, state, effect, CardType.WATER);
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        CONFIRMATION_PROMPT(store, state, player, accepted => {
+          if (accepted && canUse()) {
+            SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player, { name: 'Goomy' },
+              { max: 1, min: 0, allowCancel: false });
+          }
+        });
+      }, canUse);
     }
 
     return state;

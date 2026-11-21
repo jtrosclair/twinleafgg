@@ -4,7 +4,7 @@ import { GameError, GameMessage, PlayerType, PowerType, State, StateUtils, Store
 import { Effect } from '../../game/store/effects/effect';
 import { CheckPokemonAttacksEffect, CheckPokemonPowersEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
 import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
-import { AttachEnergyEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { DISCARD_A_STADIUM_CARD_IN_PLAY, IS_POKEBODY_BLOCKED, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class ElectivireLVX extends PokemonCard {
@@ -45,28 +45,17 @@ export class ElectivireLVX extends PokemonCard {
     }
 
     // Shocking Tail
-    if (effect instanceof AttachEnergyEffect) {
-      if (!effect.player.hand.cards.includes(effect.energyCard)) {
-        return state;
-      }
-
-      const cardList = StateUtils.findCardList(state, this);
-      const owner = StateUtils.findOwner(state, cardList);
-
-      if (!StateUtils.isPokemonInPlay(owner, this) || owner.active.getPokemonCard() !== this) {
-        return state;
-      }
-      if (IS_POKEBODY_BLOCKED(store, state, owner, this)) {
-        return state;
-      }
-      if (effect.player === owner) {
-        return state;
-      }
-
-      store.reduceEffect(
-        state,
-        new PlaceDamageCountersEffect(owner, effect.target, 20, this),
-      );
+    if (effect instanceof AfterAttachEnergyFromHandEffect) {
+      const { player, target } = effect;
+      const owner = StateUtils.getOpponent(state, player);
+      const power = this.powers[0];
+      const canResolve = () => owner.active.getPokemonCard() === this
+        && target.getPokemonCard() === effect.recipientAtAttachment && player.getPokemonInPlay().includes(target) && !IS_POKEBODY_BLOCKED(store, state, owner, this);
+      if (canResolve()) effect.reactions.set(power.name, {
+        label: power.name,
+        canResolve,
+        resolve: () => { store.reduceEffect(state, new PlaceDamageCountersEffect(owner, target, 20, this, power)); },
+      });
     }
 
     // Pulse Barrier

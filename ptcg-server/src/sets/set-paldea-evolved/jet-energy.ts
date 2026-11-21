@@ -27,6 +27,7 @@ When you attach this card from your hand to 1 of your Benched Pokémon, switch t
       const target = effect.target;
 
       const canResolve = () => player.bench.includes(target) && target.cards.includes(this)
+        && target.getPokemonCard() === effect.recipientAtAttachment
         && !IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, target);
       if (canResolve()) {
         effect.reactions.set(this.name, {

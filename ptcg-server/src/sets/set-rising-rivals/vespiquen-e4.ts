@@ -1,8 +1,9 @@
 import { CardTag, CardType, EnergyCard, PokemonCard, PowerType, Stage, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { HealEffect } from '../../game/store/effects/game-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { IS_POKEBODY_BLOCKED, MULTIPLE_COIN_FLIPS_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { attachedEnergyProvides, queuePokemonEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
+import { MULTIPLE_COIN_FLIPS_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class VespiquenE4 extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -35,14 +36,10 @@ export class VespiquenE4 extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Royal Gain
-    if (effect instanceof AttachEnergyEffect && effect.target.getPokemonCard() === this) {
-      if (effect.energyCard.name !== 'Grass Energy') {
-        return state;
-      }
-      if (IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
-        return state;
-      }
-      store.reduceEffect(state, new HealEffect(effect.player, effect.target, 10));
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this) {
+      queuePokemonEnergyReaction(store, state, effect, this, () => {
+        store.reduceEffect(state, new HealEffect(effect.player, effect.target, 10));
+      }, () => attachedEnergyProvides(store, state, effect, CardType.GRASS));
     }
 
     // Leaf Needle

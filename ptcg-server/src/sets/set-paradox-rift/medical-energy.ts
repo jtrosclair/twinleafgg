@@ -23,7 +23,7 @@ export class MedicalEnergy extends EnergyCard {
     if (effect instanceof AfterAttachEnergyFromHandEffect && effect.energyCard === this) {
       queueSpecialEnergyReaction(store, state, effect, this, () => {
         store.reduceEffect(state, new HealEffect(effect.player, effect.target, 30));
-      });
+      }, () => effect.target.getPokemonCard() === effect.recipientAtAttachment);
     }
 
     return state;
