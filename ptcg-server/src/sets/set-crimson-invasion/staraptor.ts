@@ -4,10 +4,9 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils, GamePhase } from '../../game';
+import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
+import { afterAttackDamageKnockOut } from '../../game/store/prefabs/post-damage-identity';
 import { WAS_ATTACK_USED, BLOCK_RETREAT, BLOCK_RETREAT_IF_MARKER, REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN, SWITCH_ACTIVE_WITH_BENCHED } from '../../game/store/prefabs/prefabs';
 import { MarkerConstants } from '../../game/store/markers/marker-constants';
 
@@ -54,27 +53,13 @@ export class Staraptor extends PokemonCard {
     BLOCK_RETREAT_IF_MARKER(effect, MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
     REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN(effect, MarkerConstants.DEFENDING_POKEMON_CANNOT_RETREAT_MARKER, this);
 
-    // Attack 2: Sky Hunting
-    // Ref: set-guardians-rising/whimsicott.ts (KnockOutEffect pattern)
+    // Ref: the official Sky Hunting ruling resolves Guts before the switch
+    // and resolves the switch before the opponent promotes a new Pokémon.
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      this.usedSkyHunting = true;
-    }
-
-    if (effect instanceof KnockOutEffect && this.usedSkyHunting) {
-      if (state.phase === GamePhase.ATTACK) {
-        const player = StateUtils.findOwner(state, effect.target);
-        const attacker = StateUtils.getOpponent(state, player);
-
-        if (attacker.active.getPokemonCard() === this) {
-          if (attacker.bench.some(b => b.cards.length > 0)) {
-            SWITCH_ACTIVE_WITH_BENCHED(store, state, attacker);
-          }
-        }
-      }
-    }
-
-    if (effect instanceof EndTurnEffect) {
-      this.usedSkyHunting = false;
+      afterAttackDamageKnockOut(state, effect, (store, state) => {
+        if (effect.source === effect.player.active) SWITCH_ACTIVE_WITH_BENCHED(store, state, effect.player);
+        return state;
+      });
     }
 
     return state;

@@ -7,7 +7,7 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils } from '../../game';
 import { DealDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
+import { afterAttackDamageKnockOut } from '../../game/store/prefabs/post-damage-identity';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { WAS_ATTACK_USED, REMOVE_MARKER_AT_END_OF_TURN, REPLACE_MARKER_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
 
@@ -40,23 +40,17 @@ export class Sandile2 extends PokemonCard {
   public fullName: string = 'Sandile UNB 114';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Attack 1: Grandiose Fangs
-    // Ref: set-ultra-prism/spiritomb.ts (conditional marker)
+    // Ref: set-crimson-invasion/staraptor.ts (follow-up on exact attack damage).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      this.usedGrandiose = true;
+      afterAttackDamageKnockOut(state, effect, (_store, state) => {
+        effect.source.activeDamageBonusNextTurn = { amount: 120, pending: true };
+        return state;
+      });
     }
 
-    // Check if KO happened from this attack
-    if (effect instanceof KnockOutEffect && this.usedGrandiose) {
-      const cardOwner = StateUtils.findOwner(state, StateUtils.findCardList(state, this));
-      // If the KO'd pokemon's owner is the opponent of this card's owner
-      if (effect.player !== cardOwner) {
-        cardOwner.marker.addMarker(this.GRANDIOSE_MARKER, this);
-      }
-    }
-
-    // Apply bonus damage during next turn
-    if (effect instanceof DealDamageEffect && effect.source.cards.includes(this)
+    // Honor eligible bonuses from older player markers.
+    if (effect instanceof DealDamageEffect && effect.target === effect.opponent.active
+      && effect.source.cards.includes(this)
       && effect.source.getPokemonCard() === this) {
       const player = StateUtils.findOwner(state, effect.source);
       if (player.marker.hasMarker(this.GRANDIOSE_MARKER, this) ||

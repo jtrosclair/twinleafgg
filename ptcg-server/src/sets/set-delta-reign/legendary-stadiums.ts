@@ -3,11 +3,12 @@ import { PowerType, Power } from '../../game/store/card/pokemon-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { CheckPokemonPowersEffect, CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { HealEffect, KnockOutEffect, PowerEffect } from '../../game/store/effects/game-effects';
-import { State, GamePhase } from '../../game/store/state/state';
+import { HealEffect, PowerEffect } from '../../game/store/effects/game-effects';
+import { State } from '../../game/store/state/state';
 import { StateUtils } from '../../game/store/state-utils';
 import { Player } from '../../game/store/state/player';
 import { StoreLike } from '../../game/store/store-like';
+import { WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
@@ -48,12 +49,13 @@ export class LegendarySummitLeft extends LegendaryHalf {
   public setNumber = '96'; public name = 'Legendary Summit'; public fullName = 'Legendary Summit (Left) M6';
   public text = "Whenever a [C] Pokémon (yours or your opponent's) is Knocked Out by damage from an attack from the opponent's Pokémon, that player takes 1 fewer Prize card.";
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (!(effect instanceof KnockOutEffect) || StateUtils.getStadiumCard(state) !== this || state.phase !== GamePhase.ATTACK) return state;
-    const ko = effect.target.attackDamageKnockOut;
-    const owner = effect.player, attacker = StateUtils.getOpponent(state, owner);
-    if (!ko || ko.turn !== state.turn || ko.playerId !== attacker.id || state.players[state.activePlayer] !== attacker || IS_STADIUM_EFFECT_BLOCKED(store, state, owner, effect.target, this)) return state;
-    const check = new CheckPokemonTypeEffect(effect.target); store.reduceEffect(state, check);
-    if (check.cardTypes.includes(CardType.COLORLESS) && effect.prizeCount > 0) effect.prizeCount--;
+    if (!WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) || StateUtils.getStadiumCard(state) !== this
+      || IS_STADIUM_EFFECT_BLOCKED(store, state, effect.player, effect.target, this)) return state;
+
+    const type = new CheckPokemonTypeEffect(effect.target);
+    store.reduceEffect(state, type);
+    // Ref: Black Market applies its reduction after all Prize bonuses.
+    if (type.cardTypes.includes(CardType.COLORLESS)) effect.prizeReduction++;
     return state;
   }
 }

@@ -25,6 +25,11 @@ import { CardTag, Stage } from '../card/card-types';
 import { COIN_FLIP_PROMPT } from '../prefabs/prefabs';
 import { attackDamagePositions, attackEffectKnockOuts } from '../state/pokemon-card-list';
 
+export function getActiveAttackDamageBonus(effect: DealDamageEffect | PutDamageEffect): number {
+  const bonus = effect.source.activeDamageBonusNextTurn;
+  return bonus && !bonus.pending && effect.damage > 0 && effect.target === effect.opponent.active ? bonus.amount : 0;
+}
+
 export function attackReducer(store: StoreLike, state: State, effect: Effect): State {
   if (effect instanceof GustOpponentBenchEffect) {
     effect.opponent.switchPokemon(effect.target, store, state);
@@ -67,6 +72,7 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
     }
 
     if (effect.attackEffect) {
+      if (!effect.weaknessApplied) effect.damage += getActiveAttackDamageBonus(effect);
       effect.damage += effect.source.attackDamageBonusNextTurn;
     }
 

@@ -351,6 +351,13 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
 }
 
 export function gameReducer(store: StoreLike, state: State, effect: Effect): State {
+  if (effect instanceof EndTurnEffect) {
+    effect.player.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => {
+      if (slot.activeDamageBonusNextTurn?.pending) slot.activeDamageBonusNextTurn.pending = false;
+      else slot.activeDamageBonusNextTurn = undefined;
+    });
+  }
+
   if (effect instanceof AfterAttackEffect) {
     state.players.forEach(player => player.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => {
       if (slot.defendingPokemonExtraDamageRearmAfterAttack) {
@@ -398,6 +405,12 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
         if (attacker.usedAlteredCreation) effect.prizeCount += 1;
 
         const source = effect.target.attackDamageKnockOut?.sourceCard;
+        const briar = attacker.briarPrizeBonus;
+        if (briar?.turn === state.turn && source?.tags.includes(CardTag.POKEMON_TERA)) effect.prizeCount += briar.count;
+        const anthea = attacker.antheaAndConcordiaPrizeBonus;
+        if (anthea?.turn === state.turn
+          && (source?.tags.includes(CardTag.NS) || source?.name.startsWith("N's "))) effect.prizeCount += anthea.count;
+
         if (attacker.starOrderTurn === state.turn && source?.stage === Stage.BASIC
           && source.tags.includes(CardTag.POKEMON_V)
           && card.tags.some(tag => tag === CardTag.POKEMON_VSTAR || tag === CardTag.POKEMON_VMAX)) {

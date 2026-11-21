@@ -1,6 +1,5 @@
-import { TrainerCard, TrainerType, StoreLike, State, StateUtils, GamePhase, GameError, GameMessage } from '../../game';
+import { TrainerCard, TrainerType, StoreLike, State, StateUtils, GameError, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 
 export class Briar extends TrainerCard {
@@ -20,50 +19,16 @@ During this turn, if your opponent's Active Pokémon is Knocked Out by damage fr
 
   public extraPrizes = false;
   
-  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
+  public reduceEffect(_store: StoreLike, state: State, effect: Effect): State {
+    // Ref: set-crown-zenith/sky-seal-stone.ts (turn-scoped player Prize effect).
     if (effect instanceof TrainerEffect && effect.trainerCard === this) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      const supporterTurn = player.supporterTurn;
-
-      if (supporterTurn > 0) {
-        throw new GameError(GameMessage.SUPPORTER_ALREADY_PLAYED);
-      }
-
-      player.hand.moveCardTo(effect.trainerCard, player.supporter);
-      // We will discard this card after prompt confirmation
-      effect.preventDefault = true;
-
-      if (opponent.getPrizeLeft() !== 2) {
+      if (StateUtils.getOpponent(state, effect.player).getPrizeLeft() !== 2) {
         throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }
-
-      this.extraPrizes = true;
-      return state;
-    }
-
-    if (effect instanceof KnockOutEffect && effect.target === effect.player.active) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Do not activate between turns, or when it's not opponents turn.
-      if (state.phase !== GamePhase.ATTACK || state.players[state.activePlayer] !== opponent) {
-        return state;
-      }
-
-      // Check if the knocked out Pokémon belongs to the opponent and if extra prize should be taken
-      if (effect.target === player.active) {
-        const attackingPokemon = opponent.active;
-        if (attackingPokemon.isTera() && this.extraPrizes) {
-          if (effect.prizeCount > 0) {
-            effect.prizeCount += 1;
-          }
-        }
-        this.extraPrizes = false;
-      }
-      player.supporter.moveCardTo(this, player.discard);
-      return state;
+      const bonus = effect.player.briarPrizeBonus;
+      effect.player.briarPrizeBonus = {
+        turn: state.turn, count: (bonus?.turn === state.turn ? bonus.count : 0) + 1
+      };
     }
     return state;
   }

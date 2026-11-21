@@ -72,6 +72,8 @@ export class Player {
   usedVSTAR: boolean = false;
 
   starOrderTurn?: number;
+  briarPrizeBonus?: { turn: number; count: number };
+  antheaAndConcordiaPrizeBonus?: { turn: number; count: number };
 
   usedGX: boolean = false;
 

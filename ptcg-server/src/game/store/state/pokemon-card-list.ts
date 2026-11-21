@@ -78,6 +78,7 @@ export class PokemonCardList extends CardList {
   public attackDamageReductionNextTurn = 0;
   public attackDamageBonusNextTurn = 0;
   public attackDamageBonusNextTurnPending = false;
+  public activeDamageBonusNextTurn?: { amount: number; pending: boolean };
   public attackCostIncreaseDuringNextTurn = 0;
   public noWeaknessNextTurn = false;
   public cannotEvolveNextTurn = false;
@@ -238,6 +239,7 @@ export class PokemonCardList extends CardList {
     this.attackDamageReductionNextTurn = 0;
     this.attackDamageBonusNextTurn = 0;
     this.attackDamageBonusNextTurnPending = false;
+    this.activeDamageBonusNextTurn = undefined;
     this.noWeaknessNextTurn = false;
     this.cannotEvolveNextTurn = false;
     this.cannotRetreatNextTurn = false;
@@ -300,6 +302,7 @@ export class PokemonCardList extends CardList {
     this.attackDamageReductionNextTurn = 0;
     this.attackDamageBonusNextTurn = 0;
     this.attackDamageBonusNextTurnPending = false;
+    this.activeDamageBonusNextTurn = undefined;
     this.noWeaknessNextTurn = false;
     this.cannotEvolveNextTurn = false;
     this.cannotRetreatNextTurn = false;

@@ -32,7 +32,7 @@ import { StateLog, StateLogParam } from './state/state-log';
 import { StoreHandler } from './store-handler';
 import { StoreLike } from './store-like';
 import { generateId, deepClone } from '../../utils/utils';
-import { attackReducer } from './effect-reducers/attack-effect';
+import { attackReducer, getActiveAttackDamageBonus } from './effect-reducers/attack-effect';
 import { playCardReducer } from './reducers/play-card-reducer';
 import { playEnergyReducer } from './effect-reducers/play-energy-effect';
 import { playPokemonReducer } from './effect-reducers/play-pokemon-effect';
@@ -251,6 +251,7 @@ export class Store implements StoreLike {
     // Attacking-player marker boosts are resolved before defending Pokémon's
     // damage reducers, regardless of card traversal order.
     if (effect instanceof DealDamageEffect && !effect.preventDefault) {
+      effect.damage += getActiveAttackDamageBonus(effect);
       if (effect.player.alteredCreationDamage && effect.damage > 0
         && effect.target === StateUtils.getOpponent(state, effect.player).active) {
         effect.damage += 30;

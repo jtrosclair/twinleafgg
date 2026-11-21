@@ -40,19 +40,11 @@ export class Golisopod extends PokemonCard {
   public readonly CLEAR_MARKER = 'GOLISOPOD_M4_CLEAR_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      const opponentHp = opponent.active.getPokemonCard()?.hp ?? 0;
-      const opponentDamage = opponent.active.damage;
-      if (opponentDamage + effect.damage >= opponentHp) {
-        player.active.marker.addMarker(this.INVULN_MARKER, this);
-        opponent.marker.addMarker(this.CLEAR_MARKER, this);
-      }
-    }
-    if (WAS_ATTACK_USED(effect, 1, this)) {
-      effect.player.active.cannotAttackNextTurnPending = true;
-    }
+    // Ref: set-lost-thunder/beautifly.ts (protection after a confirmed Knock Out).
+    if (WAS_ATTACK_USED(effect, 0, this)) effect.protectAttackerOnDamageKnockOut = true;
+    if (WAS_ATTACK_USED(effect, 1, this)) effect.source.cannotAttackNextTurnPending = true;
+
+    // Older board states can still contain the previous protection marker.
     if (effect instanceof DealDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
       const owner = StateUtils.findOwner(state, effect.target);
       if (owner.active.marker.hasMarker(this.INVULN_MARKER, this) && state.phase === GamePhase.ATTACK) {
