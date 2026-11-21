@@ -1,8 +1,10 @@
 import { GameError } from '../../game-error';
 import { GameMessage } from '../../game-message';
+import { CardTag } from '../card/card-types';
 import { CheckPrizesDestinationEffect } from '../effects/check-effects';
 import { DrawPrizesEffect, PrizeReaction } from '../effects/game-effects';
 import { GameStatsTracker } from '../game-stats-tracker';
+import { ChooseCardsPrompt } from '../prompts/choose-cards-prompt';
 import { ChoosePrizePrompt } from '../prompts/choose-prize-prompt';
 import { ConfirmPrompt } from '../prompts/confirm-prompt';
 import { SelectPrompt } from '../prompts/select-prompt';
@@ -38,6 +40,9 @@ export function countPrizesTaken(player: Player, count: number): void {
 
 export function takePrizeTo(player: Player, prize: CardList, destination: CardList): void {
   const count = prize.cards.length;
+  if (destination === player.discard) {
+    prize.moveCardsTo(prize.cards.filter(card => card.tags.includes(CardTag.PRISM_STAR)), player.lostzone);
+  }
   prize.moveTo(destination);
   countPrizesTaken(player, count);
 }
@@ -89,6 +94,21 @@ export function TAKE_SPECIFIC_PRIZES(
   const destinationCheck = new CheckPrizesDestinationEffect(player, options.destination ?? player.hand);
   store.reduceEffect(state, destinationCheck);
   const destination = destinationCheck.preventDefault ? options.destination ?? player.hand : destinationCheck.destination;
+  // Billowing Smoke and Lost Block apply to each Prize individually. The
+  // player sees the awarded cards and chooses which go to the discard pile.
+  if (options.destination === player.discard && destination === player.lostzone) {
+    const choices = new CardList();
+    choices.cards = selected.flatMap(prize => prize.cards);
+    store.prompt(state, new ChooseCardsPrompt(player, GameMessage.CHOOSE_PRIZES_TO_DISCARD_OR_LOST_ZONE,
+      choices, {}, { min: 0, max: choices.cards.length, allowCancel: false }), discarded => {
+      for (const prize of selected) {
+        takePrizeTo(player, prize, discarded?.includes(prize.cards[0]) ? player.discard : player.lostzone);
+      }
+      onComplete?.();
+    });
+    return;
+  }
+
   const effect = new DrawPrizesEffect(player, selected, destination, [...(options.reservedPrizes ?? []), ...selected]);
   store.reduceEffect(state, effect);
   if (effect.preventDefault) {
@@ -97,12 +117,7 @@ export function TAKE_SPECIFIC_PRIZES(
   }
 
   const finish = (): void => {
-    let taken = 0;
-    for (const prize of selected) {
-      taken += prize.cards.length;
-      prize.moveTo(effect.destination);
-    }
-    if (effect.destination === player.hand) countPrizesTaken(player, taken);
+    for (const prize of selected) takePrizeTo(player, prize, effect.destination);
     onComplete?.();
   };
   resolvePrizeReactions(store, state, player, [...effect.reactions.values()], finish);

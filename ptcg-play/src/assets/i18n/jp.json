@@ -86,6 +86,7 @@
     "CHOOSE_CARD_TO_COPY_EFFECT": "プレイするカードを選択してください。",
     "CHOOSE_CARD_TO_DECK": "デッキにシャッフルするカードを選択してください。",
     "CHOOSE_CARD_TO_DISCARD": "捨てるカードを選択してください。",
+    "CHOOSE_PRIZES_TO_DISCARD_OR_LOST_ZONE": "トラッシュするサイドのカードを選んでください。残りはロストゾーンに置きます。",
     "CHOOSE_CARD_TO_HAND": "手札に加えるカードを選択してください。",
     "CHOOSE_ONE_ITEM_AND_ONE_TOOL_TO_HAND": "手札に加える1つのアイテムと1つのポケモンツールを選択してください。",
     "CHOOSE_CARD_TO_EVOLVE": "進化カードを選択してください。",

@@ -18,6 +18,7 @@ export enum CheckEffects {
   CHECK_POKEMON_POWERS_EFFECT = 'CHECK_POKEMON_POWERS_EFFECT',
   CHECK_POKEMON_ATTACKS_EFFECT = 'CHECK_POKEMON_ATTACKS_EFFECT',
   CHECK_POKEMON_TYPE_EFFECT = 'CHECK_POKEMON_TYPE_EFFECT',
+  CHECK_POKEMON_PLACEMENT_EFFECT = 'CHECK_POKEMON_PLACEMENT_EFFECT',
   CHECK_RETREAT_COST_EFFECT = 'CHECK_RETREAT_COST_EFFECT',
   CHECK_ATTACK_COST_EFFECT = 'CHECK_ATTACK_COST_EFFECT',
   CHECK_ENOUGH_ENERGY_EFFECT = 'CHECK_ENOUGH_ENERGY_EFFECT',
@@ -130,6 +131,13 @@ export class CheckPokemonStatsEffect implements Effect {
     this.weakness = pokemonCard ? [...pokemonCard.weakness] : [];
     this.resistance = pokemonCard ? [...pokemonCard.resistance] : [];
   }
+}
+
+export class CheckPokemonPlacementEffect implements Effect {
+  readonly type = CheckEffects.CHECK_POKEMON_PLACEMENT_EFFECT;
+  public preventDefault = false;
+
+  constructor(public readonly player: Player, public readonly pokemon: PokemonCard) {}
 }
 
 export class CheckPokemonTypeEffect implements Effect {

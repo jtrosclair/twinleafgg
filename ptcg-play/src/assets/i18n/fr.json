@@ -102,6 +102,7 @@
     "CHOOSE_CARDS_TO_RETURN_TO_PRIZES": "Choissisez la (ou les) carte(s) à placer comme carte Récompense",
     "CHOOSE_CARD_TO_DECK": "Choississez la (ou les) carte(s) à remélanger dans le deck.",
     "CHOOSE_CARD_TO_DISCARD": "Choississez la (ou les) carte(s) à défausser.",
+    "CHOOSE_PRIZES_TO_DISCARD_OR_LOST_ZONE": "Choisissez les cartes Récompense à défausser. Les autres vont dans la Zone Perdue.",
     "CHOOSE_CARD_TO_HAND": "Choississez la (ou les) carte(s) à mettre dans votre main.",
     "CHOOSE_ONE_ITEM_AND_ONE_TOOL_TO_HAND": "Choississez une carte Objet et une carte Outil Pokémon à mettre dans votre main.",
     "CHOOSE_ONE_DARK_POKEMON_AND_ONE_ENERGY_TO_HAND": "Choissisez un Pokémon Obscurité et une carte Énergie à ajouter à votre main.",

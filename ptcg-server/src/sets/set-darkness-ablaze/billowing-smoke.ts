@@ -1,10 +1,9 @@
 import { TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
-import { ToolEffect } from '../../game/store/effects/play-card-effects';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
+import { IS_TOOL_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 import { StateUtils } from '../../game/store/state-utils';
 
 export class BillowingSmoke extends TrainerCard {
@@ -28,24 +27,9 @@ export class BillowingSmoke extends TrainerCard {
     'that player discards any Prize cards they would take for that Knock Out instead of putting those cards into their hand.';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof KnockOutEffect &&
-      effect.target.tools.includes(this) &&
-      effect.player.marker.hasMarker(effect.player.DAMAGE_DEALT_MARKER)
-    ) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, effect.player);
-
-      try {
-        const toolEffect = new ToolEffect(player, this);
-        store.reduceEffect(state, toolEffect);
-      } catch {
-        return state;
-      }
-
-      // Set the knockout effect's prize destination to the opponent's discard pile.
-      effect.prizeDestination = opponent.discard;
-
-      return state;
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.target.tools.includes(this)
+      && !IS_TOOL_BLOCKED(store, state, effect.player, this)) {
+      effect.prizeDestination = StateUtils.getOpponent(state, effect.player).discard;
     }
     return state;
   }

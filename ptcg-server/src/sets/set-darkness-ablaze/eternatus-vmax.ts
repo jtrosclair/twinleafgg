@@ -1,13 +1,13 @@
-import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { PokemonCard, pokemonHasCardType } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { PowerEffect } from '../../game/store/effects/game-effects';
-import { GameError, GameMessage, PlayerType, PowerType } from '../../game';
-import { CheckPokemonTypeEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
+import { GameError, GameMessage, PlayerType, PowerType, StateUtils } from '../../game';
+import { CheckPokemonPlacementEffect, CheckPokemonTypeEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class EternatusVMAX extends PokemonCard {
   public stage: Stage = Stage.VMAX;
@@ -43,6 +43,15 @@ export class EternatusVMAX extends PokemonCard {
   public readonly ETERNATUS_EXPANDED_BENCH = 'ETERNATUS_EXPANDED_BENCH';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    if (effect instanceof CheckPokemonPlacementEffect && !pokemonHasCardType(effect.pokemon, CardType.DARK)
+      && StateUtils.isPokemonInPlay(effect.player, this) && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+      effect.preventDefault = effect.player.getPokemonInPlay().every(slot => {
+        const checkType = new CheckPokemonTypeEffect(slot);
+        store.reduceEffect(state, checkType);
+        return checkType.cardTypes.includes(CardType.DARK);
+      }) || effect.preventDefault;
+    }
+
     // Eternal Zone
     if (effect instanceof CheckTableStateEffect) {
       effect.benchSizes = state.players.map((player, index) => {

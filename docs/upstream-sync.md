@@ -5071,3 +5071,48 @@ The full engine suite passes 11,240 tests across 323 files. The Bench
 reaction suite passes all 58 cases, including 14 failures reproduced on
 the prior engine. The combined worktree with the existing local edits
 passes 169 targeted cases.
+
+## Gameplay re-audit, batch 78
+
+Lucky Bonus and Wish Upon a Star now emit the completed Bench placement
+after taking the chosen Prize. Risky Ruins places two counters on the
+new Pokémon. New Moon can prevent them. The hand-only Gapejaw Bog and
+Miasma Valley stay outside this event. Dream Ball's deck placement was
+checked through the same Knock Out and Prize sequence.
+[Official Risky Ruins print](https://asia.pokemon-card.com/sg/card-search/detail/21719/)
+[Official advanced rules for Prize placements](https://www.pokemon-card.com/assets/document/advanced_manual.pdf#page=68)
+
+The Prize Abilities retain their printed timing when Silent Lab or Path
+to the Peak is in play. Eternal Zone checks the physical Eternatus VMAX,
+its Ability suppression and the effective types on its owner's board.
+It prevents Jirachi from entering via Wish Upon a Star while it applies.
+The remaining Eternal Zone paths for other ways of putting Pokémon in
+play still need the same legality review.
+[Official Silent Lab and Lucky Bonus ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B5%E3%82%A4%E3%83%AC%E3%83%B3%E3%83%88%E3%83%A9%E3%83%9C&regulation_faq_main_item1=BW)
+[Official Path to the Peak and Eternal Zone rulings for Wish Upon a Star](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B8%E3%83%A9%E3%83%BC%E3%83%81%E2%97%87&regulation_faq_main_item1=all)
+
+Barbaracle's Lost Block applies only to the opposing Prize taker while
+the Ability is active. Billowing Smoke checks actual lethal attack
+damage on its holder, so attack effects that place counters bypass it.
+If both replacements apply, the Prize taker sees the awarded cards and
+chooses which to discard. The others go to the Lost Zone. A Prism Star
+chosen for discard follows its printed Lost Zone rule. Redirected
+Prizes count toward the original award and bypass effects that require
+the card's normal path to the hand. The actual Slowbro attack and the
+final-Prize win exercise the same routing.
+[Official Lost Block print](https://asia.pokemon-card.com/hk-en/card-search/detail/2704/)
+[Official Lost Block and Billowing Smoke rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AD%E3%82%B9%E3%83%88%E3%83%96%E3%83%AD%E3%83%83%E3%82%AF&regulation_faq_main_item1=BW)
+[Official Billowing Smoke print](https://www.pokemon-card.com/card-search/details.php/card/38231/regu/BW)
+
+All 172 targeted cases pass, with 14 failures reproduced on the
+previous engine. All 559 comparable saved boards have identical
+serialized states, card names and validation responses. The API passes
+32 checks.
+
+All 3,636 sampled opening actions match, and all seven recorded puzzle
+solutions still win twice. The combined worktree passes 212 targeted
+tests. The attested browser package passes ten board scenarios and
+209 client checks. Desktop and touch tests of the packaged Prize prompt
+discard Chansey and put Treasure Energy in the Lost Zone.
+
+The full engine suite passes 11,261 tests across 323 files.

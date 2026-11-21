@@ -119,6 +119,7 @@
     "CHOOSE_CARDS_TO_RETURN_TO_PRIZES": "Choose cards to return to prizes",
     "CHOOSE_CARD_TO_DECK": "Choose cards that will be shuffled into deck.",
     "CHOOSE_CARD_TO_DISCARD": "Choose cards that will be discarded.",
+    "CHOOSE_PRIZES_TO_DISCARD_OR_LOST_ZONE": "Choose which Prize cards to discard. The rest go to the Lost Zone.",
     "CHOOSE_CARD_TO_HAND": "Choose cards that will be added to hand.",
     "CHOOSE_ONE_ITEM_AND_ONE_TOOL_TO_HAND": "Choose one Item and one Pokémon Tool to put in your hand.",
     "CHOOSE_ONE_DARK_POKEMON_AND_ONE_ENERGY_TO_HAND": "Choose on Darkness Pokémon and one Energy to put in your hand.",

@@ -4,6 +4,7 @@ import type { Card } from '../card/card';
 import { Stage } from '../card/card-types';
 import { PokemonCard } from '../card/pokemon-card';
 import { PowerType } from '../card/pokemon-types';
+import { CheckPokemonPlacementEffect } from '../effects/check-effects';
 import { EndTurnEffect } from '../effects/game-phase-effects';
 import { AfterBenchBasicPokemonEffect, AfterPlayBasicFromHandEffect, PlayPokemonFromDeckEffect } from '../effects/play-card-effects';
 import { SelectPrompt } from '../prompts/select-prompt';
@@ -15,6 +16,12 @@ import { GamePhase, State } from '../state/state';
 import type { StoreLike } from '../store-like';
 import { IS_ABILITY_BLOCKED, IS_POKEPOWER_BLOCKED } from './prefabs';
 import { IS_STADIUM_EFFECT_BLOCKED } from './stadium-effect';
+
+export function canPlacePokemon(store: StoreLike, state: State, player: Player, card: PokemonCard): boolean {
+  const check = new CheckPokemonPlacementEffect(player, card);
+  store.reduceEffect(state, check);
+  return !check.preventDefault;
+}
 
 /** Resolve triggers after the physical card and its continuous effects are in play. */
 export function resolveBenchPlayReactions(store: StoreLike, state: State, effect: AfterBenchBasicPokemonEffect): State {

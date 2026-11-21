@@ -41,25 +41,10 @@ export class Barbaracle extends PokemonCard {
   public fullName: string = 'Barbaracle LOR';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof CheckPrizesDestinationEffect && StateUtils.isPokemonInPlay(effect.player, this)) {
-      // Ensure that Barbaracle is in play and has an owner.
-      const opponent = effect.player; // Since it's the opponent that draws the prizes
-      const player = StateUtils.getOpponent(state, opponent);
-      const cardList = StateUtils.findCardList(state, this);
-      const owner = StateUtils.findOwner(state, cardList);
-
-      if (owner !== player) {
-        return state;
-      }
-
-      // Check if ability is blocked
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      // If the DrawPrizesEffect is triggering on the opponent's prize draw, override the destination.
-      if (effect.player.id === opponent.id) {
-        effect.destination = opponent.lostzone;
+    if (effect instanceof CheckPrizesDestinationEffect) {
+      const owner = StateUtils.getOpponent(state, effect.player);
+      if (StateUtils.isPokemonInPlay(owner, this) && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        effect.destination = effect.player.lostzone;
       }
     }
     return state;
