@@ -7,6 +7,7 @@ import { CoinFlipPrompt } from '../prompts/coin-flip-prompt';
 import { ConfirmPrompt } from '../prompts/confirm-prompt';
 import { Prompt } from '../prompts/prompt';
 import { SelectPrompt } from '../prompts/select-prompt';
+import { ShowCardsPrompt, publicAttackReveals } from '../prompts/show-cards-prompt';
 import { Player } from '../state/player';
 import { GamePhase, State } from '../state/state';
 import { StoreLike } from '../store-like';
@@ -103,6 +104,18 @@ export function flipToCopyAttack(
     ? store.prompt(state, new CoinFlipPrompt(effect.player.id, GameMessage.COIN_FLIP), resolve)
     : store.reduceEffect(state, new CoinFlipEffect(effect.player, resolve));
   return flip();
+}
+
+/** A printed reveal is visible to both players before the next attack coin. */
+export function revealCardsBeforeAttackCoins(
+  store: StoreLike, state: State, effect: AttackEffect, cards: Card[], then: () => void,
+): State {
+  const options = { sourcePlayerId: effect.player.id };
+  const owner = new ShowCardsPrompt(effect.player.id, GameMessage.CARDS_SHOWED_BY_EFFECT, cards, options);
+  const opponent = new ShowCardsPrompt(effect.opponent.id, GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, cards, options);
+  publicAttackReveals.add(owner);
+  publicAttackReveals.add(opponent);
+  return store.prompt(state, [owner, opponent], then);
 }
 
 /** Legacy attack handlers submit one prompt or a single batch of coin prompts. */

@@ -8,6 +8,8 @@ import { CoinFlipPrompt } from '../prompts/coin-flip-prompt';
 import { ConfirmPrompt } from '../prompts/confirm-prompt';
 import { Prompt } from '../prompts/prompt';
 import { SelectPrompt } from '../prompts/select-prompt';
+import { ShowCardsPrompt, publicAttackReveals } from '../prompts/show-cards-prompt';
+import { ShuffleDeckPrompt } from '../prompts/shuffle-prompt';
 import { WaitPrompt } from '../prompts/wait-prompt';
 import { checkpointActiveAbilityLockOrder } from '../state/active-ability-lock-order';
 import { CardList } from '../state/card-list';
@@ -154,6 +156,8 @@ export class CopiedAttackReflipBranch {
     if (this.committed) return;
     const publicChoice = (prompt: Prompt<unknown>): boolean => {
       if (prompt instanceof CoinFlipPrompt || prompt instanceof WaitPrompt || prompt instanceof ConfirmPrompt) return true;
+      if (prompt instanceof ShowCardsPrompt) return publicAttackReveals.has(prompt);
+      if (prompt instanceof ShuffleDeckPrompt) return prompt.count !== undefined;
       if (prompt instanceof SelectPrompt) return prompt.message === GameMessage.CHOOSE_HEADS_OR_TAILS;
       if (prompt instanceof ChoosePokemonPrompt) return publicTargets(this.state) === this.targets;
       if (prompt instanceof ChooseAttackPrompt) return prompt.cards.every(card => this.publicCards.has(card));

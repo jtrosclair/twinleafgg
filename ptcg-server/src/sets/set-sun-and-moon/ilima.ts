@@ -6,8 +6,8 @@ import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils, ShuffleDeckPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { COIN_FLIP_PROMPT, DRAW_CARDS } from '../../game/store/prefabs/prefabs';
+import { CoinFlipSequenceEffect, TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { DRAW_CARDS } from '../../game/store/prefabs/prefabs';
 
 export class Ilima extends TrainerCard {
   public trainerType: TrainerType = TrainerType.SUPPORTER;
@@ -24,32 +24,19 @@ export class Ilima extends TrainerCard {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
-      // Shuffle player's hand into deck (excluding this card which is in supporter zone)
-      const playerCards = player.hand.cards.filter(c => c !== this);
-      player.hand.moveCardsTo(playerCards, player.deck);
+      const players = [player, opponent];
+      for (const owner of players) {
+        const hand = owner === player ? owner.hand.cards.filter(card => card !== this) : owner.hand.cards.slice();
+        owner.hand.moveCardsTo(hand, owner.deck);
+        if (owner.deck.cards.length > 1) {
+          store.prompt(state, new ShuffleDeckPrompt(owner.id, owner.deck.cards.length), order => owner.deck.applyOrder(order));
+        }
+      }
 
-      store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-        player.deck.applyOrder(order);
-      });
-
-      // Flip coin for player
-      COIN_FLIP_PROMPT(store, state, player, playerResult => {
-        const playerDraw = playerResult ? 6 : 3;
-        DRAW_CARDS(player, Math.min(playerDraw, player.deck.cards.length));
-      });
-
-      // Shuffle opponent's hand into deck
-      const opponentCards = opponent.hand.cards.slice();
-      opponent.hand.moveCardsTo(opponentCards, opponent.deck);
-
-      store.prompt(state, new ShuffleDeckPrompt(opponent.id), order => {
-        opponent.deck.applyOrder(order);
-      });
-
-      // Flip coin for opponent
-      COIN_FLIP_PROMPT(store, state, opponent, opponentResult => {
-        const opponentDraw = opponentResult ? 6 : 3;
-        DRAW_CARDS(opponent, Math.min(opponentDraw, opponent.deck.cards.length));
+      return store.waitPrompt(state, () => {
+        store.reduceEffect(state, new CoinFlipSequenceEffect(player, players, results => {
+          players.forEach((owner, index) => DRAW_CARDS(owner, Math.min(results[index] ? 6 : 3, owner.deck.cards.length)));
+        }));
       });
     }
 

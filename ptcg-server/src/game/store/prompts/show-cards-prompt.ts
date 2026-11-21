@@ -34,3 +34,7 @@ export class ShowCardsPrompt extends Prompt<true> {
     }, options);
   }
 }
+
+// A card's printed public reveal can precede the attack's coins. Keep this
+// internal so snapshots and ordinary private ShowCards prompts are unchanged.
+export const publicAttackReveals = new WeakSet<ShowCardsPrompt>();

@@ -4,10 +4,10 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, TrainerType } from '../../game/store/card/card-types';
-import { Card, ChooseCardsPrompt, GameMessage, StoreLike, State, StateUtils } from '../../game';
+import { ChooseCardsPrompt, GameMessage, StoreLike, State, StateUtils } from '../../game';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
-import { TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { CopiedSupporterEffect } from '../../game/store/effects/play-card-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { PUT_X_DAMAGE_COUNTERS_ON_YOUR_OPPONENTS_ACTIVE_POKEMON } from '../../game/store/prefabs/attack-effects';
 
@@ -40,7 +40,7 @@ export class Sableye extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Attack 1: Bewitching Eyes
-    // Ref: set-plasma-storm/liepard.ts (Silent Claw - use opponent's Supporter)
+    // Ref: set-undaunted/smeargle.ts (Portrait)
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
@@ -59,14 +59,10 @@ export class Sableye extends PokemonCard {
         opponent.discard,
         { superType: SuperType.TRAINER, trainerType: TrainerType.SUPPORTER },
         { min: 1, max: 1, allowCancel: false }
-      ), (selected: Card[]) => {
-        selected = selected || [];
-        if (selected.length > 0) {
-          const supporterCard = selected[0] as TrainerCard;
-
-          // Use the effect of that supporter card
-          const trainerEffect = new TrainerEffect(player, supporterCard);
-          store.reduceEffect(state, trainerEffect);
+      ), selected => {
+        const supporter = selected?.[0];
+        if (supporter instanceof TrainerCard) {
+          store.reduceEffect(state, new CopiedSupporterEffect(player, supporter, 'discard'));
         }
       });
     }

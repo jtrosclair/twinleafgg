@@ -757,21 +757,23 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
 
   if (effect instanceof CoinFlipSequenceEffect) {
     const { player, mode, callback } = effect;
+    const flippers = typeof mode === 'object' ? mode : undefined;
+    const count = typeof mode === 'object' ? mode.length : mode;
     const flipSequence = (results: boolean[], finished: (results: boolean[]) => void): State => {
-      const flip = new CoinFlipEffect(player, result => {
+      const flip = new CoinFlipEffect(flippers?.[results.length] ?? player, result => {
         results.push(result);
-        if (mode === 'untilTails' ? result : results.length < mode) flipSequence(results, finished);
+        if (count === 'untilTails' ? result : results.length < count) flipSequence(results, finished);
         else finished(results);
       });
       flip.skipAttackReflip = true;
       return store.reduceEffect(state, flip);
     };
-    if (mode === 0) {
+    if (count === 0) {
       callback([]);
       return state;
     }
     return flipSequence([], results => offerAttackCoinReflip(store, state,
-      () => callback(results), () => flipSequence([], callback), [player.id]));
+      () => callback(results), () => flipSequence([], callback), (flippers ?? [player]).map(flipper => flipper.id)));
   }
 
   if (effect instanceof CoinFlipEffect) {

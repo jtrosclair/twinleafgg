@@ -243,6 +243,10 @@ export class TrainerEffect implements Effect {
 /** Resolves a borrowed Supporter's printed effect without playing the card. */
 export class CopiedSupporterEffect extends TrainerEffect {
   public maximumSupporterPlays?: number;
+
+  constructor(player: Player, trainerCard: TrainerCard, public readonly sourceZone: 'hand' | 'discard' = 'hand') {
+    super(player, trainerCard);
+  }
 }
 
 export class EnergyEffect implements Effect {
@@ -315,11 +319,11 @@ export class CoinFlipSequenceEffect implements Effect {
   readonly type: string = PlayCardEffects.COIN_FLIP_SEQUENCE_EFFECT;
   public preventDefault = false;
   public player: Player;
-  /** 'untilTails' or fixed count */
-  public mode: 'untilTails' | number;
+  /** One player's series or an ordered list of players who each flip once. */
+  public mode: 'untilTails' | number | readonly Player[];
   public callback: (results: boolean[]) => void;
 
-  constructor(player: Player, mode: 'untilTails' | number, callback: (results: boolean[]) => void) {
+  constructor(player: Player, mode: CoinFlipSequenceEffect['mode'], callback: (results: boolean[]) => void) {
     this.player = player;
     this.mode = mode;
     this.callback = callback;

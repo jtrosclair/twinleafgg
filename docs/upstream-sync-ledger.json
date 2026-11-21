@@ -9,7 +9,7 @@
       "date": "2026-09-04",
       "subject": "refactor(cards, engine): Copycat Attacks",
       "status": "partial",
-      "notes": "Historical pre-base path record. Batch 68 adapts the common copied-attack lifecycle for copies from a Benched Pokémon or the opposing Active, Mini-Metronome and Trace. It preserves the declared attack and its payment, avoids a second Confusion or Smokescreen check, and retains handling for legacy in-play sources. Linked replacement coins and other individually implemented copy paths remain open. Batch 69 links the coin-gated common copy paths so Victory Star and the equivalent sources restart at the declared gate and release the original board effects only when kept. Water Vein and other paths exposing unrevealed cards before another coin still need review."
+      "notes": "Historical pre-base path record. Batch 68 adapts the common copied-attack lifecycle for copies from a Benched Pokémon or the opposing Active, Mini-Metronome and Trace. It preserves the declared attack and its payment, avoids a second Confusion or Smokescreen check, and retains handling for legacy in-play sources. Linked replacement coins and other individually implemented copy paths remain open. Batch 69 links the coin-gated common copy paths so Victory Star and the equivalent sources restart at the declared gate and release the original board effects only when kept. Water Vein and other paths exposing unrevealed cards before another coin still need review. Batch 70 supports Water Vein’s printed public reveal during a pending copied-attack reroll while keeping private prompts on the accepted branch."
     },
     {
       "sha": "a9060761e77dced7d3bcf02f6792a73c4d5851ea",
@@ -37,7 +37,7 @@
       "date": "2026-08-08",
       "subject": "refactor(cards): COIN_FLIP_PROMPT",
       "status": "partial",
-      "notes": "Historical upstream record. Batch 63 adapts the Iono’s Electrode JTG path while preserving legacy coin prompts. Thump-Thump Boom Knocks Out the defender on final heads. The upstream helper conversion kept the reversed result. Batch 64 adapts the registered until-tails handlers after checking each printed effect. The upstream conversions for Hoppip EVS, Moltres VS2 and Tyrantrum M3 still differ from their printed outcomes and ordering. Batch 65 adapts Chansey BS Scrunch to the single resolved coin. Its older damage-protection markers still work. Conditional copied attacks such as Assist remain open."
+      "notes": "Historical upstream record. Batch 63 adapts the Iono’s Electrode JTG path while preserving legacy coin prompts. Thump-Thump Boom Knocks Out the defender on final heads. The upstream helper conversion kept the reversed result. Batch 64 adapts the registered until-tails handlers after checking each printed effect. The upstream conversions for Hoppip EVS, Moltres VS2 and Tyrantrum M3 still differ from their printed outcomes and ordering. Batch 65 adapts Chansey BS Scrunch to the single resolved coin. Its older damage-protection markers still work. Conditional copied attacks such as Assist remain open. Batch 70 adapts Ilima into a two-player coin group after both deck shuffles, with the printed draw limits and the official Bewitching Eyes reroll."
     },
     {
       "sha": "8ba948645d71148d536e0956c002004135a3f0ae",
@@ -450,7 +450,7 @@
       "date": "2026-10-24",
       "subject": "add(cards): Platinum",
       "status": "partial",
-      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-24 adds 30 Platinum cards including Life Herb in a 62-card batch. 338 focused cases, both browser builds, 530 saved states and four recorded puzzle replays passed; 3,456/3,457 initial actions matched with the sole pre-existing intentional Sob marker change. More additions remain to review."
+      "notes": "Large historical card addition; card implementations and image mappings are not yet individually reviewed. Port in collision-checked, gameplay-tested batches; do not treat this as applied. Round-24 adds 30 Platinum cards including Life Herb in a 62-card batch. 338 focused cases, both browser builds, 530 saved states and four recorded puzzle replays passed; 3,456/3,457 initial actions matched with the sole pre-existing intentional Sob marker change. More additions remain to review. Batch 70 corrects Octillery PL Water Vein with a public reveal before coins, the later deck return and shuffle, and the copied Assist restart."
     },
     {
       "sha": "702953a83cfe3f82635236fdc3d29cccc1770e7f",

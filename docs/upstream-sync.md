@@ -4704,3 +4704,36 @@ All seven recorded solutions still win. Packaged mouse and touch tests
 reroll Smithereen Smash, choose Thunder Fang instead, and finish with
 30 damage and Paralysis. The original Energy stays attached. The 2.51 MiB
 gzip package passes attestation, 10 board scenarios and 209 client checks.
+
+## Gameplay re-audit, batch 70
+
+Water Vein shows the revealed cards to both players before its first coin.
+It reveals all available cards when the deck has fewer than five, counts
+only Energy among the revealed cards, applies the damage, then returns and
+shuffles the revealed cards. A reveal with zero Energy still shuffles.
+The copied attack’s public reveal can stay visible while its changes are
+pending. Based on the Water Vein print and the separate Assist ruling,
+a reflip can restart the enclosing Assist after Water Vein’s coins. The
+abandoned branch loses its damage and shuffle. The original deck order
+is restored, so selecting Water Vein again reveals the same physical cards.
+[Official Water Vein print](https://www.pokemon-card.com/card-search/details.php/card/21129/regu/all)
+[Official short-deck and zero-Energy rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%AA%E3%82%AF%E3%82%BF%E3%83%B3&page=2&regulation=all&regulation_faq_main_item1=all)
+[Official Assist restart ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%8A%E3%83%83%E3%82%AF%E3%83%A9%E3%83%BC&regulation_faq_main_item1=all)
+
+Ilima shuffles both hands before the coin group and waits for both final
+results before drawing. Victory Star rerolls both players’ coins if
+Bewitching Eyes copies Ilima. This uses the existing Supporter copy path
+with the opponent’s discard as its source. If Assist instead abandons the
+copied Bewitching Eyes, both original hands and deck orders are restored.
+Portrait still shuffles the opponent’s copy of Ilima with their hand.
+[Official Ilima print](https://www.pokemon-card.com/card-search/details.php/card/33062)
+[Official Bewitching Eyes ruling for Ilima](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%A4%E3%83%AA%E3%83%9E)
+
+All 13 focused cases pass and reproduce failures on the previous engine.
+The full engine suite passes 11,032 tests. The worktree carrying the local
+edits passes 111 targeted checks. All 559 comparable saved boards and
+5,225 sampled opening actions match. The API passes 32 checks. All seven
+recorded solutions still win. The package passes attestation, 10 board
+scenarios and 209 client checks. Packaged mouse and touch tests reveal
+Water Vein’s five cards, restart Assist, choose Thunder Fang and confirm
+that the deck still has its original order.

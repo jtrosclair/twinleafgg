@@ -1,9 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage } from '../../game/store/card/card-types';
-import { CardList, EnergyCard, State, StateUtils, StoreLike } from '../../game';
+import { CardList, EnergyCard, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { revealCardsBeforeAttackCoins } from '../../game/store/prefabs/attack-coin-reflip';
 import { DEFENDING_POKEMON_FLIPS_COIN_TO_ATTACK } from '../../game/store/prefabs/effect-of-attack-prefabs';
-import { MOVE_CARDS, MULTIPLE_COIN_FLIPS_PROMPT, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS, MULTIPLE_COIN_FLIPS_PROMPT, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Octillery extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -36,28 +38,26 @@ export class Octillery extends PokemonCard {
     // Water Vein
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
+      effect.damage = 0;
+      if (!player.deck.cards.length) return state;
+
       const deckTop = new CardList();
-      MOVE_CARDS(store, state, player.deck, deckTop, { count: 5, sourceCard: this, sourceEffect: this.attacks[0] });
-
-      const revealed = [...deckTop.cards];
+      const sourceCard = effect.source.getPokemonCard() ?? this;
+      MOVE_CARDS(store, state, player.deck, deckTop, { count: 5, sourceCard, sourceEffect: effect });
+      const revealed = deckTop.cards.slice();
       const energyCount = revealed.filter(card => card instanceof EnergyCard).length;
-      SHOW_CARDS_TO_PLAYER(store, state, opponent, revealed);
+      if (!revealed.length) return state;
 
-      const finish = () => {
-        MOVE_CARDS(store, state, deckTop, player.deck, { cards: deckTop.cards, sourceCard: this, sourceEffect: this.attacks[0] });
-        SHUFFLE_DECK(store, state, player);
-      };
-
-      if (energyCount === 0) {
-        effect.damage = 0;
-        finish();
-        return state;
-      }
-
-      return MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, energyCount, results => {
-        effect.damage = 50 * results.filter(r => r).length;
-        finish();
+      afterAttackDamage(state, effect, (store, next) => {
+        MOVE_CARDS(store, next, deckTop, player.deck, { cards: revealed, sourceCard, sourceEffect: effect });
+        return SHUFFLE_DECK(store, next, player);
+      });
+      return revealCardsBeforeAttackCoins(store, state, effect, revealed, () => {
+        if (energyCount > 0) {
+          MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, energyCount, results => {
+            effect.damage = 50 * results.filter(Boolean).length;
+          });
+        }
       });
     }
 
