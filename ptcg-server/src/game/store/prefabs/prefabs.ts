@@ -5,7 +5,7 @@ import { withoutWillCoinChoice } from './will-coin-choice';
 import { ConfirmCardsPrompt } from '../prompts/confirm-cards-prompt';
 import { GustOpponentBenchEffect } from '../effects/attack-effects';
 import { AttachEnergyOptions, AttachEnergyPrompt, Card, CardList, CardTarget, ChooseCardsOptions, ChooseCardsPrompt, ChoosePokemonPrompt, ChooseEnergyPrompt, ConfirmPrompt, DamageMap, EnergyCard, GameError, GameLog, GameMessage, MoveDamagePrompt, Player, PlayerType, PokemonCardList, PowerType, SelectPrompt, ShowCardsPrompt, ShuffleDeckPrompt, SlotType, State, StateUtils, StoreLike, TrainerCard } from '../..';
-import { AfterAttachEnergyEffect, TrainerEffect, AttachEnergyEffect, ToolEffect, CoinFlipEffect, CoinFlipSequenceEffect, PlayPokemonFromDeckEffect } from '../effects/play-card-effects';
+import { AfterAttachEnergyEffect, CopiedSupporterEffect, TrainerEffect, TrainerTargetEffect, AttachEnergyEffect, ToolEffect, CoinFlipEffect, CoinFlipSequenceEffect, PlayPokemonFromDeckEffect } from '../effects/play-card-effects';
 import { BoardEffect, CardTag, CardType, EnergyType, Format, SpecialCondition, Stage, SuperType, TrainerType } from '../card/card-types';
 import { Attack } from '../card/pokemon-types';
 import { GamePhase } from '../state/state';
@@ -1629,8 +1629,16 @@ export function SWITCH_ACTIVE_WITH_BENCHED(store: StoreLike, state: State, playe
   });
 }
 
+/** Trainer protection applies when the chosen effect resolves. */
+export function TRAINER_TARGET_BLOCKED(store: StoreLike, state: State, effect: TrainerEffect, target: PokemonCardList): boolean {
+  if (effect instanceof CopiedSupporterEffect) return false;
+  const targeting = new TrainerTargetEffect(effect.player, effect.trainerCard, target);
+  store.reduceEffect(state, targeting);
+  return targeting.preventDefault || !targeting.target;
+}
+
 export interface SwitchInOpponentBenchedPokemonOptions {
-  sourceEffect?: AttackEffect | AfterAttackEffect;
+  sourceEffect?: AttackEffect | AfterAttackEffect | TrainerEffect;
   allowCancel?: boolean;
   blocked?: CardTarget[];
   onSwitched?: (target: PokemonCardList) => void;
@@ -1663,14 +1671,15 @@ export function SWITCH_IN_OPPONENT_BENCHED_POKEMON(
     if (!selected || selected.length === 0) {
       return;
     }
-    if (sourceEffect) {
-      const gustEffect = new GustOpponentBenchEffect(sourceEffect, selected[0]);
-      store.reduceEffect(state, gustEffect);
-      if (!gustEffect.preventDefault && onSwitched !== undefined) onSwitched(selected[0]);
-    } else {
-      opponent.switchPokemon(selected[0], store, state);
-      if (onSwitched !== undefined) onSwitched(selected[0]);
+    const target = selected[0];
+    const attack = sourceEffect instanceof CopiedSupporterEffect ? sourceEffect.attackSource
+      : sourceEffect instanceof TrainerEffect ? undefined : sourceEffect;
+    if (attack) {
+      store.reduceEffect(state, new GustOpponentBenchEffect(attack, target));
+    } else if (!(sourceEffect instanceof TrainerEffect) || !TRAINER_TARGET_BLOCKED(store, state, sourceEffect, target)) {
+      opponent.switchPokemon(target, store, state);
     }
+    if (opponent.active === target) onSwitched?.(target);
   });
 }
 

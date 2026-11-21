@@ -3,8 +3,8 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, PlayerType } from '../../game';
+import { Stage, CardType, TrainerType } from '../../game/store/card/card-types';
+import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 import { TrainerTargetEffect } from '../../game/store/effects/play-card-effects';
@@ -40,62 +40,13 @@ export class Thievul extends PokemonCard {
   public fullName: string = 'Thievul ASR 104';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Baffling - passive, intercept TrainerTargetEffect for benched V Pokemon
-    // Ref: set-team-up/galvantula.ts (Unnerve - TrainerTargetEffect.target = undefined to block effects)
-    if (effect instanceof TrainerTargetEffect) {
-      const target = effect.target;
-      if (!target) {
-        return state;
-      }
-
-      // Find which player owns Thievul
-      let thievulOwner: any = null;
-      state.players.forEach(p => {
-        p.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
-          if (cardList.getPokemonCard() === this) {
-            thievulOwner = p;
-          }
-        });
-      });
-
-      if (!thievulOwner) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, thievulOwner, this)) {
-        return state;
-      }
-
-      // The opponent is the one playing the Supporter (effect.player is opponent from our perspective)
-      const opponent = effect.player;
-
-      // Check if thievulOwner is NOT the one playing the Supporter
-      if (opponent === thievulOwner) {
-        return state;
-      }
-
-      // Check if opponent has 2 or fewer Prize cards remaining
-      const opponentRemainingPrizes = opponent.prizes.filter((p: any) => p.cards.length > 0).length;
-      if (opponentRemainingPrizes > 2) {
-        return state;
-      }
-
-      // Check if the target is one of Thievul owner's benched Pokemon V
-      let targetIsOurBenchedV = false;
-      thievulOwner.bench.forEach((benchSlot: any) => {
-        if (benchSlot === target) {
-          const pokemon = benchSlot.getPokemonCard();
-          if (pokemon && (
-            pokemon.tags.includes(CardTag.POKEMON_V) ||
-            pokemon.tags.includes(CardTag.POKEMON_VMAX) ||
-            pokemon.tags.includes(CardTag.POKEMON_VSTAR)
-          )) {
-            targetIsOurBenchedV = true;
-          }
-        }
-      });
-
-      if (targetIsOurBenchedV) {
+    // Baffling protects Benched Pokémon V from an opposing Supporter.
+    if (effect instanceof TrainerTargetEffect && effect.trainerCard.trainerType === TrainerType.SUPPORTER
+      && effect.target?.vPokemon()) {
+      const owner = StateUtils.getOpponent(state, effect.player);
+      if (owner.bench.includes(effect.target) && effect.player.prizes.filter(prize => prize.cards.length > 0).length <= 2
+        && owner.getPokemonInPlay().some(slot => slot.getPokemonCard() === this)
+        && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
         effect.target = undefined;
       }
     }

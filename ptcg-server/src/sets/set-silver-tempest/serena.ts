@@ -1,11 +1,8 @@
+import { CardTarget, ChooseCardsPrompt, PlayerType, SelectPrompt, GameError, GameMessage, State, StateUtils, StoreLike, TrainerCard, TrainerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { GameMessage } from '../../game/game-message';
-import { SupporterEffect, TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { State } from '../../game/store/state/state';
-import { StoreLike } from '../../game/store/store-like';
-import { TrainerCard } from '../../game/store/card/trainer-card';
-import { CardTag, Stage, TrainerType } from '../../game/store/card/card-types';
-import { Card, CardTarget, ChooseCardsPrompt, ChoosePokemonPrompt, GameError, PlayerType, PokemonCard, SelectPrompt, SlotType, StateUtils } from '../../game';
+import { CopiedSupporterEffect, TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { SWITCH_IN_OPPONENT_BENCHED_POKEMON } from '../../game/store/prefabs/prefabs';
+import { MoveCardsEffect } from '../../game/store/effects/game-effects';
 
 export class Serena extends TrainerCard {
 
@@ -26,139 +23,56 @@ export class Serena extends TrainerCard {
   public text: string =
     'Choose 1:\n\n' +
     '• Discard up to 3 cards from your hand. (You must discard at least 1 card.) If you do, draw cards until you have 5 cards in your hand.\n' +
-    '• Switch 1 of your opponent\'s Benched Pokémon V with their Active Pokémon. Shuffle the other cards back into your deck.';
+    '• Switch 1 of your opponent\'s Benched Pokémon V with their Active Pokémon.';
 
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof TrainerEffect && effect.trainerCard === this) {
+    if (!(effect instanceof TrainerEffect) || effect.trainerCard !== this) return state;
+    const { player } = effect;
+    if (player.supporterTurn > 0) {
+      throw new GameError(GameMessage.SUPPORTER_ALREADY_PLAYED);
+    }
 
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
+    const opponent = StateUtils.getOpponent(state, player);
+    const canDiscard = player.hand.cards.some(card => card !== this);
+    const canSwitch = opponent.bench.some(slot => slot.vPokemon());
+    if (!canDiscard && !canSwitch) throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
 
-      const supporterTurn = player.supporterTurn;
-
-      if (supporterTurn > 0) {
-        throw new GameError(GameMessage.SUPPORTER_ALREADY_PLAYED);
-      }
-
-      player.hand.moveCardTo(effect.trainerCard, player.supporter);
-      // We will discard this card after prompt confirmation
-      effect.preventDefault = true;
-
-      const options: { message: GameMessage, action: () => void }[] = [
-        {
-          message: GameMessage.DISCARD_AND_DRAW,
-          action: () => {
-
-            let cards: Card[] = [];
-
-            return store.prompt(state, new ChooseCardsPrompt(
-              player,
-              GameMessage.CHOOSE_CARD_TO_DISCARD,
-              player.hand,
-              {},
-              { min: 1, max: 3, allowCancel: true }
-            ), selected => {
-              cards = selected || [];
-              player.hand.moveCardsTo(cards, player.discard);
-
-
-              while (player.hand.cards.length < 5) {
-                if (player.deck.cards.length === 0) {
-                  break;
-                }
-                player.deck.moveTo(player.hand, 1);
-
-
-              }
-              return state;
-            });
-          }
+    if (!(effect instanceof CopiedSupporterEffect)) player.hand.moveCardTo(this, player.supporter);
+    const options: { message: GameMessage; action: () => void }[] = [];
+    if (canDiscard) {
+      options.push({
+        message: GameMessage.DISCARD_AND_DRAW,
+        action: () => {
+          store.prompt(state, new ChooseCardsPrompt(
+            player, GameMessage.CHOOSE_CARD_TO_DISCARD, player.hand, {},
+            { min: 1, max: 3, allowCancel: false }
+          ), selected => {
+            if (!selected?.length) return;
+            const discard = new MoveCardsEffect(player.hand, player.discard, { cards: selected, sourceCard: this });
+            store.reduceEffect(state, discard);
+            if (selected.some(card => player.discard.cards.includes(card) || player.lostzone.cards.includes(card))) {
+              player.deck.moveTo(player.hand, Math.max(0, 5 - player.hand.cards.length));
+            }
+          });
         },
-        {
-          message: GameMessage.SWITCH_POKEMON,
-          action: () => {
-
-            const blocked: CardTarget[] = [];
-            opponent.bench.forEach((card, index) => {
-              if (card instanceof PokemonCard && !(
-                (card.tags.includes(CardTag.POKEMON_V)) ||
-                (card.tags.includes(CardTag.POKEMON_VMAX)) ||
-                (card.tags.includes(CardTag.POKEMON_VSTAR)) ||
-                (card.tags.includes(CardTag.POKEMON_VUNION))
-              )) {
-                blocked.push({ player: PlayerType.TOP_PLAYER, slot: SlotType.BENCH, index });
-              }
-            });
-
-            return store.prompt(state, new ChoosePokemonPrompt(
-              player.id,
-              GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-              PlayerType.TOP_PLAYER,
-              [SlotType.BENCH],
-              { allowCancel: false, blocked: blocked }
-            ), result => {
-              const cardList = result[0];
-
-              if (cardList.isStage(Stage.BASIC)) {
-                try {
-                  const supporterEffect = new SupporterEffect(player, effect.trainerCard);
-                  store.reduceEffect(state, supporterEffect);
-                } catch {
-
-                  return state;
-                }
-              }
-
-              if (!result[0].getPokemonCard()?.tags.includes(CardTag.POKEMON_V) && !result[0].getPokemonCard()?.tags.includes(CardTag.POKEMON_VMAX) && !result[0].getPokemonCard()?.tags.includes(CardTag.POKEMON_VSTAR)) {
-                throw new GameError(GameMessage.INVALID_TARGET);
-              }
-
-              opponent.switchPokemon(cardList);
-
-              return state;
-            });
-          }
-        }
-      ];
-
-      const hasBench = opponent.bench.some(b => b.cards.length > 0);
-
-      if (!hasBench) {
-        options.splice(1, 1);
-      }
-
-
-      const hasVPokeBench = opponent.bench.some(b => b.getPokemonCard()?.tags.includes(CardTag.POKEMON_V) || b.getPokemonCard()?.tags.includes(CardTag.POKEMON_VMAX) || b.getPokemonCard()?.tags.includes(CardTag.POKEMON_VSTAR));
-
-      if (!hasVPokeBench) {
-        options.splice(1, 1);
-      }
-
-      let cards: Card[] = [];
-
-      cards = player.hand.cards;
-      if (cards.length < 1) {
-        options.splice(0, 1);
-      }
-
-      if (player.deck.cards.length === 0) {
-        options.splice(0, 1);
-      }
-
-      return store.prompt(state, new SelectPrompt(
-        player.id,
-        GameMessage.CHOOSE_OPTION,
-        options.map(opt => opt.message),
-        { allowCancel: false }
-      ), choice => {
-        const option = options[choice];
-        option.action();
       });
     }
-    return state;
+    if (canSwitch) {
+      options.push({
+        message: GameMessage.SWITCH_POKEMON,
+        action: () => {
+          const blocked: CardTarget[] = [];
+          opponent.forEachPokemon(PlayerType.TOP_PLAYER, (slot, _card, target) => {
+            if (!slot.vPokemon()) blocked.push(target);
+          });
+          SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, player, { blocked, sourceEffect: effect });
+        },
+      });
+    }
+
+    return store.prompt(state, new SelectPrompt(
+      player.id, GameMessage.CHOOSE_OPTION, options.map(option => option.message), { allowCancel: false }
+    ), choice => options[choice].action());
   }
-
-
-
 }

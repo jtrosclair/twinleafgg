@@ -1,8 +1,9 @@
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { CardTag, TrainerType } from '../../game/store/card/card-types';
-import { StoreLike, State } from '../../game';
+import { StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerTargetEffect } from '../../game/store/effects/play-card-effects';
+import { IS_TOOL_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class LeafyCamoPoncho extends TrainerCard {
   public trainerType: TrainerType = TrainerType.TOOL;
@@ -18,10 +19,14 @@ export class LeafyCamoPoncho extends TrainerCard {
       effect instanceof TrainerTargetEffect &&
       effect.trainerCard?.trainerType === TrainerType.SUPPORTER &&
       effect.target &&
-      effect.target.cards.includes(this) &&
+      effect.target.tools.includes(this) &&
       (effect.target.getPokemonCard()?.tags.includes(CardTag.POKEMON_VSTAR) || effect.target.getPokemonCard()?.tags.includes(CardTag.POKEMON_VMAX))
     ) {
-      effect.target = undefined;
+      const owner = StateUtils.getOpponent(state, effect.player);
+      const target = effect.target;
+      if ((owner.active === target || owner.bench.includes(target)) && !IS_TOOL_BLOCKED(store, state, owner, this)) {
+        effect.target = undefined;
+      }
     }
     return state;
   }

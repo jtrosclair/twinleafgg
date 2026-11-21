@@ -1,13 +1,7 @@
-import { TrainerCard } from '../../game/store/card/trainer-card';
-import { TrainerType } from '../../game/store/card/card-types';
-import { StoreLike } from '../../game/store/store-like';
-import { State } from '../../game/store/state/state';
+import { GameError, GameMessage, Player, State, StateUtils, StoreLike, TrainerCard, TrainerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { CopiedSupporterEffect, TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { SWITCH_IN_OPPONENT_BENCHED_POKEMON } from '../../game/store/prefabs/prefabs';
-import { StateUtils } from '../../game/store/state-utils';
-import { GameError, GameMessage, Player } from '../../game';
-
 
 export class BossOrders extends TrainerCard {
 
@@ -40,19 +34,16 @@ export class BossOrders extends TrainerCard {
   }
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof TrainerEffect && effect.trainerCard === this) {
-      // Legacy implementation:
-      // - Used a manual ChoosePokemonPrompt and optional TrainerTargetEffect redirect.
-      // - Switched opponent Active to chosen Benched target.
-      //
-      // Converted to prefab version (SWITCH_IN_OPPONENT_BENCHED_POKEMON).
-      if (effect.player.supporterTurn > 0) {
-        throw new GameError(GameMessage.SUPPORTER_ALREADY_PLAYED);
-      }
-
-      SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, effect.player, { allowCancel: false });
+    if (!(effect instanceof TrainerEffect) || effect.trainerCard !== this) return state;
+    const { player } = effect;
+    const opponent = StateUtils.getOpponent(state, player);
+    if (!opponent.bench.some(slot => slot.cards.length > 0)) {
+      if (effect instanceof CopiedSupporterEffect) return state;
+      throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
     }
-    return state;
+    if (player.supporterTurn > 0) {
+      throw new GameError(GameMessage.SUPPORTER_ALREADY_PLAYED);
+    }
+    return SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, player, { sourceEffect: effect });
   }
-
 }

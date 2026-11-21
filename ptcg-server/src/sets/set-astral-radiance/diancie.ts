@@ -1,5 +1,5 @@
 import { PowerType, State, StateUtils, StoreLike } from '../../game';
-import { CardType, Stage } from '../../game/store/card/card-types';
+import { CardType, Stage, TrainerType } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
 
@@ -45,11 +45,11 @@ export class Diancie extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof TrainerTargetEffect) {
+    if (effect instanceof TrainerTargetEffect && effect.trainerCard.trainerType === TrainerType.SUPPORTER) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
-      if (!opponent.active.cards.includes(this) || IS_ABILITY_BLOCKED(store, state, player, this)) {
+      if (opponent.active.getPokemonCard() !== this || IS_ABILITY_BLOCKED(store, state, opponent, this)) {
         return state;
       }
 

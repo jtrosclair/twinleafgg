@@ -4769,3 +4769,54 @@ solutions won. The attested package passes ten board scenarios and 209
 client checks. Packaged mouse and touch tests copy Lysandre from the
 opposing discard, preserving the physical card. They confirm the switch
 through Ω Barrier and prevention by Mist Energy on the selected Pokémon.
+
+## Gameplay re-audit, batch 72
+
+The switch chosen by the player applying an effect targets the opposing
+Benched Pokémon. Boss’s Orders, Lysandre, Guzma, Serena, Pokémon Catcher,
+Pokémon Reversal, Great Catcher and Gust of Wind now check the relevant
+protection after the target is chosen. Ω Barrier and Unnerve do not make the
+play illegal. If they stop Guzma’s first switch, it never asks the player to
+switch their own Active. Pokémon Catcher still uses the original non-coin
+effect in the legacy Black & White format and its published coin-flip erratum
+in modern formats.
+[Official advanced rulebook and Guzma ruling](https://asia.pokemon-card.com/sg/wp-content/uploads/sites/6/2022/08/advanced-manual_EN.pdf)
+[Official Pokémon Catcher erratum](https://play.pokemon.com/en-gb/resources/documents/tcg-errata/)
+
+Ryme targets the old Active and lets the opponent choose the replacement.
+Protection on the old Active can prevent the switch while leaving the draw
+intact. A protected replacement can still be selected. The official rulings
+permit either part alone and disallow the play when both are impossible.
+Copied Ryme checks attack protection against the old Active. Double Gust
+requires each applicable selection in the printed order and skips an empty
+Bench without asking for a choice.
+[Official Ryme print](https://www.pokemon-card.com/card-search/details.php/card/43948/regu/all)
+[Official Ryme rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A9%E3%82%A4%E3%83%A0&regulation_faq_main_item1=all)
+[Double Gust print](https://images.pokemontcg.io/neo1/100.png)
+
+Great Catcher pays two actual hand cards and routes a discarded Prism Star
+to the Lost Zone. Canceling the cost selection returns the Item to hand.
+Serena offers the discard mode with an empty deck and recognizes a
+Pokémon V-UNION as a single Pokémon V in play. Princess’s Curtain and
+Baffling distinguish Items from Supporters. Leafy Camo Poncho checks the
+attached Tool slot and respects Jamming Tower. Wide Wall, Unnerve and
+Obnoxious Whirring query protection using the protected Pokémon’s owner.
+[Official Great Catcher print](https://www.pokemon-card.com/card-search/details.php/card/36956/regu/XY)
+[Official Serena print](https://www.pokemon-card.com/card-search/details.php/card/42806)
+[Official ruling example for discard-only Serena](https://www.pokemon.com/uk/strategy/sword-shield-silver-tempest-strategy-zoroark-toolbox)
+[Official V-UNION explanation](https://www.pokemon-card.com/products/s/sp5.html)
+[Official Leafy Camo Poncho print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/swsh12/214/)
+
+The 39 targeted cases pass. Twenty-six fail on the previous engine. A
+read-only comparison exercised 107 saved-board attempts to play one of the
+affected Trainers. One play was rejected in both versions. All 106 legal
+plays, including 83 active puzzle openings, resolved to the same outcome
+after choosing prompts. These are sampled resolutions of existing puzzles.
+
+The full engine suite passes 11,079 tests. The worktree including the
+existing local edits passes 103 targeted checks. The API passes 32 checks.
+All 559 comparable boards and 5,225 sampled opening actions match. All
+seven recorded puzzle solutions still win. The attested package passes ten
+board scenarios and 209 client checks, plus mouse and touch runs of Guzma
+and Bewitching Eyes. The Guzma runs cover both successful switches and the
+official Unnerve case where both Pokémon stay in place.

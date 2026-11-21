@@ -9,7 +9,7 @@
       "date": "2026-09-13",
       "subject": "refactor(engine): TrainerTargetEffect Fix",
       "status": "partial",
-      "notes": "Batch 71 reviews the Lysandre path using the official Ω Barrier ruling. Upstream guards a missing selection but its current Lysandre still switches without the Trainer target check. The fork checks prevention after the valid choice, and uses attack protection when Bewitching Eyes or Silent Claw borrows its effect. The other Trainer target paths remain under review."
+      "notes": "Batch 71 reviews the Lysandre path using the official Ω Barrier ruling. Upstream guards a missing selection but its current Lysandre still switches without the Trainer target check. The fork checks prevention after the valid choice, and uses attack protection when Bewitching Eyes or Silent Claw borrows its effect. The other Trainer target paths remain under review. Batch 72 corrects the Bench selection paths for Guzma, the Pokémon Catcher implementations, Pokémon Reversal, Great Catcher, Serena, Boss’s Orders and Gust of Wind. Ryme checks the old Active. Double Gust runs the applicable mandatory switches in printed order. Reviewed active/Bench and source checks for Diancie, Thievul, Vibrava, Galvantula, Rhyperior SCR and Leafy Camo Poncho. The remaining Trainer target paths, including POW! Hand Extension and the effect consumers that are not switch effects, retain separate review."
     },
     {
       "sha": "3ee8aac139161e138794d0fe1c67ae13e47a6bed",

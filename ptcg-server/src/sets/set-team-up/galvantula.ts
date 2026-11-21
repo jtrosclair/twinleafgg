@@ -1,5 +1,6 @@
 import { PokemonCard, Stage, CardType, PowerType, State, StoreLike, StateUtils, PlayerType, GameError, GameMessage, ChooseCardsPrompt, Card } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { TrainerType } from '../../game/store/card/card-types';
 import { TrainerTargetEffect } from '../../game/store/effects/play-card-effects';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
@@ -33,11 +34,12 @@ export class Galvantula extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Unnerve
-    if (effect instanceof TrainerTargetEffect && effect.target?.cards.includes(this)) {
+    if (effect instanceof TrainerTargetEffect && effect.target?.getPokemonCard() === this
+      && (effect.trainerCard.trainerType === TrainerType.ITEM || effect.trainerCard.trainerType === TrainerType.SUPPORTER)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
-      if (IS_ABILITY_BLOCKED(store, state, effect.player, this)) { return state; }
+      if (IS_ABILITY_BLOCKED(store, state, opponent, this)) { return state; }
 
       // finding if the owner of the card is playing the trainer or if the opponent is
       let isGalvantulaOnOpponentsSide = false;

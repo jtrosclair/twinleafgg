@@ -31,12 +31,12 @@ export class Vibrava extends PokemonCard {
   public fullName: string = 'Vibrava CEC';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Snow Cover
-    if (effect instanceof TrainerTargetEffect && effect.target?.cards.includes(this)) {
+    // Obnoxious Whirring
+    if (effect instanceof TrainerTargetEffect && effect.target?.getPokemonCard() === this) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
-      if (IS_ABILITY_BLOCKED(store, state, effect.player, this)) { return state; }
+      if (IS_ABILITY_BLOCKED(store, state, opponent, this)) { return state; }
 
       if (effect.trainerCard.trainerType !== TrainerType.SUPPORTER) { return state; }
 

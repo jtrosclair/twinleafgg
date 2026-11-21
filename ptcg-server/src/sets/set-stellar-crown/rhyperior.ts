@@ -43,11 +43,11 @@ export class Rhyperior extends PokemonCard {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
-      if (!opponent.active.cards.includes(this) || IS_ABILITY_BLOCKED(store, state, player, this)) {
+      if (opponent.active.getPokemonCard() !== this || IS_ABILITY_BLOCKED(store, state, opponent, this)) {
         return state;
       }
 
-      effect.preventDefault = true;
+      if (effect.target === opponent.active || opponent.bench.includes(effect.target)) effect.preventDefault = true;
     }
 
     // Attack 1: Drill Run

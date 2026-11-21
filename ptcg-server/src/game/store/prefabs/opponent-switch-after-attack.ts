@@ -6,10 +6,18 @@ import { StoreLike } from '../store-like';
 import { afterAttackDamageForOriginalDefender } from './post-damage-identity';
 import { SWITCH_OUT_OPPONENT_ACTIVE_POKEMON } from './prefabs';
 
-class OpponentSwitchAfterAttack extends EffectOfAttackEffect {
+class OpponentSwitchEffect extends EffectOfAttackEffect {
   readonly type = 'OPPONENT_SWITCH_AFTER_ATTACK';
   constructor(base: AttackEffect, private store: StoreLike, private state: State) { super(base); }
   applyEffect(): void { SWITCH_OUT_OPPONENT_ACTIVE_POKEMON(this.store, this.state, this.player, { allowCancel: false }); }
+}
+
+export function switchOpponentActiveFromAttack(
+  store: StoreLike, state: State, effect: AttackEffect, source?: Card,
+): State {
+  const switched = new OpponentSwitchEffect(effect, store, state);
+  if (source) switched.markerSource = source;
+  return store.reduceEffect(state, switched);
 }
 
 /** Opponent chooses the replacement; protection applies to the original defender. */
@@ -18,8 +26,6 @@ export function opponentSwitchAfterAttack(
 ): void {
   afterAttackDamageForOriginalDefender(state, effect, (store, afterState) => {
     if (shouldSwitch && !shouldSwitch()) return afterState;
-    const switched = new OpponentSwitchAfterAttack(effect, store, afterState);
-    switched.markerSource = source;
-    return store.reduceEffect(afterState, switched);
+    return switchOpponentActiveFromAttack(store, afterState, effect, source);
   });
 }
