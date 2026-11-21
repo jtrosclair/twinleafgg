@@ -4,7 +4,6 @@ import { StoreLike, State, PowerType, GameError, GameMessage, PlayerType, StateU
 import { RetreatEffect } from '../../game/store/effects/game-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { ADD_SLEEP_TO_PLAYER_ACTIVE, COIN_FLIP_PROMPT, IS_POKEMON_POWER_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP } from '../../game/store/prefabs/attack-effects';
 
 export class Snorlax extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -64,10 +63,10 @@ export class Snorlax extends PokemonCard {
 
     // Roll Over
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
       COIN_FLIP_PROMPT(store, state, effect.player, (result => {
         if (result) {
-          YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP(store, state, effect);
+          ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         }
       }));
     }

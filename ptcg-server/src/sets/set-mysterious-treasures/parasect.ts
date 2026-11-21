@@ -34,10 +34,10 @@ export class Parasect extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Wild Spores
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      if (effect.player.active.pokemonPlayedTurn === state.turn) {
+      if (effect.source.pokemonPlayedTurn === state.turn && effect.source.getPokemons().some(card => card.name === 'Paras')) {
         effect.damage = 40;
-        ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-        ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+        ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+        ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
       }
     }
 

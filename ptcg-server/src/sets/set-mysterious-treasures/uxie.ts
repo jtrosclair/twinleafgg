@@ -78,7 +78,7 @@ export class Uxie extends PokemonCard {
 
       if (hasMesprit && hasAzelf) {
         effect.damage += 20;
-        ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+        ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
       }
     }
 

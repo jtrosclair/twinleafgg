@@ -41,9 +41,13 @@ export class Larvitar extends PokemonCard {
       }
       CONFIRMATION_PROMPT(store, state, player, result => {
         if (result) {
+          const topCard = player.deck.cards[0];
+          if (!topCard) return;
           DISCARD_TOP_X_CARDS_FROM_YOUR_DECK(store, state, player, 1, this, effect.attack);
-          effect.damage += 10;
-          ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, this);
+          if (player.discard.cards.includes(topCard) || player.lostzone.cards.includes(topCard)) {
+            effect.damage += 10;
+            ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, effect);
+          }
         }
       });
     }

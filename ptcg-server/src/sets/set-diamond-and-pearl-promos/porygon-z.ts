@@ -13,8 +13,6 @@ import { ShuffleDeckPrompt } from '../../game';
 import { SlotType } from '../../game';
 import { State } from '../../game';
 import { StoreLike } from '../../game';
-import { TrainerCard } from '../../game';
-import { CardTag } from '../../game/store/card/card-types';
 import { CardType } from '../../game/store/card/card-types';
 import { Stage } from '../../game/store/card/card-types';
 import { SuperType } from '../../game/store/card/card-types';
@@ -23,17 +21,9 @@ import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect } from '../../game/store/effects/game-effects';
 import { BLOCK_IF_HAS_SPECIAL_CONDITION } from '../../game/store/prefabs/prefabs';
 import { IS_POKEPOWER_BLOCKED } from '../../game/store/prefabs/prefabs';
-import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { isTechnicalMachine, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
-
-function isTechnicalMachine(card: Card): boolean {
-  if (!(card instanceof TrainerCard)) {
-    return false;
-  }
-  return card.tags.includes(CardTag.TECHNICAL_MACHINE)
-    || card.name.includes('Technical Machine');
-}
 
 function* useLearning(next: Function, store: StoreLike, state: State, effect: AttackEffect): IterableIterator<State> {
   const player = effect.player;

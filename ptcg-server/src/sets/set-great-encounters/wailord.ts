@@ -56,7 +56,7 @@ export class Wailord extends PokemonCard {
     // Sink Deep
     if (WAS_ATTACK_USED(effect, 0, this)) {
       if (THIS_POKEMON_HAS_ANY_DAMAGE_COUNTERS_ON_IT(effect, this)) {
-        ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+        ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
       }
     }
 

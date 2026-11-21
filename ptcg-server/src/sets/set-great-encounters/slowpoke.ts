@@ -41,7 +41,7 @@ export class Slowpoke extends PokemonCard {
       const removeSpecialCondition = new RemoveSpecialConditionsEffect(effect, undefined);
       removeSpecialCondition.target = player.active;
       state = store.reduceEffect(state, removeSpecialCondition);
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, effect);
     }
 
     // Tumble Over

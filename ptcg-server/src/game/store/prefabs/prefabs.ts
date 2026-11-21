@@ -1761,12 +1761,17 @@ export function MOVE_CARD_TO(state: State, card: Card, destination: CardList) {
   StateUtils.findCardList(state, card).moveCardTo(card, destination);
 }
 
+export function isTechnicalMachine(card: Card): boolean {
+  return card instanceof TrainerCard
+    && (card.tags.includes(CardTag.TECHNICAL_MACHINE) || card.name.includes('Technical Machine'));
+}
+
 export function SWITCH_ACTIVE_WITH_BENCHED(store: StoreLike, state: State, player: Player, onSwitched?: () => void) {
   const hasBenched = player.bench.some(b => b.cards.length > 0);
   if (!hasBenched)
     return state;
 
-  store.prompt(state, new ChoosePokemonPrompt(
+  return store.prompt(state, new ChoosePokemonPrompt(
     player.id,
     GameMessage.CHOOSE_NEW_ACTIVE_POKEMON,
     PlayerType.BOTTOM_PLAYER,

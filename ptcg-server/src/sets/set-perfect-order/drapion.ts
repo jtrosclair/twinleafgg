@@ -1,3 +1,4 @@
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 import { PokemonCard, Stage, CardType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, ADD_POISON_TO_PLAYER_ACTIVE, ADD_PARALYZED_TO_PLAYER_ACTIVE } from '../../game/store/prefabs/prefabs';
@@ -34,9 +35,10 @@ export class Drapion extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Hazard Tail - self-damage and poison/paralyze
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 70);
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-      ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      afterAttackDamage(state, effect, (attackStore, attackState) =>
+          THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(attackStore, attackState, effect, 70));
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+      ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

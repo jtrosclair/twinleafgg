@@ -77,11 +77,11 @@ export class Abomasnow extends PokemonCard {
 
     // Below Zero
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const cardList = StateUtils.findCardList(state, this) as PokemonCardList;
+      const cardList = effect.source;
       const evolvedFromSnoverThisTurn = cardList.pokemonPlayedTurn === state.turn
         && cardList.getPokemons().some(p => p.name === 'Snover');
       if (evolvedFromSnoverThisTurn) {
-        ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+        ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
       }
     }
 

@@ -1,9 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
-import { CardTarget, ChooseCardsPrompt, ChoosePokemonPrompt, EnergyCard, GameMessage, PlayerType, SlotType, State, StateUtils, StoreLike } from '../../game';
+import { CardType, Stage } from '../../game/store/card/card-types';
+import { Card, CardList, CardTarget, ChooseCardsPrompt, ChoosePokemonPrompt, GameMessage, PlayerType, SlotType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { DealDamageEffect, DiscardCardsEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { ADD_PARALYZED_TO_PLAYER_ACTIVE, ADD_POISON_TO_PLAYER_ACTIVE, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
+import { DISCARD_ATTACK_ENERGY_COST } from '../../game/store/prefabs/costs';
+import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
+import { ADD_PARALYZED_TO_PLAYER_ACTIVE, ADD_POISON_TO_PLAYER_ACTIVE, AFTER_ATTACK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Cacturne extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -72,43 +74,31 @@ export class Cacturne extends PokemonCard {
     }
 
     // Poison Experiment
-    if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-      const blocked: number[] = [];
-      player.active.cards.forEach((card, index) => {
-        if (
-          !(card instanceof EnergyCard) ||
-          (!card.provides.includes(G) && !card.provides.includes(D))
-        ) {
-          blocked.push(index);
-        }
+    if (AFTER_ATTACK(effect, 1, this) && effect.resolvedAttackEffect && effect.originalDefender === effect.opponent.active) {
+      const attack = effect.resolvedAttackEffect;
+      const query = new CheckProvidedEnergyEffect(attack.player, attack.source);
+      state = store.reduceEffect(state, query);
+      const eligible = new CardList();
+      const types = new Map<Card, CardType[]>();
+      query.energyMap.forEach(entry => {
+        if (!attack.source.cards.includes(entry.card) && !attack.source.energies.cards.includes(entry.card)) return;
+        const matching = [G, D].filter(type => StateUtils.checkEnoughEnergy([entry], [type]));
+        if (matching.length !== 0) types.set(entry.card, matching);
       });
-      const hasValidEnergy = player.active.cards.some((card, index) => !blocked.includes(index));
-      if (!hasValidEnergy) {
-        return state;
-      }
+      eligible.cards = [...types.keys()];
+      if (eligible.cards.length === 0) return state;
 
       return store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_ENERGY_TO_DISCARD,
-        player.active,
-        { superType: SuperType.ENERGY },
-        { min: 0, max: 1, allowCancel: true, blocked }
+        effect.player, GameMessage.CHOOSE_ENERGY_TO_DISCARD, eligible, {},
+        { min: 0, max: 1, allowCancel: true }
       ), selected => {
-        const cards = selected || [];
-        if (cards.length === 0) {
-          return;
-        }
-        const discarded = cards[0] as EnergyCard;
-        const discardEnergy = new DiscardCardsEffect(effect, cards);
-        discardEnergy.target = player.active;
-        store.reduceEffect(state, discardEnergy);
-        if (discarded.provides.includes(G)) {
-          ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-        }
-        if (discarded.provides.includes(D)) {
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-        }
+        const card = selected?.[0];
+        const supplies = card && types.get(card);
+        if (!card || !supplies) return;
+        DISCARD_ATTACK_ENERGY_COST(store, state, attack, [card], attackState => {
+          if (supplies.includes(G)) ADD_POISON_TO_PLAYER_ACTIVE(store, attackState, effect.opponent, effect);
+          if (supplies.includes(D)) ADD_PARALYZED_TO_PLAYER_ACTIVE(store, attackState, effect.opponent, effect);
+        });
       });
     }
 

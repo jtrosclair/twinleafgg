@@ -1,6 +1,7 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { State, StoreLike } from '../../game';
+import { HealTargetEffect, RemoveSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { ADD_SLEEP_TO_PLAYER_ACTIVE, MULTIPLE_COIN_FLIPS_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { COIN_FLIPS_FOR_ATTACK } from '../../game/store/prefabs/effect-of-attack-prefabs';
@@ -35,8 +36,13 @@ export class Buneary extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Rest
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, this);
+      const removal = new RemoveSpecialConditionsEffect(effect, undefined);
+      removal.target = effect.source;
+      store.reduceEffect(state, removal);
+      const healing = new HealTargetEffect(effect, 40);
+      healing.target = effect.source;
+      store.reduceEffect(state, healing);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
     }
 
     // Double Kick

@@ -2,9 +2,9 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ADD_PARALYZED_TO_PLAYER_ACTIVE, CONFIRMATION_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON } from '../../game/store/prefabs/attack-effects';
-import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
+import { ADD_PARALYZED_TO_PLAYER_ACTIVE, AFTER_ATTACK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON } from '../../game/store/prefabs/attack-effects';
+import { OPTIONALLY_DISCARD_ATTACK_ENERGY } from '../../game/store/prefabs/costs';
 
 export class Belliboltex extends PokemonCard {
   public tags = [CardTag.POKEMON_ex];
@@ -40,16 +40,13 @@ export class Belliboltex extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Jumping Press
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON(50, effect, store, state);
+      THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON(50, effect, store, state);
     }
 
     // Paralyzing Bolt
-    if (WAS_ATTACK_USED(effect, 1, this)) {
-      CONFIRMATION_PROMPT(store, state, effect.player, result => {
-        if (result) {
-          DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 2, L);
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-        }
+    if (AFTER_ATTACK(effect, 1, this) && effect.resolvedAttackEffect && effect.originalDefender === effect.opponent.active) {
+      return OPTIONALLY_DISCARD_ATTACK_ENERGY(store, state, effect.resolvedAttackEffect, [L, L], attackState => {
+        ADD_PARALYZED_TO_PLAYER_ACTIVE(store, attackState, effect.opponent, effect);
       });
     }
 

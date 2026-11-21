@@ -134,4 +134,14 @@ describe('ChooseEnergyPrompt', () => {
     expect(prompt.result).toBeUndefined();
   });
 
+  it('rejects duplicate physical cards and unknown choices', () => {
+    const first = createEnergy('first Fire Energy', fire);
+    const second = createEnergy('second Fire Energy', fire);
+    const prompt = new ChooseEnergyPrompt(playerId, GameMessage.CHOOSE_ENERGIES_TO_DISCARD,
+      [first, second], [CardType.FIRE, CardType.FIRE], { allowCancel: true });
+    expect(prompt.validate(prompt.decode([0, 1]))).toBe(true);
+    expect(prompt.validate(prompt.decode([0, 0]))).toBe(false);
+    expect(prompt.validate(prompt.decode([0, 2]))).toBe(false);
+  });
+
 });

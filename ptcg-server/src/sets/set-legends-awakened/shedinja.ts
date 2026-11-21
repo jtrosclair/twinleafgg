@@ -71,9 +71,8 @@ export class Shedinja extends PokemonCard {
     // Curse and Deceive
     if (WAS_ATTACK_USED(effect, 0, this)) {
       PUT_X_DAMAGE_COUNTERS_ON_YOUR_OPPONENTS_ACTIVE_POKEMON(3, store, state, effect);
-      const cardList = StateUtils.findCardList(state, this) as PokemonCardList;
-      if (cardList.damage > 0) {
-        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      if (effect.source.damage > 0) {
+        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
       }
     }
 

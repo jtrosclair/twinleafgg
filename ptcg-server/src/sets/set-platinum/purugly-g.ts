@@ -53,7 +53,7 @@ export class PuruglyG extends PokemonCard {
       COIN_FLIP_PROMPT(store, state, effect.player, result => {
         if (result) {
           effect.damage += 30;
-          ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+          ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
         }
       });
     }

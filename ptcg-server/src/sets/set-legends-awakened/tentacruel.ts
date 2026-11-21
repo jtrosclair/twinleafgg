@@ -77,15 +77,15 @@ export class Tentacruel extends PokemonCard {
     // Dangerous Poison
     if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
-      const selfEnergy = new CheckProvidedEnergyEffect(player, player.active);
+      const selfEnergy = new CheckProvidedEnergyEffect(player, effect.source);
       store.reduceEffect(state, selfEnergy);
       const selfCount = selfEnergy.energyMap.reduce((n, em) => n + em.provides.length, 0);
-      const defCheck = new CheckProvidedEnergyEffect(player, effect.opponent.active);
+      const defCheck = new CheckProvidedEnergyEffect(effect.opponent, effect.opponent.active);
       store.reduceEffect(state, defCheck);
       const defCount = defCheck.energyMap.reduce((n, em) => n + em.provides.length, 0);
       if (selfCount < defCount) {
-        ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-        ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+        ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+        ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
       }
     }
 

@@ -49,7 +49,8 @@ export class ChooseEnergyPrompt extends Prompt<EnergyMap[]> {
     if (result === null) {
       return this.options.allowCancel;
     }
-    if (!StateUtils.checkExactEnergy(result, this.cost)) {
+    if (result.some(entry => !entry) || new Set(result.map(entry => entry.card)).size !== result.length
+      || !StateUtils.checkExactEnergy(result, this.cost)) {
       return false;
     }
     return true;

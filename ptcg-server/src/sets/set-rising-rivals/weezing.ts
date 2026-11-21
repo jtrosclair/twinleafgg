@@ -57,7 +57,7 @@ export class Weezing extends PokemonCard {
         putCounters.target = effect.opponent.active;
         store.reduceEffect(state, putCounters);
       }
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
     }
 
     // Smog

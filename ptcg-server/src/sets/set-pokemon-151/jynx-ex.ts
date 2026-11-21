@@ -51,7 +51,7 @@ export class Jynxex extends PokemonCard {
     // Icy Wind
     if (WAS_ATTACK_USED(effect, 1, this)){
       const opponent = effect.opponent;
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, effect);
     }
 
     return state;

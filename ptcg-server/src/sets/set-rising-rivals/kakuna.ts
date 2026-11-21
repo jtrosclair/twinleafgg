@@ -44,7 +44,7 @@ export class Kakuna extends PokemonCard {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, effect);
 
       if (player.deck.cards.length === 0) {
         return state;

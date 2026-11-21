@@ -1,8 +1,6 @@
-import { PokemonCard, Stage, CardTag, CardType, StoreLike, State, ChooseCardsPrompt, GameMessage, ShuffleDeckPrompt, StateUtils, ChoosePokemonPrompt, PlayerType, SlotType } from '../../game';
+import { PokemonCard, Stage, CardTag, CardType, StoreLike, State, ChooseCardsPrompt, GameMessage, ShuffleDeckPrompt, SlotType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AfterAttackEffect } from '../../game/store/effects/game-phase-effects';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED } from '../../game/store/prefabs/attack-effects';
-import { WAS_ATTACK_USED, ADD_BURN_TO_PLAYER_ACTIVE } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, ADD_BURN_TO_PLAYER_ACTIVE, ADD_POISON_TO_PLAYER_ACTIVE, AFTER_ATTACK, SWITCH_ACTIVE_WITH_BENCHED } from '../../game/store/prefabs/prefabs';
 
 export class Salazzleex extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -61,37 +59,11 @@ export class Salazzleex extends PokemonCard {
       });
     }
 
-    // Fatal Nail - Poison + Burn
-    if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Poison and burn opponent's active
-      YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED(store, state, effect);
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, opponent, this);
-    }
-
-    // Fatal Nail - Switch (after attack)
-    if (effect instanceof AfterAttackEffect && effect.attack === this.attacks[1]) {
-      const player = effect.player;
-
-      // Switch this Pokemon with benched Pokemon
-      const hasBench = player.bench.some(b => b.cards.length > 0);
-      if (hasBench) {
-        return store.prompt(state, new ChoosePokemonPrompt(
-          player.id,
-          GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-          PlayerType.BOTTOM_PLAYER,
-          [SlotType.BENCH],
-          { allowCancel: false }
-        ), selected => {
-          const targets = selected || [];
-          if (targets.length > 0) {
-            player.active.clearEffects();
-            player.switchPokemon(targets[0]);
-          }
-        });
-      }
+    // Resolve the defender's conditions before switching the attacker.
+    if (AFTER_ATTACK(effect, 1, this)) {
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+      return SWITCH_ACTIVE_WITH_BENCHED(store, state, effect.player);
     }
 
     return state;

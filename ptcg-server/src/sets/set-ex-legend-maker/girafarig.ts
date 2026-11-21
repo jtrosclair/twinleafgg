@@ -170,7 +170,7 @@ export class Girafarig extends PokemonCard {
       });
 
       if (specialEnergyCount > 0) {
-        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
       }
     }
 

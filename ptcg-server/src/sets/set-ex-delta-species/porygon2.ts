@@ -1,8 +1,8 @@
 import { GameError, GameMessage, PowerType, State, StoreLike } from '../../game';
-import { CardTag, CardType, Stage, SuperType } from '../../game/store/card/card-types';
+import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { ABILITY_USED, ADD_BURN_TO_PLAYER_ACTIVE, ADD_MARKER, ADD_SLEEP_TO_PLAYER_ACTIVE, AFTER_ATTACK, BLOCK_IF_HAS_SPECIAL_CONDITION, DRAW_CARDS_UNTIL_CARDS_IN_HAND, HAS_MARKER, REMOVE_MARKER_AT_END_OF_TURN, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { ABILITY_USED, ADD_BURN_TO_PLAYER_ACTIVE, ADD_MARKER, ADD_SLEEP_TO_PLAYER_ACTIVE, AFTER_ATTACK, BLOCK_IF_HAS_SPECIAL_CONDITION, DRAW_CARDS_UNTIL_CARDS_IN_HAND, isTechnicalMachine, HAS_MARKER, REMOVE_MARKER_AT_END_OF_TURN, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Porygon2 extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -55,11 +55,10 @@ export class Porygon2 extends PokemonCard {
     }
 
     if (AFTER_ATTACK(effect, 0, this)) {
-      const player = effect.player;
-
-      if (player.active.cards.some(c => c.superType === SuperType.TRAINER && c.tags.includes(CardTag.TECHNICAL_MACHINE))) {
-        ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-        ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      const source = effect.resolvedAttackEffect?.source ?? effect.player.active;
+      if ([...source.cards, ...source.tools].some(isTechnicalMachine)) {
+        ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+        ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
       }
     }
 

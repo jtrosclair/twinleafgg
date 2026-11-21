@@ -4,7 +4,7 @@ import { PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { DealDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckPokemonAttacksEffect } from '../../game/store/effects/check-effects';
-import { ADD_CONFUSION_TO_PLAYER_ACTIVE, FLIP_UNTIL_TAILS_AND_COUNT_HEADS, IS_POKEBODY_BLOCKED, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_CONFUSION_TO_PLAYER_ACTIVE, FLIP_UNTIL_TAILS_AND_COUNT_HEADS, IS_POKEBODY_BLOCKED, MOVE_CARDS, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
 
 export class Gyarados extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -81,13 +81,13 @@ export class Gyarados extends PokemonCard {
     }
 
     // Enrage
-    if (WAS_ATTACK_USED(effect, 0, this)) {
+    if (AFTER_ATTACK(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
       return FLIP_UNTIL_TAILS_AND_COUNT_HEADS(store, state, player, heads => {
         if (heads === 0) {
-          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, this);
+          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, effect);
           return;
         }
 

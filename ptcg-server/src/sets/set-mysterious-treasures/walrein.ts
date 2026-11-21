@@ -2,7 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { ChooseCardsPrompt, ConfirmPrompt, GameMessage, PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ADD_PARALYZED_TO_PLAYER_ACTIVE, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, MOVE_CARDS, MOVE_POKEMON_OFF_BOARD, MULTIPLE_COIN_FLIPS_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_PARALYZED_TO_PLAYER_ACTIVE, AFTER_ATTACK, CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, JUST_EVOLVED, MOVE_CARDS, MOVE_POKEMON_OFF_BOARD, MULTIPLE_COIN_FLIPS_PROMPT } from '../../game/store/prefabs/prefabs';
 
 export class Walrein extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -52,39 +52,29 @@ export class Walrein extends PokemonCard {
     }
 
     // Ice Bind
-    if (WAS_ATTACK_USED(effect, 0, this)) {
+    if (AFTER_ATTACK(effect, 0, this) && effect.originalDefender === effect.opponent.active) {
       const opponent = effect.opponent;
-
+      const paralyze = () => ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, opponent, effect);
       if (opponent.hand.cards.length === 0) {
-        ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, opponent, this);
+        paralyze();
         return state;
       }
 
-      return store.prompt(state, new ConfirmPrompt(
-        opponent.id,
-        GameMessage.WANT_TO_DISCARD_CARDS
-      ), wantToDiscard => {
-        if (wantToDiscard) {
-          store.prompt(state, new ChooseCardsPrompt(
-            opponent,
-            GameMessage.CHOOSE_CARD_TO_DISCARD,
-            opponent.hand,
-            {},
-            { min: 1, max: 1, allowCancel: false }
-          ), selected => {
-            const cards = selected || [];
-            if (cards.length > 0) {
-              MOVE_CARDS(store, state, opponent.hand, opponent.discard, {
-                cards,
-                sourceCard: this,
-              });
-            } else {
-              ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, opponent, this);
-            }
-          });
-        } else {
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, opponent, this);
+      return store.prompt(state, new ConfirmPrompt(opponent.id, GameMessage.WANT_TO_DISCARD_CARDS), confirmed => {
+        if (!confirmed || opponent.hand.cards.length === 0) {
+          paralyze();
+          return;
         }
+        store.prompt(state, new ChooseCardsPrompt(
+          opponent, GameMessage.CHOOSE_CARD_TO_DISCARD, opponent.hand, {},
+          { min: 1, max: 1, allowCancel: false }
+        ), selected => {
+          const card = selected?.[0];
+          if (card) MOVE_CARDS(store, state, opponent.hand, opponent.discard, { cards: [card], sourceCard: this });
+          if (!card || (!opponent.discard.cards.includes(card) && !opponent.lostzone.cards.includes(card))) {
+            paralyze();
+          }
+        });
       });
     }
 

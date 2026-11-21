@@ -47,18 +47,18 @@ export class Azumarill extends PokemonCard {
     // Bubble Pump
     if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
-      const checkProvidedEnergy = new CheckProvidedEnergyEffect(player);
+      const checkProvidedEnergy = new CheckProvidedEnergyEffect(player, effect.source);
       store.reduceEffect(state, checkProvidedEnergy);
       const energyCount = checkProvidedEnergy.energyMap.reduce((sum, e) => sum + e.provides.length, 0);
       if (energyCount >= 3) {
         effect.damage += 20;
       }
 
-      const hasAzurill = player.active.cards.some(c => c.name === 'Azurill');
+      const hasAzurill = effect.source.getPokemons().some(card => card.name === 'Azurill');
       if (hasAzurill) {
         COIN_FLIP_PROMPT(store, state, player, result => {
           if (result) {
-            ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+            ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
           }
         });
       }

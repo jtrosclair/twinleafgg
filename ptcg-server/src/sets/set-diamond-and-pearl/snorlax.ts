@@ -38,8 +38,8 @@ export class Snorlax extends PokemonCard {
     }
 
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, this);
-      if (effect.player.active.getPokemons().some(p => p.name === 'Munchlax')) {
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
+      if (effect.source.getPokemons().some(p => p.name === 'Munchlax')) {
         effect.damage += 30;
       }
     }

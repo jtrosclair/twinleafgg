@@ -35,7 +35,7 @@ export class Vibrava extends PokemonCard {
 
     if (AFTER_ATTACK(effect, 1, this)) {
       if (effect.opponent.active.getPokemonCard()?.tags.includes(CardTag.POKEMON_ex)) {
-        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
       }
     }
 

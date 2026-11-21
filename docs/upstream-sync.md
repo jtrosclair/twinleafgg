@@ -3271,3 +3271,43 @@ and 209 frontend specs passed. The 2.46 MiB package passed attestation,
 the mobile size budget and ten packaged board checks. All 559 supported
 saved states and 3,633 sampled opening actions matched batch 38. All
 seven recorded puzzle solutions reached a win.
+
+## Gameplay re-audit, batch 40
+
+Bellibolt ex PAL’s Paralyzing Bolt offers an optional discard of two
+Lightning Energy after damage. A qualifying Counter Energy pays both
+units. The defending Pokémon becomes Paralyzed after the selected Energy
+is discarded. Jumping Press can also target the Active Pokémon, where
+Weakness and Resistance apply. Cacturne PL’s Poison Experiment uses
+the Energy the card provides in play. A discarded Rainbow Energy applies
+both conditions. The payment checks accept the Prism Star discard rule
+that sends the card to the Lost Zone and reject repeated selection of
+the same attached card.
+[Paldea Evolved Bellibolt ex print](https://asia.pokemon-card.com/ph/card-search/detail/6891/)
+[Official Bellibolt ex FAQ](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%8F%E3%83%A9%E3%83%90%E3%83%AA%E3%83%BCex&regulation_faq_main_item1=all)
+[Official Poison Experiment ruling](https://www.pokemon-card.com/rules/faq/search.php?page=22&regulation_faq_main=&sc_group_id=105)
+[Platinum Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Platinum.pdf)
+
+Walrein MT’s Ice Bind asks the defender whether to discard after damage.
+Wormadam Plant Cloak SW’s Leaf Hurricane measures each Pokémon’s
+remaining HP after damage. The printed attack checks also corrected
+Drapion M3’s self-damage, Buneary LA’s Rest sequence, Larvitar MT’s discard
+requirement, Parasect MT’s same-turn evolution condition, and Porygon2 DS’s
+recognition of an attached Technical Machine.
+[Secret Wonders Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/DiamondPearl_SecretWonders.pdf)
+[Legends Awakened Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/DiamondPearl_LegendsAwakened.pdf)
+[Drapion print](https://asia.pokemon-card.com/sg/card-search/detail/25067/)
+
+This batch verifies 72 attacks and resolves 81 of the 123 tracked calls.
+The remaining 42 calls span 41 card definitions. A print comparison also
+found five Black & White definitions with attacks assigned to the wrong
+collector number. They remain queued for exact-print and saved-puzzle
+verification.
+[Black & White Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/black_white.pdf)
+
+The 189 focused card cases passed, including 152 that failed on the old
+engine. All 9,865 engine tests, 2,050 checks with the existing working-tree
+edits, and 209 frontend specs passed. The 2.46 MiB package passed build
+attestation, the mobile size budget, and ten browser board checks. All 559
+supported saved states and 3,633 sampled opening actions matched batch 39.
+All seven recorded puzzle solutions reached a win.

@@ -45,7 +45,7 @@ export class MegaFroslassex extends PokemonCard {
 
     // Absolute Snow attack - 150 damage and put opponent's Active Pokemon to sleep
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

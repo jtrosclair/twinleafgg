@@ -23,7 +23,7 @@ export class Treecko2 extends PokemonCard {
     {
       name: 'Shining Claws',
       cost: [P],
-      damage: 30,
+      damage: 10,
       text: 'Flip a coin. If heads, the Defending Pokémon is now Confused.'
     }
   ];
@@ -39,7 +39,7 @@ export class Treecko2 extends PokemonCard {
     if (AFTER_ATTACK(effect, 1, this)) {
       COIN_FLIP_PROMPT(store, state, effect.player, result => {
         if (result) {
-          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         }
       });
     }

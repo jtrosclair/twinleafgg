@@ -225,6 +225,43 @@ export function DISCARD_UP_TO_X_TYPE_ENERGY_FROM_YOUR_POKEMON(
   });
 }
 
+/** Resolve a selected cost against the physical cards that were actually discarded. */
+export function DISCARD_ATTACK_ENERGY_COST(
+  store: StoreLike, state: State, effect: AttackEffect, cards: Card[], onPaid: (state: State) => void,
+): State {
+  const { player, source } = effect;
+  if (cards.length === 0 || new Set(cards).size !== cards.length
+    || !cards.every(card => source.cards.includes(card) || source.energies.cards.includes(card))) {
+    return state;
+  }
+  const discard = new DiscardCardsEffect(effect, cards);
+  discard.target = source;
+  state = store.reduceEffect(state, discard);
+  // The Prism Star rule redirects a discard to the Lost Zone.
+  if (cards.every(card => player.discard.cards.includes(card) || player.lostzone.cards.includes(card))) {
+    onPaid(state);
+  }
+  return state;
+}
+
+/** Offer an optional, exact discard of Energy units supplied by the attacker. */
+export function OPTIONALLY_DISCARD_ATTACK_ENERGY(
+  store: StoreLike, state: State, effect: AttackEffect, cost: CardType[], onPaid: (state: State) => void,
+): State {
+  const { player, source } = effect;
+  const query = new CheckProvidedEnergyEffect(player, source);
+  state = store.reduceEffect(state, query);
+  const eligible = query.energyMap.filter(entry => (source.cards.includes(entry.card) || source.energies.cards.includes(entry.card))
+    && cost.some(type => StateUtils.checkEnoughEnergy([entry], [type])));
+  if (!StateUtils.checkEnoughEnergy(eligible, cost)) return state;
+
+  return store.prompt(state, new ChooseEnergyPrompt(
+    player.id, GameMessage.CHOOSE_ENERGIES_TO_DISCARD, eligible, cost, { allowCancel: true }
+  ), selected => {
+    if (selected) DISCARD_ATTACK_ENERGY_COST(store, state, effect, selected.map(entry => entry.card), onPaid);
+  });
+}
+
 /** Offer one attached Energy that currently provides the requested attack cost type. */
 export function OPTIONALLY_DISCARD_ONE_ENERGY_FROM_ATTACKER(
   store: StoreLike,

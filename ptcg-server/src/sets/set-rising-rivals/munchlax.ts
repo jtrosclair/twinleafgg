@@ -75,7 +75,7 @@ export class Munchlax extends PokemonCard {
       const removeSpecialCondition = new RemoveSpecialConditionsEffect(effect, undefined);
       removeSpecialCondition.target = player.active;
       store.reduceEffect(state, removeSpecialCondition);
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, effect);
     }
 
     return state;

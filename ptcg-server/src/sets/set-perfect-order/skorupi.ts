@@ -27,7 +27,7 @@ export class Skorupi extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Poison Jab - poison opponent's Active Pokemon
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

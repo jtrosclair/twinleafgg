@@ -99,7 +99,7 @@ export class Dedenne extends PokemonCard {
 
       const coinFlipEffect = new CoinFlipEffect(player, (result: boolean) => {
         if (result === true) {
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, opponent, this);
+          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, opponent, effect);
         }
       });
 

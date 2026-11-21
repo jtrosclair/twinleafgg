@@ -42,7 +42,7 @@ export class Wailmer extends PokemonCard {
       });
 
       HEAL_X_DAMAGE_FROM_THIS_POKEMON(effect, store, state, 40);
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, effect);
     }
 
     if (WAS_ATTACK_USED(effect, 1, this)) {

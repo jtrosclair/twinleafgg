@@ -37,7 +37,7 @@ export class Meowstic extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Perplex - confuse opponent's Active Pokemon
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Psychic - damage based on opponent's energy

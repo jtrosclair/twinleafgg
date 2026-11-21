@@ -1,3 +1,4 @@
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 import { Effect } from '../../game/store/effects/effect';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, TrainerType } from '../../game/store/card/card-types';
@@ -104,8 +105,9 @@ export class PorygonZ extends PokemonCard {
       if (hasRainbowEnergy) {
         return state;
       } else {
-        THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 20);
-        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, this);
+        afterAttackDamage(state, effect, (attackStore, attackState) =>
+          THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(attackStore, attackState, effect, 20));
+        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, effect);
       }
     }
 

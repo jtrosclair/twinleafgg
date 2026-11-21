@@ -3,7 +3,7 @@ import { CardType, Stage } from '../../game/store/card/card-types';
 import { PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckHpEffect, CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { ADD_CONFUSION_TO_PLAYER_ACTIVE, IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_CONFUSION_TO_PLAYER_ACTIVE, IS_POKEBODY_BLOCKED, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
 
 export class WormadamPlantCloak extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -52,20 +52,21 @@ export class WormadamPlantCloak extends PokemonCard {
     }
 
     // Leaf Hurricane
-    if (WAS_ATTACK_USED(effect, 0, this)) {
+    if (AFTER_ATTACK(effect, 0, this) && effect.originalDefender === effect.opponent.active) {
       const player = effect.player;
       const opponent = effect.opponent;
 
-      const checkMyHp = new CheckHpEffect(player, player.active);
+      const source = effect.resolvedAttackEffect?.source ?? player.active;
+      const checkMyHp = new CheckHpEffect(player, source);
       store.reduceEffect(state, checkMyHp);
-      const myRemainingHp = checkMyHp.hp - player.active.damage;
+      const myRemainingHp = checkMyHp.hp - source.damage;
 
       const checkOpponentHp = new CheckHpEffect(opponent, opponent.active);
       store.reduceEffect(state, checkOpponentHp);
       const opponentRemainingHp = checkOpponentHp.hp - opponent.active.damage;
 
       if (opponentRemainingHp < myRemainingHp) {
-        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, opponent, this);
+        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, opponent, effect);
       }
     }
 
