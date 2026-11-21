@@ -14,6 +14,7 @@ import {
   LostZoneCardsEffect,
   AfterWeaknessAndResistanceEffect
 } from '../effects/attack-effects';
+import { CoinFlipEffect } from '../effects/play-card-effects';
 import { AttackEffect, HealEffect } from '../effects/game-effects';
 import { StateUtils } from '../state-utils';
 import { getCardTarget } from '../../../simple-bot/simple-tactics/simple-tactics';
@@ -115,6 +116,18 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
     const damage = Math.max(0, effect.damage);
     if (effect.attackEffect && target.surviveOnTenHpNextTurn) {
       effect.surviveOnTenHPReason = target.surviveOnTenHpNextTurn;
+    }
+    if (effect.surviveOnTenHPCoin && !effect.surviveOnTenHPReason && damage > 0) {
+      const hp = new CheckHpEffect(targetOwner, target);
+      state = store.reduceEffect(state, hp);
+      if (target.damage < hp.hp && target.damage + damage >= hp.hp) {
+        // Resolve Guts before applying damage. The animation can finish while
+        // the attack waits, and Glimwood Tangle applies only to attack flips.
+        const coin = new CoinFlipEffect(targetOwner);
+        coin.skipReflipStadium = true;
+        state = store.reduceEffect(state, coin);
+        if (coin.result === true) effect.surviveOnTenHPReason = effect.surviveOnTenHPCoin;
+      }
     }
     const damageBefore = target.damage;
     target.damage += damage;

@@ -251,6 +251,10 @@ export class Store implements StoreLike {
     // Attacking-player marker boosts are resolved before defending Pokémon's
     // damage reducers, regardless of card traversal order.
     if (effect instanceof DealDamageEffect && !effect.preventDefault) {
+      if (effect.player.alteredCreationDamage && effect.damage > 0
+        && effect.target === StateUtils.getOpponent(state, effect.player).active) {
+        effect.damage += 30;
+      }
       state = this.propagatePlayerMarkerEffect(state, effect);
     }
     state = this.propagateEffect(state, effect);

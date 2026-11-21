@@ -1,13 +1,12 @@
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { AfterDamageEffect } from '../../game/store/effects/attack-effects';
-import { ADD_CONFUSION_TO_PLAYER_ACTIVE, AFTER_ATTACK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { CardsToHandEffect } from '../../game/store/effects/attack-effects';
+import { ADD_CONFUSION_TO_PLAYER_ACTIVE, AFTER_ATTACK, WAS_ATTACK_USED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 import {
   CardTag,
   CardType,
   Stage,
   SuperType
 } from '../../game/store/card/card-types';
-import { StateUtils } from '../../game/store/state-utils';
+import { afterAttackDamageForOriginalDefender } from '../../game/store/prefabs/post-damage-identity';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
 import { PlayerType, State, StoreLike } from '../../game';
@@ -46,38 +45,23 @@ export class Accelgor extends PokemonCard {
   public readonly ESCAVALIER_DAMAGED_BY_OPPONENT_ATTACK_MARKER = 'ESCAVALIER_DAMAGED_BY_OPPONENT_ATTACK_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Track Escavalier damaged by opponent's attack this turn.
-    if (effect instanceof AfterDamageEffect && effect.damage > 0) {
-      const damagedCard = effect.target.getPokemonCard();
-      if (damagedCard?.name === 'Escavalier') {
-        const owner = StateUtils.findOwner(state, effect.target);
-        if (owner !== effect.player) {
-          effect.target.marker.addMarker(this.ESCAVALIER_DAMAGED_BY_OPPONENT_ATTACK_MARKER, this);
-        }
-      }
+    // Ref: Stunfisk's Revenge uses the attack-damage Knock Out record.
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect)
+      && effect.target.getPokemonCard()?.name === 'Escavalier') {
+      effect.player.marker.addMarker(this.ESCAVALIER_KO_MARKER, this);
     }
 
-    // Track when your Escavalier is KO'd by damage from opponent's attack.
-    if (effect instanceof KnockOutEffect) {
-      const knockedOutCard = effect.target.getPokemonCard();
-      if (knockedOutCard?.name === 'Escavalier'
-        && effect.target.marker.hasMarker(this.ESCAVALIER_DAMAGED_BY_OPPONENT_ATTACK_MARKER, this)) {
-        const owner = StateUtils.findOwner(state, effect.target);
-        owner.marker.addMarker(this.ESCAVALIER_KO_MARKER, this);
-      }
-    }
-
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      if (player.marker.hasMarker(this.ESCAVALIER_KO_MARKER, this)) {
-        // Put all energy from defending Pokemon into opponent's hand
-        const energyCards = opponent.active.cards.filter(c => c.superType === SuperType.ENERGY);
-        energyCards.forEach(card => {
-          opponent.active.moveCardTo(card, opponent.hand);
-        });
-      }
+    if (WAS_ATTACK_USED(effect, 0, this)
+      && effect.player.marker.hasMarker(this.ESCAVALIER_KO_MARKER, this)) {
+      afterAttackDamageForOriginalDefender(state, effect, (store, state, target) => {
+        const cards = new Set([
+          ...target.cards.filter(card => card.superType === SuperType.ENERGY),
+          ...target.energies.cards
+        ]);
+        const toHand = new CardsToHandEffect(effect, [...cards]);
+        toHand.target = target;
+        return store.reduceEffect(state, toHand);
+      });
     }
 
     if (AFTER_ATTACK(effect, 1, this)) {

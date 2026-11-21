@@ -1,13 +1,11 @@
 import { GameError, GameMessage, PowerType, StateUtils } from '../../game';
-import { CardTag, Stage, TrainerType } from '../../game/store/card/card-types';
+import { TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { CheckPokemonPowersEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect, PowerEffect } from '../../game/store/effects/game-effects';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
-
-import { GamePhase, State } from '../../game/store/state/state';
+import { PowerEffect } from '../../game/store/effects/game-effects';
+import { APPLY_ONCE_PER_CARD, IS_TOOL_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 
 export class SkySealStone extends TrainerCard {
@@ -34,67 +32,26 @@ export class SkySealStone extends TrainerCard {
   ];
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
-    // Add ability to card if attached to a V
-    if (effect instanceof CheckPokemonPowersEffect && !effect.powers.find(p => p.name === this.powers[0].name)) {
-      // Find the PokemonCardList that contains the target PokemonCard
-      const cardList = StateUtils.findCardList(state, effect.target);
-      if (cardList instanceof PokemonCardList && cardList.tools.includes(this)) {
-        const hasValidCard = effect.target.tags.some(tag =>
-          tag === CardTag.POKEMON_V ||
-          tag === CardTag.POKEMON_VSTAR ||
-          tag === CardTag.POKEMON_VMAX ||
-          tag === CardTag.POKEMON_VUNION
-        );
-        if (!hasValidCard) {
-          return state;
-        }
-        effect.powers.push(this.powers[0]);
+    if (effect instanceof CheckPokemonPowersEffect) {
+      const slot = StateUtils.findPokemonSlot(state, effect.target);
+      if (slot?.tools.includes(this) && slot.vPokemon()
+        && !IS_TOOL_BLOCKED(store, state, effect.player, this)
+        && !effect.powers.some(power => power.name === this.powers[0].name)) {
+        effect.powers = [...effect.powers, this.powers[0]];
       }
-      return state;
     }
 
-    // Set extraPrizes to true when power is activated
-    if (effect instanceof PowerEffect && effect.power === this.powers[0]) {
+    if (effect instanceof PowerEffect && effect.power === this.powers[0]
+      && APPLY_ONCE_PER_CARD(effect, this)) {
       const player = effect.player;
-
-      if (player.usedVSTAR === true) {
-        throw new GameError(GameMessage.LABEL_VSTAR_USED);
+      const slot = StateUtils.findPokemonSlot(state, effect.card);
+      if (!slot?.tools.includes(this) || !slot.vPokemon()
+        || StateUtils.findOwner(state, slot) !== player || IS_TOOL_BLOCKED(store, state, player, this)) {
+        throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
+      if (player.usedVSTAR) throw new GameError(GameMessage.LABEL_VSTAR_USED);
       player.usedVSTAR = true;
-      this.extraPrizes = true;
-
-      return state;
-    }
-
-    // Check conditions for taking an extra prize upon knockout
-    if (effect instanceof KnockOutEffect && effect.target === effect.player.active) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Do not activate between turns, or when it's not opponents turn
-      if (state.phase !== GamePhase.ATTACK || state.players[state.activePlayer] !== opponent) {
-        return state;
-      }
-
-      // Must be basic V, opponent's active must be VSTAR or VMAX
-      const attackingPokemon = opponent.active;
-      if (this.extraPrizes
-        && effect.target === player.active
-        && player.active.cards.some(c => c.tags.includes(CardTag.POKEMON_VMAX) || c.tags.includes(CardTag.POKEMON_VSTAR))
-        && attackingPokemon.getPokemonCard()?.stage === Stage.BASIC
-        && attackingPokemon.vPokemon()) {
-        if (effect.prizeCount > 0) {
-          effect.prizeCount += 1;
-        }
-        this.extraPrizes = false;
-      }
-      return state;
-    }
-
-    // Remove extra prize effect on turn end
-    if (effect instanceof EndTurnEffect) {
-      this.extraPrizes = false;
+      player.starOrderTurn = state.turn;
     }
     return state;
   }

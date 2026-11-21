@@ -71,6 +71,8 @@ export class Player {
 
   usedVSTAR: boolean = false;
 
+  starOrderTurn?: number;
+
   usedGX: boolean = false;
 
   assembledVUNIONs: string[] = [];
@@ -180,6 +182,8 @@ export class Player {
    */
   removeAttackEffects(): void {
     this.marker.removeAttackEffects();
+    this.alteredCreationDamage = false;
+    this.usedAlteredCreation = false;
   }
 
   removePokemonEffects(target: PokemonCardList) {

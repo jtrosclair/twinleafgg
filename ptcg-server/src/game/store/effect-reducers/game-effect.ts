@@ -2,7 +2,7 @@ import { PlayerType } from '../actions/play-card-action';
 import { checkCopiedAttackCost, runDelegatedCopiedAttackGenerator } from '../prefabs/copy-attack-delegation';
 import { GameError } from '../../game-error';
 import { GameLog, GameMessage } from '../../game-message';
-import { BoardEffect, CardTag, CardType, SpecialCondition, SuperType } from '../card/card-types';
+import { BoardEffect, CardTag, CardType, SpecialCondition, Stage, SuperType } from '../card/card-types';
 import { EnergyCard } from '../card/energy-card';
 import { Resistance, Weakness } from '../card/pokemon-types';
 import { ApplyWeaknessEffect, DealDamageEffect } from '../effects/attack-effects';
@@ -38,7 +38,7 @@ import { StoreLike } from '../store-like';
 import { MoveCardsEffect } from '../effects/game-effects';
 import { GameStatsTracker } from '../game-stats-tracker';
 import { PokemonCardList } from '../state/pokemon-card-list';
-import { MOVE_CARDS, ADD_MARKER, HAS_MARKER, COIN_FLIP_PROMPT } from '../prefabs/prefabs';
+import { MOVE_CARDS, ADD_MARKER, HAS_MARKER, COIN_FLIP_PROMPT, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../prefabs/prefabs';
 import { CardList } from '../state/card-list';
 import { Player } from '../state/player';
 import { ConfirmPrompt } from '../prompts/confirm-prompt';
@@ -50,6 +50,7 @@ import { Attack } from '../card/pokemon-types';
 import { WaitPrompt } from '../prompts/wait-prompt';
 import { CoinFlipEffect, CoinFlipSequenceEffect } from '../effects/play-card-effects';
 import { beginAttackDamageScope, cancelAttackDamageScope, finishAttackDamageScope, resolveAfterAttackDamage } from '../prefabs/attack-after-damage';
+import { wasActiveWhenDamaged } from '../prefabs/knock-out-effects';
 import { recordActiveAbilityLockOrder } from '../state/active-ability-lock-order';
 
 
@@ -384,6 +385,20 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
         state.players[state.activePlayer] === attacker &&
         knockedOutOwner.marker.hasMarker(knockedOutOwner.DAMAGE_DEALT_MARKER)) {
         knockedOutOwner.marker.addMarkerToState(MarkerConstants.REVENGE_MARKER);
+      }
+
+      // These persistent effects belong to the attacking player. Use the
+      // recorded defender position in case the attack subsequently switched it.
+      if (effect.prizeCount > 0 && !effect.preventPrizes
+        && WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && wasActiveWhenDamaged(effect)) {
+        if (attacker.usedAlteredCreation) effect.prizeCount += 1;
+
+        const source = effect.target.attackDamageKnockOut?.sourceCard;
+        if (attacker.starOrderTurn === state.turn && source?.stage === Stage.BASIC
+          && source.tags.includes(CardTag.POKEMON_V)
+          && card.tags.some(tag => tag === CardTag.POKEMON_VSTAR || tag === CardTag.POKEMON_VMAX)) {
+          effect.prizeCount += 1;
+        }
       }
 
       const duringOpponentsTurn = [GamePhase.PLAYER_TURN, GamePhase.ATTACK].includes(state.phase)

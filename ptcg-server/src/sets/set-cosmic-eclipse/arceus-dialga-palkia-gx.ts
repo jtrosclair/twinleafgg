@@ -1,11 +1,10 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, EnergyType, SuperType } from '../../game/store/card/card-types';
-import { StoreLike, State, AttachEnergyPrompt, GameMessage, PlayerType, ShuffleDeckPrompt, SlotType, StateUtils, GamePhase } from '../../game';
+import { StoreLike, State, AttachEnergyPrompt, GameMessage, PlayerType, ShuffleDeckPrompt, SlotType, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect, KnockOutEffect } from '../../game/store/effects/game-effects';
+import { AttackEffect } from '../../game/store/effects/game-effects';
 import { CheckProvidedEnergyEffect, CheckAttackCostEffect } from '../../game/store/effects/check-effects';
 import { BLOCK_IF_GX_ATTACK_USED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { DealDamageEffect } from '../../game/store/effects/attack-effects';
 
 function* useUltimateRay(next: Function, store: StoreLike, state: State,
   effect: AttackEffect): IterableIterator<State> {
@@ -102,39 +101,6 @@ export class ArceusDialgaPalkiaGX extends PokemonCard {
       }
     }
 
-    // Apply +30 damage boost to AttackEffect (before damage effects are created)
-    // This ensures it's only applied once per attack
-    if (effect instanceof DealDamageEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Only apply to attacks targeting opponent's active Pokémon
-      if (player.alteredCreationDamage === true && effect.target === opponent.active && !effect.damageIncreased) {
-        effect.damage += 30;
-        effect.damageIncreased = true;
-      }
-    }
-
-    if (effect instanceof KnockOutEffect) {
-      // effect.player is the owner of the knocked-out Pokémon
-      const knockedOutOwner = effect.player;
-      // Get the attacker (opponent of the knocked-out owner)
-      const attacker = StateUtils.getOpponent(state, knockedOutOwner);
-
-      // Only trigger if:
-      // 1. The knocked out Pokémon is the attacker's opponent's active (i.e., attacker's target)
-      // 2. It occurred during an attack phase
-      // 3. It's the attacker's turn
-      // 4. The attacker used Altered Creation with extra Water energy
-      if (effect.target === knockedOutOwner.active &&
-        state.phase === GamePhase.ATTACK &&
-        state.players[state.activePlayer] === attacker &&
-        attacker.usedAlteredCreation === true &&
-        !effect.prizeIncreased) {
-        effect.prizeCount += 1;
-        effect.prizeIncreased = true;
-      }
-    }
     return state;
   }
 }

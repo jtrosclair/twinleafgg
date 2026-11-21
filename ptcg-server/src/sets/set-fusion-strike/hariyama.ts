@@ -6,9 +6,8 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { CheckHpEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { COIN_FLIP_PROMPT, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class Hariyama extends PokemonCard {
   public tags = [CardTag.SINGLE_STRIKE];
@@ -42,30 +41,10 @@ export class Hariyama extends PokemonCard {
   public fullName: string = 'Hariyama FST 143';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Guts (passive - survive KO on coin flip)
-    // Ref: set-burning-shadows/heracross.ts (Guts - PutDamageEffect + surviveOnTenHPReason)
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)) {
-      const pokemonCard = effect.target.getPokemonCard();
-      if (pokemonCard !== this) {
-        return state;
-      }
-
-      const player = StateUtils.findOwner(state, effect.target);
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      const checkHpEffect = new CheckHpEffect(player, effect.target);
-      store.reduceEffect(state, checkHpEffect);
-
-      if (effect.target.damage + effect.damage >= checkHpEffect.hp) {
-        COIN_FLIP_PROMPT(store, state, player, result => {
-          if (result) {
-            effect.surviveOnTenHPReason = this.powers[0].name;
-          }
-        });
-      }
+    // Ref: attackReducer applies the Guts flip after damage modifiers.
+    if (effect instanceof PutDamageEffect && effect.target.getPokemonCard() === this
+      && !IS_ABILITY_BLOCKED(store, state, StateUtils.findOwner(state, effect.target), this)) {
+      effect.surviveOnTenHPCoin = this.powers[0].name;
     }
 
     return state;

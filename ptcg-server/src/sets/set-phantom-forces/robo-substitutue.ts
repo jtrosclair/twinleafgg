@@ -1,9 +1,9 @@
-import { GameError, GameMessage, PokemonCard, PokemonCardList, Power, PowerType, State, StateUtils, StoreLike, TrainerCard } from '../..';
+import { GameError, GameMessage, PokemonCard, Player, Power, PowerType, State, StateUtils, StoreLike, TrainerCard } from '../..';
 import { CardType, PokemonType, Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { Effect } from '../../game/store/effects/effect';
 import { KnockOutEffect, RetreatEffect } from '../../game/store/effects/game-effects';
 import { PlayItemEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class RoboSubstitute extends TrainerCard {
 
@@ -57,17 +57,7 @@ export class RoboSubstitute extends TrainerCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_POWER_USED(effect, 0, this)) {
-      const cardList = StateUtils.findCardList(state, this) as PokemonCardList;
-      const player = effect.player;
-
-      if (player.bench.every(b => b.cards.length === 0)) {
-        // technical implementation does not matter exactly because this ends the game
-        effect.player.active.moveCardsTo(effect.player.active.cards, player.deck);
-      } else {
-        player.switchPokemon(cardList);
-        const pokeDollCardList = StateUtils.findCardList(state, this);
-        pokeDollCardList.moveCardsTo(pokeDollCardList.cards, effect.player.discard);
-      }
+      return discardRoboSubstitute(store, state, effect.player, this);
     }
 
     if (effect instanceof PlayItemEffect && effect.trainerCard === this) {
@@ -86,16 +76,29 @@ export class RoboSubstitute extends TrainerCard {
       throw new GameError(GameMessage.CANNOT_RETREAT);
     }
 
-    if (effect instanceof KnockOutEffect && effect.target.cards.includes(this)) {
+    if (effect instanceof KnockOutEffect && effect.target.getPokemonCard() === (this as unknown as PokemonCard)) {
       effect.prizeCount = 0;
+      effect.preventPrizes = true;
       return state;
-    }
-
-    if (effect instanceof RetreatEffect && effect.player.active.cards.includes(this)) {
-      throw new GameError(GameMessage.CANNOT_RETREAT);
     }
 
     return state;
   }
 
+}
+
+// The same discard procedure applies to both registered names for this print.
+export function discardRoboSubstitute(store: StoreLike, state: State, player: Player, card: TrainerCard): State {
+  const slot = StateUtils.findPokemonSlot(state, card);
+  if (!slot || slot.getPokemonCard() !== (card as unknown as PokemonCard)
+    || StateUtils.findOwner(state, slot) !== player) return state;
+
+  const cards = [...new Set([...slot.cards, ...slot.energies.cards, ...slot.tools])];
+  state = MOVE_CARDS(store, state, slot, player.discard, { cards, sourceCard: card });
+  if (!slot.getPokemonCard()) {
+    slot.tools = [];
+    slot.damage = 0;
+    slot.clearEffects();
+  }
+  return state;
 }

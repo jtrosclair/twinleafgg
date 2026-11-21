@@ -7,10 +7,8 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { CheckHpEffect } from '../../game/store/effects/check-effects';
-import { PowerEffect } from '../../game/store/effects/game-effects';
 import { AfterAttackEffect, EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { WAS_ATTACK_USED, COIN_FLIP_PROMPT, SWITCH_ACTIVE_WITH_BENCHED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED, SWITCH_ACTIVE_WITH_BENCHED } from '../../game/store/prefabs/prefabs';
 
 export class Heracross extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -43,36 +41,10 @@ export class Heracross extends PokemonCard {
   public fullName: string = 'Heracross BUS';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Guts (passive - survive KO on coin flip)
-    // Ref: set-stormfront/machamp-lv-x.ts (Strong-Willed - surviveOnTenHPReason pattern)
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)) {
-      const pokemonCard = effect.target.getPokemonCard();
-      if (pokemonCard !== this) {
-        return state;
-      }
-
-      const player = StateUtils.findOwner(state, effect.target);
-
-      // Check if ability is blocked
-      try {
-        const powerEffect = new PowerEffect(player, this.powers[0], this);
-        store.reduceEffect(state, powerEffect);
-      } catch {
-        return state;
-      }
-
-      // Check if this damage would KO
-      const checkHpEffect = new CheckHpEffect(player, effect.target);
-      store.reduceEffect(state, checkHpEffect);
-
-      if (effect.target.damage + effect.damage >= checkHpEffect.hp) {
-        COIN_FLIP_PROMPT(store, state, player, result => {
-          if (result) {
-            // Heads: survive with 10 HP remaining
-            effect.surviveOnTenHPReason = this.powers[0].name;
-          }
-        });
-      }
+    // Ref: attackReducer applies the Guts flip after damage modifiers.
+    if (effect instanceof PutDamageEffect && effect.target.getPokemonCard() === this
+      && !IS_ABILITY_BLOCKED(store, state, StateUtils.findOwner(state, effect.target), this)) {
+      effect.surviveOnTenHPCoin = this.powers[0].name;
     }
 
     // Attack 1: Pitch

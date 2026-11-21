@@ -3,13 +3,12 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, CardTag, SuperType } from '../../game/store/card/card-types';
-import { PlayerType, StoreLike, State, StateUtils } from '../../game';
-import { AfterDamageEffect } from '../../game/store/effects/attack-effects';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
+import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
+import { PlayerType, StoreLike, State } from '../../game';
+import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { WAS_ATTACK_USED, THIS_POKEMON_CANNOT_USE_THIS_ATTACK_NEXT_TURN } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE, THIS_POKEMON_CANNOT_USE_THIS_ATTACK_NEXT_TURN } from '../../game/store/prefabs/prefabs';
 
 export class DhelmiseV extends PokemonCard {
   public tags = [CardTag.POKEMON_V];
@@ -46,25 +45,12 @@ export class DhelmiseV extends PokemonCard {
   public fullName: string = 'Dhelmise V SSH';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Track Grass Pokemon damaged by opponent's attack
-    // Ref: set-plasma-blast/accelgor.ts (ESCAVALIER_KO_MARKER pattern)
-    if (effect instanceof AfterDamageEffect && effect.damage > 0) {
-      const damagedCard = effect.target.getPokemonCard();
-      if (damagedCard && damagedCard.cardType === G && damagedCard.superType === SuperType.POKEMON) {
-        const owner = StateUtils.findOwner(state, effect.target);
-        if (owner !== effect.player) {
-          effect.target.marker.addMarker(this.GRASS_DAMAGED_BY_OPPONENT_MARKER, this);
-        }
-      }
-    }
-
-    // Track when a Grass Pokemon is KO'd by opponent's attack
-    if (effect instanceof KnockOutEffect) {
-      const knockedOutCard = effect.target.getPokemonCard();
-      if (knockedOutCard && knockedOutCard.cardType === G
-        && effect.target.marker.hasMarker(this.GRASS_DAMAGED_BY_OPPONENT_MARKER, this)) {
-        const owner = StateUtils.findOwner(state, effect.target);
-        owner.marker.addMarker(this.GRASS_KO_MARKER, this);
+    // Ref: Stunfisk's Revenge uses the attack-damage Knock Out record.
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect)) {
+      const type = new CheckPokemonTypeEffect(effect.target);
+      state = store.reduceEffect(state, type);
+      if (type.cardTypes.includes(CardType.GRASS)) {
+        effect.player.marker.addMarker(this.GRASS_KO_MARKER, this);
       }
     }
 

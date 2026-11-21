@@ -4,10 +4,10 @@
 
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils, PokemonCardList } from '../../game';
+import { StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { IS_TOOL_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { findKnockOutAttacker, wasActiveWhenDamaged } from '../../game/store/prefabs/knock-out-effects';
+import { APPLY_ONCE_PER_CARD, IS_TOOL_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 
 export class BeastBringer extends TrainerCard {
   public trainerType: TrainerType = TrainerType.TOOL;
@@ -18,57 +18,19 @@ export class BeastBringer extends TrainerCard {
   public fullName: string = 'Beast Bringer UNB';
   public text: string = 'If you have exactly 6 Prize cards remaining, and if your opponent\'s Active Pokémon-GX or Pokémon-EX is Knocked Out by damage from an attack of the Ultra Beast this card is attached to, take 1 more Prize card.';
 
-  // Ref: set-team-up/black-market.ts (Black Market - KnockOutEffect prize modification)
+  // Ref: Glutton-GX checks the exact attacker and the victim's position at damage.
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof KnockOutEffect) {
-      // Find which Pokemon this tool is attached to
-      const attachedTo = StateUtils.findCardList(state, this) as PokemonCardList;
-      if (!attachedTo || !attachedTo.tools || !attachedTo.tools.includes(this)) {
-        return state;
-      }
+    if (!WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) || !wasActiveWhenDamaged(effect)) return state;
+    const attacker = findKnockOutAttacker(state, effect);
+    const target = effect.target.getPokemonCard();
+    if (!attacker?.tools.includes(this) || !attacker.getPokemonCard()?.tags.includes(CardTag.ULTRA_BEAST)
+      || !target?.tags.some(tag => tag === CardTag.POKEMON_GX || tag === CardTag.POKEMON_EX)) return state;
 
-      const toolOwner = StateUtils.findOwner(state, attachedTo);
-
-      if (IS_TOOL_BLOCKED(store, state, toolOwner, this)) {
-        return state;
-      }
-
-      // Check if tool owner has exactly 6 prize cards remaining
-      const prizeCount = toolOwner.prizes.filter(p => p.cards.length > 0).length;
-      if (prizeCount !== 6) {
-        return state;
-      }
-
-      // Check if the attached Pokemon is an Ultra Beast
-      const attachedPokemon = attachedTo.getPokemonCard();
-      if (!attachedPokemon || !attachedPokemon.tags.includes(CardTag.ULTRA_BEAST)) {
-        return state;
-      }
-
-      // Check if the KO target is opponent's active GX or EX
-      const targetCard = effect.target.getPokemonCard();
-      if (!targetCard) {
-        return state;
-      }
-
-      if (!targetCard.tags.includes(CardTag.POKEMON_GX) && !targetCard.tags.includes(CardTag.POKEMON_EX)) {
-        return state;
-      }
-
-      // Check that the KO target belongs to the opponent
-      const targetOwner = StateUtils.findOwner(state, effect.target);
-      if (targetOwner === toolOwner) {
-        return state;
-      }
-
-      // Check that the target is the active Pokemon
-      if (effect.target !== targetOwner.active) {
-        return state;
-      }
-
+    const player = StateUtils.findOwner(state, attacker);
+    if (player.getPrizeLeft() === 6 && !IS_TOOL_BLOCKED(store, state, player, this)
+      && APPLY_ONCE_PER_CARD(effect, this)) {
       effect.prizeCount += 1;
     }
-
     return state;
   }
 }
