@@ -3,7 +3,8 @@ import { PokemonCard, CardTag, Stage, CardType, StoreLike, State, StateUtils, Co
 import { KnockOutOpponentEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AttachEnergyEffect, AttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class AlolanExeggutorex extends PokemonCard implements CopiedAttackOwnershipContract {
@@ -19,7 +20,7 @@ export class AlolanExeggutorex extends PokemonCard implements CopiedAttackOwners
       name: 'Tropical Fever',
       cost: [CardType.GRASS, CardType.WATER],
       damage: 150,
-      text: 'Choose any number of Basic Energy cards from your hand and attach them to your Pokemon in any way you like.'
+      text: 'Choose any number of Basic Energy cards from your hand and attach them to your Pokémon in any way you like.'
     },
     {
       name: 'Swinging Sphene',
@@ -64,7 +65,7 @@ export class AlolanExeggutorex extends PokemonCard implements CopiedAttackOwners
         return state;
       }
 
-      return store.prompt(state, new AttachEnergyPrompt(
+      afterAttackDamage(state, effect, (store, state) => store.prompt(state, new AttachEnergyPrompt(
         player.id,
         GameMessage.ATTACH_ENERGY_CARDS,
         player.hand,
@@ -73,14 +74,12 @@ export class AlolanExeggutorex extends PokemonCard implements CopiedAttackOwners
         { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
         { allowCancel: false }
       ), transfers => {
-        transfers = transfers || [];
-        for (const transfer of transfers) {
+        const attachments = (transfers || []).map(transfer => {
           const target = StateUtils.getTarget(state, player, transfer.to);
-          const energyCard = transfer.card as EnergyCard;
-          const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
-          store.reduceEffect(state, attachEnergyEffect);
-        }
-      });
+          return new AttachEnergyEffect(player, transfer.card as EnergyCard, target);
+        });
+        store.reduceEffect(state, new AttachEnergyFromHandEffect(player, attachments));
+      }));
     }
 
     if (WAS_ATTACK_USED(effect, 1, this)) {

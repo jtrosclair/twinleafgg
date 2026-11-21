@@ -24,13 +24,17 @@ export class WarpEnergy extends EnergyCard {
     if (effect instanceof AfterAttachEnergyFromHandEffect && effect.energyCard === this) {
       const player = effect.player;
 
-      if (effect.player.active !== effect.target
-        || player.bench.length <= 0
-        || IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {
-        return state;
+      const { target } = effect;
+      const canResolve = () => player.active === target && target.cards.includes(this)
+        && player.bench.some(slot => slot.getPokemonCard())
+        && !IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, target);
+      if (canResolve()) {
+        effect.reactions.set(this.name, {
+          label: this.name,
+          canResolve,
+          resolve: () => { SWITCH_ACTIVE_WITH_BENCHED(store, state, player); },
+        });
       }
-
-      SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
     }
     return state;
   }

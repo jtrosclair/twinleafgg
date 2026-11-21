@@ -26,11 +26,15 @@ When you attach this card from your hand to 1 of your Benched Pokémon, switch t
       const player = effect.player;
       const target = effect.target;
 
-      if (IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.target)) {
-        return state;
+      const canResolve = () => player.bench.includes(target) && target.cards.includes(this)
+        && !IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, target);
+      if (canResolve()) {
+        effect.reactions.set(this.name, {
+          label: this.name,
+          canResolve,
+          resolve: () => { player.switchPokemon(target, store, state); },
+        });
       }
-
-      player.switchPokemon(target, store, state);
     }
 
     return state;

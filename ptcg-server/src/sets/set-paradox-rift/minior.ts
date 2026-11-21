@@ -1,9 +1,10 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { ConfirmPrompt, GameMessage, PowerType, State, StateUtils, StoreLike } from '../../game';
+import { GamePhase, PowerType, State, StateUtils, StoreLike } from '../../game';
+import { CheckRetreatCostEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Minior extends PokemonCard {
 
@@ -20,7 +21,7 @@ export class Minior extends PokemonCard {
   public powers = [{
     name: 'Far-Flying Meteor',
     powerType: PowerType.ABILITY,
-    text: 'Once during your turn, if this Pokémon is on your Bench, when you attach an Energy card from your hand to this Pokémon, you may switch it with your Active Pokémon.'
+    text: 'During your turn, if this Pokémon is on your Bench, whenever you attach an Energy card from your hand to this Pokémon, you may switch it with your Active Pokémon.'
   }];
 
   public attacks = [{
@@ -46,37 +47,30 @@ export class Minior extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      const opponentActiveCard = opponent.active.getPokemonCard();
-      if (opponentActiveCard) {
-        const retreatCost = opponentActiveCard.retreat.filter(c => c === CardType.COLORLESS).length;
-
-        effect.damage = retreatCost * 20;
-
-        return state;
-      }
+      const retreat = new CheckRetreatCostEffect(StateUtils.getOpponent(state, effect.player));
+      state = store.reduceEffect(state, retreat);
+      effect.damage = retreat.cost.length * 20;
     }
 
-    if (effect instanceof AttachEnergyEffect && effect.target.cards[0] == this) {
-      const player = effect.player;
-      const target = effect.target;
-
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.getPokemonCard() === this
+      && effect.activePokemonAtAttachment !== this) {
+      const { player, target } = effect;
+      const canResolve = () => state.players[state.activePlayer] === player
+        && (state.phase === GamePhase.PLAYER_TURN || state.phase === GamePhase.ATTACK)
+        && player.bench.includes(target) && target.getPokemonCard() === this
+        && !IS_ABILITY_BLOCKED(store, state, player, this);
+      if (canResolve()) {
+        const label = this.powers[0].name;
+        effect.reactions.set(label, {
+          label,
+          canResolve,
+          resolve: () => {
+            CONFIRMATION_PROMPT(store, state, player, wantToUse => {
+              if (wantToUse && canResolve()) player.switchPokemon(target, store, state);
+            });
+          },
+        });
       }
-      state = store.prompt(state, new ConfirmPrompt(
-        effect.player.id,
-        GameMessage.WANT_TO_USE_ABILITY,
-      ), wantToUse => {
-        if (wantToUse) {
-
-          player.switchPokemon(target);
-
-        }
-      });
     }
     return state;
   }

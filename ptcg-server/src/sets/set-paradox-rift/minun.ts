@@ -1,8 +1,9 @@
-import { GameLog, PlayerType, PowerType, State, StateUtils, StoreLike } from '../../game';
+import { PowerType, State, StateUtils, StoreLike } from '../../game';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class Minun extends PokemonCard {
@@ -35,36 +36,28 @@ export class Minun extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
+    if (!(effect instanceof AfterAttachEnergyFromHandEffect)) return state;
+    const { player, target } = effect;
+    if (!player.getPokemonInPlay().includes(target)) return state;
 
-      let hasMinunInPlay = false;
+    const owner = StateUtils.getOpponent(state, player);
+    const power = this.powers[0];
+    const getSource = () => {
+      const pokemon = owner.getPokemonInPlay().map(slot => slot.getPokemonCard());
+      if (!pokemon.some(card => card?.name === 'Plusle')) return undefined;
+      return pokemon.find(card => card instanceof Minun && !IS_ABILITY_BLOCKED(store, state, owner, card));
+    };
 
-      opponent.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card === this) {
-          hasMinunInPlay = true;
-        }
+    // Only one Buddy Pulse can apply to this physical Energy attachment.
+    if (!effect.reactions.has(power.name) && getSource() === this) {
+      effect.reactions.set(power.name, {
+        label: power.name,
+        canResolve: () => player.getPokemonInPlay().includes(target) && getSource() !== undefined,
+        resolve: () => {
+          const source = getSource();
+          if (source) store.reduceEffect(state, new PlaceDamageCountersEffect(owner, target, 20, source, power));
+        },
       });
-
-      if (!hasMinunInPlay) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      const plusleIsOnBench = player.bench.some(c => c.cards.some(card => card.name === 'Plusle'));
-      if (!plusleIsOnBench) {
-        return state;
-      }
-
-      store.log(state, GameLog.LOG_PLAYER_PLACES_DAMAGE_COUNTERS, { name: opponent.name, damage: 20, target: effect.target.getPokemonCard()!.name, effect: this.name });
-
-      effect.target.damage += 20;
-
-      return state;
     }
 
     return state;

@@ -1,5 +1,5 @@
 import { AbstractAttackEffect, ApplyWeaknessEffect, DealDamageEffect, PutDamageEffect } from './effects/attack-effects';
-import { CheckPokemonTypeEffect, CheckProvidedEnergyEffect } from './effects/check-effects';
+import { CheckPokemonTypeEffect, CheckProvidedEnergyEffect, CheckRetreatCostEffect } from './effects/check-effects';
 import { mirrorOnlyEnergyForQuery } from './prefabs/mirror-only-energy';
 import { StateUtils } from './state-utils';
 import { preflightCopiedOpponentAttacks, resolveCopyAttackSessions } from './prefabs/copy-attack-delegation';
@@ -714,7 +714,8 @@ export class Store implements StoreLike {
     }
     cards.sort(c => c.superType);
     // A physical Tool can be present in both the slot and its Tools list.
-    const listeners = effect instanceof AfterAttachEnergyFromHandEffect ? new Set(cards) : cards;
+    const listeners = effect instanceof AfterAttachEnergyFromHandEffect || effect instanceof CheckRetreatCostEffect
+      ? new Set(cards) : cards;
     listeners.forEach(c => {
       if (virtual.has(c) && effect instanceof CheckProvidedEnergyEffect) {
         state = (c as Card & { reduceMirrorOnlyEnergyEffect: (store: StoreLike, state: State, effect: CheckProvidedEnergyEffect) => State }).reduceMirrorOnlyEnergyEffect(this, state, effect);

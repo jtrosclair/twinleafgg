@@ -3717,3 +3717,50 @@ passed 32 tests. The 2.46 MiB production package passed attestation, 10 board
 scenarios and 209 Angular checks. Both mouse and touch verified the complete
 α Growth and Aurora Energy flow in the packaged simulator, from choosing
 an extra Energy to discarding the payment and attaching both cards.
+
+## Gameplay re-audit, batch 50
+
+Ported Buddy Pulse from Twinleaf's second Ability-effect refactor and verified
+the official ruling against Minior and Ting-Lu ex. Minun needs Plusle anywhere
+on its own side. One eligible Minun places two counters for each Energy
+successfully attached from the opposing hand to that opponent's Pokémon. The
+typed counter effect honors Hide n Sneak and other Ability protection. Alolan
+Exeggutor ex's Tropical Frenzy now deals damage first and attaches the selected
+Basic Energy cards as a group. The saved attack identifier remains
+`Tropical Fever`.
+[Upstream Buddy Pulse change](https://github.com/twinleafgg/twinleafgg/commit/db4eebfcfb1e1a04b2d99411ea8e5d61d540e1fc)
+[Official Buddy Pulse and Minior ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%9E%E3%82%A4%E3%83%8A%E3%83%B3)
+[Official advanced rulebook](https://asia.pokemon-card.com/sg/wp-content/uploads/sites/6/2025/10/EN_advanced_manual-2025.pdf)
+
+Far-Flying Meteor checks a completed hand attachment to a Benched Minior
+during its owner's turn. Cursed Land checks whether Ting-Lu ex is Active and
+the opposing in-play Pokémon has damage counters, honors target-side Ability
+protection, and exempts Pokémon ex. Shining Vine triggers whenever a qualifying
+Energy provides Grass to Active Venusaur & Snivy-GX during its owner's turn.
+It can switch multiple times that turn and checks protection on the chosen
+Benched Pokémon. The current player chooses the order among the migrated
+reactions to one attachment. That covers Minior versus Buddy Pulse and Jet
+Energy, and Shining Vine versus Rainbow Energy under Shadow Box. Warp Energy
+cannot fire when it was attached to a Benched Minior that enters the Active
+Spot afterward.
+[Upstream Ting-Lu ex change](https://github.com/twinleafgg/twinleafgg/commit/3348ebdc898f175a2ed8f999133cd13d1afd01f5)
+[Upstream Shining Vine change](https://github.com/twinleafgg/twinleafgg/commit/49205ef1746459c14270cdf7ad4644f5e62ed010)
+[Official Ability errata](https://play.pokemon.com/en-ca/resources/documents/tcg-errata/)
+[Official Rainbow Energy ruling](https://www.pokemon-card.com/rules/faq/search.php?page=9&regulation=all&regulation_faq_main=&sc_group_id=656)
+[Pokémon Professor rules update](https://professorprogram.pokemon.com/news/11473085)
+
+Gravitational Tackle uses the defender's current Retreat Cost. The query
+counts each physical card once even when a Tool appears in the Pokémon's
+card list and its Tools list. The remaining attachment audit includes older
+same-target triggers, effects still using the pre-attachment event, and
+ordering across multiple physical attachments within a group.
+[Official Minior print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sv04/99/)
+
+The focused suite passes all 23 cases, 17 of which fail on the prior engine.
+The full suite passes 10,533 tests and the existing working edits pass 221
+combined checks. All 559 comparable saved states, 5,225 sampled opening
+actions and 1,112 checked Active Retreat Costs match the previous build. All
+seven recorded solutions still win. The API passes 32 tests. The 2.50 MiB
+gzip runtime package passes attestation, 10 board checks and 209 Angular
+checks. Mouse and touch in the packaged simulator exercise both orders of
+Far-Flying Meteor and Buddy Pulse, producing the official board outcomes.

@@ -99,13 +99,11 @@ export function resolveHandEnergyAttachments(store: StoreLike, state: State, req
       if (spendsAttachment) player.energyPlayedTurn = turn;
       request.onAttached?.(state, attached);
     }
-    const complete = (index: number): State => {
-      if (index === completions.length) return state;
-      state = store.reduceEffect(state, completions[index]);
-      if (index + 1 < completions.length && store.hasPrompts()) {
-        return store.waitPrompt(state, () => complete(index + 1));
-      }
-      return complete(index + 1);
+    const complete = (index: number): void => {
+      const completion = completions[index];
+      if (!completion) return;
+      if (index + 1 < completions.length) completion.onSettled = () => complete(index + 1);
+      state = store.reduceEffect(state, completion);
     };
     complete(0);
     return state;

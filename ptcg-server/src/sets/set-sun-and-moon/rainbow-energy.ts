@@ -41,10 +41,16 @@ export class RainbowEnergy extends EnergyCard {
     }
 
     if (effect instanceof AfterAttachEnergyFromHandEffect && effect.energyCard === this) {
-      if (IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.target)) {
-        return state;
+      const { player, target } = effect;
+      const canResolve = () => target.cards.includes(this)
+        && !IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, target);
+      if (canResolve()) {
+        effect.reactions.set(this.name, {
+          label: this.name,
+          canResolve,
+          resolve: () => { target.damage += 10; },
+        });
       }
-      effect.target.damage += 10;
     }
 
     return state;

@@ -3,10 +3,10 @@ import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { PowerType } from '../../game/store/card/pokemon-types';
-import { PowerEffect } from '../../game/store/effects/game-effects';
+import { EffectOfAbilityEffect, PowerEffect } from '../../game/store/effects/game-effects';
 import { CheckPokemonPowersEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { ChoosePokemonPrompt, GameError, GameMessage, PlayerType, PokemonCardList, SlotType, StateUtils } from '../../game';
+import { ChoosePokemonPrompt, GameError, GameMessage, PlayerType, SlotType, StateUtils } from '../../game';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
@@ -51,71 +51,32 @@ export class TingLuex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof CheckPokemonPowersEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
+    if (effect instanceof CheckPokemonPowersEffect
+      || (effect instanceof PowerEffect && effect.power.powerType === PowerType.ABILITY
+        && effect.power.name !== this.powers[0].name)) {
+      const owner = state.players.find(player => player.active.getPokemonCard() === this);
+      if (!owner) return state;
 
-      // Ting-Lu ex is not active Pokemon
-      if (player.active.getPokemonCard() !== this
-        && opponent.active.getPokemonCard() !== this) {
-        return state;
-      }
+      const pokemon = effect instanceof PowerEffect ? effect.card : effect.target;
+      if (pokemon.tags.includes(CardTag.POKEMON_ex)) return state;
+      const opponent = StateUtils.getOpponent(state, owner);
+      const target = opponent.getPokemonInPlay().find(slot => slot.getPokemonCard() === pokemon);
+      if (!target || target.damage === 0) return state;
 
-      const targetCardList = StateUtils.findCardList(state, effect.target);
-
-      // Only filter opponent's Pokemon
-      const targetOwner = StateUtils.findOwner(state, targetCardList);
-      if (targetOwner === player) {
-        return state;
-      }
-
-      const targetPokemon = effect.target;
-      if (!targetPokemon) {
-        return state;
-      }
-
-      // We are not blocking the Abilities from Pokémon ex
-      if (targetPokemon.tags.includes(CardTag.POKEMON_ex)) {
-        return state;
-      }
-
-      // Only filter if Pokemon has damage counters
-      if (targetCardList instanceof PokemonCardList && targetCardList.damage > 0) {
-        // Filter out all abilities except Cursed Land
-        effect.powers = effect.powers.filter(power =>
-          power.powerType !== PowerType.ABILITY || power.name === 'Cursed Land'
-        );
-      }
-    }
-
-    if (effect instanceof PowerEffect && effect.power.powerType === PowerType.ABILITY && effect.power.name !== 'Cursed Land') {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Ting-Lu ex is not active Pokemon
-      if (player.active.getPokemonCard() !== this
-        && opponent.active.getPokemonCard() !== this) {
-        return state;
-      }
-
-      // We are not blocking the Abilities from Pokémon ex
-      if (effect.card.tags.includes(CardTag.POKEMON_ex)) {
-        return state;
-      }
-
-      // Try reducing ability for each player  
       try {
-        const powerEffect = new PowerEffect(player, this.powers[0], this);
-        store.reduceEffect(state, powerEffect);
-      } catch {
+        store.reduceEffect(state, new PowerEffect(owner, this.powers[0], this, owner.active));
+      } catch (error) {
+        if (!(error instanceof GameError)) throw error;
         return state;
       }
 
-      if (effect.power.useFromDiscard || effect.power.useFromHand) {
-        return state;
-      }
+      const land = new EffectOfAbilityEffect(owner, this.powers[0], this, target);
+      store.reduceEffect(state, land);
+      if (land.preventDefault || !land.target) return state;
 
-      if (!effect.power.exemptFromAbilityLock) {
+      if (effect instanceof CheckPokemonPowersEffect) {
+        effect.powers = effect.powers.filter(power => power.powerType !== PowerType.ABILITY || power.exemptFromAbilityLock);
+      } else if (!effect.power.exemptFromAbilityLock) {
         throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
       }
     }
