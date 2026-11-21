@@ -1,11 +1,12 @@
+import { RESTRICT_SPECIAL_ENERGY_ATTACHMENT } from '../../game/store/prefabs/special-energy-attachment';
+import { AfterAttachEnergyEffect } from '../../game/store/effects/play-card-effects';
 import { CardTag, CardType, EnergyType, SpecialCondition } from '../../game/store/card/card-types';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { AddSpecialConditionsPowerEffect, CheckProvidedEnergyEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
-import { GameError, GameMessage, PlayerType, StateUtils } from '../../game';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { PlayerType, StateUtils } from '../../game';
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
 import { IS_SPECIAL_ENERGY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
@@ -44,30 +45,24 @@ export class ImpactEnergy extends EnergyCard {
       }
     }
 
-    // Prevent attaching to non Single Strike Pokemon
-    if (effect instanceof AttachEnergyEffect) {
-      if (effect.energyCard === this && !effect.target.getPokemonCard()?.tags.includes(CardTag.SINGLE_STRIKE)) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
+
+    // The card can clear its Special Condition on an incompatible recipient before discard.
+    if (effect instanceof AfterAttachEnergyEffect && effect.energyCard === this
+      && effect.target.cards.includes(this) && !IS_SPECIAL_ENERGY_BLOCKED(store, state,
+        StateUtils.findOwner(state, effect.target), this, effect.target)) {
+      effect.target.removeSpecialCondition(SpecialCondition.POISONED);
+    }
+    if (effect instanceof CheckTableStateEffect) {
+      for (const player of state.players) {
+        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => {
+          if (slot.cards.includes(this) && !IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, slot)) {
+            slot.removeSpecialCondition(SpecialCondition.POISONED);
+          }
+        });
       }
     }
 
-    // Heal Poison, discard card when not attached to Single Strike Pokemon
-    if (effect instanceof CheckTableStateEffect) {
-      state.players.forEach(player => {
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (!cardList.cards.includes(this) || IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, cardList)) {
-            return;
-          }
-
-          // Remove Poison before discarding as per ruling
-          cardList.removeSpecialCondition(SpecialCondition.POISONED);
-
-          if (!cardList.getPokemonCard()?.tags.includes(CardTag.SINGLE_STRIKE)) {
-            cardList.moveCardTo(this, player.discard);
-          }
-        });
-      });
-    }
+    RESTRICT_SPECIAL_ENERGY_ATTACHMENT(store, state, effect, this, target => target.getPokemonCard()?.tags.includes(CardTag.SINGLE_STRIKE) === true);
 
     // Prevent Poison
     if (effect instanceof AddSpecialConditionsEffect || effect instanceof AddSpecialConditionsPowerEffect) {

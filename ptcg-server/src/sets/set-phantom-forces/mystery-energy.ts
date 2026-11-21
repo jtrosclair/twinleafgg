@@ -1,17 +1,10 @@
+import { RESTRICT_SPECIAL_ENERGY_ATTACHMENT } from '../../game/store/prefabs/special-energy-attachment';
 import { CardType, EnergyType } from '../../game/store/card/card-types';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import {
-  CheckProvidedEnergyEffect, CheckPokemonTypeEffect,
-  CheckRetreatCostEffect,
-  CheckTableStateEffect
-} from '../../game/store/effects/check-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { GameError } from '../../game/game-error';
-import { GameMessage } from '../../game/game-message';
-import { PlayerType } from '../../game';
+import { CheckProvidedEnergyEffect, CheckPokemonTypeEffect, CheckRetreatCostEffect } from '../../game/store/effects/check-effects';
 import { IS_SPECIAL_ENERGY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class MysteryEnergy extends EnergyCard {
@@ -40,6 +33,7 @@ export class MysteryEnergy extends EnergyCard {
     '(If this card is attached to anything other than a [P] Pokemon, discard this card.)';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    RESTRICT_SPECIAL_ENERGY_ATTACHMENT(store, state, effect, this, CardType.PSYCHIC);
 
     // Provide energy when attached to Psychic Pokemon
     if (effect instanceof CheckProvidedEnergyEffect && effect.source.cards.includes(this)) {
@@ -51,32 +45,6 @@ export class MysteryEnergy extends EnergyCard {
       }
     }
 
-    // Prevent attaching to non Psychic Pokemon
-    if (effect instanceof AttachEnergyEffect && effect.energyCard === this) {
-      const checkPokemonType = new CheckPokemonTypeEffect(effect.target);
-      store.reduceEffect(state, checkPokemonType);
-
-      if (!checkPokemonType.cardTypes.includes(CardType.PSYCHIC)) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-    }
-
-    // Discard card when not attached to Psychic Pokemon
-    if (effect instanceof CheckTableStateEffect) {
-      state.players.forEach(player => {
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (!cardList.cards.includes(this) || IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, cardList)) {
-            return;
-          }
-
-          const checkPokemonType = new CheckPokemonTypeEffect(cardList);
-          store.reduceEffect(state, checkPokemonType);
-          if (!checkPokemonType.cardTypes.includes(CardType.PSYCHIC)) {
-            cardList.moveCardTo(this, player.discard);
-          }
-        });
-      });
-    }
 
     // Subtract CC from retreat cost
     if (effect instanceof CheckRetreatCostEffect && effect.player.active.cards.includes(this)) {

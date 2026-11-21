@@ -1,12 +1,11 @@
+import { RESTRICT_SPECIAL_ENERGY_ATTACHMENT } from '../../game/store/prefabs/special-energy-attachment';
 import { CardTag, CardType, EnergyType } from '../../game/store/card/card-types';
 import { EnergyCard } from '../../game/store/card/energy-card';
-import { CheckProvidedEnergyEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
+import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect, EnergyEffect } from '../../game/store/effects/play-card-effects';
+import { EnergyEffect } from '../../game/store/effects/play-card-effects';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
-import { GameError, GameMessage, PlayerType } from '../../game';
-import { IS_SPECIAL_ENERGY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class TeamRocketsEnergy extends EnergyCard {
 
@@ -37,28 +36,9 @@ export class TeamRocketsEnergy extends EnergyCard {
   While this card is attached to a Pokémon, this card provides 2 in any combination of [P] and [D] Energy`;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Prevent attaching to non Team Rocket's Pokemon
-    if (effect instanceof AttachEnergyEffect) {
-      if (effect.energyCard === this && !effect.target.getPokemonCard()?.tags.includes(CardTag.TEAM_ROCKET)) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-    }
+    RESTRICT_SPECIAL_ENERGY_ATTACHMENT(store, state, effect, this,
+      target => target.getPokemonCard()?.tags.includes(CardTag.TEAM_ROCKET) === true);
 
-    // Discard card when not attached to Team Rocket's Pokemon
-    if (effect instanceof CheckTableStateEffect) {
-      state.players.forEach(player => {
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (!cardList.cards.includes(this) || IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, cardList)) {
-            return;
-          }
-
-          const pokemonCard = cardList.getPokemonCard();
-          if (pokemonCard && !pokemonCard.tags.includes(CardTag.TEAM_ROCKET)) {
-            cardList.moveCardTo(this, player.discard);
-          }
-        });
-      });
-    }
 
     if (effect instanceof CheckProvidedEnergyEffect && effect.source.cards.includes(this)) {
       try {

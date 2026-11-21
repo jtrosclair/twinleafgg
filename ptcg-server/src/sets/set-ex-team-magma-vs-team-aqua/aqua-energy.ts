@@ -1,16 +1,16 @@
+import { RESTRICT_SPECIAL_ENERGY_ATTACHMENT } from '../../game/store/prefabs/special-energy-attachment';
 import { CardTag, CardType, EnergyType, SuperType } from '../../game/store/card/card-types';
 import { EnergyCard } from '../../game/store/card/energy-card';
-import { CheckProvidedEnergyEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
+import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect, EnergyEffect } from '../../game/store/effects/play-card-effects';
+import { EnergyEffect } from '../../game/store/effects/play-card-effects';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
-import { GameError, GameMessage, PlayerType } from '../../game';
+import { PlayerType } from '../../game';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { EnergyMap } from '../../game/store/prompts/choose-energy-prompt';
 import { CardList } from '../../game/store/state/card-list';
 import { Card } from '../../game/store/card/card';
-import { IS_SPECIAL_ENERGY_BLOCKED } from '../../game/store/prefabs/prefabs';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 
 export class AquaEnergy extends EnergyCard {
@@ -81,28 +81,9 @@ export class AquaEnergy extends EnergyCard {
   }
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Prevent attaching to non Team Rocket's Pokemon
-    if (effect instanceof AttachEnergyEffect) {
-      if (effect.energyCard === this && !effect.target.getPokemonCard()?.tags.includes(CardTag.TEAM_AQUA)) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-    }
+    RESTRICT_SPECIAL_ENERGY_ATTACHMENT(store, state, effect, this,
+      target => target.getPokemonCard()?.tags.includes(CardTag.TEAM_AQUA) === true);
 
-    // Discard card when not attached to Team Rocket's Pokemon
-    if (effect instanceof CheckTableStateEffect) {
-      state.players.forEach(player => {
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (!cardList.cards.includes(this) || IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, cardList)) {
-            return;
-          }
-
-          const pokemonCard = cardList.getPokemonCard();
-          if (pokemonCard && !pokemonCard.tags.includes(CardTag.TEAM_AQUA)) {
-            cardList.moveCardTo(this, player.discard);
-          }
-        });
-      });
-    }
 
     // Discard card at the end of the turn
     if (effect instanceof EndTurnEffect) {

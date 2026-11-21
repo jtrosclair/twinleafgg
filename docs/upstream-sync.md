@@ -4004,9 +4004,11 @@ attestation, ten board scenarios and 209 client-service checks. All 32
 standard API checks pass.
 
 The original ledger checkpoint, `7a6f5e50e`, marked eight of 35 commits
-titled `fix` as deferred and ten as partial. At this batch, the ledger has
-nine deferred and 56 partial commits across all titles. Of the 39 entries
-titled `fix`, 11 are partial and zero are deferred. This tally includes
+whose subjects start with `fix` as deferred and ten as partial. The
+re-audit applied three of those eight, verified equivalent behavior was
+already present for four, and marked one partial. At this batch, the
+ledger has nine deferred and 56 partial commits across all subjects. Of
+the 39 `fix` entries, 11 are partial and zero are deferred. This tally includes
 commits that mix gameplay with retired code. An individual defect count
 requires card-level review. Ampharos was originally deferred as part of
 the separately titled Ability refactor `db4eebfcf`.
@@ -4067,3 +4069,47 @@ touch, putting one Energy in hand and attaching the other. The full
 engine suite passes 10,711 checks and 159 targeted checks pass with the
 existing local edits. The 2.50 MiB gzip package passes attestation, ten
 board scenarios and 209 client-service checks. All 32 API checks pass.
+
+## Gameplay re-audit, batch 57
+
+Primal Turbo attaches the selected cards from the deck, shuffles, and
+resolves the resulting reactions. The normal hand attachment checks the
+recipient before spending the turn’s attachment. Card effects can put a
+restricted Energy on an incompatible recipient. The Energy’s discard
+rule resolves after continuous effects see the attachment and before a
+triggered evolution can make the recipient eligible. This covers 23
+restricted Special Energy definitions. On the official Festival Grounds
+example, the temporary attachment clears Poison from Lugia VSTAR before
+Single Strike Energy is discarded. The Stadium also prevents new Special
+Conditions while a Pokémon has Energy attached and checks Stadium
+suppression for that Pokémon.
+[Official Primal Turbo and Festival Grounds rulings](https://www.pokemon-card.com/rules/faq/search.php?sc_group_id=867)
+[Official Single Strike Energy rulings](https://www.pokemon-card.com/rules/faq/search.php?page=3&regulation=all&sc_group_id=727)
+[Pokémon advanced rules manual](https://asia.pokemon-card.com/sg/wp-content/uploads/sites/6/2025/10/EN_advanced_manual-2025.pdf)
+
+Ignition Energy discards from the board at the end of its owner’s turn
+when its effects are active, including on saved boards without a marker.
+Boost Energy and Triple Acceleration Energy expire at the end of the
+attachment turn. If suppression covers that deadline, expiry does not
+carry into a later turn. Existing marker names continue to load.
+[Ignition Energy print](https://www.pokemon-card.com/card-search/details.php/card/47708)
+[Boost Energy Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/EX_Dragon_Frontiers.pdf)
+[Triple Acceleration Energy rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%88%E3%83%AA%E3%83%97%E3%83%AB%E5%8A%A0%E9%80%9F%E3%82%A8%E3%83%8D%E3%83%AB%E3%82%AE%E3%83%BC&regulation_faq_main_item1=all)
+
+The self-Knock Out change in `b8fad7fa2` still allows Extra Energy Bomb
+on Electrode-GX CES to select zero cards and shuffle the deck. The
+printed effect takes five Energy from the discard pile, or all available
+if there are fewer, and excludes Pokémon-GX and Pokémon-EX. A separate
+review must test the self-Knock Out, Prize timing and Special Energy
+attachment reactions together.
+[Electrode-GX rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%9E%E3%83%AB%E3%83%9E%E3%82%A4%E3%83%B3GX&regulation_faq_main_item1=all)
+
+All 63 focused cases pass, including 12 that fail on the preceding
+engine. The combined workspace passes 206 targeted checks. The full
+engine suite passes 10,774 checks. All 559 comparable saved puzzle
+states match, and all seven recorded solutions still win. Of 5,225
+sampled opening moves, only 39 Ignition Energy attachments differ, due
+to removing the redundant marker. All 39 were replayed through turn
+end, when the attached Energy went to the discard pile. The 2.50 MiB
+gzip package passes build attestation, ten board scenarios and 209
+client-service checks. All 32 API checks pass.

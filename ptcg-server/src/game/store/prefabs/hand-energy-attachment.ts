@@ -42,6 +42,7 @@ export function attachWithOptionalSecondEnergy(
   store: StoreLike, state: State, first: AttachEnergyEffect, candidates: EnergyCard[], useTurnAttachment: boolean,
 ): State {
   const { player, target, energyCard } = first;
+  first.isManual = useTurnAttachment;
   const commit = (attachments: AttachEnergyEffect[]) =>
     store.reduceEffect(state, new AttachEnergyFromHandEffect(player, attachments, useTurnAttachment));
   if (candidates.length === 0) return commit([first]);
@@ -51,6 +52,7 @@ export function attachWithOptionalSecondEnergy(
   for (const card of candidates) {
     if (card === energyCard) continue;
     const extra = new AttachEnergyEffect(player, card, target);
+    extra.isManual = useTurnAttachment;
     extra.sourcePower = first.sourcePower;
     if (discardCost([first, extra]) > player.hand.cards.length - 2) continue;
     try {
@@ -87,6 +89,7 @@ export function resolveHandEnergyAttachments(store: StoreLike, state: State, req
   if (!attachments.every(current) || new Set(attachments.map(a => a.energyCard)).size !== attachments.length) {
     throw new GameError(GameMessage.INVALID_TARGET);
   }
+  for (const attachment of attachments) attachment.isManual = request.useTurnAttachment;
 
   const spendsAttachment = request.useTurnAttachment && !player.usedDragonsWish && !state.rules.unlimitedEnergyAttachments;
   if (spendsAttachment && player.energyPlayedTurn === turn) throw new GameError(GameMessage.ENERGY_ALREADY_ATTACHED);

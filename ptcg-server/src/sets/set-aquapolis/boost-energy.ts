@@ -1,13 +1,13 @@
-import { GameError, GameMessage, PlayerType, StateUtils } from '../../game';
+import { RESTRICT_SPECIAL_ENERGY_ATTACHMENT } from '../../game/store/prefabs/special-energy-attachment';
+import { AfterAttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { GameError, GameMessage, PlayerType } from '../../game';
 import { CardType, EnergyType } from '../../game/store/card/card-types';
 import { EnergyCard } from '../../game/store/card/energy-card';
-import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { CheckProvidedEnergyEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
+import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { RetreatEffect } from '../../game/store/effects/game-effects';
 import { BetweenTurnsEffect } from '../../game/store/effects/game-phase-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { IS_SPECIAL_ENERGY_BLOCKED, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 
@@ -27,18 +27,13 @@ export class BoostEnergy extends EnergyCard {
   public BOOST_MARKER = 'BOOST_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof AttachEnergyEffect && effect.energyCard === this) {
-
-      if (effect.target.getPokemons().length < 2) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-
+    RESTRICT_SPECIAL_ENERGY_ATTACHMENT(store, state, effect, this, target => target.isEvolved());
+    if (effect instanceof AfterAttachEnergyEffect && effect.energyCard === this && !effect.discardEnergy) {
       effect.player.marker.addMarker(this.BOOST_MARKER, this);
     }
 
     if (effect instanceof CheckProvidedEnergyEffect && effect.source.cards.includes(this)) {
-      const attachedTo = effect.source.getPokemonCard();
-      if (!!attachedTo && attachedTo instanceof PokemonCard && effect.source.getPokemons().length > 1) {
+      if (effect.source.isEvolved()) {
         effect.energyMap.push({ card: this, provides: [CardType.COLORLESS, CardType.COLORLESS, CardType.COLORLESS] });
       }
 
@@ -47,33 +42,16 @@ export class BoostEnergy extends EnergyCard {
 
     if (effect instanceof BetweenTurnsEffect && effect.player.marker.hasMarker(this.BOOST_MARKER, this)) {
       const player = effect.player;
-
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        if (cardList.cards.includes(this)) {
-          MOVE_CARDS(store, state, StateUtils.findCardList(state, this), player.discard, { cards: [this], sourceCard: this });
-          effect.player.marker.removeMarker(this.BOOST_MARKER, this);
+      player.marker.removeMarker(this.BOOST_MARKER, this);
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
+        if (cardList.cards.includes(this) && !IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, cardList)) {
+          MOVE_CARDS(store, state, cardList, player.discard, { cards: [this], sourceCard: this });
         }
       });
     }
 
-    if (effect instanceof CheckTableStateEffect) {
-      state.players.forEach(player => {
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (!cardList.cards.includes(this)) {
-            return;
-          }
-
-          const attachedTo = cardList.getPokemonCard();
-
-          if (!!attachedTo && cardList.getPokemons().length < 2) {
-            MOVE_CARDS(store, state, StateUtils.findCardList(state, this), player.discard, { cards: [this] });
-          }
-        });
-      });
-      return state;
-    }
-
-    if (effect instanceof RetreatEffect && effect.player.active.cards.includes(this)) {
+    if (effect instanceof RetreatEffect && effect.player.active.cards.includes(this)
+      && !IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.player.active)) {
       throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
 

@@ -6,6 +6,7 @@ import { GameMessage, GameLog } from '../../game-message';
 import { Effect } from '../effects/effect';
 import { State } from '../state/state';
 import { StoreLike } from '../store-like';
+import { StateUtils } from '../state-utils';
 import { EnergyType } from '../card/card-types';
 import { SlotType } from '../actions/play-card-action';
 import { PlayerType } from '../actions/play-card-action';
@@ -33,6 +34,12 @@ function emitAnimationEvent(store: StoreLike, eventName: string, data: {
 export function playEnergyReducer(store: StoreLike, state: State, effect: Effect): State {
 
   if (effect instanceof AfterAttachEnergyEffect) {
+    if (effect.discardEnergy && effect.target.cards.includes(effect.energyCard)) {
+      const owner = StateUtils.findOwner(state, effect.target);
+      state = store.reduceEffect(state, new MoveCardsEffect(effect.target, owner.discard, {
+        cards: [effect.energyCard], sourceCard: effect.energyCard,
+      }));
+    }
     const handAttachment = effect instanceof AfterAttachEnergyFromHandEffect ? effect : undefined;
     const pending = handAttachment && effect.target.pendingEnergyAttachDamageCounters;
     const attacker = pending && state.players.find(player => player.id === pending.attackerPlayerId);

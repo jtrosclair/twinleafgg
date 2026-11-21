@@ -49,6 +49,8 @@ export class AttachEnergyEffect implements Effect {
   public player: Player;
   public energyCard: EnergyCard;
   public target: PokemonCardList;
+  /** Whether the player is taking their regular Energy attachment for the turn. */
+  public isManual: boolean;
   /** Set by the hand attachment resolver after checking interception and payment. */
   public handAttachmentPrepared = false;
   public completionBatch?: AfterAttachEnergyEffect[];
@@ -64,6 +66,7 @@ export class AttachEnergyEffect implements Effect {
     this.player = player;
     this.energyCard = energyCard;
     this.target = target;
+    this.isManual = sourceZone === undefined;
   }
 }
 
@@ -118,6 +121,7 @@ export interface QueuedHandEnergyReaction extends HandEnergyReaction {
 export class AfterAttachEnergyEffect implements Effect {
   readonly type: string = PlayCardEffects.AFTER_ATTACH_ENERGY_EFFECT;
   public preventDefault = false;
+  public discardEnergy = false;
   public readonly activePokemonAtAttachment: PokemonCard | undefined;
   public readonly recipientAtAttachment: PokemonCard | undefined;
   public readonly reactions = new Map<string, HandEnergyReaction>();

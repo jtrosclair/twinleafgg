@@ -1,11 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, EnergyType } from '../../game/store/card/card-types';
-import { PowerType, GameMessage, PlayerType, SlotType, AttachEnergyPrompt, StateUtils, State, StoreLike, GameError } from '../../game';
+import { PowerType, GameMessage, PlayerType, SlotType, AttachEnergyPrompt, State, StoreLike, GameError } from '../../game';
 
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { ABILITY_USED, BLOCK_IF_DECK_EMPTY, MOVE_CARDS, SHUFFLE_DECK, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { ABILITY_USED, ATTACH_ENERGY_TRANSFERS, BLOCK_IF_DECK_EMPTY, SHUFFLE_DECK, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Archeops extends PokemonCard {
 
@@ -81,11 +81,10 @@ export class Archeops extends PokemonCard {
         player.marker.addMarker(this.PRIMAL_TURBO_MARKER, this);
         ABILITY_USED(player, this);
 
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          MOVE_CARDS(store, state, player.deck, target, { cards: [transfer.card], sourceCard: this });
-        }
-        SHUFFLE_DECK(store, state, player);
+        ATTACH_ENERGY_TRANSFERS(store, state, player, transfers, 'deck', {
+          sourceCard: this,
+          onAttached: () => SHUFFLE_DECK(store, state, player)
+        });
       });
 
       return state;

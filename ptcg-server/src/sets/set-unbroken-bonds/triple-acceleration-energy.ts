@@ -1,11 +1,11 @@
-import { GameError, GameMessage, PlayerType } from '../../game';
-import { CardType, EnergyType, Stage } from '../../game/store/card/card-types';
+import { RESTRICT_SPECIAL_ENERGY_ATTACHMENT } from '../../game/store/prefabs/special-energy-attachment';
+import { AfterAttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { PlayerType, StateUtils } from '../../game';
+import { CardType, EnergyType } from '../../game/store/card/card-types';
 import { EnergyCard } from '../../game/store/card/energy-card';
-import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { CheckProvidedEnergyEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
+import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { BetweenTurnsEffect } from '../../game/store/effects/game-phase-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
 import { IS_SPECIAL_ENERGY_BLOCKED } from '../../game/store/prefabs/prefabs';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
@@ -36,52 +36,28 @@ export class TripleAccelerationEnergy extends EnergyCard {
   public TRIPLE_ACCELERATION_MARKER = 'TRIPLE_ACCELERATION_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    RESTRICT_SPECIAL_ENERGY_ATTACHMENT(store, state, effect, this, StateUtils.isEvolutionPokemon);
 
-    // Prevent attaching to non Evolution Pokemon
-    if (effect instanceof AttachEnergyEffect && effect.energyCard === this) {
-      const attachedTo = effect.target.getPokemonCard();
-      if (!!attachedTo && (attachedTo.stage === Stage.BASIC || attachedTo.stage === Stage.RESTORED)) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-
+    if (effect instanceof AfterAttachEnergyEffect && effect.energyCard === this && !effect.discardEnergy) {
       effect.player.marker.addMarker(this.TRIPLE_ACCELERATION_MARKER, this);
     }
 
     // Provide CCC when attached to Evolution Pokemon
-    if (effect instanceof CheckProvidedEnergyEffect && effect.source.cards.includes(this)) {
-      const attachedTo = effect.source.getPokemonCard();
-      if (!!attachedTo && attachedTo instanceof PokemonCard && attachedTo.stage !== Stage.BASIC && attachedTo.stage !== Stage.RESTORED) {
-        effect.energyMap.push({ card: this, provides: [CardType.COLORLESS, CardType.COLORLESS, CardType.COLORLESS] });
-      }
+    if (effect instanceof CheckProvidedEnergyEffect && effect.source.cards.includes(this)
+      && StateUtils.isEvolutionPokemon(effect.source)) {
+      effect.energyMap.push({ card: this, provides: [CardType.COLORLESS, CardType.COLORLESS, CardType.COLORLESS] });
     }
 
     // Discard at end of turn
     if (effect instanceof BetweenTurnsEffect && effect.player.marker.hasMarker(this.TRIPLE_ACCELERATION_MARKER, this)) {
       const player = effect.player;
-
+      player.marker.removeMarker(this.TRIPLE_ACCELERATION_MARKER, this);
       player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
         if (!cardList.cards.includes(this) || IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, cardList)) {
           return;
         }
 
         cardList.moveCardTo(this, player.discard);
-        effect.player.marker.removeMarker(this.TRIPLE_ACCELERATION_MARKER, this);
-      });
-    }
-
-    // Discard when not attached to Evolution Pokemon
-    if (effect instanceof CheckTableStateEffect) {
-      state.players.forEach(player => {
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (!cardList.cards.includes(this) || IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, cardList)) {
-            return;
-          }
-
-          const attachedTo = cardList.getPokemonCard();
-          if (!!attachedTo && (attachedTo.stage === Stage.BASIC || attachedTo.stage === Stage.RESTORED)) {
-            cardList.moveCardTo(this, player.discard);
-          }
-        });
       });
     }
 

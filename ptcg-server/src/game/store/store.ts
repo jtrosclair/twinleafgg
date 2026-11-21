@@ -599,6 +599,7 @@ export class Store implements StoreLike {
     }
     const probe = this.createPlayabilityProbe(copy, state);
     const attempt = new AttachEnergyEffect(player, card, target);
+    attempt.isManual = attachment.isManual;
     attempt.handAttachmentPrepared = true;
     attempt.completionBatch = [];
     try {

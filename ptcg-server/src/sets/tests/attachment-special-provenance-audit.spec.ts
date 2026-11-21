@@ -42,11 +42,22 @@ for(const c of cases){
   expect(g.player1.bench[0].cards).toContain(card);expect(g.player1.bench[0].energies.cards).toContain(card);
  });
 }
-for(const energy of ['Triple Acceleration Energy UNB','Team Rocket\'s Energy DRI'])it(`${energy} keeps its own attachment restriction for explicit deck origin`,()=>{
- const g=setupGame({turn:3,player1:{active:{card:'Azurill M6'},bench:[{card:'Charmander BS'}],deck:[energy,...padDeck(9)]},player2:{active:{card:'Mew ex MEW'},deck:padDeck(10)}});
- const card=g.player1.deck.cards[0] as EnergyCard,target=g.player1.bench[0];g.player1.deck.moveCardTo(card,target);
- expect(()=>g.store.reduceEffect(g.state,new AttachEnergyEffect(g.player1,card,target,'deck'))).toThrow();
-});
+for (const energy of ['Triple Acceleration Energy UNB', "Team Rocket's Energy DRI"]) {
+  it(`${energy} is discarded after an effect attaches it from the deck to an incompatible Pokémon`, () => {
+    const g = setupGame({
+      turn: 3,
+      player1: { active: { card: 'Azurill M6' }, bench: [{ card: 'Charmander BS' }], deck: [energy, ...padDeck(9)] },
+      player2: { active: { card: 'Mew ex MEW' }, deck: padDeck(10) },
+    });
+    const card = g.player1.deck.cards[0] as EnergyCard;
+    const target = g.player1.bench[0];
+    g.store.reduceEffect(g.state, new AttachEnergyEffect(g.player1, card, target, 'deck'));
+    expect(g.player1.deck.cards).not.toContain(card);
+    expect(target.cards).not.toContain(card);
+    expect(target.energies.cards).not.toContain(card);
+    expect(g.player1.discard.cards).toContain(card);
+  });
+}
 it('a normal manual Special Energy attachment succeeds without a hand-only lock',()=>{
  const g=setupGame({turn:3,player1:{active:{card:'Azurill M6'},bench:[{card:'Charmander BS'}],hand:['Double Turbo Energy BRS'],deck:padDeck(10)},player2:{active:{card:'Mew ex MEW'},deck:padDeck(10)}});
  const card=g.player1.hand.cards[0];g.store.dispatch(new PlayCardAction(g.player1.id,0,{player:PlayerType.BOTTOM_PLAYER,slot:SlotType.BENCH,index:0}));expect(g.player1.bench[0].cards).toContain(card);
