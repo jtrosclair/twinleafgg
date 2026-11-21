@@ -2,8 +2,10 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
 
-import { StoreLike, State, GameError, GameMessage, Card, ChooseCardsPrompt, ShuffleDeckPrompt } from '../../game';
+import { StoreLike, State, GameError, GameMessage, ChooseCardsPrompt, ShuffleDeckPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
+import { replaceAndDiscardPokemon } from '../../game/store/prefabs/pokemon-replacement';
 import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Ditto extends PokemonCard {
@@ -48,53 +50,24 @@ export class Ditto extends PokemonCard {
 
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
-      // Get current turn
-      const turn = state.turn;
-
-      if (player.active.cards[0] !== this) {
+      const target = player.active;
+      if (state.turn > 2 || target.getPokemonCard() !== this || !player.deck.cards.length) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
-      const blocked: number[] = [];
-      player.deck.cards.forEach((card, index) => {
-        if (card instanceof PokemonCard && card.name == 'Ditto') {
-          blocked.push(index);
+      const otherDitto = player.deck.cards.flatMap((card, index) =>
+        card instanceof PokemonCard && card.name === this.name ? [index] : []);
+      const blocked = getBlockedPokemonPlacementIndices(store, state, player, player.deck, otherDitto);
+      return store.prompt(state, new ChooseCardsPrompt(
+        player, GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH, player.deck,
+        { superType: SuperType.POKEMON, stage: Stage.BASIC }, { min: 0, max: 1, allowCancel: true, blocked }
+      ), selected => {
+        const replacement = selected?.[0];
+        if (replacement instanceof PokemonCard) {
+          replaceAndDiscardPokemon(store, state, player, target, player.deck, replacement, this);
         }
+        return store.prompt(state, new ShuffleDeckPrompt(player.id), order => player.deck.applyOrder(order));
       });
-
-      // Check if it is player's first turn
-      if (turn > 2) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      } else {
-
-        let cards: Card[] = [];
-        return store.prompt(state, new ChooseCardsPrompt(
-          player,
-          GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
-          player.deck,
-          { superType: SuperType.POKEMON, stage: Stage.BASIC },
-          { min: 0, max: 1, allowCancel: true, blocked }
-        ), selectedCards => {
-          cards = selectedCards || [];
-
-          cards.forEach((card) => {
-            effect.player.removePokemonEffects(player.active);
-            player.active.moveTo(player.discard);
-            player.deck.moveCardTo(card, player.active);
-            // const pokemonPlayed = new PlayPokemonEffect(player, card as PokemonCard, player.active);
-            // this.reduceEffect(store, state, pokemonPlayed);
-            player.active.pokemonPlayedTurn = state.turn;
-            effect.player.removePokemonEffects(player.active);
-          });
-
-          return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-            player.deck.applyOrder(order);
-          });
-        }
-        );
-
-      }
-
     }
     return state;
   }

@@ -4,7 +4,8 @@ import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { CardTarget, GameError, GameMessage, ChooseCardsPrompt, ChoosePokemonPrompt, PlayerType, SlotType, StoreLike, State } from '../../game';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { PokemonReplacedEffect } from '../../game/store/effects/game-effects';
+import { getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
+import { swapInPlayPokemon } from '../../game/store/prefabs/pokemon-replacement';
 
 export class BookOfTransformation extends TrainerCard {
   public trainerType: TrainerType = TrainerType.ITEM;
@@ -25,19 +26,17 @@ export class BookOfTransformation extends TrainerCard {
       if (second === undefined) {
         throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }
-      const hasBasicInPlay = player.active.cards.some(c => c instanceof PokemonCard && (c as PokemonCard).stage === Stage.BASIC) ||
-        player.bench.some(b => b.cards.some(c => c instanceof PokemonCard && (c as PokemonCard).stage === Stage.BASIC));
-      const hasBasicInDiscard = player.discard.cards.some(c => c instanceof PokemonCard && (c as PokemonCard).stage === Stage.BASIC);
-      if (!hasBasicInPlay || !hasBasicInDiscard) {
+      const ineligible = player.discard.cards.flatMap((card, index) =>
+        card instanceof PokemonCard && card.stage === Stage.BASIC ? [] : [index]);
+      const blockedDiscard = getBlockedPokemonPlacementIndices(store, state, player, player.discard, ineligible);
+      const blocked: CardTarget[] = [];
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (_, card, target) => {
+        if (card.stage !== Stage.BASIC) blocked.push(target);
+      });
+      if (blocked.length === player.getPokemonInPlay().length || blockedDiscard.length === player.discard.cards.length) {
         throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }
       effect.preventDefault = true;
-      const blocked: CardTarget[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        if (card && (card as PokemonCard).stage !== Stage.BASIC) {
-          blocked.push(target);
-        }
-      });
       return store.prompt(state, new ChoosePokemonPrompt(
         player.id,
         GameMessage.CHOOSE_POKEMON_TO_SWITCH,
@@ -45,31 +44,21 @@ export class BookOfTransformation extends TrainerCard {
         [SlotType.ACTIVE, SlotType.BENCH],
         { min: 1, max: 1, allowCancel: false, blocked }
       ), inPlaySelected => {
-        const inPlayTargets = inPlaySelected || [];
-        if (inPlayTargets.length === 0) return state;
-        const inPlayList = inPlayTargets[0];
+        const target = inPlaySelected?.[0];
+        if (target?.getPokemonCard()?.stage !== Stage.BASIC
+          || (target !== player.active && !player.bench.includes(target))) return state;
         return store.prompt(state, new ChooseCardsPrompt(
           player,
           GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
           player.discard,
           { superType: SuperType.POKEMON, stage: Stage.BASIC },
-          { min: 1, max: 1, allowCancel: false }
+          { min: 1, max: 1, allowCancel: false, blocked: blockedDiscard }
         ), discardSelected => {
-          const fromDiscard = discardSelected || [];
-          if (fromDiscard.length === 0) return state;
-          const inPlayCard = inPlayList.getPokemonCard();
-          if (inPlayCard && inPlayList.cards.length > 0) {
-            inPlayList.moveCardTo(inPlayList.cards[0], player.discard);
+          const replacement = discardSelected?.[0];
+          if (replacement instanceof PokemonCard
+            && swapInPlayPokemon(store, state, player, target, player.discard, replacement, player.discard)) {
+            player.hand.moveCardTo(second, player.discard);
           }
-          player.discard.moveCardTo(fromDiscard[0], inPlayList);
-          // Notify card-specific usage tracking without triggering play-from-hand
-          // Abilities or clearing the effects inherited by the replacement.
-          if (inPlayCard) {
-            state = store.reduceEffect(state, new PokemonReplacedEffect(
-              player, inPlayList, inPlayCard, fromDiscard[0] as PokemonCard
-            ));
-          }
-          player.hand.moveCardTo(second, player.discard);
         });
       });
     }

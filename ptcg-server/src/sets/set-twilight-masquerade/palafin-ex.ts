@@ -1,6 +1,7 @@
 import { PokemonCard, Stage, CardType, CardTag, PowerType, StoreLike, State, GameError, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckEvolveEffect, EvolveEffect } from '../../game/store/effects/game-effects';
+import { CheckPokemonPlacementEffect } from '../../game/store/effects/check-effects';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Palafinex extends PokemonCard {
@@ -39,6 +40,11 @@ export class Palafinex extends PokemonCard {
       if (!IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
         throw new GameError(GameMessage.CANNOT_EVOLVE);
       }
+    }
+
+    if (effect instanceof CheckPokemonPlacementEffect && effect.candidates.includes(this)
+      && !(effect.sourceAbility?.name === 'Palafin' && effect.sourceAbility.powers.some(power => power.name === 'Zero to Hero'))) {
+      effect.blocked.add(this);
     }
 
     // Giga Impact

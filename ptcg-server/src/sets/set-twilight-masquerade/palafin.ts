@@ -1,6 +1,8 @@
-import { PokemonCard, Stage, CardType, PowerType, State, StoreLike, StateUtils, ConfirmPrompt, GameLog, GameMessage, PlayerType, Card, ChooseCardsPrompt, ShuffleDeckPrompt, SuperType } from '../../game';
-import { Effect, AfterEvolveEffect, PowerEffect } from '../../game/store/effects/game-effects';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { PokemonCard, Stage, CardType, PowerType, State, StoreLike, StateUtils, ConfirmPrompt, GameLog, GameMessage, ChooseCardsPrompt, SuperType } from '../../game';
+import { Effect, MovedFromActiveToBenchEffect } from '../../game/store/effects/game-effects';
+import { getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
+import { swapInPlayPokemon } from '../../game/store/prefabs/pokemon-replacement';
+import { IS_ABILITY_BLOCKED, REMOVE_MARKER_AT_END_OF_TURN, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
 
 export class Palafin extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -33,78 +35,32 @@ export class Palafin extends PokemonCard {
   public ABILITY_USED_MARKER = 'ABILITY_USED_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    REMOVE_MARKER_AT_END_OF_TURN(effect, this.ABILITY_USED_MARKER, this);
+    if (!(effect instanceof MovedFromActiveToBenchEffect) || effect.pokemonCard !== this
+      || state.players[state.activePlayer] !== effect.player) return state;
 
-    if (effect instanceof AfterEvolveEffect && effect.previousPokemonCard === this) {
-      const player = effect.player;
-      player.marker.removeMarker(this.ABILITY_USED_MARKER, this);
-      this.movedToActiveThisTurn = false;
-    }
+    const { player } = effect;
+    const target = StateUtils.findPokemonSlot(state, this);
+    if (!target || target.getPokemonCard() !== this || !player.bench.includes(target)
+      || target.marker.hasMarker(this.ABILITY_USED_MARKER, this)
+      || player.marker.hasMarker(this.ABILITY_USED_MARKER, this)
+      || !player.deck.cards.length || IS_ABILITY_BLOCKED(store, state, player, this)) return state;
 
-    const cardList = StateUtils.findCardList(state, this);
-    const owner = StateUtils.findOwner(state, cardList);
-
-    const player = state.players[state.activePlayer];
-
-    if (effect instanceof EndTurnEffect) {
-      this.movedToActiveThisTurn = false;
-      player.marker.removeMarker(this.ABILITY_USED_MARKER, this);
-    }
-
-    if (player === owner && !player.marker.hasMarker(this.ABILITY_USED_MARKER, this)) {
-      if (this.movedToActiveThisTurn == true) {
-        player.marker.addMarker(this.ABILITY_USED_MARKER, this);
-        // Try to reduce PowerEffect, to check if something is blocking our ability
-        try {
-          const stub = new PowerEffect(player, {
-            name: 'test',
-            powerType: PowerType.ABILITY,
-            text: ''
-          }, this);
-          store.reduceEffect(state, stub);
-        } catch {
-          return state;
+    return store.prompt(state, new ConfirmPrompt(player.id, GameMessage.WANT_TO_USE_ABILITY), use => {
+      if (!use || target.getPokemonCard() !== this) return;
+      target.marker.addMarker(this.ABILITY_USED_MARKER, this, 'ability-use', 'pokemon');
+      store.log(state, GameLog.LOG_PLAYER_USES_ABILITY, { name: player.name, ability: 'Zero to Hero' });
+      const blocked = getBlockedPokemonPlacementIndices(store, state, player, player.deck, [], this);
+      return store.prompt(state, new ChooseCardsPrompt(
+        player, GameMessage.CHOOSE_CARD_TO_EVOLVE, player.deck,
+        { superType: SuperType.POKEMON, name: 'Palafin ex' }, { min: 0, max: 1, allowCancel: false, blocked }
+      ), selected => {
+        const replacement = selected?.[0];
+        if (replacement instanceof PokemonCard) {
+          swapInPlayPokemon(store, state, player, target, player.deck, replacement, player.deck, this);
         }
-        state = store.prompt(state, new ConfirmPrompt(
-          player.id,
-          GameMessage.WANT_TO_USE_ABILITY,
-        ), wantToUse => {
-          if (wantToUse) {
-            player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-              if (cardList.getPokemonCard() === this) {
-                store.log(state, GameLog.LOG_PLAYER_USES_ABILITY, { name: player.name, ability: 'Zero to Hero' });
-              }
-            });
-
-            if (player.deck.cards.length === 0) {
-              return state;
-            }
-
-            let cards: Card[] = [];
-            state = store.prompt(state, new ChooseCardsPrompt(
-              player,
-              GameMessage.CHOOSE_CARD_TO_EVOLVE,
-              player.deck,
-              { superType: SuperType.POKEMON, name: 'Palafin ex' },
-              { min: 0, max: 1, allowCancel: false }
-            ), selected => {
-              cards = (selected || []) as PokemonCard[];
-
-              if (cards.length > 0) {
-                // Move Palafin ex from deck to active
-                player.deck.moveCardTo(cards[0], player.active);
-
-                // Move this Palafin to deck
-                player.active.moveCardTo(this, player.deck);
-              }
-
-              return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-                player.deck.applyOrder(order);
-              });
-            });
-          }
-        });
-      }
-    }
-    return state;
+        return SHUFFLE_DECK(store, state, player);
+      });
+    });
   }
 }

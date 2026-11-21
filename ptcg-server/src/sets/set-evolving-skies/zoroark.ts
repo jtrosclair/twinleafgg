@@ -4,8 +4,10 @@ import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { PowerType } from '../../game/store/card/pokemon-types';
-import { Card, ChooseCardsPrompt, GameError, GameMessage, Player } from '../../game';
+import { ChooseCardsPrompt, GameError, GameMessage, StateUtils } from '../../game';
 
+import { getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
+import { replaceAndDiscardPokemon } from '../../game/store/prefabs/pokemon-replacement';
 import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Zoroark extends PokemonCard {
@@ -50,48 +52,24 @@ export class Zoroark extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (WAS_POWER_USED(effect, 0, this)) {
-
-      if (!effect.player.discard.cards.some(b => b instanceof PokemonCard && b.stage === Stage.STAGE_1 && b.name !== this.name)) {
+      const player = effect.player;
+      const target = StateUtils.findPokemonSlot(state, this);
+      const ineligible = player.discard.cards.flatMap((card, index) =>
+        card instanceof PokemonCard && card.stage === Stage.STAGE_1 && card.name !== this.name ? [] : [index]);
+      const blocked = getBlockedPokemonPlacementIndices(store, state, player, player.discard, ineligible);
+      if (!target || target.getPokemonCard() !== this || blocked.length === player.discard.cards.length) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
-      const getBenchIndex = (player: Player, card: Card) => {
-        for (let i = 0; i < player.bench.length; i++) {
-          const bench = player.bench[i];
-          if (bench.cards.includes(card)) {
-            return i;
-          }
-        }
-        return -1;
-      };
-
-      const index = getBenchIndex(effect.player, this);
-
       return store.prompt(state, new ChooseCardsPrompt(
-        effect.player,
-        GameMessage.CHOOSE_POKEMON_TO_DISCARD,
-        effect.player.discard,
-        { stage: Stage.STAGE_1 },
-        { min: 1, max: 1 }
+        player, GameMessage.CHOOSE_POKEMON_TO_DISCARD, player.discard, { stage: Stage.STAGE_1 },
+        { min: 1, max: 1, allowCancel: false, blocked }
       ), selected => {
-
-        if (index >= 0) {
-          effect.player.bench[index].moveCardTo(this, effect.player.discard);
-        } else {
-          effect.player.active.moveCardTo(this, effect.player.discard);
+        const replacement = selected?.[0];
+        if (replacement instanceof PokemonCard) {
+          replaceAndDiscardPokemon(store, state, player, target, player.discard, replacement, this);
         }
-
-        const replacement = selected[0];
-
-        if (index >= 0) {
-          effect.player.discard.moveCardTo(replacement, effect.player.bench[index]);
-        } else {
-          effect.player.discard.moveCardTo(replacement, effect.player.active);
-        }
-
-        return state;
       });
-
     }
     return state;
   }

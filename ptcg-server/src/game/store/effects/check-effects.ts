@@ -139,7 +139,8 @@ export class CheckPokemonPlacementEffect implements Effect {
 
   readonly blocked = new Set<PokemonCard>();
 
-  constructor(public readonly player: Player, public readonly candidates: readonly PokemonCard[]) {}
+  constructor(public readonly player: Player, public readonly candidates: readonly PokemonCard[],
+    public readonly sourceAbility?: PokemonCard) {}
 }
 
 export class CheckPokemonTypeEffect implements Effect {

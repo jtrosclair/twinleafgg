@@ -5249,3 +5249,58 @@ All 559 comparable saved boards and 3,636 sampled opening actions
 match. All seven recorded solutions still win twice. The legacy card
 effects that replace an in-play Pokémon require a separate review of
 their printed state-retention and discard rules.
+
+## Gameplay re-audit, batch 82
+
+The historical movement refactor `c00300bac` touches both kinds of
+in-play replacement. Phantom Transformation and Transformative Start
+discard the full old Pokémon and its attachments. The replacement is
+a fresh Pokémon that was put into play this turn. Zoroark excludes its
+own name, applies Eternal Zone and cannot put Palafin ex into play.
+Physical cards found only in an older attachment index are discarded
+once, and Prism Stars go to the Lost Zone.
+[Phantom Transformation print](https://www.pokemon-card.com/card-search/details.php/card/39634/regu/XY)
+[Phantom Transformation evolution ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%8C%E3%83%9E%E3%82%AF%E3%83%AD%E3%83%BC&regulation_faq_main_item1=all)
+[Transformative Start print](https://www.pokemon-card.com/card-search/details.php/card/43608)
+
+V Transformation, Thorton and Transformation Tome preserve the in-play
+Pokémon and its history. The replacement keeps its damage, attached
+cards, conditions, played turn, and inherited effects such as a delayed
+Knock Out or increased Retreat Cost. A second Ditto V inherits the
+used V Transformation until the turn ends. Indeedee V can use Watch
+Over after taking its place. Thorton and Tome require a Basic currently
+in play and filter their discard choices using Eternal Zone. The
+existing Munkidori replacement and delayed-effect tests still apply.
+[V Transformation print](https://www.pokemon-card.com/card-search/details.php/card/38785/regu/XY)
+[Official replacement and Ability usage rules](https://www.pokemon-card.com/info/2022/05/images/Ruleguide_ver3.pdf)
+[Official Thorton rulings](https://asia.pokemon-card.com/sg/wp-content/uploads/sites/6/2025/10/EN_advanced_manual-2025.pdf)
+[Transformation Tome print](https://www.pokemon.com/es/jcc-pokemon/cartas-pokemon/series/me04/83/)
+
+Zero to Hero now reacts to completed movement from the Active Spot to
+the Bench during Palafin's owner's turn. It replaces Palafin in that
+Bench position and leaves Finizen underneath. Surfer finishes its draw
+before the optional Ability opens. Moving Palafin into the Active Spot
+or evolving a different Pokémon does not offer Zero to Hero. The old
+unrelated-evolution regression now asserts that printed behavior.
+[Zero to Hero print](https://www.pokemon-card.com/card-search/details.php/card/48931)
+[Official Surfer and Finizen rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%9E%E3%82%A4%E3%83%86%E3%82%A3%E3%83%81%E3%82%A7%E3%83%B3%E3%82%B8&regulation_header_search_item1=all)
+[Hero's Spirit print](https://www.pokemon-card.com/card-search/details.php/card/45727/regu/all)
+
+All ten new cases pass, including nine that demonstrate defects on
+the previous engine. The full engine suite passes 11,314 tests across
+327 files. The focused suite passes 199 cases, and the
+combined worktree passes 227. The API passes 32 tests. The attested
+package passes ten board scenarios and 209 client checks. The
+packaged Surfer and Zero to Hero sequence passed on mouse and touch.
+
+All 559 comparable saved boards and 3,636 sampled opening actions
+match the previous engine. All seven recorded solutions still win
+twice.
+
+An additional real-action probe reproduces the official Metal Signal
+counterexample with Thorton. The incoming Genesect ex can still open
+the search after the outgoing Genesect ex used that Ability. Its
+legacy player marker is tied to the physical card. The audit retains
+this reproduction for the broader work on named Ability use across
+replacements.
+[Official D-19 ruling](https://asia.pokemon-card.com/sg/wp-content/uploads/sites/6/2025/10/EN_advanced_manual-2025.pdf)

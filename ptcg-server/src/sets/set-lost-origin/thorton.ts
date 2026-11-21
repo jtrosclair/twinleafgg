@@ -4,8 +4,11 @@ import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 import { TrainerCard } from '../../game/store/card/trainer-card';
-import { BoardEffect, Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
+import { Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { CardTarget, ChooseCardsPrompt, ChoosePokemonPrompt, GameError, PlayerType, PokemonCard, SlotType } from '../../game';
+
+import { getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
+import { swapInPlayPokemon } from '../../game/store/prefabs/pokemon-replacement';
 
 export class Thorton extends TrainerCard {
 
@@ -36,23 +39,19 @@ export class Thorton extends TrainerCard {
         throw new GameError(GameMessage.SUPPORTER_ALREADY_PLAYED);
       }
 
-      player.hand.moveCardTo(effect.trainerCard, player.supporter);
-      // We will discard this card after prompt confirmation
-      effect.preventDefault = true;
-
-      const hasBasicInDiscard = player.discard.cards.some(c => {
-        return c instanceof PokemonCard && Stage.BASIC;
+      const ineligible = player.discard.cards.flatMap((card, index) =>
+        card instanceof PokemonCard && card.stage === Stage.BASIC ? [] : [index]);
+      const blockedDiscard = getBlockedPokemonPlacementIndices(store, state, player, player.discard, ineligible);
+      const blocked: CardTarget[] = [];
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (_, card, target) => {
+        if (card.stage !== Stage.BASIC) blocked.push(target);
       });
-      if (!hasBasicInDiscard) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
+      if (blocked.length === player.getPokemonInPlay().length || blockedDiscard.length === player.discard.cards.length) {
+        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }
 
-      const blocked: CardTarget[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card.stage !== Stage.BASIC) {
-          blocked.push();
-        }
-      });
+      player.hand.moveCardTo(effect.trainerCard, player.supporter);
+      effect.preventDefault = true;
 
       return store.prompt(state, new ChoosePokemonPrompt(
         player.id,
@@ -62,36 +61,21 @@ export class Thorton extends TrainerCard {
         { min: 1, max: 1, allowCancel: false, blocked }
       ), selected => {
 
-        const targets = selected || [];
-        if (targets.length === 0) {
-          throw new GameError(GameMessage.INVALID_TARGET);
-        }
+        const target = selected?.[0];
+        if (target?.getPokemonCard()?.stage !== Stage.BASIC
+          || (target !== player.active && !player.bench.includes(target))) return state;
 
         return store.prompt(state, new ChooseCardsPrompt(
           player,
           GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
           player.discard,
           { superType: SuperType.POKEMON, stage: Stage.BASIC },
-          { min: 1, max: 1, allowCancel: false }
+          { min: 1, max: 1, allowCancel: false, blocked: blockedDiscard }
         ), selectedCards => {
-          const card = selectedCards[0];
-          if (!card) {
-            throw new GameError(GameMessage.INVALID_TARGET);
+          const replacement = selectedCards?.[0];
+          if (replacement instanceof PokemonCard) {
+            swapInPlayPokemon(store, state, player, target, player.discard, replacement, player.discard);
           }
-          // Move the first selected Pokémon to the discard pile
-          const targetList = targets[0];
-
-          player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-            targetList.removeBoardEffect(BoardEffect.ABILITY_USED);
-          });
-
-          targetList.moveCardTo(targetList.cards[0], player.discard);
-
-          // Move the selected card from the discard to the target slot
-          player.discard.moveCardTo(card, targetList);
-
-          // Move Thorton to the discard pile
-
         });
       });
     }

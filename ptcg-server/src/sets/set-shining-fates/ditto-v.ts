@@ -3,10 +3,13 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, CardTag, EnergyType } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, Card, ChooseCardsPrompt, GameMessage, GameError, SlotType } from '../../game';
+import { Stage, CardType, CardTag, EnergyType, BoardEffect } from '../../game/store/card/card-types';
+import { PowerType, StoreLike, State, StateUtils, ChooseCardsPrompt, GameMessage, GameError, SlotType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED, WAS_POWER_USED, IS_ABILITY_BLOCKED, ATTACH_X_TYPE_ENERGY_FROM_DISCARD_TO_1_OF_YOUR_POKEMON, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, REMOVE_MARKER_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
+import { PokemonReplacedEffect } from '../../game/store/effects/game-effects';
+import { getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
+import { swapInPlayPokemon } from '../../game/store/prefabs/pokemon-replacement';
+import { WAS_ATTACK_USED, WAS_POWER_USED, IS_ABILITY_BLOCKED, ATTACH_X_TYPE_ENERGY_FROM_DISCARD_TO_1_OF_YOUR_POKEMON, REMOVE_MARKER_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
 
 export class DittoV extends PokemonCard {
   public tags = [CardTag.POKEMON_V];
@@ -44,69 +47,40 @@ export class DittoV extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: V Transformation
     // Ref: set-evolving-skies/zoroark.ts (Phantom Transformation - choose from discard, swap with this Pokemon)
+    if (effect instanceof PokemonReplacedEffect
+      && (effect.previousPokemon === this || effect.pokemonCard === this)) {
+      if (effect.previousMarkers.some(marker => marker.name === this.V_TRANSFORMATION_MARKER)
+        && !effect.target.marker.hasMarker(this.V_TRANSFORMATION_MARKER)) {
+        effect.target.marker.addMarker(this.V_TRANSFORMATION_MARKER, effect.previousPokemon, 'ability-use', 'pokemon');
+      }
+      effect.player.marker.removeMarker(this.V_TRANSFORMATION_MARKER, this);
+      if (effect.pokemonCard === this && effect.target.marker.hasMarker(this.V_TRANSFORMATION_MARKER)) {
+        effect.target.addBoardEffect(BoardEffect.ABILITY_USED);
+      }
+    }
+
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+      const target = StateUtils.findPokemonSlot(state, this);
+      if (!target || target.getPokemonCard() !== this) throw new GameError(GameMessage.CANNOT_USE_POWER);
+      if (target.marker.hasMarker(this.V_TRANSFORMATION_MARKER) || player.marker.hasMarker(this.V_TRANSFORMATION_MARKER, this)) {
+        throw new GameError(GameMessage.POWER_ALREADY_USED);
       }
 
-      // Check if there's a Basic V in discard (not Ditto V itself)
-      const hasBasicVInDiscard = player.discard.cards.some(c => {
-        return c instanceof PokemonCard
-          && c.stage === Stage.BASIC
-          && c.tags.includes(CardTag.POKEMON_V)
-          && c !== this;
-      });
-
-      if (!hasBasicVInDiscard) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      }
-
-      USE_ABILITY_ONCE_PER_TURN(player, this.V_TRANSFORMATION_MARKER, this);
-      ABILITY_USED(player, this);
-
-      // Find where this Ditto V is (active or bench)
-      const getBenchIndex = (card: Card) => {
-        for (let i = 0; i < player.bench.length; i++) {
-          if (player.bench[i].cards.includes(card)) {
-            return i;
-          }
-        }
-        return -1;
-      };
-
-      const benchIndex = getBenchIndex(this);
-
-      // Blocked indices: non-Basic-V cards in discard
-      const blocked: number[] = [];
-      player.discard.cards.forEach((card, index) => {
-        if (!(card instanceof PokemonCard)
-          || (card as PokemonCard).stage !== Stage.BASIC
-          || !(card as PokemonCard).tags.includes(CardTag.POKEMON_V)
-          || card === this) {
-          blocked.push(index);
-        }
-      });
+      const ineligible = player.discard.cards.flatMap((card, index) =>
+        card instanceof PokemonCard && card.stage === Stage.BASIC && card.tags.includes(CardTag.POKEMON_V) ? [] : [index]);
+      const blocked = getBlockedPokemonPlacementIndices(store, state, player, player.discard, ineligible);
+      if (blocked.length === player.discard.cards.length) throw new GameError(GameMessage.CANNOT_USE_POWER);
 
       return store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_POKEMON_TO_DISCARD,
-        player.discard,
-        {},
+        player, GameMessage.CHOOSE_POKEMON_TO_DISCARD, player.discard, {},
         { min: 1, max: 1, allowCancel: false, blocked }
       ), selected => {
-        const cards: Card[] = selected || [];
-        if (cards.length === 0) return;
-
-        const replacement = cards[0];
-
-        if (benchIndex >= 0) {
-          player.bench[benchIndex].moveCardTo(this, player.discard);
-          player.discard.moveCardTo(replacement, player.bench[benchIndex]);
-        } else {
-          player.active.moveCardTo(this, player.discard);
-          player.discard.moveCardTo(replacement, player.active);
+        const replacement = selected?.[0];
+        if (!(replacement instanceof PokemonCard)) return;
+        target.marker.addMarker(this.V_TRANSFORMATION_MARKER, this, 'ability-use', 'pokemon');
+        if (!swapInPlayPokemon(store, state, player, target, player.discard, replacement, player.discard, this)) {
+          target.marker.removeMarker(this.V_TRANSFORMATION_MARKER, this);
         }
       });
     }

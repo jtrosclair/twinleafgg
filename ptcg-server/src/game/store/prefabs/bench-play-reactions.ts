@@ -17,21 +17,22 @@ import type { StoreLike } from '../store-like';
 import { IS_ABILITY_BLOCKED, IS_POKEPOWER_BLOCKED } from './prefabs';
 import { IS_STADIUM_EFFECT_BLOCKED } from './stadium-effect';
 
-export function canPlacePokemon(store: StoreLike, state: State, player: Player, card: PokemonCard): boolean {
-  return !getBlockedPokemonPlacements(store, state, player, [card]).has(card);
+export function canPlacePokemon(store: StoreLike, state: State, player: Player, card: PokemonCard,
+  sourceAbility?: PokemonCard): boolean {
+  return !getBlockedPokemonPlacements(store, state, player, [card], sourceAbility).has(card);
 }
 
 export function getBlockedPokemonPlacements(store: StoreLike, state: State, player: Player,
-  cards: readonly Card[]): ReadonlySet<PokemonCard> {
+  cards: readonly Card[], sourceAbility?: PokemonCard): ReadonlySet<PokemonCard> {
   const candidates = cards.filter((card): card is PokemonCard => card instanceof PokemonCard);
-  const check = new CheckPokemonPlacementEffect(player, candidates);
+  const check = new CheckPokemonPlacementEffect(player, candidates, sourceAbility);
   if (candidates.length) store.reduceEffect(state, check);
   return check.blocked;
 }
 
 export function getBlockedPokemonPlacementIndices(store: StoreLike, state: State, player: Player,
-  source: CardList, alreadyBlocked: readonly number[] = []): number[] {
-  const blocked = getBlockedPokemonPlacements(store, state, player, source.cards);
+  source: CardList, alreadyBlocked: readonly number[] = [], sourceAbility?: PokemonCard): number[] {
+  const blocked = getBlockedPokemonPlacements(store, state, player, source.cards, sourceAbility);
   return blocked.size === 0 ? [...alreadyBlocked] : source.cards.flatMap((card, index) =>
     alreadyBlocked.includes(index) || (card instanceof PokemonCard && blocked.has(card)) ? [index] : []);
 }

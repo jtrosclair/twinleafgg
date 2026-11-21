@@ -154,7 +154,7 @@ describe('evolution ability checks from in-play target', () => {
     expect(g.state.prompts.filter(p => p.result === undefined).length).toBe(0);
     expect(g.player1.marker.markers.length).toBe(0);
   });
-  it('does not leak clone-only Palafin prompts into an accepted evolution', () => {
+  it('does not let an unrelated evolution trigger Zero to Hero after Palafin became Active', () => {
     const g = setupGame({ turn: 5,
       player1: { active: { card: 'Palafin TWM' }, bench: [{ card: 'Bulbasaur BS' }], hand: ['Ivysaur BS'], deck: padDeck(10) },
       player2: { active: { card: 'Mew ex MEW' }, deck: padDeck(10) }
@@ -163,8 +163,8 @@ describe('evolution ability checks from in-play target', () => {
     const card = g.player1.hand.cards[0] as PokemonCard;
     g.store.reduceEffect(g.state, new EvolveEffect(g.player1, g.player1.bench[0], card));
     expect(g.player1.bench[0].getPokemonCard()).toBe(card);
-    expect(g.state.prompts.filter(p => p.result === undefined).length).toBe(1);
-    expect(g.player1.marker.markers.length).toBe(1);
+    expect(g.state.prompts.filter(p => p.result === undefined).length).toBe(0);
+    expect(g.player1.marker.markers.length).toBe(0);
   });
   it('rejects a preflight cancellation rather than silently continuing', () => {
     const g = game(false);
