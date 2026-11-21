@@ -48,7 +48,7 @@ export class Golduck extends PokemonCard {
       ), wantTo => {
         if (wantTo) {
           effect.damage += 20;
-          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, this);
+          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, effect);
         }
       });
     }

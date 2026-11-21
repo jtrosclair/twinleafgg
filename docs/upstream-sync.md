@@ -3311,3 +3311,43 @@ edits, and 209 frontend specs passed. The 2.46 MiB package passed build
 attestation, the mobile size budget, and ten browser board checks. All 559
 supported saved states and 3,633 sampled opening actions matched batch 39.
 All seven recorded puzzle solutions reached a win.
+
+## Gameplay re-audit, batch 41
+
+Five Black & White definitions now use the attacks and stats for their
+collector numbers. Venipede 52 uses Ram and Rollout. Whirlipede 53's
+Poison Sting deals 20 and applies ordinary Poison after damage, including
+when copied. Zebstrika 43's Electrispark deals 70 to the Active Pokémon
+and 10 to each Benched Pokémon without applying Bench Weakness or
+Resistance. Musharna 49's Hypnotic Ray applies Sleep after damage. Dream
+Eater costs two Psychic Energy and deals damage only to a sleeping
+defender. Patrat 78's Hyper Fang deals 30 on heads. The five saved card
+names and collector numbers remain valid.
+[Black & White Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/black_white.pdf)
+
+Clefairy RCL keeps its saved name and now uses collector number 74,
+Shining Fingers and Magical Shot. Numbered deck imports resolve
+Clefairy 74 and Palossand 82 separately with their own artwork. Golduck
+SW's optional Break Beam Confusion applies after the 60 damage and is
+attributed to the attack.
+[Clefairy scan](https://assets.pokemon.com/assets/cms2/img/cards/web/SWSH2/SWSH2_EN_74.png)
+[Rebel Clash checklist](https://www.pokemon.com/static-assets/content-assets/cms2/pdf/trading-card-game/checklist/swsh2_web_cardlist_en.pdf)
+[Secret Wonders Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/DiamondPearl_SecretWonders.pdf)
+
+All 17 focused tests passed. Fourteen reproduced failures on the prior
+engine. All 9,882 engine tests, 377 checks with the existing working edits,
+209 frontend specs and 30 simulator API tests passed. The 2.46 MiB
+package passed build attestation, the mobile size budget and ten browser
+board checks. All 559 supported saved states and 3,633 sampled opening
+actions matched batch 40. None of the seven corrected card definitions
+occurred in those snapshots. All seven recorded solutions reached a win.
+
+The Special Condition queue now contains 35 calls in 34 definitions.
+A two-copy playthrough reproduced Needle Shock reapplying both conditions
+on the next turn after switching to a different Beedrill RR. The card
+checks whether any of the player's Pokémon used it on their preceding
+turn. The Sword & Shield checklist also confirms legacy collector-number
+mismatches for Galvantula, Galarian Ponyta and Clobbopus. These cases
+remain open for implementation and verification.
+[Rising Rivals Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Rising_Rivals.pdf)
+[Sword & Shield checklist](https://assets.pokemon.com/assets/cms2/pdf/trading-card-game/checklist/swsh1_web_cardlist_en.pdf)

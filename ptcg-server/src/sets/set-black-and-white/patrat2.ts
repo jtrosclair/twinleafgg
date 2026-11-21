@@ -1,4 +1,4 @@
-import { ADD_SLEEP_TO_PLAYER_ACTIVE, AFTER_ATTACK, COIN_FLIP_PROMPT } from '../../game/store/prefabs/prefabs';
+import { COIN_FLIP_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
@@ -12,16 +12,10 @@ export class Patrat2 extends PokemonCard {
 
   public attacks = [
     {
-      name: 'Bite',
+      name: 'Hyper Fang',
       cost: [C],
-      damage: 10,
-      text: ''
-    },
-    {
-      name: 'Hypnosis',
-      cost: [C, C],
-      damage: 0,
-      text: 'Flip a coin. If heads, the Defending Pokémon is now Asleep.'
+      damage: 30,
+      text: 'Flip a coin. If tails, this attack does nothing.'
     }
   ];
 
@@ -32,11 +26,10 @@ export class Patrat2 extends PokemonCard {
   public fullName: string = 'Patrat BLW 78';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (AFTER_ATTACK(effect, 1, this)) {
-      COIN_FLIP_PROMPT(store, state, effect.player, result => {
-        if (result) {
-          ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-        }
+    // Ref: set-emerging-powers/patrat.ts (Hyper Fang)
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      COIN_FLIP_PROMPT(store, state, effect.player, heads => {
+        if (!heads) effect.damage = 0;
       });
     }
     return state;

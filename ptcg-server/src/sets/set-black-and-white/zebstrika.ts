@@ -1,9 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, SuperType, EnergyType } from '../../game/store/card/card-types';
-import { StoreLike, State, GameMessage } from '../../game';
+import { Stage, CardType } from '../../game/store/card/card-types';
+import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED, SHUFFLE_DECK, ADD_PARALYZED_TO_PLAYER_ACTIVE, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
-import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { DAMAGE_OPPONENT_POKEMON, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Zebstrika extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -11,19 +11,19 @@ export class Zebstrika extends PokemonCard {
   public cardType: CardType = L;
   public hp: number = 90;
   public weakness = [{ type: F }];
-  public retreat = [];
+  public retreat = [C];
 
   public attacks = [{
-    name: 'Charge',
-    cost: [L],
-    damage: 0,
-    text: 'Search your deck for a [L] Energy card and attach it to this Pokémon. Shuffle your deck afterward.'
+    name: 'Rear Kick',
+    cost: [C],
+    damage: 30,
+    text: ''
   },
   {
-    name: 'Lightning Crash',
-    cost: [L, L, C],
-    damage: 80,
-    text: 'The Defending Pokémon is now Paralyzed.'
+    name: 'Electrispark',
+    cost: [L, L, L],
+    damage: 70,
+    text: 'Does 10 damage to each of your opponent\'s Benched Pokémon. (Don\'t apply Weakness and Resistance for Benched Pokémon.)'
   }];
 
   public set: string = 'BLW';
@@ -33,26 +33,12 @@ export class Zebstrika extends PokemonCard {
   public fullName: string = 'Zebstrika BLW';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      return store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_ATTACH,
-        player.deck,
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Lightning Energy' },
-        { min: 0, max: 1, allowCancel: false }
-      ), cards => {
-        cards = cards || [];
-        if (cards.length > 0) {
-          player.deck.moveCardsTo(cards, player.active);
-        }
-        SHUFFLE_DECK(store, state, player);
+    if (WAS_ATTACK_USED(effect, 1, this)) {
+      afterAttackDamage(state, effect, (attackStore, attackState) => {
+        const bench = effect.opponent.bench.filter(slot => slot.getPokemonCard());
+        DAMAGE_OPPONENT_POKEMON(attackStore, attackState, effect, 10, bench);
+        return attackState;
       });
-    }
-
-    if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
     }
 
     return state;
