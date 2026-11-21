@@ -1,3 +1,4 @@
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 import { CardType, PokemonCard, Stage, State, StateUtils, StoreLike } from '../../game';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
@@ -36,14 +37,14 @@ export class Kyogre extends PokemonCard {
       const stadium = StateUtils.getStadiumCard(state);
 
       if (stadium && stadium.name.includes('Legendary')) {
-        const opponent = StateUtils.getOpponent(state, effect.player);
-
-        opponent.bench.forEach(benched => {
-          if (benched.cards.length > 0) {
+        afterAttackDamage(state, effect, (store, next) => {
+          for (const benched of effect.opponent.bench) {
+            if (!benched.getPokemonCard()) continue;
             const damage = new PutDamageEffect(effect, 50);
             damage.target = benched;
-            store.reduceEffect(state, damage);
+            next = store.reduceEffect(next, damage);
           }
+          return next;
         });
       }
     }

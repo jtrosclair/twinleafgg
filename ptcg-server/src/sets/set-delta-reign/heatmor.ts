@@ -1,3 +1,4 @@
+import { afterAttackDamageForOriginalDefender } from '../../game/store/prefabs/post-damage-identity';
 import { CardType, PokemonCard, Stage, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON } from '../../game/store/prefabs/attack-effects';
@@ -27,10 +28,13 @@ export class Heatmor extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Destructive Flame
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      COIN_FLIP_PROMPT(store, state, effect.player, result => {
-        if (result) {
-          DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON(store, state, effect);
-        }
+      afterAttackDamageForOriginalDefender(state, effect, (store, next, target) => {
+        const defender = target.getPokemonCard();
+        return COIN_FLIP_PROMPT(store, next, effect.player, heads => {
+          if (heads && target === effect.opponent.active && target.getPokemonCard() === defender) {
+            DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON(store, next, effect);
+          }
+        });
       });
     }
 

@@ -1,4 +1,4 @@
-import { TrainerCard, TrainerType, StoreLike, State, Player, GameError, GameMessage, ChoosePokemonPrompt, PlayerType, SlotType, SuperType, ChooseCardsPrompt } from "../../game";
+import { Card, TrainerCard, TrainerType, StoreLike, State, Player, GameError, GameMessage, ChoosePokemonPrompt, PlayerType, SlotType, SuperType, ChooseCardsPrompt } from "../../game";
 import { Effect } from "../../game/store/effects/effect";
 import { TrainerEffect } from "../../game/store/effects/play-card-effects";
 import { MOVE_CARDS } from "../../game/store/prefabs/prefabs";
@@ -57,41 +57,20 @@ export class ZinniasTrust extends TrainerCard {
           }
 
           const previousActive = player.active;
-          player.switchPokemon(selected[0], store, state);
-
-          const hasEnergy = previousActive.cards.some((c) => c.superType === SuperType.ENERGY);
-          if (!hasEnergy) {
-            MOVE_CARDS(store, state, player.supporter, player.discard, {
-              cards: [effect.trainerCard],
-              sourceCard: this,
-            });
-            return state;
-          }
-
-          return store.prompt(
-            state,
-            new ChooseCardsPrompt(
-              player,
-              GameMessage.ATTACH_ENERGY_TO_BENCH,
-              previousActive,
-              { superType: SuperType.ENERGY },
-              { allowCancel: false, min: 1, max: 1 },
-            ),
-            (cards) => {
-              cards = cards || [];
-              if (cards.length > 0) {
-                MOVE_CARDS(store, state, previousActive, player.active, {
-                  cards: cards,
-                  sourceCard: this,
-                });
-              }
-              MOVE_CARDS(store, state, player.supporter, player.discard, {
-                cards: [effect.trainerCard],
-                sourceCard: this,
+          const newActive = selected[0];
+          const finish = (cards: Card[]) => {
+            player.switchPokemon(newActive, store, state, formerActive => {
+              if (cards.length > 0) MOVE_CARDS(store, state, formerActive, newActive, {
+                cards, sourceCard: this, sourceEffect: effect,
               });
-              return state;
-            },
-          );
+            });
+            MOVE_CARDS(store, state, player.supporter, player.discard, { cards: [effect.trainerCard], sourceCard: this });
+          };
+          if (previousActive.energies.cards.length === 0) return finish([]);
+          return store.prompt(state, new ChooseCardsPrompt(
+            player, GameMessage.CHOOSE_CARD_TO_ATTACH, previousActive,
+            { superType: SuperType.ENERGY }, { allowCancel: false, min: 1, max: 1 }
+          ), cards => finish(cards ?? []));
         },
       );
     }

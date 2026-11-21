@@ -1,6 +1,7 @@
-import { PokemonCard, Stage, CardType, PowerType, Player, PlayerType, SlotType, StoreLike, State, GameError, GameMessage, EnergyCard, EnergyType, AttachEnergyPrompt, SuperType, StateUtils } from "../../game";
+import { AttachEnergyEffect, AttachEnergyFromHandEffect, CheckEnergyAttachmentEffect } from '../../game/store/effects/play-card-effects';
+import { PokemonCard, PokemonCardList, Stage, CardType, PowerType, CardTarget, PlayerType, SlotType, StoreLike, State, GameError, GameMessage, EnergyCard, EnergyType, AttachEnergyPrompt, SuperType, StateUtils } from "../../game";
 import { Effect } from "../../game/store/effects/effect";
-import { WAS_POWER_USED, IS_ABILITY_BLOCKED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN } from "../../game/store/prefabs/prefabs";
+import { WAS_POWER_USED, IS_ABILITY_BLOCKED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, REMOVE_MARKER_AT_END_OF_TURN } from "../../game/store/prefabs/prefabs";
 
 export class Magmortar extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -34,35 +35,6 @@ export class Magmortar extends PokemonCard {
   public readonly BUDDY_BOOST_MARKER = "MAGMORTAR_BUDDY_BOOST_MARKER";
   private readonly VALID_POKEMON_NAMES = ["Magmortar", "Electivire"];
 
-  private getBlockedTargets(player: Player) {
-    const blockedTo: { player: PlayerType; slot: SlotType; index: number }[] =
-      [];
-    const activePokemon = player.active.getPokemonCard();
-
-    if (
-      !activePokemon ||
-      !this.VALID_POKEMON_NAMES.includes(activePokemon.name)
-    ) {
-      blockedTo.push({
-        player: PlayerType.BOTTOM_PLAYER,
-        slot: SlotType.ACTIVE,
-        index: 0,
-      });
-    }
-
-    player.bench.forEach((bench, index) => {
-      const pokemon = bench.getPokemonCard();
-      if (!pokemon || !this.VALID_POKEMON_NAMES.includes(pokemon.name)) {
-        blockedTo.push({
-          player: PlayerType.BOTTOM_PLAYER,
-          slot: SlotType.BENCH,
-          index,
-        });
-      }
-    });
-    return blockedTo;
-  }
-
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Buddy Boost
     // Ref: set-unified-minds/haxorus.ts (validCardTypes for multiple Basic types in one prompt)
@@ -73,33 +45,36 @@ export class Magmortar extends PokemonCard {
         throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
       }
 
+      const isValidEnergy = (card: unknown): card is EnergyCard =>
+        card instanceof EnergyCard && card.energyType === EnergyType.BASIC
+        && card.provides.some(type => type === CardType.FIRE || type === CardType.LIGHTNING);
+      const eligible = player.hand.cards.filter(isValidEnergy);
+      if (eligible.length === 0) throw new GameError(GameMessage.CANNOT_USE_POWER);
+      const attachmentFor = (energy: EnergyCard, target: PokemonCardList) => {
+        const attachment = new AttachEnergyEffect(player, energy, target);
+        attachment.isManual = false;
+        attachment.sourceCard = this;
+        attachment.sourcePower = effect.power.powerType;
+        return attachment;
+      };
+      const blockedTo: CardTarget[] = [];
       let hasValidTarget = false;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
-        const pokemon = cardList.getPokemonCard();
-        if (pokemon && this.VALID_POKEMON_NAMES.includes(pokemon.name)) {
-          hasValidTarget = true;
-        }
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (target, card, location) => {
+        const permitted = this.VALID_POKEMON_NAMES.includes(card.name) && eligible.some(energy => {
+          try {
+            store.reduceEffect(state, new CheckEnergyAttachmentEffect(attachmentFor(energy, target)));
+            return true;
+          } catch (error) {
+            if (!(error instanceof GameError)) throw error;
+            return false;
+          }
+        });
+        if (permitted) hasValidTarget = true;
+        else blockedTo.push(location);
       });
+      if (!hasValidTarget) throw new GameError(GameMessage.CANNOT_USE_POWER);
 
-      if (!hasValidTarget) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      }
-
-      USE_ABILITY_ONCE_PER_TURN(player, this.BUDDY_BOOST_MARKER, this);
-      ABILITY_USED(player, this);
-
-      const hasValidEnergy = player.hand.cards.some(
-        (c) =>
-          c instanceof EnergyCard &&
-          c.energyType === EnergyType.BASIC &&
-          c.provides.some(
-            (p) => p === CardType.FIRE || p === CardType.LIGHTNING,
-          ),
-      );
-
-      if (!hasValidEnergy) {
-        return state;
-      }
+      if (player.marker.hasMarker(this.BUDDY_BOOST_MARKER, this)) throw new GameError(GameMessage.POWER_ALREADY_USED);
 
       return store.prompt(
         state,
@@ -114,26 +89,21 @@ export class Magmortar extends PokemonCard {
             allowCancel: true,
             min: 0,
             max: 2,
-            // AttachEnergyPrompt's filter is a display hint; blocked indices
-            // are also checked when validating a submitted result.
-            blocked: player.hand.cards.flatMap((card, index) =>
-              card instanceof EnergyCard && card.energyType === EnergyType.BASIC
-                && card.provides.some(type => type === CardType.FIRE || type === CardType.LIGHTNING)
-                ? [] : [index]),
-            blockedTo: this.getBlockedTargets(player),
+            blocked: player.hand.cards.flatMap((card, index) => isValidEnergy(card) ? [] : [index]),
+            blockedTo,
             validCardTypes: [CardType.FIRE, CardType.LIGHTNING],
             maxPerType: 1,
           },
         ),
         (transfers) => {
-          transfers = transfers || [];
-          for (const transfer of transfers) {
-            const target = StateUtils.getTarget(state, player, transfer.to);
-            MOVE_CARDS(store, state, player.hand, target, {
-              cards: [transfer.card],
-              sourceCard: this,
-            });
-          }
+          const attachments = (transfers ?? []).map(({ card, to }) => {
+            if (!isValidEnergy(card)) throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+            return attachmentFor(card, StateUtils.getTarget(state, player, to));
+          });
+          if (attachments.length === 0) return;
+          USE_ABILITY_ONCE_PER_TURN(player, this.BUDDY_BOOST_MARKER, this);
+          ABILITY_USED(player, this);
+          store.reduceEffect(state, new AttachEnergyFromHandEffect(player, attachments));
         },
       );
     }

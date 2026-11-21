@@ -1,29 +1,9 @@
-import { State, CardTarget, PlayerType, TrainerCard, TrainerType, Attack, CardType, StoreLike, GameError, GameMessage, ShuffleDeckPrompt, AttachEnergyPrompt, SlotType, SuperType, EnergyType, StateUtils } from "../../game";
+import { AttachEnergyPrompt, CardTarget, PlayerType, SlotType, State, SuperType, TrainerCard, TrainerType, Attack, CardType, StoreLike, GameError, GameMessage, EnergyType } from "../../game";
 import { ColorlessCostReducer } from "../../game/store/card/pokemon-interface";
 import { CheckAttackCostEffect, CheckPokemonAttacksEffect } from "../../game/store/effects/check-effects";
 import { Effect } from "../../game/store/effects/effect";
 import { AttackEffect } from "../../game/store/effects/game-effects";
-import { IS_TOOL_BLOCKED, MOVE_CARDS } from "../../game/store/prefabs/prefabs";
-
-function buildCapHolderBlockedTo(player: State['players'][number], capName: string): CardTarget[] {
-  const blocked: CardTarget[] = [];
-  player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, _card, target) => {
-    if (!cardList.tools.some((tool) => tool.name === capName)) {
-      blocked.push(target);
-    }
-  });
-  return blocked;
-}
-
-function countCapHolders(player: State['players'][number], capName: string): number {
-  let count = 0;
-  player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
-    if (cardList.tools.some((tool) => tool.name === capName)) {
-      count += 1;
-    }
-  });
-  return count;
-}
+import { ATTACH_ENERGY_TRANSFERS, IS_TOOL_BLOCKED, SHUFFLE_DECK } from "../../game/store/prefabs/prefabs";
 
 export class MegaRayquazaCap extends TrainerCard {
   public trainerType: TrainerType = TrainerType.TOOL;
@@ -45,7 +25,7 @@ export class MegaRayquazaCap extends TrainerCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ref: set-paradox-rift/technical-machine-blindside.ts (tool attack grant)
     if (effect instanceof CheckAttackCostEffect && effect.attack === this.attacks[0]) {
-      const pokemonCard = effect.player.active.getPokemonCard();
+      const pokemonCard = effect.source.getPokemonCard();
       if (pokemonCard && 'getColorlessReduction' in pokemonCard) {
         const reduction = (pokemonCard as ColorlessCostReducer).getColorlessReduction(state);
         for (let i = 0; i < reduction && effect.cost.includes(CardType.COLORLESS); i++) {
@@ -72,46 +52,24 @@ export class MegaRayquazaCap extends TrainerCard {
         throw new GameError(GameMessage.CANNOT_USE_ATTACK);
       }
 
-      const capHolderCount = countCapHolders(player, this.name);
-
-      if (capHolderCount === 0) {
-        return state;
-      }
-
-      if (player.deck.cards.length === 0) {
-        return store.prompt(state, new ShuffleDeckPrompt(player.id), (order) => {
-          player.deck.applyOrder(order);
+      const blockedTo: CardTarget[] = [];
+      let capHolders = 0;
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (slot, _card, target) => {
+        if (slot.tools.some(tool => tool.name === this.name)) capHolders++;
+        else blockedTo.push(target);
+      });
+      if (capHolders === 0) return state;
+      if (player.deck.cards.length === 0) return SHUFFLE_DECK(store, state, player);
+      return store.prompt(state, new AttachEnergyPrompt(
+        player.id, GameMessage.CHOOSE_CARD_TO_ATTACH, player.deck, PlayerType.BOTTOM_PLAYER,
+        [SlotType.BENCH, SlotType.ACTIVE], { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
+        { allowCancel: false, min: 0, max: capHolders, blockedTo, differentTargets: true },
+      ), transfers => {
+        ATTACH_ENERGY_TRANSFERS(store, state, player, transfers ?? [], 'deck', {
+          sourceCard: this,
+          onAttached: () => SHUFFLE_DECK(store, state, player),
         });
-      }
-
-      const blockedTo = buildCapHolderBlockedTo(player, this.name);
-
-      // Ref: set-paradox-rift/professor-sadas-vitality.ts (one prompt, differentTargets)
-      return store.prompt(
-        state,
-        new AttachEnergyPrompt(
-          player.id,
-          GameMessage.CHOOSE_CARD_TO_ATTACH,
-          player.deck,
-          PlayerType.BOTTOM_PLAYER,
-          [SlotType.BENCH, SlotType.ACTIVE],
-          { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
-          { allowCancel: false, min: 0, max: capHolderCount, blockedTo, differentTargets: true },
-        ),
-        (transfers) => {
-          transfers = transfers || [];
-          for (const transfer of transfers) {
-            const attachTarget = StateUtils.getTarget(state, player, transfer.to);
-            MOVE_CARDS(store, state, player.deck, attachTarget, {
-              cards: [transfer.card],
-              sourceCard: this,
-            });
-          }
-          store.prompt(state, new ShuffleDeckPrompt(player.id), (order) => {
-            player.deck.applyOrder(order);
-          });
-        },
-      );
+      });
     }
 
     return state;

@@ -1,3 +1,4 @@
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 import { CardType, PokemonCard, PowerType, Stage, State, StoreLike } from '../../game';
 import { CheckAttackCostEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
@@ -43,7 +44,10 @@ export class Landorus extends PokemonCard {
   public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Gaia Crush
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      DISCARD_A_STADIUM_CARD_IN_PLAY(state);
+      afterAttackDamage(state, effect, (_store, next) => {
+        DISCARD_A_STADIUM_CARD_IN_PLAY(next);
+        return next;
+      });
     }
 
     return state;

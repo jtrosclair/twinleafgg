@@ -6573,3 +6573,35 @@ plus `ffd7c12f5` for Delta Reign.
 
 All 363 focused engine checks pass. Twenty of the 25 new cases
 reproduce failures on the preceding engine.
+
+## Gameplay audit, batch 112
+
+Finished the first Delta Reign conversion review by using the existing
+catalogue and card tests for print moves and previously verified
+effects. Buddy Boost now checks each allowed recipient, accepts only
+one Basic Fire and one Basic Lightning Energy, and resolves the
+physical attachments before hand-attachment reactions. It does not
+use the turn's manual attachment. Delta Gift identifies each
+attachment as coming from the deck and shuffles before reactions.
+
+Rewarm calculates damage while the Basic Fire Energy is still in the
+discard pile. Strong Flare, Heat Tackle, Destructive Flame, Bubble
+Drain and Gaia Crush resolve their follow-up effects after damage.
+Make Waves shuffles both hands into their decks before either player
+draws. Brutal Whirlpool deals its Active and Bench damage before Knock
+Outs. Thunderous Edge keeps ordinary damage attribution. Voltaic Hammer
+and Psychic Marionettes preserve applicable damage bonuses. Zinnia's
+Trust moves the selected Energy before other effects react to the
+switch. Verified Wimpod's retreat condition and Wishiwashi ex's
+once-per-turn Active healing with the saved simulator names.
+[Magmortar print](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/DLR/DLR_021_R_EN.png)
+[Mega Rayquaza Cap print](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/DLR/DLR_100_R_EN.png)
+[Heat Rotom ex print](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/DLR/DLR_023_R_EN.png)
+[Zinnia's Trust print](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/DLR/DLR_103_R_EN.png)
+
+Closed `ffd7c12f5`, bringing the original queue to eleven of thirteen
+reviewed. The remaining two commits cover Ability attribution across
+overlapping Scarlet & Violet and Mega Evolution cards. The 23 new
+Delta Reign checks pass. Eighteen reproduced failures before the changes.
+All 512 focused engine checks pass across the relevant Delta Reign,
+hand-attachment, Stadium and copied-attack suites.

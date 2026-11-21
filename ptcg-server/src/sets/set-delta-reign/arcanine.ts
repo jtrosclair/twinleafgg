@@ -1,6 +1,8 @@
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { DealDamageEffect } from '../../game/store/effects/attack-effects';
 import { CardType, PokemonCard, Stage, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { GET_PLAYER_PRIZES, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { GET_PLAYER_PRIZES, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Arcanine extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -43,7 +45,11 @@ export class Arcanine extends PokemonCard {
 
     // Heat Tackle
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 50);
+      afterAttackDamage(state, effect, (store, next) => {
+        const recoil = new DealDamageEffect(effect, 50);
+        recoil.target = effect.source;
+        return store.reduceEffect(next, recoil);
+      });
     }
 
     return state;

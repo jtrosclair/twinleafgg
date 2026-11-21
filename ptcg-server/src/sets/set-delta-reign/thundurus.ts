@@ -1,7 +1,6 @@
 import { CardType, PokemonCard, PowerType, Stage, State, StoreLike } from '../../game';
 import { CheckAttackCostEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS } from '../../game/store/prefabs/attack-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { reduceIncarnateUnionEffect } from './incarnate-union';
 
@@ -44,7 +43,7 @@ export class Thundurus extends PokemonCard {
   public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Thunder Edge
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS(store, state, effect, 90);
+      effect.ignoreDefendingDamageEffects = true;
     }
 
     return state;

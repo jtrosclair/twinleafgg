@@ -1,8 +1,8 @@
-import { CardType, PokemonCard, Stage, State, StateUtils, StoreLike } from '../../game';
+import { CardType, PokemonCard, ShuffleDeckPrompt, Stage, State, StoreLike } from '../../game';
+import { HealTargetEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { MoveCardsEffect } from '../../game/store/effects/game-effects';
-import { HEAL_X_DAMAGE_FROM_THIS_POKEMON } from '../../game/store/prefabs/attack-effects';
-import { DRAW_CARDS, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { DRAW_CARDS, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 
 export class Mantine extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -32,35 +32,30 @@ export class Mantine extends PokemonCard {
   public fullName: string = 'Mantine M6';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Raising Waves
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      if (player.hand.cards.length > 0) {
-        const playerMoveEffect = new MoveCardsEffect(player.hand, player.deck, {
-          cards: player.hand.cards,
-          sourceCard: this,
+      const { player, opponent } = effect;
+      for (const owner of [player, opponent]) {
+        if (owner.hand.cards.length > 0) {
+          state = MOVE_CARDS(store, state, owner.hand, owner.deck, { sourceCard: this, sourceEffect: effect });
+        }
+      }
+      return store.prompt(state, new ShuffleDeckPrompt(player.id), playerOrder => {
+        player.deck.applyOrder(playerOrder);
+        store.prompt(state, new ShuffleDeckPrompt(opponent.id), opponentOrder => {
+          opponent.deck.applyOrder(opponentOrder);
+          DRAW_CARDS(player, 4);
+          DRAW_CARDS(opponent, 4);
         });
-        state = store.reduceEffect(state, playerMoveEffect);
-      }
-
-      if (opponent.hand.cards.length > 0) {
-        const opponentMoveEffect = new MoveCardsEffect(opponent.hand, opponent.deck, { sourceCard: this });
-        state = store.reduceEffect(state, opponentMoveEffect);
-      }
-
-      SHUFFLE_DECK(store, state, player);
-      SHUFFLE_DECK(store, state, opponent);
-      DRAW_CARDS(player, 4);
-      DRAW_CARDS(opponent, 4);
+      });
     }
 
-    // Bubble Drain
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      HEAL_X_DAMAGE_FROM_THIS_POKEMON(30, effect, store, state);
+      afterAttackDamage(state, effect, (store, next) => {
+        const healing = new HealTargetEffect(effect, 30);
+        healing.target = effect.source;
+        return store.reduceEffect(next, healing);
+      });
     }
-
     return state;
   }
 }

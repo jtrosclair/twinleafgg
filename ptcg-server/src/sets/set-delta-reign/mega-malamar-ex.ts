@@ -1,3 +1,4 @@
+import { afterAttackDamageForOriginalDefender } from '../../game/store/prefabs/post-damage-identity';
 import { PokemonCard, Stage, CardTag, CardType, StoreLike, State } from "../../game";
 import { Effect } from "../../game/store/effects/effect";
 import { WAS_ATTACK_USED, ADD_CONFUSION_TO_PLAYER_ACTIVE } from "../../game/store/prefabs/prefabs";
@@ -35,17 +36,16 @@ export class MegaMalamarex extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Psychic Marionettes
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const opponent = effect.opponent;
-      let benchCount = 0;
-      opponent.bench.forEach((b) => {
-        benchCount += b.cards.length > 0 ? 1 : 0;
-      });
-      effect.damage = 70 * benchCount;
+      const benchCount = effect.opponent.bench.filter(slot => slot.getPokemonCard()).length;
+      effect.damage = benchCount ? effect.damage + 70 * benchCount - effect.attack.damage : 0;
     }
 
     // Eerie Pulse
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+      afterAttackDamageForOriginalDefender(state, effect, (store, next) => {
+        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, next, effect.opponent, effect);
+        return next;
+      });
     }
 
     return state;

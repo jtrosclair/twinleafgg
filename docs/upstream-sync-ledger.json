@@ -673,8 +673,8 @@
       "sha": "ffd7c12f5da0db484966ae0f3d0c49e4d149af8b",
       "date": "2026-11-06",
       "subject": "refactor(cards): M6 to DLR Pt. 1",
-      "status": "partial",
-      "notes": "Ported the Delta Reign printed catalogue and kept upstream fullName identities where applicable; DLR numbered identities are resolved before generic suffix removal. Batch 110 verified Electabuzz, Surskit and Raikou ex. Other gameplay changes in this commit remain to be reviewed."
+      "status": "applied",
+      "notes": "Reviewed the first Delta Reign catalogue conversion. Kept the existing fullName identities and DLR numbered resolution. Batch 110 corrected Electabuzz, Surskit and Raikou ex. Batch 112 completed the remaining gameplay review and fixed hand and deck attachment provenance, damage and follow-up timing, and compound switch resolution."
     },
     {
       "sha": "958482a2c741e332c9f446ba540c68103f7d2091",

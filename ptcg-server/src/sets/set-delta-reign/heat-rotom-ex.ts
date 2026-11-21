@@ -1,3 +1,4 @@
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 import {
   CardTag,
   CardType,
@@ -9,7 +10,7 @@ import {
   StoreLike,
 } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
+import { DISCARD_AVAILABLE_ENERGY_FROM_ATTACKER } from '../../game/store/prefabs/costs';
 import { MOVE_CARDS, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class HeatRotomex extends PokemonCard {
@@ -52,21 +53,23 @@ export class HeatRotomex extends PokemonCard {
           c.provides.includes(CardType.FIRE),
       );
 
-      effect.damage = 30 * fireBasicEnergy.length;
+      const count = fireBasicEnergy.length;
+      effect.damage = count ? effect.damage + 30 * count - effect.attack.damage : 0;
 
-      if (fireBasicEnergy.length > 0) {
-        MOVE_CARDS(store, state, player.discard, player.deck, {
-          cards: fireBasicEnergy,
-          sourceCard: this,
-          sourceEffect: effect,
+      if (count > 0) {
+        afterAttackDamage(state, effect, (store, next) => {
+          next = MOVE_CARDS(store, next, player.discard, player.deck, {
+            cards: fireBasicEnergy, sourceCard: this, sourceEffect: effect,
+          });
+          return SHUFFLE_DECK(store, next, player);
         });
-        SHUFFLE_DECK(store, state, player);
       }
     }
 
     // Strong Flare
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 2);
+      afterAttackDamage(state, effect, (store, next) =>
+        DISCARD_AVAILABLE_ENERGY_FROM_ATTACKER(store, next, effect, CardType.COLORLESS, 2));
     }
 
     return state;

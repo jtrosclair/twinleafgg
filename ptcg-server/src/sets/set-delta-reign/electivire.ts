@@ -42,6 +42,7 @@ export class Electivire extends PokemonCard {
 
     // Voltaic Hammer
     if (WAS_ATTACK_USED(effect, 1, this)) {
+      const modifier = effect.damage - effect.attack.damage;
       effect.damage = 0;
 
       return DISCARD_UP_TO_X_ENERGY_FROM_THIS_POKEMON(
@@ -53,8 +54,8 @@ export class Electivire extends PokemonCard {
         0,
         transfers => {
           const { discard, lostzone } = effect.player;
-          effect.damage = 60 * transfers.filter(({ card }) =>
-            discard.cards.includes(card) || lostzone.cards.includes(card)).length;
+          const count = transfers.filter(({ card }) => discard.cards.includes(card) || lostzone.cards.includes(card)).length;
+          effect.damage = count ? 60 * count + modifier : 0;
         },
       );
     }
