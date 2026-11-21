@@ -7,7 +7,8 @@ import { IS_ABILITY_BLOCKED, MOVE_CARDS, THIS_ATTACK_DOES_X_MORE_DAMAGE, WAS_ATT
 export class MegaLucarioZex extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom: string = 'Riolu';
-  public cardTag: CardTag[] = [CardTag.POKEMON_SV_MEGA, CardTag.POKEMON_ex];
+  public tags: CardTag[] = [CardTag.POKEMON_SV_MEGA, CardTag.POKEMON_ex];
+  public cardTag = this.tags;
   public cardType: CardType = M;
   public hp: number = 330;
   public weakness = [{ type: R }];
@@ -43,7 +44,7 @@ export class MegaLucarioZex extends PokemonCard {
       const opponent = StateUtils.getOpponent(state, player);
       const defending = opponent.active.getPokemonCard();
 
-      if (defending && defending.cardTag.includes(CardTag.POKEMON_ex)) {
+      if (defending && defending.tags.includes(CardTag.POKEMON_ex)) {
         THIS_ATTACK_DOES_X_MORE_DAMAGE(effect, store, state, 120);
       }
     }
@@ -61,6 +62,10 @@ export class MegaLucarioZex extends PokemonCard {
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
+
+      if (player.active.getPokemonCard() !== this) {
+        throw new GameError(GameMessage.CANNOT_USE_POWER);
+      }
 
       if (player.marker.hasMarker(this.AURA_SEEKER_MARKER, this)) {
         throw new GameError(GameMessage.POWER_ALREADY_USED);

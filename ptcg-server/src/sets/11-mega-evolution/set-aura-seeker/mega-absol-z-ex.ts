@@ -5,7 +5,8 @@ import { WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
 
 export class MegaAbsolZex extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  public cardTag: CardTag[] = [CardTag.POKEMON_SV_MEGA, CardTag.POKEMON_ex];
+  public tags: CardTag[] = [CardTag.POKEMON_SV_MEGA, CardTag.POKEMON_ex];
+  public cardTag = this.tags;
   public hp: number = 270;
   public cardType: CardType = P;
   public weakness = [{ type: D }];

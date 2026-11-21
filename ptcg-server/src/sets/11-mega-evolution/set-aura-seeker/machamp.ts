@@ -1,8 +1,9 @@
-import { CardType, PokemonCard, PowerType, Stage, State, StateUtils, StoreLike } from '../../../game';
-import { AfterDamageEffect, ApplyWeaknessEffect } from '../../../game/store/effects/attack-effects';
+import { CardType, PokemonCard, PowerType, Stage, State, StoreLike } from '../../../game';
+import { PutDamageEffect } from '../../../game/store/effects/attack-effects';
 import { Effect } from '../../../game/store/effects/effect';
+import { afterAttackDamage } from '../../../game/store/prefabs/attack-after-damage';
 import { AttackEffect } from '../../../game/store/effects/game-effects';
-import { IS_ABILITY_BLOCKED, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
+import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
 
 export class Machamp extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -34,36 +35,18 @@ export class Machamp extends PokemonCard {
   public fullName: string = 'Machamp FLO';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Trained Arms
-    // Ref: set-temporal-forces/walking-wake-ex.ts (damage not affected by any effects on the opponent's Active)
-    if (effect instanceof AttackEffect && effect.source.cards.includes(this)) {
-      const player = effect.player;
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      effect.attack.shredAttack = true;
-
-      const opponent = StateUtils.getOpponent(state, player);
-      const applyWeakness = new ApplyWeaknessEffect(effect, effect.damage);
-      applyWeakness.target = opponent.active;
-      applyWeakness.ignoreResistance = true;
-      store.reduceEffect(state, applyWeakness);
-      const damage = applyWeakness.damage;
-
-      effect.damage = 0;
-
-      if (damage > 0) {
-        opponent.active.damage += damage;
-        const afterDamage = new AfterDamageEffect(effect, damage);
-        state = store.reduceEffect(state, afterDamage);
-      }
+    if (effect instanceof AttackEffect && effect.source.getPokemonCard() === this
+      && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+      effect.ignoreResistance = true;
+      effect.ignoreDefendingDamageEffects = true;
     }
 
-    // Guts Fight
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 20);
+      afterAttackDamage(state, effect, (store, next) => {
+        const recoil = new PutDamageEffect(effect, 20);
+        recoil.target = effect.source;
+        return store.reduceEffect(next, recoil);
+      });
     }
 
     return state;

@@ -3,8 +3,9 @@ import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
 import { State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { THIS_POKEMON_RETALIATES_ON_DAMAGE_DURING_OPPONENTS_NEXT_TURN } from '../../game/store/prefabs/effect-of-attack-prefabs';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
+import { DISCARD_AVAILABLE_ENERGY_FROM_ATTACKER } from '../../game/store/prefabs/costs';
 
 export class IronBoulderex extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -42,7 +43,8 @@ export class IronBoulderex extends PokemonCard {
 
     // Power Stomp
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 2);
+      afterAttackDamage(state, effect, (store, next) =>
+        DISCARD_AVAILABLE_ENERGY_FROM_ATTACKER(store, next, effect, CardType.COLORLESS, 2));
     }
 
     return state;

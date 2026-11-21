@@ -1,7 +1,8 @@
-import { CardType, PokemonCard, Stage, State, StoreLike } from '../../../game';
+import { CardType, ChoosePokemonPrompt, EnergyCard, GameMessage, PlayerType, PokemonCard, SlotType, Stage, State, StoreLike } from '../../../game';
 import { Effect } from '../../../game/store/effects/effect';
-import { THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON } from '../../../game/store/prefabs/attack-effects';
-import { DISCARD_ALL_ENERGY_FROM_POKEMON, WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
+import { DiscardCardsEffect, PutDamageEffect } from '../../../game/store/effects/attack-effects';
+import { afterAttackDamage } from '../../../game/store/prefabs/attack-after-damage';
+import { WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
 
 export class Revavroom extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -32,12 +33,35 @@ export class Revavroom extends PokemonCard {
   public name: string = 'Revavroom';
   public fullName: string = 'Revavroom FLO';
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Long Drive
-    if (WAS_ATTACK_USED(effect, 1, this)) {
-      DISCARD_ALL_ENERGY_FROM_POKEMON(store, state, effect, this);
-      THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON(100, effect, store, state);
-    }
+    if (!WAS_ATTACK_USED(effect, 1, this)) return state;
 
+    const { opponent, player, source } = effect;
+    const queueDiscard = () => afterAttackDamage(state, effect, (store, next) => {
+      const cards = [...new Set([...source.energies.cards, ...source.cards.filter(card => card instanceof EnergyCard)])];
+      if (cards.length === 0) return next;
+      const discard = new DiscardCardsEffect(effect, cards);
+      discard.target = source;
+      return store.reduceEffect(next, discard);
+    });
+
+    if (opponent.bench.some(slot => slot.getPokemonCard())) {
+      return store.prompt(state, new ChoosePokemonPrompt(
+        player.id, GameMessage.CHOOSE_POKEMON_TO_DAMAGE, PlayerType.TOP_PLAYER, [SlotType.BENCH],
+        { min: 1, max: 1, allowCancel: false },
+      ), ([target]) => {
+        if (target) {
+          const defender = target.getPokemonCard();
+          afterAttackDamage(state, effect, (store, next) => {
+            if (!defender || target.getPokemonCard() !== defender) return next;
+            const damage = new PutDamageEffect(effect, 100);
+            damage.target = target;
+            return store.reduceEffect(next, damage);
+          });
+        }
+        queueDiscard();
+      });
+    }
+    queueDiscard();
     return state;
   }
 }

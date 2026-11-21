@@ -1,11 +1,13 @@
 import { CardTag, CardType, ChooseCardsPrompt, GameMessage, PokemonCard, ShowCardsPrompt, Stage, State, StateUtils, StoreLike } from '../../../game';
 import { Effect } from '../../../game/store/effects/effect';
+import { afterAttackDamage } from '../../../game/store/prefabs/attack-after-damage';
 import { MOVE_CARDS, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
 
 export class Floatzelex extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom = 'Buizel';
-  public cardTag: CardTag[] = [CardTag.POKEMON_ex];
+  public tags: CardTag[] = [CardTag.POKEMON_ex];
+  public cardTag = this.tags;
   public hp: number = 260;
   public cardType: CardType = W;
   public weakness = [{ type: L }];
@@ -62,14 +64,16 @@ export class Floatzelex extends PokemonCard {
           opponent.id,
           GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
           cards
-        ), () => { });
-
-        MOVE_CARDS(store, state, player.hand, player.deck, {
-          cards,
-          sourceCard: this,
-          sourceEffect: this.attacks[0]
+        ), () => {
+          afterAttackDamage(state, effect, (store, next) => {
+            next = MOVE_CARDS(store, next, player.hand, player.deck, {
+              cards: cards.filter(card => player.hand.cards.includes(card)),
+              sourceCard: effect.source.getPokemonCard() ?? this,
+              sourceEffect: effect,
+            });
+            return SHUFFLE_DECK(store, next, player);
+          });
         });
-        SHUFFLE_DECK(store, state, player);
       });
     }
 

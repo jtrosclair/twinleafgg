@@ -6469,3 +6469,49 @@ All 14 focused cases pass, with 11 reproduced failures on the preceding
 engine. The 154 targeted checks also cover copied attacks and existing
 Sylveon checkpoints. All 559 comparable saved boards and 5,486 sampled
 opening actions match the prior engine.
+
+## Gameplay audit, batch 109
+
+Lucian puts both hands on the bottom of the respective decks before
+flipping either coin. If at least one card moved, each player flips and
+draws the printed six or three, limited by what remains in their deck.
+A player with an empty deck can still play Lucian when the opposing
+hand can move. Iron Boulder ex's Power Stomp deals damage before
+requiring its attacker to discard two Energy units when available.
+[Lucian](https://asia.pokemon-card.com/sg/card-search/detail/12639/)
+[Iron Boulder ex](https://asia.pokemon-card.com/sg/card-search/detail/14175/)
+
+In Aura Seeker, Trained Arms preserves normal attack damage attribution
+and ignores the defending Active Pokémon's Resistance and effects.
+Guts Fight still applies recoil if the Ability is suppressed. Hustle
+Screw reveals the Supporters while still in hand and shuffles those
+cards after damage. Long Drive damages both targets before discarding
+Energy from the actual attacker, including a Memory Helix copy.
+The five Pokémon ex use canonical Prize classifications and keep their
+existing FLO names.
+Dancing Fist recognizes a Pokémon ex using its gameplay tag. Mega
+Protection recognizes modern Mega Evolution Pokémon ex and honors
+attacks that bypass defending effects.
+[Official Aura Seeker card preview](https://www.pokemon-card.com/ex/m7/index.html)
+[Machamp](https://www.pokemon-card.com/ex/m7/assets/images/card/m7-039-m9hfb.webp)
+[Revavroom](https://www.pokemon-card.com/ex/m7/assets/images/card/m7-061-npdfz.webp)
+[Floatzel ex](https://www.pokemon-card.com/ex/m7/assets/images/card/m7-020-ubnz7.webp)
+
+Closed the modern gameplay review of `d89efe580` using the existing
+verified paths and the new Lucian and Iron Boulder checks. Reconciled
+`f43aa6ed9` with its recorded coverage for all 24 Ascended Heroes
+additions, including the later Mandibuzz ex, Pecharunt, Team Rocket's
+Exeggutor, Togedemaru ex and Team Rocket's Dugtrio tests. That brings
+the original 13-commit modern queue to seven verified reviews. The six
+remaining in this queue are `3348ebdc8`, `db4eebfcf`, `afe935782`,
+`ffd7c12f5`, `958482a2c`, and `b014163c0`.
+
+Seventy-two targeted checks pass, including 19 new cases. Seventeen
+of the new cases fail on the preceding engine. All 559 compatible
+saved boards and 5,486 sampled opening actions match the prior build.
+
+For the next Delta Reign review, Git identifies 28 file moves in
+`958482a2c`. The behavior-relevant changes in the paired definitions
+are concentrated in the Darkrai and Morpeko searches, Pawmot's Energy
+attachment, and Miraidon and Zoroark ex's named attack locks. The
+remaining renames and import changes can use existing identity coverage.

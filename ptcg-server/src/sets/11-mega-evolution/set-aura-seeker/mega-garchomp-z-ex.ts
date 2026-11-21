@@ -6,7 +6,8 @@ import { WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
 export class MegaGarchompZex extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
   public evolvesFrom = 'Gabite';
-  public cardTag: CardTag[] = [CardTag.POKEMON_ex, CardTag.POKEMON_SV_MEGA];
+  public tags: CardTag[] = [CardTag.POKEMON_ex, CardTag.POKEMON_SV_MEGA];
+  public cardTag = this.tags;
   public hp: number = 360;
   public cardType: CardType = N;
   public weakness = [];

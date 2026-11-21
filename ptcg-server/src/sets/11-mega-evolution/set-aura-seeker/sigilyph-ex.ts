@@ -5,7 +5,8 @@ import { AfterAttackEffect } from "../../../game/store/effects/game-phase-effect
 import { IS_ABILITY_BLOCKED, MOVE_CARDS } from "../../../game/store/prefabs/prefabs";
 
 export class Sigilyphex extends PokemonCard {
-  public cardTag: CardTag[] = [CardTag.POKEMON_ex];
+  public tags: CardTag[] = [CardTag.POKEMON_ex];
+  public cardTag = this.tags;
   public stage: Stage = Stage.BASIC;
   public cardType: CardType = P;
   public hp: number = 210;
@@ -35,13 +36,12 @@ export class Sigilyphex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Mega Protection
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)) {
+    if (effect instanceof PutDamageEffect && !effect.ignoresDefendingDamageEffects && effect.target.getPokemonCard() === this) {
       const player = StateUtils.findOwner(state, effect.target);
       const opponent = StateUtils.findOwner(state, effect.source);
-      const pokemonCard = effect.target.getPokemonCard();
       const sourceCard = effect.source.getPokemonCard();
 
-      if (pokemonCard !== this || sourceCard === undefined) {
+      if (sourceCard === undefined) {
         return state;
       }
 
@@ -57,7 +57,7 @@ export class Sigilyphex extends PokemonCard {
         return state;
       }
 
-      if (sourceCard.cardTag.includes(CardTag.POKEMON_SV_MEGA) && sourceCard.cardTag.includes(CardTag.POKEMON_ex)) {
+      if (sourceCard.tags.includes(CardTag.POKEMON_SV_MEGA) && sourceCard.tags.includes(CardTag.POKEMON_ex)) {
         effect.preventDefault = true;
       }
     }

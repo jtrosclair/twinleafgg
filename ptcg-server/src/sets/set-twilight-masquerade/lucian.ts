@@ -2,8 +2,10 @@ import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType } from '../../game/store/card/card-types';
 import { Card, GameError, GameMessage, Player, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { MoveCardsEffect } from '../../game/store/effects/game-effects';
+import { CoinFlipSequenceEffect } from '../../game/store/effects/play-card-effects';
 import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
-import { COIN_FLIP_PROMPT, DRAW_CARDS, MOVE_HAND_TO_DECK_THEN_DRAW } from '../../game/store/prefabs/prefabs';
+import { DRAW_CARDS } from '../../game/store/prefabs/prefabs';
 
 export class Lucian extends TrainerCard {
   protected _trainerType: TrainerType = TrainerType.SUPPORTER;
@@ -22,87 +24,33 @@ export class Lucian extends TrainerCard {
     }
 
     const opponent = StateUtils.getOpponent(state, player);
-    const playerCards = player.hand.cards.filter((c) => c !== this).length;
-    const opponentCards = opponent.hand.cards.length;
-
-    if (playerCards === 0 && player.deck.cards.length === 0) {
-      return false;
-    }
-    if (playerCards === 0 && opponentCards === 0) {
-      return false;
-    }
-    return true;
+    return player.hand.cards.some(card => card !== this) || opponent.hand.cards.length > 0;
   }
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (WAS_TRAINER_USED(effect, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
+    if (!WAS_TRAINER_USED(effect, this)) return state;
 
-      if (player.supporterTurn > 0) {
-        throw new GameError(GameMessage.SUPPORTER_ALREADY_PLAYED);
-      }
+    const player = effect.player;
+    const opponent = StateUtils.getOpponent(state, player);
+    if (player.supporterTurn > 0) throw new GameError(GameMessage.SUPPORTER_ALREADY_PLAYED);
+    if (!this.canPlay(store, state, player)) throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
 
-      const playerCards = player.hand.cards.filter((c) => c !== this);
-      const opponentCards = [...opponent.hand.cards];
-
-      if (playerCards.length === 0 && player.deck.cards.length === 0) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-      if (playerCards.length === 0 && opponentCards.length === 0) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-
-      this.shuffleCards(playerCards);
-      this.shuffleCards(opponentCards);
-
-      const eitherPutCards = playerCards.length > 0 || opponentCards.length > 0;
-
-      const flipAndDraw = (target: Player, afterDraw?: () => void) => {
-        if (!eitherPutCards) {
-          afterDraw?.();
-          return;
-        }
-        COIN_FLIP_PROMPT(store, state, target, (heads) => {
-          DRAW_CARDS(target, heads ? 6 : 3);
-          afterDraw?.();
-        });
-      };
-
-      const runOpponent = (): void => {
-        if (opponentCards.length > 0) {
-          MOVE_HAND_TO_DECK_THEN_DRAW(store, state, opponent, {
-            cards: opponentCards,
-            drawCount: 0,
-            sourceCard: this,
-            afterDraw: () => flipAndDraw(opponent),
-            onMovePrevented: () => flipAndDraw(opponent),
-          });
-          return;
-        }
-        if (playerCards.length > 0) {
-          flipAndDraw(opponent);
-        }
-      };
-
-      if (playerCards.length > 0) {
-        return MOVE_HAND_TO_DECK_THEN_DRAW(store, state, player, {
-          cards: playerCards,
-          drawCount: 0,
-          sourceCard: this,
-          afterDraw: () => flipAndDraw(player, () => runOpponent()),
-        });
-      }
-
-      return MOVE_HAND_TO_DECK_THEN_DRAW(store, state, opponent, {
-        cards: opponentCards,
-        drawCount: 0,
-        sourceCard: this,
-        afterDraw: () => flipAndDraw(opponent, () => flipAndDraw(player)),
-        // If the only cards to be put on the bottom are blocked, neither player flips.
-      });
+    const players = [player, opponent];
+    let moved = false;
+    for (const owner of players) {
+      const cards = owner.hand.cards.filter(card => owner !== player || card !== this);
+      if (cards.length === 0) continue;
+      this.shuffleCards(cards);
+      const move = new MoveCardsEffect(owner.hand, owner.deck, { cards, toBottom: true, sourceCard: this });
+      state = store.reduceEffect(state, move);
+      moved = moved || cards.some(card => owner.deck.cards.includes(card));
     }
 
+    if (moved) {
+      return store.reduceEffect(state, new CoinFlipSequenceEffect(player, players, results => {
+        players.forEach((owner, index) => DRAW_CARDS(owner, results[index] ? 6 : 3));
+      }));
+    }
     return state;
   }
 
