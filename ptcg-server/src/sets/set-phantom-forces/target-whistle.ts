@@ -1,3 +1,4 @@
+import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCardList, StateUtils } from '../../game';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
@@ -47,12 +48,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
   }
 
 
-  cards.forEach((card, index) => {
-    opponent.discard.moveCardTo(card, slots[index]);
-    slots[index].pokemonPlayedTurn = state.turn;
-
-
-  });
+  benchPokemonFromZone(store, state, opponent, opponent.discard, cards, slots);
 
 }
 export class TargetWhistle extends TrainerCard {

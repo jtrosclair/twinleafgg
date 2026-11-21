@@ -1,3 +1,4 @@
+import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { CardTag, Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike, State, ChooseCardsPrompt, GameMessage, GameError, Card, PokemonCardList, ShuffleDeckPrompt } from '../../game';
@@ -61,10 +62,7 @@ export class HopsBag extends TrainerCard {
       ), selectedCards => {
         cards = selectedCards || [];
 
-        cards.forEach((card, index) => {
-          player.deck.moveCardTo(card, slots[index]);
-          slots[index].pokemonPlayedTurn = state.turn;
-        });
+        benchPokemonFromZone(store, state, player, player.deck, cards, slots);
 
         player.supporter.moveCardTo(this, player.discard);
 

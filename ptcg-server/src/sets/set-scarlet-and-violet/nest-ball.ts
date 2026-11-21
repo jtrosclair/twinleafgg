@@ -1,3 +1,4 @@
+import { playBenchPokemonBatchFromDeck } from '../../game/store/prefabs/bench-play-reactions';
 import { Card } from '../../game/store/card/card';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
@@ -8,7 +9,6 @@ import { Stage, TrainerType, SuperType } from '../../game/store/card/card-types'
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { PlayPokemonFromDeckEffect } from '../../game/store/effects/play-card-effects';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
 
@@ -50,11 +50,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
     return state;
   }
 
-  // Use the new PlayPokemonFromDeckEffect for each selected card
-  cards.forEach((card, index) => {
-    const playPokemonFromDeckEffect = new PlayPokemonFromDeckEffect(player, card as any, slots[index]);
-    store.reduceEffect(state, playPokemonFromDeckEffect);
-  });
+  playBenchPokemonBatchFromDeck(store, state, player, cards, slots);
 
 
 

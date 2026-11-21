@@ -1,3 +1,4 @@
+import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
 import { DISCARD_A_STADIUM_CARD_IN_PLAY } from '../../game/store/stadium-utils';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, CardTag } from '../../game/store/card/card-types';
@@ -83,10 +84,7 @@ export class LugiaVSTAR extends PokemonCard {
       ), selected => {
         cards = selected || [];
 
-        cards.forEach((card, index) => {
-          player.discard.moveCardTo(card, slots[index]);
-          slots[index].pokemonPlayedTurn = state.turn;
-        });
+        benchPokemonFromZone(store, state, player, player.discard, cards, slots);
         return state;
       });
     }

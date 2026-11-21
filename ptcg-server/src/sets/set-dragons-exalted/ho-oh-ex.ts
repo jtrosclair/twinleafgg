@@ -5,6 +5,7 @@ import { PowerEffect } from '../../game/store/effects/game-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
 
 
 function* useRebirth(next: Function, store: StoreLike, state: State,
@@ -40,7 +41,7 @@ function* useRebirth(next: Function, store: StoreLike, state: State,
     return state;
   }
 
-  player.discard.moveCardTo(self, slots[0]);
+  benchPokemonFromZone(store, state, player, player.discard, [self], slots);
 
   let basicEnergies = 0;
   const typeMap: { [key: number]: boolean } = {};

@@ -1,8 +1,9 @@
+import { playBenchPokemonBatchFromDeck } from '../../game/store/prefabs/bench-play-reactions';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike, State, ChooseCardsPrompt, GameMessage, GameError, ShuffleDeckPrompt, PokemonCard } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PlayPokemonFromDeckEffect, TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 
 
 export class BuddyBuddyPoffin extends TrainerCard {
@@ -53,10 +54,7 @@ export class BuddyBuddyPoffin extends TrainerCard {
       ), selectedCards => {
         const cards = selectedCards || [];
 
-        cards.forEach((card, index) => {
-          const playPokemonFromDeckEffect = new PlayPokemonFromDeckEffect(player, card as any, openSlots[index]);
-          store.reduceEffect(state, playPokemonFromDeckEffect);
-        });
+        playBenchPokemonBatchFromDeck(store, state, player, cards, openSlots);
 
         player.supporter.moveCardTo(this, player.discard);
 

@@ -1,8 +1,8 @@
+import { playBenchPokemonBatchFromDeck } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard as PokemonCardClass } from '../../game/store/card/pokemon-card';
 import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { ChooseCardsPrompt, GameMessage, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PlayPokemonFromDeckEffect } from '../../game/store/effects/play-card-effects';
 import { GET_PLAYER_BENCH_SLOTS, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP } from '../../game/store/prefabs/attack-effects';
 
@@ -66,9 +66,7 @@ export class Exeggcute extends PokemonCardClass {
         { min: 0, max, allowCancel: true, blocked },
       ), selected => {
         const cards = selected || [];
-        cards.forEach((card, index) => {
-          store.reduceEffect(state, new PlayPokemonFromDeckEffect(player, card as PokemonCardClass, slots[index]));
-        });
+        playBenchPokemonBatchFromDeck(store, state, player, cards, slots);
         SHUFFLE_DECK(store, state, player);
       });
     }

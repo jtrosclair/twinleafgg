@@ -5017,3 +5017,57 @@ orders with Lumineon V and Ting-Lu ex and verify the resulting prompts
 and damage counters.
 The full engine run passed 11,211 tests across 323
 spec files. The focused run also checks both Robo Substitute names.
+
+## Gameplay re-audit, batch 77
+
+Risky Ruins checks the Basic Pokémon after the placement succeeds, on
+the turn of that Pokémon's owner. The hand, deck and discard placement
+reducers share that event. The shared deck search and 72 legacy deck
+or discard loops now place the selected cards together before resolving
+Stadium effects. Nest Ball receives counters. Call for Family receives
+counters on both eligible Basics, and New Moon can stop the counters
+when Lunatone and Solrock arrive together. Rebirth receives counters
+from a discard placement. Thorton keeps the existing counters when
+replacing a Pokémon, as a control for the official Ogre's Mask ruling.
+[Official Risky Ruins print](https://asia.pokemon-card.com/sg/card-search/detail/21719/)
+[Official Risky Ruins rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E5%8D%B1%E3%81%AA%E3%81%84%E5%BB%83%E5%A2%9F&regulation_faq_main_item1=all)
+
+Uses the discard placement path from `012deebd1` for Alomomola's
+Gentle Fins. Once declared, the Ability needs one eligible Basic
+Pokémon with at most 70 HP from the public discard pile. The official
+ruling excludes Antique Fossils. The existing card identity and
+once-per-turn marker are retained.
+[Official Gentle Fins print](https://www.pokemon-card.com/card-search/details.php/card/47563)
+[Official Gentle Fins ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%9E%E3%83%9E%E3%83%B3%E3%83%9C%E3%82%A6&regulation_faq_main_item1=all)
+[Upstream discard placement change](https://github.com/the-epsd/twinleafgg/commit/012deebd1844e7ad79252da074c31cc11d044274)
+
+Miasma Valley counts completed hand placements such as the opposing
+Basic from Fin Luster and Claw Fossil played as a Basic. It exempts
+printed Grass and Psychic types, including dual types. Colorful Body
+has the optional ordering specified in the official Kecleon ruling.
+Miasma Valley resolves before Dialga declares Reverse Time, so
+Ampharos's Damage Bind can block it after counters are placed.
+[Official Miasma Valley print](https://www.pokemon-card.com/card-search/details.php/card/19023/regu/DP)
+[Official Miasma Valley rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E7%98%B4%E6%B0%97%E3%81%AE%E8%B0%B7&regulation_faq_main_item1=all)
+
+Other direct placements, including special entries from the prize
+cards, and older on-play Abilities still need individual review.
+
+All 559 comparable saved boards validate with the same serialized state
+and card identities, including 401 active puzzles. The only response
+changes are Risky Ruins's corrected display text and Gentle Fins's menu
+metadata. The 3,633 previously sampled opening actions and 458 targeted
+Bench and Trainer opening attempts match. The three new Gentle Fins
+attempts on saved boards are correctly rejected because Alomomola is on
+the Bench. Eligible placements pass through the real engine in the
+focused suite.
+
+All seven recorded solutions still win twice. The API passes 32 checks.
+The attested browser package passes ten board scenarios and 209 client
+checks. Packaged mouse and touch tests choose opposite orders for Risky
+Ruins and Luminous Sign under Ting-Lu ex and verify 20 damage in both.
+
+The full engine suite passes 11,240 tests across 323 files. The Bench
+reaction suite passes all 58 cases, including 14 failures reproduced on
+the prior engine. The combined worktree with the existing local edits
+passes 169 targeted cases.

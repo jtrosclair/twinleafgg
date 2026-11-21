@@ -1,8 +1,12 @@
 import { ensureClientCards } from '../../client/cards';
+import { GameError } from '../../game/game-error';
+import { GameMessage } from '../../game/game-message';
 import { CardManager } from '../../game/cards/card-manager';
 import { AttackAction, UseAbilityAction } from '../../game/store/actions/game-actions';
 import { PlayCardAction, PlayerType, SlotType } from '../../game/store/actions/play-card-action';
 import { ResolvePromptAction } from '../../game/store/actions/resolve-prompt-action';
+import { CardType } from '../../game/store/card/card-types';
+import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
 import { MoveCardsEffect } from '../../game/store/effects/game-effects';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { ConfirmPrompt } from '../../game/store/prompts/confirm-prompt';
@@ -363,6 +367,210 @@ describe('Gapejaw Bog and effect-driven hand placement', () => {
       play(board);
       expect(player1.bench[0].getPokemonCard()?.fullName).toBe(substitute);
       expect(player1.bench[0].damage).toBe(20);
+    });
+  }
+});
+
+describe('Risky Ruins and completed Bench placements', () => {
+  const ruins = 'Risky Ruins MEG';
+  const fire = 'Numel M1L';
+  const dark = 'Poochyena ASC';
+
+  for (const [card, damage] of [[basic, 20], [dark, 0], ['Kecleon RR', 0]] as const) {
+    it(`checks the effective type after ${card} enters from hand`, () => {
+      const { player1 } = start({ hand: [card] }, {}, ruins);
+      play();
+      expect(player1.bench[0].getPokemonCard()?.fullName).toBe(card);
+      expect(player1.bench[0].damage).toBe(damage);
+    });
+  }
+
+  it('never damages the opponent’s Basic put into play on your turn', () => {
+    const { player2 } = start({ hand: ["Erika's Invitation MEW"] }, { hand: [basic] }, ruins);
+    play(board);
+    settleAutomaticPrompts();
+    resolve([0]);
+    expect(player2.active.getPokemonCard()?.fullName).toBe(basic);
+    expect(player2.active.damage).toBe(0);
+  });
+
+  it('places counters after Nest Ball finds a Basic', () => {
+    const { player1 } = start({ hand: ['Nest Ball SVI'], deck: [basic, ...padDeck(10)] }, {}, ruins);
+    play(board);
+    resolve([0]);
+    settleAutomaticPrompts();
+    expect(player1.bench[0].getPokemonCard()?.fullName).toBe(basic);
+    expect(player1.bench[0].damage).toBe(20);
+  });
+
+  for (const [cards, damage] of [[[basic, fire], 20], [[moon, sun], 0], [[sun, moon], 0]] as const) {
+    it(`checks the pair from Call for Family together: ${cards.join(', ')}`, () => {
+      const { player1 } = start({
+        active: { card: fire, energy: ['Fire Energy SVE'] },
+        deck: [...cards, ...padDeck(10)],
+      }, {}, ruins);
+      store.dispatch(new AttackAction(player1.id, 'Call for Family'));
+      settleAutomaticPrompts();
+      const search = pending();
+      if (!(search instanceof ChooseCardsPrompt)) throw new Error('Expected a deck search');
+      resolve(cards.map(name => search.cards.cards.findIndex(card => card.fullName === name)));
+      settleAutomaticPrompts();
+      expect(player1.bench.slice(0, 2).map(slot => slot.getPokemonCard()?.fullName)).toEqual([...cards]);
+      expect(player1.bench.slice(0, 2).map(slot => slot.damage)).toEqual([damage, damage]);
+    });
+  }
+
+  it('counts both Basics from a Tandem Unit placement', () => {
+    const cards = ['Miraidon ex SVI', 'Mareep SVI'];
+    const { player1 } = start({
+      active: { card: cards[0] }, deck: [...cards, ...padDeck(10)],
+    }, {}, ruins);
+    store.dispatch(new UseAbilityAction(player1.id, 'Tandem Unit', { ...ownBench, slot: SlotType.ACTIVE }));
+    resolve([0, 1]);
+    settleAutomaticPrompts();
+    expect(player1.bench.slice(0, 2).map(slot => slot.getPokemonCard()?.fullName).sort()).toEqual([...cards].sort());
+    expect(player1.bench.slice(0, 2).map(slot => slot.damage)).toEqual([20, 20]);
+  });
+
+  it('applies its effect to Ho-Oh-EX put onto the Bench from discard by Rebirth', () => {
+    const hoOh = 'Ho-Oh EX DRX';
+    const { player1 } = start({ discard: [hoOh, 'Fire Energy SVE'] }, {}, ruins);
+    store.dispatch(new UseAbilityAction(player1.id, 'Rebirth', { ...ownBench, slot: SlotType.DISCARD }));
+    settleAutomaticPrompts();
+    resolve(true);
+    settleAutomaticPrompts();
+    resolve([0]);
+    settleAutomaticPrompts();
+    expect(player1.bench[0].getPokemonCard()?.fullName).toBe(hoOh);
+    expect(player1.bench[0].energies.cards.map(card => card.fullName)).toEqual(['Fire Energy SVE']);
+    expect(player1.bench[0].damage).toBe(20);
+  });
+
+  it('requires one eligible discard choice for Gentle Fins and resolves the Ruins', () => {
+    const alomomola = 'Alomomola SV11B';
+    const { player1 } = start({
+      active: { card: alomomola }, discard: [fire, basic, 'Claw Fossil PK'],
+    }, {}, ruins);
+    const use = () => store.dispatch(new UseAbilityAction(player1.id, 'Gentle Fins', { ...ownBench, slot: SlotType.ACTIVE }));
+    expect(player1.active.getPokemonCard()!.powers[0].useWhenInPlay).toBe(true);
+    use();
+    const prompt = pending() as ChooseCardsPrompt;
+    expect(prompt instanceof ChooseCardsPrompt).toBe(true);
+    expect(prompt.validate([])).toBe(false);
+    for (const card of prompt.cards.cards.filter(card => card.fullName !== basic)) {
+      expect(prompt.validate([card])).toBe(false);
+    }
+    resolve([prompt.cards.cards.findIndex(card => card.fullName === basic)]);
+    expect(player1.bench[0].getPokemonCard()?.fullName).toBe(basic);
+    expect(player1.bench[0].damage).toBe(20);
+    expect(player1.discard.cards.map(card => card.fullName).sort()).toEqual(['Claw Fossil PK', fire]);
+    expect(() => use()).toThrow(new GameError(GameMessage.POWER_ALREADY_USED));
+  });
+
+  it('refuses Gentle Fins when all discard cards are ineligible', () => {
+    const { player1 } = start({ active: { card: 'Alomomola SV11B' }, discard: [fire, 'Claw Fossil PK'] }, {}, ruins);
+    expect(() => store.dispatch(new UseAbilityAction(player1.id, 'Gentle Fins', { ...ownBench, slot: SlotType.ACTIVE })))
+      .toThrow(new GameError(GameMessage.CANNOT_USE_POWER));
+    expect(pending()).toBeUndefined();
+  });
+
+  it('keeps existing counters when Thorton replaces a Pokémon', () => {
+    const { player1 } = start({ hand: ['Thorton LOR'], bench: [{ card: fire, damage: 10 }], discard: [basic] }, {}, ruins);
+    play(board);
+    for (let step = 0; step < 2; step++) resolve(pending() instanceof ChooseCardsPrompt ? [0] : [ownBench]);
+    expect(player1.bench[0].getPokemonCard()?.fullName).toBe(basic);
+    expect(player1.bench[0].damage).toBe(10);
+  });
+
+  for (const first of ['Luminous Sign', 'Risky Ruins']) {
+    it(`honors ${first} first with Lumineon V under Law of the Land`, () => {
+      const { player1 } = start({ hand: [fish] }, { active: { card: tingLu } }, ruins);
+      play();
+      chooseOrder(first);
+      if (first === 'Luminous Sign') {
+        expect(pending() instanceof ConfirmPrompt).toBe(true);
+        resolve(false);
+      }
+      expect(pending()).toBeUndefined();
+      expect(player1.bench[0].damage).toBe(20);
+    });
+  }
+});
+
+describe('Miasma Valley and effects of entering play', () => {
+  const valley = 'Miasma Valley PL';
+  const fire = 'Numel M1L';
+  const dialga = 'Dialga PL';
+  const ampharos = 'Ampharos PL';
+
+  for (const [card, damage] of [[fire, 20], [basic, 0], [moon, 0], ['Claw Fossil PK', 20]] as const) {
+    it(`checks ${card} when played from hand`, () => {
+      const { player1 } = start({ hand: [card] }, {}, valley);
+      play(card === 'Claw Fossil PK' ? board : ownBench);
+      expect(player1.bench[0].getPokemonCard()?.fullName).toBe(card);
+      expect(player1.bench[0].damage).toBe(damage);
+    });
+  }
+
+  it('exempts a Pokémon with both Metal and Psychic types', () => {
+    const card = 'Jirachi RR';
+    const { player1 } = start({ hand: [card] }, {}, valley);
+    Object.assign(player1.hand.cards[0], { additionalCardTypes: [CardType.PSYCHIC] });
+    play();
+    expect(player1.bench[0].getPokemonCard()?.fullName).toBe(card);
+    expect(player1.bench[0].damage).toBe(0);
+  });
+
+  it('counts a Basic from the opponent’s hand when Fin Luster switches it in', () => {
+    const { player1, player2 } = start({ active: { card: 'Lumineon SF' } }, { hand: [fire] }, valley);
+    store.dispatch(new UseAbilityAction(player1.id, 'Fin Luster', { ...ownBench, slot: SlotType.ACTIVE }));
+    settleAutomaticPrompts();
+    resolve([0]);
+    expect(player2.active.getPokemonCard()?.fullName).toBe(fire);
+    expect(player2.active.damage).toBe(20);
+  });
+
+  it('leaves a Basic from the deck unaffected', () => {
+    const { player1 } = start({ hand: ['Nest Ball SVI'], deck: [fire, ...padDeck(10)] }, {}, valley);
+    play(board);
+    resolve([0]);
+    settleAutomaticPrompts();
+    expect(player1.bench[0].getPokemonCard()?.fullName).toBe(fire);
+    expect(player1.bench[0].damage).toBe(0);
+  });
+
+  for (const [first, damage] of [['Colorful Body', 0], ['Miasma Valley', 20]] as const) {
+    it(`honors ${first} first when Kecleon enters`, () => {
+      const { player1 } = start({ hand: ['Kecleon RR'] }, {}, valley);
+      play();
+      chooseOrder(first);
+      expect(player1.bench[0].damage).toBe(damage);
+      const types = new CheckPokemonTypeEffect(player1.bench[0]);
+      store.reduceEffect(store.state, types);
+      expect(types.cardTypes).toContain(CardType.PSYCHIC);
+      expect(pending()).toBeUndefined();
+    });
+  }
+
+  it('lets Damage Bind block Reverse Time after the counters are placed', () => {
+    const { player1 } = start({ hand: [dialga], discard: ['Fire Energy SVE'] }, { bench: [{ card: ampharos }] }, valley);
+    play();
+    expect(player1.bench[0].getPokemonCard()?.fullName).toBe(dialga);
+    expect(player1.bench[0].damage).toBe(20);
+    expect(pending()).toBeUndefined();
+  });
+
+  for (const [stadium, damage] of [[valley, 20], ['', 0]] as const) {
+    it(`keeps Reverse Time available on the completed placement with ${stadium || 'no Stadium'}`, () => {
+      const opponent = stadium ? {} : { bench: [{ card: ampharos }] };
+      const { player1 } = start({ hand: [dialga], discard: ['Fire Energy SVE'] }, opponent, stadium);
+      play();
+      expect(player1.bench[0].damage).toBe(damage);
+      expect(pending() instanceof ConfirmPrompt).toBe(true);
+      resolve(true);
+      expect(pending() instanceof ChooseCardsPrompt).toBe(true);
+      resolve([]);
+      expect(pending()).toBeUndefined();
     });
   }
 });

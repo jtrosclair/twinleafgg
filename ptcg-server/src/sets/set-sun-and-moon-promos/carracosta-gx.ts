@@ -1,3 +1,4 @@
+import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, PowerType, ChooseCardsPrompt, GameMessage, Card, PokemonCardList, GameError } from '../../game';
@@ -93,10 +94,7 @@ export class CarracostaGX extends PokemonCard {
       ), selectedCards => {
         cards = selectedCards || [];
 
-        cards.forEach((card, index) => {
-          player.discard.moveCardTo(card, slots[index]);
-          slots[index].pokemonPlayedTurn = state.turn;
-        });
+        benchPokemonFromZone(store, state, player, player.discard, cards, slots);
       });
     }
 

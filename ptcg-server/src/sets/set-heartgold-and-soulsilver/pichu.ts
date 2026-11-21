@@ -1,3 +1,4 @@
+import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SpecialCondition, SuperType } from '../../game/store/card/card-types';
 import {
@@ -38,10 +39,7 @@ function* usePlayground(next: Function, store: StoreLike, state: State,
     cards.length = slots.length;
   }
 
-  cards.forEach((card, index) => {
-    player.deck.moveCardTo(card, slots[index]);
-    slots[index].pokemonPlayedTurn = state.turn;
-  });
+  benchPokemonFromZone(store, state, player, player.deck, cards, slots);
 
   // Opponent
   slots = opponent.bench.filter(b => b.cards.length === 0);
@@ -62,10 +60,7 @@ function* usePlayground(next: Function, store: StoreLike, state: State,
     cards.length = slots.length;
   }
 
-  cards.forEach((card, index) => {
-    opponent.deck.moveCardTo(card, slots[index]);
-    slots[index].pokemonPlayedTurn = state.turn;
-  });
+  benchPokemonFromZone(store, state, opponent, opponent.deck, cards, slots);
 
   // Shuffle decks
   store.prompt(state, new ShuffleDeckPrompt(player.id), order => {

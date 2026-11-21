@@ -1,3 +1,4 @@
+import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
 import { Card, CardType, ChooseCardsPrompt, GameMessage, PokemonCard, PokemonCardList, ShuffleDeckPrompt, Stage, State, StoreLike, SuperType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect } from '../../game/store/effects/game-effects';
@@ -22,10 +23,7 @@ function* useMultiply(next: Function, store: StoreLike, state: State,
     next();
   });
 
-  cards.forEach((card, index) => {
-    player.deck.moveCardTo(card, slots[index]);
-    slots[index].pokemonPlayedTurn = state.turn;
-  });
+  benchPokemonFromZone(store, state, player, player.deck, cards, slots);
 
   return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
     player.deck.applyOrder(order);

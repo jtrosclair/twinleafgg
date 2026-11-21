@@ -1,8 +1,9 @@
+import { playBenchPokemonBatchFromDeck } from '../../game/store/prefabs/bench-play-reactions';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { CardTag, Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike, State, ChooseCardsPrompt, GameMessage, GameError, Card, PokemonCardList, ShuffleDeckPrompt, GameLog } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PlayPokemonFromDeckEffect, TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 
 
 export class PreciousTrolley extends TrainerCard {
@@ -58,11 +59,7 @@ export class PreciousTrolley extends TrainerCard {
           store.log(state, GameLog.LOG_PLAYER_PLAYS_BASIC_POKEMON, { name: player.name, card: card.name });
         });
 
-        // Use the new PlayPokemonFromDeckEffect for each selected card
-        cards.forEach((card, index) => {
-          const playPokemonFromDeckEffect = new PlayPokemonFromDeckEffect(player, card as any, slots[index]);
-          store.reduceEffect(state, playPokemonFromDeckEffect);
-        });
+              playBenchPokemonBatchFromDeck(store, state, player, cards, slots);
 
         player.supporter.moveCardTo(this, player.discard);
 

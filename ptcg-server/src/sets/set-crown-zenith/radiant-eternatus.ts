@@ -1,3 +1,4 @@
+import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard, CardTag, Stage, CardType, PowerType, StoreLike, State,
   GameMessage, ChooseCardsPrompt, SuperType, ShuffleDeckPrompt, GameLog, ConfirmPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
@@ -61,10 +62,7 @@ export class RadiantEternatus extends PokemonCard {
             { superType: SuperType.POKEMON },
             { min: 0, max: Math.min(2, slots.length), allowCancel: false, blocked },
           ), selected => {
-            (selected || []).forEach((card, index) => {
-              player.deck.moveCardTo(card, slots[index]);
-              slots[index].pokemonPlayedTurn = state.turn;
-            });
+            benchPokemonFromZone(store, state, player, player.deck, (selected || []), slots);
             effect.endTurn = true;
             store.prompt(state, new ShuffleDeckPrompt(player.id), order => player.deck.applyOrder(order));
           });

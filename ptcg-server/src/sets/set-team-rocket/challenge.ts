@@ -1,3 +1,4 @@
+import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike, State, ChooseCardsPrompt, GameMessage, GameError, StateUtils, SelectOptionPrompt } from '../../game';
@@ -72,15 +73,9 @@ export class Challenge extends TrainerCard {
             const playerCards = results[0] || [];
             const opponentCards = results[1] || [];
 
-            playerCards.forEach((card, index) => {
-              player.deck.moveCardTo(card, playerOpenSlots[index]);
-              playerOpenSlots[index].pokemonPlayedTurn = state.turn;
-            });
+            benchPokemonFromZone(store, state, player, player.deck, playerCards, playerOpenSlots);
 
-            opponentCards.forEach((card, index) => {
-              opponent.deck.moveCardTo(card, opponentOpenSlots[index]);
-              opponentOpenSlots[index].pokemonPlayedTurn = state.turn;
-            });
+            benchPokemonFromZone(store, state, opponent, opponent.deck, opponentCards, opponentOpenSlots);
 
             SHUFFLE_DECK(store, state, player);
             SHUFFLE_DECK(store, state, opponent);

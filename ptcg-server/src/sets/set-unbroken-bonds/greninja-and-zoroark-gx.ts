@@ -1,3 +1,4 @@
+import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType } from '../../game/store/card/card-types';
 import { AttachEnergyPrompt, Card, CardTarget, ChooseCardsPrompt, EnergyCard, GameError, GameMessage, PlayerType, PokemonCardList, SlotType, State, StateUtils, StoreLike } from '../../game';
@@ -89,10 +90,7 @@ export class GreninjaAndZoroarkGX extends PokemonCard {
           return state;
         }
 
-        cards.forEach((card, index) => {
-          player.discard.moveCardTo(card, slots[index]);
-          slots[index].pokemonPlayedTurn = state.turn;
-        });
+        benchPokemonFromZone(store, state, player, player.discard, cards, slots);
       });
 
       // Check for the extra energy cost.

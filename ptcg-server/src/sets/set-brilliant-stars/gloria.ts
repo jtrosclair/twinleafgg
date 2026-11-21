@@ -1,3 +1,4 @@
+import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
 import { Card, ChooseCardsPrompt, GameError, GameMessage, PokemonCard, PokemonCardList, ShuffleDeckPrompt, State, StoreLike } from '../../game';
 import { CardTag, Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
@@ -80,10 +81,7 @@ export class Gloria extends TrainerCard {
         ), selectedCards => {
           cards = selectedCards || [];
 
-          cards.forEach((card, index) => {
-            player.deck.moveCardTo(card, slots[index]);
-            slots[index].pokemonPlayedTurn = state.turn;
-          });
+          benchPokemonFromZone(store, state, player, player.deck, cards, slots);
 
           return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
             player.deck.applyOrder(order);

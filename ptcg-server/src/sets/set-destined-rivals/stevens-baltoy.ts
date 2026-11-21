@@ -1,3 +1,4 @@
+import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType } from '../../game/store/card/card-types';
 import { StoreLike, State, GameMessage, ChooseCardsPrompt } from '../../game';
@@ -54,10 +55,7 @@ export class StevensBaltoy extends PokemonCard {
         }
       ), selected => {
         const cards = selected || [];
-        cards.forEach((card, index) => {
-          player.deck.moveCardTo(card, slots[index]);
-          slots[index].pokemonPlayedTurn = state.turn;
-        });
+        benchPokemonFromZone(store, state, player, player.deck, cards, slots);
         SHUFFLE_DECK(store, state, player);
         return state;
       });

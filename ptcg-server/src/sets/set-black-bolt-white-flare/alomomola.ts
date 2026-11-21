@@ -1,13 +1,14 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { BoardEffect, Stage, SuperType } from '../../game/store/card/card-types';
+import { Stage, SuperType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { PowerType } from '../../game/store/card/pokemon-types';
-import { ChooseCardsPrompt, GameError, GameLog, GameMessage, PlayerType } from '../../game';
+import { ChooseCardsPrompt, GameError, GameMessage } from '../../game';
 
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { PlayPokemonFromDiscardEffect } from '../../game/store/effects/play-card-effects';
+import { ABILITY_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Alomomola extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -19,6 +20,7 @@ export class Alomomola extends PokemonCard {
   public powers = [{
     name: 'Gentle Fins',
     powerType: PowerType.ABILITY,
+    useWhenInPlay: true,
     text: 'Once during your turn, if this Pokémon is in the Active Spot, you may put a Basic Pokémon with 70HP or less from your discard pile onto your bench.'
   }];
 
@@ -46,17 +48,17 @@ export class Alomomola extends PokemonCard {
 
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
-      const openSlots = player.bench.filter(b => b.cards.length === 0);
+      const openSlot = player.bench.find(slot => slot.cards.length === 0);
 
       if (player.marker.hasMarker(this.GENTLE_FINS_MARKER, this)) {
         throw new GameError(GameMessage.POWER_ALREADY_USED);
       }
 
-      if (player.active.cards[0] !== this) {
+      if (player.active.getPokemonCard() !== this) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
-      if (openSlots.length === 0) {
+      if (!openSlot) {
         throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }
 
@@ -67,34 +69,25 @@ export class Alomomola extends PokemonCard {
         return acc;
       }, [] as number[]);
 
-      const maxPokemons = Math.min(openSlots.length, 1);
-      effect.preventDefault = true;
+      if (blocked.length === player.discard.cards.length) {
+        throw new GameError(GameMessage.CANNOT_USE_POWER);
+      }
 
+      effect.preventDefault = true;
       return store.prompt(state, new ChooseCardsPrompt(
         player,
         GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
         player.discard,
         { superType: SuperType.POKEMON, stage: Stage.BASIC },
-        { min: 0, max: maxPokemons, allowCancel: false, blocked, maxPokemons }
-      ), selectedCards => {
-        const cards = selectedCards || [];
-
-        player.marker.addMarker(this.GENTLE_FINS_MARKER, this);
-
-        cards.forEach((card, index) => {
-          player.discard.moveCardTo(card, openSlots[index]);
-          openSlots[index].pokemonPlayedTurn = state.turn;
-          store.log(state, GameLog.LOG_PLAYER_PLAYS_BASIC_POKEMON, { name: player.name, card: card.name });
-        });
-
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (cardList.getPokemonCard() === this) {
-            cardList.addBoardEffect(BoardEffect.ABILITY_USED);
-          }
-        });
-        return state;
+        { min: 1, max: 1, allowCancel: false, blocked }
+      ), ([card]) => {
+        if (card instanceof PokemonCard) {
+          store.reduceEffect(state, new PlayPokemonFromDiscardEffect(player, card, openSlot));
+          player.marker.addMarker(this.GENTLE_FINS_MARKER, this);
+          ABILITY_USED(player, this);
+        }
       });
     }
     return state;
   }
-} 
+}

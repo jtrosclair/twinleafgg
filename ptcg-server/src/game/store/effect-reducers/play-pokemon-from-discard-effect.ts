@@ -1,4 +1,6 @@
-import { PlayPokemonFromDiscardEffect } from '../effects/play-card-effects';
+import { AfterBenchBasicPokemonEffect, PlayPokemonFromDiscardEffect } from '../effects/play-card-effects';
+import { Stage } from '../card/card-types';
+import { resolveBenchPlayReactions } from '../prefabs/bench-play-reactions';
 import { GameError } from '../../game-error';
 import { GameMessage, GameLog } from '../../game-message';
 import { Effect } from '../effects/effect';
@@ -40,5 +42,9 @@ export function playPokemonFromDiscardReducer(store: StoreLike, state: State, ef
     index: effect.index,
   });
 
+  if (effect.pokemonCard.stage === Stage.BASIC && effect.player.bench.includes(effect.target)
+    && effect.target.getPokemonCard() === effect.pokemonCard) {
+    return resolveBenchPlayReactions(store, state, new AfterBenchBasicPokemonEffect(effect.player, effect.pokemonCard, effect.target));
+  }
   return state;
 }

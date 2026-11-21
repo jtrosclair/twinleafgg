@@ -16,6 +16,7 @@ export enum PlayCardEffects {
   ATTACH_ENERGY_EFFECT = 'ATTACH_ENERGY_EFFECT',
   AFTER_ATTACH_ENERGY_EFFECT = 'AFTER_ATTACH_ENERGY_EFFECT',
   PLAY_POKEMON_EFFECT = 'PLAY_POKEMON_EFFECT',
+  AFTER_BENCH_BASIC_POKEMON_EFFECT = 'AFTER_BENCH_BASIC_POKEMON_EFFECT',
   AFTER_PLAY_BASIC_FROM_HAND_EFFECT = 'AFTER_PLAY_BASIC_FROM_HAND_EFFECT',
   PLAY_POKEMON_FROM_DECK_EFFECT = 'PLAY_POKEMON_FROM_DECK_EFFECT',
   PLAY_POKEMON_FROM_DISCARD_EFFECT = 'PLAY_POKEMON_FROM_DISCARD_EFFECT',
@@ -228,19 +229,29 @@ export class PlayItemEffect implements Effect {
 }
 
 export interface BenchPlayReaction {
+  source: Card;
   label: string;
+  priority?: number;
   canResolve: () => boolean;
   resolve: () => void;
 }
 
-export class AfterPlayBasicFromHandEffect implements Effect {
-  readonly type = PlayCardEffects.AFTER_PLAY_BASIC_FROM_HAND_EFFECT;
+export class AfterBenchBasicPokemonEffect implements Effect {
+  readonly type: string = PlayCardEffects.AFTER_BENCH_BASIC_POKEMON_EFFECT;
   public preventDefault = false;
   public readonly reactions: BenchPlayReaction[] = [];
   public endTurn = false;
 
   constructor(public readonly player: Player, public readonly pokemonCard: PokemonCard,
-    public readonly target: PokemonCardList, public readonly playedByOwner = true) {}
+    public readonly target: PokemonCardList) {}
+}
+
+export class AfterPlayBasicFromHandEffect extends AfterBenchBasicPokemonEffect {
+  readonly type = PlayCardEffects.AFTER_PLAY_BASIC_FROM_HAND_EFFECT;
+
+  constructor(player: Player, pokemonCard: PokemonCard, target: PokemonCardList, public readonly playedByOwner = true) {
+    super(player, pokemonCard, target);
+  }
 }
 
 export class TrainerEffect implements Effect {
@@ -399,6 +410,7 @@ export class PlayPokemonFromDeckEffect implements Effect {
   public target: PokemonCardList;
   public slot?: SlotType;
   public index?: number;
+  public completionBatch?: AfterBenchBasicPokemonEffect[];
 
   constructor(player: Player, pokemonCard: PokemonCard, target: PokemonCardList, slot?: SlotType, index?: number) {
     this.player = player;

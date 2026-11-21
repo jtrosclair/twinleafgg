@@ -1,6 +1,6 @@
+import { playBenchPokemonBatchFromDeck } from '../../game/store/prefabs/bench-play-reactions';
 import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { Effect } from '../../game/store/effects/effect';
-import { PlayPokemonFromDeckEffect } from '../../game/store/effects/play-card-effects';
 import {
   PokemonCard,
   StoreLike,
@@ -44,12 +44,7 @@ function* useCallForFamily(
   if (cards.length > slots.length) {
     cards.length = slots.length;
   }
-  cards.forEach((card, index) => {
-    store.reduceEffect(
-      state,
-      new PlayPokemonFromDeckEffect(player, card as PokemonCard, slots[index]),
-    );
-  });
+  playBenchPokemonBatchFromDeck(store, state, player, cards, slots);
   return store.prompt(state, new ShuffleDeckPrompt(player.id), (order) => {
     player.deck.applyOrder(order);
   });

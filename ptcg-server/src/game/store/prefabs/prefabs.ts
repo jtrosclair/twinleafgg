@@ -1,3 +1,4 @@
+import { playBenchPokemonBatchFromDeck } from './bench-play-reactions';
 import { isPrizeOwnerTurn, takePrizeTo } from './prize-reactions';
 export { TAKE_SPECIFIC_PRIZES, TAKE_X_PRIZES, type TakeSpecificPrizesOptions, type TakeXPrizesOptions } from './prize-reactions';
 import { rollCoin } from './coin-flip-results';
@@ -5,7 +6,7 @@ import { withoutWillCoinChoice } from './will-coin-choice';
 import { ConfirmCardsPrompt } from '../prompts/confirm-cards-prompt';
 import { GustOpponentBenchEffect } from '../effects/attack-effects';
 import { AttachEnergyOptions, AttachEnergyPrompt, Card, CardList, CardTarget, ChooseCardsOptions, ChooseCardsPrompt, ChoosePokemonPrompt, ChooseEnergyPrompt, ConfirmPrompt, DamageMap, EnergyCard, GameError, GameLog, GameMessage, MoveDamagePrompt, Player, PlayerType, PokemonCardList, PowerType, SelectPrompt, ShowCardsPrompt, ShuffleDeckPrompt, SlotType, State, StateUtils, StoreLike, TrainerCard } from '../..';
-import { AfterAttachEnergyEffect, CopiedSupporterEffect, TrainerEffect, TrainerTargetEffect, AttachEnergyEffect, ToolEffect, CoinFlipEffect, CoinFlipSequenceEffect, PlayPokemonFromDeckEffect } from '../effects/play-card-effects';
+import { AfterAttachEnergyEffect, CopiedSupporterEffect, TrainerEffect, TrainerTargetEffect, AttachEnergyEffect, ToolEffect, CoinFlipEffect, CoinFlipSequenceEffect } from '../effects/play-card-effects';
 import { BoardEffect, CardTag, CardType, EnergyType, Format, SpecialCondition, Stage, SuperType, TrainerType } from '../card/card-types';
 import { Attack } from '../card/pokemon-types';
 import { GamePhase } from '../state/state';
@@ -108,10 +109,7 @@ export function SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store: StoreLike
     player, GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH, player.deck, filter, options,
   ), selected => {
     const cards = selected || [];
-    cards.forEach((card, index) => {
-      const playPokemonFromDeckEffect = new PlayPokemonFromDeckEffect(player, card as any, slots[index]);
-      store.reduceEffect(state, playPokemonFromDeckEffect);
-    });
+    playBenchPokemonBatchFromDeck(store, state, player, cards, slots);
     SHUFFLE_DECK(store, state, player);
   });
 }

@@ -1,8 +1,9 @@
-import { PlayPokemonFromDeckEffect } from '../effects/play-card-effects';
+import { AfterBenchBasicPokemonEffect, PlayPokemonFromDeckEffect } from '../effects/play-card-effects';
 import { GameError } from '../../game-error';
 import { GameMessage, GameLog } from '../../game-message';
 import { Effect } from '../effects/effect';
-import { SpecialCondition } from '../card/card-types';
+import { SpecialCondition, Stage } from '../card/card-types';
+import { resolveBenchPlayReactions } from '../prefabs/bench-play-reactions';
 import { State } from '../state/state';
 import { StoreLike } from '../store-like';
 
@@ -43,6 +44,12 @@ export function playPokemonFromDeckReducer(store: StoreLike, state: State, effec
         index: effect.index
       });
 
+      if (effect.pokemonCard.stage === Stage.BASIC && effect.player.bench.includes(effect.target)
+        && effect.target.getPokemonCard() === effect.pokemonCard) {
+        const completion = new AfterBenchBasicPokemonEffect(effect.player, effect.pokemonCard, effect.target);
+        if (effect.completionBatch) effect.completionBatch.push(completion);
+        else return resolveBenchPlayReactions(store, state, completion);
+      }
       return state;
     }
 
@@ -50,4 +57,4 @@ export function playPokemonFromDeckReducer(store: StoreLike, state: State, effec
   }
 
   return state;
-} 
+}

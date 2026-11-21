@@ -1,3 +1,4 @@
+import { playBenchPokemonBatchFromDeck } from '../../game/store/prefabs/bench-play-reactions';
 import {
   Player,
   StoreLike,
@@ -14,7 +15,6 @@ import {
   GameError,
 } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PlayPokemonFromDeckEffect } from '../../game/store/effects/play-card-effects';
 import {
   GET_PLAYER_BENCH_SLOTS,
   CONFIRMATION_PROMPT,
@@ -55,12 +55,7 @@ function maybeSearchBasicToBench(
       ),
       (selected) => {
         const cards = selected || [];
-        cards.forEach((card, index) => {
-          store.reduceEffect(
-            state,
-            new PlayPokemonFromDeckEffect(player, card as PokemonCard, slots[index]),
-          );
-        });
+        playBenchPokemonBatchFromDeck(store, state, player, cards, slots);
         onComplete();
       },
     );

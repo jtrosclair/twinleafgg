@@ -1,10 +1,10 @@
+import { playBenchPokemonBatchFromDeck } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
 import { StoreLike, State, GameMessage, Card, ChooseCardsPrompt, ShuffleDeckPrompt, PlayerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect } from '../../game/store/effects/game-effects';
 
-import { PlayPokemonFromDeckEffect } from '../../game/store/effects/play-card-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 function* useRotocall(next: Function, store: StoreLike, state: State,
@@ -55,14 +55,8 @@ function* useRotocall(next: Function, store: StoreLike, state: State,
     next();
   });
 
-  // Place selected cards on bench using PlayPokemonFromDeckEffect
   if (cards.length > 0) {
-    cards.forEach((card, index) => {
-      if (index < benchSlots.length) {
-        const playPokemonFromDeckEffect = new PlayPokemonFromDeckEffect(player, card as any, benchSlots[index]);
-        store.reduceEffect(state, playPokemonFromDeckEffect);
-      }
-    });
+    playBenchPokemonBatchFromDeck(store, state, player, cards.slice(0, benchSlots.length), benchSlots);
   }
 
   return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {

@@ -1,3 +1,4 @@
+import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { StateUtils } from '../../game/store/state-utils';
@@ -55,10 +56,7 @@ function* useStadium(next: Function, store: StoreLike, state: State, effect: Use
       }
 
       else {
-        cards.forEach((card, index) => {
-          player.deck.moveCardTo(card, slots[index]);
-          slots[index].pokemonPlayedTurn = state.turn;
-        });
+        benchPokemonFromZone(store, state, player, player.deck, cards, slots);
       }
       return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);

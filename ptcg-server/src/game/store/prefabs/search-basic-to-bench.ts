@@ -2,7 +2,7 @@ import { GameError, GameMessage, State, StoreLike } from '../..';
 import { PokemonCard } from '../card/pokemon-card';
 import { Stage, SuperType } from '../card/card-types';
 import { AttackEffect } from '../effects/game-effects';
-import { PlayPokemonFromDeckEffect } from '../effects/play-card-effects';
+import { playBenchPokemonBatchFromDeck } from './bench-play-reactions';
 import { ChooseCardsPrompt } from '../prompts/choose-cards-prompt';
 import { SHUFFLE_DECK } from '../prefabs/prefabs';
 
@@ -18,11 +18,7 @@ export function searchBasicsToBench(store: StoreLike, state: State, effect: Atta
     { superType: SuperType.POKEMON, stage: Stage.BASIC }, { min: 0, max: limit, allowCancel: false, blocked }), chosen => {
     if (!chosen || chosen.length > limit || chosen.length > available() || new Set(chosen).size !== chosen.length ||
       chosen.some(card => !(card instanceof PokemonCard) || card.stage !== Stage.BASIC || !player.deck.cards.includes(card) || (names && !names.includes(card.name)))) throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
-    for (const card of chosen) {
-      const slot = player.bench.find(candidate => candidate.cards.length === 0);
-      if (!slot) throw new GameError(GameMessage.INVALID_TARGET);
-      store.reduceEffect(state, new PlayPokemonFromDeckEffect(player, card as PokemonCard, slot));
-    }
+    playBenchPokemonBatchFromDeck(store, state, player, chosen, player.bench.filter(slot => slot.cards.length === 0));
     SHUFFLE_DECK(store, state, player);
   });
 }

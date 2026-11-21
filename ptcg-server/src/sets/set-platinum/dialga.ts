@@ -1,10 +1,11 @@
 import { Effect } from '../../game/store/effects/effect';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, EnergyType } from '../../game/store/card/card-types';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { AfterPlayBasicFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { PowerType, StoreLike, State, GameMessage, CardList, ChooseCardsPrompt, ShowCardsPrompt, StateUtils, EnergyCard, GameLog, OrderCardsPrompt } from '../../game';
-import { ABILITY_USED, CONFIRMATION_PROMPT, DRAW_CARDS_UNTIL_CARDS_IN_HAND, IS_POKEPOWER_BLOCKED, MOVE_CARD_TO, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ABILITY_USED, CONFIRMATION_PROMPT, DRAW_CARDS_UNTIL_CARDS_IN_HAND, MOVE_CARD_TO, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { PowerEffect } from '../../game/store/effects/game-effects';
+import { queueBenchPlayAbility } from '../../game/store/prefabs/bench-play-reactions';
 
 export class Dialga extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -39,7 +40,7 @@ export class Dialga extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterPlayBasicFromHandEffect && effect.pokemonCard === this) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
@@ -48,60 +49,60 @@ export class Dialga extends PokemonCard {
         return state;
       }
 
-      if (IS_POKEPOWER_BLOCKED(store, state, player, this)) {
-        return state;
-      }
+      // Miasma Valley places its counters before Reverse Time can be declared.
+      const timing = StateUtils.getStadiumCard(state)?.name === 'Miasma Valley' ? 'after-stadium' : undefined;
+      queueBenchPlayAbility(store, state, effect, () => {
+        CONFIRMATION_PROMPT(store, state, player, wantToUse => {
+          if (wantToUse) {
+            const powerEffect = new PowerEffect(player, this.powers[0], this);
+            store.reduceEffect(state, powerEffect);
 
-      CONFIRMATION_PROMPT(store, state, player, wantToUse => {
-        if (wantToUse) {
-          const powerEffect = new PowerEffect(player, this.powers[0], this);
-          store.reduceEffect(state, powerEffect);
-
-          const blocked: number[] = [];
-          player.discard.cards.forEach((c, index) => {
-            const isPokemon = c instanceof PokemonCard && c.stage !== Stage.LV_X;
-            const isBasicEnergy = c instanceof EnergyCard && c.energyType === EnergyType.BASIC;
-            if (!isPokemon && !isBasicEnergy) {
-              blocked.push(index);
-            }
-          });
-
-          const deckTop = new CardList();
-          return store.prompt(state, new ChooseCardsPrompt(
-            player,
-            GameMessage.CHOOSE_CARD_TO_DECK,
-            player.discard,
-            {},
-            { min: 1, max: 3, allowCancel: false, blocked }
-          ), selected => {
-            if (selected.length === 0) return;
-
-            selected.forEach(card => {
-              store.log(state, GameLog.LOG_PLAYER_RETURNS_TO_DECK_FROM_DISCARD, { name: player.name, card: card.name });
-              MOVE_CARD_TO(state, card, deckTop);
+            const blocked: number[] = [];
+            player.discard.cards.forEach((c, index) => {
+              const isPokemon = c instanceof PokemonCard && c.stage !== Stage.LV_X;
+              const isBasicEnergy = c instanceof EnergyCard && c.energyType === EnergyType.BASIC;
+              if (!isPokemon && !isBasicEnergy) {
+                blocked.push(index);
+              }
             });
 
-            store.prompt(state, new OrderCardsPrompt(
-              player.id,
-              GameMessage.CHOOSE_CARDS_ORDER,
-              deckTop,
-              { allowCancel: false }
-            ), order => {
-              if (order === null) return state;
+            const deckTop = new CardList();
+            return store.prompt(state, new ChooseCardsPrompt(
+              player,
+              GameMessage.CHOOSE_CARD_TO_DECK,
+              player.discard,
+              {},
+              { min: 0, max: 3, allowCancel: false, blocked }
+            ), selected => {
+              if (selected.length === 0) return;
 
-              deckTop.applyOrder(order);
-              deckTop.moveToTopOfDestination(player.deck);
+              selected.forEach(card => {
+                store.log(state, GameLog.LOG_PLAYER_RETURNS_TO_DECK_FROM_DISCARD, { name: player.name, card: card.name });
+                MOVE_CARD_TO(state, card, deckTop);
+              });
 
-              store.prompt(state, new ShowCardsPrompt(
-                opponent.id,
-                GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
-                selected
-              ), () => { });
+              store.prompt(state, new OrderCardsPrompt(
+                player.id,
+                GameMessage.CHOOSE_CARDS_ORDER,
+                deckTop,
+                { allowCancel: false }
+              ), order => {
+                if (order === null) return state;
+
+                deckTop.applyOrder(order);
+                deckTop.moveToTopOfDestination(player.deck);
+
+                store.prompt(state, new ShowCardsPrompt(
+                  opponent.id,
+                  GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
+                  selected
+                ), () => { });
+              });
+              ABILITY_USED(player, this);
             });
-            ABILITY_USED(player, this);
-          });
-        }
-      }, GameMessage.WANT_TO_USE_ABILITY);
+          }
+        }, GameMessage.WANT_TO_USE_ABILITY);
+      }, undefined, timing);
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {

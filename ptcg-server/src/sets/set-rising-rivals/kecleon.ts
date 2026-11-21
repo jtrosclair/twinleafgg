@@ -5,6 +5,7 @@ import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { PowerType, StateUtils } from '../../game';
 import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
+import { AfterPlayBasicFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { IS_POKEBODY_BLOCKED, MULTIPLE_COIN_FLIPS_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Kecleon extends PokemonCard {
@@ -35,6 +36,23 @@ export class Kecleon extends PokemonCard {
   public cardImage: string = 'assets/cardback.png';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+
+    if (effect instanceof AfterPlayBasicFromHandEffect && effect.pokemonCard === this) {
+      const stadium = StateUtils.getStadiumCard(state);
+      if (stadium?.name === 'Miasma Valley') {
+        // The official ruling lets the owner apply Colorful Body before Miasma Valley.
+        effect.reactions.push({
+          source: this,
+          label: this.powers[0].name,
+          canResolve: () => effect.reactions.some(reaction => reaction.source === stadium && reaction.canResolve())
+            && !IS_POKEBODY_BLOCKED(store, state, effect.player, this),
+          resolve: () => {
+            const pending = effect.reactions.findIndex(reaction => reaction.source === stadium);
+            if (pending !== -1) effect.reactions.splice(pending, 1);
+          },
+        });
+      }
+    }
 
     if (effect instanceof CheckPokemonTypeEffect
       && effect.target.getPokemonCard() === this

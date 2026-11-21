@@ -1,3 +1,4 @@
+import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType, BoardEffect } from '../../game/store/card/card-types';
 import {
@@ -89,12 +90,7 @@ export class Miraidonex extends PokemonCard {
         cards = selectedCards || [];
 
 
-        cards.forEach((card, index) => {
-          player.deck.moveCardTo(card, slots[index]);
-          slots[index].pokemonPlayedTurn = state.turn;
-
-          return state;
-        });
+        benchPokemonFromZone(store, state, player, player.deck, cards, slots);
 
         return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
           player.deck.applyOrder(order);

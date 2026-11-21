@@ -1,3 +1,4 @@
+import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike, State, ChooseCardsPrompt, GameMessage, GameError, Card, PokemonCardList, ShuffleDeckPrompt } from '../../game';
@@ -62,10 +63,7 @@ Search your deck for up to 2 Basic Pokémon and put them onto your Bench. Then, 
           ), selectedCards => {
             cards = selectedCards || [];
         
-            cards.forEach((card, index) => {
-              player.deck.moveCardTo(card, slots[index]);
-              slots[index].pokemonPlayedTurn = state.turn;
-            });
+            benchPokemonFromZone(store, state, player, player.deck, cards, slots);
 
             player.supporter.moveCardTo(this, player.discard);
         

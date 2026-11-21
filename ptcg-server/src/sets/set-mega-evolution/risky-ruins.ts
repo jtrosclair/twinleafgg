@@ -1,8 +1,10 @@
-import { State, StateUtils, StoreLike } from '../../game';
-import { CardType, Stage, TrainerType } from '../../game/store/card/card-types';
+import { GamePhase, State, StoreLike } from '../../game';
+import { CardType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
-import { PlayPokemonEffect, PlayPokemonFromDeckEffect } from '../../game/store/effects/play-card-effects';
+import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
+import { AfterBenchBasicPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { queueBenchStadiumCounters } from '../../game/store/prefabs/bench-play-reactions';
 
 export class DangerousRuins extends TrainerCard {
   public regulationMark = 'I';
@@ -12,19 +14,17 @@ export class DangerousRuins extends TrainerCard {
   public set = 'MEG';
   public name = 'Risky Ruins';
   public fullName = 'Risky Ruins MEG';
-  public text = 'Whenever either player puts a non-[D] Basic Pokémon onto their Bench, put 2 damage counters on that Pokémon.';
+  public text = 'Whenever either player puts a non-[D] Basic Pokémon onto their Bench during their turn, put 2 damage counters on that Pokémon.';
 
   reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if ((effect instanceof PlayPokemonEffect || effect instanceof PlayPokemonFromDeckEffect) && StateUtils.getStadiumCard(state) === this) {
-      if (effect.target.cards.length > 0 || effect.pokemonCard.cardType === CardType.DARK) {
-        return state;
-      }
-
-      if (effect.pokemonCard.stage === Stage.BASIC) {
-        effect.target.damage += 20;
-      }
-      return state;
+    if (effect instanceof AfterBenchBasicPokemonEffect && state.players[state.activePlayer] === effect.player
+      && [GamePhase.PLAYER_TURN, GamePhase.ATTACK, GamePhase.AFTER_ATTACK, GamePhase.CHOOSE_PRIZES].includes(state.phase)) {
+      queueBenchStadiumCounters(store, state, effect, this, () => {
+        const types = new CheckPokemonTypeEffect(effect.target);
+        store.reduceEffect(state, types);
+        return !types.cardTypes.includes(CardType.DARK);
+      });
     }
 
     return state;

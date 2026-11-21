@@ -1,3 +1,4 @@
+import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
 import { Card, ChooseCardsPrompt, GameMessage, PokemonCardList, ShuffleDeckPrompt, State, StoreLike } from '../../game';
 import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
@@ -31,10 +32,7 @@ function* useCallForFamily(next: Function, store: StoreLike, state: State,
     cards.length = slots.length;
   }
 
-  cards.forEach((card, index) => {
-    player.deck.moveCardTo(card, slots[index]);
-    slots[index].pokemonPlayedTurn = state.turn;
-  });
+  benchPokemonFromZone(store, state, player, player.deck, cards, slots);
 
   return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
     player.deck.applyOrder(order);

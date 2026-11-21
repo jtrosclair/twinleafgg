@@ -1,3 +1,4 @@
+import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardTag, CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { StoreLike, State, GameMessage, ChooseCardsPrompt, PowerType, GameLog, StateUtils } from '../../game';
@@ -69,10 +70,7 @@ export class TeamRocketsKoffing extends PokemonCard {
           ), selectedCards => {
             const cards = selectedCards || [];
 
-            cards.forEach((card, index) => {
-              player.deck.moveCardTo(card, openSlots[index]);
-              openSlots[index].pokemonPlayedTurn = state.turn;
-            });
+            benchPokemonFromZone(store, state, player, player.deck, cards, openSlots);
 
             SHUFFLE_DECK(store, state, player);
           });

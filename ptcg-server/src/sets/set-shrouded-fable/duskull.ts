@@ -1,3 +1,4 @@
+import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
 import { StoreLike, State, PokemonCardList, Card, ChooseCardsPrompt, GameMessage, GameError } from '../../game';
@@ -34,10 +35,7 @@ function* useKingsOrder(next: Function, store: StoreLike, state: State,
     cards.length = slots.length;
   }
 
-  cards.forEach((card, index) => {
-    player.discard.moveCardTo(card, slots[index]);
-    slots[index].pokemonPlayedTurn = state.turn;
-  });
+  benchPokemonFromZone(store, state, player, player.discard, cards, slots);
 }
 
 export class Duskull extends PokemonCard {
