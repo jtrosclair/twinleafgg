@@ -5,7 +5,7 @@ import { PlusPower } from '../set-base-set/pluspower';
 import { Potion } from '../set-base-set/potion';
 import { Switch } from '../set-base-set/switch';
 import { DarknessEnergySpecial } from '../set-undaunted/darkness-energy-special';
-import { MetalEnergyN1 } from '../set-neo-genesis/other-prints';
+import { MetalEnergySpecial } from '../set-undaunted/metal-energy-special';
 import { SuperRod } from '../set-paldea-evolved/super-rod';
 
 export class NightMaintenanceSW extends SuperRod {
@@ -45,7 +45,7 @@ export class DarknessEnergySpecialSW extends DarknessEnergySpecial {
   public set = 'SW';
 }
 
-export class MetalEnergyN1SW extends MetalEnergyN1 {
+export class MetalEnergyN1SW extends MetalEnergySpecial {
   public setNumber = '130';
   public fullName: string = 'Metal Energy SW';
   public set = 'SW';

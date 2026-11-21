@@ -56,6 +56,7 @@ export class ApplyWeaknessEffect extends AbstractAttackEffect implements Effect 
   public damage: number;
   public ignoreResistance = false;
   public ignoreWeakness = false;
+  public attackDamageReductionBeforeWeakness = 0;
 
   constructor(base: AttackEffect, damage: number) {
     super(base);
@@ -84,6 +85,7 @@ export class PutDamageEffect extends AbstractAttackEffect implements Effect {
   public surviveOnTenHPReason: undefined | string = undefined;
   public weaknessApplied: boolean = false;
   public damageBonusAfterWeakness = 0;
+  public attackDamageReductionBeforeWeakness = 0;
 
   private nonstackingDamageReducers: string[] = [];
   private postWeaknessReductions: { amount: number; source?: string }[] = [];

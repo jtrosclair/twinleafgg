@@ -83,7 +83,8 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
 
     const opponent = StateUtils.getOpponent(state, effect.player);
     if (target !== opponent.active && !effect.weaknessApplied) {
-      effect.damage = Math.max(0, effect.damage - effect.source.attackDamageReductionNextTurn);
+      effect.damage = Math.max(0,
+        effect.damage - effect.source.attackDamageReductionNextTurn - effect.attackDamageReductionBeforeWeakness);
     }
 
     if (effect.attackEffect && target === opponent.active && !effect.weaknessApplied) {

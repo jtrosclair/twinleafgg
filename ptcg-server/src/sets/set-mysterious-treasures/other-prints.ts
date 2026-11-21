@@ -1,7 +1,7 @@
 import { DuskBall } from '../set-surging-sparks/dusk-ball';
 import { QuickBall } from '../set-majestic-dawn/quick-ball';
 import { DarknessEnergySpecial } from '../set-undaunted/darkness-energy-special';
-import { MetalEnergyN1 } from '../set-neo-genesis/other-prints';
+import { MetalEnergySpecial } from '../set-undaunted/metal-energy-special';
 import { MultiEnergy } from '../set-ex-sandstorm/multi-energy';
 import { SuperRod } from '../set-noble-victories/super-rod';
 
@@ -38,7 +38,7 @@ export class DarknessEnergySpecialMT extends DarknessEnergySpecial {
   public set = 'MT';
 }
 
-export class MetalEnergyN1MT extends MetalEnergyN1 {
+export class MetalEnergyN1MT extends MetalEnergySpecial {
   public setNumber = '120';
   public fullName: string = 'Metal Energy MT';
   public set = 'MT';

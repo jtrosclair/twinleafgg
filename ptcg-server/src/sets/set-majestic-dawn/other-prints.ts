@@ -5,7 +5,7 @@ import { PokeBall } from '../set-jungle/pokeball';
 import { SuperScoopUp } from '../set-diamond-and-pearl/super-scoop-up';
 import { EnergySearch } from '../set-fossil/energy-search';
 import { DarknessEnergySpecial } from '../set-undaunted/darkness-energy-special';
-import { MetalEnergyN1 } from '../set-neo-genesis/other-prints';
+import { MetalEnergySpecial } from '../set-undaunted/metal-energy-special';
 import { EscapeRope } from '../set-plasma-storm/escape-rope';
 
 export class WarpPointMD extends EscapeRope {
@@ -45,7 +45,7 @@ export class DarknessEnergySpecialMD extends DarknessEnergySpecial {
   public set = 'MD';
 }
 
-export class MetalEnergyN1MD extends MetalEnergyN1 {
+export class MetalEnergyN1MD extends MetalEnergySpecial {
   public setNumber = '95';
   public fullName: string = 'Metal Energy MD';
   public set = 'MD';

@@ -3,7 +3,7 @@ import { EnergyCard } from '../../game/store/card/energy-card';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { PutDamageEffect } from '../../game/store/effects/attack-effects';
+import { ApplyWeaknessEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
 
 export class MetalEnergySpecial extends EnergyCard {
@@ -17,19 +17,19 @@ export class MetalEnergySpecial extends EnergyCard {
   public text = 'Damage done to the Pokémon Metal Energy is attached to is reduced by 10 (after applying Weakness and Resistance). If the Pokémon Metal Energy is attached to isn\'t [M], whenever it damages a Pokémon, reduce that damage by 10 (before applying Weakness and Resistance). Metal Energy provides [M] Energy. (Doesn\'t count as a basic Energy card.)';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // reduce damage if this mon isn't metal
-    if (effect instanceof PutDamageEffect) {
-      if (effect.source.cards.includes(this)) {
-        const checkPokemonType = new CheckPokemonTypeEffect(effect.source);
-        store.reduceEffect(state, checkPokemonType);
-        if (!checkPokemonType.cardTypes.includes(CardType.METAL)) {
-          effect.damage -= 10;
-        }
+    // Direct damage to the Bench can skip ApplyWeaknessEffect entirely.
+    const appliesOutgoingPenalty = effect instanceof ApplyWeaknessEffect
+      || (effect instanceof PutDamageEffect && !effect.weaknessApplied && effect.target !== effect.opponent.active);
+    if (appliesOutgoingPenalty && effect.source.cards.includes(this)) {
+      const checkPokemonType = new CheckPokemonTypeEffect(effect.source);
+      store.reduceEffect(state, checkPokemonType);
+      if (!checkPokemonType.cardTypes.includes(CardType.METAL)) {
+        effect.attackDamageReductionBeforeWeakness += 10;
       }
     }
 
     if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)) {
-      effect.damage -= 10;
+      effect.reduceDamageAfterWeakness(10);
     }
 
     return state;

@@ -2869,3 +2869,54 @@ Special Metal Energy UD currently reduces Shred damage. A real Charging
 Trumpet evolution also leaves a selected Energy in the deck while recording
 it as attached. Direct legacy attachment callers need the same source review
 as the shared prompts.
+
+## Gameplay re-audit, batch 31
+
+Neo Genesis and Aquapolis Special Metal Energy reduce the non-Metal
+holder's outgoing damage before Weakness and Resistance, including
+attack damage to a Benched Pokémon. Their defensive reduction applies
+after Weakness and Resistance. The later printings reduce attack damage
+only when attached to a Metal Pokémon. Each attached copy stacks and
+defensive reductions are ignored by Shred. The four Diamond & Pearl and
+Platinum reprints now use the same rule as Undaunted.
+[Neo Genesis print](https://images.pokemontcg.io/neo1/19_hires.png)
+[Aquapolis print](https://images.pokemontcg.io/ecard2/143_hires.png)
+[EX Delta Species print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/ex11/107)
+[Secret Wonders Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/DiamondPearl_SecretWonders.pdf)
+[Special Metal Energy damage rulings](https://www.pokemon-card.com/rules/faq/search.php?page=2&regulation=all&sc_group_id=219)
+
+Charging Trumpet runs after a completed evolution from hand during the
+player's turn. Its chosen Basic Energy leaves the viewed top three and
+the remainder is shuffled. Bea puts the five cards in the discard pile
+before offering their Energy and checks effective type on the Bench.
+Melmetal's Energy Link moves the chosen Energy from the discard pile
+after damage. Applying upstream `c00300bac` alone would leave Charging
+Trumpet recording a ghost attachment because it still calls
+`AttachEnergyEffect` without the detached source.
+[Trumbeak print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/swsh4/144)
+[Bea official card preview](https://www.pokemon-card.com/info/2020/20200821_002539.html)
+[Melmetal print](https://www.pokemon-card.com/card-search/details.php/card/40127/regu/all)
+[Upstream movement refactor](https://github.com/the-epsd/twinleafgg/commit/c00300bac7c729d4add18f596443d6ed32ca7e8a)
+
+Lugia LEGEND exposes both halves' tags through the fork's public tag
+property. Assembly from either half requires its complementary printing
+and places the top half above the bottom half. Ocean Grow shows the five
+viewed cards, attaches each Basic or Special Energy, and discards the
+remaining cards. Two copies of the same half cannot form a Pokémon.
+[HeartGold & SoulSilver Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/heartgoldsoulsilver.pdf)
+
+All 25 focused cases passed. Seventeen failed before the changes. The
+engine suite passed 7,677 tests in 276 specs, and the checkout's pending
+work passed 608 combined checks. All 559 supported saved states and
+3,633 sampled opening actions matched exactly. All seven recorded
+solutions reached a win. The 2.46 MiB ZIP passed attestation and the
+mobile package budget. Ten board interaction checks passed. The built
+client also verified the Neo Genesis and Secret Wonders damage difference
+and physically moved both selected Charging Trumpet cards.
+
+Real actions reproduced nine more ghost attachments in Emolga-EX XY,
+Solgaleo-GX SUM and UPR, Raichu UNB, Solgaleo Prism Star UPR, Steelix GL RR,
+Trapinch RR, Victini VMAX BST, and Blissey MT. Ho-Oh LEGEND and Raikou &
+Suicune LEGEND also failed assembly with complementary halves. Audit
+these paths and the fork's other inherited protected-tag definitions
+against upstream `21842b2e0`.

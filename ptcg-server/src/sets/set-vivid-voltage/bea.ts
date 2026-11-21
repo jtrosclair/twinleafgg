@@ -8,7 +8,9 @@ import { CardTarget, PlayerType, SlotType } from '../../game/store/actions/play-
 import { GameMessage, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { AttachEnergyEffect, TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
 import { EnergyCard } from '../../game/store/card/energy-card';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 import { AttachEnergyPrompt } from '../../game/store/prompts/attach-energy-prompt';
 import { CardList } from '../../game/store/state/card-list';
 import { StateUtils } from '../../game/store/state-utils';
@@ -31,22 +33,10 @@ export class Bea extends TrainerCard {
       effect.preventDefault = true;
       player.hand.moveCardTo(this, player.supporter);
 
-      // Discard top 5 cards from deck into a temp list to find energy cards
-      const discarded = new CardList();
       const count = Math.min(5, player.deck.cards.length);
-
-      for (let i = 0; i < count; i++) {
-        if (player.deck.cards.length > 0) {
-          player.deck.moveCardTo(player.deck.cards[0], discarded);
-        }
-      }
-
-      // Find energy cards among the discarded
-      const energyCards = discarded.cards.filter(c => c instanceof EnergyCard) as EnergyCard[];
-      const nonEnergyCards = discarded.cards.filter(c => !(c instanceof EnergyCard));
-
-      // Discard non-energy cards
-      nonEnergyCards.forEach(c => discarded.moveCardTo(c, player.discard));
+      const topCards = player.deck.cards.slice(0, count);
+      MOVE_CARDS(store, state, player.deck, player.discard, { cards: topCards, sourceCard: this });
+      const energyCards = topCards.filter(card => card instanceof EnergyCard && player.discard.cards.includes(card));
 
       if (energyCards.length === 0) {
         // No energy found, just discard trainer
@@ -58,18 +48,11 @@ export class Bea extends TrainerCard {
       const blockedTo: CardTarget[] = [];
       let hasFightingBenched = false;
 
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        // Only allow benched Pokemon - not the active
-        if (player.active === cardList) {
-          blockedTo.push(target);
-          return;
-        }
-        if (cardList.cards.length === 0) {
-          blockedTo.push(target);
-          return;
-        }
-        const pokemon = cardList.getPokemonCard();
-        if (!pokemon || pokemon.cardType !== CardType.FIGHTING) {
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, _card, target) => {
+        if (player.active === cardList) return;
+        const type = new CheckPokemonTypeEffect(cardList);
+        store.reduceEffect(state, type);
+        if (!type.cardTypes.includes(CardType.FIGHTING)) {
           blockedTo.push(target);
           return;
         }
@@ -77,32 +60,27 @@ export class Bea extends TrainerCard {
       });
 
       if (!hasFightingBenched) {
-        // No valid targets - discard the energy cards too
-        energyCards.forEach(c => discarded.moveCardTo(c, player.discard));
         player.supporter.moveCardTo(this, player.discard);
         return state;
       }
 
+      const choices = new CardList();
+      choices.cards = energyCards;
       return store.prompt(state, new AttachEnergyPrompt(
         player.id,
         GameMessage.ATTACH_ENERGY_CARDS,
-        discarded,
+        choices,
         PlayerType.BOTTOM_PLAYER,
         [SlotType.BENCH],
         { superType: SuperType.ENERGY },
         { allowCancel: false, min: 0, max: energyCards.length, blockedTo }
       ), transfers => {
-        transfers = transfers || [];
-
-        for (const transfer of transfers) {
+        for (const transfer of transfers || []) {
           const target = StateUtils.getTarget(state, player, transfer.to);
           const energyCard = transfer.card as EnergyCard;
-          const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
+          const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target, 'discard');
           store.reduceEffect(state, attachEnergyEffect);
         }
-
-        // Discard remaining energy cards that weren't attached
-        discarded.cards.slice().forEach(c => discarded.moveCardTo(c, player.discard));
 
         player.supporter.moveCardTo(this, player.discard);
       });

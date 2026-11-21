@@ -9,6 +9,8 @@ export function getDualLegendHalvesInHand(player: Player, source: PokemonCard): 
   const partner = player.hand.cards.find(card => card !== source
     && card instanceof PokemonCard
     && card.name === source.name
+    && card.set === source.set
+    && card.setNumber !== source.setNumber
     && card.tags.includes(CardTag.DUAL_LEGEND));
   return partner instanceof PokemonCard ? [source, partner] : [];
 }

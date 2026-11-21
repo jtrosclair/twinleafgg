@@ -1,5 +1,5 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { CardTag, CardType, Stage, SuperType } from '../../game/store/card/card-types';
+import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
 import { Card, CardList, ChooseEnergyPrompt, EnergyCard, GameError, GameMessage, PokemonCardList, PowerType, State, StoreLike } from '../../game';
 import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
@@ -10,7 +10,7 @@ import { CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, MOVE_CARDS, SHOW_CARDS_TO_PL
 
 export class LugiaLEGEND extends PokemonCard {
   public stage: Stage = Stage.LEGEND;
-  protected _tags = [CardTag.LEGEND, CardTag.DUAL_LEGEND];
+  public tags = [CardTag.LEGEND, CardTag.DUAL_LEGEND];
   public hp: number = 130;
   public cardType: CardType = W;
   public weakness = [{ type: L }];
@@ -57,6 +57,8 @@ export class LugiaLEGEND extends PokemonCard {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
+      // The bottom half goes down first even when its action started the assembly.
+      halves.sort((left, right) => Number(right.setNumber) - Number(left.setNumber));
       MOVE_CARDS(store, state, player.hand, slots[0], { cards: halves, sourceCard: this });
       slots[0].pokemonPlayedTurn = state.turn;
 
@@ -74,16 +76,12 @@ export class LugiaLEGEND extends PokemonCard {
           count: Math.min(5, player.deck.cards.length),
           sourceCard: this,
         });
-        SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards, player);
+        SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards.slice(), player);
 
-        const energies = deckTop.cards.filter(c => c instanceof EnergyCard) as EnergyCard[];
-        const others = deckTop.cards.filter(c => c.superType !== SuperType.ENERGY);
-        energies.forEach(energy => {
-          store.reduceEffect(state, new AttachEnergyEffect(player, energy, slots[0]));
-        });
-        if (others.length > 0) {
-          MOVE_CARDS(store, state, deckTop, player.discard, { cards: others, sourceCard: this });
+        for (const energy of deckTop.cards.filter(card => card instanceof EnergyCard)) {
+          store.reduceEffect(state, new AttachEnergyEffect(player, energy as EnergyCard, slots[0], 'deck', deckTop));
         }
+        MOVE_CARDS(store, state, deckTop, player.discard, { sourceCard: this });
       });
     }
 

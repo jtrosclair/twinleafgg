@@ -6,7 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { Card, ChooseCardsPrompt, GameMessage, StoreLike, State, SuperType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
 import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
 import { EnergyCard } from '../../game';
 
@@ -44,8 +44,9 @@ export class Melmetal extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Attack 1: Energy Link
     // Ref: set-unbroken-bonds/aggron.ts (AttachEnergyEffect from discard to this Pokemon)
-    if (WAS_ATTACK_USED(effect, 0, this)) {
+    if (AFTER_ATTACK(effect, 0, this)) {
       const player = effect.player;
+      const target = player.active;
 
       if (player.discard.cards.some(c => c instanceof EnergyCard)) {
         store.prompt(state, new ChooseCardsPrompt(
@@ -58,7 +59,7 @@ export class Melmetal extends PokemonCard {
           const cards: Card[] = selected || [];
           if (cards.length > 0) {
             const energyCard = cards[0] as EnergyCard;
-            const attachEffect = new AttachEnergyEffect(player, energyCard, player.active);
+            const attachEffect = new AttachEnergyEffect(player, energyCard, target, 'discard');
             store.reduceEffect(state, attachEffect);
           }
         });

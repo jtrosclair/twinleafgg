@@ -15,17 +15,14 @@ export class MetalEnergySpecial extends EnergyCard {
   public fullName = 'Metal Energy UD';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '80';
-  public text = 'Damage done by attacks to the Pokémon that Metal Energy is attached to is reduced by 10 (after applying Weakness and Resistance). Ignore this effect if the Pokémon that Metal Energy is attached to isn\'t[M]. Metal Energy provides[M] Energy. (Doesn\'t count as a basic Energy card.)';
+  public text = 'Damage done by attacks to the Pokémon that Metal Energy is attached to is reduced by 10 (after applying Weakness and Resistance). Ignore this effect if the Pokémon that Metal Energy is attached to isn\'t [M]. Metal Energy provides [M] Energy. (Doesn\'t count as a basic Energy card.)';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof PutDamageEffect) {
-
-      if (effect.target.cards.includes(this)) {
-        const checkPokemonType = new CheckPokemonTypeEffect(effect.target);
-        store.reduceEffect(state, checkPokemonType);
-        if (checkPokemonType.cardTypes.includes(CardType.METAL)) {
-          effect.damage -= 10;
-        }
+    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)) {
+      const checkPokemonType = new CheckPokemonTypeEffect(effect.target);
+      store.reduceEffect(state, checkPokemonType);
+      if (checkPokemonType.cardTypes.includes(CardType.METAL)) {
+        effect.reduceDamageAfterWeakness(10);
       }
     }
 

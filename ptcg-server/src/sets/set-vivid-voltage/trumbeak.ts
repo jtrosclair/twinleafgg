@@ -7,8 +7,9 @@ import { Stage, CardType, EnergyType, SuperType } from '../../game/store/card/ca
 import { PowerType, StoreLike, State, StateUtils, GameMessage, ConfirmPrompt, CardList, AttachEnergyPrompt, PlayerType, SlotType } from '../../game';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { Effect } from '../../game/store/effects/effect';
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
 import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { IS_ABILITY_BLOCKED, JUST_EVOLVED, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
+import { IS_ABILITY_BLOCKED, MOVE_CARDS, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
 
 export class Trumbeak extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -44,9 +45,9 @@ export class Trumbeak extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Charging Trumpet (on-evolve - look top 3, attach any basic Energy to any Pokemon)
-    // Ref: set-unbroken-bonds/sharpedo.ts (JUST_EVOLVED + ConfirmPrompt + CardList top deck + find Energy),
-    //      set-legends-awakened/regigigas.ts (AttachEnergyPrompt to attach from temp list)
-    if (JUST_EVOLVED(effect, this)) {
+    // Ref: set-vivid-voltage/alcremie.ts (completed evolution from hand).
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this && effect.playedFromHand
+      && state.players[state.activePlayer] === effect.player) {
       const player = effect.player;
 
       if (IS_ABILITY_BLOCKED(store, state, player, this)) {
@@ -67,7 +68,7 @@ export class Trumbeak extends PokemonCard {
 
         const topCards = new CardList();
         const count = Math.min(3, player.deck.cards.length);
-        player.deck.moveTo(topCards, count);
+        MOVE_CARDS(store, state, player.deck, topCards, { count, sourceCard: this });
 
         // Find basic Energy cards in top 3
         const basicEnergyCards = topCards.cards.filter(c =>
@@ -76,7 +77,7 @@ export class Trumbeak extends PokemonCard {
 
         if (basicEnergyCards.length === 0) {
           // No energy found, shuffle back
-          topCards.moveTo(player.deck);
+          MOVE_CARDS(store, state, topCards, player.deck, { sourceCard: this });
           SHUFFLE_DECK(store, state, player);
           return;
         }
@@ -95,12 +96,12 @@ export class Trumbeak extends PokemonCard {
           for (const transfer of transfers) {
             const target = StateUtils.getTarget(state, player, transfer.to);
             const energyCard = transfer.card as EnergyCard;
-            const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
+            const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target, 'deck', topCards);
             store.reduceEffect(state, attachEnergyEffect);
           }
 
           // Shuffle remaining cards back into deck
-          topCards.moveTo(player.deck);
+          MOVE_CARDS(store, state, topCards, player.deck, { sourceCard: this });
           SHUFFLE_DECK(store, state, player);
         });
       });

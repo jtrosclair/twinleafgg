@@ -1,6 +1,6 @@
 import { BebesSearch } from '../set-mysterious-treasures/bebes-search';
 import { DarknessEnergySpecial } from '../set-undaunted/darkness-energy-special';
-import { MetalEnergyN1 } from '../set-neo-genesis/other-prints';
+import { MetalEnergySpecial } from '../set-undaunted/metal-energy-special';
 import { Pikachu } from '../set-base-set/pikachu';
 export class BebesSearchRR extends BebesSearch {
   public setNumber = '89';
@@ -14,7 +14,7 @@ export class DarknessEnergySpecialRR extends DarknessEnergySpecial {
   public set = 'RR';
 }
 
-export class MetalEnergyN1RR extends MetalEnergyN1 {
+export class MetalEnergyN1RR extends MetalEnergySpecial {
   public setNumber = '100';
   public fullName: string = 'Metal Energy RR';
   public set = 'RR';
