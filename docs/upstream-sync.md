@@ -3520,3 +3520,56 @@ permission checks that intentionally run before play. Review each against
 its print before moving it. Po Town, Galactic HQ and Wyndon Stadium are
 first in the next comparison because their printed hand-only effects
 currently listen to deck evolutions as well.
+
+## Gameplay re-audit, batch 46
+
+Compared the 29 direct evolution callers with their card prints. Twenty
+card paths required changes. Nine existing permission checks continue to
+run before the move. Dialga PL 6 now checks Time Aura in that same permission
+phase and blocks only the opponent's hand evolution on their Active Pokémon.
+That prevents a rejected evolution from healing the original Pokémon or
+moving any cards.
+
+Po Town, Galactic HQ and Wyndon Stadium wait for a successful hand evolution.
+New Moon protects the affected player's Pokémon from those Stadium effects.
+Wyndon checks that the previous Pokémon was a Pokémon V and the new Pokémon
+is a VMAX. Regenerative Energy checks the previous Pokémon V after the new
+card enters play. The accepted evolution event exposes the actual previous
+card to these effects and to Resonant Evolution and Sudden Scorching.
+[Po Town BUS 121](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/BUS/BUS_121_R_EN.png)
+[Galactic HQ and Dialga PL card text](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Platinum.pdf)
+[Wyndon Stadium VIV 161](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh4/161)
+[Regenerative Energy SIT 168](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/SIT/SIT_168_R_EN.png)
+
+Gloom, Vileplume, Emboar, Hypno, Haunter and Herdier now use completed
+hand evolutions. Deck and discard evolutions leave those Abilities
+inactive. The optional top-of-deck Abilities leave the deck alone when
+declined. Hypno offers the sleep effect, and Herdier can take one Item.
+Resonant Evolution observes an actual Eevee previously in play and uses
+the same accepted-evolution event for its own follow-up from the deck.
+Wake-up Punch checks whether the previous Pokémon was a sleeping Slakoth.
+[Hypno MEW 97](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/MEW/MEW_097_R_EN.png)
+[Herdier SUM 104](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/SUM/SUM_104_R_EN.png)
+[Eevee ASR 119](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/ASR/ASR_119_R_EN.png)
+[Vigoroth MT 68](https://images.pokemontcg.io/dp2/68_hires.png)
+
+M Charizard-EX FLF 69, M Kangaskhan-EX FLF and M Rayquaza-EX ROS 61 finish
+evolving before the turn ends once. The two applicable Spirit Links are
+checked on the evolved slot and respect Tool suppression. Wild Blaze
+discards the attacker's cards and Wham Bam Punch counts each heads before
+tails. The wider legacy Mega and Primal rule still needs its own pass.
+The source scan found 40 Stage.MEGA card definitions, including 11 with
+existing play-time handlers. That definition count includes alternate
+and unregistered prints.
+[XY Mega Evolution rule](https://assets.pokemon.com/assets/cms2/pdf/trading-card-game/rulebook/xy1-rulebook-en.pdf)
+[M Charizard-EX FLF 69](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/FLF/FLF_069_R_EN.png)
+[M Kangaskhan-EX FLF 79](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/FLF/FLF_079_R_EN.png)
+
+The 47 focused cases pass, including 43 that fail on the previous build.
+All 559 comparable saved states and all 3,875 sampled opening actions,
+including 242 evolutions, matched the previous build. Seven recorded
+solutions replayed to wins. The engine passed 10,300 tests and the API
+passed 32 tests. The worktree with the existing local edits passed 582
+targeted cases. The 2.46 MiB package
+passed attestation, 10 packaged board checks, and 209 Angular checks.
+Upstream main remains at `d3d7a0031`.

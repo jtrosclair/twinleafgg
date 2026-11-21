@@ -303,8 +303,13 @@ export class AfterEvolveEffect implements Effect {
   readonly type: string = GameEffects.AFTER_EVOLVE_EFFECT;
   public preventDefault = false;
   public darkestImpulseSV?: boolean;
+  public readonly previousPokemonCard?: PokemonCard;
+
   constructor(public player: Player, public target: PokemonCardList, public pokemonCard: PokemonCard,
-    public playedFromHand: boolean) { }
+    public playedFromHand: boolean) {
+    const stack = target.getPokemons();
+    this.previousPokemonCard = stack[stack.length - 2];
+  }
 }
 
 /** Read-only permission phase: legacy blockers should reject before reactions. */

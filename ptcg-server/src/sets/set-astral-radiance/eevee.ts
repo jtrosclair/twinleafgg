@@ -4,13 +4,11 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, GameMessage, PlayerType } from '../../game';
+import { PowerType, StoreLike, State, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
-import { Card } from '../../game/store/card/card';
+import { AfterEvolveEffect, EvolveEffect } from '../../game/store/effects/game-effects';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
-import { ConfirmPrompt } from '../../game/store/prompts/confirm-prompt';
-import { ADD_MARKER, HAS_MARKER, IS_ABILITY_BLOCKED, REMOVE_MARKER_AT_END_OF_TURN, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
+import { ADD_MARKER, CONFIRMATION_PROMPT, HAS_MARKER, IS_ABILITY_BLOCKED, REMOVE_MARKER_AT_END_OF_TURN, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
 
 export class Eevee extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -44,78 +42,29 @@ export class Eevee extends PokemonCard {
   public fullName: string = 'Eevee ASR 119';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Resonant Evolution
-    // Triggered when another Eevee evolves - we may search deck for a card that evolves from this Eevee
-    // Ref: set-journey-together/lycanroc.ts (EvolveEffect + PowerEffect ability-blocked check + ConfirmPrompt)
-    // Ref: set-furious-fists/eevee.ts (search for Eevee evolution + SHUFFLE_DECK)
-    if (effect instanceof EvolveEffect
-      && effect.player !== undefined
-      && effect.pokemonCard.evolvesFrom === 'Eevee'
-      && !effect.target.cards.includes(this)) {
-      // Another Eevee is evolving; this Eevee may also evolve
+    if (effect instanceof AfterEvolveEffect && effect.playedFromHand
+      && state.players[state.activePlayer] === effect.player && effect.previousPokemonCard?.name === 'Eevee') {
       const player = effect.player;
+      const target = [player.active, ...player.bench].find(slot => slot.getPokemonCard() === this);
+      if (target && player.deck.cards.length > 0 && !HAS_MARKER(this.RESONANT_EVOLUTION_MARKER, player, this)
+        && !IS_ABILITY_BLOCKED(store, state, player, this)) {
+        return CONFIRMATION_PROMPT(store, state, player, accepted => {
+          if (!accepted || target.getPokemonCard() !== this) return;
 
-      // Once per turn enforcement
-      if (HAS_MARKER(this.RESONANT_EVOLUTION_MARKER, player, this)) {
-        return state;
-      }
-
-      // Check if ability is blocked
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      // Find this Eevee in play
-      let thisEeveeFound = false;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
-        if (cardList.getPokemonCard() === this) {
-          thisEeveeFound = true;
-        }
-      });
-
-      if (!thisEeveeFound) {
-        return state;
-      }
-
-      if (player.deck.cards.length === 0) {
-        return state;
-      }
-
-      store.prompt(state, new ConfirmPrompt(
-        player.id,
-        GameMessage.WANT_TO_USE_ABILITY,
-      ), wantToUse => {
-        if (!wantToUse) {
-          return;
-        }
-
-        ADD_MARKER(this.RESONANT_EVOLUTION_MARKER, player, this);
-
-        let cards: Card[] = [];
-        store.prompt(state, new ChooseCardsPrompt(
-          player,
-          GameMessage.CHOOSE_CARD_TO_EVOLVE,
-          player.deck,
-          { superType: SuperType.POKEMON, evolvesFrom: 'Eevee' },
-          { min: 0, max: 1, allowCancel: true }
-        ), selected => {
-          cards = selected || [];
-
-          if (cards.length > 0) {
-            const evolutionCard = cards[0];
-            // Find this Eevee's cardList and evolve it
-            player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
-              if (cardList.getPokemonCard() === this) {
-                player.deck.moveCardTo(evolutionCard, cardList);
-                cardList.clearEffects();
-                cardList.pokemonPlayedTurn = state.turn;
-              }
-            });
-          }
-
-          SHUFFLE_DECK(store, state, player);
+          ADD_MARKER(this.RESONANT_EVOLUTION_MARKER, player, this);
+          store.prompt(state, new ChooseCardsPrompt(
+            player, GameMessage.CHOOSE_CARD_TO_EVOLVE, player.deck,
+            { superType: SuperType.POKEMON, evolvesFrom: this.name },
+            { min: 0, max: 1, allowCancel: false },
+          ), selected => {
+            if (selected?.length && target.getPokemonCard() === this) {
+              // Ref: set-brilliant-stars/clefable.ts (Moonlit Miracle).
+              store.reduceEffect(state, new EvolveEffect(player, target, selected[0] as PokemonCard, player.deck));
+            }
+            SHUFFLE_DECK(store, state, player);
+          });
         });
-      });
+      }
     }
 
     REMOVE_MARKER_AT_END_OF_TURN(effect, this.RESONANT_EVOLUTION_MARKER, this);

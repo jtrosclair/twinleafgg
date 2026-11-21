@@ -1,7 +1,7 @@
 import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, ConfirmPrompt, GameMessage, StateUtils, TrainerCard, TrainerType, ChooseCardsPrompt, SuperType } from "../../game";
 import { Effect } from "../../game/store/effects/effect";
 import { EvolveEffect } from "../../game/store/effects/game-effects";
-import { IS_ABILITY_BLOCKED, MOVE_CARDS } from "../../game/store/prefabs/prefabs";
+import { IS_ABILITY_BLOCKED, JUST_EVOLVED_FROM_HAND, MOVE_CARDS } from "../../game/store/prefabs/prefabs";
 
 export class Haunter extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -33,7 +33,7 @@ export class Haunter extends PokemonCard {
   public fullName: string = "Haunter MEW";
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if ((effect instanceof EvolveEffect) && effect.pokemonCard === this) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

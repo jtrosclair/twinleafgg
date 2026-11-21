@@ -4,7 +4,7 @@ import { GameError, GameMessage, PowerType, State, StateUtils, StoreLike } from 
 import { Effect } from '../../game/store/effects/effect';
 import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { CheckEvolveEffect } from '../../game/store/effects/game-effects';
 import { IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Dialga2 extends PokemonCard {
@@ -36,19 +36,11 @@ export class Dialga2 extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Time Aura
-    if (effect instanceof EvolveEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      if (opponent.active.getPokemonCard() !== this) {
-        return state;
+    if (effect instanceof CheckEvolveEffect && effect.playedFromHand && effect.target === effect.player.active) {
+      const opponent = StateUtils.getOpponent(state, effect.player);
+      if (opponent.active.getPokemonCard() === this && !IS_POKEBODY_BLOCKED(store, state, opponent, this)) {
+        throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
       }
-      if (effect.target !== player.active) {
-        return state;
-      }
-      if (IS_POKEBODY_BLOCKED(store, state, opponent, this)) {
-        return state;
-      }
-      throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
 
     // Metal Burn

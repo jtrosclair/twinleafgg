@@ -1,5 +1,5 @@
 import { PokemonCard, Stage, CardType, PowerType, State, StoreLike, StateUtils, ConfirmPrompt, GameLog, GameMessage, PlayerType, Card, ChooseCardsPrompt, ShuffleDeckPrompt, SuperType } from '../../game';
-import { Effect, EvolveEffect, PowerEffect } from '../../game/store/effects/game-effects';
+import { Effect, AfterEvolveEffect, PowerEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 
 export class Palafin extends PokemonCard {
@@ -34,8 +34,8 @@ export class Palafin extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof EvolveEffect && effect.target.cards.includes(this)) {
-      const player = state.players[state.activePlayer];
+    if (effect instanceof AfterEvolveEffect && effect.previousPokemonCard === this) {
+      const player = effect.player;
       player.marker.removeMarker(this.ABILITY_USED_MARKER, this);
       this.movedToActiveThisTurn = false;
     }

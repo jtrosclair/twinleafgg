@@ -1,9 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
-import { StoreLike, State, Card, ChooseCardsPrompt, GameMessage, TrainerCard } from '../../game';
+import { StoreLike, State, ChooseCardsPrompt, GameMessage, TrainerCard } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
+import { IS_ABILITY_BLOCKED, JUST_EVOLVED_FROM_HAND, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 export class Herdier extends PokemonCard {
   public cardType: CardType = CardType.COLORLESS;
@@ -36,29 +36,20 @@ export class Herdier extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof EvolveEffect && effect.pokemonCard === this) {
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this) && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
       const player = effect.player;
+      const hasItem = player.discard.cards.some(card => card instanceof TrainerCard && card.trainerType === TrainerType.ITEM);
+      if (!hasItem) return state;
 
-      const hasItem = player.discard.cards.some(c => {
-        return c instanceof TrainerCard && c.trainerType === TrainerType.ITEM;
-      });
-
-      if (!hasItem) {
-        return state;
-      }
-
-      let cards: Card[] = [];
       return store.prompt(state, new ChooseCardsPrompt(
         player,
         GameMessage.CHOOSE_CARD_TO_HAND,
         player.discard,
         { superType: SuperType.TRAINER, trainerType: TrainerType.ITEM },
-        { min: 1, max: 2, allowCancel: true }
+        { min: 0, max: 1, allowCancel: true },
       ), selected => {
-        cards = selected || [];
-
-        if (cards.length > 0) {
-          player.discard.moveCardsTo(cards, player.hand);
+        if (selected?.length) {
+          MOVE_CARDS(store, state, player.discard, player.hand, { cards: selected, sourceCard: this, sourceEffect: this.powers[0] });
         }
       });
     }

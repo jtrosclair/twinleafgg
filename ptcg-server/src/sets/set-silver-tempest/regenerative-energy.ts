@@ -3,7 +3,7 @@ import { EnergyCard } from '../../game/store/card/energy-card';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect, HealEffect } from '../../game/store/effects/game-effects';
+import { AfterEvolveEffect, HealEffect } from '../../game/store/effects/game-effects';
 import { IS_SPECIAL_ENERGY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 
@@ -24,18 +24,10 @@ Whenever you play a Pokémon from your hand to evolve the Pokémon V this card i
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    // Provide energy when attached to Single Strike Pokemon
-    if (effect instanceof EvolveEffect && effect.playedFromHand && effect.target.cards.includes(this)) {
-      const player = effect.player;
-
-      if (IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {
-        return state;
-      }
-
-      if (effect.target.getPokemonCard()?.tags.includes(CardTag.POKEMON_V)) {
-        const healEffect = new HealEffect(player, effect.target, 100);
-        store.reduceEffect(state, healEffect);
-      }
+    if (effect instanceof AfterEvolveEffect && effect.playedFromHand && effect.target.cards.includes(this)
+      && effect.previousPokemonCard?.tags.includes(CardTag.POKEMON_V)
+      && !IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.target)) {
+      return store.reduceEffect(state, new HealEffect(effect.player, effect.target, 100));
     }
 
     return state;

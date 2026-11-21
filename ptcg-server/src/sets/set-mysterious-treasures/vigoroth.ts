@@ -38,7 +38,8 @@ export class Vigoroth extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Track whether Slakoth was Asleep when evolving into Vigoroth
-    if (effect instanceof EvolveEffect && effect.pokemonCard === this) {
+    if (effect instanceof EvolveEffect && effect.pokemonCard === this
+      && effect.target.getPokemonCard()?.name === 'Slakoth') {
       if (effect.target.specialConditions.includes(SpecialCondition.ASLEEP)) {
         ADD_MARKER(this.SLAKOTH_WAS_ASLEEP_MARKER, effect.player, this);
       }

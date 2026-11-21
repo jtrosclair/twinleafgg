@@ -3,10 +3,10 @@ import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
-import { CoinFlipPrompt, GameMessage, PlayerType } from '../../game';
+import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { FLIP_A_COIN_UNTIL_YOU_GET_TAILS_DO_X_MORE_DAMAGE_PER_HEADS } from '../../game/store/prefabs/attack-effects';
 
 export class MKangaskhanEX extends PokemonCard {
   public stage: Stage = Stage.MEGA;
@@ -33,35 +33,13 @@ export class MKangaskhanEX extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if ((effect instanceof EvolveEffect) && effect.pokemonCard === this) {
-      const player = effect.player;
-
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card === this && cardList.tools.length > 0 && cardList.tools[0].name === 'Kangaskhan Spirit Link') {
-          return state;
-        } else {
-          const endTurnEffect = new EndTurnEffect(player);
-          store.reduceEffect(state, endTurnEffect);
-          return state;
-        }
-      });
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this
+      && state.players[state.activePlayer] === effect.player) {
+      return store.reduceEffect(state, new EndTurnEffect(effect.player));
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      const flipCoin = (heads: number = 0): State => {
-        return store.prompt(state, [
-          new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
-        ], result => {
-          if (result === true) {
-            return flipCoin(heads + 1);
-          }
-          effect.damage += 30 * heads;
-          return state;
-        });
-      };
-      return flipCoin();
+      return FLIP_A_COIN_UNTIL_YOU_GET_TAILS_DO_X_MORE_DAMAGE_PER_HEADS(store, state, effect, 30);
     }
 
     return state;

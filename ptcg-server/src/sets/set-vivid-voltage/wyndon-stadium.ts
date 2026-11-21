@@ -6,7 +6,8 @@ import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect, HealEffect } from '../../game/store/effects/game-effects';
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
+import { AfterEvolveEffect, HealEffect } from '../../game/store/effects/game-effects';
 
 export class WyndonStadium extends TrainerCard {
   public trainerType: TrainerType = TrainerType.STADIUM;
@@ -19,27 +20,13 @@ export class WyndonStadium extends TrainerCard {
   public text: string = 'Whenever either player plays a Pokémon VMAX from their hand to evolve a Pokémon V during their turn, heal 100 damage from that Pokémon.';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Passive effect: heal 100 when any VMAX evolves from a V
-    // Ref: set-vivid-voltage/circhester-bath.ts (passive stadium intercept pattern)
-    // Ref: set-darkness-ablaze/corviknight.ts (EvolveEffect with pokemonCard.tags check)
-    if (effect instanceof EvolveEffect) {
-      const stadiumCard = StateUtils.getStadiumCard(state);
-      if (stadiumCard !== this) {
-        return state;
-      }
-
-      // Only trigger when a VMAX evolves
-      if (!effect.pokemonCard.tags.includes(CardTag.POKEMON_VMAX)) {
-        return state;
-      }
-
-      // Heal 100 damage from the newly evolved Pokemon
-      const target = effect.target;
-      if (target.damage > 0) {
-        const healAmount = Math.min(100, target.damage);
-        const healEffect = new HealEffect(effect.player, target, healAmount);
-        store.reduceEffect(state, healEffect);
-      }
+    if (effect instanceof AfterEvolveEffect && effect.playedFromHand
+      && state.players[state.activePlayer] === effect.player
+      && effect.pokemonCard.tags.includes(CardTag.POKEMON_VMAX)
+      && effect.previousPokemonCard?.tags.includes(CardTag.POKEMON_V)
+      && StateUtils.getStadiumCard(state) === this
+      && !IS_STADIUM_EFFECT_BLOCKED(store, state, effect.player, effect.target, this)) {
+      return store.reduceEffect(state, new HealEffect(effect.player, effect.target, 100));
     }
 
     return state;

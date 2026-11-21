@@ -38,11 +38,8 @@ export class Salazzle extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this) {
-      const stack = effect.target.getPokemons();
-      if (stack[stack.length - 2]?.name === 'Salandit') {
-        ADD_MARKER(this.SUDDEN_SCORCHING_MARKER, effect.player, this);
-      }
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this && effect.previousPokemonCard?.name === 'Salandit') {
+      ADD_MARKER(this.SUDDEN_SCORCHING_MARKER, effect.player, this);
     }
 
     REMOVE_MARKER_AT_END_OF_TURN(effect, this.SUDDEN_SCORCHING_MARKER, this);

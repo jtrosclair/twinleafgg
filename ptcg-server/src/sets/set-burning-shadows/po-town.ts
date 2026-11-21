@@ -6,7 +6,8 @@ import { StoreLike } from '../../game/store/store-like';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType } from '../../game/store/card/card-types';
 import { StateUtils } from '../../game/store/state-utils';
-import { EvolveEffect, UseStadiumEffect } from '../../game/store/effects/game-effects';
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
+import { AfterEvolveEffect, PlaceDamageCountersEffect, UseStadiumEffect } from '../../game/store/effects/game-effects';
 
 export class PoTown extends TrainerCard {
   public trainerType: TrainerType = TrainerType.STADIUM;
@@ -24,8 +25,9 @@ export class PoTown extends TrainerCard {
       throw new GameError(GameMessage.CANNOT_USE_STADIUM);
     }
 
-    if (effect instanceof EvolveEffect && StateUtils.getStadiumCard(state) === this) {
-      effect.target.damage += 30;
+    if (effect instanceof AfterEvolveEffect && effect.playedFromHand && StateUtils.getStadiumCard(state) === this
+      && !IS_STADIUM_EFFECT_BLOCKED(store, state, effect.player, effect.target, this)) {
+      return store.reduceEffect(state, new PlaceDamageCountersEffect(effect.player, effect.target, 30));
     }
 
     return state;

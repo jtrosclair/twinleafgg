@@ -1,7 +1,6 @@
 import { PokemonCard, Stage, CardType, PowerType, EnergyType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect } from '../../game/store/effects/game-effects';
-import { IS_ABILITY_BLOCKED, LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY } from '../../game/store/prefabs/prefabs';
+import { CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, JUST_EVOLVED_FROM_HAND, LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY } from '../../game/store/prefabs/prefabs';
 
 export class Vileplume extends PokemonCard {
 
@@ -44,32 +43,18 @@ export class Vileplume extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof EvolveEffect && effect.pokemonCard === this) {
-
+    if (JUST_EVOLVED_FROM_HAND(effect, state, this)) {
       const player = effect.player;
+      if (player.deck.cards.length === 0 || IS_ABILITY_BLOCKED(store, state, player, this)) return state;
 
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      // Legacy implementation:
-      // - Pulled top 8 cards into a temporary CardList.
-      // - Attached any Basic Energy among them to your Pokémon.
-      // - Shuffled the remaining cards back into the deck.
-      //
-      // Converted to prefab version (LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY).
-      return LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY(
-        store,
-        state,
-        player,
-        8,
-        8,
-        {
-          energyFilter: { energyType: EnergyType.BASIC },
-          remainderDestination: 'shuffle'
+      return CONFIRMATION_PROMPT(store, state, player, accepted => {
+        if (accepted) {
+          // Ref: set-roaring-skies/togekiss-2.ts (Serene Grace).
+          LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY(store, state, player, 8, 8, {
+            energyFilter: { energyType: EnergyType.BASIC },
+          });
         }
-      );
+      });
     }
     return state;
   }

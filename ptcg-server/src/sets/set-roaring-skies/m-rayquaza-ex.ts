@@ -1,15 +1,16 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect, PowerEffect } from '../../game/store/effects/game-effects';
+import { AfterEvolveEffect, PowerEffect } from '../../game/store/effects/game-effects';
 import { PowerType } from '../../game/store/card/pokemon-types';
-import { Card, ChooseEnergyPrompt, GameMessage, PlayerType } from '../../game';
+import { Card, ChooseEnergyPrompt, GameMessage } from '../../game';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { DiscardCardsEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckProvidedEnergyEffect, CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { IS_TOOL_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class MRayquazaEX extends PokemonCard {
 
@@ -54,18 +55,12 @@ export class MRayquazaEX extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if ((effect instanceof EvolveEffect) && effect.pokemonCard === this) {
-      const player = effect.player;
-
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card === this && cardList.tools.length > 0 && cardList.tools[0].name === 'Rayquaza Spirit Link') {
-          return state;
-        } else {
-          const endTurnEffect = new EndTurnEffect(player);
-          store.reduceEffect(state, endTurnEffect);
-          return state;
-        }
-      });
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this
+      && state.players[state.activePlayer] === effect.player) {
+      const spiritLink = effect.target.tools.find((card): card is TrainerCard =>
+        card instanceof TrainerCard && card.name === 'Rayquaza Spirit Link');
+      if (spiritLink && !IS_TOOL_BLOCKED(store, state, effect.player, spiritLink)) return state;
+      return store.reduceEffect(state, new EndTurnEffect(effect.player));
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {

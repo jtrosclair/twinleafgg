@@ -4,7 +4,7 @@ import { PowerType } from '../../game/store/card/pokemon-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { EvolveEffect, HealEffect } from '../../game/store/effects/game-effects';
+import { AfterEvolveEffect, HealEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { PlayerType } from '../../game/store/actions/play-card-action';
 import { GameError } from '../../game/game-error';
@@ -45,7 +45,7 @@ export class Beautifly extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof EvolveEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this) {
       const player = effect.player;
       player.marker.removeMarker(this.STOKED_STRAW_MARKER, this);
     }
