@@ -4959,3 +4959,61 @@ solutions still win. The package passes build attestation, ten board
 scenarios and 209 client checks. Packaged mouse and touch runs use
 Switch Cart to heal the former Active and see two counters without
 New Moon or zero with it. All 32 simulator API checks pass.
+
+## Gameplay re-audit, batch 76
+
+Gapejaw Bog now observes accepted Basic Pokémon placements from the
+hand, including 17 direct card effect paths and the engine's shared
+card-movement effect. Multi-card placements finish before the Stadium
+checks New Moon. Placement effects that also switch the Pokémon finish
+the switch on the same stack. Erika's Invitation, Captivating Poké Puff,
+Irresistible Aroma, Pulling Currents and Fin Luster are covered.
+A Basic Pokémon brought straight from the deck stays outside the trigger.
+Pokémon placed by an opponent's effect do not use their own on-play
+Abilities. The official Mawile-GX ruling illustrates that distinction.
+[Official Gapejaw Bog rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E5%A4%A7%E5%8F%A3%E3%81%AE%E6%B2%BC&regulation_header_search_item1=all)
+[Official Mawile-GX rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%AF%E3%83%81%E3%83%BC%E3%83%88GX&regulation_faq_main_item1=all)
+
+The newly Benched Pokémon's owner chooses the order when both a
+registered on-play Ability and the Stadium can resolve. Ting-Lu ex
+blocks Luminous Sign if the Bog places counters first. Climactic Gate
+finishes its search and shuffle and keeps the pending Stadium counters
+before ending the turn, including when the search finds zero cards.
+Rapid Vernier resolves its Energy transfers against the current Bench
+and carries the pending counters with the same Pokémon to Active.
+Pumpkin Pit can remove the Stadium when chosen first, consistent with
+the printed Stadium rule that removal ends its effect.
+[Official Rapid Vernier print](https://www.pokemon-card.com/card-search/details.php/card/47154)
+[Official Pumpkin Pit print](https://www.pokemon-card.com/card-search/details.php/card/39685/regu/all)
+[Official Pokémon TCG rulebook](https://assets.pokemon.com/assets/cms2/pdf/trading-card-game/rulebook/par_rulebook_en.pdf)
+
+Team Magma's Secret Base shares the completed hand-to-Bench trigger
+and keeps its Team Magma exemption. Dark Invitation can add three
+Ability-sourced counters and then receive two Stadium counters, per the
+official interaction. The shared event now supports ordering for 12
+on-play Ability implementations and their inherited prints. The remaining
+legacy on-play Abilities and Poké-Powers still need card-level migration.
+[Official Dark Invitation and Team Magma's Secret Base ruling](https://www.pokemon-card.com/rules/faq/search.php?sc_group_id=417)
+
+Both registered Robo Substitute names resolve the Stadium when played
+to the Bench as a Basic, as the same ruling set specifies. Risky Ruins
+and Miasma Valley have distinct Bench-entry conditions and retain their
+separate audit paths.
+The Risky Ruins audit will need the official Nest Ball, Squawkabilly,
+New Moon, and Ogre's Mask cases. Its trigger is scoped to the turn
+of the player whose Pokémon enters.
+[Official Risky Ruins print](https://asia.pokemon-card.com/sg/card-search/detail/21719/)
+[Official Risky Ruins rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E5%8D%B1%E3%81%AA%E3%81%84%E5%BB%83%E5%A2%9F&regulation_faq_main_item1=all)
+
+All 31 focused checks pass, including 23 that fail on the previous
+engine. The combined checkout passes 142 targeted checks. The
+simulator API passes 32 tests and all 559 comparable saved boards
+(401 active) match in serialized state, card names, and validation
+response. All 3,633 sampled opening actions and 258 targeted
+Bench-play and Trainer attempts match. Seven recorded solutions
+each win twice. The attested package passes ten board scenarios and
+209 client checks. Packaged mouse and touch runs select opposite
+orders with Lumineon V and Ting-Lu ex and verify the resulting prompts
+and damage counters.
+The full engine run passed 11,211 tests across 323
+spec files. The focused run also checks both Robo Substitute names.

@@ -1,3 +1,4 @@
+import { benchPokemonFromHand } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
@@ -72,7 +73,7 @@ export class Manaphy extends PokemonCard {
         GameMessage.CHOOSE_CARD_TO_HAND,
         opponent.hand,
         { superType: SuperType.POKEMON, stage: Stage.BASIC },
-        { min: 0, max: 2, allowCancel: true }
+        { min: 0, max: Math.min(2, slots.length), allowCancel: true }
       ), selected => {
         cards = selected || [];
 
@@ -81,10 +82,7 @@ export class Manaphy extends PokemonCard {
           return state;
         }
 
-        cards.forEach((card, index) => {
-          opponent.hand.moveCardTo(card, slots[index]);
-          slots[index].pokemonPlayedTurn = state.turn;
-        });
+        benchPokemonFromHand(store, state, opponent, cards, slots);
       });
     }
 

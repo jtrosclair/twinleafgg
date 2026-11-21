@@ -1,3 +1,4 @@
+import { benchPokemonFromHand } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
 import {
@@ -123,12 +124,7 @@ export class UnownE extends PokemonCard {
           return state;
         }
 
-        cards.forEach((card, index) => {
-          opponent.hand.moveCardTo(card, slots[index]);
-          slots[index].pokemonPlayedTurn = state.turn;
-
-          opponent.switchPokemon(slots[index], store, state);
-        });
+        benchPokemonFromHand(store, state, opponent, cards, slots, target => opponent.switchPokemon(target, store, state));
       });
     }
 

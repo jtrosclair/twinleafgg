@@ -1,3 +1,4 @@
+import { benchPokemonFromHand } from '../../game/store/prefabs/bench-play-reactions';
 import { GameMessage } from '../../game/game-message';
 import { StateUtils } from '../../game/store/state-utils';
 import { TrainerCard } from '../../game/store/card/trainer-card';
@@ -47,10 +48,7 @@ export class StrangeCave extends TrainerCard {
         { min: 1, max: 1, allowCancel: false, blocked: blockedHand }
       ), selected => {
         const cards = selected || [];
-        cards.forEach((card, index) => {
-          player.hand.moveCardTo(card, slots[index]);
-          slots[index].pokemonPlayedTurn = state.turn;
-        });
+        benchPokemonFromHand(store, state, player, cards, slots);
       });
     }
     return state;

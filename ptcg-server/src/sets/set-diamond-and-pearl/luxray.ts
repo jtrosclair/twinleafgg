@@ -1,3 +1,4 @@
+import { benchPokemonFromHand } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { AttachEnergyPrompt, ChooseCardsPrompt, EnergyCard, GameMessage, PlayerType, PokemonCardList, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
@@ -72,9 +73,9 @@ export class Luxray extends PokemonCard {
             return;
           }
 
-          MOVE_CARDS(store, state, opponent.hand, slots[0], { cards, sourceCard: this });
-          slots[0].pokemonPlayedTurn = state.turn;
-          opponent.switchPokemon(slots[0], store, state);
+          benchPokemonFromHand(store, state, opponent, cards, slots, target => {
+            opponent.switchPokemon(target, store, state);
+          });
         });
       }, GameMessage.WANT_TO_USE_ABILITY);
     }

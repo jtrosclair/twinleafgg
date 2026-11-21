@@ -1,11 +1,12 @@
+import { queueBenchPlayAbility } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, BoardEffect } from '../../game/store/card/card-types';
 import { StoreLike, State, ConfirmPrompt, GameMessage, PlayerType, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { ADD_POISON_TO_PLAYER_ACTIVE, AFTER_ATTACK, DRAW_CARDS_UNTIL_CARDS_IN_HAND, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { AfterPlayBasicFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { ADD_POISON_TO_PLAYER_ACTIVE, AFTER_ATTACK, DRAW_CARDS_UNTIL_CARDS_IN_HAND } from '../../game/store/prefabs/prefabs';
 
 export class CrobatV extends PokemonCard {
 
@@ -53,37 +54,34 @@ export class CrobatV extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterPlayBasicFromHandEffect && effect.pokemonCard === this) {
       const player = effect.player;
       if (player.marker.hasMarker(this.DARK_ASSET_MARKER)) {
         return state;
       }
 
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
+      if (player.hand.cards.length >= 6) {
         return state;
       }
 
-      if (player.hand.cards.length > 6) {
-        return state;
-      }
+      queueBenchPlayAbility(store, state, effect, () => {
+        state = store.prompt(state, new ConfirmPrompt(
+          effect.player.id,
+          GameMessage.WANT_TO_USE_ABILITY,
+        ), wantToUse => {
+          if (wantToUse) {
 
-      state = store.prompt(state, new ConfirmPrompt(
-        effect.player.id,
-        GameMessage.WANT_TO_USE_ABILITY,
-      ), wantToUse => {
-        if (wantToUse) {
+            player.marker.addMarker(this.DARK_ASSET_MARKER, this);
 
-          player.marker.addMarker(this.DARK_ASSET_MARKER, this);
+            player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
+              if (cardList.getPokemonCard() === this) {
+                cardList.addBoardEffect(BoardEffect.ABILITY_USED);
+              }
+            });
 
-          player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-            if (cardList.getPokemonCard() === this) {
-              cardList.addBoardEffect(BoardEffect.ABILITY_USED);
-            }
-          });
-
-          DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 6);
-        }
+            DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 6);
+          }
+        });
       });
     }
 

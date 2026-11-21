@@ -1,10 +1,11 @@
+import { queueBenchPlayAbility } from '../../game/store/prefabs/bench-play-reactions';
 import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, GameMessage, StateUtils, ConfirmPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { DEAL_MORE_DAMAGE_FOR_EACH_PRIZE_CARD_TAKEN, IS_ABILITY_BLOCKED, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { AfterPlayBasicFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { DEAL_MORE_DAMAGE_FOR_EACH_PRIZE_CARD_TAKEN, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Durantex extends PokemonCard implements CopiedAttackOwnershipContract {
 
@@ -49,24 +50,21 @@ export class Durantex extends PokemonCard implements CopiedAttackOwnershipContra
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Sudden Scrape
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterPlayBasicFromHandEffect && effect.pokemonCard === this) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
+      queueBenchPlayAbility(store, state, effect, () => {
+        state = store.prompt(state, new ConfirmPrompt(
+          effect.player.id,
+          GameMessage.WANT_TO_USE_ABILITY,
+        ), wantToUse => {
+          if (wantToUse) {
+            MOVE_CARDS(store, state, opponent.deck, opponent.discard, { count: 1, sourceCard: this, sourceEffect: this.powers[0] });
+          }
+        });
         return state;
-      }
-
-      state = store.prompt(state, new ConfirmPrompt(
-        effect.player.id,
-        GameMessage.WANT_TO_USE_ABILITY,
-      ), wantToUse => {
-        if (wantToUse) {
-          MOVE_CARDS(store, state, opponent.deck, opponent.discard, { count: 1, sourceCard: this, sourceEffect: this.powers[0] });
-        }
       });
-      return state;
     }
 
     // Revenge Crush

@@ -1,10 +1,11 @@
+import { queueBenchPlayAbility } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import {
   PowerType, StoreLike, State, ConfirmPrompt, GameMessage, StateUtils
 } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { AfterPlayBasicFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 export class Pumpkaboo extends PokemonCard {
@@ -49,26 +50,28 @@ export class Pumpkaboo extends PokemonCard {
   public fullName: string = 'Pumpkaboo EVS';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterPlayBasicFromHandEffect && effect.pokemonCard === this) {
+      if (!StateUtils.getStadiumCard(state)) return state;
+      queueBenchPlayAbility(store, state, effect, () => {
+        const stadiumCard = StateUtils.getStadiumCard(state);
+        if (stadiumCard !== undefined) {
 
-      const stadiumCard = StateUtils.getStadiumCard(state);
-      if (stadiumCard !== undefined) {
+          state = store.prompt(state, new ConfirmPrompt(
+            effect.player.id,
+            GameMessage.WANT_TO_USE_ABILITY,
+          ), wantToUse => {
+            if (wantToUse) {
 
-        state = store.prompt(state, new ConfirmPrompt(
-          effect.player.id,
-          GameMessage.WANT_TO_USE_ABILITY,
-        ), wantToUse => {
-          if (wantToUse) {
-
-            // Discard Stadium
-            const cardList = StateUtils.findCardList(state, stadiumCard);
-            const player = StateUtils.findOwner(state, cardList);
-            MOVE_CARDS(store, state, cardList, player.discard, { cards: [stadiumCard], sourceCard: this, sourceEffect: this.powers[0] });
+              // Discard Stadium
+              const cardList = StateUtils.findCardList(state, stadiumCard);
+              const player = StateUtils.findOwner(state, cardList);
+              MOVE_CARDS(store, state, cardList, player.discard, { cards: [stadiumCard], sourceCard: this, sourceEffect: this.powers[0] });
+              return state;
+            }
             return state;
-          }
-          return state;
-        });
-      }
+          });
+        }
+      });
     }
     return state;
   }

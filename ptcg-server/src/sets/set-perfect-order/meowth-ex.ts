@@ -1,10 +1,11 @@
+import { queueBenchPlayAbility } from '../../game/store/prefabs/bench-play-reactions';
 import { Effect } from '../../game/store/effects/effect';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType, TrainerType } from '../../game/store/card/card-types';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { AfterPlayBasicFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { PowerType, StoreLike, State, TrainerCard, GameMessage } from '../../game';
 import { AfterAttackEffect, EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { ABILITY_USED, CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, MOVE_CARDS, SEARCH_DECK_FOR_CARDS_TO_HAND } from '../../game/store/prefabs/prefabs';
+import { ABILITY_USED, CONFIRMATION_PROMPT, MOVE_CARDS, SEARCH_DECK_FOR_CARDS_TO_HAND } from '../../game/store/prefabs/prefabs';
 
 export class Meowthex extends PokemonCard {
   public tags = [CardTag.POKEMON_ex];
@@ -38,7 +39,7 @@ export class Meowthex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterPlayBasicFromHandEffect && effect.pokemonCard === this) {
       const player = effect.player;
 
       if (player.deck.cards.length === 0) {
@@ -51,11 +52,6 @@ export class Meowthex extends PokemonCard {
         return state;
       }
 
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
       const blocked: number[] = [];
       player.deck.cards.forEach((card, index) => {
         if (card instanceof TrainerCard && (card.trainerType !== TrainerType.SUPPORTER)) {
@@ -63,13 +59,15 @@ export class Meowthex extends PokemonCard {
         }
       });
 
-      CONFIRMATION_PROMPT(store, state, player, result => {
-        if (result) {
-          ABILITY_USED(player, this);
-          player.marker.addMarkerToState(this.TRUMP_CARD_MARKER);
-          SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, this, { superType: SuperType.TRAINER }, { min: 0, max: 1, allowCancel: false, blocked }, this.powers[0]);
-        }
-      }, GameMessage.WANT_TO_USE_ABILITY);
+      queueBenchPlayAbility(store, state, effect, () => {
+        CONFIRMATION_PROMPT(store, state, player, result => {
+          if (result) {
+            ABILITY_USED(player, this);
+            player.marker.addMarkerToState(this.TRUMP_CARD_MARKER);
+            SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, this, { superType: SuperType.TRAINER }, { min: 0, max: 1, allowCancel: false, blocked }, this.powers[0]);
+          }
+        }, GameMessage.WANT_TO_USE_ABILITY);
+      });
     }
 
     if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.TRUMP_CARD_MARKER)) {

@@ -1,3 +1,4 @@
+import { benchPokemonFromHand } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType } from '../../game/store/card/card-types';
 import { StoreLike, State, PowerType, StateUtils, ConfirmPrompt, GameMessage, Card, ChooseCardsPrompt, PokemonCardList } from '../../game';
@@ -73,10 +74,7 @@ export class LilliesRibombee extends PokemonCard {
               return state;
             }
 
-            cards.forEach((card, index) => {
-              opponent.hand.moveCardTo(card, slots[index]);
-              slots[index].pokemonPlayedTurn = state.turn;
-            });
+            benchPokemonFromHand(store, state, opponent, cards, slots);
           });
         }
       });

@@ -1,8 +1,9 @@
 import { PokemonCard, Stage, StoreLike, State, StateUtils, GameError, GameMessage, PokemonCardList, ChooseCardsPrompt, SuperType } from '../../game';
 import { PowerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EffectOfAbilityEffect } from '../../game/store/effects/game-effects';
-import { ABILITY_USED, ADD_MARKER, HAS_MARKER, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
+import { benchPokemonFromHand } from '../../game/store/prefabs/bench-play-reactions';
+import { ABILITY_USED, ADD_MARKER, HAS_MARKER, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Dusknoir extends PokemonCard {
   public stage = Stage.STAGE_2;
@@ -81,14 +82,8 @@ export class Dusknoir extends PokemonCard {
           return;
         }
 
-        cards.forEach((card, index) => {
-          MOVE_CARDS(store, state, opponent.hand, slots[index], { cards: [card], sourceCard: this });
-          slots[index].pokemonPlayedTurn = state.turn;
-          const damageEffect = new EffectOfAbilityEffect(player, this.powers[0], this, slots[index]);
-          store.reduceEffect(state, damageEffect);
-          if (damageEffect.target) {
-            damageEffect.target.damage += 30;
-          }
+        benchPokemonFromHand(store, state, opponent, cards, slots, target => {
+          store.reduceEffect(state, new PlaceDamageCountersEffect(player, target, 30, this, this.powers[0]));
         });
       });
     }

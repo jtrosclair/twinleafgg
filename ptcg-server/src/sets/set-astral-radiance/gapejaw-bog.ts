@@ -1,8 +1,8 @@
-import { GameLog, State, StateUtils, StoreLike } from '../../game';
+import { State, StoreLike } from '../../game';
 import { TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
-import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
+import { queueBenchStadiumCounters } from '../../game/store/prefabs/bench-play-reactions';
 import { AfterPlayBasicFromHandEffect } from '../../game/store/effects/play-card-effects';
 
 export class GapejawBog extends TrainerCard {
@@ -25,12 +25,8 @@ export class GapejawBog extends TrainerCard {
 
   reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AfterPlayBasicFromHandEffect && StateUtils.getStadiumCard(state) === this
-      && !IS_STADIUM_EFFECT_BLOCKED(store, state, effect.player, effect.target, this)) {
-      store.log(state, GameLog.LOG_PLAYER_PLACES_DAMAGE_COUNTERS, {
-        name: effect.player.name, damage: 20, target: effect.pokemonCard.name, effect: this.name,
-      });
-      effect.target.damage += 20;
+    if (effect instanceof AfterPlayBasicFromHandEffect) {
+      queueBenchStadiumCounters(store, state, effect, this);
     }
     return state;
   }

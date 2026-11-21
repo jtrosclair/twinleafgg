@@ -1,10 +1,11 @@
+import { benchPokemonFromHand } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { ChooseCardsPrompt, GameError, GameMessage, PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_POKEMON } from '../../game/store/prefabs/attack-effects';
 import { FLIP_COIN_TO_PREVENT_DAMAGE_AND_EFFECTS_DURING_OPPONENTS_NEXT_TURN } from '../../game/store/prefabs/effect-of-attack-prefabs';
-import { ABILITY_USED, BLOCK_IF_HAS_SPECIAL_CONDITION, IS_POKEPOWER_BLOCKED, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN, SHOW_CARDS_TO_PLAYER, USE_ABILITY_ONCE_PER_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { ABILITY_USED, BLOCK_IF_HAS_SPECIAL_CONDITION, IS_POKEPOWER_BLOCKED, REMOVE_MARKER_AT_END_OF_TURN, SHOW_CARDS_TO_PLAYER, USE_ABILITY_ONCE_PER_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Lumineon extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -77,9 +78,9 @@ export class Lumineon extends PokemonCard {
         if (cards.length === 0) {
           return;
         }
-        MOVE_CARDS(store, state, opponent.hand, slots[0], { cards, sourceCard: this });
-        slots[0].pokemonPlayedTurn = state.turn;
-        opponent.switchPokemon(slots[0], store, state);
+        benchPokemonFromHand(store, state, opponent, cards, slots, target => {
+          opponent.switchPokemon(target, store, state);
+        });
       });
     }
 

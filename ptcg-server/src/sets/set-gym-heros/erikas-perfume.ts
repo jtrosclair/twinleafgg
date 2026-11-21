@@ -1,3 +1,4 @@
+import { benchPokemonFromHand } from '../../game/store/prefabs/bench-play-reactions';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { Effect } from '../../game/store/effects/effect';
@@ -61,10 +62,7 @@ export class ErikasPerfume extends TrainerCard {
           return;
         }
 
-        cards.forEach((card, index) => {
-          opponent.hand.moveCardTo(card, slots[index]);
-          slots[index].pokemonPlayedTurn = state.turn;
-        });
+        benchPokemonFromHand(store, state, opponent, cards, slots);
 
 
       });

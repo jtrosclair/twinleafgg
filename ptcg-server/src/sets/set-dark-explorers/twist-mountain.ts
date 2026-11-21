@@ -1,3 +1,4 @@
+import { benchPokemonFromHand } from '../../game/store/prefabs/bench-play-reactions';
 import { Effect } from '../../game/store/effects/effect';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
@@ -52,10 +53,7 @@ function* useStadium(next: Function, store: StoreLike, state: State, effect: Use
     cards.length = slots.length;
   }
 
-  cards.forEach((card, index) => {
-    player.hand.moveCardTo(card, slots[index]);
-    slots[index].pokemonPlayedTurn = state.turn;
-  });
+  benchPokemonFromHand(store, state, player, cards, slots);
 
   return state;
 }

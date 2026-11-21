@@ -1,10 +1,11 @@
+import { benchPokemonFromHand, queueBenchPlayAbility } from '../../game/store/prefabs/bench-play-reactions';
 
 import { Effect } from '../../game/store/effects/effect';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType, TrainerType } from '../../game/store/card/card-types';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { AfterPlayBasicFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { PowerType, StoreLike, State, TrainerCard, GameMessage, PokemonCardList, StateUtils, ChooseCardsPrompt } from '../../game';
-import { ABILITY_USED, BLOCK_IF_GX_ATTACK_USED, CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, MOVE_CARDS, SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ABILITY_USED, BLOCK_IF_GX_ATTACK_USED, CONFIRMATION_PROMPT, MOVE_CARDS, SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class MawileGX extends PokemonCard {
   public tags = [CardTag.POKEMON_GX];
@@ -43,60 +44,51 @@ export class MawileGX extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterPlayBasicFromHandEffect && effect.pokemonCard === this) {
       const player = effect.player;
 
-      if (player.deck.cards.length === 0) {
-        return state;
-      }
+      queueBenchPlayAbility(store, state, effect, () => {
+        CONFIRMATION_PROMPT(store, state, player, result => {
+          if (result) {
+            const player = effect.player;
+            const opponent = StateUtils.getOpponent(state, player);
+            const slots: PokemonCardList[] = opponent.bench.filter(b => b.cards.length === 0);
 
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
+            ABILITY_USED(player, this);
 
-      CONFIRMATION_PROMPT(store, state, player, result => {
-        if (result) {
-          const player = effect.player;
-          const opponent = StateUtils.getOpponent(state, player);
-          const slots: PokemonCardList[] = opponent.bench.filter(b => b.cards.length === 0);
-
-          ABILITY_USED(player, this);
-
-          if (slots.length === 0) {
-            // No open slots, do nothing
-            return state;
-          }
-
-          if (opponent.hand.cards.length === 0) {
-            return state;
-          }
-
-          const max = Math.min(
-            opponent.hand.cards.filter(card => card instanceof PokemonCard && card.stage === Stage.BASIC).length,
-            slots.length
-          );
-
-          store.prompt(state, new ChooseCardsPrompt(
-            player,
-            GameMessage.CHOOSE_BASIC_POKEMON_TO_BENCH,
-            opponent.hand,
-            { superType: SuperType.POKEMON, stage: Stage.BASIC },
-            { min: 0, max, allowCancel: true }
-          ), selected => {
-            const cards = selected || [];
-
-            // Operation canceled by the user
-            if (cards.length === 0) {
+            if (slots.length === 0) {
+              // No open slots, do nothing
               return state;
             }
 
-            cards.forEach((card, index) => {
-              opponent.hand.moveCardTo(card, slots[index]);
-              slots[index].pokemonPlayedTurn = state.turn;
+            if (opponent.hand.cards.length === 0) {
+              return state;
+            }
+
+            const max = Math.min(
+              opponent.hand.cards.filter(card => card instanceof PokemonCard && card.stage === Stage.BASIC).length,
+              slots.length
+            );
+
+            store.prompt(state, new ChooseCardsPrompt(
+              player,
+              GameMessage.CHOOSE_BASIC_POKEMON_TO_BENCH,
+              opponent.hand,
+              { superType: SuperType.POKEMON, stage: Stage.BASIC },
+              { min: 0, max, allowCancel: true }
+            ), selected => {
+              const cards = selected || [];
+
+              // Operation canceled by the user
+              if (cards.length === 0) {
+                return state;
+              }
+
+              benchPokemonFromHand(store, state, opponent, cards, slots);
             });
-          });
-        }
-      }, GameMessage.WANT_TO_USE_ABILITY);
+          }
+        }, GameMessage.WANT_TO_USE_ABILITY);
+      });
     }
 
     // Wily Bite

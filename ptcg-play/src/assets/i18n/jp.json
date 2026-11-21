@@ -77,6 +77,7 @@
     "CHOOSE_CARDS_ORDER": "カードを好きな順番に並べてください。",
     "CHOOSE_KNOCK_OUT_EFFECT": "次に処理するきぜつ時の効果を選んでください。",
     "CHOOSE_ENERGY_ATTACHMENT_EFFECT": "次に処理するエネルギーをつけたときの効果を選んでください。",
+    "CHOOSE_BENCH_EFFECT_ORDER": "先に処理する効果を選んでください。",
     "CHOOSE_CARDS": "カードを選択してください。",
     "CHOOSE_CARDS_TO_PUT_ON_TOP_OF_THE_DECK": "デッキの上に置くカードを選択してください。",
     "CHOOSE_CARD_TO_ATTACH": "ポケモンに付けるカードを選択してください。",

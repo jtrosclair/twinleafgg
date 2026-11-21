@@ -1,14 +1,15 @@
+import { queueBenchPlayAbility } from '../../game/store/prefabs/bench-play-reactions';
 import { CardList, ChooseCardsPrompt, ConfirmPrompt, GameLog, GameMessage, ShowCardsPrompt, TrainerCard } from '../../game';
 import { CardType, Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { AfterDamageEffect, ApplyWeaknessEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { AfterPlayBasicFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { StateUtils } from '../../game/store/state-utils';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
-import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Mewtwo extends PokemonCard {
 
@@ -65,7 +66,7 @@ export class Mewtwo extends PokemonCard {
       }
     }
 
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterPlayBasicFromHandEffect && effect.pokemonCard === this) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
@@ -73,42 +74,39 @@ export class Mewtwo extends PokemonCard {
         return state;
       }
 
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
+      queueBenchPlayAbility(store, state, effect, () => {
+        state = store.prompt(state, new ConfirmPrompt(
+          effect.player.id,
+          GameMessage.WANT_TO_USE_ABILITY,
+        ), wantToUse => {
+          if (wantToUse) {
 
-      state = store.prompt(state, new ConfirmPrompt(
-        effect.player.id,
-        GameMessage.WANT_TO_USE_ABILITY,
-      ), wantToUse => {
-        if (wantToUse) {
+            const deckTop = new CardList();
 
-          const deckTop = new CardList();
+            return store.prompt(state, new ChooseCardsPrompt(
+              player,
+              GameMessage.CHOOSE_CARD_TO_DECK,
+              player.discard,
+              { superType: SuperType.TRAINER, trainerType: TrainerType.SUPPORTER },
+              { min: 1, max: 1, allowCancel: false }
+            ), selected => {
+              selected.forEach((card, index) => {
+                store.log(state, GameLog.LOG_PLAYER_RETURNS_TO_DECK_FROM_DISCARD, { name: player.name, card: card.name });
+              });
 
-          return store.prompt(state, new ChooseCardsPrompt(
-            player,
-            GameMessage.CHOOSE_CARD_TO_DECK,
-            player.discard,
-            { superType: SuperType.TRAINER, trainerType: TrainerType.SUPPORTER },
-            { min: 1, max: 1, allowCancel: false }
-          ), selected => {
-            selected.forEach((card, index) => {
-              store.log(state, GameLog.LOG_PLAYER_RETURNS_TO_DECK_FROM_DISCARD, { name: player.name, card: card.name });
+              player.discard.moveCardTo(selected[0], deckTop);
+              deckTop.moveToTopOfDestination(player.deck);
+
+              store.prompt(state, new ShowCardsPrompt(
+                opponent.id,
+                GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
+                selected
+              ), () => { });
+
+              return state;
             });
-
-            player.discard.moveCardTo(selected[0], deckTop);
-            deckTop.moveToTopOfDestination(player.deck);
-
-            store.prompt(state, new ShowCardsPrompt(
-              opponent.id,
-              GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
-              selected
-            ), () => { });
-
-            return state;
-          });
-        }
+          }
+        });
       });
     }
     return state;

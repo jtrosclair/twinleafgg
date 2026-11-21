@@ -1,3 +1,4 @@
+import { benchPokemonFromHand } from '../../game/store/prefabs/bench-play-reactions';
 import { Effect } from '../../game/store/effects/effect';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
@@ -68,10 +69,7 @@ export class HolonFossil extends TrainerCard {
             { min: 1, max: 1, allowCancel: false, blocked: blockedHand }
           ), selected => {
             const cards = selected || [];
-            cards.forEach((card, index) => {
-              player.hand.moveCardTo(card, slots[index]);
-              slots[index].pokemonPlayedTurn = state.turn;
-            });
+            benchPokemonFromHand(store, state, player, cards, slots);
           });
         }
         return state;

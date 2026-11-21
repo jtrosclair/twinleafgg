@@ -55,8 +55,9 @@ import { Attack } from '../card/pokemon-types';
 import { WaitPrompt } from '../prompts/wait-prompt';
 import { offerAttackCoinReflip } from '../prefabs/attack-coin-reflip';
 import { isLegacySmokescreenMarker, rollCoin } from '../prefabs/coin-flip-results';
+import { resolveBenchPlayReactions } from '../prefabs/bench-play-reactions';
 import { getWillCoinChoicePlayer, readChosenCoinSide, takeWillCoinChoice } from '../prefabs/will-coin-choice';
-import { CoinFlipEffect, CoinFlipSequenceEffect } from '../effects/play-card-effects';
+import { AfterPlayBasicFromHandEffect, CoinFlipEffect, CoinFlipSequenceEffect } from '../effects/play-card-effects';
 import { beginAttackDamageScope, cancelAttackDamageScope, finishAttackDamageScope, getAttackPayment, resolveAfterAttack, resolveAfterAttackDamage } from '../prefabs/attack-after-damage';
 import { wasActiveWhenDamaged } from '../prefabs/knock-out-effects';
 import { recordActiveAbilityLockOrder } from '../state/active-ability-lock-order';
@@ -684,6 +685,8 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
   if (effect instanceof MoveCardsEffect) {
     const source = effect.source;
     const destination = effect.destination;
+    const benchOwner = destination instanceof PokemonCardList && destination.cards.length === 0
+      ? state.players.find(player => player.hand === source && player.bench.includes(destination)) : undefined;
     if (effect instanceof PayHandEnergyAttachmentCostEffect && (source !== effect.player.hand
       || destination !== effect.player.discard || effect.cards?.length !== effect.payment.length
       || !effect.payment.every(card => effect.cards?.includes(card) && source.cards.includes(card)))) {
@@ -752,6 +755,13 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
       source.moveTo(player.discard);
     }
 
+    if (benchOwner && destination instanceof PokemonCardList) {
+      const card = destination.getPokemonCard();
+      if (card?.stage === Stage.BASIC) {
+        destination.pokemonPlayedTurn = state.turn;
+        return resolveBenchPlayReactions(store, state, new AfterPlayBasicFromHandEffect(benchOwner, card, destination, false));
+      }
+    }
     return state;
   }
 

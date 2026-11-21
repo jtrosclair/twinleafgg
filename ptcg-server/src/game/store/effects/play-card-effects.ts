@@ -227,10 +227,20 @@ export class PlayItemEffect implements Effect {
   }
 }
 
+export interface BenchPlayReaction {
+  label: string;
+  canResolve: () => boolean;
+  resolve: () => void;
+}
+
 export class AfterPlayBasicFromHandEffect implements Effect {
   readonly type = PlayCardEffects.AFTER_PLAY_BASIC_FROM_HAND_EFFECT;
   public preventDefault = false;
-  constructor(public player: Player, public pokemonCard: PokemonCard, public target: PokemonCardList) {}
+  public readonly reactions: BenchPlayReaction[] = [];
+  public endTurn = false;
+
+  constructor(public readonly player: Player, public readonly pokemonCard: PokemonCard,
+    public readonly target: PokemonCardList, public readonly playedByOwner = true) {}
 }
 
 export class TrainerEffect implements Effect {

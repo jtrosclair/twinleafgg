@@ -10,6 +10,7 @@ import { CheckPokemonPlayedTurnEffect } from '../effects/check-effects';
 import { EvolveEffect } from '../effects/game-effects';
 import { StateUtils } from '../state-utils';
 import { GameStatsTracker } from '../game-stats-tracker';
+import { resolveBenchPlayReactions } from '../prefabs/bench-play-reactions';
 
 /**
  * Helper function to emit animation events
@@ -59,7 +60,7 @@ export function playPokemonReducer(store: StoreLike, state: State, effect: Effec
       });
 
       if (fromHand && effect.player.bench.includes(effect.target) && effect.target.getPokemonCard() === effect.pokemonCard) {
-        return store.reduceEffect(state, new AfterPlayBasicFromHandEffect(effect.player, effect.pokemonCard, effect.target));
+        return resolveBenchPlayReactions(store, state, new AfterPlayBasicFromHandEffect(effect.player, effect.pokemonCard, effect.target));
       }
       return state;
     }

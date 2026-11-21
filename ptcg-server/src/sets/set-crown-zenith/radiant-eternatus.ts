@@ -1,8 +1,8 @@
-import { PokemonCard, CardTag, Stage, CardType, PowerType, StoreLike, State, GameError, GameMessage, Card, ChooseCardsPrompt, SuperType, ShuffleDeckPrompt, GameLog, ConfirmPrompt, PlayerType, PokemonCardList } from '../../game';
+import { PokemonCard, CardTag, Stage, CardType, PowerType, StoreLike, State,
+  GameMessage, ChooseCardsPrompt, SuperType, ShuffleDeckPrompt, GameLog, ConfirmPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { AfterPlayBasicFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { queueBenchPlayAbility } from '../../game/store/prefabs/bench-play-reactions';
 
 export class RadiantEternatus extends PokemonCard {
 
@@ -47,80 +47,29 @@ export class RadiantEternatus extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
-
-      const player = effect.player;
-
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-      state = store.prompt(state, new ConfirmPrompt(
-        effect.player.id,
-        GameMessage.WANT_TO_USE_ABILITY,
-      ), wantToUse => {
-        if (wantToUse) {
-          player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-            if (cardList.getPokemonCard() === this) {
-              store.log(state, GameLog.LOG_PLAYER_USES_ABILITY, { name: player.name, ability: 'Climactic Gate' });
-            }
-          });
-
-          const slots: PokemonCardList[] = player.bench.filter(b => b.cards.length === 0);
-
-          if (player.deck.cards.length === 0) {
-            throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-          }
-          // Check if bench has open slots
-          const openSlots = player.bench.filter(b => b.cards.length === 0);
-
-          if (openSlots.length === 0) {
-            // No open slots, throw error
-            throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-          }
-
-          const maxPokemons = Math.min(openSlots.length, 2);
-
-          let cards: Card[] = [];
-          const blocked: number[] = [];
-
-          player.deck.cards.forEach((c, index) => {
-            if (c instanceof PokemonCard && !c.tags.includes(CardTag.POKEMON_VMAX)) {
-              blocked.push(index);
-            }
-          });
-
-          return store.prompt(state, new ChooseCardsPrompt(
-            player,
-            GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
-            player.deck,
+    if (effect instanceof AfterPlayBasicFromHandEffect && effect.pokemonCard === this) {
+      const { player } = effect;
+      const eligible = () => player.deck.cards.length > 0 && player.bench.some(slot => slot.cards.length === 0);
+      queueBenchPlayAbility(store, state, effect, () => {
+        store.prompt(state, new ConfirmPrompt(player.id, GameMessage.WANT_TO_USE_ABILITY), wantToUse => {
+          if (!wantToUse) return;
+          const slots = player.bench.filter(slot => slot.cards.length === 0);
+          const blocked = player.deck.cards.flatMap((card, index) => card.tags.includes(CardTag.POKEMON_VMAX) ? [] : [index]);
+          store.log(state, GameLog.LOG_PLAYER_USES_ABILITY, { name: player.name, ability: this.powers[0].name });
+          store.prompt(state, new ChooseCardsPrompt(
+            player, GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH, player.deck,
             { superType: SuperType.POKEMON },
-            { min: 0, max: maxPokemons, allowCancel: false, blocked }
+            { min: 0, max: Math.min(2, slots.length), allowCancel: false, blocked },
           ), selected => {
-
-            cards = selected || [];
-
-            // Operation canceled by the user
-            if (cards.length === 0) {
-              return state;
-            }
-
-            cards.forEach((card, index) => {
+            (selected || []).forEach((card, index) => {
               player.deck.moveCardTo(card, slots[index]);
               slots[index].pokemonPlayedTurn = state.turn;
-              return state;
             });
-
-            state = store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-              player.deck.applyOrder(order);
-            });
-
-            const endTurnEffect = new EndTurnEffect(player);
-            store.reduceEffect(state, endTurnEffect);
-            return state;
+            effect.endTurn = true;
+            store.prompt(state, new ShuffleDeckPrompt(player.id), order => player.deck.applyOrder(order));
           });
-        }
-      });
+        });
+      }, eligible);
     }
     return state;
   }

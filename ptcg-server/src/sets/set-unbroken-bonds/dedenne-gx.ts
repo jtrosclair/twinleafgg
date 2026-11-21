@@ -1,11 +1,12 @@
+import { queueBenchPlayAbility } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SpecialCondition } from '../../game/store/card/card-types';
 import { ChoosePokemonPrompt, ConfirmPrompt, GameMessage, PlayerType, PowerType, SlotType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { AfterPlayBasicFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
-import { BLOCK_IF_GX_ATTACK_USED, IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { BLOCK_IF_GX_ATTACK_USED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class DedenneGX extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -51,7 +52,7 @@ export class DedenneGX extends PokemonCard {
       effect.player.marker.removeMarker(this.DEDECHANGE_MARKER, this);
     }
 
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
+    if (effect instanceof AfterPlayBasicFromHandEffect && effect.pokemonCard === this) {
       const player = effect.player;
 
       if (player.deck.cards.length === 0) {
@@ -62,22 +63,19 @@ export class DedenneGX extends PokemonCard {
         return state;
       }
 
-      // Try to reduce PowerEffect, to check if something is blocking our ability
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
+      queueBenchPlayAbility(store, state, effect, () => {
+        return store.prompt(state, new ConfirmPrompt(
+          effect.player.id,
+          GameMessage.WANT_TO_USE_ABILITY,
+        ), wantToUse => {
+          if (wantToUse) {
+            player.marker.addMarker(this.DEDECHANGE_MARKER, this);
 
-      return store.prompt(state, new ConfirmPrompt(
-        effect.player.id,
-        GameMessage.WANT_TO_USE_ABILITY,
-      ), wantToUse => {
-        if (wantToUse) {
-          player.marker.addMarker(this.DEDECHANGE_MARKER, this);
-
-          const cards = player.hand.cards.filter(c => c !== this);
-          player.hand.moveCardsTo(cards, player.discard);
-          player.deck.moveTo(player.hand, 6);
-        }
+            const cards = player.hand.cards.filter(c => c !== this);
+            player.hand.moveCardsTo(cards, player.discard);
+            player.deck.moveTo(player.hand, 6);
+          }
+        });
       });
     }
 

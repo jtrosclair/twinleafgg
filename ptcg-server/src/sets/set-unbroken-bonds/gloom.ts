@@ -1,3 +1,4 @@
+import { benchPokemonFromHand } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
 import { Card, ChooseCardsPrompt, CoinFlipPrompt, GameError, GameMessage, PokemonCardList, PowerType, State, StateUtils, StoreLike } from '../../game';
@@ -63,10 +64,7 @@ export class Gloom extends PokemonCard {
               return state;
             }
 
-            cards.forEach((card, index) => {
-              opponent.hand.moveCardTo(card, slots[index]);
-              slots[index].pokemonPlayedTurn = state.turn;
-            });
+            benchPokemonFromHand(store, state, opponent, cards, slots);
           });
         }
       });

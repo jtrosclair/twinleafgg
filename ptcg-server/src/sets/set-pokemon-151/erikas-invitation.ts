@@ -1,3 +1,4 @@
+import { benchPokemonFromHand } from '../../game/store/prefabs/bench-play-reactions';
 import { Card } from '../../game/store/card/card';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
@@ -64,11 +65,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
     return state;
   }
 
-  cards.forEach((card, index) => {
-    opponent.hand.moveCardTo(card, slots[index]);
-    slots[index].pokemonPlayedTurn = state.turn;
-    opponent.switchPokemon(slots[index], store, state);
-  });
+  benchPokemonFromHand(store, state, opponent, cards, slots, target => opponent.switchPokemon(target, store, state));
 
 
 }

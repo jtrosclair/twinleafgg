@@ -1,3 +1,4 @@
+import { benchPokemonFromHand } from '../../game/store/prefabs/bench-play-reactions';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType, SuperType, Stage, CardTag } from '../../game/store/card/card-types';
@@ -73,13 +74,8 @@ export class Maxie extends TrainerCard {
               { min: 1, max: 1, allowCancel: false, blocked: blockedHand }
             ), selected => {
               const cards = selected || [];
-              cards.forEach((card, index) => {
-                player.hand.moveCardTo(card, slots[index]);
-                slots[index].pokemonPlayedTurn = state.turn;
-
-                if (slots[index].getPokemonCard()?.stage === Stage.STAGE_2) {
-                  slots[index].damage += 20; // Add 2 damage counters
-                }
+              benchPokemonFromHand(store, state, player, cards, slots, target => {
+                if (target.getPokemonCard()?.stage === Stage.STAGE_2) target.damage += 20;
               });
             });
           }
