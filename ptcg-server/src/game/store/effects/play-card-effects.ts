@@ -8,6 +8,7 @@ import { CardList } from '../state/card-list';
 import { Card } from '../card/card';
 import { Stage } from '../card/card-types';
 import { SlotType } from '../actions/play-card-action';
+import { State } from '../state/state';
 
 export enum PlayCardEffects {
   ATTACH_ENERGY_EFFECT = 'ATTACH_ENERGY_EFFECT',
@@ -47,6 +48,9 @@ export class AttachEnergyEffect implements Effect {
   public player: Player;
   public energyCard: EnergyCard;
   public target: PokemonCardList;
+  /** Set by the hand attachment resolver after checking interception and payment. */
+  public handAttachmentPrepared = false;
+  public completionBatch?: AfterAttachEnergyFromHandEffect[];
 
   constructor(
     player: Player, energyCard: EnergyCard, target: PokemonCardList,
@@ -60,12 +64,52 @@ export class AttachEnergyEffect implements Effect {
   }
 }
 
+/** An individual legacy reducer can still check the legality of an Energy card and target. */
+export class CheckEnergyAttachmentEffect implements Effect {
+  readonly type = 'CHECK_ENERGY_ATTACHMENT_EFFECT';
+  public preventDefault = false;
+
+  constructor(public readonly attachment: AttachEnergyEffect) {}
+}
+
+export class CheckHandEnergyInterceptionEffect implements Effect {
+  readonly type = 'CHECK_HAND_ENERGY_INTERCEPTION_EFFECT';
+  public preventDefault = false;
+  public requiresHeads = false;
+
+  constructor(public readonly player: Player) {}
+}
+
+export class CheckManualEnergyAttachmentCountEffect implements Effect {
+  readonly type = 'CHECK_MANUAL_ENERGY_ATTACHMENT_COUNT_EFFECT';
+  public preventDefault = false;
+  public allowSecond = false;
+
+  constructor(public readonly player: Player, public readonly target: PokemonCardList) {}
+}
+
+/** Resolve a selection of hand Energy together before reporting any successful attachments. */
+export class AttachEnergyFromHandEffect implements Effect {
+  readonly type = 'ATTACH_ENERGY_FROM_HAND_EFFECT';
+  public preventDefault = false;
+
+  constructor(
+    public readonly player: Player,
+    public readonly attachments: AttachEnergyEffect[],
+    public readonly useTurnAttachment = false,
+    public readonly onAttached?: (state: State, attached: AttachEnergyEffect[]) => void,
+  ) {}
+}
+
 /** Sent only after an Energy card was successfully attached from the hand. */
 export class AfterAttachEnergyFromHandEffect implements Effect {
   readonly type: string = PlayCardEffects.AFTER_ATTACH_ENERGY_EFFECT;
   public preventDefault = false;
+  public readonly activePokemonAtAttachment: PokemonCard | undefined;
 
-  constructor(public player: Player, public energyCard: EnergyCard, public target: PokemonCardList) {}
+  constructor(public player: Player, public energyCard: EnergyCard, public target: PokemonCardList) {
+    this.activePokemonAtAttachment = player.active.getPokemonCard();
+  }
 }
 
 export class PlayPokemonEffect implements Effect {

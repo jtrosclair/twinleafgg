@@ -8,7 +8,7 @@ import { PowerType, SlotType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 import { PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE } from '../../game/store/prefabs/attack-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 
 export class GalarianCursolaV extends PokemonCard {
   public tags = [CardTag.POKEMON_V];
@@ -43,13 +43,8 @@ export class GalarianCursolaV extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Gnawing Aura (passive - put 3 damage counters when opponent attaches energy from hand)
-    // Ref: set-dragons-exalted/ampharos.ts (Electromagnetic Wall - AttachEnergyEffect from hand -> damage)
-    if (effect instanceof AttachEnergyEffect) {
-      // Only trigger on energy from hand
-      if (!effect.player.hand.cards.includes(effect.energyCard)) {
-        return state;
-      }
-
+    // Ref: set-dragons-exalted/ampharos.ts (Electromagnetic Wall - AfterAttachEnergyFromHandEffect from hand -> damage)
+    if (effect instanceof AfterAttachEnergyFromHandEffect) {
       const cardList = StateUtils.findCardList(state, this);
       const owner = StateUtils.findOwner(state, cardList);
 

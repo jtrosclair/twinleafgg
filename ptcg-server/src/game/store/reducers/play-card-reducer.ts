@@ -1,6 +1,6 @@
 import { Action } from '../actions/action';
 import {
-  AttachEnergyEffect, PlayPokemonEffect, PlayStadiumEffect,
+  AttachEnergyEffect, CheckManualEnergyAttachmentCountEffect, PlayPokemonEffect, PlayStadiumEffect,
   PlaySupporterEffect, AttachPokemonToolEffect, PlayItemEffect
 } from '../effects/play-card-effects';
 import { CardList } from '../state/card-list';
@@ -8,7 +8,7 @@ import { EnergyCard } from '../card/energy-card';
 import { GameError } from '../../game-error';
 import { GameMessage } from '../../game-message';
 import { PlayCardAction, PlayerType, SlotType, CardTarget } from '../actions/play-card-action';
-import { PokemonCard } from '../card/pokemon-card';
+import { hasAlphaGrowth, PokemonCard } from '../card/pokemon-card';
 import { PokemonCardList } from '../state/pokemon-card-list';
 import { State, GamePhase } from '../state/state';
 import { StoreLike } from '../store-like';
@@ -20,6 +20,7 @@ import { UsePowerEffect } from '../effects/game-effects';
 import { HAS_SUPPORTER_PLAY_AVAILABLE } from '../prefabs/prefabs';
 import { recordActiveAbilityLockOrder } from '../state/active-ability-lock-order';
 import { resolveBasicBenchPlay } from '../prefabs/active-ability-lock';
+import { attachWithOptionalSecondEnergy } from '../prefabs/hand-energy-attachment';
 
 function findCardList(state: State, target: CardTarget): CardList | undefined {
   const player = target.player === PlayerType.BOTTOM_PLAYER
@@ -53,24 +54,20 @@ export function playCardReducer(store: StoreLike, state: State, action: Action):
 
       if (handCard instanceof EnergyCard) {
         const target = findCardList(state, action.target);
-        if (!(target instanceof PokemonCardList) || target.cards.length === 0) {
+        if (action.target.player !== PlayerType.BOTTOM_PLAYER || !(target instanceof PokemonCardList) || !target.getPokemonCard()) {
           throw new GameError(GameMessage.INVALID_TARGET);
         }
-
-        if (player.usedDragonsWish === true || state.rules.unlimitedEnergyAttachments === true) {
-          // Allow multiple energy attachments per turn
-          const effect = new AttachEnergyEffect(player, handCard, target);
-          return store.reduceEffect(state, effect);
-        } else {
-
-          if (player.energyPlayedTurn === state.turn) {
-            throw new GameError(GameMessage.ENERGY_ALREADY_ATTACHED);
-          }
-          player.energyPlayedTurn = state.turn;
-
-          const effect = new AttachEnergyEffect(player, handCard, target);
-          return store.reduceEffect(state, effect);
+        if (!player.usedDragonsWish && !state.rules.unlimitedEnergyAttachments && player.energyPlayedTurn === state.turn) {
+          throw new GameError(GameMessage.ENERGY_ALREADY_ATTACHED);
         }
+        const extras = player.hand.cards.filter((card): card is EnergyCard => card instanceof EnergyCard && card !== handCard);
+        const allowance = new CheckManualEnergyAttachmentCountEffect(player, target);
+        if (extras.length > 0) {
+          allowance.allowSecond = hasAlphaGrowth(target.getPokemonCard());
+          state = store.reduceEffect(state, allowance);
+        }
+        return attachWithOptionalSecondEnergy(store, state, new AttachEnergyEffect(player, handCard, target),
+          allowance.allowSecond ? extras : [], true);
       }
 
       if (handCard instanceof PokemonCard) {

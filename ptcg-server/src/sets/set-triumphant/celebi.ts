@@ -1,8 +1,9 @@
 import { GameMessage } from '../../game/game-message';
 import { Effect } from '../../game/store/effects/effect';
-import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { hasAlphaGrowth, PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { AttachEnergyEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { attachWithOptionalSecondEnergy } from '../../game/store/prefabs/hand-energy-attachment';
 import { PowerType, StoreLike, State, PlayerType, SlotType, StateUtils, PokemonCardList, EnergyCard, GameError, AttachEnergyPrompt } from '../../game';
 
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
@@ -90,7 +91,12 @@ export class Celebi extends PokemonCard {
 
         for (const transfer of transfers) {
           const target = StateUtils.getTarget(state, player, transfer.to);
-          player.hand.moveCardTo(transfer.card, target);
+          if (!(transfer.card instanceof EnergyCard)) continue;
+          // The Forest Breath ruling allows α Growth on this specific Poké-Power.
+          const extras = hasAlphaGrowth(target.getPokemonCard()) ? player.hand.cards.filter(
+            (card): card is EnergyCard => card instanceof EnergyCard && card.name === 'Grass Energy'
+          ) : [];
+          attachWithOptionalSecondEnergy(store, state, new AttachEnergyEffect(player, transfer.card, target), extras, false);
         }
 
       });

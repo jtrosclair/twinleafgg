@@ -2,13 +2,12 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { ABILITY_USED, ADD_MARKER, ADD_SLEEP_TO_PLAYER_ACTIVE, AFTER_ATTACK, CONFIRMATION_PROMPT, HAS_MARKER, IS_ABILITY_BLOCKED, REMOVE_MARKER_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
-import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
-import { GameMessage } from '../../game/game-message';
+import { CheckManualEnergyAttachmentCountEffect } from '../../game/store/effects/play-card-effects';
+import { ADD_SLEEP_TO_PLAYER_ACTIVE, AFTER_ATTACK, IS_ABILITY_BLOCKED, REMOVE_MARKER_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
+import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyPrompt, EnergyCard, PlayerType, PowerType, SlotType, State, StoreLike } from '../../game';
+import { PowerType, State, StoreLike, StateUtils } from '../../game';
 export class Primarina extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
   public evolvesFrom: string = 'Brionne';
@@ -41,65 +40,10 @@ export class Primarina extends PokemonCard {
   public fullName: string = 'Primarina LOT';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Harmonics (passive - intercept manual energy attachment)
-    // Ref: set-expedition/venusaur.ts (Harvest Bounty - attach extra energy on AttachEnergyEffect)
-    if (effect instanceof AttachEnergyEffect) {
-      const player = effect.player;
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      // Prevent infinite recursion - once per turn
-      if (HAS_MARKER(this.HARMONICS_MARKER, player, this)) {
-        return state;
-      }
-
-      // Check this Pokemon is in play
-      let isInPlay = false;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card === this) {
-          isInPlay = true;
-        }
-      });
-
-      if (!isInPlay) {
-        return state;
-      }
-
-      // Count energy cards in hand (excluding the one already being attached)
-      const energyInHand = player.hand.cards.filter(
-        c => c instanceof EnergyCard && c !== effect.energyCard
-      );
-
-      if (energyInHand.length > 0) {
-        const attachTarget = effect.target;
-
-        CONFIRMATION_PROMPT(store, state, player, result => {
-          if (result) {
-            ADD_MARKER(this.HARMONICS_MARKER, player, this);
-            ABILITY_USED(player, this);
-
-            // Allow attaching 1 more energy card to the SAME target
-            store.prompt(state, new AttachEnergyPrompt(
-              player.id,
-              GameMessage.ATTACH_ENERGY_CARDS,
-              player.hand,
-              PlayerType.BOTTOM_PLAYER,
-              [SlotType.ACTIVE, SlotType.BENCH],
-              { superType: SuperType.ENERGY },
-              { allowCancel: false, min: 1, max: 1 }
-            ), transfers => {
-              transfers = transfers || [];
-              for (const transfer of transfers) {
-                const energyCard = transfer.card as EnergyCard;
-                const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, attachTarget);
-                store.reduceEffect(state, attachEnergyEffect);
-              }
-            });
-          }
-        });
-      }
+    // Ref: game/store/prefabs/hand-energy-attachment.ts (simultaneous manual attachment).
+    if (effect instanceof CheckManualEnergyAttachmentCountEffect && StateUtils.isPokemonInPlay(effect.player, this)
+      && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+      effect.allowSecond = true;
     }
 
     REMOVE_MARKER_AT_END_OF_TURN(effect, this.HARMONICS_MARKER, this);

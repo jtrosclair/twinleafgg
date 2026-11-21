@@ -22,4 +22,6 @@ export abstract class EnergyCard extends Card {
   public blendedEnergyCount: number = 1;
 
   public energyEffect: EnergyEffect | undefined;
+
+  declare readonly discardCostToAttachFromHand?: number;
 }

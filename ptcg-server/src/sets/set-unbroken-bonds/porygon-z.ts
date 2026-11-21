@@ -51,8 +51,8 @@ export class PorygonZ extends PokemonCard {
       const player = effect.player;
 
       const hasEnergyInHand = player.hand.cards.some(c => {
-        return c instanceof EnergyCard
-          && c.energyType === EnergyType.SPECIAL;
+        return c instanceof EnergyCard && c.energyType === EnergyType.SPECIAL
+          && (c.discardCostToAttachFromHand ?? 0) < player.hand.cards.length;
       });
       if (!hasEnergyInHand) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
@@ -69,21 +69,14 @@ export class PorygonZ extends PokemonCard {
         PlayerType.BOTTOM_PLAYER,
         [SlotType.BENCH, SlotType.ACTIVE],
         { superType: SuperType.ENERGY, energyType: EnergyType.SPECIAL },
-        { allowCancel: true }
+        { allowCancel: true, min: 1, max: 1 }
       ), transfers => {
         transfers = transfers || [];
-        // First, move all cards to their targets
         for (const transfer of transfers) {
           const target = StateUtils.getTarget(state, player, transfer.to);
-          player.hand.moveCardTo(transfer.card, target);
-        }
-
-        // Then, trigger AttachEnergyEffect for each attachment
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          const energyCard = transfer.card as EnergyCard;
-          const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
-          state = store.reduceEffect(state, attachEnergyEffect);
+          if (transfer.card instanceof EnergyCard) {
+            state = store.reduceEffect(state, new AttachEnergyEffect(player, transfer.card, target));
+          }
         }
 
       });

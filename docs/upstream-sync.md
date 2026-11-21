@@ -3670,3 +3670,50 @@ The 5,225 sampled opening actions include 1,350 manual Energy attachments
 and 242 evolutions. Every sampled outcome matched. Seven recorded solutions
 won. The API passed 32 tests and the 2.46 MiB production package passed
 attestation, 10 packaged board checks and 209 Angular checks.
+
+## Gameplay re-audit, batch 49
+
+Implemented α Growth on Swampert PRC 36, Whiscash PRC 41, Gorebyss PRC 52,
+Primal Kyogre-EX PRC 55 and 149, and Kingdra PRC 108. The optional second
+card attaches to the same Pokémon. Both physical cards enter play before
+completed-attachment reactions. Playing two spends one manual attachment,
+and declining the second plays the first normally. The Ancient Origins
+Primal Kyogre-EX still has its printed θ Max. Forest Breath can attach two
+Grass Energy cards to that recipient while preserving the turn allowance.
+Harmonics and Harvest Bounty use the same manual selection and honor their
+own eligibility rules.
+[Official α Growth print](https://www.pokemon-card.com/card-search/details.php/card/30764)
+[Official Forest Breath ruling](https://www.pokemon-card.com/rules/faq/search.php?page=758&regulation=all&sc_group_id=731%2F1000)
+[Official Harmonics timing](https://community.pokemon.com/en-us/discussion/comment/206)
+
+Aurora Energy requires another hand card per copy. Selected Energy is held
+in hand while paying. The discard excludes every Energy selected for that
+attachment, moves all required cards together, and accepts the normal Prism
+Star redirect to the Lost Zone. The once-per-turn allowance is spent after a
+successful attachment. Slimy Room flips before the discard. Tails discards
+only the rejected Energy, and a wholly rejected attempt leaves the manual
+allowance unused. Aurora Energy arriving from the deck or discard has no
+hand discard cost. Crazy Code, Cheer Up and Precious Touch use the same
+payment. Precious Touch heals 120 only after a successful Bench attachment.
+[Official Aurora Energy print](https://www.pokemon-card.com/card-search/details.php/card/38832/regu/all)
+[Official Slimy Room and Aurora Energy ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%AA%E3%83%BC%E3%83%AD%E3%83%A9%E3%82%A8%E3%83%8D%E3%83%AB%E3%82%AE%E3%83%BC&page=2&regulation=all&regulation_faq_main_item1=all)
+[Official ruling for two Aurora Energy costs](https://www.pokemon-card.com/rules/faq/search.php?page=392&regulation=all&sc_group_id=731%2F1000)
+
+Moved the reviewed hand-only attachment reactions to the completed event.
+The focused checks exercise actual simultaneous reactions from Rainbow
+Energy, Frozen City and Moomoo Malt, including Miltank's eligibility when
+Jet Energy switches the recipient. Additional legacy attachment handlers
+still share the pre-attachment event with legality checks. Audit each
+remaining card's printed origin and timing before migrating it, starting
+with Buddy Pulse and the older same-target reactions.
+[Official Moomoo Malt ruling](https://www.pokemon-card.com/rules/faq/search.php?card_block=&card_name=%E3%82%B2%E3%83%B3%E3%82%B7%E3%82%AB%E3%82%A4%E3%82%AA%E3%83%BC%E3%82%ACEX&old=1)
+
+All 23 focused cases passed. Twenty fail on the previous engine. The entire
+engine suite passed 10,510 tests, and the worktree with the existing local
+edits passed 327 targeted cases. The 559 comparable saved states and all
+5,225 sampled opening actions matched, including 1,350 hand attachments and
+242 evolutions. All seven recorded puzzle solutions reached a win. The API
+passed 32 tests. The 2.46 MiB production package passed attestation, 10 board
+scenarios and 209 Angular checks. Both mouse and touch verified the complete
+α Growth and Aurora Energy flow in the packaged simulator, from choosing
+an extra Energy to discarding the payment and attaching both cards.

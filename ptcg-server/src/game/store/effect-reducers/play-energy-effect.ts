@@ -31,6 +31,22 @@ function emitAnimationEvent(store: StoreLike, eventName: string, data: {
 
 export function playEnergyReducer(store: StoreLike, state: State, effect: Effect): State {
 
+  if (effect instanceof AfterAttachEnergyFromHandEffect) {
+    const pending = effect.target.pendingEnergyAttachDamageCounters;
+    const attacker = pending && state.players.find(player => player.id === pending.attackerPlayerId);
+    if (pending && attacker) {
+      let source = attacker.active;
+      attacker.forEachPokemon(PlayerType.BOTTOM_PLAYER, (slot, card) => {
+        if (card === pending.sourceCard) source = slot;
+      });
+      const attack = new AttackEffect(attacker, effect.player, pending.attack);
+      attack.source = source;
+      const counters = new PutCountersEffect(attack, pending.damage);
+      counters.target = effect.target;
+      return store.reduceEffect(state, counters);
+    }
+    return state;
+  }
 
   /* Play energy card */
   if (effect instanceof AttachEnergyEffect) {
@@ -53,21 +69,6 @@ export function playEnergyReducer(store: StoreLike, state: State, effect: Effect
     }
 
     const fromHand = effect.sourceZone === undefined && effect.player.hand.cards.includes(effect.energyCard);
-    const pendingAttachDamage = effect.target.pendingEnergyAttachDamageCounters;
-    if (fromHand && pendingAttachDamage) {
-      const attacker = state.players.find(player => player.id === pendingAttachDamage.attackerPlayerId);
-      if (attacker) {
-        let source = attacker.active;
-        attacker.forEachPokemon(PlayerType.BOTTOM_PLAYER, (slot, card) => {
-          if (card === pendingAttachDamage.sourceCard) source = slot;
-        });
-        const attack = new AttackEffect(attacker, effect.player, pendingAttachDamage.attack);
-        attack.source = source;
-        const counters = new PutCountersEffect(attack, pendingAttachDamage.damage);
-        counters.target = effect.target;
-        state = store.reduceEffect(state, counters);
-      }
-    }
 
     if (effect.sourceZone) {
       if (!effect.target.cards.includes(effect.energyCard)) {
@@ -101,7 +102,9 @@ export function playEnergyReducer(store: StoreLike, state: State, effect: Effect
     });
 
     if (fromHand && effect.target.cards.includes(effect.energyCard)) {
-      state = store.reduceEffect(state, new AfterAttachEnergyFromHandEffect(effect.player, effect.energyCard, effect.target));
+      const completion = new AfterAttachEnergyFromHandEffect(effect.player, effect.energyCard, effect.target);
+      if (effect.completionBatch) effect.completionBatch.push(completion);
+      else state = store.reduceEffect(state, completion);
     }
     return state;
   }

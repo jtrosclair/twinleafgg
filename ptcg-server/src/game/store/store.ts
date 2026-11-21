@@ -11,9 +11,11 @@ import { Card } from './card/card';
 import { PokemonCard } from './card/pokemon-card';
 import { TrainerCard } from './card/trainer-card';
 import { Stage, TrainerType } from './card/card-types';
-import { AfterAttachEnergyFromHandEffect, CopiedSupporterEffect } from './effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect, AttachEnergyEffect, AttachEnergyFromHandEffect, CheckEnergyAttachmentEffect, CopiedSupporterEffect } from './effects/play-card-effects';
+import { resolveHandEnergyAttachments } from './prefabs/hand-energy-attachment';
 import { PowerType } from './card/pokemon-types';
 import { PokemonCardList } from './state/pokemon-card-list';
+import { EnergyCard } from './card/energy-card';
 import { CardTarget, PlayCardAction, PlayerType, SlotType } from './actions/play-card-action';
 import { ChangeAvatarAction } from './actions/change-avatar-action';
 import { Effect } from './effects/effect';
@@ -157,6 +159,17 @@ export class Store implements StoreLike {
   }
 
   public reduceEffect(state: State, effect: Effect): State {
+    if (effect instanceof CheckEnergyAttachmentEffect) {
+      this.checkEnergyAttachment(state, effect.attachment);
+      return state;
+    }
+    if (effect instanceof AttachEnergyFromHandEffect) {
+      return resolveHandEnergyAttachments(this, state, effect);
+    }
+    if (effect instanceof AttachEnergyEffect && !effect.handAttachmentPrepared && effect.sourceZone === undefined
+      && effect.player.hand.cards.includes(effect.energyCard)) {
+      return resolveHandEnergyAttachments(this, state, new AttachEnergyFromHandEffect(effect.player, [effect]));
+    }
     if (effect instanceof CopiedSupporterEffect) {
       return this.resolveCopiedSupporter(state, effect);
     }
@@ -573,6 +586,27 @@ export class Store implements StoreLike {
     probe.state = state;
     probe.calculatingPlayability = true;
     return probe;
+  }
+
+  private checkEnergyAttachment(state: State, attachment: AttachEnergyEffect): void {
+    const references: { s: Object, d: Object }[] = [];
+    const copy = deepClone(state, [], references);
+    const player = copy.players[state.players.indexOf(attachment.player)];
+    const target = references.find(entry => entry.s === attachment.target)?.d;
+    const card = references.find(entry => entry.s === attachment.energyCard)?.d;
+    if (!player || !(target instanceof PokemonCardList) || !(card instanceof EnergyCard)) {
+      throw new GameError(GameMessage.INVALID_TARGET);
+    }
+    const probe = this.createPlayabilityProbe(copy, state);
+    const attempt = new AttachEnergyEffect(player, card, target);
+    attempt.handAttachmentPrepared = true;
+    attempt.completionBatch = [];
+    try {
+      probe.reduceEffect(copy, attempt);
+      if (attempt.preventDefault || !target.cards.includes(card)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+    } finally {
+      probe.cleanup();
+    }
   }
 
   private checkTrainerPlay(state: State, playerId: number, handIndex: number): boolean {

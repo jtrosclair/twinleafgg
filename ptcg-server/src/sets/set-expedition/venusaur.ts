@@ -1,11 +1,10 @@
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { ABILITY_USED, ADD_MARKER, ADD_PARALYZED_TO_PLAYER_ACTIVE, AFTER_ATTACK, COIN_FLIP_PROMPT, CONFIRMATION_PROMPT, HAS_MARKER, IS_POKEPOWER_BLOCKED } from '../../game/store/prefabs/prefabs';
-import { GameMessage } from '../../game/game-message';
-import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
+import { CheckManualEnergyAttachmentCountEffect } from '../../game/store/effects/play-card-effects';
+import { ADD_PARALYZED_TO_PLAYER_ACTIVE, AFTER_ATTACK, COIN_FLIP_PROMPT, IS_POKEPOWER_BLOCKED, REMOVE_MARKER_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
+import { CardType, Stage } from '../../game/store/card/card-types';
 import { StateUtils } from '../../game/store/state-utils';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyPrompt, EnergyCard, PlayerType, PowerType, SlotType, State, StoreLike } from '../../game';
+import { PowerType, State, StoreLike } from '../../game';
 export class Venusaur extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
   public evolvesFrom: string = 'Ivysaur';
@@ -37,66 +36,15 @@ export class Venusaur extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect) {
-      const player = effect.player;
-      const cardList = StateUtils.findCardList(state, this);
-      const owner = StateUtils.findOwner(state, cardList);
-      const active = effect.player.active;
-
-      let isVenusaurInPlay = false;
-      owner.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card === this) {
-          isVenusaurInPlay = true;
-        }
-      });
-
-      if (!isVenusaurInPlay) {
-        return state;
-      }
-
-      if (HAS_MARKER(this.HARVEST_BOUNTY_MARKER, player, this)) {
-        return state;
-      }
-
-      const energyInHand = player.hand.cards.filter(c => c.superType === SuperType.ENERGY && c !== effect.energyCard);
-
-      if (!IS_POKEPOWER_BLOCKED(store, state, player, this) && energyInHand.length > 0) {
-        if (owner === player && effect.target === active) {
-          CONFIRMATION_PROMPT(store, state, player, result => {
-            if (result) {
-
-              // Once per turn
-              ADD_MARKER(this.HARVEST_BOUNTY_MARKER, player, this);
-              ABILITY_USED(player, this);
-
-              store.prompt(state, new AttachEnergyPrompt(
-                player.id,
-                GameMessage.ATTACH_ENERGY_CARDS,
-                player.hand,
-                PlayerType.BOTTOM_PLAYER,
-                [SlotType.ACTIVE],
-                { superType: SuperType.ENERGY },
-                { allowCancel: false, min: 1, max: 1 },
-              ), transfers => {
-                transfers = transfers || [];
-
-                if (transfers.length === 0) {
-                  return state;
-                }
-
-                // Attach second energy
-                for (const transfer of transfers) {
-                  const target = StateUtils.getTarget(state, player, transfer.to);
-                  const energyCard = transfer.card as EnergyCard;
-                  const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
-                  store.reduceEffect(state, attachEnergyEffect);
-                }
-              });
-            }
-          });
-        }
+    // Ref: set-lost-thunder/primarina.ts (simultaneous manual attachment).
+    if (effect instanceof CheckManualEnergyAttachmentCountEffect && effect.target === effect.player.active) {
+      const holder = StateUtils.findPokemonSlot(state, this);
+      if (holder?.getPokemonCard() === this && StateUtils.isPokemonInPlay(effect.player, this)
+        && holder.specialConditions.length === 0 && !IS_POKEPOWER_BLOCKED(store, state, effect.player, this)) {
+        effect.allowSecond = true;
       }
     }
+    REMOVE_MARKER_AT_END_OF_TURN(effect, this.HARVEST_BOUNTY_MARKER, this);
 
     if (AFTER_ATTACK(effect, 0, this)) {
       COIN_FLIP_PROMPT(store, state, effect.player, result => {

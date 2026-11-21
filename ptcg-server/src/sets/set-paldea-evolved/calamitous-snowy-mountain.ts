@@ -3,7 +3,7 @@ import { CardType, Stage, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils, GameError, GameMessage, GameLog } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { UseStadiumEffect } from '../../game/store/effects/game-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
 
 export class CalamitousSnowyMountain extends TrainerCard {
@@ -29,7 +29,7 @@ export class CalamitousSnowyMountain extends TrainerCard {
       throw new GameError(GameMessage.CANNOT_USE_STADIUM);
     }
 
-    if (effect instanceof AttachEnergyEffect && effect.sourceZone === undefined && StateUtils.getStadiumCard(state) === this) {
+    if (effect instanceof AfterAttachEnergyFromHandEffect && StateUtils.getStadiumCard(state) === this) {
 
       const checkPokemonTypeEffect = new CheckPokemonTypeEffect(effect.target);
       store.reduceEffect(state, checkPokemonTypeEffect);

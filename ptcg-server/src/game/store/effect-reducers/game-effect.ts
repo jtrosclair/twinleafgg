@@ -38,7 +38,7 @@ import { StateUtils } from '../state-utils';
 import { MarkerConstants } from '../markers/marker-constants';
 import { GamePhase, State } from '../state/state';
 import { StoreLike } from '../store-like';
-import { MoveCardsEffect } from '../effects/game-effects';
+import { MoveCardsEffect, PayHandEnergyAttachmentCostEffect } from '../effects/game-effects';
 import { GameStatsTracker } from '../game-stats-tracker';
 import { PokemonCardList } from '../state/pokemon-card-list';
 import { MOVE_CARDS, ADD_MARKER, HAS_MARKER, COIN_FLIP_PROMPT, IS_TOOL_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../prefabs/prefabs';
@@ -668,6 +668,12 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
   if (effect instanceof MoveCardsEffect) {
     const source = effect.source;
     const destination = effect.destination;
+    if (effect instanceof PayHandEnergyAttachmentCostEffect && (source !== effect.player.hand
+      || destination !== effect.player.discard || effect.cards?.length !== effect.payment.length
+      || !effect.payment.every(card => effect.cards?.includes(card) && source.cards.includes(card)))) {
+      effect.preventDefault = true;
+      return state;
+    }
     const isPartialMove = effect.cards !== undefined || effect.count !== undefined;
 
     // Only reset in-play Pokemon state when moving the entire card list, not specific cards.

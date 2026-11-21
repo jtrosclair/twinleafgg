@@ -374,6 +374,13 @@ export class MoveCardsEffect implements Effect {
   }
 }
 
+/** A single hand discard payment. It can be prevented, but cannot pay in part. */
+export class PayHandEnergyAttachmentCostEffect extends MoveCardsEffect {
+  constructor(public readonly player: Player, public readonly payment: Card[], energy?: Card) {
+    super(player.hand, player.discard, { cards: [...payment], sourceCard: energy });
+  }
+}
+
 export class EffectOfAbilityEffect implements Effect {
   readonly type: string = GameEffects.EFFECT_OF_ABILITY_EFFECT;
   public preventDefault = false;

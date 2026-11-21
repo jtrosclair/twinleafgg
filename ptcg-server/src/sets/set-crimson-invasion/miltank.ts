@@ -42,7 +42,7 @@ export class Miltank extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Moomoo Malt (passive - heal when attaching energy from hand)
-    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.player.active.getPokemonCard() === this
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.activePokemonAtAttachment === this
       && StateUtils.findOwner(state, effect.target) === effect.player
       && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
       return store.reduceEffect(state, new HealEffect(effect.player, effect.target, 90));

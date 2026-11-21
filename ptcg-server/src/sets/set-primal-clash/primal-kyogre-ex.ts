@@ -2,7 +2,7 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
-import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { ALPHA_GROWTH, PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType } from '../../game/store/card/card-types';
 import { GameMessage, StoreLike, State, StateUtils, PlayerType, SlotType } from '../../game';
 import { EnergyCard } from '../../game/store/card/energy-card';
@@ -19,6 +19,8 @@ export class PrimalKyogreEx extends PokemonCard {
   public hp: number = 240;
   public weakness = [{ type: G }];
   public retreat = [C, C, C, C];
+
+  public powers = [ALPHA_GROWTH];
 
   public attacks = [
     {

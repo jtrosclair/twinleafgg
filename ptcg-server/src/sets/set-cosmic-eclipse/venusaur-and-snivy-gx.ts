@@ -4,7 +4,7 @@ import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effect
 import { BLOCK_IF_GX_ATTACK_USED, CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import {DealDamageEffect} from '../../game/store/effects/attack-effects';
 import {HealEffect} from '../../game/store/effects/game-effects';
-import {AttachEnergyEffect} from '../../game/store/effects/play-card-effects';
+import {AfterAttachEnergyFromHandEffect} from '../../game/store/effects/play-card-effects';
 import {EndTurnEffect} from '../../game/store/effects/game-phase-effects';
 
 export class VenusaurSnivyGX extends PokemonCard {
@@ -47,7 +47,7 @@ export class VenusaurSnivyGX extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Shining Vine
-    if (effect instanceof AttachEnergyEffect && effect.target === effect.player.active){
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target === effect.player.active){
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
       let benchHasPokemon = false;

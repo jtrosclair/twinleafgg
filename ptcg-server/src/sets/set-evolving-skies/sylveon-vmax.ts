@@ -1,8 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType } from '../../game/store/card/card-types';
-import { StoreLike, State, GameMessage, AttachEnergyPrompt, PlayerType, SlotType, EnergyCard, GameError, StateUtils } from '../../game';
+import { StoreLike, State, GameMessage, AttachEnergyPrompt, PlayerType, SlotType, EnergyCard, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { HealEffect } from '../../game/store/effects/game-effects';
+import { AttachEnergyEffect, AttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
 
@@ -57,21 +58,19 @@ export class SylveonVMAX extends PokemonCard {
 
       const player = effect.player;
 
-      const hasEnergyInHand = player.hand.cards.some(c => {
-        return c instanceof EnergyCard;
-      });
-      if (!hasEnergyInHand) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      }
+      const blocked = player.hand.cards.flatMap((card, index) =>
+        card instanceof EnergyCard && (card.discardCostToAttachFromHand ?? 0) >= player.hand.cards.length ? [index] : []);
+      if (!player.bench.some(slot => slot.getPokemonCard()) ||
+        !player.hand.cards.some((card, index) => card instanceof EnergyCard && !blocked.includes(index))) return state;
 
       state = store.prompt(state, new AttachEnergyPrompt(
         player.id,
         GameMessage.ATTACH_ENERGY_TO_BENCH,
         player.hand,
         PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH, SlotType.ACTIVE],
+        [SlotType.BENCH],
         { superType: SuperType.ENERGY },
-        { allowCancel: false, min: 1, max: 1 },
+        { allowCancel: false, min: 1, max: 1, blocked },
       ), transfers => {
         transfers = transfers || [];
 
@@ -82,10 +81,12 @@ export class SylveonVMAX extends PokemonCard {
 
         for (const transfer of transfers) {
           const target = StateUtils.getTarget(state, player, transfer.to);
-          player.deck.moveCardTo(transfer.card, target);
-
-          const healEffect = new HealEffect(player, target, 120);
-          store.reduceEffect(state, healEffect);
+          if (!(transfer.card instanceof EnergyCard)) continue;
+          const attachment = new AttachEnergyEffect(player, transfer.card, target);
+          // Ref: set-unbroken-bonds/porygon-z.ts (hand Energy costs).
+          store.reduceEffect(state, new AttachEnergyFromHandEffect(player, [attachment], false, paidState => {
+            store.reduceEffect(paidState, new HealEffect(player, target, 120));
+          }));
         }
       });
 

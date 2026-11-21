@@ -4,7 +4,7 @@
 
 import { ADD_PARALYZED_TO_PLAYER_ACTIVE, AFTER_ATTACK, COIN_FLIP_PROMPT } from '../../game/store/prefabs/prefabs';
 import { CardType, Stage } from '../../game/store/card/card-types';
-import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { ALPHA_GROWTH, PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
 import { State, StoreLike } from '../../game';
 export class Gorebyss2 extends PokemonCard {
@@ -14,6 +14,8 @@ export class Gorebyss2 extends PokemonCard {
   public hp: number = 90;
   public weakness = [{ type: G }];
   public retreat = [C];
+
+  public powers = [ALPHA_GROWTH];
 
   public attacks = [
     {

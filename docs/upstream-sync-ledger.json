@@ -5,6 +5,13 @@
   "description": "Per-commit review record for the PrizeMap simulator fork. Partial ports are not full commits. Never infer an applied watermark from the latest observed SHA.",
   "commits": [
     {
+      "sha": "c00300bac7c729d4add18f596443d6ed32ca7e8a",
+      "date": "2026-09-15",
+      "subject": "refactor(cards): Updated all cards to MOVE_CARDS",
+      "status": "partial",
+      "notes": "Historical upstream path record. Batch 49 adapts the Aurora Energy and Goodra FST 197 movement changes. Official rulings require the Slimy Room flip and Aurora Energy payment to resolve before attachment. The port discards rejected Energy from the hand and pays all other selected hand cards as one action. It also supplies the shared transaction for the six printed Alpha Growth entries and routes confirmed hand attachment reactions after the group. The other movement paths remain individually tracked."
+    },
+    {
       "sha": "7e20b8991f021bc0075251e4e2182ddd6ec5b419",
       "date": "2026-07-06",
       "subject": "add(cards): SVP, MEP Promos",

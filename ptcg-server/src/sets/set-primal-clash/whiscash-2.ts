@@ -2,7 +2,7 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
-import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { ALPHA_GROWTH, PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PlayerType, StoreLike, State } from '../../game';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
@@ -16,6 +16,8 @@ export class Whiscash2 extends PokemonCard {
   public hp: number = 110;
   public weakness = [{ type: G }];
   public retreat = [C, C, C, C];
+
+  public powers = [ALPHA_GROWTH];
 
   public attacks = [
     {

@@ -1,7 +1,7 @@
 import { CardType, EnergyType, Stage } from '../../game/store/card/card-types';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { GET_PLAYER_BENCH_SLOTS, IS_SPECIAL_ENERGY_BLOCKED, SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH } from '../../game/store/prefabs/prefabs';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
@@ -30,7 +30,7 @@ export class CaptureEnergy extends EnergyCard {
 When you attach this card from your hand to a Pokémon, search your deck for a Basic Pokémon and put it onto your Bench. Then, shuffle your deck.`;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof AttachEnergyEffect && effect.energyCard === this) {
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.energyCard === this) {
       const player = effect.player;
 
       if (IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {

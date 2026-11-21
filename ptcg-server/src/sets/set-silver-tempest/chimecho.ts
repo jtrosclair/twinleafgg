@@ -7,7 +7,7 @@ import { Stage, CardType, SpecialCondition } from '../../game/store/card/card-ty
 import { StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
 
@@ -57,14 +57,12 @@ export class Chimecho extends PokemonCard {
     }
 
     // Intercept energy attachment during opponent's next turn
-    // Ref: set-fusion-strike/goodra.ts (AttachEnergyEffect intercept)
-    if (effect instanceof AttachEnergyEffect) {
+    // Ref: set-fusion-strike/goodra.ts (AfterAttachEnergyFromHandEffect intercept)
+    if (effect instanceof AfterAttachEnergyFromHandEffect) {
       if (!effect.target.marker.hasMarker(this.DREAMING_TONE_MARKER, this)) {
         return state;
       }
 
-      // Check the energy is being attached from hand (not from another source)
-      // energyPlayedTurn being set indicates it's from hand
       const attachPlayer = effect.player;
       let chimechoPlayer = null;
       for (const p of state.players) {

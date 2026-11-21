@@ -3,7 +3,7 @@ import { CardType, Stage } from '../../game/store/card/card-types';
 import { PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { COIN_FLIP_PROMPT, IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON } from '../../game/store/prefabs/attack-effects';
 
@@ -38,15 +38,11 @@ export class Ampharos2 extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Conductivity
-    if (effect instanceof AttachEnergyEffect) {
+    if (effect instanceof AfterAttachEnergyFromHandEffect) {
       const attachingPlayer = effect.player;
       const owner = StateUtils.getOpponent(state, attachingPlayer);
 
       if (!StateUtils.isPokemonInPlay(owner, this)) {
-        return state;
-      }
-
-      if (!attachingPlayer.hand.cards.includes(effect.energyCard)) {
         return state;
       }
 

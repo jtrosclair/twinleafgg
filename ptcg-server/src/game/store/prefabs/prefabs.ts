@@ -3044,6 +3044,10 @@ export function CAN_PLAY_ENERGY_CARD(store: StoreLike, state: State, player: Pla
       return false;
     }
 
+    if ((energyCard.discardCostToAttachFromHand ?? 0) >= player.hand.cards.length) {
+      return false;
+    }
+
     // Check if energy was already played this turn (unless unlimited)
     if (!player.usedDragonsWish && !state.rules.unlimitedEnergyAttachments) {
       if (player.energyPlayedTurn === state.turn) {

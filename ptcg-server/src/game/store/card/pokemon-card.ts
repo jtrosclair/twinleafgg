@@ -15,6 +15,17 @@ export const ALPHA_RECOVERY: Power = {
   text: 'When this Pokémon is healed, double the amount healed.'
 };
 
+export const ALPHA_GROWTH: Power = {
+  name: 'α Growth',
+  powerType: PowerType.ANCIENT_TRAIT,
+  text: 'When you attach an Energy card from your hand to this Pokémon (except with an attack, Ability, or Trainer card), you may attach 2 Energy cards.'
+};
+
+export function hasAlphaGrowth(pokemon?: PokemonCard): boolean {
+  return pokemon?.powers.some(power => power.name === ALPHA_GROWTH.name
+    && power.powerType === PowerType.ANCIENT_TRAIT) === true;
+}
+
 export abstract class PokemonCard extends Card {
 
   public superType: SuperType = SuperType.POKEMON;

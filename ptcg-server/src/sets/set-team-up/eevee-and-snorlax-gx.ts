@@ -1,6 +1,7 @@
-import { AttachEnergyPrompt, CardTag, CardType, GameMessage, PlayerType, PokemonCard, SlotType, Stage, State, StateUtils, StoreLike, SuperType } from '../../game';
+import { AttachEnergyPrompt, CardTag, CardType, EnergyCard, GameMessage, PlayerType, PokemonCard, SlotType, Stage, State, StateUtils, StoreLike, SuperType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
+import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
 import { BLOCK_IF_GX_ATTACK_USED, DRAW_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class EeveeSnorlaxGX extends PokemonCard {
@@ -44,6 +45,9 @@ export class EeveeSnorlaxGX extends PokemonCard {
     // Cheer Up
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
+      const blocked = player.hand.cards.flatMap((card, index) =>
+        card instanceof EnergyCard && (card.discardCostToAttachFromHand ?? 0) >= player.hand.cards.length ? [index] : []);
+      if (!player.hand.cards.some((card, index) => card instanceof EnergyCard && !blocked.includes(index))) return state;
 
       return store.prompt(state, new AttachEnergyPrompt(
         player.id,
@@ -52,7 +56,7 @@ export class EeveeSnorlaxGX extends PokemonCard {
         PlayerType.BOTTOM_PLAYER,
         [SlotType.BENCH, SlotType.ACTIVE],
         { superType: SuperType.ENERGY },
-        { allowCancel: false, min: 0, max: 1 },
+        { allowCancel: false, min: 1, max: 1, blocked },
       ), transfers => {
         transfers = transfers || [];
         // cancelled by user
@@ -61,7 +65,8 @@ export class EeveeSnorlaxGX extends PokemonCard {
         }
         for (const transfer of transfers) {
           const target = StateUtils.getTarget(state, player, transfer.to);
-          player.hand.moveCardTo(transfer.card, target);
+          // Ref: set-unbroken-bonds/porygon-z.ts (hand Energy costs).
+          if (transfer.card instanceof EnergyCard) store.reduceEffect(state, new AttachEnergyEffect(player, transfer.card, target));
         }
       });
     }

@@ -2,7 +2,7 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
-import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { ALPHA_GROWTH, PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, EnergyType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils, GameMessage, ChooseCardsPrompt, Card, ChooseEnergyPrompt } from '../../game';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
@@ -17,6 +17,8 @@ export class Kingdra2 extends PokemonCard {
   public hp: number = 130;
   public weakness = [{ type: Y }];
   public retreat = [C];
+
+  public powers = [ALPHA_GROWTH];
 
   public attacks = [
     {

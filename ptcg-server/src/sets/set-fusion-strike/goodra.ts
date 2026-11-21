@@ -6,8 +6,8 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { COIN_FLIP_PROMPT, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { CheckHandEnergyInterceptionEffect } from '../../game/store/effects/play-card-effects';
 
 export class Goodra extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -39,49 +39,13 @@ export class Goodra extends PokemonCard {
   public fullName: string = 'Goodra FST 197';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Slimy Room (passive intercept of opponent's energy attachment)
-    // Ref: set-plasma-blast/froslass.ts (AttachEnergyEffect intercept with active spot check)
-    if (effect instanceof AttachEnergyEffect) {
-      // Only energy from hand (the main play-card-reducer sets energyPlayedTurn)
-      const cardList = StateUtils.findCardList(state, this);
-      if (cardList === undefined) { return state; }
-      const owner = StateUtils.findOwner(state, cardList);
-
-      // Must be in active spot
-      if (!StateUtils.isPokemonInPlay(owner, this) || owner.active.getPokemonCard() !== this) {
-        return state;
+    // Ref: set-sword-and-shield/aurora-energy.ts (cost resolves after Slimy Room).
+    if (effect instanceof CheckHandEnergyInterceptionEffect) {
+      const owner = StateUtils.getOpponent(state, effect.player);
+      if (owner.active.getPokemonCard() === this && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        effect.requiresHeads = true;
       }
-
-      // Only intercept opponent's attachment
-      if (effect.player === owner) {
-        return state;
-      }
-
-      // Check if ability is blocked
-      if (IS_ABILITY_BLOCKED(store, state, owner, this)) {
-        return state;
-      }
-
-      // Attachment has already happened in the main reducer before this card's reduceEffect runs.
-      // Flip a coin; if tails, move the energy to discard and restore the energy attachment
-      // for the turn (so this doesn't use up their Energy attachment for the turn).
-      const opponent = effect.player;
-      const energyCard = effect.energyCard;
-      const target = effect.target;
-
-      COIN_FLIP_PROMPT(store, state, opponent, result => {
-        if (!result) {
-          // Tails - discard the energy and restore energy attachment allowance
-          target.moveCardTo(energyCard, opponent.discard);
-          if (target.energies.cards.includes(energyCard)) {
-            target.energies.cards.splice(target.energies.cards.indexOf(energyCard), 1);
-          }
-          // Restore energy attachment allowance for this turn
-          opponent.energyPlayedTurn = 0;
-        }
-      });
     }
-
     return state;
   }
 }
