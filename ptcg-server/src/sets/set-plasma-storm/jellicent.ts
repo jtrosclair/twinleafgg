@@ -4,11 +4,11 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SpecialCondition } from '../../game/store/card/card-types';
-import { GamePhase, PowerType, StoreLike, State, StateUtils } from '../../game';
+import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
+import { canUseKnockOutAbility, findKnockOutAttacker, wasActiveWhenDamaged } from '../../game/store/prefabs/knock-out-effects';
 import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
-import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON } from '../../game/store/prefabs/attack-effects';
 
 export class Jellicent extends PokemonCard {
@@ -43,21 +43,14 @@ export class Jellicent extends PokemonCard {
   public fullName: string = 'Jellicent PLS';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Spiteful Spirit (passive - on KO)
-    // Ref: set-ascended-heroes/hops-trevenant.ts (attack-damage Knock Out provenance).
-    if (effect instanceof KnockOutEffect && effect.target === effect.player.active
-      && effect.target.getPokemonCard() === this && state.phase === GamePhase.ATTACK) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      const hit = effect.target.attackDamageKnockOut;
-      if (hit?.sourceCard && hit.turn === state.turn && hit.playerId === opponent.id
-        && !IS_ABILITY_BLOCKED(store, state, player, this)) {
-        const attacker = StateUtils.findPokemonSlot(state, hit.sourceCard);
-        if (attacker?.getPokemonCard() === hit.sourceCard && attacker === opponent.active) {
-          return APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
-            store, state, player, this.powers[0], this, attacker, [SpecialCondition.CONFUSED, SpecialCondition.POISONED]
-          );
-        }
+    // Ref: game/store/prefabs/knock-out-effects.ts (original damage position and attacker).
+    if (canUseKnockOutAbility(store, state, effect, this) && wasActiveWhenDamaged(effect)) {
+      const attacker = findKnockOutAttacker(state, effect);
+      const opponent = StateUtils.getOpponent(state, effect.player);
+      if (attacker && attacker === opponent.active) {
+        return APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+          store, state, effect.player, this.powers[0], this, attacker, [SpecialCondition.CONFUSED, SpecialCondition.POISONED]
+        );
       }
     }
 

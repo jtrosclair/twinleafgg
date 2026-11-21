@@ -84,7 +84,7 @@ export class Lanturn extends PokemonCard {
     if (abilities[0] !== this) return;
 
     const attached = getAttachedBasicEnergy(target);
-    effect.afterDiscard.set(this, () => {
+    effect.afterDiscard.set(this, { resolve: () => {
       if (player.marker.hasMarker(usage)) return;
       const energy = new CardList();
       energy.cards = attached.filter(card => player.discard.cards.includes(card));
@@ -107,6 +107,6 @@ export class Lanturn extends PokemonCard {
           !marker.name.startsWith(this.ENERGY_GROUNDING_MARKER + '_'));
         player.marker.addMarkerToState(usage);
       });
-    });
+    } });
   }
 }

@@ -50,7 +50,7 @@ export class Mimikyu extends PokemonCard implements CopiedAttackOwnershipContrac
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     // Prevent damage from Pokemon-ex
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)) {
+    if (effect instanceof PutDamageEffect && !effect.ignoresDefendingDamageEffects && effect.target.cards.includes(this)) {
       const pokemonCard = effect.target.getPokemonCard();
       const sourceCard = effect.source.getPokemonCard();
 

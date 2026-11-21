@@ -34,6 +34,10 @@ export abstract class AbstractAttackEffect {
   public source: PokemonCardList;
   public preventDefault = false;
 
+  public get ignoresDefendingDamageEffects(): boolean {
+    return this.attackEffect.ignoreDefendingDamageEffects && this.target === this.opponent.active;
+  }
+
   constructor(base: AttackEffect | AbstractAttackEffect) {
     // Extract attackEffect if base is an AbstractAttackEffect (has attackEffect property), otherwise use base directly
     const attackEffect = 'attackEffect' in base ? base.attackEffect : base;
@@ -89,7 +93,7 @@ export class PutDamageEffect extends AbstractAttackEffect implements Effect {
   }
 
   reduceDamage(amount: number, source: string | undefined = undefined): void {
-    if (source && this.nonstackingDamageReducers.includes(source)) {
+    if (this.ignoresDefendingDamageEffects || (source && this.nonstackingDamageReducers.includes(source))) {
       return;
     }
     this.damage = Math.max(0, this.damage - amount);
@@ -102,7 +106,7 @@ export class PutDamageEffect extends AbstractAttackEffect implements Effect {
   // run during propagation of a direct PutDamageEffect: its reducer may not
   // have calculated Weakness yet. Existing immediate reductions are unchanged.
   reduceDamageAfterWeakness(amount: number, source?: string): void {
-    if (source && this.postWeaknessReductions.some(reduction => reduction.source === source)) {
+    if (this.ignoresDefendingDamageEffects || (source && this.postWeaknessReductions.some(reduction => reduction.source === source))) {
       return;
     }
     this.postWeaknessReductions.push({ amount, source });

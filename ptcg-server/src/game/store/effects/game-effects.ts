@@ -194,6 +194,7 @@ export class AttackEffect implements Effect {
   public damage: number;
   public ignoreWeakness = false;
   public ignoreResistance = false;
+  public ignoreDefendingDamageEffects = false;
   public source: PokemonCardList;
   public invisibleTentacles?: boolean = false;
   // Opt-in: only actual lethal attack damage may route a KO and all attachments.
@@ -249,7 +250,7 @@ export class KnockOutEffect implements Effect {
   public pokemonGoingToLostZone = false;
   public pokemonInPlayBeforeKnockOut?: readonly PokemonCard[];
   public readonly beforeDiscard = new Map<Card, BeforeKnockOutDiscard>();
-  public readonly afterDiscard = new Map<Card, () => void>();
+  public readonly afterDiscard = new Map<Card, { resolve: () => void; recovery?: boolean }>();
   public simultaneousKnockOuts?: ReadonlySet<PokemonCardList>;
 
   constructor(player: Player, target: PokemonCardList, public readonly resolveBeforeDiscard = false) {

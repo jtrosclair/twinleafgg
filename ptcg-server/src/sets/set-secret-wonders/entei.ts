@@ -1,11 +1,12 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage } from '../../game/store/card/card-types';
-import { PowerType, State, StateUtils, StoreLike } from '../../game';
+import { PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutAttackEffect } from '../../game/store/effects/game-effects';
 import { THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON } from '../../game/store/prefabs/attack-effects';
-import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
-import { COIN_FLIP_PROMPT, DISCARD_TOP_X_OF_OPPONENTS_DECK, IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { DISCARD_UP_TO_X_ENERGY_FROM_YOUR_POKEMON } from '../../game/store/prefabs/costs';
+import { COIN_FLIP_PROMPT, DISCARD_TOP_X_OF_OPPONENTS_DECK, IS_POKEBODY_BLOCKED, WAS_ATTACK_USED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
+
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 
 export class Entei extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -24,7 +25,7 @@ export class Entei extends PokemonCard {
     name: 'Blaze Roar',
     cost: [R, R, R],
     damage: 60,
-    text: 'Does 20 damage to 1 of your opponent\'s Benched Pokémon. (Don\'t apply Weakness and Resistance for Benched Pokémon.) Flip a coin. If tails, discard 2 Fire Energy attached to Entei.'
+    text: 'Does 20 damage to 1 of your opponent\'s Benched Pokémon. (Don\'t apply Weakness and Resistance for Benched Pokémon.) Flip a coin. If tails, discard 2 Energy cards attached to Entei.'
   }];
 
   public set: string = 'SW';
@@ -34,36 +35,29 @@ export class Entei extends PokemonCard {
   public fullName: string = 'Entei SW';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Burning Coat
-    if (effect instanceof KnockOutAttackEffect && effect.attack === this.attacks[0]) {
-      if (!effect.player.marker.hasMarker(effect.player.DAMAGE_DEALT_MARKER)) {
-        return state;
+    // Ref: set-ascended-heroes/hops-trevenant.ts (confirmed opposing attack damage).
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect)
+      && effect.resolveBeforeDiscard && effect.target.attackDamageKnockOut?.sourceCard === this) {
+      const player = state.players[state.activePlayer];
+      if (StateUtils.isPokemonInPlay(player, this) && !IS_POKEBODY_BLOCKED(store, state, player, this)) {
+        effect.beforeDiscard.set(this, {
+          label: this.powers[0].name,
+          canResolve: () => effect.player.deck.cards.length > 0,
+          resolve: () => { DISCARD_TOP_X_OF_OPPONENTS_DECK(store, state, player, 3, this, this.powers[0]); }
+        });
       }
-      const knockedOutOwner = effect.player;
-      const cardList = StateUtils.findCardList(state, this);
-      const enteiOwner = StateUtils.findOwner(state, cardList);
-
-      if (knockedOutOwner === enteiOwner) {
-        return state;
-      }
-      if (!StateUtils.isPokemonInPlay(enteiOwner, this)) {
-        return state;
-      }
-      if (IS_POKEBODY_BLOCKED(store, state, enteiOwner, this)) {
-        return state;
-      }
-
-      DISCARD_TOP_X_OF_OPPONENTS_DECK(store, state, enteiOwner, 3, this, this.powers[0]);
     }
 
-    // Blaze Roar
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON(20, effect, store, state);
-      COIN_FLIP_PROMPT(store, state, effect.player, heads => {
-        if (!heads) {
-          DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 2, CardType.FIRE);
-        }
-      });
+      // Ref: set-crimson-invasion/staraptor.ts (effects after the Active takes damage).
+      afterAttackDamage(state, effect, (store, state) =>
+        THIS_ATTACK_DOES_X_DAMAGE_TO_1_OF_YOUR_OPPONENTS_BENCHED_POKEMON(20, effect, store, state));
+      afterAttackDamage(state, effect, (store, state) =>
+        COIN_FLIP_PROMPT(store, state, effect.player, heads => {
+          if (!heads && effect.player.active === effect.source) {
+            DISCARD_UP_TO_X_ENERGY_FROM_YOUR_POKEMON(store, state, effect, 2, {}, 2, [SlotType.ACTIVE]);
+          }
+        }));
     }
 
     return state;

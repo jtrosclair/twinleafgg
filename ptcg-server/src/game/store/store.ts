@@ -240,7 +240,8 @@ export class Store implements StoreLike {
         const damageProtectionMatches = (!damageFilter?.sourceStage || sourcePokemon?.stage === damageFilter.sourceStage)
           && (damageFilter?.sourceHasAbility !== true
             || sourcePokemon?.powers.some(power => power.powerType === PowerType.ABILITY) === true);
-        if ((damage && effect.target.preventDamageNextTurn && damageProtectionMatches)
+        if ((damage && !effect.ignoresDefendingDamageEffects
+          && effect.target.preventDamageNextTurn && damageProtectionMatches)
           || (nonDamage && effect.target.preventEffectsOfAttacksNextTurn)) {
           effect.preventDefault = true;
           return state;

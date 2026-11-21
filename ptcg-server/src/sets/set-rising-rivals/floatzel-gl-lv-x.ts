@@ -1,12 +1,10 @@
-import { Card, ChooseCardsPrompt, EnergyCard, GameError, GameMessage, GamePhase, PlayerType, PowerType, State, StateUtils, StoreLike } from '../../game';
+import { ChooseCardsPrompt, EnergyCard, GameError, GameMessage, PlayerType, PowerType, State, StateUtils, StoreLike } from '../../game';
 import { CardTag, CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import {CheckPokemonAttacksEffect, CheckPokemonPowersEffect, CheckTableStateEffect} from '../../game/store/effects/check-effects';
+import {CheckPokemonAttacksEffect, CheckPokemonPowersEffect, CheckPokemonTypeEffect, CheckTableStateEffect} from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import {BetweenTurnsEffect} from '../../game/store/effects/game-phase-effects';
 import {PlayPokemonEffect} from '../../game/store/effects/play-card-effects';
-import {IS_POKEBODY_BLOCKED, MOVE_CARDS, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, WAS_ATTACK_USED} from '../../game/store/prefabs/prefabs';
+import { CONFIRMATION_PROMPT, IS_POKEBODY_BLOCKED, MOVE_CARDS, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, WAS_ATTACK_USED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 
 export class FloatzelGLLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
@@ -44,50 +42,31 @@ export class FloatzelGLLVX extends PokemonCard {
   public name: string = 'Floatzel GL';
   public fullName: string = 'Floatzel GL LV.X RR';
 
-  public readonly WATER_RESCUE_MARKER = 'WATER_RESCUE_MARKER';
-
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Water Rescue
-    if (effect instanceof KnockOutEffect) {
-      const player = effect.player;
-
-      // Do not activate between turns, or when it's not opponents turn.
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
+    // Ref: set-arceus/lucky-egg.ts (resolve after the Pokémon actually reaches the discard pile).
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.resolveBeforeDiscard) {
+      const { player, target } = effect;
+      const pokemon = target.getPokemonCard();
+      if (pokemon && pokemon.name !== this.evolvesFrom && StateUtils.isPokemonInPlay(player, this)
+        && !IS_POKEBODY_BLOCKED(store, state, player, this)) {
+        const type = new CheckPokemonTypeEffect(target);
+        store.reduceEffect(state, type);
+        if (type.cardTypes.includes(CardType.WATER)) {
+          const cards = [...new Set([...target.cards, ...target.tools, ...target.energies.cards,
+            ...target.cards.flatMap(card => card.cards?.cards ?? [])])];
+          effect.afterDiscard.set(this, {
+            recovery: true,
+            resolve: () => {
+              if (!player.discard.cards.includes(pokemon)) return;
+              CONFIRMATION_PROMPT(store, state, player, accept => {
+                if (!accept || !player.discard.cards.includes(pokemon)) return;
+                const discarded = cards.filter(card => player.discard.cards.includes(card));
+                MOVE_CARDS(store, state, player.discard, player.hand, { cards: discarded, sourceCard: this });
+              });
+            }
+          });
+        }
       }
-      if (IS_POKEBODY_BLOCKED(store, state, player, this)){ return state; }
-      if (effect.target.getPokemonCard()?.cardType !== CardType.WATER){ return state; }
-      if (effect.target.getPokemonCard()?.name === 'Floatzel GL'){ return state; }
-
-      let isThisInPlay = false;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, card => {
-        if (card.getPokemonCard() === this){
-          isThisInPlay = true;
-        }
-      });
-      if (!isThisInPlay){ return state; }
-
-      const target = effect.target;
-      const cards = target.cards;
-      cards.forEach(card => {
-        player.marker.addMarker(this.WATER_RESCUE_MARKER, card);
-      });
-    }
-
-    if (effect instanceof BetweenTurnsEffect && effect.player.marker.hasMarker(this.WATER_RESCUE_MARKER)) {
-      state.players.forEach(player => {
-
-        if (!player.marker.hasMarker(this.WATER_RESCUE_MARKER)) {
-          return;
-        }
-
-        const rescued: Card[] = player.marker.markers
-          .filter(m => m.name === this.WATER_RESCUE_MARKER && m.source !== undefined)
-          .map(m => m.source!);
-
-        MOVE_CARDS(store, state, player.discard, player.hand, { cards: rescued });
-        player.marker.removeMarker(this.WATER_RESCUE_MARKER);
-      });
     }
 
     // Energy Cyclone

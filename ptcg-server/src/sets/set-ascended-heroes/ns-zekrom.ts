@@ -3,7 +3,6 @@ import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { DealDamageEffect } from '../../game/store/effects/attack-effects';
 
 export class NsZekrom extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -36,16 +35,11 @@ export class NsZekrom extends PokemonCard {
   public fullName: string = 'N\'s Zekrom M2a';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Shred
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      effect.ignoreResistance = true;
-      effect.damage = 0;
-
-      const dealDamage = new DealDamageEffect(effect, 70);
-      state = store.reduceEffect(state, dealDamage);
+      effect.ignoreDefendingDamageEffects = true;
     }
 
-    // Rampage Thunder
+    // Rampaging Thunder
     if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
       player.active.cannotAttackNextTurnPending = true;

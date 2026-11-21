@@ -2729,3 +2729,50 @@ card. Revenge Seed misses a prior lethal attack. Spiteful Spirit misses
 the attacker if Whirlwind moves Jellicent after lethal damage. Water
 Rescue handles a direct Knock Out and omits the choice to decline.
 N's Zekrom's Shred fails to deal damage through Critical Cut protection.
+
+## Gameplay re-audit, batch 28
+
+Burning Coat discards three cards for each opponent's Pokémon Knocked Out by
+Entei's attack damage, including Bench damage and a deck-out before the
+opponent's draw. Blaze Roar uses the current erratum's two Energy cards on
+tails. Darkness Wing offers a choice from the actual attacker's discard after
+lethal damage, including a copied attack. Revenge Seed uses the opposing
+attack's Knock Out and applies its bonus before Weakness and Resistance.
+Spiteful Spirit checks where the defender was when it took damage and poisons
+and confuses the attacker if it is still Active.
+[Entei errata](https://play.pokemon.com/en-gb/resources/documents/tcg-errata/)
+[Honchkrow print](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/DiamondPearl_SecretWonders.pdf)
+[Shaymin print](https://www.pokemon-card.com/card-search/details.php/card/23530/regu/all)
+[Spiteful Spirit ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%96%E3%83%AB%E3%83%B3%E3%82%B2%E3%83%AB&page=2&regulation_faq_main_item1=all)
+
+Water Rescue asks the owner whether to recover the Pokémon and attachments
+that reached the discard pile through an opposing attack damage Knock Out.
+Effective Water typing qualifies, a direct Knock Out does not qualify,
+and Lost City prevents recovery. Lucky Egg draws before this choice.
+[Water Rescue print](https://www.pokemon-card.com/card-search/details.php/card/22109/regu/DP)
+[Water Rescue rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%95%E3%83%AD%E3%83%BC%E3%82%BC%E3%83%AB&page=2&regulation=all&regulation_faq_main_item1=all)
+
+N's Zekrom's Shred keeps the attacker's modifiers, printed Weakness and
+Resistance, and Tenacious Body's survival flip. It bypasses Critical Cut,
+shared damage-reduction mechanics, and the reviewed card-specific damage
+modifiers, including Cornerstone Stance through Night Joker. The attack flags
+used during resolution are transient. Other legacy Shred attacks and custom
+damage modifiers still need individual review.
+[N's Zekrom print](https://www.pokemon-card.com/card-search/details.php/card/49970/regu/all)
+[Official damage calculation](https://www.pokemon-card.com/howtoplay/index.html)
+[Tenacious Body ruling](https://professorprogram.pokemon.com/news/11464646)
+[Intimidating Pattern ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%A2%E3%83%BC%E3%83%9C%E3%83%83%E3%82%AF&regulation_faq_main_item1=all)
+[Adrena-Pheromone ruling](https://www.pokemon-card.com/rules/faq/search.php?page=121)
+
+All 24 focused cases pass, with 19 failures on the previous engine. The
+full engine suite passed 7,600 tests in 273 specs. The changes combined
+with the checkout's pending work passed 428 checks. All 559 comparable
+saved states and 3,633 sampled opening actions matched exactly. The seven
+recorded solutions reached a win. The attested simulator package passed the
+mobile size budget and ten mouse and touch board checks. Its browser engine
+also verified Darkness Wing's discard choice and copied Shred damage
+through Cornerstone Stance.
+
+The next real attack probes confirmed two more failures. Kingler GE takes
+zero recoil after Scissor Blow Knocks Out the defender, and Golisopod M4 26
+gains no protection from a lethal Critical Slash.

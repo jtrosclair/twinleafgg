@@ -89,7 +89,7 @@ export class HisuianGoodraVSTAR extends PokemonCard {
       console.log('marker added');
     }
 
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)) {
+    if (effect instanceof PutDamageEffect && !effect.ignoresDefendingDamageEffects && effect.target.cards.includes(this)) {
       if (effect.target.marker.hasMarker(this.DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this)) {
         effect.damage -= 80;
         return state;

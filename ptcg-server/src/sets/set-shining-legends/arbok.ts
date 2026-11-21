@@ -42,7 +42,7 @@ export class Arbok extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Intimidating Pattern (passive - reduce damage when active)
     // Ref: set-burning-shadows/azumarill.ts (Thick Fat)
-    if (effect instanceof DealDamageEffect && effect.target.cards.includes(this)) {
+    if (effect instanceof DealDamageEffect && !effect.ignoresDefendingDamageEffects && effect.target.cards.includes(this)) {
       const pokemonCard = effect.target.getPokemonCard();
       if (pokemonCard !== this) {
         return state;

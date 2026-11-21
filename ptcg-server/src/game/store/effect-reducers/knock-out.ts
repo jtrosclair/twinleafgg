@@ -82,8 +82,11 @@ export function* resolveKnockOutGroup(
     if (store.hasPrompts()) yield store.waitPrompt(state, next);
   }
   for (const effect of effects) {
-    for (const resolve of effect.afterDiscard.values()) {
-      resolve();
+    // Resolve the mandatory discard reactions before Water Rescue can remove the discarded cards.
+    const reactions = [...effect.afterDiscard.values()]
+      .sort((left, right) => Number(!!left.recovery) - Number(!!right.recovery));
+    for (const reaction of reactions) {
+      reaction.resolve();
       if (store.hasPrompts()) yield store.waitPrompt(state, next);
     }
   }

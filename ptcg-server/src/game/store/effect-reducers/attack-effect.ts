@@ -48,8 +48,9 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
     // Reflect Shield: ask before applying attack damage; heads prevents this
     // damage and reflects counters onto the attacker, while tails takes damage.
     const shieldRetaliation = target.retaliateOnDamageNextTurn;
+    const ignoreDefendingDamageEffects = effect.ignoresDefendingDamageEffects;
     const targetOwner = StateUtils.findOwner(state, target);
-    if (!(effect as any).reflectShieldFlipResolved
+    if (!ignoreDefendingDamageEffects && !(effect as any).reflectShieldFlipResolved
       && effect.attackEffect
       && effect.damage > 0
       && shieldRetaliation !== null
@@ -76,7 +77,7 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
       effect.damage += effect.source.attackDamageBonusNextTurn;
     }
 
-    if (target.damageReductionBeforeWeaknessNextTurn > 0) {
+    if (!ignoreDefendingDamageEffects && target.damageReductionBeforeWeaknessNextTurn > 0) {
       effect.damage = Math.max(0, effect.damage - target.damageReductionBeforeWeaknessNextTurn);
     }
 
@@ -89,7 +90,7 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
       // Apply weakness
       const applyWeakness = new ApplyWeaknessEffect(effect.attackEffect, effect.damage);
       applyWeakness.target = effect.target;
-      applyWeakness.ignoreWeakness = effect.attackEffect.ignoreWeakness || target.noWeaknessNextTurn;
+      applyWeakness.ignoreWeakness = effect.attackEffect.ignoreWeakness || (!ignoreDefendingDamageEffects && target.noWeaknessNextTurn);
       applyWeakness.ignoreResistance = effect.attackEffect.ignoreResistance;
       state = store.reduceEffect(state, applyWeakness);
 
@@ -101,7 +102,8 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
 
     effect.applyPostWeaknessReductions();
 
-    if (target.preventDamageUpToNextTurn > 0 && effect.damage <= target.preventDamageUpToNextTurn) {
+    if (!ignoreDefendingDamageEffects && target.preventDamageUpToNextTurn > 0
+      && effect.damage <= target.preventDamageUpToNextTurn) {
       effect.preventDefault = true;
       return state;
     }
@@ -109,13 +111,13 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
     // Apply damage reduction for "during opponent's next turn" effects
     const reductionFilter = target.damageReductionNextTurnFilter;
     const attackerStage = effect.player.active.getPokemonCard()?.stage;
-    if (target.damageReductionNextTurn > 0
+    if (!ignoreDefendingDamageEffects && target.damageReductionNextTurn > 0
       && (!reductionFilter?.sourceIsEvolution || attackerStage !== Stage.BASIC)
       && (reductionFilter?.sourceStage === undefined || attackerStage === reductionFilter.sourceStage)) {
       effect.damage = Math.max(0, effect.damage - target.damageReductionNextTurn);
     }
 
-    if (target.defendingPokemonExtraDamageNextTurn > 0 && !target.defendingPokemonExtraDamagePending
+    if (!ignoreDefendingDamageEffects && target.defendingPokemonExtraDamageNextTurn > 0 && !target.defendingPokemonExtraDamagePending
       && target.defendingPokemonExtraDamageAttackerId === effect.player.id) {
       effect.damage += target.defendingPokemonExtraDamageNextTurn;
     }

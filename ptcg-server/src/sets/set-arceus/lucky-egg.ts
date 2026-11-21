@@ -26,9 +26,9 @@ export class LuckyEgg extends TrainerCard {
       if (this.set === 'AR') {
         // The Arceus erratum requires the actual discard to have happened.
         const pokemon = effect.target.getPokemonCard();
-        effect.afterDiscard.set(this, () => {
+        effect.afterDiscard.set(this, { resolve: () => {
           if (pokemon && player.discard.cards.includes(pokemon)) draw();
-        });
+        } });
       } else if (effect.resolveBeforeDiscard) {
         effect.beforeDiscard.set(this, {
           label: this.name,

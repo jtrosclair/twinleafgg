@@ -4,7 +4,7 @@ import { ChooseCardsPrompt, ChoosePokemonPrompt, GameError, GameMessage, PlayerT
 import { Effect } from '../../game/store/effects/effect';
 import { AfterDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckPokemonAttacksEffect, CheckPokemonPowersEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
-import { KnockOutAttackEffect } from '../../game/store/effects/game-effects';
+import { afterAttackDamageKnockOut } from '../../game/store/prefabs/post-damage-identity';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { CONFIRMATION_PROMPT, MOVE_CARDS, SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
@@ -63,36 +63,22 @@ export class HonchkrowLVX extends PokemonCard {
       });
     }
 
-    // Darkness Wing
-    if (effect instanceof KnockOutAttackEffect && effect.attack === this.attacks[1]) {
-      if (!effect.player.marker.hasMarker(effect.player.DAMAGE_DEALT_MARKER)) {
-        return state;
-      }
-      const cardOwner = StateUtils.findOwner(state, StateUtils.findCardList(state, this));
-      if (effect.player === cardOwner) {
-        return state;
-      }
-      if (cardOwner.discard.cards.length === 0) {
-        return state;
-      }
-
-      CONFIRMATION_PROMPT(store, state, cardOwner, wantToUse => {
-        if (!wantToUse) {
-          return;
-        }
-        const opponent = StateUtils.getOpponent(state, cardOwner);
-        store.prompt(state, new ChooseCardsPrompt(
-          cardOwner,
-          GameMessage.CHOOSE_CARD_TO_HAND,
-          cardOwner.discard,
-          {},
-          { min: 1, max: 1, allowCancel: false }
-        ), selected => {
-          const cards = selected || [];
-          if (cards.length > 0) {
+    // Ref: set-unbroken-bonds/sandile-2.ts (confirmed damage from this attack).
+    if (WAS_ATTACK_USED(effect, 1, this)) {
+      const { player, opponent } = effect;
+      const attacker = effect.source.getPokemonCard();
+      afterAttackDamageKnockOut(state, effect, (store, state) => {
+        if (player.discard.cards.length === 0) return state;
+        return CONFIRMATION_PROMPT(store, state, player, wantToUse => {
+          if (!wantToUse) return;
+          store.prompt(state, new ChooseCardsPrompt(
+            player, GameMessage.CHOOSE_CARD_TO_HAND, player.discard, {},
+            { min: 1, max: 1, allowCancel: false }
+          ), cards => {
+            if (!cards?.length) return;
             SHOW_CARDS_TO_PLAYER(store, state, opponent, cards);
-            MOVE_CARDS(store, state, cardOwner.discard, cardOwner.hand, { cards, sourceCard: this });
-          }
+            MOVE_CARDS(store, state, player.discard, player.hand, { cards, sourceCard: attacker });
+          });
         });
       });
     }

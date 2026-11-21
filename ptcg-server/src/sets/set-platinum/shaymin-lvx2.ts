@@ -1,11 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardTag, CardType, Stage, SuperType } from '../../game/store/card/card-types';
-import { GameError, GameMessage, GamePhase, MoveEnergyPrompt, PlayerType, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
+import { GameError, GameMessage, MoveEnergyPrompt, PlayerType, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect, KnockOutEffect } from '../../game/store/effects/game-effects';
+import { ApplyWeaknessEffect } from '../../game/store/effects/attack-effects';
 import { CheckPokemonAttacksEffect, CheckPokemonPowersEffect, CheckPokemonTypeEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { ADD_MARKER, HAS_MARKER, IS_POKEBODY_BLOCKED, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_MARKER, HAS_MARKER, IS_POKEBODY_BLOCKED, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 
 export class ShayminLVX2 extends PokemonCard {
   public stage: Stage = Stage.LV_X;
@@ -46,46 +46,22 @@ export class ShayminLVX2 extends PokemonCard {
       }
     }
 
-    // Revenge Seed — mark Grass KOs from opponent attacks
-    if (effect instanceof KnockOutEffect) {
-      const cardList = StateUtils.findCardList(state, this);
-      const owner = StateUtils.findOwner(state, cardList);
-      if (effect.player !== owner) {
-        return state;
-      }
-
-      const opponent = StateUtils.getOpponent(state, owner);
-      if (state.phase !== GamePhase.ATTACK || state.players[state.activePlayer] !== opponent) {
-        return state;
-      }
-      if (!effect.player.marker.hasMarker(effect.player.DAMAGE_DEALT_MARKER)) {
-        return state;
-      }
-
-      let isInPlay = false;
-      owner.forEachPokemon(PlayerType.BOTTOM_PLAYER, (_list, card) => {
-        if (card === this) {
-          isInPlay = true;
-        }
-      });
-      if (!isInPlay || IS_POKEBODY_BLOCKED(store, state, owner, this)) {
-        return state;
-      }
-
+    // Ref: set-ascended-heroes/dhelmise.ts (effective type at a damage Knock Out).
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect)
+      && StateUtils.findOwner(state, StateUtils.findCardList(state, this)) === effect.player) {
       const checkType = new CheckPokemonTypeEffect(effect.target);
       store.reduceEffect(state, checkType);
       if (checkType.cardTypes.includes(CardType.GRASS)) {
-        ADD_MARKER(this.REVENGE_SEED_MARKER, owner, this);
+        // Shaymin can enter play on the following turn and still use that turn's bonus.
+        ADD_MARKER(this.REVENGE_SEED_MARKER, effect.player, this);
       }
     }
 
-    // Revenge Seed — +60 to Active on Shaymin's attacks
-    if (effect instanceof AttackEffect && effect.source.cards.includes(this)) {
-      if (!IS_POKEBODY_BLOCKED(store, state, effect.player, this)
-        && HAS_MARKER(this.REVENGE_SEED_MARKER, effect.player, this)
-        && effect.target === effect.opponent.active) {
-        effect.damage += 60;
-      }
+    if (effect instanceof ApplyWeaknessEffect && effect.source.getPokemonCard() === this
+      && effect.target === effect.opponent.active && effect.damage > 0
+      && HAS_MARKER(this.REVENGE_SEED_MARKER, effect.player, this)
+      && !IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
+      effect.damage += 60;
     }
 
     REMOVE_MARKER_AT_END_OF_TURN(effect, this.REVENGE_SEED_MARKER, this);

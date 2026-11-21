@@ -52,7 +52,7 @@ export class CornerstoneMaskOgerponex extends PokemonCard {
     state = CornerstoneMaskOgerponex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
 
     // Prevent damage from Pokemon-EX
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)) {
+    if (effect instanceof PutDamageEffect && !effect.ignoresDefendingDamageEffects && effect.target.cards.includes(this)) {
       const pokemonCard = effect.target.getPokemonCard();
       const sourceCard = effect.source.getPokemonCard();
 
