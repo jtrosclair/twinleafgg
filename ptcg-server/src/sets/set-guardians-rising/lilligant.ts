@@ -74,7 +74,7 @@ export class Lilligant extends PokemonCard {
         effect.damage = 40 * heads;
       });
 
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, effect);
     }
 
     return state;

@@ -7,7 +7,6 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED, ADD_SLEEP_TO_PLAYER_ACTIVE } from '../../game/store/prefabs/prefabs';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP } from '../../game/store/prefabs/attack-effects';
 
 export class Slakoth extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -35,8 +34,8 @@ export class Slakoth extends PokemonCard {
     // Attack 1: Big Yawn
     // Ref: set-dragons-exalted/bibarel.ts (Tumbling Tackle)
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP(store, state, effect);
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
     }
 
     return state;

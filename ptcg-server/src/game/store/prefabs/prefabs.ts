@@ -9,7 +9,7 @@ import { PokemonCard } from '../card/pokemon-card';
 import { AbstractAttackEffect, AddSpecialConditionsEffect, AfterDamageEffect, ApplyWeaknessEffect, DealDamageEffect, DiscardCardsEffect, HealTargetEffect, PutCountersEffect, PutDamageEffect } from '../effects/attack-effects';
 import { AddSpecialConditionsPowerEffect, CheckHpEffect, CheckPokemonPlayedTurnEffect, CheckPokemonTypeEffect, CheckPrizesDestinationEffect, CheckProvidedEnergyEffect, CheckSupporterLimitEffect, CheckTableStateEffect } from '../effects/check-effects';
 import { Effect } from '../effects/effect';
-import { resolveAfterAttack, resolveAfterAttackDamage } from './attack-after-damage';
+import { afterAttackDamage, resolveAfterAttack, resolveAfterAttackDamage } from './attack-after-damage';
 import { AttackEffect, DrawPrizesEffect, EvolveEffect, KnockOutEffect, MoveCardsEffect, MoveDamageCountersEffect, PowerEffect, RetreatEffect, SpecialEnergyEffect } from '../effects/game-effects';
 import { AfterAttackEffect, EndTurnEffect } from '../effects/game-phase-effects';
 import { ChooseAttackPrompt } from '../prompts/choose-attack-prompt';
@@ -2481,21 +2481,26 @@ export function BLOCK_IF_ASLEEP_CONFUSED_PARALYZED(player: Player, source: Card)
 }
 
 //#region Special Conditions
-type SpecialConditionSource = Card | AfterAttackEffect;
+type SpecialConditionSource = Card | AttackEffect | AfterAttackEffect;
 
 export function ADD_SPECIAL_CONDITIONS_TO_PLAYER_ACTIVE(
   store: StoreLike, state: State, player: Player, source: SpecialConditionSource,
   specialConditions: SpecialCondition[], poisonDamage: number = 10, burnDamage: number = 20, sleepFlips: number = 1, confusionDamage: number = 30
 ) {
-  if (source instanceof AfterAttackEffect) {
-    const attack = source.resolvedAttackEffect ?? new AttackEffect(source.player, source.opponent, source.attack);
+  if (source instanceof AttackEffect || source instanceof AfterAttackEffect) {
+    const attack = source instanceof AttackEffect ? source
+      : source.resolvedAttackEffect ?? new AttackEffect(source.player, source.opponent, source.attack);
     const condition = new AddSpecialConditionsEffect(attack, specialConditions);
     condition.target = player.active;
     if (specialConditions.includes(SpecialCondition.POISONED)) condition.poisonDamage = poisonDamage;
     if (specialConditions.includes(SpecialCondition.BURNED)) condition.burnDamage = burnDamage;
     if (specialConditions.includes(SpecialCondition.ASLEEP)) condition.sleepFlips = sleepFlips;
     if (specialConditions.includes(SpecialCondition.CONFUSED)) condition.confusionDamage = confusionDamage;
-    store.reduceEffect(state, condition);
+    if (source instanceof AttackEffect) {
+      afterAttackDamage(state, attack, (attackStore, attackState) => attackStore.reduceEffect(attackState, condition));
+    } else {
+      store.reduceEffect(state, condition);
+    }
     return;
   }
   store.reduceEffect(state, new AddSpecialConditionsPowerEffect(

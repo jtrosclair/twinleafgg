@@ -29,8 +29,8 @@ export class Accelgor extends PokemonCard {
     if (AFTER_ATTACK(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, effect);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, opponent, effect);
       SWITCH_ACTIVE_WITH_BENCHED(store, state, player);
     }
 

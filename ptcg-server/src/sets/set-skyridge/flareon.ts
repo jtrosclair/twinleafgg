@@ -1,5 +1,5 @@
 import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
-import { ADD_SLEEP_TO_PLAYER_ACTIVE, AFTER_ATTACK, IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_BURN_TO_PLAYER_ACTIVE, AFTER_ATTACK, IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
 import { PowerType, State, StoreLike } from '../../game';
 import { CardType, EnergyType, Stage } from '../../game/store/card/card-types';
@@ -57,7 +57,7 @@ export class Flareon extends PokemonCard {
     }
 
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Make this acutally do the right thing later

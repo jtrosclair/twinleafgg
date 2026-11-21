@@ -37,7 +37,7 @@ export class Giratina4 extends PokemonCard {
         if (!result) {
           effect.damage = 0;
         } else {
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         }
       });
     }

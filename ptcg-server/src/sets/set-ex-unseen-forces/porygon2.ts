@@ -2,7 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils, GameMessage, PowerType, CardTarget, PlayerType, SlotType, Card } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ADD_CONFUSION_TO_PLAYER_ACTIVE, AFTER_ATTACK, BLOCK_IF_HAS_SPECIAL_CONDITION, DRAW_CARDS_UNTIL_CARDS_IN_HAND, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_CONFUSION_TO_PLAYER_ACTIVE, BLOCK_IF_HAS_SPECIAL_CONDITION, DRAW_CARDS_UNTIL_CARDS_IN_HAND, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
 import { CardList } from '../../game/store/state/card-list';
@@ -120,17 +120,11 @@ export class Porygon2 extends PokemonCard {
     }
 
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-      if (player.active.cards.some(c => c.name === 'Scramble Energy')) {
+      const source = effect.source;
+      const hasScrambleEnergy = [...source.cards, ...source.energies.cards].some(card => card.name === 'Scramble Energy');
+      if (hasScrambleEnergy) {
         effect.damage += 20;
-      }
-    }
-
-    if (AFTER_ATTACK(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      if (player.active.cards.some(c => c.name === 'Scramble Energy')) {
-        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, opponent, this);
+        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
       }
     }
 

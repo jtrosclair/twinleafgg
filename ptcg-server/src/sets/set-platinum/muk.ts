@@ -4,7 +4,7 @@ import { PlayerType, PowerType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { HealEffect } from '../../game/store/effects/game-effects';
 import { BetweenTurnsEffect } from '../../game/store/effects/game-phase-effects';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED, YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED } from '../../game/store/prefabs/attack-effects';
+import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED } from '../../game/store/prefabs/attack-effects';
 import { ADD_POISON_TO_PLAYER_ACTIVE, COIN_FLIP_PROMPT, IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Muk extends PokemonCard {
@@ -62,9 +62,9 @@ export class Muk extends PokemonCard {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       return COIN_FLIP_PROMPT(store, state, effect.player, result => {
         if (result) {
-          YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED(store, state, effect);
+          ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         } else {
-          ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+          ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
         }
       });
     }

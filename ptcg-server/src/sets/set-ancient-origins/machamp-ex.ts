@@ -45,7 +45,7 @@ export class MachampEx extends PokemonCard {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       effect.damage = 20 * (player.active.damage / 10);
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, effect);
     }
 
     // Attack 2: Crazy Hammer

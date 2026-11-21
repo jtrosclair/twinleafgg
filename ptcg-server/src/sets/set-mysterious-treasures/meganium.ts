@@ -36,13 +36,13 @@ export class Meganium extends PokemonCard {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       MULTIPLE_COIN_FLIPS_PROMPT(store, state, effect.player, 3, results => {
         if (results[0]) {
-          ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+          ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         }
         if (results[1]) {
-          ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+          ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         }
         if (results[2]) {
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         }
       });
     }

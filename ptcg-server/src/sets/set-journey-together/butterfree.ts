@@ -57,7 +57,7 @@ export class Butterfree extends PokemonCard {
         effect.damage = 60 * heads;
 
         if (heads >= 2) {
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         }
       });
       return state;

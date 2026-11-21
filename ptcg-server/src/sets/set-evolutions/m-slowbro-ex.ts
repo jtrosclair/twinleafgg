@@ -40,7 +40,7 @@ export class MSlowbroEx extends PokemonCard {
     // Attack 1: Loll Roll Spin
     // Refs: set-fates-collide/serperior.ts (Coil - next turn bonus damage), AGENTS-patterns.md (self-confusion)
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
     }
 
     NEXT_TURN_ATTACK_BONUS(effect, {

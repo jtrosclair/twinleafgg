@@ -70,7 +70,7 @@ export class Darkrai extends PokemonCard {
       if (effect.opponent.active.specialConditions.includes(SpecialCondition.ASLEEP)) {
         effect.damage += 40;
       } else {
-        ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+        ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
       }
     }
 

@@ -42,7 +42,7 @@ export class Sealeo extends PokemonCard {
     // Ref: set-x-and-y/corsola.ts (heal + self condition)
     if (WAS_ATTACK_USED(effect, 0, this)) {
       HEAL_X_DAMAGE_FROM_THIS_POKEMON(60, effect, store, state);
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
     }
 
     return state;

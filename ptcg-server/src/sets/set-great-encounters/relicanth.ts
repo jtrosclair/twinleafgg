@@ -3,7 +3,6 @@ import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { ChooseCardsPrompt, GameMessage, State, StateUtils, StoreLike, TrainerCard } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { ADD_SLEEP_TO_PLAYER_ACTIVE, MOVE_CARDS, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP } from '../../game/store/prefabs/attack-effects';
 
 export class Relicanth extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -65,8 +64,8 @@ export class Relicanth extends PokemonCard {
 
     // Sleep Swirl
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP(store, state, effect);
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
     }
 
     return state;

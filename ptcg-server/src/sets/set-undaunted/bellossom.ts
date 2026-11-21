@@ -71,7 +71,7 @@ export class Bellossom extends PokemonCard {
 
         effect.damage = 30 * heads;
       });
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, effect);
     }
 
     return state;

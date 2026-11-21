@@ -49,7 +49,7 @@ export class Meowstic extends PokemonCard {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       DRAW_CARDS(player, 3);
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, effect);
     }
 
     // Attack 2: Perplexing Eyes

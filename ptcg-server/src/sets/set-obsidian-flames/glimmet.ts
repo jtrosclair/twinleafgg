@@ -28,7 +28,7 @@ export class Glimmet extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (WAS_ATTACK_USED(effect, 0, this)){
       const opponent = effect.opponent;
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, effect);
     }
 
     return state;

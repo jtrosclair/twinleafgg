@@ -37,7 +37,7 @@ export class Marill extends PokemonCard {
 
       COIN_FLIP_PROMPT(store, state, player, result => {
         if (result === true) {
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, player), this);
+          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, player), effect);
         }
       });
     }

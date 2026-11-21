@@ -5,7 +5,6 @@ import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP } from '../../game/store/prefabs/attack-effects';
 import { ADD_SLEEP_TO_PLAYER_ACTIVE } from '../../game/store/prefabs/prefabs';
 
 export class Bibarel extends PokemonCard {
@@ -83,8 +82,8 @@ export class Bibarel extends PokemonCard {
 
     // Tumbling Tackle - both Pokemon asleep
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP(store, state, effect);
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
     }
 
     return state;

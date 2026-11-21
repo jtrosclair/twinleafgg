@@ -111,8 +111,8 @@ export class Venusaur extends PokemonCard {
     }
 
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this, 20);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect, 20);
     }
 
     return state;

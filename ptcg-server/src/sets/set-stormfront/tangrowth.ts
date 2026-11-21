@@ -57,10 +57,10 @@ export class Tangrowth extends PokemonCard {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       MULTIPLE_COIN_FLIPS_PROMPT(store, state, effect.player, 2, results => {
         if (results[0]) {
-          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         }
         if (results[1]) {
-          ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+          ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         }
       });
     }

@@ -80,8 +80,8 @@ export class Wynaut extends PokemonCard {
     }
 
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
     }
 
     return state;

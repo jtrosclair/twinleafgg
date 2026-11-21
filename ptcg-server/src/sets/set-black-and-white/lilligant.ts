@@ -46,7 +46,7 @@ export class Lilligant extends PokemonCard {
       });
 
       // This Pokémon becomes Confused
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, effect);
     }
 
     if (WAS_ATTACK_USED(effect, 1, this)) {

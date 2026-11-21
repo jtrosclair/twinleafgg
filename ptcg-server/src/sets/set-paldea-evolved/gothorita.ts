@@ -39,7 +39,7 @@ export class Gothorita extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Mind Bend
     if (WAS_ATTACK_USED(effect, 0, this)){
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
     
     return state;

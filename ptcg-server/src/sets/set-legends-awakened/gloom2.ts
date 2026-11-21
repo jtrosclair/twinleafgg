@@ -43,7 +43,7 @@ export class Gloom2 extends PokemonCard {
     // Space Out
     if (WAS_ATTACK_USED(effect, 0, this)) {
       HEAL_X_DAMAGE_FROM_THIS_POKEMON(effect, store, state, 20);
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
     }
 
     // Stinky Nectar

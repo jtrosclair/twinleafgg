@@ -44,7 +44,7 @@ export class Litten2 extends PokemonCard {
       const player = effect.player;
       if (player.deck.cards.length > 0) {
         DRAW_CARDS(player, 1);
-        ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, this);
+        ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, effect);
       }
     }
 

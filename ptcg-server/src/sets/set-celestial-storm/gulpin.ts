@@ -39,13 +39,13 @@ export class Gulpin extends PokemonCard {
     // Attack 1: Yawn
     // Ref: set-ultra-prism/salazzle.ts (Panic Poison)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Spit Poison
     // Ref: set-ultra-prism/salazzle.ts (Panic Poison)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

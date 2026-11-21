@@ -7,7 +7,6 @@ import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED, ADD_SLEEP_TO_PLAYER_ACTIVE, IS_ABILITY_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP } from '../../game/store/prefabs/attack-effects';
 import { registerKnockOutEnergyTransfer } from '../../game/store/prefabs/knock-out-effects';
 
 export class JirachiV extends PokemonCard {
@@ -60,8 +59,8 @@ export class JirachiV extends PokemonCard {
     // Ref: set-phantom-forces/musharna.ts (Dream Dance - Both Active Pokémon are now Asleep)
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
-      YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP(store, state, effect);
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, effect);
     }
 
     return state;

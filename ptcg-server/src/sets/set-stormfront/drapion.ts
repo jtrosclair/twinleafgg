@@ -60,7 +60,7 @@ export class Drapion extends PokemonCard {
         const heads = results.filter(r => r).length;
         effect.damage = 20 * heads;
         if (heads >= 2) {
-          ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+          ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         }
       });
     }

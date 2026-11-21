@@ -24,13 +24,13 @@ export class Ivysaur extends PokemonCard {
     {
       name: 'Sleep Powder',
       cost: [G, C],
-      damage: 30,
+      damage: 20,
       text: 'The Defending Pokémon is now Asleep.',
     },
     {
       name: 'Poison Powder',
       cost: [G, G, C],
-      damage: 80,
+      damage: 50,
       text: 'The Defending Pokémon is now Poisoned.',
     }
   ];
@@ -48,11 +48,11 @@ export class Ivysaur extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), effect);
     }
 
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), effect);
     }
     return state;
   }

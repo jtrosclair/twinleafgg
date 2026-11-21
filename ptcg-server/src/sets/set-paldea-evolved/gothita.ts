@@ -38,7 +38,7 @@ export class Gothita extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Eerie Wave
     if (WAS_ATTACK_USED(effect, 1, this)){
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
     
     return state;

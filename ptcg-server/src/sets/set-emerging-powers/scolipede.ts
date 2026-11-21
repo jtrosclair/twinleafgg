@@ -39,7 +39,7 @@ export class Scolipede extends PokemonCard {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this, 20);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, effect, 20);
     }
 
     if (WAS_ATTACK_USED(effect, 1, this)) {

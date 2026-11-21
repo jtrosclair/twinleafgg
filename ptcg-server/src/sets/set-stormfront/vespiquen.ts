@@ -5,8 +5,7 @@ import { Effect } from '../../game/store/effects/effect';
 import { DealDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
 import { HealEffect } from '../../game/store/effects/game-effects';
-import { ADD_POISON_TO_PLAYER_ACTIVE, IS_POKEBODY_BLOCKED, MULTIPLE_COIN_FLIPS_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_BURNED, YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED } from '../../game/store/prefabs/attack-effects';
+import { ADD_PARALYZED_TO_PLAYER_ACTIVE, ADD_BURN_TO_PLAYER_ACTIVE, ADD_POISON_TO_PLAYER_ACTIVE, IS_POKEBODY_BLOCKED, MULTIPLE_COIN_FLIPS_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Vespiquen extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -84,9 +83,9 @@ export class Vespiquen extends PokemonCard {
       const player = effect.player;
       MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 2, results => {
         if (results.length === 2 && results.every(r => r)) {
-          YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_BURNED(store, state, effect);
-          YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED(store, state, effect);
-          ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+          ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+          ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         }
       });
     }

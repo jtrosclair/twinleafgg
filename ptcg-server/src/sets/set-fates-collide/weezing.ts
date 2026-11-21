@@ -7,7 +7,6 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED, MULTIPLE_COIN_FLIPS_PROMPT, ADD_CONFUSION_TO_PLAYER_ACTIVE, ADD_POISON_TO_PLAYER_ACTIVE } from '../../game/store/prefabs/prefabs';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED, YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED } from '../../game/store/prefabs/attack-effects';
 
 export class Weezing extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -60,12 +59,12 @@ export class Weezing extends PokemonCard {
       const player = effect.player;
 
       // Opponent's Active is now Confused and Poisoned
-      YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED(store, state, effect);
-      YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED(store, state, effect);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
 
       // This Pokemon (player's Active) is now Confused and Poisoned
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, this);
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, player, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, effect);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, player, effect);
     }
 
     return state;

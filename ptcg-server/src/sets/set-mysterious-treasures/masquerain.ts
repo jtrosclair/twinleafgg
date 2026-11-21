@@ -3,7 +3,7 @@ import { CardType, Stage } from '../../game/store/card/card-types';
 import { State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { ADD_CONFUSION_TO_PLAYER_ACTIVE, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { CheckRetreatCostEffect } from '../../game/store/effects/check-effects';
+import { CheckPokemonTypeEffect, CheckRetreatCostEffect } from '../../game/store/effects/check-effects';
 
 export class Masquerain extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -48,7 +48,17 @@ export class Masquerain extends PokemonCard {
 
     // Swirling Ripple
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      const opponent = effect.opponent;
+      const waterInPlay = [opponent.active, ...opponent.bench].some(slot => {
+        if (!slot.getPokemonCard()) return false;
+        const types = new CheckPokemonTypeEffect(slot);
+        store.reduceEffect(state, types);
+        return types.cardTypes.includes(CardType.WATER);
+      });
+      if (waterInPlay) {
+        effect.damage += 30;
+        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, opponent, effect);
+      }
     }
 
     return state;

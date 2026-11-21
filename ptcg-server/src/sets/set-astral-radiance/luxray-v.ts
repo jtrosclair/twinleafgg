@@ -1,9 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardTag, Stage, SuperType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils, ChooseCardsPrompt, GameMessage, Card } from '../../game';
-import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 import { Effect } from '../../game/store/effects/effect';
-import { ADD_PARALYZED_TO_PLAYER_ACTIVE, AFTER_ATTACK, MOVE_CARDS, SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_PARALYZED_TO_PLAYER_ACTIVE, AFTER_ATTACK, DISCARD_SPECIFIC_ENERGY_FROM_THIS_POKEMON, MOVE_CARDS, SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class LuxrayV extends PokemonCard {
 
@@ -76,28 +76,14 @@ export class LuxrayV extends PokemonCard {
     }
 
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-
-      const checkProvidedEnergy = new CheckProvidedEnergyEffect(player);
-      state = store.reduceEffect(state, checkProvidedEnergy);
-
-      store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_DISCARD,
-        player.active,
-        { superType: SuperType.ENERGY },
-        { min: 2, max: 2, allowCancel: false }
-      ), selected => {
-        selected = selected || [];
-
-        MOVE_CARDS(store, state, player.active, player.discard, { cards: selected, sourceCard: this, sourceEffect: this.attacks[1] });
+      afterAttackDamage(state, effect, (attackStore, attackState) => {
+        DISCARD_SPECIFIC_ENERGY_FROM_THIS_POKEMON(attackStore, attackState, effect, [C, C]);
+        return attackState;
       });
-
-      return state;
     }
 
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), this);
+      ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), effect);
     }
 
     return state;

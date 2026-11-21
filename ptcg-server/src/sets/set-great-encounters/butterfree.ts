@@ -4,8 +4,7 @@ import { ChoosePokemonPrompt, GameMessage, PlayerType, SlotType, State, StoreLik
 import { Effect } from '../../game/store/effects/effect';
 import { AfterDamageEffect } from '../../game/store/effects/attack-effects';
 import { HealEffect } from '../../game/store/effects/game-effects';
-import { ADD_POISON_TO_PLAYER_ACTIVE, COIN_FLIP_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP } from '../../game/store/prefabs/attack-effects';
+import { ADD_SLEEP_TO_PLAYER_ACTIVE, ADD_POISON_TO_PLAYER_ACTIVE, COIN_FLIP_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Butterfree extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -60,9 +59,9 @@ export class Butterfree extends PokemonCard {
     if (WAS_ATTACK_USED(effect, 1, this)) {
       COIN_FLIP_PROMPT(store, state, effect.player, result => {
         if (result) {
-          YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP(store, state, effect);
+          ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         } else {
-          ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+          ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         }
       });
     }

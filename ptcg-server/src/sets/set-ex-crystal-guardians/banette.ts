@@ -71,7 +71,7 @@ export class Banette extends PokemonCard {
 
     if (AFTER_ATTACK(effect, 0, this)) {
       if (effect.opponent.active.getPokemonCard()?.stage === Stage.BASIC) {
-        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
       }
     }
 

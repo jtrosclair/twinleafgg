@@ -48,7 +48,7 @@ export class Dodrio extends PokemonCard {
         const heads = results.filter(r => r).length;
         effect.damage = 30 * heads;
       });
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, effect);
     }
 
     return state;

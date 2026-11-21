@@ -54,7 +54,7 @@ export class Bellossom extends PokemonCard {
       MULTIPLE_COIN_FLIPS_PROMPT(store, state, effect.player, 3, results => {
         effect.damage = 50 * results.filter(r => r).length;
       });
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
     }
 
     return state;

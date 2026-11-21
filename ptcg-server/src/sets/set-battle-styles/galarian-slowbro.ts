@@ -7,7 +7,6 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED, ADD_POISON_TO_PLAYER_ACTIVE } from '../../game/store/prefabs/prefabs';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED } from '../../game/store/prefabs/attack-effects';
 
 export class GalarianSlowbro extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -47,9 +46,9 @@ export class GalarianSlowbro extends PokemonCard {
       const player = effect.player;
 
       // Poison opponent's active (attack-sourced)
-      YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED(store, state, effect);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
       // Poison player's own active (ability-sourced prefab, but used during attack)
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, player, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, player, effect);
     }
 
     // Attack 2: Unhinged Hammer

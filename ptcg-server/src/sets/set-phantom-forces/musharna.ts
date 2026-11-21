@@ -8,7 +8,6 @@ import { StoreLike, State, StateUtils, GameMessage, Card } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { WAS_ATTACK_USED, ADD_SLEEP_TO_PLAYER_ACTIVE, SHUFFLE_DECK, BLOCK_IF_DISCARD_EMPTY, SHOW_CARDS_TO_PLAYER } from '../../game/store/prefabs/prefabs';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP } from '../../game/store/prefabs/attack-effects';
 
 export class Musharna extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -70,8 +69,8 @@ export class Musharna extends PokemonCard {
     // Ref: set-furious-fists/slakoth.ts (Big Yawn)
     if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
-      YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP(store, state, effect);
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, effect);
     }
 
     return state;

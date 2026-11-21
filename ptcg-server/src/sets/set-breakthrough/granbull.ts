@@ -70,7 +70,7 @@ export class Granbull extends PokemonCard {
     // Attack 2: Tantrum
     // Ref: AGENTS-patterns.md (This Pokemon is now Confused)
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
     }
 
     return state;

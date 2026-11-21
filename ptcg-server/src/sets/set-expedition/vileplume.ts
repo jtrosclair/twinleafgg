@@ -68,7 +68,7 @@ export class Vileplume extends PokemonCard {
       return MULTIPLE_COIN_FLIPS_PROMPT(store, state, effect.player, 3, results => {
         const heads = results.filter(r => r).length;
         effect.damage = 30 * heads;
-        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+        ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
       });
     }
 

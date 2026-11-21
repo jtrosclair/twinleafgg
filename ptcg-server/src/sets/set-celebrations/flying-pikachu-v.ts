@@ -48,7 +48,7 @@ export class FlyingPikachuV extends PokemonCard {
       ), flipResult => {
 
         if (flipResult) {
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, player), this);
+          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, player), effect);
         }
       });
     }

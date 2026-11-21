@@ -8,7 +8,6 @@ import { StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { WAS_ATTACK_USED, COIN_FLIP_PROMPT, ADD_CONFUSION_TO_PLAYER_ACTIVE } from '../../game/store/prefabs/prefabs';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED } from '../../game/store/prefabs/attack-effects';
 
 export class Spinda extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -45,9 +44,9 @@ export class Spinda extends PokemonCard {
       const player = effect.player;
       COIN_FLIP_PROMPT(store, state, player, result => {
         if (result) {
-          YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED(store, state, effect);
+          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         } else {
-          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, this);
+          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, effect);
         }
       });
     }

@@ -4,7 +4,7 @@ import { StoreLike, State, ChoosePokemonPrompt, PlayerType, SlotType } from '../
 import { Effect } from '../../game/store/effects/effect';
 import { PutCountersEffect } from '../../game/store/effects/attack-effects';
 import { GameMessage } from '../../game/game-message';
-import {ADD_POISON_TO_PLAYER_ACTIVE, SWITCH_ACTIVE_WITH_BENCHED, WAS_ATTACK_USED} from '../../game/store/prefabs/prefabs';
+import {ADD_POISON_TO_PLAYER_ACTIVE, AFTER_ATTACK, SWITCH_ACTIVE_WITH_BENCHED, WAS_ATTACK_USED} from '../../game/store/prefabs/prefabs';
 
 export class GengarEx extends PokemonCard {
   public tags = [ CardTag.POKEMON_EX ];
@@ -55,8 +55,8 @@ export class GengarEx extends PokemonCard {
     }
 
     // Dark Corridor
-    if (WAS_ATTACK_USED(effect, 1, this)){
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+    if (AFTER_ATTACK(effect, 1, this)){
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
       SWITCH_ACTIVE_WITH_BENCHED(store, state, effect.player);
     }
 

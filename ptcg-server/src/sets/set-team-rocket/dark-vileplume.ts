@@ -92,7 +92,7 @@ export class DarkVileplume extends PokemonCard {
         effect.damage = 30 * heads;
 
         if (heads >= 2) {
-          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, this);
+          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, effect);
         }
       });
     }

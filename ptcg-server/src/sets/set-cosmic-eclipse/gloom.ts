@@ -32,7 +32,7 @@ export class Gloom extends PokemonCard {
     // Sleep Powder
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const opponent = StateUtils.getOpponent(state, effect.player);
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, effect);
     }
 
     return state;

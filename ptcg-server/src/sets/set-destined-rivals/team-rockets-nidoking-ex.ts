@@ -38,7 +38,7 @@ export class TeamRocketsNidokingex extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Dirty Horns
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this, 80);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect, 80);
     }
 
     return state;

@@ -80,7 +80,7 @@ export class Skuntank extends PokemonCard {
       const player = effect.player;
       COIN_FLIP_PROMPT(store, state, player, result => {
         if (result) {
-          ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this, 20);
+          ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect, 20);
         }
       });
     }

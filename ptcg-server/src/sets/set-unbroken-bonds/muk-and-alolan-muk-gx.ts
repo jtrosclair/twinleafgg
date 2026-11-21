@@ -44,7 +44,7 @@ export class MukAlolanMukGX extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Severe Poison
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this, 80);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect, 80);
     }
 
     // Poison Absorption
@@ -67,7 +67,7 @@ export class MukAlolanMukGX extends PokemonCard {
       BLOCK_IF_GX_ATTACK_USED(player);
       player.usedGX = true;
 
-      ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, opponent, this);
+      ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, opponent, effect);
       let poisonDamage = 10;
 
       const extraEffectCost: CardType[] = [C, C, C, C];
@@ -79,7 +79,7 @@ export class MukAlolanMukGX extends PokemonCard {
         poisonDamage = 150;
       }
 
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this, poisonDamage);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, effect, poisonDamage);
     }
 
     return state;

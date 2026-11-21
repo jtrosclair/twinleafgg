@@ -44,7 +44,7 @@ export class Growlithe extends PokemonCard {
       const player = effect.player;
       const healEffect = new HealEffect(player, player.active, player.active.damage);
       state = store.reduceEffect(state, healEffect);
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, effect);
     }
 
     // Attack 2: Lunge

@@ -3169,3 +3169,48 @@ confirm protection bypasses on Team Rocket's Nidoking ex's Dirty Horns,
 Accelgor's Poisonous Ploy, and Butterfree's Scale Hurricane. Dirty Horns
 still causes 80 Poison damage in Checkup. Poisonous Ploy still applies both
 conditions and switches Accelgor. Scale Hurricane still applies Paralysis.
+
+## Gameplay re-audit, batch 38
+
+Corrected 144 Special Condition attacks against their printed text. Attack
+handlers that calculate damage or flip coins can now queue conditions after
+damage using the original attack source. This lets attack protection prevent
+Dirty Horns' eight-counter Poison, Poisonous Ploy's Confusion and Poison,
+and Scale Hurricane's Paralysis. Poisonous Ploy still switches the attacker.
+Mew ex's copied Scale Hurricane applies Paralysis on exactly two heads and
+checks protection against Mew itself.
+[Team Rocket’s Nidoking ex](https://asia.pokemon-card.com/sg/card-search/detail/19764/)
+[Pokémon TCG attack order](https://assets.pokemon.com/assets/cms2/pdf/trading-card-game/rulebook/par_rulebook_en.pdf)
+
+The checks cover independent effects on the attacker, including switching,
+discarding, drawing and healing, as well as Pokémon Checkup.
+Dark Corridor deals damage and applies Poison before Gengar-EX switches.
+Radiating Pulse deals damage, discards two Energy and then applies Paralysis
+if the defending Pokémon is unprotected. The legacy discard prompt had no
+valid selection in a real game.
+[Gengar-EX attack order](https://www.pokemon.com/us/play-pokemon/worlds/2015/decks/popular-decks)
+[Luxray V](https://asia.pokemon-card.com/ph/card-search/detail/2318/)
+
+Caterpie BS, Mudkip RS and Marshtomp RS now apply Paralysis on heads.
+Flareon SK applies Burn. Treecko CG and Deino SV11W apply Paralysis to the
+opposing Active. Ivysaur DEX deals 20 with Sleep Powder and 50 with Poison
+Powder. Poison Spike checks for existing damage before applying its own
+damage. Swirling Ripple checks the entire opposing board for a Water
+Pokémon. Porygon2 UF draws with Data Retrieval and grants the Scramble
+Energy bonus and Confusion only on Scramble Trip.
+[EX Ruby and Sapphire Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/EX_Ruby_and_Sapphire.pdf)
+[Dark Explorers Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/bw_dark_explorers.pdf)
+[EX Unseen Forces Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/EX_Unseen_Forces.pdf)
+
+This pass resolves 169 of the 306 tracked call sites and brings the total
+to 806 tested Special Condition attacks across batches 36–38. The
+remaining queue contains 137 calls across 121 definitions. 51 of those
+calls have matching printed text in local card data. Priorities include
+opponent switches followed by status, Perish Dream's delayed Knock Out,
+and remaining alternate prints. Upstream main is still at `d3d7a0031`.
+
+All 9,600 engine tests, 1,773 checks with the existing local client edits
+and 209 frontend specs passed. The build passed package attestation, the
+mobile size budget at 2.46 MiB and ten packaged board checks. All 559
+supported saved states and 3,633 sampled opening actions matched the
+previous build. All seven recorded solutions reached a win.

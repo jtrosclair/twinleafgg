@@ -60,10 +60,10 @@ export class Vileplume extends PokemonCard {
       COIN_FLIP_PROMPT(store, state, effect.player, result => {
         const opponent = StateUtils.getOpponent(state, effect.player);
         if (result) {
-          ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, this);
+          ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, effect);
         }
         else {
-          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, opponent, this);
+          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, opponent, effect);
         }
       });
     }

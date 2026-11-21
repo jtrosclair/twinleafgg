@@ -54,7 +54,7 @@ export class Bewear extends PokemonCard {
     // Ref: AGENTS-patterns.md (self-confusion)
     if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, effect);
     }
 
     return state;

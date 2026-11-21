@@ -58,7 +58,7 @@ export class MegaLopunnyJigglypuffGX extends PokemonCard {
       BLOCK_IF_GX_ATTACK_USED(player);
       player.usedGX = true;
 
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, opponent, effect);
 
       const extraEffectCost: CardType[] = [C, C, C, C, C];
       const checkProvidedEnergy = new CheckProvidedEnergyEffect(player);

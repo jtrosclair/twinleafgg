@@ -34,8 +34,8 @@ export class Psyduck extends PokemonCard {
 
     // Confusion Wave attack - confuse both active Pokemon
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, this);
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

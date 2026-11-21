@@ -41,7 +41,7 @@ export class Tangela extends PokemonCard {
     if (AFTER_ATTACK(effect, 0, this)) {
       COIN_FLIP_PROMPT(store, state, effect.player, result => {
         if (result) {
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         }
       });
     }
@@ -49,7 +49,7 @@ export class Tangela extends PokemonCard {
     // Attack 2: Poison Powder
     // Ref: set-flashfire/qwilfish.ts (Poison Sting)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

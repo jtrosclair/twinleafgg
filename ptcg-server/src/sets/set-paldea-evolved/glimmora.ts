@@ -67,7 +67,7 @@ export class Glimmora extends PokemonCard {
     if (WAS_ATTACK_USED(effect, 0, this)){
       const opponent = effect.opponent;
 
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this, 60);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, effect, 60);
     }
     return state;
   }

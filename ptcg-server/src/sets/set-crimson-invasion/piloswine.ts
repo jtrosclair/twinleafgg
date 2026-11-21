@@ -42,7 +42,7 @@ export class Piloswine extends PokemonCard {
     // Refs: set-x-and-y/bibarel.ts (Hypno Headbutt - sleep self), set-shining-legends/shroomish.ts (heal)
     if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, effect);
       HEAL_X_DAMAGE_FROM_THIS_POKEMON(effect, store, state, 90);
     }
 

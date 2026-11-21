@@ -9,7 +9,6 @@ import { DealDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { WAS_ATTACK_USED, ADD_SLEEP_TO_PLAYER_ACTIVE } from '../../game/store/prefabs/prefabs';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP } from '../../game/store/prefabs/attack-effects';
 
 export class Musharna extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -50,8 +49,8 @@ export class Musharna extends PokemonCard {
       const player = effect.player;
 
       // Both Active Pokemon are now Asleep
-      YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP(store, state, effect);
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, player, effect);
 
       // Set up 2-phase marker for next turn damage bonus
       player.marker.addMarker(this.REST_WELL_MARKER, this);

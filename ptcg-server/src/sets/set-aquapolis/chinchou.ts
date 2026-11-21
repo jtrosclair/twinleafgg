@@ -35,7 +35,7 @@ export class Chinchou extends PokemonCard {
     if (AFTER_ATTACK(effect, 0, this)) {
       COIN_FLIP_PROMPT(store, state, effect.player, result => {
         if (result) {
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), this);
+          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), effect);
         }
       });
     }
@@ -43,7 +43,7 @@ export class Chinchou extends PokemonCard {
     if (AFTER_ATTACK(effect, 1, this)) {
       COIN_FLIP_PROMPT(store, state, effect.player, result => {
         if (result) {
-          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), this);
+          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), effect);
         }
       });
     }

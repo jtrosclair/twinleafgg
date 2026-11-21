@@ -89,9 +89,9 @@ export class VileplumeGX extends PokemonCard {
       player.usedGX = true;
 
       const opponent = StateUtils.getOpponent(state, player);
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, opponent, this);
-      ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, opponent, this);
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, opponent, effect);
+      ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, opponent, effect);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, effect);
     }
 
     return state;

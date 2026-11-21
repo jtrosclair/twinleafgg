@@ -43,7 +43,7 @@ export class Parasect extends PokemonCard {
 
     // Hibernation Spore
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this, 2);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect, 2);
     }
 
     return state;

@@ -36,13 +36,13 @@ export class Roselia extends PokemonCard {
       const hasBudew = cardList instanceof PokemonCardList
         && cardList.getPokemons().some(p => p.name === 'Budew');
       if (hasBudew) {
-        ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-        ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+        ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+        ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
       } else {
         COIN_FLIP_PROMPT(store, state, effect.player, result => {
           if (result) {
-            ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
-            ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+            ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+            ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
           }
         });
       }

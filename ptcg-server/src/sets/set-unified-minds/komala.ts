@@ -71,7 +71,7 @@ export class Komala extends PokemonCard {
     // Attack 1: Snooze
     // Ref: AGENTS-patterns.md (This Pokemon is now Asleep)
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
     }
 
     return state;

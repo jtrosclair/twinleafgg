@@ -67,7 +67,7 @@ export class Muk extends PokemonCard {
 
     // Toxic Secretion - apply double poison (20 damage instead of 10)
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this, 20);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect, 20);
     }
 
     return state;

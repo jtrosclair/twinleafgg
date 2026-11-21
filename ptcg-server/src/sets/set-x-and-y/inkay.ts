@@ -7,7 +7,6 @@ import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils, SpecialCondition, GameMessage, ChooseCardsPrompt, PokemonCardList } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED, WAS_POWER_USED, IS_ABILITY_BLOCKED, ABILITY_USED, USE_ABILITY_ONCE_PER_TURN, REMOVE_MARKER_AT_END_OF_TURN, SHUFFLE_DECK, ADD_CONFUSION_TO_PLAYER_ACTIVE } from '../../game/store/prefabs/prefabs';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED } from '../../game/store/prefabs/attack-effects';
 
 export class Inkay extends PokemonCard {
   public readonly UPSIDE_DOWN_EVOLUTION_MARKER = 'INKAY_UPSIDE_DOWN_EVOLUTION_MARKER';
@@ -94,8 +93,8 @@ export class Inkay extends PokemonCard {
     // Ref: set-dragons-exalted/stunky.ts (condition application)
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
-      YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED(store, state, effect);
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, player, effect);
     }
 
     return state;

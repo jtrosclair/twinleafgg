@@ -39,7 +39,7 @@ export class Torkoal extends PokemonCard {
     // Attack 1: Singe
     // Ref: AGENTS-patterns.md (special conditions)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Body Slam
@@ -47,7 +47,7 @@ export class Torkoal extends PokemonCard {
     if (AFTER_ATTACK(effect, 1, this)) {
       COIN_FLIP_PROMPT(store, state, effect.player, result => {
         if (result) {
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         }
       });
     }

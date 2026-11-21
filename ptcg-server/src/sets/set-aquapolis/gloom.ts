@@ -71,8 +71,8 @@ export class Gloom extends PokemonCard {
     }
 
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, this);
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), effect);
     }
 
     return state;

@@ -47,7 +47,7 @@ export class Scrafty extends PokemonCard {
         const heads = results.filter(r => r).length;
         effect.damage = 50 * heads;
       });
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
     }
 
     return state;

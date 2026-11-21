@@ -90,7 +90,7 @@ export class Snorlax2 extends PokemonCard {
         if (result) {
           effect.damage += 40;
         } else {
-          ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+          ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
         }
       });
     }

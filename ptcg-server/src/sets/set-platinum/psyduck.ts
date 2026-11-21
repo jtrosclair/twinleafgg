@@ -45,7 +45,7 @@ export class Psyduck extends PokemonCard {
       return COIN_FLIP_PROMPT(store, state, effect.player, result => {
         if (!result) {
           effect.damage = 0;
-          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, this);
+          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.player, effect);
         }
       });
     }
