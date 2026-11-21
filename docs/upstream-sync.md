@@ -4625,3 +4625,50 @@ solutions still win. The 2.51 MiB gzip package passes attestation,
 board-prompt checks and 209 client checks. Packaged mouse and touch tests
 both resolve Lucky Bonus first and put the contested Dream Ball into hand.
 Rerolls spanning Assist and a copied attack are still under review.
+
+## Gameplay re-audit, batch 68
+
+Adapted the copied-attack runner from upstream `3ee8aac13` for the shared
+Bench and opposing Active effects, Clefairy's Mini-Metronome and Smeargle's
+Trace. The declared attack runs the legality checks once. Its copied attack
+uses the same paid Energy, resolves its after-damage effects and keeps the
+declared attack in the turn history. The runner uses the existing attack-only
+ownership contract when available. Legacy in-play sources still run their
+existing handlers. Trace requires a choice when the opposing Bench has an
+attack to copy. Mini-Metronome retains its original browser coin prompt
+and can still copy a copying attack. A nested Assist uses the current
+player’s Bench.
+[Official attack sequence](https://asia.pokemon-card.com/ph/wp-content/uploads/sites/6/2022/08/attack_flow_chart_EN.pdf)
+[Official Mini-Metronome print](https://www.pokemon-card.com/card-search/details.php/card/38429/regu/XY)
+[Official Try to Imitate print](https://www.pokemon-card.com/card-search/details.php/card/47336)
+[Official Trace print](https://www.pokemon-card.com/card-search/details.php/card/3106/regu/DP)
+[Official Trace selection rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%89%E3%83%BC%E3%83%96%E3%83%AB&regulation_faq_main_item1=all)
+[Official Dedenne print](https://www.pokemon-card.com/card-search/details.php/card/38434)
+[Official Wicked Jab print](https://www.pokemon-card.com/card-search/details.php/card/28128)
+
+Adapted the Smithereen Smash path from upstream `a9060761e`. On heads it
+can discard one attached Energy, finishes directly if there is none and
+honors protection from attack effects. The older raw card move could leave
+an impossible prompt or discard Mist Energy through its own protection.
+[Official Smithereen Smash print](https://www.pokemon-card.com/card-search/details.php/card/28130)
+[Official Assist print](https://www.pokemon-card.com/card-search/details.php/card/28136)
+[Official Assist and Smithereen Smash reflip ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%8A%E3%83%83%E3%82%AF%E3%83%A9%E3%83%BC&regulation_faq_main_item1=all)
+
+The Assist reflip still needs to restart at the initial coin after a copied
+attack flips. The local red reproduction chooses Smithereen Smash, accepts
+Victory Star after its tails and expects a replacement heads to allow
+choosing Trapinch’s second attack. Its printed name is Bite, which the
+legacy definition stores as Hyper Beam. Any name correction should accept
+the old name on loading. Copied attacks can also flip after damage. A restart
+must settle the coin outcomes without committing damage, discard or private
+information from the abandoned branch.
+
+All 12 focused cases pass and nine reproduce failures on the previous
+engine. The full suite passes 11,008 tests, and 185 targeted checks pass
+alongside the existing local edits. The API passes 32 tests. All 559
+comparable saved boards and 5,225 sampled opening actions match. All seven
+recorded solutions still win. The saved boards did not reach one of the
+changed copy choices as an opening action. Dedicated engine cases exercise
+those choices, and mouse and touch tests drive Mini-Metronome through the
+packaged board to verify both damage and Confusion. The 2.51 MiB gzip
+package also passes attestation, board-prompt checks and 209 client checks.

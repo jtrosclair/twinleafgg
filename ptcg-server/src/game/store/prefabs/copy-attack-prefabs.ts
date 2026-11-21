@@ -13,9 +13,9 @@ import { CardType } from '../card/card-types';
 import { PokemonCard } from '../card/pokemon-card';
 import { Attack } from '../card/pokemon-types';
 import { CheckProvidedEnergyEffect } from '../effects/check-effects';
-import { PowerEffect, UseAttackEffect } from '../effects/game-effects';
+import { AttackEffect, PowerEffect, UseAttackEffect } from '../effects/game-effects';
 import { PokemonCardList } from '../state/pokemon-card-list';
-import { checkCopiedAttackCost } from './copy-attack-delegation';
+import { checkCopiedAttackCost, runDelegatedCopiedAttackGenerator } from './copy-attack-delegation';
 
 export function findPokemonCardForAttack(
   cards: Card[],
@@ -111,34 +111,52 @@ export interface CopyAttackViaAbilityOptions extends BuildAttackListOptions {
   requireActiveCopycat?: boolean;
 }
 
-/** Copy an attack from the supplied Pokémon, ignoring only its Energy cost. */
+interface CopyAttackFromListOptions {
+  allowCancel?: boolean;
+  disallowCopycatAttack?: boolean;
+  preserveInPlaySource?: boolean;
+}
+
+/** Resolve another attack's text as part of the attack already in progress. */
+export function* copyAttackFromPokemonList(
+  next: () => void,
+  store: StoreLike,
+  state: State,
+  effect: AttackEffect,
+  pokemonCards: PokemonCard[],
+  { allowCancel = true, disallowCopycatAttack = false, preserveInPlaySource }: CopyAttackFromListOptions,
+): IterableIterator<State> {
+  const copycatCard = effect.source.getPokemonCard();
+  if (!copycatCard || !pokemonCards.some(card => card.attacks.length)) return state;
+
+  let selected: Attack | null = null;
+  yield store.prompt(state, new ChooseAttackPrompt(
+    effect.player.id, GameMessage.CHOOSE_ATTACK_TO_COPY, pokemonCards, { allowCancel },
+  ), attack => {
+    selected = attack;
+    next();
+  });
+
+  const selectedAttack = selected as Attack | null;
+  if (!selectedAttack || (disallowCopycatAttack && selectedAttack.copycatAttack)) return state;
+  const sourceCard = findPokemonCardForAttack(pokemonCards, selectedAttack);
+  if (!sourceCard) return state;
+
+  return yield* runDelegatedCopiedAttackGenerator(next, {
+    store, state, copycatCard, sourceCard, selectedAttack, sourceSlot: effect.source,
+    player: effect.player, opponent: effect.opponent, retainDeclaredAttack: true, preserveInPlaySource,
+  });
+}
+
 export function COPY_ATTACK_FROM_POKEMON_LIST(
   store: StoreLike,
   state: State,
-  effect: import('../effects/game-effects').AttackEffect,
+  effect: AttackEffect,
   pokemonCards: PokemonCard[],
-  options: { allowCancel?: boolean } = {},
+  options: CopyAttackFromListOptions = {},
 ): State {
-  const player = effect.player;
-  return store.prompt(
-    state,
-    new ChooseAttackPrompt(
-      player.id,
-      GameMessage.CHOOSE_ATTACK_TO_COPY,
-      pokemonCards,
-      { allowCancel: options.allowCancel ?? true },
-    ),
-    attack => {
-      if (!attack) return state;
-      const sourceCard = findPokemonCardForAttack(pokemonCards, attack);
-      if (!sourceCard) return state;
-      const useAttackEffect = new UseAttackEffect(player, attack);
-      useAttackEffect.delegateFrom = sourceCard;
-      useAttackEffect.source = player.active;
-      useAttackEffect.ignoreEnergyCost = true;
-      return store.reduceEffect(state, useAttackEffect);
-    },
-  );
+  const generator = copyAttackFromPokemonList(() => generator.next(), store, state, effect, pokemonCards, options);
+  return generator.next().value;
 }
 
 /**

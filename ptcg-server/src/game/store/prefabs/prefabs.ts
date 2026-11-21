@@ -16,7 +16,7 @@ import { Effect } from '../effects/effect';
 import { afterAttackDamage, resolveAfterAttack, resolveAfterAttackDamage } from './attack-after-damage';
 import { AfterEvolveEffect, AttackEffect, DrawPrizesEffect, KnockOutEffect, MoveCardsEffect, MoveDamageCountersEffect, PowerEffect, RetreatEffect, SpecialEnergyEffect } from '../effects/game-effects';
 import { AfterAttackEffect, EndTurnEffect } from '../effects/game-phase-effects';
-import { ChooseAttackPrompt } from '../prompts/choose-attack-prompt';
+import { COPY_ATTACK_FROM_POKEMON_LIST, copyAttackFromPokemonList } from './copy-attack-prefabs';
 import { preventRetreatEffect, preventDamageEffect } from '../effects/effect-of-attack-effects';
 import { CardAssign } from '../prompts/attach-energy-prompt';
 import { resolveEnergyAttachmentCompletions } from './hand-energy-reactions';
@@ -258,14 +258,13 @@ export interface CopyBenchAttackOptions {
 }
 
 function* copyBenchAttackGenerator(
-  next: Function,
+  next: () => void,
   store: StoreLike,
   state: State,
   effect: AttackEffect,
   options: CopyBenchAttackOptions
 ): IterableIterator<State> {
   const player = effect.player;
-  const opponent = StateUtils.getOpponent(state, player);
   const { allowCancel = false, throwIfNoBenchedPokemon = true, disallowCopycatAttack = true } = options;
 
   const hasBenchedPokemon = player.bench.some(b => b.cards.length > 0);
@@ -298,46 +297,9 @@ function* copyBenchAttackGenerator(
     return state;
   }
 
-  let selected: Attack | null = null;
-  yield store.prompt(state, new ChooseAttackPrompt(
-    player.id,
-    GameMessage.CHOOSE_ATTACK_TO_COPY,
-    [benchedCard],
-    { allowCancel }
-  ), result => {
-    selected = result;
-    next();
+  return yield* copyAttackFromPokemonList(next, store, state, effect, [benchedCard], {
+    allowCancel, disallowCopycatAttack, preserveInPlaySource: true,
   });
-
-  const copiedAttack = selected as Attack | null;
-  if (copiedAttack === null) {
-    return state;
-  }
-
-  if (disallowCopycatAttack && copiedAttack.copycatAttack === true) {
-    return state;
-  }
-
-  store.log(state, GameLog.LOG_PLAYER_COPIES_ATTACK, {
-    name: player.name,
-    attack: copiedAttack.name
-  });
-
-  const attackEffect = new AttackEffect(player, opponent, copiedAttack);
-  store.reduceEffect(state, attackEffect);
-
-  if (store.hasPrompts()) {
-    yield store.waitPrompt(state, () => next());
-  }
-
-  if (attackEffect.damage > 0) {
-    const dealDamage = new DealDamageEffect(attackEffect, attackEffect.damage);
-    state = store.reduceEffect(state, dealDamage);
-  }
-
-  state = yield* resolveAfterAttackDamage(() => next(), store, state, attackEffect);
-
-  return state;
 }
 
 /**
@@ -360,66 +322,17 @@ export function COPY_BENCH_ATTACK(
  * "Choose 1 of your opponent's Active Pokemon's attacks and use it as this attack."
  * Used by: Zoroark (Foul Play), Krookodile (Foul Play), Mew ex (Genome Hacking), etc.
  */
-function* copyOpponentActiveAttackGenerator(
-  next: Function,
-  store: StoreLike,
-  state: State,
-  effect: AttackEffect,
-): IterableIterator<State> {
-  const player = effect.player;
-  const opponent = StateUtils.getOpponent(state, player);
-  const pokemonCard = opponent.active.getPokemonCard();
-
-  if (pokemonCard === undefined || pokemonCard.attacks.length === 0) {
-    return state;
-  }
-
-  let selected: any;
-  yield store.prompt(state, new ChooseAttackPrompt(
-    player.id,
-    GameMessage.CHOOSE_ATTACK_TO_COPY,
-    [pokemonCard],
-    { allowCancel: false }
-  ), result => {
-    selected = result;
-    next();
-  });
-
-  const attack: Attack | null = selected;
-
-  if (attack === null || attack.copycatAttack === true) {
-    return state;
-  }
-
-  store.log(state, GameLog.LOG_PLAYER_COPIES_ATTACK, {
-    name: player.name,
-    attack: attack.name
-  });
-
-  const attackEffect = new AttackEffect(player, opponent, attack);
-  state = store.reduceEffect(state, attackEffect);
-
-  if (store.hasPrompts()) {
-    yield store.waitPrompt(state, () => next());
-  }
-
-  if (attackEffect.damage > 0) {
-    const dealDamage = new DealDamageEffect(attackEffect, attackEffect.damage);
-    state = store.reduceEffect(state, dealDamage);
-  }
-
-  state = yield* resolveAfterAttackDamage(() => next(), store, state, attackEffect);
-
-  return state;
-}
-
 export function COPY_OPPONENT_ACTIVE_ATTACK(
   store: StoreLike,
   state: State,
   effect: AttackEffect,
+  disallowCopycatAttack = true,
 ): State {
-  const generator = copyOpponentActiveAttackGenerator(() => generator.next(), store, state, effect);
-  return generator.next().value;
+  const pokemonCard = effect.opponent.active.getPokemonCard();
+  if (!pokemonCard) return state;
+  return COPY_ATTACK_FROM_POKEMON_LIST(store, state, effect, [pokemonCard], {
+    allowCancel: false, disallowCopycatAttack, preserveInPlaySource: true,
+  });
 }
 
 /**

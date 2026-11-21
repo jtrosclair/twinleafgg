@@ -69,7 +69,7 @@ export class Smeargle extends PokemonCard {
           return;
         }
         COPY_ATTACK_FROM_POKEMON_LIST(store, state, effect as AttackEffect, benchCards, {
-          allowCancel: true,
+          allowCancel: false,
         });
       });
     }

@@ -5,6 +5,20 @@
   "description": "Per-commit review record for the PrizeMap simulator fork. Partial ports are not full commits. Never infer an applied watermark from the latest observed SHA.",
   "commits": [
     {
+      "sha": "3ee8aac139161e138794d0fe1c67ae13e47a6bed",
+      "date": "2026-09-04",
+      "subject": "refactor(cards, engine): Copycat Attacks",
+      "status": "partial",
+      "notes": "Historical pre-base path record. Batch 68 adapts the common copied-attack lifecycle for copies from a Benched Pokémon or the opposing Active, Mini-Metronome and Trace. It preserves the declared attack and its payment, avoids a second Confusion or Smokescreen check, and retains handling for legacy in-play sources. Linked replacement coins and other individually implemented copy paths remain open."
+    },
+    {
+      "sha": "a9060761e77dced7d3bcf02f6792a73c4d5851ea",
+      "date": "2026-07-31",
+      "subject": "refactor(cards): DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON",
+      "status": "partial",
+      "notes": "Historical pre-base path record. Batch 68 adapts Trapinch BCR Smithereen Smash. On heads it uses the protected attack discard path and skips the choice if the opponent has no attached Energy. This entry tracks the Trapinch change. The other paths are reviewed separately."
+    },
+    {
       "sha": "354a45c1c4b3a47651984e66fb56241d59181d05",
       "date": "2026-07-20",
       "subject": "add(engine, frontend): Coin Flip/Re-Flip Handling, Frontend Visuals, Prefabs",

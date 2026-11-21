@@ -379,6 +379,7 @@ export function openCopyAttackSession(
   sourceCard: PokemonCard,
   clonedAttacks: Attack[],
   selectedClonedAttack: Attack,
+  retainDeclaredAttack = false,
 ): void {
   const sessions = sessionsForState(state);
   for (let i = sessions.length - 1; i >= 0; i--) {
@@ -396,13 +397,10 @@ export function openCopyAttackSession(
     endTurnsRemaining: DEFAULT_END_TURN_BUDGET,
   });
 
-  if (!state.playerLastAttack) {
-    state.playerLastAttack = {};
+  if (!retainDeclaredAttack) {
+    state.playerLastAttack ??= {};
+    state.playerLastAttack[player.id] = { attack: selectedClonedAttack, sourceCard: copycatCard };
   }
-  state.playerLastAttack[player.id] = {
-    attack: selectedClonedAttack,
-    sourceCard: copycatCard,
-  };
   persistCopyAttackSessions(state, sessions);
 }
 
@@ -505,6 +503,10 @@ export interface DelegatedCopiedAttackContext {
   skipLog?: boolean;
   /** Skip AfterAttackEffect (e.g. when useAttack will emit it). */
   skipAfterAttack?: boolean;
+  /** An attack copying another attack uses its own name in the turn history. */
+  retainDeclaredAttack?: boolean;
+  /** Legacy in-play sources without an audited attack-only reducer keep their original receiver. */
+  preserveInPlaySource?: boolean;
 }
 
 /**
@@ -525,6 +527,8 @@ export function* runDelegatedCopiedAttackGenerator(
     sourceSlot,
     skipLog = false,
     skipAfterAttack = false,
+    retainDeclaredAttack = false,
+    preserveInPlaySource = false,
   } = ctx;
 
   const attackIndex = findAttackIndex(sourceCard, selectedAttack);
@@ -541,11 +545,14 @@ export function* runDelegatedCopiedAttackGenerator(
     });
   }
 
-  const clonedAttacks = cloneAttacks(sourceCard.attacks || []);
-  const clonedAttack = clonedAttacks[attackIndex];
-  openCopyAttackSession(state, player, copycatCard, sourceCard, clonedAttacks, clonedAttack);
+  let copiedAttack = selectedAttack;
+  if (!preserveInPlaySource || ownedCopiedAttackReducer(sourceCard)) {
+    const clonedAttacks = cloneAttacks(sourceCard.attacks);
+    copiedAttack = clonedAttacks[attackIndex];
+    openCopyAttackSession(state, player, copycatCard, sourceCard, clonedAttacks, copiedAttack, retainDeclaredAttack);
+  }
 
-  const attackEffect = new AttackEffect(player, opponent, clonedAttack);
+  const attackEffect = new AttackEffect(player, opponent, copiedAttack);
   attackEffect.source = sourceSlot ?? player.active;
   const attackDamageScope = beginAttackDamageScope(state);
   try {
@@ -577,7 +584,7 @@ export function* runDelegatedCopiedAttackGenerator(
 
     if (!skipAfterAttack) {
       state = yield* resolveAfterAttack(() => next(), store, state,
-        new AfterAttackEffect(player, opponent, clonedAttack, originalDefender, attackEffect));
+        new AfterAttackEffect(player, opponent, copiedAttack, originalDefender, attackEffect));
     }
 
   } finally {
