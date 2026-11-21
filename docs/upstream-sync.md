@@ -2683,3 +2683,49 @@ review. Runtime inventory also found 73 registered printings whose legacy
 `_tags` includes Pokémon SP while the public `tags` field omits it.
 Other attack bonuses requiring extra Energy still need individual
 verification.
+
+## Gameplay re-audit, batch 27
+
+Critical Cut arms attack protection after a confirmed damage Knock Out.
+A target that survives with Guts leaves Golisopod unprotected. A successful
+Critical Cut protects from damage and attack effects during the opponent's
+next turn. Sky Hunting switches the actual attacker after damage and survival
+effects resolve and before the opponent promotes. It also works on a Knock Out
+worth zero Prizes. Grandiose Fangs applies its 120 damage bonus to the next
+turn's attacks against the opposing Active, before Weakness and Resistance.
+The bonus belongs to the Pokémon that actually attacked, including copies,
+and clears when the Pokémon switches out or the bonus turn ends.
+[Golisopod print](https://www.pokemon-card.com/card-search/details.php/card/50110)
+[Staraptor print](https://www.pokemon-card.com/card-search/details.php/card/34169/)
+[Sky Hunting ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A0%E3%82%AF%E3%83%9B%E3%83%BC%E3%82%AF&regulation_faq_main_item1=all)
+[Sandile print](https://www.pokemon-card.com/card-search/details.php/card/36378)
+
+Briar and Anthea & Concordia apply their bonuses during the turn they are
+played and check the attacker and defender recorded for each lethal hit.
+A Knock Out through Devolution gives the base Prize count. Legendary
+Summit subtracts one after all eligible bonuses have been added. Either
+played half produces the same reduction. A regular Colorless Knock Out
+can leave zero Prizes, and Glutton-GX against the same target yields two.
+[Briar print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sv07/163/)
+[Anthea & Concordia print](https://asia.pokemon-card.com/sg/card-search/detail/24835/)
+[Legendary Summit rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E4%BC%9D%E8%AA%AC%E3%81%AE%E5%B1%B1%E9%A0%82&regulation_faq_main_item1=all)
+
+All 19 focused cases pass, with 12 failures on the preceding engine. The
+full engine passed 7,576 tests in 272 specs. The changes combined with the
+checkout’s pending work passed 404 focused and simulator checks. All
+559 comparable saved puzzle states match exactly. Of 3,633 sampled
+opening actions, 3,631 match exactly. The two successful Briar actions
+differ only by the saved, turn-scoped Prize bonus. Their board, zones,
+Prizes, prompts, phase and events agree. Seven recorded solutions still
+reach wins. The attested package meets the mobile budget and passed ten
+mouse and touch checks. Its browser engine verified winning Prize counts
+for Briar and Legendary Summit with Glutton-GX, and the switch after a
+copied Sky Hunting. A serialized board retained Briar’s bonus when
+reloaded before the attack.
+
+Seven further failures were reproduced. Burning Coat fails to discard
+after lethal Blaze Roar. Darkness Wing fails to retrieve the selected
+card. Revenge Seed misses a prior lethal attack. Spiteful Spirit misses
+the attacker if Whirlwind moves Jellicent after lethal damage. Water
+Rescue handles a direct Knock Out and omits the choice to decline.
+N's Zekrom's Shred fails to deal damage through Critical Cut protection.
