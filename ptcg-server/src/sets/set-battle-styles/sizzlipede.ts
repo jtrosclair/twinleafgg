@@ -34,7 +34,7 @@ export class Sizzlipede extends PokemonCard {
     // Attack 1: Searing Flame
     // Ref: AGENTS-patterns.md (Special Conditions - Burned)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

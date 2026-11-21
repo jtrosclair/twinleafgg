@@ -55,7 +55,7 @@ export class Swalot extends PokemonCard {
     }
 
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

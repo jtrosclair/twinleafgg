@@ -478,7 +478,7 @@ function* copyOpponentsLastAttackGenerator(
   state = yield* resolveAfterAttackDamage(() => next(), store, state, copiedAttackEffect);
 
   return yield* resolveAfterAttack(() => next(), store, state,
-    new AfterAttackEffect(player, opponent, lastAttack, originalDefender));
+    new AfterAttackEffect(player, opponent, lastAttack, originalDefender, copiedAttackEffect));
 }
 
 export function COPY_OPPONENTS_LAST_ATTACK(
@@ -2481,31 +2481,44 @@ export function BLOCK_IF_ASLEEP_CONFUSED_PARALYZED(player: Player, source: Card)
 }
 
 //#region Special Conditions
+type SpecialConditionSource = Card | AfterAttackEffect;
+
 export function ADD_SPECIAL_CONDITIONS_TO_PLAYER_ACTIVE(
-  store: StoreLike, state: State, player: Player, source: Card,
+  store: StoreLike, state: State, player: Player, source: SpecialConditionSource,
   specialConditions: SpecialCondition[], poisonDamage: number = 10, burnDamage: number = 20, sleepFlips: number = 1, confusionDamage: number = 30
 ) {
+  if (source instanceof AfterAttackEffect) {
+    const attack = source.resolvedAttackEffect ?? new AttackEffect(source.player, source.opponent, source.attack);
+    const condition = new AddSpecialConditionsEffect(attack, specialConditions);
+    condition.target = player.active;
+    if (specialConditions.includes(SpecialCondition.POISONED)) condition.poisonDamage = poisonDamage;
+    if (specialConditions.includes(SpecialCondition.BURNED)) condition.burnDamage = burnDamage;
+    if (specialConditions.includes(SpecialCondition.ASLEEP)) condition.sleepFlips = sleepFlips;
+    if (specialConditions.includes(SpecialCondition.CONFUSED)) condition.confusionDamage = confusionDamage;
+    store.reduceEffect(state, condition);
+    return;
+  }
   store.reduceEffect(state, new AddSpecialConditionsPowerEffect(
     player, source, player.active, specialConditions, poisonDamage, burnDamage, sleepFlips, confusionDamage));
 }
 
-export function ADD_SLEEP_TO_PLAYER_ACTIVE(store: StoreLike, state: State, player: Player, source: Card, sleepFlips: number = 1) {
+export function ADD_SLEEP_TO_PLAYER_ACTIVE(store: StoreLike, state: State, player: Player, source: SpecialConditionSource, sleepFlips: number = 1) {
   ADD_SPECIAL_CONDITIONS_TO_PLAYER_ACTIVE(store, state, player, source, [SpecialCondition.ASLEEP], 10, 20, sleepFlips);
 }
 
-export function ADD_POISON_TO_PLAYER_ACTIVE(store: StoreLike, state: State, player: Player, source: Card, poisonDamage: number = 10) {
+export function ADD_POISON_TO_PLAYER_ACTIVE(store: StoreLike, state: State, player: Player, source: SpecialConditionSource, poisonDamage: number = 10) {
   ADD_SPECIAL_CONDITIONS_TO_PLAYER_ACTIVE(store, state, player, source, [SpecialCondition.POISONED], poisonDamage);
 }
 
-export function ADD_BURN_TO_PLAYER_ACTIVE(store: StoreLike, state: State, player: Player, source: Card, burnDamage: number = 20) {
+export function ADD_BURN_TO_PLAYER_ACTIVE(store: StoreLike, state: State, player: Player, source: SpecialConditionSource, burnDamage: number = 20) {
   ADD_SPECIAL_CONDITIONS_TO_PLAYER_ACTIVE(store, state, player, source, [SpecialCondition.BURNED], 10, burnDamage);
 }
 
-export function ADD_PARALYZED_TO_PLAYER_ACTIVE(store: StoreLike, state: State, player: Player, source: Card) {
+export function ADD_PARALYZED_TO_PLAYER_ACTIVE(store: StoreLike, state: State, player: Player, source: SpecialConditionSource) {
   ADD_SPECIAL_CONDITIONS_TO_PLAYER_ACTIVE(store, state, player, source, [SpecialCondition.PARALYZED]);
 }
 
-export function ADD_CONFUSION_TO_PLAYER_ACTIVE(store: StoreLike, state: State, player: Player, source: Card, confusionDamage: number = 30) {
+export function ADD_CONFUSION_TO_PLAYER_ACTIVE(store: StoreLike, state: State, player: Player, source: SpecialConditionSource, confusionDamage: number = 30) {
   ADD_SPECIAL_CONDITIONS_TO_PLAYER_ACTIVE(store, state, player, source, [SpecialCondition.CONFUSED], 10, 20, 1, confusionDamage);
 }
 

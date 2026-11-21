@@ -56,7 +56,7 @@ export class FlareonV extends PokemonCard {
     // Attack 2: Scorching Column
     // Ref: set-chilling-reign/tapu-lele.ts (YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_BURNED)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

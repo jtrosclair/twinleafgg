@@ -53,7 +53,7 @@ export class PheromosaGx extends PokemonCard {
     // Attack 2: Cruel Spike
     // Ref: AGENTS-patterns.md (special conditions)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 3: Beauty-GX

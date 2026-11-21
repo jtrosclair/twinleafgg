@@ -34,7 +34,7 @@ export class Salandit extends PokemonCard {
     // Attack 1: Smog
     // Ref: set-plasma-blast/snorunt.ts (Powder Snow - pattern)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

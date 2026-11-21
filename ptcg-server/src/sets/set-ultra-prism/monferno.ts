@@ -34,7 +34,7 @@ export class Monferno extends PokemonCard {
     // Attack 1: Super Singe
     // Ref: set-crimson-invasion/alolan-marowak.ts (Burning Bonemerang)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

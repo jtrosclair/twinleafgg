@@ -45,7 +45,7 @@ export class Celebi extends PokemonCard {
     // Attack 2: Mind Bend
     // Ref: set-unbroken-bonds/chatot.ts (YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

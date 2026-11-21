@@ -29,7 +29,7 @@ export class Shroomish extends PokemonCard {
     // Attack 1: Poison Powder
     // Ref: AGENTS-patterns.md (Poisoned status)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

@@ -41,7 +41,7 @@ export class GalarianMrMime extends PokemonCard {
     // Attack 1: Icy Wind
     // Ref: AGENTS-patterns.md (Asleep)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Triple Spin

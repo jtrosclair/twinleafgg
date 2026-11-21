@@ -41,7 +41,7 @@ export class Drowzee extends PokemonCard {
     // Attack 2: Hypnotic Ray
     // Ref: AGENTS-patterns.md (status condition prefab)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

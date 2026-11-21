@@ -259,6 +259,7 @@ export class AddSpecialConditionsEffect extends AbstractAttackEffect implements 
   public poisonDamage?: number;
   public burnDamage?: number;
   public confusionDamage?: number;
+  public sleepFlips?: number;
   public specialConditions: SpecialCondition[];
 
   constructor(base: AttackEffect, specialConditions: SpecialCondition[]) {

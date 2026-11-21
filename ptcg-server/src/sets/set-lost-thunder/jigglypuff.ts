@@ -40,7 +40,7 @@ export class Jigglypuff extends PokemonCard {
     // Attack 2: Sing
     // Ref: set-dragons-majesty/bagon.ts (Soothing Scent)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

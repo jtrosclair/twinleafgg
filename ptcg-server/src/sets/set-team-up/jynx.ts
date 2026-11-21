@@ -41,7 +41,7 @@ export class Jynx extends PokemonCard {
     // Attack 1: Dazzle Dance
     // Ref: set-celestial-storm/swalot.ts (Amnesia - Confused)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Mysterious Dance

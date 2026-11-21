@@ -34,7 +34,7 @@ export class Honedge2 extends PokemonCard {
     // Attack 1: Metal Sound
     // Ref: AGENTS-patterns.md (Special Conditions)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

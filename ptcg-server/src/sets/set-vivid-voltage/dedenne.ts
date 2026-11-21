@@ -34,7 +34,7 @@ export class Dedenne extends PokemonCard {
     // Attack 1: Tail Trickery
     // Ref: set-phantom-forces/spiritomb.ts (Confuse Ray - confusion effect)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

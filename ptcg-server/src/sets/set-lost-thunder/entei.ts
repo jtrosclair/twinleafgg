@@ -41,7 +41,7 @@ export class Entei extends PokemonCard {
     // Attack 1: Fire Fang
     // Ref: set-dragons-majesty/torchic.ts (Fire Fang)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Eruption

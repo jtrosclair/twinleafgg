@@ -40,7 +40,7 @@ export class Morelull extends PokemonCard {
     // Attack 1: Spore
     // Ref: AGENTS-patterns.md (YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

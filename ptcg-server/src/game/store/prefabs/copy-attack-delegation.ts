@@ -577,7 +577,7 @@ export function* runDelegatedCopiedAttackGenerator(
 
     if (!skipAfterAttack) {
       state = yield* resolveAfterAttack(() => next(), store, state,
-        new AfterAttackEffect(player, opponent, clonedAttack, originalDefender));
+        new AfterAttackEffect(player, opponent, clonedAttack, originalDefender, attackEffect));
     }
 
   } finally {

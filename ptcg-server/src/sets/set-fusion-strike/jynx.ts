@@ -48,7 +48,7 @@ export class Jynx extends PokemonCard {
     // Attack 2: Dazzle Dance
     // Ref: AGENTS-patterns.md (Special Conditions)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

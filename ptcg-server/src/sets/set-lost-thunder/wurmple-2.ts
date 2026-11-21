@@ -33,7 +33,7 @@ export class Wurmple2 extends PokemonCard {
     // Attack 1: Poison Sting
     // Ref: set-celestial-storm/deoxys-2.ts (Poisoned status)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

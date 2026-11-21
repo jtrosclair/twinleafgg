@@ -42,7 +42,7 @@ export class GalarianDarmanitan extends PokemonCard {
     // Attack 1: Powder Snow
     // Ref: set-fusion-strike/frosmoth.ts (Icy Wind - Asleep)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Daruma Headbutt cost reduction

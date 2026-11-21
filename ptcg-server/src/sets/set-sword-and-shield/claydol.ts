@@ -43,7 +43,7 @@ export class Claydol extends PokemonCard {
     // Attack 1: Psybeam
     // Ref: set-plasma-blast/musharna.ts (Psybeam)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Explosion

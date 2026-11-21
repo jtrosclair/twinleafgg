@@ -33,7 +33,7 @@ export class Venonat2 extends PokemonCard {
     // Attack 1: Psybeam
     // Ref: set-ultra-prism/stunky.ts (Gas Bond)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

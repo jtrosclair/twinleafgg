@@ -50,7 +50,7 @@ export class Toxapex extends PokemonCard {
     // Attack 2: Poisonous Whip
     // Ref: AGENTS-patterns.md (YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

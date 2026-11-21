@@ -61,7 +61,7 @@ export class Bronzong extends PokemonCard {
     // Attack 1: Shady Stamp
     // Ref: set-celestial-storm/swalot.ts (Confused)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

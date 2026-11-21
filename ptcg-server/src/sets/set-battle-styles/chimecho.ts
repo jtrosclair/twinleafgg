@@ -69,7 +69,7 @@ export class Chimecho extends PokemonCard {
     // Attack 2: Pleasant Tone
     // Ref: set-battle-styles/houndour.ts pattern, set-furious-fists/hypno.ts (Asleep)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

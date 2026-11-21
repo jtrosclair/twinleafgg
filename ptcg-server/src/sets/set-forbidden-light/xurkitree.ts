@@ -42,7 +42,7 @@ export class Xurkitree extends PokemonCard {
     // Attack 1: Dazzle Blast
     // Ref: set-ultra-prism/bronzong.ts (Psy Bolt pattern, but Confused)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Cablegram

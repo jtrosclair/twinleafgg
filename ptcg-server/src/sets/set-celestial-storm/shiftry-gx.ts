@@ -52,7 +52,7 @@ export class ShiftryGx extends PokemonCard {
     // Attack 1: Perplex
     // Ref: set-lost-thunder/mimikyu-gx.ts (Perplex - confused)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Extrasensory

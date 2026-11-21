@@ -77,7 +77,7 @@ export class Entei extends PokemonCard {
     // Attack 2: Fire Fang
     // Ref: AGENTS-patterns.md (Your opponent's Active Pokemon is now Burned)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

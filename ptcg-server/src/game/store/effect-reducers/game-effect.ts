@@ -279,7 +279,7 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
       state = yield* finishAttackDamageScope(() => next(), store, state, attackDamageScope);
 
       state = yield* resolveAfterAttack(() => next(), store, state,
-        new AfterAttackEffect(effect.player, opponent, attack, originalDefender));
+        new AfterAttackEffect(effect.player, opponent, attack, originalDefender, attackEffect));
     }
 
   } finally {

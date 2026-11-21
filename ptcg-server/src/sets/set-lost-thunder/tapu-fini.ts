@@ -73,7 +73,7 @@ export class TapuFini extends PokemonCard {
     // Attack 2: Wonder Shine
     // Ref: set-celestial-storm/deoxys-2.ts (Confused status)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

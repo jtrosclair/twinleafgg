@@ -44,7 +44,7 @@ export class HearthflameMaskOgerpon extends PokemonCard {
     }
 
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), effect);
     }
 
     return state;

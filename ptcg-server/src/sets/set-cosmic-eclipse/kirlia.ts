@@ -40,7 +40,7 @@ export class Kirlia extends PokemonCard {
     // Attack 1: Hypnosis
     // Ref: set-cosmic-eclipse/igglybuff.ts (Asleep pattern)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

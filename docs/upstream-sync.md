@@ -3094,3 +3094,37 @@ A syntax scan found 969 such helper calls inside attack branches across
 914 definitions. Those calls are candidates for printed-rule and
 runtime validation. The two lifecycle points are effects applied while the
 attack runs and effects applied after damage or a prompt.
+
+## Gameplay re-audit, batch 36
+
+Migrated Special Conditions on 265 card definitions across 28 sets. The
+selection matched the exact set, collector number, attack text and named
+Active target against the English print data. The suite exercises every
+attack with and without Finneon's Elegant Swim. It checks the printed damage
+at the point the condition is applied, including attacks with a coin flip.
+All 530 paired cases fail on the prior revision, which can apply a condition
+through protection or reports it as a power effect in the unprotected case.
+[Official attack resolution order](https://assets.pokemon.com/assets/cms2/pdf/trading-card-game/rulebook/par_rulebook_en.pdf)
+[Silver Tempest Dragonair](https://asia.pokemon-card.com/sg/card-search/detail/3308/)
+[Twilight Masquerade Brute Bonnet](https://images.pokemontcg.io/sv6/118_hires.png)
+[Unified Minds Magnemite](https://images.pokemontcg.io/sm11/58_hires.png)
+
+After-attack handlers now retain the resolved attack, including its actual
+attacking Pokémon. Both Mew ex's delegated copy and Mimikyu's previous-attack
+copy carry the copier's context through their Special Conditions. The
+printed status-only attacks Poison Spray and Supersonic move into the
+after-attack phase. Brute Bonnet's Toxic Powder still follows Ability rules.
+
+All 8,460 engine tests, 713 combined-checkout checks and 209 frontend
+specs passed. All 559 supported saved states matched in serialization and
+deserialized state. All 3,633 sampled opening actions matched, and all seven
+recorded solutions reached a win. The 2.46 MiB ZIP passed attestation,
+the mobile package budget and ten packaged board interaction checks.
+
+The syntax audit has 704 calls in 649 further definitions. The same printed
+text and target test identified 397 further definitions, mostly from older
+sets. Baseline plays reproduced the shield bypass for all 397. Of the
+paired unprotected controls, 394 matched the printed damage when the
+condition resolved. Icy Wind (Cryogonal NVI), Shake Vine (Bulbasaur SW)
+and Soothing Scent (Leafeon UD) require a separate check of damage and
+effect timing as part of that migration.

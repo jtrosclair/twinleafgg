@@ -36,7 +36,7 @@ export class Fletchinder extends PokemonCard {
     // Attack 1: Searing Flame
     // Ref: AGENTS-patterns.md (YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_BURNED)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

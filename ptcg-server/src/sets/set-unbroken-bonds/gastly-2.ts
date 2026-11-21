@@ -34,7 +34,7 @@ export class Gastly2 extends PokemonCard {
     // Attack 1: Smog
     // Ref: set-lost-thunder/jigglypuff.ts (Sing)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

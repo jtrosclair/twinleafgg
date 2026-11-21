@@ -41,7 +41,7 @@ export class Toucannon extends PokemonCard {
     // Attack 1: Heat Beak
     // Ref: set-lost-thunder/quilava.ts (Super Singe - Burned)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Giganticannon

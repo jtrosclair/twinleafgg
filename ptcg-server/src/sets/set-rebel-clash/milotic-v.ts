@@ -57,7 +57,7 @@ export class MiloticV extends PokemonCard {
     // Attack 2: Hypno Splash
     // Ref: AGENTS-patterns.md (Special Conditions)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

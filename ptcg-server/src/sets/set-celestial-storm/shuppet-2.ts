@@ -34,7 +34,7 @@ export class Shuppet2 extends PokemonCard {
     // Attack 1: Perplex
     // Ref: AGENTS-patterns.md (special conditions)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

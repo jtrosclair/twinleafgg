@@ -76,7 +76,7 @@ export class Mismagius extends PokemonCard {
     // Attack 2: Psybeam
     // Ref: set-unbroken-bonds/chatot.ts (Tone-Deaf - confused)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

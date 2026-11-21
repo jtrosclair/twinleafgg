@@ -41,7 +41,7 @@ export class Cinderace2 extends PokemonCard {
     // Attack 1: Pyro Ball
     // Ref: set-plasma-blast/houndoom.ts (Blazing Claws - Burned status)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Burning Kick

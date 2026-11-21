@@ -74,7 +74,7 @@ export class Wigglytuff extends PokemonCard {
     // Attack 2: Sleepy Ball
     // Ref: AGENTS-patterns.md (Asleep)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

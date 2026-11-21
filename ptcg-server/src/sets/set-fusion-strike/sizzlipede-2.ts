@@ -35,7 +35,7 @@ export class Sizzlipede2 extends PokemonCard {
     // Attack 1: Singe
     // Ref: set-fusion-strike/turtonator-gx.ts (Bright Flame) or set-darkness-ablaze/centiskorch.ts (Burn)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

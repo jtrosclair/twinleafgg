@@ -74,7 +74,7 @@ export class ReshiramGx extends PokemonCard {
     // Attack 2: Scorching Column
     // Ref: set-dragons-majesty/reshiram-gx.ts (Scorching Column)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 3: Vermilion-GX

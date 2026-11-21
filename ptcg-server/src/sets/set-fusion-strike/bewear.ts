@@ -41,7 +41,7 @@ export class Bewear extends PokemonCard {
     // Attack 1: Split Spiral Punch
     // Ref: set-plasma-blast/abomasnow.ts (Powder Snow)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

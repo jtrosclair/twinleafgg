@@ -86,7 +86,13 @@ export class AfterAttackEffect implements Effect {
 
   public originalDefender?: PokemonCardList;
 
-  constructor(player: Player, opponent: Player, attack: Attack, originalDefender: PokemonCardList = opponent.active) {
+  constructor(
+    player: Player,
+    opponent: Player,
+    attack: Attack,
+    originalDefender: PokemonCardList = opponent.active,
+    public readonly resolvedAttackEffect?: AttackEffect,
+  ) {
     this.player = player;
     this.opponent = opponent;
     this.attack = attack;

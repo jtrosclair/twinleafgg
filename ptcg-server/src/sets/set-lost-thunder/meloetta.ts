@@ -41,7 +41,7 @@ export class Meloetta extends PokemonCard {
     // Attack 1: Sing
     // Ref: set-celestial-storm/deoxys-2.ts (status condition)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Miracle Harmony

@@ -43,7 +43,7 @@ export class Bruxish extends PokemonCard {
     // Attack 1: Mind Bend
     // Ref: set-celestial-storm/deoxys-2.ts (Confused status)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Follow the Wound

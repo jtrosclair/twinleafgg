@@ -2,7 +2,7 @@ import { State, StoreLike } from '../../game';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { ADD_CONFUSION_TO_PLAYER_ACTIVE, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_CONFUSION_TO_PLAYER_ACTIVE, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
 
 export class Magnemite extends PokemonCard {
 
@@ -29,8 +29,8 @@ export class Magnemite extends PokemonCard {
   public fullName: string = 'Magnemite UNM';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+    if (AFTER_ATTACK(effect, 0, this)) {
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
     return state;
   }

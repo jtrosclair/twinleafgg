@@ -410,6 +410,9 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
     if (effect.confusionDamage !== undefined) {
       target.confusionDamage = effect.confusionDamage;
     }
+    if (effect.sleepFlips !== undefined) {
+      target.sleepFlips = effect.sleepFlips;
+    }
     return state;
   }
 

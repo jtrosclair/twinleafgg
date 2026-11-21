@@ -46,7 +46,7 @@ export class Gliscor extends PokemonCard {
     // Attack 2: Poison Jab
     // Ref: AGENTS-patterns.md (Poisoned)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

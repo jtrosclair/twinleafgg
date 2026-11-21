@@ -33,7 +33,7 @@ export class Illumise extends PokemonCard {
     // Attack 1: Pheromone Signals
     // Ref: set-ultra-prism/salazzle.ts (Panic Poison)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

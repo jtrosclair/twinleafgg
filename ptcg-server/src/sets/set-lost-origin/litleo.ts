@@ -34,7 +34,7 @@ export class Litleo extends PokemonCard {
     // Attack 1: Singe
     // Ref: AGENTS-patterns.md (Burn special condition)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

@@ -129,7 +129,7 @@ export class HattereneVmax extends PokemonCard {
     // Attack 1: G-Max Smite
     // Ref: set-crown-zenith/girafarig.ts (YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

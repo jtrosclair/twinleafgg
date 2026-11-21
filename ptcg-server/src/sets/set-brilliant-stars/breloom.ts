@@ -41,7 +41,7 @@ export class Breloom extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), effect);
     }
 
     if (effect instanceof AttackEffect && effect.attack === this.attacks[1] && state.turn !== this.sporeBallTurn + 2) {

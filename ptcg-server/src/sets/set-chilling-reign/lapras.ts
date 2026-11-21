@@ -50,7 +50,7 @@ export class Lapras extends PokemonCard {
     // Attack 2: Icy Wind
     // Ref: AGENTS-patterns.md (YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_ASLEEP)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

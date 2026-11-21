@@ -43,7 +43,7 @@ export class Magmortar extends PokemonCard {
     // Attack 1: Burst Punch
     // Ref: AGENTS-patterns.md (Special Conditions)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Ground Burn

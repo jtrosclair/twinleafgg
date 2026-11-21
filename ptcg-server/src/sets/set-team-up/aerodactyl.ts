@@ -42,7 +42,7 @@ export class Aerodactyl extends PokemonCard {
     // Attack 1: Supersonic
     // Ref: set-celestial-storm/swalot.ts (Confused)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Fossil Fangs
