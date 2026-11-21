@@ -674,14 +674,14 @@
       "date": "2026-11-06",
       "subject": "refactor(cards): M6 to DLR Pt. 1",
       "status": "partial",
-      "notes": "Ported the Delta Reign printed catalogue and kept upstream fullName identities where applicable; DLR numbered identities are resolved before generic suffix removal. Other Mega Deck and unrelated changes in this commit remain to be reviewed."
+      "notes": "Ported the Delta Reign printed catalogue and kept upstream fullName identities where applicable; DLR numbered identities are resolved before generic suffix removal. Batch 110 verified Electabuzz, Surskit and Raikou ex. Other gameplay changes in this commit remain to be reviewed."
     },
     {
       "sha": "958482a2c741e332c9f446ba540c68103f7d2091",
       "date": "2026-11-07",
       "subject": "refactor(cards): Mega Decks to DLR Pt. 2",
-      "status": "partial",
-      "notes": "Ported the Delta Reign cards and reprints, including explicit Energy and numbered artwork identities. Other Mega Deck and unrelated changes in this commit remain to be reviewed."
+      "status": "applied",
+      "notes": "Ported the Delta Reign cards and reprints, including explicit Energy and numbered artwork identities. Batch 110 reconciled all 28 moved definitions against the existing identity and gameplay coverage, correcting starter-deck search, attachment, damage and attack-lock logic where needed."
     },
     {
       "sha": "d5a8bd6eac3580171945f611af848f9a2ca73bab",

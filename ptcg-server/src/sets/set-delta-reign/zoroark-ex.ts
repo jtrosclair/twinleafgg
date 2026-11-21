@@ -1,6 +1,6 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { PlayerType, StoreLike, State } from '../../game';
+import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
@@ -37,16 +37,12 @@ export class Zoroarkex extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Riotous Beating
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      let pokemonInPlay = 0;
-      effect.player.forEachPokemon(PlayerType.BOTTOM_PLAYER, () => {
-        pokemonInPlay += 1;
-      });
-      effect.damage = 20 * pokemonInPlay;
+      effect.damage += 20 * effect.player.getPokemonInPlay().length - effect.attack.damage;
     }
 
     // Slashing Strike
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      effect.player.active.cannotUseAttacksNextTurnPending.push('Slashing Strike');
+      effect.source.cannotUseAttacksNextTurnPending.push(effect.attack.name);
     }
 
     return state;

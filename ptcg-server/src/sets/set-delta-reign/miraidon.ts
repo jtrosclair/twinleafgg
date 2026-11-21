@@ -32,9 +32,9 @@ export class Miraidon extends PokemonCard {
   public fullName: string = 'Miraidon MEE';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Flash Bolt
+    // Flashing Bolt
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      effect.player.active.cannotUseAttacksNextTurnPending.push('Flashing Bolt');
+      effect.source.cannotUseAttacksNextTurnPending.push(effect.attack.name);
     }
 
     return state;

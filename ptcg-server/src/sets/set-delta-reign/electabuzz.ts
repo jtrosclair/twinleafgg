@@ -1,6 +1,7 @@
 import { CardType, PokemonCard, Stage, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { searchBasicsToBench } from '../../game/store/prefabs/search-basic-to-bench';
 
 export class Electabuzz extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -32,13 +33,7 @@ export class Electabuzz extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Call for Family
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      return SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(
-        store,
-        state,
-        effect.player,
-        { stage: Stage.BASIC },
-        { min: 0, max: 2 },
-      );
+      return searchBasicsToBench(store, state, effect, 2);
     }
 
     return state;

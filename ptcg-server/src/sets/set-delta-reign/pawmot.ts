@@ -1,7 +1,6 @@
-import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, GameError, GameMessage, SuperType, EnergyCard, EnergyType, SlotType, AttachEnergyPrompt, PlayerType, StateUtils } from "../../game";
+import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, GameError, GameMessage, SuperType, EnergyCard, EnergyType, SlotType, AttachEnergyPrompt, PlayerType } from "../../game";
 import { Effect } from "../../game/store/effects/effect";
-import { AttachEnergyEffect } from "../../game/store/effects/play-card-effects";
-import { WAS_POWER_USED, IS_ABILITY_BLOCKED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN } from "../../game/store/prefabs/prefabs";
+import { WAS_POWER_USED, IS_ABILITY_BLOCKED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, ATTACH_ENERGY_TRANSFERS, REMOVE_MARKER_AT_END_OF_TURN } from "../../game/store/prefabs/prefabs";
 
 export class Pawmot extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -35,7 +34,7 @@ export class Pawmot extends PokemonCard {
   public readonly POWER_PLANT_TOUCH_MARKER = 'PAWMOT_MEE_POWER_PLANT_TOUCH_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Power Plant Touch
+    // Generator’s Touch
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
@@ -61,14 +60,7 @@ export class Pawmot extends PokemonCard {
         { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
         { min: 1, max: 1, allowCancel: true, sameTarget: true, validCardTypes: [CardType.LIGHTNING] },
       ), transfers => {
-        for (const transfer of transfers || []) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          const energy = transfer.card as EnergyCard;
-          MOVE_CARDS(store, state, player.discard, target, { cards: [energy], sourceCard: this, sourceEffect: this.powers[0] });
-          if (target.cards.includes(energy)) {
-            store.reduceEffect(state, new AttachEnergyEffect(player, energy, target, 'discard'));
-          }
-        }
+        ATTACH_ENERGY_TRANSFERS(store, state, player, transfers ?? [], 'discard', { sourceCard: this });
       });
     }
 

@@ -1,7 +1,7 @@
-
-import { PokemonCard, Stage, CardTag, CardType, StoreLike, State, AttachEnergyPrompt, GameMessage, PlayerType, SlotType, SuperType, EnergyType, StateUtils } from '../../game';
+import { PokemonCard, Stage, CardTag, CardType, StoreLike, State, SlotType } from '../../game';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 import { Effect } from '../../game/store/effects/effect';
-import { COIN_FLIP_PROMPT, MOVE_CARDS, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ATTACH_UP_TO_X_ENERGY_FROM_DECK_TO_Y_OF_YOUR_POKEMON, COIN_FLIP_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Raikouex extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -34,49 +34,20 @@ export class Raikouex extends PokemonCard {
   public fullName: string = 'Raikou ex M6';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Gather Lightning
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      return store.prompt(
-        state,
-        new AttachEnergyPrompt(
-          player.id,
-          GameMessage.ATTACH_ENERGY_CARDS,
-          player.deck,
-          PlayerType.BOTTOM_PLAYER,
-          [SlotType.ACTIVE],
-          { superType: SuperType.ENERGY },
-          { allowCancel: false, min: 0, max: 1 },
-        ),
-        (transfers) => {
-          transfers = transfers || [];
-
-          if (transfers.length === 0) {
-            SHUFFLE_DECK(store, state, player);
-            return state;
-          }
-
-          for (const transfer of transfers) {
-            const target = StateUtils.getTarget(state, player, transfer.to);
-            MOVE_CARDS(store, state, player.deck, target, {
-              cards: [transfer.card],
-              sourceCard: this,
-            });
-          }
-
-          SHUFFLE_DECK(store, state, player);
-        },
-      );
+      const { player, source } = effect;
+      return ATTACH_UP_TO_X_ENERGY_FROM_DECK_TO_Y_OF_YOUR_POKEMON(store, state, player, 1, 1, {
+        destinationSlots: [source === player.active ? SlotType.ACTIVE : SlotType.BENCH],
+        targetFilter: slot => slot === source,
+        sourceCard: source.getPokemonCard() ?? this,
+      });
     }
 
-    // Power Rush
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      COIN_FLIP_PROMPT(store, state, effect.player, (result) => {
-        if (!result) {
-          effect.player.active.cannotAttackNextTurnPending = true;
-        }
-      });
+      afterAttackDamage(state, effect, (store, next) =>
+        COIN_FLIP_PROMPT(store, next, effect.player, heads => {
+          if (!heads) effect.source.cannotAttackNextTurnPending = true;
+        }));
     }
 
     return state;

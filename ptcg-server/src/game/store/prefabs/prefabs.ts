@@ -1084,6 +1084,7 @@ export interface AttachUpToXEnergyFromDeckToYOfYourPokemonOptions {
   sameTarget?: boolean;
   validCardTypes?: CardType[];
   maxPerType?: number;
+  sourceCard?: Card;
   onAttached?: (transfers: { to: CardTarget, card: Card }[]) => void;
 }
 
@@ -1115,6 +1116,7 @@ export function ATTACH_UP_TO_X_ENERGY_FROM_DECK_TO_Y_OF_YOUR_POKEMON(
     sameTarget = false,
     validCardTypes,
     maxPerType,
+    sourceCard,
     onAttached
   } = options;
 
@@ -1153,6 +1155,7 @@ export function ATTACH_UP_TO_X_ENERGY_FROM_DECK_TO_Y_OF_YOUR_POKEMON(
     }
 
     ATTACH_ENERGY_TRANSFERS(store, state, player, transfers, 'deck', {
+      sourceCard,
       onAttached: attached => {
         onAttached?.(attached);
         SHUFFLE_DECK(store, state, player);

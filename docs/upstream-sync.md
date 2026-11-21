@@ -6515,3 +6515,30 @@ For the next Delta Reign review, Git identifies 28 file moves in
 are concentrated in the Darkrai and Morpeko searches, Pawmot's Energy
 attachment, and Miraidon and Zoroark ex's named attack locks. The
 remaining renames and import changes can use existing identity coverage.
+
+## Gameplay audit, batch 110
+
+Morpeko and Electabuzz's Call for Family and Surskit's Multiply limit
+selections to open Bench slots and shuffle even when nothing can be
+selected. Darkrai, Raikou ex and Pawmot check Energy attachment
+legality before moving the Energy. Thunder-Clad accepts Special Energy,
+and Power Rush flips after damage. Liepard's Follow-Up Claw and Zoroark
+ex's Riotous Beating keep damage modifiers. Miraidon's Flashing Bolt
+and Zoroark ex's Slashing Strike lock only the printed attack for the
+next turn. Genome Hacking can copy either again on the next turn.
+[Raikou ex print](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/DLR/DLR_033_R_EN.png)
+[Zoroark ex print](https://asia.pokemon-card.com/sg/card-search/detail/26946/)
+[Official copy-attack ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B2%E3%83%8E%E3%83%A0%E3%83%8F%E3%83%83%E3%82%AF+%E3%82%8C%E3%81%A3%E3%81%8B%E3%81%B0%E3%81%8F%E3%81%97%E3%82%93&regulation_faq_main_item1=all)
+
+Completed the gameplay review of `958482a2c`. The original 13-commit
+modern queue is eight verified, with `3348ebdc8`, `db4eebfcf`,
+`afe935782`, `ffd7c12f5` and `b014163c0` open. Batch 110 also covers
+the Electabuzz, Surskit and Raikou ex changes in `ffd7c12f5`.
+
+The focused Delta Reign and attack-copy suites pass all 305 checks.
+
+For the remaining queue, use the ledger and existing tests for paths
+already verified. Group uncovered Scarlet & Violet and newer logic
+changes across commits. Run focused checks for each group and run the
+full saved-puzzle comparison once on the combined changes before
+release.

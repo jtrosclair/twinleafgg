@@ -34,11 +34,11 @@ export class Liepard extends PokemonCard {
   public fullName: string = 'Liepard MEZ';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Pursuit Claw
+    // Follow-Up Claw
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const opponent = StateUtils.getOpponent(state, effect.player);
       const damageCounters = Math.floor(opponent.active.damage / 10);
-      effect.damage = 20 * damageCounters;
+      effect.damage = damageCounters > 0 ? effect.damage + 20 * damageCounters - effect.attack.damage : 0;
     }
 
     return state;
