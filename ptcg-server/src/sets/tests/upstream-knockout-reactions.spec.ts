@@ -84,7 +84,7 @@ describe('Darkness Wing', () => {
     });
   }
 
-  it('does not offer recovery if Guts keeps the defender in play', () => {
+  it('offers recovery from lethal damage even if Guts keeps the defender in play', () => {
     const { store, player1, player2, overridePrompt } = battle({
       active: { card: 'Honchkrow LV.X SW', energy: [dark, dark, dark] }, discard: [water]
     }, { active: { card: 'Heracross BUS', damage: 60 } });
@@ -93,8 +93,9 @@ describe('Darkness Wing', () => {
     overridePrompt('Confirm', confirm);
     spyOn(Math, 'random').and.returnValue(0.1);
     store.dispatch(new AttackAction(player1.id, 'Darkness Wing'));
-    expect(confirm).not.toHaveBeenCalled();
-    expect(player1.discard.cards).toContain(candidate);
+    expect(confirm).toHaveBeenCalledTimes(1);
+    expect(player1.hand.cards).toContain(candidate);
+    expect(player1.getPrizeLeft()).toBe(6);
     expect(player2.active.damage).toBe(100);
   });
 });

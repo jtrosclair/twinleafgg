@@ -33,3 +33,15 @@ export function afterAttackDamageKnockOut(
     return target.damage >= hp.hp ? apply(store, state) : state;
   });
 }
+
+/** Follow up on damage sufficient to Knock Out the defender, including when it survives. */
+export function afterAttackDamageWouldKnockOut(
+  state: State, effect: AttackEffect, apply: (store: StoreLike, state: State) => State,
+): void {
+  const defender = effect.opponent.active.getPokemonCard();
+  if (!defender) return;
+
+  const targets = effect.lethalDamageTargets ??= new Set();
+  afterAttackDamage(state, effect, (store, state) =>
+    targets.has(defender) ? apply(store, state) : state);
+}

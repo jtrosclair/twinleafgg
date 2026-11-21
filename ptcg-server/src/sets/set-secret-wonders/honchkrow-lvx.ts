@@ -4,7 +4,7 @@ import { ChooseCardsPrompt, ChoosePokemonPrompt, GameError, GameMessage, PlayerT
 import { Effect } from '../../game/store/effects/effect';
 import { AfterDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckPokemonAttacksEffect, CheckPokemonPowersEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
-import { afterAttackDamageKnockOut } from '../../game/store/prefabs/post-damage-identity';
+import { afterAttackDamageWouldKnockOut } from '../../game/store/prefabs/post-damage-identity';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { CONFIRMATION_PROMPT, MOVE_CARDS, SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
@@ -63,11 +63,11 @@ export class HonchkrowLVX extends PokemonCard {
       });
     }
 
-    // Ref: set-unbroken-bonds/sandile-2.ts (confirmed damage from this attack).
+    // Ref: set-great-encounters/kingler.ts (damage sufficient for a Knock Out).
     if (WAS_ATTACK_USED(effect, 1, this)) {
       const { player, opponent } = effect;
       const attacker = effect.source.getPokemonCard();
-      afterAttackDamageKnockOut(state, effect, (store, state) => {
+      afterAttackDamageWouldKnockOut(state, effect, (store, state) => {
         if (player.discard.cards.length === 0) return state;
         return CONFIRMATION_PROMPT(store, state, player, wantToUse => {
           if (!wantToUse) return;

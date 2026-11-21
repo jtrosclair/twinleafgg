@@ -2776,3 +2776,49 @@ through Cornerstone Stance.
 The next real attack probes confirmed two more failures. Kingler GE takes
 zero recoil after Scissor Blow Knocks Out the defender, and Golisopod M4 26
 gains no protection from a lethal Critical Slash.
+
+## Gameplay re-audit, batch 29
+
+Scissor Blow applies recoil when its attack damage would Knock Out the
+defender, even if the defender survives. The Pokémon that actually used the
+attack takes the recoil, including Mew ex using Versatile. Its own Weakness
+and Resistance apply to that damage. A lethal hit and lethal recoil award
+Prizes for both Knock Outs. The archived Darkness Wing ruling likewise
+allows recovery when Strong-Willed saves the defender. This corrects the
+survival expectation from batch 28.
+[Kingler Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/DiamondPearl_GreatEncounters.pdf)
+[Kingler rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%AD%E3%83%B3%E3%82%B0%E3%83%A9%E3%83%BC&regulation_faq_main_item1=all)
+[Darkness Wing and Strong-Willed rulings](https://doczz.net/doc/193314/rulings-compendium-lvx---pokemon-rulings-compendium)
+
+Strong-Willed flips on the following opposing turn, after resolving attack
+effects and their prompts. A defender still Active after a lethal hit survives
+at 10 HP on heads. Whirlwind clears the effect by switching the defender out,
+and a copied Strong-Willed protects the copycat. No Guard applies its two
+damage modifiers at their printed points in the calculation and also increases
+recoil, as in Machamp using Submission from an earlier stage.
+[Machamp LV.X print](https://www.pokemon-card.com/card-search/details.php/card/19176/regu/DP)
+[No Guard rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%8E%E3%83%BC%E3%82%AC%E3%83%BC%E3%83%89&regulation_faq_main_item1=all)
+
+The alternate Golisopod M4 26 printing keeps its Critical Slash identity and
+uses the same confirmed Knock Out protection as Critical Cut. The actual
+attacker gains both kinds of protection for the opposing turn, including
+a copycat. Shred also bypasses the old protection marker on saved M4 boards.
+[Golisopod M4 26 print](https://www.pokemon-card.com/card-search/details.php/card/50110)
+[Golisopod CRI 26 print](https://www.pokemon.com/br/pokemon-estampas-ilustradas/cartas-de-pokemon/series/me04/26)
+
+All 19 new cases and the corrected Honchkrow case pass. Thirteen of those
+cases failed on the previous revision. The full engine suite passed 7,619
+tests in 274 specs, and the changes combined with the checkout's pending
+work passed 447 checks. All 559 comparable saved states and 3,633 sampled
+opening actions matched exactly. The seven recorded solutions reached a win.
+The package passed the mobile size budget and ten mouse and touch checks.
+Its engine also verified the two Scissor Blow Prizes and a restored
+Strong-Willed board where Honchkrow recovers a card without taking a Prize.
+
+Three related failures remain reproduced. Special Darkness Energy SW gives
+no damage bonus to an eligible attacker. Weavile's Dark Engage can be cleared
+by querying the opposing Pokémon's type. The official Dark Engage and Kingler
+interaction still deals 30 recoil where Special Darkness Energy should raise
+it to 40. Review each Special Darkness Energy printing's text and timing
+before changing the shared parent.
+[Special Darkness Energy SW print](https://www.pokemon-card.com/card-search/details.php/card/3117)

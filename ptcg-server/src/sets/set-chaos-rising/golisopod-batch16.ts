@@ -1,7 +1,6 @@
-import { PokemonCard, PokemonCardList, Stage, CardType, StoreLike, State, StateUtils } from '../../game';
+import { PokemonCard, Stage, CardType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutAttackEffect } from '../../game/store/effects/game-effects';
-import { THIS_POKEMON_CANNOT_ATTACK_NEXT_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class GolisopodBatch172 extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -31,25 +30,10 @@ export class GolisopodBatch172 extends PokemonCard {
   public name: string = 'Golisopod';
   public fullName: string = "Golisopod M4 26";
 
-  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Critical Slash
-    if (effect instanceof KnockOutAttackEffect && effect.attack === this.attacks[0]) {
-      if (!effect.player.marker.hasMarker(effect.player.DAMAGE_DEALT_MARKER)) {
-        return state;
-      }
-      const cardList = StateUtils.findCardList(state, this) as PokemonCardList;
-      const cardOwner = StateUtils.findOwner(state, cardList);
-      if (effect.player !== cardOwner) {
-        cardList.preventDamageNextTurnPending = true;
-        cardList.preventEffectsOfAttacksNextTurnPending = true;
-      }
-    }
-
-    // Boundless Power
-    if (WAS_ATTACK_USED(effect, 1, this)) {
-      THIS_POKEMON_CANNOT_ATTACK_NEXT_TURN(effect.player);
-    }
-
+  public reduceEffect(_store: StoreLike, state: State, effect: Effect): State {
+    // Ref: set-chaos-rising/golisopod.ts (protection and attack lock).
+    if (WAS_ATTACK_USED(effect, 0, this)) effect.protectAttackerOnDamageKnockOut = true;
+    if (WAS_ATTACK_USED(effect, 1, this)) effect.source.cannotAttackNextTurnPending = true;
     return state;
   }
 }

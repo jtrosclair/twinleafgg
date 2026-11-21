@@ -4,7 +4,7 @@ import { Attack } from '../card/pokemon-types';
 import { PokemonCard } from '../card/pokemon-card';
 import { AfterDamageEffect, DealDamageEffect, PutCountersEffect, PutDamageEffect } from '../effects/attack-effects';
 import { Effect } from '../effects/effect';
-import { beginAttackDamageScope, cancelAttackDamageScope, finishAttackDamageScope, resolveAfterAttackDamage } from './attack-after-damage';
+import { beginAttackDamageScope, cancelAttackDamageScope, finishAttackDamageScope, resolveAfterAttack, resolveAfterAttackDamage } from './attack-after-damage';
 import { CheckAttackCostEffect } from '../effects/check-effects';
 import { AttackEffect, KnockOutEffect, PowerEffect } from '../effects/game-effects';
 import {
@@ -576,12 +576,8 @@ export function* runDelegatedCopiedAttackGenerator(
     state = yield* finishAttackDamageScope(() => next(), store, state, attackDamageScope);
 
     if (!skipAfterAttack) {
-      const afterAttackEffect = new AfterAttackEffect(player, opponent, clonedAttack, originalDefender);
-      state = store.reduceEffect(state, afterAttackEffect);
-
-      if (store.hasPrompts()) {
-        yield store.waitPrompt(state, () => next());
-      }
+      state = yield* resolveAfterAttack(() => next(), store, state,
+        new AfterAttackEffect(player, opponent, clonedAttack, originalDefender));
     }
 
   } finally {

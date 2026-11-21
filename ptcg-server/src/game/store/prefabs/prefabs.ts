@@ -9,7 +9,7 @@ import { PokemonCard } from '../card/pokemon-card';
 import { AbstractAttackEffect, AddSpecialConditionsEffect, AfterDamageEffect, ApplyWeaknessEffect, DealDamageEffect, DiscardCardsEffect, HealTargetEffect, PutCountersEffect, PutDamageEffect } from '../effects/attack-effects';
 import { AddSpecialConditionsPowerEffect, CheckHpEffect, CheckPokemonPlayedTurnEffect, CheckPokemonTypeEffect, CheckPrizesDestinationEffect, CheckProvidedEnergyEffect, CheckSupporterLimitEffect, CheckTableStateEffect } from '../effects/check-effects';
 import { Effect } from '../effects/effect';
-import { resolveAfterAttackDamage } from './attack-after-damage';
+import { resolveAfterAttack, resolveAfterAttackDamage } from './attack-after-damage';
 import { AttackEffect, DrawPrizesEffect, EvolveEffect, KnockOutEffect, MoveCardsEffect, MoveDamageCountersEffect, PowerEffect, RetreatEffect, SpecialEnergyEffect } from '../effects/game-effects';
 import { AfterAttackEffect, EndTurnEffect } from '../effects/game-phase-effects';
 import { ChooseAttackPrompt } from '../prompts/choose-attack-prompt';
@@ -477,14 +477,8 @@ function* copyOpponentsLastAttackGenerator(
 
   state = yield* resolveAfterAttackDamage(() => next(), store, state, copiedAttackEffect);
 
-  const afterAttackEffect = new AfterAttackEffect(player, opponent, lastAttack, originalDefender);
-  state = store.reduceEffect(state, afterAttackEffect);
-
-  if (store.hasPrompts()) {
-    yield store.waitPrompt(state, () => next());
-  }
-
-  return state;
+  return yield* resolveAfterAttack(() => next(), store, state,
+    new AfterAttackEffect(player, opponent, lastAttack, originalDefender));
 }
 
 export function COPY_OPPONENTS_LAST_ATTACK(

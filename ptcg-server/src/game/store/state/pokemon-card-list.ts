@@ -18,7 +18,7 @@ export type RetaliateOnDamageState = RetaliateOnDamageOptions & {
   attackerPlayerId: number;
 };
 
-interface AttackDamageKnockOut {
+export interface AttackDamageKnockOut {
   attack: Attack;
   sourceCard?: PokemonCard;
   playerId: number;

@@ -5,8 +5,9 @@ import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/atta
 import { CheckPokemonAttacksEffect, CheckPokemonPowersEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { MarkerConstants } from '../../game/store/markers/marker-constants';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { ADD_MARKER, COIN_FLIP_PROMPT, HAS_MARKER, IS_POKEBODY_BLOCKED, REMOVE_MARKER, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_MARKER, IS_POKEBODY_BLOCKED, REMOVE_MARKER, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class MachampLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
@@ -21,7 +22,7 @@ export class MachampLVX extends PokemonCard {
     {
       name: 'LV.X Rule',
       powerType: PowerType.LV_X_RULE,
-      text: 'Put this card onto your Active Dialga G. Dialga G LV.X can use any attack, Poké-Power, or Poké-Body from its previous Level.'
+      text: 'Put this card onto your Active Machamp. Machamp LV.X can use any attack, Poké-Power, or Poké-Body from its previous Level.'
     },
     {
       name: 'No Guard',
@@ -47,67 +48,24 @@ export class MachampLVX extends PokemonCard {
   public readonly CLEAR_PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER = 'CLEAR_PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // No Guard: dealing damage
-    if (effect instanceof DealDamageEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      const oppActive = opponent.active.getPokemonCard();
-      const damageSource = effect.source.getPokemonCard();
-
-      if (IS_POKEBODY_BLOCKED(store, state, opponent, this)) {
-        return state;
-      }
-
-      // checking if it's your attack
-      if (damageSource && damageSource === oppActive) {
-        return state;
-      }
-
-      // checking if the damage is caused by this garchomp
-      if (damageSource && damageSource !== this) {
-        return state;
-      }
-
+    // Ref: set-scarlet-and-violet/vitality-band.ts (attacking Active bonus before Weakness).
+    if (effect instanceof DealDamageEffect && effect.damage > 0 && effect.source === effect.player.active
+      && effect.source.getPokemonCard() === this && (effect.target === effect.opponent.active || effect.target === effect.source)
+      && !IS_POKEBODY_BLOCKED(store, state, effect.player, this)) {
       effect.damage += 60;
     }
 
-    // No Guard: taking damage
-    if ((effect instanceof DealDamageEffect || effect instanceof PutDamageEffect) && effect.target.getPokemonCard() === this) {
-      const opponent = effect.player;
-      const player = StateUtils.getOpponent(state, opponent);
-
-      if (IS_POKEBODY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      const activePokemonCard = player.active.getPokemonCard();
-      if (activePokemonCard && activePokemonCard !== this) {
-        return state;
-      }
-
+    // Ref: set-twilight-masquerade/cornerstone-mask-ogerpon-ex.ts (the Active defender).
+    if (effect instanceof PutDamageEffect && effect.damage > 0 && !effect.ignoresDefendingDamageEffects
+      && effect.target === effect.opponent.active && effect.target.getPokemonCard() === this
+      && !IS_POKEBODY_BLOCKED(store, state, effect.opponent, this)) {
       effect.damage += 60;
     }
 
-    // Strong-Willed
+    // Ref: game/store/prefabs/attack-after-damage.ts (survival after all attack effects).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const opponent = StateUtils.getOpponent(state, effect.player);
-      COIN_FLIP_PROMPT(store, state, effect.player, result => {
-        if (!result)
-          return;
-        ADD_MARKER(this.PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, effect.player.active, this);
-        ADD_MARKER(this.CLEAR_PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, opponent, this);
-      });
-      return state;
-    }
-
-    //Strong-Willed in effect
-    if (effect instanceof PutDamageEffect
-      && effect.target.cards.includes(this)
-      && HAS_MARKER(this.PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, effect.target, this)
-    ) {
-      effect.surviveOnTenHPReason = this.attacks[0].name;
-      return state;
+      const attacker = effect.source.getPokemonCard();
+      if (attacker) ADD_MARKER(MarkerConstants.STRONG_WILLED, effect.source, attacker);
     }
 
     REMOVE_MARKER_AT_END_OF_TURN(effect, this.CLEAR_PREVENT_KNOCKED_OUT_DURING_OPPONENTS_NEXT_TURN_MARKER, this);

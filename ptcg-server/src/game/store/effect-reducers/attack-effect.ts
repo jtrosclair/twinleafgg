@@ -159,6 +159,7 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
       const hp = new CheckHpEffect(StateUtils.findOwner(state, target), target);
       store.reduceEffect(state, hp);
       if (damageBefore < hp.hp && target.damage >= hp.hp) {
+        effect.attackEffect.lethalDamageTargets?.add(targetCard);
         attackEffectKnockOuts.delete(targetCard);
         target.attackDamageKnockOut = {
           attack: effect.attack, sourceCard: effect.source.getPokemonCard(), playerId: effect.player.id,

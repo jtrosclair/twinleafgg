@@ -49,7 +49,7 @@ import { Card } from '../card/card';
 import { Attack } from '../card/pokemon-types';
 import { WaitPrompt } from '../prompts/wait-prompt';
 import { CoinFlipEffect, CoinFlipSequenceEffect } from '../effects/play-card-effects';
-import { beginAttackDamageScope, cancelAttackDamageScope, finishAttackDamageScope, getAttackPayment, resolveAfterAttackDamage } from '../prefabs/attack-after-damage';
+import { beginAttackDamageScope, cancelAttackDamageScope, finishAttackDamageScope, getAttackPayment, resolveAfterAttack, resolveAfterAttackDamage } from '../prefabs/attack-after-damage';
 import { wasActiveWhenDamaged } from '../prefabs/knock-out-effects';
 import { recordActiveAbilityLockOrder } from '../state/active-ability-lock-order';
 
@@ -277,12 +277,8 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
       state = yield* resolveAfterAttackDamage(() => next(), store, state, attackEffect);
       state = yield* finishAttackDamageScope(() => next(), store, state, attackDamageScope);
 
-      const afterAttackEffect = new AfterAttackEffect(effect.player, opponent, attack, originalDefender);
-      state = store.reduceEffect(state, afterAttackEffect);
-
-      if (store.hasPrompts()) {
-        yield store.waitPrompt(state, () => next());
-      }
+      state = yield* resolveAfterAttack(() => next(), store, state,
+        new AfterAttackEffect(effect.player, opponent, attack, originalDefender));
     }
 
   } finally {
@@ -355,6 +351,9 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
     effect.player.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => {
       if (slot.activeDamageBonusNextTurn?.pending) slot.activeDamageBonusNextTurn.pending = false;
       else slot.activeDamageBonusNextTurn = undefined;
+    });
+    StateUtils.getOpponent(state, effect.player).forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => {
+      slot.marker.removeMarker(MarkerConstants.STRONG_WILLED);
     });
   }
 

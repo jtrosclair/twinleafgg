@@ -45,14 +45,14 @@ export class Golisopod extends PokemonCard {
     if (WAS_ATTACK_USED(effect, 1, this)) effect.source.cannotAttackNextTurnPending = true;
 
     // Older board states can still contain the previous protection marker.
-    if (effect instanceof DealDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
+    if (effect instanceof DealDamageEffect && !effect.ignoresDefendingDamageEffects && effect.target.getPokemonCard() === this) {
       const owner = StateUtils.findOwner(state, effect.target);
       if (owner.active.marker.hasMarker(this.INVULN_MARKER, this) && state.phase === GamePhase.ATTACK) {
         effect.damage = 0;
         effect.preventDefault = true;
       }
     }
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
+    if (effect instanceof PutDamageEffect && !effect.ignoresDefendingDamageEffects && effect.target.getPokemonCard() === this) {
       const owner = StateUtils.findOwner(state, effect.target);
       if (owner.active.marker.hasMarker(this.INVULN_MARKER, this) && state.phase === GamePhase.ATTACK) {
         effect.preventDefault = true;

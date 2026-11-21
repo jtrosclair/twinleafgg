@@ -200,6 +200,7 @@ export class AttackEffect implements Effect {
   // Opt-in: only actual lethal attack damage may route a KO and all attachments.
   public damageKnockOutsToLostZone = false;
   public protectAttackerOnDamageKnockOut = false;
+  public lethalDamageTargets?: Set<PokemonCard>;
   target: any;
 
   constructor(player: Player, opponent: Player, attack: Attack) {
@@ -256,23 +257,6 @@ export class KnockOutEffect implements Effect {
   constructor(player: Player, target: PokemonCardList, public readonly resolveBeforeDiscard = false) {
     this.player = player;
     this.target = target;
-    this.prizeCount = 1;
-  }
-}
-
-// how many prizes when target Pokemon is KO
-export class KnockOutAttackEffect implements Effect {
-  readonly type: string = GameEffects.KNOCK_OUT_EFFECT;
-  public preventDefault = false;
-  public player: Player;
-  public target: PokemonCardList;
-  public attack: Attack;
-  public prizeCount: number;
-
-  constructor(player: Player, target: PokemonCardList, attack: Attack) {
-    this.player = player;
-    this.target = target;
-    this.attack = attack;
     this.prizeCount = 1;
   }
 }
