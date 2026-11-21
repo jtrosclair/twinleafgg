@@ -3,10 +3,7 @@ import { EnergyCard } from '../../game/store/card/energy-card';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { DealDamageEffect } from '../../game/store/effects/attack-effects';
-import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
-import { StateUtils } from '../../game/store/state-utils';
-
+import { applySpecialDarknessEnergyBonus } from '../../game/store/prefabs/special-darkness-energy';
 
 export class DarknessEnergySpecial extends EnergyCard {
 
@@ -31,23 +28,7 @@ export class DarknessEnergySpecial extends EnergyCard {
     '[D] Energy. (Doesn\'t count as a basic Energy card.)';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof DealDamageEffect) {
-      if (effect.source.cards.includes(this)) {
-        const player = effect.player;
-        const opponent = StateUtils.getOpponent(state, player);
-        if (effect.target !== opponent.active) {
-          return state;
-        }
-
-        const checkPokemonType = new CheckPokemonTypeEffect(effect.source);
-        store.reduceEffect(state, checkPokemonType);
-        if (checkPokemonType.cardTypes.includes(CardType.DARK)) {
-          effect.damage += 10;
-        }
-      }
-    }
-
+    applySpecialDarknessEnergyBonus(store, state, effect, this);
     return state;
   }
-
 }

@@ -100,6 +100,7 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
       targetOwner.marker.addMarkerToState(targetOwner.DAMAGE_DEALT_MARKER);
     }
 
+    if (effect.damage > 0) effect.damage += effect.damageBonusAfterWeakness;
     effect.applyPostWeaknessReductions();
 
     if (!ignoreDefendingDamageEffects && target.preventDamageUpToNextTurn > 0

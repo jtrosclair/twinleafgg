@@ -1,5 +1,5 @@
 import { BebesSearch } from '../set-mysterious-treasures/bebes-search';
-import { DarknessEnergySpecial } from '../set-neo-genesis/darkness-energy-special';
+import { DarknessEnergySpecial } from '../set-undaunted/darkness-energy-special';
 import { MetalEnergyN1 } from '../set-neo-genesis/other-prints';
 import { Pikachu } from '../set-base-set/pikachu';
 export class BebesSearchRR extends BebesSearch {

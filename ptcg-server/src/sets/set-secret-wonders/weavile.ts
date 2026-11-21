@@ -1,18 +1,17 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { CardType, EnergyType, Stage, SuperType } from '../../game/store/card/card-types';
-import { GameError, GameMessage, PlayerType, PokemonCardList, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
+import { CardType, Stage } from '../../game/store/card/card-types';
+import { GameError, GameMessage, PlayerType, PowerType, SlotType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { ABILITY_USED, ADD_MARKER, ATTACH_ENERGY_PROMPT, HAS_MARKER, IS_POKEPOWER_BLOCKED, MOVE_CARDS, REMOVE_MARKER, REMOVE_MARKER_AT_END_OF_TURN, USE_ABILITY_ONCE_PER_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { setPokemonTypeForTurn } from '../../game/store/prefabs/temporary-pokemon-type';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { ABILITY_USED, ATTACH_ENERGY_PROMPT, IS_POKEPOWER_BLOCKED, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN, USE_ABILITY_ONCE_PER_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Weavile extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom: string = 'Sneasel';
   public hp: number = 80;
-  public cardType: CardType = D;
-  public weakness = [{ type: F, value: +20 }];
-  public resistance = [{ type: P, value: -20 }];
+  public cardType: CardType = W;
+  public weakness = [{ type: M, value: +20 }];
   public retreat = [];
 
   public powers = [{
@@ -42,23 +41,7 @@ export class Weavile extends PokemonCard {
   public fullName: string = 'Weavile SW';
 
   public readonly ABILITY_USED_MARKER = 'ABILITY_USED_MARKER';
-  public readonly DARK_ENGAGE_MARKER = 'DARK_ENGAGE_MARKER';
-  public darkEngageTarget: PokemonCardList | undefined;
-
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Dark Engage type override
-    if (effect instanceof CheckPokemonTypeEffect && this.darkEngageTarget !== undefined) {
-      const owner = StateUtils.findOwner(state, effect.target);
-      if (HAS_MARKER(this.DARK_ENGAGE_MARKER, owner, this)
-        && effect.target === this.darkEngageTarget
-        && owner.active === this.darkEngageTarget) {
-        effect.cardTypes = [CardType.DARK];
-      } else if (this.darkEngageTarget !== undefined && owner.active !== this.darkEngageTarget) {
-        this.darkEngageTarget = undefined;
-        REMOVE_MARKER(this.DARK_ENGAGE_MARKER, owner, this);
-      }
-    }
-
     // Dark Engage
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
@@ -69,8 +52,7 @@ export class Weavile extends PokemonCard {
 
       USE_ABILITY_ONCE_PER_TURN(player, this.ABILITY_USED_MARKER, this);
       ABILITY_USED(player, this);
-      this.darkEngageTarget = player.active;
-      ADD_MARKER(this.DARK_ENGAGE_MARKER, player, this);
+      setPokemonTypeForTurn(state, player.active, CardType.DARK, true);
       return state;
     }
 
@@ -81,30 +63,22 @@ export class Weavile extends PokemonCard {
         store, state, player,
         PlayerType.BOTTOM_PLAYER, SlotType.DECK,
         [SlotType.ACTIVE, SlotType.BENCH],
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Darkness Energy' },
+        { name: 'Darkness Energy' },
         { min: 0, max: 2, allowCancel: true }
       );
     }
 
-    // Chip Off
+    // Ref: set-secret-wonders/honchkrow-lvx.ts (post-damage effects).
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const opponent = effect.opponent;
-      while (opponent.hand.cards.length >= 6) {
-        const randomIndex = Math.floor(Math.random() * opponent.hand.cards.length);
-        const randomCard = opponent.hand.cards[randomIndex];
-        MOVE_CARDS(store, state, opponent.hand, opponent.discard, {
-          cards: [randomCard],
-          sourceCard: this,
-        });
-        if (opponent.hand.cards.length <= 5) {
-          break;
+      afterAttackDamage(state, effect, (store, state) => {
+        const hand = effect.opponent.hand;
+        while (hand.cards.length > 5) {
+          const card = hand.cards[Math.floor(Math.random() * hand.cards.length)];
+          state = MOVE_CARDS(store, state, hand, effect.opponent.discard, { cards: [card], sourceCard: this });
+          if (hand.cards.includes(card)) break;
         }
-      }
-    }
-
-    if (effect instanceof EndTurnEffect && HAS_MARKER(this.DARK_ENGAGE_MARKER, effect.player, this)) {
-      REMOVE_MARKER(this.DARK_ENGAGE_MARKER, effect.player, this);
-      this.darkEngageTarget = undefined;
+        return state;
+      });
     }
 
     REMOVE_MARKER_AT_END_OF_TURN(effect, this.ABILITY_USED_MARKER, this);

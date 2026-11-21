@@ -25,11 +25,14 @@ describe('Electric Generator PAF', () => {
     });
 
     const benchEnergyBefore = getEnergyCount(game.state, 0, 0);
+    const selected = game.player1.deck.cards.slice(0, 2);
 
     playTrainerCard(game.store, game.state, 0, 'Electric Generator PAF');
 
     // Should have attached Lightning Energy to the benched Eelektrik
-    expect(getEnergyCount(game.state, 0, 0)).toBeGreaterThan(benchEnergyBefore);
+    expect(getEnergyCount(game.state, 0, 0)).toBe(benchEnergyBefore + 2);
+    expect(selected.every(card => game.player1.bench[0].cards.includes(card))).toBe(true);
+    expect(selected.every(card => !game.player1.deck.cards.includes(card))).toBe(true);
   });
 
   it('should not be playable without Lightning Pokemon on bench', () => {

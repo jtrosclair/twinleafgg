@@ -50,6 +50,7 @@ export const KNOWN_ATTACK_EFFECT_MARKERS = new Set([
  * the `targetScope === 'pokemon'` metadata check.
  */
 export const KNOWN_POKEMON_SCOPED_PLAYER_MARKERS = new Set([
+  'DARK_ENGAGE_MARKER',
   'ATTACK_USED_MARKER',
   'ATTACK_USED_2_MARKER',
   'KNOCKOUT_MARKER',

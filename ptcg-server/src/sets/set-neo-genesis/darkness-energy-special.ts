@@ -1,12 +1,14 @@
-import { CardTag, CardType, EnergyType } from '../../game/store/card/card-types';
+import { CardType, EnergyType } from '../../game/store/card/card-types';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { PlayerType, StateUtils } from '../../game';
+import { APPLY_ONCE_PER_CARD } from '../../game/store/prefabs/prefabs';
+import { hasDarkInName, hasDarknessType } from '../../game/store/prefabs/special-darkness-energy';
+import { StateUtils } from '../../game';
 
 export class DarknessEnergySpecial extends EnergyCard {
   public provides: CardType[] = [CardType.DARK];
@@ -19,42 +21,19 @@ export class DarknessEnergySpecial extends EnergyCard {
   public text = 'If the Pokémon Darkness Energy is attached to damages the Defending Pokémon (after applying Weakness and Resistance), the attack does 10 more damage to the Defending Pokémon. At the end of every turn, put 1 damage counter on the Pokémon Darkness Energy is attached to, unless it\'s [D] or has Dark in its name.\n\nDarkness Energy provides [D] Energy. (Doesn\'t count as a basic Energy card.)';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Increase damage output
-    if (effect instanceof PutDamageEffect && effect.source.cards.includes(this)) {
-      // must deal > 0 damage to active Pokémon
-      // const target = effect.target;
-      // if (effect.damage && effect.damage > 0 && (effect.target === effect.opponent.active || effect.target === effect.player.active)) {
-      //   const additionalDamageEffect = new AfterWeaknessAndResistanceEffect(effect.attackEffect, 10);
-      //   additionalDamageEffect.target = target;
-      //   store.reduceEffect(state, additionalDamageEffect);
-      // }
+    if (effect instanceof PutDamageEffect && effect.target === effect.opponent.active
+      && effect.source.cards.includes(this) && APPLY_ONCE_PER_CARD(effect, this)) {
+      effect.damageBonusAfterWeakness += 10;
     }
 
-    if (effect instanceof EndTurnEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      player.forEachPokemon(PlayerType.ANY, (pokemon) => {
-        if (pokemon.cards.includes(this)) {
-          const checkPokemonType = new CheckPokemonTypeEffect(pokemon);
-          store.reduceEffect(state, checkPokemonType);
-          if (!checkPokemonType.cardTypes.includes(CardType.DARK) && !pokemon.getPokemonCard()?.tags.includes(CardTag.DARK)) {
-            pokemon.damage += 10;
-          }
-        }
-      });
-      opponent.forEachPokemon(PlayerType.ANY, (pokemon) => {
-        if (pokemon.cards.includes(this)) {
-          const checkPokemonType = new CheckPokemonTypeEffect(pokemon);
-          store.reduceEffect(state, checkPokemonType);
-          if (!checkPokemonType.cardTypes.includes(CardType.DARK) && !pokemon.getPokemonCard()?.tags.includes(CardTag.DARK)) {
-            pokemon.damage += 10;
-          }
-        }
-      });
+    if (effect instanceof EndTurnEffect && APPLY_ONCE_PER_CARD(effect, this)) {
+      const slot = state.players.flatMap(player => player.getPokemonInPlay()).find(slot => slot.cards.includes(this));
+      if (slot && !hasDarkInName(slot) && !hasDarknessType(store, state, slot)) {
+        const owner = StateUtils.findOwner(state, slot);
+        state = store.reduceEffect(state, new PlaceDamageCountersEffect(owner, slot, 10));
+      }
     }
 
     return state;
   }
-
 }

@@ -4,7 +4,7 @@ import { BebesSearch } from '../set-mysterious-treasures/bebes-search';
 import { PlusPower } from '../set-base-set/pluspower';
 import { Potion } from '../set-base-set/potion';
 import { Switch } from '../set-base-set/switch';
-import { DarknessEnergySpecial } from '../set-neo-genesis/darkness-energy-special';
+import { DarknessEnergySpecial } from '../set-undaunted/darkness-energy-special';
 import { MetalEnergyN1 } from '../set-neo-genesis/other-prints';
 import { SuperRod } from '../set-paldea-evolved/super-rod';
 

@@ -957,20 +957,28 @@ export function DAMAGE_OPPONENT_POKEMON(
   });
 }
 
+function attachEnergyTransfers(
+  store: StoreLike, state: State, player: Player, transfers: { to: CardTarget; card: Card }[],
+  sourceZone?: 'deck' | 'discard', sourceList?: CardList,
+): { to: CardTarget; card: Card }[] {
+  return transfers.filter(({ to, card }) => {
+    if (!(card instanceof EnergyCard)) return false;
+    const target = StateUtils.getTarget(state, player, to);
+    const wasAttached = target.cards.includes(card);
+    store.reduceEffect(state, new AttachEnergyEffect(player, card, target, sourceZone, sourceList));
+    return !wasAttached && target.cards.includes(card);
+  });
+}
+
 export function ATTACH_ENERGY_PROMPT(store: StoreLike, state: State, player: Player, playerType: PlayerType, sourceSlot: SlotType, destinationSlots: SlotType[], filter: Partial<EnergyCard> = {}, options: Partial<AttachEnergyOptions> = {}): State {
   filter.superType = SuperType.ENERGY;
   const source = player.getSlot(sourceSlot);
+  const sourceZone = sourceSlot === SlotType.DECK ? 'deck' : sourceSlot === SlotType.DISCARD ? 'discard' : undefined;
 
   return store.prompt(state, new AttachEnergyPrompt(
     player.id, GameMessage.ATTACH_ENERGY_CARDS, source, playerType, destinationSlots, filter, options,
   ), transfers => {
-    transfers = transfers || [];
-    for (const transfer of transfers) {
-      const target = StateUtils.getTarget(state, player, transfer.to);
-      const energyCard = transfer.card as EnergyCard;
-      const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
-      store.reduceEffect(state, attachEnergyEffect);
-    }
+    attachEnergyTransfers(store, state, player, transfers ?? [], sourceZone);
     if (sourceSlot === SlotType.DECK) {
       SHUFFLE_DECK(store, state, player);
     }
@@ -1217,16 +1225,8 @@ export function ATTACH_X_TYPE_ENERGY_FROM_DISCARD_TO_1_OF_YOUR_POKEMON(
     promptEnergyFilter,
     promptOptions
   ), transfers => {
-    transfers = transfers || [];
-    for (const transfer of transfers) {
-      const target = StateUtils.getTarget(state, player, transfer.to);
-      const energyCard = transfer.card as EnergyCard;
-      const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
-      store.reduceEffect(state, attachEnergyEffect);
-    }
-    if (onAttached !== undefined) {
-      onAttached(transfers);
-    }
+    const attached = attachEnergyTransfers(store, state, player, transfers ?? [], 'discard');
+    onAttached?.(attached);
   });
 }
 
@@ -1309,16 +1309,8 @@ export function ATTACH_UP_TO_X_ENERGY_FROM_DECK_TO_Y_OF_YOUR_POKEMON(
       throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
     }
 
-    for (const transfer of transfers) {
-      const target = StateUtils.getTarget(state, player, transfer.to);
-      const energyCard = transfer.card as EnergyCard;
-      const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
-      store.reduceEffect(state, attachEnergyEffect);
-    }
-
-    if (onAttached !== undefined) {
-      onAttached(transfers);
-    }
+    const attached = attachEnergyTransfers(store, state, player, transfers, 'deck');
+    onAttached?.(attached);
 
     SHUFFLE_DECK(store, state, player);
   });
@@ -2249,12 +2241,7 @@ export function LOOK_AT_TOP_X_CARDS_AND_ATTACH_UP_TO_Y_ENERGY(
       throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
     }
 
-    for (const transfer of transfers) {
-      const target = StateUtils.getTarget(state, player, transfer.to);
-      const energyCard = transfer.card as EnergyCard;
-      const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
-      store.reduceEffect(state, attachEnergyEffect);
-    }
+    attachEnergyTransfers(store, state, player, transfers, 'deck', topCards);
 
     moveRemainingTopDeckCards(store, state, player, topCards, remainderDestination);
   });

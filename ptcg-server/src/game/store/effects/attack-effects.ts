@@ -83,6 +83,7 @@ export class PutDamageEffect extends AbstractAttackEffect implements Effect {
   public surviveOnTenHPCoin?: string;
   public surviveOnTenHPReason: undefined | string = undefined;
   public weaknessApplied: boolean = false;
+  public damageBonusAfterWeakness = 0;
 
   private nonstackingDamageReducers: string[] = [];
   private postWeaknessReductions: { amount: number; source?: string }[] = [];

@@ -2822,3 +2822,50 @@ interaction still deals 30 recoil where Special Darkness Energy should raise
 it to 40. Review each Special Darkness Energy printing's text and timing
 before changing the shared parent.
 [Special Darkness Energy SW print](https://www.pokemon-card.com/card-search/details.php/card/3117)
+
+## Gameplay re-audit, batch 30
+
+Special Darkness Energy follows each printing's damage step. Neo Genesis
+adds damage after Weakness and Resistance when damage remains and retains
+its end-of-turn counter rule. The six registered EX-era printings add damage
+before Weakness and Resistance and include the Dark-name exception. The five
+later printings apply the bonus to Darkness-type holders and have no
+end-of-turn penalty. The Kingler ruling verifies the later printings' bonus
+on Active self-damage as well as damage to the opposing Active.
+[Secret Wonders Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/DiamondPearl_SecretWonders.pdf)
+[EX Holon Phantoms Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/EX_Holon_Phantoms.pdf)
+[Rising Rivals Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Rising_Rivals.pdf)
+[Undaunted Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/hs_undaunted.pdf)
+[Kingler ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%AD%E3%83%B3%E3%82%B0%E3%83%A9%E3%83%BC&regulation_faq_main_item1=all)
+
+Weavile SW starts as a Water Pokémon with Metal Weakness. Dark Engage
+tracks the affected Pokémon for that turn, survives unrelated type queries,
+and clears when it leaves the Active Spot. Weavile and Porygon-Z resolve their
+type changes in play order, and Porygon-Z retains Conversion when it moves to
+the Bench. Shadow Charge can choose both Basic and Special Darkness Energy.
+[Weavile Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/DiamondPearl_SecretWonders.pdf)
+[Dark Engage and Conversion ruling](https://www.pokemon-card.com/rules/faq/search.php?page=2&regulation=all&sc_group_id=3)
+[Shadow Charge ruling](https://www.pokemon-card.com/rules/faq/search.php?page=3&regulation=all&sc_group_id=218)
+
+The shared attachment prompts move the physical selected card from the deck,
+discard pile, or detached top-deck selection. Subsequent effects receive
+only completed attachments. Tests check Mirage Gate, Electric Generator,
+Garchomp BKP and Shadow Charge, including the hand-only Special Energy lock
+and shuffling after a zero-card choice.
+[Mirage Gate print](https://www.pokemon-card.com/card-search/details.php/card/41896/regu/all)
+
+The full engine suite passed 7,652 tests in 275 specs. The batch also passed
+549 focused checks alongside the checkout's pending work. All 559 comparable
+saved states and 3,633 sampled opening actions matched exactly, and all seven
+recorded solutions reached a win. The browser package passed the mobile size
+budget and ten mouse and touch board checks. Its engine verified the restored
+Dark Engage and Scissor Blow interaction and confirmed that both Shadow Charge
+selections physically moved out of the deck.
+
+Next confirmed cases include four Special Metal Energy failures. The Secret
+Wonders print wrongly reduces outgoing and incoming damage on non-Metal
+Pokémon. The Neo Genesis print applies its outgoing reduction after Weakness.
+Special Metal Energy UD currently reduces Shred damage. A real Charging
+Trumpet evolution also leaves a selected Energy in the deck while recording
+it as attached. Direct legacy attachment callers need the same source review
+as the shared prompts.

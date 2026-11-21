@@ -1,3 +1,4 @@
+import { keepsPokemonTypeOnBench } from '../prefabs/temporary-pokemon-type';
 import { Card } from '../card/card';
 import { BoardEffect, CardTag, CardType, SpecialCondition, Stage, SuperType } from '../card/card-types';
 import { PokemonCard } from '../card/pokemon-card';
@@ -266,7 +267,7 @@ export class PokemonCardList extends CardList {
     this.attackDamageKnockOut = undefined;
     // Switching keeps that Pokémon in play, so it retains its turn usage.
     this.marker.markers = preserveAbilityUses
-      ? this.marker.markers.filter(marker => marker.sourceType === 'ability-use')
+      ? this.marker.markers.filter(marker => marker.sourceType === 'ability-use' || keepsPokemonTypeOnBench(marker))
       : [];
 
     this.triggerEvolutionAnimation = false;

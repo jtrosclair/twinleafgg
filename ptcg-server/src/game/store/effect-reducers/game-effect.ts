@@ -52,6 +52,7 @@ import { CoinFlipEffect, CoinFlipSequenceEffect } from '../effects/play-card-eff
 import { beginAttackDamageScope, cancelAttackDamageScope, finishAttackDamageScope, getAttackPayment, resolveAfterAttack, resolveAfterAttackDamage } from '../prefabs/attack-after-damage';
 import { wasActiveWhenDamaged } from '../prefabs/knock-out-effects';
 import { recordActiveAbilityLockOrder } from '../state/active-ability-lock-order';
+import { clearPokemonTypeReplacements, DARK_ENGAGE_MARKER, getPokemonTypeForTurn } from '../prefabs/temporary-pokemon-type';
 
 
 function applyWeaknessAndResistance(
@@ -348,7 +349,9 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
 
 export function gameReducer(store: StoreLike, state: State, effect: Effect): State {
   if (effect instanceof EndTurnEffect) {
+    effect.player.marker.removeMarker(DARK_ENGAGE_MARKER);
     effect.player.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => {
+      clearPokemonTypeReplacements(slot);
       if (slot.activeDamageBonusNextTurn?.pending) slot.activeDamageBonusNextTurn.pending = false;
       else slot.activeDamageBonusNextTurn = undefined;
     });
@@ -444,6 +447,11 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
         state = discardKnockedOutPokemon(store, state, effect);
       }
     }
+  }
+
+  if (effect instanceof CheckPokemonTypeEffect) {
+    const replacement = getPokemonTypeForTurn(state, effect.target);
+    if (replacement !== undefined) effect.cardTypes = [replacement];
   }
 
   if (effect instanceof ApplyWeaknessEffect) {

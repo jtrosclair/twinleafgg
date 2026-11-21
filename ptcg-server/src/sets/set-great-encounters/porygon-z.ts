@@ -2,8 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, EnergyType, Stage, SuperType } from '../../game/store/card/card-types';
 import { ChooseCardsPrompt, EnergyCard, GameError, GameMessage, PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { setPokemonTypeForTurn } from '../../game/store/prefabs/temporary-pokemon-type';
 import { ABILITY_USED, BLOCK_IF_HAS_SPECIAL_CONDITION, IS_POKEPOWER_BLOCKED, MOVE_CARDS, MULTIPLE_COIN_FLIPS_PROMPT, REMOVE_MARKER_AT_END_OF_TURN, USE_ABILITY_ONCE_PER_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class PorygonZ extends PokemonCard {
@@ -36,16 +35,7 @@ export class PorygonZ extends PokemonCard {
   public fullName: string = 'Porygon-Z GE';
 
   public readonly ABILITY_USED_MARKER = 'ABILITY_USED_MARKER';
-  public convertedType: CardType | undefined;
-
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Conversion type override
-    if (effect instanceof CheckPokemonTypeEffect && effect.target.getPokemonCard() === this) {
-      if (this.convertedType !== undefined) {
-        effect.cardTypes = [this.convertedType];
-      }
-    }
-
     // Conversion
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
@@ -53,6 +43,8 @@ export class PorygonZ extends PokemonCard {
         throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
       }
       BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
+      const slot = StateUtils.findPokemonSlot(state, this);
+      if (slot?.getPokemonCard() !== this) throw new GameError(GameMessage.CANNOT_USE_POWER);
       const hasBasic = player.hand.cards.some(
         c => c instanceof EnergyCard && c.energyType === EnergyType.BASIC
       );
@@ -75,16 +67,10 @@ export class PorygonZ extends PokemonCard {
         }
         const energy = cards[0] as EnergyCard;
         MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: this });
-        this.convertedType = energy.provides[0];
+        if (player.discard.cards.includes(energy) && energy.provides[0] !== undefined && slot.getPokemonCard() === this) {
+          setPokemonTypeForTurn(state, slot, energy.provides[0], false);
+        }
       });
-    }
-
-    if (effect instanceof EndTurnEffect) {
-      const cardList = StateUtils.findCardList(state, this);
-      const owner = StateUtils.findOwner(state, cardList);
-      if (effect.player === owner) {
-        this.convertedType = undefined;
-      }
     }
 
     // Tri Attack

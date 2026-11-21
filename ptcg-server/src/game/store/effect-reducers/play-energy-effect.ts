@@ -1,5 +1,5 @@
 import { AfterAttachEnergyFromHandEffect, AttachEnergyEffect } from '../effects/play-card-effects';
-import { AttackEffect } from '../effects/game-effects';
+import { AttackEffect, MoveCardsEffect } from '../effects/game-effects';
 import { PutCountersEffect } from '../effects/attack-effects';
 import { GameError } from '../../game-error';
 import { GameMessage, GameLog } from '../../game-message';
@@ -69,14 +69,23 @@ export function playEnergyReducer(store: StoreLike, state: State, effect: Effect
       }
     }
 
+    if (effect.sourceZone) {
+      if (!effect.target.cards.includes(effect.energyCard)) {
+        const source = effect.sourceList ?? effect.player[effect.sourceZone];
+        if (!source.cards.includes(effect.energyCard)) return state;
+        state = store.reduceEffect(state, new MoveCardsEffect(source, effect.target, { cards: [effect.energyCard] }));
+      }
+      if (!effect.target.cards.includes(effect.energyCard)) return state;
+    } else {
+      effect.player.hand.moveCardTo(effect.energyCard, effect.target);
+    }
+
     store.log(state, GameLog.LOG_PLAYER_ATTACHES_CARD, {
       name: effect.player.name,
       card: effect.energyCard.name,
       pokemon: pokemonCard.name
     });
-    // Move card to main PokemonCardList first (so it's in the cards array)
-    effect.player.hand.moveCardTo(effect.energyCard, effect.target);
-    // Then also add it to the energies CardList
+    // Keep the legacy attached-Energy list in sync with the physical card.
     if (!effect.target.energies.cards.includes(effect.energyCard)) {
       effect.target.energies.cards.push(effect.energyCard);
     }
