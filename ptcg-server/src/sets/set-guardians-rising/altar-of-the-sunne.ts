@@ -7,8 +7,8 @@ import { TrainerType, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils, GameError, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { UseStadiumEffect } from '../../game/store/effects/game-effects';
-import { CheckPokemonStatsEffect } from '../../game/store/effects/check-effects';
-import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { CheckPokemonStatsEffect, CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 
 export class AltarOfTheSunne extends TrainerCard {
   public trainerType: TrainerType = TrainerType.STADIUM;
@@ -23,10 +23,11 @@ export class AltarOfTheSunne extends TrainerCard {
     // Ref: set-x-and-y/shadow-circle.ts (no Weakness pattern)
     if (effect instanceof CheckPokemonStatsEffect && StateUtils.getStadiumCard(state) === this) {
       const target = effect.target;
-      const pokemonCard = target.getPokemonCard();
-
-      if (pokemonCard instanceof PokemonCard) {
-        if (pokemonCard.cardType === CardType.FIRE || pokemonCard.cardType === CardType.METAL) {
+      const owner = StateUtils.findOwner(state, target);
+      if (!IS_STADIUM_EFFECT_BLOCKED(store, state, owner, target, this)) {
+        const type = new CheckPokemonTypeEffect(target);
+        store.reduceEffect(state, type);
+        if (type.cardTypes.includes(CardType.FIRE) || type.cardTypes.includes(CardType.METAL)) {
           effect.weakness = [];
         }
       }

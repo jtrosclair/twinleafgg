@@ -4,10 +4,9 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, StateUtils, PlayerType } from '../../game';
+import { PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { TrainerTargetEffect } from '../../game/store/effects/play-card-effects';
-import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { PREVENT_ITEM_AND_SUPPORTER_EFFECTS } from '../../game/store/prefabs/prefabs';
 
 export class Axew extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -38,28 +37,7 @@ export class Axew extends PokemonCard {
   public fullName: string = 'Axew UNM';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Unnerve (passive - prevent trainer effects targeting this Pokemon)
-    // Ref: set-team-up/galvantula.ts (Unnerve)
-    if (effect instanceof TrainerTargetEffect && effect.target?.cards.includes(this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      if (IS_ABILITY_BLOCKED(store, state, opponent, this)) {
-        return state;
-      }
-
-      let isAxewOnOpponentsSide = false;
-      opponent.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-        if (cardList.getPokemonCard() === this) {
-          isAxewOnOpponentsSide = true;
-        }
-      });
-      if (!isAxewOnOpponentsSide) {
-        return state;
-      }
-
-      effect.target = undefined;
-    }
+    PREVENT_ITEM_AND_SUPPORTER_EFFECTS(store, state, effect, this);
 
     return state;
   }

@@ -7,6 +7,7 @@ import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType, Stage, CardType } from '../../game/store/card/card-types';
 import { CheckRetreatCostEffect } from '../../game/store/effects/check-effects';
 import { StateUtils } from '../../game/store/state-utils';
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 import { UseStadiumEffect } from '../../game/store/effects/game-effects';
 
 export class BeachCourt extends TrainerCard {
@@ -33,7 +34,7 @@ export class BeachCourt extends TrainerCard {
       const player = effect.player;
       const pokemonCard = player.active.getPokemonCard();
 
-      if (pokemonCard && pokemonCard.stage == Stage.BASIC) {
+      if (pokemonCard?.stage === Stage.BASIC && !IS_STADIUM_EFFECT_BLOCKED(store, state, player, player.active, this)) {
         const index = effect.cost.indexOf(CardType.COLORLESS);
         if (index !== -1) {
           effect.cost.splice(index, 1);

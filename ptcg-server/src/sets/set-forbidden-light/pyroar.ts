@@ -4,10 +4,9 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, StateUtils, PlayerType } from '../../game';
+import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { TrainerTargetEffect } from '../../game/store/effects/play-card-effects';
-import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, PREVENT_ITEM_AND_SUPPORTER_EFFECTS } from '../../game/store/prefabs/prefabs';
 
 export class Pyroar extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -40,27 +39,7 @@ export class Pyroar extends PokemonCard {
   public fullName: string = 'Pyroar FLI';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Unnerve (passive - prevent trainer effects targeting this Pokemon)
-    // Ref: set-team-up/glavantula.ts (Unnerve - TrainerTargetEffect pattern)
-    if (effect instanceof TrainerTargetEffect && effect.target?.cards.includes(this)) {
-      const opponent = StateUtils.getOpponent(state, effect.player);
-
-      if (IS_ABILITY_BLOCKED(store, state, opponent, this)) {
-        return state;
-      }
-
-      let isPyroarOnOpponentsSide = false;
-      opponent.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-        if (cardList.getPokemonCard() === this) {
-          isPyroarOnOpponentsSide = true;
-        }
-      });
-      if (!isPyroarOnOpponentsSide) {
-        return state;
-      }
-
-      effect.target = undefined;
-    }
+    PREVENT_ITEM_AND_SUPPORTER_EFFECTS(store, state, effect, this);
 
     // Attack 1: Dominating Fangs
     // Ref: set-ultra-prism/purugly.ts (Own the Place - getStadiumCard)

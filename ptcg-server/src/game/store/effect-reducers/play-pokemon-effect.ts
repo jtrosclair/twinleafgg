@@ -1,5 +1,5 @@
 import { hasLegacyDeltaEvolution } from '../card/pokemon-card';
-import { PlayPokemonEffect } from '../effects/play-card-effects';
+import { AfterPlayBasicFromHandEffect, PlayPokemonEffect } from '../effects/play-card-effects';
 import { GameError } from '../../game-error';
 import { GameMessage, GameLog } from '../../game-message';
 import { Effect } from '../effects/effect';
@@ -45,6 +45,7 @@ export function playPokemonReducer(store: StoreLike, state: State, effect: Effec
         name: effect.player.name,
         card: effect.pokemonCard.name
       });
+      const fromHand = effect.player.hand.cards.includes(effect.pokemonCard);
       effect.player.hand.moveCardTo(effect.pokemonCard, effect.target);
       effect.target.pokemonPlayedTurn = state.turn;
       effect.target.removeSpecialCondition(SpecialCondition.ABILITY_USED);
@@ -57,6 +58,9 @@ export function playPokemonReducer(store: StoreLike, state: State, effect: Effec
         index: effect.index
       });
 
+      if (fromHand && effect.player.bench.includes(effect.target) && effect.target.getPokemonCard() === effect.pokemonCard) {
+        return store.reduceEffect(state, new AfterPlayBasicFromHandEffect(effect.player, effect.pokemonCard, effect.target));
+      }
       return state;
     }
     const player = effect.player;

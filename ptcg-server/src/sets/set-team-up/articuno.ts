@@ -1,10 +1,10 @@
 import { AttachEnergyPrompt, GameMessage, PlayerType, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
-import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
+import { CardType, Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
 
-import { TrainerTargetEffect } from '../../game/store/effects/play-card-effects';
-import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
+import { BLOCK_TRAINER_TARGET, IS_ABILITY_BLOCKED, IS_OPPOSING_TRAINER_TARGET, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Articuno extends PokemonCard {
 
@@ -84,24 +84,13 @@ export class Articuno extends PokemonCard {
       });
     }
 
-    if (effect instanceof TrainerTargetEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      if (!opponent.active.cards.includes(this) || IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      if (effect.target) {
-        const pokemonCard = effect.target.getPokemonCard && effect.target.getPokemonCard();
-        if (pokemonCard) {
-          const isWater = Array.isArray(pokemonCard.cardType)
-            ? pokemonCard.cardType.includes(CardType.WATER)
-            : pokemonCard.cardType === CardType.WATER;
-          if (isWater && opponent.bench.some(b => b === effect.target)) {
-            effect.preventDefault = true;
-          }
-        }
+    if (IS_OPPOSING_TRAINER_TARGET(state, effect, [TrainerType.SUPPORTER])) {
+      const owner = StateUtils.getOpponent(state, effect.player);
+      if (owner.active.getPokemonCard() === this && owner.bench.includes(effect.target)
+        && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        const type = new CheckPokemonTypeEffect(effect.target);
+        store.reduceEffect(state, type);
+        if (type.cardTypes.includes(CardType.WATER)) BLOCK_TRAINER_TARGET(effect);
       }
     }
     return state;

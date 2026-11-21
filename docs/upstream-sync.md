@@ -4871,3 +4871,51 @@ solutions win. The attested package passes ten board scenarios and 209
 client checks. Mouse and touch runs confirm the translated POW! choice,
 moving Energy to an eligible Bench slot and discarding it when the
 recipient has Ω Barrier.
+
+## Gameplay re-audit, batch 74
+
+Temple of Sinnoh uses the Stadium protection check separately for each
+side. Pokémon protected by Lunatone’s New Moon retain the Energy types
+and effects of their Special Energy. The other side still gets one
+Colorless per Special Energy. Unnerve and Snow Cover no longer intercept
+Stadium effects. New Moon also preserves the printed Retreat Cost under
+Beach Court and printed Weakness under Altar of the Sunne. Lake Acuity
+checks the types supplied by attached Energy and applies its reduction
+after Weakness and Resistance, only to opposing attack damage.
+[Official New Moon rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AB%E3%83%8A%E3%83%88%E3%83%BC%E3%83%B3&page=3&regulation=all)
+[Official Temple of Sinnoh print](https://www.pokemon-card.com/card-search/details.php/card/42519/regu/all)
+[Official Lake Acuity print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/swsh11/160/)
+
+Unnerve and Snow Cover use the current Pokémon’s unsuppressed Ability
+against an opposing Item or Supporter. Ω Barrier remains an Ancient Trait
+through Ability suppression. Blizzard Veil checks the effective Water
+type of its owner’s Bench and only reacts to opposing Supporters.
+Mysterious Buzz checks the owner, Bench position, effective Fairy type
+and Ability suppression. Moon & Sun Badge reads the attached Tool slot
+on an eligible Espeon or Umbreon Pokémon V, including VMAX, and respects
+Jamming Tower. A Supporter copied as an attack bypasses the Badge.
+[Official Unnerve print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sm11/154)
+[Official Blizzard Veil print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sm9/32/)
+[Official Mysterious Buzz print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sm8/146/)
+[Official Moon & Sun Badge print](https://www.pokemon-card.com/card-search/details.php/card/39648)
+
+Gapejaw Bog now checks New Moon after a Basic successfully enters the
+Bench from hand through the normal play action. The deck path stays
+outside the trigger. The official FAQ also requires counters when an
+opposing effect puts a Basic from the hand onto the Bench, and lets the
+owner order the Stadium and a simultaneous on-play Ability. Those paths
+need their own work, including the ruling for Luminous Sign under
+Curse of the Land. Spikemuth’s switch timing also needs separate review.
+[Official Gapejaw Bog rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E5%A4%A7%E5%8F%A3%E3%81%AE%E6%B2%BC&regulation_header_search_item1=all)
+
+All 43 targeted cases pass, including 23 that fail on the prior engine.
+An additional saved-board comparison matches all 165 Stadium, Bench
+placement and related Trainer opening attempts, including 121 active
+puzzle attempts.
+
+The full engine suite passes 11,156 tests. The combined worktree passes
+180 targeted checks, and the API passes 32. All 559 comparable boards
+and 5,225 sampled opening actions match. All seven recorded solutions
+win. The attested package passes ten board scenarios and 209 client
+checks. Packaged mouse and touch runs play Hoppip to the Bench from hand
+and verify 20 damage from Gapejaw Bog without New Moon and zero with it.

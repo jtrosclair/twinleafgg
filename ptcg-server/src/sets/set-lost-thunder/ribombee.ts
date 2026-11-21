@@ -2,7 +2,7 @@ import { Stage, CardType, PowerType, State, StoreLike, StateUtils, TrainerType }
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { TrainerTargetEffect } from '../../game/store/effects/play-card-effects';
+import { BLOCK_TRAINER_TARGET, IS_ABILITY_BLOCKED, IS_OPPOSING_TRAINER_TARGET } from '../../game/store/prefabs/prefabs';
 
 export class Ribombee extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -33,22 +33,12 @@ export class Ribombee extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof TrainerTargetEffect && effect.target && effect.trainerCard?.trainerType === TrainerType.SUPPORTER) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      let isRibombeeInPlay = false;
-      opponent.bench.forEach(benchPokemon => {
-        if (benchPokemon.getPokemonCard() === this) {
-          isRibombeeInPlay = true;
-        }
-      });
-
-      const checkPokemonType = new CheckPokemonTypeEffect(effect.target);
-      store.reduceEffect(state, checkPokemonType);
-
-      if (isRibombeeInPlay && checkPokemonType.cardTypes.includes(CardType.FAIRY)) {
-        effect.target = undefined;
+    if (IS_OPPOSING_TRAINER_TARGET(state, effect, [TrainerType.SUPPORTER])) {
+      const owner = StateUtils.getOpponent(state, effect.player);
+      if (owner.bench.some(slot => slot.getPokemonCard() === this) && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        const type = new CheckPokemonTypeEffect(effect.target);
+        store.reduceEffect(state, type);
+        if (type.cardTypes.includes(CardType.FAIRY)) BLOCK_TRAINER_TARGET(effect);
       }
     }
 

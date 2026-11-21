@@ -2,7 +2,8 @@ import { GameLog, State, StateUtils, StoreLike } from '../../game';
 import { TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
+import { AfterPlayBasicFromHandEffect } from '../../game/store/effects/play-card-effects';
 
 export class GapejawBog extends TrainerCard {
 
@@ -24,20 +25,13 @@ export class GapejawBog extends TrainerCard {
 
   reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof PlayPokemonEffect && StateUtils.getStadiumCard(state) === this) {
-      if (effect.target.cards.length > 0) {
-        return state;
-      }
-      
-      const owner = StateUtils.findOwner(state, effect.target);
-      
-      store.log(state, GameLog.LOG_PLAYER_PLACES_DAMAGE_COUNTERS, { name: owner.name, damage: 20, target: effect.pokemonCard.name, effect: this.name });
-      
+    if (effect instanceof AfterPlayBasicFromHandEffect && StateUtils.getStadiumCard(state) === this
+      && !IS_STADIUM_EFFECT_BLOCKED(store, state, effect.player, effect.target, this)) {
+      store.log(state, GameLog.LOG_PLAYER_PLACES_DAMAGE_COUNTERS, {
+        name: effect.player.name, damage: 20, target: effect.pokemonCard.name, effect: this.name,
+      });
       effect.target.damage += 20;
-      return state;
     }
-
     return state;
   }
-
 }

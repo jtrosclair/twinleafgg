@@ -3,10 +3,10 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { TrainerCard } from '../../game/store/card/trainer-card';
-import { TrainerType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State } from '../../game';
+import { TrainerType } from '../../game/store/card/card-types';
+import { StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { TrainerTargetEffect } from '../../game/store/effects/play-card-effects';
+import { BLOCK_TRAINER_TARGET, IS_OPPOSING_TRAINER_TARGET, IS_TOOL_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class MoonAndSunBadge extends TrainerCard {
   public trainerType: TrainerType = TrainerType.TOOL;
@@ -16,24 +16,16 @@ export class MoonAndSunBadge extends TrainerCard {
   public cardImage: string = 'assets/cardback.png';
   public name: string = 'Moon & Sun Badge';
   public fullName: string = 'Moon & Sun Badge EVS';
-  public text: string = 'If the Pokémon V this card is attached to has "Espeon" or "Umbreon" in its name, whenever your opponent plays a Supporter card from their hand, prevent all effects of that card done to that Pokémon. You may play any number of Item cards during your turn. Attach a Pokémon Tool to 1 of your Pokémon that doesn\'t already have a Pokémon Tool attached.';
+  public text: string = 'If the Pokémon V this card is attached to has "Espeon" or "Umbreon" in its name, whenever your opponent plays a Supporter card from their hand, prevent all effects of that card done to that Pokémon. Attach a Pokémon Tool to 1 of your Pokémon that doesn\'t already have a Pokémon Tool attached.';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Prevent Supporter effects targeting Espeon V or Umbreon V with this badge
-    // Ref: set-silver-tempest/leafy-camo-poncho.ts (TrainerTargetEffect + tool check pattern)
-    if (
-      effect instanceof TrainerTargetEffect &&
-      effect.trainerCard?.trainerType === TrainerType.SUPPORTER &&
-      effect.target &&
-      effect.target.cards.includes(this)
-    ) {
-      const attachedPokemon = effect.target.getPokemonCard();
-      if (
-        attachedPokemon &&
-        attachedPokemon.tags.includes(CardTag.POKEMON_V) &&
-        (attachedPokemon.name.includes('Espeon') || attachedPokemon.name.includes('Umbreon'))
-      ) {
-        effect.target = undefined;
+    if (IS_OPPOSING_TRAINER_TARGET(state, effect, [TrainerType.SUPPORTER])
+      && effect.target.tools.includes(this) && effect.target.vPokemon()) {
+      const pokemon = effect.target.getPokemonCard();
+      const owner = StateUtils.getOpponent(state, effect.player);
+      if (pokemon && (pokemon.name.includes('Espeon') || pokemon.name.includes('Umbreon'))
+        && !IS_TOOL_BLOCKED(store, state, owner, this)) {
+        BLOCK_TRAINER_TARGET(effect);
       }
     }
 

@@ -4,8 +4,7 @@ import { PowerType } from '../../game/store/card/pokemon-types';
 import { StoreLike, State, CardList, GameLog } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 
-import { TrainerTargetEffect } from '../../game/store/effects/play-card-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { PREVENT_ITEM_AND_SUPPORTER_EFFECTS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Fraxure extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -37,9 +36,7 @@ export class Fraxure extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof TrainerTargetEffect && effect.target?.cards.includes(this)) {
-      effect.target = undefined;
-    }
+    PREVENT_ITEM_AND_SUPPORTER_EFFECTS(store, state, effect, this);
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;

@@ -2,9 +2,8 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, TrainerType, SuperType } from '../../game/store/card/card-types';
 import { StoreLike, State, PowerType, StateUtils, TrainerCard, ChooseCardsPrompt, GameMessage, GameLog, ShowCardsPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { BLOCK_TRAINER_TARGET, IS_OPPOSING_TRAINER_TARGET, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE } from '../../game/store/prefabs/attack-effects';
-import { TrainerTargetEffect } from '../../game/store/effects/play-card-effects';
 
 export class Regirock extends PokemonCard {
 
@@ -45,17 +44,9 @@ export class Regirock extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (
-      effect instanceof TrainerTargetEffect &&
-      effect.target &&
-      effect.target?.cards?.includes(this) &&
-      effect.player !== StateUtils.findOwner(state, StateUtils.findCardList(state, this)) && // Ensure the trainer's owner is the opponent
-      !(effect.trainerCard?.trainerType === TrainerType.TOOL || effect.trainerCard?.trainerType === TrainerType.STADIUM)
-    ) {
-      const targetCard = effect.target.getPokemonCard();
-      if (targetCard && targetCard.fullName === this.fullName) {
-        effect.target = undefined;
-      }
+    if (IS_OPPOSING_TRAINER_TARGET(state, effect, [TrainerType.ITEM, TrainerType.SUPPORTER])
+      && effect.target.getPokemonCard() === this) {
+      BLOCK_TRAINER_TARGET(effect);
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {

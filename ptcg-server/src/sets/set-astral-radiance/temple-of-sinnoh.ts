@@ -3,7 +3,7 @@ import { TrainerType } from '../../game/store/card/card-types';
 import { GameError, GameMessage, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { SpecialEnergyEffect, UseStadiumEffect } from '../../game/store/effects/game-effects';
-import { TrainerTargetEffect } from '../../game/store/effects/play-card-effects';
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 
 export class TempleofSinnoh extends TrainerCard {
@@ -31,25 +31,13 @@ export class TempleofSinnoh extends TrainerCard {
         throw new GameError(GameMessage.CANNOT_USE_STADIUM);
       }
 
-      const stadiumCardList = StateUtils.findCardList(state, this);
-      const stadiumOwner = StateUtils.findOwner(state, stadiumCardList);
+      if (effect instanceof SpecialEnergyEffect || effect instanceof CheckProvidedEnergyEffect) {
+        const slot = effect instanceof SpecialEnergyEffect ? effect.attachedTo : effect.source;
+        const owner = state.players.find(player => player.active === slot || player.bench.includes(slot));
+        if (!owner || !slot.getPokemonCard() || IS_STADIUM_EFFECT_BLOCKED(store, state, owner, slot, this)) return state;
 
-      // Negate special energy effect when it is attached to a Pokemon
-      if (effect instanceof SpecialEnergyEffect) {
-        const targetCard = new TrainerTargetEffect(stadiumOwner, this, effect.attachedTo);
-        store.reduceEffect(state, targetCard);
-        if (targetCard.target) {
-          throw new GameError(GameMessage.CANNOT_USE_POWER);
-        }
-      }
-
-      // Special energies provide [C]
-      if (effect instanceof CheckProvidedEnergyEffect) {
-        const targetCard = new TrainerTargetEffect(stadiumOwner, this, effect.source);
-        store.reduceEffect(state, targetCard);
-        if (targetCard.target) {
-          effect.specialEnergiesProvideColorless = true;
-        }
+        if (effect instanceof SpecialEnergyEffect) throw new GameError(GameMessage.CANNOT_USE_POWER);
+        effect.specialEnergiesProvideColorless = true;
       }
     }
 

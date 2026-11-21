@@ -1,8 +1,6 @@
-import { PokemonCard, Stage, CardType, PowerType, State, StoreLike, StateUtils, PlayerType, GameError, GameMessage, ChooseCardsPrompt, Card } from '../../game';
+import { PokemonCard, Stage, CardType, PowerType, State, StoreLike, PlayerType, GameError, GameMessage, ChooseCardsPrompt, Card } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { TrainerType } from '../../game/store/card/card-types';
-import { TrainerTargetEffect } from '../../game/store/effects/play-card-effects';
-import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { PREVENT_ITEM_AND_SUPPORTER_EFFECTS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Galvantula extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -33,23 +31,7 @@ export class Galvantula extends PokemonCard {
   public fullName: string = 'Galvantula TEU';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Unnerve
-    if (effect instanceof TrainerTargetEffect && effect.target?.getPokemonCard() === this
-      && (effect.trainerCard.trainerType === TrainerType.ITEM || effect.trainerCard.trainerType === TrainerType.SUPPORTER)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      if (IS_ABILITY_BLOCKED(store, state, opponent, this)) { return state; }
-
-      // finding if the owner of the card is playing the trainer or if the opponent is
-      let isGalvantulaOnOpponentsSide = false;
-      opponent.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-        if (cardList.getPokemonCard() === this) { isGalvantulaOnOpponentsSide = true; }
-      });
-      if (!isGalvantulaOnOpponentsSide) { return state; }
-
-      effect.target = undefined;
-    }
+    PREVENT_ITEM_AND_SUPPORTER_EFFECTS(store, state, effect, this);
 
     // Spider Thread
     if (WAS_ATTACK_USED(effect, 0, this)) {

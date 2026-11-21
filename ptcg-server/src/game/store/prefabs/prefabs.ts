@@ -1629,6 +1629,30 @@ export function SWITCH_ACTIVE_WITH_BENCHED(store: StoreLike, state: State, playe
   });
 }
 
+/** Restrict a Trainer effect to a Pokémon in play on the opposing side. */
+export function IS_OPPOSING_TRAINER_TARGET(
+  state: State, effect: Effect, trainerTypes: readonly TrainerType[],
+): effect is TrainerTargetEffect & { target: PokemonCardList } {
+  if (!(effect instanceof TrainerTargetEffect) || effect.preventDefault || !effect.target
+    || !trainerTypes.includes(effect.trainerCard.trainerType)) return false;
+
+  const opponent = StateUtils.getOpponent(state, effect.player);
+  return effect.target === opponent.active || opponent.bench.includes(effect.target);
+}
+
+export function BLOCK_TRAINER_TARGET(effect: TrainerTargetEffect): void {
+  effect.preventDefault = true;
+  effect.target = undefined;
+}
+
+/** Unnerve and Snow Cover protect the current Pokémon from Items and Supporters. */
+export function PREVENT_ITEM_AND_SUPPORTER_EFFECTS(store: StoreLike, state: State, effect: Effect, card: PokemonCard): void {
+  if (IS_OPPOSING_TRAINER_TARGET(state, effect, [TrainerType.ITEM, TrainerType.SUPPORTER])
+    && effect.target.getPokemonCard() === card && !IS_ABILITY_BLOCKED(store, state, StateUtils.getOpponent(state, effect.player), card)) {
+    BLOCK_TRAINER_TARGET(effect);
+  }
+}
+
 /** Trainer protection applies when the chosen effect resolves. */
 export function TRAINER_TARGET_BLOCKED(store: StoreLike, state: State, effect: TrainerEffect, target: PokemonCardList): boolean {
   if (effect instanceof CopiedSupporterEffect) return false;

@@ -1,9 +1,8 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State, PowerType, PlayerType, StateUtils } from '../../game';
+import { StoreLike, State, PowerType, StateUtils, TrainerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { DISCARD_A_STADIUM_CARD_IN_PLAY, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { PlayPokemonEffect, TrainerTargetEffect } from '../../game/store/effects/play-card-effects';
+import { BLOCK_TRAINER_TARGET, DISCARD_A_STADIUM_CARD_IN_PLAY, IS_OPPOSING_TRAINER_TARGET, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class PrimalGroudonEx extends PokemonCard {
   public tags = [CardTag.POKEMON_EX, CardTag.MEGA, CardTag.PRIMAL];
@@ -44,21 +43,10 @@ export class PrimalGroudonEx extends PokemonCard {
   public setNumber: string = '86';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // wow i hate the rules
-
-    // Ω Barrier
-    if (effect instanceof TrainerTargetEffect && effect.target?.cards.includes(this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // finding if the owner of the card is playing the trainer or if the opponent is
-      let isGroudonOnOpposingSide = false;
-      opponent.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-        if (cardList.getPokemonCard() === this) { isGroudonOnOpposingSide = true; }
-      });
-      if (!isGroudonOnOpposingSide) { return state; }
-
-      effect.preventDefault = true;
+    // Ω Barrier is an Ancient Trait, so Ability suppression does not affect it.
+    if (IS_OPPOSING_TRAINER_TARGET(state, effect, [TrainerType.ITEM, TrainerType.SUPPORTER])
+      && effect.target.getPokemonCard() === this) {
+      BLOCK_TRAINER_TARGET(effect);
     }
 
     // Gaia Volcano

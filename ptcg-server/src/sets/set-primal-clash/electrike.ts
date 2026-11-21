@@ -2,9 +2,8 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike, State, PowerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { COIN_FLIP_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { BLOCK_TRAINER_TARGET, IS_OPPOSING_TRAINER_TARGET, COIN_FLIP_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED } from '../../game/store/prefabs/attack-effects';
-import { TrainerTargetEffect } from '../../game/store/effects/play-card-effects';
 
 export class Electrike extends PokemonCard {
 
@@ -39,16 +38,9 @@ export class Electrike extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (
-      effect instanceof TrainerTargetEffect &&
-      effect.target &&
-      effect.target?.cards?.includes(this) &&
-      !(effect.trainerCard?.trainerType === TrainerType.TOOL || effect.trainerCard?.trainerType === TrainerType.STADIUM)
-    ) {
-      const targetCard = effect.target.getPokemonCard();
-      if (targetCard && targetCard.fullName === this.fullName) {
-        effect.target = undefined;
-      }
+    if (IS_OPPOSING_TRAINER_TARGET(state, effect, [TrainerType.ITEM, TrainerType.SUPPORTER])
+      && effect.target.getPokemonCard() === this) {
+      BLOCK_TRAINER_TARGET(effect);
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {

@@ -16,6 +16,7 @@ export enum PlayCardEffects {
   ATTACH_ENERGY_EFFECT = 'ATTACH_ENERGY_EFFECT',
   AFTER_ATTACH_ENERGY_EFFECT = 'AFTER_ATTACH_ENERGY_EFFECT',
   PLAY_POKEMON_EFFECT = 'PLAY_POKEMON_EFFECT',
+  AFTER_PLAY_BASIC_FROM_HAND_EFFECT = 'AFTER_PLAY_BASIC_FROM_HAND_EFFECT',
   PLAY_POKEMON_FROM_DECK_EFFECT = 'PLAY_POKEMON_FROM_DECK_EFFECT',
   PLAY_POKEMON_FROM_DISCARD_EFFECT = 'PLAY_POKEMON_FROM_DISCARD_EFFECT',
   PLAY_SUPPORTER_EFFECT = 'PLAY_SUPPORTER_EFFECT',
@@ -224,6 +225,12 @@ export class PlayItemEffect implements Effect {
     this.trainerCard = trainerCard;
     this.target = target;
   }
+}
+
+export class AfterPlayBasicFromHandEffect implements Effect {
+  readonly type = PlayCardEffects.AFTER_PLAY_BASIC_FROM_HAND_EFFECT;
+  public preventDefault = false;
+  constructor(public player: Player, public pokemonCard: PokemonCard, public target: PokemonCardList) {}
 }
 
 export class TrainerEffect implements Effect {

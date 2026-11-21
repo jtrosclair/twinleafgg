@@ -1,8 +1,10 @@
-import { StoreLike, State, EnergyCard, StateUtils } from '../../game';
+import { StoreLike, State, StateUtils } from '../../game';
 import { CardType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
+import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 
 export class LakeAcuity extends TrainerCard {
   public trainerType: TrainerType = TrainerType.STADIUM;
@@ -17,14 +19,15 @@ export class LakeAcuity extends TrainerCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof PutDamageEffect && StateUtils.getStadiumCard(state) === this) {
-      const pokemon = effect.target;
-
-      const waterFightingEnergies = pokemon.cards.filter(card =>
-        card instanceof EnergyCard && (card.provides.includes(CardType.WATER) || card.provides.includes(CardType.FIGHTING))
-      );
-
-      if (waterFightingEnergies.length > 0) {
-        effect.damage -= 20;
+      const target = effect.target;
+      const owner = StateUtils.findOwner(state, target);
+      if (owner === effect.opponent && !IS_STADIUM_EFFECT_BLOCKED(store, state, owner, target, this)) {
+        const energy = new CheckProvidedEnergyEffect(owner, target);
+        store.reduceEffect(state, energy);
+        if (StateUtils.checkEnoughEnergy(energy.energyMap, [CardType.WATER])
+          || StateUtils.checkEnoughEnergy(energy.energyMap, [CardType.FIGHTING])) {
+          effect.reduceDamageAfterWeakness(20, this.name);
+        }
       }
     }
 
