@@ -5785,3 +5785,44 @@ match the preceding engine. All seven saved solutions reached the same
 win twice.
 The production package verifies against the final source, and all 211
 client checks pass.
+
+## Gameplay re-audit, batch 94
+
+Sinister Surge searches for Basic Darkness Energy and offers current
+Benched Darkness Pokémon. An unsuccessful private search still
+shuffles. A successful attachment shuffles before the Ability places
+its two counters. The live Exact. Change. board uses Sinister Surge on
+Benched Mega Absol ex and wins in the same 21 steps before and after
+the change. The exact published snapshot also passes the packaged
+mouse and touch drag checks.
+[Toxtricity print](https://asia.pokemon-card.com/sg/card-search/detail/21908/)
+
+Needly Armor retaliates when an Active Chesnaught takes opposing attack
+damage, including a Knock Out. It counts effective Grass Energy units,
+so two attached Grass Energy cards under Meganium can place 12 counters.
+Wishiwashi’s copies trigger separately when either form of Wishiwashi
+takes damage in the Active Spot. Counterattacking Crest places five
+counters. The three Abilities attribute the effect to the holder and
+respect protection on the attacker.
+[Chesnaught print](https://asia.pokemon-card.com/my/card-search/detail/25198/)
+[Needly Armor and Meganium ruling](https://www.pokemon-card.com/rules/faq/search.php?sc_group_id=945)
+[Wishiwashi print](https://www.pokemon-card.com/card-search/details.php/card/50628/regu/XY)
+[Counterattack Grouping stacking ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A8%E3%83%AF%E3%82%B7)
+[Mega Scrafty ex print](https://asia.pokemon-card.com/sg/card-search/detail/24716/)
+
+Both Mortal Shuriken implementations require a completed Basic Water
+Energy discard. They check Ability protection on the selected Pokémon
+before placing six counters. Night Gate leaves the use available after
+a rejected activation with an empty Bench.
+[Mega Greninja ex print](https://asia.pokemon-card.com/sg/card-search/detail/25213/)
+[Gengar print](https://asia.pokemon-card.com/sg/card-search/detail/11147/)
+
+All 18 focused checks pass, and 11 fail on the preceding source. The
+full engine passes 11,549 checks, the combined worktree passes 109
+focused checks, and the API passes 33. All 559 comparable saved boards
+load with identical serialized state. Expanded state differs on 31
+boards solely for the corrected Sinister Surge description.
+Of 3,636 opening actions, 3,622 matched exactly. The other 14 were
+the verified Sinister Surge prompts with Active targets removed.
+The final package and all 211 client checks pass. Exact. Change. and
+the seven previously recorded solutions each won on both replays.

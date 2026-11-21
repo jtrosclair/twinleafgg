@@ -1,9 +1,7 @@
 import { CardTag, CardType, PokemonCard, Stage, PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AfterDamageEffect } from '../../game/store/effects/attack-effects';
-import { EffectOfAbilityEffect } from '../../game/store/effects/game-effects';
-import { GamePhase } from '../../game/store/state/state';
-import { IS_ABILITY_BLOCKED, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
+import { IS_ABILITY_BLOCKED, MOVE_CARDS, ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class MegaScraftyex extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -37,22 +35,12 @@ export class MegaScraftyex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    // Counter Crest ability
-    if (effect instanceof AfterDamageEffect && effect.target.getPokemonCard() === this && state.phase === GamePhase.ATTACK) {
+    // Ref: set-pokemon-151/hitmonchan.ts (Ability counters after opposing attack damage).
+    if (ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT(state, effect, { source: this })
+      && effect.target.getPokemonCard() === this) {
       const player = StateUtils.findOwner(state, effect.target);
-      const opponent = effect.player;
-      if (player === opponent || player.active !== effect.target) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      const damageEffect = new EffectOfAbilityEffect(player, this.powers[0], this, effect.source);
-      store.reduceEffect(state, damageEffect);
-      if (damageEffect.target) {
-        damageEffect.target.damage += 50; // 5 damage counters = 50 damage
+      if (!IS_ABILITY_BLOCKED(store, state, player, this) && effect.source.getPokemonCard()) {
+        state = store.reduceEffect(state, new PlaceDamageCountersEffect(player, effect.source, 50, this, this.powers[0]));
       }
     }
 

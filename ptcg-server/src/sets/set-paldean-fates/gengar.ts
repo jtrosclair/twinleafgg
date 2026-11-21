@@ -3,40 +3,11 @@ import { Stage, CardType, SpecialCondition, BoardEffect } from '../../game/store
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { ChoosePokemonPrompt, GameError, GameMessage, PlayerType, PokemonCardList, PowerType, SlotType } from '../..';
-import { PowerEffect } from '../../game/store/effects/game-effects';
+import { ChoosePokemonPrompt, GameError, GameMessage, PlayerType, PowerType, SlotType } from '../..';
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
-
-function* useNightGate(next: Function, store: StoreLike, state: State,
-  effect: PowerEffect): IterableIterator<State> {
-  const player = effect.player;
-  const hasBench = player.bench.some(b => b.cards.length > 0);
-
-  if (hasBench === false) {
-    throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-  }
-
-  let targets: PokemonCardList[] = [];
-  yield store.prompt(state, new ChoosePokemonPrompt(
-    player.id,
-    GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-    PlayerType.BOTTOM_PLAYER,
-    [SlotType.BENCH],
-    { allowCancel: false }
-  ), results => {
-    targets = results || [];
-    next();
-  });
-
-  if (targets.length > 0) {
-    player.active.clearEffects();
-    player.switchPokemon(targets[0], store, state);
-
-  }
-}
+import { IS_ABILITY_BLOCKED, USE_ABILITY_ONCE_PER_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Gengar extends PokemonCard {
 
@@ -93,13 +64,12 @@ export class Gengar extends PokemonCard {
     }
 
     if (WAS_POWER_USED(effect, 0, this)) {
-      const generator = useNightGate(() => generator.next(), store, state, effect);
       const player = effect.player;
-      if (player.marker.hasMarker(this.NIGHT_GATE_MARKER, this)) {
-        throw new GameError(GameMessage.POWER_ALREADY_USED);
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+      if (!player.bench.some(slot => slot.getPokemonCard())) {
+        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }
-
-      effect.player.marker.addMarker(this.NIGHT_GATE_MARKER, this);
+      USE_ABILITY_ONCE_PER_TURN(player, this.NIGHT_GATE_MARKER, this);
 
       player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
         if (cardList.getPokemonCard() === this) {
@@ -107,7 +77,15 @@ export class Gengar extends PokemonCard {
         }
       });
 
-      return generator.next().value;
+      // Ref: set-black-bolt-white-flare/samurott.ts (complete the chosen friendly switch).
+      return store.prompt(state, new ChoosePokemonPrompt(
+        player.id, GameMessage.CHOOSE_POKEMON_TO_SWITCH, PlayerType.BOTTOM_PLAYER,
+        [SlotType.BENCH], { allowCancel: false },
+      ), ([target]) => {
+        if (target?.getPokemonCard() && player.bench.includes(target)) {
+          player.switchPokemon(target, store, state);
+        }
+      });
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {

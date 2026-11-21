@@ -1,7 +1,7 @@
 import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, GamePhase, StateUtils } from "../../game";
 import { AfterDamageEffect } from "../../game/store/effects/attack-effects";
 import { Effect } from "../../game/store/effects/effect";
-import { EffectOfAbilityEffect } from "../../game/store/effects/game-effects";
+import { PlaceDamageCountersEffect } from "../../game/store/effects/game-effects";
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED, COIN_FLIP_PROMPT } from "../../game/store/prefabs/prefabs";
 
 export class Wishiwashi extends PokemonCard {
@@ -33,31 +33,14 @@ export class Wishiwashi extends PokemonCard {
   public fullName: string = 'Wishiwashi 30C';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Counterattack Grouping
-    if (effect instanceof AfterDamageEffect && state.phase === GamePhase.ATTACK) {
-      const owner = StateUtils.findOwner(state, StateUtils.findCardList(state, this));
-
-      if (!StateUtils.isPokemonInPlay(owner, this)) {
-        return state;
-      }
-
-      if (effect.player === owner || effect.target !== owner.active) {
-        return state;
-      }
-
+    // Ref: set-pokemon-151/hitmonchan.ts (Ability counters after attack damage).
+    if (effect instanceof AfterDamageEffect && effect.damage > 0 && state.phase === GamePhase.ATTACK) {
+      const owner = StateUtils.findOwner(state, effect.target);
       const activeCard = owner.active.getPokemonCard();
-      if (!activeCard || (activeCard.name !== 'Wishiwashi' && activeCard.name !== 'Wishiwashi ex')) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, owner, this)) {
-        return state;
-      }
-
-      const damageEffect = new EffectOfAbilityEffect(owner, this.powers[0], this, effect.source);
-      store.reduceEffect(state, damageEffect);
-      if (damageEffect.target) {
-        damageEffect.target.damage += 30;
+      if (owner !== effect.player && effect.target === owner.active && effect.source.getPokemonCard()
+        && (activeCard?.name === 'Wishiwashi' || activeCard?.name === 'Wishiwashi ex')
+        && StateUtils.isPokemonInPlay(owner, this) && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        state = store.reduceEffect(state, new PlaceDamageCountersEffect(owner, effect.source, 30, this, this.powers[0]));
       }
     }
 

@@ -8,7 +8,7 @@ import { EnergyCard } from '../../game/store/card/energy-card';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { ChooseEnergyPrompt } from '../../game/store/prompts/choose-energy-prompt';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { WAS_POWER_USED, WAS_ATTACK_USED, ABILITY_USED, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN, CONFIRMATION_PROMPT } from '../../game/store/prefabs/prefabs';
+import { WAS_POWER_USED, WAS_ATTACK_USED, ABILITY_USED, IS_ABILITY_BLOCKED, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN, CONFIRMATION_PROMPT } from '../../game/store/prefabs/prefabs';
 import { GameError } from '../../game/game-error';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 
@@ -49,6 +49,7 @@ export class MegaGreninjaex extends PokemonCard {
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
       if (player.active.getPokemonCard() !== this) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
@@ -78,7 +79,8 @@ export class MegaGreninjaex extends PokemonCard {
         if (cards.length === 0) {
           return state;
         }
-        MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: this, sourceEffect: this.powers[0] });
+        state = MOVE_CARDS(store, state, player.hand, player.discard, { cards, sourceCard: this, sourceEffect: this.powers[0] });
+        if (!cards.every(card => player.discard.cards.includes(card))) return state;
 
         return store.prompt(state, new ChoosePokemonPrompt(
           player.id,
@@ -89,7 +91,7 @@ export class MegaGreninjaex extends PokemonCard {
         ), selected => {
           const targets = selected || [];
           if (targets.length > 0) {
-            const placeCounters = new PlaceDamageCountersEffect(player, targets[0], 60, this);
+            const placeCounters = new PlaceDamageCountersEffect(player, targets[0], 60, this, this.powers[0]);
             store.reduceEffect(state, placeCounters);
           }
           player.marker.addMarker(this.MORTAL_SHURIKEN_MARKER, this);

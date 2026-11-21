@@ -2,13 +2,10 @@ import { CardType, Stage } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { Effect } from '../../game/store/effects/effect';
 import { PokemonCard, StoreLike, State, StateUtils } from '../../game';
-import { AfterDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { PutCountersEffect } from '../../game/store/effects/attack-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { BLOCK_RETREAT, BLOCK_RETREAT_IF_MARKER, REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
+import { BLOCK_RETREAT, BLOCK_RETREAT_IF_MARKER, IS_ABILITY_BLOCKED, ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT, REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { MarkerConstants } from '../../game/store/markers/marker-constants';
-import { GamePhase } from '../../game/store/state/state';
 
 export class Chesnaught extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -19,9 +16,9 @@ export class Chesnaught extends PokemonCard {
   public retreat = [C, C, C, C];
 
   public powers = [{
-    name: 'Needle Armor',
+    name: 'Needly Armor',
     powerType: PowerType.ABILITY,
-    text: 'As long as this Pokemon is in play, whenever this Pokemon is damaged by an attack from your opponent\'s Active Pokemon, put 3 damage counters on the Attacking Pokemon for each [G] Energy attached to this Pokemon.'
+    text: 'If this Pokémon is in the Active Spot and is damaged by an attack from your opponent\'s Pokémon (even if this Pokémon is Knocked Out), place 3 damage counters on the Attacking Pokémon for each [G] Energy attached to this Pokémon.'
   }];
 
   public attacks = [{
@@ -40,23 +37,18 @@ export class Chesnaught extends PokemonCard {
   public fullName: string = 'Chesnaught M4';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof AfterDamageEffect && effect.target.cards.includes(this)) {
-      const targetOwner = StateUtils.findOwner(state, effect.target);
-      if (effect.damage > 0 && targetOwner !== effect.player && state.phase === GamePhase.ATTACK && effect.attackEffect) {
-        const attackingPokemon = effect.source;
-        const checkEnergy = new CheckProvidedEnergyEffect(targetOwner, effect.target);
-        store.reduceEffect(state, checkEnergy);
-        let gCount = 0;
-        checkEnergy.energyMap.forEach(em => {
-          em.provides.forEach(p => {
-            if (p === G || p === CardType.ANY) gCount++;
-          });
-        });
-        if (gCount > 0 && attackingPokemon) {
-          const putCounters = new PutCountersEffect(effect.attackEffect, 30 * gCount);
-          putCounters.target = attackingPokemon;
-          store.reduceEffect(state, putCounters);
-        }
+    // Ref: set-pokemon-151/hitmonchan.ts (source-attributed retaliation against the attacker).
+    if (ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT(state, effect, { source: this })
+      && effect.target.getPokemonCard() === this) {
+      const owner = StateUtils.findOwner(state, effect.target);
+      if (IS_ABILITY_BLOCKED(store, state, owner, this)) return state;
+
+      const provided = new CheckProvidedEnergyEffect(owner, effect.target);
+      store.reduceEffect(state, provided);
+      const grass = provided.energyMap.reduce((count, energy) => count
+        + energy.provides.filter(type => type === CardType.GRASS || type === CardType.ANY).length, 0);
+      if (grass > 0 && effect.source.getPokemonCard()) {
+        state = store.reduceEffect(state, new PlaceDamageCountersEffect(owner, effect.source, 30 * grass, this, this.powers[0]));
       }
     }
     if (WAS_ATTACK_USED(effect, 0, this)) {

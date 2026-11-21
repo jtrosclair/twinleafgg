@@ -116,11 +116,15 @@ export class MegaGreninjaexBatch172 extends PokemonCard {
             return state;
           }
 
-          MOVE_CARDS(store, state, player.hand, player.discard, {
+          state = MOVE_CARDS(store, state, player.hand, player.discard, {
             cards,
             sourceCard: this,
             sourceEffect: this.powers[0],
           });
+          if (!cards.every(card => player.discard.cards.includes(card))) {
+            player.marker.removeMarker(this.MORTAL_SHURIKEN_MARKER, this);
+            return state;
+          }
 
           return store.prompt(
             state,
@@ -139,7 +143,8 @@ export class MegaGreninjaexBatch172 extends PokemonCard {
                   targets[0],
                   60,
                   this,
-                        );
+                  this.powers[0],
+                );
                 store.reduceEffect(state, placeCounters);
               }
               ABILITY_USED(player, this);

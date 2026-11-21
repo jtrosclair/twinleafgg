@@ -2,10 +2,13 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, EnergyType } from '../../game/store/card/card-types';
 import { PowerType, GameMessage, PlayerType, SlotType, AttachEnergyPrompt, StateUtils, State, StoreLike, GameError, CardTarget } from '../../game';
 
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { Effect } from '../../game/store/effects/effect';
+import { hasUsedPokemonAbility } from '../../game/store/prefabs/in-play-ability-use';
+import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { ABILITY_USED, SHUFFLE_DECK, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { ABILITY_USED, ATTACH_ENERGY_TRANSFERS, IS_ABILITY_BLOCKED, REMOVE_MARKER_AT_END_OF_TURN, USE_ABILITY_ONCE_PER_TURN, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Toxtricity extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -19,7 +22,7 @@ export class Toxtricity extends PokemonCard {
     name: 'Sinister Surge',
     useWhenInPlay: true,
     powerType: PowerType.ABILITY,
-    text: 'Once during your turn, you may search your deck for a Basic [D] Energy card and attach it to 1 of your [D] Pokémon. Then, shuffle your deck. If you attached Energy to a Pokémon in this way, put 2 damage counters on that Pokémon.'
+    text: 'Once during your turn, you may search your deck for a Basic [D] Energy card and attach it to 1 of your Benched [D] Pokémon. Then, shuffle your deck. If you attached Energy to a Pokémon in this way, put 2 damage counters on that Pokémon.'
   }];
 
   public attacks = [{
@@ -44,51 +47,48 @@ export class Toxtricity extends PokemonCard {
       player.marker.removeMarker(this.BAD_BOOST_MARKER, this);
     }
 
-    if (WAS_POWER_USED(effect, 0, this)) {
-      const player = effect.player;
+    REMOVE_MARKER_AT_END_OF_TURN(effect, this.BAD_BOOST_MARKER, this);
 
-      if (player.marker.hasMarker(this.BAD_BOOST_MARKER, this)) {
+    // Ref: set-stellar-crown/lapras-ex.ts (resolve the deck attachment before its follow-up).
+    if (WAS_POWER_USED(effect, 0, this)) {
+      const { player, power } = effect;
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+
+      const blockedTo: CardTarget[] = [];
+      let hasRecipient = false;
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (slot, _card, target) => {
+        if (target.slot !== SlotType.BENCH) return;
+        const type = new CheckPokemonTypeEffect(slot);
+        store.reduceEffect(state, type);
+        if (type.cardTypes.includes(CardType.DARK)) hasRecipient = true;
+        else blockedTo.push(target);
+      });
+      if (!hasRecipient || player.deck.cards.length === 0) throw new GameError(GameMessage.CANNOT_USE_POWER);
+
+      if (hasUsedPokemonAbility(player, this.BAD_BOOST_MARKER, this, power.name)) {
         throw new GameError(GameMessage.POWER_ALREADY_USED);
       }
-
-      const blocked2: CardTarget[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (list, card, target) => {
-        if (card.cardType !== CardType.DARK) {
-          blocked2.push(target);
-        }
-      });
-
-      state = store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_TO_BENCH,
-        player.deck,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH, SlotType.ACTIVE],
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Darkness Energy' },
-        { allowCancel: true, min: 0, max: 1, blockedTo: blocked2 }
+      return store.prompt(state, new AttachEnergyPrompt(
+        player.id, GameMessage.ATTACH_ENERGY_TO_BENCH, player.deck, PlayerType.BOTTOM_PLAYER,
+        [SlotType.BENCH], { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Darkness Energy' },
+        { allowCancel: true, min: 0, max: 1, blockedTo },
       ), transfers => {
-        transfers = transfers || [];
+        USE_ABILITY_ONCE_PER_TURN(player, this.BAD_BOOST_MARKER, this, power.name);
         ABILITY_USED(player, this);
-        player.marker.addMarker(this.BAD_BOOST_MARKER, this);
-
-        // cancelled by user
-        if (transfers.length === 0) {
-          SHUFFLE_DECK(store, state, player);
-          return;
-        }
-
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          player.deck.moveCardTo(transfer.card, target);
-          SHUFFLE_DECK(store, state, player);
-          target.damage += 20;
-        }
+        ATTACH_ENERGY_TRANSFERS(store, state, player, transfers ?? [], 'deck', {
+          sourceCard: this,
+          onAttached: ([attachment]) => {
+            store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
+              player.deck.applyOrder(order);
+              if (!attachment) return;
+              const target = StateUtils.getTarget(state, player, attachment.to);
+              if (target.cards.includes(attachment.card)) {
+                return store.reduceEffect(state, new PlaceDamageCountersEffect(player, target, 20, this, power));
+              }
+            });
+          },
+        });
       });
-      return state;
-    }
-
-    if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.BAD_BOOST_MARKER, this)) {
-      effect.player.marker.removeMarker(this.BAD_BOOST_MARKER, this);
     }
 
     return state;
