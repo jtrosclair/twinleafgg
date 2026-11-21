@@ -1,4 +1,7 @@
+import type { CardType } from '../card/card-types';
+import type { Player } from '../state/player';
 import type { AttackEffect } from '../effects/game-effects';
+import type { PokemonCardList } from '../state/pokemon-card-list';
 import type { State } from '../state/state';
 import type { StoreLike } from '../store-like';
 
@@ -7,16 +10,31 @@ type AfterDamageCallback = (store: StoreLike, state: State) => State;
 // AttackEffect is transient, as are prompt continuations. Keeping callbacks
 // outside State avoids persisting executable code in puzzle snapshots.
 const pending = new WeakMap<AttackEffect, AfterDamageCallback[]>();
-interface AttackDamageScope { state: State; effects: AttackEffect[]; }
+interface AttackPayment {
+  player: Player;
+  source: PokemonCardList;
+  cost: readonly CardType[];
+}
+interface AttackDamageScope { state: State; effects: AttackEffect[]; payment?: AttackPayment; }
 const scopes = new WeakMap<State, AttackDamageScope[]>();
 
 /** Track nested legacy copy effects until the parent attack has dealt damage. */
-export function beginAttackDamageScope(state: State): AttackDamageScope {
-  const scope = { state, effects: [] };
+export function beginAttackDamageScope(state: State, payment?: AttackPayment): AttackDamageScope {
+  const scope: AttackDamageScope = { state, effects: [], payment };
   const stack = scopes.get(state) ?? [];
   stack.push(scope);
   scopes.set(state, stack);
   return scope;
+}
+
+/** Copies use the payment for the triggering attack, including its cost modifiers. */
+export function getAttackPayment(state: State, player: Player): AttackPayment | undefined {
+  const stack = scopes.get(state);
+  if (!stack) return;
+  for (let index = stack.length - 1; index >= 0; index--) {
+    const payment = stack[index].payment;
+    if (payment?.player === player) return payment;
+  }
 }
 
 export function cancelAttackDamageScope(scope: AttackDamageScope): void {

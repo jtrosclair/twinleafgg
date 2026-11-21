@@ -3,7 +3,9 @@ import { Stage, CardType, CardTag, EnergyType, SuperType } from '../../game/stor
 import { StoreLike, State, AttachEnergyPrompt, GameMessage, PlayerType, ShuffleDeckPrompt, SlotType, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect } from '../../game/store/effects/game-effects';
-import { CheckProvidedEnergyEffect, CheckAttackCostEffect } from '../../game/store/effects/check-effects';
+import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
+import { getAttackPayment } from '../../game/store/prefabs/attack-after-damage';
+import { canPayAttackCostWithExtraEnergy } from '../../game/store/prefabs/attack-energy';
 import { BLOCK_IF_GX_ATTACK_USED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 function* useUltimateRay(next: Function, store: StoreLike, state: State,
@@ -80,25 +82,12 @@ export class ArceusDialgaPalkiaGX extends PokemonCard {
       player.usedGX = true;
       player.alteredCreationDamage = true;
 
-      // Check attached energy
-      const checkEnergy = new CheckProvidedEnergyEffect(player, player.active);
+      const payment = getAttackPayment(state, player);
+      const checkEnergy = new CheckProvidedEnergyEffect(player, payment?.source ?? effect.source);
       state = store.reduceEffect(state, checkEnergy);
-
-      // Check attack cost
-      const checkAttackCost = new CheckAttackCostEffect(player, this.attacks[1]);
-      state = store.reduceEffect(state, checkAttackCost);
-
-      // Count Water energies attached
-      const waterEnergies = checkEnergy.energyMap.filter(e =>
-        e.provides.includes(CardType.WATER) || e.provides.includes(CardType.ANY)
+      player.usedAlteredCreation = canPayAttackCostWithExtraEnergy(
+        checkEnergy.energyMap, payment?.cost ?? effect.attack.cost, CardType.WATER
       );
-
-      // Check if there's at least 1 extra Water energy beyond the Metal cost
-      // Since cost is [METAL], any Water energy is "extra"
-      if (waterEnergies.length >= 1) {
-        player.usedAlteredCreation = true;
-        console.log('Used Altered Creation with Extra Water');
-      }
     }
 
     return state;

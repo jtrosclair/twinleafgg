@@ -49,7 +49,7 @@ import { Card } from '../card/card';
 import { Attack } from '../card/pokemon-types';
 import { WaitPrompt } from '../prompts/wait-prompt';
 import { CoinFlipEffect, CoinFlipSequenceEffect } from '../effects/play-card-effects';
-import { beginAttackDamageScope, cancelAttackDamageScope, finishAttackDamageScope, resolveAfterAttackDamage } from '../prefabs/attack-after-damage';
+import { beginAttackDamageScope, cancelAttackDamageScope, finishAttackDamageScope, getAttackPayment, resolveAfterAttackDamage } from '../prefabs/attack-after-damage';
 import { wasActiveWhenDamaged } from '../prefabs/knock-out-effects';
 import { recordActiveAbilityLockOrder } from '../state/active-ability-lock-order';
 
@@ -207,7 +207,11 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
 
   const attackEffect = (effect instanceof AttackEffect) ? effect : new AttackEffect(player, opponent, attack);
   attackEffect.source = attackingPokemon;
-  const attackDamageScope = beginAttackDamageScope(state);
+  const inheritedPayment = effect instanceof UseAttackEffect && effect.ignoreEnergyCost
+    ? getAttackPayment(state, player) : undefined;
+  const attackDamageScope = beginAttackDamageScope(state, {
+    player, source: attackingPokemon, cost: inheritedPayment?.cost ?? checkAttackCost.cost.slice()
+  });
   try {
     const copycatCard = attackingPokemon.getPokemonCard();
     if (delegateFrom && copycatCard) {

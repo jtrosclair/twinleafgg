@@ -44,24 +44,14 @@ export class DialgaGLVX extends PokemonCard {
   public fullName: string = 'Dialga G LV.X PL';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Time Crystal
-    if (effect instanceof PowerEffect && effect.power.powerType === PowerType.POKEBODY){
-      const player = effect.player;
-      const cardList = StateUtils.findCardList(state, this);
-      const owner = StateUtils.findOwner(state, cardList);
-
-      if (effect.card.tags.includes(CardTag.POKEMON_SP)){ return state; }
-      if (IS_POKEBODY_BLOCKED(store, state, owner, this)){ return state; }
-
-      let isThisInPlay = false;
-      player.forEachPokemon(PlayerType.ANY, card => {
-        if (card.getPokemonCard() === this){
-          isThisInPlay = true;
-        }
-      });
-      if (!isThisInPlay){ return state; }
-
-      throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
+    // Time Crystal affects both players while Dialga G LV.X is in play.
+    if (effect instanceof PowerEffect && effect.power.powerType === PowerType.POKEBODY
+      && !effect.card.tags.includes(CardTag.POKEMON_SP)) {
+      const slot = StateUtils.findPokemonSlot(state, this);
+      if (slot?.getPokemonCard() === this
+        && !IS_POKEBODY_BLOCKED(store, state, StateUtils.findOwner(state, slot), this)) {
+        throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
+      }
     }
 
     // Remove Lost

@@ -1,7 +1,6 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import {
-  CoinFlipPrompt,
   GameMessage,
   PlayerType,
   PowerType,
@@ -12,7 +11,6 @@ import {
 } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { CheckHpEffect } from '../../game/store/effects/check-effects';
 import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
@@ -47,29 +45,10 @@ export class Annihilape extends PokemonCard {
   public fullName: string = 'Annihilape M5';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ref: set-ascended-heroes/mega-hawlucha-ex.ts (Tenacious Body)
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)
-      && effect.target.getPokemonCard() === this) {
-      const owner = StateUtils.findOwner(state, effect.target);
-
-      if (IS_ABILITY_BLOCKED(store, state, owner, this)) {
-        return state;
-      }
-
-      const checkHpEffect = new CheckHpEffect(owner, effect.target);
-      store.reduceEffect(state, checkHpEffect);
-
-      if (effect.damage >= checkHpEffect.hp) {
-        return store.prompt(state, new CoinFlipPrompt(
-          owner.id,
-          GameMessage.COIN_FLIP,
-        ), result => {
-          if (result === true) {
-            effect.surviveOnTenHPReason = this.powers[0].name;
-          }
-          return state;
-        });
-      }
+    // Ref: set-burning-shadows/heracross.ts (Guts).
+    if (effect instanceof PutDamageEffect && effect.target.getPokemonCard() === this
+      && !IS_ABILITY_BLOCKED(store, state, StateUtils.findOwner(state, effect.target), this)) {
+      effect.surviveOnTenHPCoin = this.powers[0].name;
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {

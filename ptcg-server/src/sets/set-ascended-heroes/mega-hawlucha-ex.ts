@@ -1,8 +1,6 @@
 import { CardTag, CardType, PokemonCard, Stage, PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { CheckHpEffect } from '../../game/store/effects/check-effects';
-import { CoinFlipPrompt, GameMessage } from '../../game';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class MegaHawluchaex extends PokemonCard {
@@ -37,32 +35,10 @@ export class MegaHawluchaex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    // Resilient Body ability
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)) {
-      const player = StateUtils.findOwner(state, effect.target);
-
-      // Check if ability is blocked
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      // Check if damage would cause knockout
-      const checkHpEffect = new CheckHpEffect(player, effect.target);
-      store.reduceEffect(state, checkHpEffect);
-
-      if (effect.damage >= checkHpEffect.hp) {
-        // Flip a coin to see if we survive
-        return store.prompt(state, new CoinFlipPrompt(
-          player.id,
-          GameMessage.COIN_FLIP
-        ), result => {
-          if (result === true) {
-            // If heads, prevent knockout and set HP to 10
-            effect.surviveOnTenHPReason = this.powers[0].name;
-          }
-          return state;
-        });
-      }
+    // Ref: set-burning-shadows/heracross.ts (Guts).
+    if (effect instanceof PutDamageEffect && effect.target.getPokemonCard() === this
+      && !IS_ABILITY_BLOCKED(store, state, StateUtils.findOwner(state, effect.target), this)) {
+      effect.surviveOnTenHPCoin = this.powers[0].name;
     }
 
     // Somersault Dive attack
