@@ -1,4 +1,5 @@
-import { BoardEffect } from '../card/card-types';
+import { BoardEffect, SuperType } from '../card/card-types';
+import { supportsPokemonEnergyRole } from '../card/pokemon-energy-role';
 import { PokemonCard } from '../card/pokemon-card';
 import { CheckPokemonReturnToHandEffect } from '../effects/check-effects';
 import { PokemonReplacedEffect } from '../effects/game-effects';
@@ -62,6 +63,50 @@ function clearPokemonCardHistory(card: PokemonCard): void {
   card.damageTakenLastTurn = 0;
   card.knockOutAtEndOfTurnPlayerId = undefined;
   card.retreatCostIncreaseNextTurn = undefined;
+}
+
+/** Return the Pokémon's whole evolution stack, with or without its attachments. */
+export function returnPokemonToHand(store: StoreLike, state: State, player: Player,
+  target: PokemonCardList, returnAttachments: boolean): void {
+  const benchIndex = player.bench.indexOf(target);
+  const pokemon = target.getPokemons();
+  if (pokemon.length === 0 || (target !== player.active && benchIndex < 0)
+    || !canReturnPokemonToHand(store, state, player, target)) {
+    return;
+  }
+
+  const attachments = [...new Set([...target.cards, ...target.energies.cards, ...target.tools])]
+    .filter(card => !pokemon.some(member => member === card) && !target.tools.includes(card))
+    .concat([...new Set(target.tools)]);
+  for (const card of attachments) {
+    card.clearAttachedEnergyForm?.();
+    if (supportsPokemonEnergyRole(card)) card.superType = SuperType.POKEMON;
+  }
+  clearRecordedPokemonAbilityUses(player, pokemon);
+  pokemon.forEach(clearPokemonCardHistory);
+  player.movedToActiveThisTurn = player.movedToActiveThisTurn.filter(id => !pokemon.some(card => card.id === id));
+
+  const fresh = new PokemonCardList();
+  fresh.isPublic = target.isPublic;
+  fresh.isSecret = target.isSecret;
+  target.cards = [];
+  target.energies.cards = [];
+  target.tools = [];
+  if (target === player.active) {
+    player.marker.removePokemonScopedMarkers();
+    player.active = fresh;
+    recordActiveAbilityLockSwitch(player, state);
+  } else {
+    player.bench[benchIndex] = fresh;
+  }
+
+  // Prevention was checked for the whole Pokémon before removing any attachments.
+  const leaving = new CardList();
+  leaving.cards = [...attachments, ...pokemon];
+  if (!returnAttachments && attachments.length > 0) {
+    MOVE_CARDS(store, state, leaving, player.discard, { cards: attachments });
+  }
+  MOVE_CARDS(store, state, leaving, player.hand);
 }
 
 /** Discard the whole old Pokémon and put a new Pokémon into its position. */

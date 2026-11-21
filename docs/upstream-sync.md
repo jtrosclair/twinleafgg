@@ -5343,3 +5343,48 @@ All seven recorded puzzle solutions still win twice. Of 3,636
 opening actions, 3,626 match exactly. The other ten, eight Metal
 Signal and two Nighttime Maneuvers activations, differ only in the
 new Ability-use metadata. Their prompts and gameplay results match.
+
+## Gameplay re-audit, batch 84
+
+Professor Turo's Scenario returns the entire evolution stack and
+discards attachments. Penny limits the choice to an in-play Basic
+Pokémon, and Penny and Scoop Up Cyclone return the attachments.
+The three cards resolve the whole move after checking Mentally Calm
+and Scoop-Up Block. Mentally Calm can consume the Trainer play
+without moving the targeted cards. The shared movement recognizes
+Charjabug attached as Energy, Snorlax Doll in play as a Pokémon, and
+saved slots with Energy or Tools stored only in attachment lists.
+The vacated position no longer carries damage or Ability-use state
+into the next Pokémon.
+[Official Turo rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%95%E3%83%88%E3%82%A5%E3%83%BC%E5%8D%9A%E5%A3%AB%E3%81%AE%E3%82%B7%E3%83%8A%E3%83%AA%E3%82%AA&regulation_faq_main_item1=all)
+[Penny print](https://www.pokemon-card.com/card-search/details.php/card/42623/regu/XY)
+[Scoop Up Cyclone print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sv06/162)
+[Scoop-Up Block print](https://www.pokemon-card.com/card-search/details.php/card/35994/regu/XY)
+
+This covers three Trainer paths from upstream `b88cb9e0d`. Shared
+devolution and other effects that return or discard cards from play
+still use their legacy paths.
+[Upstream movement refactor](https://github.com/the-epsd/twinleafgg/commit/b88cb9e0da4340ff6c0dfa44ea7492e54a0555af)
+
+Reviewed and closed six previously partial commits for the simulator:
+`0c3c59fb0` (retreat selection), `928d9b228` (Delta Reign validation
+and card identities), `abc75170d` (Forest of Vitality), `da4a62d07`
+(hand Abilities and reveal ownership), `ddaeb5e25` (Strange Timepiece
+eligibility and depth), and `03f82b748` (Arboliva ex, Delibird, and
+Rosa's Encouragement). The implementations already covered the
+simulator changes. The ledger records which upstream changes were
+specific to the retired client. Across the 71 tracked non-merge
+commits touching cards or the game engine, 47 remain open, including
+four titled as fixes.
+
+All nine new checks reproduce failures on the previous engine and
+pass with the fix. The full engine suite passes 11,334 checks in
+329 files. The combined checkout with the in-progress client work
+passes 70 focused checks, the API passes 32, and client services
+pass 209. All 559 comparable saved boards match byte for byte and
+all 3,636 sampled opening actions match. All seven recorded puzzle
+solutions win twice on replay. The browser build and packaged board
+prompt checks pass.
+A packaged browser replay also plays Turo, returns a Pokémon,
+then drags Nest Ball from hand and benches a new Pokémon using
+both mouse and touch input.

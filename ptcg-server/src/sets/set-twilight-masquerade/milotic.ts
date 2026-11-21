@@ -1,7 +1,8 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage } from '../../game/store/card/card-types';
-import { PlayerType, PowerType, State, StateUtils, StoreLike } from '../../game';
+import { PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { CheckPokemonReturnToHandEffect } from '../../game/store/effects/check-effects';
 import { MoveCardsEffect } from '../../game/store/effects/game-effects';
 import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
 import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
@@ -35,32 +36,19 @@ export class Milotic extends PokemonCard {
   public fullName: string = 'Milotic TWM';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Mentally Calm — block scooping opponent's in-play Pokémon (and attachments) to hand
-    if (effect instanceof MoveCardsEffect) {
-      for (const owner of state.players) {
-        let isMiloticInPlay = false;
-        owner.forEachPokemon(PlayerType.BOTTOM_PLAYER, (_list, card) => {
-          if (card === this) {
-            isMiloticInPlay = true;
-          }
-        });
-        if (!isMiloticInPlay || IS_ABILITY_BLOCKED(store, state, owner, this)) {
-          continue;
-        }
-
-        const opponent = StateUtils.getOpponent(state, owner);
-        if (effect.destination !== opponent.hand) {
-          continue;
-        }
-        if (!(effect.source instanceof PokemonCardList)) {
-          continue;
-        }
-
-        const isOpponentInPlaySlot =
-          effect.source === opponent.active || opponent.bench.includes(effect.source);
-        if (isOpponentInPlaySlot) {
+    if (effect instanceof CheckPokemonReturnToHandEffect) {
+      const owner = StateUtils.getOpponent(state, effect.player);
+      if (StateUtils.isPokemonInPlay(owner, this) && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        effect.preventDefault = true;
+      }
+    } else if (effect instanceof MoveCardsEffect && effect.source instanceof PokemonCardList) {
+      const source = effect.source;
+      const affected = state.players.find(player => player.hand === effect.destination
+        && (player.active === source || player.bench.includes(source)));
+      if (affected) {
+        const owner = StateUtils.getOpponent(state, affected);
+        if (StateUtils.isPokemonInPlay(owner, this) && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
           effect.preventDefault = true;
-          break;
         }
       }
     }

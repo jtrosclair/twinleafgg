@@ -158,6 +158,8 @@ export class PokemonCardList extends CardList {
         result.push(card as unknown as PokemonCard);
       } else if (card.name === 'Lillie\'s Poké Doll') {
         result.push(card as PokemonCard);
+      } else if (card.name === 'Snorlax Doll' && !this.tools.includes(card) && !this.energies.cards.includes(card)) {
+        result.push(card as PokemonCard);
       } else if (card.name === 'Clefairy Doll') {
         result.push(card as PokemonCard);
       } else if (card.name === 'Rare Fossil') {

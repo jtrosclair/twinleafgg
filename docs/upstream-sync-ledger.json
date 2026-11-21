@@ -379,8 +379,8 @@
       "sha": "928d9b22862eb6649dfcf50ed69830c52d1d2a5f",
       "date": "2026-10-17",
       "subject": "fix(formats): Delta Reign Validation",
-      "status": "partial",
-      "notes": "Added a separate Heracross LOT 18 definition and retained the original Heracross BRS 12 definition unchanged for old snapshots. The new printing checks only the owner's Benched Stage 2 Pokémon. Five focused real-engine and identity tests passed. Combined verification: 530 comparable saved states matched, four recorded puzzle wins, seven API tests passing, and 720 engine tests passing with the same two unlabelled ownership failures. Relicanth TEF duplicate TWM file appears unregistered locally while TEF copy is registered. Format validation paths are retired."
+      "status": "applied",
+      "notes": "Added a separate Heracross LOT 18 definition and retained the original Heracross BRS 12 definition unchanged for old snapshots. The new printing checks only the owner's Benched Stage 2 Pokémon. Five focused real-engine and identity tests passed. Combined verification: 530 comparable saved states matched, four recorded puzzle wins, seven API tests passing, and 720 engine tests passing with the same two unlabelled ownership failures. Relicanth TEF duplicate TWM file appears unregistered locally while TEF copy is registered. Format validation paths are retired. Batch 84 reviewed every hunk. Heracross LOT 18 is registered with the corrected identity and printed Ability scope. Heracross BRS 12 remains addressable for existing puzzles. Only the Temporal Forces definition registers Relicanth TEF. The format validators and card builder in this change are outside the simulator."
     },
     {
       "sha": "d89efe580127a05aff8b0456fd2ad587edbbee2d",
@@ -400,8 +400,8 @@
       "sha": "0c3c59fb0878e70d602e79b53ff665daf4d3806c",
       "date": "2026-10-20",
       "subject": "fix(engine): RetreatEffect Fix",
-      "status": "partial",
-      "notes": "Ported server retreat-selection cancellation fix; upstream also changed the unused React frontend and .gitignore. Seven targeted real-engine checks pass. 530 saved states load; four intentional Gwynn text changes identified, no serialized or card-name changes. Four recorded solutions passed twice. Not deployed."
+      "status": "applied",
+      "notes": "Ported server retreat-selection cancellation fix; upstream also changed the unused React frontend and .gitignore. Seven targeted real-engine checks pass. 530 saved states load; four intentional Gwynn text changes identified, no serialized or card-name changes. Four recorded solutions passed twice. Not deployed. Batch 84 reviewed every hunk. Once Energy is paid, the shared reducer requires a Bench replacement. Remaining changes concern the retired React client and its generated files."
     },
     {
       "sha": "d8b9ba8fa88248de1d773227bb8b584a6ef51dc1",
@@ -435,8 +435,8 @@
       "sha": "abc75170d9bdd46727743d4ccaa6fe5ff908569a",
       "date": "2026-10-22",
       "subject": "fix(cards, frontend): Forest of Vitality",
-      "status": "partial",
-      "notes": "Ported Forest of Vitality same-turn Grass evolution using an upstream-named StadiumEffect probe and transient per-evolution query; preserves original played-turn timestamps and updates playable-card checks. Added Wicked Wind and Lunatone OBF New Moon checks for this Stadium, including Ability suppression; removed New Moon clickable flag. Fourteen focused real-engine tests, 530 matching saved states, both browser builds and four recorded wins passed in isolation. Stadium immunity remains opt-in for other legacy Stadium effects; React changes are not used. Combined 530-state comparison passed; engine suite reports only the two pre-existing ownership failures. Not deployed. Follow-up registered the previously unreachable Lunatone OBF 92; real catalogue/snapshot/New Moon tests pass, with Solrock PGO as partner and 530 existing snapshots unchanged in isolation."
+      "status": "applied",
+      "notes": "Ported Forest of Vitality same-turn Grass evolution using an upstream-named StadiumEffect probe and transient per-evolution query; preserves original played-turn timestamps and updates playable-card checks. Added Wicked Wind and Lunatone OBF New Moon checks for this Stadium, including Ability suppression; removed New Moon clickable flag. Fourteen focused real-engine tests, 530 matching saved states, both browser builds and four recorded wins passed in isolation. Stadium immunity remains opt-in for other legacy Stadium effects; React changes are not used. Combined 530-state comparison passed; engine suite reports only the two pre-existing ownership failures. Not deployed. Follow-up registered the previously unreachable Lunatone OBF 92; real catalogue/snapshot/New Moon tests pass, with Solrock PGO as partner and 530 existing snapshots unchanged in isolation. Batch 84 confirmed that the existing Angular-compatible engine probe covers the entire simulator fix. The playable-card prediction and real evolution agree. Tests cover both players, first-turn restrictions, evolution type, and loss of the Stadium. Other hunks implement the retired React presentation."
     },
     {
       "sha": "afe935782ab7a0e255dfa2ad4e22b6bbef00214b",
@@ -449,8 +449,8 @@
       "sha": "da4a62d0794bbccc076898227a5f192994bcd468",
       "date": "2026-10-23",
       "subject": "fix(frontend): useFromHand Abilities, ShowCardsPrompt error",
-      "status": "partial",
-      "notes": "Ported Show Cards ownership and messaging into the shared engine. Explicit ownership preserves the source when a deck effect temporarily moves revealed cards out of their zone. Angular already enables Pokémon hand Abilities without requiring the playability hint and targets the selected physical copy. The React 2D and 3D presentation changes have no Angular equivalent. The related top-deck audit corrected Trick Shovel, Sandshrew FST and Rockruff JTG through the existing Confirm Cards prompt."
+      "status": "applied",
+      "notes": "Ported Show Cards ownership and messaging into the shared engine. Explicit ownership preserves the source when a deck effect temporarily moves revealed cards out of their zone. Angular already enables Pokémon hand Abilities without requiring the playability hint and targets the selected physical copy. The React 2D and 3D presentation changes have no Angular equivalent. The related top-deck audit corrected Trick Shovel, Sandshrew FST and Rockruff JTG through the existing Confirm Cards prompt. Batch 84 verified both shared engine files and the existing Angular hand-Ability path. The in-hand prompt uses the selected card index and the requested power; reveal ownership survives when cards leave a public source. The remaining changes are React animation paths."
     },
     {
       "sha": "b63dae1a88c7e6cfb5ae0d37df8f641839fe3918",
@@ -575,8 +575,8 @@
       "sha": "03f82b7489752d165019fd4c9d9b9fd7662b9054",
       "date": "2026-11-01",
       "subject": "fix(cards): Bug Fixes",
-      "status": "partial",
-      "notes": "Ported Arboliva ex DRI Oil Machine Gun Weakness/Resistance fix; 3 red/green real-game tests, 530 matching states, four recorded wins, both browser builds pass. Remaining card fixes in this multi-card commit not yet reviewed. Not deployed. Follow-up: Rosa’s Encouragement now permits an optional zero selection, routes Energy through MoveCardsEffect, and enforces the attachment prompt’s blocked targets. Three real-store tests pass; combined 530-state comparison passed; engine suite reports only the two pre-existing ownership failures. Gameplay re-audit batch 8 verifies Delibird MEE Energizing Present against the official ruling. It permits zero or one Energy including Special Energy, reveals before moving a selected card, and shuffles only the looked-at remainder."
+      "status": "applied",
+      "notes": "Ported Arboliva ex DRI Oil Machine Gun Weakness/Resistance fix; 3 red/green real-game tests, 530 matching states, four recorded wins, both browser builds pass. Remaining card fixes in this multi-card commit not yet reviewed. Not deployed. Follow-up: Rosa’s Encouragement now permits an optional zero selection, routes Energy through MoveCardsEffect, and enforces the attachment prompt’s blocked targets. Three real-store tests pass; combined 530-state comparison passed; engine suite reports only the two pre-existing ownership failures. Gameplay re-audit batch 8 verifies Delibird MEE Energizing Present against the official ruling. It permits zero or one Energy including Special Energy, reveals before moving a selected card, and shuffles only the looked-at remainder. Batch 84 reviewed the remaining Mega Rayquaza ex hunk. It only reformats the imports. All three gameplay changes in this commit are covered by the ports above. The separate earlier Mega Rayquaza ex commit remains under review."
     },
     {
       "sha": "450a3e6a50d521d0749bf027cb69aa7b19671b23",
@@ -603,8 +603,8 @@
       "sha": "ddaeb5e250e912076d6b0e0415f3ac07c7b2f0f4",
       "date": "2026-11-02",
       "subject": "fix(cards): Strange Timepiece Fix",
-      "status": "partial",
-      "notes": "Ported upstream playable-card check using the same evolved-Psychic eligibility as effect execution. Existing fork number-selection UI already excludes Basic Pokémon and handles out-of-order evolution stacks, so retained it rather than copying upstream prompt rewrite. Focused regression tests; 530 saved-state comparison unchanged. Not deployed."
+      "status": "applied",
+      "notes": "Ported upstream playable-card check using the same evolved-Psychic eligibility as effect execution. Existing fork number-selection UI already excludes Basic Pokémon and handles out-of-order evolution stacks, so retained it rather than copying upstream prompt rewrite. Focused regression tests; 530 saved-state comparison unchanged. Not deployed. Batch 84 reviewed the full upstream change. Effective Psychic type gates both playability and target selection. Selecting a count can only return cards above the bottom Pokémon and returns the chosen depth. The independent shared devolution movement path still needs review for return-to-hand prevention."
     },
     {
       "sha": "c6203d415f255fb7dfe46c3dc1ac129785f06739",
