@@ -8,6 +8,8 @@ import { State } from '../state/state';
 import { StoreLike } from '../store-like';
 import { CheckPokemonPlayedTurnEffect } from '../effects/check-effects';
 import { EvolveEffect } from '../effects/game-effects';
+import { StateUtils } from '../state-utils';
+import { GameStatsTracker } from '../game-stats-tracker';
 
 /**
  * Helper function to emit animation events
@@ -58,6 +60,20 @@ export function playPokemonReducer(store: StoreLike, state: State, effect: Effec
       return state;
     }
     const player = effect.player;
+    if (stage === Stage.LV_X) {
+      if (effect.target !== player.active || !StateUtils.canLevelUp(state, player, effect.pokemonCard)) {
+        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
+      }
+      const previous = effect.target.getPokemonCard()!;
+      GameStatsTracker.handlePokemonEvolution(player, effect.target, previous, effect.pokemonCard);
+      player.hand.moveCardTo(effect.pokemonCard, effect.target);
+      player.removePokemonEffects(effect.target);
+      effect.target.marker.markers = [];
+      effect.target.pokemonPlayedTurn = state.turn;
+      effect.target.triggerEvolutionAnimation = true;
+      return state;
+    }
+
     const isEvolved = stage === Stage.STAGE_1 || Stage.STAGE_2;
     const evolvesFrom = effect.pokemonCard.evolvesFrom;
     const pokemonCard = effect.target.getPokemonCard();

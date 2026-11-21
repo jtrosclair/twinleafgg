@@ -1,3 +1,4 @@
+import { DISCARD_A_STADIUM_CARD_IN_PLAY } from '../../game/store/stadium-utils';
 import { CardTag, CardType, PokemonCard, Stage, PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
@@ -50,9 +51,7 @@ export class MegaHawluchaex extends PokemonCard {
         effect.damage += 140;
 
         // Discard the Stadium
-        const cardList = StateUtils.findCardList(state, stadiumCard);
-        const stadiumOwner = StateUtils.findOwner(state, cardList);
-        cardList.moveTo(stadiumOwner.discard);
+        DISCARD_A_STADIUM_CARD_IN_PLAY(state);
       }
     }
 

@@ -8,6 +8,7 @@ import { Effect } from '../effects/effect';
 import { State } from '../state/state';
 import { StoreLike } from '../store-like';
 import { StateUtils } from '../state-utils';
+import { discardStadiumSlot } from '../stadium-utils';
 import { CardTag, TrainerType } from '../card/card-types';
 import { Player } from '../state/player';
 import { TrainerCard } from '../card/trainer-card';
@@ -196,31 +197,14 @@ function playTrainerWithoutCoinFlip(store: StoreLike, state: State, effect: Effe
   if (effect instanceof PlayStadiumEffect) {
     const player = effect.player;
     const opponent = StateUtils.getOpponent(state, player);
-    const stadiumCard = StateUtils.getStadiumCard(state);
-
     if (player.marker.hasMarker(player.ATTACK_EFFECT_STADIUM_LOCK)) {
       throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
 
     // Successful play: commit the turn allowance before replacing the old Stadium.
     player.stadiumPlayedTurn = state.turn;
-    // Handle player's existing stadium
-    if (player.stadium.cards.length > 0) {
-      if (stadiumCard && stadiumCard.tags.includes(CardTag.PRISM_STAR)) {
-        player.stadium.moveTo(player.lostzone);
-      } else {
-        player.stadium.moveTo(player.discard);
-      }
-    }
-
-    // Handle opponent's existing stadium
-    if (opponent.stadium.cards.length > 0) {
-      if (stadiumCard && stadiumCard.tags.includes(CardTag.PRISM_STAR)) {
-        opponent.stadium.moveTo(opponent.lostzone);
-      } else {
-        opponent.stadium.moveTo(opponent.discard);
-      }
-    }
+    discardStadiumSlot(player, true);
+    discardStadiumSlot(opponent, true);
 
     store.log(state, GameLog.LOG_PLAYER_PLAYS_STADIUM, {
       name: effect.player.name,

@@ -8,6 +8,7 @@ import { SelectPrompt } from '../prompts/select-prompt';
 import { CardList } from '../state/card-list';
 import { GamePhase, State } from '../state/state';
 import { StoreLike } from '../store-like';
+import { discardStadiumSlot } from '../stadium-utils';
 
 function lostCityMarker(effect: KnockOutEffect) {
   return effect.target.marker.markers.find(marker => marker.name === 'LOST_CITY_MARKER');
@@ -97,6 +98,17 @@ export function discardKnockedOutPokemon(store: StoreLike, state: State, effect:
   const rescued = effect.rescuedPokemon;
   const card = rescued?.card ?? effect.target.getPokemonCard();
   if (!card) return state;
+
+  const stadium = effect.stadiumReplacement;
+  if (stadium && effect.target.cards.includes(stadium)) {
+    for (const owner of state.players) discardStadiumSlot(owner, true);
+    const nested = stadium.cards.cards.splice(0);
+    for (const attachment of nested) {
+      if (!effect.target.cards.includes(attachment) && !effect.target.tools.includes(attachment)
+        && !effect.target.energies.cards.includes(attachment)) effect.target.cards.push(attachment);
+    }
+    state = MOVE_CARDS(store, state, effect.target, effect.player.stadium, { cards: [stadium], sourceCard: stadium });
+  }
 
   // A damage-provenance opt-in differs from Lost City: ALL attachments go too.
   if (effect.knockOutDestination === 'lostzone') {

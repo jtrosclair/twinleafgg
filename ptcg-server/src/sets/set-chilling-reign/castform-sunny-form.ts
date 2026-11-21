@@ -1,3 +1,4 @@
+import { DISCARD_A_STADIUM_CARD_IN_PLAY } from '../../game/store/stadium-utils';
 import { PowerType, State, StateUtils, StoreLike, TrainerCard } from '../../game';
 import { CardType, Stage, TrainerType } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
@@ -97,9 +98,7 @@ export class CastformSunnyForm extends PokemonCard {
       const stadiumCard = StateUtils.getStadiumCard(state);
 
       if (stadiumCard !== undefined) {
-        const cardList = StateUtils.findCardList(state, stadiumCard);
-        const player = StateUtils.findOwner(state, cardList);
-        cardList.moveTo(player.discard);
+        DISCARD_A_STADIUM_CARD_IN_PLAY(state);
         return state;
       } else {
         effect.damage = 0;

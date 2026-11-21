@@ -4175,3 +4175,53 @@ sole Tera Pokémon, reduces the Bench and awards the opponent's last two
 Prizes. All seven recorded puzzle solutions still win. The 2.50 MiB
 gzip package passes attestation, ten board scenarios and 209 client-service
 checks. All 32 API checks pass.
+
+## Gameplay re-audit, batch 59
+
+Dusknoir LV.X SF now uses its printed 140 HP and Ectoplasm Poké-Power.
+Level Up requires the matching Active Pokémon from an earlier turn. It
+keeps damage and attachments, clears Special Conditions and other
+applied effects, and exposes the previous level’s attacks and powers in
+the simulator card pane. Playing LV.X does not dispatch an ordinary
+evolution. Dusknoir retains the earlier level’s Shadow Command and
+Damage Even.
+[Pokémon Arceus rulebook, Appendix A](https://assets.pokemon.com/assets/cms/pdf/tcg/rulebooks/Arceus_Rulebook.pdf)
+[Official Level Up ruling](https://www.pokemon-card.com/rules/faq/search.php?page=951&regulation=all)
+[Official Ectoplasm print](https://www.pokemon-card.com/card-search/details.php/card/19152/regu/DP)
+
+Ectoplasm offers an optional replacement before discarding Dusknoir’s
+stack after an opposing attack Knocks Out the Active. Normal Prize
+resolution still applies. Chaotic Swell does not intercept its arrival.
+Against Darkness Lost, the LV.X card becomes the Stadium and the rest
+of the stack and its attachments go to the Lost Zone. A Knock Out from
+damage counters or a blocked Poké-Power leaves the standard discard.
+During Pokémon Checkup, the Stadium puts one damage counter on each of
+its owner’s opposing Pokémon. Stadium protection can block those
+counters. Poké-Power suppression does not disable the installed Stadium.
+[Official Chaotic Swell ruling](https://www.pokemon-card.com/rules/faq/search.php?page=1&regulation=all&sc_group_id=28)
+[Official Darkness Lost ruling](https://www.pokemon-card.com/rules/faq/search.php?page=14&regulation=all&sc_group_id=28)
+[Official Cessation Crystal ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E5%B0%81%E5%8D%B0%E3%81%AE%E7%B5%90%E6%99%B6&regulation_faq_main_item1=all)
+
+Replacing or discarding the Ectoplasm Stadium returns the card to the
+owner’s hand. The discard helper also handles direct discard effects
+that previously bypassed the shared Stadium path. Lost Vacuum always
+puts the selected card into the Lost Zone after payment, including when
+the Stadium is the only target. With both choices available, the Tool
+or Stadium prompt opens after payment. Lost Vacuum cannot be played
+without another hand card.
+[Official Stadium discard ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A8%E3%83%8E%E3%83%AF%E3%83%BC%E3%83%AB&page=9&regulation=all&regulation_faq_main_item1=all)
+[Official Lost Vacuum print and rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AD%E3%82%B9%E3%83%88%E3%82%B9%E3%82%A4%E3%83%BC%E3%83%91%E3%83%BC&regulation_faq_main_item1=all)
+
+All 21 focused engine cases pass. Seventeen fail on the preceding
+engine. The full suite passes 10,823 checks and the combined local
+workspace passes 323 targeted checks. All 559 comparable saved boards
+and 5,225 sampled opening moves match, and all seven recorded solutions
+still win. The saved corpus has no Dusknoir LV.X and two Lost Vacuum
+boards with the card in the deck. A controlled draw-order replay on the
+saved Dragapult board used both Drakloak searches, played Temple of
+Sinnoh and put it in the Lost Zone with Lost Vacuum. Both engines
+settled that Tool-or-Stadium case with the same cards in the same zones.
+The focused checks verify the corrected Stadium-only case and missing
+payment. The 2.50 MiB gzip build passes attestation, ten board scenarios,
+209 client-service checks and the previous-level card-pane check. All
+32 API checks pass.

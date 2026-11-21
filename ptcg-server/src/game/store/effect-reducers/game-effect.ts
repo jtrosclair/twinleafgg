@@ -714,6 +714,11 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
 
     const moveSelected = (cards: Card[]) => {
       if (discardOwner) {
+        if (source === discardOwner.stadium) {
+          const returning = cards.filter(card => card.returnsToHandWhenDiscardedAsStadium);
+          source.moveCardsTo(returning, discardOwner.hand);
+          cards = cards.filter(card => !returning.includes(card));
+        }
         const toLostZone = cards.filter(card => card.tags.includes(CardTag.PRISM_STAR));
         const toDiscard = cards.filter(card => !card.tags.includes(CardTag.PRISM_STAR));
         source.moveCardsTo(toLostZone, discardOwner.lostzone);

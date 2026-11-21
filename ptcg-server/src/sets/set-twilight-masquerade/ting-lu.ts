@@ -1,3 +1,4 @@
+import { DISCARD_A_STADIUM_CARD_IN_PLAY } from '../../game/store/stadium-utils';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils, PlayerType } from '../../game';
@@ -75,9 +76,7 @@ export class TingLu extends PokemonCard {
       // Add stadium discard logic
       const stadiumCard = StateUtils.getStadiumCard(state);
       if (stadiumCard) {
-        const cardList = StateUtils.findCardList(state, stadiumCard);
-        const owner = StateUtils.findOwner(state, cardList);
-        cardList.moveTo(owner.discard);
+        DISCARD_A_STADIUM_CARD_IN_PLAY(state);
         this.discardedStadiumCard = false;
       }
     }

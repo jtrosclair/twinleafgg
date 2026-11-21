@@ -1,5 +1,5 @@
 import { Component, OnChanges, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Card, SuperType, Stage, PowerType, EnergyType, TrainerType, TrainerCard, PokemonCardList, EnergyCard, CardTag, PokemonCard } from 'ptcg-server';
+import { Card, SuperType, Stage, PowerType, EnergyType, TrainerType, TrainerCard, PokemonCardList, EnergyCard, CardTag, PokemonCard, StateUtils } from 'ptcg-server';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 
@@ -263,7 +263,9 @@ export class CardInfoPaneComponent implements OnChanges, OnDestroy {
       if (this.cardList && this.cardList.cards && this.cardList.cards.length > 0) {
         if (this.isViewingSpecificCard()) {
           // If viewing a specific card in the evolution chain, show its own powers plus any tool powers
-          let powers = [...(this.card.powers || [])];
+          const previousLevel = this.cardList instanceof PokemonCardList && this.card === this.cardList.getPokemonCard()
+            ? StateUtils.getPreviousLevel(this.cardList) : undefined;
+          const powers = [...(this.card.powers || []), ...(previousLevel?.powers ?? [])];
           return this.addToolPowers(powers);
         }
 
@@ -312,7 +314,9 @@ export class CardInfoPaneComponent implements OnChanges, OnDestroy {
       if (this.cardList && this.cardList.cards && this.cardList.cards.length > 0) {
         if (this.isViewingSpecificCard()) {
           // If viewing a specific card in the evolution chain, show its own attacks plus any tool attacks
-          let attacks = [...(this.card.attacks || [])];
+          const previousLevel = this.cardList instanceof PokemonCardList && this.card === this.cardList.getPokemonCard()
+            ? StateUtils.getPreviousLevel(this.cardList) : undefined;
+          const attacks = [...(this.card.attacks || []), ...(previousLevel?.attacks ?? [])];
           return this.addToolAttacks(attacks);
         }
 

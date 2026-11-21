@@ -1,3 +1,4 @@
+import { DISCARD_A_STADIUM_CARD_IN_PLAY } from '../../game/store/stadium-utils';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, ChooseCardsPrompt, PokemonCardList, Card, StateUtils, GameMessage, PowerType, GameError, ConfirmPrompt } from '../../game';
@@ -101,9 +102,7 @@ export class LugiaVSTAR extends PokemonCard {
           if (wantToUse) {
 
             // Discard Stadium
-            const cardList = StateUtils.findCardList(state, stadiumCard);
-            const player = StateUtils.findOwner(state, cardList);
-            cardList.moveTo(player.discard);
+            DISCARD_A_STADIUM_CARD_IN_PLAY(state);
             return state;
           }
           return state;

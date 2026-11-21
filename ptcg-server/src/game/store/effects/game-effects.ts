@@ -257,6 +257,7 @@ export class KnockOutEffect implements Effect {
   public knockOutDestination?: 'lostzone';
   public knockOutDestinationLabel?: string;
   public rescueSource?: Card;
+  public stadiumReplacement?: PokemonCard;
   public rescuedPokemon?: { card: PokemonCard; attachments: Card[] };
   public pokemonGoingToLostZone = false;
   public pokemonInPlayBeforeKnockOut?: readonly PokemonCard[];

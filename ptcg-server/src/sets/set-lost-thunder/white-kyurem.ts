@@ -1,3 +1,4 @@
+import { DISCARD_A_STADIUM_CARD_IN_PLAY } from '../../game/store/stadium-utils';
 import { StateUtils } from '../../game';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
@@ -56,9 +57,7 @@ export class WhiteKyurem extends PokemonCard {
       const owner = StateUtils.findOwner(state, stadiumCardList);
 
       if (stadiumCard !== undefined && owner !== effect.player) {
-        const cardList = StateUtils.findCardList(state, stadiumCard);
-        const player = StateUtils.findOwner(state, cardList);
-        cardList.moveTo(player.discard);
+        DISCARD_A_STADIUM_CARD_IN_PLAY(state);
         return state;
       }
 

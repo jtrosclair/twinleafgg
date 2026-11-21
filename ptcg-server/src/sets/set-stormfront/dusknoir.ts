@@ -26,6 +26,7 @@ import { REMOVE_MARKER } from '../../game/store/prefabs/prefabs';
 import { USE_ABILITY_ONCE_PER_TURN } from '../../game/store/prefabs/prefabs';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { StateUtils } from '../../game/store/state-utils';
 
 export class Dusknoir extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -82,7 +83,7 @@ export class Dusknoir extends PokemonCard {
       const extra = player.hand.cards.length - 6;
       const finish = () => {
         player.forEachPokemon(PlayerType.BOTTOM_PLAYER, list => {
-          if (list.getPokemonCard() === this) {
+          if (list.getPokemonCard() === this || StateUtils.getPreviousLevel(list) === this) {
             list.damage += 20;
           }
         });
@@ -130,7 +131,7 @@ export class Dusknoir extends PokemonCard {
     }
 
     if (effect instanceof AbstractAttackEffect && HAS_MARKER(this.NIGHT_SPIN_MARKER, effect.opponent, this)) {
-      if (effect.target.getPokemonCard() === this) {
+      if (effect.target.getPokemonCard() === this || StateUtils.getPreviousLevel(effect.target) === this) {
         const energyCount = effect.source.cards.filter(c => c instanceof EnergyCard).length;
         if (energyCount <= 2) {
           effect.preventDefault = true;

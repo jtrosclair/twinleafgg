@@ -2,7 +2,7 @@ import { Player } from '../state/player';
 import { PokemonCardList } from '../state/pokemon-card-list';
 import { State } from '../state/state';
 import { StoreLike } from '../store-like';
-import { TrainerCard } from '../card/trainer-card';
+import { Card } from '../card/card';
 import { StadiumEffect } from '../effects/play-card-effects';
 
 // Mirror upstream's re-entrancy guard: a Stadium that blocks Abilities may
@@ -11,7 +11,7 @@ let probingStadiumEffect = false;
 
 /** Whether the Stadium's effect is prevented for this Pokémon. */
 export function IS_STADIUM_EFFECT_BLOCKED(
-  store: StoreLike, state: State, player: Player, target: PokemonCardList, stadium?: TrainerCard
+  store: StoreLike, state: State, player: Player, target: PokemonCardList, stadium?: Card
 ): boolean {
   const nested = probingStadiumEffect;
   const probe = new StadiumEffect(player, target, stadium);

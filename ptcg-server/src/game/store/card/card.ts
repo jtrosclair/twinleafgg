@@ -57,6 +57,8 @@ export abstract class Card {
    */
   public canPlay?(store: StoreLike, state: State, player: Player): boolean | undefined;
 
+  public get returnsToHandWhenDiscardedAsStadium(): boolean { return false; }
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     return state;
   }

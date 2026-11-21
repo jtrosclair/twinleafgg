@@ -1,3 +1,4 @@
+import { DISCARD_A_STADIUM_CARD_IN_PLAY } from '../../game/store/stadium-utils';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import {
@@ -59,9 +60,7 @@ export class Tauros extends PokemonCard {
             store.reduceEffect(state, powerEffect);
 
             // Discard Stadium
-            const cardList = StateUtils.findCardList(state, stadiumCard);
-            const player = StateUtils.findOwner(state, cardList);
-            cardList.moveTo(player.discard);
+            DISCARD_A_STADIUM_CARD_IN_PLAY(state);
             return state;
           }
           return state;

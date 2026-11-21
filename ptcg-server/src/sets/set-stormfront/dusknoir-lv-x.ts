@@ -1,83 +1,87 @@
+import { PlayerType } from '../../game/store/actions/play-card-action';
+import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
+import { PowerType } from '../../game/store/card/pokemon-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, GameError, GameMessage, StateUtils, PokemonCardList, GamePhase } from '../../game';
+import { CheckPokemonAttacksEffect, CheckPokemonPowersEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect } from '../../game/store/effects/game-effects';
-import { PlayStadiumEffect } from '../../game/store/effects/play-card-effects';
-import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { PlaceDamageCountersEffect, UseStadiumEffect } from '../../game/store/effects/game-effects';
+import { BetweenTurnsEffect } from '../../game/store/effects/game-phase-effects';
+import { wasActiveWhenDamaged } from '../../game/store/prefabs/knock-out-effects';
+import { CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
+import { StateUtils } from '../../game/store/state-utils';
+import { State } from '../../game/store/state/state';
+import { StoreLike } from '../../game/store/store-like';
+import { GameError } from '../../game/game-error';
+import { GameMessage } from '../../game/game-message';
 
 export class DusknoirLvX extends PokemonCard {
-
-  public stage: Stage = Stage.LV_X;
-
-  public cardType: CardType = CardType.PSYCHIC;
-
-  public hp: number = 300;
-
-  public weakness = [{ type: CardType.PSYCHIC, value: 10 }];
-
-  public retreat = [];
+  public stage = Stage.LV_X;
+  public tags = [CardTag.POKEMON_LV_X];
+  public evolvesFrom = 'Dusknoir';
+  public cardType = CardType.PSYCHIC;
+  public hp = 140;
+  public weakness = [{ type: CardType.DARK }];
+  public resistance = [{ type: CardType.COLORLESS, value: -20 }];
+  public retreat = [CardType.COLORLESS, CardType.COLORLESS, CardType.COLORLESS];
 
   public powers = [{
-    name: 'Quick',
-    useWhenInPlay: true,
+    name: 'Ectoplasm',
     powerType: PowerType.POKEPOWER,
-    text: 'If Dusknoir is your Active Pokémon and would be Knocked Out by damage from your opponent\'s attack, you may discard all cards attached to Dusknoir LV.X and put Dusknoir LV.X as a Stadium card into play instead of discarding it. This counts as Dusknoir being Knocked Out and your opponent takes a Prize card. As long as you have Dusknoir LV.X as a Stadium card in play, put 1 damage counter on each of your opponent\'s Pokémon between turns. If another Stadium card comes into play or Dusknoir LV.X is discarded by the effects of any attacks, Poké-Powers, Poké-Bodies, Trainer, or Supporter cards, return Dusknoir LV.X to your hand.'
+    text: 'When your Active Dusknoir LV.X is Knocked Out by damage from an opponent’s attack, you may put this card into play as the Stadium and discard the rest of the stack. Your opponent takes a Prize as usual. During Pokémon Checkup, put 1 damage counter on each of your opponent’s Pokémon. Return this card to your hand if it is discarded as a Stadium.',
   }];
 
-  public set: string = 'SF';
+  public set = 'SF';
+  public cardImage = 'assets/cardback.png';
+  public setNumber = '96';
+  public name = 'Dusknoir';
+  public fullName = 'DusknLv.X SF';
 
-  public cardImage: string = 'assets/cardback.png';
-
-  public setNumber: string = '96';
-
-  public name: string = 'Dusknoir';
-
-  public fullName: string = 'DusknLv.X SF';
+  public get returnsToHandWhenDiscardedAsStadium(): boolean { return true; }
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    // Ref: prefabs/knock-out-effects.ts (resolve optional Knock Out effects before the stack leaves play)
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect) && effect.resolveBeforeDiscard
+      && effect.target.getPokemonCard() === this && wasActiveWhenDamaged(effect)) {
+      const { player, target } = effect;
+      effect.beforeDiscard.set(this, {
+        label: this.powers[0].name,
+        canResolve: () => target.getPokemonCard() === this && !IS_POKEPOWER_BLOCKED(store, state, player, this),
+        resolve: () => {
+          CONFIRMATION_PROMPT(store, state, player, yes => {
+            if (yes) effect.stadiumReplacement = this;
+          });
+        },
+      });
+    }
 
-    if (WAS_POWER_USED(effect, 0, this)) {
-      const player = (effect as PowerEffect).player;
-      const cardList = StateUtils.findCardList(state, this);
-
-
-      // check if UnownR is on player's Bench
-      const benchIndex = player.bench.indexOf(cardList as PokemonCardList);
-      if (benchIndex === -1) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      }
-
-      player.bench[benchIndex].clearEffects();
-
-      effect instanceof PlayStadiumEffect && effect.card == this; {
-        // player.bench[benchIndex].moveTo(player.stadium);
-
-        if (state.phase == GamePhase.ATTACK) {
-          const opponent = StateUtils.getOpponent(state, player);
-          opponent.active.damage += 10;
-          opponent.bench.forEach(b => b.damage += 10);
+    if ((effect instanceof BetweenTurnsEffect || effect instanceof UseStadiumEffect)
+      && StateUtils.getStadiumCard(state) === this) {
+      if (effect instanceof UseStadiumEffect) throw new GameError(GameMessage.CANNOT_USE_STADIUM);
+      const owner = effect.player;
+      if (!owner.stadium.cards.includes(this)) return state;
+      const opponent = StateUtils.getOpponent(state, owner);
+      opponent.forEachPokemon(PlayerType.TOP_PLAYER, target => {
+        if (!IS_STADIUM_EFFECT_BLOCKED(store, state, owner, target, this)) {
+          // The installed Stadium, rather than the original Poké-Power, places these counters.
+          store.reduceEffect(state, new PlaceDamageCountersEffect(owner, target, 10, this));
         }
-        if (effect instanceof PlayStadiumEffect && effect.card !== this) {
-          effect.player.stadium.moveTo(effect.player.hand);
+      });
+    }
 
-          return state;
-        }
-        return state;
-      }
-      return state;
+    if (effect instanceof CheckPokemonAttacksEffect && effect.player.active.getPokemonCard() === this) {
+      const previousLevel = StateUtils.getPreviousLevel(effect.player.active);
+      if (previousLevel) effect.attacks.push(...previousLevel.attacks);
+    }
+    if (effect instanceof CheckPokemonPowersEffect && effect.target === this) {
+      const slot = effect.player.getPokemonInPlay().find(list => list.getPokemonCard() === this);
+      const previousLevel = slot && StateUtils.getPreviousLevel(slot);
+      if (previousLevel) effect.powers = [...effect.powers, ...previousLevel.powers];
     }
     return state;
   }
 }
 
-
-
-
-
-
 export class DusknoirLVXExactPrint extends DusknoirLvX {
-  public fullName: string = 'Dusknoir LV.X SF';
-  public set: string = 'SF';
-  public setNumber: string = '96';
+  public fullName = 'Dusknoir LV.X SF';
 }

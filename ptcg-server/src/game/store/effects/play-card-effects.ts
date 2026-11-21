@@ -40,7 +40,7 @@ export class StadiumEffect implements Effect {
   public preventDefault = false;
   public skipAbilityLockCheck = false;
 
-  constructor(public player: Player, public target: PokemonCardList, public stadium?: TrainerCard) {}
+  constructor(public player: Player, public target: PokemonCardList, public stadium?: Card) {}
 }
 
 export class AttachEnergyEffect implements Effect {

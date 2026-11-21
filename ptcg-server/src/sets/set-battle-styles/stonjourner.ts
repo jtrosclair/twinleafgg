@@ -1,3 +1,4 @@
+import { DISCARD_A_STADIUM_CARD_IN_PLAY } from '../../game/store/stadium-utils';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils } from '../../game';
@@ -40,9 +41,7 @@ export class Stonjourner extends PokemonCard {
       if (stadiumCard !== undefined) {
         effect.damage += 30;
         // Discard Stadium
-        const cardList = StateUtils.findCardList(state, stadiumCard);
-        const player = StateUtils.findOwner(state, cardList);
-        cardList.moveTo(player.discard);
+        DISCARD_A_STADIUM_CARD_IN_PLAY(state);
       }
       return state;
     }

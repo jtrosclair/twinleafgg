@@ -345,6 +345,19 @@ export class StateUtils {
     return inPlay;
   }
 
+  public static getPreviousLevel(slot: PokemonCardList): PokemonCard | undefined {
+    const stack = slot.getPokemons();
+    const levelUp = stack.pop();
+    const previous = stack[stack.length - 1];
+    return levelUp?.stage === Stage.LV_X && previous?.name === levelUp.evolvesFrom ? previous : undefined;
+  }
+
+  public static canLevelUp(state: State, player: Player, levelUp: PokemonCard): boolean {
+    const current = player.active.getPokemonCard();
+    return state.turn > 2 && player.active.pokemonPlayedTurn < state.turn && !!current
+      && current.stage !== Stage.LV_X && current.name === levelUp.evolvesFrom;
+  }
+
   /** A Pokémon LV.X retains the Evolution Stage of the Pokémon under it. */
   public static isEvolutionPokemon(slot: PokemonCardList): boolean {
     const previousLevel = slot.getPokemons().filter(card => card.stage !== Stage.LV_X);

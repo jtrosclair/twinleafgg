@@ -18,17 +18,7 @@ import { CoinFlipEffect } from '../effects/play-card-effects';
  * These prefabs are for general attack effects.
  */
 
-export function DISCARD_A_STADIUM_CARD_IN_PLAY(
-  state: State
-) {
-  const stadiumCard = StateUtils.getStadiumCard(state);
-  if (stadiumCard !== undefined) {
-
-    const cardList = StateUtils.findCardList(state, stadiumCard);
-    const player = StateUtils.findOwner(state, cardList);
-    cardList.moveTo(player.discard);
-  }
-}
+export { DISCARD_A_STADIUM_CARD_IN_PLAY } from '../stadium-utils';
 
 export function DRAW_CARDS_UNTIL_YOU_HAVE_X_CARDS_IN_HAND(
   x: number,

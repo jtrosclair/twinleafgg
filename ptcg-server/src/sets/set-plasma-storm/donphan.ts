@@ -1,3 +1,4 @@
+import { DISCARD_A_STADIUM_CARD_IN_PLAY } from '../../game/store/stadium-utils';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils, ChoosePokemonPrompt, PlayerType, SlotType } from '../../game';
@@ -87,9 +88,7 @@ export class Donphan extends PokemonCard {
       if (stadiumCard !== undefined) {
         effect.damage += 60;
         // Discard Stadium
-        const cardList = StateUtils.findCardList(state, stadiumCard);
-        const player = StateUtils.findOwner(state, cardList);
-        cardList.moveTo(player.discard);
+        DISCARD_A_STADIUM_CARD_IN_PLAY(state);
       }
     }
 

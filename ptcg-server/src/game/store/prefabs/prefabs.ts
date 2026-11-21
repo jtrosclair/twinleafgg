@@ -89,15 +89,7 @@ export function PASSIVE_ABILITY_ACTIVATED(effect: Effect, user: PokemonCard) {
  * @param state is the game state.
  * @returns the game state after discarding a stadium card in play.
  */
-export function DISCARD_A_STADIUM_CARD_IN_PLAY(state: State) {
-  const stadiumCard = StateUtils.getStadiumCard(state);
-  if (stadiumCard !== undefined) {
-
-    const cardList = StateUtils.findCardList(state, stadiumCard);
-    const player = StateUtils.findOwner(state, cardList);
-    cardList.moveTo(player.discard);
-  }
-}
+export { DISCARD_A_STADIUM_CARD_IN_PLAY } from '../stadium-utils';
 
 /**
  * Search deck for Pokemon, show it to the opponent, put it into `player`'s hand, and shuffle `player`'s deck.
@@ -3099,6 +3091,8 @@ export function CAN_PLAY_POKEMON_CARD(store: StoreLike, state: State, player: Pl
     if (pokemonCard.stage === Stage.BASIC && !player.bench.some(bench => bench.cards.length === 0)) {
       return false;
     }
+
+    if (pokemonCard.stage === Stage.LV_X) return StateUtils.canLevelUp(state, player, pokemonCard);
 
     // For evolution cards, check if base Pokemon is in play AND can be evolved
     if (pokemonCard.stage !== Stage.BASIC) {
