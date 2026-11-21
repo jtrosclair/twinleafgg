@@ -1,4 +1,4 @@
-import { playBenchPokemonBatchFromDeck } from '../../game/store/prefabs/bench-play-reactions';
+import { getBlockedPokemonPlacementIndices, playBenchPokemonBatchFromDeck } from '../../game/store/prefabs/bench-play-reactions';
 import { Card } from '../../game/store/card/card';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
@@ -37,7 +37,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
     GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
     player.deck,
     { superType: SuperType.POKEMON, stage: Stage.BASIC },
-    { min: 0, max: 1, allowCancel: false }
+    { min: 0, max: 1, allowCancel: false, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck) }
   ), selected => {
     cards = selected || [];
     next();

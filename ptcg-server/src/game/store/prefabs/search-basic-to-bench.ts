@@ -2,7 +2,7 @@ import { GameError, GameMessage, State, StoreLike } from '../..';
 import { PokemonCard } from '../card/pokemon-card';
 import { Stage, SuperType } from '../card/card-types';
 import { AttackEffect } from '../effects/game-effects';
-import { playBenchPokemonBatchFromDeck } from './bench-play-reactions';
+import { getBlockedPokemonPlacementIndices, playBenchPokemonBatchFromDeck } from './bench-play-reactions';
 import { ChooseCardsPrompt } from '../prompts/choose-cards-prompt';
 import { SHUFFLE_DECK } from '../prefabs/prefabs';
 
@@ -15,7 +15,8 @@ export function searchBasicsToBench(store: StoreLike, state: State, effect: Atta
   if (!limit) return SHUFFLE_DECK(store, state, player);
   const blocked = player.deck.cards.map((card, i) => !(card instanceof PokemonCard) || card.stage !== Stage.BASIC || (names && !names.includes(card.name)) ? i : -1).filter(i => i >= 0);
   return store.prompt(state, new ChooseCardsPrompt(player, GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH, player.deck,
-    { superType: SuperType.POKEMON, stage: Stage.BASIC }, { min: 0, max: limit, allowCancel: false, blocked }), chosen => {
+    { superType: SuperType.POKEMON, stage: Stage.BASIC }, { min: 0, max: limit, allowCancel: false,
+      blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck, blocked) }), chosen => {
     if (!chosen || chosen.length > limit || chosen.length > available() || new Set(chosen).size !== chosen.length ||
       chosen.some(card => !(card instanceof PokemonCard) || card.stage !== Stage.BASIC || !player.deck.cards.includes(card) || (names && !names.includes(card.name)))) throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
     playBenchPokemonBatchFromDeck(store, state, player, chosen, player.bench.filter(slot => slot.cards.length === 0));

@@ -5116,3 +5116,54 @@ tests. The attested browser package passes ten board scenarios and
 discard Chansey and put Treasure Energy in the Lost Zone.
 
 The full engine suite passes 11,261 tests across 323 files.
+
+## Gameplay re-audit, batch 79
+
+Eternal Zone checks the live Ability and current Darkness types when
+a Pokémon is played from hand, placed from the deck or discard, moved
+onto the Bench through the shared movement path, or evolved through
+the engine preflight. A stale saved marker cannot block a placement
+when the Ability is suppressed. The same marker name remains available
+to legacy snapshots. Bench searches filter illegal Pokémon before
+selection. The shared search routines, Nest Ball, Buddy-Buddy Poffin,
+Artazon and 55 optional deck search prompts use the same check. Rare
+Candy and Gentle Fins also filter their public candidates. Some legacy
+direct-move handlers and mandatory selection prompts still need their
+own review.
+[Official Eternal Zone print](https://asia.pokemon-card.com/ph/card-search/detail/632/)
+[Official dual-type and Grass evolution rulings](https://www.pokemon-card.com/rules/faq/search.php?page=333&regulation=all&sc_group_id=731%2F1000)
+
+Bisharp STS 64 has the printed Darkness and Metal types. It can evolve
+from Darkness Pawniard under Eternal Zone and retains both types in play.
+[Official Bisharp print](https://www.pokemon-card.com/card-search/details.php/card/32098/regu/XY)
+
+The nine registered Bench-size handlers now contribute either an
+expansion or a limit. The smaller limit wins independently of player
+and reducer order. Area Zero and Eternal Zone can expand separate
+sides simultaneously. Collapsed Stadium, Parallel City, Giant Stump,
+Dust Field, Roadblock and Dittobolic apply only their printed limits.
+Capacity effects apply to the player, so the ruling that New Moon leaves
+the eight-slot Stadium expansion in place continues to hold.
+[Official Collapsed Stadium and Eternal Zone ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E5%B4%A9%E3%82%8C%E3%81%9F%E3%82%B9%E3%82%BF%E3%82%B8%E3%82%A2%E3%83%A0&regulation_header_search_item1=all)
+[Official Dust Field print](https://www.pokemon-card.com/card-search/details.php/card/44634/regu/all)
+[Official New Moon and Bench size rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AB%E3%83%8A%E3%83%88%E3%83%BC%E3%83%B3&regulation_faq_main_item1=all)
+
+After Devolution Spray Z shuffles, the simulator resolves any Bench
+shrink before checking the lower HP for a Knock Out. The official
+Eternatus case allows the player to discard the de-evolved Pokémon
+without conceding Prizes. Other removal and simultaneous Bench shrink
+sequences retain separate review.
+[Official Devolution Spray Z and Eternal Zone ruling](https://www.pokemon-card.com/rules/faq/search.php?sc_group_id=634)
+
+All 209 focused checks pass. The new Eternal Zone suite has 22 cases,
+18 of which reproduce failures against the previous engine. The API
+passes 32 checks. All 559 comparable saved boards have identical
+serialized states, card names and validation responses.
+
+All 3,636 sampled opening actions and 458 targeted Bench and Trainer
+openings match. All seven recorded puzzle solutions still win twice.
+The combined worktree passes 249 focused checks. The full engine
+suite passes 11,283 tests across 324 files. The attested browser
+package passes ten board scenarios and 209 client checks. Desktop
+and touch users can select Poochyena with Nest Ball under Eternal Zone
+while Hoppip is unavailable and Dust Field holds the Bench to three.

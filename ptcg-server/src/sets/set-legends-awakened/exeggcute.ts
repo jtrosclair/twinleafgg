@@ -1,4 +1,4 @@
-import { playBenchPokemonBatchFromDeck } from '../../game/store/prefabs/bench-play-reactions';
+import { playBenchPokemonBatchFromDeck, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard as PokemonCardClass } from '../../game/store/card/pokemon-card';
 import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { ChooseCardsPrompt, GameMessage, State, StoreLike } from '../../game';
@@ -63,7 +63,7 @@ export class Exeggcute extends PokemonCardClass {
         GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
         player.deck,
         { superType: SuperType.POKEMON, stage: Stage.BASIC },
-        { min: 0, max, allowCancel: true, blocked },
+        { min: 0, max, allowCancel: true, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck, blocked) },
       ), selected => {
         const cards = selected || [];
         playBenchPokemonBatchFromDeck(store, state, player, cards, slots);

@@ -1,4 +1,4 @@
-import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike, State, ChooseCardsPrompt, GameMessage, GameError, Card, PokemonCardList, ShuffleDeckPrompt } from '../../game';
@@ -59,7 +59,7 @@ Search your deck for up to 2 Basic Pokémon and put them onto your Bench. Then, 
             GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
             player.deck,
             { superType: SuperType.POKEMON, stage: Stage.BASIC },
-            { min: 0, max: maxCards, allowCancel: false }
+            { min: 0, max: maxCards, allowCancel: false, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck) }
           ), selectedCards => {
             cards = selectedCards || [];
         

@@ -1,4 +1,4 @@
-import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, PokemonCardList, Card, ChooseCardsPrompt, GameMessage, ShuffleDeckPrompt } from '../../game';
@@ -29,7 +29,7 @@ function* useCallForFamily(next: Function, store: StoreLike, state: State,
     GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
     player.deck,
     { superType: SuperType.POKEMON, stage: Stage.BASIC },
-    { min: 0, max: max, allowCancel: false, blocked }
+    { min: 0, max: max, allowCancel: false, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck, blocked) }
   ), selected => {
     cards = selected || [];
     next();

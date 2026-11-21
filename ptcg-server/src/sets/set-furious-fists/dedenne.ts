@@ -1,4 +1,4 @@
-import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
 import { StoreLike, State, ChooseCardsPrompt, PokemonCardList, Card, ShuffleDeckPrompt, StateUtils, GameMessage } from '../../game';
@@ -19,7 +19,7 @@ function* useEntrainment(next: Function, store: StoreLike, state: State,
     GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
     player.deck,
     { superType: SuperType.POKEMON, stage: Stage.BASIC },
-    { min: 0, max, allowCancel: true }
+    { min: 0, max, allowCancel: true, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck) }
   ), selected => {
     cards = selected || [];
     next();

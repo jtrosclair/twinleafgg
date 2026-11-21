@@ -1,4 +1,4 @@
-import { PlayerType, PowerType, StateUtils } from '../../game';
+import { PowerType, StateUtils } from '../../game';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CheckTableStateEffect } from '../../game/store/effects/check-effects';
@@ -44,27 +44,10 @@ export class Sudowoodo extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof CheckTableStateEffect) {
-      const cardList = StateUtils.findCardList(state, this);
-      const owner = StateUtils.findOwner(state, cardList);
-
-      let isOpponentSudowoodoInPlay = false;
-      owner.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card) => {
-        if (card === this) {
-          isOpponentSudowoodoInPlay = true;
-        }
-      });
-
-      if (!isOpponentSudowoodoInPlay) {
-        return state;
-      }
-
-      if (!IS_ABILITY_BLOCKED(store, state, owner, this)) {
-        effect.benchSizes = state.players.map((player, index) => {
-          if (player === owner) {
-            return effect.benchSizes[index];
-          }
-          return Math.min(effect.benchSizes[index], 4);
-        });
+      const owner = state.players.find(player => StateUtils.isPokemonInPlay(player, this));
+      if (owner && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        const opponent = StateUtils.getOpponent(state, owner);
+        effect.limitBench(state.players.indexOf(opponent), 4);
       }
     }
     return state;

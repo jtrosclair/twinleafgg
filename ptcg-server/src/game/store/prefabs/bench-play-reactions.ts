@@ -18,9 +18,22 @@ import { IS_ABILITY_BLOCKED, IS_POKEPOWER_BLOCKED } from './prefabs';
 import { IS_STADIUM_EFFECT_BLOCKED } from './stadium-effect';
 
 export function canPlacePokemon(store: StoreLike, state: State, player: Player, card: PokemonCard): boolean {
-  const check = new CheckPokemonPlacementEffect(player, card);
-  store.reduceEffect(state, check);
-  return !check.preventDefault;
+  return !getBlockedPokemonPlacements(store, state, player, [card]).has(card);
+}
+
+export function getBlockedPokemonPlacements(store: StoreLike, state: State, player: Player,
+  cards: readonly Card[]): ReadonlySet<PokemonCard> {
+  const candidates = cards.filter((card): card is PokemonCard => card instanceof PokemonCard);
+  const check = new CheckPokemonPlacementEffect(player, candidates);
+  if (candidates.length) store.reduceEffect(state, check);
+  return check.blocked;
+}
+
+export function getBlockedPokemonPlacementIndices(store: StoreLike, state: State, player: Player,
+  source: CardList, alreadyBlocked: readonly number[] = []): number[] {
+  const blocked = getBlockedPokemonPlacements(store, state, player, source.cards);
+  return blocked.size === 0 ? [...alreadyBlocked] : source.cards.flatMap((card, index) =>
+    alreadyBlocked.includes(index) || (card instanceof PokemonCard && blocked.has(card)) ? [index] : []);
 }
 
 /** Resolve triggers after the physical card and its continuous effects are in play. */
@@ -94,11 +107,13 @@ export function queueBenchStadiumCounters(store: StoreLike, state: State, effect
 export function benchPokemonFromZone(store: StoreLike, state: State, player: Player, source: CardList,
   cards: readonly Card[], targets: readonly PokemonCardList[],
   finishPlacementEffect?: (target: PokemonCardList) => void): void {
+  const blocked = getBlockedPokemonPlacements(store, state, player, cards);
   const placed: PokemonCardList[] = [];
   const completions: AfterBenchBasicPokemonEffect[] = [];
   cards.forEach((card, index) => {
     const target = targets[index];
     if ((source === player.hand && !(card instanceof PokemonCard)) || !source.cards.includes(card)
+      || (card instanceof PokemonCard && blocked.has(card))
       || !target || !player.bench.includes(target) || target.cards.length > 0) return;
 
     source.moveCardTo(card, target);

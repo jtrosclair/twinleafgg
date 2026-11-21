@@ -1,4 +1,4 @@
-import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { Card, CardType, ChooseCardsPrompt, GameMessage, PokemonCard, PokemonCardList, ShuffleDeckPrompt, Stage, State, StoreLike, SuperType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect } from '../../game/store/effects/game-effects';
@@ -17,7 +17,7 @@ function* useMultiply(next: Function, store: StoreLike, state: State,
     GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
     player.deck,
     { superType: SuperType.POKEMON, stage: Stage.BASIC, name: 'Weedle' },
-    { min: 0, max, allowCancel: true }
+    { min: 0, max, allowCancel: true, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck) }
   ), selected => {
     cards = selected || [];
     next();

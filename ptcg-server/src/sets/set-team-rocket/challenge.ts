@@ -1,4 +1,4 @@
-import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike, State, ChooseCardsPrompt, GameMessage, GameError, StateUtils, SelectOptionPrompt } from '../../game';
@@ -60,14 +60,14 @@ export class Challenge extends TrainerCard {
               GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
               player.deck,
               { superType: SuperType.POKEMON, stage: Stage.BASIC },
-              { min: 0, max: playerOpenSlots.length, allowCancel: false }
+              { min: 0, max: playerOpenSlots.length, allowCancel: false, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck) }
             ),
             new ChooseCardsPrompt(
               opponent,
               GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
               opponent.deck,
               { superType: SuperType.POKEMON, stage: Stage.BASIC },
-              { min: 0, max: opponentOpenSlots.length, allowCancel: false }
+              { min: 0, max: opponentOpenSlots.length, allowCancel: false, blocked: getBlockedPokemonPlacementIndices(store, state, opponent, opponent.deck) }
             )
           ], results => {
             const playerCards = results[0] || [];

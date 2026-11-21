@@ -1,4 +1,4 @@
-import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, EnergyType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
@@ -126,7 +126,7 @@ export class WeavileGX extends PokemonCard {
         GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
         player.deck,
         { superType: SuperType.POKEMON, stage: Stage.BASIC },
-        { min: 0, max: missingBenched, allowCancel: false }
+        { min: 0, max: missingBenched, allowCancel: false, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck) }
       ), selected => {
         cards = selected || [];
 

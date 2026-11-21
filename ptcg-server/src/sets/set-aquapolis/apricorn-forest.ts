@@ -1,4 +1,4 @@
-import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { StateUtils } from '../../game/store/state-utils';
@@ -68,7 +68,7 @@ export class ApricornForest extends TrainerCard {
                 GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
                 player.deck,
                 { superType: SuperType.POKEMON, stage: Stage.BASIC },
-                { min: 0, max: 1, allowCancel: false, blocked }
+                { min: 0, max: 1, allowCancel: false, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck, blocked) }
               ), selectedCards => {
                 cards = selectedCards || [];
 

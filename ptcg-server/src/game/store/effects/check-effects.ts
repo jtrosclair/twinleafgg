@@ -137,7 +137,9 @@ export class CheckPokemonPlacementEffect implements Effect {
   readonly type = CheckEffects.CHECK_POKEMON_PLACEMENT_EFFECT;
   public preventDefault = false;
 
-  constructor(public readonly player: Player, public readonly pokemon: PokemonCard) {}
+  readonly blocked = new Set<PokemonCard>();
+
+  constructor(public readonly player: Player, public readonly candidates: readonly PokemonCard[]) {}
 }
 
 export class CheckPokemonTypeEffect implements Effect {
@@ -222,11 +224,23 @@ export class CheckProvidedEnergyEffect implements Effect {
 export class CheckTableStateEffect implements Effect {
   readonly type: string = CheckEffects.CHECK_TABLE_STATE_EFFECT;
   public preventDefault = false;
-  public benchSizes: number[];
   public player!: Player;
+  private readonly limits: number[];
 
-  constructor(benchSizes: number[]) {
-    this.benchSizes = benchSizes;
+  constructor(private readonly expandedSizes: number[]) {
+    this.limits = expandedSizes.map(() => Infinity);
+  }
+
+  public get benchSizes(): number[] {
+    return this.expandedSizes.map((size, index) => Math.min(size, this.limits[index]));
+  }
+
+  public expandBench(index: number, size: number): void {
+    this.expandedSizes[index] = Math.max(this.expandedSizes[index], size);
+  }
+
+  public limitBench(index: number, size: number): void {
+    this.limits[index] = Math.min(this.limits[index], size);
   }
 }
 

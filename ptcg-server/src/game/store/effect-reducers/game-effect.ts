@@ -55,7 +55,7 @@ import { Attack } from '../card/pokemon-types';
 import { WaitPrompt } from '../prompts/wait-prompt';
 import { offerAttackCoinReflip } from '../prefabs/attack-coin-reflip';
 import { isLegacySmokescreenMarker, rollCoin } from '../prefabs/coin-flip-results';
-import { resolveBenchPlayReactions } from '../prefabs/bench-play-reactions';
+import { getBlockedPokemonPlacements, resolveBenchPlayReactions } from '../prefabs/bench-play-reactions';
 import { getWillCoinChoicePlayer, readChosenCoinSide, takeWillCoinChoice } from '../prefabs/will-coin-choice';
 import { AfterBenchBasicPokemonEffect, AfterPlayBasicFromHandEffect, CoinFlipEffect, CoinFlipSequenceEffect } from '../effects/play-card-effects';
 import { beginAttackDamageScope, cancelAttackDamageScope, finishAttackDamageScope, getAttackPayment, resolveAfterAttack, resolveAfterAttackDamage } from '../prefabs/attack-after-damage';
@@ -693,6 +693,13 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
       || !effect.payment.every(card => effect.cards?.includes(card) && source.cards.includes(card)))) {
       effect.preventDefault = true;
       return state;
+    }
+    if (benchOwner) {
+      const candidates = effect.cards ?? source.cards.slice(0, effect.count);
+      if (getBlockedPokemonPlacements(store, state, benchOwner, candidates).size > 0) {
+        effect.preventDefault = true;
+        return state;
+      }
     }
     const isPartialMove = effect.cards !== undefined || effect.count !== undefined;
 

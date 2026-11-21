@@ -16,6 +16,7 @@ import { CheckPokemonPlayedTurnEffect } from '../../game/store/effects/check-eff
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { EvolveEffect } from '../../game/store/effects/game-effects';
 import { Player } from '../../game';
+import { getBlockedPokemonPlacements } from '../../game/store/prefabs/bench-play-reactions';
 
 function isMatchingStage2(stage1: PokemonCard[], basic: PokemonCard, stage2: PokemonCard): boolean {
   for (const card of stage1) {
@@ -36,9 +37,9 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
   // We will discard this card after prompt confirmation
   effect.preventDefault = true;
 
-  const stage2 = player.hand.cards.filter(c => {
-    return c instanceof PokemonCard && c.stage === Stage.STAGE_2;
-  }) as PokemonCard[];
+  const prohibited = getBlockedPokemonPlacements(store, state, player, player.hand.cards);
+  const stage2 = player.hand.cards.filter((card): card is PokemonCard =>
+    card instanceof PokemonCard && card.stage === Stage.STAGE_2 && !prohibited.has(card));
 
   if (stage2.length === 0) {
     throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
@@ -94,7 +95,7 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
   const blocked2: number[] = [];
   player.hand.cards.forEach((c, index) => {
     if (c instanceof PokemonCard && c.stage === Stage.STAGE_2) {
-      if (!isMatchingStage2(stage1, pokemonCard, c)) {
+      if (prohibited.has(c) || !isMatchingStage2(stage1, pokemonCard, c)) {
         blocked2.push(index);
       }
     }
@@ -150,8 +151,9 @@ export class RareCandy extends TrainerCard {
         return false;
       }
 
+      const prohibited = getBlockedPokemonPlacements(store, state, player, player.hand.cards);
       const stage2 = player.hand.cards.filter(c => {
-        return c instanceof PokemonCard && c.stage === Stage.STAGE_2;
+        return c instanceof PokemonCard && c.stage === Stage.STAGE_2 && !prohibited.has(c);
       }) as PokemonCard[];
 
       if (stage2.length === 0) {

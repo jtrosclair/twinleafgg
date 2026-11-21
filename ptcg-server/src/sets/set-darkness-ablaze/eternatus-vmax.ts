@@ -1,12 +1,13 @@
 import { PokemonCard, pokemonHasCardType } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
+import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect } from '../../game/store/effects/game-effects';
-import { GameError, GameMessage, PlayerType, PowerType, StateUtils } from '../../game';
+import { CheckEvolveEffect, UsePowerEffect } from '../../game/store/effects/game-effects';
+import { GameError, GameMessage, Player, PowerType, StateUtils } from '../../game';
 import { CheckPokemonPlacementEffect, CheckPokemonTypeEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { PlayPokemonEffect, PlayPokemonFromDeckEffect, PlayPokemonFromDiscardEffect } from '../../game/store/effects/play-card-effects';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class EternatusVMAX extends PokemonCard {
@@ -42,117 +43,53 @@ export class EternatusVMAX extends PokemonCard {
 
   public readonly ETERNATUS_EXPANDED_BENCH = 'ETERNATUS_EXPANDED_BENCH';
 
+  private isDarkInPlay(store: StoreLike, state: State, slot: PokemonCardList): boolean {
+    const types = new CheckPokemonTypeEffect(slot);
+    store.reduceEffect(state, types);
+    return types.cardTypes.includes(CardType.DARK);
+  }
+
+  private eternalZoneApplies(store: StoreLike, state: State, player: Player): boolean {
+    return StateUtils.isPokemonInPlay(player, this) && !IS_ABILITY_BLOCKED(store, state, player, this)
+      && player.getPokemonInPlay().every(slot => this.isDarkInPlay(store, state, slot));
+  }
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof CheckPokemonPlacementEffect && !pokemonHasCardType(effect.pokemon, CardType.DARK)
-      && StateUtils.isPokemonInPlay(effect.player, this) && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
-      effect.preventDefault = effect.player.getPokemonInPlay().every(slot => {
-        const checkType = new CheckPokemonTypeEffect(slot);
-        store.reduceEffect(state, checkType);
-        return checkType.cardTypes.includes(CardType.DARK);
-      }) || effect.preventDefault;
-    }
-
-    // Eternal Zone
     if (effect instanceof CheckTableStateEffect) {
-      effect.benchSizes = state.players.map((player, index) => {
-        try {
-          const stub = new PowerEffect(player, {
-            name: 'test',
-            powerType: PowerType.ABILITY,
-            text: ''
-          }, this);
-          store.reduceEffect(state, stub);
-        } catch {
-          if (!player.marker.hasMarker(this.ETERNATUS_EXPANDED_BENCH, this)) {
-            player.marker.removeMarker(this.ETERNATUS_EXPANDED_BENCH, this);
-          }
-          return 5;
-        }
-
-        // checking if eternatus is in play for the player in question
-        let isEternInPlay = false;
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
-          const pokemon = cardList.getPokemonCard();
-          if (!!pokemon && pokemon.name === 'Eternatus VMAX' && pokemon.powers.map(p => p.name).includes(this.powers[0].name)) {
-            isEternInPlay = true;
-          }
-        });
-
-        // if eternatus isn't in play, just skip everything effectively
-        if (!isEternInPlay) {
-          if (!player.marker.hasMarker(this.ETERNATUS_EXPANDED_BENCH, this)) {
-            player.marker.removeMarker(this.ETERNATUS_EXPANDED_BENCH, this);
-          }
-          return 5;
-        }
-
-        // checking each pokemon for dark typing (must use CheckPokemonTypeEffect for pokemon with an added typing)
-        let darkPokemon = 0;
-        let pokemonInPlay = 1;
-
-        const activeType = new CheckPokemonTypeEffect(player.active);
-        store.reduceEffect(state, activeType);
-        if (activeType.cardTypes.includes(CardType.DARK)) {
-          darkPokemon++;
-        }
-
-        player.bench.forEach(benchSpot => {
-          if (benchSpot.cards.length > 0) {
-            pokemonInPlay++;
-            const benchedType = new CheckPokemonTypeEffect(benchSpot);
-            store.reduceEffect(state, benchedType);
-            if (benchedType.cardTypes.includes(CardType.DARK)) {
-              darkPokemon++;
-            }
-          }
-        });
-
-        // if all pokemon in play are dark types
-        if (darkPokemon === pokemonInPlay) {
-          // slaps on a marker to check played pokemon for dark typing later
+      state.players.forEach((player, index) => {
+        if (this.eternalZoneApplies(store, state, player)) {
           if (!player.marker.hasMarker(this.ETERNATUS_EXPANDED_BENCH, this)) {
             player.marker.addMarker(this.ETERNATUS_EXPANDED_BENCH, this);
           }
-          return 8;
+          effect.expandBench(index, 8);
         } else {
-          // removes the previous marker if this effect is removed
-          if (player.marker.hasMarker(this.ETERNATUS_EXPANDED_BENCH, this)) {
-            player.marker.removeMarker(this.ETERNATUS_EXPANDED_BENCH, this);
-          }
-          return 5;
+          player.marker.removeMarker(this.ETERNATUS_EXPANDED_BENCH, this);
         }
       });
     }
 
-    if (effect instanceof PlayPokemonEffect && effect.player.marker.hasMarker(this.ETERNATUS_EXPANDED_BENCH, this)) {
-      // trying to block non-dark types from being benched (this might still allow trainer to put in non-dark types)
-      if (effect.pokemonCard.cardType !== D) {
-        throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
+    if (effect instanceof CheckPokemonPlacementEffect) {
+      const prohibited = effect.candidates.filter(card => !pokemonHasCardType(card, CardType.DARK));
+      if (prohibited.length && this.eternalZoneApplies(store, state, effect.player)) {
+        prohibited.forEach(card => effect.blocked.add(card));
       }
     }
 
-    // Dread End
+    if (effect instanceof PlayPokemonEffect || effect instanceof PlayPokemonFromDeckEffect
+      || effect instanceof PlayPokemonFromDiscardEffect || effect instanceof CheckEvolveEffect) {
+      if (!pokemonHasCardType(effect.pokemonCard, CardType.DARK) && this.eternalZoneApplies(store, state, effect.player)) {
+        if (effect instanceof CheckEvolveEffect) effect.preventDefault = true;
+        else throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
+      }
+    }
+
+    if (effect instanceof UsePowerEffect && effect.power.useFromHandToBench
+      && !pokemonHasCardType(effect.card, CardType.DARK) && this.eternalZoneApplies(store, state, effect.player)) {
+      throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
+    }
+
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      let darksInPlay = 0;
-
-      const activeType = new CheckPokemonTypeEffect(player.active);
-      store.reduceEffect(state, activeType);
-      if (activeType.cardTypes.includes(CardType.DARK)) {
-        darksInPlay++;
-      }
-
-      player.bench.forEach(benchSpot => {
-        if (benchSpot.cards.length > 0) {
-          const benchedType = new CheckPokemonTypeEffect(benchSpot);
-          store.reduceEffect(state, benchedType);
-          if (benchedType.cardTypes.includes(CardType.DARK)) {
-            darksInPlay++;
-          }
-        }
-      });
-      effect.damage = 30 * darksInPlay;
+      effect.damage = 30 * effect.player.getPokemonInPlay().filter(slot => this.isDarkInPlay(store, state, slot)).length;
     }
 
     return state;

@@ -13,6 +13,7 @@ export class Bisharp extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom: string = 'Pawniard';
   public cardType: CardType = D;
+  public additionalCardTypes = [CardType.METAL];
   public hp: number = 100;
   public weakness = [{ type: F }];
   public resistance = [{ type: P, value: -20 }];

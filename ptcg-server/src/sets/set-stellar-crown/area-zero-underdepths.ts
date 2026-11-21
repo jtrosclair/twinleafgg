@@ -22,18 +22,10 @@ If a player no longer has any Tera Pokémon in play, that player discards Pokém
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof CheckTableStateEffect && StateUtils.getStadiumCard(state) === this) {
-      effect.benchSizes = state.players.map((player, index) => {
-        let teraPokemon = 0;
-        if (player.active?.getPokemonCard()?.tags.includes(CardTag.POKEMON_TERA)) {
-          teraPokemon++;
+      state.players.forEach((player, index) => {
+        if (player.getPokemonInPlay().some(slot => slot.getPokemonCard()?.tags.includes(CardTag.POKEMON_TERA))) {
+          effect.expandBench(index, 8);
         }
-
-        player.bench.forEach(benchSpot => {
-          if (benchSpot.getPokemonCard()?.tags.includes(CardTag.POKEMON_TERA)) {
-            teraPokemon++;
-          }
-        });
-        return teraPokemon >= 1 ? 8 : 5;
       });
     }
 

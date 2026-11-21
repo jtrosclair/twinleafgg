@@ -1,4 +1,4 @@
-import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { CardTag, Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike, State, ChooseCardsPrompt, GameMessage, GameError, Card, PokemonCardList, ShuffleDeckPrompt } from '../../game';
@@ -58,7 +58,7 @@ export class HopsBag extends TrainerCard {
         GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
         player.deck,
         { superType: SuperType.POKEMON, stage: Stage.BASIC },
-        { min: 0, max: maxCards, allowCancel: false, blocked: blocked }
+        { min: 0, max: maxCards, allowCancel: false, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck, blocked) }
       ), selectedCards => {
         cards = selectedCards || [];
 

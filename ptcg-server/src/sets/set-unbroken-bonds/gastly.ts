@@ -1,4 +1,4 @@
-import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { StoreLike, State, GameMessage, ChooseCardsPrompt, PowerType, GameLog } from '../../game';
@@ -64,7 +64,7 @@ export class Gastly extends PokemonCard {
             GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
             player.deck,
             { superType: SuperType.POKEMON, name: 'Haunter' },
-            { min: 0, max: Math.min(2, maxPokemons), allowCancel: false }
+            { min: 0, max: Math.min(2, maxPokemons), allowCancel: false, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck) }
           ), selectedCards => {
             const cards = selectedCards || [];
     

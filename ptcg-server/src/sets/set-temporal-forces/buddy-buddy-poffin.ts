@@ -1,4 +1,4 @@
-import { playBenchPokemonBatchFromDeck } from '../../game/store/prefabs/bench-play-reactions';
+import { getBlockedPokemonPlacementIndices, playBenchPokemonBatchFromDeck } from '../../game/store/prefabs/bench-play-reactions';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { StoreLike, State, ChooseCardsPrompt, GameMessage, GameError, ShuffleDeckPrompt, PokemonCard } from '../../game';
@@ -50,7 +50,8 @@ export class BuddyBuddyPoffin extends TrainerCard {
         GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
         player.deck,
         { superType: SuperType.POKEMON, stage: Stage.BASIC },
-        { min: 0, max: maxPokemons, allowCancel: false, blocked, maxPokemons }
+        { min: 0, max: maxPokemons, allowCancel: false, maxPokemons,
+          blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck, blocked) }
       ), selectedCards => {
         const cards = selectedCards || [];
 

@@ -2,7 +2,9 @@ import { CardTarget, ChooseCardsPrompt, ChoosePokemonPrompt, GameError, GameMess
 import { SuperType, TrainerType } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { DEVOLVE_POKEMON, SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
+import { DEVOLVE_POKEMON } from '../../game/store/prefabs/prefabs';
+import { checkBenchSize } from '../../game/store/effect-reducers/check-effect';
+import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
 import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
@@ -73,7 +75,11 @@ export class DevolutionSprayZ extends TrainerCard {
                   for (let i = 0; i < devolvesNeeded; i++) {
                     DEVOLVE_POKEMON(store, state, results[0], effect.player.deck);
                   }
-                  SHUFFLE_DECK(store, state, player);
+                  store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
+                    player.deck.applyOrder(order);
+                    // Reconcile the limit before Knock Outs from the lower HP.
+                    checkBenchSize(store, state);
+                  });
                 }
 
                 return state;

@@ -3,10 +3,9 @@ import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect } from '../../game/store/effects/game-effects';
-import { PlayerType, PowerType, StateUtils } from '../../game';
+import { PowerType, StateUtils } from '../../game';
 import { CheckTableStateEffect } from '../../game/store/effects/check-effects';
-import { ADD_POISON_TO_PLAYER_ACTIVE, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_POISON_TO_PLAYER_ACTIVE, IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Glimmoraex extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -41,41 +40,13 @@ export class Glimmoraex extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Dust Field
     if (effect instanceof CheckTableStateEffect) {
-      effect.benchSizes = state.players.map((player, index) => {
-        // gotta check the ability
-        try {
-          const stub = new PowerEffect(player, {
-            name: 'test',
-            powerType: PowerType.ABILITY,
-            text: ''
-          }, this);
-          store.reduceEffect(state, stub);
-        } catch {
-          return 5;
-        }
-
-        // checking if glimmora is the opponent's active
-        let isGlimmoraInPlay = false;
-        const opponent = StateUtils.getOpponent(state, player);
-        opponent.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
-          const pokemon = cardList.getPokemonCard();
-          if (!!pokemon && cardList === opponent.active && pokemon.name === 'Glimmora ex' && pokemon.powers.map(p => p.name).includes(this.powers[0].name)) {
-            isGlimmoraInPlay = true;
-          }
-        });
-
-        // if glim is the opponent's active, reduce the bench size
-        if (isGlimmoraInPlay) {
-          return 3;
-        }
-        // if glim isn't the opponent's active, skip everything
-        else {
-          return 5;
-        }
-      });
+      const owner = state.players.find(player => player.active.getPokemonCard() === this);
+      if (owner && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        const opponent = StateUtils.getOpponent(state, owner);
+        effect.limitBench(state.players.indexOf(opponent), 3);
+      }
     }
 
-    // Poisonous Gem
     if (WAS_ATTACK_USED(effect, 0, this)){
       const opponent = effect.opponent;
 

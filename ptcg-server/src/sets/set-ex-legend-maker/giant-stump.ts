@@ -28,7 +28,7 @@ export class GiantStump extends TrainerCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof CheckTableStateEffect && StateUtils.getStadiumCard(state) === this) {
-      effect.benchSizes = [3, 3];
+      state.players.forEach((_, index) => effect.limitBench(index, 3));
     }
 
     if (effect instanceof UseStadiumEffect && StateUtils.getStadiumCard(state) === this) {

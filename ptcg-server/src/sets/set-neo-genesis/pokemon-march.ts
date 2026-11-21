@@ -1,4 +1,4 @@
-import { playBenchPokemonBatchFromDeck } from '../../game/store/prefabs/bench-play-reactions';
+import { playBenchPokemonBatchFromDeck, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import {
   Player,
   StoreLike,
@@ -51,7 +51,7 @@ function maybeSearchBasicToBench(
         GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
         player.deck,
         { superType: SuperType.POKEMON, stage: Stage.BASIC },
-        { min: 0, max: 1, allowCancel: false },
+        { min: 0, max: 1, allowCancel: false, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck) },
       ),
       (selected) => {
         const cards = selected || [];

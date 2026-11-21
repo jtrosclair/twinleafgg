@@ -1,4 +1,4 @@
-import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { Card, ChooseCardsPrompt, GameError, GameMessage, PokemonCard, PokemonCardList, ShuffleDeckPrompt, State, StoreLike } from '../../game';
 import { CardTag, Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
@@ -77,7 +77,7 @@ export class Gloria extends TrainerCard {
           GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
           player.deck,
           { superType: SuperType.POKEMON, stage: Stage.BASIC },
-          { min: 0, max: maxCards, allowCancel: false }
+          { min: 0, max: maxCards, allowCancel: false, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck) }
         ), selectedCards => {
           cards = selectedCards || [];
 

@@ -1,4 +1,4 @@
-import { canPlacePokemon, playBenchPokemonBatchFromDeck, resolveBenchPlayReactions } from './bench-play-reactions';
+import { canPlacePokemon, getBlockedPokemonPlacementIndices, playBenchPokemonBatchFromDeck, resolveBenchPlayReactions } from './bench-play-reactions';
 import { isPrizeOwnerTurn, takePrizeTo } from './prize-reactions';
 export { TAKE_SPECIFIC_PRIZES, TAKE_X_PRIZES, type TakeSpecificPrizesOptions, type TakeXPrizesOptions } from './prize-reactions';
 import { rollCoin } from './coin-flip-results';
@@ -106,7 +106,8 @@ export function SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store: StoreLike
   filter.superType = SuperType.POKEMON;
 
   return store.prompt(state, new ChooseCardsPrompt(
-    player, GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH, player.deck, filter, options,
+    player, GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH, player.deck, filter,
+    { ...options, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck, options.blocked) },
   ), selected => {
     const cards = selected || [];
     playBenchPokemonBatchFromDeck(store, state, player, cards, slots);

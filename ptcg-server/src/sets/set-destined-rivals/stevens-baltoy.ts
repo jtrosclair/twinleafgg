@@ -1,4 +1,4 @@
-import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType } from '../../game/store/card/card-types';
 import { StoreLike, State, GameMessage, ChooseCardsPrompt } from '../../game';
@@ -49,9 +49,9 @@ export class StevensBaltoy extends PokemonCard {
         { superType: SuperType.POKEMON, stage: Stage.BASIC },
         {
           min: 0, max: Math.min(slots.length, 2), allowCancel: false,
-          blocked: player.deck.cards
+          blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck, player.deck.cards
             .filter(c => !c.tags.includes(CardTag.STEVENS))
-            .map(c => player.deck.cards.indexOf(c))
+            .map(c => player.deck.cards.indexOf(c)))
         }
       ), selected => {
         const cards = selected || [];

@@ -1,4 +1,4 @@
-import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { Card, ChooseCardsPrompt, PokemonCard, PokemonCardList, ShuffleDeckPrompt } from '../../game';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
@@ -37,7 +37,7 @@ function* useStadium(next: Function, store: StoreLike, state: State, effect: Use
       GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
       player.deck,
       { superType: SuperType.POKEMON, stage: Stage.BASIC },
-      { min: 0, max: 1, allowCancel: false, blocked }
+      { min: 0, max: 1, allowCancel: false, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck, blocked) }
     ), selectedCards => {
       cards = selectedCards || [];
 

@@ -1,4 +1,4 @@
-import { benchPokemonFromZone } from '../../game/store/prefabs/bench-play-reactions';
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardTag, CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { StoreLike, State, GameMessage, ChooseCardsPrompt, PowerType, GameLog, StateUtils } from '../../game';
@@ -66,7 +66,7 @@ export class TeamRocketsKoffing extends PokemonCard {
             GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
             player.deck,
             { superType: SuperType.POKEMON },
-            { min: 0, max: Math.min(2, maxPokemons), allowCancel: false, blocked }
+            { min: 0, max: Math.min(2, maxPokemons), allowCancel: false, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck, blocked) }
           ), selectedCards => {
             const cards = selectedCards || [];
 

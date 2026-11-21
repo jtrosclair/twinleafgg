@@ -76,32 +76,10 @@ export class ParallelCity extends TrainerCard {
     }
     
     if (effect instanceof CheckTableStateEffect && StateUtils.getStadiumCard(state) === this) {
-      const stadiumCardList = StateUtils.findCardList(state, this);
-      const owner = StateUtils.findOwner(state, stadiumCardList);
-      
-      const benchSizes = [0, 0];
-      if (stadiumCardList.stadiumDirection === StadiumDirection.UP) {
-        state.players.forEach((p, index) => {
-          if (p === owner) {
-            benchSizes[index] = 5;
-          } else {
-            benchSizes[index] = 3;
-          }
-        });
-        
-        effect.benchSizes = benchSizes;
-      } 
-      if (stadiumCardList.stadiumDirection === StadiumDirection.DOWN) {
-        state.players.forEach((p, index) => {
-          if (p === owner) {
-            benchSizes[index] = 3;
-          } else {
-            benchSizes[index] = 5;
-          }
-        });
-        
-        effect.benchSizes = benchSizes;
-      }
+      const stadium = StateUtils.findCardList(state, this);
+      const owner = StateUtils.findOwner(state, stadium);
+      const limited = stadium.stadiumDirection === StadiumDirection.UP ? StateUtils.getOpponent(state, owner) : owner;
+      effect.limitBench(state.players.indexOf(limited), 3);
     }
 
     if (effect instanceof DealDamageEffect && StateUtils.getStadiumCard(state) === this) {

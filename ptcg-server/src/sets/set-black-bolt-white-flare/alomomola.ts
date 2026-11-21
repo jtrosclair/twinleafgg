@@ -8,6 +8,7 @@ import { ChooseCardsPrompt, GameError, GameMessage } from '../../game';
 
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { PlayPokemonFromDiscardEffect } from '../../game/store/effects/play-card-effects';
+import { getBlockedPokemonPlacements } from '../../game/store/prefabs/bench-play-reactions';
 import { ABILITY_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Alomomola extends PokemonCard {
@@ -62,8 +63,9 @@ export class Alomomola extends PokemonCard {
         throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }
 
+      const prohibited = getBlockedPokemonPlacements(store, state, player, player.discard.cards);
       const blocked = player.discard.cards.reduce((acc, c, index) => {
-        if (!(c instanceof PokemonCard && c.stage === Stage.BASIC && c.hp <= 70)) {
+        if (!(c instanceof PokemonCard && c.stage === Stage.BASIC && c.hp <= 70 && !prohibited.has(c))) {
           acc.push(index);
         }
         return acc;
