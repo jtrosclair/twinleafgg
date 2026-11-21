@@ -1,7 +1,7 @@
 import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { PowerType, State, StateUtils, StoreLike } from '../../game';
-import { DealDamageEffect } from '../../game/store/effects/attack-effects';
+import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { IS_ABILITY_BLOCKED, NEXT_TURN_ATTACK_BONUS } from '../../game/store/prefabs/prefabs';
 
@@ -39,15 +39,11 @@ export class MegaHeatranex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // High Density Armor
-    if (effect instanceof DealDamageEffect && effect.target.getPokemonCard() === this) {
-      const targetPlayer = StateUtils.findOwner(state, effect.target);
-
-      if (IS_ABILITY_BLOCKED(store, state, targetPlayer, this)) {
-        return state;
-      }
-
-      if (effect.target.damage === 0) {
-        effect.damage = Math.max(0, effect.damage - 60);
+    if (effect instanceof PutDamageEffect && effect.target.getPokemonCard() === this && effect.target.damage === 0) {
+      const owner = StateUtils.findOwner(state, effect.target);
+      if (effect.player !== owner && effect.source.getPokemonCard()
+        && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        effect.reduceDamageAfterWeakness(60, this.fullName);
       }
     }
 

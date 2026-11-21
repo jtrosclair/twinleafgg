@@ -6317,3 +6317,48 @@ High Density Armor gives 60 damage. Lebanne heals the correct 150 on
 heads and 30 on tails. The eight Japanese Energy identities already
 carry their matching English MEE 9–16 aliases.
 [Mega Heatran ex and Lebanne promo guide](https://www.pokemon-card.com/info/005705.html)
+
+## Gameplay re-audit, batch 106
+
+Mega Heatran ex's High Density Armor applies after Weakness and
+Resistance, on opposing attack damage while it has full HP. Brave Wing
+now deals 60 damage. Gigantic Press deals 140 on the first attack and
+280 on the next. The same defensive timing applies to both Kakuna
+identities and respects Shred for Armarouge ex. Sacred Charm checks the
+attacker’s current Abilities and the defender’s Tool suppression.
+The official Mega Kangaskhan and Watchtower case deals the full 200.
+[Mega Heatran ex promo guide](https://www.pokemon-card.com/info/005705.html)
+[Kakuna](https://www.pokemon-card.com/card-search/details.php/card/50086)
+[Armarouge ex](https://asia.pokemon-card.com/my/card-search/detail/10704/)
+[Sacred Charm](https://asia.pokemon-card.com/sg/card-search/detail/22202/)
+[Sacred Charm and Watchtower ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%81%9B%E3%81%84%E3%81%AA%E3%82%8B%E3%81%8A%E3%81%BE%E3%82%82%E3%82%8A&regulation_faq_main_item1=all)
+
+Drednaw evaluates its 200-damage threshold after Weakness, Resistance
+and damage modifiers. The official Wild Impact and Rigid Band example
+deals 190. Trinity Nova with Double Turbo Energy deals 180. Rigid Band
+runs once per physical Tool, with both bands still contributing on
+Revavroom ex. Bastiodon checks actual provided Energy and respects
+damage bypass. Metal Block sees the actual evolved attacker, including
+Benched Alakazam. Guard Press and Shell Press remain on the Pokémon that
+used them, including a Memory Helix copy. Legacy marker states still
+resolve.
+[Drednaw and Rigid Band rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%AB%E3%82%B8%E3%83%AA%E3%82%AC%E3%83%A1&regulation_faq_main_item1=all)
+[Bastiodon](https://www.pokemon-card.com/card-search/details.php/card/50279)
+[Bronzong](https://www.pokemon-card.com/card-search/details.php/card/50281)
+[Shelgon](https://asia.pokemon-card.com/my/card-search/detail/17960/)
+[Clamperl](https://asia.pokemon-card.com/sg/card-search/detail/19603/)
+
+Lebanne heals 150 on heads and 30 on tails. The eight registered
+anniversary Energy cards retain their Japanese identities and English
+`MEE 9–16` artwork aliases. The deck-list import endpoint currently
+normalizes all eight numbered English lines to the corresponding
+ordinary SVE Energy. Exact-print deck import remains open under
+`786a7e7fc`.
+
+All 27 focused cases passed. The preceding engine failed 13 of them.
+All 11,848 engine checks, 130 focused checks with the in-progress WebView
+changes, and 33 API checks passed. The 559 comparable saved boards
+matched both before and after serialization, and all 5,486 sampled
+opening actions matched. The production package passed build attestation,
+all ten mouse and touch prompt checks, and all 211 client checks. Eight
+recorded puzzle solutions won on both replays.

@@ -1,12 +1,10 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { GamePhase, PowerType, StoreLike, State, StateUtils } from '../../game';
-import { Player } from '../../game/store/state/player';
 import { Effect } from '../../game/store/effects/effect';
-import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
+import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
-import { PlayerType } from '../../game/store/actions/play-card-action';
 
 export class Bastiodon extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -37,53 +35,18 @@ export class Bastiodon extends PokemonCard {
   public name: string = 'Bastiodon';
   public fullName: string = 'Bastiodon M5';
 
-  private bastiodonProtects(
-    store: StoreLike,
-    state: State,
-    defenderOwner: Player,
-    source: Player['active']
-  ): boolean {
-    let hasBastiodon = false;
-    const defenderPlayerType = state.players[0] === defenderOwner ? PlayerType.BOTTOM_PLAYER : PlayerType.TOP_PLAYER;
-    defenderOwner.forEachPokemon(defenderPlayerType, (cardList, card) => {
-      if (card instanceof Bastiodon && cardList !== defenderOwner.active) {
-        if (!IS_ABILITY_BLOCKED(store, state, defenderOwner, card)) {
-          hasBastiodon = true;
-        }
-      }
-    });
-    if (!hasBastiodon) {
-      return false;
-    }
-    const attackerOwner = StateUtils.findOwner(state, source);
-    const checkEnergy = new CheckProvidedEnergyEffect(attackerOwner, source);
-    store.reduceEffect(state, checkEnergy);
-    const energyCount = checkEnergy.energyMap.reduce((sum, em) => sum + em.provides.length, 0);
-    return energyCount <= 2;
-  }
-
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Hammer In has no attack effect. This reducer contains only Ancient
-    // Bulwark, which is not acquired when another Pokemon copies the attack.
-    if (!(this instanceof Bastiodon)) return state;
-    if (effect instanceof DealDamageEffect && state.phase === GamePhase.ATTACK) {
-      const defenderOwner = StateUtils.findOwner(state, effect.target);
-      const attackerOwner = StateUtils.findOwner(state, effect.source);
-      if (defenderOwner !== attackerOwner
-        && attackerOwner === StateUtils.getOpponent(state, defenderOwner)
-        && this.bastiodonProtects(store, state, defenderOwner, effect.source)) {
-        effect.damage = 0;
-      }
-    }
-    if (effect instanceof PutDamageEffect && state.phase === GamePhase.ATTACK) {
-      const defenderOwner = StateUtils.findOwner(state, effect.target);
-      const attackerOwner = StateUtils.findOwner(state, effect.source);
-      if (defenderOwner !== attackerOwner
-        && attackerOwner === StateUtils.getOpponent(state, defenderOwner)
-        && this.bastiodonProtects(store, state, defenderOwner, effect.source)) {
-        effect.preventDefault = true;
-      }
-    }
+    if (!(effect instanceof PutDamageEffect) || effect.ignoresDefendingDamageEffects
+      || state.phase !== GamePhase.ATTACK || !(this instanceof Bastiodon)) return state;
+
+    const owner = StateUtils.findOwner(state, effect.target);
+    if (owner === effect.player || !owner.bench.some(slot => slot.getPokemonCard() === this)
+      || !effect.source.getPokemonCard() || IS_ABILITY_BLOCKED(store, state, owner, this)) return state;
+
+    const checkEnergy = new CheckProvidedEnergyEffect(effect.player, effect.source);
+    store.reduceEffect(state, checkEnergy);
+    const energy = checkEnergy.energyMap.reduce((sum, entry) => sum + StateUtils.getProvidesUnitCount(entry.provides), 0);
+    if (energy <= 2) effect.preventDefault = true;
     return state;
   }
 }

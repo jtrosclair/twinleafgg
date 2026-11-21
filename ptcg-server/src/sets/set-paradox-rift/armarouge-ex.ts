@@ -1,12 +1,11 @@
 import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State, PowerType } from '../../game';
+import { StoreLike, State, StateUtils, PowerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { PowerEffect } from '../../game/store/effects/game-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Armarougeex extends PokemonCard implements CopiedAttackOwnershipContract {
 
@@ -54,24 +53,14 @@ export class Armarougeex extends PokemonCard implements CopiedAttackOwnershipCon
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Crimson Armor
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)) {
-      const player = effect.player;
-
-      // i love checking for ability lock woooo
-      try {
-        const powerEffect = new PowerEffect(player, this.powers[0], this);
-        store.reduceEffect(state, powerEffect);
-      } catch {
-        return state;
-      }
-
-      // checking damage (it having no damage should confirm that this has full hp, no matter what its hp is set to)
-      if (effect.target.damage === 0) {
-        effect.damage -= 80;
+    if (effect instanceof PutDamageEffect && effect.target.getPokemonCard() === this && effect.target.damage === 0) {
+      const owner = StateUtils.findOwner(state, effect.target);
+      if (effect.player !== owner && effect.source.getPokemonCard()
+        && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        effect.reduceDamageAfterWeakness(80, this.fullName);
       }
     }
 
-    // Scorching Bazooka
     return Armarougeex.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
   }
 

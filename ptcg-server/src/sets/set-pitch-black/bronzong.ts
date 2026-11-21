@@ -1,8 +1,8 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { GamePhase, PlayerType, State, StateUtils, StoreLike } from '../../game';
+import { PlayerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
+import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
@@ -40,23 +40,15 @@ export class Bronzong extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-      const opp = StateUtils.getOpponent(state, player);
-
-      player.active.marker.addMarker(this.METAL_BLOCK_MARKER, this);
-      opp.marker.addMarker(this.CLEAR_METAL_BLOCK_MARKER, this);
+      effect.source.damageReductionNextTurn = 100;
+      effect.source.damageReductionNextTurnFilter = { sourceIsEvolution: true };
     }
 
-    if ((effect instanceof DealDamageEffect || effect instanceof PutDamageEffect)
-      && state.phase === GamePhase.ATTACK
-      && effect.target.marker.hasMarker(this.METAL_BLOCK_MARKER, this)) {
-      const defenderOwner = StateUtils.findOwner(state, effect.target);
-      if (effect.player === defenderOwner) {
-        return state;
-      }
-      const source = effect.source.getPokemonCard();
-      if (source && source.stage !== Stage.BASIC && effect.damage > 0) {
-        effect.damage = Math.max(0, effect.damage - 100);
+    // Legacy saves stored this effect as a marker.
+    if (effect instanceof PutDamageEffect && effect.target.marker.hasMarker(this.METAL_BLOCK_MARKER, this)
+      && StateUtils.isEvolutionPokemon(effect.source)) {
+      if (effect.player !== StateUtils.findOwner(state, effect.target)) {
+        effect.reduceDamageAfterWeakness(100, this.fullName);
       }
     }
 

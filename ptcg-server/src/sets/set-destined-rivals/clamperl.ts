@@ -1,9 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { StoreLike, State } from '../../game';
+import { StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { DealDamageEffect } from '../../game/store/effects/attack-effects';
+import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 
 export class Clamperl extends PokemonCard {
@@ -34,13 +34,15 @@ export class Clamperl extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Shell Press
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const opponent = effect.opponent;
-
-      opponent.marker.addMarker(this.SHELL_PRESS_MARKER, this);
+      effect.source.damageReductionNextTurn = 10;
     }
 
-    if (effect instanceof DealDamageEffect && effect.player.marker.hasMarker(this.SHELL_PRESS_MARKER, this)) {
-      if (effect.target.getPokemonCard() === this) { effect.damage -= 10; }
+    // Legacy saves stored this effect as a marker.
+    if (effect instanceof PutDamageEffect && effect.target.getPokemonCard() === this
+      && effect.player.marker.hasMarker(this.SHELL_PRESS_MARKER, this)) {
+      if (effect.player !== StateUtils.findOwner(state, effect.target)) {
+        effect.reduceDamageAfterWeakness(10, this.fullName);
+      }
     }
 
     if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.SHELL_PRESS_MARKER, this)) {

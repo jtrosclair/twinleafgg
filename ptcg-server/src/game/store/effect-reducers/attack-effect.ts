@@ -22,7 +22,7 @@ import { getCardTarget } from '../../../simple-bot/simple-tactics/simple-tactics
 import { EffectOfAttackEffect } from '../effects/effect-of-attack-effects';
 import { GameStatsTracker } from '../game-stats-tracker';
 import { CheckHpEffect, CheckProvidedEnergyEffect } from '../effects/check-effects';
-import { CardTag, CardType, Stage } from '../card/card-types';
+import { CardTag, CardType } from '../card/card-types';
 import { COIN_FLIP_PROMPT, IS_ABILITY_BLOCKED } from '../prefabs/prefabs';
 import { scheduleEffectKnockOut } from './check-effect';
 import { attackDamagePositions, attackEffectKnockOuts } from '../state/pokemon-card-list';
@@ -124,9 +124,9 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
 
     // Apply damage reduction for "during opponent's next turn" effects
     const reductionFilter = target.damageReductionNextTurnFilter;
-    const attackerStage = effect.player.active.getPokemonCard()?.stage;
+    const attackerStage = effect.source.getPokemonCard()?.stage;
     if (!ignoreDefendingDamageEffects && target.damageReductionNextTurn > 0
-      && (!reductionFilter?.sourceIsEvolution || attackerStage !== Stage.BASIC)
+      && (!reductionFilter?.sourceIsEvolution || StateUtils.isEvolutionPokemon(effect.source))
       && (reductionFilter?.sourceStage === undefined || attackerStage === reductionFilter.sourceStage)) {
       effect.damage = Math.max(0, effect.damage - target.damageReductionNextTurn);
     }
@@ -135,6 +135,12 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
       && target.defendingPokemonExtraDamageAttackerId === effect.player.id) {
       effect.damage += target.defendingPokemonExtraDamageNextTurn;
     }
+    if (!ignoreDefendingDamageEffects && effect.preventDamageAtOrAbove !== undefined
+      && effect.damage >= effect.preventDamageAtOrAbove) {
+      effect.preventDefault = true;
+      return state;
+    }
+
     if (canFlipToPreventDamage(store, state, effect, targetOwner)) {
       const prevent = () => {
         effect.preventDefault = true;

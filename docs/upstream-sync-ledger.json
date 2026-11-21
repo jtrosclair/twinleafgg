@@ -372,8 +372,8 @@
       "sha": "786a7e7fce17fcf8f9e19765081751cf74d586dc",
       "date": "2026-10-17",
       "subject": "add(cards): Mega Heatran ex, Lebanne, 30C Energy",
-      "status": "deferred",
-      "notes": "Includes 30C Energy metadata changes plus Mega Evolution promo cards; preserve all print aliases and test individually."
+      "status": "partial",
+      "notes": "Includes 30C Energy metadata changes plus Mega Evolution promo cards; preserve all print aliases and test individually. Batch 106 verifies Mega Heatran ex and Lebanne. High Density Armor now applies after Weakness, consecutive Gigantic Press gives 140 and 280 damage, and Lebanne heals 150 or 30 on the printed sides. Both promos are registered. All eight M6a Energy entries retain their English MEE 9–16 artwork aliases. The deck-list API still normalizes those numbered English entries to regular SVE Energy."
     },
     {
       "sha": "928d9b22862eb6649dfcf50ed69830c52d1d2a5f",

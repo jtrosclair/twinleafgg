@@ -27,31 +27,13 @@ export class RigidBand extends TrainerCard {
   public text: string = 'The Stage 1 Pokémon this card is attached to takes 30 less damage from attacks from your opponent\'s Pokémon (after applying Weakness and Resistance).';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof PutDamageEffect && effect.target.tools.includes(this)) {
-      const sourceCard = effect.target.getPokemonCard();
-
-      if (IS_TOOL_BLOCKED(store, state, effect.player, this)) { return state; }
-
-      if (sourceCard?.stage !== Stage.STAGE_1) {
-        return state;
+    if (effect instanceof PutDamageEffect && effect.target.tools.includes(this)
+      && effect.target.getPokemonCard()?.stage === Stage.STAGE_1 && state.phase === GamePhase.ATTACK) {
+      const owner = StateUtils.findOwner(state, effect.target);
+      if (effect.player !== owner && effect.source.getPokemonCard() && !IS_TOOL_BLOCKED(store, state, owner, this)) {
+        effect.reduceDamageAfterWeakness(30, this.fullName + ':' + this.id);
       }
-
-      // It's not an attack
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-
-      const player = StateUtils.findOwner(state, effect.target);
-
-      // Check if damage target is owned by this card's owner 
-      const targetPlayer = StateUtils.findOwner(state, effect.target);
-      if (targetPlayer === player) {
-        effect.reduceDamage(30);
-      }
-
-      return state;
     }
     return state;
   }
-
 }

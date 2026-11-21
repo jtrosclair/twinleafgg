@@ -87,6 +87,7 @@ export class PutDamageEffect extends AbstractAttackEffect implements Effect {
   public damagePreventionCoin?: { source: PokemonCard; requiredEnergy?: CardType };
   public surviveOnTenHPReason: undefined | string = undefined;
   public weaknessApplied: boolean = false;
+  public preventDamageAtOrAbove?: number;
   public damageBonusAfterWeakness = 0;
   public attackDamageReductionBeforeWeakness = 0;
 

@@ -3,7 +3,7 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils, PlayerType } from '../../game';
 
 import { Effect } from '../../game/store/effects/effect';
-import { DealDamageEffect } from '../../game/store/effects/attack-effects';
+import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
@@ -42,16 +42,14 @@ export class Shelgon extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      player.active.marker.addMarker(this.GUARD_PRESS, this);
-      opponent.marker.addMarker(this.CLEAR_GUARD_PRESS, this);
+      effect.source.damageReductionNextTurn = 30;
     }
 
-    if (effect instanceof DealDamageEffect && effect.target.marker.hasMarker(this.GUARD_PRESS)) {
-      effect.damage -= 30;
-      return state;
+    // Legacy saves stored this effect as a marker.
+    if (effect instanceof PutDamageEffect && effect.target.marker.hasMarker(this.GUARD_PRESS, this)) {
+      if (effect.player !== StateUtils.findOwner(state, effect.target)) {
+        effect.reduceDamageAfterWeakness(30, this.fullName);
+      }
     }
 
     if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.CLEAR_GUARD_PRESS, this)) {
