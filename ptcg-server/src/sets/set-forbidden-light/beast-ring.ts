@@ -1,8 +1,10 @@
-import { AttachEnergyPrompt, CardTarget, GameError, GameMessage, PlayerType, SlotType, StateUtils } from '../../game';
+import { AttachEnergyPrompt, CardTarget, EnergyCard, GameError, GameMessage, PlayerType, SlotType, StateUtils } from '../../game';
 import { CardTag, EnergyType, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
-import { TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { SHUFFLE_DECK } from '../../game/store/prefabs/prefabs';
+import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 
@@ -22,57 +24,36 @@ export class BeastRing extends TrainerCard {
 Search your deck for up to 2 basic Energy cards and attach them to 1 of your Ultra Beasts. Then, shuffle your deck.`;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    if (!WAS_TRAINER_USED(effect, this)) return state;
 
-    if (effect instanceof TrainerEffect && effect.trainerCard === this) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      if (opponent.getPrizeLeft() !== 3 && opponent.getPrizeLeft() !== 4) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-
-      effect.preventDefault = true;
-
-      let ultraBeastInPlay = false;
-
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (list, card) => {
-        if (card.tags.includes(CardTag.ULTRA_BEAST)) {
-          ultraBeastInPlay = true;
-        }
-      });
-
-      if (!ultraBeastInPlay) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-
-      const blocked2: CardTarget[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (list, card, target) => {
-        if (!card.tags.includes(CardTag.ULTRA_BEAST)) {
-          blocked2.push(target);
-        }
-      });
-
-      store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_CARDS,
-        player.deck,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.ACTIVE, SlotType.BENCH],
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
-        { allowCancel: false, min: 0, max: 2, blockedTo: blocked2, sameTarget: true },
-      ), transfers => {
-        transfers = transfers || [];
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          player.deck.moveCardTo(transfer.card, target);
-        }
-
-
-
-        return state;
-      });
+    const { player } = effect;
+    const opponentPrizes = StateUtils.getOpponent(state, player).getPrizeLeft();
+    if ((opponentPrizes !== 3 && opponentPrizes !== 4) || player.deck.cards.length === 0) {
+      throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
     }
 
-    return state;
+    let hasUltraBeast = false;
+    const blockedTo: CardTarget[] = [];
+    player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (_slot, card, target) => {
+      if (card.tags.includes(CardTag.ULTRA_BEAST)) hasUltraBeast = true;
+      else blockedTo.push(target);
+    });
+    if (!hasUltraBeast) throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
+
+    return store.prompt(state, new AttachEnergyPrompt(
+      player.id,
+      GameMessage.ATTACH_ENERGY_CARDS,
+      player.deck,
+      PlayerType.BOTTOM_PLAYER,
+      [SlotType.ACTIVE, SlotType.BENCH],
+      { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
+      { allowCancel: false, min: 0, max: 2, blockedTo, sameTarget: true }
+    ), transfers => {
+      for (const { card, to } of transfers ?? []) {
+        const target = StateUtils.getTarget(state, player, to);
+        store.reduceEffect(state, new AttachEnergyEffect(player, card as EnergyCard, target, 'deck'));
+      }
+      SHUFFLE_DECK(store, state, player);
+    });
   }
 }

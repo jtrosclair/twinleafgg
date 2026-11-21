@@ -3911,3 +3911,49 @@ batch. The Energy audit still includes Eevee, Beldum and Vileplume, and
 target legality for other prompt-based effects.
 [Official Custom Catcher print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/sm-series/sm8/171/)
 [Official Beast Ring print](https://assets.pokemon.com/assets/cms2-ru-ru/pdf/trading-card-game/tcg_sun_moon_6_card_translation.pdf)
+
+## Gameplay re-audit, batch 54
+
+Custom Catcher counts the copy already in the Trainer zone and finds the
+second physical copy by name, including alternate artwork. The one-copy
+mode draws until the hand reaches three cards. Both copies switch one
+opposing Benched Pokémon into the Active Spot. The engine offers a choice
+only if both options can resolve. Cross Switcher uses the shared switch
+sequence for the opponent and then the player. A rejected Item returns
+to its original hand index when the reducer had only staged that card.
+[Official Custom Catcher print and rulings](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/sm-series/sm8/171/)
+[Official Custom Catcher play restrictions](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%82%AD%E3%83%A3%E3%83%83%E3%83%81%E3%83%A3%E3%83%BC&regulation_faq_main_item1=all)
+[Official Cross Switcher print](https://www.pokemon-card.com/card-search/details.php/card/40052/regu/all)
+
+Puzzle of Time can reorder two cards when the deck is short. Its recovery
+is available with one card in the discard and requires two selections
+when at least two are available. Neither played copy can recover itself.
+Mixed Herbs allows selection of one Special Condition with one copy, or
+removes all and heals 90 with two. Quad Stone can fully heal a damaged
+Bench with four copies when the Active already has full HP. Missing
+Clover uses the normal Prize selection for four copies, even with an
+empty deck. One copy offers a private look at the top card.
+[Official Puzzle of Time rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E6%99%82%E3%81%AE%E3%83%91%E3%82%BA%E3%83%AB)
+[Official Mixed Herbs print](https://www.pokemon-card.com/card-search/details.php/card/35213)
+[Official Quad Stone print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/swsh12/163/)
+[Official Missing Clover Card-Dex](https://assets.pokemon.com/assets/cms2-ru-ru/pdf/trading-card-game/tcg_sun_moon_5_card_translation.pdf)
+
+Beast Ring attaches Basic Energy from the deck to one Ultra Beast when
+the opponent has three or four Prizes left. It shuffles after the search,
+including a selection of zero cards from a nonempty deck. The previous
+engine rejected both Catchers in an identical Weavile Box continuation.
+The candidate won that real puzzle with the corrected switch followed
+by Weavile’s paid retreat and Greedy Crush. The scripted route won 55 of
+64 tested shuffle seeds. Nine draws needed a different route. The exact
+packaged simulator accepted the pair and switched only the opponent
+using both mouse and touch.
+[Official Beast Ring print](https://www.pokemon-card.com/card-search/details.php/card/34604/)
+
+All 29 new checks pass, including 22 that fail on the previous engine.
+The full suite passes 10,676 checks and the combined working edits pass
+183 targeted checks. All 559 comparable saved snapshots and 5,225
+sampled opening actions match. The seven previously recorded solutions
+still win. The 2.50 MiB gzip build passed attestation, ten board scenarios,
+209 client-service checks, and the standard API suite passed 32 checks.
+The engine review still includes legacy hand-Energy source restrictions
+for Eevee, Beldum and Vileplume.

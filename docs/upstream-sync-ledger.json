@@ -16,7 +16,7 @@
       "date": "2026-09-15",
       "subject": "refactor(cards): Updated all cards to MOVE_CARDS",
       "status": "partial",
-      "notes": "Historical upstream path record. Batch 49 adapts the Aurora Energy and Goodra FST 197 movement changes. Official rulings require the Slimy Room flip and Aurora Energy payment to resolve before attachment. The port discards rejected Energy from the hand and pays all other selected hand cards as one action. It also supplies the shared transaction for the six printed Alpha Growth entries and routes confirmed hand attachment reactions after the group. The other movement paths remain individually tracked. Batch 52 uses the accepted hand attachment and normal deck evolution for Skiploom EVS Solar Evolution. It preserves attachment order choices specified in the official Pokémon rulings. Batch 53 ports the reviewed hand attachment paths for Welder, Gardenia’s Vigor, Xatu PAR, Teal Mask Ogerpon ex, Shadow Rider Calyrex VMAX, Blastoise & Piplup-GX and Zarude V. The local handler groups attachments, honors interception, and runs successful draw or healing before triggered reactions."
+      "notes": "Historical upstream path record. Batch 49 adapts the Aurora Energy and Goodra FST 197 movement changes. Official rulings require the Slimy Room flip and Aurora Energy payment to resolve before attachment. The port discards rejected Energy from the hand and pays all other selected hand cards as one action. It also supplies the shared transaction for the six printed Alpha Growth entries and routes confirmed hand attachment reactions after the group. The other movement paths remain individually tracked. Batch 52 uses the accepted hand attachment and normal deck evolution for Skiploom EVS Solar Evolution. It preserves attachment order choices specified in the official Pokémon rulings. Batch 53 ports the reviewed hand attachment paths for Welder, Gardenia’s Vigor, Xatu PAR, Teal Mask Ogerpon ex, Shadow Rider Calyrex VMAX, Blastoise & Piplup-GX and Zarude V. The local handler groups attachments, honors interception, and runs successful draw or healing before triggered reactions. Batch 54 ports the Beast Ring search-then-shuffle movement and records Energy as originating from the deck. Zero results from a search still shuffle."
     },
     {
       "sha": "7e20b8991f021bc0075251e4e2182ddd6ec5b419",
@@ -155,22 +155,22 @@
       "sha": "107e7e1687bbf81368a12f23a89029d5a0b72e55",
       "date": "2026-10-14",
       "subject": "refactor(cards): canPlay SWSH",
-      "status": "deferred",
-      "notes": "Broad canPlay refactor touches many card handlers and can change playable-card hints and validation; requires per-card legality and puzzle replay tests. Batch 53 reviews the Welder and Gardenia’s Vigor paths. The upstream patch still counts selections for Welder and requires a Bench for Gardenia. The fork follows the official draw and attachment rulings for both cards."
+      "status": "partial",
+      "notes": "Broad canPlay refactor touches many card handlers and can change playable-card hints and validation; requires per-card legality and puzzle replay tests. Batch 53 reviews the Welder and Gardenia’s Vigor paths. The upstream patch still counts selections for Welder and requires a Bench for Gardenia. The fork follows the official draw and attachment rulings for both cards. Batch 54 adapts Cross Switcher to the shared opposing and own Pokémon switch sequence. Quad Stone separately checks available damage for both the one-card and four-card modes."
     },
     {
       "sha": "852e712eb055d2c9afa967956ef3b4ef498040fa",
       "date": "2026-10-14",
       "subject": "refactor(cards): canPlay SM",
-      "status": "deferred",
-      "notes": "Broad canPlay refactor touches many card handlers and can change playable-card hints and validation; requires per-card legality and puzzle replay tests. Batch 53 reproduces the Custom Catcher rejection with exactly two copies in hand in the real Weavile Box puzzle. The original and candidate engines fail in the same place. Review the upstream staged-card count and single opposing switch before porting that path."
+      "status": "partial",
+      "notes": "Broad canPlay refactor touches many card handlers and can change playable-card hints and validation; requires per-card legality and puzzle replay tests. Batch 53 reproduces the Custom Catcher rejection with exactly two copies in hand in the real Weavile Box puzzle. The original and candidate engines fail in the same place. Review the upstream staged-card count and single opposing switch before porting that path. Batch 54 implements the verified Custom Catcher and Beast Ring paths, plus legal single/multi-copy choices on Mixed Herbs and Missing Clover. The latter permits four with an empty deck and prompts for the chosen Prize. The published Weavile Box snapshot now wins through the corrected opposing switch and a normal retreat."
     },
     {
       "sha": "e207317b699c4356c43ed68bec88d5b588b99606",
       "date": "2026-10-14",
       "subject": "refactor(cards): canPlay XY",
-      "status": "deferred",
-      "notes": "Broad canPlay refactor touches many card handlers and can change playable-card hints and validation; requires per-card legality and puzzle replay tests."
+      "status": "partial",
+      "notes": "Broad canPlay refactor touches many card handlers and can change playable-card hints and validation; requires per-card legality and puzzle replay tests. Batch 54 adapts Puzzle of Time. The two-copy effect works if the deck is empty and at least one card is already in the discard. Keep both played copies out of the recovery prompt. The rest of this refactor needs per-card review."
     },
     {
       "sha": "88dab92dd10d50edc23538d96d37d283d895e364",

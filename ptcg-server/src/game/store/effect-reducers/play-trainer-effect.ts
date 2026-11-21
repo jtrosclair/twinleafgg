@@ -287,10 +287,23 @@ function playTrainerWithoutCoinFlip(store: StoreLike, state: State, effect: Effe
       throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
 
-    const playTrainer = new TrainerEffect(effect.player, effect.trainerCard, effect.target);
-    effect.player.hand.moveCardTo(effect.trainerCard, effect.player.supporter);
-    state = store.reduceEffect(state, playTrainer);
-    restorePlayedTrainerToPlayZoneIfNeeded(store, effect.player, effect.trainerCard);
+    const item = effect.trainerCard;
+    const handIndex = player.hand.cards.indexOf(item);
+    const playTrainer = new TrainerEffect(player, item, effect.target);
+    player.hand.moveCardTo(item, player.supporter);
+    try {
+      state = store.reduceEffect(state, playTrainer);
+    } catch (error) {
+      // Card handlers validate the Item after it has been placed in the play zone.
+      // Restore its original position if the play was rejected at that point.
+      const stagedIndex = player.supporter.cards.indexOf(item);
+      if (error instanceof GameError && handIndex !== -1 && stagedIndex !== -1) {
+        player.supporter.cards.splice(stagedIndex, 1);
+        player.hand.cards.splice(handIndex, 0, item);
+      }
+      throw error;
+    }
+    restorePlayedTrainerToPlayZoneIfNeeded(store, player, item);
     state = finalizeTrainerCleanup(store, state, effect.player, effect.trainerCard, false);
     store.log(state, GameLog.LOG_PLAYER_PLAYS_ITEM, {
       name: effect.player.name,

@@ -1,87 +1,9 @@
-import { ChoosePokemonPrompt, ConfirmPrompt, PlayerType, PokemonCardList, SlotType, StateUtils } from '../../game';
-import { GameError } from '../../game/game-error';
-import { GameLog, GameMessage } from '../../game/game-message';
+import { Card, ConfirmPrompt, GameError, GameMessage, State, StateUtils, StoreLike } from '../../game';
 import { TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
-import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { State } from '../../game/store/state/state';
-import { StoreLike } from '../../game/store/store-like';
-
-function* playCard(next: Function, store: StoreLike, state: State, effect: TrainerEffect): IterableIterator<State> {
-  const player = effect.player;
-  const opponent = StateUtils.getOpponent(state, player);
-  const name = effect.trainerCard.name;
-
-  // Don't allow to play both cross switchers when opponen has an empty bench
-  const benchCount = opponent.bench.reduce((sum, b) => {
-    return sum + (b.cards.length > 0 ? 1 : 0);
-  }, 0);
-
-  //let playTwoCards = false;
-
-  if (benchCount > 0) {
-    // playTwoCards = true;
-
-    // Discard second Cross Switcher +
-    const second = player.hand.cards.find(c => {
-      return c.name === name && c !== effect.trainerCard;
-    });
-    if (second !== undefined) {
-      player.hand.moveCardTo(second, player.discard);
-    }
-
-    const hasBench = player.bench.some(b => b.cards.length > 0);
-
-    if (hasBench === false) {
-      throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-    }
-
-    // We will discard this card after prompt confirmation
-    effect.preventDefault = true;
-
-    return store.prompt(state, new ChoosePokemonPrompt(
-      player.id,
-      GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-      PlayerType.TOP_PLAYER,
-      [SlotType.BENCH],
-      { allowCancel: false }
-    ), targets => {
-      if (!targets || targets.length === 0) {
-        return;
-      }
-      opponent.active.clearEffects();
-      opponent.switchPokemon(targets[0]);
-      next();
-
-      // Do not discard the card yet
-      effect.preventDefault = true;
-
-      let target: PokemonCardList[] = [];
-      return store.prompt(state, new ChoosePokemonPrompt(
-        player.id,
-        GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH],
-        { allowCancel: false }
-      ), results => {
-        target = results || [];
-        next();
-
-        if (target.length === 0) {
-          return state;
-        }
-
-        // Discard trainer only when user selected a Pokemon
-        player.active.clearEffects();
-        player.switchPokemon(target[0]);
-
-
-        return state;
-      });
-    });
-  }
-}
+import { DRAW_CARDS_UNTIL_CARDS_IN_HAND, MOVE_CARDS, SWITCH_IN_OPPONENT_BENCHED_POKEMON } from '../../game/store/prefabs/prefabs';
+import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
 
 export class CustomCatcher extends TrainerCard {
 
@@ -99,47 +21,29 @@ export class CustomCatcher extends TrainerCard {
   • If you played 2 cards, switch 1 of your opponent's Benched Pokémon with their Active Pokémon. (This effect works one time for 2 cards.)`;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof TrainerEffect && effect.trainerCard === this) {
-      const player = effect.player;
-      let drawUpToThree = false;
+    if (!WAS_TRAINER_USED(effect, this)) return state;
 
-      const count = player.hand.cards.reduce((sum, c) => {
-        return sum + (c.name === this.name ? 1 : 0);
-      }, 0);
+    const { player } = effect;
+    // The Item reducer has already moved the first copy out of the hand.
+    const second = player.hand.cards.find(card => card !== this && card.name === this.name);
+    const opponent = StateUtils.getOpponent(state, player);
+    const canDraw = player.hand.cards.length < 3 && player.deck.cards.length > 0;
+    const canSwitch = second !== undefined && opponent.bench.some(slot => !!slot.getPokemonCard());
+    const playBoth = (companion: Card) => {
+      MOVE_CARDS(store, state, player.hand, player.discard, { cards: [companion], sourceCard: this });
+      return SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, player);
+    };
 
-      if (count > 1) {
-        state = store.prompt(state, new ConfirmPrompt(
-          effect.player.id,
-          GameMessage.WANT_TO_PLAY_BOTH_CARDS_AT_ONCE,
-        ), wantToUse => {
-          if (!wantToUse) {
-            drawUpToThree = true;
-          } else {
-            const generator = playCard(() => generator.next(), store, state, effect);
-            return generator.next().value;
-          }
-        });
-      } else {
-        drawUpToThree = true;
-      }
-
-      if (drawUpToThree) {
-        const cards = player.hand.cards.filter(c => c !== this);
-        const cardsToDraw = Math.max(0, 3 - cards.length);
-
-        if (cardsToDraw === 0 || player.deck.cards.length === 0) {
-          throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-        }
-
-        player.deck.moveTo(player.hand, cardsToDraw);
-        player.supporter.moveCardTo(this, player.discard);
-
-        for (let i = 0; i < cardsToDraw; i++) {
-          store.log(state, GameLog.LOG_PLAYER_DRAWS_CARD, { name: player.name });
-        }
-      }
+    if (canSwitch && canDraw) {
+      return store.prompt(state, new ConfirmPrompt(player.id, GameMessage.WANT_TO_PLAY_BOTH_CARDS_AT_ONCE), both => {
+        if (both) playBoth(second);
+        else DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 3);
+      });
     }
+    if (canSwitch) return playBoth(second);
+    if (!canDraw) throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
 
+    DRAW_CARDS_UNTIL_CARDS_IN_HAND(player, 3);
     return state;
   }
 }
