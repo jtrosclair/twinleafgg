@@ -1,10 +1,10 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State, PowerType, StateUtils, PlayerType } from '../../game';
-import { EffectOfAbilityEffect } from '../../game/store/effects/game-effects';
+import { StoreLike, State, PowerType, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { CheckPokemonStatsEffect } from '../../game/store/effects/check-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { CheckPokemonStatsEffect, CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
+import { CAN_APPLY_ABILITY_TO_TARGET } from '../../game/store/prefabs/effect-of-ability-prefabs';
+import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class LilliesClefairyex extends PokemonCard {
 
@@ -42,27 +42,16 @@ export class LilliesClefairyex extends PokemonCard {
 
     // Fairy Zone
     if (effect instanceof CheckPokemonStatsEffect) {
-      const player = StateUtils.findOwner(state, effect.target);
-      const opponent = StateUtils.getOpponent(state, player);
-      const pokemonCard = effect.target;
-
-      // Check for opponent's Lillie's Clefairy ex
-      let isClefairyexInPlay = false;
-      opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card) => {
-        if (card === this) {
-          isClefairyexInPlay = true;
-        }
-      });
-
-      // Return if no Clefairy or target is not Dragon type
-      if (!isClefairyexInPlay || pokemonCard.getPokemonCard()?.cardType !== CardType.DRAGON) {
+      const targetOwner = StateUtils.findOwner(state, effect.target);
+      const owner = StateUtils.getOpponent(state, targetOwner);
+      if (!StateUtils.isPokemonInPlay(owner, this) || IS_ABILITY_BLOCKED(store, state, owner, this)) {
         return state;
       }
 
-      // Check if weakness can be changed
-      const canApplyAbility = new EffectOfAbilityEffect(opponent, this.powers[0], this, pokemonCard);
-      store.reduceEffect(state, canApplyAbility);
-      if (canApplyAbility.target) {
+      const types = new CheckPokemonTypeEffect(effect.target);
+      store.reduceEffect(state, types);
+      if (types.cardTypes.includes(CardType.DRAGON)
+        && CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, this.powers[0], this, effect.target)) {
         effect.weakness = [{ type: CardType.PSYCHIC }];
       }
     }

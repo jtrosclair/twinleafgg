@@ -5,8 +5,9 @@ import { StoreLike, State, PowerType, AttachEnergyPrompt, GameMessage, PlayerTyp
 import { Effect } from '../../game/store/effects/effect';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { AddSpecialConditionsPowerEffect } from '../../game/store/effects/check-effects';
-import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { ABILITY_USED, IS_ABILITY_BLOCKED, MOVE_CARDS, USE_ABILITY_ONCE_PER_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Volcanionex extends PokemonCard {
   public tags = [CardTag.POKEMON_ex];
@@ -51,49 +52,38 @@ export class Volcanionex extends PokemonCard {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
-      if (player.active.getPokemonCard() !== this) {
+      if (player.active.getPokemonCard() !== this || IS_ABILITY_BLOCKED(store, state, player, this)) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
-      if (player.marker.hasMarker(this.SCORCHING_STEAM, this)) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      }
-
-      const specialCondition = new AddSpecialConditionsPowerEffect(
-        opponent,
-        this,
-        opponent.active,
-        [SpecialCondition.BURNED]
-      );
-      store.reduceEffect(state, specialCondition);
-
-      player.marker.addMarker(this.SCORCHING_STEAM, this);
-      return store.reduceEffect(state, specialCondition);
+      USE_ABILITY_ONCE_PER_TURN(player, this.SCORCHING_STEAM, this);
+      ABILITY_USED(player, this);
+      return APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
+        store, state, player, this.powers[0], this, opponent.active, [SpecialCondition.BURNED]);
     }
 
-    // Heat Cyclone
+    // Ref: set-destined-rivals/yanmega-ex.ts (move attached Energy to the attacker's Bench).
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
-      const hasBench = player.bench.some(b => b.cards.length > 0);
+      const source = effect.source;
+      afterAttackDamage(state, effect, (store, state) => {
+        if (!source.cards.some(card => card.superType === SuperType.ENERGY)
+          || !player.bench.some(slot => slot.getPokemonCard())) return state;
 
-      if (hasBench === false) {
-        return state;
-      }
-
-      return store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_TO_BENCH,
-        player.active,
-        PlayerType.TOP_PLAYER,
-        [SlotType.BENCH],
-        { superType: SuperType.ENERGY },
-        { allowCancel: false, min: 1, max: 1 }
-      ), transfers => {
-        transfers = transfers || [];
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          player.active.moveCardTo(transfer.card, target);
-        }
+        return store.prompt(state, new AttachEnergyPrompt(
+          player.id,
+          GameMessage.ATTACH_ENERGY_TO_BENCH,
+          source,
+          PlayerType.BOTTOM_PLAYER,
+          [SlotType.BENCH],
+          { superType: SuperType.ENERGY },
+          { allowCancel: false, min: 1, max: 1 }
+        ), transfers => {
+          for (const transfer of transfers ?? []) {
+            const target = StateUtils.getTarget(state, player, transfer.to);
+            MOVE_CARDS(store, state, source, target, { cards: [transfer.card], sourceCard: this, sourceEffect: effect });
+          }
+        });
       });
     }
 

@@ -1,10 +1,10 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardTag, CardType, SuperType } from '../../game/store/card/card-types';
-import { ChooseCardsPrompt, GameMessage, PowerType, State, StateUtils, StoreLike } from '../../game';
+import { Stage, CardTag, CardType } from '../../game/store/card/card-types';
+import { PowerType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE } from '../../game/store/prefabs/attack-effects';
-import { CAN_APPLY_ABILITY_TO_TARGET } from '../../game/store/prefabs/effect-of-ability-prefabs';
-import { IS_ABILITY_BLOCKED, MOVE_CARDS, ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { DISCARD_ATTACKER_ENERGY_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Klawfex extends PokemonCard {
 
@@ -49,28 +49,9 @@ export class Klawfex extends PokemonCard {
   public fullName: string = 'Klawf ex OBF';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ref: set-pokemon-151/hitmonchan.ts (retaliate against the original attacker after damage).
-    if (ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT(state, effect, { source: this })
-      && effect.target.getPokemonCard() === this) {
-      const owner = StateUtils.findOwner(state, effect.target);
-      const attacker = effect.source;
-      const power = this.powers[0];
-      if (attacker.cards.some(card => card.superType === SuperType.ENERGY)
-        && !IS_ABILITY_BLOCKED(store, state, owner, this)
-        && CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, power, this, attacker)) {
-        const discard = StateUtils.findOwner(state, attacker).discard;
-        return store.prompt(state, new ChooseCardsPrompt(
-          owner, GameMessage.CHOOSE_CARD_TO_DISCARD, attacker,
-          { superType: SuperType.ENERGY }, { min: 1, max: 1, allowCancel: false },
-        ), cards => {
-          return MOVE_CARDS(store, state, attacker, discard, { cards, sourceCard: this, sourceEffect: power });
-        });
-      }
-    }
-
     if (WAS_ATTACK_USED(effect, 0, this)) {
       return FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE(store, state, effect, 80);
     }
-    return state;
+    return DISCARD_ATTACKER_ENERGY_FROM_ABILITY(store, state, effect, this);
   }
 }

@@ -1,10 +1,10 @@
-import { Card, PowerType, State, StateUtils, StoreLike } from '../../game';
+import { PowerType, State, StateUtils, StoreLike } from '../../game';
 import { CardType, SpecialCondition, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
-import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { APPLY_SPECIAL_CONDITIONS_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
+import { getAttachedEnergyOfType } from '../../game/store/prefabs/knock-out-effects';
 import { IS_ABILITY_BLOCKED, ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Heatran extends PokemonCard {
@@ -40,22 +40,13 @@ export class Heatran extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      const checkProvidedEnergy = new CheckProvidedEnergyEffect(player);
-      state = store.reduceEffect(state, checkProvidedEnergy);
-
-      let totalDiscarded = 0;
-
-      const cards: Card[] = checkProvidedEnergy.energyMap.map(e => e.card);
-      const discardEnergy = new DiscardCardsEffect(effect, cards);
-      discardEnergy.target = player.active;
-
-      totalDiscarded += discardEnergy.cards.length;
-
-      store.reduceEffect(state, discardEnergy);
-
-      effect.damage += (totalDiscarded - 1) * 50;
+      const source = effect.source;
+      const metalEnergy = getAttachedEnergyOfType(store, state, effect.player, source, CardType.METAL);
+      const discard = new DiscardCardsEffect(effect, metalEnergy);
+      discard.target = source;
+      store.reduceEffect(state, discard);
+      const discarded = metalEnergy.filter(card => !source.cards.includes(card) && !source.energies.cards.includes(card));
+      effect.damage = discarded.length * 50;
     }
 
     // Ref: set-temporal-forces/iron-jugulis.ts (retaliation after attack damage).

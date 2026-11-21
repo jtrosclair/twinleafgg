@@ -1,8 +1,7 @@
-import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, StateUtils, ChooseCardsPrompt, GameMessage, SuperType, GamePhase } from '../../game';
-import { PutDamageEffect, DiscardCardsEffect } from '../../game/store/effects/attack-effects';
+import { PokemonCard, Stage, CardType, PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect, AttackEffect } from '../../game/store/effects/game-effects';
-import { CoinFlipEffect } from '../../game/store/effects/play-card-effects';
+import { FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE } from '../../game/store/prefabs/attack-effects';
+import { DISCARD_ATTACKER_ENERGY_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Turtonator extends PokemonCard {
@@ -13,9 +12,9 @@ export class Turtonator extends PokemonCard {
   public retreat = [C, C];
 
   public powers = [{
-    name: 'Thorny Shell',
+    name: 'Shell Spikes',
     powerType: PowerType.ABILITY,
-    text: 'When this Pokemon takes damage from an attack from your opponent\'s Pokemon while it is in the Active Spot, discard an Energy from the attacking Pokemon.'
+    text: 'If this Pokémon is in the Active Spot and is damaged by an attack from your opponent\'s Pokémon (even if this Pokémon is Knocked Out), discard an Energy from the Attacking Pokémon.'
   }];
 
   public attacks = [{
@@ -34,88 +33,17 @@ export class Turtonator extends PokemonCard {
   public name: string = 'Turtonator';
   public fullName: string = 'Turtonator M3';
 
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Thorny Shell ability - discard energy from attacking Pokemon when this takes damage
-    if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)) {
-      const pokemonCard = effect.target.getPokemonCard();
-      const sourceCard = effect.source?.getPokemonCard();
-
-      if (pokemonCard !== this) {
-        return state;
-      }
-
-      // Check if this Pokemon is in Active Spot
-      const player = StateUtils.findOwner(state, effect.target);
-      if (player.active !== effect.target) {
-        return state;
-      }
-
-      // Check if damage was dealt from opponent's attack
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-
-      const sourceOwner = effect.source ? StateUtils.findOwner(state, effect.source) : null;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // Only trigger from opponent's attacks
-      if (sourceOwner !== opponent) {
-        return state;
-      }
-
-      // Check if player has DAMAGE_DEALT_MARKER (damage was actually dealt)
-      if (!player.marker.hasMarker(player.DAMAGE_DEALT_MARKER)) {
-        return state;
-      }
-
-      if (sourceCard && effect.source && effect.source.energies.cards.length > 0) {
-        // Try to reduce PowerEffect to check if ability is blocked
-        try {
-          const stub = new PowerEffect(player, {
-            name: 'test',
-            powerType: PowerType.ABILITY,
-            text: ''
-          }, this);
-          store.reduceEffect(state, stub);
-        } catch {
-          return state;
-        }
-
-        // Discard one energy from attacking Pokemon
-        return store.prompt(state, new ChooseCardsPrompt(
-          opponent,
-          GameMessage.CHOOSE_CARD_TO_DISCARD,
-          effect.source,
-          { superType: SuperType.ENERGY },
-          { min: 1, max: 1, allowCancel: false }
-        ), selected => {
-          const cards = selected || [];
-          if (cards.length > 0) {
-            const discardEffect = new DiscardCardsEffect(effect as any, cards);
-            discardEffect.target = effect.source;
-            store.reduceEffect(state, discardEffect);
-          }
-        });
-      }
-    }
-
+    // Ref: set-obsidian-flames/klawf-ex.ts (Counterattacking Pincer).
+    DISCARD_ATTACKER_ENERGY_FROM_ABILITY(store, state, effect, this);
     return Turtonator.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
   }
 
   public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
-    // Heat Breath - coin flip for +80 damage
-    if (WAS_ATTACK_USED(effect, 0, this) && effect instanceof AttackEffect) {
-      const player = effect.player;
-
-      const coinFlipEffect = new CoinFlipEffect(player, (result: boolean) => {
-        if (result === true) {
-          effect.damage += 80;
-        }
-      });
-
-      return store.reduceEffect(state, coinFlipEffect);
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      return FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE(store, state, effect, 80);
     }
-
     return state;
   }
 }

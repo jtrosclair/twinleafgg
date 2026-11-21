@@ -1,13 +1,14 @@
 import { PlayerType, SlotType } from '../actions/play-card-action';
 import { GameMessage } from '../../game-message';
-import { SpecialCondition } from '../card/card-types';
+import { SpecialCondition, SuperType } from '../card/card-types';
 import { PokemonCard } from '../card/pokemon-card';
 import { Power } from '../card/pokemon-types';
 import { ApplyWeaknessEffect, PutDamageEffect } from '../effects/attack-effects';
 import { Effect } from '../effects/effect';
-import { IS_ABILITY_BLOCKED } from './prefabs';
+import { IS_ABILITY_BLOCKED, MOVE_CARDS, ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT } from './prefabs';
 import { AddSpecialConditionsPowerEffect } from '../effects/check-effects';
 import { EffectOfAbilityEffect } from '../effects/game-effects';
+import { ChooseCardsPrompt } from '../prompts/choose-cards-prompt';
 import { ChoosePokemonPrompt } from '../prompts/choose-pokemon-prompt';
 import { SelectPrompt } from '../prompts/select-prompt';
 import { StateUtils } from '../state-utils';
@@ -70,6 +71,30 @@ export function REDUCE_ATTACK_DAMAGE_FROM_ABILITY(
     && CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, card.powers[0], card, effect.source)) {
     effect.attackDamageReductionBeforeWeakness += amount;
   }
+}
+
+/** Retaliation that discards one of the original attacker's attached Energy cards. */
+export function DISCARD_ATTACKER_ENERGY_FROM_ABILITY(
+  store: StoreLike,
+  state: State,
+  effect: Effect,
+  card: PokemonCard,
+): State {
+  if (!ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT(state, effect, { source: card })
+    || effect.target.getPokemonCard() !== card) return state;
+
+  const owner = StateUtils.findOwner(state, effect.target);
+  const attacker = effect.source;
+  const power = card.powers[0];
+  if (!attacker.cards.some(attached => attached.superType === SuperType.ENERGY)
+    || IS_ABILITY_BLOCKED(store, state, owner, card)
+    || !CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, power, card, attacker)) return state;
+
+  const discard = StateUtils.findOwner(state, attacker).discard;
+  return store.prompt(state, new ChooseCardsPrompt(
+    owner, GameMessage.CHOOSE_CARD_TO_DISCARD, attacker,
+    { superType: SuperType.ENERGY }, { min: 1, max: 1, allowCancel: false },
+  ), cards => MOVE_CARDS(store, state, attacker, discard, { cards, sourceCard: card, sourceEffect: power }));
 }
 
 export function APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(

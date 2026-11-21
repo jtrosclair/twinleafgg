@@ -20,6 +20,7 @@ export enum CheckEffects {
   CHECK_POKEMON_TYPE_EFFECT = 'CHECK_POKEMON_TYPE_EFFECT',
   CHECK_POKEMON_PLACEMENT_EFFECT = 'CHECK_POKEMON_PLACEMENT_EFFECT',
   CHECK_RETREAT_COST_EFFECT = 'CHECK_RETREAT_COST_EFFECT',
+  CHECK_RETREAT_PAYMENT_EFFECT = 'CHECK_RETREAT_PAYMENT_EFFECT',
   CHECK_ATTACK_COST_EFFECT = 'CHECK_ATTACK_COST_EFFECT',
   CHECK_ENOUGH_ENERGY_EFFECT = 'CHECK_ENOUGH_ENERGY_EFFECT',
   CHECK_POKEMON_PLAYED_TURN_EFFECT = 'CHECK_POKEMON_PLAYED_TURN_EFFECT',
@@ -167,6 +168,15 @@ export class CheckPokemonTypeEffect implements Effect {
   }
 }
 
+
+/** Check retreat-specific rules once the player has committed to a legal retreat. */
+export class CheckRetreatPaymentEffect implements Effect {
+  readonly type: string = CheckEffects.CHECK_RETREAT_PAYMENT_EFFECT;
+  public preventDefault = false;
+  public requiresCoinFlip = false;
+
+  constructor(public readonly player: Player) {}
+}
 
 export class CheckRetreatCostEffect implements Effect {
   readonly type: string = CheckEffects.CHECK_RETREAT_COST_EFFECT;

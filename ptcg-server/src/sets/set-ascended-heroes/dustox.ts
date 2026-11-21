@@ -8,7 +8,8 @@ import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
-import { COIN_FLIP_PROMPT, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { CAN_APPLY_ABILITY_TO_TARGET } from '../../game/store/prefabs/effect-of-ability-prefabs';
+import { ABILITY_USED, COIN_FLIP_PROMPT, IS_ABILITY_BLOCKED, MOVE_CARDS, USE_ABILITY_ONCE_PER_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Dustox extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -55,42 +56,26 @@ export class Dustox extends PokemonCard {
       player.marker.removeMarker(this.RUSTLING_WIND_MARKER, this);
     }
 
-    // Rustling Wind ability
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
-
-      // Check if ability was already used this turn
-      if (player.marker.hasMarker(this.RUSTLING_WIND_MARKER, this)) {
-        throw new GameError(GameMessage.POWER_ALREADY_USED);
-      }
-
-      // Check if opponent's active has energy cards
-      const hasEnergy = opponent.active.energies.cards.some(card => card.superType === SuperType.ENERGY);
-      if (!hasEnergy) {
+      const target = opponent.active;
+      const power = this.powers[0];
+      if (IS_ABILITY_BLOCKED(store, state, player, this)
+        || !target.cards.some(card => card.superType === SuperType.ENERGY)) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
-      // Mark ability as used
-      player.marker.addMarker(this.RUSTLING_WIND_MARKER, this);
+      USE_ABILITY_ONCE_PER_TURN(player, this.RUSTLING_WIND_MARKER, this);
+      ABILITY_USED(player, this);
+      return COIN_FLIP_PROMPT(store, state, player, heads => {
+        if (!heads || !CAN_APPLY_ABILITY_TO_TARGET(store, state, player, power, this, target)) return;
 
-      // Flip coin
-      return COIN_FLIP_PROMPT(store, state, player, (result) => {
-        if (result) {
-          // If heads, select and move energy to opponent's hand
-          store.prompt(state, new ChooseCardsPrompt(
-            player,
-            GameMessage.CHOOSE_CARD_TO_DISCARD,
-            opponent.active,
-            { superType: SuperType.ENERGY },
-            { min: 1, max: 1, allowCancel: false }
-          ), selected => {
-            if (selected && selected.length > 0) {
-              const energyCard = selected[0];
-              opponent.active.moveCardTo(energyCard, opponent.hand);
-            }
-          });
-        }
+        store.prompt(state, new ChooseCardsPrompt(
+          player, GameMessage.CHOOSE_CARD_TO_DISCARD, target,
+          { superType: SuperType.ENERGY },
+          { min: 1, max: 1, allowCancel: false },
+        ), cards => MOVE_CARDS(store, state, target, opponent.hand, { cards, sourceCard: this, sourceEffect: power }));
       });
     }
 

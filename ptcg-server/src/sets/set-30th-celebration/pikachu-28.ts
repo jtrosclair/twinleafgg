@@ -1,7 +1,6 @@
-import { PokemonCard, Stage, CardType, StoreLike, State, StateUtils, PowerType } from "../../game";
-import { DealDamageEffect } from "../../game/store/effects/attack-effects";
+import { PokemonCard, Stage, CardType, StoreLike, State, PowerType } from "../../game";
 import { Effect } from "../../game/store/effects/effect";
-import { IS_ABILITY_BLOCKED } from "../../game/store/prefabs/prefabs";
+import { REDUCE_ATTACK_DAMAGE_FROM_ABILITY } from "../../game/store/prefabs/effect-of-ability-prefabs";
 
 /** #28 — Lonely Gaze + Pika Ball */
 export class Pikachu28 extends PokemonCard {
@@ -29,27 +28,9 @@ export class Pikachu28 extends PokemonCard {
   public fullName: string = 'Pikachu 30C 28';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Lonely Gaze
-    if (effect instanceof DealDamageEffect) {
-      const owner = StateUtils.findOwner(state, StateUtils.findCardList(state, this));
-      if (!StateUtils.isPokemonInPlay(owner, this)) {
-        return state;
-      }
-      if (owner.active.getPokemonCard() !== this) {
-        return state;
-      }
-
-      const opponent = StateUtils.getOpponent(state, owner);
-      if (effect.player !== opponent || effect.source !== opponent.active) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, owner, this)) {
-        return state;
-      }
-
-      effect.damage = Math.max(0, effect.damage - 20);
-    }
+    // Ref: set-obsidian-flames/entei.ts (Pressure).
+    const owner = state.players.find(player => player.active.getPokemonCard() === this);
+    if (owner) REDUCE_ATTACK_DAMAGE_FROM_ABILITY(store, state, effect, owner, this, 20);
 
     return state;
   }

@@ -5873,3 +5873,49 @@ Opening actions include all 1,848 available retreat-target attempts.
 The production simulator package builds and passes all 211 browser checks.
 All eight recorded PrizeMap solutions win on both replays, including
 Exact. Change.
+
+## Gameplay re-audit, batch 96
+
+Slimy Sliding checks the retreating Pokémon for Ability protection and the
+Goodra for suppression. Both saved prints use one flip across any number of
+copies, including for a free retreat. Tails uses the turn's retreat while
+leaving the Active Pokémon and its attached Energy in place. Trainer switches
+skip the flip. Both Goodra prints use the printed Water and Psychic attack cost.
+[Goodra print](https://asia.pokemon-card.com/sg/card-search/detail/25259/)
+[Retreat rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%8C%E3%83%A1%E3%83%AB%E3%82%B4%E3%83%B3&regulation_faq_main_item1=all)
+
+Let's Have a Blast and Fainting Spell use lethal attack damage and resolve a
+mandatory Ability flip against the original attacker. The retaliation follows a
+Benched attacker and skips one that left play. Heads uses normal Knock Out
+and Prize processing. Gengar ex can also retaliate when hit on the Bench.
+[Weezing print](https://www.pokemon-card.com/card-search/details.php/card/43588/regu/all)
+[Weezing rulings](https://www.pokemon-card.com/rules/faq/search.php?page=12&regulation=all&sc_group_id=882)
+[Gengar ex print](https://www.pokemon-card.com/card-search/details.php/card/50688/regu/all)
+
+Shell Spikes, Poison Point and Incandescent Body react to actual opposing attack
+damage to the Active. Shell Spikes shares the original-attacker Energy discard
+with Counterattacking Pincer. The Numel and Qwilfish print variants share their
+respective effects. Steel Burst discards only attached Metal Energy and counts
+each discarded card once.
+[Turtonator print](https://asia.pokemon-card.com/sg/card-search/detail/24987/)
+[Qwilfish print](https://asia.pokemon-card.com/my/card-search/detail/25243/)
+[Numel print](https://asia.pokemon-card.com/sg/card-search/detail/24804/)
+[Heatran print](https://asia.pokemon-card.com/my/card-search/detail/12606/)
+
+Scorching Steam applies Burn once with the Ability owner as the source.
+Heat Cyclone moves Energy to the attacking player's Bench after damage.
+Boisterous Wind checks source suppression and target protection. Fairy Zone
+uses the target's current types and checks source suppression. Lonely Gaze uses
+the shared pre-Weakness damage reduction against the opposing Active's damage.
+[Volcanion ex print](https://www.pokemon-card.com/card-search/details.php/card/47025)
+[Dustox print](https://asia.pokemon-card.com/sg/card-search/detail/24596/)
+[Lillie's Clefairy ex print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sv09/173)
+[Pikachu print](https://www.pokemon-card.com/card-search/details.php/card/50634/regu/all)
+
+All 40 focused cases and 11,615 engine checks pass. The focused integration
+checks with the existing WebView worktree changes pass all 165 cases. All
+33 API tests pass, and 559 comparable saved boards load identically.
+All 5,484 opening actions match the preceding engine. The verified production
+simulator package passes the desktop and touch prompt checks and all 211
+client checks. All eight recorded PrizeMap solutions win on both replays,
+including Exact. Change. and Trapped in the Phantom Maze.

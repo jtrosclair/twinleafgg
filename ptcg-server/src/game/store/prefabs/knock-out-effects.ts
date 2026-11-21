@@ -1,3 +1,5 @@
+import { scheduleEffectKnockOut } from '../effect-reducers/check-effect';
+import { CAN_APPLY_ABILITY_TO_TARGET } from './effect-of-ability-prefabs';
 import { GameLog, GameMessage } from '../../game-message';
 import { CardTarget, PlayerType, SlotType } from '../actions/play-card-action';
 import { Card } from '../card/card';
@@ -8,6 +10,7 @@ import { TrainerCard } from '../card/trainer-card';
 import { CheckProvidedEnergyEffect } from '../effects/check-effects';
 import { Effect } from '../effects/effect';
 import { KnockOutEffect, PlaceDamageCountersEffect } from '../effects/game-effects';
+import { CoinFlipEffect } from '../effects/play-card-effects';
 import { AttachEnergyPrompt } from '../prompts/attach-energy-prompt';
 import { ChooseCardsPrompt } from '../prompts/choose-cards-prompt';
 import { StateUtils } from '../state-utils';
@@ -132,6 +135,32 @@ export function registerKnockOutRetaliation(
         store.reduceEffect(state, new PlaceDamageCountersEffect(player, attacker, damage, pokemon, ability));
       }
     }
+  });
+}
+
+/** Resolve a mandatory flip to Knock Out the original attacker on heads. */
+export function registerCoinFlipKnockOutRetaliation(
+  store: StoreLike, state: State, effect: Effect, source: PokemonCard, requireActive: boolean,
+): void {
+  if (!canUseKnockOutAbility(store, state, effect, source) || !effect.resolveBeforeDiscard
+    || (requireActive && !wasActiveWhenDamaged(effect))) return;
+
+  const power = source.powers[0];
+  effect.beforeDiscard.set(source, {
+    label: power.name,
+    canResolve: () => !!findKnockOutAttacker(state, effect),
+    resolve: () => {
+      const flip = new CoinFlipEffect(effect.player, heads => {
+        const attacker = findKnockOutAttacker(state, effect);
+        const card = attacker?.getPokemonCard();
+        if (heads && attacker && card
+          && CAN_APPLY_ABILITY_TO_TARGET(store, state, effect.player, power, source, attacker)) {
+          scheduleEffectKnockOut(state, card);
+        }
+      });
+      flip.skipAttackReflip = true;
+      store.reduceEffect(state, flip);
+    },
   });
 }
 
