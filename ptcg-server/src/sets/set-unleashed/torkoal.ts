@@ -50,7 +50,7 @@ export class Torkoal extends PokemonCard {
           if (result) {
             ADD_BURN_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, player), this);
           }
-        });
+        }, { legacyPower: true });
       }, GameMessage.WANT_TO_USE_ABILITY);
     }
 

@@ -55,6 +55,7 @@ import { Attack } from '../card/pokemon-types';
 import { WaitPrompt } from '../prompts/wait-prompt';
 import { offerAttackCoinReflip } from '../prefabs/attack-coin-reflip';
 import { isLegacySmokescreenMarker, rollCoin } from '../prefabs/coin-flip-results';
+import { getWillCoinChoicePlayer, readChosenCoinSide, takeWillCoinChoice } from '../prefabs/will-coin-choice';
 import { CoinFlipEffect, CoinFlipSequenceEffect } from '../effects/play-card-effects';
 import { beginAttackDamageScope, cancelAttackDamageScope, finishAttackDamageScope, getAttackPayment, resolveAfterAttack, resolveAfterAttackDamage } from '../prefabs/attack-after-damage';
 import { wasActiveWhenDamaged } from '../prefabs/knock-out-effects';
@@ -774,44 +775,42 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
   }
 
   if (effect instanceof CoinFlipEffect) {
-    // Simulate coin flip and store result
-    const result = rollCoin(store, state, effect.player, effect.forcedResult);
-    effect.result = result;
-
     const { player, callback } = effect;
+    const flip = (chosen?: boolean): State => {
+      const requested = effect.forcedResult === false ? false : (chosen ?? effect.forcedResult);
+      const result = rollCoin(store, state, player, requested);
+      effect.result = result;
 
-    // Emit coin flip animation event
-    const game = (store as any).handler;
-    if (game && game.core && typeof game.core.emit === 'function') {
-      game.core.emit((c: any) => {
-        if (typeof c.socket !== 'undefined') {
-          c.socket.emit(`game[${game.id}]:coinFlip`, {
-            playerId: player.id,
-            result: result
-          });
-        }
+      const game = (store as any).handler;
+      if (game && game.core && typeof game.core.emit === 'function') {
+        game.core.emit((c: any) => {
+          if (typeof c.socket !== 'undefined') {
+            c.socket.emit(`game[${game.id}]:coinFlip`, { playerId: player.id, result });
+          }
+        });
+      }
+
+      return store.prompt(state, new WaitPrompt(player.id, 2000, 'Coin flip animation'), () => {
+        const message = result ? GameLog.LOG_PLAYER_FLIPS_HEADS : GameLog.LOG_PLAYER_FLIPS_TAILS;
+        store.log(state, message, { name: player.name });
+        if (!callback) return;
+        if (effect.skipAttackReflip) return callback(result);
+        offerAttackCoinReflip(store, state, () => callback(result), () => {
+          const reflip = new CoinFlipEffect(player, callback);
+          reflip.skipAttackReflip = true;
+          store.reduceEffect(state, reflip);
+        }, [player.id]);
+      });
+    };
+
+    // Synchronous defensive consumers read result as soon as reduceEffect returns.
+    // Their coins belong to the opponent of the turn player.
+    if (callback && getWillCoinChoicePlayer(state) === player) {
+      return store.prompt(state, takeWillCoinChoice(player), selection => {
+        flip(readChosenCoinSide(selection));
       });
     }
-
-    // Wait for animation to complete (6 seconds)
-    // Capture the state that will be available in the callback
-    const stateForCallback = state;
-    state = store.prompt(state, new WaitPrompt(player.id, 2000, 'Coin flip animation'), () => {
-      // Animation complete, continue with game logic
-      // Log the coin flip result
-      const gameMessage = result ? GameLog.LOG_PLAYER_FLIPS_HEADS : GameLog.LOG_PLAYER_FLIPS_TAILS;
-      store.log(stateForCallback, gameMessage, { name: player.name });
-
-      if (!callback) return;
-      if (effect.skipAttackReflip) return callback(result);
-      offerAttackCoinReflip(store, stateForCallback, () => callback(result), () => {
-        const reflip = new CoinFlipEffect(player, callback);
-        reflip.skipAttackReflip = true;
-        store.reduceEffect(stateForCallback, reflip);
-      }, [player.id]);
-    });
-
-    return state;
+    return flip();
   }
 
   return state;

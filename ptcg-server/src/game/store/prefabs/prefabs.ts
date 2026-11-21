@@ -1,4 +1,5 @@
 import { rollCoin } from './coin-flip-results';
+import { withoutWillCoinChoice } from './will-coin-choice';
 import { ConfirmCardsPrompt } from '../prompts/confirm-cards-prompt';
 import { GustOpponentBenchEffect } from '../effects/attack-effects';
 import { AttachEnergyOptions, AttachEnergyPrompt, Card, CardList, CardTarget, ChooseCardsOptions, ChooseCardsPrompt, ChoosePokemonPrompt, ChoosePrizePrompt, ChooseEnergyPrompt, ConfirmPrompt, DamageMap, EnergyCard, GameError, GameLog, GameMessage, MoveDamagePrompt, Player, PlayerType, PokemonCardList, PowerType, SelectPrompt, ShowCardsPrompt, ShuffleDeckPrompt, SlotType, State, StateUtils, StoreLike, TrainerCard } from '../..';
@@ -2393,14 +2394,24 @@ export function CONFIRMATION_PROMPT(store: StoreLike, state: State, player: Play
   return store.prompt(state, new ConfirmPrompt(player.id, message), callback);
 }
 
-export function COIN_FLIP_PROMPT(store: StoreLike, state: State, player: Player, callback: (result: boolean) => void): State {
+export function COIN_FLIP_PROMPT(
+  store: StoreLike, state: State, player: Player, callback: (result: boolean) => void,
+  options: { legacyPower?: boolean } = {},
+): State {
   const coinFlip = new CoinFlipEffect(player, callback);
-  return store.reduceEffect(state, coinFlip);
+  return options.legacyPower
+    ? withoutWillCoinChoice(state, () => store.reduceEffect(state, coinFlip))
+    : store.reduceEffect(state, coinFlip);
 }
 
-export function MULTIPLE_COIN_FLIPS_PROMPT(store: StoreLike, state: State, player: Player, amount: number, callback: (results: boolean[]) => void): State {
+export function MULTIPLE_COIN_FLIPS_PROMPT(
+  store: StoreLike, state: State, player: Player, amount: number, callback: (results: boolean[]) => void,
+  options: { legacyPower?: boolean } = {},
+): State {
   const sequenceEffect = new CoinFlipSequenceEffect(player, amount, callback);
-  return store.reduceEffect(state, sequenceEffect);
+  return options.legacyPower
+    ? withoutWillCoinChoice(state, () => store.reduceEffect(state, sequenceEffect))
+    : store.reduceEffect(state, sequenceEffect);
 }
 
 /**

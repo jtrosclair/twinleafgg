@@ -59,7 +59,7 @@ export class UnownJ extends PokemonCard {
             { min: 0, max: 1, allowCancel: false },
             this.powers[0],
           );
-        });
+        }, { legacyPower: true });
       }, GameMessage.WANT_TO_USE_ABILITY);
     }
 

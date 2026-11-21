@@ -12,6 +12,7 @@ import { PlayerType } from '../actions/play-card-action';
 import { MarkerConstants } from '../markers/marker-constants';
 import { isLegacySmokescreenMarker } from '../prefabs/coin-flip-results';
 import { StateUtils } from '../state-utils';
+import { WILL_FIRST_COIN } from '../prefabs/will-coin-choice';
 import { ATTACK_RETREAT_LOCK_UNTIL_TARGET_END_TURN } from '../prefabs/retreat-lock-until-target-end-turn';
 
 function getActivePlayer(state: State): Player {
@@ -20,6 +21,7 @@ function getActivePlayer(state: State): Player {
 
 export function betweenTurns(store: StoreLike, state: State, onComplete: () => void): State {
   if (state.phase === GamePhase.PLAYER_TURN || state.phase === GamePhase.ATTACK) {
+    state.players[state.activePlayer].marker.removeMarker(WILL_FIRST_COIN);
     state.phase = GamePhase.BETWEEN_TURNS;
   }
 

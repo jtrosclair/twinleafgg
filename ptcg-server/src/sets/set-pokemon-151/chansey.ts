@@ -1,10 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, GameMessage, PowerType } from '../../game';
+import { GamePhase } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { DrawPrizesEffect } from '../../game/store/effects/game-effects';
 import { CoinFlipEffect } from '../../game/store/effects/play-card-effects';
-import { CONFIRMATION_PROMPT, GET_PLAYER_BENCH_SLOTS, IS_ABILITY_BLOCKED, SIMULATE_COIN_FLIP, TAKE_SPECIFIC_PRIZES, TAKE_X_PRIZES } from '../../game/store/prefabs/prefabs';
+import { CONFIRMATION_PROMPT, GET_PLAYER_BENCH_SLOTS, IS_ABILITY_BLOCKED, TAKE_SPECIFIC_PRIZES, TAKE_X_PRIZES } from '../../game/store/prefabs/prefabs';
 
 export class Chansey extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -50,6 +51,9 @@ export class Chansey extends PokemonCard {
   private *handlePrizeEffect(next: Function, store: StoreLike, state: State, effect: DrawPrizesEffect): IterableIterator<State> {
     const player = effect.player;
     const prizeCard = effect.prizes.find(cardList => cardList.cards.includes(this));
+
+    if (state.players[state.activePlayer] !== player
+      || (state.phase !== GamePhase.PLAYER_TURN && state.phase !== GamePhase.ATTACK)) return state;
 
     // Check if ability conditions are met
     if (!prizeCard || GET_PLAYER_BENCH_SLOTS(player).length === 0 || !prizeCard.isSecret || effect.destination !== player.hand) {
@@ -108,6 +112,7 @@ export class Chansey extends PokemonCard {
     // it does not go to the player's hand)
     this.abilityUsed = true;
     player.prizesTaken += 1;
+    player.prizesTakenThisTurn += 1;
     
     const targetSlot = emptyBenchSlots[0];
     for (const [index, prize] of player.prizes.entries()) {
@@ -118,26 +123,21 @@ export class Chansey extends PokemonCard {
       }
     }
 
-    // Handle coin flip
-    try {
-      const coinFlip = new CoinFlipEffect(player);
-      store.reduceEffect(state, coinFlip);
-    } catch {
-      return state;
-    }
+    // Ref: set-base-set/chansey.ts (one settled coin drives the card effect).
+    let coinResult = false;
+    const coinFlip = new CoinFlipEffect(player, heads => {
+      coinResult = heads;
+      next();
+    });
+    coinFlip.skipAttackReflip = true;
+    yield store.reduceEffect(state, coinFlip);
 
-    const coinResult = SIMULATE_COIN_FLIP(store, state, player);
+    if (!coinResult) return state;
 
-    if (!coinResult) {
-      return state;
-    }
-
-    // Handle extra prize (excluding the group this card is in)
-    yield TAKE_X_PRIZES(store, state, player, 1, {
-      promptOptions: {
-        blocked: effect.prizes.map(p => player.prizes.indexOf(p))
-      }
-    }, () => next());
+    const remaining = player.prizes.filter(prize => prize.cards.length > 0);
+    const blocked = remaining.flatMap((prize, index) => effect.prizes.includes(prize) ? [index] : []);
+    if (blocked.length === remaining.length) return state;
+    yield TAKE_X_PRIZES(store, state, player, 1, { promptOptions: { blocked } }, () => next());
 
     return state;
   }

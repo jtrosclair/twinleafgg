@@ -59,7 +59,7 @@ export class Zapdos extends PokemonCard {
               new PlaceDamageCountersEffect(player, cardList, 10, this),
             );
           });
-        });
+        }, { legacyPower: true });
       });
     }
 

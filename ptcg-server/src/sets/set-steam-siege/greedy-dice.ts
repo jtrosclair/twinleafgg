@@ -5,7 +5,7 @@ import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
 import { DrawPrizesEffect } from '../../game/store/effects/game-effects';
 import { CoinFlipEffect, TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { CONFIRMATION_PROMPT, SIMULATE_COIN_FLIP, TAKE_SPECIFIC_PRIZES, TAKE_X_PRIZES } from '../../game/store/prefabs/prefabs';
+import { CONFIRMATION_PROMPT, TAKE_SPECIFIC_PRIZES, TAKE_X_PRIZES } from '../../game/store/prefabs/prefabs';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 
@@ -93,6 +93,7 @@ export class GreedyDice extends TrainerCard {
     // it does not go to the player's hand)
     this.cardUsed = true;
     player.prizesTaken += 1;
+    player.prizesTakenThisTurn += 1;
 
     // If the player agrees, discard Greedy Dice
     for (const [index, prize] of player.prizes.entries()) {
@@ -102,28 +103,21 @@ export class GreedyDice extends TrainerCard {
       }
     }
 
-    // Handle coin flip
-    try {
-      const coinFlip = new CoinFlipEffect(player);
-      store.reduceEffect(state, coinFlip);
-    } catch {
-      return state;
-    }
+    // Ref: set-base-set/chansey.ts (one settled coin drives the card effect).
+    let coinResult = false;
+    const coinFlip = new CoinFlipEffect(player, heads => {
+      coinResult = heads;
+      next();
+    });
+    coinFlip.skipAttackReflip = true;
+    yield store.reduceEffect(state, coinFlip);
 
-    const coinResult = SIMULATE_COIN_FLIP(store, state, player);
+    if (!coinResult) return state;
 
-    if (!coinResult) {
-      return state;
-    }
-
-    player.supporter.moveCardTo(this, player.discard);
-
-    // Handle extra prize (excluding the group this card is in)
-    yield TAKE_X_PRIZES(store, state, player, 1, {
-      promptOptions: {
-        blocked: effect.prizes.map(p => player.prizes.indexOf(p))
-      }
-    }, () => next());
+    const remaining = player.prizes.filter(prize => prize.cards.length > 0);
+    const blocked = remaining.flatMap((prize, index) => effect.prizes.includes(prize) ? [index] : []);
+    if (blocked.length === remaining.length) return state;
+    yield TAKE_X_PRIZES(store, state, player, 1, { promptOptions: { blocked } }, () => next());
 
     return state;
   }

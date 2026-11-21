@@ -49,7 +49,7 @@ export class Forretress extends PokemonCard {
               store.reduceEffect(state, new PlaceDamageCountersEffect(player, slot, 20, this, this.powers[0]));
             }
           }
-        });
+        }, { legacyPower: true });
       });
     }
 

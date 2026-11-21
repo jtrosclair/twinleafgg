@@ -99,7 +99,7 @@ export class DarkGyarados extends PokemonCard {
 
           target.damage += Math.max(0, damage);
         }
-      });
+      }, { legacyPower: true });
     }
 
     // Ice Beam

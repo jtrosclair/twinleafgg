@@ -42,7 +42,7 @@ export class Articuno extends PokemonCard {
         if (result) {
           ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, opponent, this);
         }
-      });
+      }, { legacyPower: true });
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {

@@ -91,7 +91,7 @@ export class Moltres extends PokemonCard {
                 MOVE_CARDS(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this });
               }
             });
-          });
+          }, { legacyPower: true });
         }
         return state;
       });

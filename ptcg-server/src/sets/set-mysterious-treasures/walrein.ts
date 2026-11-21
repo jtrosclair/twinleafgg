@@ -47,7 +47,7 @@ export class Walrein extends PokemonCard {
               sourceCard: this,
             });
           }
-        });
+        }, { legacyPower: true });
       }, GameMessage.WANT_TO_USE_ABILITY);
     }
 

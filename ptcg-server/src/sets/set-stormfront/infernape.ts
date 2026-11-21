@@ -58,7 +58,7 @@ export class Infernape extends PokemonCard {
             4,
             { energyFilter: { energyType: EnergyType.BASIC }, validCardTypes: [CardType.FIRE] },
           );
-        });
+        }, { legacyPower: true });
       }, GameMessage.WANT_TO_USE_ABILITY);
     }
 

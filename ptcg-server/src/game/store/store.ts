@@ -2,10 +2,13 @@ import { AbstractAttackEffect, ApplyWeaknessEffect, DealDamageEffect, PutDamageE
 import { CheckCoinFlipResultEffect, CheckPokemonTypeEffect, CheckProvidedEnergyEffect, CheckRetreatCostEffect } from './effects/check-effects';
 import { mirrorOnlyEnergyForQuery } from './prefabs/mirror-only-energy';
 import { StateUtils } from './state-utils';
-import { COIN_FLIPS_TREATED_AS_TAILS, isCoinForcedTails } from './prefabs/coin-flip-results';
+import { COIN_FLIPS_TREATED_AS_TAILS, isCoinForcedTails, rollCoin } from './prefabs/coin-flip-results';
 import { COIN_REFLIP_AGAIN_USED, LEGACY_GLIMWOOD_REFLIP_USED, legacyAttackCoinGroup, offerAttackCoinReflip,
   suppressesAttackReflips, withoutAttackReflips } from './prefabs/attack-coin-reflip';
 import { CoinFlipPrompt } from './prompts/coin-flip-prompt';
+import { SelectPrompt } from './prompts/select-prompt';
+import { getWillCoinChoicePlayer, readChosenCoinSide, suppressesWillCoinChoice, takeWillCoinChoice,
+  withoutWillCoinChoice } from './prefabs/will-coin-choice';
 import { preflightCopiedOpponentAttacks, resolveCopyAttackSessions } from './prefabs/copy-attack-delegation';
 import { Action } from './actions/action';
 import { AbortGameAction } from './actions/abort-game-action';
@@ -165,6 +168,14 @@ export class Store implements StoreLike {
   }
 
   public reduceEffect(state: State, effect: Effect): State {
+    if (effect instanceof PowerEffect
+      && [PowerType.POKEPOWER, PowerType.POKEBODY, PowerType.POKEMON_POWER].includes(effect.power.powerType)) {
+      return withoutWillCoinChoice(state, () => this.reduceEffectInContext(state, effect));
+    }
+    return this.reduceEffectInContext(state, effect);
+  }
+
+  private reduceEffectInContext(state: State, effect: Effect): State {
     if (effect instanceof CheckEnergyAttachmentEffect) {
       this.checkEnergyAttachment(state, effect.attachment);
       return state;
@@ -344,12 +355,9 @@ export class Store implements StoreLike {
   }
 
   public prompt(state: State, prompts: Prompt<any>[] | Prompt<any>, then: (results: any) => void): State {
-    if (!(prompts instanceof Array)) {
-      prompts = [prompts];
-    }
-
+    const group = Array.isArray(prompts) ? prompts : [prompts];
     const complete = then;
-    const attackCoins = legacyAttackCoinGroup(state, prompts);
+    const attackCoins = legacyAttackCoinGroup(state, group);
     if (attackCoins) {
       then = results => offerAttackCoinReflip(this, state, () => complete(results), () => {
         const reflips = attackCoins.map(coin => new CoinFlipPrompt(coin.playerId, coin.message));
@@ -359,6 +367,38 @@ export class Store implements StoreLike {
       then = results => withoutAttackReflips(state, () => complete(results));
     }
 
+    const chooser = getWillCoinChoicePlayer(state);
+    if (chooser) {
+      const firstCoin = group.findIndex(prompt => prompt instanceof CoinFlipPrompt && prompt.playerId === chooser.id
+        && (prompt.message === GameMessage.COIN_FLIP || prompt.message === GameMessage.FLIP_COIN));
+      if (firstCoin >= 0) {
+        const choice = takeWillCoinChoice(chooser);
+        // Keep any earlier coins first, and wait for Will before revealing later coins.
+        const queueCoins = (group: Prompt<any>[], done: (results: any[]) => void) => group.length
+          ? this.queuePrompts(state, group, results => done(group.length === 1 ? [results] : results))
+          : done([]);
+        queueCoins(group.slice(0, firstCoin), earlier => {
+          this.queuePrompts(state, [choice], selection => {
+            const heads = rollCoin(this, state, chooser, readChosenCoinSide(selection));
+            this.log(state, heads ? GameLog.LOG_PLAYER_FLIPS_HEADS : GameLog.LOG_PLAYER_FLIPS_TAILS, { name: chooser.name });
+            queueCoins(group.slice(firstCoin + 1), later => {
+              const results = [...earlier, heads, ...later];
+              then(results.length === 1 ? heads : results);
+            });
+          });
+        });
+        return state;
+      }
+    }
+
+    return this.queuePrompts(state, group, then);
+  }
+
+  private queuePrompts(state: State, prompts: Prompt<any>[], then: (results: any) => void): State {
+    if (suppressesWillCoinChoice(state)) {
+      const resume = then;
+      then = results => withoutWillCoinChoice(state, () => resume(results));
+    }
     for (let i = 0; i < prompts.length; i++) {
       const id = generateId(state.prompts);
       prompts[i].id = id;
@@ -375,7 +415,7 @@ export class Store implements StoreLike {
   }
 
   public waitPrompt(state: State, callback: () => void): State {
-    this.waitItems.push(callback);
+    this.waitItems.push(suppressesWillCoinChoice(state) ? () => withoutWillCoinChoice(state, callback) : callback);
     return state;
   }
 
@@ -407,6 +447,9 @@ export class Store implements StoreLike {
     }
 
     try {
+      if (prompt instanceof SelectPrompt && prompt.message === GameMessage.CHOOSE_HEADS_OR_TAILS) {
+        readChosenCoinSide(action.result);
+      }
       const player = state.players[state.activePlayer];
       const forcedTails = prompt instanceof CoinFlipPrompt && player?.id === prompt.playerId
         && isCoinForcedTails(this, state, player);

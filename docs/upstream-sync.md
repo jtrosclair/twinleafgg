@@ -4551,3 +4551,40 @@ unprotected. Both versions reach the same turn and resolve the action.
 All seven recorded solutions still win. All 32 API tests, 209 client
 tests and ten packaged board checks pass. The 2.50 MiB gzip runtime
 passes build attestation.
+
+## Gameplay re-audit, batch 66
+
+Will CEC now reserves a choice for the turn player's first eligible coin.
+The player chooses the side before any later coins in the group appear.
+The choice applies to attack, Ability and Trainer effects, including an
+earlier attack's Smokescreen. Confusion, Pokémon Checkup and the opposing
+player's coins leave Will available. Activated Pokémon Powers and the
+reviewed reactive Poké-Powers and Poké-Bodies keep their own random
+results. The choice expires before Checkup. Contrary can turn a chosen
+heads into tails. Victory Star replaces the original group with new
+flips and the choice stays spent.
+[Official Will print](https://www.pokemon-card.com/card-search/details.php/card/37041/regu/all)
+[Official Will rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%A4%E3%83%84%E3%82%AD&regulation_faq_main_item1=all)
+[Official Will and Smokescreen ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%92%E3%83%8E%E3%82%A2%E3%83%A9%E3%82%B7&regulation_faq_main_item1=all)
+[Official Will and older Powers ruling](https://www.pokemon-card.com/rules/faq/search.php?page=6&regulation=all&sc_group_id=654)
+
+Greedy Dice STS and Chansey MEW now use one settled Prize coin each.
+Will can choose that coin on the turn player's side. The original Prize
+is counted when the Item is discarded or Chansey moves to the Bench.
+Heads can award an additional remaining Prize. Lucky Bonus is limited
+to its owner's turn. The Prize cards still use the existing batch
+selection, which requires separate review for multiple special cards
+in one group. Assist and other copied attacks that reach multiple
+linked coin groups also remain open.
+[Official Greedy Dice print](https://www.pokemon-card.com/card-search/details.php/card/32117)
+[Official Lucky Bonus print](https://www.pokemon-card.com/card-search/details.php/card/43434/regu/all)
+
+All 15 focused cases pass and fail on the prior engine. The combined
+worktree passes 170 targeted checks. The packaged board accepts Will's
+heads choice with a mouse and its tails choice with touch, with the
+expected resulting damage and turn progression. All 559 comparable
+saved boards and 5,225 sampled opening actions match. All seven recorded
+solutions still win. All 32 API tests, 209 client tests and ten general
+packaged board checks pass. The 2.51 MiB gzip runtime passes build
+attestation.
+The full engine passes 10,985 tests across 313 spec files.
