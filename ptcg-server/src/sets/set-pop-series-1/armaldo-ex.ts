@@ -9,7 +9,7 @@ import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class ArmaldoEx extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
-  protected _tags = [CardTag.POKEMON_ex];
+  public tags = [CardTag.POKEMON_ex];
   public evolvesFrom: string = 'Anorith';
   public hp: number = 160;
   public cardType: CardType = F;

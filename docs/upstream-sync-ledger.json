@@ -23,7 +23,7 @@
       "date": "2026-07-26",
       "subject": "refactor(engine): Card tags use a getter access method",
       "status": "partial",
-      "notes": "Pre-base historical path record. The fork uses a public tags field while upstream exposes protected _tags through accessors. Batch 32 brings Steelix GL, Ho-Oh LEGEND and Raikou & Suicune LEGEND into the local convention and corrects the single-Pokémon LEGEND Prize rule for Ho-Oh and Lugia. A catalog check on the prior build found 182 registered prints with protected tags missing from their public tags; real Knock Outs reproduced incorrect Prize awards for three representative ex and Mega ex prints. The rest require card and puzzle verification."
+      "notes": "Pre-base historical path record. The fork uses a public tags field while upstream exposes protected _tags through accessors. Batch 32 brings Steelix GL, Ho-Oh LEGEND and Raikou & Suicune LEGEND into the local convention and corrects the single-Pokémon LEGEND Prize rule for Ho-Oh and Lugia. A catalog check on the prior build found 182 registered prints with protected tags missing from their public tags; real Knock Outs reproduced incorrect Prize awards for three representative ex and Mega ex prints. The rest require card and puzzle verification. Batch 33 restores all 32 registered prints with missing public Prize tags, verified through real attack Knock Outs. Four saved states change only the public tags of Koraidon ex ASC and Team Rocket’s Kangaskhan ex ASC. The compiled catalog now has 145 prints with other protected tags missing from their public tags, with a confirmed Poké Turn failure on Forretress G RR."
     },
     {
       "sha": "f0edbdac48a0b72d146bfcf768243a043736adc2",

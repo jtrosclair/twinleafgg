@@ -22,7 +22,7 @@ import {
 export class Mausholdex extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom = 'Tandemaus';
-  protected _tags = [CardTag.POKEMON_ex];
+  public tags = [CardTag.POKEMON_ex];
   public cardType: CardType = C;
   public hp: number = 230;
   public weakness = [{ type: F }];

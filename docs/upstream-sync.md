@@ -2972,3 +2972,46 @@ its filter for presentation without checking the selection against it.
 Audit those live paths against the public tag and filter contracts before
 applying the changes across the catalog.
 [Upstream tag accessor refactor](https://github.com/the-epsd/twinleafgg/commit/21842b2e06790ec47546cf2518513c4e558ba3c1)
+
+## Gameplay re-audit, batch 33
+
+Restored public card tags in 30 source definitions covering all 32
+registered prints that lacked a tag used to award Prizes. Real Knock
+Outs verified two Prizes for Pokémon ex, Pokémon-EX, Pokémon-GX and
+Pokémon V, and three for Mega Evolution Pokémon ex. Associated Tera,
+Team Rocket's and Future tags were restored on the same definitions.
+The built catalog contains 15,750 cards with no remaining protected
+Prize tags missing from their public tags.
+[Pokémon TCG Rulebook](https://assets.pokemon.com/assets/cms2/pdf/trading-card-game/rulebook/mew_rulebook_en.pdf)
+[Mega Evolution ex rules](https://www.pokemon-card.com/info/004859.html?rss=250228)
+[POP Series 3 Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/POP_Series_3_Promo_cards.pdf)
+[Eevee ex Starter Set](https://www.pokemon-card.com/ex/me/)
+[Mega Heatran ex promo](https://www.pokemon-card.com/info/005705.html?ui=en)
+[Mega Tatsugiri ex promo](https://www.pokemon-card.com/card-search/details.php/card/50471)
+
+The Energy prompt validates eligibility, type limits and target
+restrictions together. The Angular UI and simple bot share the same
+checks. The engine rejects off-type Never Give Up selections, duplicate
+types for Tar Generator and repeated recipients for Geomancy. Joltik's
+Jolting Charge can still attach two Grass and two Lightning Energy in
+any distribution. The older cardType and provides filter shapes also
+resolve against Energy cards.
+[Coalossal print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/swsh2/107/)
+[Stellar Crown Joltik](https://www.pokemon.com/uk/features/scarlet-violet-stellar-crown-triple-play-cinderace-ex-lapras-ex-galvantula-ex)
+
+The suite passed 7,750 engine tests, 694 combined checks alongside the
+checkout's pending work, and 209 frontend specs. The 41 new engine
+cases include 36 that failed on the prior revision. All 559 supported
+saved states still load with identical serialized payloads and card
+identities. Four in-memory states differ exclusively in the restored
+tags for Koraidon ex ASC or Team Rocket's Kangaskhan ex ASC. All 3,633
+sampled opening actions matched, and all seven recorded solutions won.
+The 2.46 MiB ZIP passed attestation, the mobile package budget and ten
+board interaction checks. A simple-bot run also confirmed that it can
+skip the off-type card and duplicate Fire Energy before assigning one
+Fire and one Fighting Energy.
+
+The remaining 145 printed tag omissions include Pokémon SP, LV.X,
+Delta Species and other classifications. A real Poké Turn play was
+rejected with Forretress G RR as the only eligible Pokémon. The same
+action succeeded when its printed SP tag was visible to the game.

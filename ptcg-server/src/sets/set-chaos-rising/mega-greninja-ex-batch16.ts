@@ -36,7 +36,7 @@ import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 export class MegaGreninjaexBatch172 extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
   public evolvesFrom = 'Frogadier';
-  protected _tags = [CardTag.POKEMON_SV_MEGA, CardTag.POKEMON_ex];
+  public tags = [CardTag.POKEMON_SV_MEGA, CardTag.POKEMON_ex];
   public hp: number = 350;
   public cardType: CardType = W;
   public weakness = [{ type: L }];

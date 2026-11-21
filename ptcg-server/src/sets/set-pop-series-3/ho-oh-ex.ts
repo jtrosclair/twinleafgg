@@ -5,7 +5,7 @@ import { IS_POKEPOWER_BLOCKED, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/st
 
 export class HoOhEx extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_ex];
+  public tags = [CardTag.POKEMON_ex];
   public hp: number = 110;
   public cardType: CardType = R;
   public weakness = [{ type: W }];

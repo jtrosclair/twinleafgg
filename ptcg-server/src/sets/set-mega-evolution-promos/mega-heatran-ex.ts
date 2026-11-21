@@ -10,7 +10,7 @@ export class MegaHeatranex extends PokemonCard {
   private readonly GIGANTIC_PRESS_CLEAR_MARKER = 'MEGA_HEATRAN_GIGANTIC_PRESS_CLEAR';
 
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SV_MEGA, CardTag.POKEMON_ex];
+  public tags = [CardTag.POKEMON_SV_MEGA, CardTag.POKEMON_ex];
   public cardType: CardType = M;
   public hp: number = 300;
   public weakness = [{ type: R }];

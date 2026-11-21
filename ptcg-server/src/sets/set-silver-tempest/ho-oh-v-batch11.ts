@@ -26,7 +26,7 @@ import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import {WAS_POWER_USED, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 export class HoOhVBatch112 extends PokemonCard {
-  protected _tags = [CardTag.POKEMON_V];
+  public tags = [CardTag.POKEMON_V];
   public regulationMark = 'F';
   public stage: Stage = Stage.BASIC;
   public cardType: CardType = CardType.COLORLESS;

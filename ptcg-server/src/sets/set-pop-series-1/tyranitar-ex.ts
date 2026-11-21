@@ -15,7 +15,7 @@ import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class TyranitarEx extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
-  protected _tags = [CardTag.POKEMON_ex];
+  public tags = [CardTag.POKEMON_ex];
   public evolvesFrom: string = 'Pupitar';
   public hp: number = 150;
   public cardType: CardType = D;

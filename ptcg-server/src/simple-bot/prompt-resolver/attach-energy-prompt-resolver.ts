@@ -1,5 +1,5 @@
 import { AttachEnergyPrompt, CardAssign } from '../../game/store/prompts/attach-energy-prompt';
-import { Player, State, Action, ResolvePromptAction, Prompt, StateUtils,
+import { Player, State, Action, ResolvePromptAction, Prompt,
   PokemonCardList, PlayerType, CardList, Card, CardTarget } from '../../game';
 import { PromptResolver } from './prompt-resolver';
 import { deepClone } from '../../utils/utils';
@@ -32,14 +32,16 @@ export class AttachEnergyPromptResolver extends PromptResolver {
       results.push({ value: [], score: baseScore });
     }
 
-    const cardList = this.buildCardsToChoose(copy, prompt);
+    const cardList = new CardList();
+    cardList.cards = prompt.cardList.cards.filter((card, index) => prompt.isEligibleCard(card, index));
     const cards = cardList.cards.slice();
     let value: CardAssign[] = [];
 
-    for (let i = 0; i < cards.length && i < prompt.options.max; i++) {
-      const result = this.assignToBestTarget(copy, prompt, cardList, cards[i], value);
+    for (const card of cards) {
+      if (value.length >= prompt.options.max) break;
+      const result = this.assignToBestTarget(copy, prompt, cardList, card, value);
       if (result === undefined || result.value === null) {
-        break;
+        continue;
       }
       value =  [ ...value, result.value[0] ];
       if (prompt.validate(value)) results.push({ value, score: result.score });
@@ -47,17 +49,6 @@ export class AttachEnergyPromptResolver extends PromptResolver {
 
     results.sort((a, b) => b.score - a.score);
     return results.length > 0 ? results[0].value : null;
-  }
-
-  private buildCardsToChoose(state: State, prompt: AttachEnergyPrompt): CardList {
-    const cardList = new CardList();
-
-    cardList.cards = prompt.cardList.cards.filter((card, index) => {
-      return !prompt.options.blocked.includes(index);
-    });
-
-    cardList.cards = cardList.filter(prompt.filter);
-    return cardList;
   }
 
   private assignToBestTarget(
@@ -87,16 +78,7 @@ export class AttachEnergyPromptResolver extends PromptResolver {
       });
     }
 
-    const blocked = prompt.options.blockedTo.map(b => StateUtils.getTarget(state, player, b));
-    results = results.filter(i => !blocked.includes(i.cardList));
-    if (assigned.length && prompt.options.sameTarget) {
-      const target = StateUtils.getTarget(state, player, assigned[0].to);
-      results = results.filter(item => item.cardList === target);
-    }
-    if (assigned.length && prompt.options.differentTargets) {
-      const used = new Set(assigned.map(item => StateUtils.getTarget(state, player, item.to)));
-      results = results.filter(item => !used.has(item.cardList));
-    }
+    results = results.filter(item => prompt.validateAssignments([...assigned, { to: item.target, card }]));
 
     if (results.length === 0) {
       return;

@@ -603,14 +603,10 @@ class TestStoreHandler implements StoreHandler {
     if (!promptPlayers) return null;
     const { player, opponent } = promptPlayers;
 
-    const blocked = new Set(prompt.options.blocked);
     const energyCandidates: Array<{ index: number; card: Card; type: CardType }> = [];
     for (let i = 0; i < prompt.cardList.cards.length; i++) {
       const card = prompt.cardList.cards[i];
-      if (blocked.has(i) || card.superType !== SuperType.ENERGY) {
-        continue;
-      }
-      if (!this.cardMatchesPartialFilter(card, prompt.filter)) {
+      if (!prompt.isEligibleCard(card, i)) {
         continue;
       }
       energyCandidates.push({ index: i, card, type: this.getPrimaryEnergyType(card) });

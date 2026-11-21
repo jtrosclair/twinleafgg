@@ -4,7 +4,7 @@ import { WAS_ATTACK_USED, THIS_POKEMON_CANNOT_USE_THIS_ATTACK_NEXT_TURN } from "
 
 export class SalamenceEX extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_EX];
+  public tags = [CardTag.POKEMON_EX];
   public hp: number = 180;
   public cardType: CardType = N;
   public weakness = [{ type: Y }];

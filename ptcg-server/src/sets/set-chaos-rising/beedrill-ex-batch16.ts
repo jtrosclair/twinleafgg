@@ -6,7 +6,7 @@ import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class BeedrillexBatch172 extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
-  protected _tags = [CardTag.POKEMON_ex];
+  public tags = [CardTag.POKEMON_ex];
   public evolvesFrom = 'Kakuna';
   public hp: number = 310;
   public cardType: CardType = G;

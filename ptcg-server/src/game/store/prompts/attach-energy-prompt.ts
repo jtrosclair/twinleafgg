@@ -8,7 +8,6 @@ import { CardList } from '../state/card-list';
 import { FilterType } from './choose-cards-prompt';
 import { SuperType, CardType } from '../card/card-types';
 import { EnergyCard } from '../card/energy-card';
-import { PokemonCard } from '../card/pokemon-card';
 
 export const AttachEnergyPromptType = 'Attach energy';
 
@@ -22,7 +21,7 @@ export interface AttachEnergyOptions {
   sameTarget: boolean;
   differentTargets: boolean;
   validCardTypes?: CardType[];
-  maxPerType?: number  // Add this new option
+  maxPerType?: number;
 }
 
 export type AttachEnergyResultType = { to: CardTarget, index: number }[];
@@ -105,16 +104,27 @@ export class AttachEnergyPrompt extends Prompt<CardAssign[]> {
   }
 
   public validate(result: CardAssign[] | null): boolean {
-    if (result === null) {
-      return this.options.allowCancel;  // operation cancelled
-    }
-    if (result.length < this.options.min || result.length > this.options.max) {
-      return false;
-    }
-    if (new Set(result.map(r => r.card)).size !== result.length) {
-      return false;
-    }
-    if (result.some(r => this.options.blocked.includes(this.cardList.cards.indexOf(r.card)))) {
+    return result === null ? this.options.allowCancel
+      : result.length >= this.options.min && this.validateAssignments(result);
+  }
+
+  public isEligibleCard(card: Card, index = this.cardList.cards.indexOf(card)): boolean {
+    if (!(card instanceof EnergyCard) || index < 0 || this.options.blocked.includes(index)) return false;
+
+    const { cardType, provides, ...filter } = this.filter as Partial<EnergyCard> & { cardType?: CardType };
+    if (cardType !== undefined && !card.provides.includes(cardType)) return false;
+    if (provides && (provides.length !== card.provides.length
+      || provides.some((type, i) => type !== card.provides[i]))) return false;
+    const allowedTypes = this.options.validCardTypes;
+    if (allowedTypes && !card.provides.some(type => allowedTypes.includes(type))) return false;
+
+    return Object.entries(filter).every(([key, value]) => card[key as keyof EnergyCard] === value);
+  }
+
+  /** Check the rules that apply before the player has selected the minimum. */
+  public validateAssignments(result: CardAssign[]): boolean {
+    if (result.length > this.options.max || new Set(result.map(r => r.card)).size !== result.length
+      || result.some(r => !this.isEligibleCard(r.card))) {
       return false;
     }
     if (result.some(r => this.options.blockedTo.some(target =>
@@ -147,31 +157,10 @@ export class AttachEnergyPrompt extends Prompt<CardAssign[]> {
       }
     }
 
-    if (this.options.validCardTypes) {
-      let onlyValidTypes = true;
-
-      for (const assign of result) {
-        const energyCard = assign.card as EnergyCard;
-
-        if (energyCard.provides.every(p => !this.options.validCardTypes!.includes(p))) {
-          onlyValidTypes = false;
-        }
-      }
-
-      return onlyValidTypes;
-    }
-
     // Check if 'different types' restriction is valid
     if (this.options.differentTypes) {
-      const typeMap: { [key: number]: boolean } = {};
-      for (const assign of result) {
-        const cardType = this.getCardType(assign.card);
-        if (typeMap[cardType] === true) {
-          return false;
-        } else {
-          typeMap[cardType] = true;
-        }
-      }
+      const types = new Set(result.map(({ card }) => (card as EnergyCard).provides[0] ?? CardType.NONE));
+      if (types.size !== result.length) return false;
     }
 
     // Check if all selected targets are different
@@ -189,18 +178,7 @@ export class AttachEnergyPrompt extends Prompt<CardAssign[]> {
       }
     }
 
-    return result.every(r => r.card !== undefined);
-  }
-  private getCardType(card: Card): CardType {
-    if (card.superType === SuperType.ENERGY) {
-      const energyCard = card as EnergyCard;
-      return energyCard.provides.length > 0 ? energyCard.provides[0] : CardType.NONE;
-    }
-    if (card.superType === SuperType.POKEMON) {
-      const pokemonCard = card as PokemonCard;
-      return pokemonCard.cardType;
-    }
-    return CardType.NONE;
+    return true;
   }
 
 }

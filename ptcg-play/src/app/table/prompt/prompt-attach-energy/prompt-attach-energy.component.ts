@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import {
-  Card, AttachEnergyPrompt, FilterType, CardList, AttachEnergyOptions,
+  Card, AttachEnergyPrompt, AttachEnergyOptions,
   PokemonCardList,
   SuperType
 } from 'ptcg-server';
@@ -29,7 +29,6 @@ export class PromptAttachEnergyComponent implements OnChanges {
   public promptId: number;
   public message: string;
   public cardListCards: Card[];
-  public filter: FilterType;
   public isInvalid = false;
   public results: AttachEnergyResult[] = [];
   private options: Partial<AttachEnergyOptions> = {};
@@ -55,6 +54,7 @@ export class PromptAttachEnergyComponent implements OnChanges {
   }
 
   public confirm() {
+    if (this.isInvalid) return;
     const gameId = this.gameState.gameId;
     const id = this.promptId;
     const results = this.results.map(r => ({
@@ -96,15 +96,6 @@ export class PromptAttachEnergyComponent implements OnChanges {
   }
 
   public onCardDrop([item, card]: [PokemonItem, Card]) {
-    if (this.pokemonData.matchesTarget(item, this.options.blockedTo)) {
-      return;
-    }
-    if (this.options.sameTarget && !this.results.every(r => r.to === item)) {
-      return;
-    }
-    if (this.options.differentTargets && this.results.some(r => r.to === item)) {
-      return;
-    }
     const index = this.cardListCards.indexOf(card);
     if (index === -1) {
       return;
@@ -113,6 +104,8 @@ export class PromptAttachEnergyComponent implements OnChanges {
       to: item,
       card
     };
+    const assignments = [...this.results, result].map(r => ({ to: r.to.target, card: r.card }));
+    if (!this.prompt.validateAssignments(assignments)) return;
     this.moveCard(result.to, card);
     this.results.push(result);
     this.updateIsInvalid(this.results);
@@ -188,11 +181,7 @@ export class PromptAttachEnergyComponent implements OnChanges {
   }
 
   private updateIsInvalid(results: AttachEnergyResult[]) {
-    let isInvalid = false;
-    if (this.options.min > results.length || this.options.max < results.length) {
-      isInvalid = true;
-    }
-    this.isInvalid = isInvalid;
+    this.isInvalid = !this.prompt.validate(results.map(r => ({ to: r.to.target, card: r.card })));
   }
 
   ngOnChanges() {
@@ -206,9 +195,8 @@ export class PromptAttachEnergyComponent implements OnChanges {
       this.pokemonData = new PokemonData(state, playerId, playerType, slots);
       this.allowedCancel = prompt.options.allowCancel;
       this.initialCards = prompt.cardList.cards;
-      this.selectableCards = this.initialCards.filter((_, index) => !prompt.options.blocked.includes(index));
+      this.selectableCards = this.initialCards.filter((card, index) => prompt.isEligibleCard(card, index));
       this.cardListCards = [...this.selectableCards];
-      this.filter = prompt.filter;
       this.message = prompt.message;
       this.promptId = prompt.id;
       this.results = [];

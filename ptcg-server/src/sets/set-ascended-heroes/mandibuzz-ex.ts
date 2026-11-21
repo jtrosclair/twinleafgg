@@ -7,7 +7,7 @@ import { MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class MandibuzzEx extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
-  protected _tags = [CardTag.POKEMON_ex];
+  public tags = [CardTag.POKEMON_ex];
   public evolvesFrom: string = 'Vullaby';
   public hp: number = 260;
   public cardType: CardType = D;

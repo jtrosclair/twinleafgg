@@ -10,7 +10,7 @@ import {
 } from '../../game/store/prefabs/prefabs';
 
 export class Eeveeex extends PokemonCard {
-  protected _tags = [CardTag.POKEMON_ex];
+  public tags = [CardTag.POKEMON_ex];
   public stage: Stage = Stage.BASIC;
   public cardType: CardType = C;
   public hp: number = 200;

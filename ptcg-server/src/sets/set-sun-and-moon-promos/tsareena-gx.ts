@@ -7,7 +7,7 @@ import {BLOCK_IF_GX_ATTACK_USED,
   WAS_ATTACK_USED, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
 export class TsareenaGX extends PokemonCard {
-  protected _tags = [CardTag.POKEMON_GX];
+  public tags = [CardTag.POKEMON_GX];
   public stage: Stage = Stage.STAGE_2;
   public evolvesFrom = 'Steenee';
   public cardType: CardType = G;

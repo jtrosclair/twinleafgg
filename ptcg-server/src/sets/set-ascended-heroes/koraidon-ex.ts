@@ -10,7 +10,7 @@ import {
 
 export class Koraidonex extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_ex, CardTag.POKEMON_TERA];
+  public tags = [CardTag.POKEMON_ex, CardTag.POKEMON_TERA];
   public cardType: CardType = F;
   public hp: number = 230;
   public weakness = [{ type: P }];

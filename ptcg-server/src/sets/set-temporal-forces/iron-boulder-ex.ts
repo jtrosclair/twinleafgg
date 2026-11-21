@@ -8,7 +8,7 @@ import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/cos
 
 export class IronBoulderex extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_ex, CardTag.FUTURE];
+  public tags = [CardTag.POKEMON_ex, CardTag.FUTURE];
   public cardType: CardType = F;
   public hp: number = 240;
   public weakness = [{ type: G }];
