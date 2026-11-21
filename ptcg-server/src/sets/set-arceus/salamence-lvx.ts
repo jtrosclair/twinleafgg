@@ -1,12 +1,11 @@
 import { CardTag, CardType, GameError, GameMessage, PlayerType, PokemonCard, PowerType, Stage, State, StateUtils, StoreLike, SuperType } from '../../game';
 import { CheckPokemonAttacksEffect, CheckPokemonPowersEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { BetweenTurnsEffect } from '../../game/store/effects/game-phase-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { GamePhase } from '../../game/store/state/state';
 import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
-import { ADD_MARKER, CONFIRMATION_PROMPT, HAS_MARKER, IS_POKEPOWER_BLOCKED, REMOVE_MARKER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { ADD_MARKER, CONFIRMATION_PROMPT, HAS_MARKER, IS_POKEPOWER_BLOCKED, REMOVE_MARKER, WAS_ATTACK_USED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../../game/store/prefabs/prefabs';
 
 export class SalamenceLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
@@ -55,29 +54,24 @@ export class SalamenceLVX extends PokemonCard {
       });
     }
 
-    if (effect instanceof KnockOutEffect && HAS_MARKER(this.DOUBLE_FALL_MARKER, StateUtils.getOpponent(state, effect.player), this)) {
+    if (WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE(state, effect)
+      && effect.target.attackDamageKnockOut?.sourceCard === this) {
       const attacker = StateUtils.getOpponent(state, effect.player);
-      if (state.phase !== GamePhase.ATTACK || state.players[state.activePlayer] !== attacker) {
-        return state;
-      }
-      if (!effect.player.marker.hasMarker(effect.player.DAMAGE_DEALT_MARKER)) {
-        return state;
-      }
-      if (attacker.active.getPokemonCard() !== this) {
-        return state;
-      }
-      if (effect.prizeCount > 0) {
+      if (effect.prizeCount > 0 && HAS_MARKER(this.DOUBLE_FALL_MARKER, attacker, this)) {
         effect.prizeCount += 1;
       }
     }
 
-    if (effect instanceof EndTurnEffect && HAS_MARKER(this.DOUBLE_FALL_MARKER, effect.player, this)) {
+    if (effect instanceof BetweenTurnsEffect && HAS_MARKER(this.DOUBLE_FALL_MARKER, effect.player, this)) {
       REMOVE_MARKER(this.DOUBLE_FALL_MARKER, effect.player, this);
     }
 
-    // Steam Blast
+    // Ref: set-astral-radiance/luxray-v.ts (discard Energy after damage).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      DISCARD_X_ENERGY_FROM_THIS_POKEMON(store, state, effect, 1);
+      afterAttackDamage(state, effect, (attackStore, attackState) => {
+        DISCARD_X_ENERGY_FROM_THIS_POKEMON(attackStore, attackState, effect, 1);
+        return attackState;
+      });
     }
 
     if (effect instanceof CheckTableStateEffect) {

@@ -44,6 +44,9 @@ async function main() {
   const existingOnly = process.argv.includes('--existing');
   const filterArgument = process.argv.find(argument => argument.startsWith('--filter='));
   const filter = filterArgument ? new RegExp(filterArgument.slice('--filter='.length)) : undefined;
+  const workerArgument = process.argv.find(argument => argument.startsWith('--workers='));
+  const workers = workerArgument ? Number(workerArgument.slice('--workers='.length)) : 2;
+  if (!Number.isSafeInteger(workers) || workers < 1) throw new Error('--workers must be a positive integer');
   const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'twinleaf-card-regressions-'));
   const workspace = path.join(temporary, 'ptcg-server');
   // Reports and per-spec logs stay in `temporary`; the compiled workspace is
@@ -85,7 +88,7 @@ async function main() {
     }
     const results = [];
     let index = 0;
-    await Promise.all(Array.from({ length: 2 }, async () => {
+    await Promise.all(Array.from({ length: Math.min(workers, specs.length) }, async () => {
       while (index < specs.length) {
         const ordinal = index++;
         const spec = specs[ordinal].replace(/\.ts$/, '.js');

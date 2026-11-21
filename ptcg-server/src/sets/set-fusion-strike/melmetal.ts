@@ -4,12 +4,11 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, StateUtils, PlayerType } from '../../game';
+import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
 import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
+import { PREVENT_DAMAGE, preserveLegacyAbilityDamageProtection } from '../../game/store/prefabs/effect-of-attack-prefabs';
 
 export class Melmetal extends PokemonCard {
   public tags = [CardTag.SINGLE_STRIKE];
@@ -47,37 +46,15 @@ export class Melmetal extends PokemonCard {
   public fullName: string = 'Melmetal FST 189';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Attack 1: Ingot Swing
-    // Ref: set-battle-styles/aegislash-2.ts (Gigaton Bash - prevent damage with 2-marker cleanup)
-    // Ref: set-plasma-freeze/latias-ex.ts (Bright Down - check sourceCard.powers.length)
+    // Ref: set-chaos-rising/deoxys-3-batch16.ts (damage protection from Pokémon with an Ability).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      player.active.marker.addMarker(this.INGOT_SWING_MARKER, this);
-      opponent.marker.addMarker(this.CLEAR_INGOT_SWING_MARKER, this);
+      return PREVENT_DAMAGE(store, state, effect, this, { sourceHasAbility: true });
     }
 
-    // Prevent damage from Pokemon with Abilities during opponent's next turn
-    if ((effect instanceof DealDamageEffect || effect instanceof PutDamageEffect)
-      && effect.target.cards.includes(this)
-      && effect.target.marker.hasMarker(this.INGOT_SWING_MARKER, this)) {
-      const sourceCard = effect.source.getPokemonCard();
-      if (sourceCard && sourceCard.powers.some(p => p.powerType === PowerType.ABILITY)) {
-        effect.preventDefault = true;
-        return state;
-      }
-    }
-
-    // Cleanup markers at end of opponent's turn
-    if (effect instanceof EndTurnEffect
-      && effect.player.marker.hasMarker(this.CLEAR_INGOT_SWING_MARKER, this)) {
-      effect.player.marker.removeMarker(this.CLEAR_INGOT_SWING_MARKER, this);
-      const opponent = StateUtils.getOpponent(state, effect.player);
-      opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList) => {
-        cardList.marker.removeMarker(this.INGOT_SWING_MARKER, this);
-      });
-    }
+    preserveLegacyAbilityDamageProtection(store, state, effect, this, this.INGOT_SWING_MARKER);
+    CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN(
+      state, effect, this.CLEAR_INGOT_SWING_MARKER, this.INGOT_SWING_MARKER, this
+    );
 
     // Attack 2: Blasting Hammer
     // Ref: set-surging-sparks/charcadet-2.ts (Flamethrower - DISCARD_X_ENERGY_FROM_THIS_POKEMON)

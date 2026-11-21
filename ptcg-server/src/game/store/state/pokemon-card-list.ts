@@ -13,6 +13,7 @@ export interface AttackSourceFilter {
   sourceStage?: Stage;
   sourceCardType?: CardType;
   sourceHasAbility?: boolean;
+  excludedSourceName?: string;
 }
 
 export type RetaliateOnDamageOptions =

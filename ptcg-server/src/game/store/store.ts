@@ -29,6 +29,7 @@ import { CardTarget, PlayCardAction, PlayerType, SlotType } from './actions/play
 import { ChangeAvatarAction } from './actions/change-avatar-action';
 import { Effect } from './effects/effect';
 import { clearAttackDamageScopes } from './prefabs/attack-after-damage';
+import { pokemonHasEffectiveAbility } from './prefabs/pokemon-abilities';
 import { AfterEvolveEffect, AttackEffect, CheckEvolveEffect, EffectOfAbilityEffect, EvolveEffect, KnockOutEffect,
   PowerEffect, RetreatEffect, RetreatStartEffect } from './effects/game-effects';
 import { ATTACK_RETREAT_LOCK_UNTIL_TARGET_END_TURN } from './prefabs/retreat-lock-until-target-end-turn';
@@ -281,9 +282,10 @@ export class Store implements StoreLike {
           : effect.target.preventEffectsOfAttacksNextTurn && !(effect instanceof ApplyWeaknessEffect);
         const filter = damage ? effect.target.preventDamageNextTurnFilter : effect.target.preventEffectsOfAttacksNextTurnFilter;
         const sourcePokemon = effect.source.getPokemonCard();
-        if (prevent && (!filter?.sourceStage || sourcePokemon?.stage === filter.sourceStage)
+        if (prevent && (filter?.sourceStage === undefined || sourcePokemon?.stage === filter.sourceStage)
+          && (!filter?.excludedSourceName || sourcePokemon?.name !== filter.excludedSourceName)
           && (filter?.sourceHasAbility !== true
-            || sourcePokemon?.powers.some(power => power.powerType === PowerType.ABILITY) === true)) {
+            || pokemonHasEffectiveAbility(this, state, sourceOwner, sourcePokemon))) {
           const sourceType = filter?.sourceCardType;
           const typeCheck = sourceType === undefined ? undefined : new CheckPokemonTypeEffect(effect.source);
           if (typeCheck) state = this.reduceEffect(state, typeCheck);

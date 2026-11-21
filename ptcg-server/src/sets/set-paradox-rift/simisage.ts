@@ -1,12 +1,9 @@
 import { CardType, Player, PlayerType, PokemonCard, Stage, State, StateUtils, StoreLike } from '../../game';
 import { CheckAttackCostEffect } from '../../game/store/effects/check-effects';
-import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { PowerType } from '../../game/store/card/pokemon-types';
-import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { GamePhase } from '../../game/store/state/state';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-
+import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED, CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
+import { PREVENT_DAMAGE, preserveLegacyAbilityDamageProtection } from '../../game/store/prefabs/effect-of-attack-prefabs';
 
 const MONKEY_TRIO_NAMES = ['Simisage', 'Simisear', 'Simipour'];
 
@@ -71,79 +68,15 @@ export class Simisage extends PokemonCard {
       effect.cost = effect.cost.filter(c => c !== CardType.COLORLESS);
     }
 
-    // Attack 1: Arm Thrust Needle
-    // Ref: set-chaos-rising/deoxys3.ts (Psy Protect)
+    // Ref: set-chaos-rising/deoxys-3-batch16.ts (damage protection from Pokémon with an Ability).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player)
-
-      player.active.marker.addMarker(this.ARM_THRUST_NEEDLE_MARKER, this, 'attack')
-      opponent.marker.addMarker(this.CLEAR_ARM_THRUST_NEEDLE_MARKER, this, 'attack')
+      return PREVENT_DAMAGE(store, state, effect, this, { sourceHasAbility: true, excludedSourceName: 'Simisage' });
     }
 
-    // Prevent damage from Pokemon with Abilities (during opponent's next turn)
-    // Ref: set-twilight-masquerade/cornerstone-mask-ogerpon-ex.ts (prevent damage from source with ability)
-    if (
-      effect instanceof DealDamageEffect &&
-      effect.target.cards.includes(this) &&
-      effect.target.getPokemonCard() === this
-    ) {
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-      const defender = StateUtils.findOwner(state, effect.target);
-      if (IS_ABILITY_BLOCKED(store, state, defender, this)) {
-        return state;
-      }
-      if (!effect.target.marker.hasMarker(this.ARM_THRUST_NEEDLE_MARKER, this)) {
-        return state;
-      }
-      const sourceCard = effect.source.getPokemonCard();
-      if (sourceCard?.name === 'Simisage') {
-        return state;
-      }
-      if (!sourceCard || !sourceCard.powers.some((p) => p.powerType === PowerType.ABILITY)) {
-        return state;
-      }
-      effect.damage = 0;
-    }
-
-    if (
-      effect instanceof PutDamageEffect &&
-      effect.target.cards.includes(this) &&
-      effect.target.getPokemonCard() === this
-    ) {
-      if (state.phase !== GamePhase.ATTACK) {
-        return state;
-      }
-      const defender = StateUtils.findOwner(state, effect.target);
-      if (IS_ABILITY_BLOCKED(store, state, defender, this)) {
-        return state;
-      }
-      if (!effect.target.marker.hasMarker(this.ARM_THRUST_NEEDLE_MARKER, this)) {
-        return state;
-      }
-      const sourceCard = effect.source.getPokemonCard();
-      if (sourceCard?.name === 'Simisage') {
-        return state;
-      }
-      if (!sourceCard || !sourceCard.powers.some((p) => p.powerType === PowerType.ABILITY)) {
-        return state;
-      }
-      effect.preventDefault = true;
-    }
-
-    // Cleanup at end of opponent's turn
-    if (
-      effect instanceof EndTurnEffect &&
-      effect.player.marker.hasMarker(this.CLEAR_ARM_THRUST_NEEDLE_MARKER, this)
-    ) {
-      effect.player.marker.removeMarker(this.CLEAR_ARM_THRUST_NEEDLE_MARKER, this);
-      const opponent = StateUtils.getOpponent(state, effect.player);
-      opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList) => {
-        cardList.marker.removeMarker(this.ARM_THRUST_NEEDLE_MARKER, this);
-      });
-    }
+    preserveLegacyAbilityDamageProtection(store, state, effect, this, this.ARM_THRUST_NEEDLE_MARKER, 'Simisage');
+    CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN(
+      state, effect, this.CLEAR_ARM_THRUST_NEEDLE_MARKER, this.ARM_THRUST_NEEDLE_MARKER, this
+    );
 
     return state;
   }

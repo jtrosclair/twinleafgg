@@ -5435,3 +5435,50 @@ They include several shared effect refactors and card-catalog
 additions. The next gameplay review covers the unfinished shared
 Knock Out rules in `bc849aeed` and `b8fad7fa2`, and outstanding
 port behavior in the requested-card additions.
+
+## Gameplay re-audit, batch 86
+
+Double Fall awards one extra Prize per opposing Pokémon Knocked Out
+by damage from the physical Salamence LV.X. It remains active through
+Knock Out resolution. A real Level Up followed by Shoot Through takes
+four Prizes across the Active and Bench. Counters placed on a separate
+target do not earn an extra Prize. Steam Blast discards after damage.
+[Arceus Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Arceus.pdf)
+
+Simisage PAR, both Chaos Rising Deoxys prints and Melmetal FST check
+whether the attacking Pokémon currently has an Ability. The attack
+protection survives removal of the defender's own Ability, while Path
+to the Peak removing the attacker's Ability lets the damage through.
+Arm Thrust Needle keeps the same-name exception. Monkey Trio supplies
+only Colorless costs, including those of Technical Machine attacks.
+[Simisage print](https://asia.pokemon-card.com/ph/card-search/detail/10682/)
+[Simisage rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%81%8A%E3%81%AB%E3%81%B3&page=153&regulation=all&regulation_faq_main_item1=all)
+[Deoxys rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%87%E3%82%AA%E3%82%AD%E3%82%B7%E3%82%B9&regulation_faq_main_item1=all)
+
+Giovanni's Charisma respects Wide Wall, Mentally Calm and Scoop-Up
+Block. It attaches one legal Energy from hand when the opposing Energy
+actually returns. The shared attachment sequence still applies printed
+costs and checks. The test includes Aurora Energy as the last card in
+hand after playing the Supporter.
+[Wide Wall rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%89%E3%82%B5%E3%82%A4%E3%83%89%E3%83%B3&page=4&regulation=all&regulation_faq_main_item1=all)
+[Mentally Calm rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%9F%E3%83%AD%E3%82%AB%E3%83%AD%E3%82%B9&regulation_faq_main_item1=all)
+[Aurora Energy print](https://www.pokemon-card.com/card-search/details.php/card/38832/regu/all)
+
+Closed the Simisage/Pansage/Stakataka request, the Self Knock Out and
+Dusknoir LV.X refactor, and the Hop's Phantump and Trevenant request.
+Horrifying Revenge already uses the Hop-specific attack-damage marker.
+The corresponding tests cover attack damage, damage counters and
+expiration after the qualifying turn. Forty card and engine commits
+remain open, including the wider Wide Wall and Knock Out reviews.
+[Hop's Phantump print](https://www.pokemon-card.com/card-search/details.php/card/48599)
+[Hop's Trevenant print](https://www.pokemon-card.com/card-search/details.php/card/48600)
+
+The regression runner accepts `--workers=N` for larger parallel batches.
+
+The 19 new checks pass, including 13 failures on the preceding engine.
+All 11,362 engine checks pass in 331 files. The combined checkout with
+the in-progress client changes passes 130 focused checks. The API
+passes 33 checks, client services pass 209, and all ten packaged
+board prompt checks pass. All 559 comparable saved boards and 3,636
+sampled opening actions match. The seven recorded solutions each win
+twice on replay.

@@ -1,8 +1,11 @@
 import { Card } from '../card/card';
 import { CardType } from '../card/card-types';
+import { PutDamageEffect } from '../effects/attack-effects';
+import { Effect } from '../effects/effect';
 import { AttackEffect } from '../effects/game-effects';
 import { EffectOfAttackEffect } from '../effects/effect-of-attack-effects';
-import { State } from '../state/state';
+import { GamePhase, State } from '../state/state';
+import { StateUtils } from '../state-utils';
 import { StoreLike } from '../store-like';
 import { COIN_FLIP_PROMPT } from './prefabs';
 import { ChooseAttackPrompt } from '../prompts/choose-attack-prompt';
@@ -14,6 +17,7 @@ import { PokemonCard } from '../card/pokemon-card';
 import { EndTurnEffect } from '../effects/game-phase-effects';
 import { PokemonCardList } from '../state/pokemon-card-list';
 import { AttackSourceFilter, RetaliateOnDamageOptions } from '../state/pokemon-card-list';
+import { pokemonHasEffectiveAbility } from './pokemon-abilities';
 
 import {
   DefendingPokemonTakesDamageOnEnergyAttachFromHandNextTurnEffect,
@@ -341,6 +345,22 @@ export function PREVENT_DAMAGE(
 ): State {
   const protection = new NextTurnPreventDamageEffect(effect, filter); protection.markerSource = source;
   return store.reduceEffect(state, protection);
+}
+
+/** Honor the card-specific attack markers stored by older puzzle snapshots. */
+export function preserveLegacyAbilityDamageProtection(
+  store: StoreLike, state: State, effect: Effect, source: PokemonCard, marker: string, excludedSourceName?: string,
+): void {
+  if (!(effect instanceof PutDamageEffect) || state.phase !== GamePhase.ATTACK
+    || effect.ignoresDefendingDamageEffects || effect.target.getPokemonCard() !== source
+    || !effect.target.marker.hasMarker(marker, source)
+    || effect.target === effect.source) return;
+  const attacker = effect.source.getPokemonCard();
+  const owner = StateUtils.findOwner(state, effect.source);
+  if (owner !== StateUtils.findOwner(state, effect.target) && attacker
+    && attacker.name !== excludedSourceName && pokemonHasEffectiveAbility(store, state, owner, attacker)) {
+    effect.preventDefault = true;
+  }
 }
 
 /** Increase the Defending Pokémon's retreat cost through the end of its owner's next turn. */
