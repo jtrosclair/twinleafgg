@@ -1,7 +1,4 @@
-import { CardType, PokemonCard, PowerType, Stage, State, StoreLike } from '../../../game';
-import { Effect } from '../../../game/store/effects/effect';
-import { AttackEffect } from '../../../game/store/effects/game-effects';
-import { IS_ABILITY_BLOCKED } from '../../../game/store/prefabs/prefabs';
+import { CardType, PokemonCard, PowerType, Stage } from '../../../game';
 
 export class Pawmot extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -31,16 +28,4 @@ export class Pawmot extends PokemonCard {
   public setNumber: string = '25';
   public name: string = 'Pawmot';
   public fullName: string = 'Pawmot FLO';
-  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Double Strike
-    if (effect instanceof AttackEffect && effect.source.cards.includes(this)) {
-      if (!IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
-        this.powers[0].barrage = true;
-      } else {
-        this.powers[0].barrage = false;
-      }
-    }
-
-    return state;
-  }
 }

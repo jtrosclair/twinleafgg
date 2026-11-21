@@ -1,7 +1,9 @@
-import { CardType, ChoosePokemonPrompt, GameMessage, PlayerType, PokemonCard, SlotType, Stage, State, StateUtils, StoreLike } from '../../../game';
+import { opponentSwitchAfterAttack } from '../../../game/store/prefabs/opponent-switch-after-attack';
+import { afterAttackDamage } from '../../../game/store/prefabs/attack-after-damage';
+import { DealDamageEffect } from '../../../game/store/effects/attack-effects';
+import { CardType, PokemonCard, Stage, State, StoreLike } from '../../../game';
 import { Effect } from '../../../game/store/effects/effect';
-import { AfterAttackEffect } from '../../../game/store/effects/game-phase-effects';
-import { THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
 
 export class Throh extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -32,33 +34,17 @@ export class Throh extends PokemonCard {
   public fullName: string = 'Throh FLO';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Circle Throw
-    // Ref: set-team-up/pidgeot.ts (Whirlwind - opponent chooses the new Active)
-    if (effect instanceof AfterAttackEffect && effect.attack === this.attacks[0]) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      if (!opponent.bench.some(b => b.cards.length > 0)) {
-        return state;
-      }
-
-      return store.prompt(state, new ChoosePokemonPrompt(
-        opponent.id,
-        GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-        PlayerType.TOP_PLAYER,
-        [SlotType.BENCH],
-        { min: 1, max: 1, allowCancel: false }
-      ), targets => {
-        if (!targets || targets.length === 0) {
-          return;
-        }
-        opponent.switchPokemon(targets[0], store, state);
-      });
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      opponentSwitchAfterAttack(state, effect, this);
     }
 
     // Guts Fight
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 20);
+      afterAttackDamage(state, effect, (store, next) => {
+        const recoil = new DealDamageEffect(effect, 20);
+        recoil.target = effect.source;
+        return store.reduceEffect(next, recoil);
+      });
     }
 
     return state;

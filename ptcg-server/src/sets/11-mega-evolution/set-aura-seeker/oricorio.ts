@@ -1,7 +1,7 @@
 import { benchPokemonFromHand } from '../../../game/store/prefabs/bench-play-reactions';
 import { Card, CardType, ChooseCardsPrompt, GameMessage, PokemonCard, PokemonCardList, Stage, State, StateUtils, StoreLike, SuperType } from '../../../game';
 import { Effect } from '../../../game/store/effects/effect';
-import { WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
+import { SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
 
 export class Oricorio extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -36,9 +36,10 @@ export class Oricorio extends PokemonCard {
       const opponent = StateUtils.getOpponent(state, player);
       const slots: PokemonCardList[] = opponent.bench.filter(b => b.cards.length === 0);
 
-      if (opponent.hand.cards.length === 0 || slots.length === 0) {
-        return state;
+      if (slots.length === 0) {
+        return SHOW_CARDS_TO_PLAYER(store, state, player, opponent.hand.cards, opponent);
       }
+      if (opponent.hand.cards.length === 0) return state;
 
       const max = Math.min(3, slots.length);
       return store.prompt(state, new ChooseCardsPrompt(

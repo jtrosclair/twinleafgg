@@ -1,7 +1,9 @@
+import { afterAttackDamage } from '../../../game/store/prefabs/attack-after-damage';
+import { DealDamageEffect } from '../../../game/store/effects/attack-effects';
 import { CardType, PokemonCard, Stage, State, StoreLike } from '../../../game';
 import { Effect } from '../../../game/store/effects/effect';
 import { PUT_X_DAMAGE_COUNTERS_IN_ANY_WAY_YOU_LIKE } from '../../../game/store/prefabs/attack-effects';
-import { THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
 
 export class Medicham extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -40,7 +42,11 @@ export class Medicham extends PokemonCard {
 
     // Guts Fight
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 20);
+      afterAttackDamage(state, effect, (store, next) => {
+        const recoil = new DealDamageEffect(effect, 20);
+        recoil.target = effect.source;
+        return store.reduceEffect(next, recoil);
+      });
     }
 
     return state;

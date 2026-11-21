@@ -1,6 +1,5 @@
 import { CardTag, CardType, PokemonCard, pokemonHasCardType, Stage, State, StoreLike } from '../../../game';
 import { Effect } from '../../../game/store/effects/effect';
-import { THIS_ATTACK_DOES_X_DAMAGE_FOR_EACH_POKEMON_IN_YOUR_DISCARD_PILE, THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS } from '../../../game/store/prefabs/attack-effects';
 import { WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
 
 export class MegaGarchompZex extends PokemonCard {
@@ -38,16 +37,15 @@ export class MegaGarchompZex extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Dragon Avenger
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      THIS_ATTACK_DOES_X_DAMAGE_FOR_EACH_POKEMON_IN_YOUR_DISCARD_PILE(
-        30,
-        c => pokemonHasCardType(c, CardType.DRAGON),
-        effect
-      );
+      const dragons = effect.player.discard.cards.filter(
+        card => card instanceof PokemonCard && pokemonHasCardType(card, CardType.DRAGON)
+      ).length;
+      effect.damage = dragons ? effect.damage + 30 * dragons - effect.attack.damage : 0;
     }
 
     // Sonic Edge
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      THIS_ATTACKS_DAMAGE_ISNT_AFFECTED_BY_EFFECTS(store, state, effect, 240);
+      effect.ignoreDefendingDamageEffects = true;
     }
 
     return state;

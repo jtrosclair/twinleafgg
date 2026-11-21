@@ -27,7 +27,8 @@ export class Mawile extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Big Jaw
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      effect.damage = 30 * effect.opponent.hand.cards.length;
+      const count = effect.opponent.hand.cards.length;
+      effect.damage = count ? effect.damage + 30 * count - effect.attack.damage : 0;
     }
 
     return state;

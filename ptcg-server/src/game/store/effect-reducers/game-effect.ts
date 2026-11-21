@@ -45,7 +45,7 @@ import { StoreLike } from '../store-like';
 import { MoveCardsEffect, PayHandEnergyAttachmentCostEffect } from '../effects/game-effects';
 import { GameStatsTracker } from '../game-stats-tracker';
 import { PokemonCardList } from '../state/pokemon-card-list';
-import { MOVE_CARDS, COIN_FLIP_PROMPT, IS_TOOL_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../prefabs/prefabs';
+import { MOVE_CARDS, COIN_FLIP_PROMPT, IS_ABILITY_BLOCKED, IS_TOOL_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../prefabs/prefabs';
 import { CardList } from '../state/card-list';
 import { Player } from '../state/player';
 import { ConfirmPrompt } from '../prompts/confirm-prompt';
@@ -144,6 +144,7 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
   if (attackingPokemonCard) {
     hasBarragePower = attackingPokemonCard.powers.some(
       power => power.barrage
+        && (power.powerType !== PowerType.ABILITY || !IS_ABILITY_BLOCKED(store, state, player, attackingPokemonCard))
     );
   }
 
@@ -302,6 +303,7 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
     if (store.hasPrompts()) {
       yield store.waitPrompt(state, () => next());
     }
+    if (state.phase === GamePhase.FINISHED) return state;
     let wantToUse: boolean | undefined = undefined;
     yield store.prompt(state, new ConfirmPrompt(
       player.id,

@@ -1,3 +1,4 @@
+import { afterAttackDamage } from '../../../game/store/prefabs/attack-after-damage';
 import { CardType, PokemonCard, Stage, State, StoreLike } from '../../../game';
 import { Effect } from '../../../game/store/effects/effect';
 import { DRAW_CARDS, WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
@@ -25,7 +26,10 @@ export class Pawmi extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Quick Draw
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      DRAW_CARDS(effect.player, 1);
+      afterAttackDamage(state, effect, (_store, next) => {
+        DRAW_CARDS(effect.player, 1);
+        return next;
+      });
     }
 
     return state;

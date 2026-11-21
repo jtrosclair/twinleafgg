@@ -1,7 +1,15 @@
-import { CardType, ChooseCardsPrompt, GameMessage, PokemonCard, Stage, State, SuperType } from '../../../game';
+import { CheckProvidedEnergyEffect } from '../../../game/store/effects/check-effects';
+import { afterAttackDamageForOriginalDefender } from '../../../game/store/prefabs/post-damage-identity';
+import { EffectOfAttackEffect } from '../../../game/store/effects/effect-of-attack-effects';
+import { AttackEffect } from '../../../game/store/effects/game-effects';
+import { CardType, ChooseEnergyPrompt, GameMessage, PokemonCard, Stage, State } from '../../../game';
 import { Effect } from '../../../game/store/effects/effect';
-import { CONFIRMATION_PROMPT, MOVE_CARDS, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
+import { MOVE_CARDS, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
 import { StoreLike } from '../../../game/store/store-like';
+
+class DesertWindEffect extends EffectOfAttackEffect {
+  constructor(attack: AttackEffect, readonly applyEffect: () => void) { super(attack); }
+}
 
 export class Flygon extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -32,36 +40,26 @@ export class Flygon extends PokemonCard {
   public name: string = 'Flygon';
   public fullName: string = 'Flygon FLO';
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Desert Wind
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = effect.opponent;
-      const energyCount = opponent.active.energies.cards.length;
-
-      if (energyCount === 0) {
-        return state;
-      }
-
-      return CONFIRMATION_PROMPT(store, state, player, result => {
-        if (!result) {
-          return;
-        }
-
-        const max = Math.min(2, opponent.active.energies.cards.length);
-        store.prompt(state, new ChooseCardsPrompt(
-          player,
-          GameMessage.CHOOSE_ENERGIES_TO_DISCARD,
-          opponent.active,
-          { superType: SuperType.ENERGY },
-          { min: 0, max, allowCancel: true }
-        ), selected => {
-          const cards = selected || [];
-          if (cards.length === 0) {
-            return;
-          }
-          MOVE_CARDS(store, state, opponent.active, opponent.deck, { cards, sourceCard: this });
-          SHUFFLE_DECK(store, state, opponent);
-        });
+      afterAttackDamageForOriginalDefender(state, effect, (store, next, target) => {
+        if (target.energies.cards.length === 0) return next;
+        return store.reduceEffect(next, new DesertWindEffect(effect, () => {
+          const { player, opponent } = effect;
+          const energy = new CheckProvidedEnergyEffect(opponent, target);
+          store.reduceEffect(next, energy);
+          const energyMap = energy.energyMap.filter(entry => entry.provides.length > 0);
+          const count = Math.min(2, energyMap.reduce((total, entry) => total + entry.provides.length, 0));
+          if (count === 0) return;
+          store.prompt(next, new ChooseEnergyPrompt(
+            player.id, GameMessage.CHOOSE_CARD_TO_SHUFFLE, energyMap, Array<CardType>(count).fill(CardType.COLORLESS),
+            { allowCancel: true }
+          ), selected => {
+            if (!selected?.length) return;
+            const cards = selected.map(entry => entry.card);
+            MOVE_CARDS(store, next, target, opponent.deck, { cards, sourceCard: this, sourceEffect: effect });
+            SHUFFLE_DECK(store, next, opponent);
+          });
+        }));
       });
     }
 

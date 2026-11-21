@@ -6542,3 +6542,34 @@ already verified. Group uncovered Scarlet & Violet and newer logic
 changes across commits. Run focused checks for each group and run the
 full saved-puzzle comparison once on the combined changes before
 release.
+
+## Gameplay audit, batch 111
+
+Used Pokémon's 39 corresponding Japanese Aura Seeker prints to review
+the simulator's M7 definitions. The printed card identities and saved
+`FLO` names are retained. Gible, Gabite, Trapinch, Pawmi, and the
+Guts Fight attackers now resolve their follow-up effects after damage.
+Throh gives the defender the replacement choice and respects protection
+on the original defender. Meloetta caps the private search at empty
+Bench spots. Oricorio can look at the opposing hand with a full Bench.
+
+Drampa attaches Basic Energy to a Dragon Pokémon after damage and
+shuffles its own deck. Flygon can decline Desert Wind or return two
+Energy units after damage. Sigilyph ex uses the actual attacker as
+the source of its Power Cyclone transfer. Sonic Edge keeps normal
+damage attribution and ignores the defender's damage effects.
+Big Jaw, Dragon Avenger and Triple Kick preserve applicable bonuses.
+Fight Arena requires an eligible injured Pokémon. Double Strike
+checks Ability suppression and can continue against the promoted
+defender after the first hit.
+[Official Aura Seeker card gallery](https://www.pokemon-card.com/ex/m7/)
+[Official advanced rules guide](https://www.pokemon-card.com/assets/document/advanced_manual.pdf)
+
+Completed the gameplay review of `afe935782` and `b014163c0`. The Delta
+Reign hunks in `b014163c0` are print registry and formatting changes.
+The modern queue is ten of thirteen reviewed. The remaining entries
+are the two Ability attribution commits `3348ebdc8` and `db4eebfcf`,
+plus `ffd7c12f5` for Delta Reign.
+
+All 363 focused engine checks pass. Twenty of the 25 new cases
+reproduce failures on the preceding engine.

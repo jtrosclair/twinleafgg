@@ -1,4 +1,4 @@
-import { PlayerType, State, StateUtils, StoreLike, TrainerCard, TrainerType } from '../../../game';
+import { GameError, GameMessage, State, StateUtils, StoreLike, TrainerCard, TrainerType } from '../../../game';
 import { Effect } from '../../../game/store/effects/effect';
 import { HealEffect, UseStadiumEffect } from '../../../game/store/effects/game-effects';
 import { IS_STADIUM_EFFECT_BLOCKED } from '../../../game/store/prefabs/stadium-effect';
@@ -18,16 +18,11 @@ export class FightArena extends TrainerCard {
     if (effect instanceof UseStadiumEffect && StateUtils.getStadiumCard(state) === this) {
       const player = effect.player;
 
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
-        const pokemon = cardList.getPokemonCard();
-        if (!pokemon || cardList.hasRuleBox()) {
-          return;
-        }
-        if (IS_STADIUM_EFFECT_BLOCKED(store, state, player, cardList, this)) {
-          return;
-        }
-        store.reduceEffect(state, new HealEffect(player, cardList, 20));
-      });
+      const candidates = player.getPokemonInPlay().filter(slot =>
+        slot.damage > 0 && !slot.hasRuleBox() && !IS_STADIUM_EFFECT_BLOCKED(store, state, player, slot, this)
+      );
+      if (candidates.length === 0) throw new GameError(GameMessage.CANNOT_USE_STADIUM);
+      for (const slot of candidates) state = store.reduceEffect(state, new HealEffect(player, slot, 20));
     }
 
     return state;

@@ -1,6 +1,8 @@
+import { afterAttackDamage } from '../../../game/store/prefabs/attack-after-damage';
+import { DealDamageEffect } from '../../../game/store/effects/attack-effects';
 import { CardType, PokemonCard, Stage, State, StoreLike } from '../../../game';
 import { Effect } from '../../../game/store/effects/effect';
-import { MULTIPLE_COIN_FLIPS_PROMPT, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
+import { MULTIPLE_COIN_FLIPS_PROMPT, WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
 
 export class Hitmontop extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -37,13 +39,17 @@ export class Hitmontop extends PokemonCard {
       const player = effect.player;
       return MULTIPLE_COIN_FLIPS_PROMPT(store, state, player, 3, results => {
         const heads = results.filter(r => r).length;
-        effect.damage = 10 * heads;
+        effect.damage = heads ? effect.damage + 10 * heads - effect.attack.damage : 0;
       });
     }
 
     // Guts Fight
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 20);
+      afterAttackDamage(state, effect, (store, next) => {
+        const recoil = new DealDamageEffect(effect, 20);
+        recoil.target = effect.source;
+        return store.reduceEffect(next, recoil);
+      });
     }
 
     return state;

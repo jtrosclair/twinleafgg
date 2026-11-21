@@ -1,7 +1,9 @@
+import { searchBasicsToBench } from '../../../game/store/prefabs/search-basic-to-bench';
+import { afterAttackDamageForOriginalDefender } from '../../../game/store/prefabs/post-damage-identity';
 import { CardType, PokemonCard, Stage, State, StoreLike } from '../../../game';
 import { Effect } from '../../../game/store/effects/effect';
 import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED } from '../../../game/store/prefabs/attack-effects';
-import { SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH, WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
 
 export class Meloetta extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -33,18 +35,15 @@ export class Meloetta extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Welcoming Song
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(
-        store,
-        state,
-        effect.player,
-        { stage: Stage.BASIC },
-        { min: 0, max: 3 }
-      );
+      return searchBasicsToBench(store, state, effect, 3);
     }
 
     // Perplex
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED(store, state, effect);
+      afterAttackDamageForOriginalDefender(state, effect, (store, next) => {
+        YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED(store, next, effect);
+        return next;
+      });
     }
 
     return state;

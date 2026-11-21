@@ -1,3 +1,4 @@
+import { afterAttackDamage } from '../../../game/store/prefabs/attack-after-damage';
 import { CardType, PokemonCard, Stage, State, StoreLike } from '../../../game';
 import { Effect } from '../../../game/store/effects/effect';
 import { DISCARD_TOP_X_OF_OPPONENTS_DECK, WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
@@ -25,7 +26,10 @@ export class Trapinch extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Mountain Munch
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      DISCARD_TOP_X_OF_OPPONENTS_DECK(store, state, effect.player, 1, this, effect);
+      afterAttackDamage(state, effect, (store, next) => {
+        DISCARD_TOP_X_OF_OPPONENTS_DECK(store, next, effect.player, 1, this, effect);
+        return next;
+      });
     }
 
     return state;

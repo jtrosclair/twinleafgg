@@ -442,8 +442,8 @@
       "sha": "afe935782ab7a0e255dfa2ad4e22b6bbef00214b",
       "date": "2026-10-23",
       "subject": "add(cards): Aura Seeker",
-      "status": "partial",
-      "notes": "Six M7 cards were trialled, not applied: M7 image mappings unavailable; upstream reorganized paths. See docs/upstream-sync.md. The M7 definitions are now registered under their existing FLO identities. Batch 109 fixes Long Drive damage and discard timing, maps the registered Aura Seeker Pokémon ex tags into the engine, and fixes Mega Protection and Dancing Fist against canonical card prints. Remaining gameplay paths are tracked separately from the catalogue import."
+      "status": "applied",
+      "notes": "Batch 111 completed the Aura Seeker gameplay review using official M7 prints and the existing FLO identities. Fixed attack resolution, Energy return and attachment, Bench capacity, and Double Strike. Prior targeted and registry coverage applies to paths already verified."
     },
     {
       "sha": "da4a62d0794bbccc076898227a5f192994bcd468",
@@ -694,8 +694,8 @@
       "sha": "b014163c0791539d454c2cbab58b7c4a45d327da",
       "date": "2026-11-07",
       "subject": "add(cards): DLR SR's, New M7 Cards",
-      "status": "partial",
-      "notes": "Ported Delta Reign alternate prints through 141; unrelated M7 additions and other changes remain deferred. The reported M7 additions now have registered FLO definitions. Batch 109 corrects Trained Arms and Guts Fight, and moves Hustle Screw’s return and shuffle after damage. Floatzel ex and the other Aura Seeker Pokémon ex now use their printed Prize tags. The remaining M7 effects are still open."
+      "status": "applied",
+      "notes": "Delta Reign alternate prints through 141 are registered. The Delta Reign changes are print identity and formatting updates. Batch 111 completed the M7 gameplay review, using batch 109 coverage for Trained Arms, Hustle Screw, and the printed Pokémon ex tags."
     },
     {
       "sha": "837aebeb5f7fbb0f26d1646e958875f16ae55134",

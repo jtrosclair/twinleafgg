@@ -1,8 +1,9 @@
+import { afterAttackDamage } from '../../../game/store/prefabs/attack-after-damage';
 import { PokemonCard, CardTag, Stage, CardType, PowerType, StoreLike, State, StateUtils, GamePhase, AttachEnergyPrompt, GameMessage, PlayerType, SlotType, SuperType } from "../../../game";
 import { PutDamageEffect } from "../../../game/store/effects/attack-effects";
 import { Effect } from "../../../game/store/effects/effect";
 import { AfterAttackEffect } from "../../../game/store/effects/game-phase-effects";
-import { IS_ABILITY_BLOCKED, MOVE_CARDS } from "../../../game/store/prefabs/prefabs";
+import { IS_ABILITY_BLOCKED, MOVE_CARDS, WAS_ATTACK_USED } from "../../../game/store/prefabs/prefabs";
 
 export class Sigilyphex extends PokemonCard {
   public tags: CardTag[] = [CardTag.POKEMON_ex];
@@ -62,29 +63,19 @@ export class Sigilyphex extends PokemonCard {
       }
     }
 
-    // Power Cyclone
-    if (effect instanceof AfterAttackEffect && effect.attack === this.attacks[0]) {
-      const player = effect.player;
-      const hasBench = player.bench.some(b => b.cards.length > 0);
-
-      if (!hasBench) {
-        return state;
-      }
-
-      return store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_TO_BENCH,
-        player.active,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH],
-        { superType: SuperType.ENERGY },
-        { allowCancel: false, min: 1, max: 1 }
-      ), transfers => {
-        transfers = transfers || [];
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          MOVE_CARDS(store, state, player.active, target, { cards: [transfer.card], sourceCard: this });
-        }
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      afterAttackDamage(state, effect, (store, next) => {
+        const { player, source } = effect;
+        if (source.energies.cards.length === 0 || !player.bench.some(slot => slot.getPokemonCard())) return next;
+        return store.prompt(next, new AttachEnergyPrompt(
+          player.id, GameMessage.ATTACH_ENERGY_TO_BENCH, source, PlayerType.BOTTOM_PLAYER, [SlotType.BENCH],
+          { superType: SuperType.ENERGY }, { allowCancel: false, min: 1, max: 1 }
+        ), transfers => {
+          for (const transfer of transfers ?? []) {
+            const target = StateUtils.getTarget(next, player, transfer.to);
+            MOVE_CARDS(store, next, source, target, { cards: [transfer.card], sourceCard: this, sourceEffect: effect });
+          }
+        });
       });
     }
 

@@ -1,3 +1,4 @@
+import { afterAttackDamage } from '../../../game/store/prefabs/attack-after-damage';
 import { CardType, PokemonCard, Stage, State, StoreLike } from '../../../game';
 import { Effect } from '../../../game/store/effects/effect';
 import { DISCARD_TOP_X_CARDS_FROM_YOUR_DECK, WAS_ATTACK_USED } from '../../../game/store/prefabs/prefabs';
@@ -26,7 +27,8 @@ export class Gible extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Dragon Pulse
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      DISCARD_TOP_X_CARDS_FROM_YOUR_DECK(store, state, effect.player, 1, this, effect);
+      afterAttackDamage(state, effect, (store, state) =>
+        DISCARD_TOP_X_CARDS_FROM_YOUR_DECK(store, state, effect.player, 1, this, effect));
     }
 
     return state;
