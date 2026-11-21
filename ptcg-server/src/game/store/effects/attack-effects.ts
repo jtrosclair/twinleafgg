@@ -197,6 +197,11 @@ export class GustOpponentBenchEffect extends AbstractAttackEffect implements Eff
   }
 }
 
+/** An attack that explicitly Knocks Out the target without dealing damage. */
+export class DirectKnockOutAttackEffect extends AbstractAttackEffect implements Effect {
+  readonly type = AttackEffects.KNOCK_OUT_OPPONENT_EFFECT;
+}
+
 export class KnockOutOpponentEffect extends AbstractAttackEffect implements Effect {
   readonly type: string = AttackEffects.DEAL_DAMAGE_EFFECT;
   public preventDefault = false;

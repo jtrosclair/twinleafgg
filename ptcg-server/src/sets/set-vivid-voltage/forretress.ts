@@ -4,10 +4,13 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils } from '../../game';
+import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED, THIS_POKEMON_DOES_DAMAGE_TO_ITSELF } from '../../game/store/prefabs/prefabs';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
+import { DirectKnockOutAttackEffect } from '../../game/store/effects/attack-effects';
+import { SelfKnockOutEffect } from '../../game/store/effects/game-effects';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { afterAttackDamageForOriginalDefender } from '../../game/store/prefabs/post-damage-identity';
 
 export class Forretress extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -47,21 +50,19 @@ export class Forretress extends PokemonCard {
       THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 30);
     }
 
-    // Attack 2: Double KO
-    // Ref: set-plasma-blast/haxorus.ts (KnockOutEffect for both active)
+    // Ref: set-paldea-evolved/forretress-ex.ts (printed self-Knock Out).
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      // KO the opponent's active
-      const knockOutOpponent = new KnockOutEffect(player, opponent.active);
-      store.reduceEffect(state, knockOutOpponent);
-
-      // KO this Pokemon
-      const knockOutSelf = new KnockOutEffect(opponent, player.active);
-      store.reduceEffect(state, knockOutSelf);
+      const attacker = effect.source.getPokemonCard();
+      afterAttackDamageForOriginalDefender(state, effect, (store, afterState, defender) => {
+        const knockOut = new DirectKnockOutAttackEffect(effect);
+        knockOut.target = defender;
+        return store.reduceEffect(afterState, knockOut);
+      });
+      if (attacker) {
+        afterAttackDamage(state, effect, (store, afterState) =>
+          store.reduceEffect(afterState, new SelfKnockOutEffect(effect.player, attacker)));
+      }
     }
-
     return state;
   }
 }

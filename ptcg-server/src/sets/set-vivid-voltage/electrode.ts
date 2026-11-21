@@ -4,11 +4,12 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, EnergyType } from '../../game/store/card/card-types';
-import { AttachEnergyPrompt, GameError, GameMessage, PlayerType, PowerType, SlotType, StoreLike, State, StateUtils } from '../../game';
+import { AttachEnergyPrompt, GameError, GameMessage, PlayerType, PowerType, ShuffleDeckPrompt, SlotType, StoreLike, State } from '../../game';
 import { CardTarget } from '../../game/store/actions/play-card-action';
+import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_POWER_USED, SHUFFLE_DECK, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
+import { SelfKnockOutEffect } from '../../game/store/effects/game-effects';
+import { ATTACH_ENERGY_TRANSFERS, IS_ABILITY_BLOCKED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Electrode extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -22,6 +23,7 @@ export class Electrode extends PokemonCard {
     name: 'Buzzap Generator',
     useWhenInPlay: true,
     powerType: PowerType.ABILITY,
+    knocksOutSelf: true,
     text: 'Once during your turn, if this Pokémon is on your Bench, you may search your deck for up to 2 [L] Energy cards and attach them to your Lightning Pokémon in any way you like. Then, shuffle your deck. If you searched your deck in this way, this Pokémon is Knocked Out.'
   }];
 
@@ -42,60 +44,36 @@ export class Electrode extends PokemonCard {
   public fullName: string = 'Electrode VIV';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Buzzap Generator
-    // Ref: set-paradox-rift/iron-moth.ts (bench ability triggered with WAS_POWER_USED)
-    // Ref: set-vivid-voltage/dialga.ts (AttachEnergyPrompt + shuffle deck)
-    // Ref: set-vivid-voltage/forretress.ts (KnockOutEffect on self)
+    // Ref: set-paldea-evolved/forretress-ex.ts (Exploding Energy), set-surging-sparks/magneton.ts (Overvolt Discharge).
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+      if (!player.bench.some(slot => slot.getPokemonCard() === this) || player.deck.cards.length === 0) {
+        throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
-      // Must be on bench, not active
-      const isBenched = player.bench.some(b => b.getPokemonCard() === this);
-      if (!isBenched) {
-        return state;
-      }
-
-      // Block non-Lightning Pokemon slots
       const blockedTo: CardTarget[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        if (card.cardType !== CardType.LIGHTNING) {
-          blockedTo.push(target);
-        }
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (slot, _card, target) => {
+        const type = new CheckPokemonTypeEffect(slot);
+        store.reduceEffect(state, type);
+        if (!type.cardTypes.includes(CardType.LIGHTNING)) blockedTo.push(target);
       });
 
       return store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_CARDS,
-        player.deck,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.ACTIVE, SlotType.BENCH],
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Lightning Energy' },
-        { allowCancel: false, min: 0, max: 2, blockedTo }
+        player.id, GameMessage.ATTACH_ENERGY_CARDS, player.deck,
+        PlayerType.BOTTOM_PLAYER, [SlotType.ACTIVE, SlotType.BENCH],
+        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, cardType: CardType.LIGHTNING },
+        { allowCancel: false, min: 0, max: 2, blockedTo },
       ), transfers => {
-        transfers = transfers || [];
-
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          player.deck.moveCardTo(transfer.card, target);
-        }
-
-        SHUFFLE_DECK(store, state, player);
-
-        // KO this Electrode - the ability text says "If you searched your deck in this way,
-        // this Pokemon is Knocked Out", which applies whenever the ability is used
-        const electrodeList = player.bench.find(b => b.getPokemonCard() === this);
-        if (electrodeList) {
-          const opponent = StateUtils.getOpponent(state, player);
-          const knockOutEffect = new KnockOutEffect(opponent, electrodeList);
-          store.reduceEffect(state, knockOutEffect);
-        }
+        ATTACH_ENERGY_TRANSFERS(store, state, player, transfers ?? [], 'deck', {
+          sourceCard: this,
+          onAttached: () => store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
+            player.deck.applyOrder(order);
+            store.reduceEffect(state, new SelfKnockOutEffect(player, this));
+          }),
+        });
       });
     }
-
     return state;
   }
 }

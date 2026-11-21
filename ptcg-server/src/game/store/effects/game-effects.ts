@@ -240,7 +240,11 @@ export class SelfKnockOutEffect implements Effect {
   readonly type = GameEffects.SELF_KNOCK_OUT_EFFECT;
   public preventDefault = false;
 
-  constructor(public readonly player: Player, public readonly source: PokemonCard) {}
+  constructor(
+    public readonly player: Player,
+    public readonly source: PokemonCard,
+    public readonly afterDiscard?: () => void,
+  ) {}
 }
 
 // how many prizes when target Pokemon is KO

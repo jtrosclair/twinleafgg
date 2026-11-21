@@ -47,7 +47,7 @@ import { MOVE_CARDS, ADD_MARKER, HAS_MARKER, COIN_FLIP_PROMPT, IS_TOOL_BLOCKED, 
 import { CardList } from '../state/card-list';
 import { Player } from '../state/player';
 import { ConfirmPrompt } from '../prompts/confirm-prompt';
-import { checkState, scheduleSelfKnockOut } from './check-effect';
+import { checkState, scheduleEffectKnockOut } from './check-effect';
 import { discardKnockedOutPokemon } from './knock-out';
 import { ChooseAttackPrompt } from '../prompts/choose-attack-prompt';
 import { Card } from '../card/card';
@@ -371,7 +371,7 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
 
   if (effect instanceof SelfKnockOutEffect) {
     if (!effect.preventDefault && effect.player.getPokemonInPlay().some(slot => slot.getPokemons().includes(effect.source))) {
-      scheduleSelfKnockOut(state, effect.source);
+      scheduleEffectKnockOut(state, effect.source, effect.afterDiscard);
     }
     return state;
   }

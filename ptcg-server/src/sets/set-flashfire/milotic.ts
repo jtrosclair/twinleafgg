@@ -1,9 +1,11 @@
-import { AttachEnergyPrompt, CardTarget, GameError, GameMessage, PlayerType, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
-import { CardType, EnergyType, Stage, SuperType } from '../../game/store/card/card-types';
+import { AttachEnergyPrompt, CardTarget, GameError, GameMessage, PlayerType, PowerType, SlotType, State, StoreLike } from '../../game';
+import { CardTag, CardType, EnergyType, Stage, SuperType } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
 
-import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { EnergyCard } from '../../game/store/card/energy-card';
+import { SelfKnockOutEffect } from '../../game/store/effects/game-effects';
+import { ATTACH_ENERGY_TRANSFERS, IS_ABILITY_BLOCKED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Milotic extends PokemonCard {
 
@@ -23,6 +25,7 @@ export class Milotic extends PokemonCard {
     name: 'Energy Grace',
     useWhenInPlay: true,
     powerType: PowerType.ABILITY,
+    knocksOutSelf: true,
     text: 'Once during your turn (before your attack), you may Knock Out this Pokémon. If you do, attach 3 basic Energy cards from your discard pile to 1 of your Pokémon (excluding Pokémon-EX).'
   }];
 
@@ -47,61 +50,33 @@ export class Milotic extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    // Ref: set-celestial-storm/electrode-gx.ts (Extra Energy Bomb).
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
 
-      const energyInDiscard = player.discard.cards.filter(c => {
-        return c.superType === SuperType.ENERGY && c.energyType === EnergyType.BASIC;
-      }).length;
-
-      if (energyInDiscard === 0) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      }
-
-      /*const blocked: number[] = [];
-      player.discard.cards.forEach((card, index) => {
-        if (card.superType === SuperType.ENERGY && card.energyType === EnergyType.BASIC) {
-          // Allow basic energy cards to be selected
-        } else {
-          blocked.push(index);
-        }
-      });*/
-
-      //Blocks energy from being attached to Pokemon EX
-      const blocked2: CardTarget[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (list, card, target) => {
-        if (card.tags.includes('CardTag.POKEMON_EX')) {
-          blocked2.push(target);
-        }
+      const count = Math.min(3, player.discard.cards.filter(card =>
+        card instanceof EnergyCard && card.energyType === EnergyType.BASIC).length);
+      const blockedTo: CardTarget[] = [];
+      let hasRecipient = false;
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (_slot, card, target) => {
+        if (card.tags.includes(CardTag.POKEMON_EX)) blockedTo.push(target);
+        else hasRecipient = true;
       });
+      if (count === 0 || !hasRecipient) throw new GameError(GameMessage.CANNOT_USE_POWER);
 
-      const attachAmount = Math.min(energyInDiscard, 3);
-
-      state = store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_CARDS,
-        player.discard,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH, SlotType.ACTIVE],
+      return store.prompt(state, new AttachEnergyPrompt(
+        player.id, GameMessage.ATTACH_ENERGY_CARDS, player.discard,
+        PlayerType.BOTTOM_PLAYER, [SlotType.BENCH, SlotType.ACTIVE],
         { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
-        { allowCancel: false, min: attachAmount, max: attachAmount, blockedTo: blocked2 }
+        { allowCancel: false, min: count, max: count, sameTarget: true, blockedTo },
       ), transfers => {
-        transfers = transfers || [];
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          player.discard.moveCardTo(transfer.card, target);
-        }
-
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (cardList.getPokemonCard() === this) {
-            cardList.damage += 999;
-          }
+        ATTACH_ENERGY_TRANSFERS(store, state, player, transfers ?? [], 'discard', {
+          sourceCard: this,
+          onAttached: () => store.reduceEffect(state, new SelfKnockOutEffect(player, this)),
         });
       });
-
-      return state;
     }
-
     return state;
   }
 }

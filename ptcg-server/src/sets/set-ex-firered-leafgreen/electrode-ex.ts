@@ -1,14 +1,19 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, CardTag } from '../../game/store/card/card-types';
 import {
-  PowerType, StoreLike, State, StateUtils, GameMessage,
-  PlayerType, SlotType, PokemonCardList,
+  PowerType, StoreLike, State, StateUtils, GameError, GameMessage,
+  PlayerType, SlotType,
   AttachEnergyPrompt,
   CardTarget,
   DiscardEnergyPrompt,
 } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ABILITY_USED, BLOCK_IF_HAS_SPECIAL_CONDITION, MOVE_CARD_TO, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { EnergyCard } from '../../game/store/card/energy-card';
+import { SelfKnockOutEffect } from '../../game/store/effects/game-effects';
+import {
+  ATTACH_ENERGY_TRANSFERS, BLOCK_IF_HAS_SPECIAL_CONDITION, IS_POKEPOWER_BLOCKED,
+  MOVE_CARDS, WAS_ATTACK_USED, WAS_POWER_USED,
+} from '../../game/store/prefabs/prefabs';
 
 export class Electrodeex extends PokemonCard {
   public tags = [CardTag.POKEMON_ex];
@@ -33,7 +38,7 @@ export class Electrodeex extends PokemonCard {
       cost: [L, C],
       damage: 30,
       damageCalculation: '+',
-      text: 'You may discard as many Energy as you like attached to your Pokémon in play. If you do, this attack does 30 damage plus 20 more damage for each Energy you discarded.'
+      text: 'You may discard as many Energy cards as you like attached to your Pokémon in play. If you do, this attack does 30 damage plus 20 more damage for each Energy you discarded.'
     }
   ];
 
@@ -44,94 +49,52 @@ export class Electrodeex extends PokemonCard {
   public setNumber: string = '107';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    //Extra Energy Bomb
+    // Ref: set-celestial-storm/electrode-gx.ts (Extra Energy Bomb). This print discards itself first.
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
-
       BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
-      ABILITY_USED(player, this);
+      if (IS_POKEPOWER_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
 
-      // Find Electrode's slot and move attached cards to discard first,
-      // so energy that was attached becomes available for the prompt
-      const cardList = StateUtils.findCardList(state, this) as PokemonCardList;
+      return store.reduceEffect(state, new SelfKnockOutEffect(player, this, () => {
+        const blockedTo: CardTarget[] = [];
+        let hasRecipient = false;
+        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (_slot, card, target) => {
+          if (card.tags.includes(CardTag.POKEMON_ex)) blockedTo.push(target);
+          else hasRecipient = true;
+        });
+        const count = Math.min(5, player.discard.cards.filter(card => card instanceof EnergyCard).length);
+        if (!hasRecipient || count === 0) return;
 
-      const pokemons = cardList.getPokemons();
-      const attachedCards = cardList.cards.filter(c => !pokemons.includes(c as PokemonCard));
-      const tools = cardList.tools.slice();
-
-      attachedCards.forEach(c => cardList.moveCardTo(c, player.discard));
-      tools.forEach(c => cardList.moveCardTo(c, player.discard));
-
-      // Mark for KO - engine will handle the actual KO (prizes, slot cleanup)
-      cardList.damage += 999;
-
-      // Block Pokemon-ex from receiving energy
-      let validTargets = 0;
-      const blocked2: CardTarget[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (list, card, target) => {
-        if (card.tags.includes(CardTag.POKEMON_ex)) {
-          blocked2.push(target);
-        }
-        validTargets++;
-      });
-
-      if (validTargets === 0) {
-        return state;
-      }
-
-      return store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_CARDS,
-        player.discard,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH, SlotType.ACTIVE],
-        { superType: SuperType.ENERGY },
-        { allowCancel: false, min: 0, max: 5, blockedTo: blocked2 },
-      ), transfers => {
-        transfers = transfers || [];
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          MOVE_CARD_TO(state, transfer.card, target);
-        }
-      });
+        store.prompt(state, new AttachEnergyPrompt(
+          player.id, GameMessage.ATTACH_ENERGY_CARDS, player.discard,
+          PlayerType.BOTTOM_PLAYER, [SlotType.BENCH, SlotType.ACTIVE], { superType: SuperType.ENERGY },
+          { allowCancel: false, min: count, max: count, blockedTo },
+        ), transfers => {
+          ATTACH_ENERGY_TRANSFERS(store, state, player, transfers ?? [], 'discard', { sourceCard: this });
+        });
+      }));
     }
 
-    //Power Move attack
+    // Ref: set-celestial-storm/electrode-gx.ts (Crush and Burn-GX).
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
-
-      let totalEnergy = 0;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
-        const energyCount = cardList.cards.filter(card =>
-          card.superType === SuperType.ENERGY
-        ).length;
-        totalEnergy += energyCount;
-      });
+      const count = player.getPokemonInPlay().reduce((total, slot) =>
+        total + slot.cards.filter(card => card instanceof EnergyCard).length, 0);
+      if (count === 0) return state;
 
       return store.prompt(state, new DiscardEnergyPrompt(
-        player.id,
-        GameMessage.CHOOSE_ENERGIES_TO_DISCARD,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.ACTIVE, SlotType.BENCH],
-        { superType: SuperType.ENERGY },
-        { min: 1, max: totalEnergy, allowCancel: false }
+        player.id, GameMessage.CHOOSE_ENERGIES_TO_DISCARD, PlayerType.BOTTOM_PLAYER,
+        [SlotType.ACTIVE, SlotType.BENCH], { superType: SuperType.ENERGY },
+        { allowCancel: false, min: 0, max: count },
       ), transfers => {
-        if (transfers === null) {
-          return state;
-        }
-
-        // Move all selected energies to discard
-        transfers.forEach(transfer => {
+        for (const transfer of transfers ?? []) {
           const source = StateUtils.getTarget(state, player, transfer.from);
-          source.moveCardTo(transfer.card, player.discard);
-        });
-
-        // Set damage based on number of discarded cards
-        effect.damage += transfers.length * 20;
-        return state;
+          if (transfer.from.player !== PlayerType.BOTTOM_PLAYER || !source.cards.includes(transfer.card)) continue;
+          MOVE_CARDS(store, state, source, player.discard, { cards: [transfer.card], sourceCard: this, sourceEffect: effect });
+          if (!source.cards.includes(transfer.card)) effect.damage += 20;
+        }
       });
     }
     return state;
   }
-
 }

@@ -4,10 +4,10 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils } from '../../game';
+import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ApplyWeaknessEffect, AfterDamageEffect } from '../../game/store/effects/attack-effects';
-import { AfterAttackEffect, EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { SelfKnockOutEffect } from '../../game/store/effects/game-effects';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Minior extends PokemonCard {
@@ -39,42 +39,22 @@ export class Minior extends PokemonCard {
   public name: string = 'Minior';
   public fullName: string = 'Minior GRI';
 
-  public usedCosmicsplosion: boolean = false;
-
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Attack 1: Swift
-    // Ref: set-next-destinies/starmie.ts (Swift)
+    // Ref: set-ascended-heroes/ns-zekrom.ts (Swift-style damage).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      const applyWeakness = new ApplyWeaknessEffect(effect, 20);
-      store.reduceEffect(state, applyWeakness);
-
-      effect.damage = 0;
-
-      opponent.active.damage += 20;
-
-      const afterDamage = new AfterDamageEffect(effect, 20);
-      state = store.reduceEffect(state, afterDamage);
+      effect.ignoreWeakness = true;
+      effect.ignoreResistance = true;
+      effect.ignoreDefendingDamageEffects = true;
     }
 
-    // Attack 2: Cosmicsplosion
-    // Ref: set-guardians-rising/absol.ts (Doom News - self KO pattern)
+    // Ref: set-shrouded-fable/dusclops.ts (printed self-Knock Out).
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      this.usedCosmicsplosion = true;
+      const attacker = effect.source.getPokemonCard();
+      if (attacker) {
+        afterAttackDamage(state, effect, (store, afterState) =>
+          store.reduceEffect(afterState, new SelfKnockOutEffect(effect.player, attacker)));
+      }
     }
-
-    if (effect instanceof AfterAttackEffect && this.usedCosmicsplosion) {
-      this.usedCosmicsplosion = false;
-      const player = effect.player;
-      player.active.damage = 999;
-    }
-
-    if (effect instanceof EndTurnEffect) {
-      this.usedCosmicsplosion = false;
-    }
-
     return state;
   }
 }

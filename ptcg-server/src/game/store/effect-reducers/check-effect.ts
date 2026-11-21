@@ -26,6 +26,7 @@ interface PokemonItem {
   cardList: PokemonCardList;
   card: PokemonCard;
   destination?: 'lostzone';
+  afterDiscard?: () => void;
 }
 
 interface PrizeGroup {
@@ -35,18 +36,18 @@ interface PrizeGroup {
 
 // Pending effects only belong to the live board. They are consumed by the next
 // normal Knock Out check and never carried into a reset or a rolled-back action.
-const pendingSelfKnockOuts = new WeakMap<State, Set<PokemonCard>>();
+const pendingEffectKnockOuts = new WeakMap<State, Map<PokemonCard, (() => void) | undefined>>();
 
-export function scheduleSelfKnockOut(state: State, source: PokemonCard): void {
-  const pending = pendingSelfKnockOuts.get(state) ?? new Set<PokemonCard>();
-  pending.add(source);
-  pendingSelfKnockOuts.set(state, pending);
+export function scheduleEffectKnockOut(state: State, pokemon: PokemonCard, afterDiscard?: () => void): void {
+  const pending = pendingEffectKnockOuts.get(state) ?? new Map();
+  if (!pending.has(pokemon) || afterDiscard) pending.set(pokemon, afterDiscard);
+  pendingEffectKnockOuts.set(state, pending);
 }
 
 function findKoPokemons(store: StoreLike, state: State): PokemonItem[] {
   const pokemons: PokemonItem[] = [];
-  const selfKnockOuts = pendingSelfKnockOuts.get(state);
-  pendingSelfKnockOuts.delete(state);
+  const effectKnockOuts = pendingEffectKnockOuts.get(state);
+  pendingEffectKnockOuts.delete(state);
 
   for (let i = 0; i < state.players.length; i++) {
     const player = state.players[i];
@@ -54,9 +55,8 @@ function findKoPokemons(store: StoreLike, state: State): PokemonItem[] {
       const checkHpEffect = new CheckHpEffect(player, cardList);
       store.reduceEffect(state, checkHpEffect);
 
-      const selfKnockOut = selfKnockOuts !== undefined
-        && cardList.getPokemons().some(pokemon => selfKnockOuts.has(pokemon));
-      if (selfKnockOut) cardList.attackDamageKnockOut = undefined;
+      const effectKnockOut = effectKnockOuts && cardList.getPokemons().find(pokemon => effectKnockOuts.has(pokemon));
+      if (effectKnockOut) cardList.attackDamageKnockOut = undefined;
       const ko = cardList.attackDamageKnockOut;
       const destination = ko && ko.turn === state.turn && state.phase === GamePhase.ATTACK
         && ko.playerId === state.players[state.activePlayer].id
@@ -64,8 +64,9 @@ function findKoPokemons(store: StoreLike, state: State): PokemonItem[] {
       // Consume the opt-in at the next state check, even if healed/saved.
       // Never carry a Lost Crisis destination into another attack or checkup.
       if (ko) { delete ko.destination; delete ko.targetCard; }
-      if (selfKnockOut || cardList.damage >= checkHpEffect.hp) {
-        pokemons.push({ playerNum: i, cardList, card, destination });
+      if (effectKnockOut || cardList.damage >= checkHpEffect.hp) {
+        const afterDiscard = effectKnockOut && effectKnockOuts?.get(effectKnockOut);
+        pokemons.push({ playerNum: i, cardList, card, destination, afterDiscard });
       }
     });
   }
@@ -422,6 +423,7 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
       player.getPokemonInPlay().flatMap(slot => slot.getPokemonCard() ?? [])) : undefined;
     const simultaneousKnockOuts = pokemonInPlay && new Set(pending.map(pokemon => pokemon.cardList));
     const resolved: KnockOutEffect[] = [];
+    const continuations: (() => void)[] = [];
     for (const pokemon of pending) {
       const owner = state.players[pokemon.playerNum];
       if (pokemon.cardList.getPokemonCard() !== pokemon.card) continue;
@@ -439,6 +441,7 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
 
       protectAttackerAfterKnockOut(state, effect);
       resolved.push(effect);
+      if (pokemon.afterDiscard) continuations.push(pokemon.afterDiscard);
       if (effect.preventPrizes) continue;
 
       const opponentIndex = pokemon.playerNum === 0 ? 1 : 0;
@@ -451,6 +454,12 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
       group.count += Math.max(0, effect.prizeCount - effect.prizeReduction);
     }
     state = yield* resolveKnockOutGroup(() => next(), store, state, resolved);
+    // A printed discard cost can make the discarded cards available to the
+    // rest of its effect. Finish that effect before taking any Prizes.
+    for (const continueEffect of continuations) {
+      continueEffect();
+      if (store.hasPrompts()) yield store.waitPrompt(state, () => next());
+    }
     pending = findKoPokemons(store, state).filter(pokemon => !processed.has(pokemon.card));
   }
 

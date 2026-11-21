@@ -1,6 +1,15 @@
-import { AttachEnergyPrompt, CardList, GameMessage, PlayerType, PokemonCard, PokemonCardList, PowerType, ShowCardsPrompt, SlotType, Stage, State, StateUtils, StoreLike, SuperType } from '../../game';
+import {
+  AttachEnergyPrompt, CardList, ChoosePokemonPrompt, GameError, GameMessage, PlayerType, PokemonCard,
+  PowerType, ShowCardsPrompt, SlotType, Stage, State, StoreLike, SuperType,
+} from '../../game';
+import { EnergyCard } from '../../game/store/card/energy-card';
 import { Effect } from '../../game/store/effects/effect';
-import { ABILITY_USED, BLOCK_IF_HAS_SPECIAL_CONDITION, MOVE_CARDS, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { SelfKnockOutEffect } from '../../game/store/effects/game-effects';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import {
+  ATTACH_ENERGY_TRANSFERS, BLOCK_IF_HAS_SPECIAL_CONDITION, DAMAGE_OPPONENT_POKEMON,
+  IS_POKEPOWER_BLOCKED, MOVE_CARDS, WAS_ATTACK_USED, WAS_POWER_USED,
+} from '../../game/store/prefabs/prefabs';
 
 export class Electrode extends PokemonCard {
   public stage = Stage.STAGE_1;
@@ -32,66 +41,57 @@ export class Electrode extends PokemonCard {
   public fullName: string = 'Electrode TM';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
+    // Ref: set-paldea-evolved/forretress-ex.ts (Exploding Energy).
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
-
       BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
-      ABILITY_USED(player, this);
+      if (IS_POKEPOWER_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
 
-      const thisCardList = StateUtils.findCardList(state, effect.card) as PokemonCardList;
-      thisCardList.damage += 9990;
-
-      const temp = new CardList();
-
-      player.deck.moveTo(temp, 7);
-      // Check if any cards drawn are basic energy
-      const energyCardsDrawn = temp.cards.filter(card => {
-        return card.superType === SuperType.ENERGY;
+      const lookedAt = new CardList();
+      lookedAt.cards = player.deck.cards.slice(0, 7);
+      const energyCount = lookedAt.cards.filter(card => card instanceof EnergyCard).length;
+      const finish = () => {
+        const remaining = lookedAt.cards.filter(card => player.deck.cards.includes(card));
+        if (remaining.length) MOVE_CARDS(store, state, player.deck, player.discard, { cards: remaining, sourceCard: this });
+        store.reduceEffect(state, new SelfKnockOutEffect(player, this));
+      };
+      if (lookedAt.cards.length === 0) {
+        finish();
+        return state;
+      }
+      if (energyCount === 0) {
+        return store.prompt(state, new ShowCardsPrompt(player.id, GameMessage.CARDS_SHOWED_BY_EFFECT,
+          lookedAt.cards, { sourcePlayerId: player.id }), finish);
+      }
+      return store.prompt(state, new AttachEnergyPrompt(
+        player.id, GameMessage.ATTACH_ENERGY_CARDS, lookedAt,
+        PlayerType.BOTTOM_PLAYER, [SlotType.ACTIVE, SlotType.BENCH], { superType: SuperType.ENERGY },
+        { allowCancel: false, min: 0, max: energyCount },
+      ), transfers => {
+        ATTACH_ENERGY_TRANSFERS(store, state, player, transfers ?? [], 'deck', {
+          sourceCard: this,
+          onAttached: finish,
+        });
       });
-
-      // If no energy cards were drawn, move all cards to deck & shuffle
-      if (energyCardsDrawn.length == 0) {
-
-        store.prompt(state, [new ShowCardsPrompt(
-          player.id,
-          GameMessage.CARDS_SHOWED_BY_EFFECT,
-          temp.cards
-        )], () => {
-          temp.cards.forEach(card => {
-            MOVE_CARDS(store, state, temp, player.discard, { cards: [card] });
-            return state;
-          });
-          return state;
-        });
-      }
-
-      if (energyCardsDrawn.length >= 1) {
-
-        // Prompt to attach energy if any were drawn
-        return store.prompt(state, new AttachEnergyPrompt(
-          player.id,
-          GameMessage.ATTACH_ENERGY_CARDS,
-          temp, // Only show drawn energies
-          PlayerType.BOTTOM_PLAYER,
-          [SlotType.BENCH, SlotType.ACTIVE],
-          { superType: SuperType.ENERGY },
-          { min: 0, max: energyCardsDrawn.length }
-        ), transfers => {
-
-          // Attach energy based on prompt selection
-          if (transfers) {
-            for (const transfer of transfers) {
-              const target = StateUtils.getTarget(state, player, transfer.to);
-              temp.moveCardTo(transfer.card, target); // Move card to target
-            }
-            temp.cards.forEach(card => {
-              MOVE_CARDS(store, state, temp, player.discard, { cards: [card] });
-            });
+    }
+    // Ref: set-fossil/raichu.ts (Gigashock).
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      afterAttackDamage(state, effect, (store, afterState) => {
+        const benched = effect.opponent.bench.filter(slot => slot.getPokemonCard());
+        if (benched.length <= 2) {
+          DAMAGE_OPPONENT_POKEMON(store, afterState, effect, 10, benched);
+          return afterState;
+        }
+        return store.prompt(afterState, new ChoosePokemonPrompt(
+          effect.player.id, GameMessage.CHOOSE_POKEMON_TO_DAMAGE, PlayerType.TOP_PLAYER, [SlotType.BENCH],
+          { allowCancel: false, min: 2, max: 2 },
+        ), (targets: typeof benched | null) => {
+          if (!targets || new Set(targets).size !== 2 || !targets.every(target => benched.includes(target))) {
+            throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
           }
-          return state;
+          DAMAGE_OPPONENT_POKEMON(store, afterState, effect, 10, targets);
         });
-      }
+      });
     }
     return state;
   }

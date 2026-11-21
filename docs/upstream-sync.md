@@ -4225,3 +4225,77 @@ The focused checks verify the corrected Stadium-only case and missing
 payment. The 2.50 MiB gzip build passes attestation, ten board scenarios,
 209 client-service checks and the previous-level card-pane check. All
 32 API checks pass.
+
+## Gameplay re-audit, batch 60
+
+Extra Energy Bomb on Electrode ex RG puts the full stack through the
+Knock Out discard sequence before choosing Energy. Energy discarded
+from that stack is eligible. The player must take five or all available
+if there are fewer, follows the printed Pokémon-ex recipient restriction,
+and finishes attaching before Prizes and promotion. Crush and Burn
+allows zero discards and adds 20 damage per physical Energy card moved.
+The existing `Crash and Burn` attack identifier stays compatible with
+saved games and replays.
+[Official FireRed & LeafGreen Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/EX_FireRed_and_LeafGreen.pdf)
+[Archived Rules Team ruling on Energy from the same stack](https://pokebeach.com/forums/threads/simple-and-stupid-question-here-lol.4362/)
+[Archived Rules Team ruling on the required Energy count](https://www.pokebeach.com/forums/threads/holon-farmer.55/)
+[Official ruling on the classification of older Pokémon ex](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%BB%E3%83%B3%E3%83%AA&regulation_faq_main_item1=all)
+
+Energymite on Electrode TM can take Basic or Special Energy from the
+first seven cards, discards every other viewed card, and resolves the
+Knock Out after the attachments. Gigashock deals its printed Bench
+damage to two choices, or every available target when there are fewer.
+Buzzap Generator on Electrode VIV requires a Benched Electrode and a
+nonempty deck, permits its own Lightning slot as a recipient, and
+shuffles before the Knock Out even after a zero-card search. Double KO
+on Forretress VIV uses two ordinary Knock Outs without damage counters.
+Mist Energy and Big Parasol can prevent the opposing Knock Out while
+the attacker still leaves play. Both players' Prizes are resolved before
+the winner is decided.
+[Official Energymite print](https://www.pokemon-card.com/card-search/details.php/card/26127/regu/DP)
+[Official Energymite rulings](https://www.pokemon-card.com/rules/faq/search.php?page=961&regulation=all)
+[Official Buzzap Generator print](https://asia.pokemon-card.com/sg/card-search/detail/964/)
+[Official Buzzap Generator rulings](https://www.pokemon-card.com/rules/faq/search.php?page=364&regulation=all)
+[Official Double KO print](https://asia.pokemon-card.com/sg/card-search/detail/1032/)
+
+Energy Grace on Milotic FLF attaches the required Basic Energy to a
+single eligible recipient and excludes Pokémon-EX. Life Dew can
+prevent the Prize. Six Feet Under on Cofagrigus PLF distributes three
+Ability-sourced counters, respecting Ability protection. After two
+Active Knock Outs, the opponent promotes first. Cosmicsplosion on
+Minior GRI Knocks Out the actual user after damage, including copies.
+Swift uses the standard damage path while bypassing Weakness,
+Resistance and effects on the defender.
+[Official Energy Grace rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%A8%E3%83%8A%E3%82%B8%E3%83%BC%E3%82%B0%E3%83%AC%E3%82%A4%E3%82%B9&regulation_faq_main_item1=all)
+[Official Six Feet Under rulings](https://www.pokemon-card.com/rules/faq/search.php?page=857&regulation=all)
+[Official Minior print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sm2/77)
+
+Shattering Speed on Revavroom ex SFA discards the attacking stack
+after damage and awards no Prizes for that discard. Its owner
+promotes before the defender's Knock Out is processed, including when
+Mew ex copies Shattering Speed. The upstream self-Knock Out helper
+would award Prizes for the attacker, so the local implementation
+uses the ordinary discard path and the printed promotion timing.
+[Official Revavroom ex print](https://asia.pokemon-card.com/my/card-search/detail/13737/)
+[Official Shattering Speed rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B9%E3%83%94%E3%83%BC%E3%83%89&regulation_faq_main_item1=XY)
+
+The remaining related paths are Electrode BS and EVO, where the
+Knocked Out card itself becomes an Energy attachment. The Evolutions
+errata allows it to provide Lightning Energy on any Pokémon once
+attached, while the Ability still initially selects a Lightning
+Pokémon. Cofagrigus PLF's Slap of Misfortune needs its own coin-effect
+review with Confusion and Victory Star.
+[Official Buzzap Thunder errata](https://assets.pokemon.com/assets/cms2/pdf/trading-card-game/tcg-errata-06232023-en.pdf)
+[Official Slap of Misfortune rulings](https://www.pokemon-card.com/rules/faq/search.php?page=829&regulation=all)
+
+All 36 focused cases pass, including 29 that reproduce failures on the
+preceding engine. The full engine passes 10,859 checks. The combined
+workspace passes 148 targeted cases. All 559 comparable saved puzzles
+retain their serialized states and
+card identities. Two expanded API records drop an unused Revavroom
+flag from cards in the deck. The affected prints do not begin in play
+in this corpus, so their action outcomes are covered by constructed
+engine cases. All 5,225 sampled opening actions match and all seven
+recorded solutions still win. The 2.50 MiB gzip package passes build
+attestation, ten packaged board scenarios and 209 client-service
+checks. All 32 API checks pass.

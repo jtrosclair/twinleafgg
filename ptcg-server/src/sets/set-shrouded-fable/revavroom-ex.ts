@@ -3,9 +3,10 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { KnockOutEffect } from '../../game/store/effects/game-effects';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
-import { MOVED_TO_ACTIVE_THIS_TURN, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { checkBenchSize } from '../../game/store/effect-reducers/check-effect';
+import { MOVE_CARDS, MOVED_TO_ACTIVE_THIS_TURN, SWITCH_ACTIVE_WITH_BENCHED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Revavroomex extends PokemonCard implements CopiedAttackOwnershipContract {
 
@@ -51,8 +52,6 @@ export class Revavroomex extends PokemonCard implements CopiedAttackOwnershipCon
 
   public fullName: string = 'Revavroom ex SFA';
 
-  public discardRevavroom: boolean = false;
-
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof PutDamageEffect && effect.target.cards.includes(this) && effect.target.getPokemonCard() === this) {
       const player = effect.player;
@@ -78,14 +77,24 @@ export class Revavroomex extends PokemonCard implements CopiedAttackOwnershipCon
       }
     }
 
+    // The official Shattering Speed ruling promotes the user's replacement before
+    // the defender's Knock Out is processed. Discarding the attacker awards no Prizes.
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-      const knockOutEffect = new KnockOutEffect(player, player.active);
-      state = store.reduceEffect(state, knockOutEffect);
-      return state;
-    }
+      const { player, source } = effect;
+      const attacker = source.getPokemonCard();
+      afterAttackDamage(state, effect, (store, afterState) => {
+        if (!attacker || source.getPokemonCard() !== attacker) return afterState;
+        MOVE_CARDS(store, afterState, source, player.discard, { sourceCard: attacker, sourceEffect: effect });
+        if (source !== player.active || source.getPokemonCard()) return afterState;
 
-    
+        const benchSizeHandled = afterState.benchSizeChangeHandled;
+        checkBenchSize(store, afterState);
+        afterState.benchSizeChangeHandled = benchSizeHandled;
+        const promote = () => SWITCH_ACTIVE_WITH_BENCHED(store, afterState, player);
+        if (store.hasPrompts()) return store.waitPrompt(afterState, promote);
+        return promote();
+      });
+    }
     return state;
   }
 }

@@ -9,7 +9,7 @@ import {
   AddMarkerEffect, HealTargetEffect, AddSpecialConditionsEffect,
   RemoveSpecialConditionsEffect, ApplyWeaknessEffect, AfterDamageEffect,
   PutCountersEffect, CardsToHandEffect,
-  KnockOutOpponentEffect,
+  DirectKnockOutAttackEffect, KnockOutOpponentEffect,
   KOEffect,
   LostZoneCardsEffect,
   AfterWeaknessAndResistanceEffect
@@ -23,6 +23,7 @@ import { GameStatsTracker } from '../game-stats-tracker';
 import { CheckHpEffect } from '../effects/check-effects';
 import { CardTag, Stage } from '../card/card-types';
 import { COIN_FLIP_PROMPT } from '../prefabs/prefabs';
+import { scheduleEffectKnockOut } from './check-effect';
 import { attackDamagePositions, attackEffectKnockOuts } from '../state/pokemon-card-list';
 
 export function getActiveAttackDamageBonus(effect: DealDamageEffect | PutDamageEffect): number {
@@ -300,6 +301,12 @@ export function attackReducer(store: StoreLike, state: State, effect: Effect): S
       afterDamageEffect.target = effect.target;
       store.reduceEffect(state, afterDamageEffect);
     }
+  }
+
+  if (effect instanceof DirectKnockOutAttackEffect) {
+    const target = effect.target.getPokemonCard();
+    if (target) scheduleEffectKnockOut(state, target);
+    return state;
   }
 
   if (effect instanceof KnockOutOpponentEffect) {

@@ -1,8 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardTag, Stage, CardType } from '../../game/store/card/card-types';
-import { StoreLike, State, PowerType, GameMessage, PlayerType, SlotType, StateUtils, DamageMap, PutDamagePrompt } from '../../game';
+import { StoreLike, State, PowerType, GameError, GameMessage, PlayerType, SlotType, StateUtils, PutDamagePrompt, DamageMap } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { PlaceDamageCountersEffect, SelfKnockOutEffect } from '../../game/store/effects/game-effects';
+import { IS_ABILITY_BLOCKED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Cofagrigus extends PokemonCard {
 
@@ -18,6 +19,7 @@ export class Cofagrigus extends PokemonCard {
     name: 'Six Feet Under',
     useWhenInPlay: true,
     powerType: PowerType.ABILITY,
+    knocksOutSelf: true,
     text: 'Once during your turn (before your attack) you may Knock Out this Pokémon. If you do, put 3 damage counters on your opponent\'s Pokémon in any way you like.'
   }];
 
@@ -37,33 +39,32 @@ export class Cofagrigus extends PokemonCard {
   public fullName: string = 'Cofagrigus PLF';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    // Ref: set-shrouded-fable/dusclops.ts (Cursed Blast).
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
 
-      const maxAllowedDamage: DamageMap[] = [];
+      const opponent = StateUtils.getOpponent(state, player);
       const damage = 30;
-
       return store.prompt(state, new PutDamagePrompt(
-        effect.player.id,
-        GameMessage.CHOOSE_POKEMON_TO_DAMAGE,
-        PlayerType.TOP_PLAYER,
-        [SlotType.ACTIVE, SlotType.BENCH],
-        damage,
-        maxAllowedDamage,
-        { allowCancel: false }
-      ), targets => {
-        const results = targets || [];
-
-        for (const result of results) {
-          const target = StateUtils.getTarget(state, player, result.target);
-          target.damage += result.damage;
+        player.id, GameMessage.CHOOSE_POKEMON_TO_DAMAGE, PlayerType.TOP_PLAYER,
+        [SlotType.ACTIVE, SlotType.BENCH], damage, [], { allowCancel: false },
+      ), (results: DamageMap[] | null) => {
+        if (!results || results.reduce((total, result) => total + result.damage, 0) !== damage
+          || results.some(result => result.damage < 0 || result.damage % 10 !== 0)) {
+          throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
         }
-
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (cardList.getPokemonCard() === this) {
-            cardList.damage += 999;
-          }
-        });
+        const targets = results.filter(result => result.damage > 0)
+          .map(({ target, damage }) => ({ target: StateUtils.getTarget(state, player, target), damage }));
+        const inPlay = opponent.getPokemonInPlay();
+        if (targets.some(({ target }) => !inPlay.includes(target))
+          || new Set(targets.map(({ target }) => target)).size !== targets.length) {
+          throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+        }
+        for (const { target, damage } of targets) {
+          store.reduceEffect(state, new PlaceDamageCountersEffect(player, target, damage, this));
+        }
+        store.reduceEffect(state, new SelfKnockOutEffect(player, this));
       });
     }
     return state;
