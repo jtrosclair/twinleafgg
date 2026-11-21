@@ -750,19 +750,18 @@ export class Store implements StoreLike {
 
   private resolveCopiedSupporter(state: State, effect: CopiedSupporterEffect): State {
     const opponent = StateUtils.getOpponent(state, effect.player);
-    const sourceIndex = opponent[effect.sourceZone].cards.indexOf(effect.trainerCard);
-    if (sourceIndex === -1 || effect.trainerCard.trainerType !== TrainerType.SUPPORTER) {
+    if (!opponent[effect.sourceZone].cards.includes(effect.trainerCard)
+      || effect.trainerCard.trainerType !== TrainerType.SUPPORTER) {
       throw new GameError(GameMessage.INVALID_TARGET);
     }
 
     // A borrowed Supporter can be selected even if its cost or condition
     // cannot be met. Validate on a copy before touching the live board.
-    const copy: State = deepClone(state);
-    const player = copy.players[state.players.indexOf(effect.player)];
-    const card = StateUtils.getOpponent(copy, player)[effect.sourceZone].cards[sourceIndex] as TrainerCard;
+    const { state: copy, effect: copiedEffect }: { state: State; effect: CopiedSupporterEffect } =
+      deepClone({ state, effect });
     const probe = this.createPlayabilityProbe(copy, state);
     try {
-      probe.runCopiedSupporter(copy, new CopiedSupporterEffect(player, card, effect.sourceZone));
+      probe.runCopiedSupporter(copy, copiedEffect);
     } catch (error) {
       if (error instanceof GameError) return state;
       throw error;

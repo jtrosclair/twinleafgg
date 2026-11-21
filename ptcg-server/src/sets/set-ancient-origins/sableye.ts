@@ -62,7 +62,7 @@ export class Sableye extends PokemonCard {
       ), selected => {
         const supporter = selected?.[0];
         if (supporter instanceof TrainerCard) {
-          store.reduceEffect(state, new CopiedSupporterEffect(player, supporter, 'discard'));
+          store.reduceEffect(state, new CopiedSupporterEffect(player, supporter, 'discard', effect));
         }
       });
     }

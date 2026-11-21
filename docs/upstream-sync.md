@@ -4737,3 +4737,35 @@ recorded solutions still win. The package passes attestation, 10 board
 scenarios and 209 client checks. Packaged mouse and touch tests reveal
 Water Vein’s five cards, restart Assist, choose Thunder Fang and confirm
 that the deck still has its original order.
+
+## Gameplay re-audit, batch 71
+
+Lysandre can be played and its only Benched target can be chosen when that
+Pokémon has Ω Barrier. The Trainer effect then leaves it on the Bench.
+Bewitching Eyes borrows the same switch as an attack effect, which Ω Barrier
+allows and Mist Energy on the selected Pokémon prevents. The tournament
+ruling uses a Japanese Rhyperior print. The tests use the same printed
+Ancient Trait on the registered Primal Groudon-EX. Mist Energy on the old
+Active does not protect the chosen slot. Portrait can still borrow Lysandre
+without spending a Supporter play or moving the opposing card.
+[Official Lysandre ruling](https://www.pokemon-card.com/rules/faq/details.php?id=9780)
+[Official Bewitching Eyes ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%CE%A9%E3%83%90%E3%83%AA%E3%82%A2&page=1&regulation=all&regulation_faq_main=)
+[Official Mist Energy print](https://www.pokemon-card.com/card-search/details.php/card/46847/regu/XY)
+
+Silent Claw reveals the opponent’s hand and discards the chosen Supporter
+even when its effect cannot resolve. A discarded Prism Star goes to its
+owner’s Lost Zone. Silent Claw can borrow a Supporter after the attacker
+already played one, and a borrowed Lysandre uses the same attack protection
+as Bewitching Eyes. Other cards that borrow Supporters through a raw
+Trainer effect still need individual source and legality review.
+[Official Silent Claw ruling for Lysandre](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AC%E3%83%91%E3%83%AB%E3%83%80%E3%82%B9&page=2&regulation_faq_main=)
+[Official Silent Claw ruling for Cyrus Prism Star](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AC%E3%83%91%E3%83%AB%E3%83%80%E3%82%B9&regulation_faq_main_item1=all)
+
+All eight new regression cases pass. Five fail on the prior engine. The
+full engine suite passes 11,040 tests, the combined worktree passes 72
+targeted tests, and the API passes 32 checks. All 559 comparable saved
+boards and 5,225 sampled opening actions matched. All seven recorded
+solutions won. The attested package passes ten board scenarios and 209
+client checks. Packaged mouse and touch tests copy Lysandre from the
+opposing discard, preserving the physical card. They confirm the switch
+through Ω Barrier and prevention by Mist Energy on the selected Pokémon.

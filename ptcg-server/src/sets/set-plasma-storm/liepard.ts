@@ -2,8 +2,8 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
-import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { ADD_PARALYZED_TO_PLAYER_ACTIVE, AFTER_ATTACK, COIN_FLIP_PROMPT, SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { CopiedSupporterEffect } from '../../game/store/effects/play-card-effects';
+import { ADD_PARALYZED_TO_PLAYER_ACTIVE, AFTER_ATTACK, COIN_FLIP_PROMPT, MOVE_CARDS, SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 
 import {
@@ -69,14 +69,16 @@ export class Liepard extends PokemonCard {
           { superType: SuperType.TRAINER, trainerType: TrainerType.SUPPORTER },
           { min: 1, max: 1, allowCancel: false }
         ), selected => {
-          selected = selected || [];
-          if (selected.length > 0) {
-            const supporterCard = selected[0] as TrainerCard;
-            opponent.hand.moveCardTo(supporterCard, opponent.discard);
+          const supporter = selected?.[0];
+          if (!(supporter instanceof TrainerCard) || !opponent.hand.cards.includes(supporter)) return;
 
-            // Use the effect of that supporter card
-            const trainerEffect = new TrainerEffect(player, supporterCard);
-            store.reduceEffect(state, trainerEffect);
+          MOVE_CARDS(store, state, opponent.hand, opponent.discard, {
+            cards: [supporter], sourceCard: this, sourceEffect: effect,
+          });
+          // A discarded Prism Star goes to the Lost Zone and can still be copied.
+          const zone = supporter.tags.includes(CardTag.PRISM_STAR) ? 'lostzone' : 'discard';
+          if (opponent[zone].cards.includes(supporter)) {
+            store.reduceEffect(state, new CopiedSupporterEffect(player, supporter, zone, effect));
           }
         });
       }

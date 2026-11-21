@@ -1,4 +1,5 @@
 import { Effect } from './effect';
+import type { AttackEffect } from './game-effects';
 import { EnergyCard } from '../card/energy-card';
 import { Player } from '../state/player';
 import { PokemonCard } from '../card/pokemon-card';
@@ -244,7 +245,12 @@ export class TrainerEffect implements Effect {
 export class CopiedSupporterEffect extends TrainerEffect {
   public maximumSupporterPlays?: number;
 
-  constructor(player: Player, trainerCard: TrainerCard, public readonly sourceZone: 'hand' | 'discard' = 'hand') {
+  constructor(
+    player: Player,
+    trainerCard: TrainerCard,
+    public readonly sourceZone: 'hand' | 'discard' | 'lostzone' = 'hand',
+    public readonly attackSource?: AttackEffect,
+  ) {
     super(player, trainerCard);
   }
 }
