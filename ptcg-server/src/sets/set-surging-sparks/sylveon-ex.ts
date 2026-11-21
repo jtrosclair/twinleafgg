@@ -4,9 +4,10 @@ import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { ChoosePokemonPrompt, GameError, GameMessage, PlayerType, ShuffleDeckPrompt, SlotType, State, StateUtils, StoreLike } from '../..';
 
 import { Effect } from '../../game/store/effects/effect';
-import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
+import { isBeforeWeaknessDamage, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { DEFENDING_POKEMON_DOES_LESS_DAMAGE } from '../../game/store/prefabs/effect-of-attack-prefabs';
 import { Player } from '../../game/store/state/player';
 import { MarkerItem } from '../../game/store/state/card-marker';
 import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
@@ -63,7 +64,7 @@ export class Sylveonex extends PokemonCard implements CopiedAttackOwnershipContr
   /** Continue Magical Charm when its source is outside normal effect fan-out. */
   public reducePlayerMarkerEffect(_store: StoreLike, state: State, effect: Effect, owner: Player, marker: MarkerItem): State {
     if (marker.name !== this.CLEAR_DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER ||
-      !(effect instanceof DealDamageEffect || effect instanceof EndTurnEffect) || effect.player !== owner) return state;
+      !(isBeforeWeaknessDamage(effect) || effect instanceof EndTurnEffect) || effect.player !== owner) return state;
     // Store already visits these zones when propagating effects. Do not apply
     // the same reduction or turn cleanup twice while the source remains there.
     const isPropagated = state.players.some(player =>
@@ -72,9 +73,9 @@ export class Sylveonex extends PokemonCard implements CopiedAttackOwnershipContr
         list.cards.includes(this) || (list instanceof PokemonCardList && list.tools.includes(this)))
     );
     if (isPropagated) return state;
-    if (effect instanceof DealDamageEffect &&
+    if (isBeforeWeaknessDamage(effect) &&
       effect.source.marker.hasMarker(this.DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this)) {
-      effect.damage -= 100;
+      effect.attackDamageReductionBeforeWeakness += 100;
     }
     if (effect instanceof EndTurnEffect) {
       owner.marker.removeMarker(this.CLEAR_DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this);
@@ -116,16 +117,11 @@ export class Sylveonex extends PokemonCard implements CopiedAttackOwnershipContr
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      const markerSource = sourceCard ?? this;
-      opponent.active.marker.addMarker(this.DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, markerSource);
-      opponent.marker.addMarker(this.CLEAR_DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, markerSource);
+      return DEFENDING_POKEMON_DOES_LESS_DAMAGE(store, state, effect, sourceCard ?? this, 100);
     }
 
-    if (effect instanceof DealDamageEffect && effect.source.marker.hasMarker(this.DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this)) {
-      effect.damage -= 100;
+    if (isBeforeWeaknessDamage(effect) && effect.source.marker.hasMarker(this.DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this)) {
+      effect.attackDamageReductionBeforeWeakness += 100;
       return state;
     }
 

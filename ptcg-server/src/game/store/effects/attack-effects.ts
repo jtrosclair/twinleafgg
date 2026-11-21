@@ -127,6 +127,11 @@ export class PutDamageEffect extends AbstractAttackEffect implements Effect {
   }
 }
 
+export function isBeforeWeaknessDamage(effect: Effect): effect is ApplyWeaknessEffect | PutDamageEffect {
+  return effect instanceof ApplyWeaknessEffect
+    || (effect instanceof PutDamageEffect && !effect.weaknessApplied && effect.target !== effect.opponent.active);
+}
+
 export class AfterWeaknessAndResistanceEffect extends AbstractAttackEffect implements Effect {
   readonly type: string = AttackEffects.AFTER_WEAKNESS_AND_RESISTANCE_EFFECT;
   public preventDefault = false;

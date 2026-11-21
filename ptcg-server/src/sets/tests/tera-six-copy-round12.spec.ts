@@ -7,22 +7,22 @@ import { clearCopyAttackSessionsForTests } from '../../game/store/prefabs/copy-a
 import { getCardByName, padDeck, setupGame } from './test-helpers';
 import { useAbility, useAttack } from './card-test-helpers';
 
-type Case = { source:string; reprint?:string; attack:string; energy:string[]; expected:number };
+type Case = { source:string; reprint?:string; attack:string; energy:string[]; expected:number; outgoingReduction?:number };
 const cases:Case[]=[
  {source:'Palossand ex SSP',attack:'Sand Tomb',energy:['Fire Energy SVE','Fire Energy SVE','Fire Energy SVE'],expected:160},
  {source:'Tatsugiri ex SSP',attack:'Surprise Pump',energy:['Fire Energy SVE','Water Energy SVE'],expected:100},
  {source:'Ceruledge ex SSP',reprint:'Ceruledge exSAR PRE',attack:'Abyssal Flame',energy:['Fire Energy SVE'],expected:30},
  {source:'Tyranitar ex OBF',attack:'Mountain Hurl',energy:['Fighting Energy SVE'],expected:120},
  {source:'Gyarados ex SVI',attack:'Waterfall',energy:['Water Energy SVE','Water Energy SVE','Water Energy SVE'],expected:100},
- {source:'Sylveon ex SSP',reprint:'Sylveon exSAR PRE',attack:'Magical Charm',energy:['Psychic Energy SVE','Fire Energy SVE','Fire Energy SVE'],expected:160},
+ {source:'Sylveon ex SSP',reprint:'Sylveon exSAR PRE',attack:'Magical Charm',energy:['Psychic Energy SVE','Fire Energy SVE','Fire Energy SVE'],expected:160,outgoingReduction:100},
 ];
 function game(c:Case,print=c.source) {
  const g=setupGame({turn:5,player1:{active:{card:'Mew ex 30C',energy:c.energy},bench:[{card:print},{card:'Snorlax PGO'}],deck:padDeck(10)},player2:{active:{card:'Charizard ex OBF'},deck:padDeck(10)}});
  g.player2.active.getPokemonCard()!.hp=600;g.overridePrompt('Choose attack',()=>({index:0,attack:c.attack}));return g;
 }
-function hitBench(store:Store,state:State,target:any) {
- const attack=new AttackEffect(state.players[1],state.players[0],{name:'Bench Hit',cost:[],damage:40,text:''});
- const effect=new PutDamageEffect(attack,40);effect.target=target;store.reduceEffect(state,effect);
+function hitBench(store:Store,state:State,target:any,amount=40) {
+ const attack=new AttackEffect(state.players[1],state.players[0],{name:'Bench Hit',cost:[],damage:amount,text:''});
+ const effect=new PutDamageEffect(attack,amount);effect.target=target;store.reduceEffect(state,effect);
 }
 function copyAndBench(g:ReturnType<typeof game>,c:Case,keepSource=false) {
  useAbility(g.store,g.state,0,'Memory Helix');expect(g.player2.active.damage).toBe(c.expected);
@@ -37,13 +37,13 @@ describe('Six Tera attack-only ownership boundaries',()=>{
    g.player2.active.getPokemonCard()!.hp=600;useAttack(g.store,g.state,0,c.attack);expect(g.player2.active.damage).toBe(c.expected);
   });
   it(c.source+' does not transfer Bench protection to Mew',()=>{
-   const g=game(c);copyAndBench(g,c);hitBench(g.store,g.state,g.player1.bench[1]);expect(g.player1.bench[1].damage).toBe(40);
+   const g=game(c);copyAndBench(g,c);hitBench(g.store,g.state,g.player1.bench[1],40+(c.outgoingReduction??0));expect(g.player1.bench[1].damage).toBe(40);
   });
   it(c.source+' still protects itself while Benched',()=>{
-   const g=game(c);copyAndBench(g,c,true);hitBench(g.store,g.state,g.player1.bench[0]);expect(g.player1.bench[0].damage).toBe(0);
+   const g=game(c);copyAndBench(g,c,true);hitBench(g.store,g.state,g.player1.bench[0],40+(c.outgoingReduction??0));expect(g.player1.bench[0].damage).toBe(0);
   });
   if(c.reprint)it(c.reprint+' does not transfer Bench protection',()=>{
-   const g=game(c,c.reprint);copyAndBench(g,c);hitBench(g.store,g.state,g.player1.bench[1]);expect(g.player1.bench[1].damage).toBe(40);
+   const g=game(c,c.reprint);copyAndBench(g,c);hitBench(g.store,g.state,g.player1.bench[1],40+(c.outgoingReduction??0));expect(g.player1.bench[1].damage).toBe(40);
   });
  });
  it('copies Ceruledge damage calculation for each discard Energy',()=>{
@@ -68,10 +68,10 @@ describe('Six Tera attack-only ownership boundaries',()=>{
  });
  it('expires actual Sylveon Magical Charm after the defending player turn',()=>{
   const g=setupGame({turn:5,player1:{active:{card:'Sylveon ex SSP',energy:['Psychic Energy SVE','Fire Energy SVE','Fire Energy SVE']},deck:padDeck(10)},player2:{active:{card:'Charizard ex OBF'},deck:padDeck(10)}});
-  g.player2.active.getPokemonCard()!.hp=600;const source=g.player1.active.getPokemonCard()!;
+  g.player2.active.getPokemonCard()!.hp=600;
   useAttack(g.store,g.state,0,'Magical Charm');
-  expect(g.player2.active.marker.hasMarker('DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER',source)).toBe(true);
+  expect(g.player2.active.attackDamageReductionNextTurn).toBe(100);
   g.state.phase=GamePhase.FINISHED;g.store.reduceEffect(g.state,new EndTurnEffect(g.player2));
-  expect(g.player2.active.marker.hasMarker('DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER',source)).toBe(false);
+  expect(g.player2.active.attackDamageReductionNextTurn).toBe(0);
  });
 });

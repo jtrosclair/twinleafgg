@@ -1,7 +1,8 @@
 import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
 import { Effect } from '../../game/store/effects/effect';
-import { PokemonCard, StoreLike, State, StateUtils } from '../../game';
+import { PokemonCard, StoreLike, State } from '../../game';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { DEFENDING_POKEMON_DOES_LESS_DAMAGE } from '../../game/store/prefabs/effect-of-attack-prefabs';
 
 export class MegaPyroarex extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -16,7 +17,7 @@ export class MegaPyroarex extends PokemonCard {
     name: 'Ferocious Bellow',
     cost: [R, C],
     damage: 80,
-    text: 'During your opponent\'s next turn, the Defending Pokemon\'s attacks do 50 less damage.'
+    text: 'During your opponent\'s next turn, attacks used by the Defending Pokémon do 50 less damage (before applying Weakness and Resistance).'
   },
   {
     name: 'Big Bang Fire',
@@ -30,14 +31,13 @@ export class MegaPyroarex extends PokemonCard {
   public set: string = 'M4';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '15';
-  public usSetNumber = 'CRI 15';
+  public usSetNumber?: string = 'CRI 15';
   public name: string = 'Mega Pyroar ex';
   public fullName: string = 'Mega Pyroar ex M4';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const opponent = StateUtils.getOpponent(state, effect.player);
-      opponent.active.damageReductionNextTurn = 50;
+      return DEFENDING_POKEMON_DOES_LESS_DAMAGE(store, state, effect, this, 50);
     }
     if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;

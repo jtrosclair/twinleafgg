@@ -477,9 +477,9 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
   }
 
   if (effect instanceof ApplyWeaknessEffect) {
-    effect.damage = Math.max(0,
-      effect.damage - effect.source.attackDamageReductionNextTurn - effect.attackDamageReductionBeforeWeakness);
-    if (effect.damage === 0 && effect.attackDamageReductionBeforeWeakness > 0) return state;
+    const reduction = effect.source.attackDamageReductionNextTurn + effect.attackDamageReductionBeforeWeakness;
+    effect.damage = Math.max(0, effect.damage - reduction);
+    if (effect.damage === 0 && reduction > 0) return state;
     const checkPokemonType = new CheckPokemonTypeEffect(effect.source);
     state = store.reduceEffect(state, checkPokemonType);
     const checkPokemonStats = new CheckPokemonStatsEffect(effect.target);

@@ -277,15 +277,19 @@ export class OutgoingDamageReductionEffect extends EffectOfAttackEffect {
   readonly type = 'OUTGOING_DAMAGE_REDUCTION_EFFECT';
   constructor(base: AttackEffect, public reduction: number) { super(base); }
   applyEffect(): void {
-    this.opponent.active.attackDamageReductionNextTurn = Math.max(0, this.reduction);
+    this.target.attackDamageReductionNextTurn = Math.max(0, this.reduction);
   }
 }
 export function DEFENDING_POKEMON_DOES_LESS_DAMAGE(
   store: StoreLike, state: State, effect: AttackEffect, source: Card, reduction: number
 ): State {
-  const reduced = new OutgoingDamageReductionEffect(effect, reduction);
-  reduced.markerSource = source;
-  return store.reduceEffect(state, reduced);
+  afterAttackDamageForOriginalDefender(state, effect, (store, next, target) => {
+    const reduced = new OutgoingDamageReductionEffect(effect, reduction);
+    reduced.target = target;
+    reduced.markerSource = effect.source.getPokemonCard() ?? source;
+    return store.reduceEffect(next, reduced);
+  });
+  return state;
 }
 
 // Upstream weakness override effect and duration fields, with fork scalar card types.

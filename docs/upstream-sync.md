@@ -6440,3 +6440,32 @@ apply to its Bench damage as well. These cases are queued for the next
 attack-reduction batch.
 [Hop’s Rookidee](https://asia.pokemon-card.com/my/card-search/detail/17980/)
 [Houndoom](https://asia.pokemon-card.com/sg/card-search/detail/13788/)
+
+## Gameplay audit, batch 108
+
+Intimidating Stare, Snarl, Growl, Charm, Magical Charm and Ferocious
+Bellow now give the original Defending Pokémon an outgoing damage
+reduction. The normal attack-effect checks apply after damage, so
+Mist Energy can block the reduction. It applies before Weakness and
+Resistance, covers damage to the Bench and follows the recipient
+when the Pokémon that applied it leaves play. The affected turn's end
+and switching the recipient out clear the effect. Both Mega Pyroar
+and both registered Sylveon identities share their corresponding fix.
+Legacy Houndoom saves placed the marker on Houndoom and did not record
+the original recipient. That existing marker keeps its old meaning.
+[Hop’s Rookidee](https://asia.pokemon-card.com/my/card-search/detail/17980/)
+[Houndoom](https://asia.pokemon-card.com/sg/card-search/detail/13788/)
+[Chikorita](https://asia.pokemon-card.com/sg/card-search/detail/24589/)
+[Buneary](https://asia.pokemon-card.com/my/card-search/detail/21699/)
+[Sylveon ex](https://asia.pokemon-card.com/my/card-search/detail/17655/)
+[Mega Pyroar ex](https://asia.pokemon-card.com/my/card-search/detail/25206/)
+
+Use completed gameplay reviews and their recorded tests to close matching
+upstream paths. For remaining commits, group the uncovered changes and
+verify the affected paths and saved puzzles. Run the full engine and
+browser release suite on the consolidated release candidate.
+
+All 14 focused cases pass, with 11 reproduced failures on the preceding
+engine. The 154 targeted checks also cover copied attacks and existing
+Sylveon checkpoints. All 559 comparable saved boards and 5,486 sampled
+opening actions match the prior engine.

@@ -1,6 +1,7 @@
-import { PokemonCard, Stage, CardType, StoreLike, State, StateUtils } from "../../game";
+import { PokemonCard, Stage, CardType, StoreLike, State } from "../../game";
 import { Effect } from "../../game/store/effects/effect";
 import { WAS_ATTACK_USED } from "../../game/store/prefabs/prefabs";
+import { DEFENDING_POKEMON_DOES_LESS_DAMAGE } from '../../game/store/prefabs/effect-of-attack-prefabs';
 
 export class Buneary extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -32,9 +33,7 @@ export class Buneary extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      opponent.active.damageReductionNextTurn = 20;
+      return DEFENDING_POKEMON_DOES_LESS_DAMAGE(store, state, effect, this, 20);
     }
     return state;
   }

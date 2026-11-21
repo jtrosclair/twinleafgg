@@ -6,6 +6,7 @@ import { Effect } from '../../game/store/effects/effect';
 
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { DEFENDING_POKEMON_DOES_LESS_DAMAGE } from '../../game/store/prefabs/effect-of-attack-prefabs';
 
 export class Houndoom extends PokemonCard {
 
@@ -54,13 +55,10 @@ export class Houndoom extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      player.active.marker.addMarker(this.DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this);
-      opponent.marker.addMarker(this.CLEAR_DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this);
+      return DEFENDING_POKEMON_DOES_LESS_DAMAGE(store, state, effect, this, 100);
     }
 
+    // Older saves placed the reduction on Houndoom, with no record of the original recipient.
     if (effect instanceof PutDamageEffect && effect.target.cards.includes(this)) {
       if (effect.target.marker.hasMarker(this.DURING_OPPONENTS_NEXT_TURN_TAKE_LESS_DAMAGE_MARKER, this)) {
         effect.damage -= 100;

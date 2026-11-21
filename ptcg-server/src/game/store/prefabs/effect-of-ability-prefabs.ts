@@ -3,7 +3,7 @@ import { GameMessage } from '../../game-message';
 import { SpecialCondition, SuperType } from '../card/card-types';
 import { PokemonCard } from '../card/pokemon-card';
 import { Power } from '../card/pokemon-types';
-import { ApplyWeaknessEffect, PutDamageEffect } from '../effects/attack-effects';
+import { isBeforeWeaknessDamage } from '../effects/attack-effects';
 import { Effect } from '../effects/effect';
 import { IS_ABILITY_BLOCKED, MOVE_CARDS, ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT } from './prefabs';
 import { AddSpecialConditionsPowerEffect } from '../effects/check-effects';
@@ -62,8 +62,7 @@ export function REDUCE_ATTACK_DAMAGE_FROM_ABILITY(
   card: PokemonCard,
   amount: number,
 ): void {
-  if (!(effect instanceof ApplyWeaknessEffect)
-    && !(effect instanceof PutDamageEffect && !effect.weaknessApplied && effect.target !== effect.opponent.active)) {
+  if (!isBeforeWeaknessDamage(effect)) {
     return;
   }
   if (effect.damage > 0 && effect.source === effect.player.active && owner !== effect.player
