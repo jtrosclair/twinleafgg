@@ -141,8 +141,8 @@
       "sha": "c9aea764b9d65b7acb5adbab36f24e136224a4c5",
       "date": "2026-09-13",
       "subject": "Implement card request SCR Rhyperior",
-      "status": "partial",
-      "notes": "Ported Rhyhorn SCR and Rhydon SCR with four real-engine/registry tests, 530 matching saved states, four recorded winning replays and verified artwork. Rhyperior SCR is deferred: its Wide Wall needs a shared Supporter-target interception missing from the Boss’s Orders path. Not deployed. Rhyperior SCR is registered and already blocks switching Supporters through the shared Trainer target check. Batch 86 applies the official Giovanni’s Charisma ruling. Batch 87 routes ten more attachment-removing Supporters through the shared target check. Independent effects and paid costs still resolve. Cyrus Prism Star and Avery apply to the player according to official rulings. The remaining Wide Wall review covers direct counter movement and Special Conditions."
+      "status": "applied",
+      "notes": "Ported Rhyhorn SCR and Rhydon SCR with four real-engine/registry tests, 530 matching saved states, four recorded winning replays and verified artwork. Rhyperior SCR is deferred: its Wide Wall needs a shared Supporter-target interception missing from the Boss’s Orders path. Not deployed. Rhyperior SCR is registered and already blocks switching Supporters through the shared Trainer target check. Batch 86 applies the official Giovanni’s Charisma ruling. Batch 87 routes ten more attachment-removing Supporters through the shared target check. Independent effects and paid costs still resolve. Cyrus Prism Star and Avery apply to the player according to official rulings. The remaining Wide Wall review covers direct counter movement and Special Conditions. Batch 88 completes Rhyperior SCR’s review. Agatha and Grimsley resolve removal and placement with target protection, and Koga’s Trap checks protection before applying Special Conditions. Nita uses the same Trainer target check. The printed Drill Run passes against Greedent because it is an attack."
     },
     {
       "sha": "360df40414d7fed23050587496c815b3732079f9",

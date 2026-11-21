@@ -1,3 +1,4 @@
+import { MOVE_CARDS, TRAINER_TARGET_BLOCKED } from '../../game/store/prefabs/prefabs';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType, EnergyType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
@@ -62,7 +63,9 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
 
   if (cards.length > 0) {
     // Discard selected special energy card
-    target.moveCardsTo(cards, opponent.discard);
+    if (!TRAINER_TARGET_BLOCKED(store, state, effect, target)) {
+      MOVE_CARDS(store, state, target, opponent.discard, { cards, sourceCard: effect.trainerCard, sourceEffect: effect });
+    }
   }
 
   return state;

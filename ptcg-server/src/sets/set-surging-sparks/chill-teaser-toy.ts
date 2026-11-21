@@ -1,69 +1,10 @@
-import { TrainerCard } from '../../game/store/card/trainer-card';
-import { TrainerType } from '../../game/store/card/card-types';
-import { StoreLike } from '../../game/store/store-like';
-import { State } from '../../game/store/state/state';
+import { GameError, GameMessage, PlayerType, State, StateUtils, StoreLike, TrainerCard, TrainerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import {
-  PlayerType, SlotType, StateUtils, CardTarget,
-  GameError, GameMessage, PokemonCardList, ChooseCardsPrompt, Card
-} from '../../game';
-
-function* playCard(next: Function, store: StoreLike, state: State, effect: TrainerEffect): IterableIterator<State> {
-  const player = effect.player;
-  const opponent = StateUtils.getOpponent(state, player);
-
-  let hasPokemonWithEnergy = false;
-  const blocked: CardTarget[] = [];
-  opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card, target) => {
-    if (cardList.energies.cards.length > 0) {
-      hasPokemonWithEnergy = true;
-    } else {
-      blocked.push(target);
-    }
-  });
-
-  if (!hasPokemonWithEnergy) {
-    throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-  }
-
-  if (state.turn !== 2) {
-    throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-  }
-
-  let targets: PokemonCardList[] = [];
-  yield store.prompt(state, new ChoosePokemonPrompt(
-    player.id,
-    GameMessage.CHOOSE_POKEMON_TO_DISCARD_CARDS,
-    PlayerType.TOP_PLAYER,
-    [SlotType.ACTIVE, SlotType.BENCH],
-    { allowCancel: false, blocked }
-  ), results => {
-    targets = results || [];
-    next();
-  });
-
-  if (targets.length === 0) {
-    return state;
-  }
-
-  const target = targets[0];
-  let cards: Card[] = [];
-  yield store.prompt(state, new ChooseCardsPrompt(
-    player,
-    GameMessage.CHOOSE_CARD_TO_HAND,
-    target.energies,
-    {},
-    { min: 1, max: 1, allowCancel: false }
-  ), selected => {
-    cards = selected;
-    next();
-  });
-
-  target.moveCardsTo(cards, opponent.hand);
-  return state;
-}
+import { getPhysicalAttachedEnergy } from '../../game/store/prefabs/attack-effects';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { chooseTrainerAttachment, chooseTrainerAttachmentTarget } from '../../game/store/prefabs/trainer-attachments';
+import { canReturnPokemonToHand } from '../../game/store/prefabs/pokemon-replacement';
 
 export class ChillTeaserToy extends TrainerCard {
 
@@ -82,14 +23,21 @@ export class ChillTeaserToy extends TrainerCard {
   public fullName: string = 'Chill Teaser Toy SSP';
 
   public text: string =
-    'You can use this card only if you go second, and only during your first turn. \n Put an Energy attached to 1 of your opponent\'s Pokemon into your hand.';
+    'You can use this card only if you go second, and only during your first turn. \n Put an Energy attached to 1 of your opponent\'s Pokemon into their hand.';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof TrainerEffect && effect.trainerCard === this) {
-      const generator = playCard(() => generator.next(), store, state, effect);
-      return generator.next().value;
-    }
-    return state;
-  }
+    if (!(effect instanceof TrainerEffect) || effect.trainerCard !== this) return state;
 
+    const opponent = StateUtils.getOpponent(state, effect.player);
+    if (state.turn !== 2 || !opponent.getPokemonInPlay().some(slot => getPhysicalAttachedEnergy(slot).length > 0)) {
+      throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
+    }
+    // Ref: set-pokemon-151/giovannis-charisma.ts (move a physical Energy with Trainer attribution).
+    return chooseTrainerAttachmentTarget(store, state, effect, PlayerType.TOP_PLAYER, getPhysicalAttachedEnergy, target => {
+      if (!canReturnPokemonToHand(store, state, opponent, target)) return;
+      chooseTrainerAttachment(store, state, effect, target, getPhysicalAttachedEnergy, GameMessage.CHOOSE_CARD_TO_HAND, card => {
+        if (card) MOVE_CARDS(store, state, target, opponent.hand, { cards: [card], sourceCard: this, sourceEffect: effect });
+      });
+    });
+  }
 }

@@ -3,9 +3,14 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State } from '../../game';
+import { Stage, CardType, TrainerType } from '../../game/store/card/card-types';
+import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { MoveCardsEffect } from '../../game/store/effects/game-effects';
+import { CopiedSupporterEffect, TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { getPhysicalAttachedEnergy } from '../../game/store/prefabs/attack-effects';
+import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
 
 export class Greedent extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -37,13 +42,22 @@ export class Greedent extends PokemonCard {
   public name: string = 'Greedent';
   public fullName: string = 'Greedent CRE';
 
-  public reduceEffect(_store: StoreLike, state: State, _effect: Effect): State {
-    // Ability: Brazen Tail
-    // TODO: "Energy attached to your Pokémon can't be put into your hand, deck, or discard pile by an effect
-    // of your opponent's Item or Supporter cards." — requires tying DiscardCardsEffect back to a specific
-    // PlayItemEffect/PlaySupporterEffect context, which is not currently supported by the engine.
-    // See also: set-chilling-reign/greedent.ts (same limitation)
+  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    // Ref: set-twilight-masquerade/milotic.ts (intercept a sourced card move).
+    if (!(effect instanceof MoveCardsEffect) || !(effect.source instanceof PokemonCardList) || !effect.cards?.length) return state;
+    const trainer = effect.sourceEffect;
+    if (!(trainer instanceof TrainerEffect) || trainer instanceof CopiedSupporterEffect) return state;
+    const type = trainer.trainerCard.trainerType;
+    if (type !== TrainerType.ITEM && type !== TrainerType.SUPPORTER) return state;
 
+    const owner = StateUtils.getOpponent(state, trainer.player);
+    if (!owner.getPokemonInPlay().includes(effect.source) || !StateUtils.isPokemonInPlay(owner, this)
+      || (effect.destination !== owner.discard && effect.destination !== owner.hand && effect.destination !== owner.deck)) return state;
+
+    const attached = getPhysicalAttachedEnergy(effect.source);
+    if (effect.cards.some(card => attached.includes(card)) && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+      effect.cards = effect.cards.filter(card => !attached.includes(card));
+    }
     return state;
   }
 }

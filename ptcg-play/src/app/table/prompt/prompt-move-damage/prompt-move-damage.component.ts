@@ -56,7 +56,9 @@ export class PromptMoveDamageComponent implements OnChanges {
   }
 
   public onCardClick(item: PokemonItem) {
-    if (this.pokemonData.matchesTarget(item, this.blockedFrom)) {
+    if (!item.cardList.getPokemonCard()
+      || (this.pokemonData.matchesTarget(item, this.blockedFrom)
+        && this.pokemonData.matchesTarget(item, this.blockedTo))) {
       return;
     }
     this.pokemonData.unselectAll();
@@ -66,6 +68,7 @@ export class PromptMoveDamageComponent implements OnChanges {
   }
 
   public removeDamage() {
+    if (this.isRemoveDisabled || !this.selectedItem) return;
     const damageMultiple = this.prompt.options.damageMultiple || 10;
     this.damage += damageMultiple;
     const item = this.selectedItem;
@@ -76,6 +79,7 @@ export class PromptMoveDamageComponent implements OnChanges {
   }
 
   public addDamage() {
+    if (this.isAddDisabled || !this.selectedItem) return;
     const damageMultiple = this.prompt.options.damageMultiple || 10;
     this.damage -= damageMultiple;
     const item = this.selectedItem;
@@ -121,8 +125,8 @@ export class PromptMoveDamageComponent implements OnChanges {
     });
     const allowedDamage: number | undefined = damageMap && damageMap.damage;
 
-    let isAddDisabled = false;
-    let isRemoveDisabled = false;
+    let isAddDisabled = this.pokemonData.matchesTarget(this.selectedItem, this.blockedTo);
+    let isRemoveDisabled = this.pokemonData.matchesTarget(this.selectedItem, this.blockedFrom);
 
     if (cardList.damage <= 0) {
       isRemoveDisabled = true;

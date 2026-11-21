@@ -5527,3 +5527,55 @@ solutions win twice. The API passes 33 tests, client services pass
 For the saved-puzzle action comparison, `--workers=4` reduced local
 wall time from 199 to 61 seconds. The serial and parallel reports
 matched across all 559 boards and 3,636 sampled actions.
+
+## Gameplay re-audit, batch 88
+
+Wide Wall now applies to Grimsley and Koga's Trap. Grimsley moves at
+most three 10-damage counters between two opposing Pokémon and cannot
+take counters off a protected Pokémon. Agatha moves counters from
+the user's Active to the opposing Active. Target-only immunity prevents
+placement after the unprotected source has lost the chosen counters.
+The engine uses the same distinction established by the official Painful
+Spoons ruling.
+[Wide Wall print](https://www.pokemon-card.com/card-search/details.php/card/45991/)
+[Grimsley print](https://www.pokemon-card.com/card-search/details.php/card/36588/regu/XY)
+[Agatha print](https://asia.pokemon-card.com/ph/card-search/detail/1544/)
+[Koga's Trap print](https://www.pokemon-card.com/card-search/details.php/card/36195/regu/XY)
+[Damage counter movement ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%81%8B%E3%81%8C%E3%82%84%E3%81%8F%E3%83%95%E3%83%BC%E3%83%87%E3%82%A3%E3%83%B3&regulation_faq_main_item1=all)
+
+Greedent's Brazen Tail checks who played the Item or Supporter and
+where attached Energy is going. It preserves the Energy headed for
+the defending player's hand, deck or discard. Independent effects still
+resolve, and Faba can put attached Special Energy in the Lost Zone.
+Crushing Hammer and the other updated Items also check the target's
+Trainer protection. Fan of Waves now moves the selected Special Energy
+to the bottom of the owner's deck. Nita places one physical Energy
+on top, and Chill Teaser Toy uses the owner's hand as shown on the print.
+[Brazen Tail print](https://www.pokemon-card.com/card-search/details.php/card/39490/regu/DP)
+[Brazen Tail rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A8%E3%82%AF%E3%83%90%E3%83%AA%E3%82%B9&regulation_faq_main_item1=all)
+[Crushing Hammer and Ω Barrier ruling](https://www.pokemon-card.com/rules/faq/details.php?id=9784)
+[Nita print](https://www.pokemon-card.com/card-search/details.php/card/35600)
+[Chill Teaser Toy print](https://asia.pokemon-card.com/sg/card-search/detail/16731/)
+
+This closes the Rhyhorn, Rhydon and Rhyperior card request. Thirty-nine
+card and engine commits remain open. Separate move-counter protection
+from Abilities remains under review, including Patrat's Watchful Eye.
+
+The move-counter dialog allows selection of Pokémon that can only
+receive counters and applies separate restrictions to adding and
+removing. The client regression exercises a counter transfer between
+the two Active Pokémon and verifies the submitted prompt response.
+All 559 comparable saved snapshots and all 3,636 sampled opening
+actions match. The three expanded API differences are limited to
+the printed descriptions for Agatha and Chill Teaser Toy.
+
+All 41 new engine checks pass, with 24 failures on the previous engine.
+The full engine passes 11,433 checks. The combined checkout passes 178
+focused checks. All 33 API, 210 client and ten packaged board checks
+pass, along with build attestation. All seven recorded solutions win
+twice on replay.
+
+Both Chaos Rising Patrat definitions currently check only the name of
+a Pokémon in play when blocking a counter move. The next review needs
+to verify the live card's Ability and the attack and Ability movement
+paths for both identities.

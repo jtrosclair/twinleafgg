@@ -1,3 +1,4 @@
+import { MOVE_CARDS, TRAINER_TARGET_BLOCKED } from '../../game/store/prefabs/prefabs';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType, SuperType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
@@ -104,7 +105,9 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
     next();
   });
 
-  target2.moveCardsTo(cards2, opponent.discard);
+  if (!TRAINER_TARGET_BLOCKED(store, state, effect, target2)) {
+    MOVE_CARDS(store, state, target2, opponent.discard, { cards: cards2, sourceCard: effect.trainerCard, sourceEffect: effect });
+  }
 
   return state;
 }

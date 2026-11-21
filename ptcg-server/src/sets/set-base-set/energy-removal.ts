@@ -9,7 +9,7 @@ import {
   PlayerType, SlotType, StateUtils, CardTarget,
   GameError, GameMessage, ChooseCardsPrompt, Card, PokemonCardList
 } from '../../game';
-import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS, TRAINER_TARGET_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 function* playCard(next: Function, store: StoreLike, state: State, effect: TrainerEffect): IterableIterator<State> {
   const player = effect.player;
@@ -61,7 +61,9 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
     next();
   });
 
-  MOVE_CARDS(store, state, target, opponent.discard, { cards, sourceCard: effect.trainerCard });
+  if (!TRAINER_TARGET_BLOCKED(store, state, effect, target)) {
+    MOVE_CARDS(store, state, target, opponent.discard, { cards, sourceCard: effect.trainerCard, sourceEffect: effect });
+  }
 
   return state;
 }

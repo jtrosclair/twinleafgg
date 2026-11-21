@@ -1,14 +1,9 @@
-import { TrainerCard } from '../../game/store/card/trainer-card';
-import { TrainerType, SuperType, EnergyType } from '../../game/store/card/card-types';
-import { StoreLike } from '../../game/store/store-like';
-import { State } from '../../game/store/state/state';
+import { GameError, GameMessage, PlayerType, State, StateUtils, StoreLike, TrainerCard, TrainerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import {
-  PlayerType, SlotType, StateUtils, CardTarget,
-  GameMessage, PokemonCardList, ChooseCardsPrompt, Card, GameError, CardList
-} from '../../game';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { chooseTrainerAttachment, chooseTrainerAttachmentTarget, getAttachedSpecialEnergy } from '../../game/store/prefabs/trainer-attachments';
+
 export class FanOfWaves extends TrainerCard {
 
   public regulationMark = 'E';
@@ -29,61 +24,17 @@ export class FanOfWaves extends TrainerCard {
     'Put a Special Energy attached to 1 of your opponent\'s Pokémon on the bottom of their deck.';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof TrainerEffect && effect.trainerCard === this) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
+    if (!(effect instanceof TrainerEffect) || effect.trainerCard !== this) return state;
 
-      // We will discard this card after prompt confirmation
-      effect.preventDefault = true;
-
-      let hasPokemonWithEnergy = false;
-      const blocked: CardTarget[] = [];
-      opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card, target) => {
-        if (cardList.cards.some(c => c.superType === SuperType.ENERGY && EnergyType.SPECIAL)) {
-          hasPokemonWithEnergy = true;
-        } else {
-          blocked.push(target);
-        }
-      });
-
-      if (!hasPokemonWithEnergy) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-
-      let targets: PokemonCardList[] = [];
-      state = store.prompt(state, new ChoosePokemonPrompt(
-        player.id,
-        GameMessage.CHOOSE_POKEMON_TO_DISCARD_CARDS,
-        PlayerType.TOP_PLAYER,
-        [SlotType.ACTIVE, SlotType.BENCH],
-        { allowCancel: false, blocked }
-      ), results => {
-        targets = results || [];
-      });
-
-      if (targets.length === 0) {
-        return state;
-      }
-
-      const target = targets[0];
-      state = store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_DISCARD,
-        target,
-        { superType: SuperType.ENERGY, energyType: EnergyType.SPECIAL },
-        { min: 1, max: 1, allowCancel: false }
-      ), selected => {
-        const cards = selected as Card[];
-
-        const opponentDeckBottom = new CardList();
-        cards.forEach(card => {
-          opponentDeckBottom.moveCardTo(card, opponent.deck);
-        });
-
-        return state;
-      });
-      return state;
+    const opponent = StateUtils.getOpponent(state, effect.player);
+    if (!opponent.getPokemonInPlay().some(slot => getAttachedSpecialEnergy(slot).length > 0)) {
+      throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
     }
-    return state;
+    // Ref: set-pokemon-151/giovannis-charisma.ts (move a physical Energy with Trainer attribution).
+    return chooseTrainerAttachmentTarget(store, state, effect, PlayerType.TOP_PLAYER, getAttachedSpecialEnergy, target => {
+      chooseTrainerAttachment(store, state, effect, target, getAttachedSpecialEnergy, GameMessage.CHOOSE_CARD_TO_DISCARD, card => {
+        if (card) MOVE_CARDS(store, state, target, opponent.deck, { cards: [card], sourceCard: this, sourceEffect: effect, toBottom: true });
+      });
+    });
   }
 }

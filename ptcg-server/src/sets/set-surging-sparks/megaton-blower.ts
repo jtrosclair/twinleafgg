@@ -3,7 +3,7 @@ import { CardTag, EnergyType, TrainerType, SuperType } from '../../game/store/ca
 import { StoreLike, State, EnergyCard, PokemonCardList, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS, TRAINER_TARGET_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class MegatonBlower extends TrainerCard {
 
@@ -50,8 +50,8 @@ export class MegatonBlower extends TrainerCard {
           (card.superType === SuperType.ENERGY && (card as EnergyCard).energyType === EnergyType.SPECIAL) ||
           (card instanceof TrainerCard && card.trainerType === TrainerType.TOOL)
         );
-        if (cardsToDiscard.length > 0) {
-          state = MOVE_CARDS(store, state, pokemonCardList, opponent.discard, { cards: cardsToDiscard, sourceCard: this });
+        if (cardsToDiscard.length > 0 && !TRAINER_TARGET_BLOCKED(store, state, effect, pokemonCardList)) {
+          state = MOVE_CARDS(store, state, pokemonCardList, opponent.discard, { cards: cardsToDiscard, sourceCard: this, sourceEffect: effect });
           // Legacy boards can also index the same Tool separately from the stack.
           pokemonCardList.tools = pokemonCardList.tools.filter(tool => !cardsToDiscard.includes(tool)
             || !(opponent.discard.cards.includes(tool) || opponent.lostzone.cards.includes(tool)));

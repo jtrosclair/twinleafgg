@@ -6,6 +6,7 @@ import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType, SpecialCondition } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { ADD_SPECIAL_CONDITIONS_TO_PLAYER_ACTIVE, TRAINER_TARGET_BLOCKED } from '../../game/store/prefabs/prefabs';
 import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
 
 
@@ -24,8 +25,9 @@ export class KogasTrap extends TrainerCard {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
-      opponent.active.addSpecialCondition(SpecialCondition.CONFUSED);
-      opponent.active.addSpecialCondition(SpecialCondition.POISONED);
+      if (!TRAINER_TARGET_BLOCKED(store, state, effect, opponent.active)) {
+        ADD_SPECIAL_CONDITIONS_TO_PLAYER_ACTIVE(store, state, opponent, this, [SpecialCondition.CONFUSED, SpecialCondition.POISONED]);
+      }
     }
 
     return state;
