@@ -59,8 +59,8 @@ export class AttachEnergyEffect implements Effect {
 
   constructor(
     player: Player, energyCard: EnergyCard, target: PokemonCardList,
-    public readonly sourceZone?: 'deck' | 'discard',
-    /** A detached selection, such as the cards being looked at from the deck. */
+    public readonly sourceZone?: 'deck' | 'discard' | 'in-play',
+    /** A detached selection, such as the cards being looked at or an in-play card changing roles. */
     public readonly sourceList?: CardList,
   ) {
     this.player = player;

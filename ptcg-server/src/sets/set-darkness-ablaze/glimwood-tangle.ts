@@ -8,6 +8,7 @@ import { State, GamePhase } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { CoinFlipEffect } from '../../game/store/effects/play-card-effects';
 import { WaitPrompt } from '../../game/store/prompts/wait-prompt';
+import { rollCoin } from '../../game/store/prefabs/coin-flip-results';
 import { REMOVE_MARKER_AT_END_OF_TURN, ADD_MARKER, HAS_MARKER } from '../../game/store/prefabs/prefabs';
 
 export class GlimwoodTangle extends TrainerCard {
@@ -34,7 +35,7 @@ export class GlimwoodTangle extends TrainerCard {
 
       effect.preventDefault = true;
 
-      const result = Math.random() < 0.5;
+      const result = rollCoin(state, effect.player, effect.forcedResult);
       (effect as CoinFlipEffect).result = result;
       const player = (effect as CoinFlipEffect).player;
       const coinFlipEffect = effect as CoinFlipEffect;

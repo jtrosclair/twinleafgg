@@ -3,13 +3,12 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, EnergyType } from '../../game/store/card/card-types';
-import { CardTarget, GameError, GameMessage, PlayerType, PokemonCardList, PowerType, SlotType, StoreLike, State, StateUtils } from '../../game';
+import { Stage, CardType, EnergyType, SuperType } from '../../game/store/card/card-types';
+import { GameError, GameMessage, PowerType, StoreLike, State } from '../../game';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
-import { checkState } from '../../game/store/effect-reducers/check-effect';
+import { knockOutAndAttachAsEnergy } from '../../game/store/prefabs/knock-out-as-energy';
 import { WAS_POWER_USED, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class Electrode extends PokemonCard implements EnergyCard {
@@ -25,6 +24,7 @@ export class Electrode extends PokemonCard implements EnergyCard {
     name: 'Buzzap Thunder',
     useWhenInPlay: true,
     powerType: PowerType.ABILITY,
+    knocksOutSelf: true,
     text: 'Once during your turn (before your attack), you may Knock Out this Pokémon and attach it to one of your Lightning Pokémon as a Special Energy card. This card provides 2 [L] Energy only while this card is attached to a Pokémon.'
   }];
 
@@ -52,74 +52,25 @@ export class Electrode extends PokemonCard implements EnergyCard {
   public blendedEnergyCount = 1;
   public energyEffect: any = undefined;
 
+  public isEnergyWhenAttached(): boolean { return true; }
+
+  public clearAttachedEnergyForm(): void {
+    this.superType = SuperType.POKEMON;
+  }
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Buzzap Thunder
-    // Ref: set-base-set/electrode.ts (Buzzap)
+    // Ref: set-base-set/electrode.ts (Buzzap).
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
-      }
-
-      // Check if there's at least one Lightning Pokemon to attach to
-      let hasLightningTarget = false;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
-        if (cardList.getPokemonCard() !== this && cardList.getPokemonCard()?.cardType === CardType.LIGHTNING) {
-          hasLightningTarget = true;
-        }
-      });
-
-      if (!hasLightningTarget) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      }
-
-      // KO this Pokemon
-      const cardList = StateUtils.findCardList(state, this) as PokemonCardList;
-      cardList.damage = 999;
-      state = checkState(store, state);
-
-      if (store.hasPrompts()) {
-        state = store.waitPrompt(state, () => { });
-      }
-
-      // Build blocked list for non-Lightning Pokemon
-      const blocked: CardTarget[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        if (card.cardType !== CardType.LIGHTNING) {
-          blocked.push(target);
-        }
-      });
-
-      // Choose a Lightning Pokemon to attach to
-      return store.prompt(state, new ChoosePokemonPrompt(
-        player.id,
-        GameMessage.CHOOSE_POKEMON_TO_ATTACH_CARDS,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.ACTIVE, SlotType.BENCH],
-        { allowCancel: false, blocked }
-      ), targets => {
-        if (!targets || targets.length === 0) {
-          return;
-        }
-
-        // Move Electrode to the target Pokemon as energy
-        effect.preventDefault = true;
-        const sourceList = StateUtils.findCardList(state, this);
-        if (sourceList) {
-          sourceList.moveCardTo(this, targets[0]);
-          if (!targets[0].energies.cards.includes(this)) {
-            targets[0].energies.cards.push(this);
-          }
-        }
-      });
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+      return knockOutAndAttachAsEnergy(store, state, player, this,
+        [CardType.LIGHTNING, CardType.LIGHTNING], CardType.LIGHTNING);
     }
 
-    // Provide energy when attached as energy
-    if (effect instanceof CheckProvidedEnergyEffect && effect.source.energies.cards.includes(this)) {
+    if (effect instanceof CheckProvidedEnergyEffect && this.superType === SuperType.ENERGY
+      && effect.source.energies.cards.includes(this)) {
       effect.energyMap.push({ card: this, provides: this.provides.slice() });
     }
-
     return state;
   }
 }

@@ -1,3 +1,4 @@
+import { rollCoin } from './coin-flip-results';
 import { ConfirmCardsPrompt } from '../prompts/confirm-cards-prompt';
 import { GustOpponentBenchEffect } from '../effects/attack-effects';
 import { AttachEnergyOptions, AttachEnergyPrompt, Card, CardList, CardTarget, ChooseCardsOptions, ChooseCardsPrompt, ChoosePokemonPrompt, ChoosePrizePrompt, ChooseEnergyPrompt, ConfirmPrompt, DamageMap, EnergyCard, GameError, GameLog, GameMessage, MoveDamagePrompt, Player, PlayerType, PokemonCardList, PowerType, SelectPrompt, ShowCardsPrompt, ShuffleDeckPrompt, SlotType, State, StateUtils, StoreLike, TrainerCard } from '../..';
@@ -2420,7 +2421,7 @@ export function FLIP_UNTIL_TAILS_AND_COUNT_HEADS(
 }
 
 export function SIMULATE_COIN_FLIP(store: StoreLike, state: State, player: Player): boolean {
-  const result = Math.random() < 0.5;
+  const result = rollCoin(state, player);
   const gameMessage = result ? GameLog.LOG_PLAYER_FLIPS_HEADS : GameLog.LOG_PLAYER_FLIPS_TAILS;
   store.log(state, gameMessage, { name: player.name });
   return result;

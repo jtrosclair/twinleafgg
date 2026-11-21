@@ -53,6 +53,7 @@ import { ChooseAttackPrompt } from '../prompts/choose-attack-prompt';
 import { Card } from '../card/card';
 import { Attack } from '../card/pokemon-types';
 import { WaitPrompt } from '../prompts/wait-prompt';
+import { rollCoin } from '../prefabs/coin-flip-results';
 import { CoinFlipEffect, CoinFlipSequenceEffect } from '../effects/play-card-effects';
 import { beginAttackDamageScope, cancelAttackDamageScope, finishAttackDamageScope, getAttackPayment, resolveAfterAttack, resolveAfterAttackDamage } from '../prefabs/attack-after-damage';
 import { wasActiveWhenDamaged } from '../prefabs/knock-out-effects';
@@ -371,7 +372,7 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
 
   if (effect instanceof SelfKnockOutEffect) {
     if (!effect.preventDefault && effect.player.getPokemonInPlay().some(slot => slot.getPokemons().includes(effect.source))) {
-      scheduleEffectKnockOut(state, effect.source, effect.afterDiscard);
+      scheduleEffectKnockOut(state, effect.source, effect.options);
     }
     return state;
   }
@@ -797,7 +798,7 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
 
   if (effect instanceof CoinFlipEffect) {
     // Simulate coin flip and store result
-    const result = effect.forcedResult ?? Math.random() < 0.5;
+    const result = rollCoin(state, effect.player, effect.forcedResult);
     (effect as CoinFlipEffect).result = result;
 
     const player = (effect as CoinFlipEffect).player;

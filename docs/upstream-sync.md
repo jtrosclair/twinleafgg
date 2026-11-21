@@ -4299,3 +4299,66 @@ engine cases. All 5,225 sampled opening actions match and all seven
 recorded solutions still win. The 2.50 MiB gzip package passes build
 attestation, ten packaged board scenarios and 209 client-service
 checks. All 32 API checks pass.
+
+## Gameplay re-audit, batch 61
+
+Buzzap and Buzzap Thunder choose another Pokémon before committing the
+Knock Out. The original physical Electrode becomes an attached Special
+Energy card through the normal attachment reducer. The other cards in
+the stack follow the normal Knock Out routing, and the opponent takes
+a Prize. Damp disables Buzzap Thunder. Its initial recipient needs
+effective Lightning typing. Once attached, it provides two Lightning
+Energy even after moving to a different Pokémon type. Enhanced Hammer
+can discard it, and Temple of Sinnoh changes its provision to one
+Colorless Energy.
+[Official Buzzap Thunder errata](https://assets.pokemon.com/assets/cms2/pdf/trading-card-game/tcg-errata-06232023-en.pdf)
+[Official Prize and Enhanced Hammer rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B5%E3%83%B3%E3%83%80%E3%83%BC&page=6&regulation=all)
+
+Base Set Buzzap restores the player's chosen type independently for
+each physical card. The optional choice is serialized on the
+attachment's Pokémon slot. A legacy snapshot with no recorded type
+continues without an inferred choice. Both prints revert to Pokémon
+when the Energy leaves play. Electric Shock uses the shared coin and
+recoil path.
+[Original Buzzap print](https://www.mrpokemon.com/info.php?i=3189)
+[Archived Wizards rulings on Buzzap](https://www.elitefourum.com/t/wotc-chat-logs-from-feb-2000-to-nov-2000-q-a-w-employees/16872/1)
+
+Slap of Misfortune, Sinister Suggestion and Unown E's Hidden Power
+apply a player-scoped effect for the opponent's next turn. It
+survives the attacker leaving play and snapshot restoration. Both
+engine-generated flips and legacy prompts, including Confusion,
+resolve as tails. It applies again on an existing reflip and expires
+when the affected player ends their turn. Victory Star's general
+reflip implementation remains open.
+[Official Slap of Misfortune rulings](https://www.pokemon-card.com/rules/faq/search.php?page=829&regulation=all)
+[Official Drowzee print](https://www.pokemon-card.com/card-search/details.php/card/30408/regu/BW)
+[Official Unown E print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/dp2/65)
+
+Electrode SW's Energy Shift needs a separate damage-origin and
+promotion review. The errata permits the power after attack damage
+on either player's turn, including Ion Blast recoil. The official
+Active ruling places promotion before the opponent takes a Prize.
+The current engine awards Prizes before promotion. Real action
+probes on Electrode SW find no Energy Shift prompt after a lethal
+Blissful Blast or Ion Blast recoil, even with another Pokémon in play.
+[Official Energy Shift errata](https://assets.pokemon.com/assets/cms2/pdf/trading-card-game/tcg-errata-06232023-en.pdf)
+[Official Energy Shift rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%9E%E3%83%AB%E3%83%9E%E3%82%A4%E3%83%B3&page=7&regulation_faq_main=)
+
+A separate check of the upstream evolution-stage change accepted
+361 registered VMAX, VSTAR, Mega Evolution and BREAK prints from a
+matching parent. The four failures were Umbreon VMAX prints whose
+optional Dark Signal prompt was accepted with an empty opposing
+Bench. That prompt path throws an error during the legal evolution
+and needs its own review. The Angular card pane already restricts
+Stadium activation controls to Trainer cards.
+
+The full engine passes 10,876 checks. All 17 new cases pass, and 14
+reproduce failures on the previous source. The combined local
+workspace passes 200 targeted checks. All 559 comparable saved
+puzzles have identical serialized and deserialized states and card
+identities. The affected Electrode appears in one archived puzzle's
+hand and deck, and none of the changed source Pokémon starts in play.
+All 5,225 sampled opening actions match, and all seven recorded
+solutions still win. The 2.51 MiB gzip runtime passes build attestation,
+ten packaged board scenarios and 209 client-service checks. All 32
+API checks pass.

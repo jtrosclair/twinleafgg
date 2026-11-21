@@ -520,7 +520,24 @@ export class PokemonCardList extends CardList {
   public moveTo(destination: CardList, count?: number): void {
     // Move energies CardList to destination before moving cards
     if (this.energies.cards.length > 0) {
+      // Role-changing cards mirrored in both lists move with their physical
+      // card. Restore the mirror on an in-play transfer or revert the role
+      // when the card leaves play.
+      const movingCards = this.cards.slice(0, count ?? this.cards.length);
+      const retained: Card[] = [];
+      for (const card of this.energies.cards.slice()) {
+        if (!card.clearAttachedEnergyForm) continue;
+        const isMirrored = this.cards.includes(card);
+        if (isMirrored) this.energies.cards.splice(this.energies.cards.indexOf(card), 1);
+        if (isMirrored && !movingCards.includes(card)) {
+          retained.push(card);
+          continue;
+        }
+        if (!(destination instanceof PokemonCardList)) card.clearAttachedEnergyForm();
+        else if (!destination.energies.cards.includes(card)) destination.energies.cards.push(card);
+      }
       this.energies.moveTo(destination);
+      this.energies.cards.push(...retained);
     }
 
     super.moveTo(destination, count);
@@ -536,6 +553,7 @@ export class PokemonCardList extends CardList {
         const energyIndex = this.energies.cards.indexOf(card[0]);
         if (energyIndex !== -1) {
           this.energies.cards.splice(energyIndex, 1);
+          if (!(destination instanceof PokemonCardList)) card[0].clearAttachedEnergyForm?.();
         }
         destination.cards.push(card[0]);
         moved++;
@@ -550,6 +568,7 @@ export class PokemonCardList extends CardList {
         index = this.energies.cards.indexOf(cards[i]);
         if (index !== -1) {
           const card = this.energies.cards.splice(index, 1);
+          if (!(destination instanceof PokemonCardList)) card[0].clearAttachedEnergyForm?.();
           destination.cards.push(card[0]);
           moved++;
           // If destination is a PokemonCardList and card came from energies, add to destination energies.cards

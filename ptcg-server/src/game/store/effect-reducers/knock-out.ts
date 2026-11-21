@@ -1,8 +1,9 @@
 import { GameError } from '../../game-error';
 import { GameMessage } from '../../game-message';
 import { Card } from '../card/card';
-import { CardTag } from '../card/card-types';
+import { CardTag, SuperType } from '../card/card-types';
 import { KnockOutEffect } from '../effects/game-effects';
+import { AttachEnergyEffect } from '../effects/play-card-effects';
 import { MOVE_CARDS } from '../prefabs/prefabs';
 import { SelectPrompt } from '../prompts/select-prompt';
 import { CardList } from '../state/card-list';
@@ -110,6 +111,20 @@ export function discardKnockedOutPokemon(store: StoreLike, state: State, effect:
     state = MOVE_CARDS(store, state, effect.target, effect.player.stadium, { cards: [stadium], sourceCard: stadium });
   }
 
+  const energy = effect.energyAttachment;
+  let heldEnergy: CardList | undefined;
+  if (energy && energy.card === card && energy.target !== effect.target
+    && effect.player.getPokemonInPlay().includes(energy.target)
+    && !effect.simultaneousKnockOuts?.has(energy.target)) {
+    const index = effect.target.cards.indexOf(energy.card);
+    if (index >= 0) {
+      heldEnergy = new CardList();
+      heldEnergy.cards = effect.target.cards.splice(index, 1);
+    }
+  }
+
+  effect.target.energies.cards.forEach(attached => attached.clearAttachedEnergyForm?.());
+
   // A damage-provenance opt-in differs from Lost City: ALL attachments go too.
   if (effect.knockOutDestination === 'lostzone') {
     const allCards = new CardList();
@@ -196,6 +211,17 @@ export function discardKnockedOutPokemon(store: StoreLike, state: State, effect:
     effect.target.tools = [];
     effect.target.clearEffects();
     state = MOVE_CARDS(store, state, effect.target, effect.player.discard);
+  }
+  if (energy && heldEnergy) {
+    energy.card.provides = energy.provides;
+    energy.card.superType = SuperType.ENERGY;
+    const attachment = new AttachEnergyEffect(effect.player, energy.card, energy.target, 'in-play', heldEnergy);
+    attachment.sourceCard = energy.card;
+    state = store.reduceEffect(state, attachment);
+    if (heldEnergy.cards.length) {
+      energy.card.clearAttachedEnergyForm?.();
+      state = MOVE_CARDS(store, state, heldEnergy, effect.player.discard);
+    }
   }
   return state;
 }

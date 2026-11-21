@@ -2,6 +2,8 @@ import { AbstractAttackEffect, ApplyWeaknessEffect, DealDamageEffect, PutDamageE
 import { CheckPokemonTypeEffect, CheckProvidedEnergyEffect, CheckRetreatCostEffect } from './effects/check-effects';
 import { mirrorOnlyEnergyForQuery } from './prefabs/mirror-only-energy';
 import { StateUtils } from './state-utils';
+import { COIN_FLIPS_TREATED_AS_TAILS, isCoinForcedTails } from './prefabs/coin-flip-results';
+import { CoinFlipPrompt } from './prompts/coin-flip-prompt';
 import { preflightCopiedOpponentAttacks, resolveCopyAttackSessions } from './prefabs/copy-attack-delegation';
 import { Action } from './actions/action';
 import { AbortGameAction } from './actions/abort-game-action';
@@ -287,6 +289,7 @@ export class Store implements StoreLike {
     if (effect instanceof EndTurnEffect) {
       state = this.propagatePlayerMarkerEffect(state, effect);
       if (effect.preventDefault) return state;
+      effect.player.marker.removeMarker(COIN_FLIPS_TREATED_AS_TAILS);
     }
 
     state = gamePhaseReducer(this, state, effect);
@@ -382,7 +385,9 @@ export class Store implements StoreLike {
     }
 
     try {
-      prompt.result = action.result;
+      const player = state.players[state.activePlayer];
+      prompt.result = prompt instanceof CoinFlipPrompt && player?.id === prompt.playerId
+        && isCoinForcedTails(state, player) ? false : action.result;
 
       const results = promptItem.ids.map(id => {
         const p = state.prompts.find(item => item.id === id);

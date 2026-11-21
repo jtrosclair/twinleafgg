@@ -94,8 +94,8 @@ export function playEnergyReducer(store: StoreLike, state: State, effect: Effect
 
     if (effect.sourceZone) {
       if (!effect.target.cards.includes(effect.energyCard)) {
-        const source = effect.sourceList ?? effect.player[effect.sourceZone];
-        if (!source.cards.includes(effect.energyCard)) return state;
+        const source = effect.sourceList ?? (effect.sourceZone === 'in-play' ? undefined : effect.player[effect.sourceZone]);
+        if (!source?.cards.includes(effect.energyCard)) return state;
         state = store.reduceEffect(state, new MoveCardsEffect(source, effect.target, {
           cards: [effect.energyCard], sourceCard: effect.sourceCard,
         }));

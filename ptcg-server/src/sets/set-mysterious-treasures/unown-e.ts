@@ -1,10 +1,11 @@
+import { opponentFlipsTailsNextTurn } from '../../game/store/prefabs/coin-flip-results';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, GameError, GameMessage, StateUtils, PokemonCardList, CardTarget, PlayerType, ChoosePokemonPrompt, SlotType } from '../../game';
 import { CheckHpEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { PowerEffect } from '../../game/store/effects/game-effects';
-import { MOVE_CARDS, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 function* usePower(next: Function, store: StoreLike, state: State, self: UnownE, effect: PowerEffect): IterableIterator<State> {
   const player = effect.player;
@@ -99,7 +100,7 @@ export class UnownE extends PokemonCard {
     name: 'Hidden Power',
     cost: [C, C],
     damage: 0,
-    text: '**THIS ATTACK DOES NOT WORK LIL BRO**\n\nDuring your opponent\'s next turn, whenever your opponent flips a coin, treat it as tails.'
+    text: 'During your opponent\'s next turn, whenever your opponent flips a coin, treat it as tails.'
   }];
 
   public set: string = 'MT';
@@ -109,6 +110,8 @@ export class UnownE extends PokemonCard {
   public setNumber: string = '65';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    // Ref: set-x-and-y-promos/malamar.ts (Contrary's forced coin result).
+    if (WAS_ATTACK_USED(effect, 0, this)) opponentFlipsTailsNextTurn(state, effect);
     if (WAS_POWER_USED(effect, 0, this)) {
       const generator = usePower(() => generator.next(), store, state, this, effect);
       return generator.next().value;

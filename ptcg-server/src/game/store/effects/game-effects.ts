@@ -1,3 +1,4 @@
+import { CardType } from '../card/card-types';
 import { Attack, Power } from '../card/pokemon-types';
 import { Effect } from './effect';
 import { Player } from '../state/player';
@@ -235,6 +236,17 @@ interface BeforeKnockOutDiscard {
   resolve: () => void;
 }
 
+export interface KnockOutEnergyAttachment {
+  card: PokemonCard & EnergyCard;
+  target: PokemonCardList;
+  provides: CardType[];
+}
+
+export interface EffectKnockOutOptions {
+  afterDiscard?: () => void;
+  energyAttachment?: KnockOutEnergyAttachment;
+}
+
 /** A printed effect that Knocks Out its own Pokémon independently of damage. */
 export class SelfKnockOutEffect implements Effect {
   readonly type = GameEffects.SELF_KNOCK_OUT_EFFECT;
@@ -243,7 +255,7 @@ export class SelfKnockOutEffect implements Effect {
   constructor(
     public readonly player: Player,
     public readonly source: PokemonCard,
-    public readonly afterDiscard?: () => void,
+    public readonly options?: EffectKnockOutOptions,
   ) {}
 }
 
@@ -262,6 +274,7 @@ export class KnockOutEffect implements Effect {
   public knockOutDestinationLabel?: string;
   public rescueSource?: Card;
   public stadiumReplacement?: PokemonCard;
+  public energyAttachment?: KnockOutEnergyAttachment;
   public rescuedPokemon?: { card: PokemonCard; attachments: Card[] };
   public pokemonGoingToLostZone = false;
   public pokemonInPlayBeforeKnockOut?: readonly PokemonCard[];

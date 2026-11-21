@@ -9,7 +9,7 @@ import { EnergyCard } from '../card/energy-card';
 import { PokemonCard } from '../card/pokemon-card';
 import { CheckHpEffect, CheckProvidedEnergyEffect, CheckTableStateEffect } from '../effects/check-effects';
 import { Effect } from '../effects/effect';
-import { KnockOutEffect, MovedToActiveEffect } from '../effects/game-effects';
+import { EffectKnockOutOptions, KnockOutEffect, MovedToActiveEffect } from '../effects/game-effects';
 import { protectAttackerAfterKnockOut } from '../prefabs/knock-out-effects';
 import { TAKE_SPECIFIC_PRIZES, MOVE_CARDS } from '../prefabs/prefabs';
 import { ChoosePokemonPrompt } from '../prompts/choose-pokemon-prompt';
@@ -26,7 +26,7 @@ interface PokemonItem {
   cardList: PokemonCardList;
   card: PokemonCard;
   destination?: 'lostzone';
-  afterDiscard?: () => void;
+  effectOptions?: EffectKnockOutOptions;
 }
 
 interface PrizeGroup {
@@ -36,11 +36,11 @@ interface PrizeGroup {
 
 // Pending effects only belong to the live board. They are consumed by the next
 // normal Knock Out check and never carried into a reset or a rolled-back action.
-const pendingEffectKnockOuts = new WeakMap<State, Map<PokemonCard, (() => void) | undefined>>();
+const pendingEffectKnockOuts = new WeakMap<State, Map<PokemonCard, EffectKnockOutOptions | undefined>>();
 
-export function scheduleEffectKnockOut(state: State, pokemon: PokemonCard, afterDiscard?: () => void): void {
+export function scheduleEffectKnockOut(state: State, pokemon: PokemonCard, options?: EffectKnockOutOptions): void {
   const pending = pendingEffectKnockOuts.get(state) ?? new Map();
-  if (!pending.has(pokemon) || afterDiscard) pending.set(pokemon, afterDiscard);
+  if (!pending.has(pokemon) || options) pending.set(pokemon, options);
   pendingEffectKnockOuts.set(state, pending);
 }
 
@@ -65,8 +65,8 @@ function findKoPokemons(store: StoreLike, state: State): PokemonItem[] {
       // Never carry a Lost Crisis destination into another attack or checkup.
       if (ko) { delete ko.destination; delete ko.targetCard; }
       if (effectKnockOut || cardList.damage >= checkHpEffect.hp) {
-        const afterDiscard = effectKnockOut && effectKnockOuts?.get(effectKnockOut);
-        pokemons.push({ playerNum: i, cardList, card, destination, afterDiscard });
+        const effectOptions = effectKnockOut && effectKnockOuts?.get(effectKnockOut);
+        pokemons.push({ playerNum: i, cardList, card, destination, effectOptions });
       }
     });
   }
@@ -432,6 +432,7 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
       effect.pokemonInPlayBeforeKnockOut = pokemonInPlay?.[pokemon.playerNum];
       effect.simultaneousKnockOuts = simultaneousKnockOuts;
       effect.knockOutDestination = pokemon.destination;
+      effect.energyAttachment = pokemon.effectOptions?.energyAttachment;
       if (pokemon.destination) {
         effect.knockOutDestinationLabel = pokemon.cardList.attackDamageKnockOut?.attack.name;
       }
@@ -441,7 +442,7 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
 
       protectAttackerAfterKnockOut(state, effect);
       resolved.push(effect);
-      if (pokemon.afterDiscard) continuations.push(pokemon.afterDiscard);
+      if (pokemon.effectOptions?.afterDiscard) continuations.push(pokemon.effectOptions.afterDiscard);
       if (effect.preventPrizes) continue;
 
       const opponentIndex = pokemon.playerNum === 0 ? 1 : 0;

@@ -1,11 +1,13 @@
 import { Card } from './card';
-import { SuperType } from './card-types';
+import { CardType, SuperType } from './card-types';
 import { State } from '../state/state';
 import { PokemonCardList } from '../state/pokemon-card-list';
 
 /** Trusted card definitions opt in; no mutable form flags are accepted from wire data. */
 export interface PokemonEnergyRole {
   isEnergyWhenAttached(): boolean;
+  getAttachedEnergyChoice?(): CardType | undefined;
+  restoreAttachedEnergyChoice?(choice: CardType): void;
 }
 
 type Zone = { cards: Card[]; energies?: { cards: Card[] } };

@@ -55,7 +55,7 @@ export class Electrodeex extends PokemonCard {
       BLOCK_IF_HAS_SPECIAL_CONDITION(player, this);
       if (IS_POKEPOWER_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
 
-      return store.reduceEffect(state, new SelfKnockOutEffect(player, this, () => {
+      return store.reduceEffect(state, new SelfKnockOutEffect(player, this, { afterDiscard: () => {
         const blockedTo: CardTarget[] = [];
         let hasRecipient = false;
         player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (_slot, card, target) => {
@@ -72,7 +72,7 @@ export class Electrodeex extends PokemonCard {
         ), transfers => {
           ATTACH_ENERGY_TRANSFERS(store, state, player, transfers ?? [], 'discard', { sourceCard: this });
         });
-      }));
+      } }));
     }
 
     // Ref: set-celestial-storm/electrode-gx.ts (Crush and Burn-GX).

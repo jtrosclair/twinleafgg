@@ -177,7 +177,7 @@ describe('Pokemon-as-Energy restoration and existing live lifecycle', () => {
   });
   it('does not invent a legacy Buzzap Energy choice', () => {
     const g = game(prints[0].name), electrode = getCardByName('Electrode BS');
-    electrode.superType = SuperType.ENERGY; (electrode as any).chosenEnergyType = 7; (electrode as any).provides = [7, 7];
+    electrode.superType = SuperType.ENERGY;
     g.player1.active.cards.push(electrode); g.player1.active.energies.cards.push(electrode);
     const state = new StateSerializer().deserialize(serialize(g.state));
     const restored = state.players[0].active.energies.cards.find(item => item.id === electrode.id)!;

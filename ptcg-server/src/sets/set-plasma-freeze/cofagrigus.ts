@@ -1,9 +1,10 @@
+import { opponentFlipsTailsNextTurn } from '../../game/store/prefabs/coin-flip-results';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardTag, Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, PowerType, GameError, GameMessage, PlayerType, SlotType, StateUtils, PutDamagePrompt, DamageMap } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { PlaceDamageCountersEffect, SelfKnockOutEffect } from '../../game/store/effects/game-effects';
-import { IS_ABILITY_BLOCKED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Cofagrigus extends PokemonCard {
 
@@ -28,7 +29,7 @@ export class Cofagrigus extends PokemonCard {
       name: 'Slap of Misfortune',
       cost: [P, P, C],
       damage: 70,
-      text: 'NOT CURRENTLY WORKING: Whenever your opponent flips a coin during his or her next turn, treat it as tails.'
+      text: 'Whenever your opponent flips a coin during his or her next turn, treat it as tails.'
     }
   ];
 
@@ -39,6 +40,8 @@ export class Cofagrigus extends PokemonCard {
   public fullName: string = 'Cofagrigus PLF';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    // Ref: set-x-and-y-promos/malamar.ts (Contrary's forced coin result).
+    if (WAS_ATTACK_USED(effect, 0, this)) opponentFlipsTailsNextTurn(state, effect);
     // Ref: set-shrouded-fable/dusclops.ts (Cursed Blast).
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
