@@ -6005,3 +6005,55 @@ was reproduced on the preceding engine with its Tool in both attachment
 lists and with no active Ability lock. The suppression tests exercise the
 Tool with one listener.
 [Lillie's Comfey print](https://www.pokemon-card.com/card-search/details.php/card/47051/regu/all)
+
+## Gameplay re-audit, batch 99
+
+This batch takes the modern next-turn shield changes from `343b9ae42`.
+Cynthia's Feebas, Barboach, Hoppip, Charcadet, Seaking, Flittle, Dunsparce
+and Marill now apply their printed damage and effect protection on heads.
+Dunsparce flips for Dig and leaves Gnaw at its printed 10 damage. Cherubi's
+existing Hide passes the same controls. Shelmet and Altaria block damage
+only. Noivern ex, Nidoqueen, Dipplin, Golbat and Mega Manectric ex block
+damage from Basic Pokémon and allow secondary effects. In each case Shred
+bypasses the damage shield. Older puzzle snapshots can use the existing
+markers until they expire.
+[Cynthia's Feebas](https://www.pokemon-card.com/card-search/details.php/card/47323/regu/all)
+[Barboach](https://www.pokemon-card.com/card-search/details.php/card/43174)
+[Hoppip](https://asia.pokemon-card.com/my/card-search/detail/13226/)
+[Charcadet](https://asia.pokemon-card.com/hk-en/card-search/detail/10702/)
+[Seaking](https://asia.pokemon-card.com/sg/card-search/detail/10168/)
+[Flittle](https://asia.pokemon-card.com/sg/card-search/detail/16659/)
+[Dunsparce](https://asia.pokemon-card.com/sg/card-search/detail/12218/)
+[Marill](https://www.pokemon-card.com/card-search/details.php/card/49011/regu/all)
+[Shelmet](https://www.pokemon-card.com/card-search/details.php/card/47016/regu/all)
+[Altaria](https://www.pokemon-card.com/card-search/details.php/card/46270)
+[Noivern ex](https://asia.pokemon-card.com/sg/card-search/detail/11159/)
+[Nidoqueen](https://asia.pokemon-card.com/ph/card-search/detail/10080/)
+[Dipplin](https://asia.pokemon-card.com/sg/card-search/detail/13989/)
+[Golbat](https://asia.pokemon-card.com/my/card-search/detail/25241/)
+[Mega Manectric ex](https://asia.pokemon-card.com/sg/card-search/detail/21642/)
+[Koraidon](https://asia.pokemon-card.com/my/card-search/detail/12209/)
+
+The same tests caught Frenzied Gouging's unconditional recoil. The fork
+retains its existing Knock Out provenance and now uses the successful
+Knock Out result to gate the 200 self-damage, following `a1e541bca`.
+[Roaring Moon ex](https://asia.pokemon-card.com/my/card-search/detail/10968/)
+[Official Frenzied Gouging ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%81%8F%E3%82%8B%E3%81%84%E3%81%88%E3%81%90%E3%82%8B&regulation_faq_main_item1=all)
+
+All 559 compatible saved boards round-trip byte-for-byte. Of 5,484 sampled
+opening actions, two Marill Hide actions change. The field comparison shows
+that the old damage marker becomes two active protection flags, and the
+last-attack source reference encodes the same card directly. The affected
+moves keep the same game result, turn, card zones and prompts.
+
+All 11,711 engine checks, 108 combined WebView and gameplay checks, and
+33 API checks pass. The 38 new checks include 11 failures on the preceding
+engine. Existing Flittle tests exercise the real turn transition and
+separate damage from attack effects.
+The attested production package passed its mobile budget and all ten
+desktop and touch prompt checks. All 211 client checks passed, and all
+eight recorded solutions won on both replays.
+
+The next `343b9ae42` modern paths are Joltik SFA's full shield, the printed
+defender restrictions on Eiscue ex, Iron Bundle and N's Vanillish, and damage
+timing on Mabosstiff PBL.

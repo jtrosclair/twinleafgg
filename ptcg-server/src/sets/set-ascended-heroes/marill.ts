@@ -1,8 +1,8 @@
 import { PokemonCard, Stage, CardType, StoreLike, State, StateUtils } from '../../game';
-import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
+import { FLIP_COIN_TO_PREVENT_DAMAGE_AND_EFFECTS_DURING_OPPONENTS_NEXT_TURN, preserveLegacyNextTurnAttackProtection } from '../../game/store/prefabs/effect-of-attack-prefabs';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { AFTER_ATTACK, COIN_FLIP_PROMPT } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Marill extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -35,21 +35,12 @@ export class Marill extends PokemonCard {
   public readonly PREVENT_DAMAGE_MARKER = 'PREVENT_DAMAGE_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (AFTER_ATTACK(effect, 0, this)) {
-      COIN_FLIP_PROMPT(store, state, effect.player, (result) => {
-        if (result) {
-          const player = effect.player;
-          player.active.marker.addMarker(this.PREVENT_DAMAGE_MARKER, this);
-        }
-      });
+    // Ref: set-black-bolt-white-flare/tranquill.ts (Fly).
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      return FLIP_COIN_TO_PREVENT_DAMAGE_AND_EFFECTS_DURING_OPPONENTS_NEXT_TURN(store, state, effect, this);
     }
 
-    // Prevent damage if marker is set
-    if (effect instanceof PutDamageEffect && effect.target.marker.hasMarker(this.PREVENT_DAMAGE_MARKER, this)) {
-      effect.preventDefault = true;
-      return state;
-    }
-
+    preserveLegacyNextTurnAttackProtection(state, effect, this, this.PREVENT_DAMAGE_MARKER, { preventEffects: true });
     // Clear marker at end of opponent's turn
     if (effect instanceof EndTurnEffect) {
       const player = effect.player;

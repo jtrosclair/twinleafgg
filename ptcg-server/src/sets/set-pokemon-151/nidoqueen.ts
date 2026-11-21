@@ -1,6 +1,6 @@
 import { PokemonCard, Stage, CardType, State, StateUtils, StoreLike, PlayerType } from '../../game';
-import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
+import { PREVENT_DAMAGE, preserveLegacyNextTurnAttackProtection } from '../../game/store/prefabs/effect-of-attack-prefabs';
 
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
@@ -39,24 +39,14 @@ export class Nidoqueen extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    // Ref: set-arceus/arceus-metal.ts (Metal Barrier), with a Basic-only damage filter.
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      player.active.marker.addMarker(this.PREVENT_ALL_DAMAGE_DONE_BY_OPPONENTS_BASIC_POKEMON_MARKER, this);
-      opponent.marker.addMarker(this.CLEAR_PREVENT_ALL_DAMAGE_DONE_BY_OPPONENTS_BASIC_POKEMON_MARKER, this);
-      return state;
+      return PREVENT_DAMAGE(store, state, effect, this, { sourceStage: Stage.BASIC });
     }
 
-    if (effect instanceof PutDamageEffect
-      && effect.target.marker.hasMarker(this.PREVENT_ALL_DAMAGE_DONE_BY_OPPONENTS_BASIC_POKEMON_MARKER)) {
-      const card = effect.source.getPokemonCard();
-
-      if (card?.stage === Stage.BASIC) {
-        effect.preventDefault = true;
-      }
-
-      return state;
-    }
+    preserveLegacyNextTurnAttackProtection(
+      state, effect, this, this.PREVENT_ALL_DAMAGE_DONE_BY_OPPONENTS_BASIC_POKEMON_MARKER, { sourceStage: Stage.BASIC },
+    );
 
     if (effect instanceof EndTurnEffect) {
 

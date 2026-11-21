@@ -1,6 +1,8 @@
 import { Card } from '../card/card';
-import { CardType } from '../card/card-types';
-import { PutDamageEffect } from '../effects/attack-effects';
+import { CardType, Stage } from '../card/card-types';
+import {
+  AbstractAttackEffect, ApplyWeaknessEffect, DealDamageEffect, PutDamageEffect,
+} from '../effects/attack-effects';
 import { Effect } from '../effects/effect';
 import { AttackEffect } from '../effects/game-effects';
 import { EffectOfAttackEffect } from '../effects/effect-of-attack-effects';
@@ -345,6 +347,24 @@ export function PREVENT_DAMAGE(
 ): State {
   const protection = new NextTurnPreventDamageEffect(effect, filter); protection.markerSource = source;
   return store.reduceEffect(state, protection);
+}
+
+/** Apply next-turn shields stored as markers in older puzzle snapshots. */
+export function preserveLegacyNextTurnAttackProtection(
+  state: State, effect: Effect, source: Card, marker: string,
+  options: { preventEffects?: boolean; sourceStage?: Stage } = {},
+): void {
+  if (!(effect instanceof AbstractAttackEffect) || effect instanceof ApplyWeaknessEffect
+    || !effect.target.marker.hasMarker(marker, source)) return;
+
+  const attacker = effect.source.getPokemonCard();
+  if (!attacker || (options.sourceStage !== undefined && attacker.stage !== options.sourceStage)
+    || StateUtils.findOwner(state, effect.source) === StateUtils.findOwner(state, effect.target)) return;
+
+  const damage = effect instanceof PutDamageEffect || effect instanceof DealDamageEffect;
+  if (damage ? !effect.ignoresDefendingDamageEffects : options.preventEffects) {
+    effect.preventDefault = true;
+  }
 }
 
 /** Honor the card-specific attack markers stored by older puzzle snapshots. */

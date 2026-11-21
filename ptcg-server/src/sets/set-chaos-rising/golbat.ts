@@ -1,7 +1,7 @@
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
+import { PREVENT_DAMAGE, preserveLegacyNextTurnAttackProtection } from '../../game/store/prefabs/effect-of-attack-prefabs';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { StoreLike, State, StateUtils, PlayerType } from '../../game';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
@@ -34,27 +34,15 @@ export class Golbat extends PokemonCard {
   public readonly CLEAR_PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER = 'CLEAR_PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    // Ref: set-arceus/arceus-metal.ts (Metal Barrier), with a Basic-only damage filter.
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      player.active.marker.addMarker(this.PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER, this);
-      opponent.marker.addMarker(this.CLEAR_PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER, this);
-      return state;
+      return PREVENT_DAMAGE(store, state, effect, this, { sourceStage: Stage.BASIC });
     }
-    if (effect instanceof DealDamageEffect
-      && effect.target.marker.hasMarker(this.PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER, this)) {
-      const card = effect.source.getPokemonCard();
-      if (card && card.stage === Stage.BASIC) {
-        effect.damage = 0;
-      }
-    }
-    if (effect instanceof PutDamageEffect
-      && effect.target.marker.hasMarker(this.PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER, this)) {
-      const card = effect.source.getPokemonCard();
-      if (card && card.stage === Stage.BASIC) {
-        effect.preventDefault = true;
-      }
-    }
+
+    preserveLegacyNextTurnAttackProtection(
+      state, effect, this, this.PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER, { sourceStage: Stage.BASIC },
+    );
+
     if (effect instanceof EndTurnEffect) {
       if (effect.player.marker.hasMarker(this.CLEAR_PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER, this)) {
         effect.player.marker.removeMarker(this.CLEAR_PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER, this);

@@ -206,6 +206,7 @@ export class DirectKnockOutAttackEffect extends AbstractAttackEffect implements 
 export class KnockOutOpponentEffect extends AbstractAttackEffect implements Effect {
   readonly type: string = AttackEffects.DEAL_DAMAGE_EFFECT;
   public preventDefault = false;
+  public knockedOut = false;
   public damage: number;
 
   constructor(base: AttackEffect, damage: number) {

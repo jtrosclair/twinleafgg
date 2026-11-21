@@ -1,9 +1,9 @@
 import { Effect } from '../../game/store/effects/effect';
+import { PREVENT_DAMAGE, preserveLegacyNextTurnAttackProtection } from '../../game/store/prefabs/effect-of-attack-prefabs';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, EnergyType } from '../../game/store/card/card-types';
 import { StoreLike, State, PlayerType, StateUtils, GameError, GameMessage } from '../../game';
 
-import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { AttachEnergyEffect, PlayStadiumEffect } from '../../game/store/effects/play-card-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
@@ -54,25 +54,14 @@ export class Noivernex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    // Ref: set-arceus/arceus-metal.ts (Metal Barrier), with a Basic-only damage filter.
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      player.active.marker.addMarker(this.PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER, this);
-      opponent.marker.addMarker(this.CLEAR_PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER, this);
-      return state;
+      return PREVENT_DAMAGE(store, state, effect, this, { sourceStage: Stage.BASIC });
     }
 
-    if (effect instanceof PutDamageEffect
-      && effect.target.marker.hasMarker(this.PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER)) {
-      const card = effect.source.getPokemonCard();
-      const stage = card !== undefined ? card.stage : undefined;
-
-      if (stage === Stage.BASIC) {
-        effect.preventDefault = true;
-      }
-
-      return state;
-    }
+    preserveLegacyNextTurnAttackProtection(
+      state, effect, this, this.PREVENT_DAMAGE_FROM_BASIC_POKEMON_MARKER, { sourceStage: Stage.BASIC },
+    );
 
     if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;

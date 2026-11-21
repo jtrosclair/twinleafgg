@@ -5,9 +5,8 @@ import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 import { Effect } from '../../game/store/effects/effect';
 import { ConfirmPrompt, GameMessage, StateUtils } from '../../game';
-import { DealDamageEffect, KnockOutOpponentEffect } from '../../game/store/effects/attack-effects';
-import { BetweenTurnsEffect } from '../../game/store/effects/game-phase-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { KnockOutOpponentEffect } from '../../game/store/effects/attack-effects';
+import { THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class RoaringMoonex extends PokemonCard {
 
@@ -54,21 +53,14 @@ export class RoaringMoonex extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
+      const target = effect.opponent.active;
+      if (!target.getPokemonCard()) return state;
 
-      const activePokemon = opponent.active.getPokemonCard();
-
-      if (activePokemon) {
-        const dealDamage = new KnockOutOpponentEffect(effect, 999);
-        dealDamage.target = opponent.active;
-        store.reduceEffect(state, dealDamage);
-      }
-
-      if (BetweenTurnsEffect && activePokemon !== undefined) {
-        const dealSelfDamage = new DealDamageEffect(effect, 200);
-        dealSelfDamage.target = player.active;
-        store.reduceEffect(state, dealSelfDamage);
+      const knockOut = new KnockOutOpponentEffect(effect, 999);
+      knockOut.target = target;
+      state = store.reduceEffect(state, knockOut);
+      if (knockOut.knockedOut) {
+        state = THIS_POKEMON_DOES_DAMAGE_TO_ITSELF(store, state, effect, 200);
       }
     }
 

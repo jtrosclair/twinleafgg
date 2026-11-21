@@ -1,10 +1,10 @@
 import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
-import { GamePhase, State } from '../../game/store/state/state';
+import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { GameMessage, PokemonCard, StateUtils } from '../../game';
-import { CONFIRMATION_PROMPT, DISCARD_ALL_ENERGY_FROM_POKEMON, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { PutDamageEffect } from '../../game/store/effects/attack-effects';
+import { PREVENT_DAMAGE, preserveLegacyNextTurnAttackProtection } from '../../game/store/prefabs/effect-of-attack-prefabs';
+import { GameMessage, PokemonCard } from '../../game';
+import { CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN, CONFIRMATION_PROMPT, DISCARD_ALL_ENERGY_FROM_POKEMON, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class MegaManectricEx extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -41,21 +41,17 @@ export class MegaManectricEx extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    // Ref: set-arceus/arceus-metal.ts (Metal Barrier), with a Basic-only damage filter.
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      player.active.marker.addMarker(this.PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN_MARKER, this);
-      opponent.marker.addMarker(this.CLEAR_PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN_MARKER, this);
+      return PREVENT_DAMAGE(store, state, effect, this, { sourceStage: Stage.BASIC });
     }
 
-    if (effect instanceof PutDamageEffect && effect.target.marker.hasMarker(this.PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN_MARKER) && state.phase === GamePhase.ATTACK) {
-      const sourceCard = effect.source.getPokemonCard();
-      if (sourceCard && sourceCard.stage === Stage.BASIC) {
-        effect.preventDefault = true;
-        return state;
-      }
-      return state;
-    }
+    preserveLegacyNextTurnAttackProtection(
+      state, effect, this, this.PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN_MARKER, { sourceStage: Stage.BASIC },
+    );
+    CLEAR_MARKER_AND_OPPONENTS_POKEMON_MARKER_AT_END_OF_TURN(
+      state, effect, this.CLEAR_PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN_MARKER, this.PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN_MARKER, this,
+    );
 
     if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
