@@ -4,7 +4,7 @@ import { CardType, EnergyType, SuperType, TrainerType } from '../../game/store/c
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AttachEnergyEffect, AttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { AttachEnergyPrompt } from '../../game/store/prompts/attach-energy-prompt';
@@ -50,17 +50,12 @@ export class Welder extends TrainerCard {
         { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Fire Energy' },
         { min: 1, max: 2, allowCancel: false, sameTarget: true }
       ), transfers => {
-        transfers = transfers || [];
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          const energyCard = transfer.card as EnergyCard;
-          const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
-          store.reduceEffect(state, attachEnergyEffect);
-        }
-        if (transfers.length > 0) {
+        const attachments = (transfers ?? []).map(({ card, to }) =>
+          new AttachEnergyEffect(player, card as EnergyCard, StateUtils.getTarget(state, player, to)));
+        // The Supporter draw resolves before reactions such as Solar Evolution.
+        store.reduceEffect(state, new AttachEnergyFromHandEffect(player, attachments, false, () => {
           player.deck.moveTo(player.hand, 3);
-        }
-        player.supporter.moveCardTo(this, player.discard);
+        }));
       });
     }
 

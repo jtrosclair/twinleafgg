@@ -1,7 +1,10 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType, EnergyType, SpecialCondition } from '../../game/store/card/card-types';
-import { AttachEnergyPrompt, GameMessage, PlayerType, SlotType, State, StateUtils, StoreLike } from '../../game';
+import { AttachEnergyPrompt, EnergyCard, GameMessage, PlayerType, SlotType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { AttachEnergyEffect, AttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { checkBasicHandEnergyRecipients } from '../../game/store/prefabs/hand-energy-attachment';
 
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { HealTargetEffect } from '../../game/store/effects/attack-effects';
@@ -41,32 +44,34 @@ export class BlastoisePiplupGX extends PokemonCard {
     // Splash Maker
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
+      const energy = player.hand.cards.find((card): card is EnergyCard =>
+        card instanceof EnergyCard && card.energyType === EnergyType.BASIC && card.name === 'Water Energy');
+      if (!energy) return state;
 
+      afterAttackDamage(state, effect, (store, state) => {
+        const slots = [SlotType.BENCH, SlotType.ACTIVE];
+        const { hasRecipient, blockedTo } = checkBasicHandEnergyRecipients(store, state, player, energy, slots);
+        if (!hasRecipient) return state;
 
-      state = store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_TO_BENCH,
-        player.hand,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH],
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Water Energy' },
-        { allowCancel: false, min: 0, max: 3 }
-      ), transfers => {
-        transfers = transfers || [];
-
-        if (transfers.length === 0) {
-          return;
-        }
-
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          player.hand.moveCardTo(transfer.card, target);
-
-          const healing = new HealTargetEffect(effect, 50);
-          healing.target = target;
-          store.reduceEffect(state, healing);
-        }
-
+        return store.prompt(state, new AttachEnergyPrompt(
+          player.id,
+          GameMessage.ATTACH_ENERGY_CARDS,
+          player.hand,
+          PlayerType.BOTTOM_PLAYER,
+          slots,
+          { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Water Energy' },
+          { allowCancel: false, min: 0, max: 3, blockedTo }
+        ), transfers => {
+          const attachments = (transfers ?? []).map(({ card, to }) =>
+            new AttachEnergyEffect(player, card as EnergyCard, StateUtils.getTarget(state, player, to)));
+          store.reduceEffect(state, new AttachEnergyFromHandEffect(player, attachments, false, (attachedState, attached) => {
+            for (const { target } of attached) {
+              const healing = new HealTargetEffect(effect, 50);
+              healing.target = target;
+              store.reduceEffect(attachedState, healing);
+            }
+          }));
+        });
       });
     }
 

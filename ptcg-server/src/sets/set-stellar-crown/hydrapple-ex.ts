@@ -3,7 +3,7 @@ import { Stage, CardType, CardTag, EnergyType, SuperType, BoardEffect } from '..
 import { AttachEnergyPrompt, EnergyCard, GameError, GameMessage, PlayerType, PowerType, SlotType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { HealEffect } from '../../game/store/effects/game-effects';
-import { AttachEnergyEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { AttachEnergyEffect, AttachEnergyFromHandEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
@@ -80,7 +80,8 @@ export class Hydrappleex extends PokemonCard {
         { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Grass Energy' },
         { min: 1, max: 1, allowCancel: true }
       ), transfers => {
-        transfers = transfers || [];
+        const transfer = transfers?.[0];
+        if (!transfer) return;
 
         player.marker.addMarker(this.RIPE_CHARGE_MARKER, this);
 
@@ -90,16 +91,11 @@ export class Hydrappleex extends PokemonCard {
           }
         });
 
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          const energyCard = transfer.card as EnergyCard;
-          const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
-          store.reduceEffect(state, attachEnergyEffect);
-
-          const healEffect = new HealEffect(player, target, 30);
-          state = store.reduceEffect(state, healEffect);
-          return state;
-        }
+        const target = StateUtils.getTarget(state, player, transfer.to);
+        const attachment = new AttachEnergyEffect(player, transfer.card as EnergyCard, target);
+        store.reduceEffect(state, new AttachEnergyFromHandEffect(player, [attachment], false, attachedState => {
+          store.reduceEffect(attachedState, new HealEffect(player, target, 30));
+        }));
       });
 
     }

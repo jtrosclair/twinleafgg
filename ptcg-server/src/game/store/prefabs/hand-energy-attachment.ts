@@ -1,3 +1,4 @@
+import { CardTarget, PlayerType, SlotType } from '../actions/play-card-action';
 import { GameError } from '../../game-error';
 import { GameLog, GameMessage } from '../../game-message';
 import { Card } from '../card/card';
@@ -9,9 +10,29 @@ import {
 import { MoveCardsEffect, PayHandEnergyAttachmentCostEffect } from '../effects/game-effects';
 import { ChooseCardsPrompt } from '../prompts/choose-cards-prompt';
 import { CardList } from '../state/card-list';
+import { Player } from '../state/player';
 import { State } from '../state/state';
 import { StoreLike } from '../store-like';
 import { resolveHandEnergyReactions, waitForHandEnergyPrompts } from './hand-energy-reactions';
+
+/** Check the recipients before an optional Basic Energy effect asks the player to choose. */
+export function checkBasicHandEnergyRecipients(
+  store: StoreLike, state: State, player: Player, energy: EnergyCard, slots: SlotType[],
+): { hasRecipient: boolean, blockedTo: CardTarget[] } {
+  let hasRecipient = false;
+  const blockedTo: CardTarget[] = [];
+  player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (target, _card, location) => {
+    if (!slots.includes(location.slot)) return;
+    try {
+      store.reduceEffect(state, new CheckEnergyAttachmentEffect(new AttachEnergyEffect(player, energy, target)));
+      hasRecipient = true;
+    } catch (error) {
+      if (!(error instanceof GameError)) throw error;
+      blockedTo.push(location);
+    }
+  });
+  return { hasRecipient, blockedTo };
+}
 
 function discardCost(attachments: AttachEnergyEffect[]): number {
   return attachments.reduce((count, attachment) => count + (attachment.energyCard.discardCostToAttachFromHand ?? 0), 0);

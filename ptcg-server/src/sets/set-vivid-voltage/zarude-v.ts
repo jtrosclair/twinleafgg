@@ -5,8 +5,10 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType, EnergyType } from '../../game/store/card/card-types';
 import { AttachEnergyPrompt, GameMessage, PlayerType, SlotType, StoreLike, State, StateUtils } from '../../game';
-import { CardTarget } from '../../game/store/actions/play-card-action';
 import { Effect } from '../../game/store/effects/effect';
+import { AttachEnergyEffect, AttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { checkBasicHandEnergyRecipients } from '../../game/store/prefabs/hand-energy-attachment';
 import { WAS_ATTACK_USED, BLOCK_RETREAT, BLOCK_RETREAT_IF_MARKER, REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
 import { MarkerConstants } from '../../game/store/markers/marker-constants';
 import { EnergyCard } from '../../game/store/card/energy-card';
@@ -57,56 +59,33 @@ export class ZarudeV extends PokemonCard {
     if (WAS_ATTACK_USED(effect, 1, this)) {
       const player = effect.player;
 
-      const hasBasicEnergyInHand = player.hand.cards.some(c =>
-        c instanceof EnergyCard && c.energyType === EnergyType.BASIC
-      );
-      if (!hasBasicEnergyInHand) {
-        return state;
-      }
+      const energy = player.hand.cards.find((card): card is EnergyCard =>
+        card instanceof EnergyCard && card.energyType === EnergyType.BASIC);
+      if (!energy) return state;
 
-      const hasBench = player.bench.some(b => b.cards.length > 0);
-      if (!hasBench) {
-        return state;
-      }
+      afterAttackDamage(state, effect, (store, state) => {
+        const slots = [SlotType.BENCH];
+        const { hasRecipient, blockedTo } = checkBasicHandEnergyRecipients(store, state, player, energy, slots);
+        if (!hasRecipient) return state;
 
-      // Block active Pokemon (can only attach to bench)
-      const blockedTo: CardTarget[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        if (cardList === player.active) {
-          blockedTo.push(target);
-        }
-      });
-
-      store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_CARDS,
-        player.hand,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH],
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
-        { allowCancel: true, min: 0, max: 2, blockedTo }
-      ), transfers => {
-        transfers = transfers || [];
-        if (transfers.length === 0) {
-          return;
-        }
-
-        // Track which targets received energy
-        const healTargets = new Set<string>();
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          player.hand.moveCardTo(transfer.card, target);
-          healTargets.add(`${transfer.to.player}-${transfer.to.slot}-${transfer.to.index}`);
-        }
-
-        // Heal all damage from Pokemon that received energy
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          if (target.damage > 0) {
-            const healEffect = new HealEffect(player, target, target.damage);
-            store.reduceEffect(state, healEffect);
-          }
-        }
+        return store.prompt(state, new AttachEnergyPrompt(
+          player.id,
+          GameMessage.ATTACH_ENERGY_CARDS,
+          player.hand,
+          PlayerType.BOTTOM_PLAYER,
+          slots,
+          { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
+          { allowCancel: true, min: 0, max: 2, blockedTo }
+        ), transfers => {
+          const attachments = (transfers ?? []).map(({ card, to }) =>
+            new AttachEnergyEffect(player, card as EnergyCard, StateUtils.getTarget(state, player, to)));
+          store.reduceEffect(state, new AttachEnergyFromHandEffect(player, attachments, false, (attachedState, attached) => {
+            const targets = new Set(attached.map(attachment => attachment.target));
+            for (const target of targets) {
+              if (target.damage > 0) store.reduceEffect(attachedState, new HealEffect(player, target, target.damage));
+            }
+          }));
+        });
       });
     }
 

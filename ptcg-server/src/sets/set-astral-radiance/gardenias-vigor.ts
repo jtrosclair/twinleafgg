@@ -4,7 +4,7 @@ import { EnergyType, SuperType, TrainerType } from '../../game/store/card/card-t
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
-import { AttachEnergyEffect, TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { AttachEnergyEffect, AttachEnergyFromHandEffect, TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { GameMessage } from '../../game/game-message';
 import { AttachEnergyPrompt } from '../../game/store/prompts/attach-energy-prompt';
 import { PlayerType, SlotType } from '../../game/store/actions/play-card-action';
@@ -26,11 +26,6 @@ export class GardeniasVigor extends TrainerCard {
     if (effect instanceof TrainerEffect && effect.trainerCard === this) {
       const player = effect.player;
 
-      const hasBenched = player.bench.some(b => b.cards.length > 0);
-      if (!hasBenched) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-
       if (player.deck.cards.length === 0) {
         throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }
@@ -42,10 +37,11 @@ export class GardeniasVigor extends TrainerCard {
       }
 
       player.hand.moveCardTo(effect.trainerCard, player.supporter);
-      // We will discard this card after prompt confirmation
       effect.preventDefault = true;
 
       DRAW_CARDS(player, 2);
+      if (!player.bench.some(slot => slot.getPokemonCard()) || !player.hand.cards.some(card =>
+        card instanceof EnergyCard && card.energyType === EnergyType.BASIC && card.name === 'Grass Energy')) return state;
 
       return store.prompt(state, new AttachEnergyPrompt(
         player.id,
@@ -56,14 +52,9 @@ export class GardeniasVigor extends TrainerCard {
         { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Grass Energy' },
         { min: 0, max: 2, allowCancel: false, differentTargets: false, sameTarget: true }
       ), transfers => {
-        transfers = transfers || [];
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          const energyCard = transfer.card as EnergyCard;
-          const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
-          store.reduceEffect(state, attachEnergyEffect);
-        }
-        // Clean up supporter once, after all transfers are done
+        const attachments = (transfers ?? []).map(({ card, to }) =>
+          new AttachEnergyEffect(player, card as EnergyCard, StateUtils.getTarget(state, player, to)));
+        store.reduceEffect(state, new AttachEnergyFromHandEffect(player, attachments));
       });
     }
 

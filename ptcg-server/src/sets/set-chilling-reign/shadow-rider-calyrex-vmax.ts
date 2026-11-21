@@ -1,11 +1,12 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, EnergyType, SuperType } from '../../game/store/card/card-types';
 import { StoreLike, State, GameMessage, GameError, PlayerType, SlotType, StateUtils, PowerType, AttachEnergyPrompt, EnergyCard } from '../../game';
+import { CardTarget } from '../../game/store/actions/play-card-action';
 import { Effect } from '../../game/store/effects/effect';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
+import { AttachEnergyEffect, AttachEnergyFromHandEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { CheckPokemonTypeEffect, CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class ShadowRiderCalyrexVMAX extends PokemonCard {
@@ -52,10 +53,6 @@ export class ShadowRiderCalyrexVMAX extends PokemonCard {
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
-      const hasBench = player.bench.some(b => b.cards.length > 0);
-      if (!hasBench) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      }
       const hasEnergyInHand = player.hand.cards.some(c => {
         return c instanceof EnergyCard
           && c.energyType === EnergyType.BASIC
@@ -68,12 +65,18 @@ export class ShadowRiderCalyrexVMAX extends PokemonCard {
         throw new GameError(GameMessage.POWER_ALREADY_USED);
       }
 
-      const blocked: number[] = [];
-      player.bench.forEach((card, index) => {
-        if (card instanceof PokemonCard && card.cardType === CardType.PSYCHIC) {
-          blocked.push(index);
-        }
+      const blockedTo: CardTarget[] = [];
+      let hasPsychicBench = false;
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, _card, target) => {
+        if (target.slot !== SlotType.BENCH) return;
+        const cardType = new CheckPokemonTypeEffect(cardList);
+        store.reduceEffect(state, cardType);
+        if (cardType.cardTypes.includes(CardType.PSYCHIC)) hasPsychicBench = true;
+        else blockedTo.push(target);
       });
+      if (!hasPsychicBench) {
+        throw new GameError(GameMessage.CANNOT_USE_POWER);
+      }
 
       state = store.prompt(state, new AttachEnergyPrompt(
         player.id,
@@ -82,19 +85,17 @@ export class ShadowRiderCalyrexVMAX extends PokemonCard {
         PlayerType.BOTTOM_PLAYER,
         [SlotType.BENCH],
         { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Psychic Energy' },
-        { allowCancel: true, min: 1, max: 1, blocked: blocked },
+        { allowCancel: true, min: 1, max: 1, blockedTo },
       ), transfers => {
-        transfers = transfers || [];
-        // cancelled by user
-        if (transfers.length === 0) {
-          return state;
-        }
-        for (const transfer of transfers) {
-          player.marker.addMarker(this.UNDERWORLD_DOOR_MARKER, this);
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          player.hand.moveCardTo(transfer.card, target);
-        }
-        player.deck.moveTo(player.hand, 2);
+        const transfer = transfers?.[0];
+        if (!transfer) return;
+
+        player.marker.addMarker(this.UNDERWORLD_DOOR_MARKER, this);
+        const target = StateUtils.getTarget(state, player, transfer.to);
+        const attachment = new AttachEnergyEffect(player, transfer.card as EnergyCard, target);
+        store.reduceEffect(state, new AttachEnergyFromHandEffect(player, [attachment], false, () => {
+          player.deck.moveTo(player.hand, 2);
+        }));
       });
     }
     if (effect instanceof EndTurnEffect && effect.player.marker.hasMarker(this.UNDERWORLD_DOOR_MARKER, this)) {

@@ -3856,3 +3856,58 @@ origin and timing restrictions. Welder still needs grouped attachments
 and a draw that follows successful attachment before any Solar Evolution
 prompt. Its current draw checks the number selected and can still happen
 after all selected attachments were prevented.
+
+## Gameplay re-audit, batch 53
+
+Welder now attempts its Energy attachments together. It draws once if at
+least one succeeds, even when Slimy Room discards the other. The draw
+finishes before Solar Evolution. Gardenia’s Vigor draws even with an empty
+Bench or zero Grass Energy in hand. Eligible Grass Energy can be attached
+after the draw, and the player can choose to attach zero.
+[Official Welder and Slimy Room ruling](https://www.pokemon-card.com/rules/faq/search.php?sc_group_id=729)
+[Official Welder and Solar Evolution ruling](https://www.pokemon-card.com/rules/faq/search.php?page=286&regulation=all&sc_group_id=728%2F1000)
+[Official Gardenia’s Vigor rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%8A%E3%82%BF%E3%83%8D%E3%81%AE%E6%B4%BB%E6%B0%97&regulation_faq_main_item1=all)
+
+Teal Dance, Clairvoyant Sense, Ripening Charge and Underworld Door now
+dispatch real hand attachments. Their draws or healing require success and
+resolve before attachment-triggered reactions. Underworld Door only targets
+a Benched Pokémon whose current type includes Psychic. Ripening Charge
+remains available after cancelling its selection.
+[Official Teal Dance and Clairvoyant Sense rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%8C%E3%83%A1%E3%83%AB%E3%82%B4%E3%83%B3&regulation_faq_main_item1=all)
+[Official Hydrapple ex print explanation](https://www.pokemon-card.com/ex/sv7/index.html)
+[Official Underworld Door print and rulings](https://asia.pokemon-card.com/my/card-search/detail/1490/)
+[Official Underworld Door Special Energy ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%81%93%E3%81%8F%E3%81%B0%E3%83%90%E3%83%89%E3%83%AC%E3%83%83%E3%82%AF%E3%82%B9VMAX&regulation_faq_main_item1=all)
+
+Splash Maker and Jungle Rising deal damage before offering their legal
+attachment targets. Splash Maker accepts the Active Pokémon and heals
+50 per successful attachment. Jungle Rising fully heals only Benched
+Pokémon that receive Energy. Both attacks heal before the attachment
+reactions. A blocked attachment leaves the attack’s damage intact.
+[Official Splash Maker print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/sm12/38)
+[Official Splash Maker restrictions and timing](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%AB%E3%83%A1%E3%83%83%E3%82%AF%E3%82%B9&regulation_faq_main_item1=all)
+[Official Jungle Rising print](https://www.pokemon-card.com/card-search/details.php/card/38599/regu/all)
+[Official Jungle Rising timing ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B6%E3%83%AB%E3%83%BC%E3%83%89&regulation_faq_main_item1=all)
+
+All 25 new cases pass. Twenty fail on the previous engine. The full suite
+passes 10,647 checks, and the combined worktree passes 197 targeted checks.
+All 559 comparable saved states and 5,225 sampled opening actions are
+identical. Eleven real Teal Dance plays and two Ripening Charge plays settle
+identically when their attachment prompts are resolved. The seven recorded
+solutions still win. The packaged simulator verifies Welder before Solar
+Evolution by mouse and touch. The 2.50 MiB gzip build passed attestation,
+ten board scenarios and 209 repository client-service checks. All 32 tests
+in the standard API suite pass. The broader API glob also runs an existing
+SVP negative case that fails in both builds because an unregistered
+Iono’s Kilowattrel number can fall back to the named print.
+
+Weavile Box is the one comparable puzzle that contains Welder. The opponent
+holds it at the opening and has no Basic Fire Energy in hand. A separate
+player-side playthrough reproduces Custom Catcher failing with exactly two
+copies in hand on both engines. The first has already moved to the Trainer
+zone when the card counts copies in hand. The two-card implementation also
+asks for an extra player-side switch, and Beast Ring omits its printed
+shuffle. Retain the real puzzle reproduction for the next item-effects
+batch. The Energy audit still includes Eevee, Beldum and Vileplume, and
+target legality for other prompt-based effects.
+[Official Custom Catcher print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/sm-series/sm8/171/)
+[Official Beast Ring print](https://assets.pokemon.com/assets/cms2-ru-ru/pdf/trading-card-game/tcg_sun_moon_6_card_translation.pdf)

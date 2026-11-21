@@ -1,11 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType, EnergyType, BoardEffect } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, GameError, GameMessage, StateUtils, ChooseCardsPrompt, EnergyCard, PlayerType } from '../../game';
+import { PowerType, StoreLike, State, GameError, GameMessage, StateUtils, ChooseCardsPrompt, EnergyCard } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { AttachEnergyEffect, AttachEnergyFromHandEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
@@ -78,7 +78,7 @@ export class TealMaskOgerponex extends PokemonCard implements CopiedAttackOwners
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
-      const cardList = StateUtils.findCardList(state, this);
+      const cardList = player.getPokemonInPlay().find(slot => slot.getPokemonCard() === this);
       if (cardList === undefined) {
         return state;
       }
@@ -90,24 +90,16 @@ export class TealMaskOgerponex extends PokemonCard implements CopiedAttackOwners
         { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Grass Energy' },
         { min: 0, max: 1, allowCancel: false }
       ), cards => {
-        cards = cards || [];
-        if (cards.length > 0) {
-          player.marker.addMarker(this.TEAL_DANCE_MARKER, this);
+        const energy = cards?.[0];
+        if (!(energy instanceof EnergyCard)) return;
 
-          player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-            if (cardList.getPokemonCard() === this) {
-              cardList.addBoardEffect(BoardEffect.ABILITY_USED);
-            }
-          });
+        player.marker.addMarker(this.TEAL_DANCE_MARKER, this);
+        cardList.addBoardEffect(BoardEffect.ABILITY_USED);
 
-          player.hand.moveCardsTo(cards, cardList);
-
-          // cards.forEach((card, index) => {
-          //   store.log(state, GameLog.LOG_PLAYER_ATTACHES_CARD, { name: player.name, card: card.name, cardList: cardList });
-          // });
-
+        const attachment = new AttachEnergyEffect(player, energy, cardList);
+        store.reduceEffect(state, new AttachEnergyFromHandEffect(player, [attachment], false, () => {
           player.deck.moveTo(player.hand, 1);
-        }
+        }));
       });
     }
 

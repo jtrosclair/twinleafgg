@@ -6,7 +6,7 @@ import { Effect } from '../../game/store/effects/effect';
 
 import { AttachEnergyPrompt, EnergyCard, GameError, GameMessage, PlayerType, PowerType, SlotType, StateUtils } from '../../game';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { AttachEnergyEffect, AttachEnergyFromHandEffect, PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Xatu extends PokemonCard {
@@ -88,24 +88,17 @@ export class Xatu extends PokemonCard {
         { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Psychic Energy' },
         { allowCancel: true, min: 1, max: 1 },
       ), transfers => {
-        transfers = transfers || [];
-        // cancelled by user
-        if (transfers.length === 0) {
-          return state;
-        }
-        for (const transfer of transfers) {
-          player.marker.addMarker(this.AKASHIC_SENSE_MARKER, this);
+        const transfer = transfers?.[0];
+        if (!transfer) return;
 
-          player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-            if (cardList.getPokemonCard() === this) {
-              cardList.addBoardEffect(BoardEffect.ABILITY_USED);
-            }
-          });
+        player.marker.addMarker(this.AKASHIC_SENSE_MARKER, this);
+        player.getPokemonInPlay().find(slot => slot.getPokemonCard() === this)?.addBoardEffect(BoardEffect.ABILITY_USED);
 
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          player.hand.moveCardTo(transfer.card, target);
-        }
-        player.deck.moveTo(player.hand, 2);
+        const target = StateUtils.getTarget(state, player, transfer.to);
+        const attachment = new AttachEnergyEffect(player, transfer.card as EnergyCard, target);
+        store.reduceEffect(state, new AttachEnergyFromHandEffect(player, [attachment], false, () => {
+          player.deck.moveTo(player.hand, 2);
+        }));
       });
     }
     if (effect instanceof EndTurnEffect) {
