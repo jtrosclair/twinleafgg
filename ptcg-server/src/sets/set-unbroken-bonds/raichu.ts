@@ -3,11 +3,10 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, EnergyType, SuperType } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils, GameError, GameMessage, PlayerType, SlotType, AttachEnergyPrompt, EnergyCard } from '../../game';
+import { Stage, CardType, EnergyType } from '../../game/store/card/card-types';
+import { StoreLike, State, StateUtils, GameError, GameMessage, PlayerType, SlotType, EnergyCard } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { ATTACH_ENERGY_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Raichu extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -51,31 +50,14 @@ export class Raichu extends PokemonCard {
         throw new GameError(GameMessage.CANNOT_USE_ATTACK);
       }
 
-      const hasLightningEnergy = player.discard.cards.some(
-        c => c instanceof EnergyCard && c.energyType === EnergyType.BASIC && c.provides.includes(CardType.LIGHTNING)
-      );
+      const count = player.discard.cards.filter(card =>
+        card instanceof EnergyCard && card.energyType === EnergyType.BASIC && card.name === 'Lightning Energy'
+      ).length;
+      if (count === 0) return state;
 
-      if (!hasLightningEnergy) {
-        return state;
-      }
-
-      return store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_CARDS,
-        player.discard,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH, SlotType.ACTIVE],
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Lightning Energy' },
-        { allowCancel: false }
-      ), transfers => {
-        transfers = transfers || [];
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          const energyCard = transfer.card as EnergyCard;
-          const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
-          store.reduceEffect(state, attachEnergyEffect);
-        }
-      });
+      return ATTACH_ENERGY_PROMPT(store, state, player, PlayerType.BOTTOM_PLAYER, SlotType.DISCARD,
+        [SlotType.BENCH, SlotType.ACTIVE], { energyType: EnergyType.BASIC, name: 'Lightning Energy' },
+        { allowCancel: false, min: count, max: count });
     }
 
     return state;

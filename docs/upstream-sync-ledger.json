@@ -19,6 +19,13 @@
       "notes": "Pre-base historical path record: this is the latest upstream change to ptcg-server/src/sets/11-mega-evolution/set-pitch-black/other-prints.ts, not an assertion that this comment-only commit introduced the defects. Brave Bangle PBL 104 and Iron Defender PBL 110 remain deferred due to independently reproduced bugs in their existing local parents. Brave Bangle fails to add damage to Groudon M6 Brutal Lands when its printed base is 0+; Iron Defender incorrectly reduces the player's own current-turn damage against an opposing Metal Pokemon. Real-play and attack controls, including a real end-turn control, are preserved in docs/fixtures/pbl-parent-bugs. Validate fixes against existing puzzles and check exact print artwork and regulation marks before adding PBL variants. Round-32 additionally ports Crushing Hammer FA PBL (PBL 105; ptcg-server/src/sets/11-mega-evolution/set-pitch-black/other-prints.ts); Energy Switch FA PBL (PBL 107; ptcg-server/src/sets/11-mega-evolution/set-pitch-black/other-prints.ts). These two exact numbered aliases use their printed J/I regulation marks and artwork; other changes to the upstream path remain under review. Existing unnumbered and wrong-number fallback behavior is preserved, including mixed/lowercase cases; missing exact printings do not substitute another card. Brave Bangle PBL 104 and Iron Defender PBL 110 remain deferred as described above."
     },
     {
+      "sha": "21842b2e06790ec47546cf2518513c4e558ba3c1",
+      "date": "2026-07-26",
+      "subject": "refactor(engine): Card tags use a getter access method",
+      "status": "partial",
+      "notes": "Pre-base historical path record. The fork uses a public tags field while upstream exposes protected _tags through accessors. Batch 32 brings Steelix GL, Ho-Oh LEGEND and Raikou & Suicune LEGEND into the local convention and corrects the single-Pokémon LEGEND Prize rule for Ho-Oh and Lugia. A catalog check on the prior build found 182 registered prints with protected tags missing from their public tags; real Knock Outs reproduced incorrect Prize awards for three representative ex and Mega ex prints. The rest require card and puzzle verification."
+    },
+    {
       "sha": "f0edbdac48a0b72d146bfcf768243a043736adc2",
       "date": "2026-08-16",
       "subject": "add (cards): Trainer Kit Promos, 30th Celebration",

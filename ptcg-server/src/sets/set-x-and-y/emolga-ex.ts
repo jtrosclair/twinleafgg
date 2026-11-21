@@ -9,8 +9,8 @@ import { EnergyCard } from '../../game/store/card/energy-card';
 import { Effect } from '../../game/store/effects/effect';
 import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
 import { AttachEnergyPrompt } from '../../game/store/prompts/attach-energy-prompt';
-import { AfterAttackEffect, EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { WAS_ATTACK_USED, SWITCH_ACTIVE_WITH_BENCHED, SHUFFLE_DECK, CONFIRMATION_PROMPT } from '../../game/store/prefabs/prefabs';
+import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { AFTER_ATTACK, WAS_ATTACK_USED, SWITCH_ACTIVE_WITH_BENCHED, SHUFFLE_DECK, CONFIRMATION_PROMPT } from '../../game/store/prefabs/prefabs';
 import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/costs';
 
 export class EmolgaEx extends PokemonCard {
@@ -61,18 +61,15 @@ export class EmolgaEx extends PokemonCard {
         for (const transfer of transfers) {
           const target = StateUtils.getTarget(state, player, transfer.to);
           const energyCard = transfer.card as EnergyCard;
-          const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
+          const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target, 'deck');
           store.reduceEffect(state, attachEnergyEffect);
-        }
-        // Only mark for switch if energy was actually attached
-        if (transfers.length > 0) {
-          this.usedEnergyGlide = true;
+          this.usedEnergyGlide = target.cards.includes(energyCard);
         }
         SHUFFLE_DECK(store, state, player);
       });
     }
 
-    if (effect instanceof AfterAttackEffect && this.usedEnergyGlide) {
+    if (AFTER_ATTACK(effect, 0, this) && this.usedEnergyGlide) {
       this.usedEnergyGlide = false;
       const player = effect.player;
       if (player.bench.some(b => b.cards.length > 0)) {

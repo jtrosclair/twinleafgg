@@ -3,12 +3,11 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, CardTag, SuperType, EnergyType } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils, GameMessage, PlayerType, SlotType, AttachEnergyPrompt } from '../../game';
+import { Stage, CardType, CardTag, EnergyType } from '../../game/store/card/card-types';
+import { StoreLike, State, StateUtils, PlayerType, SlotType } from '../../game';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ATTACH_ENERGY_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Solgaleo extends PokemonCard {
   public tags = [CardTag.PRISM_STAR];
@@ -49,18 +48,11 @@ export class Solgaleo extends PokemonCard {
 
       // Count opponent's Pokemon in play
       let opponentPokemonCount = 0;
-      if (opponent.active.cards.length > 0) {
-        opponentPokemonCount++;
-      }
-      opponent.bench.forEach(b => {
-        if (b.cards.length > 0) {
-          opponentPokemonCount++;
-        }
-      });
+      opponent.forEachPokemon(PlayerType.TOP_PLAYER, () => { opponentPokemonCount++; });
 
       // Count available Metal Energy in discard
       const metalEnergyInDiscard = player.discard.cards.filter(c =>
-        c instanceof EnergyCard && c.energyType === EnergyType.BASIC && c.provides.includes(CardType.METAL)
+        c instanceof EnergyCard && c.energyType === EnergyType.BASIC && c.name === 'Metal Energy'
       ).length;
 
       const maxAttach = Math.min(opponentPokemonCount, metalEnergyInDiscard);
@@ -69,23 +61,9 @@ export class Solgaleo extends PokemonCard {
         return state;
       }
 
-      return store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_CARDS,
-        player.discard,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.ACTIVE, SlotType.BENCH],
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Metal Energy' },
-        { allowCancel: false, min: 0, max: maxAttach }
-      ), transfers => {
-        transfers = transfers || [];
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          const energyCard = transfer.card as EnergyCard;
-          const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
-          store.reduceEffect(state, attachEnergyEffect);
-        }
-      });
+      return ATTACH_ENERGY_PROMPT(store, state, player, PlayerType.BOTTOM_PLAYER, SlotType.DISCARD,
+        [SlotType.ACTIVE, SlotType.BENCH], { energyType: EnergyType.BASIC, name: 'Metal Energy' },
+        { allowCancel: false, min: maxAttach, max: maxAttach });
     }
 
     // Attack 2: Corona Impact

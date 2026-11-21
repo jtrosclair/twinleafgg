@@ -9,7 +9,7 @@ import { IS_POKEBODY_BLOCKED, MOVE_CARDS, WAS_ATTACK_USED, WAS_POWER_USED } from
 
 export class HoOhLEGEND extends PokemonCard {
   public stage: Stage = Stage.LEGEND;
-  protected _tags = [CardTag.LEGEND, CardTag.DUAL_LEGEND];
+  public tags = [CardTag.LEGEND];
   public hp: number = 140;
   public cardType: CardType = R;
   public weakness = [{ type: W }];
@@ -66,11 +66,7 @@ export class HoOhLEGEND extends PokemonCard {
       if (IS_POKEBODY_BLOCKED(store, state, player, this)) {
         return state;
       }
-      effect.energyMap.forEach(em => {
-        if (em.provides.length > 0) {
-          em.provides = em.provides.map(() => CardType.FIRE);
-        }
-      });
+      effect.energyTypeOverride = CardType.FIRE;
     }
 
     // Bright Wing

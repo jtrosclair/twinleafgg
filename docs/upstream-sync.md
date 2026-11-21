@@ -2920,3 +2920,55 @@ Trapinch RR, Victini VMAX BST, and Blissey MT. Ho-Oh LEGEND and Raikou &
 Suicune LEGEND also failed assembly with complementary halves. Audit
 these paths and the fork's other inherited protected-tag definitions
 against upstream `21842b2e0`.
+
+## Gameplay re-audit, batch 32
+
+Nine card paths now move each selected Energy from the deck or discard
+pile to its intended Pokémon. Sol Burst-GX for both prints supports
+Basic and Special Energy and shuffles after taking zero cards. Emolga
+switches only after Energy Glide actually attaches a card and shuffles.
+Never Give Up moves every eligible Lightning Energy with a three-Prize
+deficit. Radiant Star moves as many eligible Metal Energy as the opponent
+has Pokémon in play, or all available when fewer remain.
+[Emolga-EX print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/xy1/143/)
+[Solgaleo-GX print](https://www.pokemon.com/de/pokemon-sammelkartenspiel/pokemon-karten/series/sm1/143/)
+[Raichu print](https://images.pokemontcg.io/sm10/55.png)
+[Solgaleo Prism Star print](https://images.pokemontcg.io/sm5/89.png)
+
+Steelix GL's Mend heals only after a Metal Energy moves from the discard
+pile. Gather Sand attaches Basic Fighting Energy to Active Trapinch.
+Happy Chance counts the attacking Pokémon's Energy after the optional
+attachment. Spreading Flames attaches the chosen Fire Energy to its
+selected targets. Both Victini VMAX prints also use the printed 310 HP
+and 120 bonus damage for Max Victory against Pokémon V.
+[Rising Rivals Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Rising_Rivals.pdf)
+[Mysterious Treasures Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/DiamondPearl_MysteriousTreasures.pdf)
+[Victini VMAX print](https://images.pokemontcg.io/swsh5/22.png)
+
+Ho-Oh LEGEND and Raikou & Suicune LEGEND assemble from their complementary
+halves. Ho-Oh and Lugia award one Prize each and Raikou & Suicune awards
+two. The latter recognizes both Lightning and Water typing and both
+printed Weaknesses. Sacred Rainbow converts Energy to Fire, including
+both units of Double Colorless Energy.
+[HeartGold & SoulSilver Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/heartgoldsoulsilver.pdf)
+[HS—Unleashed Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/hs-unleashed.pdf)
+
+All 32 focused cases passed, including 21 that failed on the earlier
+revision. The full engine suite passed 7,709 tests in 277 specs. The
+checkout's pending work passed 653 combined checks. All 559 supported
+saved states and 3,633 sampled opening actions matched exactly, and all
+seven recorded solutions reached a win. The 2.46 MiB ZIP passed attestation,
+the mobile package budget, and ten board interaction checks. Its engine
+also attached both selected Sol Burst-GX cards and assembled Raikou &
+Suicune from a saved board. The previous Charging Trumpet regression now
+forces the Moonlit Miracle coin result so it always exercises evolution.
+
+The built catalog still contains 177 printings with protected tags
+missing from their public tags. Of those, 32 have a tag that affects Prizes.
+Real Knock Outs gave one Prize each for Maushold ex PAR, Eevee ex MEE, and
+Mega Floette ex M4 35. A direct resolution of Never Give Up could submit
+Water Energy despite the preset Lightning filter. The shared prompt uses
+its filter for presentation without checking the selection against it.
+Audit those live paths against the public tag and filter contracts before
+applying the changes across the catalog.
+[Upstream tag accessor refactor](https://github.com/the-epsd/twinleafgg/commit/21842b2e06790ec47546cf2518513c4e558ba3c1)

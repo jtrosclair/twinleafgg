@@ -3,12 +3,10 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, CardTag, SuperType } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, StateUtils, GameMessage, GameError, PlayerType, SlotType, AttachEnergyPrompt } from '../../game';
-import { EnergyCard } from '../../game/store/card/energy-card';
+import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
+import { PowerType, StoreLike, State, GameError, GameMessage, PlayerType, SlotType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { WAS_ATTACK_USED, WAS_POWER_USED, IS_ABILITY_BLOCKED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, BLOCK_IF_GX_ATTACK_USED, SHUFFLE_DECK, SWITCH_ACTIVE_WITH_BENCHED, DISCARD_ALL_ENERGY_FROM_POKEMON, REMOVE_MARKER_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED, WAS_POWER_USED, IS_ABILITY_BLOCKED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, BLOCK_IF_GX_ATTACK_USED, ATTACH_ENERGY_PROMPT, SWITCH_ACTIVE_WITH_BENCHED, DISCARD_ALL_ENERGY_FROM_POKEMON, REMOVE_MARKER_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
 
 export class SolgaleoGx extends PokemonCard {
   public tags = [CardTag.POKEMON_GX];
@@ -91,24 +89,8 @@ export class SolgaleoGx extends PokemonCard {
         return state;
       }
 
-      return store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_CARDS,
-        player.deck,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.ACTIVE, SlotType.BENCH],
-        { superType: SuperType.ENERGY },
-        { allowCancel: false, min: 0, max: 5 }
-      ), transfers => {
-        transfers = transfers || [];
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          const energyCard = transfer.card as EnergyCard;
-          const attachEnergyEffect = new AttachEnergyEffect(player, energyCard, target);
-          store.reduceEffect(state, attachEnergyEffect);
-        }
-        SHUFFLE_DECK(store, state, player);
-      });
+      return ATTACH_ENERGY_PROMPT(store, state, player, PlayerType.BOTTOM_PLAYER, SlotType.DECK,
+        [SlotType.ACTIVE, SlotType.BENCH], {}, { allowCancel: false, min: 0, max: 5 });
     }
 
     return state;

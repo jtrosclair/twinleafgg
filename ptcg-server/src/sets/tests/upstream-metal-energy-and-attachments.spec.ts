@@ -106,6 +106,7 @@ describe('Physical Energy attachments from selected cards', () => {
   }
 
   it('Charging Trumpet does not trigger when Moonlit Miracle evolves Pikipek from the deck', () => {
+    spyOn(Math, 'random').and.returnValue(0.1);
     const { store, player1, overridePrompt } = battle({
       active: { card: 'Clefable BRS 54', energy: [water] }, bench: [{ card: 'Pikipek VIV' }],
       deck: ['Trumbeak VIV', ...padDeck(16)]

@@ -8,10 +8,11 @@ import { HEAL_X_DAMAGE_FROM_THIS_POKEMON, MOVE_CARDS, WAS_ATTACK_USED, WAS_POWER
 
 export class RaikouSuicuneLEGEND extends PokemonCard {
   public stage: Stage = Stage.LEGEND;
-  protected _tags = [CardTag.LEGEND, CardTag.DUAL_LEGEND];
+  public tags = [CardTag.LEGEND, CardTag.DUAL_LEGEND];
   public hp: number = 160;
-  public cardType: CardType = [L, W] as unknown as CardType;
-  public weakness = [{ type: F }];
+  public cardType: CardType = L;
+  public additionalCardTypes = [W];
+  public weakness = [{ type: F }, { type: L }];
   public retreat = [C];
 
   public powers = [{

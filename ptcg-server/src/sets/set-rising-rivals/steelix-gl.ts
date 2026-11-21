@@ -7,7 +7,7 @@ import { COIN_FLIP_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/pref
 
 export class SteelixGL extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 110;
   public cardType: CardType = M;
   public weakness = [{ type: R }];
@@ -50,13 +50,15 @@ export class SteelixGL extends PokemonCard {
         PlayerType.BOTTOM_PLAYER,
         [SlotType.ACTIVE],
         { superType: SuperType.ENERGY, name: 'Metal Energy' },
-        { allowCancel: true, min: 0, max: 1 }
+        { allowCancel: false, min: 1, max: 1 }
       ), transfers => {
         transfers = transfers || [];
         for (const transfer of transfers) {
           const target = StateUtils.getTarget(state, player, transfer.to);
-          store.reduceEffect(state, new AttachEnergyEffect(player, transfer.card as EnergyCard, target));
-          store.reduceEffect(state, new HealEffect(player, target, 10));
+          store.reduceEffect(state, new AttachEnergyEffect(player, transfer.card as EnergyCard, target, 'discard'));
+          if (target.cards.includes(transfer.card)) {
+            store.reduceEffect(state, new HealEffect(player, target, 10));
+          }
         }
       });
     }

@@ -10,7 +10,7 @@ import { CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, MOVE_CARDS, SHOW_CARDS_TO_PL
 
 export class LugiaLEGEND extends PokemonCard {
   public stage: Stage = Stage.LEGEND;
-  public tags = [CardTag.LEGEND, CardTag.DUAL_LEGEND];
+  public tags = [CardTag.LEGEND];
   public hp: number = 130;
   public cardType: CardType = W;
   public weakness = [{ type: L }];
@@ -57,8 +57,6 @@ export class LugiaLEGEND extends PokemonCard {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
-      // The bottom half goes down first even when its action started the assembly.
-      halves.sort((left, right) => Number(right.setNumber) - Number(left.setNumber));
       MOVE_CARDS(store, state, player.hand, slots[0], { cards: halves, sourceCard: this });
       slots[0].pokemonPlayedTurn = state.turn;
 

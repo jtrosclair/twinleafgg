@@ -1,8 +1,7 @@
-import { AttachEnergyPrompt, CardType, EnergyCard, EnergyType, GameError, GameMessage, PlayerType, PokemonCard, PowerType, SlotType, Stage, State, StoreLike, SuperType } from '../../game';
+import { CardType, EnergyCard, EnergyType, GameError, GameMessage, PlayerType, PokemonCard, PowerType, SlotType, Stage, State, StoreLike } from '../../game';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { ABILITY_USED, IS_POKEPOWER_BLOCKED, REMOVE_MARKER_AT_END_OF_TURN, USE_ABILITY_ONCE_PER_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { ABILITY_USED, ATTACH_ENERGY_PROMPT, IS_POKEPOWER_BLOCKED, REMOVE_MARKER_AT_END_OF_TURN, USE_ABILITY_ONCE_PER_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Trapinch extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -50,20 +49,9 @@ export class Trapinch extends PokemonCard {
       }
       USE_ABILITY_ONCE_PER_TURN(player, this.ABILITY_USED_MARKER, this);
       ABILITY_USED(player, this);
-      return store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_CARDS,
-        player.discard,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.ACTIVE],
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Fighting Energy' },
-        { allowCancel: false, min: 1, max: 1 }
-      ), transfers => {
-        transfers = transfers || [];
-        for (const transfer of transfers) {
-          store.reduceEffect(state, new AttachEnergyEffect(player, transfer.card as EnergyCard, player.active));
-        }
-      });
+      return ATTACH_ENERGY_PROMPT(store, state, player, PlayerType.BOTTOM_PLAYER, SlotType.DISCARD,
+        [SlotType.ACTIVE], { energyType: EnergyType.BASIC, name: 'Fighting Energy' },
+        { allowCancel: false, min: 1, max: 1 });
     }
 
     // Grind

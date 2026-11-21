@@ -2,15 +2,15 @@ import { CardTag } from './card/card-types';
 import { PokemonCard } from './card/pokemon-card';
 import { Player } from './state/player';
 
-/** Returns the current LEGEND card and its matching half from the player's hand. */
+/** Returns the complementary LEGEND halves in stacking order, bottom first. */
 export function getDualLegendHalvesInHand(player: Player, source: PokemonCard): PokemonCard[] {
-  const sourceIndex = player.hand.cards.indexOf(source);
-  if (sourceIndex < 0) return [];
+  if (!player.hand.cards.includes(source)) return [];
   const partner = player.hand.cards.find(card => card !== source
     && card instanceof PokemonCard
     && card.name === source.name
     && card.set === source.set
     && card.setNumber !== source.setNumber
-    && card.tags.includes(CardTag.DUAL_LEGEND));
-  return partner instanceof PokemonCard ? [source, partner] : [];
+    && card.tags.includes(CardTag.LEGEND));
+  // The top half is the in-play Pokémon and has the lower collector number.
+  return partner instanceof PokemonCard ? [source, partner].sort((left, right) => Number(right.setNumber) - Number(left.setNumber)) : [];
 }

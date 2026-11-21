@@ -90,14 +90,13 @@ export class Blissey extends PokemonCard {
     // Happy Chance
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
-      const cardList = StateUtils.findCardList(state, this) as PokemonCardList;
 
       const hasBasicEnergy = player.discard.cards.some(c =>
         c instanceof EnergyCard && c.energyType === EnergyType.BASIC
       );
 
       const applyDamageBonus = () => {
-        const checkEnergy = new CheckProvidedEnergyEffect(player, cardList);
+        const checkEnergy = new CheckProvidedEnergyEffect(player, effect.source);
         store.reduceEffect(state, checkEnergy);
         const energyCount = checkEnergy.energyMap.reduce((sum, e) => sum + e.provides.length, 0);
         effect.damage = 20 + (energyCount * 10);
@@ -121,7 +120,7 @@ export class Blissey extends PokemonCard {
         for (const transfer of transfers) {
           const target = StateUtils.getTarget(state, player, transfer.to);
           const energyCard = transfer.card as EnergyCard;
-          const attachEffect = new AttachEnergyEffect(player, energyCard, target);
+          const attachEffect = new AttachEnergyEffect(player, energyCard, target, 'discard');
           store.reduceEffect(state, attachEffect);
         }
         applyDamageBonus();
