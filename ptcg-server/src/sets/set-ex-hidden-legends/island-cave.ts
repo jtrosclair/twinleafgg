@@ -1,9 +1,10 @@
 import { State, StateUtils, StoreLike } from '../../game';
-import { CardType, SpecialCondition, TrainerType } from '../../game/store/card/card-types';
+import { CardType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 
 export class IslandCave extends TrainerCard {
   public cardImage: string = 'assets/cardback.png';
@@ -17,20 +18,22 @@ export class IslandCave extends TrainerCard {
 
   reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && effect.sourceZone === undefined && StateUtils.getStadiumCard(state) === this) {
-
-      const checkPokemonTypeEffect = new CheckPokemonTypeEffect(effect.target);
-      store.reduceEffect(state, checkPokemonTypeEffect);
-
-      if (checkPokemonTypeEffect.cardTypes.includes(CardType.WATER) ||
-        checkPokemonTypeEffect.cardTypes.includes(CardType.FIGHTING) ||
-        checkPokemonTypeEffect.cardTypes.includes(CardType.METAL)) {
-        effect.target.removeSpecialCondition(SpecialCondition.ASLEEP);
-        effect.target.removeSpecialCondition(SpecialCondition.PARALYZED);
-        effect.target.removeSpecialCondition(SpecialCondition.CONFUSED);
-        effect.target.removeSpecialCondition(SpecialCondition.BURNED);
-        effect.target.removeSpecialCondition(SpecialCondition.POISONED);
-      }
+    if (effect instanceof AfterAttachEnergyFromHandEffect && StateUtils.getStadiumCard(state) === this) {
+      const { player, target } = effect;
+      const canResolve = () => {
+        if (StateUtils.getStadiumCard(state) !== this || !player.getPokemonInPlay().includes(target)
+          || IS_STADIUM_EFFECT_BLOCKED(store, state, player, target, this)) return false;
+        const type = new CheckPokemonTypeEffect(target);
+        store.reduceEffect(state, type);
+        return [CardType.WATER, CardType.FIGHTING, CardType.METAL].some(eligible => type.cardTypes.includes(eligible));
+      };
+      if (canResolve()) effect.reactions.set(this.name, {
+        label: this.name,
+        canResolve,
+        resolve: () => {
+          target.clearAllSpecialConditions();
+        },
+      });
     }
 
     return state;

@@ -4,8 +4,8 @@ import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckPokemonTypeEffect, CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { IS_SPECIAL_ENERGY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { queueSpecialEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
 
 export class SpeedLightningEnergy extends EnergyCard {
 
@@ -35,20 +35,14 @@ When you attach this card from your hand to a [L] Pokémon, draw 2 cards.`;
       effect.energyMap.push({ card: this, provides: [CardType.LIGHTNING] });
     }
 
-    if (effect instanceof AttachEnergyEffect && effect.energyCard === this) {
-      const player = effect.player;
-
-      if (IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {
-        return state;
-      }
-
-      const checkPokemonType = new CheckPokemonTypeEffect(effect.target);
-      store.reduceEffect(state, checkPokemonType);
-      if (!checkPokemonType.cardTypes.includes(CardType.LIGHTNING)) {
-        return state;
-      }
-
-      player.deck.moveTo(player.hand, 2);
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.energyCard === this) {
+      queueSpecialEnergyReaction(store, state, effect, this, () => {
+        effect.player.deck.moveTo(effect.player.hand, 2);
+      }, () => {
+        const type = new CheckPokemonTypeEffect(effect.target);
+        store.reduceEffect(state, type);
+        return type.cardTypes.includes(CardType.LIGHTNING);
+      });
     }
 
     return state;

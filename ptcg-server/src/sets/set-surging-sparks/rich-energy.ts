@@ -3,8 +3,9 @@ import { EnergyCard } from '../../game/store/card/energy-card';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { DRAW_CARDS, IS_SPECIAL_ENERGY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { queueSpecialEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
+import { DRAW_CARDS } from '../../game/store/prefabs/prefabs';
 
 export class RichEnergy extends EnergyCard {
 
@@ -33,12 +34,8 @@ export class RichEnergy extends EnergyCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && effect.energyCard === this) {
-      const player = effect.player;
-      if (IS_SPECIAL_ENERGY_BLOCKED(store, state, player, this, effect.target)) {
-        return state;
-      }
-      DRAW_CARDS(player, 4);
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.energyCard === this) {
+      queueSpecialEnergyReaction(store, state, effect, this, () => DRAW_CARDS(effect.player, 4));
     }
     return state;
   }

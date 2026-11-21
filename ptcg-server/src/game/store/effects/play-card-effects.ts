@@ -101,10 +101,14 @@ export class AttachEnergyFromHandEffect implements Effect {
   ) {}
 }
 
-interface HandEnergyReaction {
+export interface HandEnergyReaction {
   label: string;
   canResolve: () => boolean;
   resolve: () => void;
+}
+
+export interface QueuedHandEnergyReaction extends HandEnergyReaction {
+  target: PokemonCardList;
 }
 
 /** Sent only after an Energy card was successfully attached from the hand. */
@@ -113,7 +117,7 @@ export class AfterAttachEnergyFromHandEffect implements Effect {
   public preventDefault = false;
   public readonly activePokemonAtAttachment: PokemonCard | undefined;
   public readonly reactions = new Map<string, HandEnergyReaction>();
-  public onSettled?: () => void;
+  public reactionBatch?: QueuedHandEnergyReaction[];
 
   constructor(public player: Player, public energyCard: EnergyCard, public target: PokemonCardList) {
     this.activePokemonAtAttachment = player.active.getPokemonCard();

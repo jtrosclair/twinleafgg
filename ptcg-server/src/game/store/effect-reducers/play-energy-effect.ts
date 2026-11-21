@@ -9,7 +9,7 @@ import { StoreLike } from '../store-like';
 import { EnergyType } from '../card/card-types';
 import { SlotType } from '../actions/play-card-action';
 import { PlayerType } from '../actions/play-card-action';
-import { SelectPrompt } from '../prompts/select-prompt';
+import { resolveHandEnergyReactions } from '../prefabs/hand-energy-reactions';
 
 /**
  * Helper function to emit animation events
@@ -33,36 +33,6 @@ function emitAnimationEvent(store: StoreLike, eventName: string, data: {
 export function playEnergyReducer(store: StoreLike, state: State, effect: Effect): State {
 
   if (effect instanceof AfterAttachEnergyFromHandEffect) {
-    const { reactions } = effect;
-    const waitIfNeeded = (next: () => void): void => {
-      if (state.prompts.some(prompt => prompt.result === undefined)) store.waitPrompt(state, next);
-      else next();
-    };
-    const applyReactions = (): void => {
-      const available = [...reactions].filter(([, reaction]) => reaction.canResolve());
-      if (available.length === 0) {
-        effect.onSettled?.();
-        return;
-      }
-
-      const resolve = (index: number): void => {
-        const chosen = available[index];
-        if (!Number.isInteger(index) || !chosen) throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
-        const [key, reaction] = chosen;
-        reactions.delete(key);
-        if (reaction.canResolve()) reaction.resolve();
-        waitIfNeeded(applyReactions);
-      };
-
-      if (available.length === 1) {
-        resolve(0);
-      } else {
-        const player = state.players[state.activePlayer] ?? effect.player;
-        store.prompt(state, new SelectPrompt(player.id, GameMessage.CHOOSE_ENERGY_ATTACHMENT_EFFECT,
-          available.map(([, reaction]) => reaction.label), { allowCancel: false }), resolve);
-      }
-    };
-
     const pending = effect.target.pendingEnergyAttachDamageCounters;
     const attacker = pending && state.players.find(player => player.id === pending.attackerPlayerId);
     if (pending && attacker) {
@@ -74,9 +44,19 @@ export function playEnergyReducer(store: StoreLike, state: State, effect: Effect
       attack.source = source;
       const counters = new PutCountersEffect(attack, pending.damage);
       counters.target = effect.target;
-      state = store.reduceEffect(state, counters);
+      effect.reactions.set(pending.attack.name, {
+        label: pending.attack.name,
+        canResolve: () => effect.target.pendingEnergyAttachDamageCounters === pending && !!effect.target.getPokemonCard(),
+        resolve: () => { store.reduceEffect(state, counters); },
+      });
     }
-    if (reactions.size > 0 || effect.onSettled) waitIfNeeded(applyReactions);
+    const reactions = [...effect.reactions.values()].map(reaction => ({ ...reaction, target: effect.target }));
+    if (effect.reactionBatch) {
+      effect.reactionBatch.push(...reactions);
+    } else if (reactions.length > 0) {
+      const chooser = state.players[state.activePlayer] ?? effect.player;
+      resolveHandEnergyReactions(store, state, chooser, reactions);
+    }
     return state;
   }
 

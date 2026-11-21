@@ -3,8 +3,8 @@ import { CardType, EnergyType } from '../../game/store/card/card-types';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { Effect } from '../../game/store/effects/effect';
 import { HealEffect } from '../../game/store/effects/game-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { IS_SPECIAL_ENERGY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { queueSpecialEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
 
 export class MedicalEnergy extends EnergyCard {
   public provides: CardType[] = [CardType.COLORLESS];
@@ -20,15 +20,10 @@ export class MedicalEnergy extends EnergyCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && effect.energyCard === this) {
-      const player = effect.player;
-
-      if (IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.target)) {
-        return state;
-      }
-
-      const healEffect = new HealEffect(player, effect.target, 30);
-      store.reduceEffect(state, healEffect);
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.energyCard === this) {
+      queueSpecialEnergyReaction(store, state, effect, this, () => {
+        store.reduceEffect(state, new HealEffect(effect.player, effect.target, 30));
+      });
     }
 
     return state;

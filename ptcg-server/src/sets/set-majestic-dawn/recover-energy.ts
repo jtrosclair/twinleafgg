@@ -4,8 +4,8 @@ import { EnergyType } from '../../game';
 import { State } from '../../game';
 import { StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { IS_SPECIAL_ENERGY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { queueSpecialEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
 
 export class RecoverEnergy extends EnergyCard {
   public provides: CardType[] = [C];
@@ -18,12 +18,8 @@ export class RecoverEnergy extends EnergyCard {
   public text: string = 'Recover Energy provides Colorless Energy. When you attach this card from your hand to 1 of your Pokémon, remove all Special Conditions from that Pokémon.';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof AttachEnergyEffect && effect.energyCard === this) {
-      if (IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.target)) {
-        return state;
-      }
-      const conditions = effect.target.specialConditions.slice();
-      conditions.forEach(condition => effect.target.removeSpecialCondition(condition));
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.energyCard === this) {
+      queueSpecialEnergyReaction(store, state, effect, this, () => effect.target.clearAllSpecialConditions());
     }
 
     return state;

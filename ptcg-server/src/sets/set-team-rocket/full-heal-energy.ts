@@ -2,8 +2,8 @@ import { StoreLike, State } from '../../game';
 import { CardType, EnergyType, SpecialCondition } from '../../game/store/card/card-types';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { IS_SPECIAL_ENERGY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { queueSpecialEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
 
 export class FullHealEnergy extends EnergyCard {
   public provides: CardType[] = [CardType.COLORLESS];
@@ -18,16 +18,13 @@ export class FullHealEnergy extends EnergyCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && effect.energyCard === this) {
-
-      if (IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.target)) {
-        return state;
-      }
-
-      effect.target.removeSpecialCondition(SpecialCondition.ASLEEP);
-      effect.target.removeSpecialCondition(SpecialCondition.PARALYZED);
-      effect.target.removeSpecialCondition(SpecialCondition.CONFUSED);
-      effect.target.removeSpecialCondition(SpecialCondition.POISONED);
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.energyCard === this) {
+      queueSpecialEnergyReaction(store, state, effect, this, () => {
+        effect.target.removeSpecialCondition(SpecialCondition.ASLEEP);
+        effect.target.removeSpecialCondition(SpecialCondition.PARALYZED);
+        effect.target.removeSpecialCondition(SpecialCondition.CONFUSED);
+        effect.target.removeSpecialCondition(SpecialCondition.POISONED);
+      });
     }
 
     return state;

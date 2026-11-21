@@ -3764,3 +3764,54 @@ seven recorded solutions still win. The API passes 32 tests. The 2.50 MiB
 gzip runtime package passes attestation, 10 board checks and 209 Angular
 checks. Mouse and touch in the packaged simulator exercise both orders of
 Far-Flying Meteor and Buddy Pulse, producing the official board outcomes.
+
+## Gameplay re-audit, batch 51
+
+Energy attachment reactions now collect across all successful attachments
+made together. After the physical cards are in play, the turn player chooses
+the order of competing reactions registered on that group. Equivalent
+reactions on the same recipient resolve per attached card. Reactions recheck
+eligibility after a choice or intervening effect. The new test exercises
+Medical Energy and Rainbow Energy in both orders. A real Pachirisu MEG
+attack separately verifies that either Medical Energy or Electrified Incisors
+can resolve first, with the resulting 80 or 60 damage on the recipient.
+[Pokémon Professor rules update](https://professorprogram.pokemon.com/news/11473085)
+[Official Pachirisu print explanation](https://www.pokemon.com/el/noticias/dale-un-vistazo-a-las-nuevas-cartas-de-la-expansion-megaevolucion-de-jcc-pokemon)
+
+Enriching, Speed Lightning, Medical, Herbal, Health, Potion, Full Heal,
+Recover, Heal, and Cyclone Energy now react only after a successful hand
+attachment. Verified exceptions include Full Heal Energy leaving Burned,
+Herbal Energy still being attachable only to Grass Pokémon, and Cyclone
+Energy asking the opponent to choose a replacement after it attaches to
+the original Active Pokémon. Dawn Stadium, Island Cave and Pokémon Park
+also use the completed hand attachment. Dawn Stadium heals for each
+physical card while Pokémon Park enforces its once-per-turn Bench limit.
+[Official Enriching Energy print](https://asia.pokemon-card.com/sg/card-search/detail/16756/)
+[Official Heal Energy print](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/EX_Deoxys.pdf)
+[Official Dawn Stadium rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E5%A4%9C%E6%98%8E%E3%81%91%E3%81%AE%E3%82%B9%E3%82%BF%E3%82%B8%E3%82%A2%E3%83%A0&regulation_faq_main_item1=all)
+[Official Pokémon Park print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pop2/10/)
+
+Telepathic Psychic Energy requires a deck search and shuffle when attached
+from hand to a Psychic Pokémon with Bench space and cards in deck. The
+player may select zero, one or two eligible Basics, up to the available
+Bench slots. The printed text and full-Bench ruling control the search.
+The simulator retains its existing M3 identifier and POR print mapping.
+[Upstream Telepathic Psychic Energy change](https://github.com/twinleafgg/twinleafgg/commit/8ba948645d71148d536e0956c002004135a3f0ae)
+[Official Perfect Order 88 print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me03/88)
+[Official Telepathic Psychic Energy rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%86%E3%83%AC%E3%83%91%E3%82%B9%E8%B6%85%E3%82%A8%E3%83%8D%E3%83%AB%E3%82%AE%E3%83%BC&regulation_faq_main_item1=all)
+
+All 34 focused cases pass. Fifteen fail on the prior engine. The full
+suite passes 10,567 tests and the combined working edits pass 194 targeted
+checks. All 559 comparable saved states validate with identical serialized
+payloads. Sixteen deserialized states differ only in Telepathic Psychic
+Energy text. Of 5,225 sampled opening actions, 5,219 are identical. The
+six remaining actions only remove the cancel option from Telepathic Psychic
+Energy's search. Each was played through search and shuffle and matched the
+previous settled state. All seven recorded solutions still win. The API
+passes 32 tests. The 2.50 MiB gzip package passed attestation, 10 board
+scenarios and 209 Angular checks. Mouse and touch both verified the
+complete two-Energy order selection in the packaged simulator.
+
+The remaining audit includes legacy Pokémon Powers and early Ability
+handlers that still react before the attachment, plus completed listeners
+that have yet to register with the shared order prompt.

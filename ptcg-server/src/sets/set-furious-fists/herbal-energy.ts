@@ -6,7 +6,8 @@ import { EnergyCard } from '../../game/store/card/energy-card';
 import { CheckPokemonTypeEffect, CheckProvidedEnergyEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { HealEffect } from '../../game/store/effects/game-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect, AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { queueSpecialEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
 import { IS_SPECIAL_ENERGY_BLOCKED } from '../../game/store/prefabs/prefabs';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
@@ -46,7 +47,7 @@ export class HerbalEnergy extends EnergyCard {
       }
     }
 
-    // Prevent attaching to non Grass Pokemon, heal 30 damage from Grass Pokemon
+    // Reject attachment to a non-Grass Pokémon before moving the card.
     if (effect instanceof AttachEnergyEffect && effect.energyCard === this) {
       const checkPokemonType = new CheckPokemonTypeEffect(effect.target);
       store.reduceEffect(state, checkPokemonType);
@@ -54,13 +55,16 @@ export class HerbalEnergy extends EnergyCard {
       if (!checkPokemonType.cardTypes.includes(CardType.GRASS)) {
         throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
       }
+    }
 
-      if (IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.target)) {
-        return state;
-      }
-
-      const healEffect = new HealEffect(effect.player, effect.target, 30);
-      store.reduceEffect(state, healEffect);
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.energyCard === this) {
+      queueSpecialEnergyReaction(store, state, effect, this, () => {
+        store.reduceEffect(state, new HealEffect(effect.player, effect.target, 30));
+      }, () => {
+        const type = new CheckPokemonTypeEffect(effect.target);
+        store.reduceEffect(state, type);
+        return type.cardTypes.includes(CardType.GRASS);
+      });
     }
 
     // Discard card when not attached to Grass Pokemon

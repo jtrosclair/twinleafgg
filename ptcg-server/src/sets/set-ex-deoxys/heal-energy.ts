@@ -1,10 +1,10 @@
 import { StoreLike, State } from '../../game';
-import { CardTag, CardType, EnergyType, SpecialCondition } from '../../game/store/card/card-types';
+import { CardTag, CardType, EnergyType } from '../../game/store/card/card-types';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { Effect } from '../../game/store/effects/effect';
 import { HealEffect } from '../../game/store/effects/game-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { IS_SPECIAL_ENERGY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { queueSpecialEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
 
 export class HealEnergy extends EnergyCard {
   public provides: CardType[] = [CardType.COLORLESS];
@@ -19,25 +19,11 @@ export class HealEnergy extends EnergyCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && effect.energyCard === this && effect.sourceZone === undefined) {
-      const player = effect.player;
-
-      if (IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.target)) {
-        return state;
-      }
-
-      if (effect.target.getPokemonCard()?.tags.includes(CardTag.POKEMON_ex)) {
-        return state;
-      }
-
-      const healEffect = new HealEffect(player, effect.target, 10);
-      store.reduceEffect(state, healEffect);
-
-      effect.target.removeSpecialCondition(SpecialCondition.ASLEEP);
-      effect.target.removeSpecialCondition(SpecialCondition.PARALYZED);
-      effect.target.removeSpecialCondition(SpecialCondition.CONFUSED);
-      effect.target.removeSpecialCondition(SpecialCondition.BURNED);
-      effect.target.removeSpecialCondition(SpecialCondition.POISONED);
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.energyCard === this) {
+      queueSpecialEnergyReaction(store, state, effect, this, () => {
+        store.reduceEffect(state, new HealEffect(effect.player, effect.target, 10));
+        effect.target.clearAllSpecialConditions();
+      }, () => !effect.target.getPokemonCard()?.tags.includes(CardTag.POKEMON_ex));
     }
 
     return state;

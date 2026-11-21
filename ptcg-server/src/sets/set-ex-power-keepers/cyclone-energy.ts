@@ -2,8 +2,9 @@ import { StoreLike, State, StateUtils } from '../../game';
 import { CardType, EnergyType } from '../../game/store/card/card-types';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
-import { IS_SPECIAL_ENERGY_BLOCKED, SWITCH_ACTIVE_WITH_BENCHED } from '../../game/store/prefabs/prefabs';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
+import { queueSpecialEnergyReaction } from '../../game/store/prefabs/hand-energy-reactions';
+import { SWITCH_ACTIVE_WITH_BENCHED } from '../../game/store/prefabs/prefabs';
 
 export class CycloneEnergy extends EnergyCard {
   public provides: CardType[] = [CardType.COLORLESS];
@@ -18,15 +19,13 @@ export class CycloneEnergy extends EnergyCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && effect.energyCard === this && effect.target === effect.player.active) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      if (IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.target)) {
-        return state;
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.energyCard === this) {
+      const opponent = StateUtils.getOpponent(state, effect.player);
+      if (effect.activePokemonAtAttachment === effect.target.getPokemonCard()) {
+        queueSpecialEnergyReaction(store, state, effect, this, () => {
+          SWITCH_ACTIVE_WITH_BENCHED(store, state, opponent);
+        }, () => opponent.bench.some(slot => !!slot.getPokemonCard()));
       }
-
-      SWITCH_ACTIVE_WITH_BENCHED(store, state, opponent);
     }
 
     return state;

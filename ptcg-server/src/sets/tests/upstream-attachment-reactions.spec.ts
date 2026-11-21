@@ -242,6 +242,9 @@ describe('official hand Energy attachment reactions', () => {
       expect(foe.active.damage).toBe(150);
       expect(pending() instanceof AttachEnergyPrompt).toBe(true);
       resolve(targets.map((to, index) => ({ to, index })));
+      if (targets[0] !== targets[1]) {
+        chooseReaction('Buddy Pulse (Finneon)', owner.id);
+      }
       expect(owner.active.damage).toBe(targets[0] === active ? 20 : 0);
       expect(owner.bench[0].damage).toBe(targets[0] === active ? 20 : 40);
       expect(owner.hand.cards.map(card => card.fullName)).toEqual([jet]);

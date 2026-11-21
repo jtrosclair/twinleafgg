@@ -5,6 +5,13 @@
   "description": "Per-commit review record for the PrizeMap simulator fork. Partial ports are not full commits. Never infer an applied watermark from the latest observed SHA.",
   "commits": [
     {
+      "sha": "8ba948645d71148d536e0956c002004135a3f0ae",
+      "date": "2026-05-31",
+      "subject": "fix(cards): update Telepathic Psychic Energy set code",
+      "status": "partial",
+      "notes": "Historical pre-base path record. Batch 51 ports the printed mandatory search for up to two Basic Psychic Pokémon, then shuffle, to the successful hand attachment event. A full Bench prevents looking at or shuffling the deck. The fork retains the legacy M3 79 identifier and its existing POR 88 print mapping. Six real opening attachment searches had their cancel option removed and settled to the same state after valid search and shuffle."
+    },
+    {
       "sha": "c00300bac7c729d4add18f596443d6ed32ca7e8a",
       "date": "2026-09-15",
       "subject": "refactor(cards): Updated all cards to MOVE_CARDS",

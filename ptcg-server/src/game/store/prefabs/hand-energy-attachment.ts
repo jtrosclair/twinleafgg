@@ -4,13 +4,14 @@ import { Card } from '../card/card';
 import { EnergyCard } from '../card/energy-card';
 import {
   AfterAttachEnergyFromHandEffect, AttachEnergyEffect, AttachEnergyFromHandEffect,
-  CheckEnergyAttachmentEffect, CheckHandEnergyInterceptionEffect, CoinFlipEffect,
+  CheckEnergyAttachmentEffect, CheckHandEnergyInterceptionEffect, CoinFlipEffect, QueuedHandEnergyReaction,
 } from '../effects/play-card-effects';
 import { MoveCardsEffect, PayHandEnergyAttachmentCostEffect } from '../effects/game-effects';
 import { ChooseCardsPrompt } from '../prompts/choose-cards-prompt';
 import { CardList } from '../state/card-list';
 import { State } from '../state/state';
 import { StoreLike } from '../store-like';
+import { resolveHandEnergyReactions, waitForHandEnergyPrompts } from './hand-energy-reactions';
 
 function discardCost(attachments: AttachEnergyEffect[]): number {
   return attachments.reduce((count, attachment) => count + (attachment.energyCard.discardCostToAttachFromHand ?? 0), 0);
@@ -99,11 +100,17 @@ export function resolveHandEnergyAttachments(store: StoreLike, state: State, req
       if (spendsAttachment) player.energyPlayedTurn = turn;
       request.onAttached?.(state, attached);
     }
+    const reactions: QueuedHandEnergyReaction[] = [];
     const complete = (index: number): void => {
       const completion = completions[index];
-      if (!completion) return;
-      if (index + 1 < completions.length) completion.onSettled = () => complete(index + 1);
+      if (!completion) {
+        const chooser = state.players[state.activePlayer] ?? player;
+        resolveHandEnergyReactions(store, state, chooser, reactions);
+        return;
+      }
+      completion.reactionBatch = reactions;
       state = store.reduceEffect(state, completion);
+      waitForHandEnergyPrompts(store, state, () => complete(index + 1));
     };
     complete(0);
     return state;
