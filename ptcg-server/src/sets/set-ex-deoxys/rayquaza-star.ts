@@ -1,4 +1,5 @@
-import { CardTag, CardType, CoinFlipPrompt, GameMessage, PlayerType, PokemonCard, Stage, State, StoreLike } from '../../game';
+import { flipLegacyCoinsForDamage } from '../../game/store/prefabs/attack-coin-reflip';
+import { CardTag, CardType, PlayerType, PokemonCard, Stage, State, StoreLike } from '../../game';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { DISCARD_ALL_ENERGY_FROM_POKEMON, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
@@ -34,21 +35,9 @@ export class RayquazaStar extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    // Ref: set-mega-evolution/mega-kangaskhan-ex.ts (whole coin sequence before damage).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      const flipCoin = (heads: number = 0): State => {
-        return store.prompt(state, [
-          new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
-        ], result => {
-          if (result === true) {
-            return flipCoin(heads + 1);
-          }
-          effect.damage = 30 * heads;
-          return state;
-        });
-      };
-      return flipCoin();
+      return flipLegacyCoinsForDamage(store, state, effect, 30);
     }
 
     if (WAS_ATTACK_USED(effect, 1, this)) {

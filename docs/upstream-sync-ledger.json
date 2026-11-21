@@ -9,7 +9,7 @@
       "date": "2026-07-20",
       "subject": "add(engine, frontend): Coin Flip/Re-Flip Handling, Frontend Visuals, Prefabs",
       "status": "partial",
-      "notes": "Historical upstream record. Batch 63 adapts the shared attack reflip, Glimwood Tangle and Retry Badge, including source selection, the active player’s printed timing and the actual attacker. Rapid-Fire Combo preserves legacy coin prompts and restarts from the first flip. Kaleidowaltz replaces all three coins, and an all-tails result leaves the deck alone. The React animation paths and remaining sequential legacy handlers are outside this port."
+      "notes": "Historical upstream record. Batch 63 adapts the shared attack reflip, Glimwood Tangle and Retry Badge, including source selection, the active player’s printed timing and the actual attacker. Rapid-Fire Combo preserves legacy coin prompts and restarts from the first flip. Kaleidowaltz replaces all three coins, and an all-tails result leaves the deck alone. Batch 64 routes 18 registered until-tails attacks through the same whole-series choice while retaining the legacy browser prompts. Conditional copied attacks, other linked groups and React animation follow separate paths."
     },
     {
       "sha": "440e7857fbeadf3e61f8a4a509bc6526567673e5",
@@ -23,7 +23,7 @@
       "date": "2026-08-08",
       "subject": "refactor(cards): COIN_FLIP_PROMPT",
       "status": "partial",
-      "notes": "Historical upstream record. Batch 63 adapts the Iono’s Electrode JTG path while preserving legacy coin prompts. Thump-Thump Boom Knocks Out the defender on final heads. The upstream helper conversion kept the reversed result. Some older attacks still need full-sequence conversion, including conditional copied attacks such as Assist."
+      "notes": "Historical upstream record. Batch 63 adapts the Iono’s Electrode JTG path while preserving legacy coin prompts. Thump-Thump Boom Knocks Out the defender on final heads. The upstream helper conversion kept the reversed result. Batch 64 adapts the registered until-tails handlers after checking each printed effect. The upstream conversions for Hoppip EVS, Moltres VS2 and Tyrantrum M3 still differ from their printed outcomes and ordering. Conditional copied attacks such as Assist remain open."
     },
     {
       "sha": "8ba948645d71148d536e0956c002004135a3f0ae",

@@ -1,10 +1,10 @@
+import { flipLegacyCoinsUntilTails } from '../../game/store/prefabs/attack-coin-reflip';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { DRAW_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { CoinFlipPrompt, GameMessage } from '../../game';
 
 export class Scorbunny2 extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -36,20 +36,9 @@ export class Scorbunny2 extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      const flipCoin = (heads: number = 0): State => {
-        return store.prompt(state, [
-          new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
-        ], result => {
-          if (result === true) {
-            return flipCoin(heads + 1);
-          }
-          DRAW_CARDS(player, heads);
-          return state;
-        });
-      };
-      return flipCoin();
+      return flipLegacyCoinsUntilTails(store, state, effect.player, heads => {
+        DRAW_CARDS(effect.player, heads);
+      });
     }
 
     return state;

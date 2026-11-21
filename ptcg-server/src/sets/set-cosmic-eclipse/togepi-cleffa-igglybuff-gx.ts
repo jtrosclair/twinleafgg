@@ -1,6 +1,7 @@
+import { flipLegacyCoinsForDamage } from '../../game/store/prefabs/attack-coin-reflip';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State, GameMessage, StateUtils, CoinFlipPrompt, PlayerType, ShuffleDeckPrompt } from '../../game';
+import { StoreLike, State, StateUtils, PlayerType, ShuffleDeckPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
@@ -55,21 +56,9 @@ export class TogepiCleffaIgglybuffGX extends PokemonCard {
     }
 
     // Rolling Panic
+    // Ref: set-mega-evolution/mega-kangaskhan-ex.ts (whole coin sequence before damage).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      const flipCoin = (heads: number = 0): State => {
-        return store.prompt(state, [
-          new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
-        ], result => {
-          if (result === true) {
-            return flipCoin(heads + 1);
-          }
-          effect.damage += 30 * heads;
-          return state;
-        });
-      };
-      return flipCoin();
+      return flipLegacyCoinsForDamage(store, state, effect, 30);
     }
 
     // Supreme Puff-GX

@@ -1,6 +1,8 @@
+import { flipLegacyCoinsUntilTails } from '../../game/store/prefabs/attack-coin-reflip';
+import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, EnergyType, SuperType } from '../../game/store/card/card-types';
-import { ChooseCardsPrompt, ChoosePokemonPrompt, CoinFlipPrompt, GameMessage, PlayerType, SlotType, State, StoreLike } from '../../game';
+import { Stage, CardType } from '../../game/store/card/card-types';
+import { CardList, ChooseCardsPrompt, ChoosePokemonPrompt, GameMessage, PlayerType, SlotType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 
 import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
@@ -47,55 +49,29 @@ export class Moltres extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    // Ref: set-platinum/dialga-g-lv-x.ts (select exactly the final number of cards).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
+      const { player, opponent } = effect;
+      return store.prompt(state, new ChoosePokemonPrompt(player.id, GameMessage.CHOOSE_ENERGIES_TO_DISCARD,
+        PlayerType.TOP_PLAYER, [SlotType.ACTIVE, SlotType.BENCH], { allowCancel: false }), ([target]) => {
+        flipLegacyCoinsUntilTails(store, state, player, heads => {
+          if (heads === 0) return;
+          const provided = new CheckProvidedEnergyEffect(opponent, target);
+          store.reduceEffect(state, provided);
+          const water = new CardList();
+          water.cards = [...new Set(provided.energyMap.filter(entry =>
+            entry.provides.includes(CardType.WATER) || entry.provides.includes(CardType.ANY)).map(entry => entry.card))];
+          const count = Math.min(heads, water.cards.length);
+          if (count === 0) return;
 
-      let numFlips = 0;
-
-      return store.prompt(state, [
-        new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
-      ], result => {
-        if (result === true) {
-          numFlips++;
-          return this.reduceEffect(store, state, effect);
-        }
-
-        if (numFlips === 0) {
-          return state;
-        }
-
-        return store.prompt(state, new ChoosePokemonPrompt(
-          player.id,
-          GameMessage.CHOOSE_ENERGIES_TO_DISCARD,
-          PlayerType.TOP_PLAYER,
-          [SlotType.ACTIVE, SlotType.BENCH],
-          { min: 1, max: 1, allowCancel: false }
-        ), targets => {
-          targets.forEach(target => {
-
-            return store.prompt(state, new ChooseCardsPrompt(
-              player,
-              GameMessage.CHOOSE_ENERGIES_TO_DISCARD,
-              target, // Card source is target Pokemon
-              { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Water Energy' },
-              { min: 0, max: numFlips, allowCancel: false }
-            ), selected => {
-              const cards = selected || [];
-              if (cards.length > 0) {
-
-                targets.forEach(target => {
-
-                  const discardEnergy = new DiscardCardsEffect(effect, cards);
-                  discardEnergy.target = target;
-                  store.reduceEffect(state, discardEnergy);
-                });
-              }
-              return state;
-            });
+          store.prompt(state, new ChooseCardsPrompt(player, GameMessage.CHOOSE_ENERGIES_TO_DISCARD, water, {},
+            { min: count, max: count, allowCancel: false }), cards => {
+            const discard = new DiscardCardsEffect(effect, cards);
+            discard.target = target;
+            store.reduceEffect(state, discard);
           });
         });
       });
-      return state;
     }
     return state;
   }

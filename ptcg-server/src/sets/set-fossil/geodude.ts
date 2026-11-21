@@ -1,6 +1,7 @@
+import { flipLegacyCoinsForDamage } from '../../game/store/prefabs/attack-coin-reflip';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { StoreLike, State, CoinFlipPrompt, GameMessage } from '../../game';
+import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
@@ -28,21 +29,9 @@ export class Geodude extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    // Ref: set-mega-evolution/mega-kangaskhan-ex.ts (whole coin sequence before damage).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      const flipCoin = (heads: number = 0): State => {
-        return store.prompt(state, [
-          new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
-        ], result => {
-          if (result === true) {
-            return flipCoin(heads + 1);
-          }
-          effect.damage = 10 * heads;
-          return state;
-        });
-      };
-      return flipCoin();
+      return flipLegacyCoinsForDamage(store, state, effect, 10);
     }
     return state;
   }

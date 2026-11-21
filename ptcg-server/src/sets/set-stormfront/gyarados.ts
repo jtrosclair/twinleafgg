@@ -1,6 +1,8 @@
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { flipLegacyCoinsUntilTails } from '../../game/store/prefabs/attack-coin-reflip';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
-import { Card, StoreLike, State, ChoosePokemonPrompt, GameMessage, PlayerType, SlotType, CoinFlipPrompt, CardTarget, PokemonCardList, ChooseCardsPrompt } from '../../game';
+import { Card, StoreLike, State, ChoosePokemonPrompt, GameMessage, PlayerType, SlotType, CardTarget, PokemonCardList, ChooseCardsPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { COIN_FLIP_PROMPT, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { THIS_ATTACK_DOES_X_DAMAGE_FOR_EACH_POKEMON_IN_YOUR_DISCARD_PILE } from '../../game/store/prefabs/attack-effects';
@@ -47,21 +49,14 @@ export class Gyarados extends PokemonCard {
     }
 
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-      const opponent = effect.opponent;
-
-      const flipCoin = (heads: number = 0): State => {
-        return store.prompt(state, [
-          new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
-        ], result => {
-          if (result === true) {
-            return flipCoin(heads + 1);
-          }
-          MOVE_CARDS(store, state, opponent.deck, opponent.discard, { count: heads, sourceCard: this, sourceEffect: this.attacks[1] });
-          return state;
+      return flipLegacyCoinsUntilTails(store, state, effect.player, heads => {
+        if (heads === 0) return;
+        afterAttackDamage(state, effect, (store, state) => {
+          const opponent = effect.opponent;
+          return MOVE_CARDS(store, state, opponent.deck, opponent.discard,
+            { count: heads, sourceCard: this, sourceEffect: effect.attack });
         });
-      };
-      return flipCoin();
+      });
     }
 
     if (WAS_ATTACK_USED(effect, 2, this)) {

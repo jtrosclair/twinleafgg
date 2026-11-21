@@ -4461,3 +4461,47 @@ engine. The full engine passes 10,917 tests. The combined worktree passes
 opening actions match, and all seven recorded solutions still win. All
 32 API checks, 209 client checks and ten packaged board scenarios pass.
 The 2.51 MiB gzip runtime passes build attestation.
+
+## Gameplay re-audit, batch 64
+
+Eighteen registered until-tails attacks now use the complete original or
+replacement sequence before applying its effects. The browser still prompts
+for each coin. Hoppip EVS deals the printed 20 damage for each heads. Moltres
+VS2 chooses its opponent's Pokémon before the first coin and discards one
+attached card supplying Water per final heads, up to the amount available.
+Mist Energy can prevent the discard. The separate Astral Radiance
+Qwilfish definition found by the text search is unregistered. The live
+ASR 89 definition already uses the typed whole-sequence helper.
+[Official Hoppip EVS print](https://asia.pokemon-card.com/my/card-search/detail/1576/)
+[Moltres VS2 print](https://tcgplayer-cdn.tcgplayer.com/product/617495_in_1000x1000.jpg)
+
+Tyrantrum M3 waits for the final Wreak Havoc sequence, deals damage,
+then discards up to one card per heads. It still flips until tails when
+the opponent has fewer cards left. Gyarados SF and Lairon CRZ also discard
+one per heads. Gyarados PGO discards two. Houndstone M1S reveals a group
+of distinct random cards from the opponent's hand before moving and
+shuffling them into the deck. Rayquaza ex DR requires one available Basic
+Energy from the discard per final heads and targets the actual attacker,
+including when the attack is copied.
+[Official Tyrantrum print](https://www.pokemon-card.com/card-search/details.php/card/49677/regu/DP)
+[Official Houndstone print](https://www.pokemon-card.com/card-search/details.php/card/48459/regu/all)
+[Official EX Dragon card dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/EX_Dragon.pdf#page=33)
+
+The original import ledger marked eight of 35 explicitly titled fix
+commits fully deferred and ten partial. The re-audit has applied three of
+the eight, found equivalent behavior or imports for four, and partially
+ported one. The current ledger has 39 such commits, with zero fully
+deferred and 11 partial. The full ledger has 103 entries, with eight
+deferred and 60 partial. It includes mixed card, engine, and interface
+work. Individual defects still require card-level review, including
+Assist and other linked coin sequences, Will, and Malamar XYP's legacy
+Contrary path.
+
+The 32 focused cases pass, with 24 failures reproduced on the previous
+engine. The combined worktree passes 225 targeted cases. All 559
+comparable saved states and 5,225 sampled opening actions match.
+All seven recorded solutions still win, including Trapped in the
+Phantom Maze. All 32 API checks pass.
+The 2.50 MiB gzip runtime passes build attestation, all ten packaged
+mouse and touch board checks, and 209 client checks.
+The full engine suite passes 10,949 tests across 311 spec files.

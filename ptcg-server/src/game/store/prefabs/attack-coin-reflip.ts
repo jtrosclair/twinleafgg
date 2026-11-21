@@ -1,6 +1,7 @@
 import { GameError } from '../../game-error';
 import { GameLog, GameMessage } from '../../game-message';
 import { Card } from '../card/card';
+import { AttackEffect } from '../effects/game-effects';
 import { CheckAttackCoinReflipEffect } from '../effects/play-card-effects';
 import { CoinFlipPrompt } from '../prompts/coin-flip-prompt';
 import { ConfirmPrompt } from '../prompts/confirm-prompt';
@@ -99,4 +100,18 @@ export function flipLegacyCoinsUntilTails(
     });
   };
   return flip(0, heads => offerAttackCoinReflip(store, state, () => apply(heads), () => flip(0, apply), [player.id]));
+}
+
+/** Resolve the printed base or bonus once the player keeps a coin sequence. */
+export function flipLegacyCoinsForDamage(
+  store: StoreLike, state: State, effect: AttackEffect, damagePerHeads: number,
+): State {
+  return flipLegacyCoinsUntilTails(store, state, effect.player, heads => {
+    const damage = heads * damagePerHeads;
+    if (effect.attack.damageCalculation === '+') {
+      effect.damage += damage;
+    } else {
+      effect.damage = damage === 0 ? 0 : Math.max(0, effect.damage + damage - effect.attack.damage);
+    }
+  });
 }

@@ -1,4 +1,5 @@
-import { Attack, CardType, ChooseCardsPrompt, CoinFlipPrompt, GameMessage, PokemonCard, Stage, State, StoreLike, SuperType, Weakness } from '../../game';
+import { flipLegacyCoinsForDamage } from '../../game/store/prefabs/attack-coin-reflip';
+import { Attack, CardType, ChooseCardsPrompt, GameMessage, PokemonCard, Stage, State, StoreLike, SuperType, Weakness } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
@@ -65,21 +66,9 @@ export class Steelix extends PokemonCard {
       });
     }
 
+    // Ref: set-mega-evolution/mega-kangaskhan-ex.ts (whole coin sequence before damage).
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-
-      const flipCoin = (heads: number = 0): State => {
-        return store.prompt(state, [
-          new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
-        ], result => {
-          if (result === true) {
-            return flipCoin(heads + 1);
-          }
-          effect.damage = 100 * heads;
-          return state;
-        });
-      };
-      return flipCoin();
+      return flipLegacyCoinsForDamage(store, state, effect, 100);
     }
 
     return state;

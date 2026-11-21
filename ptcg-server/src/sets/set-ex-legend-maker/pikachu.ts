@@ -1,11 +1,10 @@
+import { flipLegacyCoinsForDamage } from '../../game/store/prefabs/attack-coin-reflip';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 
-import { CoinFlipPrompt } from '../../game/store/prompts/coin-flip-prompt';
-import { GameMessage } from '../../game';
 import { ADD_PARALYZED_TO_PLAYER_ACTIVE, AFTER_ATTACK, COIN_FLIP_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Pikachu extends PokemonCard {
@@ -48,21 +47,9 @@ export class Pikachu extends PokemonCard {
       });
     }
 
+    // Ref: set-mega-evolution/mega-kangaskhan-ex.ts (whole coin sequence before damage).
     if (WAS_ATTACK_USED(effect, 1, this)) {
-      const player = effect.player;
-
-      const flipCoin = (heads: number = 0): State => {
-        return store.prompt(state, [
-          new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
-        ], result => {
-          if (result === true) {
-            return flipCoin(heads + 1);
-          }
-          effect.damage = 20 * heads;
-          return state;
-        });
-      };
-      return flipCoin();
+      return flipLegacyCoinsForDamage(store, state, effect, 20);
     }
 
     return state;

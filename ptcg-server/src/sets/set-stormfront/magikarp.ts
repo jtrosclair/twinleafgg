@@ -1,4 +1,5 @@
-import { CoinFlipPrompt, GameMessage, State, StoreLike } from '../../game';
+import { flipLegacyCoinsUntilTails } from '../../game/store/prefabs/attack-coin-reflip';
+import { State, StoreLike } from '../../game';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
@@ -33,20 +34,9 @@ export class Magikarp extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      const flipCoin = (heads: number = 0): State => {
-        return store.prompt(state, [
-          new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
-        ], result => {
-          if (result === true) {
-            return flipCoin(heads + 1);
-          }
-          DRAW_CARDS(player, heads);
-          return state;
-        });
-      };
-      return flipCoin();
+      return flipLegacyCoinsUntilTails(store, state, effect.player, heads => {
+        DRAW_CARDS(effect.player, heads);
+      });
     }
     return state;
   }

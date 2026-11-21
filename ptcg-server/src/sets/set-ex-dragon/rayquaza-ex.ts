@@ -1,10 +1,11 @@
+import { flipLegacyCoinsUntilTails } from '../../game/store/prefabs/attack-coin-reflip';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, EnergyType, SuperType } from '../../game/store/card/card-types';
-import { StoreLike, State, GameError, SelectPrompt, StateUtils, PokemonCardList, Card, CoinFlipPrompt, AttachEnergyPrompt, PlayerType, SlotType } from '../../game';
+import { StoreLike, State, GameError, SelectPrompt, StateUtils, PokemonCardList, Card, EnergyCard, AttachEnergyPrompt, PlayerType, SlotType, CardTarget } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { GameMessage } from '../../game/game-message';
 import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
-import { MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ATTACH_ENERGY_TRANSFERS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 
 export class Rayquazaex extends PokemonCard {
@@ -38,40 +39,26 @@ export class Rayquazaex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    // Ref: set-paradox-rift/professor-sadas-vitality.ts (attach a group of Basic Energy from discard).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
+      const { player, source } = effect;
+      return flipLegacyCoinsUntilTails(store, state, player, heads => {
+        const available = player.discard.cards.filter(card =>
+          card instanceof EnergyCard && card.energyType === EnergyType.BASIC);
+        const count = Math.min(heads, available.length);
+        if (count === 0) return;
 
-      const flipCoin = (heads: number = 0): State => {
-        return store.prompt(state, [
-          new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
-        ], result => {
-          if (result === true) {
-            return flipCoin(heads + 1);
-          }
-
-          state = store.prompt(state, new AttachEnergyPrompt(
-            player.id,
-            GameMessage.ATTACH_ENERGY_TO_ACTIVE,
-            player.discard,
-            PlayerType.BOTTOM_PLAYER,
-            [SlotType.ACTIVE],
-            { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
-            { allowCancel: false, min: 0, max: heads }
-          ), transfers => {
-            transfers = transfers || [];
-            // cancelled by user
-            if (transfers.length === 0) {
-              return;
-            }
-
-            for (const transfer of transfers) {
-              const target = StateUtils.getTarget(state, player, transfer.to);
-              MOVE_CARDS(store, state, player.discard, target, { cards: [transfer.card], sourceCard: this, sourceEffect: this.attacks[0] });
-            }
-          });
+        const slot = source === player.active ? SlotType.ACTIVE : SlotType.BENCH;
+        const blockedTo: CardTarget[] = [];
+        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (list, _card, target) => {
+          if (list !== source) blockedTo.push(target);
         });
-      };
-      return flipCoin();
+        store.prompt(state, new AttachEnergyPrompt(player.id, GameMessage.ATTACH_ENERGY_TO_ACTIVE, player.discard,
+          PlayerType.BOTTOM_PLAYER, [slot], { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
+          { min: count, max: count, allowCancel: false, blockedTo }), transfers => {
+          ATTACH_ENERGY_TRANSFERS(store, state, player, transfers ?? [], 'discard', { sourceCard: this });
+        });
+      });
     }
 
     if (WAS_ATTACK_USED(effect, 1, this)) {

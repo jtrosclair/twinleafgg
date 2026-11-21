@@ -1,9 +1,11 @@
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { flipLegacyCoinsUntilTails } from '../../game/store/prefabs/attack-coin-reflip';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, EnergyType, SuperType } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils, CoinFlipPrompt, GameMessage, CardList, GameLog, PowerType } from '../../game';
+import { StoreLike, State, GameLog, PowerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckHpEffect, CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { IS_ABILITY_BLOCKED, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Tyrantrum extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -56,34 +58,23 @@ export class Tyrantrum extends PokemonCard {
       }
     }
 
-    // Attack: Flip coins until tails, discard top card for each heads
+    // Ref: set-stormfront/gyarados.ts (Wreak Havoc).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      const flipCoins = (s: State): State => {
-        if (opponent.deck.cards.length === 0) {
-          return s;
-        }
-
-        return store.prompt(s, new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP), result => {
-          if (result === true) {
-            // Heads - discard top card
-            const deckTop = new CardList();
-            opponent.deck.moveTo(deckTop, 1);
-            if (deckTop.cards.length > 0) {
-              store.log(s, GameLog.LOG_PLAYER_DISCARDS_CARD, { name: opponent.name, card: deckTop.cards[0].name, effect: 'Wreak Havoc' });
-              deckTop.moveTo(opponent.discard);
+      return flipLegacyCoinsUntilTails(store, state, effect.player, heads => {
+        if (heads === 0) return;
+        afterAttackDamage(state, effect, (store, state) => {
+          const opponent = effect.opponent;
+          const cards = opponent.deck.cards.slice(0, heads);
+          state = MOVE_CARDS(store, state, opponent.deck, opponent.discard,
+            { cards, sourceCard: this, sourceEffect: effect.attack });
+          for (const card of cards) {
+            if (opponent.discard.cards.includes(card)) {
+              store.log(state, GameLog.LOG_PLAYER_DISCARDS_CARD, { name: opponent.name, card: card.name, effectName: effect.attack.name });
             }
-            // Continue flipping
-            return flipCoins(s);
           }
-          // Tails - stop flipping
-          return s;
+          return state;
         });
-      };
-
-      return flipCoins(state);
+      });
     }
 
     return state;

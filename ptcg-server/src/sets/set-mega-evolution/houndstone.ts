@@ -1,8 +1,10 @@
-import { CoinFlipPrompt, GameMessage, State, StateUtils, StoreLike } from '../../game';
+import { flipLegacyCoinsUntilTails } from '../../game/store/prefabs/attack-coin-reflip';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { Card, GameMessage, ShowCardsPrompt, State, StoreLike } from '../../game';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { MOVE_CARD_TO, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Houndstone extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -35,34 +37,30 @@ export class Houndstone extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    // Ref: set-mega-evolution/mega-kangaskhan-ex.ts (keep the entire series before applying results).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
+      const { player, opponent } = effect;
+      return flipLegacyCoinsUntilTails(store, state, player, heads => {
+        if (heads === 0) return;
+        afterAttackDamage(state, effect, (store, state) => {
+          const pool = opponent.hand.cards.slice();
+          const count = Math.min(heads, pool.length);
+          if (count === 0) return state;
 
-      let numCards = 0;
-      const flipCoin = (heads: number = 0): State => {
-        return store.prompt(state, [
-          new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
-        ], result => {
-          if (result === true) {
-            return flipCoin(heads + 1);
+          const revealed: Card[] = [];
+          for (let i = 0; i < count; i++) {
+            const index = Math.floor(Math.random() * pool.length);
+            revealed.push(pool.splice(index, 1)[0]);
           }
-          numCards = heads;
-          for (let i = 0; i < numCards; i++) {
-            if (opponent.hand.cards.length > 0) {
-              const randomIndex = Math.floor(Math.random() * opponent.hand.cards.length);
-              const randomCard = opponent.hand.cards[randomIndex];
-              SHOW_CARDS_TO_PLAYER(store, state, player, [randomCard]);
-              MOVE_CARD_TO(state, randomCard, opponent.deck);
-              SHUFFLE_DECK(store, state, opponent);
-            }
-          }
-          return state;
+          return store.prompt(state, new ShowCardsPrompt(player.id, GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
+            revealed, { sourcePlayerId: opponent.id }), () => {
+            MOVE_CARDS(store, state, opponent.hand, opponent.deck, { cards: revealed, sourceCard: this, sourceEffect: effect.attack });
+            SHUFFLE_DECK(store, state, opponent);
+          });
         });
-      };
-      return flipCoin();
+      });
     }
 
     return state;
   }
-} 
+}
