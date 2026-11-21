@@ -15,6 +15,9 @@ import { TAKE_SPECIFIC_PRIZES, MOVE_CARDS } from '../prefabs/prefabs';
 import { ChoosePokemonPrompt } from '../prompts/choose-pokemon-prompt';
 import { createPlayer, setupGame } from '../reducers/setup-reducer';
 import { CardList } from '../state/card-list';
+import { Player } from '../state/player';
+import { StateUtils } from '../state-utils';
+import { pendingBenchStadiumDeparture } from '../stadium-utils';
 import { PokemonCardList } from '../state/pokemon-card-list';
 import { GamePhase, GameWinner, State } from '../state/state';
 import { StoreLike } from '../store-like';
@@ -41,7 +44,10 @@ const pendingEffectKnockOuts = new WeakMap<State, Map<PokemonCard, EffectKnockOu
 export function checkpointPendingEffectKnockOuts(state: State): () => void {
   const existing = pendingEffectKnockOuts.get(state);
   const saved = existing && new Map(existing);
+  const departed = pendingBenchStadiumDeparture.get(state);
   return () => {
+    if (departed) pendingBenchStadiumDeparture.set(state, departed);
+    else pendingBenchStadiumDeparture.delete(state);
     if (saved) pendingEffectKnockOuts.set(state, new Map(saved));
     else pendingEffectKnockOuts.delete(state);
   };
@@ -110,90 +116,72 @@ function findKoPokemons(store: StoreLike, state: State): PokemonItem[] {
 //   return state;
 // }
 
-function handleBenchSizeChange(store: StoreLike, state: State, benchSizes: number[]): State {
-  // Skip if we've already handled bench size changes in this state check
-  if (state.benchSizeChangeHandled) {
-    return state;
-  }
-
-  state.players.forEach((player, index) => {
-    const benchSize = benchSizes[index];
-    // Add empty slots if bench is smaller
-    while (player.bench.length < benchSize) {
-      const bench = new PokemonCardList();
-      bench.isPublic = true;
-      player.bench.push(bench);
-    }
-
-    if (player.bench.length === benchSize) {
-      return;
-    }
-
-    // Remove empty slots, starting from the right side
-    const empty: PokemonCardList[] = [];
-    for (let index = player.bench.length - 1; index >= 0; index--) {
-      const bench = player.bench[index];
-      const isEmpty = bench.cards.length === 0;
-      if (player.bench.length - empty.length > benchSize && isEmpty) {
-        empty.push(bench);
-      }
-    }
-
-    if (player.bench.length - empty.length <= benchSize) {
-      // Discarding empty slots is enough
-      for (let i = player.bench.length - 1; i >= 0; i--) {
-        if (empty.includes(player.bench[i])) {
-          player.bench.splice(i, 1);
-        }
-      }
-      return;
-    }
-
-    // Player has more Pokemons than bench size, discard some
-    const count = player.bench.length - empty.length - benchSize;
-    store.prompt(state, new ChoosePokemonPrompt(
-      player.id,
-      GameMessage.CHOOSE_POKEMON_TO_DISCARD,
-      PlayerType.BOTTOM_PLAYER,
-      [SlotType.BENCH],
-      { min: count, max: count, allowCancel: false }
-    ), results => {
-      results = results || [];
-      const selected = [...empty, ...results];
-
-      // Discard all empty slots and selected Pokemons
-      for (let i = player.bench.length - 1; i >= 0; i--) {
-        if (selected.includes(player.bench[i])) {
-          const cardList = player.bench[i];
-          const pokemons = cardList.getPokemons();
-          const otherCards = cardList.cards.filter(card =>
-            !(card instanceof PokemonCard) &&
-            !pokemons.includes(card as PokemonCard) &&
-            (!cardList.tools || !cardList.tools.includes(card))
-          );
-          const tools = [...cardList.tools];
-
-          // Move other cards to discard
-          if (otherCards.length > 0) {
-            MOVE_CARDS(store, state, cardList, player.discard, { cards: otherCards });
-          }
-
-          // Move tools to discard
-          for (const tool of tools) {
-            cardList.moveCardTo(tool, player.discard);
-          }
-
-          // Move Pokémon to discard
-          if (pokemons.length > 0) {
-            MOVE_CARDS(store, state, cardList, player.discard, { cards: pokemons });
-          }
-          player.bench.splice(i, 1);
-        }
-      }
-    });
-  });
-  // Mark that we've handled bench size changes
+function handleBenchSizeChange(store: StoreLike, state: State, benchSizes: number[], first: Player): State {
+  if (state.benchSizeChangeHandled) return state;
   state.benchSizeChangeHandled = true;
+
+  const order = state.players.includes(first) ? [first, ...state.players.filter(player => player !== first)] : state.players;
+  const plans = order.map(player => {
+    const capacity = benchSizes[state.players.indexOf(player)];
+    while (player.bench.length < capacity) {
+      const slot = new PokemonCardList();
+      slot.isPublic = true;
+      player.bench.push(slot);
+    }
+
+    const empty = player.bench.filter(slot => slot.cards.length === 0);
+    const remove = empty.slice(Math.max(0, empty.length - (player.bench.length - capacity)));
+    return { player, remove, excess: player.bench.length - remove.length - capacity };
+  });
+
+  const commit = () => {
+    // Detach every selected stack before either discard can affect the board.
+    const discards = plans.map(({ player, remove }) => {
+      const discard = new CardList();
+      for (let index = player.bench.length - 1; index >= 0; index--) {
+        const slot = player.bench[index];
+        if (!remove.includes(slot)) continue;
+        const pokemon = new Set<Card>(slot.getPokemons());
+        const tools = new Set(slot.tools);
+        const attachments = [...slot.cards, ...slot.energies.cards]
+          .filter(card => !pokemon.has(card) && !tools.has(card));
+        const cards = new Set([...attachments, ...tools, ...pokemon]);
+        cards.forEach(card => card.clearAttachedEnergyForm?.());
+        discard.cards.push(...cards);
+        slot.cards.length = 0;
+        slot.tools.length = 0;
+        slot.energies.cards.length = 0;
+        player.bench.splice(index, 1);
+      }
+      return { player, discard };
+    });
+    for (const { player, discard } of discards) {
+      if (discard.cards.length) MOVE_CARDS(store, state, discard, player.discard);
+    }
+  };
+
+  const selections = plans.filter(plan => plan.excess > 0);
+  const chooseNext = (): void => {
+    const plan = selections[0];
+    if (!plan) {
+      commit();
+      return;
+    }
+    const { player, remove, excess } = plan;
+    store.prompt(state, new ChoosePokemonPrompt(player.id, GameMessage.CHOOSE_POKEMON_TO_DISCARD,
+      PlayerType.BOTTOM_PLAYER, [SlotType.BENCH], { min: excess, max: excess, allowCancel: false }),
+    (result: PokemonCardList[] | null) => {
+      if (!Array.isArray(result) || result.length !== excess || new Set(result).size !== excess
+        || result.some(slot => !player.bench.includes(slot) || !slot.getPokemonCard())) {
+        throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
+      }
+      remove.push(...result);
+      selections.shift();
+      chooseNext();
+    });
+  };
+
+  chooseNext();
   return state;
 }
 
@@ -202,7 +190,21 @@ export function checkBenchSize(store: StoreLike, state: State): State {
   recordActiveAbilityLockOrder(state);
   const effect = new CheckTableStateEffect(state.players.map(() => 5));
   store.reduceEffect(state, effect);
-  return handleBenchSizeChange(store, state, effect.benchSizes);
+  const stadium = StateUtils.getStadiumCard(state);
+  // An incoming Stadium with an explicit order takes precedence over the outgoing expansion.
+  const limiter = stadium?.name === 'Collapsed Stadium' || stadium?.name === 'Giant Stump'
+    ? state.players.find(player => player.stadium.cards.includes(stadium)) : undefined;
+  const departed = pendingBenchStadiumDeparture.get(state);
+  pendingBenchStadiumDeparture.delete(state);
+  return handleBenchSizeChange(store, state, effect.benchSizes, limiter ?? departed ?? state.players[state.activePlayer]);
+}
+
+function mustReconcileBenchBeforeKnockOuts(state: State): boolean {
+  const stadium = StateUtils.getStadiumCard(state);
+  const lostExpansion = pendingBenchStadiumDeparture.has(state);
+  if (!lostExpansion && stadium?.name !== 'Area Zero Underdepths') return false;
+  return state.players.some(player => player.bench.filter(slot => slot.getPokemonCard()).length > 5
+    && (lostExpansion || !player.getPokemonInPlay().some(slot => slot.getPokemonCard()?.tags.includes(CardTag.POKEMON_TERA))));
 }
 
 function chooseActivePokemons(state: State): ChoosePokemonPrompt[] {
@@ -466,6 +468,14 @@ function initiateSuddenDeath(store: StoreLike, state: State): State {
 export function* executeCheckState(next: Function, store: StoreLike, state: State, onComplete?: () => void): IterableIterator<State> {
   const prizeGroups: PrizeGroup[][] = state.players.map(() => []);
   const promoteBeforePrizes = new Set<number>();
+
+  // Losing a Stadium expansion or its last Tera can make Bench discards
+  // mandatory before lethal damage is checked (Megaton Blower, Devolution).
+  if (!state.benchSizeChangeHandled && mustReconcileBenchBeforeKnockOuts(state)) {
+    checkBenchSize(store, state);
+    if (store.hasPrompts()) yield store.waitPrompt(state, () => next());
+    state.benchSizeChangeHandled = false;
+  }
 
   // Resolve every Knock Out created by these effects before taking Prizes.
   const processed = new Set<PokemonCard>();

@@ -5167,3 +5167,41 @@ suite passes 11,283 tests across 324 files. The attested browser
 package passes ten board scenarios and 209 client checks. Desktop
 and touch users can select Poochyena with Nest Ball under Eternal Zone
 while Hoppip is unavailable and Dust Field holds the Bench to three.
+
+## Gameplay re-audit, batch 80
+
+Both players now finish their Bench selections before the selected
+stacks leave play together. When Collapsed Stadium or Giant Stump is
+the new limit, its owner chooses first. When Area Zero Underdepths or
+Sky Field leaves and no such limiter takes priority, the outgoing
+Stadium's owner chooses first. Replacing a Stadium and removing one
+with Lost Vacuum or an attack retain the original owner's identity
+through the shared movement and discard paths.
+[Official Area Zero Underdepths rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%BC%E3%83%AD%E3%81%AE%E5%A4%A7%E7%A9%BA%E6%B4%9E&regulation_faq_main_item1=all)
+[Official Sky Field rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B9%E3%82%AB%E3%82%A4%E3%83%95%E3%82%A3%E3%83%BC%E3%83%AB%E3%83%89&page=2&regulation=all&regulation_faq_main_item1=all)
+[Collapsed Stadium print](https://www.pokemon-card.com/card-search/details.php/card/41000/regu/all)
+
+Megaton Blower clears both physical Tools and their legacy attachment
+references. If losing Area Zero and Bravery Charm leaves a Terapagos ex
+with lethal damage, the player reduces their Bench first. Discarding
+Terapagos awards no Prizes. Keeping it allows the subsequent Knock Out.
+Technical Machine: Devolution follows the same order when it removes
+the last Tera. A lost last Tera during a normal Knock Out still shrinks
+the Bench before the replacement Pokémon is promoted. Selected stacks
+move each physical card once, including attachments kept only in a
+legacy index. Prism Star cards from those stacks go to the Lost Zone.
+[Official Megaton Blower print](https://asia.pokemon-card.com/sg/card-search/detail/16747/)
+[Official Technical Machine: Devolution print](https://asia.pokemon-card.com/ph/card-search/detail/10854/)
+
+All nine new cases fail against the previous engine and pass with the
+fix. The full engine suite passes 11,292 tests across 325 files. The
+combined worktree passes 163 focused checks. The API passes 32 tests
+and the attested browser package passes 209 client checks and the
+packaged board scenarios. The new Collapsed Stadium flow passed on
+desktop mouse and touch-sized Chromium, reducing both full Benches
+from eight to four without either player taking Prizes.
+
+All 559 comparable saved boards are identical before and after the
+change. The 3,636 sampled opening actions and 458 targeted Bench and
+Trainer openings match. All seven recorded solutions still win
+twice. Legacy direct-placement routes retain separate review.

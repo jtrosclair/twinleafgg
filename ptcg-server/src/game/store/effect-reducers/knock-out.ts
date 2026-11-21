@@ -102,7 +102,7 @@ export function discardKnockedOutPokemon(store: StoreLike, state: State, effect:
 
   const stadium = effect.stadiumReplacement;
   if (stadium && effect.target.cards.includes(stadium)) {
-    for (const owner of state.players) discardStadiumSlot(owner, true);
+    for (const owner of state.players) discardStadiumSlot(state, owner, true);
     const nested = stadium.cards.cards.splice(0);
     for (const attachment of nested) {
       if (!effect.target.cards.includes(attachment) && !effect.target.tools.includes(attachment)

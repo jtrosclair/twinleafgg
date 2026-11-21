@@ -203,8 +203,8 @@ function playTrainerWithoutCoinFlip(store: StoreLike, state: State, effect: Effe
 
     // Successful play: commit the turn allowance before replacing the old Stadium.
     player.stadiumPlayedTurn = state.turn;
-    discardStadiumSlot(player, true);
-    discardStadiumSlot(opponent, true);
+    discardStadiumSlot(state, player, true);
+    discardStadiumSlot(state, opponent, true);
 
     store.log(state, GameLog.LOG_PLAYER_PLAYS_STADIUM, {
       name: effect.player.name,

@@ -1,3 +1,4 @@
+import { recordBenchStadiumDeparture } from '../stadium-utils';
 import { PlayerType } from '../actions/play-card-action';
 import { checkCopiedAttackCost, runDelegatedCopiedAttackGenerator } from '../prefabs/copy-attack-delegation';
 import { GameError } from '../../game-error';
@@ -685,6 +686,8 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
   if (effect instanceof MoveCardsEffect) {
     const source = effect.source;
     const destination = effect.destination;
+    const stadiumOwner = state.players.find(player => player.stadium === source);
+    const previousStadium = stadiumOwner?.stadium.cards[0];
     const benchOwner = destination instanceof PokemonCardList && destination.cards.length === 0
       ? state.players.find(player => (player.hand === source || player.deck === source || player.discard === source)
         && player.bench.includes(destination)) : undefined;
@@ -753,6 +756,10 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
       source.moveToTopOfDestination(destination);
     } else {
       source.moveTo(destination);
+    }
+
+    if (stadiumOwner && previousStadium && !source.cards.includes(previousStadium)) {
+      recordBenchStadiumDeparture(state, stadiumOwner, previousStadium);
     }
 
     // If source is a PokemonCardList and we moved all cards, discard remaining attached cards
