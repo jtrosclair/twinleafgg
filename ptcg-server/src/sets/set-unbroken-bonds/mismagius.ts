@@ -1,10 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SpecialCondition } from '../../game/store/card/card-types';
-import { GameError, GameMessage, PlayerType, PowerType, State, StoreLike } from '../../game';
+import { GameError, GameMessage, PowerType, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 
+import { SelfKnockOutEffect } from '../../game/store/effects/game-effects';
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
-import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { DRAW_CARDS, IS_ABILITY_BLOCKED, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Mismagius extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -18,6 +19,7 @@ export class Mismagius extends PokemonCard {
   public powers = [{
     name: 'Mysterious Message',
     useWhenInPlay: true,
+    knocksOutSelf: true,
     powerType: PowerType.ABILITY,
     text: 'Once during your turn (before your attack), you may draw cards until you have 7 cards in your hand. If you drew any cards in this way, this Pokémon is Knocked Out.'
   }];
@@ -40,26 +42,13 @@ export class Mismagius extends PokemonCard {
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
-      if (player.hand.cards.length >= 7) {
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+      if (player.hand.cards.length >= 7 || player.deck.cards.length === 0) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
-      if (player.deck.cards.length === 0) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      }
-
-      while (player.hand.cards.length < 7) {
-        if (player.deck.cards.length === 0) {
-          break;
-        }
-        player.deck.moveTo(player.hand, 1);
-      }
-
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-        if (cardList.getPokemonCard() === this) {
-          cardList.damage += 999;
-        }
-      });
+      DRAW_CARDS(player, 7 - player.hand.cards.length);
+      return store.reduceEffect(state, new SelfKnockOutEffect(player, this));
     }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {

@@ -3,10 +3,12 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, EnergyType, SuperType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, PowerType, GameMessage, PlayerType, SlotType, AttachEnergyPrompt, StateUtils, GameError } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { SelfKnockOutEffect } from '../../game/store/effects/game-effects';
+import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
 
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { SHUFFLE_DECK, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { ATTACH_ENERGY_TRANSFERS, IS_ABILITY_BLOCKED, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Forretressex extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.STAGE_1;
@@ -47,34 +49,22 @@ export class Forretressex extends PokemonCard implements CopiedAttackOwnershipCo
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
-      if (player.deck.cards.length === 0) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+      if (player.deck.cards.length === 0) throw new GameError(GameMessage.CANNOT_USE_POWER);
 
+      // Ref: set-silver-tempest/archeops.ts (Primal Turbo), set-cosmic-eclipse/magneton.ts (Call Signal)
       return store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_CARDS,
-        player.deck,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH, SlotType.ACTIVE],
-        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Grass Energy' },
+        player.id, GameMessage.ATTACH_ENERGY_CARDS, player.deck,
+        PlayerType.BOTTOM_PLAYER, [SlotType.BENCH, SlotType.ACTIVE],
+        { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, cardType: CardType.GRASS },
         { allowCancel: false, min: 0, max: 5 },
       ), transfers => {
-        transfers = transfers || [];
-        // cancelled by user
-        if (transfers.length === 0) {
-          SHUFFLE_DECK(store, state, player);
-          return state;
-        }
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          player.deck.moveCardTo(transfer.card, target);
-          SHUFFLE_DECK(store, state, player);
-        }
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (cardList.getPokemonCard() === this) {
-            cardList.damage += 999;
-          }
+        ATTACH_ENERGY_TRANSFERS(store, state, player, transfers ?? [], 'deck', {
+          sourceCard: this,
+          onAttached: () => store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
+            player.deck.applyOrder(order);
+            store.reduceEffect(state, new SelfKnockOutEffect(player, this));
+          }),
         });
       });
     }

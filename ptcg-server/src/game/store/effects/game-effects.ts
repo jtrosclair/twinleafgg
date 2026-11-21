@@ -19,6 +19,7 @@ export enum GameEffects {
   POWER_EFFECT = 'POWER_EFFECT',
   ATTACK_EFFECT = 'ATTACK_EFFECT',
   KNOCK_OUT_EFFECT = 'KNOCK_OUT_EFFECT',
+  SELF_KNOCK_OUT_EFFECT = 'SELF_KNOCK_OUT_EFFECT',
   HEAL_EFFECT = 'HEAL_EFFECT',
   AFTER_HEAL_EFFECT = 'AFTER_HEAL_EFFECT',
   EVOLVE_EFFECT = 'EVOLVE_EFFECT',
@@ -232,6 +233,14 @@ interface BeforeKnockOutDiscard {
   label: string;
   canResolve: () => boolean;
   resolve: () => void;
+}
+
+/** A printed effect that Knocks Out its own Pokémon independently of damage. */
+export class SelfKnockOutEffect implements Effect {
+  readonly type = GameEffects.SELF_KNOCK_OUT_EFFECT;
+  public preventDefault = false;
+
+  constructor(public readonly player: Player, public readonly source: PokemonCard) {}
 }
 
 // how many prizes when target Pokemon is KO

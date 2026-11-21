@@ -1,9 +1,12 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, EnergyType, SuperType } from '../../game/store/card/card-types';
-import { StoreLike, State, PowerType, GameMessage, PlayerType, SlotType, GameError, AttachEnergyPrompt, StateUtils, CardTarget } from '../../game';
+import { StoreLike, State, PowerType, GameMessage, PlayerType, SlotType, GameError, AttachEnergyPrompt, CardTarget } from '../../game';
+import { EnergyCard } from '../../game/store/card/energy-card';
+import { CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
+import { SelfKnockOutEffect } from '../../game/store/effects/game-effects';
 import { Effect } from '../../game/store/effects/effect';
 
-import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { ATTACH_ENERGY_TRANSFERS, IS_ABILITY_BLOCKED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Magneton extends PokemonCard {
 
@@ -42,42 +45,30 @@ export class Magneton extends PokemonCard {
 
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
-      const hasEnergyInHand = player.discard.cards.some(c => {
-        return c.superType === SuperType.ENERGY && c.energyType == EnergyType.BASIC;
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+      const energyCount = player.discard.cards.filter(card =>
+        card instanceof EnergyCard && card.energyType === EnergyType.BASIC).length;
+      const blockedTargets: CardTarget[] = [];
+      let hasRecipient = false;
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (slot, _card, target) => {
+        const type = new CheckPokemonTypeEffect(slot);
+        store.reduceEffect(state, type);
+        if (type.cardTypes.includes(CardType.LIGHTNING)) hasRecipient = true;
+        else blockedTargets.push(target);
       });
-      if (!hasEnergyInHand) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      }
+      if (energyCount === 0 || !hasRecipient) throw new GameError(GameMessage.CANNOT_USE_POWER);
 
-      const blocked2: CardTarget[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (list, card, target) => {
-        if (card.cardType !== CardType.LIGHTNING) {
-          blocked2.push(target);
-        }
-      });
-
+      // Ref: set-silver-tempest/archeops.ts (Primal Turbo)
       return store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_CARDS,
-        player.discard,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH, SlotType.ACTIVE],
+        player.id, GameMessage.ATTACH_ENERGY_CARDS, player.discard,
+        PlayerType.BOTTOM_PLAYER, [SlotType.BENCH, SlotType.ACTIVE],
         { superType: SuperType.ENERGY, energyType: EnergyType.BASIC },
-        { allowCancel: false, min: 0, max: 3, blockedTo: blocked2 },
+        { allowCancel: true, min: 1, max: Math.min(3, energyCount), blockedTo: blockedTargets },
       ), transfers => {
-        transfers = transfers || [];
-        // cancelled by user
-        if (transfers.length === 0) {
-          return state;
-        }
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          player.discard.moveCardTo(transfer.card, target);
-        }
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (cardList.getPokemonCard() === this) {
-            cardList.damage += 999;
-          }
+        if (!transfers?.length) return;
+        ATTACH_ENERGY_TRANSFERS(store, state, player, transfers, 'discard', {
+          sourceCard: this,
+          onAttached: () => { store.reduceEffect(state, new SelfKnockOutEffect(player, this)); },
         });
       });
     }

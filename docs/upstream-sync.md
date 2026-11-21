@@ -4113,3 +4113,65 @@ to removing the redundant marker. All 39 were replayed through turn
 end, when the attached Energy went to the discard pile. The 2.50 MiB
 gzip package passes build attestation, ten board scenarios and 209
 client-service checks. All 32 API checks pass.
+
+## Gameplay re-audit, batch 58
+
+Seven card definitions now send their printed self-Knock Outs through the
+existing Knock Out and Prize sequence. The engine tracks the physical
+source on the live board and checks its current stack. Existing damage
+counters are preserved until the normal Knock Out processing runs.
+Simultaneous Cursed Blast Knock Outs award both players' Prizes before
+checking a winner, and the opponent promotes first when both need a new
+Active Pokémon. Damp blocks Cursed Blast and Mysterious Message. A
+protected target can still stop the Cursed Blast counters while the
+Pokémon that used the Ability is Knocked Out.
+[Official Cursed Blast rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B5%E3%83%9E%E3%83%A8%E3%83%BC%E3%83%AB&regulation_faq_main_item1=all)
+[Official Mismagius print](https://www.pokemon-card.com/card-search/details.php/card/36358)
+
+Extra Energy Bomb on Electrode-GX CES requires five Energy cards already
+in the discard, or all available when fewer than five remain. Its own
+attached cards enter the discard after the Ability. The result can attach
+Special Energy before an incompatible attachment is discarded, and
+excludes Pokémon-GX and Pokémon-EX recipients. Crush and Burn-GX adds
+50 damage for each actual discard and spends the GX attack with zero
+selected. The existing `Crash and Burn-GX` attack identifier is retained.
+[Electrode-GX English card text](https://assets.pokemon.com/assets/cms2-ru-ru/pdf/trading-card-game/tcg_sun_moon_7_card_translation.pdf)
+[Official Extra Energy Bomb rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%9E%E3%83%AB%E3%83%9E%E3%82%A4%E3%83%B3GX&regulation_faq_main_item1=all)
+
+Exploding Energy on Forretress ex PAL attaches any chosen Basic Grass
+Energy, shuffles once and Knocks Out Forretress even when the search finds
+zero cards. The Forretress Knock Out can remove the last Tera Pokémon and
+reduce the Bench under Area Zero Underdepths before Prize resolution.
+Overvolt Discharge uses one to three Basic Energy from the discard and
+checks effective Lightning typing. The player can decline before
+committing. Magneton can receive its own attachments before it is Knocked
+Out. Call Signal retains the deck search, reveal, shuffle and Knock Out
+sequence. Mysterious Message draws to seven cards, or as many as available,
+before the Knock Out resolves.
+[Official Exploding Energy print](https://asia.pokemon-card.com/sg/card-search/detail/6817/)
+[Official Exploding Energy rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%95%E3%82%A9%E3%83%AC%E3%83%88%E3%82%B9&regulation_faq_main_item1=all)
+[Official Overvolt Discharge print](https://asia.pokemon-card.com/sg/card-search/detail/16826/)
+[Official Overvolt Discharge rulings](https://www.pokemon-card.com/rules/faq/search.php?page=4&regulation=all&sc_group_id=923)
+[Pokémon advanced rules manual](https://asia.pokemon-card.com/sg/wp-content/uploads/sites/6/2025/10/EN_advanced_manual-2025.pdf)
+
+The remaining self-Knock Out cards in `b8fad7fa2` have different effect
+ordering. Electrode ex RG discards its own attachments before choosing
+Energy, unlike the CES Pokémon-GX. Dusknoir LV.X SF still needs a complete
+Ectoplasm review. Its local power is a placeholder, and the official
+ruling lets it become a Stadium when hit by Giratina's Lost Zone attack.
+[Official Ectoplasm print](https://www.pokemon-card.com/card-search/details.php/card/19152/regu/DP)
+[Official Ectoplasm ruling](https://www.pokemon-card.com/rules/faq/search.php?page=18&regulation=all&sc_group_id=28)
+
+All 28 focused cases pass. Fifteen of the 27 cases that can run against
+the previous engine fail there. The full engine passes 10,802 checks,
+and the combined local workspace passes 216 targeted checks. All 559
+comparable saved boards validate with identical serialized state and card
+identities. The only expanded API changes are Cursed Blast descriptions
+on 203 boards. Of 5,225 sampled opening moves, the only difference is
+the Basic Grass filter in one Exploding Energy prompt. All 58 completed
+real Cursed Blast moves reach the same states. Both walked choices on the
+real Forretress board found no Grass Energy. Each now Knocks Out the
+sole Tera Pokémon, reduces the Bench and awards the opponent's last two
+Prizes. All seven recorded puzzle solutions still win. The 2.50 MiB
+gzip package passes attestation, ten board scenarios and 209 client-service
+checks. All 32 API checks pass.

@@ -33,8 +33,20 @@ interface PrizeGroup {
   count: number;
 }
 
+// Pending effects only belong to the live board. They are consumed by the next
+// normal Knock Out check and never carried into a reset or a rolled-back action.
+const pendingSelfKnockOuts = new WeakMap<State, Set<PokemonCard>>();
+
+export function scheduleSelfKnockOut(state: State, source: PokemonCard): void {
+  const pending = pendingSelfKnockOuts.get(state) ?? new Set<PokemonCard>();
+  pending.add(source);
+  pendingSelfKnockOuts.set(state, pending);
+}
+
 function findKoPokemons(store: StoreLike, state: State): PokemonItem[] {
   const pokemons: PokemonItem[] = [];
+  const selfKnockOuts = pendingSelfKnockOuts.get(state);
+  pendingSelfKnockOuts.delete(state);
 
   for (let i = 0; i < state.players.length; i++) {
     const player = state.players[i];
@@ -42,6 +54,9 @@ function findKoPokemons(store: StoreLike, state: State): PokemonItem[] {
       const checkHpEffect = new CheckHpEffect(player, cardList);
       store.reduceEffect(state, checkHpEffect);
 
+      const selfKnockOut = selfKnockOuts !== undefined
+        && cardList.getPokemons().some(pokemon => selfKnockOuts.has(pokemon));
+      if (selfKnockOut) cardList.attackDamageKnockOut = undefined;
       const ko = cardList.attackDamageKnockOut;
       const destination = ko && ko.turn === state.turn && state.phase === GamePhase.ATTACK
         && ko.playerId === state.players[state.activePlayer].id
@@ -49,7 +64,7 @@ function findKoPokemons(store: StoreLike, state: State): PokemonItem[] {
       // Consume the opt-in at the next state check, even if healed/saved.
       // Never carry a Lost Crisis destination into another attack or checkup.
       if (ko) { delete ko.destination; delete ko.targetCard; }
-      if (cardList.damage >= checkHpEffect.hp) {
+      if (selfKnockOut || cardList.damage >= checkHpEffect.hp) {
         pokemons.push({ playerNum: i, cardList, card, destination });
       }
     });

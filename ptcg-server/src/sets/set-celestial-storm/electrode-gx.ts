@@ -1,10 +1,12 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, PowerType, GameMessage, PlayerType, SlotType, GameError, AttachEnergyPrompt, StateUtils, CardTarget } from '../../game';
+import { EnergyCard } from '../../game/store/card/energy-card';
 import { Effect } from '../../game/store/effects/effect';
+import { SelfKnockOutEffect } from '../../game/store/effects/game-effects';
 
 import { DiscardEnergyPrompt } from '../../game/store/prompts/discard-energy-prompt';
-import { BLOCK_IF_GX_ATTACK_USED, SHUFFLE_DECK, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { ATTACH_ENERGY_TRANSFERS, BLOCK_IF_GX_ATTACK_USED, IS_ABILITY_BLOCKED, MOVE_CARDS, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class ElectrodeGX extends PokemonCard {
 
@@ -63,51 +65,31 @@ export class ElectrodeGX extends PokemonCard {
 
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
-      const hasEnergyInHand = player.discard.cards.some(c => {
-        return c.superType === SuperType.ENERGY;
-      });
-      if (!hasEnergyInHand) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      }
-
-      const blocked2: CardTarget[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (list, card, target) => {
-        if (card.tags.includes(CardTag.POKEMON_EX)) {
-          blocked2.push(target);
-        }
-        if (card.tags.includes(CardTag.POKEMON_GX)) {
-          blocked2.push(target);
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
+      const energyCount = Math.min(5, player.discard.cards.filter(card => card instanceof EnergyCard).length);
+      const blockedTargets: CardTarget[] = [];
+      let hasRecipient = false;
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (_slot, card, target) => {
+        if (card.tags.includes(CardTag.POKEMON_GX) || card.tags.includes(CardTag.POKEMON_EX)) {
+          blockedTargets.push(target);
+        } else {
+          hasRecipient = true;
         }
       });
+      if (energyCount === 0 || !hasRecipient) throw new GameError(GameMessage.CANNOT_USE_POWER);
 
+      // Ref: set-silver-tempest/archeops.ts (Primal Turbo)
       return store.prompt(state, new AttachEnergyPrompt(
-        player.id,
-        GameMessage.ATTACH_ENERGY_CARDS,
-        player.discard,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH, SlotType.ACTIVE],
+        player.id, GameMessage.ATTACH_ENERGY_CARDS, player.discard,
+        PlayerType.BOTTOM_PLAYER, [SlotType.BENCH, SlotType.ACTIVE],
         { superType: SuperType.ENERGY },
-        { allowCancel: false, min: 0, max: 5, blockedTo: blocked2 },
+        { allowCancel: false, min: energyCount, max: energyCount, blockedTo: blockedTargets },
       ), transfers => {
-        transfers = transfers || [];
-        // cancelled by user
-        if (transfers.length === 0) {
-          SHUFFLE_DECK(store, state, player);
-          player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-            if (cardList.getPokemonCard() === this) {
-              cardList.damage += 999;
-              return state;
-            }
-          });
-        }
-        for (const transfer of transfers) {
-          const target = StateUtils.getTarget(state, player, transfer.to);
-          player.discard.moveCardTo(transfer.card, target);
-        }
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (cardList.getPokemonCard() === this) {
-            cardList.damage += 999;
-          }
+        ATTACH_ENERGY_TRANSFERS(store, state, player, transfers ?? [], 'discard', {
+          sourceCard: this,
+          onAttached: attached => {
+            if (attached.length > 0) store.reduceEffect(state, new SelfKnockOutEffect(player, this));
+          },
         });
       });
     }
@@ -117,55 +99,25 @@ export class ElectrodeGX extends PokemonCard {
 
       BLOCK_IF_GX_ATTACK_USED(player);
 
-      // return store.prompt(state, new ChoosePokemonPrompt(
-      //   player.id,
-      //   GameMessage.CHOOSE_ENERGIES_TO_DISCARD,
-      //   PlayerType.BOTTOM_PLAYER,
-      //   [SlotType.ACTIVE, SlotType.BENCH],
-      //   { min: 1, max: 6, allowCancel: true }
-      // ), targets => {
-      //   targets.forEach(target => {
-
-      let totalEnergy = 0;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
-        const energyCount = cardList.cards.filter(card =>
-          card.superType === SuperType.ENERGY
-        ).length;
-        totalEnergy += energyCount;
-      });
-
-      console.log('Total Energy: ' + totalEnergy);
+      player.usedGX = true;
+      const energyCount = player.getPokemonInPlay().reduce((count, slot) =>
+        count + slot.cards.filter(card => card instanceof EnergyCard).length, 0);
+      if (energyCount === 0) return state;
 
       return store.prompt(state, new DiscardEnergyPrompt(
-        player.id,
-        GameMessage.CHOOSE_ENERGIES_TO_DISCARD,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.ACTIVE, SlotType.BENCH],// Card source is target Pokemon
-        { superType: SuperType.ENERGY },
-        { min: 1, max: totalEnergy, allowCancel: false }
+        player.id, GameMessage.CHOOSE_ENERGIES_TO_DISCARD, PlayerType.BOTTOM_PLAYER,
+        [SlotType.ACTIVE, SlotType.BENCH], { superType: SuperType.ENERGY },
+        { min: 0, max: energyCount, allowCancel: false },
       ), transfers => {
-
-        if (transfers === null) {
-          return;
-        }
-
-        for (const transfer of transfers) {
-          let totalDiscarded = 0;
-
+        for (const transfer of transfers ?? []) {
           const source = StateUtils.getTarget(state, player, transfer.from);
-          const target = player.discard;
-          source.moveCardTo(transfer.card, target);
-
-          totalDiscarded = transfers.length;
-
-          effect.damage += totalDiscarded * 50;
-          player.usedGX = true;
-
+          if (transfer.from.player !== PlayerType.BOTTOM_PLAYER || !source.cards.includes(transfer.card)) continue;
+          MOVE_CARDS(store, state, source, player.discard, { cards: [transfer.card], sourceCard: this, sourceEffect: effect });
+          if (!source.cards.includes(transfer.card)) effect.damage += 50;
         }
-        console.log('Total Damage: ' + effect.damage);
-        return state;
       });
     }
+
     return state;
   }
 }

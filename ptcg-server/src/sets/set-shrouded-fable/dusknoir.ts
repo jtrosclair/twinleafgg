@@ -1,10 +1,10 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { StoreLike, State, PowerType, ChoosePokemonPrompt, GameMessage, PlayerType, SlotType } from '../../game';
+import { StoreLike, State, PowerType, ChoosePokemonPrompt, GameError, GameMessage, PlayerType, SlotType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
+import { PlaceDamageCountersEffect, SelfKnockOutEffect } from '../../game/store/effects/game-effects';
 import { MarkerConstants } from '../../game/store/markers/marker-constants';
-import { WAS_ATTACK_USED, BLOCK_RETREAT, BLOCK_RETREAT_IF_MARKER, REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED, BLOCK_RETREAT, BLOCK_RETREAT_IF_MARKER, REMOVE_MARKER_FROM_ACTIVE_AT_END_OF_TURN, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Dusknoir extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -20,7 +20,7 @@ export class Dusknoir extends PokemonCard {
     useWhenInPlay: true,
     powerType: PowerType.ABILITY,
     knocksOutSelf: true,
-    text: 'Once during your turn, you may put 13 damage counters on 1 of your opponent\'s Pokémon. If you placed any damage counters in this way, this Pokémon is Knocked Out.'
+    text: 'Once during your turn, you may put 13 damage counters on 1 of your opponent\'s Pokémon. If you use this Ability, this Pokémon is Knocked Out.'
   }];
 
   public attacks = [{
@@ -41,6 +41,7 @@ export class Dusknoir extends PokemonCard {
     // Cursed Blast
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
 
       return store.prompt(state, new ChoosePokemonPrompt(
         player.id,
@@ -49,18 +50,10 @@ export class Dusknoir extends PokemonCard {
         [SlotType.BENCH, SlotType.ACTIVE],
         { min: 1, max: 1, allowCancel: false },
       ), selected => {
-        const targets = selected || [];
-
-        if (targets.length > 0) {
-          const placeCountersEffect = new PlaceDamageCountersEffect(player, targets[0], 130, this);
-          state = store.reduceEffect(state, placeCountersEffect);
-        }
-
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (cardList.getPokemonCard() === this) {
-            cardList.damage += 999;
-          }
-        });
+        const target = selected?.[0];
+        if (!target) return;
+        state = store.reduceEffect(state, new PlaceDamageCountersEffect(player, target, 130, this));
+        store.reduceEffect(state, new SelfKnockOutEffect(player, this));
       });
     }
     // Shadow Bind

@@ -7,6 +7,7 @@ import { ResolvePromptAction } from '../../game/store/actions/resolve-prompt-act
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
 import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
+import { checkState } from '../../game/store/effect-reducers/check-effect';
 import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
 import { State, GamePhase } from '../../game/store/state/state';
 import { Player } from '../../game/store/state/player';
@@ -47,10 +48,17 @@ describe('Raticate Pickup timing and provenance',()=>{
 });
 
 describe('Magneton Call Signal search sequencing',()=>{
+ function expectKnockOutAfterShuffle(x: ReturnType<typeof setup>) {
+   shuffle(x);
+   expect(x.p.active.damage).toBe(0);
+   checkState(x.store, x.state);
+   expect(x.p.discard.cards).toContain(x.magneton);
+   expect(x.p.active.getPokemonCard()).toBeUndefined();
+ }
  function setup(){const x=base(),magneton=new Magneton(),supporter=new TeamRocketsProton(),other=new NestBall(),energy=new WaterEnergy();ids(magneton,supporter,other,energy);x.p.active.cards=[magneton];x.p.deck.cards=[supporter,other,energy];const power=new PowerEffect(x.p,magneton.powers[0],magneton);x.store.reduceEffect(x.state,power);return {...x,magneton,supporter,other,energy,power};}
- it('reveals selected Supporters, moves them, shuffles, then knocks itself out',()=>{const x=setup(),q=pending(x,ChooseCardsPrompt)!;expect(q.validate([x.supporter])).toBe(true);expect(q.validate([x.other])).toBe(false);send(x,q,[x.supporter]);expect(x.p.deck.cards).toContain(x.supporter);expect(x.p.active.damage).toBe(0);const show=pending(x,ShowCardsPrompt)!;send(x,show,true);expect(x.p.hand.cards).toContain(x.supporter);expect(x.p.active.damage).toBe(0);expect(x.moves.find(m=>m.source===x.p.deck)!.sourceEffect).toBe(x.magneton.powers[0]);shuffle(x);expect(x.p.active.damage).toBe(999);});
- it('rejects cancellation without shuffling or knocking out and allows an empty search',()=>{const x=setup(),q=pending(x,ChooseCardsPrompt)!;expect(q.options.allowCancel).toBe(false);expect(q.validate(null)).toBe(false);expect(q.validate([])).toBe(true);expect(()=>send(x,q,null)).toThrow();expect(q.result).toBeUndefined();expect(pending(x,ShuffleDeckPrompt)).toBeUndefined();expect(x.p.active.damage).toBe(0);send(x,q,[]);shuffle(x);expect(x.p.active.damage).toBe(999);});
- it('shuffles and knocks itself out after searching for zero cards',()=>{const x=setup();send(x,pending(x,ChooseCardsPrompt)!,[]);expect(pending(x,ShowCardsPrompt)).toBeUndefined();expect(x.p.active.damage).toBe(0);shuffle(x);expect(x.p.active.damage).toBe(999);});
+ it('reveals selected Supporters, moves them, shuffles, then knocks itself out',()=>{const x=setup(),q=pending(x,ChooseCardsPrompt)!;expect(q.validate([x.supporter])).toBe(true);expect(q.validate([x.other])).toBe(false);send(x,q,[x.supporter]);expect(x.p.deck.cards).toContain(x.supporter);expect(x.p.active.damage).toBe(0);const show=pending(x,ShowCardsPrompt)!;send(x,show,true);expect(x.p.hand.cards).toContain(x.supporter);expect(x.p.active.damage).toBe(0);expect(x.moves.find(m=>m.source===x.p.deck)!.sourceEffect).toBe(x.magneton.powers[0]);expectKnockOutAfterShuffle(x);});
+ it('rejects cancellation without shuffling or knocking out and allows an empty search',()=>{const x=setup(),q=pending(x,ChooseCardsPrompt)!;expect(q.options.allowCancel).toBe(false);expect(q.validate(null)).toBe(false);expect(q.validate([])).toBe(true);expect(()=>send(x,q,null)).toThrow();expect(q.result).toBeUndefined();expect(pending(x,ShuffleDeckPrompt)).toBeUndefined();expect(x.p.active.damage).toBe(0);send(x,q,[]);expectKnockOutAfterShuffle(x);});
+ it('shuffles and knocks itself out after searching for zero cards',()=>{const x=setup();send(x,pending(x,ChooseCardsPrompt)!,[]);expect(pending(x,ShowCardsPrompt)).toBeUndefined();expect(x.p.active.damage).toBe(0);expectKnockOutAfterShuffle(x);});
  it('rejects invalid or duplicate selections and permits retry',()=>{const x=setup(),q=pending(x,ChooseCardsPrompt)!;for(const bad of [[x.other],[x.supporter,x.supporter],[new TeamRocketsProton()]]){expect(()=>send(x,q,bad)).toThrow();expect(q.result).toBeUndefined()}send(x,q,[x.supporter]);expect(pending(x,ShowCardsPrompt)).toBeDefined();});
 });
 

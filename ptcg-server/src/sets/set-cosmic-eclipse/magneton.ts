@@ -1,11 +1,12 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, TrainerType } from '../../game/store/card/card-types';
 import {
-  StoreLike, State, GameMessage, PowerType, ChooseCardsPrompt, GameLog, PlayerType, StateUtils,
+  StoreLike, State, GameMessage, PowerType, ChooseCardsPrompt, GameLog, StateUtils,
   GameError
 } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ABILITY_USED, MOVE_CARDS, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { SelfKnockOutEffect } from '../../game/store/effects/game-effects';
+import { ABILITY_USED, IS_ABILITY_BLOCKED, MOVE_CARDS, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 import { Card, TrainerCard } from '../../game';
 import { ShowCardsPrompt } from '../../game/store/prompts/show-cards-prompt';
 import { ShuffleDeckPrompt } from '../../game/store/prompts/shuffle-prompt';
@@ -44,6 +45,7 @@ export class Magneton extends PokemonCard {
 
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
       const opponent = StateUtils.getOpponent(state, player);
 
       if (player.deck.cards.length === 0) {
@@ -56,9 +58,7 @@ export class Magneton extends PokemonCard {
       const isSupporter = (card: Card) => card instanceof TrainerCard && card.trainerType === TrainerType.SUPPORTER;
       const finishSearch = () => store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
         player.deck.applyOrder(order);
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (cardList.getPokemonCard() === this) cardList.damage += 999;
-        });
+        store.reduceEffect(state, new SelfKnockOutEffect(player, this));
       });
       return store.prompt(state, new ChooseCardsPrompt(
         player, GameMessage.CHOOSE_CARD_TO_HAND, source,

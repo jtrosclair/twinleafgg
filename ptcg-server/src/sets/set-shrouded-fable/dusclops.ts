@@ -1,9 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { StoreLike, State, PowerType, ChoosePokemonPrompt, GameMessage, PlayerType, SlotType } from '../../game';
+import { StoreLike, State, PowerType, ChoosePokemonPrompt, GameError, GameMessage, PlayerType, SlotType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
-import { WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { PlaceDamageCountersEffect, SelfKnockOutEffect } from '../../game/store/effects/game-effects';
+import { IS_ABILITY_BLOCKED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Dusclops extends PokemonCard {
 
@@ -28,7 +28,7 @@ export class Dusclops extends PokemonCard {
     useWhenInPlay: true,
     powerType: PowerType.ABILITY,
     knocksOutSelf: true,
-    text: 'Once during your turn, you may put 5 damage counters on 1 of your opponent\'s Pokémon. If you placed any damage counters in this way, this Pokémon is Knocked Out.'
+    text: 'Once during your turn, you may put 5 damage counters on 1 of your opponent\'s Pokémon. If you use this Ability, this Pokémon is Knocked Out.'
   }];
 
   public attacks = [
@@ -53,6 +53,7 @@ export class Dusclops extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
+      if (IS_ABILITY_BLOCKED(store, state, player, this)) throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
 
       return store.prompt(state, new ChoosePokemonPrompt(
         player.id,
@@ -61,18 +62,10 @@ export class Dusclops extends PokemonCard {
         [SlotType.BENCH, SlotType.ACTIVE],
         { min: 1, max: 1, allowCancel: false },
       ), selected => {
-        const targets = selected || [];
-
-        if (targets.length > 0) {
-          const placeCountersEffect = new PlaceDamageCountersEffect(player, targets[0], 50, this);
-          state = store.reduceEffect(state, placeCountersEffect);
-        }
-
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-          if (cardList.getPokemonCard() === this) {
-            cardList.damage += 999;
-          }
-        });
+        const target = selected?.[0];
+        if (!target) return;
+        state = store.reduceEffect(state, new PlaceDamageCountersEffect(player, target, 50, this));
+        store.reduceEffect(state, new SelfKnockOutEffect(player, this));
       });
     }
     return state;
