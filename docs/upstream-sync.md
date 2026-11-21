@@ -2638,3 +2638,48 @@ Review direct and copied attack costs against the actual Energy paid.
 [Mega Hawlucha ex rulings](https://professorprogram.pokemon.com/news/11464646)
 [EX Team Rocket Returns official card text](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/EX_Team_Rocket_Returns.pdf)
 [Altered Creation-GX print](https://www.pokemon-card.com/card-search/details.php/card/37382/regu/XY)
+
+## Gameplay re-audit, batch 26
+
+Tenacious Body, Durable Body and both registered Buffer Poké-Bodies
+resolve a coin flip once final attack damage would Knock Out the holder.
+Heads leaves 10 HP. Tenacious Body still works against Shred. The Buffer
+errata restricts it to opposing attack damage. Skiploom's Miracle Powder
+deals the printed 10 damage before the flip. Hoppip's version has no damage.
+Time Crystal suppresses applicable Poké-Bodies on either side of the board.
+Toxicroak G's visible Pokémon SP tag preserves its printed exception.
+[Mega Hawlucha ex rulings](https://professorprogram.pokemon.com/news/11464646)
+[Annihilape print](https://www.pokemon-card.com/card-search/details.php/card/50258/regu/all)
+[Hoppip and Skiploom prints](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/EX_Team_Rocket_Returns.pdf)
+[Archived April 2005 Buffer errata](https://doczz.net/doc/193314/rulings-compendium-lvx---pokemon-rulings-compendium)
+[Dialga G LV.X and Toxicroak G prints](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Platinum.pdf)
+
+Altered Creation-GX now requires a distinct Water unit beyond the
+effective attack cost. One Aurora Energy or one Blend Energy cannot
+supply both Metal and the extra Water. Double Dragon Energy can supply
+both. Cost increases, type changes and the cost of a copying attack are
+included. Perfection checks the selected attack's cost. Nine-Tailed
+Shapeshifter and Trace use the cost paid by the copying attack.
+[Altered Creation-GX print](https://www.pokemon-card.com/card-search/details.php/card/37382/regu/XY)
+[Official Nine-Tailed Shapeshifter ruling](https://www.pokemon-card.com/rules/faq/search.php?page=3&regulation_faq_main=&sc_group_id=655)
+
+All 30 focused cases pass, with 17 failures on the preceding engine.
+The full engine passed 7,557 tests in 271 specs. The changes combined
+with pending work passed 349 focused and simulator checks. All 559
+comparable saved states and 3,633 sampled opening actions match exactly.
+Seven recorded solutions reached wins. The attested production package
+met its mobile size budget and passed all ten mouse and touch checks.
+The browser engine verified survival at 10 HP on all four cards and the
+two Ninetales V Energy cases from the published ruling.
+
+Seven further red cases are reproduced. Critical Cut grants protection
+when Guts saves its target. Sky Hunting fails to switch Staraptor after
+lethal damage. Grandiose Fangs fails to grant Sandile's next-turn bonus.
+Briar can award Prizes on a later turn and after Technical Machine:
+Devolution. Anthea & Concordia can also award Prizes after Devolution.
+Legendary Summit can zero the base Prize too early, preventing a legal
+Glutton-GX bonus. These cases belong to the ongoing damage Knock Out
+review. Runtime inventory also found 73 registered printings whose legacy
+`_tags` includes Pokémon SP while the public `tags` field omits it.
+Other attack bonuses requiring extra Energy still need individual
+verification.
