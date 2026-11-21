@@ -3,7 +3,7 @@ import { PowerType } from '../../game/store/card/pokemon-types';
 import { GameError, GameMessage, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { DealDamageEffect } from '../../game/store/effects/attack-effects';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+import { AfterEvolveEffect, MovedFromActiveToBenchEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import {
   WAS_ATTACK_USED,
@@ -15,7 +15,8 @@ import {
   REMOVE_MARKER_AT_END_OF_TURN,
   REPLACE_MARKER_AT_END_OF_TURN,
 } from '../../game/store/prefabs/prefabs';
-import { DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON } from '../../game/store/prefabs/attack-effects';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { DISCARD_ENERGY_FROM_ABILITY } from '../../game/store/prefabs/effect-of-ability-prefabs';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 
 export class Rampardosex extends PokemonCard {
@@ -63,36 +64,39 @@ export class Rampardosex extends PokemonCard {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
       USE_ABILITY_ONCE_PER_TURN(player, this.DESTRUCTIVE_HEADBUTT_MARKER, this);
-      COIN_FLIP_PROMPT(store, state, player, result => {
-        if (result && opponent.active.cards.length > 0) {
-          const attackStub = new AttackEffect(player, opponent, this.attacks[0]);
-          DISCARD_AN_ENERGY_FROM_OPPONENTS_ACTIVE_POKEMON(store, state, attackStub);
-        }
-        ABILITY_USED(player, this);
+      ABILITY_USED(player, this);
+      return COIN_FLIP_PROMPT(store, state, player, heads => {
+        if (heads) DISCARD_ENERGY_FROM_ABILITY(store, state, player, this.powers[0], this, opponent.active);
       });
     }
     REMOVE_MARKER_AT_END_OF_TURN(effect, this.DESTRUCTIVE_HEADBUTT_MARKER, this);
 
+    // Ref: set-unbroken-bonds/sandile-2.ts (an Active-only bonus on the next turn).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      effect.player.marker.addMarker(this.RAMPAGING_HAMMER_MARKER, this);
+      const source = effect.source;
+      const attacker = source.getPokemonCard();
+      afterAttackDamage(state, effect, (_store, state) => {
+        if (attacker && source === effect.player.active && source.getPokemonCard() === attacker) {
+          source.activeDamageBonusNextTurn = { amount: 150, pending: true };
+        }
+        return state;
+      });
     }
 
-    // Ref: set-cosmic-eclipse/herdier.ts (Work Up)
-    if (effect instanceof DealDamageEffect && effect.source) {
-      const attacker = effect.player;
-      const opp = StateUtils.getOpponent(state, attacker);
-      if ((attacker.marker.hasMarker(this.RAMPAGING_HAMMER_MARKER, this)
-        || attacker.marker.hasMarker(this.CLEAR_RAMPAGING_HAMMER_MARKER, this))
-        && effect.source.cards.includes(this)
-        && effect.source.getPokemonCard() === this
-        && effect.target === opp.active) {
-        effect.damage += 150;
-      }
+    // Saved boards can still contain a pending or armed player marker.
+    if (effect instanceof DealDamageEffect && effect.damage > 0
+      && !effect.source.activeDamageBonusNextTurn && effect.source.getPokemonCard() === this
+      && effect.target === effect.opponent.active && effect.player.marker.hasMarker(this.CLEAR_RAMPAGING_HAMMER_MARKER, this)) {
+      effect.damage += 150;
     }
-
     if (effect instanceof EndTurnEffect) {
       REMOVE_MARKER_AT_END_OF_TURN(effect, this.CLEAR_RAMPAGING_HAMMER_MARKER, this);
       REPLACE_MARKER_AT_END_OF_TURN(effect, this.RAMPAGING_HAMMER_MARKER, this.CLEAR_RAMPAGING_HAMMER_MARKER, this);
+    }
+    if ((effect instanceof MovedFromActiveToBenchEffect && effect.pokemonCard === this)
+      || (effect instanceof AfterEvolveEffect && effect.previousPokemonCard === this)) {
+      effect.player.marker.removeMarker(this.RAMPAGING_HAMMER_MARKER, this);
+      effect.player.marker.removeMarker(this.CLEAR_RAMPAGING_HAMMER_MARKER, this);
     }
 
     return state;

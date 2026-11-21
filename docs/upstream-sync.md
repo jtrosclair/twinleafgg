@@ -5919,3 +5919,43 @@ All 5,484 opening actions match the preceding engine. The verified production
 simulator package passes the desktop and touch prompt checks and all 211
 client checks. All eight recorded PrizeMap solutions win on both replays,
 including Exact. Change. and Trapped in the Phantom Maze.
+
+## Gameplay re-audit, batch 97
+
+Illumise changes the Weakness multiplier for either Active Pokémon with
+Volbeat in play. The modifier is applied after pre-Weakness damage reductions.
+Multipliers stay at 2× when protection blocks the source, including the
+official Sinistcha case. Another eligible Illumise may still apply.
+[Illumise and Sinistcha ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%A4%E3%83%AB%E3%83%9F%E3%83%BC%E3%82%BC&regulation_faq_main_item1=all)
+
+Yveltal's Life-Locked respects target Ability protection. Attack healing
+and ordinary healing both use the same engine path. Gastrodon's Sticky
+Bind reaches Benched Stage 2 Pokémon on either side only while Gastrodon
+is Benched. Both Damp cards use their real owner for suppression and
+check protection on the Pokémon with a self-Knock-Out Ability. The
+availability query and activation checks have the same scope.
+[Yveltal print](https://asia.pokemon-card.com/my/card-search/detail/26009/)
+[Gastrodon print](https://www.pokemon-card.com/card-search/details.php/card/46406)
+[Psyduck print](https://asia.pokemon-card.com/sg/card-search/detail/24807/)
+[Golduck print](https://asia.pokemon-card.com/my/card-search/detail/21806/)
+[Damp and Cursed Blast ruling](https://www.pokemon-card.com/rules/faq/search.php?sc_group_id=917)
+
+Destructive Headbutt discards with Ability provenance. Rampaging Hammer arms
+the Active-only bonus after the damage step, for the next own turn. The slot
+clears the bonus on switching or evolution changes. Saved marker identities
+still load. Both Phantump prints use the completed hand evolution pipeline
+and place their two counters before evolution reactions. They can evolve
+immediately after entering play from their second turn onward.
+[Rampardos ex print](https://www.pokemon-card.com/card-search/details.php/card/50262/regu/all)
+[Rampardos ex rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A9%E3%83%A0%E3%83%91%E3%83%AB%E3%83%89&regulation_faq_main_item1=all)
+[Phantump print](https://asia.pokemon-card.com/sg/card-search/detail/25229/)
+[Phantump rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%9C%E3%82%AF%E3%83%AC%E3%83%BC&regulation_faq_main_item1=all)
+
+All 33 focused cases pass. The preceding engine failed 19 of those cases.
+All 243 focused integration checks with the existing WebView changes and
+all 33 API tests pass. All 559 comparable puzzle boards and 5,484 opening
+actions match the preceding engine.
+All 11,648 engine checks and all 211 client checks pass. The attested
+production package passes desktop and touch prompt checks. Eight recorded
+solutions win on both replays, including Exact. Change. and Trapped in the
+Phantom Maze.

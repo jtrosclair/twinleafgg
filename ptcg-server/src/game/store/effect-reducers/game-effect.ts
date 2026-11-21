@@ -71,7 +71,8 @@ function applyWeaknessAndResistance(
   cardTypes: CardType[],
   additionalCardTypes: CardType[],
   weakness: Weakness[],
-  resistance: Resistance[]
+  resistance: Resistance[],
+  weaknessMultiplier: number,
 ): number {
   let multiply = 1;
   let modifier = 0;
@@ -81,7 +82,7 @@ function applyWeaknessAndResistance(
   for (const item of weakness) {
     if (allTypes.includes(item.type)) {
       if (item.value === undefined) {
-        multiply *= 2;
+        multiply *= weaknessMultiplier;
       } else {
         modifier += item.value;
       }
@@ -491,7 +492,8 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
     const additionalCardTypes = checkPokemonType.cardTypes;
     const weakness = effect.ignoreWeakness ? [] : checkPokemonStats.weakness;
     const resistance = effect.ignoreResistance ? [] : checkPokemonStats.resistance;
-    effect.damage = applyWeaknessAndResistance(effect.damage, cardType, additionalCardTypes, weakness, resistance);
+    effect.damage = applyWeaknessAndResistance(effect.damage, cardType, additionalCardTypes,
+      weakness, resistance, effect.weaknessMultiplier);
     return state;
   }
 
@@ -854,4 +856,3 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
 
   return state;
 }
-

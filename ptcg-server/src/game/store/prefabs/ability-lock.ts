@@ -1,3 +1,5 @@
+import { CAN_APPLY_ABILITY_TO_TARGET } from './effect-of-ability-prefabs';
+import { CheckPokemonPowersEffect } from '../effects/check-effects';
 import { GameError } from '../../game-error';
 import { GameMessage } from '../../game-message';
 import { PowerType } from '../card/pokemon-types';
@@ -28,6 +30,54 @@ export function HANDLE_ABILITY_BLOCK(
   if (isBlocked({ player: effect.player, card: effect.target ?? effect.card })) {
     throw new GameError(options.error);
   }
+}
+
+interface ScopedAbilityLock {
+  sourceOnBench?: boolean;
+  affects: (power: Power, target: PokemonCard, benched: boolean) => boolean;
+}
+
+const probingScopedLocks = new WeakSet<PokemonCard>();
+
+/** Use the same in-play targeting rule for Ability availability and activation. */
+export function applyScopedAbilityLock(
+  store: StoreLike, state: State, effect: Effect, source: PokemonCard, lock: ScopedAbilityLock,
+): void {
+  if (!(effect instanceof PowerEffect) && !(effect instanceof CheckPokemonPowersEffect)) return;
+  if (probingScopedLocks.has(source)) return;
+  if (effect instanceof PowerEffect
+    && (effect.activationSlot === SlotType.HAND || effect.activationSlot === SlotType.DISCARD)) return;
+
+  const card = effect instanceof PowerEffect ? effect.card : effect.target;
+  const slot = StateUtils.findPokemonSlot(state, card);
+  if (slot?.getPokemonCard() !== card) return;
+
+  const targetOwner = StateUtils.findOwner(state, slot);
+  const affected = (power: Power) => power.powerType === PowerType.ABILITY
+    && !power.exemptFromAbilityLock && lock.affects(power, card, targetOwner.active !== slot);
+  const powers = effect instanceof PowerEffect ? [effect.power] : effect.powers;
+  if (!powers.some(affected)) return;
+
+  const owner = state.players.find(player =>
+    StateUtils.isPokemonInPlay(player, source, lock.sourceOnBench ? SlotType.BENCH : undefined));
+  if (!owner) return;
+  const power = source.powers[0];
+  // An affected target may probe its own protection while resolving this check.
+  probingScopedLocks.add(source);
+  try {
+    if (!CAN_APPLY_LOCKER_ABILITY(store, state, owner, source, power)
+      || !CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, power, source, slot)) return;
+  } finally {
+    probingScopedLocks.delete(source);
+  }
+
+  if (effect instanceof PowerEffect) throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
+  effect.powers = effect.powers.filter(power => !affected(power));
+}
+
+/** Damp suppresses only Abilities that explicitly Knock Out their user. */
+export function applyDamp(store: StoreLike, state: State, effect: Effect, source: PokemonCard): void {
+  applyScopedAbilityLock(store, state, effect, source, { affects: power => !!power.knocksOutSelf });
 }
 
 /** Whether this card is currently in either player's play area. */

@@ -1,7 +1,7 @@
-import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, PlayerType } from "../../game";
+import { PokemonCard, Stage, CardType, PowerType, StoreLike, State, StateUtils } from "../../game";
 import { ApplyWeaknessEffect } from "../../game/store/effects/attack-effects";
-import { CheckPokemonTypeEffect, CheckPokemonStatsEffect } from "../../game/store/effects/check-effects";
 import { Effect } from "../../game/store/effects/effect";
+import { CAN_APPLY_ABILITY_TO_TARGET } from '../../game/store/prefabs/effect-of-ability-prefabs';
 import { IS_ABILITY_BLOCKED } from "../../game/store/prefabs/prefabs";
 
 export class Illumise extends PokemonCard {
@@ -32,62 +32,15 @@ export class Illumise extends PokemonCard {
   public fullName: string = 'Illumise 30C';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Supereffective Pheromones
-    if (effect instanceof ApplyWeaknessEffect) {
-      // Only one Illumise applies (no stacking); first qualifying in play order wins
-      let applicator: PokemonCard | undefined;
-
-      for (const player of state.players) {
-        let hasVolbeat = false;
-        const illumises: PokemonCard[] = [];
-
-        player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-          if (cardList.getPokemonCard() !== card) {
-            return;
-          }
-          if (card.name === 'Volbeat') {
-            hasVolbeat = true;
-          }
-          if (card.name === 'Illumise' && card.powers.some(p => p.name === 'Supereffective Pheromones')) {
-            illumises.push(card);
-          }
-        });
-
-        if (!hasVolbeat) {
-          continue;
-        }
-
-        for (const illumise of illumises) {
-          if (!IS_ABILITY_BLOCKED(store, state, player, illumise)) {
-            applicator = illumise;
-            break;
-          }
-        }
-
-        if (applicator) {
-          break;
-        }
-      }
-
-      if (applicator !== this) {
-        return state;
-      }
-
-      const checkPokemonType = new CheckPokemonTypeEffect(effect.source);
-      store.reduceEffect(state, checkPokemonType);
-      const checkPokemonStats = new CheckPokemonStatsEffect(effect.target);
-      store.reduceEffect(state, checkPokemonStats);
-
-      const hasWeakness = !effect.ignoreWeakness && checkPokemonStats.weakness.some(w =>
-        w.value === undefined && checkPokemonType.cardTypes.includes(w.type)
-      );
-
-      if (hasWeakness) {
-        // ×2 from engine × 1.5 here = ×3
-        effect.damage = effect.damage * 1.5;
+    if (effect instanceof ApplyWeaknessEffect && effect.weaknessMultiplier !== 3 && !effect.ignoreWeakness
+      && state.players.some(player => player.active === effect.target)) {
+      const owner = state.players.find(player => StateUtils.isPokemonInPlay(player, this));
+      if (owner && owner.getPokemonInPlay().some(slot => slot.getPokemonCard()?.name === 'Volbeat')
+        && !IS_ABILITY_BLOCKED(store, state, owner, this)
+        && CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, this.powers[0], this, effect.target)) {
+        effect.weaknessMultiplier = 3;
       }
     }
-
     return state;
   }
 }

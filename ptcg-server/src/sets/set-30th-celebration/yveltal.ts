@@ -3,6 +3,7 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { HealEffect } from '../../game/store/effects/game-effects';
+import { CAN_APPLY_ABILITY_TO_TARGET } from '../../game/store/prefabs/effect-of-ability-prefabs';
 import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class Yveltal extends PokemonCard {
@@ -34,25 +35,16 @@ export class Yveltal extends PokemonCard {
   public fullName: string = 'Yveltal 30C';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Life-Locked
-    if (effect instanceof HealEffect) {
-      for (const player of state.players) {
-        if (!StateUtils.isPokemonInPlay(player, this)) {
-          continue;
-        }
-
-        if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-          return state;
-        }
-
-        const opponent = StateUtils.getOpponent(state, player);
-        if (effect.target === opponent.active) {
-          effect.preventDefault = true;
-          return state;
-        }
+    // HealTargetEffect also delegates here through the engine's HealEffect.
+    if (effect instanceof HealEffect && effect.damage > 0) {
+      const targetOwner = StateUtils.findOwner(state, effect.target);
+      const owner = StateUtils.getOpponent(state, targetOwner);
+      if (effect.target === targetOwner.active && StateUtils.isPokemonInPlay(owner, this)
+        && !IS_ABILITY_BLOCKED(store, state, owner, this)
+        && CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, this.powers[0], this, effect.target)) {
+        effect.preventDefault = true;
       }
     }
-
     return state;
   }
 }

@@ -1,8 +1,8 @@
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { StoreLike, State, PowerType, GameError, GameMessage, PlayerType, StateUtils } from '../../game';
-import { PowerEffect } from '../../game/store/effects/game-effects';
+import { StoreLike, State, PowerType } from '../../game';
+import { applyDamp } from '../../game/store/prefabs/ability-lock';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
@@ -36,42 +36,7 @@ export class Golduck extends PokemonCard {
   public fullName: string = 'Golduck MEP';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof PowerEffect && effect.power.powerType === PowerType.ABILITY && effect.power.name !== 'Damp') {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      let isGolduckInPlay = false;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card === this) {
-          isGolduckInPlay = true;
-        }
-      });
-      opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card) => {
-        if (card === this) {
-          isGolduckInPlay = true;
-        }
-      });
-
-      if (!isGolduckInPlay) {
-        return state;
-      }
-
-      if (!effect.power.knocksOutSelf) {
-        return state;
-      }
-
-      // Try reducing ability for each player  
-      try {
-        const powerEffect = new PowerEffect(player, this.powers[0], this);
-        store.reduceEffect(state, powerEffect);
-      } catch {
-        return state;
-      }
-      if (!effect.power.exemptFromAbilityLock) {
-        throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
-      }
-    }
-
+    applyDamp(store, state, effect, this);
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
 

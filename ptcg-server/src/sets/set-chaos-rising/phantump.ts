@@ -1,12 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
-import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
 import { StoreLike, State, StateUtils } from '../../game';
 import { GameError } from '../../game/game-error';
 import { GameMessage } from '../../game/game-message';
 import { Effect } from '../../game/store/effects/effect';
-import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
+import { EvolveEffect, PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { WAS_POWER_USED, IS_ABILITY_BLOCKED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, REMOVE_MARKER_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
 
@@ -54,45 +53,37 @@ export class Phantump extends PokemonCard {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
-      const cardList = StateUtils.findCardList(state, this) as PokemonCardList | undefined;
-      if (!cardList) return state;
-
-      const evolutionInHand = player.hand.cards.filter(c =>
-        c instanceof PokemonCard && c.evolvesFrom === 'Phantump'
-      );
-
-      if (evolutionInHand.length === 0) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
+      const target = StateUtils.findPokemonSlot(state, this);
+      if (target?.getPokemonCard() !== this || target.cannotEvolveNextTurn) {
+        throw new GameError(GameMessage.CANNOT_EVOLVE);
       }
 
-      const blocked: number[] = [];
-      player.hand.cards.forEach((card, index) => {
-        if (!(card instanceof PokemonCard) || card.evolvesFrom !== 'Phantump') {
-          blocked.push(index);
-        }
-      });
+      const isEvolution = (card: unknown): card is PokemonCard =>
+        card instanceof PokemonCard && card.stage === Stage.STAGE_1 && card.evolvesFrom === this.name;
+      if (!player.hand.cards.some(isEvolution)) throw new GameError(GameMessage.CANNOT_USE_POWER);
 
       return store.prompt(state, new ChooseCardsPrompt(
         player,
         GameMessage.CHOOSE_CARD_TO_EVOLVE,
         player.hand,
-        { superType: SuperType.POKEMON },
-        { min: 0, max: 1, allowCancel: true, blocked }
+        { superType: SuperType.POKEMON, stage: Stage.STAGE_1, evolvesFrom: this.name },
+        { min: 0, max: 1, allowCancel: true }
       ), cards => {
-        const selected = cards || [];
-        if (selected.length === 0) return state;
+        const evolution = cards?.[0];
+        if (!isEvolution(evolution)) return state;
 
         USE_ABILITY_ONCE_PER_TURN(player, this.ENVIOUS_EVOLUTION_MARKER, this);
         ABILITY_USED(player, this);
 
-        const evolutionCard = selected[0];
-        player.hand.moveCardTo(evolutionCard, cardList);
-        cardList.clearEffects();
-        cardList.pokemonPlayedTurn = state.turn;
-
-        const placeDamage = new PlaceDamageCountersEffect(player, cardList, 20, this);
-        store.reduceEffect(state, placeDamage);
-
+        // Ref: set-darkness-ablaze/pokemon-breeders-nurturing.ts (complete an effect
+        // before dispatching the evolution reactions).
+        const evolve = new EvolveEffect(player, target, evolution, player.hand, true);
+        evolve.completionBatch = [];
+        state = store.reduceEffect(state, evolve);
+        if (target.getPokemonCard() === evolution) {
+          state = store.reduceEffect(state, new PlaceDamageCountersEffect(player, target, 20, this, this.powers[0]));
+        }
+        for (const completed of evolve.completionBatch) state = store.reduceEffect(state, completed);
         return state;
       });
     }

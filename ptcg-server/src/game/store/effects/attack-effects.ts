@@ -56,6 +56,7 @@ export class ApplyWeaknessEffect extends AbstractAttackEffect implements Effect 
   public damage: number;
   public ignoreResistance = false;
   public ignoreWeakness = false;
+  public weaknessMultiplier = 2;
   public attackDamageReductionBeforeWeakness = 0;
 
   constructor(base: AttackEffect, damage: number) {

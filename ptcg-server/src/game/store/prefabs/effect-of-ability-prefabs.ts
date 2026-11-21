@@ -84,17 +84,27 @@ export function DISCARD_ATTACKER_ENERGY_FROM_ABILITY(
     || effect.target.getPokemonCard() !== card) return state;
 
   const owner = StateUtils.findOwner(state, effect.target);
-  const attacker = effect.source;
-  const power = card.powers[0];
-  if (!attacker.cards.some(attached => attached.superType === SuperType.ENERGY)
-    || IS_ABILITY_BLOCKED(store, state, owner, card)
-    || !CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, power, card, attacker)) return state;
+  if (IS_ABILITY_BLOCKED(store, state, owner, card)) return state;
+  return DISCARD_ENERGY_FROM_ABILITY(store, state, owner, card.powers[0], card, effect.source);
+}
 
-  const discard = StateUtils.findOwner(state, attacker).discard;
+/** Let the Ability owner discard one Energy from a Pokémon it can affect. */
+export function DISCARD_ENERGY_FROM_ABILITY(
+  store: StoreLike,
+  state: State,
+  owner: Player,
+  power: Power,
+  card: PokemonCard,
+  target: PokemonCardList,
+): State {
+  if (!target.cards.some(attached => attached.superType === SuperType.ENERGY)
+    || !CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, power, card, target)) return state;
+
+  const discard = StateUtils.findOwner(state, target).discard;
   return store.prompt(state, new ChooseCardsPrompt(
-    owner, GameMessage.CHOOSE_CARD_TO_DISCARD, attacker,
+    owner, GameMessage.CHOOSE_CARD_TO_DISCARD, target,
     { superType: SuperType.ENERGY }, { min: 1, max: 1, allowCancel: false },
-  ), cards => MOVE_CARDS(store, state, attacker, discard, { cards, sourceCard: card, sourceEffect: power }));
+  ), cards => MOVE_CARDS(store, state, target, discard, { cards, sourceCard: card, sourceEffect: power }));
 }
 
 export function APPLY_SPECIAL_CONDITIONS_FROM_ABILITY(
