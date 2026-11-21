@@ -3,8 +3,6 @@ import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { FLIP_A_COIN_UNTIL_YOU_GET_TAILS_DO_X_MORE_DAMAGE_PER_HEADS } from '../../game/store/prefabs/attack-effects';
 
@@ -32,11 +30,6 @@ export class MKangaskhanEX extends PokemonCard {
   public setNumber: string = '79';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
-    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this
-      && state.players[state.activePlayer] === effect.player) {
-      return store.reduceEffect(state, new EndTurnEffect(effect.player));
-    }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
       return FLIP_A_COIN_UNTIL_YOU_GET_TAILS_DO_X_MORE_DAMAGE_PER_HEADS(store, state, effect, 30);

@@ -4,7 +4,7 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State } from '../../game';
+import { PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
@@ -17,6 +17,12 @@ export class MRayquazaEx2 extends PokemonCard {
   public weakness = [{ type: L }];
   public resistance = [{ type: F, value: -20 }];
   public retreat = [C];
+
+  public powers = [{
+    name: 'Δ Evolution',
+    powerType: PowerType.ANCIENT_TRAIT,
+    text: 'You may play this card from your hand to evolve a Pokémon during your first turn or the turn you play that Pokémon.',
+  }];
 
   public attacks = [
     {

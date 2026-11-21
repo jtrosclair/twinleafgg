@@ -6,8 +6,6 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { WAS_ATTACK_USED, DISCARD_A_STADIUM_CARD_IN_PLAY } from '../../game/store/prefabs/prefabs';
 
 export class PrimalGroudonEx extends PokemonCard {
@@ -49,19 +47,6 @@ export class PrimalGroudonEx extends PokemonCard {
   public fullName: string = 'Primal Groudon-EX AOR';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Primal Reversion Rule + Theta Max
-    // Ref: set-primal-clash/primal-groudon-ex.ts (Primal Reversion Rule)
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
-      // Theta Max: heal all damage when evolved
-      effect.target.damage = 0;
-
-      if (effect.target.tools.length > 0 && effect.target.tools[0].name === 'Groudon Spirit Link') {
-        return state;
-      }
-
-      const endTurnEffect = new EndTurnEffect(effect.player);
-      store.reduceEffect(state, endTurnEffect);
-    }
 
     // Attack 1: Gaia Volcano
     // Ref: set-primal-clash/primal-groudon-ex.ts (Gaia Volcano)

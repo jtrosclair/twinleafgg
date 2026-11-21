@@ -91,15 +91,6 @@ export class MGengarEx extends PokemonCard {
   public setNumber: string = '35';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // love me some funny evolution crap
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this){
-      if (effect.target.tools.length > 0 && effect.target.tools[0].name === 'Gengar Spirit Link'){
-        return state;
-      }
-
-      const endTurnEffect = new EndTurnEffect(effect.player);
-      store.reduceEffect(state, endTurnEffect);
-    }
 
     // Phantom Gate
     if (WAS_ATTACK_USED(effect, 0, this)){

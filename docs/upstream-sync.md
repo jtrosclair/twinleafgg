@@ -3573,3 +3573,50 @@ passed 32 tests. The worktree with the existing local edits passed 582
 targeted cases. The 2.46 MiB package
 passed attestation, 10 packaged board checks, and 209 Angular checks.
 Upstream main remains at `d3d7a0031`.
+
+## Gameplay re-audit, batch 47
+
+All 77 registered names for 75 physical XY Mega and Primal prints now use
+one rule after a successful evolution. The current action and its prompts
+finish before the turn ends. A working matching Spirit Link on the evolved
+Pokémon lets the turn continue. An evolution during an attack uses that
+attack's turn-end sequence. Modern Mega ex keeps its normal evolution rules.
+[XY rulebook](https://assets.pokemon.com/assets/cms2/pdf/trading-card-game/rulebook/xy8-rulebook-en.pdf)
+
+The printed Δ Evolution cards can evolve on the first turn or on the turn
+the previous Pokémon entered play. This permission applies only to that
+card and target. The three θ Max prints heal after they enter play. Lysandre
+Labs and Jamming Tower suppress attached Tools, including Spirit Links.
+New Moon protects Tools on its owner's Pokémon from those Stadiums.
+[Official Tool suppression fix](https://community.pokemon.com/en-us/discussion/22464/version-1-35-0-patch-notes)
+
+Pokémon Breeder's Nurturing can choose the Active Pokémon and finish both
+evolutions before resolving their reactions. It rejects first-turn use even
+when a separate effect allows early evolution. The same deck card cannot
+be selected twice. BREAK and VMAX evolutions are eligible. The Japanese
+FAQ confirms that two Mega Evolutions finish together before the turn ends.
+[Pokémon Breeder's Nurturing](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/swsh3/188)
+[Official rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%9D%E3%82%B1%E3%83%A2%E3%83%B3%E3%83%96%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%81%AE%E8%82%B2%E6%88%90&regulation_faq_main_item1=all)
+
+The next Ancient Trait is α Growth. The Primal Clash print data identifies
+Swampert 36, Whiscash 41, Gorebyss 52, Primal Kyogre-EX 55 and 149, and Kingdra
+108. The official print and ruling specify that the two hand attachments
+happen together on the same Pokémon. Effects that respond per Energy card
+need their own verification when adding the trait.
+[Official Primal Kyogre-EX print](https://www.pokemon-card.com/card-search/details.php/card/30764)
+[Official Healing Scarf ruling](https://www.pokemon-card.com/rules/faq/details.php?id=9819)
+
+The 167 focused cases pass. The previous engine fails 86 of them. All 559
+comparable saved states and 3,875 sampled opening actions matched, including
+242 evolutions. Seven recorded solutions still won. The engine passed 10,467
+tests. The worktree with the existing local edits passed 749 targeted cases.
+The API passed 32 tests. The 2.46 MiB package passed attestation, 10 packaged
+board scenarios and 209 Angular checks.
+
+At the original import checkpoint `7a6f5e50e`, eight of the 35 `fix` commits
+were fully deferred and ten were partial. At batch 47, the ledger covers 38
+`fix` commits. Thirteen are applied, four were already present, eleven are
+inapplicable to this simulator and ten are partial. The ledger also still
+marks twelve other commits deferred. A commit may contain several gameplay
+fixes or include code for retired features. Team Rocket's Ampharos was in a
+separately titled Ability-effects refactor and is outside the `fix` count.

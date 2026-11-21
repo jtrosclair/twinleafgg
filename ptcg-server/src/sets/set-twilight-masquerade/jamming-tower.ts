@@ -8,7 +8,8 @@ import { TrainerType } from '../../game/store/card/card-types';
 import { StateUtils } from '../../game/store/state-utils';
 
 import { UseStadiumEffect } from '../../game/store/effects/game-effects';
-import {ToolEffect} from '../../game/store/effects/play-card-effects';
+import { ToolEffect } from '../../game/store/effects/play-card-effects';
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 
 export class JammingTower extends TrainerCard {
 
@@ -35,8 +36,11 @@ export class JammingTower extends TrainerCard {
       throw new GameError(GameMessage.CANNOT_USE_STADIUM);
     }
 
-    if (effect instanceof ToolEffect && StateUtils.getStadiumCard(state) === this){
-      throw new GameError(GameMessage.CANNOT_USE_POWER);
+    if (effect instanceof ToolEffect && StateUtils.getStadiumCard(state) === this) {
+      const target = StateUtils.findPokemonSlot(state, effect.card);
+      if (target && !IS_STADIUM_EFFECT_BLOCKED(store, state, StateUtils.findOwner(state, target), target, this)) {
+        throw new GameError(GameMessage.CANNOT_USE_POWER);
+      }
     }
 
     return state;

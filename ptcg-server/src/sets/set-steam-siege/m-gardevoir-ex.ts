@@ -6,8 +6,6 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, PlayerType, ChoosePokemonPrompt, GameMessage, SlotType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 import { MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class MGardevoirEx extends PokemonCard {
@@ -37,16 +35,6 @@ export class MGardevoirEx extends PokemonCard {
   public fullName: string = 'M Gardevoir-EX STS';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Mega Evolution Rule: end turn when evolving (unless Spirit Link attached)
-    // Ref: set-steam-siege/mega-gardevoir-ex.ts (Mega Evolution Rule)
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
-      if (effect.target.tools.length > 0 && effect.target.tools[0].name === 'Gardevoir Spirit Link') {
-        return state;
-      }
-
-      const endTurnEffect = new EndTurnEffect(effect.player);
-      store.reduceEffect(state, endTurnEffect);
-    }
 
     // Attack 1: Despair Ray
     // Ref: set-steam-siege/mega-gardevoir-ex.ts (Despair Ray)

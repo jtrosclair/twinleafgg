@@ -40,15 +40,6 @@ export class MAudinoEx extends PokemonCard {
   public setNumber: string = '85';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // screw the rules
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this){
-      if (effect.target.tools.length > 0 && effect.target.tools[0].name === 'Audino Spirit Link'){
-        return state;
-      }
-
-      const endTurnEffect = new EndTurnEffect(effect.player);
-      store.reduceEffect(state, endTurnEffect);
-    }
 
     // Magical Symphony
     if (WAS_ATTACK_USED(effect, 0, this)){

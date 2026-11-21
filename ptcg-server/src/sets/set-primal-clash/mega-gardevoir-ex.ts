@@ -41,15 +41,6 @@ export class MGardevoirEx extends PokemonCard {
   public setNumber: string = '106';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // screw the rules
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this){
-      if (effect.target.tools.length > 0 && effect.target.tools[0].name === 'Gardevoir Spirit Link'){
-        return state;
-      }
-
-      const endTurnEffect = new EndTurnEffect(effect.player);
-      store.reduceEffect(state, endTurnEffect);
-    }
 
     // Brilliant Arrow
     if (WAS_ATTACK_USED(effect, 0, this)){

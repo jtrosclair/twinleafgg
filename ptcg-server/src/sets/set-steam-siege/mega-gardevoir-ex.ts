@@ -3,8 +3,6 @@ import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, PowerType, PlayerType, ChoosePokemonPrompt, GameMessage, SlotType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
 
 export class MGardevoirEx extends PokemonCard {
   public tags = [CardTag.POKEMON_EX, CardTag.MEGA];
@@ -42,15 +40,6 @@ export class MGardevoirEx extends PokemonCard {
   public setNumber: string = '79';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // screw the rules
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
-      if (effect.target.tools.length > 0 && effect.target.tools[0].name === 'Gardevoir Spirit Link') {
-        return state;
-      }
-
-      const endTurnEffect = new EndTurnEffect(effect.player);
-      store.reduceEffect(state, endTurnEffect);
-    }
 
     // Despair Ray
     if (WAS_ATTACK_USED(effect, 0, this)) {

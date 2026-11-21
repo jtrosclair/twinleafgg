@@ -1,3 +1,4 @@
+import { PowerType } from '../../game/store/card/pokemon-types';
 import { EnergyRecycler } from '../set-battle-styles/energy-recycler';
 import { LuckyHelmet } from '../set-twilight-masquerade/lucky-helmet';
 import { Lysandre } from '../set-flashfire/lysandre';
@@ -141,12 +142,22 @@ export class StevenAOR extends Steven {
 }
 
 export class PrimalKyogreExAOR extends PrimalKyogreEx {
+  public powers = [{
+    name: 'θ Max',
+    powerType: PowerType.ANCIENT_TRAIT,
+    text: 'When 1 of your Pokémon becomes this Pokémon, heal all damage from it.',
+  }];
   public set: string = 'AOR';
   public setNumber: string = '96';
   public fullName: string = 'Primal Kyogre-EX AOR';
 }
 
 export class MRayquazaExAOR extends MRayquazaEx2 {
+  public powers = [{
+    name: 'θ Max',
+    powerType: PowerType.ANCIENT_TRAIT,
+    text: 'When 1 of your Pokémon becomes this Pokémon, heal all damage from it.',
+  }];
   public set: string = 'AOR';
   public setNumber: string = '98';
   public fullName: string = 'M Rayquaza-EX AOR';

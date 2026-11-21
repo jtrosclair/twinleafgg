@@ -7,8 +7,6 @@ import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 
 export class MRayquazaEx extends PokemonCard {
   public tags = [CardTag.MEGA, CardTag.POKEMON_EX];
@@ -50,22 +48,6 @@ export class MRayquazaEx extends PokemonCard {
   public fullName: string = 'M Rayquaza EX CEL';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Δ Evolution
-    // Ref: set-roaring-skies/mega-rayquaza-ex.ts (Δ Evolution - bypass first-turn/same-turn evolution restriction)
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
-      // Allow evolution on first turn or the turn the base Pokemon was played
-      effect.player.canEvolve = true;
-      effect.target.pokemonPlayedTurn = state.turn - 1;
-    }
-
-    // Mega Evolution Rule: end the turn when this is played (unless it has Rayquaza Spirit Link)
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
-      if (effect.target.tools.length > 0 && effect.target.tools[0].name === 'Rayquaza Spirit Link') {
-        return state;
-      }
-      const endTurnEffect = new EndTurnEffect(effect.player);
-      store.reduceEffect(state, endTurnEffect);
-    }
 
     // Attack 1: Emerald Break
     // Ref: set-roaring-skies/m-rayquaza-ex-2.ts (Emerald Break)

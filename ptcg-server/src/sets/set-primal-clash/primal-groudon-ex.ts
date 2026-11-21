@@ -4,7 +4,6 @@ import { StoreLike, State, PowerType, PlayerType, StateUtils } from '../../game'
 import { Effect } from '../../game/store/effects/effect';
 import { DISCARD_A_STADIUM_CARD_IN_PLAY, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { PlayPokemonEffect, TrainerTargetEffect } from '../../game/store/effects/play-card-effects';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 
 export class PrimalGroudonEx extends PokemonCard {
   public tags = [CardTag.POKEMON_EX, CardTag.MEGA, CardTag.PRIMAL];
@@ -46,14 +45,6 @@ export class PrimalGroudonEx extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // wow i hate the rules
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
-      if (effect.target.tools.length > 0 && effect.target.tools[0].name === 'Groudon Spirit Link') {
-        return state;
-      }
-
-      const endTurnEffect = new EndTurnEffect(effect.player);
-      store.reduceEffect(state, endTurnEffect);
-    }
 
     // Ω Barrier
     if (effect instanceof TrainerTargetEffect && effect.target?.cards.includes(this)) {

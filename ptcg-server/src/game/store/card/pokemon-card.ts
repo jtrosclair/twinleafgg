@@ -1,7 +1,7 @@
 import { Marker } from '../state/card-marker';
 import { Card } from './card';
 import { SuperType, Stage, PokemonType, CardType, CardTag, Format } from './card-types';
-import { Attack, Weakness, Resistance, Power } from './pokemon-types';
+import { Attack, Weakness, Resistance, Power, PowerType } from './pokemon-types';
 import { TrainerCard } from './trainer-card';
 import type { ActiveAbilityLock } from '../prefabs/active-ability-lock';
 
@@ -72,6 +72,11 @@ export abstract class PokemonCard extends Card {
   public wasMovedToActiveThisTurn?(player: any): boolean {
     return player.movedToActiveThisTurn.includes(this.id);
   }
+}
+
+export function hasLegacyDeltaEvolution(pokemon: PokemonCard): boolean {
+  return pokemon.stage === Stage.MEGA
+    && pokemon.powers.some(power => power.powerType === PowerType.ANCIENT_TRAIT && power.name === 'Δ Evolution');
 }
 
 export function pokemonHasRuleBox(pokemon: PokemonCard): boolean {

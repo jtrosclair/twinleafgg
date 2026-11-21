@@ -1,12 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { AfterEvolveEffect } from '../../game/store/effects/game-effects';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { DISCARD_TOP_X_CARDS_FROM_YOUR_DECK, IS_TOOL_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { DISCARD_TOP_X_CARDS_FROM_YOUR_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class MCharizardEX extends PokemonCard {
 
@@ -44,14 +41,6 @@ export class MCharizardEX extends PokemonCard {
   public setNumber: string = '69';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
-    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this
-      && state.players[state.activePlayer] === effect.player) {
-      const spiritLink = effect.target.tools.find((card): card is TrainerCard =>
-        card instanceof TrainerCard && card.name === 'Charizard Spirit Link');
-      if (spiritLink && !IS_TOOL_BLOCKED(store, state, effect.player, spiritLink)) return state;
-      return store.reduceEffect(state, new EndTurnEffect(effect.player));
-    }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
       return DISCARD_TOP_X_CARDS_FROM_YOUR_DECK(store, state, effect.player, 5, this, effect);

@@ -286,6 +286,8 @@ export class EvolveEffect implements Effect {
   public readonly playedFromHand: boolean;
   public readonly clearPlayerMarkers: boolean;
   public preflightComplete = false;
+  /** Collect reactions for an action that evolves several Pokémon together. */
+  public completionBatch?: AfterEvolveEffect[];
 
   constructor(player: Player, target: PokemonCardList, pokemonCard: PokemonCard, source: CardList = player.hand,
     clearPlayerMarkers = false) {

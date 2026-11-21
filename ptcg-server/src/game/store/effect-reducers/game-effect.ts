@@ -2,9 +2,10 @@ import { PlayerType } from '../actions/play-card-action';
 import { checkCopiedAttackCost, runDelegatedCopiedAttackGenerator } from '../prefabs/copy-attack-delegation';
 import { GameError } from '../../game-error';
 import { GameLog, GameMessage } from '../../game-message';
-import { BoardEffect, CardTag, CardType, SpecialCondition, Stage, SuperType } from '../card/card-types';
+import { BoardEffect, CardTag, CardType, SpecialCondition, Stage, SuperType, TrainerType } from '../card/card-types';
 import { EnergyCard } from '../card/energy-card';
-import { Resistance, Weakness } from '../card/pokemon-types';
+import { TrainerCard } from '../card/trainer-card';
+import { PowerType, Resistance, Weakness } from '../card/pokemon-types';
 import { ApplyWeaknessEffect, DealDamageEffect } from '../effects/attack-effects';
 import {
   AddSpecialConditionsPowerEffect,
@@ -16,6 +17,7 @@ import {
 } from '../effects/check-effects';
 import { Effect } from '../effects/effect';
 import {
+  AfterEvolveEffect,
   AttackEffect,
   EffectOfAbilityEffect,
   EvolveEffect,
@@ -38,7 +40,7 @@ import { StoreLike } from '../store-like';
 import { MoveCardsEffect } from '../effects/game-effects';
 import { GameStatsTracker } from '../game-stats-tracker';
 import { PokemonCardList } from '../state/pokemon-card-list';
-import { MOVE_CARDS, ADD_MARKER, HAS_MARKER, COIN_FLIP_PROMPT, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../prefabs/prefabs';
+import { MOVE_CARDS, ADD_MARKER, HAS_MARKER, COIN_FLIP_PROMPT, IS_TOOL_BLOCKED, WAS_KNOCKED_OUT_BY_OPPONENT_ATTACK_DAMAGE } from '../prefabs/prefabs';
 import { CardList } from '../state/card-list';
 import { Player } from '../state/player';
 import { ConfirmPrompt } from '../prompts/confirm-prompt';
@@ -634,6 +636,29 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
     else effect.target.clearEffects();
     effect.target._preservedConditionsDuringEvolution = undefined;
     effect.target.triggerEvolutionAnimation = true;
+  }
+
+  if (effect instanceof AfterEvolveEffect && effect.pokemonCard.stage === Stage.MEGA) {
+    const { player, target, pokemonCard } = effect;
+    if (pokemonCard.powers.some(power => power.powerType === PowerType.ANCIENT_TRAIT && power.name === 'θ Max')) {
+      state = store.reduceEffect(state, new HealEffect(player, target, target.damage));
+    }
+
+    // An attack already has its own turn-end sequence, including prize choices.
+    if (state.phase !== GamePhase.PLAYER_TURN || state.players[state.activePlayer] !== player) return state;
+
+    const spiritLink = `${pokemonCard.evolvesFrom.replace(/[- ]EX$/, '')} Spirit Link`;
+    const linked = target.tools.some(tool => tool instanceof TrainerCard && tool.trainerType === TrainerType.TOOL
+      && tool.name === spiritLink && !IS_TOOL_BLOCKED(store, state, player, tool));
+    if (linked) return state;
+
+    const turn = state.turn;
+    return store.waitPrompt(state, () => {
+      // Finish the current action and its prompts before ending the turn once.
+      if (state.turn === turn && state.phase === GamePhase.PLAYER_TURN && state.players[state.activePlayer] === player) {
+        store.reduceEffect(state, new EndTurnEffect(player));
+      }
+    });
   }
 
   if (effect instanceof MoveCardsEffect) {

@@ -1,60 +1,47 @@
 import { Card, CardManager, CardTarget, ChooseCardsPrompt, ChoosePokemonPrompt, GameError, GameMessage, PlayerType, PokemonCard, PokemonCardList, ShuffleDeckPrompt, SlotType } from '../../game';
 import { Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
-import { CheckPokemonPlayedTurnEffect } from '../../game/store/effects/check-effects';
+import { AfterEvolveEffect, EvolveEffect } from '../../game/store/effects/game-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 
+function isEvolution(card: Card): card is PokemonCard {
+  return card instanceof PokemonCard && card.stage > Stage.BASIC && card.stage !== Stage.LV_X;
+}
+
 function* playCard(next: Function, store: StoreLike, state: State, effect: TrainerEffect): IterableIterator<State> {
   const player = effect.player;
 
+  if (state.turn <= 2) {
+    throw new GameError(GameMessage.CANNOT_EVOLVE_ON_YOUR_FIRST_TURN);
+  }
   if (player.deck.cards.length === 0) {
     throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
   }
 
+  const evolutionParents = new Set(CardManager.getInstance().getAllCards().filter(isEvolution).map(card => card.evolvesFrom));
+  const blocked: CardTarget[] = [];
+  let eligible = 0;
   player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (list, card, target) => {
-    const playedTurnEffect = new CheckPokemonPlayedTurnEffect(player, list);
-    store.reduceEffect(state, playedTurnEffect);
-    if (playedTurnEffect.pokemonPlayedTurn === state.turn) {
-      blocked2.push(target);
+    if (list.pokemonPlayedTurn >= state.turn || list.cannotEvolveNextTurn || !evolutionParents.has(card.name)) {
+      blocked.push(target);
+    } else {
+      eligible++;
     }
   });
-
-  // Look through all known cards to find out if Pokemon can evolve
-  const cm = CardManager.getInstance();
-  const evolutions = cm.getAllCards().filter(c => {
-    return c instanceof PokemonCard && c.stage !== Stage.BASIC;
-  }) as PokemonCard[];
-
-  // Build possible evolution card names
-  const evolutionNames: string[] = [];
-  player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (list, card, target) => {
-    const valid = evolutions.filter(e => e.evolvesFrom === card.name);
-    valid.forEach(c => {
-      if (!evolutionNames.includes(c.name)) {
-        evolutionNames.push(c.name);
-      }
-    });
-  });
-
-  // There is nothing that can evolve
-  if (evolutionNames.length === 0) {
+  if (eligible === 0) {
     throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
   }
-
-  const blocked2: CardTarget[] = [];
-  player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (list, card, target) => {
-  });
 
   let targets: PokemonCardList[] = [];
   yield store.prompt(state, new ChoosePokemonPrompt(
     player.id,
     GameMessage.CHOOSE_POKEMON_TO_EVOLVE,
     PlayerType.BOTTOM_PLAYER,
-    [SlotType.BENCH],
-    { min: 1, max: 2, allowCancel: false, blocked: blocked2 }
+    [SlotType.ACTIVE, SlotType.BENCH],
+    { min: 1, max: Math.min(2, eligible), allowCancel: false, blocked }
   ), selection => {
     targets = selection || [];
     next();
@@ -64,46 +51,38 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
     return state; // canceled by user
   }
 
+  const evolutions: EvolveEffect[] = [];
+  const selectedCards = new Set<Card>();
+  const completions: AfterEvolveEffect[] = [];
   for (const target of targets) {
     const pokemonCard = target.getPokemonCard();
     if (pokemonCard === undefined) {
       return state; // invalid target?
     }
 
-    // Blocking pokemon cards, that cannot be valid evolutions
-    const blocked: number[] = [];
-    player.deck.cards.forEach((card, index) => {
-      if (card instanceof PokemonCard && card.evolvesFrom !== pokemonCard.name) {
-        blocked.push(index);
-      }
-    });
-
-    let cards: Card[] = [];
+    const blocked = player.deck.cards.flatMap((card, index) => !isEvolution(card) || selectedCards.has(card) ? [index] : []);
     yield store.prompt(state, new ChooseCardsPrompt(
       player,
       GameMessage.CHOOSE_CARD_TO_EVOLVE,
       player.deck,
-      { superType: SuperType.POKEMON },
-      { min: 0, max: 1, allowCancel: false, blocked }
+      { superType: SuperType.POKEMON, evolvesFrom: pokemonCard.name },
+      { min: 0, max: 1, allowCancel: false, blocked },
     ), selected => {
-      cards = selected || [];
+      const card = selected?.[0] as Card | undefined;
+      if (card && isEvolution(card)) {
+        const evolution = new EvolveEffect(player, target, card, player.deck);
+        evolution.completionBatch = completions;
+        evolutions.push(evolution);
+        selectedCards.add(card);
+      }
       next();
     });
-
-    if (cards.length === 0) {
-      continue;
-    }
-
-    const evolution = cards[0] as PokemonCard;
-
-    // Evolve Pokemon
-    player.deck.moveCardTo(evolution, target);
-    target.clearEffects();
-    target.pokemonPlayedTurn = state.turn;
   }
 
+  for (const evolution of evolutions) store.reduceEffect(state, evolution);
   return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
     player.deck.applyOrder(order);
+    for (const completion of completions) store.reduceEffect(state, completion);
   });
 }
 

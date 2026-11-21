@@ -230,7 +230,7 @@ describe('Printed evolution effects and timing', () => {
             hand: [name], deck: padDeck(10) },
           player2: { active: { card: 'Finneon MT' }, deck: padDeck(10) },
         });
-        const { store, state, player1 } = game;
+        const { store, player1 } = game;
         const card = player1.hand.cards[0] as PokemonCard;
         const seen: boolean[] = [];
         const reduce = store.reduceEffect.bind(store);
@@ -240,7 +240,7 @@ describe('Printed evolution effects and timing', () => {
           }
           return reduce(current, effect);
         });
-        store.reduceEffect(state, new EvolveEffect(player1, player1.active, card));
+        playEvolution(game);
         expect(player1.active.getPokemonCard()).toBe(card);
         expect(seen).toEqual(withLink ? [] : [true]);
       });

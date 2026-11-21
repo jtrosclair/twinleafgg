@@ -5,7 +5,7 @@ import { TrainerEffect, AttachEnergyEffect, ToolEffect, CoinFlipEffect, CoinFlip
 import { BoardEffect, CardTag, CardType, EnergyType, Format, SpecialCondition, Stage, SuperType, TrainerType } from '../card/card-types';
 import { Attack } from '../card/pokemon-types';
 import { GamePhase } from '../state/state';
-import { PokemonCard } from '../card/pokemon-card';
+import { hasLegacyDeltaEvolution, PokemonCard } from '../card/pokemon-card';
 import { AbstractAttackEffect, AddSpecialConditionsEffect, AfterDamageEffect, ApplyWeaknessEffect, DealDamageEffect, DiscardCardsEffect, HealTargetEffect, PutCountersEffect, PutDamageEffect } from '../effects/attack-effects';
 import { AddSpecialConditionsPowerEffect, CheckHpEffect, CheckPokemonPlayedTurnEffect, CheckPokemonTypeEffect, CheckPrizesDestinationEffect, CheckProvidedEnergyEffect, CheckSupporterLimitEffect, CheckTableStateEffect } from '../effects/check-effects';
 import { Effect } from '../effects/effect';
@@ -3082,6 +3082,7 @@ export function CAN_PLAY_POKEMON_CARD(store: StoreLike, state: State, player: Pl
 
     // For evolution cards, check if base Pokemon is in play AND can be evolved
     if (pokemonCard.stage !== Stage.BASIC) {
+      const deltaEvolution = hasLegacyDeltaEvolution(pokemonCard);
       // Check active Pokemon
       const activePokemon = player.active.getPokemonCard();
       let canEvolveActive = false;
@@ -3094,7 +3095,7 @@ export function CAN_PLAY_POKEMON_CARD(store: StoreLike, state: State, player: Pl
           // Check if Pokemon was played this turn (can't evolve if played this turn)
           const playedTurn = new CheckPokemonPlayedTurnEffect(player, player.active, pokemonCard);
           store.reduceEffect(state, playedTurn);
-          if (playedTurn.pokemonPlayedTurn < state.turn) {
+          if (deltaEvolution || playedTurn.pokemonPlayedTurn < state.turn) {
             canEvolveActive = true;
           }
         }
@@ -3113,7 +3114,7 @@ export function CAN_PLAY_POKEMON_CARD(store: StoreLike, state: State, player: Pl
             // Check if Pokemon was played this turn (can't evolve if played this turn)
             const playedTurn = new CheckPokemonPlayedTurnEffect(player, bench, pokemonCard);
             store.reduceEffect(state, playedTurn);
-            if (playedTurn.pokemonPlayedTurn < state.turn) {
+            if (deltaEvolution || playedTurn.pokemonPlayedTurn < state.turn) {
               canEvolveBench = true;
               break;
             }

@@ -1,16 +1,14 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { AfterEvolveEffect, PowerEffect } from '../../game/store/effects/game-effects';
+import { PowerEffect } from '../../game/store/effects/game-effects';
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { Card, ChooseEnergyPrompt, GameMessage } from '../../game';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { DiscardCardsEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { CheckProvidedEnergyEffect, CheckPokemonTypeEffect } from '../../game/store/effects/check-effects';
-import { IS_TOOL_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class MRayquazaEX extends PokemonCard {
 
@@ -54,14 +52,6 @@ export class MRayquazaEX extends PokemonCard {
   public setNumber: string = '61';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
-    if (effect instanceof AfterEvolveEffect && effect.pokemonCard === this
-      && state.players[state.activePlayer] === effect.player) {
-      const spiritLink = effect.target.tools.find((card): card is TrainerCard =>
-        card instanceof TrainerCard && card.name === 'Rayquaza Spirit Link');
-      if (spiritLink && !IS_TOOL_BLOCKED(store, state, effect.player, spiritLink)) return state;
-      return store.reduceEffect(state, new EndTurnEffect(effect.player));
-    }
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;

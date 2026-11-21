@@ -3,8 +3,6 @@ import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike, State, PowerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 
 export class MRayquazaEx extends PokemonCard {
   public tags = [CardTag.POKEMON_EX, CardTag.MEGA];
@@ -46,21 +44,6 @@ export class MRayquazaEx extends PokemonCard {
   public setNumber: string = '76';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // love me some funny evolution crap, especially when they CHEAT
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
-      // maybe this will allow the ancient trait to go through
-      effect.player.canEvolve = true;
-      effect.target.pokemonPlayedTurn = state.turn - 1;
-    }
-
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
-      if (effect.target.tools.length > 0 && effect.target.tools[0].name === 'Rayquaza Spirit Link') {
-        return state;
-      }
-
-      const endTurnEffect = new EndTurnEffect(effect.player);
-      store.reduceEffect(state, endTurnEffect);
-    }
 
     // Emerald Break
     if (WAS_ATTACK_USED(effect, 0, this)) {

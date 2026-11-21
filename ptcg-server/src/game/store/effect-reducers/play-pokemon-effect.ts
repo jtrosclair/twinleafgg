@@ -1,3 +1,4 @@
+import { hasLegacyDeltaEvolution } from '../card/pokemon-card';
 import { PlayPokemonEffect } from '../effects/play-card-effects';
 import { GameError } from '../../game-error';
 import { GameMessage, GameLog } from '../../game-message';
@@ -74,22 +75,16 @@ export function playPokemonReducer(store: StoreLike, state: State, effect: Effec
       if (effect.target.cannotEvolveNextTurn) {
         throw new GameError(GameMessage.POKEMON_CANT_EVOLVE_THIS_TURN);
       }
-      const playedTurnEffect = new CheckPokemonPlayedTurnEffect(effect.player, effect.target, effect.pokemonCard);
-      store.reduceEffect(state, playedTurnEffect);
+      if (!hasLegacyDeltaEvolution(effect.pokemonCard)) {
+        const playedTurnEffect = new CheckPokemonPlayedTurnEffect(player, effect.target, effect.pokemonCard);
+        store.reduceEffect(state, playedTurnEffect);
 
-      if (state.turn == 0 && player.canEvolve === false) {
-        throw new GameError(GameMessage.CANNOT_EVOLVE_ON_YOUR_FIRST_TURN);
-      }
-
-      if (state.turn == 1 && player.canEvolve === false) {
-        throw new GameError(GameMessage.CANNOT_EVOLVE_ON_YOUR_FIRST_TURN);
-      }
-      if (state.turn == 2 && player.canEvolve === false) {
-        throw new GameError(GameMessage.CANNOT_EVOLVE_ON_YOUR_FIRST_TURN);
-      }
-
-      if (playedTurnEffect.pokemonPlayedTurn >= state.turn) {
-        throw new GameError(GameMessage.POKEMON_CANT_EVOLVE_THIS_TURN);
+        if (state.turn <= 2 && !player.canEvolve) {
+          throw new GameError(GameMessage.CANNOT_EVOLVE_ON_YOUR_FIRST_TURN);
+        }
+        if (playedTurnEffect.pokemonPlayedTurn >= state.turn) {
+          throw new GameError(GameMessage.POKEMON_CANT_EVOLVE_THIS_TURN);
+        }
       }
 
       const evolveEffect = new EvolveEffect(effect.player, effect.target, effect.pokemonCard, effect.player.hand, true);

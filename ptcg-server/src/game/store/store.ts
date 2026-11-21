@@ -290,7 +290,9 @@ export class Store implements StoreLike {
     // Only signal a successful evolution after every existing blocker has
     // accepted it. Its evolved Pokémon is now in play for Ability checks.
     if (effect instanceof EvolveEffect && !effect.preventDefault && effect.target.getPokemonCard() === effect.pokemonCard) {
-      state = this.reduceEffect(state, new AfterEvolveEffect(effect.player, effect.target, effect.pokemonCard, effect.playedFromHand));
+      const completion = new AfterEvolveEffect(effect.player, effect.target, effect.pokemonCard, effect.playedFromHand);
+      if (effect.completionBatch) effect.completionBatch.push(completion);
+      else state = this.reduceEffect(state, completion);
     }
 
     // Effects include nested reducers and read-only HP/type queries. Derive
