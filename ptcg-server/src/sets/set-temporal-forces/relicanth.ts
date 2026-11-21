@@ -1,9 +1,10 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, PlayerType, StateUtils } from '../../game';
+import { Stage, CardType } from '../../game/store/card/card-types';
+import { PowerType, StoreLike, State, StateUtils, GameError, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { CheckTableStateEffect, CheckPokemonAttacksEffect } from '../../game/store/effects/check-effects';
-import {IS_ABILITY_BLOCKED} from '../../game/store/prefabs/prefabs';
+import { CheckPokemonAttacksEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
+import { COPY_ATTACK_VIA_ABILITY } from '../../game/store/prefabs/copy-attack-prefabs';
+import { IS_ABILITY_BLOCKED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Relicanth extends PokemonCard {
 
@@ -19,7 +20,7 @@ export class Relicanth extends PokemonCard {
 
   public powers = [{
     name: 'Memory Dive',
-    useWhenInPlay: false,
+    useWhenInPlay: true,
     powerType: PowerType.ABILITY,
     text: 'Each of your evolved Pokémon can use any attack from its previous Evolutions. (You still need the necessary Energy to use each attack.)'
   }];
@@ -47,71 +48,42 @@ export class Relicanth extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof CheckTableStateEffect) {
-      const player = effect.player;
-      const cardList = StateUtils.findCardList(state, this);
-      const owner = StateUtils.findOwner(state, cardList);
-
-      if (owner !== player) {
-        return state;
+      const owner = effect.player;
+      if (owner && StateUtils.isPokemonInPlay(owner, this) && !IS_ABILITY_BLOCKED(store, state, owner, this)
+        && owner.getPokemonInPlay().some(slot => StateUtils.isEvolutionPokemon(slot))) {
+        owner.showAllStageAbilities = true;
       }
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)){ return state; }
-
-
-      let isRelicanthInPlay = false;
-      owner.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card === this) {
-          isRelicanthInPlay = true;
-        }
-      });
-
-      if (!isRelicanthInPlay) {
-        return state;
-      }
-
-      // Enable showAllStageAbilities for evolved Pokémon
-      owner.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card.stage !== Stage.BASIC) {
-          player.showAllStageAbilities = true;
-        }
-      });
-
       return state;
     }
 
-    if (effect instanceof CheckPokemonAttacksEffect) {
-      const player = effect.player;
-      const cardList = StateUtils.findCardList(state, this);
-      const owner = StateUtils.findOwner(state, cardList);
-
-      if (owner !== player) {
-        return state;
-      }
-
-      let isRelicanthInPlay = false;
-      owner.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card === this) {
-          isRelicanthInPlay = true;
-        }
-      });
-
-      if (!isRelicanthInPlay) {
-        return state;
-      }
-
-      // Add attacks from previous evolutions to evolved Pokémon
-      owner.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card.stage !== Stage.BASIC) {
-          // Get all previous evolution attacks
-          for (const evolutionCard of cardList.cards) {
-            if (evolutionCard.superType === SuperType.POKEMON && evolutionCard !== card) {
-              effect.attacks.push(...(evolutionCard.attacks || []));
-            }
-          }
-        }
-      });
+    if (!(effect instanceof CheckPokemonAttacksEffect) && !WAS_POWER_USED(effect, 0, this)) return state;
+    const { player } = effect;
+    const attacker = player.active.getPokemonCard();
+    const previous = player.active.getPokemons().slice(0, -1).filter(card => card instanceof PokemonCard && card.attacks.length > 0);
+    if (!attacker || !StateUtils.isEvolutionPokemon(player.active) || previous.length === 0
+      || !StateUtils.isPokemonInPlay(player, this)) {
+      if (effect instanceof CheckPokemonAttacksEffect) return state;
+      throw new GameError(GameMessage.CANNOT_USE_POWER);
+    }
+    if (IS_ABILITY_BLOCKED(store, state, player, this)) {
+      if (effect instanceof CheckPokemonAttacksEffect) return state;
+      throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
     }
 
-    return state;
+    if (effect instanceof CheckPokemonAttacksEffect) {
+      for (const source of previous) {
+        for (const attack of source.attacks) {
+          if (effect.grantedAttackSources.has(attack)) continue;
+          effect.attacks.push(attack);
+          effect.grantedAttackSources.set(attack, source);
+        }
+      }
+      return state;
+    }
+
+    // Retain the board's Ability menu for selecting an inherited attack.
+    return COPY_ATTACK_VIA_ABILITY(store, state, effect, {
+      copycatCard: attacker, filter: () => false, extraCards: previous,
+    });
   }
 }

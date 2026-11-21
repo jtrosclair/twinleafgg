@@ -65,6 +65,7 @@ export class CheckPokemonAttacksEffect implements Effect {
   public preventDefault = false;
   public player: Player;
   public attacks: Attack[];
+  public readonly grantedAttackSources = new Map<Attack, PokemonCard>();
 
   constructor(player: Player) {
     this.player = player;

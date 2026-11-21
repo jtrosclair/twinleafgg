@@ -6184,3 +6184,33 @@ pass. All 559 compatible saved boards round-trip byte-for-byte, and all
 5,484 sampled opening actions match.
 The attested package passed all desktop and touch checks, all 211 client
 checks passed, and eight recorded solutions won on both replays.
+
+## Gameplay re-audit, batch 103
+
+Completed the review of the ten modern copy-attack handlers in
+`3ee8aac13`. Memory Dive on the registered Temporal Forces Relicanth
+now grants attacks from the Active Pokémon's own evolution stack.
+The Basic remains eligible under Rare Candy. The grant requires an
+unsuppressed Relicanth on the player's side and appears once even with
+two Relicanth. The ordinary attack action and the Ability menu both
+resolve the inherited move as an attack by the evolved Pokémon. Genome
+Hacking continues to list the opposing Active's printed attacks.
+The live Mew ex 30C Memory Helix check passed in the preceding batch.
+[Relicanth card](https://asia.pokemon-card.com/sg/card-search/detail/12174/)
+[Official Memory Dive rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B8%E3%83%BC%E3%83%A9%E3%83%B3%E3%82%B9&regulation_faq_main_item1=all)
+
+Incineroar ex's Hustle Play discounts only Colorless symbols. With two
+opposing Benched Pokémon, a single Fire Energy pays for the inherited
+Flare Strike and the attack's next-turn restriction applies to Incineroar.
+Feraligatr's Torrential Heart also boosts its inherited Big Bite.
+[Incineroar ex card](https://asia.pokemon-card.com/sg/card-search/detail/12124/)
+[Torracat card](https://asia.pokemon-card.com/my/card-search/detail/12123/)
+
+All 12 focused cases pass, including seven failures on the preceding
+engine. All 11,784 engine checks, 92 combined WebView checks and 33 API
+checks pass. All 559 comparable boards round-trip byte-for-byte. The
+expanded state of ten boards changes only the Memory Dive menu flag.
+All 5,484 existing sampled opening actions match. The two extra Memory
+Dive candidates both reject cleanly on their saved opening boards.
+The attested simulator passes all ten desktop and touch checks and 211
+client checks. Eight recorded puzzle solutions win on both replays.

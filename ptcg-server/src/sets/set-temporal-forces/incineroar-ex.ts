@@ -71,8 +71,12 @@ export class Incineroarex extends PokemonCard {
       const opponent = StateUtils.getOpponent(state, player);
       const benched = opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
 
-      const index = effect.cost.indexOf(CardType.COLORLESS);
-      effect.cost.splice(index, benched);
+      let discount = benched;
+      effect.cost = effect.cost.filter(type => {
+        if (type !== CardType.COLORLESS || discount === 0) return true;
+        discount--;
+        return false;
+      });
 
       return state;
     }

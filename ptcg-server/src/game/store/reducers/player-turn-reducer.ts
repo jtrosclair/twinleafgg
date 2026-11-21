@@ -91,6 +91,7 @@ export function playerTurnReducer(store: StoreLike, state: State, action: Action
       }
 
       const useAttackEffect = new UseAttackEffect(player, attack);
+      useAttackEffect.delegateFrom = attackEffect.grantedAttackSources.get(attack);
       state = store.reduceEffect(state, useAttackEffect);
 
       state.lastAttack = attack;
