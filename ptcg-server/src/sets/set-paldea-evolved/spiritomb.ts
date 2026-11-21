@@ -3,12 +3,10 @@ import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect } from '../../game/store/effects/game-effects';
-import { CheckPokemonPowersEffect } from '../../game/store/effects/check-effects';
 import { PowerType } from '../../game/store/card/pokemon-types';
-import { GameError } from '../../game/game-error';
-import { GameMessage } from '../../game/game-message';
-import { PlayerType, PokemonCardList, StateUtils } from '../../game';
+import { applyScopedAbilityLock } from '../../game/store/prefabs/ability-lock';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { returnPokemonToHand } from '../../game/store/prefabs/pokemon-replacement';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Spiritomb extends PokemonCard {
@@ -53,103 +51,19 @@ export class Spiritomb extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof CheckPokemonPowersEffect) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
+    applyScopedAbilityLock(store, state, effect, this, {
+      affects: (_power, target) => target.stage === Stage.BASIC && target.tags.includes(CardTag.POKEMON_V),
+    });
 
-      const ruleBoxTags = [
-        CardTag.POKEMON_V,
-        CardTag.POKEMON_VSTAR,
-        CardTag.POKEMON_VMAX
-      ];
-
-      let isSpiritombInPlay = false;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card === this) {
-          isSpiritombInPlay = true;
-        }
-      });
-      opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card) => {
-        if (card === this) {
-          isSpiritombInPlay = true;
-        }
-      });
-
-      const targetCardList = StateUtils.findCardList(state, effect.target);
-      if (!(targetCardList instanceof PokemonCardList)) {
-        return state;
-      }
-
-      if (isSpiritombInPlay) {
-        const targetPokemon = effect.target;
-        if (targetPokemon && targetPokemon.stage === Stage.BASIC && ruleBoxTags.some(tag => targetPokemon.tags.includes(tag))) {
-          // Try reducing ability for each player  
-          try {
-            const powerEffect = new PowerEffect(player, this.powers[0], this);
-            store.reduceEffect(state, powerEffect);
-          } catch {
-            return state;
-          }
-          // Filter out all abilities
-          effect.powers = effect.powers.filter(power =>
-            power.powerType !== PowerType.ABILITY
-          );
-        }
-      }
-    }
-
-    if (effect instanceof PowerEffect
-      && effect.power.powerType === PowerType.ABILITY
-      && effect.power.name !== 'Fettered in Misfortune') {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      const ruleBoxTags = [
-        CardTag.POKEMON_V,
-        CardTag.POKEMON_VSTAR,
-        CardTag.POKEMON_VMAX
-      ];
-
-      let isSpiritombInPlay = false;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card === this) {
-          isSpiritombInPlay = true;
-        }
-      });
-      opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card) => {
-        if (card === this) {
-          isSpiritombInPlay = true;
-        }
-      });
-
-      if (!isSpiritombInPlay) {
-        return state;
-      }
-
-      if (effect.power.useFromDiscard || effect.power.useFromHand) {
-        return state;
-      }
-
-      // Try reducing ability for each player  
-      try {
-        const powerEffect = new PowerEffect(player, this.powers[0], this);
-        store.reduceEffect(state, powerEffect);
-      } catch {
-        return state;
-      }
-      if (ruleBoxTags.some(tag => effect.card.tags.includes(tag)) && !effect.power.exemptFromInitialize) {
-        if (!effect.power.exemptFromAbilityLock) {
-          throw new GameError(GameMessage.BLOCKED_BY_ABILITY);
-        }
-      }
-    }
-
+    // Ref: set-perfect-order/meowth-ex.ts (return the original attacker after damage).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      player.active.clearEffects();
-      player.active.moveTo(player.hand);
-      const pokemon = player.active.getPokemonCard();
-      pokemon?.cards.moveCardsTo(pokemon.cards.cards, player.hand);
+      const attacker = effect.source.getPokemonCard();
+      afterAttackDamage(state, effect, (store, state) => {
+        if (attacker && effect.source.getPokemonCard() === attacker) {
+          returnPokemonToHand(store, state, effect.player, effect.source, true);
+        }
+        return state;
+      });
     }
     return state;
   }

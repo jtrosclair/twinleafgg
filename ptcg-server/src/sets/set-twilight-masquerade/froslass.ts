@@ -39,45 +39,19 @@ export class Froslass extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     if (effect instanceof BetweenTurnsEffect && state.phase === GamePhase.BETWEEN_TURNS) {
-      const player = effect.player;
+      const owner = effect.player;
+      if (!StateUtils.isPokemonInPlay(owner, this) || IS_ABILITY_BLOCKED(store, state, owner, this)) return state;
 
-      // Check if this Froslass is in play on effect.player's side
-      let thisIsInPlay = false;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card === this) {
-          thisIsInPlay = true;
-        }
-      });
-
-      if (!thisIsInPlay) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      const opponent = StateUtils.getOpponent(state, player);
-
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card.name !== 'Froslass') {
-          const powersEffect = new CheckPokemonPowersEffect(player, card);
-          state = store.reduceEffect(state, powersEffect);
-          if (powersEffect.powers.some(power => power.powerType === PowerType.ABILITY)) {
-            state = store.reduceEffect(state, new PlaceDamageCountersEffect(player, cardList, 10, this));
+      for (const targetOwner of [owner, StateUtils.getOpponent(state, owner)]) {
+        targetOwner.forEachPokemon(PlayerType.BOTTOM_PLAYER, (slot, card) => {
+          if (card.name === 'Froslass') return;
+          const powers = new CheckPokemonPowersEffect(targetOwner, card);
+          state = store.reduceEffect(state, powers);
+          if (powers.powers.some(power => power.powerType === PowerType.ABILITY)) {
+            state = store.reduceEffect(state, new PlaceDamageCountersEffect(owner, slot, 10, this, this.powers[0]));
           }
-        }
-      });
-
-      opponent.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-        if (card.name !== 'Froslass') {
-          const powersEffect = new CheckPokemonPowersEffect(opponent, card);
-          state = store.reduceEffect(state, powersEffect);
-          if (powersEffect.powers.some(power => power.powerType === PowerType.ABILITY)) {
-            state = store.reduceEffect(state, new PlaceDamageCountersEffect(player, cardList, 10, this));
-          }
-        }
-      });
+        });
+      }
     }
 
     return state;

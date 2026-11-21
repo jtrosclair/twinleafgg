@@ -1,3 +1,5 @@
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { returnPokemonToHand } from '../../game/store/prefabs/pokemon-replacement';
 import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType, CardTag } from '../../game/store/card/card-types';
@@ -91,6 +93,17 @@ export class LilliesComfey extends PokemonCard {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const generator = useCallForFamily(() => generator.next(), store, state, effect);
       return generator.next().value;
+    }
+
+    // Ref: set-paldea-evolved/spiritomb.ts (Fade Out).
+    if (WAS_ATTACK_USED(effect, 1, this)) {
+      const attacker = effect.source.getPokemonCard();
+      afterAttackDamage(state, effect, (store, state) => {
+        if (attacker && effect.source.getPokemonCard() === attacker) {
+          returnPokemonToHand(store, state, effect.player, effect.source, true);
+        }
+        return state;
+      });
     }
 
     return state;

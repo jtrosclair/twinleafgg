@@ -5959,3 +5959,49 @@ All 11,648 engine checks and all 211 client checks pass. The attested
 production package passes desktop and touch prompt checks. Eight recorded
 solutions win on both replays, including Exact. Change. and Trapped in the
 Phantom Maze.
+
+## Gameplay re-audit, batch 98
+
+Flying Entry runs after its owner plays Hawlucha onto the Bench. The optional
+Ability selects two targets when available or one when the opponent has a
+single Benched Pokémon. Both Flying Entry and Freezing Shroud place counters
+with the printed Ability as the source, so an opposing target's protection
+applies. Each Froslass places counters during Checkup and excludes Froslass
+and Pokémon whose Abilities are absent or suppressed.
+[Hawlucha print](https://www.pokemon-card.com/card-search/details.php/card/42591/regu/all)
+[Flying Entry rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AB%E3%83%81%E3%83%A3%E3%83%96%E3%83%AB&regulation_faq_main_item1=all)
+[Freezing Shroud rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A6%E3%82%AD%E3%83%A1%E3%83%8E%E3%82%B3&regulation_faq_main_item1=XY)
+
+Frigid Room checks the actual attacker, including an attacker using a copied
+attack. The cutoff is 40 remaining HP and the attack is legal if Ability
+protection prevents the lock. Fettered in Misfortune now limits both the
+Ability list and actual suppression to Basic Pokémon V in play. Initialization
+uses the existing Active Ability path and the printed Future exemption.
+Wings of Light continues to protect Mega Clefable ex from Initialization.
+Tool-granted Star Alchemy stays available while those Pokémon Ability locks
+are active.
+[Vanilluxe print](https://asia.pokemon-card.com/my/card-search/detail/10722/)
+[Spiritomb print](https://asia.pokemon-card.com/ph/card-search/detail/6901/)
+[Iron Thorns ex print](https://asia.pokemon-card.com/sg/card-search/detail/12560/)
+[Initialization rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%86%E3%83%84%E3%83%8E%E3%82%A4%E3%83%90%E3%83%A9&regulation_faq_main_item1=all)
+[Tool Ability ruling](https://asia.pokemon-card.com/hk-en/rules/search/?keyword=Forest+Seal+Stone)
+
+Volt Cyclone moves one Energy from the attacker to its own Bench after damage.
+Spiritomb and Lillie's Comfey deal the printed Fade Out damage before returning
+the attacker and attachments and promoting the replacement.
+
+All 559 comparable saved boards validate and round-trip byte-for-byte. The
+expanded API representation of 14 boards omits the obsolete Iron Thorns ex
+card-private Volt Cyclone marker constant. A recursive field comparison
+found this was the only expanded-state difference. All 5,484 opening
+actions match the preceding engine.
+
+All 25 focused checks pass, including 18 that failed on the preceding engine.
+All 11,673 engine checks, 260 integration checks with the existing WebView
+changes, 33 API tests and 211 client checks pass. The attested production
+package passed the desktop and touch prompt checks. All eight recorded
+solutions won on both replays. Star Alchemy's existing double-listener error
+was reproduced on the preceding engine with its Tool in both attachment
+lists and with no active Ability lock. The suppression tests exercise the
+Tool with one listener.
+[Lillie's Comfey print](https://www.pokemon-card.com/card-search/details.php/card/47051/regu/all)

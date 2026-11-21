@@ -2,18 +2,14 @@ import { Effect } from '../../game/store/effects/effect';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import {
   PowerType, StoreLike, State, ChoosePokemonPrompt, PlayerType, SlotType,
-  StateUtils,
-  ConfirmPrompt
+  StateUtils
 } from '../../game';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { AfterPlayBasicFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { GameMessage } from '../../game/game-message';
-import {
-  PlaceDamageCountersEffect,
-  PowerEffect,
-} from '../../game/store/effects/game-effects';
-import { ABILITY_USED } from '../../game/store/prefabs/prefabs';
-
+import { PlaceDamageCountersEffect } from '../../game/store/effects/game-effects';
+import { queueBenchPlayAbility } from '../../game/store/prefabs/bench-play-reactions';
+import { ABILITY_USED, CONFIRMATION_PROMPT } from '../../game/store/prefabs/prefabs';
 
 export class Hawlucha extends PokemonCard {
 
@@ -59,50 +55,27 @@ export class Hawlucha extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
-      const player = StateUtils.findOwner(state, effect.target);
+    // Ref: set-perfect-order/meowth-ex.ts (completed hand-to-Bench reaction).
+    if (effect instanceof AfterPlayBasicFromHandEffect && effect.pokemonCard === this) {
+      const { player } = effect;
       const opponent = StateUtils.getOpponent(state, player);
+      queueBenchPlayAbility(store, state, effect, () => {
+        CONFIRMATION_PROMPT(store, state, player, accepted => {
+          if (!accepted) return;
 
-      const hasBenched = opponent.bench.some(b => b.cards.length > 0);
-      if (!hasBenched) {
-        return state;
-      }
-
-      state = store.prompt(state, new ConfirmPrompt(
-        effect.player.id,
-        GameMessage.WANT_TO_USE_ABILITY,
-      ), wantToUse => {
-        if (wantToUse) {
-
-          // Try to reduce PowerEffect, to check if something is blocking our ability
-          try {
-            const stub = new PowerEffect(player, {
-              name: 'test',
-              powerType: PowerType.ABILITY,
-              text: ''
-            }, this);
-            store.reduceEffect(state, stub);
-          } catch {
-            return state;
-          }
-
-          return store.prompt(state, new ChoosePokemonPrompt(
-            player.id,
-            GameMessage.CHOOSE_POKEMON_TO_DAMAGE,
-            PlayerType.TOP_PLAYER,
-            [SlotType.BENCH],
-            { min: 1, max: 2, allowCancel: false },
-          ), selected => {
+          const count = Math.min(2, opponent.bench.filter(slot => slot.getPokemonCard()).length);
+          if (!count) return;
+          store.prompt(state, new ChoosePokemonPrompt(
+            player.id, GameMessage.CHOOSE_POKEMON_TO_DAMAGE, PlayerType.TOP_PLAYER, [SlotType.BENCH],
+            { min: count, max: count, allowCancel: false },
+          ), targets => {
             ABILITY_USED(player, this);
-            const targets = selected || [];
-            // Ref: set-chilling-reign/inteleon.ts (Quick Shooting) — PlaceDamageCountersEffect per target
-            targets.forEach(target => {
-              state = store.reduceEffect(state, new PlaceDamageCountersEffect(player, target, 10, this));
-            });
-            return state;
+            for (const target of targets) {
+              state = store.reduceEffect(state, new PlaceDamageCountersEffect(player, target, 10, this, this.powers[0]));
+            }
           });
-        }
-      });
+        });
+      }, () => opponent.bench.some(slot => slot.getPokemonCard()));
     }
     return state;
   }
