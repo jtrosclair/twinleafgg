@@ -5669,3 +5669,37 @@ in-progress working changes passes 147 focused checks. The API passes
 expanded boards differ only in Miracle Headset's printed description.
 Of 3,636 opening actions, 3,633 match exactly. The other three differ
 only in Max Rod's prompt saying the cards go to hand.
+
+## Gameplay re-audit, batch 91
+
+The modern gameplay review of the reveal-order changes in `95313f768`
+is complete. Fruity Scent shows the full top-six look to its user and
+only reveals the Pokémon taken to the opponent. Destructo-Press reveals
+the full top-five look to both players. Its damage counts both Future
+Pokémon and Future Trainers, retains existing modifiers and discards the
+Future cards after damage. The same sequence runs for a copied attack.
+[Tropius print](https://www.pokemon-card.com/card-search/details.php/card/50220)
+[Iron Thorns print](https://asia.pokemon-card.com/my/card-search/detail/12152/)
+[Official Future-card strategy](https://www.pokemon-card.com/info/004286.html)
+
+The Stellar Crown, Prismatic Evolutions and promo Noctowl prints all
+offer Jewel Seeker after successful hand evolution. They require a
+friendly Tera Pokémon and honor Ability suppression and declining.
+Read the Stars can privately view a one-card opposing deck and return
+the card to the same position. Psych Out deals damage before the blind
+discard. Junk Hunt and Electromagnetic Sonar require one eligible
+public discard card when available. Their attack effects still work
+under Toedscruel's Slime Mold Colony.
+[Noctowl print](https://asia.pokemon-card.com/sg/card-search/detail/14091/)
+[Gothitelle print and blind discard](https://www.pokemon-card.com/card-search/details.php/card/43240/regu/XY)
+[Read the Stars one-card ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B4%E3%83%81%E3%83%AB%E3%82%BC%E3%83%AB&regulation_faq_main_item1=all)
+[Rotom print](https://asia.pokemon-card.com/sg/card-search/detail/5640/)
+[Dedenne print](https://asia.pokemon-card.com/ph/card-search/detail/16652/)
+[Slime Mold Colony print](https://asia.pokemon-card.com/my/card-search/detail/10924/)
+
+All 18 new tests pass and the previous engine fails 11 of them.
+The build with the in-progress working changes passes 150 focused
+checks. The 559 comparable boards match in both serialized and expanded
+form. All 3,636 sampled opening actions and 35 Noctowl evolutions
+match exactly.
+The full engine passes 11,491 checks, and all 33 API checks pass.

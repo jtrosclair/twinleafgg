@@ -1,9 +1,7 @@
-import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { StoreLike, State, CardList, ShuffleDeckPrompt, GameMessage, ShowCardsPrompt, StateUtils } from '../../game';
+import { CardList, CardTag, CardType, PokemonCard, Stage, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { MOVE_CARDS, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class IronThorns extends PokemonCard {
 
@@ -45,49 +43,29 @@ export class IronThorns extends PokemonCard {
   public fullName: string = 'Iron Thorns TEF';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    if (!WAS_ATTACK_USED(effect, 0, this)) return state;
+    const { player, opponent } = effect;
+    const topCards = new CardList();
+    player.deck.moveTo(topCards, Math.min(5, player.deck.cards.length));
+    const revealed = topCards.cards.slice();
+    const future = revealed.filter(card => card.tags.includes(CardTag.FUTURE));
+    const base = future.length * 70;
+    effect.damage = base > 0 ? Math.max(0, effect.damage + base - effect.attack.damage) : 0;
+    if (revealed.length === 0) return state;
 
-    if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      const deckTop = new CardList();
-      player.deck.moveTo(deckTop, 5);
-
-      // Filter for item cards
-      const futureCards = deckTop.cards.filter(c =>
-        c instanceof PokemonCard &&
-        c.tags.includes(CardTag.FUTURE)
-      );
-
-      if (futureCards.length > 0) {
-        state = store.prompt(state, new ShowCardsPrompt(
-          opponent.id,
-          GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
-          futureCards), () => state);
-      }
-
-      if (futureCards.length > 0) {
-        state = store.prompt(state, new ShowCardsPrompt(
-          player.id,
-          GameMessage.CARDS_SHOWED_BY_EFFECT,
-          futureCards), () => state);
-      }
-
-      // Move item cards to hand
-      deckTop.moveCardsTo(futureCards, player.discard);
-
-      // Move all cards to discard
-      deckTop.moveTo(player.deck, deckTop.cards.length);
-
-      effect.damage = 70 * futureCards.length;
-
-      return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-        player.deck.applyOrder(order);
-
-        return state;
+    // Ref: set-stellar-crown/lapras-ex.ts (settle the revealed cards after attack damage).
+    SHOW_CARDS_TO_PLAYER(store, state, opponent, revealed, player);
+    SHOW_CARDS_TO_PLAYER(store, state, player, revealed, player);
+    afterAttackDamage(state, effect, (store, afterState) => {
+      afterState = MOVE_CARDS(store, afterState, topCards, player.discard, {
+        cards: future, sourceCard: effect.source.getPokemonCard(), sourceEffect: effect,
       });
-    }
-
+      if (topCards.cards.length > 0) {
+        topCards.moveTo(player.deck);
+        return SHUFFLE_DECK(store, afterState, player);
+      }
+      return afterState;
+    });
     return state;
   }
 }

@@ -1,7 +1,6 @@
-import { PokemonCard, Stage, CardType, StoreLike, State, PowerType, ChooseCardsPrompt, ConfirmPrompt, GameMessage, ShowCardsPrompt, StateUtils, SuperType, CardTag, ShuffleDeckPrompt } from '../../game';
+import { PokemonCard, Stage, CardType, StoreLike, State, PowerType, SuperType, CardTag } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { PowerEffect } from '../../game/store/effects/game-effects';
-import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { CONFIRMATION_PROMPT, IS_ABILITY_BLOCKED, JUST_EVOLVED_FROM_HAND, SEARCH_DECK_FOR_CARDS_TO_HAND } from '../../game/store/prefabs/prefabs';
 
 export class Noctowl extends PokemonCard {
 
@@ -47,80 +46,22 @@ export class Noctowl extends PokemonCard {
   public fullName: string = 'Noctowl SCR';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof PlayPokemonEffect && effect.pokemonCard === this) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
+    // Ref: set-paldea-evolved/pelipper.ts (check the board after a completed hand evolution).
+    if (!JUST_EVOLVED_FROM_HAND(effect, state, this)) return state;
+    const player = effect.player;
+    const hasTera = player.getPokemonInPlay().some(slot => slot.getPokemonCard()?.tags.includes(CardTag.POKEMON_TERA));
+    if (!hasTera || player.deck.cards.length === 0 || IS_ABILITY_BLOCKED(store, state, player, this)) return state;
 
-      if (player.deck.cards.length === 0) {
-        return state;
+    return CONFIRMATION_PROMPT(store, state, player, confirmed => {
+      if (confirmed) {
+        SEARCH_DECK_FOR_CARDS_TO_HAND(store, state, player, this, { superType: SuperType.TRAINER },
+          { min: 0, max: 2, allowCancel: false }, this.powers[0]);
       }
-
-      let teraPokemonCount = 0;
-
-      if (player.active?.getPokemonCard()?.tags.includes(CardTag.POKEMON_TERA)) {
-        teraPokemonCount++;
-      }
-
-      player.bench.forEach(benchSpot => {
-        if (benchSpot.getPokemonCard()?.tags.includes(CardTag.POKEMON_TERA)) {
-          teraPokemonCount++;
-        }
-      });
-
-      if (teraPokemonCount == 0) {
-        return state;
-      }
-
-      if (teraPokemonCount >= 1) {
-
-        // Try to reduce PowerEffect, to check if something is blocking our ability
-        try {
-          const stub = new PowerEffect(player, {
-            name: 'test',
-            powerType: PowerType.ABILITY,
-            text: ''
-          }, this);
-          store.reduceEffect(state, stub);
-        } catch {
-          return state;
-        }
-
-        state = store.prompt(state, new ConfirmPrompt(
-          effect.player.id,
-          GameMessage.WANT_TO_USE_ABILITY,
-        ), wantToUse => {
-          if (wantToUse) {
-
-            state = store.prompt(state, new ChooseCardsPrompt(
-              player,
-              GameMessage.CHOOSE_CARD_TO_HAND,
-              player.deck,
-              { superType: SuperType.TRAINER },
-              { min: 0, max: 2, allowCancel: false }
-            ), selected => {
-              const cards = selected || [];
-
-              store.prompt(state, [new ShowCardsPrompt(
-                opponent.id,
-                GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
-                cards
-              )], () => {
-                player.deck.moveCardsTo(cards, player.hand);
-              });
-              return store.prompt(state, new ShuffleDeckPrompt(player.id), order => {
-                player.deck.applyOrder(order);
-              });
-            });
-          }
-        });
-      }
-    }
-    return state;
+    });
   }
 
   /** Its printed attack has no additional effects; its Ability is not copied. */
-  public reduceCopiedAttackEffect(_store: StoreLike, state: State, _effect: Effect, _attackIndex: number): State {
+  public reduceCopiedAttackEffect(_store: StoreLike, state: State, _effect: Effect): State {
     return state;
   }
-
 }

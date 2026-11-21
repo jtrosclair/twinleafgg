@@ -1,8 +1,9 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { StoreLike, State, PowerType, ChooseCardsPrompt, GameMessage, ShowCardsPrompt, StateUtils, GameError, CardList, Card } from '../../game';
+import { StoreLike, State, PowerType, ChooseCardsPrompt, GameMessage, ShowCardsPrompt, StateUtils, GameError, CardList } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ABILITY_USED, ADD_MARKER, HAS_MARKER, REMOVE_MARKER_AT_END_OF_TURN, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { ABILITY_USED, ADD_MARKER, HAS_MARKER, MOVE_CARDS, REMOVE_MARKER_AT_END_OF_TURN, SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Gothitelle extends PokemonCard {
   public regulationMark = 'G';
@@ -39,69 +40,50 @@ export class Gothitelle extends PokemonCard {
   public readonly READ_THE_STARS_MARKER = 'READ_THE_STARS_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Read the Stars
-    if (WAS_POWER_USED(effect, 0, this)){
+    if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
+      if (opponent.deck.cards.length === 0) throw new GameError(GameMessage.CANNOT_USE_POWER);
+      if (HAS_MARKER(this.READ_THE_STARS_MARKER, player, this)) throw new GameError(GameMessage.POWER_ALREADY_USED);
 
-      if (opponent.deck.cards.length < 2){
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      }
-      if (HAS_MARKER(this.READ_THE_STARS_MARKER, player, this)){
-        throw new GameError(GameMessage.POWER_ALREADY_USED);
+      ABILITY_USED(player, this);
+      ADD_MARKER(this.READ_THE_STARS_MARKER, player, this);
+      if (opponent.deck.cards.length === 1) {
+        // Ref: set-stellar-crown/lapras-ex.ts (a private preview of a short deck).
+        return SHOW_CARDS_TO_PLAYER(store, state, player, opponent.deck.cards.slice(), opponent);
       }
 
-      let cards: Card[] = [];
       const deckTop = new CardList();
       opponent.deck.moveTo(deckTop, 2);
-      
       return store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_PUT_ON_BOTTOM,
-        deckTop,
-        {},
-        { min: 1, max: 1, allowCancel: false }
+        player, GameMessage.CHOOSE_CARD_TO_PUT_ON_BOTTOM, deckTop, {},
+        { min: 1, max: 1, allowCancel: false },
       ), selected => {
-        cards = selected || [];
-        
-        ABILITY_USED(player, this);
-        ADD_MARKER(this.READ_THE_STARS_MARKER, player, this);
-
-        deckTop.moveCardsTo(cards, opponent.deck);
+        deckTop.moveCardsTo(selected ?? [], opponent.deck);
         deckTop.moveToTopOfDestination(opponent.deck);
       });
     }
 
-    // Psych Out
-    if (WAS_ATTACK_USED(effect, 0, this)){
-      const player = effect.player;
-      const opponent = effect.opponent;
-
-      if (opponent.hand.cards.length === 0){
-        return state;
-      }
-
-      state = store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_DISCARD,
-        opponent.hand,
-        {},
-        { allowCancel: false, min: 1, max: 1, isSecret: true }
-      ), cards => {
-        cards = cards || [];
-        
-        store.prompt(state, new ShowCardsPrompt(
-          player.id,
-          GameMessage.CARDS_SHOWED_BY_THE_OPPONENT,
-          cards
-        ), () => []);
-
-        opponent.hand.moveCardsTo(cards, opponent.discard);
+    // Ref: set-obsidian-flames/togepi.ts (choose a face-down card from the opponent's hand).
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      afterAttackDamage(state, effect, (store, afterState) => {
+        const { player, opponent } = effect;
+        if (opponent.hand.cards.length === 0) return afterState;
+        return store.prompt(afterState, new ChooseCardsPrompt(
+          player, GameMessage.CHOOSE_CARD_TO_DISCARD, opponent.hand, {},
+          { allowCancel: false, min: 1, max: 1, isSecret: true },
+        ), selected => {
+          if (!selected?.length) return;
+          store.prompt(afterState, new ShowCardsPrompt(player.id, GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, selected,
+            { sourcePlayerId: opponent.id }), () => {});
+          MOVE_CARDS(store, afterState, opponent.hand, opponent.discard, {
+            cards: selected, sourceCard: effect.source.getPokemonCard(), sourceEffect: effect,
+          });
+        });
       });
     }
 
     REMOVE_MARKER_AT_END_OF_TURN(effect, this.READ_THE_STARS_MARKER, this);
-    
     return state;
   }
 }
