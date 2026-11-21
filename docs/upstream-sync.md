@@ -4820,3 +4820,54 @@ seven recorded puzzle solutions still win. The attested package passes ten
 board scenarios and 209 client checks, plus mouse and touch runs of Guzma
 and Bewitching Eyes. The Guzma runs cover both successful switches and the
 official Unnerve case where both Pokémon stay in place.
+
+## Gameplay re-audit, batch 73
+
+POW! Hand Extension requires more Prizes remaining than the opponent and
+an opposing Bench. Its choices appear as translated labels, with the Energy
+mode available only when the opposing Active has an Energy attached. The
+selection moves one physical card from the opposing Active to the opposing
+Bench and validates against that player’s actual Bench size. It accepts legacy mirror-only attachments. Protection on
+the source keeps the Energy attached. Based on the official Energy Antics
+rulings, when only the recipient refuses the effect, removal still happens
+and the Energy is discarded. The switch mode checks protection on the
+chosen Bench slot.
+[English POW! Hand Extension print](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/TRR/TRR_085_EN.png)
+[Official Energy Antics source ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A0%E3%83%81%E3%83%A5%E3%83%BC%E3%83%AB&regulation_faq_main_item1=all)
+[Official Energy Antics destination ruling](https://www.pokemon-card.com/rules/faq/details.php?id=8063)
+
+Prime, Counter, Cross, Custom, Mega and Toy Catcher all respect protection
+on the selected Pokémon. Prime still works with the player’s Bench empty
+and rejects play when the opposing Bench is empty. Prime and Cross require
+the first switch to succeed before asking for the second. Escape Rope
+checks each outgoing Active independently and still switches the player’s
+Pokémon if protection prevents the opponent’s switch. Both Repel prints
+check the outgoing Active. The registered Mega Evolution reprint already had its printed Item type.
+The duplicate source definition now also inherits the shared Item logic.
+[Official Prime Catcher rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%97%E3%83%A9%E3%82%A4%E3%83%A0%E3%82%AD%E3%83%A3%E3%83%83%E3%83%81%E3%83%A3%E3%83%BC&regulation_faq_main_item1=all)
+[Official Repel print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/me01/126/)
+[Official Escape Rope ruling](https://www.pokemon-card.com/rules/faq/details.php?id=9782)
+[Official advanced rules, C-04 and E-20](https://asia.pokemon-card.com/sg/wp-content/uploads/sites/6/2025/10/EN_advanced_manual-2025.pdf)
+
+Team Rocket’s Giovanni can switch the player’s eligible Pokémon when the
+opponent has no Bench. An illegal play leaves the card and the Team Rocket
+Supporter flag untouched. Lisia’s Appeal requires a Benched Basic, checks
+Trainer or attack protection as appropriate, and applies Confusion after the
+new Pokémon arrives through the normal Special Condition checks. The legacy
+Mega Catcher selector and mixed-era Mega Evolution eligibility need separate
+verification.
+[Official Team Rocket’s Giovanni rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AD%E3%82%B1%E3%83%83%E3%83%88%E5%9B%A3%E3%81%AE%E3%82%B5%E3%82%AB%E3%82%AD&regulation_faq_main_item1=all)
+[Official Lisia’s Appeal print](https://www.pokemon-card.com/card-search/details.php/card/46292)
+
+All 34 targeted cases pass, including 21 that fail on the prior engine.
+Sixty saved-board Trainer plays complete through their prompts and match
+the previous outcomes. Forty of these are from active puzzles.
+
+The full engine suite passes 11,113 tests. The worktree including the local
+edits passes 126 targeted checks, and the API passes 32. All 15,750 catalog
+identities and numbered print metadata match, along with 559 comparable
+saved boards and 5,225 sampled opening actions. All seven recorded puzzle
+solutions win. The attested package passes ten board scenarios and 209
+client checks. Mouse and touch runs confirm the translated POW! choice,
+moving Energy to an eligible Bench slot and discarding it when the
+recipient has Ω Barrier.

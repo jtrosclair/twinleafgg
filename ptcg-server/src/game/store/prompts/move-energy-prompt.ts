@@ -96,6 +96,7 @@ export class MoveEnergyPrompt extends Prompt<CardTransfer[]> {
     if (!state || !player || result.length < this.options.min || result.length > (this.options.max ?? Infinity)
       || new Set(result.map(transfer => transfer.card)).size !== result.length) return false;
 
+    const opponent = StateUtils.getOpponent(state, player);
     const sameTarget = (left: CardTarget, right: CardTarget) =>
       left.player === right.player && left.slot === right.slot && left.index === right.index;
     const allowed = (target: CardTarget) =>
@@ -103,7 +104,7 @@ export class MoveEnergyPrompt extends Prompt<CardTransfer[]> {
       && (target.player === this.playerType || this.playerType === PlayerType.ANY)
       && this.slots.includes(target.slot)
       && (target.slot === SlotType.ACTIVE ? target.index === 0
-        : Number.isInteger(target.index) && target.index >= 0 && target.index < player.bench.length);
+        : Number.isInteger(target.index) && target.index >= 0 && target.index < (target.player === PlayerType.TOP_PLAYER ? opponent : player).bench.length);
 
     return result.every(({ from, to, card }) => {
       if (!card || !allowed(from) || !allowed(to) || sameTarget(from, to)

@@ -6,6 +6,7 @@ import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Stage, TrainerType } from '../../game/store/card/card-types';
 import { CardTarget, ChoosePokemonPrompt, GameError, GameMessage, PlayerType, SlotType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { TRAINER_TARGET_BLOCKED } from '../../game/store/prefabs/prefabs';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 
 export class MegaCatcher extends TrainerCard {
@@ -54,8 +55,9 @@ export class MegaCatcher extends TrainerCard {
         [SlotType.BENCH],
         { min: 1, max: 1, allowCancel: false, blocked }
       ), selected => {
-        if (selected && selected.length > 0) {
-          opponent.switchPokemon(selected[0]);
+        const target = selected?.[0];
+        if (target && !TRAINER_TARGET_BLOCKED(store, state, effect, target)) {
+          opponent.switchPokemon(target, store, state);
         }
       });
     }

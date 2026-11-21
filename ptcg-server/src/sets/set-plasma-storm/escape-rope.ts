@@ -1,68 +1,7 @@
-import { TrainerCard } from '../../game/store/card/trainer-card';
-import { TrainerType } from '../../game/store/card/card-types';
-import { StoreLike } from '../../game/store/store-like';
-import { State } from '../../game/store/state/state';
+import { ChoosePokemonPrompt, PlayerType, SlotType, GameError, GameMessage, State, StateUtils, StoreLike, TrainerCard, TrainerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
-import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { PlayerType, SlotType, GameError, GameMessage, PokemonCardList, StateUtils } from '../../game';
-
-function* playCard(next: Function, store: StoreLike, state: State, effect: TrainerEffect): IterableIterator<State> {
-  const player = effect.player;
-  const opponent = StateUtils.getOpponent(state, player);
-
-  const playerHasBench = player.bench.some(b => b.cards.length > 0);
-  const opponentHasBench = opponent.bench.some(b => b.cards.length > 0);
-
-  if (!playerHasBench && !opponentHasBench) {
-    throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-  }
-
-  effect.preventDefault = true;
-  player.hand.moveCardTo(effect.trainerCard, player.supporter);
-
-  let targets: PokemonCardList[] = [];
-  if (opponentHasBench) {
-    yield store.prompt(state, new ChoosePokemonPrompt(
-      opponent.id,
-      GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-      PlayerType.BOTTOM_PLAYER,
-      [SlotType.BENCH],
-      { allowCancel: false }
-    ), results => {
-      targets = results || [];
-      next();
-    });
-
-    if (targets.length > 0) {
-      opponent.switchPokemon(targets[0]);
-
-    }
-  }
-
-  if (playerHasBench) {
-    yield store.prompt(state, new ChoosePokemonPrompt(
-      player.id,
-      GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-      PlayerType.BOTTOM_PLAYER,
-      [SlotType.BENCH],
-      { allowCancel: false }
-    ), results => {
-      targets = results || [];
-      next();
-    });
-
-    if (targets.length > 0) {
-      player.switchPokemon(targets[0]);
-
-    }
-
-  }
-
-
-
-  return state;
-}
+import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
+import { SWITCH_OUT_OPPONENT_ACTIVE_POKEMON, TRAINER_TARGET_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class EscapeRope extends TrainerCard {
 
@@ -84,11 +23,25 @@ export class EscapeRope extends TrainerCard {
     'have a Benched Pokemon, he or she doesn\'t switch Pokemon.)';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof TrainerEffect && effect.trainerCard === this) {
-      const generator = playCard(() => generator.next(), store, state, effect);
-      return generator.next().value;
-    }
-    return state;
-  }
+    if (!WAS_TRAINER_USED(effect, this)) return state;
+    const { player } = effect;
+    const opponent = StateUtils.getOpponent(state, player);
+    const ownBench = player.bench.some(slot => !!slot.getPokemonCard());
+    const opposingBench = opponent.bench.some(slot => !!slot.getPokemonCard());
+    if (!ownBench && !opposingBench) throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
 
+    const switchOwn = () => {
+      if (!ownBench) return state;
+      return store.prompt(state, new ChoosePokemonPrompt(
+        player.id, GameMessage.CHOOSE_POKEMON_TO_SWITCH, PlayerType.BOTTOM_PLAYER, [SlotType.BENCH],
+        { allowCancel: false }
+      ), selected => {
+        if (selected?.[0]) player.switchPokemon(selected[0], store, state);
+      });
+    };
+
+    // Escape Rope affects each old Active independently, in this order.
+    if (!opposingBench || TRAINER_TARGET_BLOCKED(store, state, effect, opponent.active)) return switchOwn();
+    return SWITCH_OUT_OPPONENT_ACTIVE_POKEMON(store, state, player, { onSwitched: switchOwn });
+  }
 }

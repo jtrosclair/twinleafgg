@@ -1,10 +1,10 @@
+import { CardTarget, GameError, GameMessage, PlayerType, SlotType, State, StateUtils, StoreLike, TrainerCard, TrainerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { TrainerCard } from '../../game/store/card/trainer-card';
-import { CardTag, TrainerType } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils, GameError, GameMessage, PlayerType, SlotType, ChoosePokemonPrompt, CardTarget, MoveEnergyPrompt, Card } from '../../game';
-import { TrainerEffect, TrainerTargetEffect } from '../../game/store/effects/play-card-effects';
+import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
+import { CardTag } from '../../game/store/card/card-types';
+import { MoveEnergyPrompt } from '../../game/store/prompts/move-energy-prompt';
 import { SelectOptionPrompt } from '../../game/store/prompts/select-option-prompt';
-import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
+import { MOVE_CARDS, SWITCH_IN_OPPONENT_BENCHED_POKEMON, TRAINER_TARGET_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class PowHandExtension extends TrainerCard {
   public trainerType: TrainerType = TrainerType.ITEM;
@@ -18,125 +18,44 @@ export class PowHandExtension extends TrainerCard {
 Move 1 Energy card attached to the Defending Pokémon to another of your opponent's Pokémon. Or, switch 1 of your opponent's Benched Pokémon with 1 of the Defending Pokémon. Your opponent chooses the Defending Pokémon to switch.`;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
-    if (effect instanceof TrainerEffect && effect.trainerCard === this) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      if (player.getPrizeLeft() <= opponent.getPrizeLeft()) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-
-      const hasBench = opponent.bench.some(b => b.cards.length > 0);
-      if (!hasBench) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-
-      const blockedFrom: CardTarget[] = [];
-      opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card, target) => {
-        if (cardList !== opponent.active) {
-          blockedFrom.push(target);
-        }
-      });
-
-      const options: { message: GameMessage, action: () => void }[] = [
-        {
-          message: GameMessage.MOVE_ENERGY_CARDS,
-          action: () => {
-
-            const blockedMap: { source: CardTarget, blocked: number[] }[] = [];
-            player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-              const checkProvidedEnergy = new CheckProvidedEnergyEffect(player, cardList);
-              store.reduceEffect(state, checkProvidedEnergy);
-
-              const blockedCards: Card[] = [];
-              checkProvidedEnergy.energyMap.forEach(em => {
-                if (em.provides.length === 0) {
-                  blockedCards.push(em.card);
-                }
-              });
-
-              const blocked: number[] = [];
-              blockedCards.forEach(bc => {
-                const index = cardList.cards.indexOf(bc);
-                if (index !== -1 && !blocked.includes(index)) {
-                  blocked.push(index);
-                }
-              });
-
-              if (blocked.length !== 0) {
-                blockedMap.push({ source: target, blocked });
-              }
-            });
-
-            store.prompt(state, new MoveEnergyPrompt(
-              player.id,
-              GameMessage.MOVE_ENERGY_CARDS,
-              PlayerType.TOP_PLAYER,
-              [SlotType.ACTIVE, SlotType.BENCH],
-              {},
-              { min: 1, max: 1, allowCancel: false, blockedMap, blockedFrom }
-            ), transfers => {
-              if (transfers === null) {
-                return;
-              }
-
-              for (const transfer of transfers) {
-
-                const source = StateUtils.getTarget(state, player, transfer.from);
-                const target = StateUtils.getTarget(state, player, transfer.to);
-
-                source.moveCardTo(transfer.card, target);
-              }
-            });
-
-          }
-        },
-        {
-          message: GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-          action: () => {
-            player.hand.moveCardTo(effect.trainerCard, player.supporter);
-            // We will discard this card after prompt confirmation
-            effect.preventDefault = true;
-
-            return store.prompt(state, new ChoosePokemonPrompt(
-              player.id,
-              GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-              PlayerType.TOP_PLAYER,
-              [SlotType.BENCH],
-              { allowCancel: false }
-            ), result => {
-              const cardList = result[0];
-
-              if (cardList) {
-                const targetCard = new TrainerTargetEffect(player, effect.trainerCard, cardList);
-                targetCard.target = cardList;
-                store.reduceEffect(state, targetCard);
-                if (targetCard.target) {
-                  opponent.switchPokemon(targetCard.target);
-                }
-              }
-
-
-              return state;
-            });
-          }
-        }
-      ];
-
-      return store.prompt(state, new SelectOptionPrompt(
-        player.id,
-        GameMessage.CHOOSE_OPTION,
-        options.map(opt => opt.message),
-        { allowCancel: false }
-      ), choice => {
-        const option = options[choice];
-        option.action();
-
-        return state;
-      });
+    if (!WAS_TRAINER_USED(effect, this)) return state;
+    const { player } = effect;
+    const opponent = StateUtils.getOpponent(state, player);
+    if (player.getPrizeLeft() <= opponent.getPrizeLeft() || !opponent.bench.some(slot => !!slot.getPokemonCard())) {
+      throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
     }
 
-    return state;
+    const source = opponent.active;
+    const hasEnergy = MoveEnergyPrompt.sourceCards(source).some(card => MoveEnergyPrompt.isAttachedEnergy(source, card));
+    const switchOpponent = () => SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, player, { sourceEffect: effect });
+    if (!hasEnergy) return switchOpponent();
+
+    return store.prompt(state, new SelectOptionPrompt(
+      player.id, GameMessage.CHOOSE_OPTION,
+      [GameMessage.MOVE_ENERGY_CARDS, GameMessage.CHOOSE_POKEMON_TO_SWITCH].map(message => 'GAME_MESSAGES.' + message),
+      { allowCancel: false }
+    ), choice => {
+      if (choice === 1) {
+        switchOpponent();
+        return;
+      }
+      if (choice !== 0) return;
+
+      const active: CardTarget = { player: PlayerType.TOP_PLAYER, slot: SlotType.ACTIVE, index: 0 };
+      const bench = opponent.bench.map((_, index) => ({ player: PlayerType.TOP_PLAYER, slot: SlotType.BENCH, index }));
+      store.prompt(state, new MoveEnergyPrompt(
+        player.id, GameMessage.MOVE_ENERGY_CARDS, PlayerType.TOP_PLAYER, [SlotType.ACTIVE, SlotType.BENCH], {},
+        { min: 1, max: 1, allowCancel: false, validateTransfers: true, blockedFrom: bench, blockedTo: [active] }
+      ), transfers => {
+        const transfer = transfers?.[0];
+        if (!transfer || source !== opponent.active || !MoveEnergyPrompt.isAttachedEnergy(source, transfer.card)) return;
+        if (TRAINER_TARGET_BLOCKED(store, state, effect, source)) return;
+
+        // Like Energy Antics, removal succeeds even if the recipient refuses the Energy.
+        const target = StateUtils.getTarget(state, player, transfer.to);
+        const destination = TRAINER_TARGET_BLOCKED(store, state, effect, target) ? opponent.discard : target;
+        MOVE_CARDS(store, state, source, destination, { cards: [transfer.card], sourceCard: this });
+      });
+    });
   }
 }

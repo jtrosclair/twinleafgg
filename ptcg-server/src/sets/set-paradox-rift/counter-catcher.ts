@@ -61,7 +61,7 @@ Switch in 1 of your opponent's Benched Pokémon to the Active Spot.`;
       // - Switched opponent Active to selected Bench target.
       //
       // Converted to prefab version (SWITCH_IN_OPPONENT_BENCHED_POKEMON).
-      SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, player, { allowCancel: false });
+      return SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, player, { sourceEffect: effect });
     }
 
     return state;

@@ -31,7 +31,7 @@ export class CustomCatcher extends TrainerCard {
     const canSwitch = second !== undefined && opponent.bench.some(slot => !!slot.getPokemonCard());
     const playBoth = (companion: Card) => {
       MOVE_CARDS(store, state, player.hand, player.discard, { cards: [companion], sourceCard: this });
-      return SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, player);
+      return SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, player, { sourceEffect: effect });
     };
 
     if (canSwitch && canDraw) {

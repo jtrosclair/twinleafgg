@@ -1,11 +1,7 @@
-import { GameError, GameMessage, StateUtils } from '../../game';
-import { TrainerType } from '../../game/store/card/card-types';
-import { TrainerCard } from '../../game/store/card/trainer-card';
+import { GameError, GameMessage, State, StateUtils, StoreLike, TrainerCard, TrainerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { State } from '../../game/store/state/state';
-import { StoreLike } from '../../game/store/store-like';
-import { SWITCH_OUT_OPPONENT_ACTIVE_POKEMON } from '../../game/store/prefabs/prefabs';
 import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
+import { SWITCH_OUT_OPPONENT_ACTIVE_POKEMON, TRAINER_TARGET_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class Repel extends TrainerCard {
   public trainerType: TrainerType = TrainerType.ITEM;
@@ -17,23 +13,14 @@ export class Repel extends TrainerCard {
   public text: string = 'Your opponent switches their Active Pokémon with 1 of their Benched Pokémon.';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (WAS_TRAINER_USED(effect, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      const opponentHasBench = opponent.bench.some(b => b.cards.length > 0);
-
-      if (!opponentHasBench) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-
-      // Legacy implementation:
-      // - Prompted opponent to choose their Benched replacement Active.
-      // - Switched opponent Active to that target.
-      //
-      // Converted to prefab version (SWITCH_OUT_OPPONENT_ACTIVE_POKEMON).
-      SWITCH_OUT_OPPONENT_ACTIVE_POKEMON(store, state, player, { allowCancel: false });
+    if (!WAS_TRAINER_USED(effect, this)) return state;
+    const { player } = effect;
+    const opponent = StateUtils.getOpponent(state, player);
+    if (!opponent.bench.some(slot => !!slot.getPokemonCard())) {
+      throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
     }
 
-    return state;
+    if (TRAINER_TARGET_BLOCKED(store, state, effect, opponent.active)) return state;
+    return SWITCH_OUT_OPPONENT_ACTIVE_POKEMON(store, state, player);
   }
 }

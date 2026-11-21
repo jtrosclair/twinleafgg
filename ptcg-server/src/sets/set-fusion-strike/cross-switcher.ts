@@ -33,6 +33,7 @@ Switch 1 of your opponent's Benched Pokémon with their Active Pokémon. If you 
 
     MOVE_CARDS(store, state, player.hand, player.discard, { cards: [second], sourceCard: this });
     return SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, player, {
+      sourceEffect: effect,
       onSwitched: () => { SWITCH_ACTIVE_WITH_BENCHED(store, state, player); }
     });
   }

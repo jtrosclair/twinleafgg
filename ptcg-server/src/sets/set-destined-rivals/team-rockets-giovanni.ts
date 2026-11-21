@@ -1,14 +1,10 @@
-import { GameError, GameMessage } from '../../game';
-import { CardTarget, PlayerType, SlotType } from '../../game/store/actions/play-card-action';
-import { CardTag, TrainerType } from '../../game/store/card/card-types';
-import { TrainerCard } from '../../game/store/card/trainer-card';
+import { CardTarget, ChoosePokemonPrompt, PlayerType, SlotType, GameError, GameMessage, State, StoreLike, TrainerCard, TrainerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
+import { CardTag } from '../../game/store/card/card-types';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
-import { StateUtils } from '../../game/store/state-utils';
-import { State } from '../../game/store/state/state';
-import { StoreLike } from '../../game/store/store-like';
+import { CopiedSupporterEffect } from '../../game/store/effects/play-card-effects';
+import { SWITCH_IN_OPPONENT_BENCHED_POKEMON } from '../../game/store/prefabs/prefabs';
 
 export class TeamRocketsGiovanni extends TrainerCard {
   public trainerType: TrainerType = TrainerType.SUPPORTER;
@@ -31,99 +27,33 @@ export class TeamRocketsGiovanni extends TrainerCard {
     'Switch your Active Team Rocket\'s Pokemon with 1 of your Benched Team Rocket\'s Pokemon. If you do, then switch 1 of your opponent\'s Benched Pokémon with their Active Pokémon.';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof TrainerEffect && effect.trainerCard === this) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      const supporterTurn = player.supporterTurn;
-      if (supporterTurn > 0) {
-        throw new GameError(GameMessage.SUPPORTER_ALREADY_PLAYED);
-      }
-
-      player.rocketSupporter = true;
-      player.hand.moveCardTo(effect.trainerCard, player.supporter);
-      effect.preventDefault = true;
-
-      // Check if active Pokémon is a Team Rocket's Pokémon
-      const activePokemon = player.active.getPokemonCard();
-      if (!activePokemon ||
-        !activePokemon.tags ||
-        !activePokemon.tags.includes(CardTag.TEAM_ROCKET)) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-
-      // Create a blocked array for non-Team Rocket Pokémon
-      const blocked: CardTarget[] = [];
-      let teamRocketBenchCount = 0;
-
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (list, card, target) => {
-        if (target.slot === SlotType.BENCH) {
-          if (!card.tags || !card.tags.includes(CardTag.TEAM_ROCKET)) {
-            blocked.push(target);
-          } else {
-            teamRocketBenchCount++;
-          }
-        }
-      });
-
-      if (teamRocketBenchCount === 0) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-
-      // Check if opponent has benched Pokémon
-      const benchCount = opponent.bench.reduce((sum, b) => {
-        return sum + (b.cards.length > 0 ? 1 : 0);
-      }, 0);
-
-      if (benchCount === 0) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-
-      // First, have player choose which Team Rocket's Pokémon to switch to
-      return store.prompt(state, new ChoosePokemonPrompt(
-        player.id,
-        GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH],
-        {
-          allowCancel: false,
-          blocked: blocked
-        }
-      ), targets => {
-        if (!targets || targets.length === 0) {
-
-          return state;
-        }
-
-        // Switch player's Pokémon
-        player.active.clearEffects();
-        player.switchPokemon(targets[0]);
-
-        // Then have player choose which of opponent's benched Pokémon to switch to active
-        return store.prompt(state, new ChoosePokemonPrompt(
-          player.id,
-          GameMessage.CHOOSE_POKEMON_TO_SWITCH,
-          PlayerType.TOP_PLAYER,
-          [SlotType.BENCH],
-          { allowCancel: false }
-        ), oppTargets => {
-          if (!oppTargets || oppTargets.length === 0) {
-
-            return state;
-          }
-
-          // Switch opponent's Pokémon
-          opponent.active.clearEffects();
-          opponent.switchPokemon(oppTargets[0]);
-          return state;
-        });
-      });
-    }
-
     if (effect instanceof EndTurnEffect && effect.player.rocketSupporter) {
       effect.player.rocketSupporter = false;
     }
+    if (!WAS_TRAINER_USED(effect, this)) return state;
 
-    return state;
+    const { player } = effect;
+    if (player.supporterTurn > 0) throw new GameError(GameMessage.SUPPORTER_ALREADY_PLAYED);
+    const isRocket = (slot: typeof player.active) => slot.getPokemonCard()?.tags.includes(CardTag.TEAM_ROCKET) === true;
+    if (!isRocket(player.active) || !player.bench.some(isRocket)) {
+      if (effect instanceof CopiedSupporterEffect) return state;
+      throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
+    }
+
+    const blocked: CardTarget[] = [];
+    player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (slot, _card, target) => {
+      if (target.slot === SlotType.BENCH && !isRocket(slot)) blocked.push(target);
+    });
+
+    if (!(effect instanceof CopiedSupporterEffect)) player.rocketSupporter = true;
+    return store.prompt(state, new ChoosePokemonPrompt(
+      player.id, GameMessage.CHOOSE_POKEMON_TO_SWITCH, PlayerType.BOTTOM_PLAYER, [SlotType.BENCH],
+      { allowCancel: false, blocked }
+    ), selected => {
+      const target = selected?.[0];
+      if (!target) return;
+      player.switchPokemon(target, store, state);
+      if (player.active === target) SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, player, { sourceEffect: effect });
+    });
   }
 }
