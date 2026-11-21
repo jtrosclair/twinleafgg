@@ -1,3 +1,4 @@
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, GameMessage, ConfirmPrompt, ChooseCardsPrompt } from '../../game';
@@ -75,16 +76,9 @@ export class Ninjask extends PokemonCard {
             GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
             player.deck,
             { superType: SuperType.POKEMON },
-            { min: 0, max: 1, allowCancel: false, blocked }
+            { min: 0, max: 1, allowCancel: false, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck, blocked) }
           ), selected => {
-            const cards = selected || [];
-            if (cards.length > 0) {
-              const benchSlots = GET_PLAYER_BENCH_SLOTS(player);
-              if (benchSlots.length > 0) {
-                player.deck.moveCardTo(cards[0], benchSlots[0]);
-                benchSlots[0].pokemonPlayedTurn = state.turn;
-              }
-            }
+            benchPokemonFromZone(store, state, player, player.deck, selected || [], GET_PLAYER_BENCH_SLOTS(player));
             SHUFFLE_DECK(store, state, player);
           });
         }

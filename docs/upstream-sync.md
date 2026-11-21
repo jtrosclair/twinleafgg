@@ -5205,3 +5205,47 @@ All 559 comparable saved boards are identical before and after the
 change. The 3,636 sampled opening actions and 458 targeted Bench and
 Trainer openings match. All seven recorded solutions still win
 twice. Legacy direct-placement routes retain separate review.
+
+## Gameplay re-audit, batch 81
+
+The port adapts Twinleaf's historical Spirit Burner selection fix
+`206062e66` to the fork's post-damage attack phase. The player sees all
+eligible Fire Pokémon from the five discarded cards and can choose
+zero or as many as their Bench allows. Stage 1 and Stage 2 Pokémon can
+be placed directly. Prism Stars go to the Lost Zone and are unavailable
+for placement. Eternatus filters a copied Spirit Burner, and a lethally
+damaged Roadblock Sudowoodo still limits the Bench during the attack.
+[Official Spirit Burner timing and Roadblock rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B7%E3%83%A3%E3%83%B3%E3%83%87%E3%83%A9&regulation_faq_main_item1=all)
+[Official Prism Star placement ruling](https://www.pokemon-card.com/rules/faq/search.php?sc_group_id=531)
+
+Gloria's search applies both the printed Rule Box exclusion and the
+current Bench placement rules. Follow My Tail, Massive Catch-GX,
+Multiply, Roll Call, Coax, Cast-off Shell and Bubble Pod now route
+placement through the existing placement and reaction checks. Roll
+Call allows at most one of each printed name. Multiply and Cast-off
+Shell can place the named Evolution Pokémon. Bubble Pod recognizes a
+Water secondary type and limits its Energy attachments to its newly
+placed Pokémon. Basic Pokémon placed by these effects can trigger
+Risky Ruins, and non-Basics retain their stage.
+[Gloria print](https://www.pokemon.com/it/gcc/archivio-carte/series/swsh9/141/)
+[Follow My Tail print](https://www.pokemon-card.com/card-search/details.php/card/37313)
+[Massive Catch-GX print](https://www.pokemon-card.com/card-search/details.php/card/37442)
+[Official Multiply rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%B3%E3%82%AF%E3%83%BC%E3%83%B3&regulation_faq_main_item1=all)
+[Roll Call print](https://www.pokemon-card.com/card-search/details.php/card/33242/regu/XY)
+[Coax print](https://www.pokemon-card.com/card-search/details.php/card/34396/regu/DP)
+[Official Dragons Exalted card text](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/bw_dragons_exalted.pdf)
+[Bubble Pod print](https://www.pokemon-card.com/card-search/details.php/card/39911)
+
+The 12 new real-engine checks pass, including nine that reproduce
+failures on the prior engine. The full engine suite passes 11,304
+tests across 326 files. The focused suite passes 157 checks,
+the combined worktree passes 141, and the API passes 32. The attested
+package passes 209 client checks and ten board scenarios. A packaged
+Gloria test on mouse and touch confirmed a legal Darkness Basic
+remains selectable while a Grass Basic and a Darkness Rule Box
+Pokémon are unavailable under Eternal Zone.
+
+All 559 comparable saved boards and 3,636 sampled opening actions
+match. All seven recorded solutions still win twice. The legacy card
+effects that replace an in-play Pokémon require a separate review of
+their printed state-retention and discard rules.

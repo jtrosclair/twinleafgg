@@ -2,11 +2,13 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
-import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType } from '../../game/store/card/card-types';
-import { StoreLike, State, ConfirmPrompt, GameMessage } from '../../game';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { benchPokemonFromZone, getBlockedPokemonPlacements } from '../../game/store/prefabs/bench-play-reactions';
+import { PokemonCard, pokemonHasCardType } from '../../game/store/card/pokemon-card';
+import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
+import { CardList, ChooseCardsPrompt, GameMessage, State, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Chandelure extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
@@ -38,47 +40,25 @@ export class Chandelure extends PokemonCard {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
 
-      // Discard top 5 cards
-      const cardsToDiscard = player.deck.cards.slice(0, 5);
-      const discardedPokemon: PokemonCard[] = [];
-
-      cardsToDiscard.forEach(card => {
-        player.deck.moveCardTo(card, player.discard);
-        if (card instanceof PokemonCard) {
-          discardedPokemon.push(card);
-        }
-      });
-
-      // Add damage for each Pokemon discarded
+      const top = player.deck.cards.slice(0, 5);
+      MOVE_CARDS(store, state, player.deck, player.discard, { cards: top, sourceCard: this, sourceEffect: effect });
+      const discardedPokemon = top.filter((card): card is PokemonCard => card instanceof PokemonCard
+        && (player.discard.cards.includes(card) || player.lostzone.cards.includes(card)));
       effect.damage += 60 * discardedPokemon.length;
 
-      // Find Fire Pokemon among the discarded
-      const firePokemon = discardedPokemon.filter(p =>
-        p.cardType === CardType.FIRE
-      );
+      afterAttackDamage(state, effect, (store, state) => {
+        const slots = player.bench.filter(slot => slot.cards.length === 0);
+        const legal = new CardList();
+        const blocked = getBlockedPokemonPlacements(store, state, player, discardedPokemon);
+        legal.cards = discardedPokemon.filter(card => player.discard.cards.includes(card)
+          && pokemonHasCardType(card, CardType.FIRE) && !blocked.has(card));
+        if (slots.length === 0 || legal.cards.length === 0) return state;
 
-      // Put any number of Fire Pokemon onto bench
-      if (firePokemon.length > 0) {
-        const availableBenchSlots = player.bench.filter(b => b.cards.length === 0).length;
-        if (availableBenchSlots > 0) {
-          const pokemonToPlace = firePokemon.slice(0, availableBenchSlots);
-          pokemonToPlace.forEach(pokemon => {
-            // Ask if they want to place each one
-            store.prompt(state, new ConfirmPrompt(
-              player.id,
-              GameMessage.WANT_TO_USE_ABILITY
-            ), wantToPlace => {
-              if (wantToPlace) {
-                const emptySlot = player.bench.find(b => b.cards.length === 0);
-                if (emptySlot) {
-                  player.discard.moveCardTo(pokemon, emptySlot);
-                  emptySlot.pokemonPlayedTurn = state.turn;
-                }
-              }
-            });
-          });
-        }
-      }
+        return store.prompt(state, new ChooseCardsPrompt(
+          player, GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH, legal,
+          { superType: SuperType.POKEMON }, { min: 0, max: Math.min(slots.length, legal.cards.length), allowCancel: false }
+        ), selected => benchPokemonFromZone(store, state, player, player.discard, selected || [], slots));
+      });
     }
 
     return state;

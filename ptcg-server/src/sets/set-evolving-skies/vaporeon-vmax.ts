@@ -2,9 +2,10 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
-import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
+import { PokemonCard, pokemonHasCardType } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType, EnergyType } from '../../game/store/card/card-types';
-import { GameMessage, PokemonCardList, StoreLike, State, StateUtils } from '../../game';
+import { GameMessage, StoreLike, State, StateUtils } from '../../game';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED, ATTACH_ENERGY_PROMPT } from '../../game/store/prefabs/prefabs';
@@ -56,12 +57,10 @@ export class VaporeonVmax extends PokemonCard {
         return state;
       }
 
-      // Check for Water Pokemon in discard
-      const waterPokemonInDiscard = player.discard.cards.filter(c =>
-        c instanceof PokemonCard && c.cardType === CardType.WATER
-      );
-
-      if (waterPokemonInDiscard.length === 0) {
+      const nonWater = player.discard.cards.flatMap((card, index) =>
+        card instanceof PokemonCard && pokemonHasCardType(card, CardType.WATER) ? [] : [index]);
+      const blocked = getBlockedPokemonPlacementIndices(store, state, player, player.discard, nonWater);
+      if (blocked.length === player.discard.cards.length) {
         return state;
       }
 
@@ -70,28 +69,18 @@ export class VaporeonVmax extends PokemonCard {
         player,
         GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
         player.discard,
-        { superType: SuperType.POKEMON, cardType: CardType.WATER },
-        { min: 1, max: 1, allowCancel: false }
+        { superType: SuperType.POKEMON },
+        { min: 1, max: 1, allowCancel: false, blocked }
       ), selected => {
         const cards = selected || [];
         if (cards.length === 0) {
           return;
         }
 
-        // Put chosen Pokemon onto bench
-        const benchSlot = openSlots[0];
-        player.discard.moveCardTo(cards[0], benchSlot);
-        (benchSlot as PokemonCardList).pokemonPlayedTurn = state.turn;
-
-        // Attach up to 3 W energy from discard to that Pokemon
-        const waterEnergyInDiscard = player.discard.cards.filter(c =>
-          c instanceof EnergyCard && c.energyType === EnergyType.BASIC &&
-          c.provides.includes(CardType.WATER)
-        );
-
-        if (waterEnergyInDiscard.length > 0) {
-          // Find bench index for the placed Pokemon
-          const benchIndex = player.bench.indexOf(benchSlot as PokemonCardList);
+        benchPokemonFromZone(store, state, player, player.discard, cards, openSlots, benchSlot => {
+          const hasWaterEnergy = player.discard.cards.some(card =>
+            card instanceof EnergyCard && card.energyType === EnergyType.BASIC && card.provides.includes(CardType.WATER));
+          if (!hasWaterEnergy) return;
 
           ATTACH_ENERGY_PROMPT(
             store, state, player,
@@ -99,10 +88,10 @@ export class VaporeonVmax extends PokemonCard {
             [SlotType.BENCH],
             { superType: SuperType.ENERGY, energyType: EnergyType.BASIC, name: 'Water Energy' },
             { min: 0, max: 3, allowCancel: false, blockedTo: player.bench
-              .map((b, i) => ({ player: PlayerType.BOTTOM_PLAYER, slot: SlotType.BENCH, index: i }))
-              .filter(t => t.index !== benchIndex) }
+              .map((_, index) => ({ player: PlayerType.BOTTOM_PLAYER, slot: SlotType.BENCH, index }))
+              .filter(target => player.bench[target.index] !== benchSlot) }
           );
-        }
+        });
       });
     }
 

@@ -1,6 +1,7 @@
 import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
-import { Card, ChooseCardsPrompt, GameError, GameMessage, PokemonCard, PokemonCardList, ShuffleDeckPrompt, State, StoreLike } from '../../game';
-import { CardTag, Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
+import { Card, ChooseCardsPrompt, GameError, GameMessage, PokemonCardList, ShuffleDeckPrompt, State, StoreLike } from '../../game';
+import { Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
+import { PokemonCard, pokemonHasRuleBox } from '../../game/store/card/pokemon-card';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
@@ -46,23 +47,8 @@ export class Gloria extends TrainerCard {
           throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
         }
 
-        const blocked: number[] = [];
-        player.deck.cards.forEach((c, index) => {
-          if (c instanceof PokemonCard && c.stage === Stage.BASIC &&
-            !c.tags.includes(CardTag.POKEMON_V) &&
-            !c.tags.includes(CardTag.POKEMON_VSTAR) &&
-            !c.tags.includes(CardTag.POKEMON_VMAX) &&
-            !c.tags.includes(CardTag.POKEMON_EX) &&
-            !c.tags.includes(CardTag.POKEMON_GX) &&
-            !c.tags.includes(CardTag.POKEMON_LV_X) &&
-            !c.tags.includes(CardTag.POKEMON_ex) &&
-            // eslint-disable-next-line no-empty
-            !c.tags.includes(CardTag.RADIANT)) {
-
-          } else {
-            blocked.push(index);
-          }
-        });
+        const blocked = player.deck.cards.flatMap((card, index) =>
+          card instanceof PokemonCard && pokemonHasRuleBox(card) ? [index] : []);
 
         player.hand.moveCardTo(effect.trainerCard, player.supporter);
         // We will discard this card after prompt confirmation
@@ -77,7 +63,7 @@ export class Gloria extends TrainerCard {
           GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
           player.deck,
           { superType: SuperType.POKEMON, stage: Stage.BASIC },
-          { min: 0, max: maxCards, allowCancel: false, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck) }
+          { min: 0, max: maxCards, allowCancel: false, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck, blocked) }
         ), selectedCards => {
           cards = selectedCards || [];
 

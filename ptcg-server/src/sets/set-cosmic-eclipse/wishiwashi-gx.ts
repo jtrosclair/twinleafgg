@@ -2,6 +2,7 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag, SuperType } from '../../game/store/card/card-types';
 import { CardList, ChooseCardsPrompt, GameMessage, PlayerType, StoreLike, State } from '../../game';
@@ -71,36 +72,28 @@ export class WishiwashiGx extends PokemonCard {
       SHOW_CARDS_TO_PLAYER(store, state, player, deckTop.cards, player);
 
       // Count available bench slots
-      const openSlots = player.bench.filter(b => b.cards.length === 0).length;
+      const openSlots = player.bench.filter(b => b.cards.length === 0);
 
-      // Count basic Pokemon in the top cards
-      const basicCount = deckTop.cards.filter(c =>
-        c instanceof PokemonCard && c.stage === Stage.BASIC
-      ).length;
+      const blocked = getBlockedPokemonPlacementIndices(store, state, player, deckTop);
+      const basicCount = deckTop.cards.filter((card, index) =>
+        card instanceof PokemonCard && card.stage === Stage.BASIC && !blocked.includes(index)).length;
 
-      if (basicCount === 0 || openSlots === 0) {
+      if (basicCount === 0 || openSlots.length === 0) {
         deckTop.moveTo(player.deck);
         SHUFFLE_DECK(store, state, player);
         return state;
       }
 
-      const maxToSelect = Math.min(basicCount, openSlots);
+      const maxToSelect = Math.min(basicCount, openSlots.length);
 
       return store.prompt(state, new ChooseCardsPrompt(
         player,
         GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
         deckTop,
         { superType: SuperType.POKEMON, stage: Stage.BASIC },
-        { min: 0, max: maxToSelect, allowCancel: false }
+        { min: 0, max: maxToSelect, allowCancel: false, blocked }
       ), selected => {
-        const cards = selected || [];
-        cards.forEach(card => {
-          const emptySlot = player.bench.find(b => b.cards.length === 0);
-          if (emptySlot) {
-            deckTop.moveCardTo(card, emptySlot);
-            emptySlot.pokemonPlayedTurn = state.turn;
-          }
-        });
+        benchPokemonFromZone(store, state, player, deckTop, selected || [], openSlots);
         // Shuffle remaining cards back into deck
         deckTop.moveTo(player.deck);
         SHUFFLE_DECK(store, state, player);

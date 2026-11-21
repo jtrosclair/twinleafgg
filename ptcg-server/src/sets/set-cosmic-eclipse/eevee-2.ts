@@ -2,6 +2,7 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
 import { ChooseCardsPrompt, GameMessage, StoreLike, State } from '../../game';
@@ -62,15 +63,9 @@ export class Eevee2 extends PokemonCard {
         GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
         player.deck,
         { superType: SuperType.POKEMON },
-        { min: 0, max: emptySlots.length, allowCancel: true, blocked }
+        { min: 0, max: emptySlots.length, allowCancel: true, blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck, blocked) }
       ), selected => {
-        const cards = selected || [];
-        cards.forEach((card, index) => {
-          if (index < emptySlots.length) {
-            player.deck.moveCardTo(card, emptySlots[index]);
-            emptySlots[index].pokemonPlayedTurn = state.turn;
-          }
-        });
+        benchPokemonFromZone(store, state, player, player.deck, selected || [], emptySlots);
         return SHUFFLE_DECK(store, state, player);
       });
     }

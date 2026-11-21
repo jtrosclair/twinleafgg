@@ -2,6 +2,7 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
 import { Card, ConfirmPrompt, GameMessage, StoreLike, State, StateUtils } from '../../game';
@@ -54,8 +55,8 @@ export class Politoed extends PokemonCard {
         return state;
       }
 
-      const openSlots = player.bench.filter(b => b.cards.length === 0).length;
-      if (openSlots === 0) {
+      const openSlots = player.bench.filter(b => b.cards.length === 0);
+      if (openSlots.length === 0) {
         return SHUFFLE_DECK(store, state, player);
       }
 
@@ -74,7 +75,8 @@ export class Politoed extends PokemonCard {
         GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
         player.deck,
         { superType: SuperType.POKEMON },
-        { min: 0, max: Math.min(3, openSlots), allowCancel: false, blocked }
+        { min: 0, max: Math.min(3, openSlots.length), allowCancel: false, maxBasics: 1, maxStage1: 1, maxStage2: 1,
+          blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck, blocked) }
       ), (selected: Card[]) => {
         const cards = selected || [];
 
@@ -85,13 +87,7 @@ export class Politoed extends PokemonCard {
             cards
           ), () => { });
 
-          cards.forEach(card => {
-            const emptySlot = player.bench.find(b => b.cards.length === 0);
-            if (emptySlot) {
-              player.deck.moveCardTo(card, emptySlot);
-              emptySlot.pokemonPlayedTurn = state.turn;
-            }
-          });
+          benchPokemonFromZone(store, state, player, player.deck, cards, openSlots);
         }
 
         return SHUFFLE_DECK(store, state, player);

@@ -2,6 +2,7 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
+import { benchPokemonFromZone, getBlockedPokemonPlacementIndices } from '../../game/store/prefabs/bench-play-reactions';
 import { ADD_SLEEP_TO_PLAYER_ACTIVE, AFTER_ATTACK, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { CardType, Stage, SuperType } from '../../game/store/card/card-types';
 import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
@@ -43,28 +44,22 @@ export class Shaymin extends PokemonCard {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
 
-      const emptyBenchSlots = player.bench.filter(b => b.cards.length === 0).length;
-      if (emptyBenchSlots === 0 || player.deck.cards.length === 0) {
+      const emptyBenchSlots = player.bench.filter(b => b.cards.length === 0);
+      if (emptyBenchSlots.length === 0 || player.deck.cards.length === 0) {
         return state;
       }
 
-      const maxPokemon = Math.min(3, emptyBenchSlots);
+      const maxPokemon = Math.min(3, emptyBenchSlots.length);
 
       return store.prompt(state, new ChooseCardsPrompt(
         player,
         GameMessage.CHOOSE_CARD_TO_PUT_ONTO_BENCH,
         player.deck,
         { superType: SuperType.POKEMON, stage: Stage.BASIC },
-        { min: 0, max: maxPokemon, allowCancel: false, differentTypes: true }
+        { min: 0, max: maxPokemon, allowCancel: false, differentTypes: true,
+          blocked: getBlockedPokemonPlacementIndices(store, state, player, player.deck) }
       ), selected => {
-        const cards = selected || [];
-        cards.forEach(card => {
-          const emptySlot = player.bench.find(b => b.cards.length === 0);
-          if (emptySlot) {
-            player.deck.moveCardTo(card, emptySlot);
-            emptySlot.pokemonPlayedTurn = state.turn;
-          }
-        });
+        benchPokemonFromZone(store, state, player, player.deck, selected || [], emptyBenchSlots);
         return SHUFFLE_DECK(store, state, player);
       });
     }
