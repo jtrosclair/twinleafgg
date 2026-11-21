@@ -6,6 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { HealEffect } from '../../game/store/effects/game-effects';
 import { WAS_POWER_USED, IS_ABILITY_BLOCKED, REMOVE_MARKER_AT_END_OF_TURN, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED } from '../../game/store/prefabs/prefabs';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { GameError, GameMessage } from '../../game';
@@ -69,7 +70,7 @@ export class Clefable extends PokemonCard {
       ABILITY_USED(player, this);
 
       // Heal 20 damage from Active Pokemon
-      player.active.damage = Math.max(0, player.active.damage - 20);
+      store.reduceEffect(state, new HealEffect(player, player.active, 20));
 
       // Remove all Special Conditions
       player.active.specialConditions = [];

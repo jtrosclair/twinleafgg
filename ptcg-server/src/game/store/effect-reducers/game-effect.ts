@@ -4,6 +4,7 @@ import { GameError } from '../../game-error';
 import { GameLog, GameMessage } from '../../game-message';
 import { BoardEffect, CardTag, CardType, SpecialCondition, Stage, SuperType, TrainerType } from '../card/card-types';
 import { EnergyCard } from '../card/energy-card';
+import { ALPHA_RECOVERY } from '../card/pokemon-card';
 import { TrainerCard } from '../card/trainer-card';
 import { PowerType, Resistance, Weakness } from '../card/pokemon-types';
 import { ApplyWeaknessEffect, DealDamageEffect } from '../effects/attack-effects';
@@ -528,7 +529,10 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
   // }
 
   if (effect instanceof HealEffect) {
-    effect.target.damage = Math.max(0, effect.target.damage - effect.damage);
+    const pokemon = effect.target.getPokemonCard();
+    const hasAlphaRecovery = pokemon?.powers.some(power =>
+      power.powerType === PowerType.ANCIENT_TRAIT && power.name === ALPHA_RECOVERY.name);
+    effect.target.damage = Math.max(0, effect.target.damage - effect.damage * (hasAlphaRecovery ? 2 : 1));
     return state;
   }
 

@@ -4,7 +4,7 @@ import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { IS_SPECIAL_ENERGY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class RainbowEnergy extends EnergyCard {
@@ -40,7 +40,7 @@ export class RainbowEnergy extends EnergyCard {
       effect.energyMap.push({ card: this, provides: [CardType.ANY] });
     }
 
-    if (effect instanceof AttachEnergyEffect && effect.energyCard === this) {
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.energyCard === this) {
       if (IS_SPECIAL_ENERGY_BLOCKED(store, state, effect.player, this, effect.target)) {
         return state;
       }

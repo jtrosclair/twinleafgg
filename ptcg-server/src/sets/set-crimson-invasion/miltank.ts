@@ -6,7 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { HealEffect } from '../../game/store/effects/game-effects';
 import { WAS_ATTACK_USED, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 import { FLIP_A_COIN_IF_HEADS_DEAL_MORE_DAMAGE } from '../../game/store/prefabs/attack-effects';
@@ -42,27 +42,10 @@ export class Miltank extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Moomoo Malt (passive - heal when attaching energy from hand)
-    // Ref: set-roaring-skies/healing-scarf.ts (AttachEnergyEffect healing pattern)
-    if (effect instanceof AttachEnergyEffect) {
-      const player = StateUtils.findOwner(state, effect.target);
-
-      // Check if this Miltank is in the active slot
-      if (player.active.getPokemonCard() !== this) {
-        return state;
-      }
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        return state;
-      }
-
-      // Only trigger when the owner is the one attaching energy
-      if (effect.player !== player) {
-        return state;
-      }
-
-      // Heal 90 damage from the Pokemon that received energy
-      const healEffect = new HealEffect(player, effect.target, 90);
-      store.reduceEffect(state, healEffect);
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.player.active.getPokemonCard() === this
+      && StateUtils.findOwner(state, effect.target) === effect.player
+      && !IS_ABILITY_BLOCKED(store, state, effect.player, this)) {
+      return store.reduceEffect(state, new HealEffect(effect.player, effect.target, 90));
     }
 
     // Attack 1: Sitdown Splash

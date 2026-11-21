@@ -2,7 +2,7 @@ import { StoreLike, State } from '../../game';
 import { CardType, EnergyType } from '../../game/store/card/card-types';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { IS_SPECIAL_ENERGY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class JetEnergy extends EnergyCard {
@@ -22,7 +22,7 @@ When you attach this card from your hand to 1 of your Benched Pokémon, switch t
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof AttachEnergyEffect && effect.energyCard === this) {
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.energyCard === this) {
       const player = effect.player;
       const target = effect.target;
 
@@ -30,7 +30,7 @@ When you attach this card from your hand to 1 of your Benched Pokémon, switch t
         return state;
       }
 
-      player.switchPokemon(target);
+      player.switchPokemon(target, store, state);
     }
 
     return state;

@@ -2,7 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, GameMessage, PlayerType, SlotType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
+import { AttackEffect, HealEffect } from '../../game/store/effects/game-effects';
 import { WAS_ATTACK_USED, MULTIPLE_COIN_FLIPS_PROMPT } from '../../game/store/prefabs/prefabs';
 import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
@@ -72,7 +72,7 @@ export class Audino extends PokemonCard {
       ), targets => {
         if (targets && targets.length > 0) {
           const target = targets[0];
-          target.damage = Math.max(0, target.damage - 50);
+          store.reduceEffect(state, new HealEffect(player, target, 50));
         }
       });
     }

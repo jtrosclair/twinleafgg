@@ -3620,3 +3620,53 @@ inapplicable to this simulator and ten are partial. The ledger also still
 marks twelve other commits deferred. A commit may contain several gameplay
 fixes or include code for retired features. Team Rocket's Ampharos was in a
 separately titled Ability-effects refactor and is outside the `fix` count.
+
+## Gameplay re-audit, batch 48
+
+The five Primal Clash prints with α Recovery now double actual healing.
+Ludicolo 37, Eelektrik 64, Tentacool 71, Azumarill 104 and Bidoof 117 use
+the same rule for Tools, Abilities, Trainer cards and attacks that heal.
+Seven direct healing call sites now use that resolution path. Healing caps
+at the damage on the target, and healing prevention still applies.
+[Official Ludicolo print](https://www.pokemon-card.com/card-search/details.php/card/30748)
+[Official Bidoof and Leafeon-GX ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AA%E3%83%BC%E3%83%95%E3%82%A3%E3%82%A2GX&regulation_faq_main_item1=all)
+
+Adapted the Dyna Tree Hill and Frozen City paths from `cfe494c46`. Dyna Tree
+Hill suppresses healing on either side while it is the active Stadium.
+New Moon protects only its owner's affected Pokémon. Frozen City counts
+successful attachments from the hand and respects that same protection.
+The Stadium refactor touches 120 files. The current path comparison identifies
+112 card source files using its Stadium query. Eleven fork paths already use
+the query, 97 need printed-rule comparison and four need source mapping.
+These are file counts for review.
+[Official Dyna Tree Hill print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/swsh6/135/)
+[Official Dyna Tree Hill rulings](https://asia.pokemon-card.com/sg/rules/search/?keyword=Dyna+Tree+Hill)
+
+Healing Scarf, Moomoo Malt, Jet Energy and Rainbow Energy now observe
+successful hand attachment. A physical Tool participates once even when
+stored in both the main slot and the Tools list. A Tool stored only in a
+saved Tools list still participates. Jet Energy switches its actual recipient
+after attachment and emits the normal movement effects.
+[Official Healing Scarf ruling](https://www.pokemon-card.com/rules/faq/details.php?id=9819)
+
+α Growth still needs a transaction for the two physical attachments. The
+printed rule requires both cards to attach before downstream reactions.
+The official rulings confirm two instances of Healing Scarf, Frozen City,
+Rainbow Energy and Moomoo Malt. They also confirm that Celebi TM's Forest
+Breath can attach two Grass Energy to the same recipient. Ordinary Ability,
+attack and Trainer attachments do not use α Growth. The remaining work needs
+to keep Aurora Energy's hand discard and the normal once-per-turn manual
+attachment consistent if a selection fails. An actual manual Aurora Energy
+play currently attaches the card and spends the turn's attachment while the
+discard choice is still pending, with no card paid. This timing needs to be
+corrected before using it in a simultaneous attachment.
+[Official Moomoo Malt ruling](https://www.pokemon-card.com/rules/faq/search.php?card_block=&card_name=%E3%82%B2%E3%83%B3%E3%82%B7%E3%82%AB%E3%82%A4%E3%82%AA%E3%83%BC%E3%82%ACEX&old=1)
+[Official Forest Breath and attachment rulings](https://www.pokemon-card.com/rules/faq/search.php?page=758&regulation=all&sc_group_id=731%2F1000)
+
+All 20 focused cases passed. Sixteen fail on the previous engine. The full
+engine suite passed 10,487 tests and the worktree with the existing local
+edits passed 271 targeted checks. All 559 comparable saved states matched.
+The 5,225 sampled opening actions include 1,350 manual Energy attachments
+and 242 evolutions. Every sampled outcome matched. Seven recorded solutions
+won. The API passed 32 tests and the 2.46 MiB production package passed
+attestation, 10 packaged board checks and 209 Angular checks.

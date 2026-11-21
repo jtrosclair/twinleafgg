@@ -2,7 +2,7 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
-import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { ALPHA_RECOVERY, PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State } from '../../game';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
@@ -15,6 +15,8 @@ export class Bidoof2 extends PokemonCard {
   public hp: number = 70;
   public weakness = [{ type: F }];
   public retreat = [C, C];
+
+  public powers = [ALPHA_RECOVERY];
 
   public attacks = [
     {

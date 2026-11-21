@@ -6,8 +6,7 @@ import { StoreLike } from '../../game/store/store-like';
 import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { GameError, GameMessage } from '../../game';
-import { checkState } from '../../game/store/effect-reducers/check-effect';
-import { HealTargetEffect } from '../../game/store/effects/attack-effects';
+import { IS_STADIUM_EFFECT_BLOCKED } from '../../game/store/prefabs/stadium-effect';
 
 export class DynaTreeHill extends TrainerCard {
 
@@ -29,19 +28,14 @@ export class DynaTreeHill extends TrainerCard {
     
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof HealEffect || HealTargetEffect && StateUtils.getStadiumCard(state) === this) {
-
-      effect.preventDefault = true;
-
-      checkState(store, state);
-
-      if (effect instanceof UseStadiumEffect && StateUtils.getStadiumCard(state) === this) {
-        throw new GameError(GameMessage.CANNOT_USE_STADIUM);
+    if (effect instanceof UseStadiumEffect && StateUtils.getStadiumCard(state) === this) {
+      throw new GameError(GameMessage.CANNOT_USE_STADIUM);
+    }
+    if (effect instanceof HealEffect && StateUtils.getStadiumCard(state) === this) {
+      const owner = StateUtils.findOwner(state, effect.target);
+      if (!IS_STADIUM_EFFECT_BLOCKED(store, state, owner, effect.target, this)) {
+        effect.preventDefault = true;
       }
-
-      checkState(store, state);
-
-      return state;
     }
 
     return state;

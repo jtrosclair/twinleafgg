@@ -2,7 +2,7 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
-import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { ALPHA_RECOVERY, PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
@@ -16,6 +16,8 @@ export class Azumarill2 extends PokemonCard {
   public weakness = [{ type: M }];
   public resistance = [{ type: D, value: -20 }];
   public retreat = [C, C];
+
+  public powers = [ALPHA_RECOVERY];
 
   public attacks = [
     {

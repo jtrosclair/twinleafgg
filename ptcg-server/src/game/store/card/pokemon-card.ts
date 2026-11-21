@@ -9,6 +9,12 @@ const RULE_BOX_TAGS = [CardTag.POKEMON_V, CardTag.POKEMON_VMAX, CardTag.POKEMON_
   CardTag.POKEMON_EX, CardTag.BREAK, CardTag.POKEMON_GX, CardTag.PRISM_STAR,
   CardTag.RADIANT, CardTag.POKEMON_VUNION];
 
+export const ALPHA_RECOVERY: Power = {
+  name: 'α Recovery',
+  powerType: PowerType.ANCIENT_TRAIT,
+  text: 'When this Pokémon is healed, double the amount healed.'
+};
+
 export abstract class PokemonCard extends Card {
 
   public superType: SuperType = SuperType.POKEMON;

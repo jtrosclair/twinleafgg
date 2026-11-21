@@ -6,6 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { GameError, GameMessage, PlayerType, PowerType, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { HealEffect } from '../../game/store/effects/game-effects';
 import { WAS_POWER_USED, IS_ABILITY_BLOCKED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, REMOVE_MARKER_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
 
 export class Milotic extends PokemonCard {
@@ -57,7 +58,7 @@ export class Milotic extends PokemonCard {
       // Heal 20 from each of player's Pokemon
       player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList) => {
         if (cardList.damage > 0) {
-          cardList.damage = Math.max(0, cardList.damage - 20);
+          store.reduceEffect(state, new HealEffect(player, cardList, 20));
         }
       });
     }

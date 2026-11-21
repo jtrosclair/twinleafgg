@@ -6,6 +6,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
 import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { HealEffect } from '../../game/store/effects/game-effects';
 import { GameError, GameMessage } from '../../game';
 import { WAS_ATTACK_USED, WAS_POWER_USED, IS_ABILITY_BLOCKED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, REMOVE_MARKER_AT_END_OF_TURN } from '../../game/store/prefabs/prefabs';
 import { CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
@@ -59,7 +60,7 @@ export class IndeedeeV extends PokemonCard {
       ABILITY_USED(player, this);
 
       // Heal 20 damage from active Pokemon
-      player.active.damage = Math.max(0, player.active.damage - 20);
+      store.reduceEffect(state, new HealEffect(player, player.active, 20));
     }
 
     REMOVE_MARKER_AT_END_OF_TURN(effect, this.WATCH_OVER_MARKER, this);

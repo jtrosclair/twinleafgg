@@ -33,6 +33,13 @@
       "notes": "Pre-base historical path record. The fork uses a public tags field while upstream exposes protected _tags through accessors. Batch 32 brings Steelix GL, Ho-Oh LEGEND and Raikou & Suicune LEGEND into the local convention and corrects the single-Pokémon LEGEND Prize rule for Ho-Oh and Lugia. A catalog check on the prior build found 182 registered prints with protected tags missing from their public tags; real Knock Outs reproduced incorrect Prize awards for three representative ex and Mega ex prints. The rest require card and puzzle verification. Batch 33 restores all 32 registered prints with missing public Prize tags, verified through real attack Knock Outs. Four saved states change only the public tags of Koraidon ex ASC and Team Rocket’s Kangaskhan ex ASC. The compiled catalog now has 145 prints with other protected tags missing from their public tags, with a confirmed Poké Turn failure on Forretress G RR. Batch 34 restores those 145 printed classifications via the fork's public tags field. It also corrects the Poké Turn physical card return, Rob's Technical Machine handling, Damage Porter's cost and damage, and the Unown and Arceus deck validation rules."
     },
     {
+      "sha": "cfe494c464f0a413cb6cc4bc32a59c3252b0a53e",
+      "date": "2026-07-26",
+      "subject": "refactor(cards:): Lunatone OBF New Moon, Stadium Effect Blocking",
+      "status": "partial",
+      "notes": "Historical upstream path record. Batch 48 ports the Dyna Tree Hill and Frozen City checks using the existing Stadium permission helper. Dyna Tree Hill intercepts healing only, while Frozen City reacts to successful hand attachments. The prior Po Town, Galactic HQ, Wyndon Stadium and Jamming Tower fixes also overlap this patch. The other Stadium paths remain individually tracked for printed-rule review."
+    },
+    {
       "sha": "f0edbdac48a0b72d146bfcf768243a043736adc2",
       "date": "2026-08-16",
       "subject": "add (cards): Trainer Kit Promos, 30th Celebration",

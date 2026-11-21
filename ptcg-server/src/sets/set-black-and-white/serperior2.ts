@@ -3,6 +3,7 @@ import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils, PlayerType, SlotType, MoveEnergyPrompt, CardTarget } from '../../game';
 import { PowerType } from '../../game/store/card/pokemon-types';
 import { Effect } from '../../game/store/effects/effect';
+import { HealEffect } from '../../game/store/effects/game-effects';
 import { BetweenTurnsEffect } from '../../game/store/effects/game-phase-effects';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 import { GameMessage } from '../../game/game-message';
@@ -55,7 +56,7 @@ export class Serperior2 extends PokemonCard {
         // Heal 10 from each of this player's Pokémon
         player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
           if (cardList.damage > 0) {
-            cardList.damage = Math.max(0, cardList.damage - 10);
+            store.reduceEffect(state, new HealEffect(player, cardList, 10));
           }
         });
       }

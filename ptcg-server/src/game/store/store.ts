@@ -11,7 +11,7 @@ import { Card } from './card/card';
 import { PokemonCard } from './card/pokemon-card';
 import { TrainerCard } from './card/trainer-card';
 import { Stage, TrainerType } from './card/card-types';
-import { CopiedSupporterEffect } from './effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect, CopiedSupporterEffect } from './effects/play-card-effects';
 import { PowerType } from './card/pokemon-types';
 import { PokemonCardList } from './state/pokemon-card-list';
 import { CardTarget, PlayCardAction, PlayerType, SlotType } from './actions/play-card-action';
@@ -679,7 +679,9 @@ export class Store implements StoreLike {
       player.discard.cards.forEach(c => cards.push(c));
     }
     cards.sort(c => c.superType);
-    cards.forEach(c => {
+    // A physical Tool can be present in both the slot and its Tools list.
+    const listeners = effect instanceof AfterAttachEnergyFromHandEffect ? new Set(cards) : cards;
+    listeners.forEach(c => {
       if (virtual.has(c) && effect instanceof CheckProvidedEnergyEffect) {
         state = (c as Card & { reduceMirrorOnlyEnergyEffect: (store: StoreLike, state: State, effect: CheckProvidedEnergyEffect) => State }).reduceMirrorOnlyEnergyEffect(this, state, effect);
       } else state = this.callReduceEffect(c, this, state, effect);

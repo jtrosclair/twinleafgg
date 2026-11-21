@@ -2,7 +2,7 @@
 // Card effects were implemented by an agent.
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
-import { PokemonCard } from '../../game/store/card/pokemon-card';
+import { ALPHA_RECOVERY, PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
@@ -18,6 +18,8 @@ export class Ludicolo2 extends PokemonCard {
 
   public readonly SPLASH_DANCE_MARKER = 'LUDICOLO2_SPLASH_DANCE_MARKER';
   public readonly SPLASH_DANCE_MARKER_2 = 'LUDICOLO2_SPLASH_DANCE_MARKER_2';
+
+  public powers = [ALPHA_RECOVERY];
 
   public attacks = [
     {

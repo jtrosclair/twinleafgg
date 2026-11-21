@@ -6,6 +6,7 @@ import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType } from '../../game/store/card/card-types';
 import { PlayerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { HealEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { IS_TOOL_BLOCKED } from '../../game/store/prefabs/prefabs';
 
@@ -41,7 +42,7 @@ export class SitrusBerry extends TrainerCard {
           // 3 or more damage counters = 30+ damage
           if (cardList.damage >= 30) {
             // Heal 30 damage
-            cardList.damage = Math.max(0, cardList.damage - 30);
+            store.reduceEffect(state, new HealEffect(checkPlayer, cardList, 30));
             // Discard this tool
             cardList.moveCardTo(this, checkPlayer.discard);
           }

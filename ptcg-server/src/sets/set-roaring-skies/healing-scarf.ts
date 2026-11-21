@@ -6,7 +6,7 @@ import { TrainerCard } from '../../game/store/card/trainer-card';
 import { TrainerType } from '../../game/store/card/card-types';
 import { StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
+import { AfterAttachEnergyFromHandEffect } from '../../game/store/effects/play-card-effects';
 import { HealEffect } from '../../game/store/effects/game-effects';
 import { IS_TOOL_BLOCKED } from '../../game/store/prefabs/prefabs';
 
@@ -19,28 +19,12 @@ export class HealingScarf extends TrainerCard {
   public fullName: string = 'Healing Scarf ROS';
   public text: string = 'Whenever you attach an Energy card from your hand to the Pok\u00e9mon this card is attached to, heal 20 damage from it.';
 
-  // Ref: set-x-and-y/hard-charm.ts (Tool effect pattern), set-phantom-forces/gliscor.ts (AttachEnergyEffect interception)
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof AttachEnergyEffect) {
-      // Check if this tool is attached to the target Pokemon
-      if (!effect.target.tools.includes(this)) {
-        return state;
-      }
-
+    if (effect instanceof AfterAttachEnergyFromHandEffect && effect.target.tools.includes(this)) {
       const player = StateUtils.findOwner(state, effect.target);
-
-      if (IS_TOOL_BLOCKED(store, state, player, this)) {
-        return state;
+      if (effect.player === player && !IS_TOOL_BLOCKED(store, state, player, this)) {
+        return store.reduceEffect(state, new HealEffect(player, effect.target, 20));
       }
-
-      // Only trigger when the owner is the one attaching energy
-      if (effect.player !== player) {
-        return state;
-      }
-
-      // Heal 20 damage from the Pokemon this card is attached to
-      const healEffect = new HealEffect(player, effect.target, 20);
-      store.reduceEffect(state, healEffect);
     }
 
     return state;
