@@ -6142,3 +6142,45 @@ the defender and places a Checkup counter through Genome Hacking.
 [Thievul](https://asia.pokemon-card.com/sg/card-search/detail/25782/)
 [Clefable](https://asia.pokemon-card.com/sg/card-search/detail/12562/)
 [Brute Bonnet](https://asia.pokemon-card.com/my/card-search/detail/12601/)
+
+## Gameplay re-audit, batch 102
+
+Seven modern attack handlers from `3ee8aac13` now resolve copied attacks
+through the shared damage and post-attack sequence. Skill Thief and
+Metronome both apply Brute Bonnet's Poison Spray, including the immediate
+Checkup counter, and retain the declared attack in turn history. Skill
+Thief can choose a Benched source while keeping the opposing Active as
+the target. Mimed Games leaves the choice with the opponent. Gemstone
+Hunt limits its choices to the opposing Active Tera Pokémon, and Night
+Joker selects from the eligible N's Pokémon on the player's Bench.
+[Thievul](https://asia.pokemon-card.com/sg/card-search/detail/25782/)
+[Clefable](https://asia.pokemon-card.com/sg/card-search/detail/12562/)
+[Brute Bonnet](https://asia.pokemon-card.com/my/card-search/detail/12601/)
+[Mime Jr.](https://asia.pokemon-card.com/hk-en/card-search/detail/11121/)
+[Team Rocket's Mimikyu](https://www.pokemon-card.com/card-search/details.php/card/47435)
+[N's Zoroark ex](https://asia.pokemon-card.com/ph/card-search/detail/18036/)
+
+Seek Inspiration discards the printed top card and requires the attack
+choice from an eligible Pokémon. It discards Rule Box Pokémon without
+offering their attacks. Haughty Orders reveals the available cards to both
+players, resolves the chosen attack, and then shuffles the revealed cards
+back. If it copies Haughty Orders itself, it shuffles before repeating the
+reveal. Declining the optional copy still shuffles, and shorter decks reveal
+only the cards they have.
+[Slowking](https://asia.pokemon-card.com/hk-en/card-search/detail/14034/)
+[Team Rocket's Persian ex](https://asia.pokemon-card.com/my/card-search/detail/19684/)
+[Haughty Orders rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%AD%E3%82%B1%E3%83%83%E3%83%88%E5%9B%A3%E3%81%AE%E3%83%9A%E3%83%AB%E3%82%B7%E3%82%A2%E3%83%B3ex&regulation_faq_main_item1=all)
+
+All 14 new cases pass, including eight failures on the preceding engine.
+The focused suite also covers damage bypass, cost ownership and older
+Slowking and Night Joker cases. A live Night Joker copy of Rampaging
+Thunder deals 250 and blocks Zoroark’s next attack. Memory Helix on Mew ex
+30C already copies an affordable Benched Poison Spray; Memory Dive’s
+evolution-stack choices remain open.
+[Official Rampaging Thunder ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=N%E3%81%AE%E3%82%BE%E3%83%AD%E3%82%A2&regulation_faq_main_item1=all)
+
+All 11,772 engine checks, 102 combined WebView checks and 33 API checks
+pass. All 559 compatible saved boards round-trip byte-for-byte, and all
+5,484 sampled opening actions match.
+The attested package passed all desktop and touch checks, all 211 client
+checks passed, and eight recorded solutions won on both replays.

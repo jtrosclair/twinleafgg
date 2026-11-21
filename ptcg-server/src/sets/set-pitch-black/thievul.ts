@@ -1,12 +1,10 @@
-import { Attack, GameLog, GameMessage, State, StateUtils, StoreLike } from '../../game';
+import { GameMessage, State, StoreLike } from '../../game';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { DealDamageEffect } from '../../game/store/effects/attack-effects';
 import { Effect } from '../../game/store/effects/effect';
-import { AttackEffect } from '../../game/store/effects/game-effects';
-import { ChooseAttackPrompt } from '../../game/store/prompts/choose-attack-prompt';
 import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
 import { PlayerType, SlotType } from '../../game/store/actions/play-card-action';
+import { copyAttackFromPokemonList } from '../../game/store/prefabs/copy-attack-prefabs';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Thievul extends PokemonCard {
@@ -39,57 +37,27 @@ export class Thievul extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
+      const attackEffect = effect;
+      const { player, opponent } = attackEffect;
       if (player.hand.cards.length > 0) {
         return state;
       }
-      function* useSkillThief(next: Function): IterableIterator<State> {
-        const opponent = StateUtils.getOpponent(state, player);
-        let targetList = opponent.active;
-        const hasBench = opponent.bench.some(b => b.cards.length > 0);
-        if (hasBench) {
+      function* useSkillThief(next: () => void): IterableIterator<State> {
+        let target = opponent.active;
+        if (opponent.bench.some(slot => slot.getPokemonCard())) {
           yield store.prompt(state, new ChoosePokemonPrompt(
-            player.id,
-            GameMessage.CHOOSE_POKEMON,
-            PlayerType.TOP_PLAYER,
-            [SlotType.ACTIVE, SlotType.BENCH],
-            { min: 1, max: 1, allowCancel: false }
+            player.id, GameMessage.CHOOSE_POKEMON, PlayerType.TOP_PLAYER,
+            [SlotType.ACTIVE, SlotType.BENCH], { min: 1, max: 1, allowCancel: false },
           ), selected => {
-            if (selected && selected.length > 0) {
-              targetList = selected[0];
-            }
+            if (selected?.[0]) target = selected[0];
             next();
           });
         }
-        const pokemonCard = targetList.getPokemonCard();
-        if (!pokemonCard || pokemonCard.attacks.length === 0) {
-          return state;
-        }
-        let chosen: Attack | undefined;
-        yield store.prompt(state, new ChooseAttackPrompt(
-          player.id,
-          GameMessage.CHOOSE_ATTACK_TO_COPY,
-          [pokemonCard],
-          { allowCancel: false }
-        ), (result: Attack | null) => {
-          chosen = result ?? undefined;
-          next();
+        const pokemon = target.getPokemonCard();
+        if (!pokemon) return state;
+        return yield* copyAttackFromPokemonList(next, store, state, attackEffect, [pokemon], {
+          allowCancel: false, preserveInPlaySource: true,
         });
-        if (chosen === undefined) {
-          return state;
-        }
-        const attackToCopy = chosen;
-        store.log(state, GameLog.LOG_PLAYER_COPIES_ATTACK, { name: player.name, attack: attackToCopy.name });
-        const copyEffect = new AttackEffect(player, opponent, attackToCopy);
-        store.reduceEffect(state, copyEffect);
-        if (store.hasPrompts()) {
-          yield store.waitPrompt(state, () => next());
-        }
-        if (copyEffect.damage > 0) {
-          const dealDamage = new DealDamageEffect(copyEffect, copyEffect.damage);
-          state = store.reduceEffect(state, dealDamage);
-        }
-        return state;
       }
       const generator = useSkillThief(() => generator.next());
       return generator.next().value;

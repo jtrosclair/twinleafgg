@@ -1,79 +1,55 @@
-import { PokemonCard, Stage, CardType, CardTag, StoreLike, State, GameMessage, StateUtils, GameError, CardList, SuperType, ChooseAttackPrompt, Attack, GameLog, ShowCardsPrompt } from '../../game';
-import { DealDamageEffect } from '../../game/store/effects/attack-effects';
+import { PokemonCard, Stage, CardType, CardTag, StoreLike, State, GameMessage, CardList, ChooseAttackPrompt, Attack, ShowCardsPrompt } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect } from '../../game/store/effects/game-effects';
+import { runDelegatedCopiedAttackGenerator } from '../../game/store/prefabs/copy-attack-delegation';
+import { findPokemonCardForAttack } from '../../game/store/prefabs/copy-attack-prefabs';
 import { ADD_CONFUSION_TO_PLAYER_ACTIVE, AFTER_ATTACK, SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
-function* useHaughtyOrders(next: Function, store: StoreLike, state: State, effect: AttackEffect): IterableIterator<State> {
-  const player = effect.player;
-  const opponent = StateUtils.getOpponent(state, player);
+function* useHaughtyOrders(next: () => void, store: StoreLike, state: State, effect: AttackEffect): IterableIterator<State> {
+  const { player, opponent, source } = effect;
+  const attacker = source.getPokemonCard();
+  if (!attacker) return state;
 
-  if (opponent.deck.cards.length === 0) { throw new GameError(GameMessage.CANNOT_USE_ATTACK); }
+  while (opponent.deck.cards.length > 0) {
+    const revealed = opponent.deck.cards.slice(0, 10);
+    yield store.prompt(state, [
+      new ShowCardsPrompt(player.id, GameMessage.CARDS_SHOWED_BY_EFFECT, revealed, { allowCancel: false }),
+      new ShowCardsPrompt(opponent.id, GameMessage.CARDS_SHOWED_BY_EFFECT, revealed, { allowCancel: false }),
+    ], () => next());
 
-  const opponentTop10 = new CardList();
-  opponent.deck.moveTo(opponentTop10, Math.min(10, opponent.deck.cards.length));
-  const toppedPokemon = opponentTop10.cards.filter(card => card.superType === SuperType.POKEMON) as PokemonCard[];
-
-  // showing the prompt to both players at the same time, although this is having a weird effect where if the user tries to use an attack before the opponent has confirmed their side of the prompt, the effect won't go through but the damage does
-  store.prompt(state, [
-    new ShowCardsPrompt(player.id, GameMessage.CARDS_SHOWED_BY_EFFECT, opponentTop10.cards, { allowCancel: false }),
-    new ShowCardsPrompt(opponent.id, GameMessage.CARDS_SHOWED_BY_EFFECT, opponentTop10.cards, { allowCancel: false }),
-  ], results => {
-    opponentTop10.moveTo(opponent.deck);
-    SHUFFLE_DECK(store, state, opponent);
-  });
-
-  // if there's no pokemon in the top ten cards, move on
-  if (toppedPokemon.length === 0) {
-    return state;
-  }
-
-  for (let retryCount = 0; retryCount < 3; retryCount++) {
-    let selected: any;
-    yield store.prompt(state, new ChooseAttackPrompt(
-      player.id,
-      GameMessage.CHOOSE_ATTACK_TO_COPY,
-      toppedPokemon,
-      { allowCancel: true }
-    ), result => {
-      selected = result;
-      next();
-    });
-
-    const attack: Attack | null = selected;
-
-    if (attack === null) {
-      return state; // Player chose to cancel
-    }
-
-    try {
-      store.log(state, GameLog.LOG_PLAYER_COPIES_ATTACK, {
-        name: player.name,
-        attack: attack.name
+    const candidates = revealed.filter((card): card is PokemonCard => card instanceof PokemonCard && card.attacks.length > 0);
+    let selected: Attack | null = null;
+    if (candidates.length > 0) {
+      yield store.prompt(state, new ChooseAttackPrompt(
+        player.id, GameMessage.CHOOSE_ATTACK_TO_COPY, candidates, { allowCancel: true },
+      ), result => {
+        selected = result;
+        next();
       });
+    }
 
-      const attackEffect = new AttackEffect(player, opponent, attack);
-      state = store.reduceEffect(state, attackEffect);
-
-      if (store.hasPrompts()) {
-        yield store.waitPrompt(state, () => next());
-      }
-
-      if (attackEffect.damage > 0) {
-        const dealDamage = new DealDamageEffect(attackEffect, attackEffect.damage);
-        state = store.reduceEffect(state, dealDamage);
-      }
-
-      return state; // Successfully executed attack, exit the function
-    } catch (error) {
-      console.log('Attack failed:', error);
-      retryCount++;
-      if (retryCount >= 3) {
-        console.log('Max retries reached. Exiting loop.');
-        return state;
+    const attack = selected as Attack | null;
+    const printedSource = attack && findPokemonCardForAttack(candidates, attack);
+    const repeat = printedSource instanceof TeamRocketsPersianex && attack === printedSource.attacks[0];
+    if (attack && printedSource && !repeat) {
+      const setAside = new CardList();
+      opponent.deck.moveCardsTo(revealed, setAside);
+      try {
+        state = yield* runDelegatedCopiedAttackGenerator(next, {
+          store, state, player, opponent, copycatCard: attacker, sourceCard: printedSource,
+          selectedAttack: attack, sourceSlot: source, retainDeclaredAttack: true,
+        });
+      } finally {
+        setAside.moveTo(opponent.deck);
       }
     }
+
+    state = SHUFFLE_DECK(store, state, opponent);
+    if (store.hasPrompts()) yield store.waitPrompt(state, next);
+    // The official Haughty Orders ruling permits choosing itself after shuffling.
+    if (!repeat) return state;
   }
+  return state;
 }
 
 export class TeamRocketsPersianex extends PokemonCard {

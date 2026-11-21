@@ -113,6 +113,7 @@ export interface CopyAttackViaAbilityOptions extends BuildAttackListOptions {
 
 interface CopyAttackFromListOptions {
   allowCancel?: boolean;
+  promptPlayerId?: number;
   disallowCopycatAttack?: boolean;
   preserveInPlaySource?: boolean;
 }
@@ -124,14 +125,14 @@ export function* copyAttackFromPokemonList(
   state: State,
   effect: AttackEffect,
   pokemonCards: PokemonCard[],
-  { allowCancel = true, disallowCopycatAttack = false, preserveInPlaySource }: CopyAttackFromListOptions,
+  { allowCancel = true, promptPlayerId = effect.player.id, disallowCopycatAttack = false, preserveInPlaySource }: CopyAttackFromListOptions,
 ): IterableIterator<State> {
   const copycatCard = effect.source.getPokemonCard();
   if (!copycatCard || !pokemonCards.some(card => card.attacks.length)) return state;
 
   let selected: Attack | null = null;
   yield store.prompt(state, new ChooseAttackPrompt(
-    effect.player.id, GameMessage.CHOOSE_ATTACK_TO_COPY, pokemonCards, { allowCancel },
+    promptPlayerId, GameMessage.CHOOSE_ATTACK_TO_COPY, pokemonCards, { allowCancel },
   ), attack => {
     selected = attack;
     next();
