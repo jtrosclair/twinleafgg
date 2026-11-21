@@ -2,7 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PowerType, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { CoinFlipEffect } from '../../game/store/effects/play-card-effects';
+import { CheckCoinFlipResultEffect } from '../../game/store/effects/check-effects';
 import { EffectOfAbilityEffect } from '../../game/store/effects/game-effects';
 import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED } from '../../game/store/prefabs/attack-effects';
 import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
@@ -40,32 +40,18 @@ export class Malamar extends PokemonCard {
   public fullName: string = "Malamar XYP";
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // θ Stop — Ancient Trait (not an Ability; no IS_ABILITY_BLOCKED)
-    if (effect instanceof EffectOfAbilityEffect && effect.target?.getPokemonCard() === this) {
+    // θ Stop is an Ancient Trait and protects against opposing Abilities.
+    if (effect instanceof EffectOfAbilityEffect && effect.target?.getPokemonCard() === this
+      && StateUtils.getOpponent(state, effect.player).getPokemonInPlay().includes(effect.target)) {
       effect.preventDefault = true;
     }
 
     // Contrary
-    if (effect instanceof CoinFlipEffect) {
-      const cardList = StateUtils.findCardList(state, this);
-      const owner = StateUtils.findOwner(state, cardList);
-
-      if (owner.active.getPokemonCard() !== this) {
-        return state;
+    if (effect instanceof CheckCoinFlipResultEffect) {
+      const owner = StateUtils.getOpponent(state, effect.player);
+      if (owner.active.getPokemonCard() === this && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        effect.forcedTails = true;
       }
-      if (IS_ABILITY_BLOCKED(store, state, owner, this)) {
-        return state;
-      }
-
-      const opponent = StateUtils.getOpponent(state, owner);
-      if (effect.player !== opponent) {
-        return state;
-      }
-      if (state.players[state.activePlayer] !== opponent) {
-        return state;
-      }
-
-      effect.forcedResult = false;
     }
 
     // Conform

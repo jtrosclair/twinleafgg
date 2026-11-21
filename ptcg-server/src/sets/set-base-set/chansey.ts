@@ -5,8 +5,8 @@ import { StoreLike, State, StateUtils, PlayerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { CoinFlipEffect } from '../../game/store/effects/play-card-effects';
-import { SIMULATE_COIN_FLIP, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { PREVENT_DAMAGE } from '../../game/store/prefabs/effect-of-attack-prefabs';
+import { COIN_FLIP_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Chansey extends PokemonCard {
 
@@ -52,26 +52,11 @@ export class Chansey extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
+    // Ref: set-evolutions/chansey.ts (Scrunch uses one coin for damage protection).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      try {
-        const coinFlip = new CoinFlipEffect(player);
-        store.reduceEffect(state, coinFlip);
-      } catch {
-        return state;
-      }
-
-      const coinFlipResult = SIMULATE_COIN_FLIP(store, state, player);
-
-      if (coinFlipResult) {
-
-        player.active.marker.addMarker(this.PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN_MARKER, this);
-        opponent.marker.addMarker(this.CLEAR_PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN_MARKER, this);
-      }
-
-      return state;
+      return COIN_FLIP_PROMPT(store, state, effect.player, heads => {
+        if (heads) PREVENT_DAMAGE(store, state, effect, this);
+      });
     }
 
     if (WAS_ATTACK_USED(effect, 1, this)) {
@@ -82,8 +67,9 @@ export class Chansey extends PokemonCard {
       return store.reduceEffect(state, dealDamage);
     }
 
-    if (effect instanceof PutDamageEffect
-      && effect.target.marker.hasMarker(this.PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN_MARKER)) {
+    // Preserve protection in snapshots made before Scrunch used the typed effect.
+    if ((effect instanceof DealDamageEffect || effect instanceof PutDamageEffect)
+      && effect.target.marker.hasMarker(this.PREVENT_DAMAGE_DURING_OPPONENTS_NEXT_TURN_MARKER, this)) {
       effect.preventDefault = true;
       return state;
     }

@@ -1,11 +1,9 @@
 import { Effect } from '../../game/store/effects/effect';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { StoreLike, State, StateUtils } from '../../game';
+import { StoreLike, State } from '../../game';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { CoinFlipEffect } from '../../game/store/effects/play-card-effects';
-import { AttackEffect } from '../../game/store/effects/game-effects';
-import { ADD_MARKER, HAS_MARKER, REMOVE_MARKER, SIMULATE_COIN_FLIP, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
+import { DEFENDING_POKEMON_FLIPS_COIN_TO_ATTACK } from '../../game/store/prefabs/effect-of-attack-prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Seadra extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -35,42 +33,11 @@ export class Seadra extends PokemonCard {
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '22';
 
-  public readonly DEFENDING_POKEMON_CANNOT_ATTACK_MARKER = 'DEFENDING_POKEMON_CANNOT_ATTACK_MARKER';
-
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
-    //Attack
+    // Ref: set-ex-deoxys/weezing.ts (Smokescreen resolves before attack effects).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      ADD_MARKER(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, opponent.active, this);
+      return DEFENDING_POKEMON_FLIPS_COIN_TO_ATTACK(store, state, effect, this);
     }
-
-    if (effect instanceof AttackEffect && HAS_MARKER(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this)) {
-      const player = effect.player;
-
-      try {
-        const coinFlip = new CoinFlipEffect(player);
-        store.reduceEffect(state, coinFlip);
-      } catch {
-        return state;
-      }
-
-      const coinFlipResult = SIMULATE_COIN_FLIP(store, state, player);
-
-      if (!coinFlipResult) {
-        effect.preventDefault = true;
-      }
-    }
-
-    //Marker remover
-    if (effect instanceof EndTurnEffect) {
-      if (HAS_MARKER(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this)) {
-        REMOVE_MARKER(this.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER, effect.player.active, this);
-      }
-    }
-
     return state;
   }
-
 }

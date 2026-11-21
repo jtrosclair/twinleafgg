@@ -1,6 +1,10 @@
+import { CheckCoinFlipResultEffect } from '../effects/check-effects';
 import { AttackEffect } from '../effects/game-effects';
 import { Player } from '../state/player';
 import { GamePhase, State } from '../state/state';
+import { MarkerConstants } from '../markers/marker-constants';
+import { MarkerItem } from '../state/card-marker';
+import { StoreLike } from '../store-like';
 import { afterAttackDamage } from './attack-after-damage';
 
 export const COIN_FLIPS_TREATED_AS_TAILS = 'COIN_FLIPS_TREATED_AS_TAILS';
@@ -15,12 +19,22 @@ export function opponentFlipsTailsNextTurn(state: State, effect: AttackEffect): 
   });
 }
 
-export function isCoinForcedTails(state: State, player: Player | undefined): boolean {
-  return player !== undefined && state.players[state.activePlayer] === player
-    && (state.phase === GamePhase.PLAYER_TURN || state.phase === GamePhase.ATTACK)
-    && player.marker.hasMarker(COIN_FLIPS_TREATED_AS_TAILS);
+export function isLegacySmokescreenMarker(marker: MarkerItem): boolean {
+  return marker.name === MarkerConstants.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER
+    && (marker.source?.fullName === 'Weezing DX' || marker.source?.fullName === 'Seadra DF');
 }
 
-export function rollCoin(state: State, player: Player, forcedResult?: boolean): boolean {
-  return !isCoinForcedTails(state, player) && (forcedResult ?? Math.random() < 0.5);
+export function isCoinForcedTails(store: StoreLike, state: State, player: Player): boolean {
+  if (state.players[state.activePlayer] !== player
+    || (state.phase !== GamePhase.PLAYER_TURN && state.phase !== GamePhase.ATTACK)) return false;
+  if (player.marker.hasMarker(COIN_FLIPS_TREATED_AS_TAILS)) return true;
+
+  const check = new CheckCoinFlipResultEffect(player);
+  store.reduceEffect(state, check);
+  return check.forcedTails;
+}
+
+export function rollCoin(store: StoreLike, state: State, player: Player, forcedResult?: boolean): boolean {
+  return forcedResult !== false && !isCoinForcedTails(store, state, player)
+    && (forcedResult ?? Math.random() < 0.5);
 }

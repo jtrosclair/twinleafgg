@@ -1,5 +1,5 @@
 import { AbstractAttackEffect, ApplyWeaknessEffect, DealDamageEffect, PutDamageEffect } from './effects/attack-effects';
-import { CheckPokemonTypeEffect, CheckProvidedEnergyEffect, CheckRetreatCostEffect } from './effects/check-effects';
+import { CheckCoinFlipResultEffect, CheckPokemonTypeEffect, CheckProvidedEnergyEffect, CheckRetreatCostEffect } from './effects/check-effects';
 import { mirrorOnlyEnergyForQuery } from './prefabs/mirror-only-energy';
 import { StateUtils } from './state-utils';
 import { COIN_FLIPS_TREATED_AS_TAILS, isCoinForcedTails } from './prefabs/coin-flip-results';
@@ -408,8 +408,9 @@ export class Store implements StoreLike {
 
     try {
       const player = state.players[state.activePlayer];
-      prompt.result = prompt instanceof CoinFlipPrompt && player?.id === prompt.playerId
-        && isCoinForcedTails(state, player) ? false : action.result;
+      const forcedTails = prompt instanceof CoinFlipPrompt && player?.id === prompt.playerId
+        && isCoinForcedTails(this, state, player);
+      prompt.result = forcedTails ? false : action.result;
 
       const results = promptItem.ids.map(id => {
         const p = state.prompts.find(item => item.id === id);
@@ -417,7 +418,9 @@ export class Store implements StoreLike {
       });
 
       if (action.log !== undefined) {
-        this.log(state, action.log.message, action.log.params, action.log.client);
+        const message = forcedTails && action.log.message === GameLog.LOG_PLAYER_FLIPS_HEADS
+          ? GameLog.LOG_PLAYER_FLIPS_TAILS : action.log.message;
+        this.log(state, message, action.log.params, action.log.client);
       }
 
       if (results.every(result => result !== undefined)) {
@@ -720,6 +723,10 @@ export class Store implements StoreLike {
   }
 
   private propagateEffect(state: State, effect: Effect): State {
+    if (effect instanceof CheckCoinFlipResultEffect) {
+      const defender = StateUtils.getOpponent(state, effect.player).active.getPokemonCard();
+      return defender ? this.callReduceEffect(defender, this, state, effect) : state;
+    }
     if (effect instanceof CheckAttackCoinReflipEffect) {
       const stadium = StateUtils.getStadiumCard(state);
       const cards = new Set<Card>(effect.attacker.tools);

@@ -10,6 +10,7 @@ import { PokemonCard } from '../card/pokemon-card';
 import { CardList } from '../state/card-list';
 
 export enum CheckEffects {
+  CHECK_COIN_FLIP_RESULT_EFFECT = 'CHECK_COIN_FLIP_RESULT_EFFECT',
   CHECK_SUPPORTER_LIMIT_EFFECT = 'CHECK_SUPPORTER_LIMIT_EFFECT',
   CHECK_HP_EFFECT = 'CHECK_HP_EFFECT',
   CHECK_PRIZES_COUNT_EFFECT = 'CHECK_PRIZE_COUNT_EFFECT',
@@ -25,6 +26,14 @@ export enum CheckEffects {
   ADD_SPECIAL_CONDITIONS_EFFECT = 'ADD_SPECIAL_CONDITIONS_EFFECT',
   CHECK_PRIZES_DESTINATION_EFFECT = 'CHECK_PRIZES_DESTINATION_EFFECT',
   CHECK_SPECIAL_CONDITION_REMOVAL_EFFECT = 'CHECK_SPECIAL_CONDITION_REMOVAL_EFFECT'
+}
+
+export class CheckCoinFlipResultEffect implements Effect {
+  readonly type: string = CheckEffects.CHECK_COIN_FLIP_RESULT_EFFECT;
+  public preventDefault = false;
+  public forcedTails = false;
+
+  constructor(public readonly player: Player) {}
 }
 
 export class CheckSupporterLimitEffect implements Effect {

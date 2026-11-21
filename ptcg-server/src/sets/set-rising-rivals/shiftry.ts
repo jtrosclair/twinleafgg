@@ -1,5 +1,5 @@
 import { CardType, PokemonCard, PowerType, Stage, State, StateUtils, StoreLike } from '../../game';
-import { CoinFlipEffect } from '../../game/store/effects/play-card-effects';
+import { CheckCoinFlipResultEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED } from '../../game/store/prefabs/attack-effects';
 import { DEFENDING_POKEMON_HAS_NO_ABILITIES_UNTIL_END_OF_YOUR_NEXT_TURN } from '../../game/store/prefabs/effect-of-attack-prefabs';
@@ -41,17 +41,11 @@ export class Shiftry extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Unlucky Wind
-    if (effect instanceof CoinFlipEffect) {
-      const cardList = StateUtils.findCardList(state, this);
-      const owner = StateUtils.findOwner(state, cardList);
-      if (owner.active.getPokemonCard() !== this || IS_POKEBODY_BLOCKED(store, state, owner, this)) {
-        return state;
+    if (effect instanceof CheckCoinFlipResultEffect) {
+      const owner = StateUtils.getOpponent(state, effect.player);
+      if (owner.active.getPokemonCard() === this && !IS_POKEBODY_BLOCKED(store, state, owner, this)) {
+        effect.forcedTails = true;
       }
-      const opponent = StateUtils.getOpponent(state, owner);
-      if (effect.player !== opponent || state.players[state.activePlayer] !== opponent) {
-        return state;
-      }
-      effect.forcedResult = false;
     }
 
     // Conform

@@ -54,7 +54,7 @@ import { Card } from '../card/card';
 import { Attack } from '../card/pokemon-types';
 import { WaitPrompt } from '../prompts/wait-prompt';
 import { offerAttackCoinReflip } from '../prefabs/attack-coin-reflip';
-import { rollCoin } from '../prefabs/coin-flip-results';
+import { isLegacySmokescreenMarker, rollCoin } from '../prefabs/coin-flip-results';
 import { CoinFlipEffect, CoinFlipSequenceEffect } from '../effects/play-card-effects';
 import { beginAttackDamageScope, cancelAttackDamageScope, finishAttackDamageScope, getAttackPayment, resolveAfterAttack, resolveAfterAttackDamage } from '../prefabs/attack-after-damage';
 import { wasActiveWhenDamaged } from '../prefabs/knock-out-effects';
@@ -168,7 +168,7 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
   const pokemonMarkers = attackingPokemon.marker.markers;
   const legacySingle = [...pokemonMarkers, ...player.marker.markers].filter(
     marker => marker.name === MarkerConstants.PREVENT_OPPONENTS_ACTIVE_FROM_ATTACKING_DURING_OPPONENTS_NEXT_TURN
-      || (marker.name === MarkerConstants.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER && marker.source?.fullName === 'Weezing DX')
+      || isLegacySmokescreenMarker(marker)
   ).length;
   const legacyDouble = pokemonMarkers.some(marker => marker.name === MarkerConstants.LEGACY_OCTILLERY_CORNER_STOP);
   const persistentFlips = attackingPokemon.marker.hasMarker(MarkerConstants.OCTAZOOKA_ATTACK_CANCELLATION) ? 1 : 0;
@@ -775,7 +775,7 @@ export function gameReducer(store: StoreLike, state: State, effect: Effect): Sta
 
   if (effect instanceof CoinFlipEffect) {
     // Simulate coin flip and store result
-    const result = rollCoin(state, effect.player, effect.forcedResult);
+    const result = rollCoin(store, state, effect.player, effect.forcedResult);
     effect.result = result;
 
     const { player, callback } = effect;

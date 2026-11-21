@@ -2421,7 +2421,7 @@ export function FLIP_UNTIL_TAILS_AND_COUNT_HEADS(
 }
 
 export function SIMULATE_COIN_FLIP(store: StoreLike, state: State, player: Player): boolean {
-  const result = rollCoin(state, player);
+  const result = rollCoin(store, state, player);
   const gameMessage = result ? GameLog.LOG_PLAYER_FLIPS_HEADS : GameLog.LOG_PLAYER_FLIPS_TAILS;
   store.log(state, gameMessage, { name: player.name });
   return result;

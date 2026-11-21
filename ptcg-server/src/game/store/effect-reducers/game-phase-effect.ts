@@ -10,6 +10,7 @@ import { checkState, endGame } from './check-effect';
 import { CoinFlipPrompt } from '../prompts/coin-flip-prompt';
 import { PlayerType } from '../actions/play-card-action';
 import { MarkerConstants } from '../markers/marker-constants';
+import { isLegacySmokescreenMarker } from '../prefabs/coin-flip-results';
 import { StateUtils } from '../state-utils';
 import { ATTACK_RETREAT_LOCK_UNTIL_TARGET_END_TURN } from '../prefabs/retreat-lock-until-target-end-turn';
 
@@ -323,8 +324,7 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
       slot.coinFlipCancelAttackNextTurn = 0;
       slot.marker.removeMarker(MarkerConstants.LEGACY_OCTILLERY_CORNER_STOP);
       for (const entry of slot.marker.markers) {
-        if (entry.name === MarkerConstants.DEFENDING_POKEMON_CANNOT_ATTACK_MARKER
-          && entry.source?.fullName === 'Weezing DX') {
+        if (isLegacySmokescreenMarker(entry)) {
           slot.marker.removeMarker(entry.name, entry.source);
         }
       }

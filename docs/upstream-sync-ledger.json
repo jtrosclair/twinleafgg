@@ -23,7 +23,7 @@
       "date": "2026-08-08",
       "subject": "refactor(cards): COIN_FLIP_PROMPT",
       "status": "partial",
-      "notes": "Historical upstream record. Batch 63 adapts the Iono’s Electrode JTG path while preserving legacy coin prompts. Thump-Thump Boom Knocks Out the defender on final heads. The upstream helper conversion kept the reversed result. Batch 64 adapts the registered until-tails handlers after checking each printed effect. The upstream conversions for Hoppip EVS, Moltres VS2 and Tyrantrum M3 still differ from their printed outcomes and ordering. Conditional copied attacks such as Assist remain open."
+      "notes": "Historical upstream record. Batch 63 adapts the Iono’s Electrode JTG path while preserving legacy coin prompts. Thump-Thump Boom Knocks Out the defender on final heads. The upstream helper conversion kept the reversed result. Batch 64 adapts the registered until-tails handlers after checking each printed effect. The upstream conversions for Hoppip EVS, Moltres VS2 and Tyrantrum M3 still differ from their printed outcomes and ordering. Batch 65 adapts Chansey BS Scrunch to the single resolved coin. Its older damage-protection markers still work. Conditional copied attacks such as Assist remain open."
     },
     {
       "sha": "8ba948645d71148d536e0956c002004135a3f0ae",

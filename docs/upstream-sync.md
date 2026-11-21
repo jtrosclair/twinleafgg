@@ -4505,3 +4505,49 @@ Phantom Maze. All 32 API checks pass.
 The 2.50 MiB gzip runtime passes build attestation, all ten packaged
 mouse and touch board checks, and 209 client checks.
 The full engine suite passes 10,949 tests across 311 spec files.
+
+## Gameplay re-audit, batch 65
+
+Malamar XYP's Contrary and Shiftry RR's Unlucky Wind now use the same
+result check for browser coin prompts, typed flips and immediate rolls.
+They force the turn player's coins to tails while the opposing Pokémon
+is Active and its printed effect is active. That includes Confusion and
+all replacement coins. Pokémon Checkup is outside either player's turn.
+Malamar's θ Stop protects it from the opponent's Garbotoxin. Garbotoxin
+on Malamar's own side still suppresses Contrary. Time Crystal suppresses
+Unlucky Wind as a Poké-Body.
+[Official Contrary print](https://www.pokemon-card.com/card-search/details.php/card/31069/regu/all)
+[Official Unlucky Wind print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/pl2/13/)
+[Official Contrary Checkup ruling](https://www.pokemon-card.com/rules/faq/details.php?id=10010)
+[Official Contrary Confusion ruling](https://www.pokemon-card.com/rules/faq/details.php?id=10011)
+[Official θ Stop and opposing Garbotoxin ruling](https://www.pokemon-card.com/rules/faq/search.php?page=2&regulation=all&sc_group_id=341)
+
+Chansey BS's Scrunch uses its one displayed coin for damage prevention on
+the opponent's next turn. Victory Star replaces the original result.
+Existing Scrunch markers still work. Seadra DF uses the upstream
+Smokescreen timing with one coin before the opponent's affected Pokémon
+can start its attack. An existing Weezing or Seadra marker follows the
+same pre-attack check. Its marker clears at the end of the affected turn.
+[Chansey BS print](https://images.pokemontcg.io/base1/3_hires.png)
+[Official EX Dragon Frontiers card dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/EX_Dragon_Frontiers.pdf)
+
+The official Assist ruling confirms the replacement starts at the first
+coin even after a copied attack flips. This needs to be settled before
+applying the copied outcome. The separate Will ruling confirms Will can
+choose heads against Contrary, but Contrary resolves it as tails. Will
+does not carry its choice into a replacement sequence. Its printed choice
+and the linked copied attacks are still open.
+[Official Assist ruling](https://www.pokemon-card.com/rules/faq/search.php?page=4&regulation=all&regulation_faq_main=&sc_group_id=325)
+[Official Will rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%A4%E3%83%84%E3%82%AD&regulation_faq_main_item1=all)
+
+The 21 focused cases pass, and 16 reproduce failures on the previous
+engine. The full engine passes 10,970 checks and the combined worktree
+passes 175 targeted checks. All 559 comparable saved boards deserialize
+identically. Of 5,225 sampled opening actions, 5,223 match, including
+all 3,953 sampled actions on active boards. The two differences are
+archived Chansey BS Scrunch openings. Both now log one heads and apply
+protection. The old engine logged two results and left Chansey
+unprotected. Both versions reach the same turn and resolve the action.
+All seven recorded solutions still win. All 32 API tests, 209 client
+tests and ten packaged board checks pass. The 2.50 MiB gzip runtime
+passes build attestation.
