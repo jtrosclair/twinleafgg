@@ -1,18 +1,7 @@
-import { CardType, Stage } from '../../game/store/card/card-types';
+import { CardType, Stage, PokemonCard, State, StoreLike, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import {
-  PokemonCard,
-  StoreLike,
-  State,
-  StateUtils,
-  CardTarget,
-  PlayerType,
-  SlotType,
-  ChoosePokemonPrompt,
-  GameMessage,
-} from '../../game';
+import { moveBenchedDamageCountersToDefender } from '../../game/store/prefabs/damage-counter-movement';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { PutCountersEffect } from '../../game/store/effects/attack-effects';
 
 export class NinetalesBatch172 extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -27,7 +16,7 @@ export class NinetalesBatch172 extends PokemonCard {
       name: 'Nine-Tailed Transfer',
       cost: [R],
       damage: 0,
-      text: "Move all damage counters from 1 of your Benched Pokémon to your opponent's Active Pokémon. ",
+      text: "Move all damage counters from 1 of your Benched Pokémon to your opponent's Active Pokémon.",
     },
     {
       name: 'Will-o-Wisp',
@@ -44,49 +33,11 @@ export class NinetalesBatch172 extends PokemonCard {
   public name: string = 'Ninetales';
   public fullName: string = "Ninetales M4 9";
 
-  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Attack 1: Magical Echo
-    // Ref: set-silver-tempest/altaria.ts (That one is AI-generated. Be warned)
+  public reduceEffect(_store: StoreLike, state: State, effect: Effect): State {
+    // Ref: set-twilight-masquerade/munkidori.ts (separate removal from counter placement).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-
-      const hasDamagedBench = player.bench.some((b) => b.cards.length > 0 && b.damage > 0);
-      if (!hasDamagedBench) {
-        return state;
-      }
-
-      const blocked: CardTarget[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        if (cardList === player.active || cardList.damage === 0) {
-          blocked.push(target);
-        }
-      });
-
-      return store.prompt(
-        state,
-        new ChoosePokemonPrompt(
-          player.id,
-          GameMessage.CHOOSE_POKEMON,
-          PlayerType.BOTTOM_PLAYER,
-          [SlotType.BENCH],
-          { min: 1, max: 1, allowCancel: false, blocked },
-        ),
-        (selected) => {
-          if (!selected || selected.length === 0) {
-            return;
-          }
-          const source = selected[0];
-          const damageToMove = source.damage;
-          source.damage = 0;
-
-          const damageEffect = new PutCountersEffect(effect, damageToMove);
-          damageEffect.target = opponent.active;
-          store.reduceEffect(state, damageEffect);
-        },
-      );
+      moveBenchedDamageCountersToDefender(state, effect, GameMessage.CHOOSE_POKEMON, () => true);
     }
-
     return state;
   }
 }

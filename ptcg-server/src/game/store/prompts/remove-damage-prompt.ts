@@ -27,6 +27,7 @@ export interface RemoveDamageOptions {
   blockedFrom: CardTarget[];
   blockedTo: CardTarget[];
   sameTarget: boolean;
+  singleSourceTarget?: boolean;
 }
 
 export class RemoveDamagePrompt extends Prompt<DamageTransfer[]> {
@@ -78,6 +79,13 @@ export class RemoveDamagePrompt extends Prompt<DamageTransfer[]> {
 
     if (this.options.max !== undefined && result.length > this.options.max) {
       return false;
+    }
+
+    if (this.options.singleSourceTarget && result.length > 1) {
+      const source = result[0].from;
+      if (result.some(({ from }) => from.player !== source.player || from.slot !== source.slot || from.index !== source.index)) {
+        return false;
+      }
     }
 
     // Check if all targets are the same

@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { DamageTransfer, CardTarget, DamageMap, PokemonCardList, RemoveDamagePrompt, GameError, GameMessage, PlayerType } from 'ptcg-server';
+import { DamageTransfer, CardTarget, DamageMap, PokemonCardList, RemoveDamagePrompt } from 'ptcg-server';
 
 import { GameService } from '../../../api/services/game.service';
 import { LocalGameState } from '../../../shared/session/session.interface';
@@ -56,13 +56,9 @@ export class PromptRemoveDamageComponent implements OnChanges {
   }
 
   public onCardClick(item: PokemonItem) {
-    if (item.target.player === PlayerType.BOTTOM_PLAYER && item.cardList.damage === 0) {
-      return; // Prevent selection of player's Pokémon without damage
-    }
-
-    // if (this.pokemonData.matchesTarget(item, this.blockedFrom)) {
-    //   return;
-    // }
+    if (!item.cardList.getPokemonCard()
+      || (this.pokemonData.matchesTarget(item, this.blockedFrom)
+        && this.pokemonData.matchesTarget(item, this.blockedTo))) return;
 
     this.pokemonData.unselectAll();
     item.selected = true;
@@ -72,21 +68,17 @@ export class PromptRemoveDamageComponent implements OnChanges {
 
 
   public removeDamage() {
+    if (this.isRemoveDisabled || !this.selectedItem) return;
     this.damage += 10;
     const item = this.selectedItem;
     item.cardList = Object.assign(new PokemonCardList(), item.cardList);
     item.cardList.damage -= 10;
-    if (this.pokemonData.matchesTarget(item, this.blockedFrom)) {
-      return;
-    }
     this.updateButtonDisable();
     this.updateIsInvalid();
   }
 
   public addDamage() {
-    if (this.selectedItem && this.selectedItem.target.player === PlayerType.BOTTOM_PLAYER) {
-      throw new GameError(GameMessage.CANNOT_USE_POWER);
-    }
+    if (this.isAddDisabled || !this.selectedItem) return;
 
     this.damage -= 10;
     const item = this.selectedItem;
@@ -133,8 +125,12 @@ export class PromptRemoveDamageComponent implements OnChanges {
     });
     const allowedDamage: number | undefined = damageMap && damageMap.damage;
 
-    let isAddDisabled = false;
-    let isRemoveDisabled = false;
+    let isAddDisabled = this.pokemonData.matchesTarget(this.selectedItem, this.blockedTo)
+      || (this.prompt.options.sameTarget
+        && this.pokemonData.hasOtherDamageChange(this.selectedItem, this.initialDamageMap, 1));
+    let isRemoveDisabled = this.pokemonData.matchesTarget(this.selectedItem, this.blockedFrom)
+      || (!!this.prompt.options.singleSourceTarget
+        && this.pokemonData.hasOtherDamageChange(this.selectedItem, this.initialDamageMap, -1));
 
     if (cardList.damage <= 0) {
       isRemoveDisabled = true;

@@ -1,9 +1,11 @@
 import { CardType, Stage } from '../../game/store/card/card-types';
 import { PowerType } from '../../game/store/card/pokemon-types';
-import { PokemonCard, PlayerType, StoreLike, State } from '../../game';
+import { PokemonCard, StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { MoveDamageCountersEffect } from '../../game/store/effects/game-effects';
 import { MoveCountersAttackEffect } from '../../game/store/effects/attack-effects';
+
+import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class PatratBatch172 extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -37,15 +39,8 @@ export class PatratBatch172 extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof MoveDamageCountersEffect || effect instanceof MoveCountersAttackEffect) {
-      let hasPatrat = false;
-      state.players.forEach((p) => {
-        p.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card) => {
-          if (card?.name === 'Patrat') hasPatrat = true;
-        });
-      });
-      if (hasPatrat) {
-        effect.preventDefault = true;
-      }
+      const owner = state.players.find(player => player.getPokemonInPlay().some(slot => slot.getPokemonCard() === this));
+      if (owner && !IS_ABILITY_BLOCKED(store, state, owner, this)) effect.preventDefault = true;
     }
     return state;
   }

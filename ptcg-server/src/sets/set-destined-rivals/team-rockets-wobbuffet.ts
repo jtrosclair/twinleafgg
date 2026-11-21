@@ -1,5 +1,6 @@
-import { PokemonCard, Stage, CardType, CardTag, StoreLike, State, GameMessage, CardTarget, PlayerType, SlotType, ChoosePokemonPrompt } from '../../game';
+import { CardTag, CardType, Stage, PokemonCard, State, StoreLike, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
+import { moveBenchedDamageCountersToDefender } from '../../game/store/prefabs/damage-counter-movement';
 import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class TeamRocketsWobbuffet extends PokemonCard {
@@ -33,45 +34,11 @@ export class TeamRocketsWobbuffet extends PokemonCard {
   public name: string = 'Team Rocket\'s Wobbuffet';
   public fullName: string = 'Team Rocket\'s Wobbuffet DRI';
 
-  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Rocket Mirror
+  public reduceEffect(_store: StoreLike, state: State, effect: Effect): State {
+    // Ref: set-twilight-masquerade/munkidori.ts (separate removal from counter placement).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      // checking for a damaged rockets pokemon on the bench
-      const blockedTo: CardTarget[] = [];
-      let isRocketDamaged = false;
-      player.bench.forEach((cardList, index) => {
-        if (cardList.cards.length > 0 && cardList.getPokemonCard()?.tags.includes(CardTag.TEAM_ROCKET) && cardList.damage > 0) {
-          isRocketDamaged = true;
-        } else {
-          const target: CardTarget = {
-            player: PlayerType.BOTTOM_PLAYER,
-            slot: SlotType.BENCH,
-            index
-          };
-          blockedTo.push(target);
-        }
-      });
-      if (!isRocketDamaged) { return state; }
-
-      return store.prompt(state, new ChoosePokemonPrompt(
-        player.id,
-        GameMessage.CHOOSE_POKEMON_TO_DAMAGE,
-        PlayerType.BOTTOM_PLAYER,
-        [SlotType.BENCH],
-        { allowCancel: false, blocked: blockedTo }
-      ), targets => {
-        if (!targets || targets.length === 0) {
-          return;
-        }
-        const damageOnRocket = targets[0].damage;
-
-        targets[0].damage = 0;
-        effect.opponent.active.damage += damageOnRocket;
-      });
+      moveBenchedDamageCountersToDefender(state, effect, GameMessage.CHOOSE_POKEMON_TO_DAMAGE, slot => slot.getPokemonCard()?.tags.includes(CardTag.TEAM_ROCKET) === true);
     }
-
     return state;
   }
 }

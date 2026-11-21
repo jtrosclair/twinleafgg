@@ -1,11 +1,12 @@
-import { PokemonCard, Stage, CardType, PowerType, DamageMap, GameMessage, PlayerType, SlotType, State, StateUtils, StoreLike, CardTarget, RemoveDamagePrompt, GameError, SpecialCondition, EnergyCard, BoardEffect, SuperType } from '../../game';
+import { PokemonCard, Stage, CardType, PowerType, DamageMap, GameMessage, PlayerType, SlotType, State, StateUtils, StoreLike, CardTarget, RemoveDamagePrompt, GameError, SpecialCondition, BoardEffect } from '../../game';
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
 import { CheckHpEffect, CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { hasUsedPokemonAbility, inheritLegacyPokemonAbilityUse, recordPokemonAbilityUse } from '../../game/store/prefabs/in-play-ability-use';
-import { MoveDamageCountersEffect, PlaceDamageCountersEffect, PokemonReplacedEffect } from '../../game/store/effects/game-effects';
+import { PokemonReplacedEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
+import { canMoveDamageCounters, moveAbilityDamageCounters } from '../../game/store/prefabs/damage-counter-movement';
 import { WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Munkidori extends PokemonCard {
@@ -86,128 +87,40 @@ export class Munkidori extends PokemonCard {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
-      // Check if any Pokémon have damage
-      let hasDamagedPokemon = false;
-      const damagedPokemon: DamageMap[] = [];
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        if (cardList.damage > 0) {
-          hasDamagedPokemon = true;
-          damagedPokemon.push({ target, damage: cardList.damage });
-        }
-      });
-
-      if (!hasDamagedPokemon) {
+      const ownSlots = player.getPokemonInPlay();
+      const holder = ownSlots.find(slot => slot.getPokemonCard() === this);
+      if (!holder || !ownSlots.some(slot => slot.damage >= 10) || !canMoveDamageCounters(store, state, player)) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
-        const checkHpEffect = new CheckHpEffect(player, cardList);
-        store.reduceEffect(state, checkHpEffect);
-        maxAllowedDamage.push({ target, damage: checkHpEffect.hp });
-      });
+      const energy = new CheckProvidedEnergyEffect(player, holder);
+      state = store.reduceEffect(state, energy);
+      if (!energy.energyMap.some(entry => entry.provides.includes(CardType.DARK) || entry.provides.includes(CardType.ANY))) {
+        throw new GameError(GameMessage.CANNOT_USE_POWER);
+      }
 
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, card, target) => {
+      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (cardList, _card, target) => {
+        const hp = new CheckHpEffect(player, cardList);
+        store.reduceEffect(state, hp);
+        maxAllowedDamage.push({ target, damage: hp.hp });
         blockedTo.push(target);
       });
+      opponent.forEachPokemon(PlayerType.TOP_PLAYER, (_slot, _card, target) => blockedFrom.push(target));
 
-      opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card, target) => {
-        blockedFrom.push(target);
-      });
+      // Ref: set-destined-rivals/team-rockets-wobbuffet.ts (remove counters before resolving placement).
+      return store.prompt(state, new RemoveDamagePrompt(
+        player.id, GameMessage.MOVE_DAMAGE, PlayerType.ANY, [SlotType.ACTIVE, SlotType.BENCH], maxAllowedDamage,
+        { min: 1, max: 3, allowCancel: false, sameTarget: true, singleSourceTarget: true, blockedTo, blockedFrom }
+      ), transfers => {
+        if (!transfers?.length) return;
+        const { from, to } = transfers[0];
+        const source = StateUtils.getTarget(state, player, from);
+        const target = StateUtils.getTarget(state, player, to);
+        if (!player.getPokemonInPlay().includes(source) || !opponent.getPokemonInPlay().includes(target)) return;
 
-      let hasDarkAttached = false;
-
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-        if (cardList.getPokemonCard() === this) {
-
-          const checkEnergy = new CheckProvidedEnergyEffect(player, cardList);
-          store.reduceEffect(state, checkEnergy);
-
-          checkEnergy.energyMap.forEach(em => {
-            if (em.provides.includes(CardType.ANY)) {
-              hasDarkAttached = true;
-            }
-            if (em.provides.includes(CardType.DARK)) {
-              hasDarkAttached = true;
-            }
-            const energyCard = em.card;
-            if (energyCard.superType === SuperType.ENERGY && (energyCard as EnergyCard).provides.includes(CardType.DARK)) {
-              hasDarkAttached = true;
-            }
-            if (energyCard.superType === SuperType.ENERGY && (energyCard as EnergyCard).provides.includes(CardType.ANY)) {
-              hasDarkAttached = true;
-            }
-            if (energyCard.superType === SuperType.ENERGY && (energyCard as EnergyCard).blendedEnergies?.includes(CardType.DARK)) {
-              hasDarkAttached = true;
-            }
-          });
-
-          if (!hasDarkAttached) {
-            throw new GameError(GameMessage.CANNOT_USE_POWER);
-          }
-
-          return store.prompt(state, new RemoveDamagePrompt(
-            effect.player.id,
-            GameMessage.MOVE_DAMAGE,
-            PlayerType.ANY,
-            [SlotType.ACTIVE, SlotType.BENCH],
-            maxAllowedDamage,
-            { min: 1, max: 3, allowCancel: false, sameTarget: true, blockedTo: blockedTo, blockedFrom: blockedFrom }
-          ), transfers => {
-            if (transfers === null) {
-              return state;
-            }
-
-            if (transfers.length > 0) {
-              recordPokemonAbilityUse(player, this.ADRENA_BRAIN_MARKER, this, effect.power.name);
-              const target = StateUtils.findPokemonSlot(state, this);
-              target?.addBoardEffect(BoardEffect.ABILITY_USED);
-            }
-
-            let totalDamageMoved = 0;
-            for (const transfer of transfers) {
-
-              const source = StateUtils.getTarget(state, player, transfer.from);
-              const target = StateUtils.getTarget(state, player, transfer.to);
-
-              // if (source.cards.length > 1) {
-              //   throw new GameError(GameMessage.INVALID_TARGET);
-              // }
-
-              // if (target.cards.length > 1) {
-              //   throw new GameError(GameMessage.INVALID_TARGET);
-              // }
-
-              /*blockedFrom.forEach(blocked => {
-                if (transfer.from === blocked && transfer.to === blocked) {
-                  throw new GameError(GameMessage.CANNOT_USE_POWER);;
-                }
-              });
-    
-              if (blockedFrom.includes(transfer.from)) {
-                throw new GameError(GameMessage.CANNOT_USE_POWER);
-              }*/
-
-              const damageToMove = Math.min(30 - totalDamageMoved, Math.min(10, source.damage));
-              if (damageToMove > 0) {
-                const moveEffect = new MoveDamageCountersEffect(effect.player);
-                state = store.reduceEffect(state, moveEffect);
-                if (moveEffect.preventDefault) {
-                  continue;
-                }
-                source.damage -= damageToMove;
-                const placeCountersEffect = new PlaceDamageCountersEffect(
-                  effect.player,
-                  target,
-                  damageToMove,
-                  this
-                );
-                state = store.reduceEffect(state, placeCountersEffect);
-                totalDamageMoved += damageToMove;
-              }
-              if (totalDamageMoved >= 30) break;
-            }
-          });
-        }
+        recordPokemonAbilityUse(player, this.ADRENA_BRAIN_MARKER, this, effect.power.name);
+        holder.addBoardEffect(BoardEffect.ABILITY_USED);
+        moveAbilityDamageCounters(store, state, effect, source, target, Math.min(3, transfers.length) * 10);
       });
     }
     return state;

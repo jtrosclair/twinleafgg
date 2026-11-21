@@ -5579,3 +5579,42 @@ Both Chaos Rising Patrat definitions currently check only the name of
 a Pokémon in play when blocking a counter move. The next review needs
 to verify the live card's Ability and the attack and Ability movement
 paths for both identities.
+
+## Gameplay re-audit, batch 89
+
+The active gameplay audit covers Scarlet & Violet and later releases.
+Of the 39 open tracked non-merge commits after the original sync base,
+13 touch Scarlet & Violet or Mega Evolution card paths. The remaining
+26 are older-set or unrelated system work. Mixed commits retain their
+historical status, and shared engine changes are reviewed where they
+affect a modern card. Reviews focus on the card's printed effect and
+the real puzzle path.
+
+Both Watchful Eye printings now use the actual Pokémon and Ability in
+play, including when Team Rocket's Watchtower suppresses it. Both
+Chaos Rising Ninetales printings and Team Rocket's Wobbuffet use the
+printed friendly Bench source. The saved attack names continue to
+identify their existing prints.
+[Watchful Eye print](https://www.pokemon-card.com/card-search/details.php/card/50473/regu/all)
+[Ninetales print](https://www.pokemon-card.com/card-search/details.php/card/50093/regu/all)
+[Team Rocket's Wobbuffet print](https://www.pokemon-card.com/card-search/details.php/card/47507/regu/DP)
+[Rocket Mirror advanced ruling](https://www.pokemon-card.com/assets/document/advanced_manual.pdf)
+
+Adrena-Brain requires Darkness Energy currently supplied to Munkidori,
+one friendly donor and one opposing recipient. The browser and engine
+enforce the same choices. Watchful Eye prevents the transfer and leaves
+the counters on the donor. Battle Cage and Wings of Light can prevent
+placement after Adrena-Brain has removed them. Transformation Tome's
+existing Ability-use behavior is covered by its own regressions.
+[Adrena-Brain print](https://www.pokemon-card.com/card-search/details.php/card/49902/regu/all)
+[Adrena-Brain rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%9E%E3%82%B7%E3%83%9E%E3%82%B7%E3%83%A9&regulation_faq_main_item1=all)
+[Battle Cage rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%90%E3%83%88%E3%83%AB%E3%82%B3%E3%83%AD%E3%82%B7%E3%82%A2%E3%83%A0&regulation_faq_main_item1=all)
+[Temple of Sinnoh print](https://www.pokemon-card.com/card-search/details.php/card/45335)
+
+The 19 new engine checks and the browser dialog check pass. All 11,452
+engine checks, 211 client checks, and 33 API checks pass. The candidate
+also passes 81 focused checks with the in-progress working changes.
+All 559 comparable saved boards match. Of 3,636 opening actions, 3,539
+match exactly. An exact comparison accounts for all 97 differences
+by the new single-source flag on the Adrena-Brain prompt. All seven
+recorded solutions win twice.

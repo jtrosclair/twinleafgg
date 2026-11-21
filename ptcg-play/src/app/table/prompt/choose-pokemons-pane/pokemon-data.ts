@@ -1,4 +1,4 @@
-import { State, PlayerType, SlotType, PokemonCardList, CardTarget, Card } from 'ptcg-server';
+import { State, PlayerType, SlotType, PokemonCardList, CardTarget, Card, DamageMap } from 'ptcg-server';
 
 export interface PokemonItem {
   cardList: PokemonCardList;
@@ -108,6 +108,13 @@ export class PokemonData {
       return t.player === item.target.player
         && t.slot === item.target.slot
         && t.index === item.target.index;
+    });
+  }
+
+  public hasOtherDamageChange(selected: PokemonItem, initialDamage: DamageMap[], direction: 1 | -1): boolean {
+    return initialDamage.some(initial => {
+      const item = this.getItemByTarget(initial.target);
+      return !!item && item !== selected && (item.cardList.damage - initial.damage) * direction > 0;
     });
   }
 
