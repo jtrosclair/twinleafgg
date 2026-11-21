@@ -52,7 +52,7 @@ export class Dusknoir extends PokemonCard {
       ), selected => {
         const target = selected?.[0];
         if (!target) return;
-        state = store.reduceEffect(state, new PlaceDamageCountersEffect(player, target, 130, this));
+        state = store.reduceEffect(state, new PlaceDamageCountersEffect(player, target, 130, this, this.powers[0]));
         store.reduceEffect(state, new SelfKnockOutEffect(player, this));
       });
     }

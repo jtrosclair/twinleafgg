@@ -1,9 +1,8 @@
 import { PokemonCard, Stage, CardTag, CardType, PowerType, StoreLike, State, StateUtils, SuperType, ChooseCardsPrompt, GameMessage } from '../../game';
-import { DiscardCardsEffect } from '../../game/store/effects/attack-effects';
 import { AddSpecialConditionsPowerEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { EffectOfAbilityEffect } from '../../game/store/effects/game-effects';
-import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { IS_ABILITY_BLOCKED, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class MegaClefableex extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -73,14 +72,12 @@ export class MegaClefableex extends PokemonCard {
         { superType: SuperType.ENERGY },
         { allowCancel: false, min: 0, max: maxToDiscard }
       ), selected => {
-        const cards = selected || [];
-        if (cards.length > 0) {
-          const discardEffect = new DiscardCardsEffect(effect, cards);
-          discardEffect.target = player.active;
-          store.reduceEffect(state, discardEffect);
-          player.hand.moveCardsTo(cards, player.discard);
-          effect.damage += cards.length * 40;
-        }
+        if (!selected?.length) return;
+        state = MOVE_CARDS(store, state, player.hand, player.discard, {
+          cards: selected, sourceCard: effect.source.getPokemonCard() ?? this, sourceEffect: effect,
+        });
+        const discarded = selected.filter(card => player.discard.cards.includes(card) || player.lostzone.cards.includes(card));
+        effect.damage += discarded.length * 40;
       });
     }
 

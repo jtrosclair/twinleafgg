@@ -1,3 +1,4 @@
+import { afterAttackDamageForOriginalDefender } from '../../game/store/prefabs/post-damage-identity';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, SpecialCondition, BoardEffect } from '../../game/store/card/card-types';
 import { StoreLike } from '../../game/store/store-like';
@@ -90,9 +91,11 @@ export class Gengar extends PokemonCard {
 
     if (WAS_ATTACK_USED(effect, 0, this)) {
 
-      const specialCondition = new AddSpecialConditionsEffect(effect, [SpecialCondition.ASLEEP]);
-      store.reduceEffect(state, specialCondition);
-      return state;
+      afterAttackDamageForOriginalDefender(state, effect, (store, next, target) => {
+        const sleep = new AddSpecialConditionsEffect(effect, [SpecialCondition.ASLEEP]);
+        sleep.target = target;
+        return store.reduceEffect(next, sleep);
+      });
     }
     return state;
   }

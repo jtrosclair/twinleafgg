@@ -61,7 +61,7 @@ export class MegaChandelureex extends PokemonCard {
       store.reduceEffect(state, checkRetreat);
       const colorlessCount = checkRetreat.cost.filter(c => c === CardType.COLORLESS).length;
 
-      effect.damage = 130 + 50 * colorlessCount;
+      effect.damage += 50 * colorlessCount;
     }
 
     return state;

@@ -1,3 +1,4 @@
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/copy-attack-delegation';
 import { CardType, PokemonCard, PowerType, Stage, State, StateUtils, StoreLike } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
@@ -34,7 +35,8 @@ export class Sandslash extends PokemonCard implements CopiedAttackOwnershipContr
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Counterattack Quills
-    if (ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT(state, effect, { source: this })) {
+    if (ON_DAMAGED_BY_OPPONENT_ATTACK_EVEN_IF_KNOCKED_OUT(state, effect, { source: this })
+      && effect.target.getPokemonCard() === this) {
       const abilityOwner = StateUtils.findOwner(state, effect.target);
 
       if (IS_ABILITY_BLOCKED(store, state, abilityOwner, this)) {
@@ -46,6 +48,7 @@ export class Sandslash extends PokemonCard implements CopiedAttackOwnershipContr
         effect.source,
         30,
         this,
+        this.powers[0],
       );
       store.reduceEffect(state, placeCounters);
     }
@@ -56,7 +59,10 @@ export class Sandslash extends PokemonCard implements CopiedAttackOwnershipContr
   public reduceCopiedAttackEffect(store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Digging Claw
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      DISCARD_TOP_X_OF_OPPONENTS_DECK(store, state, effect.player, 1, this, effect);
+      afterAttackDamage(state, effect, (store, next) => {
+        DISCARD_TOP_X_OF_OPPONENTS_DECK(store, next, effect.player, 1, this, effect);
+        return next;
+      });
     }
 
     return state;

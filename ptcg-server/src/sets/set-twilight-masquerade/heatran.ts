@@ -46,7 +46,7 @@ export class Heatran extends PokemonCard {
       discard.target = source;
       store.reduceEffect(state, discard);
       const discarded = metalEnergy.filter(card => !source.cards.includes(card) && !source.energies.cards.includes(card));
-      effect.damage = discarded.length * 50;
+      effect.damage = discarded.length ? effect.damage + 50 * discarded.length - effect.attack.damage : 0;
     }
 
     // Ref: set-temporal-forces/iron-jugulis.ts (retaliation after attack damage).

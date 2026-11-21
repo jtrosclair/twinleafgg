@@ -1,3 +1,4 @@
+import { resolveAfterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { TrainerCard } from '../../game/store/card/trainer-card';
@@ -55,10 +56,22 @@ describe('explicit ownership migration batch 2 - actual attack and Ability branc
    expect(checkCopiedAttackCost(copy.store,copy.state,copy.player,copy.card,copy.card.attacks[0],copy.mew).effect.cost).toEqual(copy.card.attacks[0].cost);
  });
  for(const copied of [false,true]) it('Landorus Gaia Crush discards the Stadium, copied='+copied,()=>{
-   const b=battle(new Landorus(),copied),stadium=new Stadium();b.player.stadium.cards=[stadium];b.store.reduceEffect(b.state,b.attack);expect(b.player.discard.cards).toContain(stadium);
+   const b = battle(new Landorus(), copied);
+   const stadium = new Stadium();
+   b.player.stadium.cards = [stadium];
+   b.store.reduceEffect(b.state, b.attack);
+   expect(b.player.stadium.cards).toContain(stadium);
+   b.store.reduceEffect(b.state, new DealDamageEffect(b.attack, b.attack.damage));
+   [...resolveAfterAttackDamage(() => undefined, b.store, b.state, b.attack)];
+   expect(b.player.discard.cards).toContain(stadium);
  });
  for(const copied of [false,true]) it('Thundurus Thunderous Edge deals damage ignoring effects, copied='+copied,()=>{
-   const b=battle(new Thundurus(),copied);b.store.reduceEffect(b.state,b.attack);expect(b.opponent.active.damage).toBe(90);expect(b.attack.damage).toBe(0);
+   const b = battle(new Thundurus(), copied);
+   b.opponent.active.preventDamageNextTurn = true;
+   b.store.reduceEffect(b.state, b.attack);
+   expect(b.attack.ignoreDefendingDamageEffects).toBe(true);
+   b.store.reduceEffect(b.state, new DealDamageEffect(b.attack, b.attack.damage));
+   expect(b.opponent.active.damage).toBe(90);
  });
  for(const make of [()=>new Enamorus(),()=>new EnamorusIR()]) for(const copied of [false,true]) it('Enamorus and alternate print Rising Heart retain ex bonus, copied='+copied,()=>{
    const card=make(),name=card.fullName,b=battle(card,copied);(b.opponent.active.cards[0] as PokemonCard).tags=[CardTag.POKEMON_ex];

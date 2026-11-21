@@ -158,7 +158,8 @@ export class Pecharuntex extends PokemonCard {
 
       const damagePerPrize = 60;
 
-      effect.damage = opponent.prizesTaken * damagePerPrize;
+      const count = opponent.prizesTaken;
+      effect.damage = count ? effect.damage + count * damagePerPrize - effect.attack.damage : 0;
     }
 
     return state;

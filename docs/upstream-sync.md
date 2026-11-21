@@ -6605,3 +6605,42 @@ overlapping Scarlet & Violet and Mega Evolution cards. The 23 new
 Delta Reign checks pass. Eighteen reproduced failures before the changes.
 All 512 focused engine checks pass across the relevant Delta Reign,
 hand-attachment, Stadium and copied-attack suites.
+
+## Gameplay audit, batch 113
+
+Completed the Scarlet & Violet and Mega Evolution scope of
+`3348ebdc8` and `db4eebfcf` using 71 upstream card paths. The
+existing coverage includes Hide n Sneak versus Team Rocket's
+Ampharos, attachment reactions and Ability protection. Counterattack
+Quills and both Cursed Blast cards now pass their printed Ability
+source to the protection check. Cursed Blast still knocks out its user
+when the target blocks the counters. Shooting Moon counts Energy
+successfully discarded from hand. Nightmare and Digging Claw resolve
+their follow-up effects after damage. Five printed attack calculations
+preserve applicable damage modifiers.
+[Official Cursed Blast ruling](https://www.pokemon-card.com/rules/faq/search.php?sc_group_id=917)
+[Sandslash print](https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/DLR/DLR_050_R_EN.png)
+[Mega Clefable ex print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/me03/103)
+[Mega Chandelure ex print](https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/series/me05/99/)
+
+All 13 commits in the modern-card review queue are now accounted for
+through upstream `d3d7a0031`. The two Ability entries retain their
+partial merge status because the upstream commits also touch older
+sets. Thirteen new checks pass. Eleven isolated failures on the
+preceding engine reproduce the corrected behavior.
+
+Compared the combined gameplay batches since `1a5280c3d` against the
+previous verified engine. All 559 compatible saved boards, including
+401 active records, preserve their serialized state and card identities.
+All 5,486 sampled opening actions match across Trainer plays, attacks,
+Abilities and retreats. Of the other 137 database rows, 134 use a
+different format, two lack a payload, and one had an existing decoding
+failure. All eight recorded solutions replay to wins twice each,
+including Exact. Change. and Trapped in the Phantom Maze. The simulator
+API passes 33 tests and the client passes 211 checks.
+
+All 11,983 engine checks pass across 357 spec files after updating
+the Growl, Gaia Crush and Thunderous Edge fixtures to run the normal
+damage and follow-up phases.
+The isolated checkout with the current in-progress WebView edits
+passes 145 focused engine checks, including the Ampharos interaction.

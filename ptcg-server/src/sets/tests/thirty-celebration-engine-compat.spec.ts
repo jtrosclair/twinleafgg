@@ -1,3 +1,4 @@
+import { resolveAfterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { EnergyCard } from '../../game/store/card/energy-card';
 import { CardType } from '../../game/store/card/card-types';
@@ -105,7 +106,9 @@ describe('30C engine compatibility', () => {
     const { DealDamageEffect } = require('../../game/store/effects/attack-effects');
     const card = new NidoranFemale(); b.player.active.cards = [card];
     b.opponent.active.getPokemonCard()!.cardType = CardType.FIGHTING;
-    b.store.reduceEffect(b.state,new AttackEffect(b.player,b.opponent,card.attacks[0]));
+    const growl = new AttackEffect(b.player, b.opponent, card.attacks[0]);
+    b.store.reduceEffect(b.state, growl);
+    [...resolveAfterAttackDamage(() => undefined, b.store, b.state, growl)];
     const attack = new AttackEffect(b.opponent,b.player,{ name:'Hit',cost:[],damage:50,text:'' });
     b.store.reduceEffect(b.state,new DealDamageEffect(attack,50));
     expect(b.player.active.damage).toBe(40);

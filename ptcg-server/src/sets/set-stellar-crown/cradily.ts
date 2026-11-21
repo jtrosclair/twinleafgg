@@ -85,8 +85,8 @@ export class Cradily extends PokemonCard {
 
     // Miasma Wind
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const opponent = StateUtils.getOpponent(state, effect.player);
-      effect.damage = 100 * opponent.active.specialConditions.length;
+      const conditions = effect.opponent.active.specialConditions.length;
+      effect.damage = conditions ? effect.damage + 100 * conditions - effect.attack.damage : 0;
     }
 
     return state;

@@ -63,15 +63,8 @@ export class LilliesClefairyex extends PokemonCard {
   public reduceCopiedAttackEffect(_store: StoreLike, state: State, effect: Effect, _attackIndex: number): State {
     // Full Moon Rondo
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      //Get number of benched pokemon
-      const playerBenched = player.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
-      const opponentBenched = opponent.bench.reduce((left, b) => left + (b.cards.length ? 1 : 0), 0);
-
-      const totalBenched = playerBenched + opponentBenched;
-
-      effect.damage = 20 + totalBenched * 20;
+      const benched = [...effect.player.bench, ...effect.opponent.bench].filter(slot => slot.getPokemonCard()).length;
+      effect.damage += 20 * benched;
     }
     return state;
   }
