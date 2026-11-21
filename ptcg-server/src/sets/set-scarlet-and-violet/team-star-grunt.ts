@@ -1,12 +1,11 @@
-import { Effect } from '../../game/store/effects/effect';
-import { GameError } from '../../game/game-error';
-import { GameMessage } from '../../game/game-message';
-import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { State } from '../../game/store/state/state';
-import { StoreLike } from '../../game/store/store-like';
+import { GameError, GameMessage, Player, State, StateUtils, StoreLike } from '../../game';
+import { TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
-import { SuperType, TrainerType } from '../../game/store/card/card-types';
-import { StateUtils, CardList, ChooseCardsPrompt, Player } from '../../game';
+import { Effect } from '../../game/store/effects/effect';
+import { TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { getPhysicalAttachedEnergy } from '../../game/store/prefabs/attack-effects';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { chooseTrainerAttachment } from '../../game/store/prefabs/trainer-attachments';
 
 export class TeamStarGrunt extends TrainerCard {
 
@@ -27,67 +26,22 @@ export class TeamStarGrunt extends TrainerCard {
   public text: string =
     'Put an Energy attached to your opponent\'s Active Pokémon on top of their deck.';
 
-  public canPlay(store: StoreLike, state: State, player: Player): boolean {
+  public canPlay(_store: StoreLike, state: State, player: Player): boolean {
     const opponent = StateUtils.getOpponent(state, player);
-    const supporterTurn = player.supporterTurn;
-
-    if (supporterTurn > 0) {
-      return false;
-    }
-
-    if (!opponent.active.cards.some(c => c.superType === SuperType.ENERGY)) {
-      return false;
-    }
-    return true;
+    return getPhysicalAttachedEnergy(opponent.active).length > 0;
   }
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof TrainerEffect && effect.trainerCard === this) {
+    if (!(effect instanceof TrainerEffect) || effect.trainerCard !== this) return state;
 
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
+    const { player } = effect;
+    const opponent = StateUtils.getOpponent(state, player);
+    if (!this.canPlay(store, state, player)) throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
 
-      const supporterTurn = player.supporterTurn;
-
-      if (supporterTurn > 0) {
-        throw new GameError(GameMessage.SUPPORTER_ALREADY_PLAYED);
-      }
-
-      player.hand.moveCardTo(effect.trainerCard, player.supporter);
-      // We will discard this card after prompt confirmation
-      effect.preventDefault = true;
-
-      if (!opponent.active.cards.some(c => c.superType === SuperType.ENERGY)) {
-        throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-      }
-
-      const deckTop = new CardList();
-
-      const target = opponent.active;
-      state = store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_DISCARD,
-        target,
-        { superType: SuperType.ENERGY },
-        { min: 1, max: 1, allowCancel: true }
-      ), energy => {
-        const cards: CardList[] = (energy || []).map(e => e.cards);
-
-        if (cards.length > 0) {
-          target.moveCardsTo(energy, deckTop);
-          deckTop.moveToTopOfDestination(opponent.deck);
-
-
-
-        }
-      });
-
-
-      return state;
-    }
-    return state;
+    // Ref: set-pokemon-151/giovannis-charisma.ts (check Trainer protection before moving an attachment).
+    const target = opponent.active;
+    return chooseTrainerAttachment(store, state, effect, target, getPhysicalAttachedEnergy, GameMessage.CHOOSE_CARD_TO_DISCARD, card => {
+      if (card) MOVE_CARDS(store, state, target, opponent.deck, { cards: [card], sourceCard: this, sourceEffect: effect, toTop: true });
+    });
   }
-
 }
-
-

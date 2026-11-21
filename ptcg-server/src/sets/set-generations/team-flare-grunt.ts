@@ -1,55 +1,11 @@
-import {
-  Card,
-  ChooseCardsPrompt,
-  GameError, GameMessage,
-  PokemonCardList,
-  StateUtils
-} from '../../game';
-import { SuperType, TrainerType } from '../../game/store/card/card-types';
+import { GameError, GameMessage, Player, State, StateUtils, StoreLike } from '../../game';
+import { TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
-import { State } from '../../game/store/state/state';
-import { StoreLike } from '../../game/store/store-like';
-
-function* playCard(next: Function, store: StoreLike, state: State, effect: TrainerEffect): IterableIterator<State> {
-  const player = effect.player;
-  const opponent = StateUtils.getOpponent(state, player);
-
-  const activeHasEnergy = opponent.active.cards.some(c => c.superType === SuperType.ENERGY);
-
-  if (!activeHasEnergy) {
-    throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
-  }
-
-  if (player.supporterTurn >= 1) {
-    throw new GameError(GameMessage.SUPPORTER_ALREADY_PLAYED);
-  }
-
-  player.hand.moveCardTo(effect.trainerCard, player.supporter);
-  // We will discard this card after prompt confirmation
-  effect.preventDefault = true;
-
-  const target: PokemonCardList = opponent.active as PokemonCardList;
-
-  let cards: Card[] = [];
-
-  yield store.prompt(state, new ChooseCardsPrompt(
-    player,
-    GameMessage.CHOOSE_CARD_TO_DISCARD,
-    target,
-    { superType: SuperType.ENERGY },
-    { min: 1, max: 1, allowCancel: false }
-  ), selected => {
-    cards = selected;
-    next();
-  });
-
-
-  target.moveCardsTo(cards, opponent.discard);
-
-  return state;
-}
+import { getPhysicalAttachedEnergy } from '../../game/store/prefabs/attack-effects';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
+import { chooseTrainerAttachment } from '../../game/store/prefabs/trainer-attachments';
 
 export class TeamFlareGrunt extends TrainerCard {
 
@@ -68,12 +24,22 @@ export class TeamFlareGrunt extends TrainerCard {
   public text: string =
     'Discard an Energy attached to your opponent\'s Active Pokémon.';
 
-  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (effect instanceof TrainerEffect && effect.trainerCard === this) {
-      const generator = playCard(() => generator.next(), store, state, effect);
-      return generator.next().value;
-    }
-    return state;
+  public canPlay(_store: StoreLike, state: State, player: Player): boolean {
+    const opponent = StateUtils.getOpponent(state, player);
+    return getPhysicalAttachedEnergy(opponent.active).length > 0;
   }
 
+  public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    if (!(effect instanceof TrainerEffect) || effect.trainerCard !== this) return state;
+
+    const { player } = effect;
+    const opponent = StateUtils.getOpponent(state, player);
+    if (!this.canPlay(store, state, player)) throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
+
+    // Ref: set-pokemon-151/giovannis-charisma.ts (check Trainer protection before moving an attachment).
+    const target = opponent.active;
+    return chooseTrainerAttachment(store, state, effect, target, getPhysicalAttachedEnergy, GameMessage.CHOOSE_CARD_TO_DISCARD, card => {
+      if (card) MOVE_CARDS(store, state, target, opponent.discard, { cards: [card], sourceCard: this, sourceEffect: effect });
+    });
+  }
 }

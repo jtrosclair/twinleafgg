@@ -5482,3 +5482,44 @@ passes 33 checks, client services pass 209, and all ten packaged
 board prompt checks pass. All 559 comparable saved boards and 3,636
 sampled opening actions match. The seven recorded solutions each win
 twice on replay.
+
+## Gameplay re-audit, batch 87
+
+Ten attachment-removing Supporters now check protection on the Pokémon
+holding the selected Energy or Tool. The paths cover Team Star Grunt,
+Team Flare Grunt, Team Yell Grunt, Rust Syndicate Grunt, Plumeria,
+Flannery, Faba, Xerosic, Ruffian and Giacomo. Wide Wall covers the Active
+and Bench, and copied Supporter effects retain their existing behavior.
+A Tool stored in both the Pokémon's cards and its attached Tools now
+leaves both lists when moved.
+[Wide Wall print](https://www.pokemon-card.com/card-search/details.php/card/45991/)
+[Wide Wall and Giovanni's Charisma ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%89%E3%82%B5%E3%82%A4%E3%83%89%E3%83%B3&regulation_faq_main_item1=all)
+
+Flannery resolves each available discard. When protection prevents
+Special Energy removal, it can still discard the Stadium. Plumeria
+still pays its two-card cost. Giacomo discards one Special Energy per
+eligible Pokémon, and Ruffian resolves both eligible attachment types
+on its chosen target. Rust Syndicate Grunt checks the previous turn's
+Knock Out, including Knock Outs from effects. The printed card allows
+other cards in hand.
+[Flannery rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%A2%E3%82%B9%E3%83%8A&regulation_faq_main_item1=all)
+[Plumeria print](https://www.pokemon-card.com/card-search/details.php/card/33913)
+[Giacomo rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%94%E3%83%BC%E3%83%8B%E3%83%A3&regulation_faq_main_item1=all)
+[Ruffian rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E6%80%96%E3%81%84%E3%81%8A%E5%85%84%E3%81%95%E3%82%93&regulation_faq_main_item1=all)
+[Rust Syndicate Grunt print](https://www.pokemon-card.com/card-search/details.php/card/50296)
+
+Cyrus Prism Star and Avery affect the player who selects their own
+Benched Pokémon. Pokémon-level Trainer protection does not stop those
+effects. The next protection review covers direct counter movement
+and Special Conditions.
+[Cyrus Prism Star ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%CE%A9%E3%83%90%E3%83%AA%E3%82%A2)
+[Avery ruling](https://www.pokemon-card.com/rules/faq/search.php?sc_group_id=730)
+
+All 30 new checks pass, including an opponent-owned copied Supporter,
+both protected attachment types and the independent Stadium effects.
+The full engine suite passes 11,392 checks in 332 files. The combined
+checkout with in-progress client changes passes 153 focused checks,
+including Meowth's Tuck Tail. All 559 comparable saved boards match.
+All 3,636 sampled opening actions match, and all seven recorded
+solutions win twice. The API passes 33 tests, client services pass
+209, and the browser package passes attestation and ten board checks.

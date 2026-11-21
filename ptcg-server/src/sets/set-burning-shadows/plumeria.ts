@@ -1,20 +1,18 @@
 import {
   Card,
   CardList,
-  CardTarget,
   ChooseCardsPrompt,
   GameError, GameMessage,
   PlayerType,
-  PokemonCardList,
-  SlotType,
   StateUtils
 } from '../../game';
-import { Stage, SuperType, TrainerType } from '../../game/store/card/card-types';
+import { TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
 import { Effect } from '../../game/store/effects/effect';
-import { SupporterEffect, TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { TrainerEffect } from '../../game/store/effects/play-card-effects';
+import { getPhysicalAttachedEnergy } from '../../game/store/prefabs/attack-effects';
+import { chooseTrainerAttachment, chooseTrainerAttachmentTarget } from '../../game/store/prefabs/trainer-attachments';
 import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
-import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
 import { State } from '../../game/store/state/state';
 import { StoreLike } from '../../game/store/store-like';
 
@@ -33,17 +31,7 @@ function* playCard(next: Function, store: StoreLike, state: State, self: Plumeri
     throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
   }
 
-  let hasPokemonWithEnergy = false;
-  const blocked: CardTarget[] = [];
-  opponent.forEachPokemon(PlayerType.TOP_PLAYER, (cardList, card, target) => {
-    if (cardList.cards.some(c => c.superType === SuperType.ENERGY)) {
-      hasPokemonWithEnergy = true;
-    } else {
-      blocked.push(target);
-    }
-  });
-
-  if (!hasPokemonWithEnergy) {
+  if (!opponent.getPokemonInPlay().some(slot => getPhysicalAttachedEnergy(slot).length > 0)) {
     throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
   }
 
@@ -71,47 +59,12 @@ function* playCard(next: Function, store: StoreLike, state: State, self: Plumeri
 
   player.hand.moveCardsTo(cardsInHand, player.discard);
 
-  let targets: PokemonCardList[] = [];
-  yield store.prompt(state, new ChoosePokemonPrompt(
-    player.id,
-    GameMessage.CHOOSE_POKEMON_TO_DISCARD_CARDS,
-    PlayerType.TOP_PLAYER,
-    [SlotType.ACTIVE, SlotType.BENCH],
-    { allowCancel: false, blocked }
-  ), results => {
-    targets = results || [];
-    next();
+  // Ref: set-pokemon-151/giovannis-charisma.ts (check Trainer protection before removing Energy).
+  return chooseTrainerAttachmentTarget(store, state, effect, PlayerType.TOP_PLAYER, getPhysicalAttachedEnergy, target => {
+    chooseTrainerAttachment(store, state, effect, target, getPhysicalAttachedEnergy, GameMessage.CHOOSE_CARD_TO_DISCARD, card => {
+      if (card) MOVE_CARDS(store, state, target, opponent.discard, { cards: [card], sourceCard: self, sourceEffect: effect });
+    });
   });
-
-  if (targets.length === 0) {
-    return state;
-  }
-
-  const cardList = targets[0];
-
-  if (cardList.isStage(Stage.BASIC)) {
-    try {
-      const supporterEffect = new SupporterEffect(player, effect.trainerCard);
-      store.reduceEffect(state, supporterEffect);
-    } catch {
-      return state;
-    }
-  }
-
-  const target = targets[0];
-  let cards: Card[] = [];
-  yield store.prompt(state, new ChooseCardsPrompt(
-    player,
-    GameMessage.CHOOSE_CARD_TO_DISCARD,
-    target,
-    { superType: SuperType.ENERGY },
-    { min: 1, max: 1, allowCancel: false }
-  ), selected => {
-    cards = selected;
-    next();
-  });
-  MOVE_CARDS(store, state, target, opponent.discard, { cards, sourceCard: self });
-  return state;
 }
 
 export class Plumeria extends TrainerCard {
