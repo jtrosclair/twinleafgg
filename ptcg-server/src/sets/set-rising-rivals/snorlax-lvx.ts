@@ -10,7 +10,7 @@ export class SnorlaxLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
   public evolvesFrom = 'Snorlax';
   public cardType: CardType = C;
-  protected _tags = [CardTag.POKEMON_LV_X];
+  public tags = [CardTag.POKEMON_LV_X];
   public hp: number = 130;
   public weakness = [{ type: F, value: +30 }];
   public retreat = [C, C, C, C];

@@ -27,11 +27,6 @@ export class DeckAnalyser {
     let hasAceSpec = false;
     let hasRadiant = false;
     let hasStar = false;
-    let hasUnownTag = false;
-    let unownCount = 0;
-    let hasArceusRule = false;
-    let arceusRuleCount = 0;
-    let arceusCount = 0;
 
     // Pre-Release format uses 40 cards, all other formats use 60
     const requiredDeckSize = format === Format.PRE_RELEASE ? 40 : 60;
@@ -55,32 +50,13 @@ export class DeckAnalyser {
         hasBasicPokemon = true;
       }
 
-      // Check for UNOWN tag
-      if (card.tags.includes(CardTag.UNOWN)) {
-        hasUnownTag = true;
-      }
-
-      // Count cards with 'Unown' in their name
-      if (card.name.includes('Unown')) {
-        unownCount++;
-      }
-
-      // CHeck for Arceus Rule
-      if (card.tags.includes(CardTag.ARCEUS)){
-        hasArceusRule = true;
-      }
-
-      // Count Cards with 'Arceus' in their name
-      if (card.name === 'Arceus'){
-        arceusCount++;
-        if (card.tags.includes(CardTag.ARCEUS)){
-          arceusRuleCount++;
-        }
-      }
-
-      if (!(card instanceof EnergyCard) || card.energyType !== EnergyType.BASIC) {
-        countMap[card.name] = (countMap[card.name] || 0) + 1;
-        if (countMap[card.name] > 4 && (!hasArceusRule || arceusCount !== arceusRuleCount)) {
+      const isBasicEnergy = card instanceof EnergyCard && card.energyType === EnergyType.BASIC;
+      const hasArceusRule = card.name === 'Arceus' && card.tags.includes(CardTag.ARCEUS);
+      if (!isBasicEnergy && !hasArceusRule) {
+        // The Neo print uses a shared Unown limit. Diamond & Pearl letters have distinct names.
+        const deckName = card.set === 'N2' && card.tags.includes(CardTag.UNOWN) ? 'Unown' : card.name;
+        countMap[deckName] = (countMap[deckName] || 0) + 1;
+        if (countMap[deckName] > 4) {
           return false;
         }
       }
@@ -112,16 +88,6 @@ export class DeckAnalyser {
         }
         prismStarCards.add(card.name);
       }
-    }
-
-    // If any card has UNOWN tag, total Unown cards must be 4 or less
-    if (hasUnownTag && unownCount > 4) {
-      return false;
-    }
-
-    // If there is a Arceus Rule Arceus in the deck, all of them have to have the Arceus Rule for the deck to be legal with more than 4 Arceus
-    if (hasArceusRule && arceusCount !== arceusRuleCount){
-      return false;
     }
 
     return hasBasicPokemon;

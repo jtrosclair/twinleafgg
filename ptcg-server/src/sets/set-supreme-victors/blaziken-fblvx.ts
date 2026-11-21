@@ -10,7 +10,7 @@ import { IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/p
 export class BlazikenFBLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
   public evolvesFrom: string = 'Blaziken FB';
-  protected _tags = [CardTag.POKEMON_LV_X, CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_LV_X, CardTag.POKEMON_SP];
   public hp: number = 110;
   public cardType: CardType = R;
   public weakness = [{ type: W }];

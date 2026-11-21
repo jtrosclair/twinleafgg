@@ -7,7 +7,7 @@ import { IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/p
 
 export class LucarioGL extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 80;
   public cardType: CardType = F;
   public weakness = [{ type: P, value: +20 }];

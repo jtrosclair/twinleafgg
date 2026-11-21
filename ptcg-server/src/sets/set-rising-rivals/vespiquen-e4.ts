@@ -6,7 +6,7 @@ import { IS_POKEBODY_BLOCKED, MULTIPLE_COIN_FLIPS_PROMPT, WAS_ATTACK_USED } from
 
 export class VespiquenE4 extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 80;
   public cardType: CardType = G;
   public weakness = [{ type: L }];

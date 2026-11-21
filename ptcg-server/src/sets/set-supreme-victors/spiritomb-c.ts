@@ -6,7 +6,7 @@ import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class SpiritombC extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 70;
   public cardType: CardType = P;
   public weakness = [];

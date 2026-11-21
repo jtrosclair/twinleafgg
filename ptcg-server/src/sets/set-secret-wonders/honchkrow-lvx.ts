@@ -10,7 +10,7 @@ import { CONFIRMATION_PROMPT, MOVE_CARDS, SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED 
 
 export class HonchkrowLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
-  protected _tags = [CardTag.POKEMON_LV_X];
+  public tags = [CardTag.POKEMON_LV_X];
   public evolvesFrom: string = 'Honchkrow';
   public hp: number = 110;
   public cardType: CardType = D;

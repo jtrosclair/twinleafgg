@@ -4,7 +4,7 @@ import { MOVE_CARDS, MULTIPLE_COIN_FLIPS_PROMPT, SHOW_CARDS_TO_PLAYER, WAS_ATTAC
 
 export class RapidashE4 extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 70;
   public cardType: CardType = R;
   public weakness = [{ type: W }];

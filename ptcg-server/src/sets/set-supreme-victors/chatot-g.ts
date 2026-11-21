@@ -7,7 +7,7 @@ import { CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, MOVE_CARDS, SHOW_CARDS_TO_PL
 
 export class ChatotG extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 60;
   public cardType: CardType = C;
   public weakness = [{ type: L, value: +20 }];

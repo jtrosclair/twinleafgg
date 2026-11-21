@@ -5,7 +5,7 @@ import { MULTIPLE_COIN_FLIPS_PROMPT, WAS_ATTACK_USED } from '../../game/store/pr
 
 export class Pikachu extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.DELTA_SPECIES];
+  public tags = [CardTag.DELTA_SPECIES];
   public hp: number = 40;
   public cardType: CardType = M;
   public weakness = [{ type: F }];

@@ -8,7 +8,7 @@ import { ABILITY_USED, IS_POKEPOWER_BLOCKED, MOVE_CARDS, REMOVE_MARKER_AT_END_OF
 
 export class UnownZ extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.UNOWN];
+  public tags = [CardTag.UNOWN];
   public hp: number = 50;
   public cardType: CardType = P;
   public weakness = [{ type: P, value: +10 }];

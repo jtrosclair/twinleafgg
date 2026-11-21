@@ -6,7 +6,7 @@ import { ABILITY_USED, COIN_FLIP_PROMPT, CONFIRMATION_PROMPT, DRAW_CARDS, IS_POK
 
 export class UnownF extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.UNOWN];
+  public tags = [CardTag.UNOWN];
   public hp: number = 50;
   public cardType: CardType = P;
   public weakness = [{ type: P, value: +10 }];

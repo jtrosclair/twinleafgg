@@ -12,7 +12,7 @@ import { ADD_MARKER, HAS_MARKER, IS_POKEBODY_BLOCKED, MULTIPLE_COIN_FLIPS_PROMPT
 
 export class DarkraiLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
-  protected _tags = [CardTag.POKEMON_LV_X];
+  public tags = [CardTag.POKEMON_LV_X];
   public evolvesFrom: string = 'Darkrai';
   public hp: number = 100;
   public cardType: CardType = D;

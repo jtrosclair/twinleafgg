@@ -8,7 +8,7 @@ import { MOVE_CARDS, SHOW_CARDS_TO_PLAYER, SHUFFLE_DECK, WAS_ATTACK_USED } from 
 
 export class RhyperiorLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
-  protected _tags = [CardTag.POKEMON_LV_X];
+  public tags = [CardTag.POKEMON_LV_X];
   public evolvesFrom: string = 'Rhyperior';
   public hp: number = 170;
   public cardType: CardType = F;

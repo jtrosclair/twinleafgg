@@ -7,7 +7,7 @@ import { MOVE_CARDS, SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED } from '../../game/st
 
 export class RaticateG extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 70;
   public cardType: CardType = C;
   public weakness = [{ type: F, value: +20 }];

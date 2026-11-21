@@ -12,7 +12,7 @@ import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Arceus extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.ARCEUS];
+  public tags = [CardTag.ARCEUS];
   public hp: number = 90;
   public cardType: CardType = C;
   public weakness = [{ type: F }];

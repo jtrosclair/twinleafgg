@@ -7,7 +7,7 @@ import { COIN_FLIP_PROMPT, THIS_POKEMON_CANNOT_USE_THIS_ATTACK_NEXT_TURN, WAS_AT
 
 export class ForretressG extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 80;
   public cardType: CardType = M;
   public weakness = [{ type: R, value: +20 }];

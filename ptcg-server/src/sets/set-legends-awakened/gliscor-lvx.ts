@@ -9,7 +9,7 @@ import { ADD_PARALYZED_TO_PLAYER_ACTIVE, ADD_POISON_TO_PLAYER_ACTIVE, CONFIRMATI
 
 export class GliscorLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
-  protected _tags = [CardTag.POKEMON_LV_X];
+  public tags = [CardTag.POKEMON_LV_X];
   public evolvesFrom: string = 'Gliscor';
   public hp: number = 110;
   public cardType: CardType = F;

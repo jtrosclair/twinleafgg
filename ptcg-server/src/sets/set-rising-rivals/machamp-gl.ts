@@ -5,7 +5,7 @@ import { AFTER_ATTACK, MOVE_POKEMON_OFF_BOARD, SHUFFLE_DECK, WAS_ATTACK_USED } f
 
 export class MachampGL extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 100;
   public cardType: CardType = F;
   public weakness = [{ type: P }];

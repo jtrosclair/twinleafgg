@@ -8,7 +8,7 @@ import { COIN_FLIP_PROMPT, MULTIPLE_COIN_FLIPS_PROMPT, WAS_ATTACK_USED } from '.
 
 export class MiloticC extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public cardType: CardType = W;
   public hp: number = 90;
   public weakness = [{ type: L, value: +30 }];

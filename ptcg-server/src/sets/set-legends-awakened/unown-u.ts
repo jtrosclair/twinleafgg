@@ -7,7 +7,7 @@ import { IS_POKEBODY_BLOCKED, MOVE_CARDS, SHUFFLE_DECK, WAS_ATTACK_USED } from '
 
 export class UnownU extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.UNOWN];
+  public tags = [CardTag.UNOWN];
   public hp: number = 50;
   public cardType: CardType = P;
   public weakness = [{ type: P, value: +10 }];

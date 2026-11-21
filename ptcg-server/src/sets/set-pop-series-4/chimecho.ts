@@ -5,7 +5,7 @@ import { COIN_FLIP_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/pref
 
 export class Chimecho extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.DELTA_SPECIES];
+  public tags = [CardTag.DELTA_SPECIES];
   public hp: number = 60;
   public cardType: CardType = M;
   public weakness = [{ type: P }];

@@ -11,7 +11,7 @@ export class HippowdonLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
   public evolvesFrom = 'Hippowdon';
   public cardType: CardType = F;
-  protected _tags = [CardTag.POKEMON_LV_X];
+  public tags = [CardTag.POKEMON_LV_X];
   public hp: number = 130;
   public weakness = [{ type: W, value: +30 }];
   public resistance = [{ type: L, value: -20 }];

@@ -11,7 +11,7 @@ export class MismagiusGLLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
   public evolvesFrom = 'Mismagius GL';
   public cardType: CardType = P;
-  protected _tags = [CardTag.POKEMON_LV_X, CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_LV_X, CardTag.POKEMON_SP];
   public hp: number = 100;
   public weakness = [{ type: D, value: +30 }];
   public resistance = [{ type: C, value: -20 }];

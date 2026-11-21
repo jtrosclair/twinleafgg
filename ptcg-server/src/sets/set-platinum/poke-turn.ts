@@ -8,8 +8,9 @@ import { State } from '../../game/store/state/state';
 import { Effect } from '../../game/store/effects/effect';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
+import { MOVE_CARDS } from '../../game/store/prefabs/prefabs';
 
-function* playCard(next: Function, store: StoreLike, state: State, effect: TrainerEffect): IterableIterator<State> {
+function playCard(store: StoreLike, state: State, effect: TrainerEffect): State {
   const player = effect.player;
 
   // Create list of non - Pokemon SP slots
@@ -28,7 +29,6 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
     throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
   }
 
-  // We will discard this card after prompt confirmation
   effect.preventDefault = true;
 
   return store.prompt(state, new ChoosePokemonPrompt(
@@ -38,14 +38,14 @@ function* playCard(next: Function, store: StoreLike, state: State, effect: Train
     [SlotType.ACTIVE, SlotType.BENCH],
     { allowCancel: true, blocked }
   ), targets => {
-    if (targets && targets.length > 0) {
-      // Discard trainer only when user selected a Pokemon
-
-
-      targets[0].moveTo(player.hand);
-      targets[0].damage = 0;
-      targets[0].clearEffects();
-    }
+    const target = targets?.[0];
+    if (!target) return;
+    const cards = [...new Set([...target.cards, ...target.energies.cards, ...target.tools])];
+    MOVE_CARDS(store, state, target, player.hand, { cards, sourceCard: effect.trainerCard });
+    // Older slots can store the same Tool in both cards and tools.
+    target.tools = target.tools.filter(tool => !player.hand.cards.includes(tool));
+    target.damage = 0;
+    target.clearEffects();
   });
 }
 
@@ -68,8 +68,7 @@ export class PokeTurn extends TrainerCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof TrainerEffect && effect.trainerCard === this) {
-      const generator = playCard(() => generator.next(), store, state, effect);
-      return generator.next().value;
+      return playCard(store, state, effect);
     }
 
     return state;

@@ -13,7 +13,7 @@ import {
 } from '../../game/store/prefabs/prefabs';
 
 export class DarkGyarados extends PokemonCard {
-  protected _tags = [CardTag.DARK];
+  public tags = [CardTag.DARK];
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom = 'Magikarp';
   public cardType: CardType = W;

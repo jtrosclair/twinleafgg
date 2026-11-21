@@ -8,7 +8,7 @@ import { ATTACH_ENERGY_PROMPT, COIN_FLIP_PROMPT, CONFIRMATION_PROMPT, WAS_ATTACK
 
 export class ZapdosG extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 90;
   public cardType: CardType = L;
   public weakness = [{ type: L }];

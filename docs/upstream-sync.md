@@ -3015,3 +3015,46 @@ The remaining 145 printed tag omissions include Pokémon SP, LV.X,
 Delta Species and other classifications. A real Poké Turn play was
 rejected with Forretress G RR as the only eligible Pokémon. The same
 action succeeded when its printed SP tag was visible to the game.
+
+## Gameplay re-audit, batch 34
+
+Made the remaining 145 missing printed classifications visible to the engine,
+across 132 definitions and their reprints. The regression suite checks each
+exact print and exercises Pokémon SP pickup and Level-Up, Delta Rainbow
+Energy, Rocket's Hideout, owner-specific Energy and searches.
+[Supreme Victors rulebook](https://assets.pokemon.com/assets/cms/pdf/tcg/rulebooks/Supreme_Victors_Rulebook.pdf)
+[Rising Rivals Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Rising_Rivals.pdf)
+[EX Holon Phantoms Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/EX_Holon_Phantoms.pdf)
+
+Poké Turn returns each physical card once, including Tools that appear in
+both attachment lists on older boards. Before the fix, returning Steelix GL
+with one Energy and one Tool put the same Energy ID into the hand twice and
+left a Tool reference in the empty slot. Sneasel's Rob now returns both
+Technical Machines and Pokémon Tools. Damage Porter requires three Colorless
+Energy and uses the number of damage counters on the Pokémon using the attack.
+[Platinum Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Platinum.pdf)
+[Legends Awakened Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/DiamondPearl_LegendsAwakened.pdf)
+[Rising Rivals Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Rising_Rivals.pdf)
+
+Deck validation counts Diamond & Pearl Unown letters independently and keeps
+the shared count for the registered older Neo and EX prints. The Arceus
+exception applies to the card that prints it, including promo DP50. A separate
+card's four-copy limit applies regardless of where Arceus appears in the list.
+[Diamond & Pearl rules change bulletin](https://www.pokebeach.com/news/0507/dprules.pdf)
+[Arceus Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Arceus.pdf)
+
+All 7,913 engine tests passed, including 163 focused cases. Of those focused
+cases, 160 failed on the prior revision. The combined engine suite passed 791
+checks alongside the pending checkout changes. All 559 supported saved states
+loaded with identical serialized payloads, identities and deserialized state.
+All 3,633 sampled opening actions matched, and all seven recorded puzzle
+solutions reached a win. The 2.46 MiB ZIP passed attestation and the mobile
+package budget. The built catalog has
+15,750 prints and zero nonempty protected tags missing from their public tags.
+
+A separate real-attack reproduction found that Arceus AR9's Metal Barrier
+blocks Rookidee's Flap even though Rookidee is a Basic Pokémon. On Rookidee's
+following turn, the original marker still blocks Flap. The printed effect is
+limited to attacks from Pokémon LV.X during the opponent's next turn. Keep
+that reproduction for the next pass on temporary attack protection.
+[Metal Barrier print text](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Arceus.pdf)

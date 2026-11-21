@@ -7,7 +7,7 @@ import { COIN_FLIP_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/pref
 
 export class CharizardG extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public cardType: CardType = R;
   public hp: number = 100;
   public weakness = [{ type: W, value: +30 }];

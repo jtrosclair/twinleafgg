@@ -7,7 +7,7 @@ import { ABILITY_USED, BLOCK_IF_HAS_SPECIAL_CONDITION, CONFIRMATION_PROMPT, IS_P
 
 export class PorygonZLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
-  protected _tags = [CardTag.POKEMON_LV_X];
+  public tags = [CardTag.POKEMON_LV_X];
   public evolvesFrom: string = 'Porygon-Z';
   public hp: number = 130;
   public cardType: CardType = C;

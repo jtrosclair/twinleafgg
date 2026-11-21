@@ -6,7 +6,7 @@ import { COIN_FLIP_PROMPT, IS_POKEBODY_BLOCKED, THIS_ATTACK_DOES_X_DAMAGE_TO_EAC
 
 export class MamoswineGL extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 100;
   public cardType: CardType = W;
   public weakness = [{ type: M }];

@@ -10,7 +10,7 @@ import { CONFIRMATION_PROMPT, DISCARD_ALL_ENERGY_FROM_POKEMON, IS_POKEBODY_BLOCK
 export class RayquazaCLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
   public evolvesFrom: string = 'Rayquaza C';
-  protected _tags = [CardTag.POKEMON_LV_X, CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_LV_X, CardTag.POKEMON_SP];
   public hp: number = 120;
   public cardType: CardType = C;
   public weakness = [{ type: C }];

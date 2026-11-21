@@ -6,7 +6,7 @@ import { ADD_SLEEP_TO_PLAYER_ACTIVE, COIN_FLIP_PROMPT, MOVE_CARDS, WAS_ATTACK_US
 
 export class PuruglyG extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 90;
   public cardType: CardType = C;
   public weakness = [{ type: F }];

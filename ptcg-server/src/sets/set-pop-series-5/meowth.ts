@@ -5,7 +5,7 @@ import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Meowth extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.DELTA_SPECIES];
+  public tags = [CardTag.DELTA_SPECIES];
   public hp: number = 40;
   public cardType: CardType = D;
   public weakness = [{ type: F }];

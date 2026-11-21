@@ -5,7 +5,7 @@ import { CONFIRMATION_PROMPT, IS_POKEBODY_BLOCKED, SWITCH_ACTIVE_WITH_BENCHED, W
 
 export class QuagsireGL extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 90;
   public cardType: CardType = W;
   public weakness = [{ type: G }];

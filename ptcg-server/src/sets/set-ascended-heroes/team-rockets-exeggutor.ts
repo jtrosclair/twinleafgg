@@ -19,7 +19,7 @@ import {
 
 export class TeamRocketsExeggutor extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
-  protected _tags = [CardTag.TEAM_ROCKET];
+  public tags = [CardTag.TEAM_ROCKET];
   public evolvesFrom: string = 'Team Rocket\'s Exeggcute';
   public hp: number = 140;
   public cardType: CardType = P;

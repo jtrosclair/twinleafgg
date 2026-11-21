@@ -6,7 +6,7 @@ import { IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/p
 export class Pelipper extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
   public evolvesFrom: string = 'Wingull';
-  protected _tags = [CardTag.DELTA_SPECIES];
+  public tags = [CardTag.DELTA_SPECIES];
   public hp: number = 70;
   public cardType: CardType = L;
   public weakness = [{ type: L }];

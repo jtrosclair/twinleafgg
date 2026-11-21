@@ -14,7 +14,7 @@ import {
 import { PREVENT_DAMAGE } from '../../game/store/prefabs/effect-of-attack-prefabs';
 
 export class DarkBlastoise extends PokemonCard {
-  protected _tags = [CardTag.DARK];
+  public tags = [CardTag.DARK];
   public stage: Stage = Stage.STAGE_2;
   public evolvesFrom: string = 'Dark Wartortle';
   public hp: number = 70;

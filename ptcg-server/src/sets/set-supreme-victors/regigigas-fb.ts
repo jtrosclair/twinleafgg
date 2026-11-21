@@ -7,7 +7,7 @@ import { HEAL_X_DAMAGE_FROM_THIS_POKEMON, WAS_ATTACK_USED } from '../../game/sto
 
 export class RegigigasFB extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public cardType: CardType = C;
   public hp: number = 100;
   public weakness = [{ type: F, value: +30 }];

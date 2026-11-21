@@ -8,7 +8,7 @@ import { ABILITY_USED, BLOCK_IF_HAS_SPECIAL_CONDITION, IS_POKEPOWER_BLOCKED, MOV
 export class GengarLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
   public evolvesFrom: string = 'Gengar';
-  protected _tags = [CardTag.POKEMON_LV_X];
+  public tags = [CardTag.POKEMON_LV_X];
   public hp: number = 140;
   public cardType: CardType = P;
   public weakness = [{ type: D }];

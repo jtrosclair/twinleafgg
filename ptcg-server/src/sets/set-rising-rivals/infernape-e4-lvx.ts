@@ -12,7 +12,7 @@ export class InfernapeE4LVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
   public evolvesFrom = 'Infernape E4';
   public cardType: CardType = R;
-  protected _tags = [CardTag.POKEMON_LV_X, CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_LV_X, CardTag.POKEMON_SP];
   public hp: number = 110;
   public weakness = [{ type: W, value: +30 }];
   public retreat = [];

@@ -12,7 +12,7 @@ import { ABILITY_USED, IS_POKEBODY_BLOCKED, IS_POKEPOWER_BLOCKED, MOVE_CARDS, WA
 
 export class HeatranLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
-  protected _tags = [CardTag.POKEMON_LV_X];
+  public tags = [CardTag.POKEMON_LV_X];
   public evolvesFrom: string = 'Heatran';
   public hp: number = 120;
   public cardType: CardType = R;

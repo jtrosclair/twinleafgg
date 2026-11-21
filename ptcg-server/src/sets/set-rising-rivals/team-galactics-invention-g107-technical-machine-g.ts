@@ -1,7 +1,7 @@
-import { Attack, CardTarget, ChoosePokemonPrompt, GameError, GameMessage, PlayerType, SlotType, State, StateUtils, StoreLike } from '../../game';
+import { Attack, CardTarget, ChoosePokemonPrompt, GameError, GameMessage, PlayerType, SlotType, State, StoreLike } from '../../game';
 import { CardTag, TrainerType } from '../../game/store/card/card-types';
 import { TrainerCard } from '../../game/store/card/trainer-card';
-import { CheckPokemonAttacksEffect, CheckProvidedEnergyEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
+import { CheckPokemonAttacksEffect, CheckTableStateEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
 import { AttackEffect } from '../../game/store/effects/game-effects';
 import { DAMAGE_OPPONENT_POKEMON, MOVE_CARDS } from '../../game/store/prefabs/prefabs';
@@ -9,7 +9,7 @@ import { WAS_TRAINER_USED } from '../../game/store/prefabs/trainer-prefabs';
 
 export class TeamGalacticsInventionG107TechnicalMachineG extends TrainerCard {
   protected _trainerType: TrainerType = TrainerType.ITEM;
-  protected _tags = [CardTag.TECHNICAL_MACHINE];
+  public tags = [CardTag.TECHNICAL_MACHINE];
   public set: string = 'RR';
   public cardImage: string = 'assets/cardback.png';
   public setNumber: string = '95';
@@ -18,9 +18,9 @@ export class TeamGalacticsInventionG107TechnicalMachineG extends TrainerCard {
 
   public attacks: Attack[] = [{
     name: 'Damage Porter',
-    cost: [C],
+    cost: [C, C, C],
     damage: 0,
-    text: 'Choose 1 of your opponent\'s Pokémon. This attack does 10 damage times the amount of Energy attached to that Pokémon. (Don\'t apply Weakness and Resistance for Benched Pokémon.)'
+    text: 'Choose 1 of your opponent\'s Pokémon. This attack does 10 damage times the number of damage counters on the Pokémon this card is attached to. (Don\'t apply Weakness and Resistance for Benched Pokémon.)'
   }];
 
   public text: string = 'Attach this card to 1 of your Pokémon SP in play. That Pokémon may use this card\'s attack instead of its own. When the Pokémon this card is attached to is no longer Pokémon SP, discard this card.';
@@ -71,12 +71,7 @@ export class TeamGalacticsInventionG107TechnicalMachineG extends TrainerCard {
         if (!targets || targets.length === 0) {
           return;
         }
-        const target = targets[0];
-        const owner = StateUtils.findOwner(state, target);
-        const checkEnergy = new CheckProvidedEnergyEffect(owner, target);
-        store.reduceEffect(state, checkEnergy);
-        const energyCount = checkEnergy.energyMap.reduce((sum, e) => sum + e.provides.length, 0);
-        DAMAGE_OPPONENT_POKEMON(store, state, effect, 10 * energyCount, [target]);
+        DAMAGE_OPPONENT_POKEMON(store, state, effect, effect.source.damage, targets);
       });
     }
 

@@ -1,8 +1,8 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { CardTag, CardType, Stage, TrainerType } from '../../game/store/card/card-types';
-import { State, StateUtils, StoreLike, TrainerCard } from '../../game';
+import { GameMessage, ShowCardsPrompt, State, StateUtils, StoreLike, TrainerCard } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { SHUFFLE_DECK, SHOW_CARDS_TO_PLAYER, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { SHUFFLE_DECK, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Sneasel extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -36,19 +36,19 @@ export class Sneasel extends PokemonCard {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
-      SHOW_CARDS_TO_PLAYER(store, state, player, opponent.hand.cards);
-      const toolCards = opponent.hand.cards.filter(c => {
-        if (!(c instanceof TrainerCard) || c.trainerType !== TrainerType.TOOL) {
-          return false;
-        }
-        return c.tags.includes(CardTag.TECHNICAL_MACHINE) || c.trainerType === TrainerType.TOOL;
-      });
-      if (toolCards.length > 0) {
-        toolCards.reverse().forEach(card => {
+      const hand = opponent.hand.cards.slice();
+      if (hand.length === 0) return state;
+      return store.prompt(state, new ShowCardsPrompt(
+        player.id, GameMessage.CARDS_SHOWED_BY_THE_OPPONENT, hand, { sourcePlayerId: opponent.id }
+      ), () => {
+        const matchingCards = hand.filter(card => card instanceof TrainerCard
+          && (card.trainerType === TrainerType.TOOL || card.tags.includes(CardTag.TECHNICAL_MACHINE)));
+        if (matchingCards.length === 0) return;
+        matchingCards.reverse().forEach(card => {
           opponent.hand.moveCardTo(card, opponent.deck);
         });
         SHUFFLE_DECK(store, state, opponent);
-      }
+      });
     }
 
     return state;

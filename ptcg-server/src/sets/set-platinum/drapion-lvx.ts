@@ -11,7 +11,7 @@ import { ABILITY_USED, ADD_POISON_TO_PLAYER_ACTIVE, BLOCK_IF_HAS_SPECIAL_CONDITI
 export class DrapionLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
   public evolvesFrom: string = 'Drapion';
-  protected _tags = [CardTag.POKEMON_LV_X];
+  public tags = [CardTag.POKEMON_LV_X];
   public hp: number = 130;
   public cardType: CardType = D;
   public weakness = [{ type: P }];

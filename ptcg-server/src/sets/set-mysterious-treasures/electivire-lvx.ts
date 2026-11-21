@@ -10,7 +10,7 @@ import { DISCARD_A_STADIUM_CARD_IN_PLAY, IS_POKEBODY_BLOCKED, MOVE_CARDS, WAS_AT
 export class ElectivireLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
   public evolvesFrom: string = 'Electivire';
-  protected _tags = [CardTag.POKEMON_LV_X];
+  public tags = [CardTag.POKEMON_LV_X];
   public hp: number = 120;
   public cardType: CardType = L;
   public weakness = [{ type: F }];

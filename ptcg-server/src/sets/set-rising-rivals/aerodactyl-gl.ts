@@ -7,7 +7,7 @@ import { DEFENDING_POKEMON_CANNOT_EVOLVE_NEXT_TURN } from '../../game/store/pref
 
 export class AerodactylGL extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 80;
   public cardType: CardType = F;
   public weakness = [{ type: L, value: +20 }];

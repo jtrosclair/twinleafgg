@@ -8,7 +8,7 @@ import { IS_POKEBODY_BLOCKED, WAS_ATTACK_USED } from '../../game/store/prefabs/p
 
 export class DrifblimFB extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public cardType: CardType = P;
   public hp: number = 80;
   public weakness = [{ type: D, value: +20 }];

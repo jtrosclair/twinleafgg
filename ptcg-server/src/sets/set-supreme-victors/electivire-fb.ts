@@ -6,7 +6,7 @@ import { DRAW_CARDS, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/prefab
 
 export class ElectivireFB extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public cardType: CardType = L;
   public hp: number = 90;
   public weakness = [{ type: F, value: +30 }];

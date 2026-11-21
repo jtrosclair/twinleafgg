@@ -6,7 +6,7 @@ import { THIS_POKEMON_DOES_DAMAGE_TO_ITSELF, WAS_ATTACK_USED } from '../../game/
 
 export class GolemE4 extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 110;
   public cardType: CardType = F;
   public weakness = [{ type: G, value: +30 }];

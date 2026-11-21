@@ -9,7 +9,7 @@ import { BLOCK_RETREAT } from '../../game/store/prefabs/prefabs';
 
 export class EthansSudowoodo extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.ETHANS];
+  public tags = [CardTag.ETHANS];
   public cardType: CardType = F;
   public hp: number = 110;
   public weakness = [{ type: G }];

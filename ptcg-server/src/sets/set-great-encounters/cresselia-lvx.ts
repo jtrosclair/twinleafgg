@@ -15,7 +15,7 @@ import {
 
 export class CresseliaLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
-  protected _tags = [CardTag.POKEMON_LV_X];
+  public tags = [CardTag.POKEMON_LV_X];
   public evolvesFrom: string = 'Cresselia';
   public hp: number = 100;
   public cardType: CardType = P;

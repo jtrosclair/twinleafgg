@@ -44,7 +44,7 @@ function findInPlayPokemon(state: State, pokemon: PokemonCard): { player: Player
 export class Pidgeot extends PokemonCard {
   public stage: Stage = Stage.STAGE_2;
   public evolvesFrom: string = 'Pidgeotto';
-  protected _tags = [CardTag.DELTA_SPECIES];
+  public tags = [CardTag.DELTA_SPECIES];
   public cardType: CardType = L;
   public additionalCardTypes = [M];
   public hp: number = 100;

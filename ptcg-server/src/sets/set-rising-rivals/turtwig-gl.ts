@@ -4,7 +4,7 @@ import { HEAL_X_DAMAGE_FROM_THIS_POKEMON, IS_POKEBODY_BLOCKED, WAS_ATTACK_USED }
 
 export class TurtwigGL extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 90;
   public cardType: CardType = G;
   public weakness = [{ type: R }];

@@ -7,7 +7,7 @@ import { AFTER_ATTACK, COIN_FLIP_PROMPT, CONFIRMATION_PROMPT, SWITCH_ACTIVE_WITH
 
 export class CrawdauntG extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public cardType: CardType = D;
   public hp: number = 80;
   public weakness = [{ type: L, value: +20 }];

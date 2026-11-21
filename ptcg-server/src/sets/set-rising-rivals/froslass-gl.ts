@@ -7,7 +7,7 @@ import { ADD_SLEEP_TO_PLAYER_ACTIVE, SWITCH_IN_OPPONENT_BENCHED_POKEMON, WAS_ATT
 
 export class FroslassGL extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 70;
   public cardType: CardType = W;
   public weakness = [{ type: M, value: +20 }];

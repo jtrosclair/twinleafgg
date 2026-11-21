@@ -9,7 +9,7 @@ import { BLOCK_IF_HAS_SPECIAL_CONDITION, COIN_FLIP_PROMPT, DISCARD_ALL_ENERGY_FR
 export class CharizardGLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
   public evolvesFrom: string = 'Charizard G';
-  protected _tags = [CardTag.POKEMON_LV_X, CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_LV_X, CardTag.POKEMON_SP];
   public hp: number = 120;
   public cardType: CardType = R;
   public weakness = [{ type: W }];

@@ -7,7 +7,7 @@ import { MOVE_CARDS, MULTIPLE_COIN_FLIPS_PROMPT, WAS_ATTACK_USED } from '../../g
 
 export class RayquazaC extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public cardType: CardType = C;
   public hp: number = 100;
   public weakness = [{ type: C, value: +30 }];

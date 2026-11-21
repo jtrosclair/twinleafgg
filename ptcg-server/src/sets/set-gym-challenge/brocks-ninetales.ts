@@ -30,7 +30,7 @@ export class BrocksNinetales extends PokemonCard {
   public weakness: Weakness[] = [{ type: W }];
   public resistance: Resistance[] = [];
   public retreat: CardType[] = [C];
-  protected _tags = [CardTag.BROCKS];
+  public tags: string[] = [CardTag.BROCKS];
 
   public powers: Power[] = [{
     name: 'Shapeshift',

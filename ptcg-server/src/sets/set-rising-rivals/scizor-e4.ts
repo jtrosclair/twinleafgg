@@ -5,7 +5,7 @@ import { COIN_FLIP_PROMPT, WAS_ATTACK_USED } from '../../game/store/prefabs/pref
 
 export class ScizorE4 extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 80;
   public cardType: CardType = G;
   public weakness = [{ type: R }];

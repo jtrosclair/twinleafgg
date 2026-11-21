@@ -7,7 +7,7 @@ import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_CONFUSED } from '../../game/store
 
 export class BronzongE4 extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 90;
   public cardType: CardType = P;
   public weakness = [{ type: P, value: +20 }];

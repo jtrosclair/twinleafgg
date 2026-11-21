@@ -7,7 +7,7 @@ import { COIN_FLIP_PROMPT, MOVE_CARDS, WAS_ATTACK_USED } from '../../game/store/
 
 export class ManectricG extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 80;
   public cardType: CardType = L;
   public weakness = [{ type: F, value: +20 }];

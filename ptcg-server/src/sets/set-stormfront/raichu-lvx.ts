@@ -10,7 +10,7 @@ import { AFTER_ATTACK, ADD_MARKER, IS_POKEBODY_BLOCKED, MOVE_CARDS, REMOVE_MARKE
 
 export class RaichuLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
-  protected _tags = [CardTag.POKEMON_LV_X];
+  public tags = [CardTag.POKEMON_LV_X];
   public evolvesFrom: string = 'Raichu';
   public hp: number = 110;
   public cardType: CardType = L;

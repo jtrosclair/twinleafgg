@@ -12,7 +12,7 @@ export class FlygonLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
   public evolvesFrom = 'Flygon';
   public cardType: CardType = C;
-  protected _tags = [CardTag.POKEMON_LV_X];
+  public tags = [CardTag.POKEMON_LV_X];
   public hp: number = 140;
   public weakness = [{ type: C, value: +30 }];
   public resistance = [{ type: L, value: -20 }];

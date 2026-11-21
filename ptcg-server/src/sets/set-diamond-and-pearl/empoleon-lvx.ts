@@ -10,7 +10,7 @@ import { ABILITY_USED, ADD_MARKER, BLOCK_IF_HAS_SPECIAL_CONDITION, DAMAGE_OPPONE
 export class EmpoleonLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
   public evolvesFrom: string = 'Empoleon';
-  protected _tags = [CardTag.POKEMON_LV_X];
+  public tags = [CardTag.POKEMON_LV_X];
   public hp: number = 140;
   public cardType: CardType = W;
   public weakness = [{ type: L, value: +30 }];

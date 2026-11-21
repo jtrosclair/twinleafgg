@@ -11,7 +11,7 @@ import { ABILITY_USED, ADD_BURN_TO_PLAYER_ACTIVE, ADD_MARKER, BLOCK_IF_HAS_SPECI
 export class MagmortarLVX extends PokemonCard {
   public stage: Stage = Stage.LV_X;
   public evolvesFrom: string = 'Magmortar';
-  protected _tags = [CardTag.POKEMON_LV_X];
+  public tags = [CardTag.POKEMON_LV_X];
   public hp: number = 130;
   public cardType: CardType = R;
   public weakness = [{ type: W }];

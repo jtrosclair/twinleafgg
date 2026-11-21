@@ -7,7 +7,7 @@ import { DRAW_CARDS_UNTIL_CARDS_IN_HAND, MOVE_CARDS, WAS_ATTACK_USED } from '../
 
 export class LickilickyC extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public cardType: CardType = C;
   public hp: number = 90;
   public weakness = [{ type: F, value: +30 }];

@@ -7,7 +7,7 @@ import { CONFIRMATION_PROMPT, IS_POKEBODY_BLOCKED, SHOW_CARDS_TO_PLAYER, WAS_ATT
 
 export class UnownL extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.UNOWN];
+  public tags = [CardTag.UNOWN];
   public hp: number = 50;
   public cardType: CardType = P;
   public weakness = [{ type: P, value: +10 }];

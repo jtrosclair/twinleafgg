@@ -4,7 +4,7 @@ import { MULTIPLE_COIN_FLIPS_PROMPT, WAS_ATTACK_USED } from '../../game/store/pr
 
 export class RhyperiorE4 extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 100;
   public cardType: CardType = F;
   public weakness = [{ type: W }];

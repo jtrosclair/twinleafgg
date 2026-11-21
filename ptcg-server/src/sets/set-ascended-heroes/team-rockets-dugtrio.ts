@@ -11,7 +11,7 @@ import { IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
 
 export class TeamRocketsDugtrio extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
-  protected _tags = [CardTag.TEAM_ROCKET];
+  public tags = [CardTag.TEAM_ROCKET];
   public evolvesFrom: string = 'Team Rocket\'s Diglett';
   public hp: number = 100;
   public cardType: CardType = F;

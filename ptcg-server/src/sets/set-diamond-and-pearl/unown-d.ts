@@ -6,7 +6,7 @@ import { ABILITY_USED, ADD_MARKER, COIN_FLIP_PROMPT, DRAW_CARDS, HAS_MARKER, IS_
 
 export class UnownD extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.UNOWN];
+  public tags = [CardTag.UNOWN];
   public hp: number = 50;
   public cardType: CardType = P;
   public weakness = [{ type: P }];

@@ -8,7 +8,7 @@ import { ADD_MARKER, HAS_MARKER, MULTIPLE_COIN_FLIPS_PROMPT, REMOVE_MARKER, WAS_
 
 export class SkarmoryFB extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 80;
   public cardType: CardType = M;
   public weakness = [{ type: L }];

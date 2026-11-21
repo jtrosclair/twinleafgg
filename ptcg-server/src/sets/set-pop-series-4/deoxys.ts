@@ -6,7 +6,7 @@ import { ABILITY_USED, ADD_MARKER, HAS_MARKER, IS_POKEPOWER_BLOCKED, MOVE_CARDS,
 
 export class Deoxys extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.DELTA_SPECIES];
+  public tags = [CardTag.DELTA_SPECIES];
   public hp: number = 70;
   public cardType: CardType = C;
   public weakness = [{ type: P }];

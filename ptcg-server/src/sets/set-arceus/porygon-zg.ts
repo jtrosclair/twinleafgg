@@ -9,7 +9,7 @@ import { CONFIRMATION_PROMPT, IS_POKEPOWER_BLOCKED, MOVE_CARDS, SHUFFLE_DECK, SH
 
 export class PorygonZG extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 80;
   public cardType: CardType = C;
   public weakness = [{ type: F, value: +20 }];

@@ -10,7 +10,7 @@ import { ADD_MARKER, HAS_MARKER, IS_POKEBODY_BLOCKED, MOVE_CARDS, REMOVE_MARKER_
 export class ShayminLVX2 extends PokemonCard {
   public stage: Stage = Stage.LV_X;
   public evolvesFrom: string = 'Shaymin';
-  protected _tags = [CardTag.POKEMON_LV_X];
+  public tags = [CardTag.POKEMON_LV_X];
   public hp: number = 110;
   public cardType: CardType = G;
   public weakness = [{ type: R }];

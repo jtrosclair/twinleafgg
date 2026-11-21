@@ -6,7 +6,7 @@ import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class DusknoirFB extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public cardType: CardType = P;
   public hp: number = 90;
   public weakness = [{ type: D, value: +30 }];

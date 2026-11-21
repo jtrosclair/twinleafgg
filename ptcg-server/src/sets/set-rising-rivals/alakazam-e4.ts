@@ -8,7 +8,7 @@ import { DISCARD_X_ENERGY_FROM_THIS_POKEMON } from '../../game/store/prefabs/cos
 
 export class AlakazamE4 extends PokemonCard {
   public stage: Stage = Stage.BASIC;
-  protected _tags = [CardTag.POKEMON_SP];
+  public tags = [CardTag.POKEMON_SP];
   public hp: number = 80;
   public cardType: CardType = P;
   public weakness = [{ type: P, value: +20 }];
