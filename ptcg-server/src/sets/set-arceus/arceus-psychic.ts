@@ -1,8 +1,10 @@
-import { PowerType, State, StateUtils, StoreLike } from '../../game';
-import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
+import { PowerType, State, StoreLike } from '../../game';
+import { CardTag, CardType, SpecialCondition, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { ADD_CONFUSION_TO_PLAYER_ACTIVE, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
+import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
+import { afterAttackDamage } from '../../game/store/prefabs/attack-after-damage';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class ArceusPsychic extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -35,9 +37,11 @@ export class ArceusPsychic extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    // Mind Bend
-    if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), this);
+    // Mind Bend is an attack effect even when a Pokémon LV.X inherits it.
+    if (WAS_ATTACK_USED(effect, 0, this)) {
+      afterAttackDamage(state, effect, (attackStore, attackState) => attackStore.reduceEffect(
+        attackState, new AddSpecialConditionsEffect(effect, [SpecialCondition.CONFUSED])
+      ));
     }
 
     return state;

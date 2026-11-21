@@ -3,11 +3,11 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType } from '../../game/store/card/card-types';
-import { StoreLike, State, StateUtils } from '../../game';
+import { Stage, CardType, SpecialCondition } from '../../game/store/card/card-types';
+import { StoreLike, State } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { WAS_ATTACK_USED, DISCARD_TOP_X_CARDS_FROM_YOUR_DECK } from '../../game/store/prefabs/prefabs';
-import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED } from '../../game/store/prefabs/attack-effects';
+import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
 
 export class Dragalge extends PokemonCard {
   public stage: Stage = Stage.STAGE_1;
@@ -42,10 +42,9 @@ export class Dragalge extends PokemonCard {
     // Attack 1: Severe Poison
     // Ref: AGENTS-patterns.md (Poison with custom damage)
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_POISIONED(store, state, effect);
-      opponent.active.poisonDamage = 40;
+      const poison = new AddSpecialConditionsEffect(effect, [SpecialCondition.POISONED]);
+      poison.poisonDamage = 40;
+      state = store.reduceEffect(state, poison);
     }
 
     // Attack 2: Dragon Pulse

@@ -9,6 +9,12 @@ import { Marker } from './card-marker';
 import { State } from './state';
 import { StateUtils } from '../state-utils';
 
+export interface AttackSourceFilter {
+  sourceStage?: Stage;
+  sourceCardType?: CardType;
+  sourceHasAbility?: boolean;
+}
+
 export type RetaliateOnDamageOptions =
   | { damage: number; coinFlipPrevent?: boolean }
   | { reflect: true };
@@ -87,10 +93,12 @@ export class PokemonCardList extends CardList {
   public cannotUsePowersNextTurn = false;
   public preventDamageNextTurnPending = false;
   public preventDamageNextTurn = false;
-  public preventDamageNextTurnFilterPending?: { sourceStage?: Stage; sourceHasAbility?: boolean };
-  public preventDamageNextTurnFilter?: { sourceStage?: Stage; sourceHasAbility?: boolean };
+  public preventDamageNextTurnFilterPending?: AttackSourceFilter;
+  public preventDamageNextTurnFilter?: AttackSourceFilter;
   public preventEffectsOfAttacksNextTurnPending = false;
   public preventEffectsOfAttacksNextTurn = false;
+  public preventEffectsOfAttacksNextTurnFilterPending?: AttackSourceFilter;
+  public preventEffectsOfAttacksNextTurnFilter?: AttackSourceFilter;
   public weaknessOverrideType?: CardType;
   public weaknessOverrideAttackerId?: number;
   public weaknessOverrideClearArmed = false;
@@ -251,6 +259,8 @@ export class PokemonCardList extends CardList {
     this.preventDamageNextTurnFilter = undefined;
     this.preventEffectsOfAttacksNextTurnPending = false;
     this.preventEffectsOfAttacksNextTurn = false;
+    this.preventEffectsOfAttacksNextTurnFilterPending = undefined;
+    this.preventEffectsOfAttacksNextTurnFilter = undefined;
     this.weaknessOverrideType = undefined;
     this.weaknessOverrideAttackerId = undefined;
     this.weaknessOverrideClearArmed = false;
@@ -314,6 +324,8 @@ export class PokemonCardList extends CardList {
     this.preventDamageNextTurnFilter = undefined;
     this.preventEffectsOfAttacksNextTurnPending = false;
     this.preventEffectsOfAttacksNextTurn = false;
+    this.preventEffectsOfAttacksNextTurnFilterPending = undefined;
+    this.preventEffectsOfAttacksNextTurnFilter = undefined;
     this.weaknessOverrideType = undefined;
     this.weaknessOverrideAttackerId = undefined;
     this.weaknessOverrideClearArmed = false;

@@ -3058,3 +3058,39 @@ following turn, the original marker still blocks Flap. The printed effect is
 limited to attacks from Pokémon LV.X during the opponent's next turn. Keep
 that reproduction for the next pass on temporary attack protection.
 [Metal Barrier print text](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Arceus.pdf)
+
+## Gameplay re-audit, batch 35
+
+Ported Metal Barrier and Moon Barrier from the upstream attack-effect refactor
+to the local next-turn protection lifecycle. Metal Barrier scopes both damage
+and secondary effects to Pokémon LV.X. Moon Barrier checks the attacker's
+effective Dragon type and permits damage from attacks such as Shred that
+ignore effects on the defending Pokémon.
+[Upstream attack-effect refactor](https://github.com/the-epsd/twinleafgg/commit/343b9ae4294d0af4521da998475640ff643427b8)
+[Metal Barrier card text](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Arceus.pdf)
+[BREAKpoint Clefable print](https://images.pokemontcg.io/xy9/82_hires.png)
+
+Mind Bend now applies Confusion through the attack that caused it, including
+when a Pokémon LV.X inherits the attack. Severe Poison applies its 40-damage
+Checkup value only when the attack actually Poisons the target. Focused
+regressions play real attacks, Level-Up, Boss's Orders and copy effects, and
+check the protection after a compact snapshot round-trip. Eight of the twelve
+cases reproduce failures on the prior revision. The saved puzzle inventory
+contains no legacy Metal Barrier markers.
+[Mind Bend card text](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/Arceus.pdf)
+[BREAKpoint Dragalge print](https://images.pokemontcg.io/xy9/86_hires.png)
+[Arceus rulebook](https://assets.pokemon.com/assets/cms/pdf/tcg/rulebooks/Arceus_Rulebook.pdf)
+
+All 7,925 engine tests, 420 combined-checkout checks and 209 frontend
+specs passed. All 559 supported saved states matched in serialization and
+deserialized state. All 3,633 sampled opening actions matched, and all seven
+recorded solutions reached a win. The 2.46 MiB ZIP passed attestation, its
+mobile package budget and ten packaged board interaction checks.
+
+A separate reproduction found that Silver Tempest Dragonair's Wrap still
+Paralyzes Finneon after Elegant Swim prevents damage and attack effects.
+The attack calls a helper that reports its condition as a power effect.
+A syntax scan found 969 such helper calls inside attack branches across
+914 definitions. Those calls are candidates for printed-rule and
+runtime validation. The two lifecycle points are effects applied while the
+attack runs and effects applied after damage or a prompt.

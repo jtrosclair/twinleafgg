@@ -296,6 +296,7 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
       slot.preventDamageNextTurn = false;
       slot.preventDamageNextTurnFilter = undefined;
       slot.preventEffectsOfAttacksNextTurn = false;
+      slot.preventEffectsOfAttacksNextTurnFilter = undefined;
       slot.surviveOnTenHpNextTurn = null;
     });
     player.forEachPokemon(PlayerType.BOTTOM_PLAYER, slot => {
@@ -305,6 +306,8 @@ export function gamePhaseReducer(store: StoreLike, state: State, effect: Effect)
       slot.preventDamageNextTurnFilterPending = undefined;
       slot.preventEffectsOfAttacksNextTurn = slot.preventEffectsOfAttacksNextTurnPending;
       slot.preventEffectsOfAttacksNextTurnPending = false;
+      slot.preventEffectsOfAttacksNextTurnFilter = slot.preventEffectsOfAttacksNextTurnFilterPending;
+      slot.preventEffectsOfAttacksNextTurnFilterPending = undefined;
       slot.surviveOnTenHpNextTurn = slot.surviveOnTenHpNextTurnPending;
       slot.surviveOnTenHpNextTurnPending = null;
       slot.coinFlipCancelAttackNextTurn = 0;

@@ -1,5 +1,5 @@
 import { Card } from '../card/card';
-import { CardType, Stage } from '../card/card-types';
+import { CardType } from '../card/card-types';
 import { AttackEffect } from '../effects/game-effects';
 import { EffectOfAttackEffect } from '../effects/effect-of-attack-effects';
 import { State } from '../state/state';
@@ -11,7 +11,7 @@ import { Attack } from '../card/pokemon-types';
 import { PokemonCard } from '../card/pokemon-card';
 import { EndTurnEffect } from '../effects/game-phase-effects';
 import { PokemonCardList } from '../state/pokemon-card-list';
-import { RetaliateOnDamageOptions } from '../state/pokemon-card-list';
+import { AttackSourceFilter, RetaliateOnDamageOptions } from '../state/pokemon-card-list';
 
 import {
   DefendingPokemonTakesDamageOnEnergyAttachFromHandNextTurnEffect,
@@ -282,19 +282,28 @@ export function DEFENDING_POKEMON_TAKES_MORE_DAMAGE_DURING_YOUR_NEXT_TURN(
 // Upstream pending/active self-protection; legacy prefab PREVENT_DAMAGE remains unchanged.
 class NextTurnPreventDamageEffect extends EffectOfAttackEffect {
   readonly type = 'NEXT_TURN_PREVENT_DAMAGE_EFFECT';
-  constructor(base: AttackEffect, private filter: { sourceStage?: Stage; sourceHasAbility?: boolean } = {}) { super(base); this.target = base.source; }
+  constructor(base: AttackEffect, private filter?: AttackSourceFilter) {
+    super(base);
+    this.target = base.source;
+  }
   applyEffect(): void {
-    this.player.active.preventDamageNextTurnPending = true;
-    this.player.active.preventDamageNextTurnFilterPending = Object.keys(this.filter).length ? this.filter : undefined;
+    this.target.preventDamageNextTurnPending = true;
+    this.target.preventDamageNextTurnFilterPending = this.filter;
   }
 }
 class PreventEffectsOfAttacksEffect extends EffectOfAttackEffect {
   readonly type = 'PREVENT_EFFECTS_OF_ATTACKS_EFFECT';
-  constructor(base: AttackEffect) { super(base); this.target = base.source; }
-  applyEffect(): void { this.player.active.preventEffectsOfAttacksNextTurnPending = true; }
+  constructor(base: AttackEffect, private filter?: AttackSourceFilter) {
+    super(base);
+    this.target = base.source;
+  }
+  applyEffect(): void {
+    this.target.preventEffectsOfAttacksNextTurnPending = true;
+    this.target.preventEffectsOfAttacksNextTurnFilterPending = this.filter;
+  }
 }
 export function PREVENT_DAMAGE(
-  store: StoreLike, state: State, effect: AttackEffect, source: Card, filter?: { sourceStage?: Stage; sourceHasAbility?: boolean }
+  store: StoreLike, state: State, effect: AttackEffect, source: Card, filter?: AttackSourceFilter
 ): State {
   const protection = new NextTurnPreventDamageEffect(effect, filter); protection.markerSource = source;
   return store.reduceEffect(state, protection);
@@ -308,8 +317,11 @@ export function DEFENDING_POKEMON_RETREAT_COSTS_MORE(
   if (target) target.retreatCostIncreaseNextTurn = (target.retreatCostIncreaseNextTurn ?? 0) + amount;
   return state;
 }
-export function PREVENT_EFFECTS_OF_ATTACKS(store: StoreLike, state: State, effect: AttackEffect, source: Card): State {
-  const protection = new PreventEffectsOfAttacksEffect(effect); protection.markerSource = source;
+export function PREVENT_EFFECTS_OF_ATTACKS(
+  store: StoreLike, state: State, effect: AttackEffect, source: Card, filter?: AttackSourceFilter
+): State {
+  const protection = new PreventEffectsOfAttacksEffect(effect, filter);
+  protection.markerSource = source;
   return store.reduceEffect(state, protection);
 }
 

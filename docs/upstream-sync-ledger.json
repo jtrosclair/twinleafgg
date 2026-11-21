@@ -19,6 +19,13 @@
       "notes": "Pre-base historical path record: this is the latest upstream change to ptcg-server/src/sets/11-mega-evolution/set-pitch-black/other-prints.ts, not an assertion that this comment-only commit introduced the defects. Brave Bangle PBL 104 and Iron Defender PBL 110 remain deferred due to independently reproduced bugs in their existing local parents. Brave Bangle fails to add damage to Groudon M6 Brutal Lands when its printed base is 0+; Iron Defender incorrectly reduces the player's own current-turn damage against an opposing Metal Pokemon. Real-play and attack controls, including a real end-turn control, are preserved in docs/fixtures/pbl-parent-bugs. Validate fixes against existing puzzles and check exact print artwork and regulation marks before adding PBL variants. Round-32 additionally ports Crushing Hammer FA PBL (PBL 105; ptcg-server/src/sets/11-mega-evolution/set-pitch-black/other-prints.ts); Energy Switch FA PBL (PBL 107; ptcg-server/src/sets/11-mega-evolution/set-pitch-black/other-prints.ts). These two exact numbered aliases use their printed J/I regulation marks and artwork; other changes to the upstream path remain under review. Existing unnumbered and wrong-number fallback behavior is preserved, including mixed/lowercase cases; missing exact printings do not substitute another card. Brave Bangle PBL 104 and Iron Defender PBL 110 remain deferred as described above."
     },
     {
+      "sha": "343b9ae4294d0af4521da998475640ff643427b8",
+      "date": "2026-07-26",
+      "subject": "refactor(cards): More Effect of Attack Updates",
+      "status": "partial",
+      "notes": "Historical upstream path record. Batch 35 ports the two barrier attack paths to the local pending/active protection lifecycle. Metal Barrier limits both damage and secondary effects to Pokémon LV.X; upstream scoped only the damage. Moon Barrier checks the attack source’s effective Dragon type and allows Shred damage to bypass the protection. Mind Bend and Severe Poison resolve through attack effects, with the stronger Poison bundled into its status application. The other card and engine paths from this commit remain under review."
+    },
+    {
       "sha": "21842b2e06790ec47546cf2518513c4e558ba3c1",
       "date": "2026-07-26",
       "subject": "refactor(engine): Card tags use a getter access method",

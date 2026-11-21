@@ -1,5 +1,5 @@
 import { AbstractAttackEffect, ApplyWeaknessEffect, DealDamageEffect, PutDamageEffect } from './effects/attack-effects';
-import { CheckProvidedEnergyEffect } from './effects/check-effects';
+import { CheckPokemonTypeEffect, CheckProvidedEnergyEffect } from './effects/check-effects';
 import { mirrorOnlyEnergyForQuery } from './prefabs/mirror-only-energy';
 import { StateUtils } from './state-utils';
 import { preflightCopiedOpponentAttacks, resolveCopyAttackSessions } from './prefabs/copy-attack-delegation';
@@ -234,17 +234,21 @@ export class Store implements StoreLike {
       const sourceOwner = StateUtils.findOwner(state, effect.source);
       if (targetOwner !== sourceOwner) {
         const damage = effect instanceof PutDamageEffect || effect instanceof DealDamageEffect;
-        const nonDamage = !damage && !(effect instanceof ApplyWeaknessEffect);
-        const damageFilter = effect.target.preventDamageNextTurnFilter;
+        const prevent = damage
+          ? effect.target.preventDamageNextTurn && !effect.ignoresDefendingDamageEffects
+          : effect.target.preventEffectsOfAttacksNextTurn && !(effect instanceof ApplyWeaknessEffect);
+        const filter = damage ? effect.target.preventDamageNextTurnFilter : effect.target.preventEffectsOfAttacksNextTurnFilter;
         const sourcePokemon = effect.source.getPokemonCard();
-        const damageProtectionMatches = (!damageFilter?.sourceStage || sourcePokemon?.stage === damageFilter.sourceStage)
-          && (damageFilter?.sourceHasAbility !== true
-            || sourcePokemon?.powers.some(power => power.powerType === PowerType.ABILITY) === true);
-        if ((damage && !effect.ignoresDefendingDamageEffects
-          && effect.target.preventDamageNextTurn && damageProtectionMatches)
-          || (nonDamage && effect.target.preventEffectsOfAttacksNextTurn)) {
-          effect.preventDefault = true;
-          return state;
+        if (prevent && (!filter?.sourceStage || sourcePokemon?.stage === filter.sourceStage)
+          && (filter?.sourceHasAbility !== true
+            || sourcePokemon?.powers.some(power => power.powerType === PowerType.ABILITY) === true)) {
+          const sourceType = filter?.sourceCardType;
+          const typeCheck = sourceType === undefined ? undefined : new CheckPokemonTypeEffect(effect.source);
+          if (typeCheck) state = this.reduceEffect(state, typeCheck);
+          if (sourceType === undefined || typeCheck?.cardTypes.includes(sourceType)) {
+            effect.preventDefault = true;
+            return state;
+          }
         }
       }
     }

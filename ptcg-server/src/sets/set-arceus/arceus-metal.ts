@@ -1,9 +1,9 @@
-import { GamePhase, PowerType, State, StoreLike } from '../../game';
+import { PowerType, State, StoreLike } from '../../game';
 import { CardTag, CardType, Stage } from '../../game/store/card/card-types';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { AddSpecialConditionsEffect, DealDamageEffect, PutCountersEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
-import {WAS_ATTACK_USED} from '../../game/store/prefabs/prefabs';
+import { PREVENT_DAMAGE, PREVENT_EFFECTS_OF_ATTACKS } from '../../game/store/prefabs/effect-of-attack-prefabs';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class ArceusMetal extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -35,28 +35,13 @@ export class ArceusMetal extends PokemonCard {
   public name: string = 'Arceus';
   public fullName: string = 'Arceus Metal AR';
 
-  public readonly METAL_BARRIER_MARKER = 'METAL_BARRIER_MARKER';
-
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-
-    // Metal Barrier
+    // Ref: set-mysterious-treasures/finneon.ts (Elegant Swim).
     if (WAS_ATTACK_USED(effect, 0, this)) {
-      effect.opponent.marker.addMarker(this.METAL_BARRIER_MARKER, this);
+      const filter = { sourceStage: Stage.LV_X };
+      state = PREVENT_DAMAGE(store, state, effect, this, filter);
+      state = PREVENT_EFFECTS_OF_ATTACKS(store, state, effect, this, filter);
     }
-
-    if ((effect instanceof PutDamageEffect 
-      || effect instanceof DealDamageEffect 
-      || effect instanceof PutCountersEffect 
-      || effect instanceof AddSpecialConditionsEffect) 
-      && effect.player.marker.hasMarker(this.METAL_BARRIER_MARKER, this) 
-      && effect.target.getPokemonCard() === this){
-      if (state.phase !== GamePhase.ATTACK){
-        return state;
-      }
-
-      effect.preventDefault = true;
-    }
-
     return state;
   }
 }
