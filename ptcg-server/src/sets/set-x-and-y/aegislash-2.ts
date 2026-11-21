@@ -4,13 +4,13 @@ import type { CopiedAttackOwnershipContract } from '../../game/store/prefabs/cop
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, SuperType } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, GameError, GameMessage, PlayerType, StateUtils } from '../../game';
+import { Stage, CardType } from '../../game/store/card/card-types';
+import { PowerType, StoreLike, State, PlayerType, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
-import { WAS_ATTACK_USED, WAS_POWER_USED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, REMOVE_MARKER_AT_END_OF_TURN, THIS_POKEMON_CANNOT_USE_THIS_ATTACK_NEXT_TURN } from '../../game/store/prefabs/prefabs';
+import { applyStanceChange } from '../../game/store/prefabs/stance-change';
+import { WAS_ATTACK_USED, THIS_POKEMON_CANNOT_USE_THIS_ATTACK_NEXT_TURN } from '../../game/store/prefabs/prefabs';
 
 export class Aegislash2 extends PokemonCard implements CopiedAttackOwnershipContract {
   public stage: Stage = Stage.STAGE_2;
@@ -48,75 +48,7 @@ export class Aegislash2 extends PokemonCard implements CopiedAttackOwnershipCont
   private readonly CLEAR_PREVENT_DAMAGE_MARKER = 'AEGISLASH2_CLEAR_PREVENT_DAMAGE_MARKER';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Stance Change
-    // Ref: set-x-and-y/aegislash.ts (Stance Change)
-    if (WAS_POWER_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      // Check if there's an Aegislash in hand (different card instance)
-      const aegislashInHand = player.hand.cards.filter(
-        c => c instanceof PokemonCard && c.name === 'Aegislash' && c !== this
-      );
-
-      if (aegislashInHand.length === 0) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      }
-
-      USE_ABILITY_ONCE_PER_TURN(player, this.STANCE_CHANGE_MARKER, this);
-      ABILITY_USED(player, this);
-
-      // Find this card in the player's Pokemon slots
-      let cardList: any = null;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (list) => {
-        if (list.cards.includes(this)) {
-          cardList = list;
-        }
-      });
-
-      if (cardList === null) {
-        return state;
-      }
-
-      // Block non-Aegislash cards in hand
-      const blocked: number[] = [];
-      player.hand.cards.forEach((card, index) => {
-        if (!(card instanceof PokemonCard) || card.name !== 'Aegislash') {
-          blocked.push(index);
-        }
-      });
-
-      store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_HAND,
-        player.hand,
-        { superType: SuperType.POKEMON },
-        { min: 1, max: 1, allowCancel: false, blocked }
-      ), selected => {
-        if (!selected || selected.length === 0) {
-          return;
-        }
-
-        const newAegislash = selected[0] as PokemonCard;
-
-        // Swap: remove this card from the PokemonCardList, insert new one
-        const thisIndex = cardList.cards.indexOf(this);
-        if (thisIndex !== -1) {
-          // Remove this from the card list
-          cardList.cards.splice(thisIndex, 1);
-          // Remove from hand
-          const handIndex = player.hand.cards.indexOf(newAegislash);
-          if (handIndex !== -1) {
-            player.hand.cards.splice(handIndex, 1);
-          }
-          // Insert new Aegislash at the same position
-          cardList.cards.splice(thisIndex, 0, newAegislash);
-          // Put old Aegislash into hand
-          player.hand.cards.push(this);
-        }
-      });
-    }
-
-    REMOVE_MARKER_AT_END_OF_TURN(effect, this.STANCE_CHANGE_MARKER, this);
+    state = applyStanceChange(store, state, effect, this, this.STANCE_CHANGE_MARKER);
 
     return Aegislash2.prototype.reduceCopiedAttackEffect.call(this, store, state, effect, 0);
   }

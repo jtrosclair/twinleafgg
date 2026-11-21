@@ -1,5 +1,6 @@
 import { BoardEffect } from '../card/card-types';
 import { PokemonCard } from '../card/pokemon-card';
+import { CheckPokemonReturnToHandEffect } from '../effects/check-effects';
 import { PokemonReplacedEffect } from '../effects/game-effects';
 import { CardList } from '../state/card-list';
 import { Player } from '../state/player';
@@ -8,7 +9,14 @@ import { State } from '../state/state';
 import { StoreLike } from '../store-like';
 import { recordActiveAbilityLockSwitch } from '../state/active-ability-lock-order';
 import { canPlacePokemon } from './bench-play-reactions';
+import { clearRecordedPokemonAbilityUses, inheritPokemonAbilityUses, namedAbilityUsed } from './in-play-ability-use';
 import { MOVE_CARDS } from './prefabs';
+
+export function canReturnPokemonToHand(store: StoreLike, state: State, player: Player, target: PokemonCardList): boolean {
+  const check = new CheckPokemonReturnToHandEffect(player, target);
+  store.reduceEffect(state, check);
+  return !check.preventDefault;
+}
 
 /** Switch just the top card, keeping the same Pokémon's in-play history. */
 export function swapInPlayPokemon(store: StoreLike, state: State, player: Player,
@@ -16,10 +24,12 @@ export function swapInPlayPokemon(store: StoreLike, state: State, player: Player
   sourceAbility?: PokemonCard): boolean {
   const previous = target.getPokemonCard();
   if (!previous || (target !== player.active && !player.bench.includes(target))
-    || !source.cards.includes(replacement) || !canPlacePokemon(store, state, player, replacement, sourceAbility)) {
+    || !source.cards.includes(replacement) || !canPlacePokemon(store, state, player, replacement, sourceAbility)
+    || (destination === player.hand && !canReturnPokemonToHand(store, state, player, target))) {
     return false;
   }
 
+  const replaced = new PokemonReplacedEffect(player, target, previous, replacement);
   source.moveCardTo(replacement, target);
   if (destination === player.discard) {
     MOVE_CARDS(store, state, target, destination, { cards: [previous], sourceCard: sourceAbility });
@@ -39,7 +49,11 @@ export function swapInPlayPokemon(store: StoreLike, state: State, player: Player
     target.removeBoardEffect(BoardEffect.ABILITY_USED);
   }
   if (target === player.active) recordActiveAbilityLockSwitch(player, state);
-  store.reduceEffect(state, new PokemonReplacedEffect(player, target, previous, replacement));
+  inheritPokemonAbilityUses(replaced);
+  store.reduceEffect(state, replaced);
+  if (replacement.powers.some(power => namedAbilityUsed(target, replacement, power.name))) {
+    target.addBoardEffect(BoardEffect.ABILITY_USED);
+  }
   return true;
 }
 
@@ -63,6 +77,7 @@ export function replaceAndDiscardPokemon(store: StoreLike, state: State, player:
   discarded.cards = [...new Set([...target.cards, ...target.energies.cards, ...target.tools])];
   discarded.cards.forEach(card => card.clearAttachedEnergyForm?.());
   const leaving = target.getPokemons();
+  clearRecordedPokemonAbilityUses(player, [...leaving, replacement]);
   leaving.forEach(clearPokemonCardHistory);
   clearPokemonCardHistory(replacement);
   player.movedToActiveThisTurn = player.movedToActiveThisTurn

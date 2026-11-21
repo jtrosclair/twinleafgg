@@ -1,6 +1,7 @@
 import { canPlacePokemon, getBlockedPokemonPlacementIndices, playBenchPokemonBatchFromDeck, resolveBenchPlayReactions } from './bench-play-reactions';
 import { isPrizeOwnerTurn, takePrizeTo } from './prize-reactions';
 export { TAKE_SPECIFIC_PRIZES, TAKE_X_PRIZES, type TakeSpecificPrizesOptions, type TakeXPrizesOptions } from './prize-reactions';
+import { hasUsedPokemonAbility, recordPokemonAbilityUse } from './in-play-ability-use';
 import { rollCoin } from './coin-flip-results';
 import { withoutWillCoinChoice } from './will-coin-choice';
 import { ConfirmCardsPrompt } from '../prompts/confirm-cards-prompt';
@@ -2477,11 +2478,12 @@ export function HAS_MARKER(marker: string, owner: Player | Card | PokemonCard | 
  * Call this after all card-specific validation, right before applying the ability effect.
  * Pair with REMOVE_MARKER_AT_END_OF_TURN(effect, marker, source) in reduceEffect.
  */
-export function USE_ABILITY_ONCE_PER_TURN(player: Player, marker: string, source: Card) {
-  if (HAS_MARKER(marker, player, source)) {
+export function USE_ABILITY_ONCE_PER_TURN(player: Player, marker: string, source: Card, abilityName?: string) {
+  const name = abilityName ?? (source instanceof PokemonCard && source.powers.length === 1 ? source.powers[0].name : undefined);
+  if (hasUsedPokemonAbility(player, marker, source, name)) {
     throw new GameError(GameMessage.POWER_ALREADY_USED);
   }
-  ADD_MARKER(marker, player, source);
+  recordPokemonAbilityUse(player, marker, source, name);
 }
 
 export function BLOCK_EFFECT_IF_MARKER(marker: string, owner: Player | Card | PokemonCard | PokemonCardList, source?: Card) {

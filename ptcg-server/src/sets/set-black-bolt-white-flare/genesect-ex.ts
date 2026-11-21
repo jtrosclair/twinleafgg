@@ -1,9 +1,11 @@
 import { PokemonCard, Stage, CardType, State, StoreLike, PowerType, GameError, GameMessage, SuperType, CardTag } from '../../game';
 import { PutDamageEffect } from '../../game/store/effects/attack-effects';
 
+import { PokemonReplacedEffect } from '../../game/store/effects/game-effects';
+import { inheritLegacyPokemonAbilityUse } from '../../game/store/prefabs/in-play-ability-use';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
-import { HAS_MARKER, ABILITY_USED, ADD_MARKER, REMOVE_MARKER_AT_END_OF_TURN, SEARCH_DECK_FOR_CARDS_TO_HAND, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
+import { ABILITY_USED, USE_ABILITY_ONCE_PER_TURN, REMOVE_MARKER_AT_END_OF_TURN, SEARCH_DECK_FOR_CARDS_TO_HAND, WAS_ATTACK_USED, WAS_POWER_USED } from '../../game/store/prefabs/prefabs';
 
 export class Genesectex extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -47,15 +49,16 @@ export class Genesectex extends PokemonCard {
       this.turnTracker = 0;
     }
 
+    if (effect instanceof PokemonReplacedEffect
+      && (effect.previousPokemon === this || effect.pokemonCard === this)) {
+      inheritLegacyPokemonAbilityUse(effect, this.METAL_SIGNAL_MARKER, this.powers[0].name);
+    }
+
     if (WAS_POWER_USED(effect, 0, this)) {
       const player = effect.player;
 
-      if (HAS_MARKER(this.METAL_SIGNAL_MARKER, player, this)) {
-        throw new GameError(GameMessage.POWER_ALREADY_USED);
-      }
-
+      USE_ABILITY_ONCE_PER_TURN(player, this.METAL_SIGNAL_MARKER, this, effect.power.name);
       ABILITY_USED(player, this);
-      ADD_MARKER(this.METAL_SIGNAL_MARKER, player, this);
 
       const blocked: number[] = [];
       player.deck.cards.forEach((card, index) => {

@@ -143,6 +143,14 @@ export class CheckPokemonPlacementEffect implements Effect {
     public readonly sourceAbility?: PokemonCard) {}
 }
 
+/** Whether this in-play Pokémon can be put into its owner's hand. */
+export class CheckPokemonReturnToHandEffect implements Effect {
+  readonly type = 'CHECK_POKEMON_RETURN_TO_HAND_EFFECT';
+  public preventDefault = false;
+
+  constructor(public readonly player: Player, public readonly target: PokemonCardList) {}
+}
+
 export class CheckPokemonTypeEffect implements Effect {
   readonly type: string = CheckEffects.CHECK_POKEMON_TYPE_EFFECT;
   public preventDefault = false;

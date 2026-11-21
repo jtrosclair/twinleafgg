@@ -5297,10 +5297,49 @@ All 559 comparable saved boards and 3,636 sampled opening actions
 match the previous engine. All seven recorded solutions still win
 twice.
 
-An additional real-action probe reproduces the official Metal Signal
-counterexample with Thorton. The incoming Genesect ex can still open
-the search after the outgoing Genesect ex used that Ability. Its
-legacy player marker is tied to the physical card. The audit retains
-this reproduction for the broader work on named Ability use across
-replacements.
+An additional real-action probe reproduced the official Metal Signal
+counterexample with Thorton. The incoming Genesect ex opened a second
+search because the prior use was tied to the outgoing card. Batch 83
+addresses that reproduction.
 [Official D-19 ruling](https://asia.pokemon-card.com/sg/wp-content/uploads/sites/6/2025/10/EN_advanced_manual-2025.pdf)
+
+## Gameplay re-audit, batch 83
+
+The shared once-per-turn helper now records the used Ability by name
+for the in-play Pokémon. The audit checked all 227 existing calls for
+a printed once-per-turn activation. Two definitions with multiple
+powers, Swampert PRC 36 and Porygon-Z LV.X MD, pass the activated
+power's name explicitly. Swaps transfer the recorded history through
+any intermediate card and clear the old physical card's usage record.
+The in-play history expires at the usual turn boundary. A swap to a
+different Ability can use it normally.
+
+Genesect ex and Munkidori also read their original saved marker names.
+A second Genesect ex in the same position cannot reuse Metal Signal
+after Thorton. The Shuckle example, a different physical Genesect ex
+returning in another position, a Munkidori round trip through
+Pecharunt, and serialized in-progress histories are covered by
+real-engine tests.
+[Official D-19 ruling](https://asia.pokemon-card.com/sg/wp-content/uploads/sites/6/2025/10/EN_advanced_manual-2025.pdf)
+[Genesect ex print](https://www.pokemon.com/el/jcc-pokemon/cartas-pokemon/series/zsv10pt5/67/)
+
+The four XY and Battle Styles Aegislash definitions use the same
+in-play replacement for Stance Change. The exact Aegislash name is
+required, and a used Stance Change stays used when the incoming card
+is another printing. Mr. Mime's Scoop-Up Block is checked before a
+damaged Aegislash can return to hand. Ordinary effects that return
+Pokémon and attachments to hand still need separate route review.
+[Official Stance Change and Scoop-Up Block rulings](https://www.pokemon-card.com/rules/faq/search.php?page=6&regulation=all&sc_group_id=727)
+
+Nine of the 11 new real-action checks fail against the previous
+engine. The full suite passes 11,325 tests across 328 files. The
+focused suite passes 151 checks and the combined worktree passes 72.
+The API passes 32 checks and the client passes 209. The packaged Thorton
+sequence displays the already-used indication and rejects a second
+Metal Signal on both mouse and touch.
+
+All 559 comparable saved boards serialize and load identically.
+All seven recorded puzzle solutions still win twice. Of 3,636
+opening actions, 3,626 match exactly. The other ten, eight Metal
+Signal and two Nighttime Maneuvers activations, differ only in the
+new Ability-use metadata. Their prompts and gameplay results match.

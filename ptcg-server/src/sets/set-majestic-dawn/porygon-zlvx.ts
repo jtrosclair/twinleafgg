@@ -85,7 +85,7 @@ export class PorygonZLVX extends PokemonCard {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
-      USE_ABILITY_ONCE_PER_TURN(player, this.DECODE_MARKER, this);
+      USE_ABILITY_ONCE_PER_TURN(player, this.DECODE_MARKER, this, effect.power.name);
       ABILITY_USED(player, this);
 
       const deckTop = new CardList();

@@ -62,7 +62,7 @@ export class Swampert2 extends PokemonCard {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
-      USE_ABILITY_ONCE_PER_TURN(player, this.DIVING_SEARCH_MARKER, this);
+      USE_ABILITY_ONCE_PER_TURN(player, this.DIVING_SEARCH_MARKER, this, effect.power.name);
       ABILITY_USED(player, this);
 
       let cards: Card[] = [];

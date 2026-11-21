@@ -3,13 +3,13 @@
 // If you have any questions or feedback, reach out to @C4 in the discord.
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
-import { Stage, CardType, CardTag, SuperType } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, StateUtils, GameError, GameMessage, PlayerType } from '../../game';
+import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
+import { PowerType, StoreLike, State, StateUtils, PlayerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { DealDamageEffect, PutDamageEffect } from '../../game/store/effects/attack-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { ChooseCardsPrompt } from '../../game/store/prompts/choose-cards-prompt';
-import { WAS_ATTACK_USED, WAS_POWER_USED, USE_ABILITY_ONCE_PER_TURN, ABILITY_USED, REMOVE_MARKER_AT_END_OF_TURN, IS_ABILITY_BLOCKED } from '../../game/store/prefabs/prefabs';
+import { applyStanceChange } from '../../game/store/prefabs/stance-change';
+import { WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
 
 export class Aegislash2 extends PokemonCard {
   public readonly STANCE_CHANGE_MARKER = 'AEGISLASH2_BST_STANCE_CHANGE_MARKER';
@@ -47,75 +47,7 @@ export class Aegislash2 extends PokemonCard {
   public fullName: string = 'Aegislash BST 108';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Stance Change
-    // Ref: set-x-and-y/aegislash.ts (Stance Change - swap with Aegislash in hand)
-    if (WAS_POWER_USED(effect, 0, this)) {
-      const player = effect.player;
-
-      if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-        throw new GameError(GameMessage.BLOCKED_BY_EFFECT);
-      }
-
-      // Check if there's an Aegislash in hand (different card instance)
-      const aegislashInHand = player.hand.cards.filter(
-        c => c instanceof PokemonCard && c.name === 'Aegislash' && c !== this
-      );
-
-      if (aegislashInHand.length === 0) {
-        throw new GameError(GameMessage.CANNOT_USE_POWER);
-      }
-
-      USE_ABILITY_ONCE_PER_TURN(player, this.STANCE_CHANGE_MARKER, this);
-      ABILITY_USED(player, this);
-
-      // Find this card in the player's Pokemon slots
-      let cardList: any = null;
-      player.forEachPokemon(PlayerType.BOTTOM_PLAYER, (list) => {
-        if (list.cards.includes(this)) {
-          cardList = list;
-        }
-      });
-
-      if (cardList === null) {
-        return state;
-      }
-
-      // Block non-Aegislash cards in hand
-      const blocked: number[] = [];
-      player.hand.cards.forEach((card, index) => {
-        if (!(card instanceof PokemonCard) || card.name !== 'Aegislash') {
-          blocked.push(index);
-        }
-      });
-
-      store.prompt(state, new ChooseCardsPrompt(
-        player,
-        GameMessage.CHOOSE_CARD_TO_HAND,
-        player.hand,
-        { superType: SuperType.POKEMON },
-        { min: 1, max: 1, allowCancel: false, blocked }
-      ), selected => {
-        if (!selected || selected.length === 0) {
-          return;
-        }
-
-        const newAegislash = selected[0] as PokemonCard;
-
-        // Swap: remove this card from the PokemonCardList, insert new one
-        const thisIndex = cardList.cards.indexOf(this);
-        if (thisIndex !== -1) {
-          cardList.cards.splice(thisIndex, 1);
-          const handIndex = player.hand.cards.indexOf(newAegislash);
-          if (handIndex !== -1) {
-            player.hand.cards.splice(handIndex, 1);
-          }
-          cardList.cards.splice(thisIndex, 0, newAegislash);
-          player.hand.cards.push(this);
-        }
-      });
-    }
-
-    REMOVE_MARKER_AT_END_OF_TURN(effect, this.STANCE_CHANGE_MARKER, this);
+    state = applyStanceChange(store, state, effect, this, this.STANCE_CHANGE_MARKER);
 
     // Attack 1: Gigaton Bash
     // Ref: set-vivid-voltage/zamazenta.ts (Amazing Shield - prevent VMAX damage with 2-marker cleanup)

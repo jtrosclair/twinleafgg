@@ -2,6 +2,7 @@ import { PokemonCard, Stage, CardType, PowerType, DamageMap, GameMessage, Player
 import { AddSpecialConditionsEffect } from '../../game/store/effects/attack-effects';
 import { CheckHpEffect, CheckProvidedEnergyEffect } from '../../game/store/effects/check-effects';
 import { Effect } from '../../game/store/effects/effect';
+import { hasUsedPokemonAbility, inheritLegacyPokemonAbilityUse, recordPokemonAbilityUse } from '../../game/store/prefabs/in-play-ability-use';
 import { MoveDamageCountersEffect, PlaceDamageCountersEffect, PokemonReplacedEffect } from '../../game/store/effects/game-effects';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
 import { PlayPokemonEffect } from '../../game/store/effects/play-card-effects';
@@ -62,11 +63,10 @@ export class Munkidori extends PokemonCard {
     // Ref: set-chaos-rising/book-of-transformation.ts: the outgoing Pokémon's
     // effects pass to the replacement; the incoming card's old use does not.
     if (effect instanceof PokemonReplacedEffect
-      && (effect.previousPokemon === this || effect.pokemonCard === this)) {
-      effect.player.marker.removeMarker(this.ADRENA_BRAIN_MARKER, effect.previousPokemon);
-      effect.player.marker.removeMarker(this.ADRENA_BRAIN_MARKER, effect.pokemonCard);
-      if (effect.previousMarkers.some(marker => marker.name === this.ADRENA_BRAIN_MARKER)) {
-        effect.player.marker.addMarker(this.ADRENA_BRAIN_MARKER, effect.pokemonCard);
+      && (effect.pokemonCard === this || (effect.previousPokemon === this && !(effect.pokemonCard instanceof Munkidori)))) {
+      inheritLegacyPokemonAbilityUse(effect, this.ADRENA_BRAIN_MARKER, this.powers[0].name);
+      if (effect.pokemonCard === this && effect.previousMarkers.some(marker => marker.name === this.ADRENA_BRAIN_MARKER)) {
+        recordPokemonAbilityUse(effect.player, this.ADRENA_BRAIN_MARKER, this, this.powers[0].name);
       }
     }
 
@@ -82,7 +82,7 @@ export class Munkidori extends PokemonCard {
       const blockedFrom: CardTarget[] = [];
       const blockedTo: CardTarget[] = [];
 
-      if (player.marker.hasMarker(this.ADRENA_BRAIN_MARKER, this)) {
+      if (hasUsedPokemonAbility(player, this.ADRENA_BRAIN_MARKER, this, effect.power.name)) {
         throw new GameError(GameMessage.CANNOT_USE_POWER);
       }
 
@@ -157,6 +157,12 @@ export class Munkidori extends PokemonCard {
               return state;
             }
 
+            if (transfers.length > 0) {
+              recordPokemonAbilityUse(player, this.ADRENA_BRAIN_MARKER, this, effect.power.name);
+              const target = StateUtils.findPokemonSlot(state, this);
+              target?.addBoardEffect(BoardEffect.ABILITY_USED);
+            }
+
             let totalDamageMoved = 0;
             for (const transfer of transfers) {
 
@@ -170,14 +176,6 @@ export class Munkidori extends PokemonCard {
               // if (target.cards.length > 1) {
               //   throw new GameError(GameMessage.INVALID_TARGET);
               // }
-
-              player.marker.addMarker(this.ADRENA_BRAIN_MARKER, this);
-
-              player.forEachPokemon(PlayerType.BOTTOM_PLAYER, cardList => {
-                if (cardList.getPokemonCard() === this) {
-                  cardList.addBoardEffect(BoardEffect.ABILITY_USED);
-                }
-              });
 
               /*blockedFrom.forEach(blocked => {
                 if (transfer.from === blocked && transfer.to === blocked) {

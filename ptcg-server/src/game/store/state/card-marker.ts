@@ -14,6 +14,8 @@ export interface MarkerItem {
   sourceType?: MarkerSourceType;
   /** Whether this marker targets a specific Pokemon or the player's actions broadly. */
   targetScope?: MarkerTargetScope;
+  /** The once-per-turn Ability recorded against its current physical card. */
+  abilityName?: string;
 }
 
 export class Marker {
@@ -38,11 +40,14 @@ export class Marker {
     this.markers = this.markers.filter(c => c.source !== source || c.name !== name);
   }
 
-  addMarker(name: string, source: Card, sourceType?: MarkerSourceType, targetScope?: MarkerTargetScope) {
+  addMarker(name: string, source: Card, sourceType?: MarkerSourceType, targetScope?: MarkerTargetScope,
+    abilityName?: string) {
     if (this.hasMarker(name, source)) {
       return;
     }
-    this.markers.push({ name, source, sourceType, targetScope });
+    this.markers.push(abilityName
+      ? { name, source, sourceType, targetScope, abilityName }
+      : { name, source, sourceType, targetScope });
   }
 
   addMarkerToState(name: string) {

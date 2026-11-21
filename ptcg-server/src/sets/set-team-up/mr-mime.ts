@@ -4,9 +4,10 @@
 
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State } from '../../game';
+import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { WAS_ATTACK_USED, COIN_FLIP_PROMPT } from '../../game/store/prefabs/prefabs';
+import { CheckPokemonReturnToHandEffect } from '../../game/store/effects/check-effects';
+import { IS_ABILITY_BLOCKED, WAS_ATTACK_USED, COIN_FLIP_PROMPT } from '../../game/store/prefabs/prefabs';
 import { YOUR_OPPPONENTS_ACTIVE_POKEMON_IS_NOW_PARALYZED } from '../../game/store/prefabs/attack-effects';
 
 export class MrMime extends PokemonCard {
@@ -38,8 +39,12 @@ export class MrMime extends PokemonCard {
   public fullName: string = 'Mr. Mime TEU';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ability: Scoop-Up Block
-    // TODO: "Your opponent's Pokemon that have any damage counters on them, and any cards attached to those Pokemon, can't be put into your opponent's hand." - Intercepting bounce-to-hand effects is not currently supported by the engine.
+    if (effect instanceof CheckPokemonReturnToHandEffect && effect.target.damage > 0) {
+      const owner = StateUtils.getOpponent(state, effect.player);
+      if (StateUtils.isPokemonInPlay(owner, this) && !IS_ABILITY_BLOCKED(store, state, owner, this)) {
+        effect.preventDefault = true;
+      }
+    }
 
     // Attack 1: Psy Bolt
     // Ref: set-roaring-skies/pikachu.ts (coin flip for status)
