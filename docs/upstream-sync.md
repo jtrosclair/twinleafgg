@@ -2586,3 +2586,55 @@ Discarding Benched Robo Substitute incorrectly changes the Active Spot or
 clears its effects. Star Order loses its bonus before the Knock Out check.
 Beast Bringer grants Prizes for another Pokémon’s attack. Altered
 Creation-GX grants an extra Prize for an explicit Knock Out.
+
+## Gameplay re-audit, batch 25
+
+Guts on Heracross BUS and Hariyama FST flips only when final attack damage
+would be lethal. Heads leaves the Pokémon at 10 HP before the Knock Out
+check and keeps Butterfly Edge from gaining protection. Anchor Anger and
+Retribution remember the Knock Out even if Whirlwind moves the victim to
+the Bench. Retribution returns the original defender's attached Energy
+after dealing damage, including when the defender will be Knocked Out.
+Both catalog names for Robo Substitute discard only their own stack and
+attachments. Removing it from the Bench preserves the Active Pokémon's
+effects. Removing the only Pokémon ends the game without awarding Prizes.
+[Heracross print](https://www.pokemon-card.com/card-search/details.php/card/33867/regu/XY)
+[Hariyama print and expansion](https://www.pokemon-card.com/products/s/s7.html)
+[Beautifly rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%A2%E3%82%B2%E3%83%8F%E3%83%B3%E3%83%88&regulation_faq_main_item1=all)
+[Dhelmise V print](https://www.pokemon-card.com/card-search/details.php/card/37614/regu/all)
+[Accelgor rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%82%A2%E3%82%AE%E3%83%AB%E3%83%80%E3%83%BC&regulation_faq_main_item1=all)
+[Robo Substitute print](https://www.pokemon-card.com/card-search/details.php/card/30551/regu/DP)
+
+Star Order lasts for the current turn and applies to a qualifying Basic
+Pokémon V even after the holder switches or the Tool leaves play. Beast
+Bringer requires the actual attacking Ultra Beast to hold the Tool and
+have six Prizes remaining. A physical Tool in both legacy attachment lists
+counts once. Altered Creation-GX applies its damage and Prize bonuses from
+the player even after the original Pokémon leaves play. Its Prize bonus
+requires lethal attack damage dealt to an Active Pokémon. Pokémon Ranger
+removes both effects while the GX attack remains used.
+[Sky Seal Stone rulings](https://asia.pokemon-card.com/hk-en/rules/search/?keyword=Sky+Seal+Stone)
+[Beast Bringer print](https://www.pokemon.com/uk/pokemon-tcg/pokemon-cards/series/sm10/229/)
+[Altered Creation-GX rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%91%E3%83%AB%E3%82%AD%E3%82%A2GX&regulation_faq_main_item1=all)
+[Altered Creation-GX and Whirlwind ruling](https://www.pokemon-card.com/rules/faq/search.php?page=11&regulation=all&sc_group_id=655)
+
+All 22 focused checks pass, including 15 failures on the preceding engine.
+The complete engine passed 7,527 cases across 270 specs in two invocations.
+The changes combined with the checkout's pending work passed 303 focused
+and simulator checks. All 559 comparable saved states and all 3,633 sampled
+opening actions exactly match. Seven recorded solutions replayed to wins.
+The attested package met the mobile size budget and passed all ten
+mouse and touch checks. Its browser engine verified Star Order taking the
+final three Prizes and Guts preventing a puzzle win on heads.
+
+Five open cases have been reproduced for the next review. Tenacious Body
+on Mega Hawlucha ex and Durable Body on Annihilape M5 skip the flip if
+previous damage makes the incoming hit lethal. Hoppip and Skiploom TRR do
+not survive a lethal attack through Buffer. The original Buffer wording
+also requires checking how it applies to attack effects that directly cause
+a Knock Out. One Aurora Energy currently qualifies for the extra Water
+on Altered Creation-GX even though it was used to pay the Metal cost.
+Review direct and copied attack costs against the actual Energy paid.
+[Mega Hawlucha ex rulings](https://professorprogram.pokemon.com/news/11464646)
+[EX Team Rocket Returns official card text](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/EX_Team_Rocket_Returns.pdf)
+[Altered Creation-GX print](https://www.pokemon-card.com/card-search/details.php/card/37382/regu/XY)
