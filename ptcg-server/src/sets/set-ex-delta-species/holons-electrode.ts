@@ -151,7 +151,7 @@ export class HolonsElectrode extends PokemonCard implements EnergyCard {
 
     // Dazzle Blast
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

@@ -41,7 +41,7 @@ export class Qwilfish extends PokemonCard {
     // Attack 1: Poison Sting
     // Ref: set-burning-shadows/seviper.ts (Venomous Fang)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Shocking Sting

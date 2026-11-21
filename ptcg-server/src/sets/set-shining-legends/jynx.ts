@@ -76,7 +76,7 @@ export class Jynx extends PokemonCard {
     // Attack 2: Feverish Kiss
     // Ref: set-sun-and-moon/poliwrath.ts (Split Spiral Punch)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

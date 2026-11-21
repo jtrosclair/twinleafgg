@@ -40,7 +40,7 @@ export class Vulpix extends PokemonCard {
     // Attack 2: Singe
     // Ref: set-darkness-ablaze/larvesta.ts (Singe)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

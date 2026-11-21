@@ -37,7 +37,7 @@ export class Umbreon2 extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Confuse Ray
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Shadow Shutdown - flip 2 coins, both heads = discard all energy

@@ -16,7 +16,7 @@ export class Leafeon extends PokemonCard {
     cost: [C],
     damage: 50,
     damageCalculation: 'x',
-    text: 'Does 50 damage damage times the number of Special Conditions affecting the Defending Pokémon.'
+    text: 'Does 50 damage times the number of Special Conditions affecting the Defending Pokémon.'
   },
   {
     name: 'Soothing Scent',
@@ -33,7 +33,7 @@ export class Leafeon extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (WAS_ATTACK_USED(effect, 1, this)) {
+    if (WAS_ATTACK_USED(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
       const oppActive = opponent.active;
@@ -42,7 +42,7 @@ export class Leafeon extends PokemonCard {
     }
 
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

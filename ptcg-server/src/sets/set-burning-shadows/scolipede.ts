@@ -40,7 +40,7 @@ export class Scolipede extends PokemonCard {
     // Attack 1: Poison Horn
     // Ref: set-guardians-rising/salandit.ts (Scratch + Poison pattern)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Steamroller

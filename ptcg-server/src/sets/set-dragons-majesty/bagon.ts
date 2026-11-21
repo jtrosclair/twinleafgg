@@ -49,7 +49,7 @@ export class Bagon extends PokemonCard {
     // Attack 2: Dragon Eye
     // Ref: set-forbidden-light/abomasnow.ts (Hypno Hammer)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

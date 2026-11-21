@@ -39,7 +39,7 @@ export class Onix extends PokemonCard {
 
       COIN_FLIP_PROMPT(store, state, player, result => {
         if (result) {
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, opponent, this);
+          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, opponent, effect);
         }
       });
     }

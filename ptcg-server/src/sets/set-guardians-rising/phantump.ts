@@ -39,7 +39,7 @@ export class Phantump extends PokemonCard {
     // Attack 2: Confuse Ray
     // Ref: set-sun-and-moon/spinda.ts (Teeter Punch)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

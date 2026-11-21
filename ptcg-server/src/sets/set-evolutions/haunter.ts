@@ -42,7 +42,7 @@ export class Haunter extends PokemonCard {
     // Attack 1: Hypnosis
     // Ref: set-diamond-and-pearl/haunter.ts (Hypnosis)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Dream Eater

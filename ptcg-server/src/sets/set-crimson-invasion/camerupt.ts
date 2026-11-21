@@ -48,7 +48,7 @@ export class Camerupt extends PokemonCard {
     // Attack 2: Searing Flame
     // Ref: set-burning-shadows/salazzle.ts (Searing Flame)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

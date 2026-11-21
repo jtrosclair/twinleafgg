@@ -36,7 +36,7 @@ export class Moltres extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Searing Flame
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Fire Blast

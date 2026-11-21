@@ -33,7 +33,7 @@ export class Spinda extends PokemonCard {
     // Attack 1: Teeter Punch
     // Ref: set-x-and-y/bisharp.ts (Metal Sound)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

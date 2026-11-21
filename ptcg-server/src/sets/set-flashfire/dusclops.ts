@@ -41,7 +41,7 @@ export class Dusclops extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ref: AGENTS-patterns.md (Confused)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Ref: set-dragons-exalted/shedinja.ts (Cursed Drop)

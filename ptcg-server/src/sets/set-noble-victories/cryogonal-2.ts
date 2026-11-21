@@ -1,12 +1,11 @@
-import { ADD_SLEEP_TO_PLAYER_ACTIVE, AFTER_ATTACK, SWITCH_ACTIVE_WITH_BENCHED, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
-import { AfterAttackEffect } from '../../game/store/effects/game-phase-effects';
-import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-
 import { CardType, Stage } from '../../game/store/card/card-types';
-import { StateUtils } from '../../game/store/state-utils';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Effect } from '../../game/store/effects/effect';
-import { State, StoreLike } from '../../game';
+import { GameMessage, State, StoreLike } from '../../game';
+import {
+  AFTER_ATTACK, CONFIRMATION_PROMPT, MOVE_CARDS, SWITCH_IN_OPPONENT_BENCHED_POKEMON
+} from '../../game/store/prefabs/prefabs';
+
 export class Cryogonal2 extends PokemonCard {
   public stage: Stage = Stage.BASIC;
   public cardType: CardType = W;
@@ -16,53 +15,47 @@ export class Cryogonal2 extends PokemonCard {
 
   public attacks = [
     {
-      name: 'Icy Wind',
+      name: 'Ice Chain',
       cost: [W],
-      damage: 10,
-      text: 'The Defending Pokémon is now Asleep.'
+      damage: 0,
+      text: 'Switch the Defending Pokémon with 1 of your opponent\'s Benched Pokémon.'
     },
     {
-      name: 'Ice Chain',
-      cost: [W, W, C],
-      damage: 50,
-      text: 'Switch the Defending Pokémon with 1 of your opponent\'s Benched Pokémon.'
+      name: 'Frost Vanish',
+      cost: [W, W],
+      damage: 40,
+      text: 'You may return this Pokémon and all cards attached to it to your hand.'
     }
   ];
 
   public set: string = 'NVI';
-  public setNumber: string = '33';
   public cardImage: string = 'assets/cardback.png';
+  public setNumber: string = '33';
   public name: string = 'Cryogonal';
   public fullName: string = 'Cryogonal NVI 33';
 
-  private usedIceChain: boolean = false;
-
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Icy Wind
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      return SWITCH_IN_OPPONENT_BENCHED_POKEMON(store, state, effect.player, {
+        sourceEffect: effect.resolvedAttackEffect ?? effect
+      });
     }
 
-    // Ice Chain - switch defending Pokémon after attack
-    if (WAS_ATTACK_USED(effect, 1, this)) {
-      this.usedIceChain = true;
-    }
-
-    // After Ice Chain, switch opponent's active with benched
-    if (effect instanceof AfterAttackEffect && this.usedIceChain) {
-      this.usedIceChain = false;
+    // Ref: set-platinum/poke-turn.ts (return each physical attachment once).
+    if (AFTER_ATTACK(effect, 1, this)) {
       const player = effect.player;
-      const opponent = StateUtils.getOpponent(state, player);
-      const hasBenched = opponent.bench.some(b => b.cards.length > 0);
+      const source = effect.resolvedAttackEffect?.source ?? player.active;
+      const pokemon = source.getPokemonCard();
+      if (!pokemon) return state;
 
-      if (hasBenched) {
-        SWITCH_ACTIVE_WITH_BENCHED(store, state, opponent);
-      }
-    }
-
-    // Cleanup
-    if (effect instanceof EndTurnEffect && this.usedIceChain) {
-      this.usedIceChain = false;
+      return CONFIRMATION_PROMPT(store, state, player, confirmed => {
+        if (!confirmed || source.getPokemonCard() !== pokemon) return;
+        const cards = [...new Set([...source.cards, ...source.energies.cards, ...source.tools])];
+        MOVE_CARDS(store, state, source, player.hand, { cards, sourceCard: pokemon });
+        source.tools = source.tools.filter(tool => !player.hand.cards.includes(tool));
+        source.damage = 0;
+        source.clearEffects();
+      }, GameMessage.WANT_TO_USE_EFFECT_OF_ATTACK);
     }
 
     return state;

@@ -42,7 +42,7 @@ export class Poliwrath extends PokemonCard {
     // Attack 1: Split Spiral Punch
     // Ref: set-x-and-y/inkay.ts (Confusion Wave - opponent confused)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Wake-Up Slap

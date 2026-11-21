@@ -38,7 +38,7 @@ export class EnteiEx extends PokemonCard {
 
     // Fire Fang - applies burn
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Grand Flame - attach Fire Energy from discard to a benched Pokémon

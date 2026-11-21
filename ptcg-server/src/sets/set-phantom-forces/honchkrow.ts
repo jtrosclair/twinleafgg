@@ -43,7 +43,7 @@ export class Honchkrow extends PokemonCard {
     // Attack 1: Hypnoblast
     // Ref: set-furious-fists/hypno.ts (Hypnoblast)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Nightmare Mambo

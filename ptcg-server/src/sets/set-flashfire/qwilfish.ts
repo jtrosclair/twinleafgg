@@ -51,7 +51,7 @@ export class Qwilfish extends PokemonCard {
 
     // Ref: set-x-and-y/beedrill.ts (Poison Jab)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

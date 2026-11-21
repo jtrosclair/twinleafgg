@@ -63,7 +63,7 @@ export class Volbeat extends PokemonCard {
     // Attack 2: Signal Beam
     // Ref: AGENTS-patterns.md (Confused status condition)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

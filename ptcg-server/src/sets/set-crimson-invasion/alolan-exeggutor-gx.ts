@@ -89,7 +89,7 @@ export class AlolanExeggutorGx extends PokemonCard {
     // Attack 2: Dragon Hammer
     // Ref: set-burning-shadows/noctowl.ts (Confused status)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 3: Tower-Go-Round-GX

@@ -38,7 +38,7 @@ export class Haunter extends PokemonCard {
     if (AFTER_ATTACK(effect, 0, this)) {
       COIN_FLIP_PROMPT(store, state, effect.player, result => {
         if (result) {
-          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
         }
       });
     }

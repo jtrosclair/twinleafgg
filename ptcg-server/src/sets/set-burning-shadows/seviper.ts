@@ -78,7 +78,7 @@ export class Seviper extends PokemonCard {
     // Attack 1: Venomous Fang
     // Ref: set-guardians-rising/helioptile.ts (special condition pattern)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

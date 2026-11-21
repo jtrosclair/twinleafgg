@@ -118,7 +118,7 @@ export class Vivillon extends PokemonCard {
     // Attack 1: Sleep Powder
     // Ref: AGENTS-patterns.md (Asleep)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

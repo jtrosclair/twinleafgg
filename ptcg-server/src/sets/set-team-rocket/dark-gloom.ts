@@ -64,7 +64,7 @@ export class DarkGloom extends PokemonCard {
     REMOVE_MARKER_AT_END_OF_TURN(effect, this.POLLEN_STENCH_MARKER, this);
 
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
     return state;
   }

@@ -34,7 +34,7 @@ export class Chansey extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Sing
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Double-Edge

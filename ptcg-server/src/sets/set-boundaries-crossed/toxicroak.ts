@@ -50,7 +50,7 @@ export class Toxicroak extends PokemonCard {
     // Attack 2: Poison Jab
     // Ref: set-stormfront/haunter.ts (Poison Breath)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

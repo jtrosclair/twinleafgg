@@ -40,7 +40,7 @@ export class Golduck extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Attack 1: Confuse Ray
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

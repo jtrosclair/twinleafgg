@@ -58,7 +58,7 @@ export class Vanilluxe extends PokemonCard {
 
     // Attack 2: Cold Breath
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

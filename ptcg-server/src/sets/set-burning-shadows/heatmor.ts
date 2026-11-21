@@ -69,7 +69,7 @@ export class Heatmor extends PokemonCard {
     // Attack 2: Searing Flame
     // Ref: set-guardians-rising/turtonator.ts (Searing Flame)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

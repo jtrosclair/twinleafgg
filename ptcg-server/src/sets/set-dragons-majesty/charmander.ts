@@ -33,7 +33,7 @@ export class Charmander extends PokemonCard {
     // Attack 1: Fire Fang
     // Ref: set-celestial-storm/charmander.ts (Flare - burn pattern)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

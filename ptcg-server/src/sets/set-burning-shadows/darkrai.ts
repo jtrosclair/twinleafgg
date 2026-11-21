@@ -42,7 +42,7 @@ export class Darkrai extends PokemonCard {
     // Attack 1: Hypnoblast
     // Ref: set-guardians-rising/victreebel.ts (Pollen Hazard)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Dark Raid

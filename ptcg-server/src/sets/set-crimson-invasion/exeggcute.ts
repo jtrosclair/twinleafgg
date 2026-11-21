@@ -39,7 +39,7 @@ export class Exeggcute extends PokemonCard {
     // Attack 1: Hypnosis
     // Ref: set-burning-shadows/darkrai.ts (Hypnosis)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

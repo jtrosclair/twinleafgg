@@ -39,7 +39,7 @@ export class Morelull extends PokemonCard {
     // Attack 1: Flickering Spores
     // Ref: set-x-and-y/vivillon.ts (Asleep pattern)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

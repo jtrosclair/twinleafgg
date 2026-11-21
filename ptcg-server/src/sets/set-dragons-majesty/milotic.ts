@@ -44,7 +44,7 @@ export class Milotic extends PokemonCard {
     // Attack 1: Aurora Wave
     // Ref: set-celestial-storm/shiftry-gx.ts (Perplex)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Aqua Split

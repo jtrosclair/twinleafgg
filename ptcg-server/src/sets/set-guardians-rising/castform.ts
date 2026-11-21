@@ -82,7 +82,7 @@ export class Castform extends PokemonCard {
     // Attack 2: Water Pulse
     // Ref: set-sun-and-moon/morelull.ts (Flickering Spores)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

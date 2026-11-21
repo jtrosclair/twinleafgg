@@ -43,7 +43,7 @@ export class Drifblim extends PokemonCard {
     // Attack 1: Eerie Wave
     // Ref: AGENTS-patterns.md (Confused)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Burst Curse

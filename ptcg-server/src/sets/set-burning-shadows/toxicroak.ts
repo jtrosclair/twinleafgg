@@ -41,7 +41,7 @@ export class Toxicroak extends PokemonCard {
     // Attack 1: Poison Jab
     // Ref: set-guardians-rising/salandit.ts (Scratch + Poison)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Poison Boost

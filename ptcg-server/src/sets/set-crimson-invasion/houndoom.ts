@@ -41,7 +41,7 @@ export class Houndoom extends PokemonCard {
     // Attack 1: Fire Fang
     // Ref: set-burning-shadows/salazzle.ts (Searing Flame)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Puncturing Fangs

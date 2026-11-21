@@ -3,7 +3,7 @@ import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, CoinFlipPrompt, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { GameMessage } from '../../game/game-message';
-import { ADD_CONFUSION_TO_PLAYER_ACTIVE, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_CONFUSION_TO_PLAYER_ACTIVE, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
 
 export class Ralts extends PokemonCard {
 
@@ -43,7 +43,7 @@ export class Ralts extends PokemonCard {
   public setNumber: string = '102';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (WAS_ATTACK_USED(effect, 1, this)) {
+    if (AFTER_ATTACK(effect, 1, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
@@ -51,7 +51,7 @@ export class Ralts extends PokemonCard {
         new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
       ], result => {
         if (result === true) {
-          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, opponent, this); 
+          ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, opponent, effect);
         }
       });
     }

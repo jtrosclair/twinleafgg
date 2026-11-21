@@ -44,7 +44,7 @@ export class Abra extends PokemonCard {
     if (AFTER_ATTACK(effect, 0, this)) {
       return store.prompt(state, new CoinFlipPrompt(effect.player.id, GameMessage.COIN_FLIP), (heads) => {
         if (heads) {
-          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), this);
+          ADD_PARALYZED_TO_PLAYER_ACTIVE(store, state, StateUtils.getOpponent(state, effect.player), effect);
         }
       });
     }

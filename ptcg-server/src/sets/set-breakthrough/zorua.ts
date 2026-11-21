@@ -41,7 +41,7 @@ export class Zorua extends PokemonCard {
     // Attack 1: Moonless Madness
     // Ref: AGENTS-patterns.md (Confused pattern)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Dark Edge

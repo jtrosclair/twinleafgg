@@ -33,7 +33,7 @@ export class Frillish extends PokemonCard {
     // Attack 1: Confuse Ray
     // Ref: set-furious-fists/poliwag.ts (Confuse Ray)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

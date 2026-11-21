@@ -3128,3 +3128,44 @@ paired unprotected controls, 394 matched the printed damage when the
 condition resolved. Icy Wind (Cryogonal NVI), Shake Vine (Bulbasaur SW)
 and Soothing Scent (Leafeon UD) require a separate check of damage and
 effect timing as part of that migration.
+
+## Gameplay re-audit, batch 37
+
+Migrated 397 more printed status attacks to the resolved attack source.
+The paired test suite now covers 662 attacks from this pass and the prior
+one. Each has a real play with and without Finneon's Elegant Swim, with the
+printed damage checked at the point the condition resolves. Zero-damage
+Paralyzing Gaze, Poisonpowder and Confuse Ray now resolve in the after-attack
+phase alongside the other status attacks.
+[Official attack order](https://assets.pokemon.com/assets/cms2/pdf/trading-card-game/rulebook/par_rulebook_en.pdf)
+
+Corrected four card definitions against their exact English prints. Cryogonal
+NVI 32 deals no damage with Icy Wind. Bulbasaur SW flips four coins for Bullet
+Seed and only applies Sleep for Shake Vine. Leafeon UD multiplies the damage
+of Miasma Wind by the number of Special Conditions, and Soothing Scent deals
+30 before it applies Sleep.
+[Noble Victories Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/bw_noble_victories.pdf)
+[Secret Wonders Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/DiamondPearl_SecretWonders.pdf)
+[Undaunted Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/hs_undaunted.pdf)
+
+Cryogonal NVI 33 now has its printed Ice Chain and Frost Vanish. Ice Chain
+costs one Water Energy and lets the attacker choose the opposing Benched
+Pokémon. Frost Vanish deals 40 before offering to return the attacker and
+each physical attachment. Tests cover the attacker declining, a Tool
+referenced in both attachment lists, and Mew ex returning itself after
+copying Frost Vanish.
+[Noble Victories Card-Dex](https://assets.pokemon.com/assets/cms/pdf/tcg/carddex/bw_noble_victories.pdf)
+[Pokémon Organized Play switching rulings](https://doczz.net/doc/193314/rulings-compendium-lvx---pokemon-rulings-compendium)
+
+All 9,264 engine tests, 1,517 combined-checkout checks and 209 frontend
+specs passed. All 559 supported saved states and 3,633 sampled opening
+actions matched the prior build. All seven recorded solutions reached a win.
+The 2.46 MiB package passed attestation, the mobile budget and ten packaged
+board interaction checks.
+
+The tracked audit has 306 calls across 251 remaining definitions. Printed
+attack text has been associated with 219 of those calls. Baseline plays
+confirm protection bypasses on Team Rocket's Nidoking ex's Dirty Horns,
+Accelgor's Poisonous Ploy, and Butterfree's Scale Hurricane. Dirty Horns
+still causes 80 Poison damage in Checkup. Poisonous Ploy still applies both
+conditions and switches Accelgor. Scale Hurricane still applies Paralysis.

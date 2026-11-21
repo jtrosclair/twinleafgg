@@ -36,7 +36,7 @@ export class Seadra extends PokemonCard {
 
     //Attack
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     if (WAS_ATTACK_USED(effect, 1, this)) {

@@ -34,7 +34,7 @@ export class Swablu2 extends PokemonCard {
     // Attack 1: Sing
     // Ref: set-boundaries-crossed/swablu.ts (Sing - asleep pattern)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

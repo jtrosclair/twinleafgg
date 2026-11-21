@@ -44,7 +44,7 @@ export class Lanturn extends PokemonCard {
     // Attack 1: Confuse Ray
     // Ref: AGENTS-patterns.md (special conditions)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Aqua Spark

@@ -40,7 +40,7 @@ export class Simisear extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ref: AGENTS-patterns.md (Asleep)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Ref: set-dragons-exalted/magmortar.ts (Flamethrower)

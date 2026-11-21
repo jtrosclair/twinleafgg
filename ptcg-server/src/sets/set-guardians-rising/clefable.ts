@@ -44,7 +44,7 @@ export class Clefable extends PokemonCard {
     // Attack 1: Lullaby
     // Ref: AGENTS-patterns.md (special condition)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Meteor Mash

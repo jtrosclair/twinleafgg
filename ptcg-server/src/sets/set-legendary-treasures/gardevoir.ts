@@ -44,7 +44,7 @@ export class Gardevoir extends PokemonCard {
     // Attack 1: Psybeam
     // Ref: set-plasma-blast/chatot.ts (Tone-Deaf)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Eternal Radiance

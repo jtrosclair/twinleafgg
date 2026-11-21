@@ -40,7 +40,7 @@ export class VenusaurEx extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ref: AGENTS-patterns.md (Poison)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_POISON_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Ref: AGENTS-patterns.md (Heal)

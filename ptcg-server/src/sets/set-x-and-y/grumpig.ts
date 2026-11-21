@@ -94,7 +94,7 @@ export class Grumpig extends PokemonCard {
     // Attack 2: Psybeam
     // Ref: set-dragons-exalted/tympole.ts (Bubble)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

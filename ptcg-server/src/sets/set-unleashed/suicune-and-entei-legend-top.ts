@@ -106,7 +106,7 @@ export class SuicuneAndEnteiLegendTop extends PokemonCard {
 
     // Bursting Inferno
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

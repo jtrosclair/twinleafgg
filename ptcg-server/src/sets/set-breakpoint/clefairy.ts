@@ -41,7 +41,7 @@ export class Clefairy extends PokemonCard {
     // Attack 1: Sing
     // Ref: set-evolutions/gastly.ts (Nightmare)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Double Slap

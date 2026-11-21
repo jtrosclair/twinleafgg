@@ -65,7 +65,7 @@ export class Altaria extends PokemonCard {
     // Attack 2: Midnight Eyes
     // Ref: AGENTS-patterns.md (opponent's active is now Asleep)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

@@ -37,7 +37,7 @@ export class Numel extends PokemonCard {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, opponent, effect);
     }
 
     return state;

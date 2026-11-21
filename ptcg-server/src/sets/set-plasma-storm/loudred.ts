@@ -40,7 +40,7 @@ export class Loudred extends PokemonCard {
     // Attack 1: Supersonic
     // Ref: set-next-destinies/beheeyem.ts (Psybeam)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

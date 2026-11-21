@@ -40,7 +40,7 @@ export class Walrein extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ref: set-x-and-y/vivillon.ts (Asleep condition)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Ref: AGENTS-patterns.md (damage minus damage counters)

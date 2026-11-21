@@ -28,7 +28,7 @@ export class Larvesta2 extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Super Singe
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

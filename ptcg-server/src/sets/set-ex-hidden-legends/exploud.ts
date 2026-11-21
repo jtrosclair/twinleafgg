@@ -54,7 +54,7 @@ export class Exploud extends PokemonCard {
     }
 
     if (AFTER_ATTACK(effect, 2, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     return state;

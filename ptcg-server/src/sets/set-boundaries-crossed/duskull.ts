@@ -27,7 +27,7 @@ export class Duskull extends PokemonCard {
     // Attack 1: Confuse Ray
     // Ref: set-boundaries-crossed/vileplume.ts (Pollen Spray)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_CONFUSION_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
     return state;
   }

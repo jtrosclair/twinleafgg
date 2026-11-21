@@ -2,7 +2,7 @@ import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
 import { StoreLike, State, CoinFlipPrompt, GameMessage, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { ADD_POISON_TO_PLAYER_ACTIVE, WAS_ATTACK_USED } from '../../game/store/prefabs/prefabs';
+import { ADD_POISON_TO_PLAYER_ACTIVE, AFTER_ATTACK } from '../../game/store/prefabs/prefabs';
 
 export class Oddish extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -31,7 +31,7 @@ export class Oddish extends PokemonCard {
   public fullName: string = 'Oddish LA';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    if (WAS_ATTACK_USED(effect, 0, this)) {
+    if (AFTER_ATTACK(effect, 0, this)) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
         
@@ -39,7 +39,7 @@ export class Oddish extends PokemonCard {
         new CoinFlipPrompt(player.id, GameMessage.COIN_FLIP)
       ], result => {
         if (result === true) {
-          ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, this); 
+          ADD_POISON_TO_PLAYER_ACTIVE(store, state, opponent, effect);
         }
       });
     }

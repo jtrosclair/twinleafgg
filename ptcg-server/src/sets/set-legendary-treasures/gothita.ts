@@ -36,7 +36,7 @@ export class Gothita extends PokemonCard {
     // Attack 1: Hypnotic Gaze
     // Ref: AGENTS-patterns.md (special conditions)
     if (AFTER_ATTACK(effect, 0, this)) {
-      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_SLEEP_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 2: Double Slap

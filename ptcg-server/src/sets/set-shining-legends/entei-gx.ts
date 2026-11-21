@@ -47,7 +47,7 @@ export class EnteiGx extends PokemonCard {
     // Attack 2: Fire Fang
     // Ref: set-burning-shadows/heatmor.ts (Burn)
     if (AFTER_ATTACK(effect, 1, this)) {
-      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, this);
+      ADD_BURN_TO_PLAYER_ACTIVE(store, state, effect.opponent, effect);
     }
 
     // Attack 3: Brave Burn GX
