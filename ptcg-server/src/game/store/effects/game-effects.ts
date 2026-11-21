@@ -1,3 +1,4 @@
+import { GameMessage } from '../../game-message';
 import { CardType } from '../card/card-types';
 import { Attack, Power } from '../card/pokemon-types';
 import { Effect } from './effect';
@@ -359,17 +360,30 @@ export class CheckEvolveEffect implements Effect {
     public source: CardList, public playedFromHand: boolean) { }
 }
 
+export interface PrizeReaction {
+  card: Card;
+  prize: CardList;
+  message: GameMessage;
+  canUse: () => boolean;
+  use: () => void;
+}
+
 export class DrawPrizesEffect implements Effect {
   readonly type: string = GameEffects.DRAW_PRIZES_EFFECT;
   public preventDefault = false;
-  public player: Player;
-  public prizes: CardList[];
-  public destination: CardList;
+  public readonly reactions = new Map<CardList, PrizeReaction>();
 
-  constructor(player: Player, prizes: CardList[], destination: CardList) {
-    this.player = player;
-    this.prizes = prizes;
-    this.destination = destination;
+  constructor(
+    public player: Player,
+    public prizes: CardList[],
+    public destination: CardList,
+    public readonly reservedPrizes: readonly CardList[] = prizes,
+  ) {}
+
+  public offer(card: Card, message: GameMessage, canUse: () => boolean, use: (prize: CardList) => void): void {
+    if (this.destination !== this.player.hand) return;
+    const prize = this.prizes.find(list => list.isSecret && !list.faceUpPrize && list.cards.includes(card));
+    if (prize) this.reactions.set(prize, { card, prize, message, canUse, use: () => use(prize) });
   }
 }
 

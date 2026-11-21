@@ -1,22 +1,23 @@
+import { isPrizeOwnerTurn, takePrizeTo } from './prize-reactions';
+export { TAKE_SPECIFIC_PRIZES, TAKE_X_PRIZES, type TakeSpecificPrizesOptions, type TakeXPrizesOptions } from './prize-reactions';
 import { rollCoin } from './coin-flip-results';
 import { withoutWillCoinChoice } from './will-coin-choice';
 import { ConfirmCardsPrompt } from '../prompts/confirm-cards-prompt';
 import { GustOpponentBenchEffect } from '../effects/attack-effects';
-import { AttachEnergyOptions, AttachEnergyPrompt, Card, CardList, CardTarget, ChooseCardsOptions, ChooseCardsPrompt, ChoosePokemonPrompt, ChoosePrizePrompt, ChooseEnergyPrompt, ConfirmPrompt, DamageMap, EnergyCard, GameError, GameLog, GameMessage, MoveDamagePrompt, Player, PlayerType, PokemonCardList, PowerType, SelectPrompt, ShowCardsPrompt, ShuffleDeckPrompt, SlotType, State, StateUtils, StoreLike, TrainerCard } from '../..';
+import { AttachEnergyOptions, AttachEnergyPrompt, Card, CardList, CardTarget, ChooseCardsOptions, ChooseCardsPrompt, ChoosePokemonPrompt, ChooseEnergyPrompt, ConfirmPrompt, DamageMap, EnergyCard, GameError, GameLog, GameMessage, MoveDamagePrompt, Player, PlayerType, PokemonCardList, PowerType, SelectPrompt, ShowCardsPrompt, ShuffleDeckPrompt, SlotType, State, StateUtils, StoreLike, TrainerCard } from '../..';
 import { AfterAttachEnergyEffect, TrainerEffect, AttachEnergyEffect, ToolEffect, CoinFlipEffect, CoinFlipSequenceEffect, PlayPokemonFromDeckEffect } from '../effects/play-card-effects';
 import { BoardEffect, CardTag, CardType, EnergyType, Format, SpecialCondition, Stage, SuperType, TrainerType } from '../card/card-types';
 import { Attack } from '../card/pokemon-types';
 import { GamePhase } from '../state/state';
 import { hasLegacyDeltaEvolution, PokemonCard } from '../card/pokemon-card';
 import { AbstractAttackEffect, AddSpecialConditionsEffect, AfterDamageEffect, ApplyWeaknessEffect, DealDamageEffect, DiscardCardsEffect, HealTargetEffect, PutCountersEffect, PutDamageEffect } from '../effects/attack-effects';
-import { AddSpecialConditionsPowerEffect, CheckHpEffect, CheckPokemonPlayedTurnEffect, CheckPokemonTypeEffect, CheckPrizesDestinationEffect, CheckProvidedEnergyEffect, CheckSupporterLimitEffect, CheckTableStateEffect } from '../effects/check-effects';
+import { AddSpecialConditionsPowerEffect, CheckHpEffect, CheckPokemonPlayedTurnEffect, CheckPokemonTypeEffect, CheckProvidedEnergyEffect, CheckSupporterLimitEffect, CheckTableStateEffect } from '../effects/check-effects';
 import { Effect } from '../effects/effect';
 import { afterAttackDamage, resolveAfterAttack, resolveAfterAttackDamage } from './attack-after-damage';
 import { AfterEvolveEffect, AttackEffect, DrawPrizesEffect, KnockOutEffect, MoveCardsEffect, MoveDamageCountersEffect, PowerEffect, RetreatEffect, SpecialEnergyEffect } from '../effects/game-effects';
 import { AfterAttackEffect, EndTurnEffect } from '../effects/game-phase-effects';
 import { ChooseAttackPrompt } from '../prompts/choose-attack-prompt';
 import { preventRetreatEffect, preventDamageEffect } from '../effects/effect-of-attack-effects';
-import { GameStatsTracker } from '../game-stats-tracker';
 import { CardAssign } from '../prompts/attach-energy-prompt';
 import { resolveEnergyAttachmentCompletions } from './hand-energy-reactions';
 export { IS_STADIUM_EFFECT_BLOCKED } from './stadium-effect';
@@ -672,97 +673,20 @@ export function APPLY_ONCE_PER_CARD(effect: Effect, card: Card): boolean {
   return true;
 }
 
-export interface TakeSpecificPrizesOptions {
-  destination?: CardList;
-  skipReduce?: boolean;
-}
-
-export interface TakeXPrizesOptions extends TakeSpecificPrizesOptions {
-  promptOptions?: {
-    allowCancel?: boolean;
-    blocked?: number[];
-  };
-}
-
-export function TAKE_SPECIFIC_PRIZES(
-  store: StoreLike,
-  state: State,
-  player: Player,
-  prizes: CardList[],
-  options: TakeSpecificPrizesOptions = {}
+/** Wish Upon a Star and Lucky Bonus put the chosen Prize directly onto the Bench. */
+export function offerBenchedPrizePokemon(
+  store: StoreLike, state: State, effect: DrawPrizesEffect, pokemon: PokemonCard, then: () => void,
 ): void {
-  let { destination = player.hand } = options;
-  const { skipReduce = false } = options;
-  let preventDefault: boolean = false;
-
-  if (!skipReduce) {
-    const drawPrizesEffect = new DrawPrizesEffect(
-      player,
-      prizes,
-      destination
-    );
-
-    // Reduce the prizes destination for effects that override it and take place before any
-    // DrawPrizesEffect is processed (e.g. Barbaracle LOR)
-    const prizesDestinationEffect = new CheckPrizesDestinationEffect(player, drawPrizesEffect.destination);
-    store.reduceEffect(state, prizesDestinationEffect);
-
-    // If nothing prevented the override, apply the new destination
-    if (!prizesDestinationEffect.preventDefault) {
-      drawPrizesEffect.destination = prizesDestinationEffect.destination;
-    }
-
-    // Process the actual DrawPrizesEffect
-    store.reduceEffect(state, drawPrizesEffect);
-
-    preventDefault = drawPrizesEffect.preventDefault;
-    destination = drawPrizesEffect.destination;
-  } else {
-    destination = player.hand;
-  }
-
-  if (!preventDefault) {
-    let prizesTakenCount = 0;
-    prizes.forEach(prize => {
-      if (player.prizes.includes(prize)) {
-        prize.moveTo(destination);
-
-        if (destination === player.hand) {
-          // If the destination is the hand, we've "taken" a prize
-          player.prizesTaken += 1;
-          player.prizesTakenThisTurn += 1;
-          prizesTakenCount += 1;
-        }
-      }
+  const { player } = effect;
+  effect.offer(pokemon, GameMessage.WANT_TO_USE_ABILITY_FROM_PRIZES,
+    () => isPrizeOwnerTurn(state, player) && GET_PLAYER_BENCH_SLOTS(player).length > 0
+      && !IS_ABILITY_BLOCKED(store, state, player, pokemon),
+    prize => {
+      const target = GET_PLAYER_BENCH_SLOTS(player)[0];
+      takePrizeTo(player, prize, target);
+      target.pokemonPlayedTurn = state.turn;
+      then();
     });
-
-    // Track accurate prize count using GameStatsTracker
-    if (prizesTakenCount > 0) {
-      GameStatsTracker.trackPrizeTaken(player, prizesTakenCount);
-    }
-  }
-}
-
-export function TAKE_X_PRIZES(
-  store: StoreLike,
-  state: State,
-  player: Player,
-  count: number,
-  options: TakeXPrizesOptions = {},
-  callback?: (chosenPrizes: CardList[]) => void
-): State {
-  const { promptOptions = {}, ...takeOptions } = options;
-
-  state = store.prompt(state, new ChoosePrizePrompt(
-    player.id,
-    GameMessage.CHOOSE_PRIZE_CARD,
-    { count, allowCancel: false, ...promptOptions }
-  ), result => {
-    TAKE_SPECIFIC_PRIZES(store, state, player, result, takeOptions);
-    if (callback) callback(result);
-  });
-
-  return state;
 }
 
 /** Upstream KO predicate; attack-damage mode excludes counters, poison and effects. */

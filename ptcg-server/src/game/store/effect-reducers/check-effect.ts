@@ -526,11 +526,12 @@ export function* executeCheckState(next: Function, store: StoreLike, state: Stat
   // Both players take their Prizes for this check before the winner is decided.
   for (let i = 0; i < state.players.length && state.phase !== GamePhase.FINISHED; i++) {
     const player = state.players[i];
-    for (const { count, destination } of prizeGroups[i]) {
-      if (count <= 0) continue;
-      const prizes = player.prizes.filter(prize => prize.cards.length > 0).slice(0, count);
+    const available = player.prizes.filter(prize => prize.cards.length > 0);
+    const groups = prizeGroups[i].map(({ count, destination }) => ({ prizes: available.splice(0, count), destination }));
+    const reservedPrizes = groups.flatMap(group => group.prizes);
+    for (const { prizes, destination } of groups) {
       if (!prizes.length) continue;
-      TAKE_SPECIFIC_PRIZES(store, state, player, prizes, { destination });
+      TAKE_SPECIFIC_PRIZES(store, state, player, prizes, { destination, reservedPrizes });
       if (store.hasPrompts()) yield store.waitPrompt(state, () => next());
     }
   }

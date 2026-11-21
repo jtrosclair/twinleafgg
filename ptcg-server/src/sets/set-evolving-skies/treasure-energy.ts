@@ -7,11 +7,10 @@ import { CardType, EnergyType } from '../../game/store/card/card-types';
 import { StoreLike, State, GameMessage } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { DrawPrizesEffect } from '../../game/store/effects/game-effects';
-import { CONFIRMATION_PROMPT, TAKE_SPECIFIC_PRIZES } from '../../game/store/prefabs/prefabs';
+import { countPrizesTaken, isPrizeOwnerTurn } from '../../game/store/prefabs/prize-reactions';
 import { AttachEnergyEffect } from '../../game/store/effects/play-card-effects';
 import { PlayerType, SlotType } from '../../game/store/actions/play-card-action';
 import { ChoosePokemonPrompt } from '../../game/store/prompts/choose-pokemon-prompt';
-import { PokemonCardList } from '../../game/store/state/pokemon-card-list';
 
 export class TreasureEnergy extends EnergyCard {
   public provides: CardType[] = [C];
@@ -25,69 +24,19 @@ export class TreasureEnergy extends EnergyCard {
   public text: string = 'As long as this card is attached to a Pokémon, it provides [C] Energy. If you took this card as a face-down Prize card during your turn, before you put it into your hand, you may attach this card to 1 of your Pokémon.';
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
-    // Ref: set-evolving-skies/dream-ball.ts (DrawPrizesEffect intercept pattern for prize card effects)
+    // Ref: set-evolving-skies/dream-ball.ts (resolve the Prize without moving it through the hand).
     if (effect instanceof DrawPrizesEffect) {
-      const generator = this.handlePrizeEffect(() => generator.next(), store, state, effect);
-      return generator.next().value;
+      const { player } = effect;
+      effect.offer(this, GameMessage.WANT_TO_USE_ITEM_FROM_PRIZES,
+        () => isPrizeOwnerTurn(state, player) && player.getPokemonInPlay().length > 0,
+        prize => {
+          store.prompt(state, new ChoosePokemonPrompt(player.id, GameMessage.ATTACH_ENERGY_CARDS,
+            PlayerType.BOTTOM_PLAYER, [SlotType.ACTIVE, SlotType.BENCH], { allowCancel: false }), ([target]) => {
+            store.reduceEffect(state, new AttachEnergyEffect(player, this, target, 'prizes', prize));
+            if (!prize.cards.includes(this)) countPrizesTaken(player, 1);
+          });
+        });
     }
-
-    return state;
-  }
-
-  private *handlePrizeEffect(next: Function, store: StoreLike, state: State, effect: DrawPrizesEffect): IterableIterator<State> {
-    const player = effect.player;
-    const prizeCard = effect.prizes.find(cardList => cardList.cards.includes(this));
-
-    // Only act when this card is drawn as a prize (face-down)
-    if (!prizeCard || !prizeCard.isSecret || effect.destination !== player.hand) {
-      return state;
-    }
-
-    // Prevent prize card from going to hand until we complete the flow
-    effect.preventDefault = true;
-
-    // Ask player if they want to attach it
-    let wantToUse = false;
-    yield CONFIRMATION_PROMPT(store, state, player, result => {
-      wantToUse = result;
-      next();
-    }, GameMessage.WANT_TO_USE_ITEM_FROM_PRIZES);
-
-    if (!wantToUse) {
-      // Player declines: put card in hand normally
-      effect.preventDefault = false;
-      const prizeIndex = player.prizes.findIndex(prize => prize.cards.includes(this));
-      if (prizeIndex !== -1) {
-        TAKE_SPECIFIC_PRIZES(store, state, player, [player.prizes[prizeIndex]], { skipReduce: true });
-      }
-      return state;
-    }
-
-    // Move the prize card to hand temporarily
-    const prizeIndex = player.prizes.findIndex(prize => prize.cards.includes(this));
-    if (prizeIndex !== -1) {
-      player.prizes[prizeIndex].moveCardTo(this, player.hand);
-    }
-
-    // Player chooses a Pokemon to attach to
-    let targets: PokemonCardList[] = [];
-    yield store.prompt(state, new ChoosePokemonPrompt(
-      player.id,
-      GameMessage.ATTACH_ENERGY_CARDS,
-      PlayerType.BOTTOM_PLAYER,
-      [SlotType.ACTIVE, SlotType.BENCH],
-      { allowCancel: false }
-    ), result => {
-      targets = result || [];
-      next();
-    });
-
-    if (targets.length > 0) {
-      const target = targets[0];
-      const attachEnergyEffect = new AttachEnergyEffect(player, this, target);
-      store.reduceEffect(state, attachEnergyEffect);
-    }
-
     return state;
   }
 }

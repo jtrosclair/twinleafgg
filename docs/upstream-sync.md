@@ -4588,3 +4588,40 @@ solutions still win. All 32 API tests, 209 client tests and ten general
 packaged board checks pass. The 2.51 MiB gzip runtime passes build
 attestation.
 The full engine passes 10,985 tests across 313 spec files.
+
+## Gameplay re-audit, batch 67
+
+The simulator now reserves all Prizes awarded by the Knock Outs before
+offering any individual Prize effects. When multiple effects can be used,
+the Prize owner chooses which to resolve next. Each optional effect and
+its nested effects finish before another sibling is offered. Declined
+cards and ordinary Prizes go to the hand in their original order.
+Additional Prize prompts exclude cards already awarded, even when a
+different Knock Out sends one of them to the discard pile. An invalid
+selection leaves the prompt open. The simple bot follows the same
+available Prize and blocked-slot rules.
+[Official Lucky Bonus and Dream Ball order ruling](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%A9%E3%83%83%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%8A%E3%82%B9&regulation_faq_main_item1=BW)
+[Official two-Greedy-Dice ruling](https://www.pokemon-card.com/rules/faq/details.php?id=10612)
+[Official nested Greedy Dice ruling](https://www.pokemon-card.com/rules/faq/details.php?id=10610)
+[Official advanced rules for multiple Lucky Bonus effects](https://www.pokemon-card.com/assets/document/advanced_manual.pdf#page=68)
+
+Both registered Jirachi CES names and Chansey MEW take their original
+Prize when they enter the Bench. Dream Ball and Greedy Dice count their
+original Prize when placed in the discard. Dream Ball may fail a private
+deck search and still shuffles. Treasure Energy moves from the Prize
+directly onto the selected Pokémon before its attachment reactions.
+It neither spends the hand attachment for the turn nor triggers
+Arctozolt's Biting Whirlpool. Two face-up special cards are taken
+normally. The legacy usage properties remain available to old snapshots.
+[Official Dream Ball print](https://www.pokemon-card.com/card-search/details.php/card/39645/regu/XY)
+[Official Wish Upon a Star print](https://www.pokemon-card.com/card-search/details.php/card/37295/regu/all)
+[Official Treasure Energy and Biting Whirlpool ruling](https://www.pokemon-card.com/info/2022/05/images/Ruleguide_ver3.pdf)
+
+All 11 focused cases pass and reproduce failures on the previous engine.
+The full engine suite passes 10,996 tests, and the combined worktree
+passes 161 targeted cases. The API passes 32 checks. All 559 comparable
+saved boards and 5,225 sampled opening actions match. All seven recorded
+solutions still win. The 2.51 MiB gzip package passes attestation,
+board-prompt checks and 209 client checks. Packaged mouse and touch tests
+both resolve Lucky Bonus first and put the contested Dream Ball into hand.
+Rerolls spanning Assist and a copied attack are still under review.

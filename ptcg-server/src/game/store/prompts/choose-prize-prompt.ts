@@ -43,45 +43,30 @@ export class ChoosePrizePrompt extends Prompt<CardList[]> {
 
   }
 
-  public decode(result: number[] | null, state: State): CardList[] | null {
-    if (result === null) {
-      return null;
-    }
+  public availablePrizes(state: State): CardList[] {
     const player = state.players.find(p => p.id === this.playerId);
-    if (player === undefined) {
+    if (!player) return [];
+    const owner = this.options.useOpponentPrizes ? state.players.find(p => p !== player) : player;
+    return owner?.prizes.filter(prize => prize.cards.length > 0) ?? [];
+  }
+
+  public decode(result: number[] | null, state: State): CardList[] | null {
+    if (result === null) return null;
+    const prizes = this.availablePrizes(state);
+    if (!Array.isArray(result) || result.some(index => !Number.isInteger(index) || !prizes[index])) {
       throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
     }
-
-    const targetPlayer = this.options.useOpponentPrizes
-      ? state.players.find(p => p.id !== this.playerId)
-      : player;
-
-    if (targetPlayer === undefined) {
-      throw new GameError(GameMessage.INVALID_PROMPT_RESULT);
-    }
-
-    const prizes = targetPlayer.prizes.filter(p => p.cards.length > 0);
     return result.map(index => prizes[index]);
   }
 
-  public validate(result: CardList[] | null): boolean {
-    if (result === null) {
-      return this.options.allowCancel;
-    }
-    if (result.length !== this.options.count) {
-      return false;
-    }
-    const hasDuplicates = result.some((p, index) => {
-      return result.indexOf(p) !== index;
+  public validate(result: CardList[] | null, state: State): boolean {
+    if (result === null) return this.options.allowCancel;
+    if (!Array.isArray(result) || result.length !== this.options.count
+      || new Set(result).size !== result.length) return false;
+    const prizes = this.availablePrizes(state);
+    return result.every(prize => {
+      const index = prizes.indexOf(prize);
+      return index >= 0 && !this.options.blocked.includes(index);
     });
-    if (hasDuplicates) {
-      return false;
-    }
-    const hasEmpty = result.some(p => p.cards.length === 0);
-    if (hasEmpty) {
-      return false;
-    }
-    return true;
   }
-
 }

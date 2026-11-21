@@ -3,7 +3,8 @@ import { CardTag, TrainerType } from '../../game/store/card/card-types';
 import { DrawPrizesEffect } from '../../game/store/effects/game-effects';
 import { StoreLike, State, PokemonCard, GameError } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
-import { SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH, CONFIRMATION_PROMPT, GET_PLAYER_BENCH_SLOTS, TAKE_SPECIFIC_PRIZES } from '../../game/store/prefabs/prefabs';
+import { SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH, GET_PLAYER_BENCH_SLOTS } from '../../game/store/prefabs/prefabs';
+import { takePrizeTo } from '../../game/store/prefabs/prize-reactions';
 import { GameMessage } from '../../game/game-message';
 import { TrainerEffect } from '../../game/store/effects/play-card-effects';
 
@@ -34,84 +35,20 @@ export class DreamBall extends TrainerCard {
       throw new GameError(GameMessage.CANNOT_PLAY_THIS_CARD);
     }
 
-    // Only act when this card is drawn as a Prize.
+    // Ref: set-steam-siege/greedy-dice.ts (use the selected Prize before it enters the hand).
     if (effect instanceof DrawPrizesEffect) {
-      const generator = this.handlePrizeEffect(() => generator.next(), store, state, effect);
-      return generator.next().value;
+      const { player } = effect;
+      effect.offer(this, GameMessage.WANT_TO_USE_ITEM_FROM_PRIZES,
+        () => GET_PLAYER_BENCH_SLOTS(player).length > 0 && player.deck.cards.length > 0,
+        prize => {
+          takePrizeTo(player, prize, player.discard);
+          const blocked = player.deck.cards.flatMap((card, index) => card instanceof PokemonCard
+            && [CardTag.POKEMON_LV_X, CardTag.LEGEND, CardTag.BREAK, CardTag.POKEMON_VUNION].some(tag => card.tags.includes(tag))
+            ? [index] : []);
+          SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(store, state, player, {},
+            { min: 0, max: 1, allowCancel: false, blocked });
+        });
     }
-    return state;
-  }
-
-  private *handlePrizeEffect(next: Function, store: StoreLike, state: State, effect: DrawPrizesEffect): IterableIterator<State> {
-    const player = effect.player;
-    const prizeCard = effect.prizes.find(cardList => cardList.cards.includes(this));
-
-    // Check if play conditions are met
-    if (!prizeCard || GET_PLAYER_BENCH_SLOTS(player).length === 0 || !prizeCard.isSecret || effect.destination !== player.hand) {
-      return state;
-    }
-
-    // Prevent prize card from going to hand until we complete the card effect flow
-    effect.preventDefault = true;
-
-    // Ask player if they want to use the card
-    let wantToUse = false;
-    yield CONFIRMATION_PROMPT(store, state, player, result => {
-      wantToUse = result;
-      next();
-    }, GameMessage.WANT_TO_USE_ITEM_FROM_PRIZES);
-
-    // If the player declines, move the original prize card to hand
-    if (!wantToUse) {
-      effect.preventDefault = false;
-      const prizeIndex = player.prizes.findIndex(prize => prize.cards.includes(this));
-      if (prizeIndex !== -1) {
-        TAKE_SPECIFIC_PRIZES(store, state, player, [player.prizes[prizeIndex]], { skipReduce: true });
-      }
-      return state;
-    }
-
-    // If the player agrees, discard Dream Ball
-    // (Unfortunately, we have to check this again closer to the end of the flow
-    // because due to how the generator pattern works, the player could have
-    // played another card to the bench)
-    for (const [index, prize] of player.prizes.entries()) {
-      if (prize.cards.includes(this)) {
-        player.prizes[index].moveTo(player.discard);
-        break;
-      }
-    }
-
-    // Search for a Pokémon and put it onto the bench
-    const emptyBenchSlots = GET_PLAYER_BENCH_SLOTS(player);
-
-    if (emptyBenchSlots.length === 0) {
-      return state;
-    }
-
-    // Can't search for Pokémon with specific "coming into play" rules
-    const searchBlocked: number[] = [];
-    player.deck.cards.forEach((card, index) => {
-      if (card instanceof PokemonCard && (
-        card.tags.includes(CardTag.POKEMON_LV_X) ||
-        card.tags.includes(CardTag.LEGEND) ||
-        card.tags.includes(CardTag.BREAK) ||
-        card.tags.includes(CardTag.POKEMON_VUNION)
-      )) {
-        searchBlocked.push(index);
-      }
-    });
-
-    player.supporter.moveCardTo(this, player.discard);
-
-    yield SEARCH_YOUR_DECK_FOR_POKEMON_AND_PUT_ONTO_BENCH(
-      store,
-      state,
-      player,
-      {},
-      { min: 1, max: 1, allowCancel: false, blocked: searchBlocked }
-    );
-
     return state;
   }
 }

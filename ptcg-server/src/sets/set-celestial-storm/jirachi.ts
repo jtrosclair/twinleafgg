@@ -5,11 +5,12 @@
 import { KNOCK_OUT_DEFENDING_POKEMON_AT_END_OF_OPPONENTS_NEXT_TURN } from '../../game/store/prefabs/attack-effects';
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType, CardTag } from '../../game/store/card/card-types';
-import { PowerType, StoreLike, State, StateUtils, GameMessage } from '../../game';
+import { PowerType, StoreLike, State, StateUtils } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { DrawPrizesEffect } from '../../game/store/effects/game-effects';
+import { takeBonusPrize } from '../../game/store/prefabs/prize-reactions';
 import { EndTurnEffect } from '../../game/store/effects/game-phase-effects';
-import { ADD_SLEEP_TO_PLAYER_ACTIVE, AFTER_ATTACK, CONFIRMATION_PROMPT, GET_PLAYER_BENCH_SLOTS, IS_ABILITY_BLOCKED, TAKE_SPECIFIC_PRIZES, TAKE_X_PRIZES } from '../../game/store/prefabs/prefabs';
+import { ADD_SLEEP_TO_PLAYER_ACTIVE, AFTER_ATTACK, offerBenchedPrizePokemon } from '../../game/store/prefabs/prefabs';
 
 export class Jirachi extends PokemonCard {
   public tags = [CardTag.PRISM_STAR];
@@ -45,19 +46,14 @@ export class Jirachi extends PokemonCard {
   public readonly KNOCKOUT_MARKER = 'JIRACHI_CES_KNOCKOUT_MARKER';
   public readonly CLEAR_KNOCKOUT_MARKER = 'JIRACHI_CES_CLEAR_KNOCKOUT_MARKER';
 
+  // Keep the default for existing snapshots. Eligibility follows the physical Prize.
   public abilityUsed = false;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Wish Upon a Star
     // Ref: set-celestial-storm/jirachi-prism-star.ts (Wish Upon a Star)
     if (effect instanceof DrawPrizesEffect) {
-      const generator = this.handlePrizeEffect(
-        () => generator.next(),
-        store,
-        state,
-        effect
-      );
-      return generator.next().value;
+      offerBenchedPrizePokemon(store, state, effect, this, () => takeBonusPrize(store, state, effect));
     }
 
     // Attack: Perish Dream
@@ -79,80 +75,4 @@ export class Jirachi extends PokemonCard {
     return state;
   }
 
-  private *handlePrizeEffect(next: Function, store: StoreLike, state: State, effect: DrawPrizesEffect): IterableIterator<State> {
-    const player = effect.player;
-    const prizeCard = effect.prizes.find(cardList => cardList.cards.includes(this));
-
-    // Check if ability conditions are met
-    if (!prizeCard || GET_PLAYER_BENCH_SLOTS(player).length === 0 || !prizeCard.isSecret || effect.destination !== player.hand) {
-      return state;
-    }
-
-    // Prevent unintended multiple uses
-    if (this.abilityUsed) {
-      return state;
-    }
-    this.abilityUsed = true;
-
-    // Check if ability is blocked
-    if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-      return state;
-    }
-
-    // Prevent prize card from going to hand until we complete the ability flow
-    effect.preventDefault = true;
-
-    // Ask player if they want to use the ability
-    let wantToUse = false;
-    yield CONFIRMATION_PROMPT(store, state, player, result => {
-      wantToUse = result;
-      next();
-    }, GameMessage.WANT_TO_USE_ABILITY_FROM_PRIZES);
-
-    // If the player declines, move the original prize card to hand
-    const prizeIndex = player.prizes.findIndex(prize => prize.cards.includes(this));
-    const fallback: (prizeIndex: number) => void = (prizeIndex) => {
-      if (prizeIndex !== -1) {
-        TAKE_SPECIFIC_PRIZES(store, state, player, [player.prizes[prizeIndex]], { skipReduce: true });
-      }
-      return;
-    };
-
-    if (!wantToUse) {
-      effect.preventDefault = false;
-      fallback(prizeIndex);
-      return state;
-    }
-
-    // Check bench slots again (may have changed during generator flow)
-    const emptyBenchSlots = GET_PLAYER_BENCH_SLOTS(player);
-
-    if (emptyBenchSlots.length === 0) {
-      effect.preventDefault = false;
-      fallback(prizeIndex);
-      return state;
-    }
-
-    // Move this card to bench (counts as a prize taken)
-    this.abilityUsed = true;
-    player.prizesTaken += 1;
-
-    const targetSlot = emptyBenchSlots[0];
-    for (const [index, prize] of player.prizes.entries()) {
-      if (prize.cards.includes(this)) {
-        player.prizes[index].moveTo(targetSlot);
-        targetSlot.pokemonPlayedTurn = state.turn;
-        break;
-      }
-    }
-
-    // Handle extra prize (excluding the group this card is in)
-    yield TAKE_X_PRIZES(store, state, player, 1, {
-      promptOptions: {
-        blocked: effect.prizes.map(p => player.prizes.indexOf(p))
-      }
-    }, () => next());
-
-    return state;
-  }
 }

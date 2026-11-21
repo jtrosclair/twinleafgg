@@ -1,11 +1,11 @@
 import { PokemonCard } from '../../game/store/card/pokemon-card';
 import { Stage, CardType } from '../../game/store/card/card-types';
-import { StoreLike, State, GameMessage, PowerType } from '../../game';
-import { GamePhase } from '../../game/store/state/state';
+import { StoreLike, State, PowerType } from '../../game';
 import { Effect } from '../../game/store/effects/effect';
 import { DrawPrizesEffect } from '../../game/store/effects/game-effects';
+import { takeBonusPrize } from '../../game/store/prefabs/prize-reactions';
 import { CoinFlipEffect } from '../../game/store/effects/play-card-effects';
-import { CONFIRMATION_PROMPT, GET_PLAYER_BENCH_SLOTS, IS_ABILITY_BLOCKED, TAKE_SPECIFIC_PRIZES, TAKE_X_PRIZES } from '../../game/store/prefabs/prefabs';
+import { offerBenchedPrizePokemon } from '../../game/store/prefabs/prefabs';
 
 export class Chansey extends PokemonCard {
   public stage: Stage = Stage.BASIC;
@@ -33,112 +33,20 @@ export class Chansey extends PokemonCard {
   public name: string = 'Chansey';
   public fullName: string = 'Chansey MEW';
 
+  // Keep the default for existing snapshots. Eligibility follows the physical Prize.
   public abilityUsed = false;
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
+    // Ref: set-celestial-storm/jirachi.ts (place the Prize directly on the Bench).
     if (effect instanceof DrawPrizesEffect) {
-      const generator = this.handlePrizeEffect(
-        () => generator.next(),
-        store, 
-        state, 
-        effect
-      );
-      return generator.next().value;
+      offerBenchedPrizePokemon(store, state, effect, this, () => {
+        const coinFlip = new CoinFlipEffect(effect.player, heads => {
+          if (heads) takeBonusPrize(store, state, effect);
+        });
+        coinFlip.skipAttackReflip = true;
+        store.reduceEffect(state, coinFlip);
+      });
     }
     return state;
   }
-
-  private *handlePrizeEffect(next: Function, store: StoreLike, state: State, effect: DrawPrizesEffect): IterableIterator<State> {
-    const player = effect.player;
-    const prizeCard = effect.prizes.find(cardList => cardList.cards.includes(this));
-
-    if (state.players[state.activePlayer] !== player
-      || (state.phase !== GamePhase.PLAYER_TURN && state.phase !== GamePhase.ATTACK)) return state;
-
-    // Check if ability conditions are met
-    if (!prizeCard || GET_PLAYER_BENCH_SLOTS(player).length === 0 || !prizeCard.isSecret || effect.destination !== player.hand) {
-      return state;
-    }
-     
-    // Prevent unintended multiple uses
-    if (this.abilityUsed) {
-      return state;
-    }
-
-    // Check if ability is blocked
-    if (IS_ABILITY_BLOCKED(store, state, player, this)) {
-      return state;
-    }
-
-    // Prevent prize card from going to hand until we complete the ability flow
-    effect.preventDefault = true;
-
-    // Ask player if they want to use the ability
-    let wantToUse = false;
-    yield CONFIRMATION_PROMPT(store, state, player, result => {
-      wantToUse = result;
-      next();
-    }, GameMessage.WANT_TO_USE_ABILITY_FROM_PRIZES);
-
-    // If the player declines, move the original prize card to hand
-    const prizeIndex = player.prizes.findIndex(prize => prize.cards.includes(this));
-    const fallback: (prizeIndex: number) => void = (prizeIndex) => {
-      if (prizeIndex !== -1) {
-        TAKE_SPECIFIC_PRIZES(store, state, player, [player.prizes[prizeIndex]], { skipReduce: true });
-      }
-      return;
-    };
-
-    if (!wantToUse) {
-      effect.preventDefault = false;
-      fallback(prizeIndex);
-      return state;
-    }
-
-    // We have an all clear, so let's move the card to bench
-    // (Unfortunately, we have to check this again closer to the end of the flow
-    // because due to how the generator pattern works, the player could have
-    // played another card to the bench)
-    const emptyBenchSlots = GET_PLAYER_BENCH_SLOTS(player);
-    
-    if (emptyBenchSlots.length === 0) {
-      effect.preventDefault = false;
-      fallback(prizeIndex);
-      return state;
-    }
-
-    // Now that we've confirmed the ability is allowed, we can update the state
-    // (per wording of the ability, this still counts as a prize taken even if
-    // it does not go to the player's hand)
-    this.abilityUsed = true;
-    player.prizesTaken += 1;
-    player.prizesTakenThisTurn += 1;
-    
-    const targetSlot = emptyBenchSlots[0];
-    for (const [index, prize] of player.prizes.entries()) {
-      if (prize.cards.includes(this)) {
-        player.prizes[index].moveTo(targetSlot);
-        targetSlot.pokemonPlayedTurn = state.turn;
-        break;
-      }
-    }
-
-    // Ref: set-base-set/chansey.ts (one settled coin drives the card effect).
-    let coinResult = false;
-    const coinFlip = new CoinFlipEffect(player, heads => {
-      coinResult = heads;
-      next();
-    });
-    coinFlip.skipAttackReflip = true;
-    yield store.reduceEffect(state, coinFlip);
-
-    if (!coinResult) return state;
-
-    const remaining = player.prizes.filter(prize => prize.cards.length > 0);
-    const blocked = remaining.flatMap((prize, index) => effect.prizes.includes(prize) ? [index] : []);
-    if (blocked.length === remaining.length) return state;
-    yield TAKE_X_PRIZES(store, state, player, 1, { promptOptions: { blocked } }, () => next());
-
-    return state;
-  }
-} 
+}
