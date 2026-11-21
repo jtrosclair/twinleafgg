@@ -218,7 +218,7 @@ export class CheckAttackCostEffect implements Effect {
   public cost: CardType[];
   public fixedCost?: CardType[];
 
-  constructor(player: Player, attack: Attack) {
+  constructor(player: Player, attack: Attack, public readonly source = player.active) {
     this.player = player;
     this.attack = attack;
     this.cost = [...attack.cost];

@@ -30,6 +30,10 @@ export class NeutralCenter extends TrainerCard {
 
 This card can't be put into your hand or deck from the discard pile. `;
 
+  public get canRecoverFromDiscard(): boolean {
+    return false;
+  }
+
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof MoveCardsEffect) {
       const owner = state.players.find(player => player.discard === effect.source);

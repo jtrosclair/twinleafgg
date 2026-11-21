@@ -24,6 +24,10 @@ export abstract class TrainerCard extends Card {
 
   public stadiumDirection: 'up' | 'down' = 'up';
 
+  public get canRecoverFromDiscard(): boolean {
+    return true;
+  }
+
   public toolEffect: ToolEffect | undefined;
 
   //Used on items and supporters that are "put into play", specifically for reference on Chaos Gym

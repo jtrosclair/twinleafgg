@@ -107,12 +107,6 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
     throw new GameError(GameMessage.CANNOT_ATTACK_ON_FIRST_TURN);
   }
 
-  const sp = player.active.specialConditions;
-  const ignoreStatusConditions = effect instanceof UseAttackEffect && effect.ignoreStatusConditions;
-  if ((sp.includes(SpecialCondition.PARALYZED) || sp.includes(SpecialCondition.ASLEEP)) && !ignoreStatusConditions) {
-    throw new GameError(GameMessage.BLOCKED_BY_SPECIAL_CONDITION);
-  }
-
   const attack = effect.attack;
   const delegateFrom = effect instanceof UseAttackEffect ? effect.delegateFrom : undefined;
   let attackingPokemon = delegateFrom && effect instanceof UseAttackEffect ? effect.source : player.active;
@@ -125,6 +119,12 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
         attackingPokemon = benchSlot;
       }
     });
+  }
+
+  const sp = attackingPokemon.specialConditions;
+  const ignoreStatusConditions = effect instanceof UseAttackEffect && effect.ignoreStatusConditions;
+  if ((sp.includes(SpecialCondition.PARALYZED) || sp.includes(SpecialCondition.ASLEEP)) && !ignoreStatusConditions) {
+    throw new GameError(GameMessage.BLOCKED_BY_SPECIAL_CONDITION);
   }
 
   // Check if Pokemon cannot attack next turn
@@ -149,12 +149,12 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
 
   let checkAttackCost: CheckAttackCostEffect;
   if (effect instanceof UseAttackEffect && effect.delegateFrom) {
-    const checked = checkCopiedAttackCost(store, state, player, effect.delegateFrom, attack, attackingPokemonCard);
+    const checked = checkCopiedAttackCost(store, state, player, effect.delegateFrom, attack, attackingPokemonCard, attackingPokemon);
     state = checked.state;
     checkAttackCost = checked.effect;
     if (effect.ignoreEnergyCost) checkAttackCost.cost = [];
   } else {
-    checkAttackCost = new CheckAttackCostEffect(player, attack);
+    checkAttackCost = new CheckAttackCostEffect(player, attack, attackingPokemon);
     state = store.reduceEffect(state, checkAttackCost);
     if (!checkAttackCost.fixedCost && attackingPokemon.attackCostIncreaseDuringNextTurn > 0) {
       checkAttackCost.cost.push(...Array(attackingPokemon.attackCostIncreaseDuringNextTurn).fill(CardType.COLORLESS));
@@ -201,7 +201,7 @@ function* useAttack(next: Function, store: StoreLike, state: State, effect: UseA
 
     if (flip === false) {
       store.log(state, GameLog.LOG_HURTS_ITSELF);
-      player.active.damage += player.active.confusionDamage;
+      attackingPokemon.damage += attackingPokemon.confusionDamage;
       state = store.reduceEffect(state, new EndTurnEffect(player));
       return state;
     }

@@ -20,11 +20,11 @@ export class NightMine extends TrainerCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     if (effect instanceof CheckAttackCostEffect && StateUtils.getStadiumCard(state) === this) {
-      const player = effect.player;
-      const pokemonCard = player.active.getPokemonCard();
+      const { player, source } = effect;
+      const pokemonCard = source.getPokemonCard();
 
       if (pokemonCard?.tags.includes(CardTag.POKEMON_TERA)
-        && !IS_STADIUM_EFFECT_BLOCKED(store, state, player, player.active, this)) {
+        && !IS_STADIUM_EFFECT_BLOCKED(store, state, player, source, this)) {
         effect.cost.push(CardType.COLORLESS);
       }
     }

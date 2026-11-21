@@ -9,7 +9,6 @@ import {
   StateUtils,
   StoreLike,
 } from '../..';
-import { CardType } from '../card/card-types';
 import { PokemonCard } from '../card/pokemon-card';
 import { Attack } from '../card/pokemon-types';
 import { CheckProvidedEnergyEffect } from '../effects/check-effects';
@@ -25,10 +24,6 @@ export function findPokemonCardForAttack(
   // Preserve reference identity across all cards before falling back to legacy name matching.
   return pokemonCards.find(card => card.attacks.includes(attack))
     || pokemonCards.find(card => card.attacks.some(a => a.name === attack.name));
-}
-
-function isAttackLockedNextTurn(player: Player, attack: Attack): boolean {
-  return (player.active.cannotUseAttacksNextTurn || []).includes(attack.name);
 }
 
 export interface BuildAttackListOptions {
@@ -51,7 +46,10 @@ export function buildAttackListWithEnergyBlocking(
   player: Player,
   options: BuildAttackListOptions = {},
 ): { pokemonCards: PokemonCard[]; blocked: { index: number; attack: string }[] } {
-  const checkProvidedEnergyEffect = new CheckProvidedEnergyEffect(player);
+  const copycatSlot = options.copycatCard
+    ? StateUtils.findPokemonSlot(state, options.copycatCard) ?? player.active
+    : player.active;
+  const checkProvidedEnergyEffect = new CheckProvidedEnergyEffect(player, copycatSlot);
   store.reduceEffect(state, checkProvidedEnergyEffect);
   const energyMap = checkProvidedEnergyEffect.energyMap;
 
@@ -59,21 +57,23 @@ export function buildAttackListWithEnergyBlocking(
   const blocked: { index: number; attack: string }[] = [];
 
   const addCardWithBlocking = (card: PokemonCard) => {
-    const affordableAttacks = card.attacks.filter(attack => {
-      const checked = checkCopiedAttackCost(store, state, player, card, attack, options.copycatCard);
-      state = checked.state;
-      const checkAttackCost = checked.effect;
-      return StateUtils.checkEnoughEnergy(energyMap, checkAttackCost.cost as CardType[]);
-    });
+    if (copycatSlot !== player.active && !card.attacks.some(attack => attack.useOnBench)) return;
 
     const index = pokemonCards.length;
     pokemonCards.push(card);
-    const locked = new Set(player.active.cannotUseAttacksNextTurn || []);
-    card.attacks.forEach(attack => {
-      if (!affordableAttacks.includes(attack) || locked.has(attack.name)) {
+    for (const attack of card.attacks) {
+      if ((copycatSlot !== player.active && !attack.useOnBench)
+        || copycatSlot.cannotUseAttacksNextTurn.includes(attack.name)) {
+        blocked.push({ index, attack: attack.name });
+        continue;
+      }
+
+      const checked = checkCopiedAttackCost(store, state, player, card, attack, options.copycatCard, copycatSlot);
+      state = checked.state;
+      if (!StateUtils.checkEnoughEnergy(energyMap, checked.effect.cost)) {
         blocked.push({ index, attack: attack.name });
       }
-    });
+    }
   };
 
   const scanInPlay = (scanPlayer: Player) => {
@@ -107,7 +107,7 @@ export function buildAttackListWithEnergyBlocking(
 export interface CopyAttackViaAbilityOptions extends BuildAttackListOptions {
   copycatCard: PokemonCard;
   allowCancel?: boolean;
-  /** When false, the copycat may be on the Bench while another Pokémon is Active. Default true. */
+  /** When false, the copycat may use attacks that can be used from the Bench. */
   requireActiveCopycat?: boolean;
 }
 
@@ -173,7 +173,8 @@ export function COPY_ATTACK_VIA_ABILITY(
   const player = effect.player;
   const { copycatCard, allowCancel = true, requireActiveCopycat = true } = options;
 
-  if (requireActiveCopycat && player.active.getPokemonCard() !== copycatCard) {
+  const copycatSlot = player.getPokemonInPlay().find(slot => slot.getPokemonCard() === copycatCard);
+  if (!copycatSlot || (requireActiveCopycat && copycatSlot !== player.active)) {
     throw new GameError(GameMessage.CANNOT_USE_POWER);
   }
 
@@ -197,7 +198,7 @@ export function COPY_ATTACK_VIA_ABILITY(
       if (attack === null) {
         return state;
       }
-      if (isAttackLockedNextTurn(player, attack)) {
+      if (copycatSlot.cannotUseAttacksNextTurn.includes(attack.name)) {
         return state;
       }
       const sourceCard = findPokemonCardForAttack(pokemonCards, attack);
@@ -206,7 +207,7 @@ export function COPY_ATTACK_VIA_ABILITY(
       }
       const useAttackEffect = new UseAttackEffect(player, attack);
       useAttackEffect.delegateFrom = sourceCard;
-      useAttackEffect.source = player.active;
+      useAttackEffect.source = copycatSlot;
       return store.reduceEffect(state, useAttackEffect);
     },
   );

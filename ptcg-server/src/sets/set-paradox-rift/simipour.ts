@@ -49,7 +49,7 @@ export class Simipour extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Monkey Trio
     if (effect instanceof CheckAttackCostEffect) {
-      if (effect.player.active.getPokemonCard() !== this) {
+      if (effect.source.getPokemonCard() !== this) {
         return state;
       }
       const player = effect.player;

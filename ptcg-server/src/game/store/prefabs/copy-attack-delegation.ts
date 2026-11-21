@@ -60,10 +60,11 @@ export function checkCopiedAttackCost(
   sourceCard: PokemonCard,
   attack: Attack,
   copycatCard = player.active.getPokemonCard(),
+  copycatSlot = player.active,
 ): { state: State; effect: CheckAttackCostEffect } {
   const clonedAttacks = cloneAttacks(sourceCard.attacks);
   const clonedAttack = clonedAttacks[findAttackIndex(sourceCard, attack)] ?? cloneAttack(attack);
-  const effect = new CheckAttackCostEffect(player, clonedAttack);
+  const effect = new CheckAttackCostEffect(player, clonedAttack, copycatSlot);
   const reduce = () => {
     state = store.reduceEffect(state, effect);
     return { state, effect };

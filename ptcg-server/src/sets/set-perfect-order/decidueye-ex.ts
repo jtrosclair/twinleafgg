@@ -41,7 +41,7 @@ export class Decidueyeex extends PokemonCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
     // Ability: Ignore [C] in attack costs if opponent has exactly 4 cards
-    if (effect instanceof CheckAttackCostEffect && effect.player.active.getPokemonCard() === this) {
+    if (effect instanceof CheckAttackCostEffect && effect.source.getPokemonCard() === this) {
       const player = effect.player;
       const opponent = StateUtils.getOpponent(state, player);
 

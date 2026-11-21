@@ -44,7 +44,8 @@ export class Mewex extends PokemonCard {
       }
       return COPY_ATTACK_VIA_ABILITY(store, state, effect, {
         copycatCard: this,
-        filter: (cardList) => cardList !== player.active,
+        requireActiveCopycat: false,
+        filter: (cardList, card) => cardList !== player.active && card !== this,
       });
     }
 

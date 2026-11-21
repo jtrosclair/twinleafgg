@@ -52,10 +52,11 @@ export class Espathraex extends PokemonCard {
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
     // Ref: set-black-bolt-white-flare/samurott.ts (probe the opposing Pokémon as the Ability target).
-    if (effect instanceof CheckAttackCostEffect && effect.player.active.getPokemonCard()) {
+    if (effect instanceof CheckAttackCostEffect && effect.source === effect.player.active
+      && effect.source.getPokemonCard()) {
       const owner = StateUtils.getOpponent(state, effect.player);
       if (owner.active.getPokemonCard() === this && !IS_ABILITY_BLOCKED(store, state, owner, this)
-        && CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, this.powers[0], this, effect.player.active)) {
+        && CAN_APPLY_ABILITY_TO_TARGET(store, state, owner, this.powers[0], this, effect.source)) {
         effect.cost.push(CardType.COLORLESS);
       }
     }

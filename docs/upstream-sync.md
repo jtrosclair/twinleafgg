@@ -6268,3 +6268,52 @@ when its Active teammate is Basic, and under Nighttime Mine when its
 Active teammate is Tera. Dedenne's Electromagnetic Sonar still offers a
 recovery prompt when Neutralization Zone is its only discarded Trainer.
 Neutralization Zone stays in the discard after the attempted choice.
+
+## Gameplay re-audit, batch 105
+
+Attack-cost checks now carry the attacking slot. Pokémon League
+Headquarters and Nighttime Mine judge the actual attacker, even when an
+attack comes from the Bench. Dazzling Gaze and Seismitoad's equivalent
+Ability continue to tax opposing Active attackers. Sparkling Crystal,
+Hop's Choice Band and personal Ability discounts use the same source
+instead of lending one Pokémon's discount to its teammate. Special
+Conditions are checked on the attacker, so a Benched Alakazam can still
+attack while its Active teammate is Asleep or Paralyzed.
+[Alakazam ex](https://asia.pokemon-card.com/ph/card-search/detail/10394/)
+[Pokémon League Headquarters](https://asia.pokemon-card.com/sg/card-search/detail/9133/)
+[Nighttime Mine](https://asia.pokemon-card.com/sg/card-search/detail/24778/)
+[Espathra ex](https://asia.pokemon-card.com/my/card-search/detail/11096/)
+[Sparkling Crystal](https://asia.pokemon-card.com/sg/card-search/detail/14118/)
+
+The official Memory Helix ruling allows Mew ex to use Alakazam's
+Dimensional Hand from the Bench. Its choice only enables Bench-legal
+moves when Mew is on the Bench. Energy checks, attack locks and damage
+resolve against Mew's own slot. The Basic surcharge still applies to
+Mew under League Headquarters.
+[Official Memory Helix and Dimensional Hand rulings](https://www.pokemon-card.com/rules/faq/search.php?freeword=%E3%83%95%E3%83%BC%E3%83%87%E3%82%A3%E3%83%B3EX&regulation_faq_main_item1=all)
+
+Dedenne's Electromagnetic Sonar leaves Neutralization Zone blocked in
+the public discard choice. It skips the choice when the Stadium is the
+only Trainer, and a separate eligible Trainer still has to be chosen.
+The same recovery rules apply when Mew copies the attack. The earlier
+guard on actual discard-to-hand or discard-to-deck moves still covers
+the normal move path.
+[Dedenne](https://asia.pokemon-card.com/ph/card-search/detail/16652/)
+[Neutralization Zone](https://www.pokemon-card.com/card-search/details.php/card/46845)
+
+Fourteen focused cases cover Bench costs, copied attack legality and
+discard recovery. The 559 compatible saved boards match byte-for-byte,
+and all 5,486 standard opening actions match. A separate scan found no
+saved opening board with a playable attack from the Bench. Those cases
+are exercised directly by the focused tests.
+All 11,821 engine checks, 109 combined WebView checks and 33 API checks
+pass. Eleven of the first 13 focused cases failed on the preceding engine.
+The attested build passed all ten board prompt checks and 211 client
+checks. Eight recorded puzzle solutions won both replays.
+
+A follow-up probe for `786a7e7fc` found that full-health Mega Heatran ex
+takes 0 from Charizard ex MEW's Brave Wing. Applying Fire Weakness before
+High Density Armor gives 60 damage. Lebanne heals the correct 150 on
+heads and 30 on tails. The eight Japanese Energy identities already
+carry their matching English MEE 9–16 aliases.
+[Mega Heatran ex and Lebanne promo guide](https://www.pokemon-card.com/info/005705.html)

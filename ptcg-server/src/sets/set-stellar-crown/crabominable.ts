@@ -41,7 +41,7 @@ export class Crabominable extends PokemonCard {
     if (effect instanceof CheckAttackCostEffect) {
       const player = effect.player;
 
-      if (effect.player !== player || player.active.getPokemonCard() !== this) {
+      if (effect.source.getPokemonCard() !== this) {
         return state;
       }
 

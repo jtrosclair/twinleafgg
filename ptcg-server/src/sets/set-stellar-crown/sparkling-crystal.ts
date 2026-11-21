@@ -29,8 +29,8 @@ export class SparklingCrystal extends TrainerCard {
 
   public reduceEffect(store: StoreLike, state: State, effect: Effect): State {
 
-    if (effect instanceof CheckAttackCostEffect && effect.player.active.tools.includes(this)) {
-      const pokemonCard = effect.player.active.getPokemonCard();
+    if (effect instanceof CheckAttackCostEffect && effect.source.tools.includes(this)) {
+      const pokemonCard = effect.source.getPokemonCard();
 
       // Try to reduce ToolEffect, to check if something is blocking the tool from working
       try {
@@ -41,7 +41,7 @@ export class SparklingCrystal extends TrainerCard {
       }
 
       if (pokemonCard && pokemonCard.tags.includes(CardTag.POKEMON_TERA)) {
-        const checkEnergy = new CheckProvidedEnergyEffect(effect.player);
+        const checkEnergy = new CheckProvidedEnergyEffect(effect.player, effect.source);
         store.reduceEffect(state, checkEnergy);
 
         const availableEnergy = [...checkEnergy.energyMap.flatMap(e => e.provides)];

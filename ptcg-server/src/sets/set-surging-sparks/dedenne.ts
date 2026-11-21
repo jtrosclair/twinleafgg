@@ -38,9 +38,11 @@ export class Dedenne extends PokemonCard {
     if (WAS_ATTACK_USED(effect, 0, this)) {
       afterAttackDamage(state, effect, (store, afterState) => {
         const player = effect.player;
-        if (player.discard.cards.some(card => card instanceof TrainerCard)) {
+        if (player.discard.cards.some(card => card instanceof TrainerCard && card.canRecoverFromDiscard)) {
+          const blocked = player.discard.cards.flatMap((card, index) =>
+            card instanceof TrainerCard && !card.canRecoverFromDiscard ? [index] : []);
           SEARCH_DISCARD_PILE_FOR_CARDS_TO_HAND(store, afterState, player, effect.source.getPokemonCard() ?? this,
-            { superType: SuperType.TRAINER }, { min: 1, max: 1, allowCancel: false }, effect);
+            { superType: SuperType.TRAINER }, { min: 1, max: 1, allowCancel: false, blocked }, effect);
         }
         return afterState;
       });
